@@ -1,0 +1,35 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--surface-page);
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--space-4);
+  border-right: var(--border-width-thin) solid var(--border-faint);
+  background-color: var(--surface-page);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: var(--border-width-thin) solid var(--border-faint);
+  }
+}

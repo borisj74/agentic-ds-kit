@@ -25,13 +25,16 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 | Modal | Focused overlay dialog |
 | PageHeader | Page title block |
 | Section | Grouped content block |
-| AppNav | Sidebar navigation |
+| AppNav | Sidebar navigation — flat `items` or grouped `groups` catalog |
 | Table | Simple semantic table |
 
 ### Patterns (3)
 - `dashboard` — PageHeader + Scoreboard + Section + Table + Buttons
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
+
+### Playground
+Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page.
 
 ### Playground routes
 - `/` — Dashboard pattern (home)

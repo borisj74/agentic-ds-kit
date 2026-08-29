@@ -31,50 +31,56 @@ export default function PatternsPage() {
           Blueprint compositions that only import kit components. Use these before inventing layouts.
         </p>
 
-        <Section title="dashboard" description="PageHeader + Scoreboard + Section + Table + Buttons">
-          <div className={styles.preview}>
-            <DashboardPattern metrics={dashboardMetrics} table={dashboardTable} />
-          </div>
-        </Section>
+        <div id="dashboard" className={styles.anchor}>
+          <Section title="dashboard" description="PageHeader + Scoreboard + Section + Table + Buttons">
+            <div className={styles.preview}>
+              <DashboardPattern metrics={dashboardMetrics} table={dashboardTable} />
+            </div>
+          </Section>
+        </div>
 
-        <Section title="settings-form" description="PageHeader + Section + Field inputs + Buttons">
-          <div className={styles.preview}>
-            <SettingsFormPattern />
-          </div>
-        </Section>
+        <div id="settings-form" className={styles.anchor}>
+          <Section title="settings-form" description="PageHeader + Section + Field inputs + Buttons">
+            <div className={styles.preview}>
+              <SettingsFormPattern />
+            </div>
+          </Section>
+        </div>
 
-        <Section title="list-detail" description="AppNav + Table + detail Section">
-          <div className={styles.preview}>
-            <ListDetailPattern
-              nav={{
-                title: "Studio",
-                items: [
-                  { href: "#", label: "Projects", active: true },
-                  { href: "#", label: "Archive" },
-                  { href: "#", label: "Settings" },
-                ],
-              }}
-              table={{
-                caption: "All projects",
-                columns: [
-                  { key: "name", header: "Name" },
-                  { key: "status", header: "Status" },
-                ],
-                rows: [
-                  { name: "Atlas", status: "Active" },
-                  { name: "Nova", status: "Draft" },
-                ],
-              }}
-              detail={{
-                title: "Atlas",
-                description: "Selected project",
-                status: "Active",
-                statusVariant: "success",
-                body: "Redesign engagement for Atlas Labs. Kickoff completed; wireframes in review.",
-              }}
-            />
-          </div>
-        </Section>
+        <div id="list-detail" className={styles.anchor}>
+          <Section title="list-detail" description="AppNav + Table + detail Section">
+            <div className={styles.preview}>
+              <ListDetailPattern
+                nav={{
+                  title: "Studio",
+                  items: [
+                    { href: "#", label: "Projects", active: true },
+                    { href: "#", label: "Archive" },
+                    { href: "#", label: "Settings" },
+                  ],
+                }}
+                table={{
+                  caption: "All projects",
+                  columns: [
+                    { key: "name", header: "Name" },
+                    { key: "status", header: "Status" },
+                  ],
+                  rows: [
+                    { name: "Atlas", status: "Active" },
+                    { name: "Nova", status: "Draft" },
+                  ],
+                }}
+                detail={{
+                  title: "Atlas",
+                  description: "Selected project",
+                  status: "Active",
+                  statusVariant: "success",
+                  body: "Redesign engagement for Atlas Labs. Kickoff completed; wireframes in review.",
+                }}
+              />
+            </div>
+          </Section>
+        </div>
       </div>
     </div>
   );

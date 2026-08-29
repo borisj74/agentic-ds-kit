@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { PlaygroundNav } from "./_components/PlaygroundNav";
+import { PlaygroundShell } from "./_components/PlaygroundShell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,8 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.variable}>
       <body>
-        <PlaygroundNav />
-        {children}
+        <PlaygroundShell>{children}</PlaygroundShell>
       </body>
     </html>
   );

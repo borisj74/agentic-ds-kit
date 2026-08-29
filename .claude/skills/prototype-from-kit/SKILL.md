@@ -13,7 +13,8 @@ Use this skill when adding or changing playground screens in this repo.
 2. **Open contracts** — Read only the 1–2 contract files that match the UI you need.
 3. **Check patterns** — If the screen matches `dashboard`, `settings-form`, or `list-detail`, use the pattern from `ui/patterns/` instead of hand-rolling the layout.
 4. **Compose from `ui/`** — Import kit components. Match props exactly to contract enums; do not add variants.
-5. **Stop if missing** — If no contract or pattern covers what you need, stop and ask. Do not scaffold a one-off.
+5. **App shells** — Use `AppNav` with `groups` for playground/docs IA; flat `items` for list-detail.
+6. **Stop if missing** — If no contract or pattern covers what you need, stop and ask. Do not scaffold a one-off.
 
 ## Hard rules
 

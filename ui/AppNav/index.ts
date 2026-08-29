@@ -1,2 +1,2 @@
 export { AppNav } from "./AppNav";
-export type { AppNavProps, AppNavItem } from "./AppNav.types";
+export type { AppNavProps, AppNavItem, AppNavLeaf, AppNavGroup } from "./AppNav.types";
