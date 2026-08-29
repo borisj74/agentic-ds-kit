@@ -1,7 +1,7 @@
 {
   "id": "datatable",
   "status": "stable",
-  "intent": "Responsive structured data with search, filters, column settings, and clear empty states.",
+  "intent": "Framed dataset with search, filters, column settings, and a caption title.",
   "useWhen": [
     "Searchable datasets with filters or column settings",
     "Selectable rows of structured data"

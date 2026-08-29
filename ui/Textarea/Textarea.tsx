@@ -1,18 +1,25 @@
 import type { TextareaProps } from "./Textarea.types";
-import controlStyles from "../shared/controls.module.css";
 import styles from "./Textarea.module.css";
 
 export type { TextareaProps, TextareaSize } from "./Textarea.types";
 
+const SIZE_CLASS = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+} as const;
+
 export function Textarea({
   id,
   size = "md",
-  rows = 4,
+  rows,
   placeholder,
   disabled = false,
   error = false,
   defaultValue,
   name,
+  demo,
+  describedBy,
 }: TextareaProps) {
   return (
     <textarea
@@ -23,7 +30,9 @@ export function Textarea({
       disabled={disabled}
       defaultValue={defaultValue}
       aria-invalid={error || undefined}
-      className={`${controlStyles.control} ${size === "sm" ? controlStyles.controlSm : controlStyles.controlMd} ${error ? controlStyles.controlError : ""} ${styles.textarea}`}
+      aria-describedby={describedBy}
+      data-demo={disabled ? undefined : demo}
+      className={`${styles.textarea} ${SIZE_CLASS[size]}${error ? ` ${styles.error}` : ""}`}
     />
   );
 }

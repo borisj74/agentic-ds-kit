@@ -20,19 +20,24 @@ const COMPONENT_ITEMS = [
   "datatable",
   "datepicker",
   "drawer",
+  "dropdownmenu",
   "field",
+  "fieldset",
   "headercell",
   "input",
   "inputotp",
   "insightcard",
   "modal",
   "modalcard",
+  "navigationmenu",
   "pageheader",
+  "pagination",
   "radiogroup",
   "scorecard",
   "scoreboard",
   "section",
   "select",
+  "sidenav",
   "switch",
   "table",
   "tabs",
@@ -53,7 +58,11 @@ function componentLabel(id: string): string {
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "modalcard") return "ModalCard";
+  if (id === "navigationmenu") return "NavigationMenu";
+  if (id === "sidenav") return "SideNav";
   if (id === "inputotp") return "InputOTP";
+  if (id === "dropdownmenu") return "DropdownMenu";
+  if (id === "fieldset") return "FieldSet";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 

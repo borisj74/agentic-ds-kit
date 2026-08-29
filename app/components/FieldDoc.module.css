@@ -1,0 +1,15 @@
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.split > * {
+  min-width: 0;
+}
+
+.masterCard {
+  width: 100%;
+  max-width: 28rem;
+}

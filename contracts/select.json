@@ -1,15 +1,16 @@
 {
   "id": "select",
   "status": "stable",
-  "intent": "Dropdown for choosing one option from a short fixed list.",
+  "intent": "Choose one option from a short list. Field trigger, kit DropdownMenu panel. Not a native select.",
   "useWhen": [
-    "Five or fewer visible options where a native select is acceptable",
-    "Inside Field for labeled form fields"
+    "Choosing one value in a Field",
+    "Short fixed lists such as month, year, or timezone"
   ],
   "doNotUseWhen": [
-    "Long searchable lists \u2014 use Command",
-    "Mutually exclusive choices with visible options \u2014 prefer RadioGroup",
-    "Multi-select \u2014 not supported"
+    "Long searchable lists — use Command",
+    "Actions from a button — use DropdownMenu",
+    "Mutually exclusive choices with visible options — prefer RadioGroup",
+    "Multi-select — not supported"
   ],
   "props": {
     "id": {
@@ -63,16 +64,19 @@
     "status.danger"
   ],
   "a11y": {
-    "element": "select",
+    "element": "button",
     "requirements": [
-      "Must have associated label via Field",
+      "Trigger is a field-styled button with aria-haspopup=menu",
+      "Must have associated label via Field or ariaLabel",
       "Each option needs a human-readable label"
     ]
   },
   "doNot": [
-    "Do not invent local Select or combobox",
+    "Do not use a native select",
+    "Do not use kit Button as the Select trigger — Select uses DropdownMenu triggerStyle=field",
+    "Do not invent a local Select or combobox",
     "Do not use raw hex",
-    "Do not use for navigation \u2014 use AppNav or links"
+    "Do not use for navigation — use AppNav or links"
   ],
   "snippet": "<Field label=\"Timezone\" htmlFor=\"tz\"><Select id=\"tz\" options={[{ value: 'utc', label: 'UTC' }]} /></Field>"
 }

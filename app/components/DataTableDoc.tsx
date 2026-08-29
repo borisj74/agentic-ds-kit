@@ -7,44 +7,30 @@ import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 
+const ACTION = {
+  type: "actionMenu" as const,
+  label: "Row actions",
+  actions: [
+    { label: "Edit", icon: "Pencil" },
+    { label: "Make a copy", icon: "Copy" },
+    { label: "Delete", icon: "Trash2", variant: "danger" as const },
+  ],
+};
+
 const COLUMNS: DataTableColumn[] = [
   { key: "name", header: "Name", sortable: true },
   { key: "role", header: "Role", sortable: true },
   { key: "status", header: "Status", sortable: true },
   { key: "projects", header: "Projects", type: "number", sortable: true },
+  { key: "actions", header: "Actions" },
 ];
 
 const ROWS: DataTableRow[] = [
-  {
-    name: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: FACES["Maya Chen"] },
-    role: "Designer",
-    status: { type: "badge", label: "Active", tone: "success" },
-    projects: 12,
-  },
-  {
-    name: { type: "avatar", label: "Noah Williams", name: "Noah Williams", src: FACES["Noah Williams"] },
-    role: "Engineer",
-    status: { type: "badge", label: "Active", tone: "success" },
-    projects: 8,
-  },
-  {
-    name: { type: "avatar", label: "Iris Okafor", name: "Iris Okafor", src: FACES["Iris Okafor"] },
-    role: "Product",
-    status: { type: "badge", label: "Invited", tone: "info" },
-    projects: 4,
-  },
-  {
-    name: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee", src: FACES["Jordan Lee"] },
-    role: "Designer",
-    status: { type: "badge", label: "Away", tone: "warning" },
-    projects: 6,
-  },
-  {
-    name: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera", src: FACES["Alex Rivera"] },
-    role: "Engineer",
-    status: { type: "badge", label: "Active", tone: "success" },
-    projects: 9,
-  },
+  { name: "Maya Chen", role: "Product designer", status: "Active", projects: 8, actions: ACTION },
+  { name: "Noah Williams", role: "Engineer", status: "Active", projects: 5, actions: ACTION },
+  { name: "Iris Okafor", role: "Product manager", status: "Active", projects: 3, actions: ACTION },
+  { name: "Jordan Lee", role: "Designer", status: "Away", projects: 6, actions: ACTION },
+  { name: "Alex Rivera", role: "Engineer", status: "Active", projects: 4, actions: ACTION },
 ];
 
 const CELL_TYPE_COLUMNS: DataTableColumn[] = [
@@ -130,7 +116,15 @@ const INTERACTIVE_ROWS: DataTableRow[] = [
         { icon: "Trash2", ariaLabel: "Delete", variant: "danger" },
       ],
     },
-    menu: { type: "actionMenu", label: "Row actions" },
+    menu: {
+      type: "actionMenu",
+      label: "Row actions",
+      actions: [
+        { label: "Edit", icon: "Pencil" },
+        { label: "Make a copy", icon: "Copy" },
+        { label: "Delete", icon: "Trash2", variant: "danger" },
+      ],
+    },
   },
 ];
 
@@ -153,6 +147,7 @@ const TOOLBAR_CODE = `<DataTable
   caption="Team members"
   selectable
   toolbar
+  cellSize="sm"
   searchPlaceholder="Search members..."
   filters={[
     { key: "status", label: "Status" },
@@ -164,13 +159,23 @@ const TOOLBAR_CODE = `<DataTable
     { key: "role", header: "Role" },
     { key: "status", header: "Status" },
     { key: "projects", header: "Projects", type: "number" },
+    { key: "actions", header: "Actions" },
   ]}
   rows={[
     {
-      name: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: "/faces/maya-chen.jpg" },
-      role: "Designer",
-      status: { type: "badge", label: "Active", tone: "success" },
-      projects: 12,
+      name: "Maya Chen",
+      role: "Product designer",
+      status: "Active",
+      projects: 8,
+      actions: {
+        type: "actionMenu",
+        label: "Row actions",
+        actions: [
+          { label: "Edit", icon: "Pencil" },
+          { label: "Make a copy", icon: "Copy" },
+          { label: "Delete", icon: "Trash2", variant: "danger" },
+        ],
+      },
     },
   ]}
 />`;
@@ -201,6 +206,7 @@ export function DataTableDoc() {
       caption="Team members"
       selectable
       toolbar
+      cellSize="sm"
       searchPlaceholder="Search members..."
       filters={FILTERS}
       columnSettings
@@ -224,8 +230,7 @@ export function DataTableDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toolbar with search, filters, column settings, and row selection. Each td is a kit Cell.
-            Table stays the short static list.
+            Small cells. Actions is kit Cell type=actionMenu. Table stays the short static list.
           </p>
           <div className={styles.tabList} role="tablist" aria-label="Master views">
             <button
@@ -262,8 +267,7 @@ export function DataTableDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  DataTable for searchable datasets. Table for a short static list. Render kit Cell in
-                  each td — Avatar, Badge, and Checkbox through Cell. Do not invent a local cell.
+                  DataTable for searchable datasets. Table for a short static list. Each td is a kit Cell. Compose Avatar or Badge in a cell when the row needs them.
                 </p>
               </div>
               <CodeBlock code={TOOLBAR_CODE} />
@@ -281,8 +285,7 @@ export function DataTableDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Search, filters, and Columns. Result strip shows how many rows match. Name is Cell
-                  type=avatar; status is type=badge.
+                  Search, filters, and Columns. Result strip, then the caption as the table title.
                 </p>
               </div>
               <CodeBlock code={TOOLBAR_CODE} />

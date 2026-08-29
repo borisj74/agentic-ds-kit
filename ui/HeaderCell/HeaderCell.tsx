@@ -31,10 +31,18 @@ export function HeaderCell({
   const checkboxId = id ?? generatedId;
   const aria = label ? `Select all ${label}` : "Select all rows";
   const icon = sort === "asc" ? "ChevronUp" : sort === "desc" ? "ChevronDown" : "ChevronsUpDown";
-  const sortLabel = sort === "asc" ? `Sort ${label ?? "column"} descending` : sort === "desc" ? `Clear sort on ${label ?? "column"}` : `Sort ${label ?? "column"} ascending`;
+  const sortLabel =
+    sort === "asc"
+      ? `Sort ${label ?? "column"} descending`
+      : sort === "desc"
+        ? `Clear sort on ${label ?? "column"}`
+        : `Sort ${label ?? "column"} ascending`;
+  const checkboxOnly = checkbox && !label;
 
   return (
-    <span className={`${styles.cell} ${styles[size]} ${styles[align]}`}>
+    <span
+      className={`${styles.cell} ${styles[size]} ${styles[align]}${checkboxOnly ? ` ${styles.checkboxOnly}` : ""}`}
+    >
       {checkbox ? (
         <Checkbox
           id={checkboxId}

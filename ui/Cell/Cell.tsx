@@ -5,6 +5,7 @@ import { Avatar } from "@/ui/Avatar";
 import { AvatarGroup } from "@/ui/AvatarGroup";
 import { Badge } from "@/ui/Badge";
 import { Button } from "@/ui/Button";
+import { DropdownMenu } from "@/ui/DropdownMenu";
 import { ButtonGroup } from "@/ui/ButtonGroup";
 import { Checkbox } from "@/ui/Checkbox";
 import { Select } from "@/ui/Select";
@@ -237,14 +238,26 @@ export function Cell({
       );
     }
   } else if (type === "actionMenu") {
-    const item = actions?.[0];
+    const menuItems = (actions ?? []).map((item, index) => ({
+      id: item.label || item.ariaLabel || item.icon || `action-${index}`,
+      label: item.label || item.ariaLabel || "Action",
+      icon: item.icon,
+      danger: item.variant === "danger",
+    }));
     visual = (
-      <Button
+      <DropdownMenu
+        iconStart={icon || "Ellipsis"}
+        ariaLabel={label || "Row actions"}
+        variant="tertiary"
         size={buttonSize}
-        variant={item?.variant ?? "tertiary"}
-        iconStart={item?.icon || icon || "Ellipsis"}
-        ariaLabel={item?.ariaLabel || label || "Row actions"}
-        onClick={item?.onClick}
+        align="end"
+        groups={[{ items: menuItems }]}
+        onSelect={(id) => {
+          const hit = (actions ?? []).find(
+            (item, index) => (item.label || item.ariaLabel || item.icon || `action-${index}`) === id,
+          );
+          hit?.onClick?.();
+        }}
       />
     );
   }

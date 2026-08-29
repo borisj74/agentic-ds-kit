@@ -1,0 +1,36 @@
+.layout {
+  min-height: 22rem;
+  min-width: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.canvas {
+  display: grid;
+  place-items: center;
+  min-height: 22rem;
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-6);
+  overflow-x: auto;
+}
+
+.exampleCanvas {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-6);
+  overflow-x: auto;
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

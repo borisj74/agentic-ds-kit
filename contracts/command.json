@@ -4,12 +4,13 @@
   "intent": "Searchable command menu for quick actions.",
   "useWhen": [
     "Searchable actions and quick jumps",
-    "Command palette \u2014 kit Button opens kit Modal with Command inside"
+    "Command palette — kit Button opens kit Modal with Command inside"
   ],
   "doNotUseWhen": [
-    "Short Field dropdown \u2014 use Select",
-    "Sidebar navigation \u2014 use AppNav",
-    "Overlay chrome \u2014 compose Modal; do not add CommandDialog"
+    "Short Field dropdown — use Select",
+    "Actions from a button — use DropdownMenu",
+    "Sidebar navigation — use AppNav",
+    "Overlay chrome — compose Modal; do not add CommandDialog"
   ],
   "props": {
     "placeholder": {
@@ -73,11 +74,11 @@
   },
   "doNot": [
     "Do not invent CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandShortcut, or CommandDialog",
-    "Do not wrap the search field in Field \u2014 Command owns its input",
+    "Do not wrap the search field in Field — Command owns its input",
     "Do not use kit Input (uncontrolled) for the query",
     "Do not use cmdk or extra dependencies",
     "Do not use raw hex",
-    "Do not close itself \u2014 compose Modal for an overlay"
+    "Do not close itself — compose Modal for an overlay"
   ],
   "snippet": "<Button variant=\"secondary\" iconStart=\"Search\" onClick={open} />\n<Modal open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Modal>"
 }

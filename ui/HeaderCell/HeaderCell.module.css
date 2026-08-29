@@ -28,6 +28,12 @@
   justify-content: flex-end;
 }
 
+.checkboxOnly {
+  width: auto;
+  justify-content: center;
+  padding-inline: 0;
+}
+
 .label {
   min-width: 0;
   font-family: var(--font-sans);

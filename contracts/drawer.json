@@ -11,7 +11,8 @@
   "doNotUseWhen": [
     "Centered short task \u2014 use Modal",
     "Must-choose confirm \u2014 use AlertDialog",
-    "Persistent nav \u2014 use AppNav",
+    "Persistent nav list \u2014 use AppNav",
+    "Closeable app chrome \u2014 use SideNav",
     "Full page \u2014 use a route"
   ],
   "props": {

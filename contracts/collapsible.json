@@ -1,10 +1,10 @@
 {
   "id": "collapsible",
   "status": "stable",
-  "intent": "Single show/hide panel.",
+  "intent": "Single show/hide panel with a title and a toggle.",
   "useWhen": [
     "One disclosure whose body composes kit pieces",
-    "Product details or extra spec the user can hide"
+    "Order, product, or extra spec the user can hide"
   ],
   "doNotUseWhen": [
     "Two or more related sections, one open at a time — use Accordion",
@@ -14,7 +14,7 @@
     "trigger": {
       "type": "string",
       "required": true,
-      "note": "Button label"
+      "note": "Title on the left. Toggle is a ChevronsUpDown button, not the whole row"
     },
     "children": {
       "type": "slot",
@@ -39,23 +39,28 @@
   "tokens": [
     "text.primary",
     "icon.muted",
+    "surface.muted",
+    "surface.card",
     "border.faint",
     "border.focus",
-    "motion.expandDuration"
+    "radius.surface.md",
+    "radius.control.sm"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
-      "Trigger is a button with aria-expanded",
+      "Title is not the toggle",
+      "Toggle is a button with aria-expanded and aria-label Toggle {trigger}",
       "Button aria-controls the panel",
-      "Panel is role=region, aria-labelledby the button",
+      "Panel is role=region, aria-labelledby the title",
       "Closed panel is hidden from AT"
     ]
   },
   "doNot": [
     "Do not invent CollapsibleTrigger or CollapsibleContent cousins",
     "Do not use Accordion for a single block",
+    "Do not make the whole header row the button",
     "Do not use raw hex"
   ],
-  "snippet": "<Collapsible trigger=\"Product details\" defaultOpen>\n  {children}\n</Collapsible>"
+  "snippet": "<Collapsible trigger=\"Order #4189\" defaultOpen>\n  {children}\n</Collapsible>"
 }

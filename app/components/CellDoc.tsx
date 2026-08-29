@@ -378,16 +378,27 @@ export function CellDoc() {
               <h2 className={styles.exampleTitle}>Action menu</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Cell type="actionMenu" size="md" label="Row actions" />
+                  <Cell
+                    type="actionMenu"
+                    size="md"
+                    label="Row actions"
+                    actions={[
+                      { label: "Edit", icon: "Pencil" },
+                      { label: "Make a copy", icon: "Copy" },
+                      { label: "Delete", icon: "Trash2", variant: "danger" },
+                    ]}
+                  />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One icon-only kit Button, Ellipsis by default. Trigger only — no DropdownMenu cousin.
+                  Kit DropdownMenu from the ellipsis. Pass actions. Align end.
                 </p>
               </div>
-              <CodeBlock code={'<Cell type="actionMenu" label="Row actions" />'} />
+              <CodeBlock
+                code={'<Cell type="actionMenu" label="Row actions" actions={[{ label: "Edit", icon: "Pencil" }, { label: "Delete", icon: "Trash2", variant: "danger" }]} />'}
+              />
             </section>
           </div>
         )}

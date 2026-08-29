@@ -8,12 +8,16 @@
     "List-detail layouts with a small flat list of section links"
   ],
   "doNotUseWhen": [
-    "In-page panel switching — use Tabs",
-    "Horizontal top nav bars — out of scope",
-    "Breadcrumb trails — not supported"
+    "In-page panel switching \u2014 use Tabs",
+    "Horizontal site nav \u2014 use NavigationMenu",
+    "Breadcrumb trails \u2014 not supported",
+    "Closeable product chrome \u2014 use SideNav"
   ],
   "props": {
-    "title": { "type": "string", "required": true },
+    "title": {
+      "type": "string",
+      "required": false
+    },
     "items": {
       "type": "array",
       "itemShape": {
@@ -37,7 +41,15 @@
     }
   },
   "precedence": "When both items and groups are passed, groups wins; items is ignored.",
-  "tokens": ["text.primary", "text.secondary", "text.muted", "surface.card", "surface.muted", "border.faint", "action.primary"],
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "action.primary"
+  ],
   "a11y": {
     "element": "nav",
     "requirements": [
@@ -50,8 +62,9 @@
   },
   "doNot": [
     "Do not invent local Sidebar or AppNav",
+    "Do not invent Sidebar, SidebarProvider, or local nav chrome \u2014 use SideNav",
     "Do not use raw hex",
-    "Do not use AppNav for tab panels — use Tabs",
+    "Do not use AppNav for tab panels \u2014 use Tabs",
     "Do not nest more than one subgroup level"
   ],
   "snippet": "<AppNav title=\"Agentic DS Kit\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"

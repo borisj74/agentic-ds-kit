@@ -1,3 +1,4 @@
+import { cloneElement, isValidElement, type ReactElement } from "react";
 import type { FieldProps } from "./Field.types";
 import styles from "./Field.module.css";
 
@@ -11,19 +12,26 @@ export function Field({
   labelPosition = "top",
   children,
 }: FieldProps) {
-  const hintId = hint ? `${htmlFor}-hint` : undefined;
+  const hintId = hint && !error ? `${htmlFor}-hint` : undefined;
   const errorId = error ? `${htmlFor}-error` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 
+  const control =
+    describedBy && isValidElement(children)
+      ? cloneElement(children as ReactElement<{ describedBy?: string }>, { describedBy })
+      : children;
+
   return (
-    <div className={`${styles.field} ${styles[labelPosition]}`}>
+    <div
+      className={`${styles.field} ${styles[labelPosition]}`}
+      role="group"
+      data-invalid={error ? "true" : undefined}
+    >
       <label className={styles.label} htmlFor={htmlFor}>
         {label}
       </label>
-      <div className={styles.body} aria-describedby={describedBy}>
-        {children}
-      </div>
-      {hint ? (
+      <div className={styles.body}>{control}</div>
+      {hint && !error ? (
         <p id={hintId} className={styles.hint}>
           {hint}
         </p>

@@ -1,81 +1,49 @@
 {
   "id": "field",
   "status": "stable",
-  "intent": "Wrap a form control with label, optional hint, and optional error. Label sits on top or start (left).",
+  "intent": "One labeled control with optional hint and error. Label on top or start (left).",
   "useWhen": [
-    "Any labeled Input, Textarea, or Select in a form",
-    "When validation errors or helper text must appear below the control"
+    "Any labeled Input, Textarea, Select, DatePicker, or Switch",
+    "When helper text or a validation error sits with the control"
   ],
   "doNotUseWhen": [
-    "Checkbox with inline label \u2014 use Checkbox directly unless hint/error is needed",
-    "RadioGroup \u2014 it provides its own legend",
-    "Display-only content \u2014 use Section or plain text"
+    "Checkbox with its own label and no extra hint/error — use Checkbox",
+    "RadioGroup — it provides its own legend",
+    "A group of fields with a legend — use FieldSet",
+    "Display-only content — use Section"
   ],
   "props": {
-    "label": {
-      "type": "string",
-      "required": true
-    },
-    "htmlFor": {
-      "type": "string",
-      "required": true
-    },
-    "hint": {
-      "type": "string",
-      "required": false
-    },
-    "error": {
-      "type": "string",
-      "required": false
+    "label": { "type": "string", "required": true },
+    "htmlFor": { "type": "string", "required": true },
+    "hint": { "type": "string", "required": false, "note": "helper text. Hidden when error is set." },
+    "error": { "type": "string", "required": false },
+    "labelPosition": {
+      "type": "enum",
+      "values": ["top", "start"],
+      "default": "top",
+      "note": "top stacks. start is horizontal (label left). Hint and error stay under the control."
     },
     "children": {
       "type": "slot",
-      "allowedContracts": [
-        "input",
-        "textarea",
-        "select",
-        "datepicker"
-      ],
+      "allowedContracts": ["input", "textarea", "select", "datepicker", "switch", "checkbox"],
       "required": true
-    },
-    "labelPosition": {
-      "type": "enum",
-      "values": [
-        "top",
-        "start"
-      ],
-      "default": "top",
-      "note": "top stacks the label above the control. start places it on the left. Hint and error stay under the control."
     }
   },
-  "tokens": [
-    "text.primary",
-    "text.secondary",
-    "text.danger"
-  ],
+  "tokens": ["text.primary", "text.muted", "text.danger"],
   "a11y": {
     "element": "div",
     "requirements": [
+      "role=group",
       "Label htmlFor matches child control id",
-      "Error text linked via aria-describedby when present"
+      "Hint or error id is passed to the child as describedBy",
+      "data-invalid when error is set"
     ]
   },
   "doNot": [
-    "Do not invent local Field",
+    "Do not invent FieldLabel, FieldContent, FieldDescription, FieldError, FieldTitle, FieldGroup, FieldLegend, FieldSeparator, Form, FormField, FormItem, FormControl, or FormMessage",
     "Do not wrap Button or layout components",
-    "Do not use raw hex",
-    "Do not use Field without a kit Input, Textarea, Select, or DatePicker child",
-    "Do not use start on Field for prefix text \u2014 that is Input start"
+    "Do not use start on Field for prefix text — that is Input start",
+    "Do not use raw hex"
   ],
-  "snippet": "<Field label=\"Email\" htmlFor=\"email\" labelPosition=\"start\"><Input id=\"email\" type=\"email\" /></Field>",
-  "children": {
-    "type": "slot",
-    "allowedContracts": [
-      "input",
-      "textarea",
-      "select",
-      "datepicker"
-    ],
-    "required": true
-  }
+  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\"><Input id=\"email\" type=\"email\" /></Field>"
 }

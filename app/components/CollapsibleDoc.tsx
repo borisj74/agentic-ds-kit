@@ -2,34 +2,25 @@
 
 import { useState } from "react";
 import { Badge } from "@/ui/Badge";
-import { Card } from "@/ui/Card";
 import { Collapsible } from "@/ui/Collapsible";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import demo from "./CollapsibleDoc.module.css";
 
-const MASTER_TRIGGER = "Product details";
+const MASTER_TRIGGER = "Order #4189";
 
-const CLOSED_CODE = `<Collapsible trigger="Product details">
-  <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>
-  <p>Made to order. Lead time two weeks.</p>
+const CLOSED_CODE = `<Collapsible trigger="Order #4189">
+  {children}
 </Collapsible>`;
 
-const OPEN_CODE = `<Collapsible trigger="Product details" defaultOpen>
-  <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>
-  <p>Made to order. Lead time two weeks.</p>
+const OPEN_CODE = `<Collapsible trigger="Order #4189" defaultOpen>
+  {children}
 </Collapsible>`;
 
-const EXTRA_CODE = `<Collapsible trigger="Extra details" defaultOpen>
+const EXTRA_CODE = `<Collapsible trigger="Product details" defaultOpen>
   <Badge tone="info">In stock</Badge>
   <p>Walnut finish. Ships from Belgrade.</p>
 </Collapsible>`;
-
-const CARD_CODE = `<Card>
-  <Collapsible trigger="Order #4189" defaultOpen>
-    <Badge tone="success">Shipped</Badge>
-    <p>Left the studio this morning. Tracking updates in the next hour.</p>
-  </Collapsible>
-</Card>`;
 
 function masterCode() {
   return [
@@ -38,10 +29,28 @@ function masterCode() {
     "  open={open}",
     "  onOpenChange={setOpen}",
     ">",
-    "  <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>",
-    "  <p>Made to order. Lead time two weeks.</p>",
+    "  {children}",
     "</Collapsible>",
   ].join("\n");
+}
+
+function OrderRows() {
+  return (
+    <>
+      <div className={demo.row}>
+        <span className={demo.label}>Status</span>
+        <span className={demo.value}>Shipped</span>
+      </div>
+      <div className={`${demo.row} ${demo.stack}`}>
+        <span className={demo.kicker}>Shipping address</span>
+        <span className={demo.copy}>100 Market St, San Francisco</span>
+      </div>
+      <div className={`${demo.row} ${demo.stack}`}>
+        <span className={demo.kicker}>Items</span>
+        <span className={demo.copy}>2x Studio Headphones</span>
+      </div>
+    </>
+  );
 }
 
 export function CollapsibleDoc() {
@@ -61,7 +70,7 @@ export function CollapsibleDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            One disclosure. Compose kit pieces in the body. Not Accordion.
+            Title on the left. ChevronsUpDown toggles the body. Not Accordion.
           </p>
           <div className={styles.tabList} role="tablist" aria-label="Master views">
             <button
@@ -91,8 +100,7 @@ export function CollapsibleDoc() {
               <div className={styles.canvas}>
                 <div className={styles.previewFill}>
                   <Collapsible trigger={MASTER_TRIGGER} open={open} onOpenChange={setOpen}>
-                    <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>
-                    <p>Made to order. Lead time two weeks.</p>
+                    <OrderRows />
                   </Collapsible>
                 </div>
               </div>
@@ -124,9 +132,8 @@ export function CollapsibleDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One panel. Use Accordion when two or more related sections open one at a time. Use
-                  Tabs for peer views. Compose kit Badge, Field, or Card in children — never a local
-                  cousin.
+                  One panel. The title is not the button. Use Accordion when two or more related
+                  sections open one at a time. Compose kit pieces in children — never a local cousin.
                 </p>
               </div>
               <CodeBlock code={masterCode()} />
@@ -138,9 +145,8 @@ export function CollapsibleDoc() {
               <h2 className={styles.exampleTitle}>Closed</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
-                  <Collapsible trigger="Product details">
-                    <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>
-                    <p>Made to order. Lead time two weeks.</p>
+                  <Collapsible trigger="Order #4189">
+                    <OrderRows />
                   </Collapsible>
                 </div>
               </div>
@@ -155,9 +161,8 @@ export function CollapsibleDoc() {
               <h2 className={styles.exampleTitle}>Open</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
-                  <Collapsible trigger="Product details" defaultOpen>
-                    <p>SKU FL-204. Natural oak, 120 × 80 cm.</p>
-                    <p>Made to order. Lead time two weeks.</p>
+                  <Collapsible trigger="Order #4189" defaultOpen>
+                    <OrderRows />
                   </Collapsible>
                 </div>
               </div>
@@ -169,10 +174,10 @@ export function CollapsibleDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Extra details</h2>
+              <h2 className={styles.exampleTitle}>Product details</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
-                  <Collapsible trigger="Extra details" defaultOpen>
+                  <Collapsible trigger="Product details" defaultOpen>
                     <Badge tone="info">In stock</Badge>
                     <p>Walnut finish. Ships from Belgrade.</p>
                   </Collapsible>
@@ -185,27 +190,6 @@ export function CollapsibleDoc() {
                 </p>
               </div>
               <CodeBlock code={EXTRA_CODE} />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>With Card</h2>
-              <div className={styles.exampleCanvas}>
-                <div className={styles.previewFill}>
-                  <Card>
-                    <Collapsible trigger="Order #4189" defaultOpen>
-                      <Badge tone="success">Shipped</Badge>
-                      <p>Left the studio this morning. Tracking updates in the next hour.</p>
-                    </Collapsible>
-                  </Card>
-                </div>
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Nest Collapsible in kit Card. Badge lives in the body, not the trigger row.
-                </p>
-              </div>
-              <CodeBlock code={CARD_CODE} />
             </section>
           </div>
         )}

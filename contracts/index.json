@@ -57,7 +57,7 @@
   },
   {
     "id": "textarea",
-    "intent": "Multi-line text entry for longer form content.",
+    "intent": "Multi-line text for notes. Florence field. Wrap with Field.",
     "group": "component",
     "path": "contracts/textarea.json",
     "status": "stable"
@@ -148,9 +148,16 @@
   },
   {
     "id": "field",
-    "intent": "Wrap a form control with label, optional hint, and optional error. Label sits on top or start (left).",
+    "intent": "One labeled control with optional hint and error. Label on top or start (left).",
     "group": "component",
     "path": "contracts/field.json",
+    "status": "stable"
+  },
+  {
+    "id": "fieldset",
+    "intent": "Semantic group of fields with a legend and optional description.",
+    "group": "component",
+    "path": "contracts/fieldset.json",
     "status": "stable"
   },
   {
@@ -203,10 +210,31 @@
     "status": "stable"
   },
   {
+    "id": "dropdownmenu",
+    "intent": "Actions or value menu from a button, field, or nav trigger.",
+    "group": "component",
+    "path": "contracts/dropdownmenu.json",
+    "status": "stable"
+  },
+  {
+    "id": "navigationmenu",
+    "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
+    "group": "component",
+    "path": "contracts/navigationmenu.json",
+    "status": "stable"
+  },
+  {
     "id": "pageheader",
     "intent": "Top-of-page title block with optional actions.",
     "group": "component",
     "path": "contracts/pageheader.json",
+    "status": "stable"
+  },
+  {
+    "id": "pagination",
+    "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
+    "group": "component",
+    "path": "contracts/pagination.json",
     "status": "stable"
   },
   {
@@ -224,8 +252,15 @@
     "status": "stable"
   },
   {
+    "id": "sidenav",
+    "intent": "Florence product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+    "group": "component",
+    "path": "contracts/sidenav.json",
+    "status": "stable"
+  },
+  {
     "id": "table",
-    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
+    "intent": "Simple semantic table for text rows — not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable"

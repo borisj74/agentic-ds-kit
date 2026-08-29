@@ -7,8 +7,8 @@
     "Mixed visual and label content in a row"
   ],
   "doNotUseWhen": [
-    "A full searchable dataset \u2014 use DataTable, which composes Cell",
-    "A short static text table \u2014 use Table"
+    "A full searchable dataset — use DataTable, which composes Cell",
+    "A short static text table — use Table"
   ],
   "contains": [
     "avatar",
@@ -133,7 +133,7 @@
     "onCheckedChange": {
       "type": "function",
       "required": false,
-      "note": "(checked: boolean) => void \u2014 only when checkbox"
+      "note": "(checked: boolean) => void — only when checkbox"
     },
     "id": {
       "type": "string",
@@ -158,7 +158,7 @@
         "ariaLabel": "string?",
         "variant": "ButtonVariant?"
       },
-      "note": "type=actions (labeled Buttons in ButtonGroup, cap 3), actionIcons (icon-only Buttons, each ariaLabel), actionMenu uses actions[0] or Ellipsis."
+      "note": "type=actions (labeled Buttons in ButtonGroup, cap 3), actionIcons (icon-only Buttons, each ariaLabel), actionMenu composes kit DropdownMenu from actions."
     }
   },
   "tokens": [
@@ -191,10 +191,11 @@
     "Do not invent DataTableCell, Tag, Trend, FileIcon, PaymentMethod, or a second Badge",
     "Do not use raw hex",
     "Do not use Badge for trends",
-    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",
+    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox — compose the kit pieces",
     "Do not use Lucide except via LucideByName from @/ui/Button/lucideName",
-    "Do not invent Progress, Rating, StarRating, ActionCell, or DropdownMenu",
-    "Do not invent local Select, Button, or ButtonGroup \u2014 compose the kit pieces"
+    "Do not invent Progress, Rating, StarRating, ActionCell",
+    "Do not invent a local DropdownMenu — type=actionMenu composes kit DropdownMenu",
+    "Do not invent local Select, Button, or ButtonGroup — compose the kit pieces"
   ],
   "snippet": "<Cell type=\"progress\" size=\"md\" value={64} />"
 }

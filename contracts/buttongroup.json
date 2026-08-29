@@ -10,7 +10,8 @@
   "doNotUseWhen": [
     "Unrelated actions that should stay separate Buttons",
     "Wrapping non-Button controls",
-    "Nesting groups"
+    "Nesting groups",
+    "paging a list — use Pagination"
   ],
   "props": {
     "children": {

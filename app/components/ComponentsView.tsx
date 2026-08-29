@@ -21,12 +21,18 @@ import { DatePickerDoc } from "./DatePickerDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
 import { DrawerDoc } from "./DrawerDoc";
+import { DropdownMenuDoc } from "./DropdownMenuDoc";
+import { FieldDoc } from "./FieldDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { NavigationMenuDoc } from "./NavigationMenuDoc";
+import { SideNavDoc } from "./SideNavDoc";
 import { OtherComponent } from "./OtherComponents";
+import { PaginationDoc } from "./PaginationDoc";
 import { SwitchDoc } from "./SwitchDoc";
+import { TextareaDoc } from "./TextareaDoc";
 
 function currentHash(): string {
   if (typeof window === "undefined") return "button";
@@ -55,14 +61,19 @@ const TITLES: Record<string, string> = {
   headercell: "HeaderCell",
   radiogroup: "RadioGroup",
   field: "Field",
+  fieldset: "FieldSet",
   badge: "Badge",
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
   modal: "Modal",
   modalcard: "ModalCard",
+  navigationmenu: "NavigationMenu",
+  sidenav: "SideNav",
   drawer: "Drawer",
+  dropdownmenu: "DropdownMenu",
   pageheader: "PageHeader",
+  pagination: "Pagination",
   section: "Section",
   appnav: "AppNav",
   table: "Table",
@@ -87,7 +98,16 @@ export function ComponentsView() {
     };
   }, []);
 
-  const resolved = hash === "dialog" ? "modal" : hash;
+  const resolved =
+    hash === "dialog"
+      ? "modal"
+      : hash === "fieldset"
+        ? "field"
+        : hash === "sidebar" || hash === "outsidebar"
+          ? "sidenav"
+          : hash === "navmenu" || hash === "navigation-menu"
+            ? "navigationmenu"
+            : hash;
   const id = resolved in TITLES ? resolved : "button";
   if (id === "badge") return <BadgeDoc />;
   if (id === "breadcrumb") return <BreadcrumbDoc />;
@@ -108,11 +128,17 @@ export function ComponentsView() {
   if (id === "datepicker") return <DatePickerDoc />;
   if (id === "modal") return <ModalDoc />;
   if (id === "modalcard") return <ModalCardDoc />;
+  if (id === "navigationmenu") return <NavigationMenuDoc />;
+  if (id === "sidenav") return <SideNavDoc />;
   if (id === "drawer") return <DrawerDoc />;
+  if (id === "dropdownmenu") return <DropdownMenuDoc />;
+  if (id === "field") return <FieldDoc />;
   if (id === "headercell") return <HeaderCellDoc />;
   if (id === "input") return <InputDoc />;
   if (id === "inputotp") return <InputOTPDoc />;
   if (id === "insightcard") return <InsightCardDoc />;
+  if (id === "pagination") return <PaginationDoc />;
   if (id === "switch") return <SwitchDoc />;
+  if (id === "textarea") return <TextareaDoc />;
   return <OtherComponent id={id} title={TITLES[id]} />;
 }

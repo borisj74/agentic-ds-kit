@@ -109,7 +109,7 @@ export function AppNav({ title, items = [], groups }: AppNavProps) {
 
   return (
     <nav className={styles.nav} aria-label="Application">
-      <p className={styles.title}>{title}</p>
+      {title ? <p className={styles.title}>{title}</p> : null}
       {useGroups ? (
         <ul className={styles.groupList}>
           {groups!.map((group) => (

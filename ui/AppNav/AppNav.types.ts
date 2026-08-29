@@ -16,7 +16,7 @@ export interface AppNavGroup {
 }
 
 export interface AppNavProps {
-  title: string;
+  title?: string;
   /** Flat list for simple shells (e.g. list-detail). Ignored when `groups` is provided. */
   items?: AppNavItem[];
   /** Grouped catalog nav for docs/playground shells. Takes precedence over `items`. */

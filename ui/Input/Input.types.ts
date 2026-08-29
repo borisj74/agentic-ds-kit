@@ -15,4 +15,5 @@ export interface InputProps {
   iconStart?: string;
   iconEnd?: string;
   demo?: "hover" | "focus";
+  describedBy?: string;
 }

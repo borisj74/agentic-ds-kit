@@ -21,6 +21,7 @@ export function Input({
   iconStart,
   iconEnd,
   demo,
+  describedBy,
 }: InputProps) {
   const iconPx = ICON_PX[size];
 
@@ -44,6 +45,7 @@ export function Input({
         disabled={disabled}
         defaultValue={defaultValue}
         aria-invalid={error || undefined}
+        aria-describedby={describedBy}
         className={styles.native}
       />
       {end ? (

@@ -1,0 +1,85 @@
+{
+  "id": "pagination",
+  "status": "stable",
+  "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
+  "useWhen": [
+    "tables",
+    "long lists",
+    "search results"
+  ],
+  "doNotUseWhen": [
+    "in-page panels — Tabs",
+    "a pair of sibling actions — ButtonGroup"
+  ],
+  "contains": [
+    "button"
+  ],
+  "props": {
+    "page": {
+      "type": "number",
+      "required": false,
+      "note": "controlled 1-based. Controlled when page is a number."
+    },
+    "defaultPage": {
+      "type": "number",
+      "default": 1,
+      "note": "uncontrolled initial page"
+    },
+    "pageCount": {
+      "type": "number",
+      "required": true,
+      "note": ">= 1"
+    },
+    "onPageChange": {
+      "type": "function",
+      "required": false,
+      "note": "(page: number) => void"
+    },
+    "showPages": {
+      "type": "boolean",
+      "default": true,
+      "note": "false shows Previous/Next only (icons-only when showLabels is also false)"
+    },
+    "showLabels": {
+      "type": "boolean",
+      "default": true,
+      "note": "Previous / Next text next to chevrons. Icon-only uses ariaLabel."
+    },
+    "showPreviousNext": {
+      "type": "boolean",
+      "default": true,
+      "note": "false hides Previous/Next (Simple: page numbers only)"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md",
+      "note": "passed to kit Button"
+    }
+  },
+  "tokens": [
+    "space.1",
+    "icon.muted"
+  ],
+  "a11y": {
+    "element": "nav",
+    "requirements": [
+      "nav with aria-label=\"Pagination\"",
+      "Previous disabled on page 1",
+      "Next disabled on last page",
+      "current page uses kit Button variant=secondary and aria-current=page",
+      "ellipsis is a span with Lucide Ellipsis, aria-hidden, not a Button",
+      "icon-only Previous/Next set ariaLabel"
+    ]
+  },
+  "doNot": [
+    "no PaginationContent/Item/Link/Previous/Next/Ellipsis cousins",
+    "do not use raw hex",
+    "do not use ButtonGroup for paging",
+    "page numbers are kit Button"
+  ],
+  "snippet": "<Pagination page={2} pageCount={10} onPageChange={() => {}} />"
+}

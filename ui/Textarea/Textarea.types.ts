@@ -1,4 +1,4 @@
-export type TextareaSize = "md" | "sm";
+export type TextareaSize = "lg" | "md" | "sm";
 
 export interface TextareaProps {
   id: string;
@@ -9,4 +9,6 @@ export interface TextareaProps {
   error?: boolean;
   defaultValue?: string;
   name?: string;
+  demo?: "hover" | "focus";
+  describedBy?: string;
 }

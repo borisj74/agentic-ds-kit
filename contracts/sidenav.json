@@ -1,0 +1,111 @@
+{
+  "id": "sidenav",
+  "status": "stable",
+  "intent": "Florence product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+  "useWhen": [
+    "Product app chrome",
+    "Persistent nav with icons"
+  ],
+  "doNotUseWhen": [
+    "Docs catalog \u2014 use AppNav",
+    "Overlay task panel \u2014 use Drawer",
+    "Centered short task \u2014 use Modal",
+    "Horizontal site nav \u2014 use NavigationMenu"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "note": "Brand title in the header"
+    },
+    "mark": {
+      "type": "string",
+      "required": false,
+      "note": "Brand letter. Defaults to the first character of title"
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "default": true
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void"
+    },
+    "side": {
+      "type": "enum",
+      "values": [
+        "left",
+        "right"
+      ],
+      "default": "left",
+      "note": "Does not position SideNav. The consumer shell uses row-reverse for right"
+    },
+    "groups": {
+      "type": "array",
+      "required": false,
+      "note": "Labeled sections of SideNavItem. Takes precedence over items"
+    },
+    "items": {
+      "type": "array",
+      "required": false,
+      "note": "Flat list when groups is omitted"
+    },
+    "footer": {
+      "type": "object",
+      "required": false,
+      "note": "Single footer row (Florence Settings)"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.brand",
+    "text.disabled",
+    "surface.card",
+    "surface.muted",
+    "surface.brandSubtle",
+    "surface.disabled",
+    "border.subtle",
+    "border.faint",
+    "border.surface",
+    "border.divider",
+    "fill.brand",
+    "brand.onBrand",
+    "icon.secondary",
+    "icon.brand",
+    "icon.muted",
+    "focus.ring",
+    "shadow.raisedDepth",
+    "layout.sidebar",
+    "layout.sidebarCompact"
+  ],
+  "a11y": {
+    "element": "aside",
+    "requirements": [
+      "In-flow aside, not a dialog and not position:fixed",
+      "No overlay, no focus trap, no Escape-to-close",
+      "Close is a kit Button with ariaLabel Close",
+      "Closed rail reopens via the brand mark button with ariaLabel Open",
+      "Title is visible in the header when open; clipped when closed",
+      "Active leaf uses aria-current=page",
+      "Parent with nested items is a disclosure with aria-expanded",
+      "Closed rail keeps labels available as sr-only text"
+    ]
+  },
+  "doNot": [
+    "Do not invent Sidebar, SidebarHeader, SidebarNav, SidebarSection, SidebarItem, SidebarSubmenu, SidebarFooter, SidebarProvider, SidebarTrigger, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, or SidebarRail",
+    "Do not compose AppNav inside SideNav",
+    "Do not use Drawer for persistent app chrome",
+    "Do not use AppNav as closeable product chrome",
+    "Do not use position:fixed, an overlay, a focus trap, or Escape-to-close",
+    "Do not use the shadcn sidebar package",
+    "Do not use raw hex"
+  ],
+  "snippet": "<SideNav title=\"Agentix\" mark=\"A\" open={open} onOpenChange={setOpen} groups={groups} footer={[{ id: \"invite\", label: \"Invite members\", icon: \"CirclePlus\" }, { id: \"settings\", label: \"Settings\", icon: \"Settings\" }]} />"
+}
