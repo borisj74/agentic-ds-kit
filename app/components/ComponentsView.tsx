@@ -7,6 +7,7 @@ import { AlertDoc } from "./AlertDoc";
 import { AvatarDoc } from "./AvatarDoc";
 import { AvatarGroupDoc } from "./AvatarGroupDoc";
 import { BadgeDoc } from "./BadgeDoc";
+import { BreadcrumbDoc } from "./BreadcrumbDoc";
 import { ButtonDoc } from "./ButtonDoc";
 import { ButtonGroupDoc } from "./ButtonGroupDoc";
 import { CalendarDoc } from "./CalendarDoc";
@@ -48,6 +49,7 @@ const TITLES: Record<string, string> = {
   radiogroup: "RadioGroup",
   field: "Field",
   badge: "Badge",
+  breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
   dialog: "Dialog",
@@ -80,6 +82,7 @@ export function ComponentsView() {
   const resolved = hash === "modal" ? "dialog" : hash;
   const id = resolved in TITLES ? resolved : "button";
   if (id === "badge") return <BadgeDoc />;
+  if (id === "breadcrumb") return <BreadcrumbDoc />;
   if (id === "button") return <ButtonDoc />;
   if (id === "buttongroup") return <ButtonGroupDoc />;
   if (id === "accordion") return <AccordionDoc />;

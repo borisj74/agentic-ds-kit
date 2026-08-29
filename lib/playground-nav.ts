@@ -8,6 +8,7 @@ const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
+  "breadcrumb",
   "button",
   "buttongroup",
   "calendar",

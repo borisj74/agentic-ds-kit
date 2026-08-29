@@ -9,7 +9,8 @@
   "doNotUseWhen": [
     "In-card section titles \u2014 use Section",
     "Sidebar branding \u2014 use AppNav title",
-    "Dialog titles \u2014 use Dialog title prop"
+    "Dialog titles \u2014 use Dialog title prop",
+    "Path to this page \u2014 use Breadcrumb"
   ],
   "props": {
     "title": {

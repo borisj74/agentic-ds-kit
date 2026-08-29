@@ -140,6 +140,13 @@
     "status": "stable"
   },
   {
+    "id": "breadcrumb",
+    "intent": "Path to the current page as a hierarchy of links.",
+    "group": "component",
+    "path": "contracts/breadcrumb.json",
+    "status": "stable"
+  },
+  {
     "id": "tooltip",
     "intent": "Brief supplementary text on hover or focus.",
     "group": "component",
