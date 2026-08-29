@@ -47,6 +47,11 @@ Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundation
 - `CLAUDE.md` / `.cursor/rules/kit.mdc` — always-on rules
 - `.cursor/skills/prototype-from-kit/` — composition skill
 
+## Origin repository
+
+- **Codebase:** https://cursor.com/codebase/bojo74/agentic-ds-kit
+- **Clone:** `git clone https://origin.cursor.com/bojo74/agentic-ds-kit.git`
+
 ## Run locally
 
 ```bash
