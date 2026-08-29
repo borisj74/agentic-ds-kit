@@ -8,7 +8,6 @@ import { Select } from "@/ui/Select";
 import { Table } from "@/ui/Table";
 import { Textarea } from "@/ui/Textarea";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
-import { InteractiveDemos } from "./InteractiveDemos";
 import styles from "./components.module.css";
 import doc from "./ComponentDoc.module.css";
 
@@ -17,7 +16,7 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
     <div>
       <header className={doc.hero}>
         <h1 className={doc.heroTitle}>{title}</h1>
-        <p className={doc.lede}>Kit example.</p>
+        <p className={doc.lede}>Kit example with live controls and contract snippets.</p>
       </header>
       <div className={styles.anchor} id={id}>
         {id === "appnav" && (
@@ -79,7 +78,6 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
             ]}
           />
         )}
-        {id === "tooltip" && <InteractiveDemos mode="tooltip" />}
       </div>
     </div>
   );

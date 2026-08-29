@@ -21,7 +21,7 @@ export function DashboardPattern({ metrics, table }: DashboardPatternProps) {
     <div className={styles.pattern}>
       <PageHeader
         title="Studio dashboard"
-        subtitle="Contracts in JSON, components in ui/."
+        subtitle="A compact playground — contracts in JSON, components in ui/."
         eyebrow="Personal kit sandbox"
         actions={
           <>

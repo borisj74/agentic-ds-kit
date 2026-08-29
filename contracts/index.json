@@ -56,6 +56,20 @@
     "status": "stable"
   },
   {
+    "id": "linechart",
+    "intent": "Change and progress over ordered samples as a line or area chart.",
+    "group": "component",
+    "path": "contracts/linechart.json",
+    "status": "stable"
+  },
+  {
+    "id": "loadinganimation",
+    "intent": "Square dot-grid loading indicator for compact waits.",
+    "group": "component",
+    "path": "contracts/loadinganimation.json",
+    "status": "stable"
+  },
+  {
     "id": "textarea",
     "intent": "Multi-line text for notes. Wrap with Field.",
     "group": "component",
@@ -67,6 +81,13 @@
     "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
     "group": "component",
     "path": "contracts/select.json",
+    "status": "stable"
+  },
+  {
+    "id": "shimmertext",
+    "intent": "Animated text for short indeterminate processing copy.",
+    "group": "component",
+    "path": "contracts/shimmertext.json",
     "status": "stable"
   },
   {
@@ -168,6 +189,13 @@
     "status": "stable"
   },
   {
+    "id": "barchart",
+    "intent": "Compare magnitudes across categories with vertical or horizontal bars.",
+    "group": "component",
+    "path": "contracts/barchart.json",
+    "status": "stable"
+  },
+  {
     "id": "breadcrumb",
     "intent": "Path to the current page as a hierarchy of links.",
     "group": "component",
@@ -224,6 +252,13 @@
     "status": "stable"
   },
   {
+    "id": "numbertransition",
+    "intent": "Rolling number treatment for live metrics and counters.",
+    "group": "component",
+    "path": "contracts/numbertransition.json",
+    "status": "stable"
+  },
+  {
     "id": "pageheader",
     "intent": "Top-of-page title block with optional actions.",
     "group": "component",
@@ -235,6 +270,13 @@
     "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
     "group": "component",
     "path": "contracts/pagination.json",
+    "status": "stable"
+  },
+  {
+    "id": "piechart",
+    "intent": "Part-to-whole share for a handful of segments, as a donut or solid pie.",
+    "group": "component",
+    "path": "contracts/piechart.json",
     "status": "stable"
   },
   {
@@ -267,9 +309,30 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
+    "intent": "Simple semantic table for text rows — not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
+    "status": "stable"
+  },
+  {
+    "id": "thinkinganimation",
+    "intent": "Calm processing indicator for assistants and short system waits.",
+    "group": "component",
+    "path": "contracts/thinkinganimation.json",
+    "status": "stable"
+  },
+  {
+    "id": "timeline",
+    "intent": "Vertical sequence of now, next, and later for ordered multi-stage work.",
+    "group": "component",
+    "path": "contracts/timeline.json",
+    "status": "stable"
+  },
+  {
+    "id": "toast",
+    "intent": "Short non-blocking feedback after an action or background event.",
+    "group": "component",
+    "path": "contracts/toast.json",
     "status": "stable"
   },
   {
@@ -305,6 +368,13 @@
     "intent": "Overlapping row of kit Avatars with an optional leftover count.",
     "group": "component",
     "path": "contracts/avatargroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "chat",
+    "intent": "Assistant workspace with messages, suggestions, composer, and thinking state.",
+    "group": "pattern",
+    "path": "contracts/patterns/chat.json",
     "status": "stable"
   },
   {

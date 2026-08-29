@@ -59,9 +59,9 @@ export function Checkbox({
       />
       <span className={styles.box} aria-hidden>
         {indeterminate ? (
-          <Minus size={iconPx} strokeWidth={2.5} color="currentColor" />
+          <Minus className={styles.icon} size={iconPx} strokeWidth={2.5} color="currentColor" />
         ) : isChecked ? (
-          <Check size={iconPx} strokeWidth={2.5} color="currentColor" />
+          <Check className={styles.icon} size={iconPx} strokeWidth={2.5} color="currentColor" />
         ) : null}
       </span>
       {label ? <span className={styles.text}>{label}</span> : null}

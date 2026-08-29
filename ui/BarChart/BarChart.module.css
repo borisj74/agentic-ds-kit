@@ -1,0 +1,33 @@
+.wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.grid {
+  stroke: var(--border-faint);
+  stroke-width: 1;
+}
+
+.categoryLabel,
+.tickLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart rect {
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart rect {
+    transition: none;
+  }
+}

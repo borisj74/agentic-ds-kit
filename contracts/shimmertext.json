@@ -1,0 +1,33 @@
+{
+  "id": "shimmertext",
+  "status": "stable",
+  "intent": "Animated text for short indeterminate processing copy.",
+  "useWhen": [
+    "Generating or loading message placeholders",
+    "Swap to real content when ready"
+  ],
+  "doNotUseWhen": [
+    "Static headings or body copy",
+    "Long paragraphs of final content"
+  ],
+  "props": {
+    "children": { "type": "string", "required": true },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md"
+    },
+    "speed": {
+      "type": "enum|number",
+      "values": ["slow", "normal", "fast"],
+      "default": "normal"
+    }
+  },
+  "tokens": ["text.primary", "text.muted"],
+  "a11y": {
+    "element": "span",
+    "requirements": ["aria-label mirrors visible text", "Respect prefers-reduced-motion"]
+  },
+  "doNot": ["Do not use raw hex"],
+  "snippet": "<ShimmerText speed=\"normal\">Generating response…</ShimmerText>"
+}

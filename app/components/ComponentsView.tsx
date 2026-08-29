@@ -7,6 +7,7 @@ import { AlertDoc } from "./AlertDoc";
 import { AvatarDoc } from "./AvatarDoc";
 import { AvatarGroupDoc } from "./AvatarGroupDoc";
 import { BadgeDoc } from "./BadgeDoc";
+import { BarChartDoc } from "./BarChartDoc";
 import { BreadcrumbDoc } from "./BreadcrumbDoc";
 import { ButtonDoc } from "./ButtonDoc";
 import { ButtonGroupDoc } from "./ButtonGroupDoc";
@@ -18,8 +19,6 @@ import { CollapsibleDoc } from "./CollapsibleDoc";
 import { CommandDoc } from "./CommandDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
-import { ModalCardDoc } from "./ModalCardDoc";
-import { ModalDoc } from "./ModalDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { FieldDoc } from "./FieldDoc";
@@ -27,19 +26,30 @@ import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { LineChartDoc } from "./LineChartDoc";
+import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
+import { ModalCardDoc } from "./ModalCardDoc";
+import { ModalDoc } from "./ModalDoc";
 import { NavigationMenuDoc } from "./NavigationMenuDoc";
-import { SideNavDoc } from "./SideNavDoc";
+import { NumberTransitionDoc } from "./NumberTransitionDoc";
 import { OtherComponent } from "./OtherComponents";
 import { PaginationDoc } from "./PaginationDoc";
+import { PieChartDoc } from "./PieChartDoc";
 import { ProgressDoc } from "./ProgressDoc";
 import { RadioGroupDoc } from "./RadioGroupDoc";
 import { ScoreboardDoc } from "./ScoreboardDoc";
 import { SectionDoc } from "./SectionDoc";
 import { ScorecardDoc } from "./ScorecardDoc";
 import { SelectDoc } from "./SelectDoc";
+import { ShimmerTextDoc } from "./ShimmerTextDoc";
+import { SideNavDoc } from "./SideNavDoc";
 import { SwitchDoc } from "./SwitchDoc";
 import { TabsDoc } from "./TabsDoc";
 import { TextareaDoc } from "./TextareaDoc";
+import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
+import { TimelineDoc } from "./TimelineDoc";
+import { ToastDoc } from "./ToastDoc";
+import { TooltipDoc } from "./TooltipDoc";
 
 function currentHash(): string {
   if (typeof window === "undefined") return "button";
@@ -70,6 +80,7 @@ const TITLES: Record<string, string> = {
   field: "Field",
   fieldset: "FieldSet",
   badge: "Badge",
+  barchart: "BarChart",
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
@@ -81,6 +92,14 @@ const TITLES: Record<string, string> = {
   dropdownmenu: "DropdownMenu",
   pageheader: "PageHeader",
   pagination: "Pagination",
+  piechart: "PieChart",
+  linechart: "LineChart",
+  loadinganimation: "LoadingAnimation",
+  numbertransition: "NumberTransition",
+  shimmertext: "ShimmerText",
+  thinkinganimation: "ThinkingAnimation",
+  timeline: "Timeline",
+  toast: "Toast",
   progress: "Progress",
   section: "Section",
   appnav: "AppNav",
@@ -91,6 +110,40 @@ const TITLES: Record<string, string> = {
   avatar: "Avatar",
   avatargroup: "AvatarGroup",
 };
+
+function resolveHash(hash: string): string {
+  const aliases: Record<string, string> = {
+    dialog: "modal",
+    fieldset: "field",
+    sidebar: "sidenav",
+    outsidebar: "sidenav",
+    navmenu: "navigationmenu",
+    "navigation-menu": "navigationmenu",
+    pie: "piechart",
+    "pie-chart": "piechart",
+    bar: "barchart",
+    "bar-chart": "barchart",
+    line: "linechart",
+    "line-chart": "linechart",
+    thinking: "thinkinganimation",
+    "thinking-animation": "thinkinganimation",
+    shimmer: "shimmertext",
+    "shimmer-text": "shimmertext",
+    loading: "loadinganimation",
+    "loading-animation": "loadinganimation",
+    "number-transition": "numbertransition",
+    radio: "radiogroup",
+    radios: "radiogroup",
+    tab: "tabs",
+    tablist: "tabs",
+    kpi: "scorecard",
+    kpicard: "scorecard",
+    kpicards: "scorecard",
+    "kpi-card": "scorecard",
+    "kpi-cards": "scorecard",
+  };
+  return aliases[hash] ?? hash;
+}
 
 export function ComponentsView() {
   const [hash, setHash] = useState("button");
@@ -106,64 +159,56 @@ export function ComponentsView() {
     };
   }, []);
 
-  const resolved =
-    hash === "dialog"
-      ? "modal"
-      : hash === "fieldset"
-        ? "field"
-        : hash === "sidebar" || hash === "outsidebar"
-          ? "sidenav"
-          : hash === "navmenu" || hash === "navigation-menu"
-            ? "navigationmenu"
-            : hash === "radio" || hash === "radios"
-              ? "radiogroup"
-              : hash === "tab" || hash === "tablist"
-                ? "tabs"
-              : hash === "kpi" ||
-                  hash === "kpicard" ||
-                  hash === "kpicards" ||
-                  hash === "kpi-card" ||
-                  hash === "kpi-cards"
-                ? "scorecard"
-                : hash;
-  const id = resolved in TITLES ? resolved : "button";
-  if (id === "badge") return <BadgeDoc />;
-  if (id === "breadcrumb") return <BreadcrumbDoc />;
-  if (id === "button") return <ButtonDoc />;
-  if (id === "buttongroup") return <ButtonGroupDoc />;
-  if (id === "accordion") return <AccordionDoc />;
-  if (id === "alert") return <AlertDoc />;
-  if (id === "alertdialog") return <AlertDialogDoc />;
-  if (id === "avatar") return <AvatarDoc />;
-  if (id === "avatargroup") return <AvatarGroupDoc />;
-  if (id === "calendar") return <CalendarDoc />;
-  if (id === "card") return <CardDoc />;
-  if (id === "cell") return <CellDoc />;
-  if (id === "checkbox") return <CheckboxDoc />;
-  if (id === "collapsible") return <CollapsibleDoc />;
-  if (id === "command") return <CommandDoc />;
-  if (id === "datatable") return <DataTableDoc />;
-  if (id === "datepicker") return <DatePickerDoc />;
-  if (id === "modal") return <ModalDoc />;
-  if (id === "modalcard") return <ModalCardDoc />;
-  if (id === "navigationmenu") return <NavigationMenuDoc />;
-  if (id === "sidenav") return <SideNavDoc />;
-  if (id === "drawer") return <DrawerDoc />;
-  if (id === "dropdownmenu") return <DropdownMenuDoc />;
-  if (id === "field") return <FieldDoc />;
-  if (id === "headercell") return <HeaderCellDoc />;
-  if (id === "input") return <InputDoc />;
-  if (id === "inputotp") return <InputOTPDoc />;
-  if (id === "insightcard") return <InsightCardDoc />;
-  if (id === "pagination") return <PaginationDoc />;
-  if (id === "progress") return <ProgressDoc />;
-  if (id === "radiogroup") return <RadioGroupDoc />;
-  if (id === "scorecard") return <ScorecardDoc />;
-  if (id === "scoreboard") return <ScoreboardDoc />;
-  if (id === "section") return <SectionDoc />;
-  if (id === "select") return <SelectDoc />;
-  if (id === "switch") return <SwitchDoc />;
-  if (id === "tabs") return <TabsDoc />;
-  if (id === "textarea") return <TextareaDoc />;
-  return <OtherComponent id={id} title={TITLES[id]} />;
+  const id = resolveHash(hash);
+  const resolved = id in TITLES ? id : "button";
+
+  if (resolved === "badge") return <BadgeDoc />;
+  if (resolved === "barchart") return <BarChartDoc />;
+  if (resolved === "breadcrumb") return <BreadcrumbDoc />;
+  if (resolved === "button") return <ButtonDoc />;
+  if (resolved === "buttongroup") return <ButtonGroupDoc />;
+  if (resolved === "accordion") return <AccordionDoc />;
+  if (resolved === "alert") return <AlertDoc />;
+  if (resolved === "alertdialog") return <AlertDialogDoc />;
+  if (resolved === "avatar") return <AvatarDoc />;
+  if (resolved === "avatargroup") return <AvatarGroupDoc />;
+  if (resolved === "calendar") return <CalendarDoc />;
+  if (resolved === "card") return <CardDoc />;
+  if (resolved === "cell") return <CellDoc />;
+  if (resolved === "checkbox") return <CheckboxDoc />;
+  if (resolved === "collapsible") return <CollapsibleDoc />;
+  if (resolved === "command") return <CommandDoc />;
+  if (resolved === "datatable") return <DataTableDoc />;
+  if (resolved === "datepicker") return <DatePickerDoc />;
+  if (resolved === "modal") return <ModalDoc />;
+  if (resolved === "modalcard") return <ModalCardDoc />;
+  if (resolved === "navigationmenu") return <NavigationMenuDoc />;
+  if (resolved === "sidenav") return <SideNavDoc />;
+  if (resolved === "drawer") return <DrawerDoc />;
+  if (resolved === "dropdownmenu") return <DropdownMenuDoc />;
+  if (resolved === "field") return <FieldDoc />;
+  if (resolved === "headercell") return <HeaderCellDoc />;
+  if (resolved === "input") return <InputDoc />;
+  if (resolved === "inputotp") return <InputOTPDoc />;
+  if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "linechart") return <LineChartDoc />;
+  if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
+  if (resolved === "numbertransition") return <NumberTransitionDoc />;
+  if (resolved === "pagination") return <PaginationDoc />;
+  if (resolved === "piechart") return <PieChartDoc />;
+  if (resolved === "progress") return <ProgressDoc />;
+  if (resolved === "radiogroup") return <RadioGroupDoc />;
+  if (resolved === "scorecard") return <ScorecardDoc />;
+  if (resolved === "scoreboard") return <ScoreboardDoc />;
+  if (resolved === "section") return <SectionDoc />;
+  if (resolved === "select") return <SelectDoc />;
+  if (resolved === "shimmertext") return <ShimmerTextDoc />;
+  if (resolved === "switch") return <SwitchDoc />;
+  if (resolved === "tabs") return <TabsDoc />;
+  if (resolved === "textarea") return <TextareaDoc />;
+  if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
+  if (resolved === "timeline") return <TimelineDoc />;
+  if (resolved === "toast") return <ToastDoc />;
+  if (resolved === "tooltip") return <TooltipDoc />;
+  return <OtherComponent id={resolved} title={TITLES[resolved]} />;
 }

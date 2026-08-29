@@ -137,7 +137,7 @@ export function SideNavDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>SideNav</h1>
         <p className={styles.lede}>
-          Product chrome. AppNav is the catalog list. Drawer is the overlay panel.
+          Product app chrome side navigation. AppNav is the catalog list. Drawer is the overlay panel.
         </p>
       </header>
 

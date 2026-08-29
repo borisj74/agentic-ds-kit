@@ -8,6 +8,7 @@ const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
+  "barchart",
   "breadcrumb",
   "button",
   "buttongroup",
@@ -27,22 +28,30 @@ const COMPONENT_ITEMS = [
   "input",
   "inputotp",
   "insightcard",
+  "linechart",
+  "loadinganimation",
   "modal",
   "modalcard",
   "navigationmenu",
+  "numbertransition",
   "pageheader",
   "pagination",
+  "piechart",
   "progress",
   "radiogroup",
   "scorecard",
   "scoreboard",
   "section",
   "select",
+  "shimmertext",
   "sidenav",
   "switch",
   "table",
   "tabs",
   "textarea",
+  "thinkinganimation",
+  "timeline",
+  "toast",
   "tooltip",
 ] as const;
 
@@ -66,6 +75,15 @@ function componentLabel(id: string): string {
   if (id === "inputotp") return "InputOTP";
   if (id === "dropdownmenu") return "DropdownMenu";
   if (id === "fieldset") return "FieldSet";
+  if (id === "piechart") return "PieChart";
+  if (id === "barchart") return "BarChart";
+  if (id === "linechart") return "LineChart";
+  if (id === "loadinganimation") return "LoadingAnimation";
+  if (id === "numbertransition") return "NumberTransition";
+  if (id === "shimmertext") return "ShimmerText";
+  if (id === "thinkinganimation") return "ThinkingAnimation";
+  if (id === "timeline") return "Timeline";
+  if (id === "toast") return "Toast";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
@@ -116,6 +134,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     {
       label: "Patterns",
       items: [
+        leaf("/patterns#chat", "chat"),
         leaf("/patterns#dashboard", "dashboard"),
         leaf("/patterns#settings-form", "settings-form"),
         leaf("/patterns#list-detail", "list-detail"),

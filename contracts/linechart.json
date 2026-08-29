@@ -1,0 +1,49 @@
+{
+  "id": "linechart",
+  "status": "stable",
+  "intent": "Change and progress over ordered samples as a line or area chart.",
+  "useWhen": [
+    "Following a trajectory across time or sequence",
+    "Multi-series trends with shared labels"
+  ],
+  "doNotUseWhen": [
+    "Comparing unrelated magnitudes at one moment — use BarChart",
+    "Part-to-whole share — use PieChart"
+  ],
+  "props": {
+    "data": { "type": "array", "required": false },
+    "labels": { "type": "array", "required": false },
+    "series": { "type": "array", "required": false },
+    "title": { "type": "string", "required": false },
+    "description": { "type": "string", "required": false },
+    "variant": {
+      "type": "enum",
+      "values": ["line", "area"],
+      "default": "area"
+    },
+    "showGrid": { "type": "boolean", "default": true },
+    "showTable": { "type": "boolean", "default": true },
+    "includeZero": { "type": "boolean", "default": false },
+    "height": { "type": "number", "default": 240 },
+    "emptyLabel": { "type": "string", "default": "No data for this range" }
+  },
+  "tokens": [
+    "surface.card",
+    "text.primary",
+    "text.muted",
+    "border.faint",
+    "fill.brand"
+  ],
+  "a11y": {
+    "element": "figure",
+    "requirements": [
+      "Title on figure when provided",
+      "Table view keeps values readable"
+    ]
+  },
+  "doNot": [
+    "Do not invent chart container cousins",
+    "Do not use raw hex"
+  ],
+  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />"
+}

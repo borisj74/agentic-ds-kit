@@ -1,30 +1,34 @@
 .calendar {
   --calendar-cell: 2.25rem;
   box-sizing: border-box;
-  display: inline-flex;
-  flex-direction: column;
+  display: inline-grid;
   gap: var(--space-2);
-  padding: var(--space-3);
-  border: var(--border-width-thin, 1px) solid var(--border-faint);
+  width: max-content;
+  margin: 0;
+  padding: var(--space-4);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   background: var(--surface-card);
   box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
+  color: var(--text-primary);
 }
 
 .sm {
   --calendar-cell: 1.9rem;
+  gap: var(--space-1);
   padding: var(--space-2);
 }
 
 .md {
   --calendar-cell: 2.25rem;
-  padding: var(--space-3);
+  padding: var(--space-4);
 }
 
 .lg {
   --calendar-cell: 2.6rem;
-  padding: var(--space-4);
+  gap: var(--space-3);
+  padding: var(--space-6);
 }
 
 .calendar[data-disabled] {
@@ -50,16 +54,15 @@
 }
 
 .grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  display: grid;
+  gap: var(--space-1);
 }
 
 .weekdays,
 .row {
   display: grid;
   grid-template-columns: repeat(7, var(--calendar-cell));
-  gap: var(--space-2);
+  gap: var(--space-1);
   justify-content: center;
 }
 
@@ -73,6 +76,7 @@
 }
 
 .cell {
+  display: grid;
   width: var(--calendar-cell);
   height: var(--calendar-cell);
 }
@@ -83,7 +87,7 @@
   height: 100%;
   margin: 0;
   padding: 0;
-  border: var(--border-width-thin, 1px) solid transparent;
+  border: var(--border-width-thin) solid transparent;
   border-radius: var(--radius-control-sm);
   background: transparent;
   font-family: var(--font-sans);
@@ -92,6 +96,7 @@
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
   cursor: pointer;
+  transition: background var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
 .sm .day {
@@ -102,8 +107,9 @@
   background: var(--surface-muted);
 }
 
-.day[data-today] {
+.day[data-today]:not([data-selected]) {
   border-color: var(--border-strong);
+  font-weight: var(--type-weight-label);
 }
 
 .day[data-outside] {
@@ -116,6 +122,7 @@
   color: var(--action-on-primary);
   border-color: var(--action-primary);
   opacity: 1;
+  font-weight: var(--type-weight-label);
 }
 
 .day[aria-disabled="true"] {
@@ -130,4 +137,10 @@
 .day:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day {
+    transition: none;
+  }
 }

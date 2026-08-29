@@ -1,0 +1,61 @@
+{
+  "id": "toast",
+  "status": "stable",
+  "intent": "Short non-blocking feedback after an action or background event.",
+  "useWhen": [
+    "Saved, sent, or completed confirmations",
+    "Transient warnings that do not need a choice"
+  ],
+  "doNotUseWhen": [
+    "Inline page status — use Alert",
+    "Must-choose interruption — use AlertDialog",
+    "Long forms or multi-step work — use Modal"
+  ],
+  "props": {
+    "open": { "type": "boolean", "default": true },
+    "onOpenChange": { "type": "function", "required": false },
+    "title": { "type": "string", "required": false },
+    "description": { "type": "string", "required": false },
+    "status": {
+      "type": "enum",
+      "values": ["default", "success", "warning", "danger", "info"],
+      "default": "default"
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md"
+    },
+    "duration": {
+      "type": "number|null",
+      "default": null,
+      "note": "auto-dismiss ms; null keeps open"
+    },
+    "onClose": { "type": "function", "required": false },
+    "action": { "type": "slot", "required": false }
+  },
+  "tokens": [
+    "surface.card",
+    "text.primary",
+    "text.secondary",
+    "status.success",
+    "status.warning",
+    "status.danger",
+    "status.info",
+    "shadow.md"
+  ],
+  "a11y": {
+    "element": "div[role=status]",
+    "requirements": [
+      "role=status with aria-live=polite",
+      "Dismiss control has accessible name",
+      "Title and description wired with ids when present"
+    ]
+  },
+  "doNot": [
+    "Do not invent ToastViewport cousins",
+    "Do not use Alert for toast feedback",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Toast title=\"Saved\" description=\"Your changes are live.\" status=\"success\" duration={4000} onClose={() => {}} />"
+}

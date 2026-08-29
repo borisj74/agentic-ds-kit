@@ -1,0 +1,60 @@
+{
+  "id": "piechart",
+  "status": "stable",
+  "intent": "Part-to-whole share for a handful of segments, as a donut or solid pie.",
+  "useWhen": [
+    "Rough share at a glance for up to six segments",
+    "Dashboard tiles where proportion matters more than precise ranking"
+  ],
+  "doNotUseWhen": [
+    "Comparing close values — use BarChart",
+    "Change over time — use LineChart",
+    "More than six segments without folding into Other"
+  ],
+  "props": {
+    "data": {
+      "type": "array",
+      "required": false,
+      "note": "{ label: string, value: number, color?: string }[]"
+    },
+    "title": { "type": "string", "required": false },
+    "description": { "type": "string", "required": false },
+    "variant": {
+      "type": "enum",
+      "values": ["donut", "pie"],
+      "default": "donut"
+    },
+    "showCenterTotal": { "type": "boolean", "default": true },
+    "showTable": { "type": "boolean", "default": true },
+    "sort": { "type": "boolean", "default": true },
+    "maxSegments": { "type": "number", "default": 6 },
+    "emptyLabel": { "type": "string", "default": "No data for this range" }
+  },
+  "tokens": [
+    "surface.card",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "fill.brand",
+    "fill.success",
+    "fill.warning",
+    "fill.danger",
+    "fill.info",
+    "border.faint",
+    "shadow.sm"
+  ],
+  "a11y": {
+    "element": "figure",
+    "requirements": [
+      "Title exposed on the figure when provided",
+      "Segments have accessible names with values",
+      "Table toggle keeps values readable in table view"
+    ]
+  },
+  "doNot": [
+    "Do not invent local chart wrappers",
+    "Do not use raw hex",
+    "Do not add chart-library compound APIs"
+  ],
+  "snippet": "<PieChart title=\"Properties by status\" variant=\"donut\" data={[{ label: 'Listed', value: 256 }]} />"
+}

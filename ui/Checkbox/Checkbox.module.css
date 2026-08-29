@@ -31,6 +31,7 @@
 }
 
 .box {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -40,6 +41,24 @@
   border-radius: var(--radius-control-sm);
   background-color: var(--surface-card);
   color: var(--action-on-primary);
+  transition:
+    border-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    background var(--motion-interaction-duration) var(--motion-interaction-easing),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0.12rem;
+  transform-origin: center;
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform var(--motion-expand-duration) var(--motion-ease-spring),
+    opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
 .sm {
@@ -62,8 +81,8 @@
 
 .md .input,
 .md .box {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 .lg .input,
@@ -76,6 +95,12 @@
 .input:indeterminate + .box {
   background-color: var(--action-primary);
   border-color: var(--action-primary);
+}
+
+.input:checked + .box .icon,
+.input:indeterminate + .box .icon {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .label[data-error] .box {
@@ -95,4 +120,16 @@
 
 .text {
   line-height: var(--type-line-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .icon {
+    transition: none;
+  }
+
+  .input:checked + .box .icon,
+  .input:indeterminate + .box .icon {
+    transform: none;
+  }
 }

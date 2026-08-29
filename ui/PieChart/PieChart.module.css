@@ -1,0 +1,56 @@
+.wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.chart {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.chart path {
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+  outline: none;
+}
+
+.chart path:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.active {
+  filter: brightness(1.05);
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: var(--space-1);
+  text-align: center;
+  pointer-events: none;
+}
+
+.centerLabel {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  color: var(--text-muted);
+}
+
+.centerValue {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart path {
+    transition: none;
+  }
+}

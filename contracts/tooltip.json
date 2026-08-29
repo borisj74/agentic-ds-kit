@@ -26,6 +26,19 @@
       ],
       "default": "top"
     },
+    "delay": {
+      "type": "number",
+      "default": 150
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled visibility"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
     "children": {
       "type": "slot",
       "required": true

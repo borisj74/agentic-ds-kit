@@ -1,0 +1,33 @@
+{
+  "id": "loadinganimation",
+  "status": "stable",
+  "intent": "Square dot-grid loading indicator for compact waits.",
+  "useWhen": [
+    "Panel or card content is loading",
+    "Short blocking fetches inside a region"
+  ],
+  "doNotUseWhen": [
+    "Assistant thinking state — use ThinkingAnimation",
+    "Determinate progress — use Progress"
+  ],
+  "props": {
+    "label": { "type": "string", "default": "Loading" },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md"
+    },
+    "variant": {
+      "type": "enum",
+      "values": ["grid"],
+      "default": "grid"
+    }
+  },
+  "tokens": ["surface.muted", "text.primary", "border.faint"],
+  "a11y": {
+    "element": "span[role=status]",
+    "requirements": ["role=status", "aria-label describes loading"]
+  },
+  "doNot": ["Do not use raw hex"],
+  "snippet": "<LoadingAnimation label=\"Loading\" size=\"md\" />"
+}

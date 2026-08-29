@@ -59,7 +59,7 @@
     "footer": {
       "type": "object",
       "required": false,
-      "note": "Single footer row (Settings)"
+      "note": "Single footer row (e.g. Settings)"
     }
   },
   "tokens": [
