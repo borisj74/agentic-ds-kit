@@ -7,10 +7,11 @@
     "Success, warning, or danger copy tied to the current view"
   ],
   "doNotUseWhen": [
-    "Transient confirmations that disappear \u2014 not a toast; ask before adding one",
-    "Compact status chips \u2014 use Badge",
-    "Blocking decisions \u2014 use Dialog",
-    "Must-choose overlay confirm \u2014 use AlertDialog"
+    "Transient confirmations that disappear — not a toast; ask before adding one",
+    "Compact status chips — use Badge",
+    "Blocking decisions — use Dialog",
+    "Must-choose overlay confirm — use AlertDialog",
+    "A dismissible insight tile — use InsightCard"
   ],
   "props": {
     "variant": {

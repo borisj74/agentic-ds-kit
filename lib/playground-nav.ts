@@ -24,6 +24,7 @@ const COMPONENT_ITEMS = [
   "field",
   "headercell",
   "input",
+  "insightcard",
   "pageheader",
   "radiogroup",
   "scorecard",
@@ -47,6 +48,7 @@ function componentLabel(id: string): string {
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
   if (id === "datepicker") return "DatePicker";
+  if (id === "insightcard") return "InsightCard";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 

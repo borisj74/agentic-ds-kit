@@ -22,6 +22,7 @@ import { DialogDoc } from "./DialogDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
+import { InsightCardDoc } from "./InsightCardDoc";
 import { OtherComponent } from "./OtherComponents";
 
 function currentHash(): string {
@@ -38,6 +39,7 @@ const TITLES: Record<string, string> = {
   scorecard: "Scorecard",
   scoreboard: "Scoreboard",
   input: "Input",
+  insightcard: "InsightCard",
   textarea: "Textarea",
   select: "Select",
   checkbox: "Checkbox",
@@ -102,5 +104,6 @@ export function ComponentsView() {
   if (id === "drawer") return <DrawerDoc />;
   if (id === "headercell") return <HeaderCellDoc />;
   if (id === "input") return <InputDoc />;
+  if (id === "insightcard") return <InsightCardDoc />;
   return <OtherComponent id={id} title={TITLES[id]} />;
 }

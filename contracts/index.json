@@ -42,6 +42,13 @@
     "status": "stable"
   },
   {
+    "id": "insightcard",
+    "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
+    "group": "component",
+    "path": "contracts/insightcard.json",
+    "status": "stable"
+  },
+  {
     "id": "textarea",
     "intent": "Multi-line text entry for longer form content.",
     "group": "component",
@@ -197,7 +204,7 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
+    "intent": "Simple semantic table for text rows — not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable"

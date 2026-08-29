@@ -10,7 +10,8 @@
     "Multiple metrics in one tile — use separate Scorecards inside Scoreboard",
     "Charts, sparklines, or tables — out of scope for this contract",
     "Clickable or interactive metric tiles",
-    "A framed content tile — use Card"
+    "A framed content tile — use Card",
+    "A recommended action tile — use InsightCard"
   ],
   "props": {
     "title": {
@@ -23,7 +24,11 @@
     },
     "trend": {
       "type": "enum",
-      "values": ["up", "down", "neutral"],
+      "values": [
+        "up",
+        "down",
+        "neutral"
+      ],
       "required": false
     },
     "trendLabel": {
