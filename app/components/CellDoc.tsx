@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Cell } from "@/ui/Cell";
 import type { CellSize } from "@/ui/Cell";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
@@ -107,28 +108,8 @@ export function CellDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
-                  <label className={styles.switch}>
-                    Text
-                    <span className={styles.switchControl} data-checked={showText}>
-                      <input
-                        type="checkbox"
-                        checked={showText}
-                        onChange={(event) => setShowText(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Checkbox
-                    <span className={styles.switchControl} data-checked={checkbox}>
-                      <input
-                        type="checkbox"
-                        checked={checkbox}
-                        onChange={(event) => setCheckbox(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch label="Text" size="sm" checked={showText} onChange={setShowText} />
+                  <Switch label="Checkbox" size="sm" checked={checkbox} onChange={setCheckbox} />
                 </div>
               </aside>
             </div>

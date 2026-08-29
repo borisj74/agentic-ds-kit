@@ -206,52 +206,6 @@
   accent-color: var(--action-primary);
 }
 
-.switch {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  color: var(--text-primary);
-  cursor: pointer;
-}
-
-.switchControl {
-  position: relative;
-  width: 2.25rem;
-  height: 1.25rem;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background: var(--color-neutral-300);
-  transition: background var(--motion-interaction-duration) var(--motion-interaction-easing);
-}
-
-.switchControl[data-checked="true"] {
-  background: var(--action-primary);
-}
-
-.switchThumb {
-  position: absolute;
-  top: 0.125rem;
-  left: 0.125rem;
-  width: 1rem;
-  height: 1rem;
-  border-radius: var(--radius-pill);
-  background: var(--surface-card);
-  transition: transform var(--motion-interaction-duration) var(--motion-interaction-easing);
-}
-
-.switchControl[data-checked="true"] .switchThumb {
-  transform: translateX(1rem);
-}
-
-.switch input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .docs {
   display: grid;
   gap: var(--space-4);

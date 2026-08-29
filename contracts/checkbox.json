@@ -5,11 +5,12 @@
   "useWhen": [
     "Independent booleans such as agree to terms or enable notifications",
     "Confirmations that are not a submit action",
-    "Table row or icon-only select without visible text \u2014 set ariaLabel"
+    "Table row or icon-only select without visible text — set ariaLabel"
   ],
   "doNotUseWhen": [
-    "Choosing one of several options \u2014 use RadioGroup",
-    "Primary form submit actions \u2014 use Button"
+    "Choosing one of several options — use RadioGroup",
+    "Primary form submit actions — use Button",
+    "Immediate on/off setting — use Switch"
   ],
   "props": {
     "id": {
@@ -93,7 +94,8 @@
     "Do not invent local Checkbox",
     "Do not use raw hex",
     "Do not use RadioGroup for booleans",
-    "Do not ship unlabeled without ariaLabel"
+    "Do not ship unlabeled without ariaLabel",
+    "Do not use Switch as a checkbox"
   ],
   "snippet": "<Checkbox id=\"updates\" label=\"Send me product updates\" />\n<Checkbox id=\"row-1\" ariaLabel=\"Select row\" />"
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/ui/Button";
 import type { ButtonSize, ButtonVariant } from "@/ui/Button";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -178,17 +179,7 @@ export function ButtonDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
-                  <label className={styles.switch}>
-                    Disabled
-                    <span className={styles.switchControl} data-checked={disabled}>
-                      <input
-                        type="checkbox"
-                        checked={disabled}
-                        onChange={(event) => setDisabled(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
             </div>

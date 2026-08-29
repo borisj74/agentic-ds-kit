@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Breadcrumb } from "@/ui/Breadcrumb";
 import type { BreadcrumbItem, BreadcrumbSeparator } from "@/ui/Breadcrumb";
 import { PageHeader } from "@/ui/PageHeader";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -126,17 +127,7 @@ export function BreadcrumbDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>Trail</span>
-                  <label className={styles.switch}>
-                    Collapsed
-                    <span className={styles.switchControl} data-checked={collapsed}>
-                      <input
-                        type="checkbox"
-                        checked={collapsed}
-                        onChange={(event) => setCollapsed(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch label="Collapsed" size="sm" checked={collapsed} onChange={setCollapsed} />
                 </div>
               </aside>
             </div>

@@ -25,6 +25,7 @@ import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { OtherComponent } from "./OtherComponents";
+import { SwitchDoc } from "./SwitchDoc";
 
 function currentHash(): string {
   if (typeof window === "undefined") return "button";
@@ -43,6 +44,7 @@ const TITLES: Record<string, string> = {
   insightcard: "InsightCard",
   textarea: "Textarea",
   select: "Select",
+  switch: "Switch",
   checkbox: "Checkbox",
   collapsible: "Collapsible",
   command: "Command",
@@ -108,5 +110,6 @@ export function ComponentsView() {
   if (id === "headercell") return <HeaderCellDoc />;
   if (id === "input") return <InputDoc />;
   if (id === "insightcard") return <InsightCardDoc />;
+  if (id === "switch") return <SwitchDoc />;
   return <OtherComponent id={id} title={TITLES[id]} />;
 }

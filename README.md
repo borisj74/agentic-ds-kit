@@ -18,6 +18,7 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 | Scoreboard | Horizontal row of Scorecards |
 | Input, Textarea, Select | Form controls |
 | Checkbox, RadioGroup | Boolean and single-choice inputs |
+| Switch | Immediate on/off setting — pill track, not Checkbox |
 | Field | Label + control + hint/error wrapper |
 | Badge | Status/category pill |
 | Tooltip | Hover/focus supplementary text |

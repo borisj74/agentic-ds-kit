@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Checkbox } from "@/ui/Checkbox";
 import type { CheckboxSize } from "@/ui/Checkbox";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -140,50 +141,10 @@ export function CheckboxDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
-                  <label className={styles.switch}>
-                    Checked
-                    <span className={styles.switchControl} data-checked={checked}>
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={(event) => setChecked(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Indeterminate
-                    <span className={styles.switchControl} data-checked={indeterminate}>
-                      <input
-                        type="checkbox"
-                        checked={indeterminate}
-                        onChange={(event) => setIndeterminate(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Error
-                    <span className={styles.switchControl} data-checked={error}>
-                      <input
-                        type="checkbox"
-                        checked={error}
-                        onChange={(event) => setError(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Disabled
-                    <span className={styles.switchControl} data-checked={disabled}>
-                      <input
-                        type="checkbox"
-                        checked={disabled}
-                        onChange={(event) => setDisabled(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch label="Checked" size="sm" checked={checked} onChange={setChecked} />
+                  <Switch label="Indeterminate" size="sm" checked={indeterminate} onChange={setIndeterminate} />
+                  <Switch label="Error" size="sm" checked={error} onChange={setError} />
+                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
             </div>

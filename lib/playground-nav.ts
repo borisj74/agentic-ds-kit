@@ -32,6 +32,7 @@ const COMPONENT_ITEMS = [
   "scoreboard",
   "section",
   "select",
+  "switch",
   "table",
   "tabs",
   "textarea",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { HeaderCell } from "@/ui/HeaderCell";
 import type { HeaderCellSize, HeaderCellSort } from "@/ui/HeaderCell";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -104,31 +105,16 @@ export function HeaderCellDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
-                  <label className={styles.switch}>
-                    Sortable
-                    <span className={styles.switchControl} data-checked={sortable}>
-                      <input
-                        type="checkbox"
-                        checked={sortable}
-                        onChange={(event) => {
-                          setSortable(event.target.checked);
-                          if (!event.target.checked) setSort(undefined);
-                        }}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Checkbox
-                    <span className={styles.switchControl} data-checked={checkbox}>
-                      <input
-                        type="checkbox"
-                        checked={checkbox}
-                        onChange={(event) => setCheckbox(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch
+                    label="Sortable"
+                    size="sm"
+                    checked={sortable}
+                    onChange={(next) => {
+                      setSortable(next);
+                      if (!next) setSort(undefined);
+                    }}
+                  />
+                  <Switch label="Checkbox" size="sm" checked={checkbox} onChange={setCheckbox} />
                 </div>
               </aside>
             </div>

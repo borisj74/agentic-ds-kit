@@ -7,6 +7,7 @@ import { Drawer } from "@/ui/Drawer";
 import type { DrawerSide } from "@/ui/Drawer";
 import { Field } from "@/ui/Field";
 import { Input } from "@/ui/Input";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -44,30 +45,6 @@ function masterCode(side: DrawerSide, showDescription: boolean, showClose: boole
     "</Drawer>",
   );
   return lines.join("\n");
-}
-
-function StateSwitch({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (next: boolean) => void;
-}) {
-  return (
-    <label className={styles.switch}>
-      {label}
-      <span className={styles.switchControl} data-checked={checked}>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(event) => onChange(event.target.checked)}
-        />
-        <span className={styles.switchThumb} />
-      </span>
-    </label>
-  );
 }
 
 function Actions({
@@ -201,8 +178,8 @@ export function DrawerDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>State</span>
-                  <StateSwitch label="Description" checked={showDescription} onChange={setShowDescription} />
-                  <StateSwitch label="Close" checked={showClose} onChange={setShowClose} />
+                  <Switch size="sm" label="Description" checked={showDescription} onChange={setShowDescription} />
+                  <Switch size="sm" label="Close" checked={showClose} onChange={setShowClose} />
                 </div>
               </aside>
             </div>

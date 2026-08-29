@@ -5,6 +5,7 @@ import { Field } from "@/ui/Field";
 import type { FieldLabelPosition } from "@/ui/Field";
 import { Input } from "@/ui/Input";
 import type { InputSize } from "@/ui/Input";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -32,30 +33,6 @@ function masterCode(
   if (error) lines.push("    error");
   lines.push('    placeholder="you@example.com"', "  />", "</Field>");
   return lines.join("\n");
-}
-
-function StateSwitch({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (next: boolean) => void;
-}) {
-  return (
-    <label className={styles.switch}>
-      {label}
-      <span className={styles.switchControl} data-checked={checked}>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(event) => onChange(event.target.checked)}
-        />
-        <span className={styles.switchThumb} />
-      </span>
-    </label>
-  );
 }
 
 export function InputDoc() {
@@ -169,7 +146,8 @@ export function InputDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>State</span>
-                  <StateSwitch
+                  <Switch
+                    size="sm"
                     label="Hover"
                     checked={hover}
                     onChange={(next) => {
@@ -177,7 +155,8 @@ export function InputDoc() {
                       if (next) setFocus(false);
                     }}
                   />
-                  <StateSwitch
+                  <Switch
+                    size="sm"
                     label="Focus"
                     checked={focus}
                     onChange={(next) => {
@@ -185,8 +164,8 @@ export function InputDoc() {
                       if (next) setHover(false);
                     }}
                   />
-                  <StateSwitch label="Disabled" checked={disabled} onChange={setDisabled} />
-                  <StateSwitch label="Error" checked={error} onChange={setError} />
+                  <Switch size="sm" label="Disabled" checked={disabled} onChange={setDisabled} />
+                  <Switch size="sm" label="Error" checked={error} onChange={setError} />
                 </div>
               </aside>
             </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Badge } from "@/ui/Badge";
 import type { BadgeSize, BadgeTone } from "@/ui/Badge";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -155,28 +156,8 @@ export function BadgeDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
-                  <label className={styles.switch}>
-                    Removable
-                    <span className={styles.switchControl} data-checked={removable}>
-                      <input
-                        type="checkbox"
-                        checked={removable}
-                        onChange={(event) => setRemovable(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
-                  <label className={styles.switch}>
-                    Disabled
-                    <span className={styles.switchControl} data-checked={disabled}>
-                      <input
-                        type="checkbox"
-                        checked={disabled}
-                        onChange={(event) => setDisabled(event.target.checked)}
-                      />
-                      <span className={styles.switchThumb} />
-                    </span>
-                  </label>
+                  <Switch label="Removable" size="sm" checked={removable} onChange={setRemovable} />
+                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
             </div>

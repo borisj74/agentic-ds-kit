@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { InsightCard } from "@/ui/InsightCard";
 import type { InsightCardSize, InsightCardTone } from "@/ui/InsightCard";
+import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -32,30 +33,6 @@ function masterCode(
   if (showDismiss) lines.push("  onDismiss={() => {}}");
   lines.push("/>");
   return lines.join("\n");
-}
-
-function StateSwitch({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (next: boolean) => void;
-}) {
-  return (
-    <label className={styles.switch}>
-      {label}
-      <span className={styles.switchControl} data-checked={checked}>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(event) => onChange(event.target.checked)}
-        />
-        <span className={styles.switchThumb} />
-      </span>
-    </label>
-  );
 }
 
 const VARIANT_DOCS: {
@@ -295,10 +272,10 @@ export function InsightCardDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>Content</span>
-                  <StateSwitch label="Description" checked={showDescription} onChange={setShowDescription} />
-                  <StateSwitch label="Confidence" checked={showConfidence} onChange={setShowConfidence} />
-                  <StateSwitch label="Source" checked={showSource} onChange={setShowSource} />
-                  <StateSwitch label="Dismiss" checked={showDismiss} onChange={setShowDismiss} />
+                  <Switch size="sm" label="Description" checked={showDescription} onChange={setShowDescription} />
+                  <Switch size="sm" label="Confidence" checked={showConfidence} onChange={setShowConfidence} />
+                  <Switch size="sm" label="Source" checked={showSource} onChange={setShowSource} />
+                  <Switch size="sm" label="Dismiss" checked={showDismiss} onChange={setShowDismiss} />
                 </div>
               </aside>
             </div>

@@ -63,6 +63,13 @@
     "status": "stable"
   },
   {
+    "id": "switch",
+    "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
+    "group": "component",
+    "path": "contracts/switch.json",
+    "status": "stable"
+  },
+  {
     "id": "checkbox",
     "intent": "Multi-select or confirmation control. Optional visible label.",
     "group": "component",
@@ -211,7 +218,7 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows — not a data grid.",
+    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable"

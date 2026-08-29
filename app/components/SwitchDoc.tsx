@@ -1,44 +1,44 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar } from "@/ui/Calendar";
-import type { CalendarSize } from "@/ui/Calendar";
 import { Switch } from "@/ui/Switch";
+import type { SwitchSize } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
-const SIZES: CalendarSize[] = ["lg", "md", "sm"];
-const SNIPPET = `<Calendar size="md" defaultValue="2026-08-29" onValueChange={(date) => setDate(date)} />`;
-const MASTER_DEFAULT = "2026-08-29";
+const SIZES: SwitchSize[] = ["sm", "md", "lg"];
+const MASTER_LABEL = "Notifications";
 
-function masterCode(size: CalendarSize, disabled: boolean, value: string) {
-  const lines = ["<Calendar", `  size="${size}"`, `  value="${value}"`];
+function masterCode(size: SwitchSize, checked: boolean, disabled: boolean) {
+  const lines = ["<Switch", `  label="${MASTER_LABEL}"`, `  size="${size}"`];
+  lines.push(`  checked={${checked}}`);
   if (disabled) lines.push("  disabled");
-  lines.push("  onValueChange={(date) => setDate(date)}");
-  lines.push("/>");
+  lines.push("  onChange={() => {}}", "/>");
   return lines.join("\n");
 }
 
-export function CalendarDoc() {
+export function SwitchDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
-  const [size, setSize] = useState<CalendarSize>("md");
+  const [size, setSize] = useState<SwitchSize>("md");
+  const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
-  const [value, setValue] = useState(MASTER_DEFAULT);
 
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Calendars</h1>
-        <p className={styles.lede}>Month view for picking a single date in lg, md, and sm.</p>
+        <h1 className={styles.heroTitle}>Switch</h1>
+        <p className={styles.lede}>
+          Immediate on/off. Pill track, role=switch. Not a Checkbox.
+        </p>
       </header>
 
-      <section className={styles.master} aria-labelledby="calendar-master">
+      <section className={styles.master} aria-labelledby="switch-master">
         <div className={styles.masterHeader}>
-          <h2 id="calendar-master" className={styles.masterTitle}>
+          <h2 id="switch-master" className={styles.masterTitle}>
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle size and disabled to preview the month grid. One date only.
+            Toggle the switch on the canvas. Size and disabled live in the panel.
           </p>
           <div className={styles.tabList} role="tablist" aria-label="Master views">
             <button
@@ -66,8 +66,14 @@ export function CalendarDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewRow}>
-                  <Calendar size={size} value={value} disabled={disabled} onValueChange={setValue} />
+                <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
+                  <Switch
+                    label={MASTER_LABEL}
+                    size={size}
+                    checked={checked}
+                    onChange={setChecked}
+                    disabled={disabled}
+                  />
                 </div>
               </div>
               <aside className={styles.panel} aria-label="Controls">
@@ -88,7 +94,7 @@ export function CalendarDoc() {
                   </div>
                 </div>
                 <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
+                  <span className={styles.panelLabel}>State</span>
                   <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
@@ -97,82 +103,100 @@ export function CalendarDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One date only. Range is not this component. Date field overlay uses this Calendar.
-                  Nav is kit Buttons. minDate and maxDate are YYYY-MM-DD bounds.
+                  Instant settings only. Checkbox for multi-select or agree-to-terms. RadioGroup
+                  for one of several. Unlabeled needs ariaLabel.
                 </p>
               </div>
-              <CodeBlock code={masterCode(size, disabled, value)} />
+              <CodeBlock code={masterCode(size, checked, disabled)} />
             </div>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Sizes</h2>
+              <h2 className={styles.exampleTitle}>Unlabeled</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
                   {SIZES.map((step) => (
-                    <Calendar key={step} size={step} defaultValue={MASTER_DEFAULT} />
+                    <Switch
+                      key={step}
+                      size={step}
+                      ariaLabel={MASTER_LABEL}
+                      defaultChecked
+                    />
                   ))}
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Show lg, md, and sm when hierarchy or density changes. Default is md.
+                  Unlabeled needs ariaLabel. Width fits the control.
                 </p>
               </div>
               <CodeBlock
-                code={SIZES.map((step) => `<Calendar size="${step}" defaultValue="${MASTER_DEFAULT}" />`).join("\n")}
+                code={SIZES.map(
+                  (step) => `<Switch size="${step}" ariaLabel="${MASTER_LABEL}" />`,
+                ).join("\n")}
               />
             </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Sizes</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewStack} style={{ maxWidth: "20rem" }}>
+                  <Switch size="sm" label="Small" defaultChecked />
+                  <Switch size="md" label="Medium" defaultChecked />
+                  <Switch size="lg" label="Large" defaultChecked />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  sm, md, and lg. Default is md.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Switch size="sm" label="Small" />\n<Switch size="md" label="Medium" />\n<Switch size="lg" label="Large" />'}
+              />
+            </section>
+
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Disabled</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
-                  <Calendar size="md" defaultValue={MASTER_DEFAULT} disabled />
+                <div className={styles.previewStack} style={{ maxWidth: "20rem" }}>
+                  <Switch label={MASTER_LABEL} disabled />
+                  <Switch label={MASTER_LABEL} disabled defaultChecked />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Disabled dims the calendar and blocks interaction, including month navigation.
-                </p>
-              </div>
-              <CodeBlock code={'<Calendar size="md" defaultValue="2026-08-29" disabled />'} />
-            </section>
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Min and max</h2>
-              <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
-                  <Calendar
-                    size="md"
-                    defaultValue={MASTER_DEFAULT}
-                    minDate="2026-08-10"
-                    maxDate="2026-09-15"
-                  />
-                </div>
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  minDate and maxDate bound selectable days. Adjacent months are blocked when they
-                  fall fully outside the range.
+                  Disabled dims the control and blocks interaction. The disabled state is exposed
+                  on the button.
                 </p>
               </div>
               <CodeBlock
-                code={'<Calendar size="md" defaultValue="2026-08-29" minDate="2026-08-10" maxDate="2026-09-15" />'}
+                code={`<Switch label="${MASTER_LABEL}" disabled />\n<Switch label="${MASTER_LABEL}" disabled defaultChecked />`}
               />
             </section>
+
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Contract snippet</h2>
+              <h2 className={styles.exampleTitle}>Settings list</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewStack} style={{ maxWidth: "20rem" }}>
+                  <Switch label="Notifications" defaultChecked />
+                  <Switch label="Dark mode" />
+                  <Switch label="Weekly digest" defaultChecked />
+                </div>
+              </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One date only. Range is not this component. Date field overlay uses this Calendar.
-                  Nav is kit Buttons.
+                  Labeled switches in a settings row. Label left, control right. Takes effect now.
                 </p>
               </div>
-              <CodeBlock code={SNIPPET} />
+              <CodeBlock
+                code={'<Switch label="Notifications" defaultChecked />\n<Switch label="Dark mode" />\n<Switch label="Weekly digest" defaultChecked />'}
+              />
             </section>
           </div>
         )}
