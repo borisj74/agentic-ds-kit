@@ -1,0 +1,25 @@
+{
+  "id": "field",
+  "status": "stable",
+  "intent": "Wrap a form control with label, optional hint, and optional error message.",
+  "useWhen": [
+    "Any labeled Input, Textarea, or Select in a form",
+    "When validation errors or helper text must appear below the control"
+  ],
+  "doNotUseWhen": [
+    "Checkbox with inline label — use Checkbox directly unless hint/error is needed",
+    "RadioGroup — it provides its own legend",
+    "Display-only content — use Section or plain text"
+  ],
+  "props": {
+    "label": { "type": "string", "required": true },
+    "htmlFor": { "type": "string", "required": true },
+    "hint": { "type": "string", "required": false },
+    "error": { "type": "string", "required": false },
+    "children": { "type": "slot", "allowedContracts": ["input", "textarea", "select"], "required": true }
+  },
+  "tokens": ["text.primary", "text.secondary", "text.danger"],
+  "a11y": { "element": "div", "requirements": ["Label htmlFor matches child control id", "Error text linked via aria-describedby when present"] },
+  "doNot": ["Do not invent local Field", "Do not wrap Button or layout components", "Do not use raw hex", "Do not use Field without a kit Input, Textarea, or Select child"],
+  "snippet": "<Field label=\"Project name\" htmlFor=\"name\" hint=\"Visible to your team\"><Input id=\"name\" /></Field>"
+}

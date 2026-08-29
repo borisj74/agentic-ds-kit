@@ -1,0 +1,20 @@
+{
+  "id": "select",
+  "status": "stable",
+  "intent": "Dropdown for choosing one option from a short fixed list.",
+  "useWhen": ["Five or fewer visible options where a native select is acceptable", "Inside Field for labeled form fields"],
+  "doNotUseWhen": ["Long searchable lists — out of scope", "Mutually exclusive choices with visible options — prefer RadioGroup", "Multi-select — not supported"],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "options": { "type": "array", "itemShape": { "value": "string", "label": "string" }, "required": true },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "defaultValue": { "type": "string", "required": false },
+    "name": { "type": "string", "required": false }
+  },
+  "tokens": ["text.primary", "surface.card", "surface.muted", "border.faint", "border.focus", "status.danger"],
+  "a11y": { "element": "select", "requirements": ["Must have associated label via Field", "Each option needs a human-readable label"] },
+  "doNot": ["Do not invent local Select or combobox", "Do not use raw hex", "Do not use for navigation — use AppNav or links"],
+  "snippet": "<Field label=\"Timezone\" htmlFor=\"tz\"><Select id=\"tz\" options={[{ value: 'utc', label: 'UTC' }]} /></Field>"
+}

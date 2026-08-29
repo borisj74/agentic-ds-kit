@@ -1,0 +1,16 @@
+{
+  "id": "section",
+  "status": "stable",
+  "intent": "Grouped content block with optional heading and description on a page.",
+  "useWhen": ["Separating metrics, tables, or form groups on a page", "Under PageHeader to structure dashboard or settings content"],
+  "doNotUseWhen": ["Whole page title — use PageHeader", "Modal body layout — keep content minimal inside Modal", "App-wide navigation — use AppNav"],
+  "props": {
+    "title": { "type": "string", "required": false },
+    "description": { "type": "string", "required": false },
+    "children": { "type": "slot", "required": true }
+  },
+  "tokens": ["text.primary", "text.secondary", "space.6"],
+  "a11y": { "element": "section", "requirements": ["Section title uses heading when provided", "aria-labelledby when title is set"] },
+  "doNot": ["Do not invent local Section", "Do not use raw hex", "Do not embed one-off metric flex rows — use Scoreboard"],
+  "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\"><Table ... /></Section>"
+}

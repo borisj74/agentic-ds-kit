@@ -1,0 +1,11 @@
+.preview {
+  padding: var(--space-6);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-lg);
+}
+
+.preview > * :global(.pattern),
+.preview :global(.pattern) {
+  margin-bottom: 0;
+}

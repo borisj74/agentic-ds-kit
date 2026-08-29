@@ -1,23 +1,149 @@
 [
   {
+    "id": "tokens",
+    "intent": "Design tokens: color, space, radius, type, shadow, and motion primitives with semantic roles.",
+    "group": "foundation",
+    "path": "tokens/tokens.json",
+    "status": "stable"
+  },
+  {
     "id": "button",
     "intent": "Primary action control for forms and dashboards.",
-    "group": "actions",
+    "group": "component",
     "path": "contracts/button.json",
     "status": "stable"
   },
   {
     "id": "scorecard",
     "intent": "Single KPI tile with title, metric, and optional trend.",
-    "group": "data-display",
+    "group": "component",
     "path": "contracts/scorecard.json",
     "status": "stable"
   },
   {
     "id": "scoreboard",
     "intent": "Horizontal row of Scorecards for a metrics strip.",
-    "group": "data-display",
+    "group": "component",
     "path": "contracts/scoreboard.json",
+    "status": "stable"
+  },
+  {
+    "id": "input",
+    "intent": "Single-line text entry for forms and filters.",
+    "group": "component",
+    "path": "contracts/input.json",
+    "status": "stable"
+  },
+  {
+    "id": "textarea",
+    "intent": "Multi-line text entry for longer form content.",
+    "group": "component",
+    "path": "contracts/textarea.json",
+    "status": "stable"
+  },
+  {
+    "id": "select",
+    "intent": "Dropdown for choosing one option from a short fixed list.",
+    "group": "component",
+    "path": "contracts/select.json",
+    "status": "stable"
+  },
+  {
+    "id": "checkbox",
+    "intent": "Boolean toggle with an inline label.",
+    "group": "component",
+    "path": "contracts/checkbox.json",
+    "status": "stable"
+  },
+  {
+    "id": "radiogroup",
+    "intent": "Choose exactly one option from a small visible radio set.",
+    "group": "component",
+    "path": "contracts/radiogroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "field",
+    "intent": "Label, control, hint, and error wrapper for form inputs.",
+    "group": "component",
+    "path": "contracts/field.json",
+    "status": "stable"
+  },
+  {
+    "id": "tag",
+    "intent": "Compact status or category label chip.",
+    "group": "component",
+    "path": "contracts/tag.json",
+    "status": "stable"
+  },
+  {
+    "id": "tooltip",
+    "intent": "Brief supplementary text on hover or focus.",
+    "group": "component",
+    "path": "contracts/tooltip.json",
+    "status": "stable"
+  },
+  {
+    "id": "tabs",
+    "intent": "Switch between related in-page panels.",
+    "group": "component",
+    "path": "contracts/tabs.json",
+    "status": "stable"
+  },
+  {
+    "id": "modal",
+    "intent": "Focused overlay dialog for confirmations or short tasks.",
+    "group": "component",
+    "path": "contracts/modal.json",
+    "status": "stable"
+  },
+  {
+    "id": "pageheader",
+    "intent": "Top-of-page title block with optional actions.",
+    "group": "component",
+    "path": "contracts/pageheader.json",
+    "status": "stable"
+  },
+  {
+    "id": "section",
+    "intent": "Grouped content block with optional heading.",
+    "group": "component",
+    "path": "contracts/section.json",
+    "status": "stable"
+  },
+  {
+    "id": "appnav",
+    "intent": "Vertical sidebar navigation with active item state.",
+    "group": "component",
+    "path": "contracts/appnav.json",
+    "status": "stable"
+  },
+  {
+    "id": "table",
+    "intent": "Simple semantic table for text rows — not a data grid.",
+    "group": "component",
+    "path": "contracts/table.json",
+    "status": "stable"
+  },
+  {
+    "id": "dashboard",
+    "intent": "Dashboard blueprint: PageHeader, Scoreboard, Section, Table, Buttons.",
+    "group": "pattern",
+    "path": "contracts/patterns/dashboard.json",
+    "status": "stable"
+  },
+  {
+    "id": "settings-form",
+    "intent": "Settings blueprint: PageHeader, Fields, and save actions.",
+    "group": "pattern",
+    "path": "contracts/patterns/settings-form.json",
+    "status": "stable"
+  },
+  {
+    "id": "list-detail",
+    "intent": "List-detail blueprint: AppNav, Table, and detail Section.",
+    "group": "pattern",
+    "path": "contracts/patterns/list-detail.json",
     "status": "stable"
   }
 ]

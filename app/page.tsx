@@ -1,6 +1,5 @@
-import { Button } from "@/ui/Button";
-import { Scoreboard } from "@/ui/Scoreboard";
-import styles from "./page.module.css";
+import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
+import styles from "./playground.module.css";
 
 const metrics = [
   {
@@ -23,39 +22,25 @@ const metrics = [
   },
 ];
 
+const table = {
+  caption: "Recent projects",
+  columns: [
+    { key: "name", header: "Project" },
+    { key: "status", header: "Status" },
+    { key: "updated", header: "Updated" },
+  ],
+  rows: [
+    { name: "Atlas redesign", status: "In progress", updated: "2 days ago" },
+    { name: "Client portal", status: "Review", updated: "5 days ago" },
+    { name: "Brand kit", status: "Shipped", updated: "1 week ago" },
+  ],
+};
+
 export default function Home() {
   return (
     <div className={styles.page}>
       <div className={styles.shell}>
-        <header className={styles.header}>
-          <p className={styles.eyebrow}>Personal kit sandbox</p>
-          <h1 className={styles.title}>Studio dashboard</h1>
-          <p className={styles.subtitle}>
-            A tiny Florence-style playground — contracts in JSON, components in ui/, agents read the
-            kit before inventing UI.
-          </p>
-        </header>
-
-        <section className={styles.section} aria-labelledby="metrics-heading">
-          <h2 id="metrics-heading" className={styles.sectionLabel}>
-            Key metrics
-          </h2>
-          <Scoreboard items={metrics} aria-label="Studio key metrics" />
-        </section>
-
-        <section className={styles.section} aria-labelledby="actions-heading">
-          <h2 id="actions-heading" className={styles.sectionLabel}>
-            Actions
-          </h2>
-          <div className={styles.actions}>
-            <Button variant="primary" size="md">
-              Export report
-            </Button>
-            <Button variant="secondary" size="md">
-              View details
-            </Button>
-          </div>
-        </section>
+        <DashboardPattern metrics={metrics} table={table} />
       </div>
     </div>
   );

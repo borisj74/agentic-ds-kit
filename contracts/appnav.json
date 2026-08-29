@@ -1,0 +1,19 @@
+{
+  "id": "appnav",
+  "status": "stable",
+  "intent": "Vertical sidebar navigation with title and active item state.",
+  "useWhen": ["List-detail layouts needing persistent section links", "Playground or app shell with a small set of routes"],
+  "doNotUseWhen": ["In-page panel switching — use Tabs", "Horizontal top nav bars — out of scope for this contract", "Breadcrumb trails — not supported"],
+  "props": {
+    "title": { "type": "string", "required": true },
+    "items": {
+      "type": "array",
+      "itemShape": { "href": "string", "label": "string", "active": "boolean" },
+      "required": true
+    }
+  },
+  "tokens": ["text.primary", "text.secondary", "surface.card", "surface.muted", "border.faint", "action.primary"],
+  "a11y": { "element": "nav", "requirements": ["nav has aria-label", "Current page indicated with aria-current"] },
+  "doNot": ["Do not invent local Sidebar or AppNav", "Do not use raw hex", "Do not use AppNav for tab panels — use Tabs"],
+  "snippet": "<AppNav title=\"Studio\" items={[{ href: '/projects', label: 'Projects', active: true }]} />"
+}

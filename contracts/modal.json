@@ -1,0 +1,18 @@
+{
+  "id": "modal",
+  "status": "stable",
+  "intent": "Focused overlay dialog for confirmations or short secondary tasks.",
+  "useWhen": ["Confirming destructive actions", "Short forms or messages that block the page briefly"],
+  "doNotUseWhen": ["Full-page flows — use a dedicated route", "Passive help text — use Tooltip or Field hint", "Persistent navigation — use AppNav"],
+  "props": {
+    "open": { "type": "boolean", "required": true },
+    "title": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "lg"], "default": "md" },
+    "onClose": { "type": "function", "required": true },
+    "children": { "type": "slot", "required": true }
+  },
+  "tokens": ["text.primary", "surface.overlay", "surface.elevated", "shadow.md", "border.faint", "motion.normal"],
+  "a11y": { "element": "dialog", "requirements": ["Focus trapped while open", "Title exposed as accessible name", "Escape closes modal"] },
+  "doNot": ["Do not invent local Modal or Dialog", "Do not use raw hex", "Do not nest Scoreboard or Table layouts inside modals without reason"],
+  "snippet": "<Modal open={open} title=\"Delete project?\" onClose={close}>Are you sure?</Modal>"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "tabs",
+  "status": "stable",
+  "intent": "Switch between related panels in the same view without navigation.",
+  "useWhen": ["Grouped settings or detail sections on one page", "Two to five peer views sharing one context"],
+  "doNotUseWhen": ["Top-level app routes — use AppNav", "Mutually exclusive form values — use RadioGroup", "Single panel content — use Section"],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemShape": { "id": "string", "label": "string", "content": "string" },
+      "required": true,
+      "minItems": 2
+    },
+    "defaultTab": { "type": "string", "required": false }
+  },
+  "tokens": ["text.primary", "text.secondary", "border.faint", "action.primary", "surface.card"],
+  "a11y": { "element": "tablist", "requirements": ["Tab buttons control tabpanels", "Active tab indicated visually and with aria-selected"] },
+  "doNot": ["Do not invent local Tabs", "Do not use raw hex", "Do not use Tabs for main app navigation — use AppNav"],
+  "snippet": "<Tabs items={[{ id: 'general', label: 'General', content: '...' }, { id: 'billing', label: 'Billing', content: '...' }]} />"
+}

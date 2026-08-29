@@ -1,0 +1,16 @@
+{
+  "id": "tooltip",
+  "status": "stable",
+  "intent": "Brief supplementary text on hover or focus of a trigger element.",
+  "useWhen": ["Explaining an icon or abbreviated label", "Non-critical context that should not clutter the layout"],
+  "doNotUseWhen": ["Essential instructions — put them in visible hint text via Field", "Large content or forms — use Modal", "Navigation — use AppNav"],
+  "props": {
+    "content": { "type": "string", "required": true },
+    "placement": { "type": "enum", "values": ["top", "bottom", "left", "right"], "default": "top" },
+    "children": { "type": "slot", "required": true }
+  },
+  "tokens": ["text.inverse", "surface.elevated", "shadow.md", "motion.fast"],
+  "a11y": { "element": "span", "requirements": ["Trigger must be focusable", "Tooltip content available to assistive tech on focus"] },
+  "doNot": ["Do not invent local Tooltip", "Do not use raw hex", "Do not hide required form labels in tooltips"],
+  "snippet": "<Tooltip content=\"Export includes all projects\"><Button variant=\"secondary\" size=\"sm\">Export</Button></Tooltip>"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "textarea",
+  "status": "stable",
+  "intent": "Multi-line text entry for longer form content.",
+  "useWhen": ["Collecting paragraphs, notes, or descriptions", "Inside Field when label and validation messaging are required"],
+  "doNotUseWhen": ["Single-line values — use Input", "Rich text or markdown editing — out of scope"],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "rows": { "type": "number", "default": 4 },
+    "placeholder": { "type": "string", "required": false },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "defaultValue": { "type": "string", "required": false },
+    "name": { "type": "string", "required": false }
+  },
+  "tokens": ["text.primary", "surface.card", "surface.muted", "border.faint", "border.focus", "status.danger"],
+  "a11y": { "element": "textarea", "requirements": ["Must have associated label via Field", "rows provides visible height"] },
+  "doNot": ["Do not invent local Textarea", "Do not use raw hex", "Do not use for code blocks — use pre elsewhere"],
+  "snippet": "<Field label=\"Notes\" htmlFor=\"notes\"><Textarea id=\"notes\" rows={4} /></Field>"
+}

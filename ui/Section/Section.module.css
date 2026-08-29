@@ -1,0 +1,28 @@
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.header {
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.body {
+  width: 100%;
+}

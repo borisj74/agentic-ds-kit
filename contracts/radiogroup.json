@@ -1,0 +1,19 @@
+{
+  "id": "radiogroup",
+  "status": "stable",
+  "intent": "Choose exactly one option from a small visible set of radio buttons.",
+  "useWhen": ["Two to six mutually exclusive options that should stay visible", "Settings where users compare options side by side"],
+  "doNotUseWhen": ["Long option lists — use Select", "Independent booleans — use Checkbox", "Tabs for panel switching — use Tabs"],
+  "props": {
+    "name": { "type": "string", "required": true },
+    "legend": { "type": "string", "required": true },
+    "orientation": { "type": "enum", "values": ["vertical", "horizontal"], "default": "vertical" },
+    "options": { "type": "array", "itemShape": { "value": "string", "label": "string" }, "required": true },
+    "defaultValue": { "type": "string", "required": false },
+    "disabled": { "type": "boolean", "default": false }
+  },
+  "tokens": ["text.primary", "text.secondary", "border.faint", "border.focus", "action.primary"],
+  "a11y": { "element": "fieldset", "requirements": ["legend names the group", "Each radio has a unique value and visible label"] },
+  "doNot": ["Do not invent local Radio or RadioGroup", "Do not use raw hex", "Do not use for tabbed content — use Tabs"],
+  "snippet": "<RadioGroup name=\"plan\" legend=\"Billing plan\" options={[{ value: 'monthly', label: 'Monthly' }, { value: 'annual', label: 'Annual' }]} />"
+}

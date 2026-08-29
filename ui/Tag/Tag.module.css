@@ -1,0 +1,43 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  white-space: nowrap;
+}
+
+.sm {
+  padding: 2px var(--space-2);
+  font-size: 0.6875rem;
+}
+
+.md {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--type-size-label);
+}
+
+.neutral {
+  background-color: var(--surface-muted);
+  color: var(--text-secondary);
+}
+
+.success {
+  background-color: color-mix(in srgb, var(--status-success) 12%, var(--surface-card));
+  color: var(--status-success);
+}
+
+.warning {
+  background-color: color-mix(in srgb, var(--status-warning) 12%, var(--surface-card));
+  color: var(--status-warning);
+}
+
+.danger {
+  background-color: color-mix(in srgb, var(--status-danger) 12%, var(--surface-card));
+  color: var(--status-danger);
+}
+
+.info {
+  background-color: color-mix(in srgb, var(--status-info) 12%, var(--surface-card));
+  color: var(--status-info);
+}

@@ -1,0 +1,16 @@
+{
+  "id": "tag",
+  "status": "stable",
+  "intent": "Compact label for status, category, or metadata chips.",
+  "useWhen": ["Status badges on table rows or cards", "Filtering labels and category markers"],
+  "doNotUseWhen": ["Primary actions — use Button", "Clickable navigation — use AppNav links", "Long sentences — use body text"],
+  "props": {
+    "children": { "type": "string", "required": true },
+    "variant": { "type": "enum", "values": ["neutral", "success", "warning", "danger", "info"], "default": "neutral" },
+    "size": { "type": "enum", "values": ["sm", "md"], "default": "md" }
+  },
+  "tokens": ["text.primary", "text.secondary", "surface.muted", "status.success", "status.warning", "status.danger", "status.info"],
+  "a11y": { "element": "span", "requirements": ["Text content must be readable", "Decorative only unless given role by parent"] },
+  "doNot": ["Do not invent local Tag or Badge", "Do not use raw hex", "Do not make Tags interactive without a new contract"],
+  "snippet": "<Tag variant=\"success\">Active</Tag>"
+}

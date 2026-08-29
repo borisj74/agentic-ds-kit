@@ -1,0 +1,16 @@
+{
+  "id": "table",
+  "status": "stable",
+  "intent": "Simple semantic table for rows of text data — not a full data grid.",
+  "useWhen": ["Listing projects, users, or transactions with a handful of columns", "Inside Section on dashboard or list-detail patterns"],
+  "doNotUseWhen": ["Complex sorting, filtering, or pagination — out of scope", "Layout for metrics — use Scoreboard", "Forms — use Field and inputs"],
+  "props": {
+    "columns": { "type": "array", "itemShape": { "key": "string", "header": "string" }, "required": true },
+    "rows": { "type": "array", "itemShape": "Record<string, string>", "required": true },
+    "caption": { "type": "string", "required": false }
+  },
+  "tokens": ["text.primary", "text.secondary", "surface.card", "border.faint", "surface.muted"],
+  "a11y": { "element": "table", "requirements": ["Column headers in thead", "Optional caption describes the table"] },
+  "doNot": ["Do not invent local Table or DataGrid", "Do not use raw hex", "Do not embed Buttons in cells without explicit need"],
+  "snippet": "<Table caption=\"Recent projects\" columns={[{ key: 'name', header: 'Name' }]} rows={[{ name: 'Atlas' }]} />"
+}

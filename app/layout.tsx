@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { PlaygroundNav } from "./_components/PlaygroundNav";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geistSans.variable}>
-      <body>{children}</body>
+      <body>
+        <PlaygroundNav />
+        {children}
+      </body>
     </html>
   );
 }

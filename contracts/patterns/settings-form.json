@@ -1,0 +1,13 @@
+{
+  "id": "settings-form",
+  "status": "stable",
+  "intent": "Settings page blueprint: header, grouped fields, and save/cancel actions.",
+  "contains": ["pageheader", "section", "field", "input", "select", "checkbox", "button"],
+  "doNot": [
+    "Do not restyle Field or Input inside the pattern",
+    "Do not invent local form layouts",
+    "Do not skip Field wrappers on labeled inputs",
+    "Do not add more than one primary Button"
+  ],
+  "snippet": "<SettingsFormPattern />"
+}
