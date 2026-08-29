@@ -1,19 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  getPrimitiveHex,
+  labelToneOnHex,
+  primitiveCssVar,
+  primitiveTokenPattern,
+  rgbStringToHex,
+} from "./color-utils";
 import styles from "./ColorFoundations.module.css";
 
-type Theme = "light" | "dark";
 type ColorTab = "primitives" | "semantics";
 
-const PRIMITIVE_RAMPS = [
-  { hue: "white", steps: ["white"] as const, single: true },
-  { hue: "black", steps: ["black"] as const, single: true },
+const PRIMITIVE_RAMPS: {
+  hue: string;
+  steps: readonly string[];
+  single?: boolean;
+}[] = [
   { hue: "neutral", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "blue", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "red", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "green", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "amber", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
+  { hue: "white", steps: ["white"], single: true },
+  { hue: "black", steps: ["black"], single: true },
 ];
 
 const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] }[] = [
@@ -102,114 +112,169 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
   },
 ];
 
-function primitiveVar(hue: string, step: string, single?: boolean) {
-  return single ? `var(--color-${hue})` : `var(--color-${hue}-${step})`;
+function useCopyHex() {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyHex = useCallback(async (hex: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(hex);
+      setCopiedId(id);
+      window.setTimeout(() => setCopiedId(null), 1400);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }, []);
+
+  return { copiedId, copyHex };
 }
 
-function primitiveLabel(hue: string, step: string, single?: boolean) {
-  return single ? `color.${hue}` : `color.${hue}.${step}`;
+interface PrimitiveChipProps {
+  id: string;
+  hue: string;
+  step: string;
+  single?: boolean;
+  copiedId: string | null;
+  onCopy: (hex: string, id: string) => void;
+}
+
+function PrimitiveChip({ id, hue, step, single, copiedId, onCopy }: PrimitiveChipProps) {
+  const hex = getPrimitiveHex(hue, single ? undefined : step);
+  const cssVar = primitiveCssVar(hue, single ? undefined : step);
+  const label = single ? hue : step;
+  const tone = labelToneOnHex(hex);
+  const copied = copiedId === id;
+
+  return (
+    <button
+      type="button"
+      className={`${styles.chip} ${styles[`chipText${tone === "light" ? "Light" : "Dark"}`]} ${single ? styles.chipSingle : ""}`}
+      style={{ backgroundColor: `var(${cssVar})` }}
+      onClick={() => onCopy(hex, id)}
+      aria-label={`Copy ${hex}`}
+    >
+      <span className={styles.chipStep}>{label}</span>
+      <span className={styles.chipVar}>{cssVar}</span>
+      <span className={styles.chipHex}>{copied ? "Copied ✓" : hex}</span>
+    </button>
+  );
+}
+
+interface SemanticChipProps {
+  id: string;
+  name: string;
+  cssVar: string;
+  copiedId: string | null;
+  onCopy: (hex: string, id: string) => void;
+}
+
+function SemanticChip({ id, name, cssVar, copiedId, onCopy }: SemanticChipProps) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [hex, setHex] = useState("");
+  const [tone, setTone] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const bg = getComputedStyle(el).backgroundColor;
+    const resolved = rgbStringToHex(bg);
+    setHex(resolved);
+    if (resolved.startsWith("#")) setTone(labelToneOnHex(resolved));
+  }, []);
+
+  const copied = copiedId === id;
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={`${styles.chip} ${styles.semanticChip} ${styles[`chipText${tone === "light" ? "Light" : "Dark"}`]}`}
+      style={{ backgroundColor: `var(${cssVar})` }}
+      onClick={() => hex && onCopy(hex, id)}
+      aria-label={`Copy ${name}`}
+    >
+      <span className={styles.chipStep}>{name}</span>
+      <span className={styles.chipVar}>{cssVar}</span>
+      <span className={styles.chipHex}>{copied ? "Copied ✓" : hex || "…"}</span>
+    </button>
+  );
 }
 
 export function ColorFoundations() {
   const [tab, setTab] = useState<ColorTab>("primitives");
-  const [theme, setTheme] = useState<Theme>("light");
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
-    return () => {
-      document.documentElement.removeAttribute("data-theme");
-    };
-  }, [theme]);
+  const { copiedId, copyHex } = useCopyHex();
 
   return (
     <section className={styles.colorSection}>
-      <div className={styles.toolbar}>
-        <div className={styles.tabList} role="tablist" aria-label="Color foundation views">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === "primitives"}
-            className={`${styles.tab} ${tab === "primitives" ? styles.tabActive : ""}`}
-            onClick={() => setTab("primitives")}
-          >
-            Primitives
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === "semantics"}
-            className={`${styles.tab} ${tab === "semantics" ? styles.tabActive : ""}`}
-            onClick={() => setTab("semantics")}
-          >
-            Semantics
-          </button>
-        </div>
-        <div className={styles.themeToggle} role="group" aria-label="Theme">
-          <button
-            type="button"
-            className={`${styles.themeBtn} ${theme === "light" ? styles.themeBtnActive : ""}`}
-            onClick={() => setTheme("light")}
-          >
-            Light
-          </button>
-          <button
-            type="button"
-            className={`${styles.themeBtn} ${theme === "dark" ? styles.themeBtnActive : ""}`}
-            onClick={() => setTheme("dark")}
-          >
-            Dark
-          </button>
-        </div>
+      <div className={styles.tabList} role="tablist" aria-label="Color foundation views">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "primitives"}
+          className={`${styles.tab} ${tab === "primitives" ? styles.tabActive : ""}`}
+          onClick={() => setTab("primitives")}
+        >
+          Primitives
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "semantics"}
+          className={`${styles.tab} ${tab === "semantics" ? styles.tabActive : ""}`}
+          onClick={() => setTab("semantics")}
+        >
+          Semantics
+        </button>
       </div>
 
       {tab === "primitives" ? (
-        <div className={styles.primitives}>
+        <div className={styles.primitives} role="tabpanel">
           <p className={styles.lead}>
-            Fixed palette ramps from <code>tokens/tokens.json</code>. Components never use these
-            directly — they map meaning through semantic roles.
+            Fixed palette ramps from <code>tokens/tokens.json</code>. Click a chip to copy its hex.
+            Components map these through semantic roles — never use primitives directly.
           </p>
           {PRIMITIVE_RAMPS.map((ramp) => (
-            <div key={ramp.hue} className={styles.rampBlock}>
-              <h3 className={styles.rampTitle}>{ramp.hue}</h3>
-              <div className={styles.rampRow}>
-                {ramp.steps.map((step) => (
-                  <div key={step} className={styles.rampSwatch}>
-                    <div
-                      className={styles.rampColor}
-                      style={{ backgroundColor: primitiveVar(ramp.hue, step, ramp.single) }}
+            <div key={ramp.hue} className={styles.hueSection}>
+              <div className={styles.hueHeader}>
+                <h3 className={styles.hueTitle}>{ramp.hue}</h3>
+                <code className={styles.huePattern}>{primitiveTokenPattern(ramp.hue, ramp.single)}</code>
+              </div>
+              <div className={`${styles.chipRow} ${ramp.single ? styles.chipRowSingle : ""}`}>
+                {ramp.steps.map((step) => {
+                  const chipId = `${ramp.hue}-${step}`;
+                  return (
+                    <PrimitiveChip
+                      key={chipId}
+                      id={chipId}
+                      hue={ramp.hue}
+                      step={step}
+                      single={ramp.single}
+                      copiedId={copiedId}
+                      onCopy={copyHex}
                     />
-                    <code className={styles.tokenName}>
-                      {primitiveLabel(ramp.hue, step, ramp.single)}
-                    </code>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className={styles.semantics}>
+        <div className={styles.semantics} role="tabpanel">
           <p className={styles.lead}>
-            Semantic roles remapped per theme via <code>data-theme</code>. Same CSS variable names
-            in light and dark — only values change.
+            Semantic roles from <code>lib/tokens.css</code>. Click a chip to copy its resolved hex.
           </p>
           {SEMANTIC_GROUPS.map((group) => (
             <div key={group.title} className={styles.group}>
               <h3 className={styles.groupTitle}>{group.title}</h3>
-              <div className={styles.swatches}>
+              <div className={styles.semanticChipRow}>
                 {group.tokens.map((token) => (
-                  <div key={token.var} className={styles.swatch}>
-                    <div
-                      className={styles.swatchColor}
-                      style={{ backgroundColor: `var(${token.var})` }}
-                    />
-                    <span className={styles.swatchLabel}>{token.name}</span>
-                    <code className={styles.varName}>{token.var}</code>
-                  </div>
+                  <SemanticChip
+                    key={token.var}
+                    id={token.var}
+                    name={token.name}
+                    cssVar={token.var}
+                    copiedId={copiedId}
+                    onCopy={copyHex}
+                  />
                 ))}
               </div>
             </div>
