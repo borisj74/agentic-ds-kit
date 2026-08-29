@@ -76,8 +76,8 @@
 }
 
 .tab:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .layout {
@@ -179,8 +179,8 @@
 }
 
 .sizeTab:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .radioList {

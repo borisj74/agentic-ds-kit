@@ -13,8 +13,8 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--action-primary);
-  outline-offset: 2px;
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .button:disabled {

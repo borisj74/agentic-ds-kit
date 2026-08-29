@@ -12,15 +12,15 @@
 
 .shell:focus-within,
 .shell[data-demo="focus"] {
-  outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--border-focus) 20%, transparent);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .shell.controlError:focus-within,
 .shell.controlError[data-demo="focus"] {
   border-color: var(--status-danger);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-danger) 20%, transparent);
+  outline-color: var(--status-danger);
 }
 
 .shell[data-disabled] {

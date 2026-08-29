@@ -21,7 +21,8 @@
 }
 
 .search:focus-within {
-  box-shadow: inset 0 0 0 var(--border-focus-width) var(--border-focus);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .searchIcon {

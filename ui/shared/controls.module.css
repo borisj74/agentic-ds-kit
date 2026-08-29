@@ -9,13 +9,13 @@
   background-color: var(--surface-card);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-md);
-  transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+  transition: border-color var(--motion-fast) ease, outline-color var(--motion-fast) ease;
 }
 
 .control:focus {
-  outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--border-focus) 20%, transparent);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .control:disabled {
@@ -44,5 +44,5 @@
 
 .controlError:focus {
   border-color: var(--status-danger);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-danger) 20%, transparent);
+  outline-color: var(--status-danger);
 }
