@@ -2,16 +2,53 @@
   "id": "pageheader",
   "status": "stable",
   "intent": "Top-of-page title block with optional eyebrow, subtitle, and action slot.",
-  "useWhen": ["Every playground screen and product page needs a clear heading hierarchy", "Placing primary/secondary Buttons aligned to the page title"],
-  "doNotUseWhen": ["In-card section titles — use Section", "Sidebar branding — use AppNav title", "Modal titles — use Modal title prop"],
+  "useWhen": [
+    "Every playground screen and product page needs a clear heading hierarchy",
+    "Placing primary/secondary Buttons aligned to the page title"
+  ],
+  "doNotUseWhen": [
+    "In-card section titles \u2014 use Section",
+    "Sidebar branding \u2014 use AppNav title",
+    "Dialog titles \u2014 use Dialog title prop"
+  ],
   "props": {
-    "title": { "type": "string", "required": true },
-    "subtitle": { "type": "string", "required": false },
-    "eyebrow": { "type": "string", "required": false },
-    "actions": { "type": "slot", "allowedContracts": ["button"], "required": false }
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string",
+      "required": false
+    },
+    "eyebrow": {
+      "type": "string",
+      "required": false
+    },
+    "actions": {
+      "type": "slot",
+      "allowedContracts": [
+        "button"
+      ],
+      "required": false
+    }
   },
-  "tokens": ["text.primary", "text.secondary", "type.size.title", "type.size.body"],
-  "a11y": { "element": "header", "requirements": ["Page title is h1", "Actions remain keyboard accessible"] },
-  "doNot": ["Do not invent local PageHeader", "Do not use raw hex", "Do not put more than one primary Button in actions"],
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "type.size.title",
+    "type.size.body"
+  ],
+  "a11y": {
+    "element": "header",
+    "requirements": [
+      "Page title is h1",
+      "Actions remain keyboard accessible"
+    ]
+  },
+  "doNot": [
+    "Do not invent local PageHeader",
+    "Do not use raw hex",
+    "Do not put more than one primary Button in actions"
+  ],
   "snippet": "<PageHeader title=\"Settings\" subtitle=\"Manage your account\" eyebrow=\"Studio\" />"
 }

@@ -14,7 +14,11 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     const readHash = () => setHash(window.location.hash);
     readHash();
     window.addEventListener("hashchange", readHash);
-    return () => window.removeEventListener("hashchange", readHash);
+    window.addEventListener("popstate", readHash);
+    return () => {
+      window.removeEventListener("hashchange", readHash);
+      window.removeEventListener("popstate", readHash);
+    };
   }, []);
 
   const groups = buildPlaygroundNavGroups(pathname, hash);

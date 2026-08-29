@@ -1,0 +1,83 @@
+{
+  "id": "command",
+  "status": "stable",
+  "intent": "Searchable command menu for quick actions.",
+  "useWhen": [
+    "Searchable actions and quick jumps",
+    "Command palette \u2014 kit Button opens kit Dialog with Command inside"
+  ],
+  "doNotUseWhen": [
+    "Short Field dropdown \u2014 use Select",
+    "Sidebar navigation \u2014 use AppNav",
+    "Overlay chrome \u2014 compose Dialog; do not add CommandDialog"
+  ],
+  "props": {
+    "placeholder": {
+      "type": "string",
+      "default": "Type a command or search..."
+    },
+    "empty": {
+      "type": "string",
+      "default": "No results found."
+    },
+    "groups": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "heading": "string?",
+        "items": [
+          {
+            "id": "string",
+            "label": "string",
+            "icon": "string?",
+            "shortcut": "string?",
+            "disabled": "boolean?"
+          }
+        ]
+      },
+      "note": "Each group has optional heading and a required items array. Item icon is a Lucide PascalCase name from the catalog."
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void"
+    },
+    "label": {
+      "type": "string",
+      "default": "Command menu",
+      "note": "Accessible name on the combobox input"
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "icon.muted",
+    "space.1"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Input is role=combobox with aria-expanded=true, aria-controls the listbox, aria-autocomplete=list, aria-activedescendant, and aria-label from label",
+      "List is role=listbox",
+      "Items are role=option with aria-selected when highlighted and aria-disabled when disabled",
+      "useId for ids",
+      "Search icon is aria-hidden"
+    ]
+  },
+  "doNot": [
+    "Do not invent CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandShortcut, or CommandDialog",
+    "Do not wrap the search field in Field \u2014 Command owns its input",
+    "Do not use kit Input (uncontrolled) for the query",
+    "Do not use cmdk or extra dependencies",
+    "Do not use raw hex",
+    "Do not close itself \u2014 compose Dialog for an overlay"
+  ],
+  "snippet": "<Button variant=\"secondary\" iconStart=\"Search\" onClick={open} />\n<Dialog open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Dialog>"
+}

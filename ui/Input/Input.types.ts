@@ -1,4 +1,4 @@
-export type InputSize = "md" | "sm";
+export type InputSize = "lg" | "md" | "sm";
 export type InputType = "text" | "email" | "password" | "search";
 
 export interface InputProps {
@@ -10,4 +10,9 @@ export interface InputProps {
   error?: boolean;
   defaultValue?: string;
   name?: string;
+  start?: string;
+  end?: string;
+  iconStart?: string;
+  iconEnd?: string;
+  demo?: "hover" | "focus";
 }

@@ -1,25 +1,81 @@
 {
   "id": "field",
   "status": "stable",
-  "intent": "Wrap a form control with label, optional hint, and optional error message.",
+  "intent": "Wrap a form control with label, optional hint, and optional error. Label sits on top or start (left).",
   "useWhen": [
     "Any labeled Input, Textarea, or Select in a form",
     "When validation errors or helper text must appear below the control"
   ],
   "doNotUseWhen": [
-    "Checkbox with inline label — use Checkbox directly unless hint/error is needed",
-    "RadioGroup — it provides its own legend",
-    "Display-only content — use Section or plain text"
+    "Checkbox with inline label \u2014 use Checkbox directly unless hint/error is needed",
+    "RadioGroup \u2014 it provides its own legend",
+    "Display-only content \u2014 use Section or plain text"
   ],
   "props": {
-    "label": { "type": "string", "required": true },
-    "htmlFor": { "type": "string", "required": true },
-    "hint": { "type": "string", "required": false },
-    "error": { "type": "string", "required": false },
-    "children": { "type": "slot", "allowedContracts": ["input", "textarea", "select"], "required": true }
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "htmlFor": {
+      "type": "string",
+      "required": true
+    },
+    "hint": {
+      "type": "string",
+      "required": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "children": {
+      "type": "slot",
+      "allowedContracts": [
+        "input",
+        "textarea",
+        "select",
+        "datepicker"
+      ],
+      "required": true
+    },
+    "labelPosition": {
+      "type": "enum",
+      "values": [
+        "top",
+        "start"
+      ],
+      "default": "top",
+      "note": "top stacks the label above the control. start places it on the left. Hint and error stay under the control."
+    }
   },
-  "tokens": ["text.primary", "text.secondary", "text.danger"],
-  "a11y": { "element": "div", "requirements": ["Label htmlFor matches child control id", "Error text linked via aria-describedby when present"] },
-  "doNot": ["Do not invent local Field", "Do not wrap Button or layout components", "Do not use raw hex", "Do not use Field without a kit Input, Textarea, or Select child"],
-  "snippet": "<Field label=\"Project name\" htmlFor=\"name\" hint=\"Visible to your team\"><Input id=\"name\" /></Field>"
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.danger"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Label htmlFor matches child control id",
+      "Error text linked via aria-describedby when present"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Field",
+    "Do not wrap Button or layout components",
+    "Do not use raw hex",
+    "Do not use Field without a kit Input, Textarea, Select, or DatePicker child",
+    "Do not use start on Field for prefix text \u2014 that is Input start"
+  ],
+  "snippet": "<Field label=\"Email\" htmlFor=\"email\" labelPosition=\"start\"><Input id=\"email\" type=\"email\" /></Field>",
+  "children": {
+    "type": "slot",
+    "allowedContracts": [
+      "input",
+      "textarea",
+      "select",
+      "datepicker"
+    ],
+    "required": true
+  }
 }

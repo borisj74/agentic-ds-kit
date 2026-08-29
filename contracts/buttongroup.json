@@ -1,0 +1,47 @@
+{
+  "id": "buttongroup",
+  "status": "stable",
+  "intent": "Joined row of kit Buttons that share one size and act as one control cluster.",
+  "useWhen": [
+    "Related sibling actions such as a view switch",
+    "Split confirm/cancel pairs that should read as one cluster",
+    "A toolbar of same-size Buttons"
+  ],
+  "doNotUseWhen": [
+    "Unrelated actions that should stay separate Buttons",
+    "Wrapping non-Button controls",
+    "Nesting groups"
+  ],
+  "props": {
+    "children": {
+      "type": "node",
+      "required": true,
+      "note": "only kit Button nodes, same size, 2+"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "names the group"
+    }
+  },
+  "tokens": [
+    "border.faint",
+    "radius.md"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "role=group",
+      "optional aria-label names the group",
+      "Buttons keep their own names"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local button group / segmented control",
+    "Do not mix sizes inside one group",
+    "Do not put more than one variant=primary Button in a group (or the view)",
+    "Do not wrap Input, Select, or anything except kit Button",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ButtonGroup ariaLabel=\"Plan period\"><Button variant=\"secondary\" size=\"md\">Day</Button><Button variant=\"secondary\" size=\"md\">Week</Button><Button variant=\"secondary\" size=\"md\">Month</Button></ButtonGroup>"
+}

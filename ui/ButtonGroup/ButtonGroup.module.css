@@ -1,0 +1,31 @@
+.group {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.group > button {
+  position: relative;
+}
+
+.group > button:not(:first-child) {
+  margin-inline-start: -1px;
+}
+
+.group > button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.group > button:first-child:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.group > button:last-child:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.group > button:hover,
+.group > button:focus-visible {
+  z-index: 1;
+}

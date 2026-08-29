@@ -5,22 +5,33 @@
   "useWhen": [
     "Submitting a form or triggering a primary workflow action",
     "Offering a secondary or tertiary action alongside content",
-    "Destructive actions that need explicit danger styling"
+    "Destructive actions that need explicit danger styling",
+    "Toolbar or compact actions with a Lucide icon and a visible label",
+    "Icon-only actions when space is tight and ariaLabel names the action"
   ],
   "doNotUseWhen": [
-    "Navigation that should be a link — use an anchor styled elsewhere",
-    "Icon-only controls without visible text — not supported by this contract",
+    "Navigation that should be a link \u2014 use an anchor styled elsewhere",
+    "Icon-only without aria-label \u2014 icon-only must set ariaLabel",
     "More than one primary button in the same view"
   ],
   "props": {
     "size": {
       "type": "enum",
-      "values": ["lg", "md", "sm"],
+      "values": [
+        "lg",
+        "md",
+        "sm"
+      ],
       "default": "md"
     },
     "variant": {
       "type": "enum",
-      "values": ["primary", "secondary", "tertiary", "danger"],
+      "values": [
+        "primary",
+        "secondary",
+        "tertiary",
+        "danger"
+      ],
       "default": "primary"
     },
     "disabled": {
@@ -29,7 +40,23 @@
     },
     "children": {
       "type": "string",
-      "required": true
+      "required": false,
+      "note": "required unless icon-only"
+    },
+    "iconStart": {
+      "type": "string",
+      "required": false,
+      "note": "lucide-react export name from the Foundations catalog (Plus, ArrowRight, \u2026)"
+    },
+    "iconEnd": {
+      "type": "string",
+      "required": false,
+      "note": "lucide-react export name from the Foundations catalog (Plus, ArrowRight, \u2026)"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "required when children is omitted (icon-only)"
     },
     "onClick": {
       "type": "function",
@@ -37,7 +64,11 @@
     },
     "type": {
       "type": "enum",
-      "values": ["button", "submit", "reset"],
+      "values": [
+        "button",
+        "submit",
+        "reset"
+      ],
       "default": "button"
     }
   },
@@ -51,12 +82,14 @@
     "action.primary",
     "action.primaryHover",
     "action.danger",
-    "action.dangerHover"
+    "action.dangerHover",
+    "icon.default"
   ],
   "a11y": {
     "element": "button",
     "requirements": [
-      "Visible label via children",
+      "Visible label via children, OR aria-label for icon-only",
+      "Decorative icons are aria-hidden",
       "disabled sets aria-disabled and prevents interaction",
       "Focus ring must be visible on keyboard focus"
     ]
@@ -64,7 +97,9 @@
   "doNot": [
     "Do not invent local Button variants outside the enum",
     "Do not use raw hex colors in styles",
-    "Do not place more than one variant=primary Button in a single view"
+    "Do not place more than one variant=primary Button in a single view",
+    "Do not pass custom SVG or React nodes as icons \u2014 use lucide-react export names on iconStart/iconEnd",
+    "Do not ship icon-only without ariaLabel"
   ],
-  "snippet": "<Button variant=\"primary\" size=\"md\">Save changes</Button>"
+  "snippet": "<Button variant=\"primary\" size=\"md\">Save changes</Button>\n<Button variant=\"secondary\" iconStart=\"Plus\">Add</Button>"
 }

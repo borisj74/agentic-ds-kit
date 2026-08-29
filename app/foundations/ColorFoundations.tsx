@@ -47,7 +47,11 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
       { name: "text.secondary", var: "--text-secondary" },
       { name: "text.muted", var: "--text-muted" },
       { name: "text.inverse", var: "--text-inverse" },
+      { name: "text.brand", var: "--text-brand" },
+      { name: "text.success", var: "--text-success" },
+      { name: "text.warning", var: "--text-warning" },
       { name: "text.danger", var: "--text-danger" },
+      { name: "text.info", var: "--text-info" },
       { name: "text.disabled", var: "--text-disabled" },
     ],
   },
@@ -58,19 +62,98 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
       { name: "surface.page", var: "--surface-page" },
       { name: "surface.card", var: "--surface-card" },
       { name: "surface.muted", var: "--surface-muted" },
-      { name: "surface.overlay", var: "--surface-overlay" },
       { name: "surface.elevated", var: "--surface-elevated" },
+      { name: "surface.overlay", var: "--surface-overlay" },
+      { name: "surface.inverse", var: "--surface-inverse" },
+      { name: "surface.brand", var: "--surface-brand" },
+      { name: "surface.brand-subtle", var: "--surface-brand-subtle" },
       { name: "surface.disabled", var: "--surface-disabled" },
+    ],
+  },
+  {
+    title: "Fill",
+    pattern: "fill-*",
+    tokens: [
+      { name: "fill.strong", var: "--fill-strong" },
+      { name: "fill.subtle", var: "--fill-subtle" },
+      { name: "fill.brand", var: "--fill-brand" },
+      { name: "fill.brand-subtle", var: "--fill-brand-subtle" },
+      { name: "fill.success", var: "--fill-success" },
+      { name: "fill.success-subtle", var: "--fill-success-subtle" },
+      { name: "fill.warning", var: "--fill-warning" },
+      { name: "fill.warning-subtle", var: "--fill-warning-subtle" },
+      { name: "fill.danger", var: "--fill-danger" },
+      { name: "fill.danger-subtle", var: "--fill-danger-subtle" },
+      { name: "fill.info", var: "--fill-info" },
+      { name: "fill.info-subtle", var: "--fill-info-subtle" },
     ],
   },
   {
     title: "Border",
     pattern: "border-*",
     tokens: [
+      { name: "border.subtle", var: "--border-subtle" },
       { name: "border.faint", var: "--border-faint" },
       { name: "border.strong", var: "--border-strong" },
+      { name: "border.brand", var: "--border-brand" },
       { name: "border.focus", var: "--border-focus" },
       { name: "border.disabled", var: "--border-disabled" },
+    ],
+  },
+  {
+    title: "Icon",
+    pattern: "icon-*",
+    tokens: [
+      { name: "icon.primary", var: "--icon-primary" },
+      { name: "icon.secondary", var: "--icon-secondary" },
+      { name: "icon.muted", var: "--icon-muted" },
+      { name: "icon.inverse", var: "--icon-inverse" },
+      { name: "icon.brand", var: "--icon-brand" },
+      { name: "icon.success", var: "--icon-success" },
+      { name: "icon.warning", var: "--icon-warning" },
+      { name: "icon.danger", var: "--icon-danger" },
+      { name: "icon.info", var: "--icon-info" },
+      { name: "icon.disabled", var: "--icon-disabled" },
+      { name: "icon.default", var: "--icon-default" },
+    ],
+  },
+  {
+    title: "Brand",
+    pattern: "brand-*",
+    tokens: [
+      { name: "brand.primary", var: "--brand-primary" },
+      { name: "brand.primary-hover", var: "--brand-primary-hover" },
+      { name: "brand.primary-active", var: "--brand-primary-active" },
+      { name: "brand.subtle", var: "--brand-subtle" },
+      { name: "brand.on-brand", var: "--brand-on-brand" },
+    ],
+  },
+  {
+    title: "Action",
+    pattern: "action-*",
+    tokens: [
+      { name: "action.primary", var: "--action-primary" },
+      { name: "action.primary-hover", var: "--action-primary-hover" },
+      { name: "action.primary-pressed", var: "--action-primary-pressed" },
+      { name: "action.on-primary", var: "--action-on-primary" },
+      { name: "action.secondary", var: "--action-secondary" },
+      { name: "action.secondary-hover", var: "--action-secondary-hover" },
+      { name: "action.secondary-pressed", var: "--action-secondary-pressed" },
+      { name: "action.danger", var: "--action-danger" },
+      { name: "action.danger-hover", var: "--action-danger-hover" },
+      { name: "action.danger-pressed", var: "--action-danger-pressed" },
+      { name: "action.selected", var: "--action-selected" },
+      { name: "action.selected-border", var: "--action-selected-border" },
+    ],
+  },
+  {
+    title: "Link",
+    pattern: "link-*",
+    tokens: [
+      { name: "link.default", var: "--link-default" },
+      { name: "link.hover", var: "--link-hover" },
+      { name: "link.visited", var: "--link-visited" },
+      { name: "link.active", var: "--link-active" },
     ],
   },
   {
@@ -84,6 +167,15 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
           { name: "status.warning", var: "--status-warning" },
           { name: "status.danger", var: "--status-danger" },
           { name: "status.info", var: "--status-info" },
+        ],
+      },
+      {
+        title: "Text",
+        tokens: [
+          { name: "status.success-text", var: "--status-success-text" },
+          { name: "status.warning-text", var: "--status-warning-text" },
+          { name: "status.danger-text", var: "--status-danger-text" },
+          { name: "status.info-text", var: "--status-info-text" },
         ],
       },
       {
@@ -107,23 +199,11 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
     ],
   },
   {
-    title: "Action",
-    pattern: "action-*",
-    tokens: [
-      { name: "action.primary", var: "--action-primary" },
-      { name: "action.primary-hover", var: "--action-primary-hover" },
-      { name: "action.primary-pressed", var: "--action-primary-pressed" },
-      { name: "action.on-primary", var: "--action-on-primary" },
-      { name: "action.danger", var: "--action-danger" },
-      { name: "action.danger-hover", var: "--action-danger-hover" },
-      { name: "action.danger-pressed", var: "--action-danger-pressed" },
-    ],
-  },
-  {
     title: "Disabled",
     pattern: "*.disabled",
     tokens: [
       { name: "text.disabled", var: "--text-disabled" },
+      { name: "icon.disabled", var: "--icon-disabled" },
       { name: "surface.disabled", var: "--surface-disabled" },
       { name: "border.disabled", var: "--border-disabled" },
     ],
@@ -134,15 +214,8 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
     tokens: [
       { name: "focus.ring", var: "--focus-ring" },
       { name: "focus.ring-offset", var: "--focus-ring-offset" },
+      { name: "focus.ring-inverse", var: "--focus-ring-inverse" },
       { name: "border.focus", var: "--border-focus" },
-    ],
-  },
-  {
-    title: "Icon",
-    pattern: "icon-*",
-    tokens: [
-      { name: "icon.default", var: "--icon-default" },
-      { name: "icon.muted", var: "--icon-muted" },
     ],
   },
 ];
@@ -194,66 +267,64 @@ function PrimitiveChip({ id, hue, step, single, copiedId, onCopy }: PrimitiveChi
   );
 }
 
-interface SemanticChipProps {
-  id: string;
-  name: string;
-  cssVar: string;
-  copiedId: string | null;
-  onCopy: (hex: string, id: string) => void;
+function shortName(cssVar: string): string {
+  const parts = cssVar.replace(/^--/, "").split("-");
+  return parts.slice(1).join(" ");
 }
 
-function SemanticChip({ id, name, cssVar, copiedId, onCopy }: SemanticChipProps) {
-  const ref = useRef<HTMLButtonElement>(null);
+function TokenChip({
+  cssVar,
+  copiedId,
+  onCopy,
+}: {
+  cssVar: string;
+  copiedId: string | null;
+  onCopy: (value: string, id: string) => void;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
   const [hex, setHex] = useState("");
-  const [tone, setTone] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const bg = getComputedStyle(el).backgroundColor;
-    const resolved = rgbStringToHex(bg);
-    setHex(resolved);
-    if (resolved.startsWith("#")) setTone(labelToneOnHex(resolved));
+    setHex(rgbStringToHex(getComputedStyle(el).backgroundColor));
   }, []);
 
-  const copied = copiedId === id;
+  const copied = copiedId === cssVar;
 
   return (
     <button
-      ref={ref}
       type="button"
-      className={`${styles.chip} ${styles.semanticChip} ${styles[`chipText${tone === "light" ? "Light" : "Dark"}`]}`}
-      style={{ backgroundColor: `var(${cssVar})` }}
-      onClick={() => hex && onCopy(hex, id)}
-      aria-label={`Copy ${name}`}
+      className={styles.tokenChip}
+      title={`Copy ${cssVar}`}
+      onClick={() => onCopy(cssVar, cssVar)}
     >
-      <span className={styles.chipStep}>{name}</span>
-      <span className={styles.chipVar}>{cssVar}</span>
-      <span className={styles.chipHex}>{copied ? "Copied ✓" : hex || "…"}</span>
+      <span
+        ref={ref}
+        className={styles.tokenChipDot}
+        style={{ backgroundColor: `var(${cssVar})` }}
+      />
+      <span className={styles.tokenChipBody}>
+        <span className={styles.tokenChipName}>{copied ? "Copied" : shortName(cssVar)}</span>
+        <span className={styles.tokenChipMeta}>{hex || "…"}</span>
+      </span>
     </button>
   );
 }
 
-function SemanticChipRow({
+function SemanticList({
   tokens,
   copiedId,
   onCopy,
 }: {
   tokens: SemanticToken[];
   copiedId: string | null;
-  onCopy: (hex: string, id: string) => void;
+  onCopy: (value: string, id: string) => void;
 }) {
   return (
-    <div className={styles.chipRow}>
+    <div className={styles.tokenChipGrid}>
       {tokens.map((token) => (
-        <SemanticChip
-          key={token.var}
-          id={token.var}
-          name={token.name}
-          cssVar={token.var}
-          copiedId={copiedId}
-          onCopy={onCopy}
-        />
+        <TokenChip key={token.var} cssVar={token.var} copiedId={copiedId} onCopy={onCopy} />
       ))}
     </div>
   );
@@ -289,8 +360,8 @@ export function ColorFoundations() {
       {tab === "semantics" ? (
         <div className={styles.semantics} role="tabpanel">
           <p className={styles.lead}>
-            Semantic roles from <code>lib/tokens.css</code>. Click a chip to copy its resolved hex.
-            Components bind to these names only — never primitives.
+            Start with the palette ramps, then map meaning through semantic roles.
+            Click a chip to copy the CSS variable.
           </p>
           {SEMANTIC_FAMILIES.map((family) => (
             <div key={family.title} className={styles.hueSection}>
@@ -302,11 +373,11 @@ export function ColorFoundations() {
                 family.subgroups.map((subgroup) => (
                   <div key={subgroup.title} className={styles.subgroup}>
                     <h4 className={styles.subgroupTitle}>{subgroup.title}</h4>
-                    <SemanticChipRow tokens={subgroup.tokens} copiedId={copiedId} onCopy={copyHex} />
+                    <SemanticList tokens={subgroup.tokens} copiedId={copiedId} onCopy={copyHex} />
                   </div>
                 ))
               ) : (
-                <SemanticChipRow tokens={family.tokens ?? []} copiedId={copiedId} onCopy={copyHex} />
+                <SemanticList tokens={family.tokens ?? []} copiedId={copiedId} onCopy={copyHex} />
               )}
             </div>
           ))}

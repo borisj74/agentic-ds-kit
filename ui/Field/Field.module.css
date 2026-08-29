@@ -1,7 +1,40 @@
 .field {
+  min-width: 0;
+}
+
+.top {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+.start {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  align-items: center;
+}
+
+.start .label {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.start .body {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.start .hint {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.start .error {
+  grid-column: 2;
+  grid-row: 3;
 }
 
 .label {

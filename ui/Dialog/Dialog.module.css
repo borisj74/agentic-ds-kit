@@ -1,0 +1,130 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background-color: var(--surface-overlay);
+  animation: overlayEnter var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.dialog {
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100dvh - 4rem);
+  overflow: hidden;
+  background-color: var(--surface-elevated);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  animation: dialogEnter var(--motion-modal-duration) var(--motion-modal-easing);
+}
+
+.md {
+  max-width: 28rem;
+}
+
+.lg {
+  max-width: 40rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-6);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-muted);
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  color: var(--icon-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.close:hover {
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-6);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-6);
+  border-top: var(--border-width-thin) solid var(--border-faint);
+}
+
+@keyframes overlayEnter {
+  from {
+    opacity: var(--opacity-0);
+  }
+  to {
+    opacity: var(--opacity-full);
+  }
+}
+
+@keyframes dialogEnter {
+  from {
+    opacity: var(--opacity-0);
+  }
+  to {
+    opacity: var(--opacity-full);
+  }
+}

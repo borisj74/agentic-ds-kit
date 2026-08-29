@@ -1,7 +1,8 @@
 import { AppNav } from "@/ui/AppNav";
 import { Section } from "@/ui/Section";
 import { Table } from "@/ui/Table";
-import { Tag } from "@/ui/Tag";
+import { Badge } from "@/ui/Badge";
+import type { BadgeTone } from "@/ui/Badge";
 import type { AppNavItem } from "@/ui/AppNav";
 import type { TableColumn } from "@/ui/Table";
 import styles from "./ListDetailPattern.module.css";
@@ -20,7 +21,7 @@ export interface ListDetailPatternProps {
     title: string;
     description: string;
     status: string;
-    statusVariant: "neutral" | "success" | "warning" | "danger" | "info";
+    statusTone: BadgeTone;
     body: string;
   };
 }
@@ -35,7 +36,7 @@ export function ListDetailPattern({ nav, table, detail }: ListDetailPatternProps
         </Section>
         <Section title={detail.title} description={detail.description}>
           <div className={styles.detail}>
-            <Tag variant={detail.statusVariant}>{detail.status}</Tag>
+            <Badge tone={detail.statusTone}>{detail.status}</Badge>
             <p className={styles.body}>{detail.body}</p>
           </div>
         </Section>

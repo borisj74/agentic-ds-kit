@@ -13,4 +13,5 @@ export interface SelectProps {
   error?: boolean;
   defaultValue?: string;
   name?: string;
+  ariaLabel?: string;
 }

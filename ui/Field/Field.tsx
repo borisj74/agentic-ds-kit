@@ -1,19 +1,28 @@
 import type { FieldProps } from "./Field.types";
 import styles from "./Field.module.css";
 
-export type { FieldProps } from "./Field.types";
+export type { FieldProps, FieldLabelPosition } from "./Field.types";
 
-export function Field({ label, htmlFor, hint, error, children }: FieldProps) {
+export function Field({
+  label,
+  htmlFor,
+  hint,
+  error,
+  labelPosition = "top",
+  children,
+}: FieldProps) {
   const hintId = hint ? `${htmlFor}-hint` : undefined;
   const errorId = error ? `${htmlFor}-error` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 
   return (
-    <div className={styles.field}>
+    <div className={`${styles.field} ${styles[labelPosition]}`}>
       <label className={styles.label} htmlFor={htmlFor}>
         {label}
       </label>
-      <div aria-describedby={describedBy}>{children}</div>
+      <div className={styles.body} aria-describedby={describedBy}>
+        {children}
+      </div>
       {hint ? (
         <p id={hintId} className={styles.hint}>
           {hint}

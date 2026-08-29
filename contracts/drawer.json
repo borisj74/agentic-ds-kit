@@ -1,0 +1,89 @@
+{
+  "id": "drawer",
+  "status": "stable",
+  "intent": "Edge panel for secondary tasks that need more room than a Dialog.",
+  "useWhen": [
+    "Settings",
+    "Filters",
+    "Detail alongside the page",
+    "Mobile-style sheet from the bottom"
+  ],
+  "doNotUseWhen": [
+    "Centered short task \u2014 use Dialog",
+    "Must-choose confirm \u2014 use AlertDialog",
+    "Persistent nav \u2014 use AppNav",
+    "Full page \u2014 use a route"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "side": {
+      "type": "enum",
+      "values": [
+        "right",
+        "left",
+        "bottom",
+        "top"
+      ],
+      "default": "right"
+    },
+    "showClose": {
+      "type": "boolean",
+      "default": true
+    },
+    "onClose": {
+      "type": "function",
+      "required": true
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Body"
+    },
+    "footer": {
+      "type": "slot",
+      "required": false,
+      "note": "kit Buttons / ButtonGroup"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "surface.overlay",
+    "surface.elevated",
+    "border.faint",
+    "border.focus",
+    "shadow.md",
+    "motion.overlay",
+    "motion.modal",
+    "icon.muted"
+  ],
+  "a11y": {
+    "element": "dialog",
+    "requirements": [
+      "role=dialog and aria-modal",
+      "Title is the accessible name, description is aria-describedby when present",
+      "Focus is trapped while open",
+      "Escape closes",
+      "Overlay click closes",
+      "Unique ids via useId"
+    ]
+  },
+  "doNot": [
+    "Do not invent Sheet, SidePanel, or local Drawer",
+    "Do not use raw hex",
+    "Do not add snap points or swipe",
+    "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Overlay click and Escape still close."
+  ],
+  "snippet": "<Drawer open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" side=\"right\" onClose={close} footer={<ButtonGroup ariaLabel=\"Drawer actions\"><Button variant=\"secondary\" onClick={close}>Cancel</Button><Button variant=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Drawer>"
+}

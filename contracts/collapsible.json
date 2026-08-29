@@ -1,0 +1,61 @@
+{
+  "id": "collapsible",
+  "status": "stable",
+  "intent": "Single show/hide panel.",
+  "useWhen": [
+    "One disclosure whose body composes kit pieces",
+    "Product details or extra spec the user can hide"
+  ],
+  "doNotUseWhen": [
+    "Two or more related sections, one open at a time — use Accordion",
+    "In-page peer views — use Tabs"
+  ],
+  "props": {
+    "trigger": {
+      "type": "string",
+      "required": true,
+      "note": "Button label"
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Revealed body. Compose kit pieces, never a local cousin"
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "default": false
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "icon.muted",
+    "border.faint",
+    "border.focus",
+    "motion.expandDuration"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Trigger is a button with aria-expanded",
+      "Button aria-controls the panel",
+      "Panel is role=region, aria-labelledby the button",
+      "Closed panel is hidden from AT"
+    ]
+  },
+  "doNot": [
+    "Do not invent CollapsibleTrigger or CollapsibleContent cousins",
+    "Do not use Accordion for a single block",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Collapsible trigger=\"Product details\" defaultOpen>\n  {children}\n</Collapsible>"
+}

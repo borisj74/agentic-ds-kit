@@ -9,7 +9,8 @@
   "doNotUseWhen": [
     "Multiple metrics in one tile — use separate Scorecards inside Scoreboard",
     "Charts, sparklines, or tables — out of scope for this contract",
-    "Clickable or interactive metric tiles"
+    "Clickable or interactive metric tiles",
+    "A framed content tile — use Card"
   ],
   "props": {
     "title": {

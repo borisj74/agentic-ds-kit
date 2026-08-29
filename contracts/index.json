@@ -14,6 +14,13 @@
     "status": "stable"
   },
   {
+    "id": "buttongroup",
+    "intent": "Joined row of kit Buttons.",
+    "group": "component",
+    "path": "contracts/buttongroup.json",
+    "status": "stable"
+  },
+  {
     "id": "scorecard",
     "intent": "Single KPI tile with title, metric, and optional trend.",
     "group": "component",
@@ -29,7 +36,7 @@
   },
   {
     "id": "input",
-    "intent": "Single-line text entry for forms and filters.",
+    "intent": "Single-line text entry with optional start and end slots inside the field.",
     "group": "component",
     "path": "contracts/input.json",
     "status": "stable"
@@ -50,9 +57,65 @@
   },
   {
     "id": "checkbox",
-    "intent": "Boolean toggle with an inline label.",
+    "intent": "Multi-select or confirmation control. Optional visible label.",
     "group": "component",
     "path": "contracts/checkbox.json",
+    "status": "stable"
+  },
+  {
+    "id": "collapsible",
+    "intent": "Single show/hide panel.",
+    "group": "component",
+    "path": "contracts/collapsible.json",
+    "status": "stable"
+  },
+  {
+    "id": "command",
+    "intent": "Searchable command menu for quick actions.",
+    "group": "component",
+    "path": "contracts/command.json",
+    "status": "stable"
+  },
+  {
+    "id": "datatable",
+    "intent": "Responsive structured data with search, filters, column settings, and clear empty states.",
+    "group": "component",
+    "path": "contracts/datatable.json",
+    "status": "stable"
+  },
+  {
+    "id": "datepicker",
+    "intent": "Form field that opens kit Calendar to pick one date.",
+    "group": "component",
+    "path": "contracts/datepicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "calendar",
+    "intent": "Month grid for picking one date.",
+    "group": "component",
+    "path": "contracts/calendar.json",
+    "status": "stable"
+  },
+  {
+    "id": "cell",
+    "intent": "Inline cell content for datasets: text, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions.",
+    "group": "component",
+    "path": "contracts/cell.json",
+    "status": "stable"
+  },
+  {
+    "id": "headercell",
+    "intent": "Column header for DataTable: label, optional select-all checkbox, sm or md.",
+    "group": "component",
+    "path": "contracts/headercell.json",
+    "status": "stable"
+  },
+  {
+    "id": "card",
+    "intent": "Framed tile with optional header, body, and footer actions.",
+    "group": "component",
+    "path": "contracts/card.json",
     "status": "stable"
   },
   {
@@ -64,16 +127,16 @@
   },
   {
     "id": "field",
-    "intent": "Label, control, hint, and error wrapper for form inputs.",
+    "intent": "Wrap a form control with label, optional hint, and optional error. Label sits on top or start (left).",
     "group": "component",
     "path": "contracts/field.json",
     "status": "stable"
   },
   {
-    "id": "tag",
-    "intent": "Compact status or category label chip.",
+    "id": "badge",
+    "intent": "Compact status or category pill.",
     "group": "component",
-    "path": "contracts/tag.json",
+    "path": "contracts/badge.json",
     "status": "stable"
   },
   {
@@ -91,10 +154,17 @@
     "status": "stable"
   },
   {
-    "id": "modal",
-    "intent": "Focused overlay dialog for confirmations or short tasks.",
+    "id": "dialog",
+    "intent": "Dismissible overlay for short tasks, forms, or extra detail. Not a must-choose confirm.",
     "group": "component",
-    "path": "contracts/modal.json",
+    "path": "contracts/dialog.json",
+    "status": "stable"
+  },
+  {
+    "id": "drawer",
+    "intent": "Edge panel for secondary tasks that need more room than a Dialog.",
+    "group": "component",
+    "path": "contracts/drawer.json",
     "status": "stable"
   },
   {
@@ -120,9 +190,44 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows — not a data grid.",
+    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
+    "status": "stable"
+  },
+  {
+    "id": "accordion",
+    "intent": "One-open disclosure list for short related sections.",
+    "group": "component",
+    "path": "contracts/accordion.json",
+    "status": "stable"
+  },
+  {
+    "id": "alert",
+    "intent": "Inline status banner that stays on the page.",
+    "group": "component",
+    "path": "contracts/alert.json",
+    "status": "stable"
+  },
+  {
+    "id": "alertdialog",
+    "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
+    "group": "component",
+    "path": "contracts/alertdialog.json",
+    "status": "stable"
+  },
+  {
+    "id": "avatar",
+    "intent": "Face or initials for a person. Not a status chip and not a button.",
+    "group": "component",
+    "path": "contracts/avatar.json",
+    "status": "stable"
+  },
+  {
+    "id": "avatargroup",
+    "intent": "Overlapping row of kit Avatars with an optional leftover count.",
+    "group": "component",
+    "path": "contracts/avatargroup.json",
     "status": "stable"
   },
   {

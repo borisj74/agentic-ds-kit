@@ -1,0 +1,106 @@
+{
+  "id": "headercell",
+  "status": "stable",
+  "intent": "Column header for DataTable: label, optional select-all checkbox, optional sort, sm or md.",
+  "useWhen": [
+    "DataTable column titles",
+    "Select-all in the leading header column",
+    "Sortable DataTable column titles"
+  ],
+  "doNotUseWhen": [
+    "Body cells \u2014 use Cell",
+    "A short static table \u2014 use Table"
+  ],
+  "contains": [
+    "checkbox"
+  ],
+  "props": {
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Column title. Omit for checkbox-only select-all."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md"
+    },
+    "checkbox": {
+      "type": "boolean",
+      "default": false
+    },
+    "checked": {
+      "type": "boolean",
+      "required": false
+    },
+    "indeterminate": {
+      "type": "boolean",
+      "required": false
+    },
+    "onCheckedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(checked: boolean) => void"
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "start",
+        "end"
+      ],
+      "default": "start",
+      "note": "end for number columns"
+    },
+    "id": {
+      "type": "string",
+      "required": false
+    },
+    "sortable": {
+      "type": "boolean",
+      "default": false
+    },
+    "sort": {
+      "type": "enum",
+      "values": [
+        "asc",
+        "desc"
+      ],
+      "required": false,
+      "note": "Active direction. Omit when unsorted."
+    },
+    "onSort": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. DataTable cycles asc, desc, off."
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "text.secondary",
+    "type.size.label",
+    "type.size.caption",
+    "space.1",
+    "space.3",
+    "space.4",
+    "icon.muted",
+    "icon.primary"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Lives inside th scope=col",
+      "Checkbox unlabeled needs aria-label Select all {label} or Select all rows",
+      "When sortable, button with aria-label Sort {label} ascending/descending/Clear sort"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local header cell or th cousin",
+    "Do not use Cell for headers",
+    "Do not use raw hex",
+    "Do not invent a SortButton or extra chevron component"
+  ],
+  "snippet": "<HeaderCell label=\"Name\" size=\"md\" sortable sort=\"asc\" />"
+}

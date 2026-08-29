@@ -1,0 +1,56 @@
+{
+  "id": "alert",
+  "status": "stable",
+  "intent": "Inline status banner that stays on the page.",
+  "useWhen": [
+    "Page or form feedback the user should still see after it appears",
+    "Success, warning, or danger copy tied to the current view"
+  ],
+  "doNotUseWhen": [
+    "Transient confirmations that disappear \u2014 not a toast; ask before adding one",
+    "Compact status chips \u2014 use Badge",
+    "Blocking decisions \u2014 use Dialog",
+    "Must-choose overlay confirm \u2014 use AlertDialog"
+  ],
+  "props": {
+    "variant": {
+      "type": "enum",
+      "values": [
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "default": "info"
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "children": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "status.info",
+    "status.success",
+    "status.warning",
+    "status.danger"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "info and success use role=status",
+      "warning and danger use role=alert",
+      "Title and body are readable text"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Alert, Banner, or Callout",
+    "Do not use raw hex",
+    "Do not use Alert for toast-style popups"
+  ],
+  "snippet": "<Alert variant=\"success\" title=\"Saved\">Your changes are live.</Alert>"
+}

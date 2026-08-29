@@ -1,0 +1,83 @@
+{
+  "id": "avatargroup",
+  "status": "stable",
+  "intent": "Overlapping row of kit Avatars with an optional leftover count.",
+  "useWhen": [
+    "several people on a row, card, or table cell"
+  ],
+  "doNotUseWhen": [
+    "one person — use Avatar",
+    "status chips — use Badge",
+    "actions — use Button"
+  ],
+  "contains": [
+    "avatar"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "minItems": 2,
+      "itemShape": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "src": {
+          "type": "string",
+          "required": false
+        },
+        "initials": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "max": {
+      "type": "number",
+      "default": 3,
+      "note": "how many Avatars to show before +N. If items.length <= max, no count."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "names the group, e.g. Assignees"
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "text.secondary",
+    "surface.page",
+    "radius.full",
+    "space.px",
+    "space.2",
+    "space.8",
+    "space.10",
+    "space.12"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "role=group",
+      "optional aria-label names the group",
+      "leftover count uses aria-label like \"3 more\""
+    ]
+  },
+  "doNot": [
+    "Do not invent a local avatar stack",
+    "Do not wrap non-Avatar content",
+    "Do not use raw hex",
+    "Do not put a status badge on faces",
+    "Do not make the group a button"
+  ],
+  "snippet": "<AvatarGroup size=\"md\" max={3} ariaLabel=\"Assignees\" items={[{ name: \"Boris Jovanovic\" }, { name: \"Ada Jones\" }, { name: \"Mira\" }, { name: \"Leo\" }]} />"
+}

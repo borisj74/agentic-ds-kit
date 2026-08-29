@@ -1,2 +1,2 @@
 export { Field } from "./Field";
-export type { FieldProps } from "./Field.types";
+export type { FieldProps, FieldLabelPosition } from "./Field.types";

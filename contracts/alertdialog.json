@@ -1,0 +1,89 @@
+{
+  "id": "alertdialog",
+  "status": "stable",
+  "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
+  "useWhen": [
+    "Confirming a destructive or irreversible action",
+    "A decision that must be answered before the page continues"
+  ],
+  "doNotUseWhen": [
+    "Inline status on the page \u2014 use Alert",
+    "Dismissible short tasks or forms \u2014 use Dialog",
+    "Passive help \u2014 use Tooltip"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "cancelLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Cancel"
+    },
+    "actionLabel": {
+      "type": "string",
+      "required": true
+    },
+    "actionVariant": {
+      "type": "enum",
+      "values": [
+        "primary",
+        "danger"
+      ],
+      "default": "primary"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md"
+    },
+    "onCancel": {
+      "type": "function",
+      "required": true
+    },
+    "onAction": {
+      "type": "function",
+      "required": true
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "surface.overlay",
+    "surface.elevated",
+    "shadow.md",
+    "border.faint",
+    "motion.overlay"
+  ],
+  "a11y": {
+    "element": "alertdialog",
+    "requirements": [
+      "role=alertdialog and aria-modal",
+      "Title is the accessible name, description is aria-describedby",
+      "Focus moves to Cancel when opened",
+      "Focus is trapped while open",
+      "Escape cancels",
+      "Overlay click does not dismiss"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local confirm dialog or use window.confirm",
+    "Do not use raw hex",
+    "Do not put forms, tables, or extra actions in AlertDialog \u2014 use Dialog",
+    "Do not add a close X or dismiss on overlay",
+    "Do not use more than one primary/danger action (the action button is the one)"
+  ],
+  "snippet": "<AlertDialog open={open} title=\"Delete project?\" description=\"This cannot be undone.\" actionLabel=\"Delete\" actionVariant=\"danger\" onCancel={close} onAction={remove} />"
+}

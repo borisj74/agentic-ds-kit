@@ -1,0 +1,102 @@
+{
+  "id": "datepicker",
+  "status": "stable",
+  "intent": "Form field that opens kit Calendar to pick one date.",
+  "useWhen": [
+    "A date in a form or filter",
+    "Need a typed-looking field whose overlay is Calendar"
+  ],
+  "doNotUseWhen": [
+    "The month grid is already on the page \u2014 use Calendar",
+    "Time-only \u2014 ask first",
+    "A range of dates \u2014 not in this contract, ask first"
+  ],
+  "contains": [
+    "calendar"
+  ],
+  "props": {
+    "id": {
+      "type": "string",
+      "required": true,
+      "note": "For Field htmlFor"
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled YYYY-MM-DD"
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "uncontrolled YYYY-MM-DD"
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(date: string) => void // ISO date"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "md",
+        "sm"
+      ],
+      "default": "md",
+      "note": "Trigger size; Calendar in the overlay is sm when size is sm, else md"
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "Pick a date"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "boolean",
+      "default": false
+    },
+    "minDate": {
+      "type": "string",
+      "required": false,
+      "note": "Passed to kit Calendar"
+    },
+    "maxDate": {
+      "type": "string",
+      "required": false,
+      "note": "Passed to kit Calendar"
+    },
+    "name": {
+      "type": "string",
+      "required": false,
+      "note": "Hidden input for forms"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "icon.muted",
+    "surface.card",
+    "border.faint",
+    "border.focus",
+    "status.danger",
+    "space.1",
+    "space.2"
+  ],
+  "a11y": {
+    "element": "button",
+    "requirements": [
+      "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
+      "Overlay is role=dialog labelled Choose date and contains kit Calendar",
+      "Escape and pointer down outside close and return focus to the trigger",
+      "Must have associated label via Field or a visible label pointing at id"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local calendar, Popover, DatePickerDialog, or native input type=date",
+    "Do not use raw hex",
+    "Do not skip kit Calendar in the overlay",
+    "Do not add range selection in this contract"
+  ],
+  "snippet": "<Field label=\"Start date\" htmlFor=\"start-date\"><DatePicker id=\"start-date\" value={date} onValueChange={setDate} /></Field>"
+}

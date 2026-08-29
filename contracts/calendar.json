@@ -1,0 +1,93 @@
+{
+  "id": "calendar",
+  "status": "stable",
+  "intent": "Month grid for picking one date.",
+  "useWhen": [
+    "Booking, scheduling, or choosing a single calendar day",
+    "A date field\u2019s overlay content"
+  ],
+  "doNotUseWhen": [
+    "Time-only \u2014 ask first",
+    "A typed date field without a grid \u2014 use Input type=date or ask",
+    "Range of dates \u2014 not in this contract, ask first",
+    "A form date field \u2014 use DatePicker"
+  ],
+  "props": {
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled YYYY-MM-DD"
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "uncontrolled YYYY-MM-DD"
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(date: string) => void // ISO date"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "minDate": {
+      "type": "string",
+      "required": false,
+      "note": "YYYY-MM-DD inclusive lower bound"
+    },
+    "maxDate": {
+      "type": "string",
+      "required": false,
+      "note": "YYYY-MM-DD inclusive upper bound"
+    }
+  },
+  "tokens": [
+    "surface.page",
+    "surface.card",
+    "surface.muted",
+    "text.primary",
+    "text.muted",
+    "text.inverse",
+    "border.faint",
+    "border.strong",
+    "border.focus",
+    "action.primary",
+    "action.onPrimary",
+    "radius.surfaceMd",
+    "radius.controlSm",
+    "shadow.sm",
+    "opacity.disabled",
+    "opacity.muted"
+  ],
+  "a11y": {
+    "element": "div[role=grid]",
+    "requirements": [
+      "role=grid for the month days",
+      "Heading names the visible month and uses aria-live polite",
+      "Previous and next month controls have aria-labels",
+      "Selected day is aria-selected",
+      "Today is announced in the day accessible name",
+      "Disabled days are not selectable",
+      "Keyboard arrows move day focus (roving tabindex)"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local calendar",
+    "Do not use raw hex",
+    "Do not use Calendar as a form field \u2014 use DatePicker",
+    "Do not add range selection in this contract",
+    "Do not replace nav with custom icon buttons \u2014 use kit Buttons"
+  ],
+  "snippet": "<Calendar size=\"md\" defaultValue=\"2026-08-29\" onValueChange={(date) => setDate(date)} />"
+}

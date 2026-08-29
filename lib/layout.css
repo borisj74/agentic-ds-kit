@@ -1,0 +1,127 @@
+/* Semantic layout roles. Use these instead of inventing per-page grids. */
+
+.layout-app {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-app > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-canvas {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.layout-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--layout-rail);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.layout-workspace > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+.layout-workspace--flush {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.layout-content {
+  display: grid;
+  gap: var(--space-stack-lg);
+  align-content: start;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--layout-margin-md);
+  overflow: auto;
+}
+
+.layout-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--layout-metrics-min)), 1fr));
+  gap: var(--layout-gutter-md);
+}
+
+.layout-metrics--fixed-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.layout-metrics--fixed-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.layout-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+  padding-block: var(--space-inset-md);
+  padding-inline: var(--layout-margin-md);
+}
+
+.layout-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--layout-gutter-md);
+  align-items: start;
+}
+
+.layout-split--primary {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--layout-gutter-md);
+  align-items: start;
+}
+
+.layout-split--secondary {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--layout-gutter-md);
+  align-items: start;
+}
+
+.layout-split--thirds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--layout-gutter-md);
+  align-items: start;
+}
+
+.layout-split--quarters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--layout-gutter-md);
+  align-items: start;
+}
+
+.layout-container-sm,
+.layout-container-md,
+.layout-container-lg,
+.layout-container-xl {
+  width: min(100%, var(--layout-container-sm));
+  margin-inline: auto;
+}
+
+.layout-container-md {
+  width: min(100%, var(--layout-container-md));
+}
+
+.layout-container-lg {
+  width: min(100% - (var(--layout-margin-md) * 2), var(--layout-container-lg));
+}
+
+.layout-container-xl {
+  width: min(100% - (var(--layout-margin-lg) * 2), var(--layout-container-xl));
+}

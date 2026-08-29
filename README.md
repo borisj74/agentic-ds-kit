@@ -19,10 +19,11 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 | Input, Textarea, Select | Form controls |
 | Checkbox, RadioGroup | Boolean and single-choice inputs |
 | Field | Label + control + hint/error wrapper |
-| Tag | Status/category chip |
+| Badge | Status/category pill |
 | Tooltip | Hover/focus supplementary text |
 | Tabs | In-page panel switching |
-| Modal | Focused overlay dialog |
+| Dialog | Dismissible overlay for short tasks |
+| Drawer | Edge panel for secondary tasks |
 | PageHeader | Page title block |
 | Section | Grouped content block |
 | AppNav | Sidebar navigation — flat `items` or grouped `groups` catalog |

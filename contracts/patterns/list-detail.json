@@ -2,7 +2,7 @@
   "id": "list-detail",
   "status": "stable",
   "intent": "List-detail shell: sidebar nav, selectable table list, and detail section.",
-  "contains": ["appnav", "table", "section", "tag"],
+  "contains": ["appnav", "table", "section", "badge"],
   "doNot": [
     "Do not restyle AppNav or Table",
     "Do not replace Table with custom list markup",

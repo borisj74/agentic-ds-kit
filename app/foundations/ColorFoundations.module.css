@@ -68,6 +68,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
+  margin-bottom: 0.35rem;
 }
 
 .hueTitle {
@@ -82,8 +83,9 @@
 
 .huePattern {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
 }
 
 .chipRow {
@@ -174,12 +176,12 @@
 }
 
 .subgroupTitle {
-  margin: 0;
-  padding: 0 var(--space-1);
+  margin: 0 0 0.45rem;
+  padding: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
+  font-size: 0.8125rem;
   font-weight: var(--type-weight-label);
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .group {
@@ -208,3 +210,65 @@
     min-width: 4.5rem;
   }
 }
+
+.tokenChipGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.15rem 0.75rem;
+}
+
+.tokenChip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.4rem 0.35rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tokenChip:hover {
+  background: var(--surface-muted);
+}
+
+.tokenChip:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.tokenChipDot {
+  flex-shrink: 0;
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.35rem;
+  border: var(--border-width-thin) solid var(--border-faint);
+}
+
+.tokenChipBody {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.tokenChipName {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.tokenChipMeta {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

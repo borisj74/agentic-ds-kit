@@ -74,7 +74,7 @@ export default function PatternsPage() {
                   title: "Atlas",
                   description: "Selected project",
                   status: "Active",
-                  statusVariant: "success",
+                  statusTone: "success",
                   body: "Redesign engagement for Atlas Labs. Kickoff completed; wireframes in review.",
                 }}
               />

@@ -33,7 +33,7 @@
         "items": "array of AppNavItem"
       },
       "required": false,
-      "note": "Grouped catalog nav. Takes precedence over items when present."
+      "note": "Grouped catalog nav. Takes precedence over items when present. Groups collapse; only one is open at a time. defaultOpen sets the initial group when no leaf is active."
     }
   },
   "precedence": "When both items and groups are passed, groups wins; items is ignored.",
@@ -42,7 +42,8 @@
     "element": "nav",
     "requirements": [
       "nav has aria-label",
-      "Group labels are headings with aria-labelledby on item lists",
+      "Group labels are disclosure buttons with aria-expanded",
+      "Closed group lists are aria-hidden and inert",
       "Active leaf uses aria-current=page",
       "All leaves are keyboard-focusable links"
     ]

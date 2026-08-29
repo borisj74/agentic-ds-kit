@@ -12,6 +12,7 @@ export function Select({
   error = false,
   defaultValue,
   name,
+  ariaLabel,
 }: SelectProps) {
   return (
     <select
@@ -19,6 +20,7 @@ export function Select({
       name={name}
       disabled={disabled}
       defaultValue={defaultValue}
+      aria-label={ariaLabel}
       aria-invalid={error || undefined}
       className={`${controlStyles.control} ${size === "sm" ? controlStyles.controlSm : controlStyles.controlMd} ${error ? controlStyles.controlError : ""} ${styles.select}`}
     >

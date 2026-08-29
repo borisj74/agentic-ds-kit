@@ -3,10 +3,13 @@ export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 export type ButtonType = "button" | "submit" | "reset";
 
 export interface ButtonProps {
-  children: string;
+  children?: string;
   size?: ButtonSize;
   variant?: ButtonVariant;
   disabled?: boolean;
   type?: ButtonType;
   onClick?: () => void;
+  iconStart?: string;
+  iconEnd?: string;
+  ariaLabel?: string;
 }
