@@ -1,5 +1,5 @@
 export type HeaderCellSize = "sm" | "md";
-export type HeaderCellAlign = "start" | "end";
+export type HeaderCellAlign = "start" | "end" | "center";
 export type HeaderCellSort = "asc" | "desc";
 
 export interface HeaderCellProps {

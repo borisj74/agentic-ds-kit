@@ -1,7 +1,7 @@
 {
   "id": "sidenav",
   "status": "stable",
-  "intent": "Florence product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+  "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
   "useWhen": [
     "Product app chrome",
     "Persistent nav with icons"
@@ -59,7 +59,7 @@
     "footer": {
       "type": "object",
       "required": false,
-      "note": "Single footer row (Florence Settings)"
+      "note": "Single footer row (Settings)"
     }
   },
   "tokens": [

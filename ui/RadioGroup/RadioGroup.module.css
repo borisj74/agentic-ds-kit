@@ -1,46 +1,220 @@
-.fieldset {
+.group {
+  display: grid;
+  gap: var(--space-stack-md);
   margin: 0;
   padding: 0;
-  border: none;
+  border: 0;
+  min-inline-size: 0;
 }
 
 .legend {
-  margin-bottom: var(--space-2);
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 var(--space-stack-sm);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-label);
-  color: var(--text-primary);
+  line-height: var(--type-line-body);
 }
 
-.vertical {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+.options {
+  display: grid;
+  gap: var(--space-stack-md);
+  clear: both;
 }
 
 .horizontal {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-inline-lg);
 }
 
-.label {
+.message {
+  clear: both;
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-body);
+}
+
+.messageError {
+  color: var(--text-danger);
+}
+
+.radio {
+  --radio-size: 1.15rem;
+  --radio-dot: 0.6rem;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-inline-sm);
   cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  color: var(--text-primary);
 }
 
 .input {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--action-primary);
-  cursor: pointer;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.text {
+.control {
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border: var(--border-control) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-page);
+  transition:
+    border-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    background-color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--radio-dot);
+  height: var(--radio-dot);
+  border-radius: var(--radius-pill);
+  background: var(--action-primary);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition:
+    transform var(--motion-expand-duration) var(--motion-ease-spring),
+    opacity var(--motion-expand-duration) var(--motion-ease-spring);
+}
+
+.radio[data-checked] .control {
+  border-color: var(--action-primary);
+  background: var(--surface-page);
+}
+
+.radio[data-checked] .dot {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.groupError .radio:not([data-checked]) .control {
+  border-color: var(--status-danger);
+}
+
+.groupError .radio[data-checked] .control {
+  border-color: var(--action-danger);
+  background: var(--surface-page);
+}
+
+.groupError .radio[data-checked] .dot {
+  background: var(--action-danger);
+}
+
+.groupError .radio[data-checked]:hover:not([data-disabled]) .control {
+  border-color: var(--action-danger-hover);
+}
+
+.groupError .radio[data-checked]:hover:not([data-disabled]) .dot {
+  background: var(--action-danger-hover);
+}
+
+.label {
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
+}
+
+.radio:hover:not([data-disabled]) .control {
+  border-color: var(--border-strong);
+}
+
+.radio[data-checked]:hover:not([data-disabled]) .control {
+  border-color: var(--action-primary-hover);
+  background: var(--surface-page);
+}
+
+.radio[data-checked]:hover:not([data-disabled]) .dot {
+  background: var(--action-primary-hover);
+}
+
+.radio:has(.input:focus-visible) .control {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.radio[data-disabled] {
+  cursor: not-allowed;
+}
+
+.radio[data-disabled] .control {
+  opacity: var(--opacity-disabled);
+}
+
+.radio[data-disabled] .label {
+  color: var(--text-disabled);
+}
+
+.group:disabled .radio {
+  cursor: not-allowed;
+}
+
+.sm,
+.sm .options {
+  gap: var(--space-stack-sm);
+}
+
+.sm .radio {
+  --radio-size: 0.95rem;
+  --radio-dot: 0.48rem;
+  gap: var(--space-inline-xs);
+}
+
+.sm .label,
+.sm .legend {
+  font-size: var(--type-size-caption);
+}
+
+.sm .legend {
+  margin-bottom: var(--space-stack-xs);
+}
+
+.lg {
+  gap: var(--space-stack-lg);
+}
+
+.lg .legend {
+  margin-bottom: var(--space-stack-md);
+}
+
+.lg .options {
+  gap: var(--space-stack-lg);
+}
+
+.lg .radio {
+  --radio-size: 1.35rem;
+  --radio-dot: 0.72rem;
+  gap: var(--space-inline-md);
+}
+
+.lg .label {
+  font-size: var(--type-size-body-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control,
+  .dot,
+  .message {
+    transition: none;
+    animation: none;
+  }
 }

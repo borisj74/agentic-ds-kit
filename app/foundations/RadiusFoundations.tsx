@@ -20,24 +20,10 @@ const SCALE = [
 ] as const;
 
 const ROLES = [
-  { title: "Control", code: "radius-control-*", prefix: "control", tokens: [
-    { step: "sm", note: "4px" },
-    { step: "md", note: "8px" },
-    { step: "lg", note: "12px" },
-  ]},
-  { title: "Surface", code: "radius-surface-*", prefix: "surface", tokens: [
-    { step: "sm", note: "8px" },
-    { step: "md", note: "12px" },
-    { step: "lg", note: "16px" },
-  ]},
-  { title: "Media", code: "radius-media-*", prefix: "media", tokens: [
-    { step: "sm", note: "8px" },
-    { step: "md", note: "12px" },
-    { step: "lg", note: "16px" },
-  ]},
-  { title: "Pill", code: "radius-pill", prefix: "pill", tokens: [
-    { step: null, note: "9999px" },
-  ]},
+  { title: "Control", code: "radius-control-*", prefix: "control", tokens: ["sm", "md", "lg"] },
+  { title: "Surface", code: "radius-surface-*", prefix: "surface", tokens: ["sm", "md", "lg"] },
+  { title: "Media", code: "radius-media-*", prefix: "media", tokens: ["sm", "md", "lg"] },
+  { title: "Pill", code: "radius-pill", prefix: "pill", tokens: [null] },
 ] as const;
 
 function tokenName(prefix: string, step: string | null) {
@@ -49,10 +35,28 @@ export function RadiusFoundations() {
   return (
     <div className={colorStyles.colorSection}>
       <div className={colorStyles.tabList} role="tablist" aria-label="Radius views">
-        <button type="button" role="tab" aria-selected={tab === "semantics"} className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`} onClick={() => setTab("semantics")}>Semantics</button>
-        <button type="button" role="tab" aria-selected={tab === "primitives"} className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`} onClick={() => setTab("primitives")}>Primitives</button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "semantics"}
+          className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`}
+          onClick={() => setTab("semantics")}
+        >
+          Semantics
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "primitives"}
+          className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`}
+          onClick={() => setTab("primitives")}
+        >
+          Primitives
+        </button>
       </div>
-      <p className={colorStyles.lead}>Use semantic radius roles in components. Primitives are the source corner scale.</p>
+      <p className={colorStyles.lead}>
+        Use semantic radius roles in components. Primitives are the source corner scale.
+      </p>
       {tab === "semantics" ? (
         <div className={styles.sections}>
           {ROLES.map((family) => (
@@ -62,12 +66,11 @@ export function RadiusFoundations() {
                 <code className={styles.pattern}>{family.code}</code>
               </header>
               <div className={styles.list}>
-                {family.tokens.map((item) => {
-                  const token = tokenName(family.prefix, item.step);
+                {family.tokens.map((step) => {
+                  const token = tokenName(family.prefix, step);
                   return (
-                    <div key={token} className={`${styles.row} ${styles.rowRadius}`}>
+                    <div key={token} className={`${styles.row} ${styles.rowRadiusSemantic}`}>
                       <CopyToken value={`--${token}`} />
-                      <span className={styles.note}>{item.note}</span>
                       <div className={styles.swatch} style={{ borderRadius: `var(--${token})` }} />
                     </div>
                   );

@@ -49,7 +49,7 @@
   min-height: var(--space-section-lg);
   padding: var(--space-inset-md);
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
   background: var(--surface-card);
   color: var(--icon-default);
 }
@@ -84,7 +84,7 @@
   padding: var(--space-inset-lg);
   overflow-x: auto;
   background: var(--surface-muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
 }
 
 .code code {

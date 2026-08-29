@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
   font-family: var(--font-sans);
   font-weight: var(--type-weight-label);
@@ -74,7 +74,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: inherit;
   cursor: pointer;

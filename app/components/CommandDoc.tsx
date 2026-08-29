@@ -7,6 +7,7 @@ import type { CommandGroup } from "@/ui/Command";
 import { Modal } from "@/ui/Modal";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const MASTER_GROUPS: CommandGroup[] = [
   {
@@ -129,26 +130,7 @@ export function CommandDoc() {
           <p className={styles.masterSummary}>
             Kit Button opens kit Modal with Command. ⌘K or Ctrl+K toggles it. No CommandDialog.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => setTab("preview")}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => setTab("variants")}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
         {tab === "preview" ? (

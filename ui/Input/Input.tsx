@@ -15,6 +15,8 @@ export function Input({
   disabled = false,
   error = false,
   defaultValue,
+  value,
+  onChange,
   name,
   start,
   end,
@@ -22,6 +24,7 @@ export function Input({
   iconEnd,
   demo,
   describedBy,
+  ariaLabel,
 }: InputProps) {
   const iconPx = ICON_PX[size];
 
@@ -43,8 +46,11 @@ export function Input({
         type={type}
         placeholder={placeholder}
         disabled={disabled}
-        defaultValue={defaultValue}
+        value={value}
+        defaultValue={value === undefined ? defaultValue : undefined}
+        onChange={(event) => onChange?.(event.target.value)}
         aria-invalid={error || undefined}
+        aria-label={ariaLabel}
         aria-describedby={describedBy}
         className={styles.native}
       />

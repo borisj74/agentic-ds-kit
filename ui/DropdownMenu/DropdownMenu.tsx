@@ -12,7 +12,10 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { Badge } from "@/ui/Badge";
 import { Button } from "@/ui/Button";
+import { Checkbox } from "@/ui/Checkbox";
+import { Input } from "@/ui/Input";
 import { LucideByName } from "@/ui/Button/lucideName";
 import type { DropdownMenuGroup, DropdownMenuItem, DropdownMenuProps } from "./DropdownMenu.types";
 import styles from "./DropdownMenu.module.css";
@@ -47,6 +50,11 @@ export function DropdownMenu({
   open: openProp,
   onOpenChange,
   onSelect,
+  closeOnSelect = true,
+  triggerMuted = false,
+  triggerBadge,
+  searchable = false,
+  searchPlaceholder = "Search",
 }: DropdownMenuProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -61,8 +69,21 @@ export function DropdownMenu({
   const [coords, setCoords] = useState<CSSProperties | null>(null);
   const [subCoords, setSubCoords] = useState<CSSProperties | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [query, setQuery] = useState("");
+  const searchId = `${uid}-search`;
 
-  const mainItems = useMemo(() => flattenItems(groups), [groups]);
+  const visibleGroups = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return groups;
+    return groups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => item.label.toLowerCase().includes(q)),
+      }))
+      .filter((group) => group.items.length > 0);
+  }, [groups, query]);
+
+  const mainItems = useMemo(() => flattenItems(visibleGroups), [visibleGroups]);
   const enabledIds = useMemo(
     () => mainItems.filter((item) => !item.disabled).map((item) => item.id),
     [mainItems],
@@ -80,6 +101,7 @@ export function DropdownMenu({
     if (!next) {
       setHighlightId(null);
       setOpenSubId(null);
+      setQuery("");
     }
   }
 
@@ -206,9 +228,13 @@ export function DropdownMenu({
 
   useEffect(() => {
     if (!open || !mounted) return;
-    const item = panelRef.current?.querySelector<HTMLElement>("[role='menuitem'][data-enabled='true']");
+    if (searchable) {
+      panelRef.current?.querySelector<HTMLInputElement>("input")?.focus();
+      return;
+    }
+    const item = panelRef.current?.querySelector<HTMLElement>("[role='menuitem'][data-enabled='true'], [role='menuitemcheckbox'][data-enabled='true']");
     item?.focus();
-  }, [open, mounted, coords]);
+  }, [open, mounted, coords, searchable]);
 
   function findItem(id: string): DropdownMenuItem | undefined {
     return mainItems.find((item) => item.id === id) ?? subItems.find((item) => item.id === id);
@@ -218,6 +244,7 @@ export function DropdownMenu({
     const item = findItem(id);
     if (!item || item.disabled || item.submenu) return;
     onSelect?.(id);
+    if (!closeOnSelect) return;
     setOpen(false);
     triggerButton()?.focus();
   }
@@ -238,6 +265,19 @@ export function DropdownMenu({
   }
 
   function onMenuKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    const inSearch = event.target instanceof HTMLInputElement;
+    if (inSearch) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (enabledIds[0]) {
+          highlight(enabledIds[0]);
+          queryItem(panelRef.current, enabledIds[0])?.focus();
+        }
+      }
+      if (event.key === "Tab") setOpen(false);
+      if (event.key === "Enter") event.preventDefault();
+      return;
+    }
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -338,9 +378,28 @@ export function DropdownMenu({
           ]
             .filter(Boolean)
             .join(" ");
+          const showCheck = typeof item.selected === "boolean" && !item.checkbox;
           const body = (
             <>
-              {item.icon ? <LucideByName name={item.icon} size={16} className={styles.itemIcon} /> : null}
+              {item.checkbox ? (
+                <span className={styles.itemCheckbox} inert aria-hidden>
+                  <Checkbox
+                    id={`${uid}-cb-${item.id}`}
+                    size="sm"
+                    checked={Boolean(item.selected)}
+                    ariaLabel={item.label}
+                    onChange={() => {}}
+                  />
+                </span>
+              ) : showCheck ? (
+                item.selected ? (
+                  <LucideByName name="Check" size={16} className={styles.itemCheck} />
+                ) : (
+                  <span className={styles.itemCheck} />
+                )
+              ) : item.icon ? (
+                <LucideByName name={item.icon} size={16} className={styles.itemIcon} />
+              ) : null}
               <span className={styles.itemText}>
                 <span className={styles.itemLabel}>{item.label}</span>
                 {item.description ? (
@@ -353,9 +412,10 @@ export function DropdownMenu({
           );
           const shared = {
             className,
-            role: "menuitem" as const,
+            role: (item.checkbox ? "menuitemcheckbox" : "menuitem") as "menuitem" | "menuitemcheckbox",
             "data-id": item.id,
             "data-enabled": item.disabled ? "false" : "true",
+            "aria-checked": item.checkbox ? Boolean(item.selected) : undefined,
             "aria-disabled": item.disabled || undefined,
             "aria-haspopup": hasSub ? ("menu" as const) : undefined,
             "aria-expanded": hasSub ? openSubId === item.id : undefined,
@@ -392,7 +452,14 @@ export function DropdownMenu({
 
   const hasLabel = Boolean(trigger && trigger.trim());
 
-  const panelClass = columns === 2 ? `${styles.panel} ${styles.panelColumns}` : styles.panel;
+  const panelClass = [
+    styles.panel,
+    columns === 2 ? styles.panelColumns : "",
+    searchable ? styles.panelSearchable : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
 
   const panel =
     open && mounted && coords
@@ -406,7 +473,25 @@ export function DropdownMenu({
             style={coords}
             onKeyDown={onMenuKeyDown}
           >
-            {renderItems(groups, false)}
+            {searchable ? (
+              <div className={styles.search}>
+                <Input
+                  id={searchId}
+                  size="sm"
+                  type="search"
+                  iconStart="Search"
+                  placeholder={searchPlaceholder}
+                  value={query}
+                  onChange={setQuery}
+                  ariaLabel="Search options"
+                />
+              </div>
+            ) : null}
+            {visibleGroups.length === 0 ? (
+              <div className={styles.empty}>No results.</div>
+            ) : (
+              renderItems(visibleGroups, false)
+            )}
           </div>,
           document.body,
         )
@@ -444,12 +529,19 @@ export function DropdownMenu({
           aria-label={ariaLabel}
           aria-invalid={error || undefined}
           aria-describedby={describedBy}
-          className={`${styles.fieldTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}`}
+          className={`${styles.fieldTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}${triggerMuted ? ` ${styles.fieldMuted}` : ""}`}
           onClick={() => {
             if (!disabled) setOpen(!open);
           }}
         >
-          <span className={styles.fieldLabel}>{trigger || "Select"}</span>
+          <span className={styles.fieldMain}>
+            <span className={styles.fieldLabel}>{trigger || "Select"}</span>
+            {triggerBadge ? (
+              <Badge size="sm" tone="neutral">
+                {triggerBadge}
+              </Badge>
+            ) : null}
+          </span>
           <LucideByName name={iconEnd || "ChevronsUpDown"} size={iconPx} className={styles.fieldIcon} />
         </button>
       ) : navTrigger ? (
@@ -474,6 +566,7 @@ export function DropdownMenu({
           variant={variant}
           size={size}
           iconStart={iconStart}
+          iconEnd={iconEnd}
           ariaLabel={hasLabel ? undefined : ariaLabel}
           onClick={() => setOpen(!open)}
         >

@@ -48,31 +48,49 @@
   color: var(--text-muted);
 }
 
+.tabListHost {
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+  margin-top: var(--space-3);
+}
+
 .tabList {
   display: inline-flex;
-  gap: var(--space-1);
+  align-items: center;
+  gap: var(--space-inline-2xs);
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
   margin-top: var(--space-3);
-  padding: var(--space-1);
-  border-radius: var(--radius-control-sm);
+  padding: var(--space-inset-2xs);
+  border-radius: var(--radius-control-md);
   background: var(--surface-muted);
+  box-shadow: inset 0 0 0 var(--border-100) var(--border-faint);
 }
 
 .tab {
   margin: 0;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--space-inset-sm) var(--space-inset-md);
   border: 0;
   border-radius: var(--radius-control-sm);
   background: transparent;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
+  font-size: var(--type-size-label);
   font-weight: var(--type-weight-label);
-  color: var(--text-secondary);
+  line-height: var(--type-line-body);
+  color: var(--text-muted);
   cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text-primary);
 }
 
 .tabActive {
   background: var(--surface-card);
   color: var(--text-primary);
+  box-shadow: var(--shadow-raised-sm);
 }
 
 .tab:focus-visible {

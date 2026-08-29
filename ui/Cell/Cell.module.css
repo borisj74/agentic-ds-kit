@@ -80,21 +80,10 @@
   max-width: 100%;
 }
 
-.progress {
+.progressWrap {
   display: block;
   width: 8rem;
   max-width: 100%;
-  height: var(--space-2);
-  overflow: hidden;
-  background: var(--surface-muted);
-  border-radius: var(--radius-full);
-}
-
-.progressFill {
-  display: block;
-  height: 100%;
-  background: var(--fill-brand);
-  border-radius: inherit;
 }
 
 .rating {
@@ -116,4 +105,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+}
+
+.actionMenu {
+  justify-content: center;
 }

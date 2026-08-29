@@ -6,6 +6,7 @@ import type { SideNavGroup, SideNavItem, SideNavSide } from "@/ui/SideNav";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const H = "/components#sidenav";
 
@@ -136,7 +137,7 @@ export function SideNavDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>SideNav</h1>
         <p className={styles.lede}>
-          Florence product chrome. AppNav is the catalog list. Drawer is the overlay panel.
+          Product chrome. AppNav is the catalog list. Drawer is the overlay panel.
         </p>
       </header>
 
@@ -148,26 +149,7 @@ export function SideNavDoc() {
           <p className={styles.masterSummary}>
             Brand mark, icon items, badges, and a closeable rail. Stays in the layout.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => setTab("preview")}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => setTab("variants")}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
         {tab === "preview" ? (

@@ -12,6 +12,8 @@ export interface DropdownMenuItem {
   danger?: boolean;
   description?: string;
   href?: string;
+  selected?: boolean;
+  checkbox?: boolean;
   submenu?: DropdownMenuGroup[];
 }
 
@@ -38,4 +40,9 @@ export interface DropdownMenuProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSelect?: (id: string) => void;
+  closeOnSelect?: boolean;
+  triggerMuted?: boolean;
+  triggerBadge?: string;
+  searchable?: boolean;
+  searchPlaceholder?: string;
 }

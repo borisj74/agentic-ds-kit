@@ -1,6 +1,6 @@
 # Agentic DS Kit
 
-Personal experiment (Florence-style, code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
+Personal experiment (code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
 
 A Next.js playground that proves JSON component contracts + a short always-on rule + one skill help agents prototype faster without inventing local components.
 

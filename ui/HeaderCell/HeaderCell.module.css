@@ -28,6 +28,10 @@
   justify-content: flex-end;
 }
 
+.center {
+  justify-content: center;
+}
+
 .checkboxOnly {
   width: auto;
   justify-content: center;

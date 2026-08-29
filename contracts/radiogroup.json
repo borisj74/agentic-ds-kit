@@ -1,19 +1,109 @@
 {
   "id": "radiogroup",
   "status": "stable",
-  "intent": "Choose exactly one option from a small visible set of radio buttons.",
-  "useWhen": ["Two to six mutually exclusive options that should stay visible", "Settings where users compare options side by side"],
-  "doNotUseWhen": ["Long option lists — use Select", "Independent booleans — use Checkbox", "Tabs for panel switching — use Tabs"],
+  "intent": "Choose exactly one option from a small visible set. Custom circle, not a native radio. One piece.",
+  "useWhen": [
+    "Two to six mutually exclusive options that should stay visible",
+    "Settings where users compare options side by side"
+  ],
+  "doNotUseWhen": [
+    "Long option lists \u2014 use Select",
+    "Independent booleans \u2014 use Checkbox",
+    "Instant on/off \u2014 use Switch",
+    "Tabs for panel switching \u2014 use Tabs"
+  ],
   "props": {
-    "name": { "type": "string", "required": true },
-    "legend": { "type": "string", "required": true },
-    "orientation": { "type": "enum", "values": ["vertical", "horizontal"], "default": "vertical" },
-    "options": { "type": "array", "itemShape": { "value": "string", "label": "string" }, "required": true },
-    "defaultValue": { "type": "string", "required": false },
-    "disabled": { "type": "boolean", "default": false }
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "legend": {
+      "type": "string",
+      "required": true,
+      "note": "Fieldset legend."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "vertical",
+        "horizontal"
+      ],
+      "default": "vertical"
+    },
+    "options": {
+      "type": "array",
+      "itemShape": {
+        "value": "string",
+        "label": "string",
+        "disabled": "boolean?"
+      },
+      "required": true
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Locks the whole group."
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "Group error message. Tints the radios."
+    },
+    "hint": {
+      "type": "string",
+      "required": false
+    }
   },
-  "tokens": ["text.primary", "text.secondary", "border.faint", "border.focus", "action.primary"],
-  "a11y": { "element": "fieldset", "requirements": ["legend names the group", "Each radio has a unique value and visible label"] },
-  "doNot": ["Do not invent local Radio or RadioGroup", "Do not use raw hex", "Do not use for tabbed content — use Tabs"],
-  "snippet": "<RadioGroup name=\"plan\" legend=\"Billing plan\" options={[{ value: 'monthly', label: 'Monthly' }, { value: 'annual', label: 'Annual' }]} />"
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "text.danger",
+    "text.disabled",
+    "border.strong",
+    "border.focus",
+    "action.primary",
+    "action.danger",
+    "surface.page",
+    "radius.pill"
+  ],
+  "a11y": {
+    "element": "fieldset",
+    "requirements": [
+      "legend names the group",
+      "Each radio is a native input type=radio with a visible label",
+      "error sets aria-invalid on the group and options",
+      "Disabled options stay in the a11y tree but cannot be selected"
+    ]
+  },
+  "doNot": [
+    "Do not invent Radio, RadioGroupItem, or RadioGroupLegend cousins",
+    "Do not use a native unstyled radio with accent-color",
+    "Do not use raw hex",
+    "Do not use for tabbed content \u2014 use Tabs",
+    "Do not use for multi-select \u2014 use Checkbox"
+  ],
+  "snippet": "<RadioGroup name=\"plan\" legend=\"Plan\" size=\"lg\" defaultValue=\"pro\" options={[\n  { value: 'starter', label: 'Starter' },\n  { value: 'pro', label: 'Studio Pro' },\n]} />"
 }

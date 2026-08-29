@@ -38,7 +38,7 @@
 .map {
   padding: var(--space-inset-md);
   background: var(--surface-muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
 }
 
 .mapApp {
@@ -47,7 +47,7 @@
   min-height: 12rem;
   overflow: hidden;
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
   background: var(--surface-card);
 }
 
@@ -100,7 +100,7 @@
 
 .mapMetrics span,
 .mapSplit span {
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
   background: var(--color-neutral-200);
 }
 
@@ -120,7 +120,7 @@
   padding: var(--space-inset-lg);
   overflow-x: auto;
   background: var(--surface-muted);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
 }
 
 .code code {
@@ -142,7 +142,7 @@
   gap: var(--space-2);
   padding: var(--space-inset-md);
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
   background: var(--surface-card);
 }
 
@@ -178,7 +178,7 @@
 
 .demoCell {
   min-height: 3.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
   border: var(--border-width-thin) solid var(--border-faint);
 }
 
@@ -251,7 +251,7 @@
   min-width: 0;
   padding: var(--space-2);
   background: var(--surface-muted);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
 }
 
 .containerBox {
@@ -259,7 +259,7 @@
   place-items: center;
   min-height: 2rem;
   background: var(--color-neutral-200);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-secondary);

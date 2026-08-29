@@ -5,6 +5,7 @@ import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Cell } from "@/ui/Cell";
 import { HeaderCell } from "@/ui/HeaderCell";
+import { DropdownMenu } from "@/ui/DropdownMenu";
 import type { CellSize, CellValue } from "@/ui/Cell";
 import { LucideByName } from "@/ui/Button/lucideName";
 import type {
@@ -94,6 +95,14 @@ function renderCell(value: DataTableCell | undefined, cellSize: CellSize) {
     return <Cell type="text" label={String(value)} size={cellSize} />;
   }
   return <Cell {...value} size={cellSize} />;
+}
+
+function isActionMenuValue(value: DataTableCell | undefined): boolean {
+  return Boolean(value) && typeof value === "object" && value.type === "actionMenu";
+}
+
+function isActionColumn(column: DataTableColumn, rows: DataTableRow[]): boolean {
+  return rows.some((row) => isActionMenuValue(row[column.key]));
 }
 
 export function DataTable({
@@ -239,8 +248,10 @@ export function DataTable({
     setHidden((prev) => ({ ...prev, [key]: !checked }));
   }
 
-  function numericClass(column: DataTableColumn): string {
-    return column.type === "number" ? ` ${styles.numeric}` : "";
+  function columnClass(column: DataTableColumn): string {
+    if (column.type === "number") return ` ${styles.numeric}`;
+    if (isActionColumn(column, rows)) return ` ${styles.actionCell}`;
+    return "";
   }
 
   return (
@@ -259,31 +270,40 @@ export function DataTable({
               aria-label={searchPlaceholder}
             />
           </div>
-          {filterDefs.map((filter) => (
-            <div key={filter.key} className={styles.filter}>
-              <select
-                className={styles.filterSelect}
-                aria-label={filter.label}
-                value={filterValues[filter.key] ?? ""}
-                onChange={(event) =>
-                  setFilterValues((prev) => ({ ...prev, [filter.key]: event.target.value }))
-                }
-              >
-                <option value="">All {filter.label.toLowerCase()}</option>
-                {(facetValues[filter.key] ?? []).map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-              <LucideByName name="ChevronDown" size={16} className={styles.filterIcon} />
-            </div>
-          ))}
+          {filterDefs.map((filter) => {
+            const allId = `__all-${filter.key}`;
+            const allLabel = `All ${filter.label.toLowerCase()}`;
+            const selected = filterValues[filter.key] ?? "";
+            const items = [
+              { id: allId, label: allLabel },
+              ...(facetValues[filter.key] ?? [])
+                .filter((value) => value !== "")
+                .map((value) => ({ id: value, label: value })),
+            ];
+            return (
+              <div key={filter.key} className={styles.filter}>
+                <DropdownMenu
+                  trigger={selected || allLabel}
+                  variant="secondary"
+                  size="md"
+                  iconEnd="ChevronDown"
+                  ariaLabel={filter.label}
+                  groups={[{ items }]}
+                  onSelect={(id) =>
+                    setFilterValues((prev) => ({
+                      ...prev,
+                      [filter.key]: id === allId ? "" : id,
+                    }))
+                  }
+                />
+              </div>
+            );
+          })}
           {columnSettings ? (
             <div ref={columnsWrapRef} className={styles.columns}>
               <Button
                 variant="secondary"
-                size="sm"
+                size="md"
                 iconStart="Settings"
                 onClick={() => setMenuOpen((open) => !open)}
               >
@@ -339,7 +359,7 @@ export function DataTable({
                 <th
                   key={column.key}
                   scope="col"
-                  className={`${styles.th}${numericClass(column)}`}
+                  className={`${styles.th}${columnClass(column)}`}
                   aria-sort={
                     column.sortable
                       ? sortKey === column.key
@@ -353,7 +373,13 @@ export function DataTable({
                   <HeaderCell
                     label={column.header}
                     size={cellSize}
-                    align={column.type === "number" ? "end" : "start"}
+                    align={
+                      column.type === "number"
+                        ? "end"
+                        : isActionColumn(column, rows)
+                          ? "center"
+                          : "start"
+                    }
                     sortable={column.sortable}
                     sort={sortKey === column.key ? sortDir : undefined}
                     onSort={() => toggleSort(column.key)}
@@ -387,7 +413,7 @@ export function DataTable({
                       </td>
                     ) : null}
                     {visibleColumns.map((column) => (
-                      <td key={column.key} className={`${styles.td}${numericClass(column)}`}>
+                      <td key={column.key} className={`${styles.td}${columnClass(column)}`}>
                         {renderCell(row[column.key], cellSize)}
                       </td>
                     ))}

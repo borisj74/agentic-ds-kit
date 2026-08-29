@@ -17,7 +17,7 @@
   line-height: var(--type-line-body);
   color: var(--text-inverse);
   background-color: var(--text-primary);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
   box-shadow: var(--shadow-md);
   white-space: normal;
   pointer-events: none;

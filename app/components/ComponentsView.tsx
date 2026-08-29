@@ -31,7 +31,14 @@ import { NavigationMenuDoc } from "./NavigationMenuDoc";
 import { SideNavDoc } from "./SideNavDoc";
 import { OtherComponent } from "./OtherComponents";
 import { PaginationDoc } from "./PaginationDoc";
+import { ProgressDoc } from "./ProgressDoc";
+import { RadioGroupDoc } from "./RadioGroupDoc";
+import { ScoreboardDoc } from "./ScoreboardDoc";
+import { SectionDoc } from "./SectionDoc";
+import { ScorecardDoc } from "./ScorecardDoc";
+import { SelectDoc } from "./SelectDoc";
 import { SwitchDoc } from "./SwitchDoc";
+import { TabsDoc } from "./TabsDoc";
 import { TextareaDoc } from "./TextareaDoc";
 
 function currentHash(): string {
@@ -74,6 +81,7 @@ const TITLES: Record<string, string> = {
   dropdownmenu: "DropdownMenu",
   pageheader: "PageHeader",
   pagination: "Pagination",
+  progress: "Progress",
   section: "Section",
   appnav: "AppNav",
   table: "Table",
@@ -107,7 +115,17 @@ export function ComponentsView() {
           ? "sidenav"
           : hash === "navmenu" || hash === "navigation-menu"
             ? "navigationmenu"
-            : hash;
+            : hash === "radio" || hash === "radios"
+              ? "radiogroup"
+              : hash === "tab" || hash === "tablist"
+                ? "tabs"
+              : hash === "kpi" ||
+                  hash === "kpicard" ||
+                  hash === "kpicards" ||
+                  hash === "kpi-card" ||
+                  hash === "kpi-cards"
+                ? "scorecard"
+                : hash;
   const id = resolved in TITLES ? resolved : "button";
   if (id === "badge") return <BadgeDoc />;
   if (id === "breadcrumb") return <BreadcrumbDoc />;
@@ -138,7 +156,14 @@ export function ComponentsView() {
   if (id === "inputotp") return <InputOTPDoc />;
   if (id === "insightcard") return <InsightCardDoc />;
   if (id === "pagination") return <PaginationDoc />;
+  if (id === "progress") return <ProgressDoc />;
+  if (id === "radiogroup") return <RadioGroupDoc />;
+  if (id === "scorecard") return <ScorecardDoc />;
+  if (id === "scoreboard") return <ScoreboardDoc />;
+  if (id === "section") return <SectionDoc />;
+  if (id === "select") return <SelectDoc />;
   if (id === "switch") return <SwitchDoc />;
+  if (id === "tabs") return <TabsDoc />;
   if (id === "textarea") return <TextareaDoc />;
   return <OtherComponent id={id} title={TITLES[id]} />;
 }

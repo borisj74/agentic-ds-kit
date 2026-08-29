@@ -1,2 +1,2 @@
 export { Scorecard } from "./Scorecard";
-export type { ScorecardProps, ScorecardTrend } from "./Scorecard.types";
+export type { ScorecardProps, ScorecardTrend, ScorecardSize } from "./Scorecard.types";

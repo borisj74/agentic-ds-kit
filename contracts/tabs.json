@@ -1,20 +1,90 @@
 {
   "id": "tabs",
   "status": "stable",
-  "intent": "Switch between related panels in the same view without navigation.",
-  "useWhen": ["Grouped settings or detail sections on one page", "Two to five peer views sharing one context"],
-  "doNotUseWhen": ["Top-level app routes — use AppNav", "Mutually exclusive form values — use RadioGroup", "Single panel content — use Section"],
+  "intent": "Switch between related views in place. Segmented or line, in lg, md, and sm.",
+  "useWhen": [
+    "Grouped settings or detail sections on one page",
+    "Two to five peer views sharing one context",
+    "Compact local switching such as preview and code"
+  ],
+  "doNotUseWhen": [
+    "Top-level app routes \u2014 use AppNav",
+    "Mutually exclusive form values \u2014 use RadioGroup",
+    "Single panel content \u2014 use Section"
+  ],
   "props": {
     "items": {
       "type": "array",
-      "itemShape": { "id": "string", "label": "string", "content": "string" },
+      "itemShape": {
+        "id": "string",
+        "label": "string",
+        "content": "node",
+        "disabled": "boolean"
+      },
       "required": true,
       "minItems": 2
     },
-    "defaultTab": { "type": "string", "required": false }
+    "value": {
+      "type": "string",
+      "required": false
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false
+    },
+    "onChange": {
+      "type": "function",
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "segmented",
+        "line"
+      ],
+      "default": "segmented"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Tabs"
+    }
   },
-  "tokens": ["text.primary", "text.secondary", "border.faint", "action.primary", "surface.card"],
-  "a11y": { "element": "tablist", "requirements": ["Tab buttons control tabpanels", "Active tab indicated visually and with aria-selected"] },
-  "doNot": ["Do not invent local Tabs", "Do not use raw hex", "Do not use Tabs for main app navigation — use AppNav"],
-  "snippet": "<Tabs items={[{ id: 'general', label: 'General', content: '...' }, { id: 'billing', label: 'Billing', content: '...' }]} />"
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "text.disabled",
+    "surface.muted",
+    "surface.card",
+    "border.faint",
+    "radius.control",
+    "shadow.raisedSm",
+    "focus.ring"
+  ],
+  "a11y": {
+    "element": "tablist",
+    "requirements": [
+      "Tab buttons control tabpanels",
+      "Active tab indicated visually and with aria-selected",
+      "Roving tabindex with arrow keys",
+      "Disabled tabs stay visible and are not selectable"
+    ]
+  },
+  "doNot": [
+    "Do not invent TabsList, TabsTrigger, or TabsContent cousins",
+    "Do not use raw hex",
+    "Do not use Tabs for main app navigation \u2014 use AppNav",
+    "Do not nest tabs inside tabs"
+  ],
+  "snippet": "<Tabs defaultValue=\"overview\" variant=\"segmented\" items={[{ id: 'overview', label: 'Overview', content: '\u2026' }, { id: 'docs', label: 'Docs', content: '\u2026' }]} />"
 }

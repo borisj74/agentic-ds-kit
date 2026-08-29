@@ -1,16 +1,20 @@
 {
   "id": "select",
   "status": "stable",
-  "intent": "Choose one option from a short list. Field trigger, kit DropdownMenu panel. Not a native select.",
+  "intent": "Choose one or several options from a list. Field trigger, kit DropdownMenu panel. Not a native select.",
   "useWhen": [
     "Choosing one value in a Field",
-    "Short fixed lists such as month, year, or timezone"
+    "Choosing several values from a list (multiple)",
+    "A long fixed list with local search (searchable)",
+    "Short fixed lists such as month, year, timezone, or tags"
   ],
   "doNotUseWhen": [
-    "Long searchable lists — use Command",
-    "Actions from a button — use DropdownMenu",
-    "Mutually exclusive choices with visible options — prefer RadioGroup",
-    "Multi-select — not supported"
+    "Command palettes \u2014 use Command",
+    "Actions from a button \u2014 use DropdownMenu",
+    "Mutually exclusive choices with visible options \u2014 prefer RadioGroup"
+  ],
+  "contains": [
+    "dropdownmenu"
   ],
   "props": {
     "id": {
@@ -41,9 +45,30 @@
       "type": "boolean",
       "default": false
     },
-    "defaultValue": {
+    "multiple": {
+      "type": "boolean",
+      "default": false,
+      "note": "Several values. Menu stays open. Checks each pick. Trigger lists labels. Not a MultiSelect cousin."
+    },
+    "placeholder": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "Shown until a value is picked. Muted field text. When set and no defaultValue, start empty."
+    },
+    "defaultValue": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "string when single, string[] when multiple"
+    },
+    "value": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "controlled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string | string[]) => void"
     },
     "name": {
       "type": "string",
@@ -53,10 +78,30 @@
       "type": "string",
       "required": false,
       "note": "When there is no Field label, such as a DataTable Cell."
+    },
+    "itemCheck": {
+      "type": "enum",
+      "values": [
+        "check",
+        "checkbox"
+      ],
+      "default": "check",
+      "note": "checkbox composes kit Checkbox in the menu when multiple. Visual only. Not DropdownMenuCheckboxItem."
+    },
+    "maxVisible": {
+      "type": "number",
+      "required": false,
+      "note": "When multiple and selected count exceeds this, trigger shows the first labels plus a kit Badge +N. Omit to list all labels."
+    },
+    "searchable": {
+      "type": "boolean",
+      "default": false,
+      "note": "Kit Input at the top of the panel. Filters option labels. For a long fixed list. Not Command."
     }
   },
   "tokens": [
     "text.primary",
+    "text.muted",
     "surface.card",
     "surface.muted",
     "border.faint",
@@ -68,15 +113,18 @@
     "requirements": [
       "Trigger is a field-styled button with aria-haspopup=menu",
       "Must have associated label via Field or ariaLabel",
-      "Each option needs a human-readable label"
+      "Each option needs a human-readable label",
+      "Selected options show a Check, or kit Checkbox when itemCheck=checkbox",
+      "Overflow count uses kit Badge on the trigger, not Tag"
     ]
   },
   "doNot": [
     "Do not use a native select",
-    "Do not use kit Button as the Select trigger — Select uses DropdownMenu triggerStyle=field",
-    "Do not invent a local Select or combobox",
+    "Do not use kit Button as the Select trigger \u2014 Select uses DropdownMenu triggerStyle=field",
+    "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, MultiSelect, or Combobox",
+    "Do not invent Tag for overflow \u2014 use kit Badge",
     "Do not use raw hex",
-    "Do not use for navigation — use AppNav or links"
+    "Do not use for navigation \u2014 use AppNav or links"
   ],
-  "snippet": "<Field label=\"Timezone\" htmlFor=\"tz\"><Select id=\"tz\" options={[{ value: 'utc', label: 'UTC' }]} /></Field>"
+  "snippet": "<Field label=\"Fruit\" htmlFor=\"fruit\">\n  <Select id=\"fruit\" placeholder=\"Select a fruit\" options={[{ value: 'apple', label: 'Apple' }]} />\n</Field>\n<Select id=\"fruits\" multiple itemCheck=\"checkbox\" maxVisible={2} placeholder=\"Select fruits\" options={fruits} />\n<Select id=\"city\" searchable placeholder=\"Select a city\" options={cities} />"
 }

@@ -4,7 +4,7 @@
   padding: var(--space-4);
   background-color: var(--surface-card);
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-surface-md);
 }
 
 .title {
@@ -142,7 +142,7 @@
   font-weight: var(--type-weight-label);
   color: var(--text-secondary);
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control-md);
   transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease;
 }
 

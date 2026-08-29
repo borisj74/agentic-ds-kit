@@ -5,6 +5,7 @@ import { Alert } from "@/ui/Alert";
 import type { AlertVariant } from "@/ui/Alert";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const VARIANTS: AlertVariant[] = ["info", "success", "warning", "danger"];
 
@@ -49,14 +50,7 @@ export function AlertDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>Switch variant to preview info, success, warning, and danger.</p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button type="button" role="tab" aria-selected={tab === "preview"} className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`} onClick={() => setTab("preview")}>
-              Preview
-            </button>
-            <button type="button" role="tab" aria-selected={tab === "variants"} className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`} onClick={() => setTab("variants")}>
-              Variants
-            </button>
-          </div>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
         {tab === "preview" ? (

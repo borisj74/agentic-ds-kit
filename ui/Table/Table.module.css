@@ -2,7 +2,7 @@
   width: 100%;
   overflow-x: auto;
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-surface-md);
   background-color: var(--surface-card);
 }
 

@@ -67,6 +67,10 @@
   grid-template-columns: minmax(12rem, 16rem) 5.5rem max-content;
 }
 
+.rowRadiusSemantic {
+  grid-template-columns: minmax(12rem, 16rem) max-content;
+}
+
 .rowShadow {
   padding: 0.85rem 0;
 }

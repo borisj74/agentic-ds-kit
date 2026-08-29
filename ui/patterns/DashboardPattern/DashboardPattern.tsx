@@ -21,7 +21,7 @@ export function DashboardPattern({ metrics, table }: DashboardPatternProps) {
     <div className={styles.pattern}>
       <PageHeader
         title="Studio dashboard"
-        subtitle="A tiny Florence-style playground — contracts in JSON, components in ui/."
+        subtitle="Contracts in JSON, components in ui/."
         eyebrow="Personal kit sandbox"
         actions={
           <>
@@ -37,7 +37,15 @@ export function DashboardPattern({ metrics, table }: DashboardPatternProps) {
       <Section title="Key metrics" description="Overview for the current period">
         <Scoreboard items={metrics} aria-label="Studio key metrics" />
       </Section>
-      <Section title="Recent activity" description="Latest project updates">
+      <Section
+        title="Recent activity"
+        description="Latest project updates"
+        actions={
+          <Button variant="secondary" size="sm">
+            View all
+          </Button>
+        }
+      >
         <Table columns={table.columns} rows={table.rows} caption={table.caption} />
       </Section>
     </div>

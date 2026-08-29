@@ -10,6 +10,7 @@ import { Input } from "@/ui/Input";
 import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const SIDES: DrawerSide[] = ["right", "left", "bottom", "top"];
 const STACK = { display: "grid", gap: "var(--space-4)" } as const;
@@ -121,32 +122,14 @@ export function DrawerDoc() {
             Open the drawer, then switch side, description, and close. Overlay click and Escape
             dismiss.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("preview");
-                setVariantOpen(null);
-              }}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("variants");
-                setOpen(false);
-              }}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList
+            value={tab}
+            onChange={(id) => {
+              setTab(id as "preview" | "variants");
+              if (id === "preview") setVariantOpen(null);
+              else setOpen(false);
+            }}
+          />
         </div>
 
         {tab === "preview" ? (
@@ -231,7 +214,7 @@ export function DrawerDoc() {
 
             <Variant
               title="Bottom"
-              usage="Sheet from the bottom. Top corners use radius-lg."
+              usage="Sheet from the bottom. Top corners use radius-surface-md."
               code={`<Drawer open={open} title="Edit profile" side="bottom" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("bottom")}
             >
@@ -242,7 +225,7 @@ export function DrawerDoc() {
 
             <Variant
               title="Top"
-              usage="Panel slides from the top. Bottom corners use radius-lg."
+              usage="Panel slides from the top. Bottom corners use radius-surface-md."
               code={`<Drawer open={open} title="Edit profile" side="top" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("top")}
             >

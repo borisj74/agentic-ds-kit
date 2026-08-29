@@ -4,7 +4,8 @@
   "intent": "Actions or value menu from a button, field, or nav trigger.",
   "useWhen": [
     "A button that opens a short list of actions",
-    "Row actions in a DataTable via Cell type=actionMenu"
+    "Row actions in a DataTable via Cell type=actionMenu",
+    "Select composes this with triggerStyle=field"
   ],
   "doNotUseWhen": [
     "Choosing one value in a form \u2014 use Select (it composes this with triggerStyle=field)",
@@ -70,7 +71,9 @@
             "danger": "boolean?",
             "submenu": "DropdownMenuGroup[]? one level",
             "description": "string?",
-            "href": "string? renders a when set and not disabled"
+            "href": "string? renders a when set and not disabled",
+            "selected": "boolean? Check when true unless checkbox is set.",
+            "checkbox": "boolean? Compose kit Checkbox (visual, inert). Not DropdownMenuCheckboxItem."
           }
         ]
       }
@@ -103,7 +106,7 @@
     "iconEnd": {
       "type": "string",
       "required": false,
-      "note": "Lucide name on a field trigger, default ChevronsUpDown"
+      "note": "Lucide name on a field trigger (default ChevronsUpDown) or kit Button trigger."
     },
     "columns": {
       "type": "enum",
@@ -113,6 +116,31 @@
       ],
       "default": 1,
       "note": "2 uses a CSS grid panel, min-width 28rem. 1 stays a list."
+    },
+    "closeOnSelect": {
+      "type": "boolean",
+      "default": true,
+      "note": "false keeps the menu open. Select multiple uses false."
+    },
+    "triggerMuted": {
+      "type": "boolean",
+      "default": false,
+      "note": "Muted field trigger text for a placeholder."
+    },
+    "triggerBadge": {
+      "type": "string",
+      "required": false,
+      "note": "Kit Badge on a field trigger next to the label, e.g. +2. Select overflow uses this."
+    },
+    "searchable": {
+      "type": "boolean",
+      "default": false,
+      "note": "Kit Input at the top of the panel. Filters item labels. Select searchable uses this."
+    },
+    "searchPlaceholder": {
+      "type": "string",
+      "required": false,
+      "default": "Search"
     }
   },
   "tokens": [
@@ -137,8 +165,8 @@
     "requirements": [
       "Trigger has aria-haspopup=menu, aria-expanded, aria-controls. button is kit Button; field is a field control; nav is a ghost text control",
       "Panel is role=menu",
-      "Items are role=menuitem, aria-disabled when disabled. With href and not disabled, the item is an a",
-      "Escape and outside click close; arrows move; Tab closes",
+      "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
+      "Escape and outside click close; arrows move; Tab closes. Search Input is focused first when searchable",
       "Icon-only trigger needs ariaLabel",
       "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens, ArrowLeft closes"
     ]
@@ -148,12 +176,15 @@
     "Do not use Select for actions from a button",
     "Do not use Command or Modal for a small action menu",
     "Do not invent DropdownMenuSub \u2014 nest groups on the item, one level",
-    "Do not add checkbox items or radio items",
+    "Do not invent CheckboxItem or RadioItem cousins \u2014 compose kit Checkbox on the item",
     "Do not use radix, cmdk, or @base-ui/react",
     "Do not use raw hex"
   ],
   "contains": [
-    "button"
+    "button",
+    "checkbox",
+    "input",
+    "badge"
   ],
   "snippet": "<DropdownMenu\n  trigger=\"Open\"\n  groups={[{\n    heading: \"My Account\",\n    items: [\n      { id: \"profile\", label: \"Profile\", shortcut: \"\u21e7\u2318P\" },\n      { id: \"invite\", label: \"Invite users\", submenu: [{ items: [{ id: \"email\", label: \"Email\" }] }] },\n    ],\n  }]}\n  onSelect={(id) => {}}\n/>"
 }

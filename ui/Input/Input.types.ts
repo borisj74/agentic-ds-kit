@@ -9,6 +9,8 @@ export interface InputProps {
   disabled?: boolean;
   error?: boolean;
   defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   name?: string;
   start?: string;
   end?: string;
@@ -16,4 +18,5 @@ export interface InputProps {
   iconEnd?: string;
   demo?: "hover" | "focus";
   describedBy?: string;
+  ariaLabel?: string;
 }

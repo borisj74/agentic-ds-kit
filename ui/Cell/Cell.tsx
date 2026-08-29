@@ -6,6 +6,7 @@ import { AvatarGroup } from "@/ui/AvatarGroup";
 import { Badge } from "@/ui/Badge";
 import { Button } from "@/ui/Button";
 import { DropdownMenu } from "@/ui/DropdownMenu";
+import { Progress } from "@/ui/Progress";
 import { ButtonGroup } from "@/ui/ButtonGroup";
 import { Checkbox } from "@/ui/Checkbox";
 import { Select } from "@/ui/Select";
@@ -118,8 +119,6 @@ export function Cell({
       rootAria = trendAria("Up", value);
     } else if (type === "trendNegative") {
       rootAria = trendAria("Down", value);
-    } else if (type === "progress") {
-      rootAria = `${Math.round(toPercent(value))}%`;
     } else if (type === "rating") {
       rootAria = `${toRating(value)} of ${STAR_COUNT}`;
     }
@@ -174,15 +173,12 @@ export function Cell({
   } else if (type === "progress") {
     const percent = toPercent(value);
     visual = (
-      <span
-        className={styles.progress}
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={Math.round(percent)}
-        aria-label={label || `${Math.round(percent)}%`}
-      >
-        <span className={styles.progressFill} style={{ width: `${percent}%` }} />
+      <span className={styles.progressWrap}>
+        <Progress
+          value={percent}
+          size={size}
+          ariaLabel={label || `${Math.round(percent)}%`}
+        />
       </span>
     );
   } else if (type === "rating") {
@@ -266,8 +262,13 @@ export function Cell({
     text && shown && type !== "trendPositive" && type !== "trendNegative";
   const empty = !checkbox && !visual && !showSideLabel;
 
+  const actionMenu = type === "actionMenu";
+
   return (
-    <span className={`${styles.cell} ${styles[size]}`} aria-label={rootAria}>
+    <span
+      className={`${styles.cell} ${styles[size]}${actionMenu ? ` ${styles.actionMenu}` : ""}`}
+      aria-label={rootAria}
+    >
       {checkbox ? (
         <Checkbox
           id={checkboxId}

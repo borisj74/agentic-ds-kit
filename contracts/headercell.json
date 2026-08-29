@@ -49,10 +49,11 @@
       "type": "enum",
       "values": [
         "start",
-        "end"
+        "end",
+        "center"
       ],
       "default": "start",
-      "note": "end for number columns"
+      "note": "end for number columns. center for actionMenu columns."
     },
     "id": {
       "type": "string",

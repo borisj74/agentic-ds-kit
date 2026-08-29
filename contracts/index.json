@@ -22,7 +22,7 @@
   },
   {
     "id": "scorecard",
-    "intent": "Single KPI tile with title, metric, and optional trend.",
+    "intent": "Single KPI tile with label, value, optional delta and trend.",
     "group": "component",
     "path": "contracts/scorecard.json",
     "status": "stable"
@@ -57,14 +57,14 @@
   },
   {
     "id": "textarea",
-    "intent": "Multi-line text for notes. Florence field. Wrap with Field.",
+    "intent": "Multi-line text for notes. Wrap with Field.",
     "group": "component",
     "path": "contracts/textarea.json",
     "status": "stable"
   },
   {
     "id": "select",
-    "intent": "Dropdown for choosing one option from a short fixed list.",
+    "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
     "group": "component",
     "path": "contracts/select.json",
     "status": "stable"
@@ -183,7 +183,7 @@
   },
   {
     "id": "tabs",
-    "intent": "Switch between related in-page panels.",
+    "intent": "Switch between related views in place. Segmented or line, in lg, md, and sm.",
     "group": "component",
     "path": "contracts/tabs.json",
     "status": "stable"
@@ -238,8 +238,15 @@
     "status": "stable"
   },
   {
+    "id": "progress",
+    "intent": "Task completion as a bar from 0 to 100. Optional label and percent.",
+    "group": "component",
+    "path": "contracts/progress.json",
+    "status": "stable"
+  },
+  {
     "id": "section",
-    "intent": "Grouped content block with optional heading.",
+    "intent": "Grouped page block with heading, optional description and actions.",
     "group": "component",
     "path": "contracts/section.json",
     "status": "stable"
@@ -253,14 +260,14 @@
   },
   {
     "id": "sidenav",
-    "intent": "Florence product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+    "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
     "group": "component",
     "path": "contracts/sidenav.json",
     "status": "stable"
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows — not a data grid.",
+    "intent": "Simple semantic table for text rows \u2014 not a data grid.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable"

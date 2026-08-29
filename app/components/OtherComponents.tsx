@@ -4,9 +4,6 @@ import { AppNav } from "@/ui/AppNav";
 import { Field } from "@/ui/Field";
 import { Input } from "@/ui/Input";
 import { PageHeader } from "@/ui/PageHeader";
-import { RadioGroup } from "@/ui/RadioGroup";
-import { Scoreboard } from "@/ui/Scoreboard";
-import { Section } from "@/ui/Section";
 import { Select } from "@/ui/Select";
 import { Table } from "@/ui/Table";
 import { Textarea } from "@/ui/Textarea";
@@ -20,24 +17,13 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
     <div>
       <header className={doc.hero}>
         <h1 className={doc.heroTitle}>{title}</h1>
-        <p className={doc.lede}>Kit example. Florence-style docs start with Button.</p>
+        <p className={doc.lede}>Kit example.</p>
       </header>
       <div className={styles.anchor} id={id}>
         {id === "appnav" && (
           <div className={styles.appNavDemo}>
             <AppNav title="Agentic DS Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
           </div>
-        )}
-        {id === "scoreboard" && (
-          <Scoreboard
-            items={[
-              { title: "Revenue", metric: "$12k", trend: "up", trendLabel: "+4%" },
-              { title: "Users", metric: "840", trend: "neutral", trendLabel: "Flat" },
-            ]}
-          />
-        )}
-        {id === "scorecard" && (
-          <Scoreboard items={[{ title: "Active users", metric: "1,240", trend: "up", trendLabel: "+3%" }]} />
         )}
         {id === "field" && (
           <div className={styles.stack}>
@@ -79,17 +65,6 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
             />
           </Field>
         )}
-        {id === "radiogroup" && (
-          <RadioGroup
-            name="demo-rg-only"
-            legend="Billing"
-            options={[
-              { value: "monthly", label: "Monthly" },
-              { value: "annual", label: "Annual" },
-            ]}
-            defaultValue="monthly"
-          />
-        )}
         {id === "pageheader" && <PageHeader title="Example page" subtitle="Subtitle text" eyebrow="Eyebrow" />}
         {id === "table" && (
           <Table
@@ -104,13 +79,7 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
             ]}
           />
         )}
-        {id === "section" && (
-          <Section title="Section" description="Grouped block with optional heading">
-            <p className={styles.sectionBody}>Content inside a Section wrapper.</p>
-          </Section>
-        )}
         {id === "tooltip" && <InteractiveDemos mode="tooltip" />}
-        {id === "tabs" && <InteractiveDemos mode="tabs" />}
       </div>
     </div>
   );

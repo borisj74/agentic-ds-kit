@@ -8,7 +8,7 @@ export function Scoreboard({ items, "aria-label": ariaLabel = "Key metrics" }: S
   return (
     <section className={styles.scoreboard} aria-label={ariaLabel}>
       {items.map((item) => (
-        <Scorecard key={item.title} {...item} />
+        <Scorecard key={item.label} {...item} />
       ))}
     </section>
   );

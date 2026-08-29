@@ -6,8 +6,8 @@ import styles from "./patterns.module.css";
 import playground from "../playground.module.css";
 
 const dashboardMetrics = [
-  { title: "MRR", metric: "$8.4k", trend: "up" as const, trendLabel: "+6%" },
-  { title: "Clients", metric: "6", trend: "neutral" as const, trendLabel: "No change" },
+  { label: "MRR", value: "$8.4k", trend: "up" as const, delta: "+6%" },
+  { label: "Clients", value: "6", trend: "flat" as const, delta: "0%" },
 ];
 
 const dashboardTable = {

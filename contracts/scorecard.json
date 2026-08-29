@@ -1,62 +1,119 @@
 {
   "id": "scorecard",
   "status": "stable",
-  "intent": "Display one KPI with a label, value, and optional trend indicator.",
+  "intent": "one KPI with label, value, optional delta/trend/hint/badge",
   "useWhen": [
-    "Showing a single metric such as revenue, users, or conversion rate",
-    "Composing a Scoreboard row of related KPIs"
+    "Showing a single metric such as revenue, users, or conversion rate"
   ],
   "doNotUseWhen": [
-    "Multiple metrics in one tile — use separate Scorecards inside Scoreboard",
-    "Charts, sparklines, or tables — out of scope for this contract",
-    "Clickable or interactive metric tiles",
-    "A framed content tile — use Card",
-    "A recommended action tile — use InsightCard"
+    "Multiple metrics \u2014 use Scoreboard",
+    "Charts, sparklines, or tables \u2014 out of scope for this contract",
+    "A framed content tile \u2014 use Card",
+    "A recommended action tile \u2014 use InsightCard"
   ],
   "props": {
-    "title": {
+    "label": {
       "type": "string",
       "required": true
     },
-    "metric": {
+    "value": {
       "type": "string",
       "required": true
+    },
+    "delta": {
+      "type": "string",
+      "required": false,
+      "note": "Visible change text, e.g. '+12.4%'"
     },
     "trend": {
       "type": "enum",
       "values": [
         "up",
         "down",
+        "flat",
         "neutral"
       ],
-      "required": false
+      "default": "neutral"
     },
-    "trendLabel": {
+    "hint": {
       "type": "string",
       "required": false,
-      "note": "Accessible description of the trend, e.g. '+12% vs last week'"
+      "note": "Supporting context, e.g. 'vs last 30 days'"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "badge": {
+      "type": "string",
+      "required": false,
+      "note": "kit Badge on the header, aligned with label. Compose Badge. No Tag."
+    },
+    "badgeTone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "brand",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "default": "neutral",
+      "note": "kit Badge tone"
+    },
+    "onClick": {
+      "type": "function",
+      "required": false,
+      "note": "When set, the whole card is a button that opens a detail view"
     }
   },
   "tokens": [
+    "surface.card",
+    "border.highlight",
+    "border.faint",
+    "radius.surfaceMd",
+    "shadow.raisedDepth",
     "text.primary",
     "text.secondary",
-    "surface.card",
-    "border.faint",
-    "status.success",
-    "status.danger"
+    "text.muted",
+    "text.success",
+    "text.danger",
+    "type.size.caption",
+    "type.size.heading",
+    "type.size.title",
+    "type.size.metric",
+    "type.weight.caption",
+    "type.weight.metric",
+    "space.stack.sm",
+    "space.inset.md",
+    "motion.interaction",
+    "border.focus"
   ],
   "a11y": {
     "element": "article",
     "requirements": [
-      "title is exposed as a heading",
-      "metric is readable as primary content",
-      "trend uses status colors and trendLabel when provided"
+      "useId for label and value",
+      "aria-labelledby when both exist",
+      "trend icon is aria-hidden",
+      "delta text is the visible change",
+      "root is a button when onClick is set"
     ]
   },
   "doNot": [
-    "Do not pack multiple KPIs into one Scorecard",
+    "Do not invent a KpiCard, Stat, or MetricCard cousin",
     "Do not use raw hex colors in styles",
-    "Do not add buttons or links inside Scorecard"
+    "Do not pack multiple KPIs into one Scorecard",
+    "Do not put buttons or links inside Scorecard besides the whole-card onClick",
+    "Do not invent a local Tag or Status on Scorecard \u2014 use kit Badge via badge"
   ],
-  "snippet": "<Scorecard title=\"Active users\" metric=\"12,480\" trend=\"up\" trendLabel=\"+8% vs last week\" />"
+  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />",
+  "contains": [
+    "badge"
+  ]
 }

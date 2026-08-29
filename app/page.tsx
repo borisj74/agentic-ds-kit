@@ -3,22 +3,24 @@ import styles from "./playground.module.css";
 
 const metrics = [
   {
-    title: "Monthly revenue",
-    metric: "$48.2k",
+    label: "Monthly revenue",
+    value: "$48.2k",
     trend: "up" as const,
-    trendLabel: "+12% vs last month",
+    delta: "+12%",
+    hint: "vs last month",
   },
   {
-    title: "Active projects",
-    metric: "14",
+    label: "Active projects",
+    value: "14",
     trend: "neutral" as const,
-    trendLabel: "No change",
+    delta: "No change",
   },
   {
-    title: "Churn rate",
-    metric: "2.1%",
+    label: "Churn rate",
+    value: "2.1%",
     trend: "down" as const,
-    trendLabel: "-0.3% vs last month",
+    delta: "-0.3%",
+    hint: "vs last month",
   },
 ];
 

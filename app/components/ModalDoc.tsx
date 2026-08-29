@@ -10,6 +10,7 @@ import type { ModalSize } from "@/ui/Modal";
 import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const SIZES: ModalSize[] = ["sm", "md", "lg"];
 const STACK = { display: "grid", gap: "var(--space-4)" } as const;
@@ -127,32 +128,14 @@ export function ModalDoc() {
             Open the modal in the preview frame, then switch size, description, and close. Scrim click
             and Escape dismiss.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("preview");
-                setVariantOpen(null);
-              }}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("variants");
-                setOpen(false);
-              }}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList
+            value={tab}
+            onChange={(id) => {
+              setTab(id as "preview" | "variants");
+              if (id === "preview") setVariantOpen(null);
+              else setOpen(false);
+            }}
+          />
         </div>
 
         {tab === "preview" ? (

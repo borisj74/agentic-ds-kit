@@ -32,6 +32,7 @@ const COMPONENT_ITEMS = [
   "navigationmenu",
   "pageheader",
   "pagination",
+  "progress",
   "radiogroup",
   "scorecard",
   "scoreboard",
@@ -59,6 +60,8 @@ function componentLabel(id: string): string {
   if (id === "insightcard") return "InsightCard";
   if (id === "modalcard") return "ModalCard";
   if (id === "navigationmenu") return "NavigationMenu";
+  if (id === "scorecard") return "Scorecard";
+  if (id === "scoreboard") return "Scoreboard";
   if (id === "sidenav") return "SideNav";
   if (id === "inputotp") return "InputOTP";
   if (id === "dropdownmenu") return "DropdownMenu";

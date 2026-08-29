@@ -20,7 +20,11 @@
       "minItems": 1
     }
   },
-  "tokens": ["surface.page"],
+  "tokens": [
+    "surface.page",
+    "layout.metricsMin",
+    "space.4"
+  ],
   "a11y": {
     "element": "section",
     "requirements": [
@@ -34,5 +38,5 @@
     "Do not restyle Scorecard padding or borders inside Scoreboard",
     "Do not inline Scorecard markup — import from ui/Scorecard"
   ],
-  "snippet": "<Scoreboard items={[{ title: 'Revenue', metric: '$48.2k', trend: 'up', trendLabel: '+12%' }, { title: 'Churn', metric: '2.1%', trend: 'down', trendLabel: '-0.3%' }]} />"
+  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }]} />"
 }

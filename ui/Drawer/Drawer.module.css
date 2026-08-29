@@ -41,7 +41,7 @@
   left: 0;
   width: 100%;
   max-height: calc(100dvh - 6rem);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-surface-md) var(--radius-surface-md) 0 0;
   animation-name: enterBottom;
 }
 
@@ -50,7 +50,7 @@
   left: 0;
   width: 100%;
   max-height: calc(100dvh - 6rem);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: 0 0 var(--radius-surface-md) var(--radius-surface-md);
   animation-name: enterTop;
 }
 
@@ -100,7 +100,7 @@
   color: var(--icon-muted);
   background: transparent;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control-sm);
   cursor: pointer;
 }
 

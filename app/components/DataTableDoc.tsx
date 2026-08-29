@@ -6,6 +6,7 @@ import type { DataTableColumn, DataTableRow } from "@/ui/DataTable";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const ACTION = {
   type: "actionMenu" as const,
@@ -232,26 +233,7 @@ export function DataTableDoc() {
           <p className={styles.masterSummary}>
             Small cells. Actions is kit Cell type=actionMenu. Table stays the short static list.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => setTab("preview")}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => setTab("variants")}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
         {tab === "preview" ? (

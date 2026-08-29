@@ -7,8 +7,8 @@
     "Mixed visual and label content in a row"
   ],
   "doNotUseWhen": [
-    "A full searchable dataset — use DataTable, which composes Cell",
-    "A short static text table — use Table"
+    "A full searchable dataset \u2014 use DataTable, which composes Cell",
+    "A short static text table \u2014 use Table"
   ],
   "contains": [
     "avatar",
@@ -17,7 +17,8 @@
     "buttongroup",
     "button",
     "checkbox",
-    "select"
+    "select",
+    "progress"
   ],
   "props": {
     "type": {
@@ -133,7 +134,7 @@
     "onCheckedChange": {
       "type": "function",
       "required": false,
-      "note": "(checked: boolean) => void — only when checkbox"
+      "note": "(checked: boolean) => void \u2014 only when checkbox"
     },
     "id": {
       "type": "string",
@@ -181,7 +182,7 @@
       "Trend aria-label is Up {value} or Down {value} when text is false",
       "When checkbox, unlabeled kit Checkbox with ariaLabel Select ${label || name || \"row\"}",
       "type=select uses kit Select with ariaLabel from label",
-      "type=progress is a progressbar with valuemin 0 valuemax 100",
+      "type=progress composes kit Progress",
       "type=rating is role=img, '{n} of 5'",
       "type=actionIcons each icon-only Button needs ariaLabel",
       "type=actionMenu ariaLabel is Row actions unless label is set"
@@ -191,11 +192,11 @@
     "Do not invent DataTableCell, Tag, Trend, FileIcon, PaymentMethod, or a second Badge",
     "Do not use raw hex",
     "Do not use Badge for trends",
-    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox — compose the kit pieces",
+    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",
     "Do not use Lucide except via LucideByName from @/ui/Button/lucideName",
-    "Do not invent Progress, Rating, StarRating, ActionCell",
-    "Do not invent a local DropdownMenu — type=actionMenu composes kit DropdownMenu",
-    "Do not invent local Select, Button, or ButtonGroup — compose the kit pieces"
+    "Do not invent a local progress bar \u2014 type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
+    "Do not invent a local DropdownMenu \u2014 type=actionMenu composes kit DropdownMenu",
+    "Do not invent local Select, Button, or ButtonGroup \u2014 compose the kit pieces"
   ],
   "snippet": "<Cell type=\"progress\" size=\"md\" value={64} />"
 }

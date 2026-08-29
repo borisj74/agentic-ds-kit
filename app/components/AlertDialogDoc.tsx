@@ -6,6 +6,7 @@ import type { AlertDialogActionVariant, AlertDialogSize } from "@/ui/AlertDialog
 import { Button } from "@/ui/Button";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const SIZES: AlertDialogSize[] = ["sm", "md"];
 const ACTION_VARIANTS: AlertDialogActionVariant[] = ["primary", "danger"];
@@ -72,32 +73,14 @@ export function AlertDialogDoc() {
           <p className={styles.masterSummary}>
             Open the dialog, then switch size and action variant. Escape cancels. Overlay click does not.
           </p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("preview");
-                setVariantOpen(null);
-              }}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => {
-                setTab("variants");
-                setOpen(false);
-              }}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList
+            value={tab}
+            onChange={(id) => {
+              setTab(id as "preview" | "variants");
+              if (id === "preview") setVariantOpen(null);
+              else setOpen(false);
+            }}
+          />
         </div>
 
         {tab === "preview" ? (

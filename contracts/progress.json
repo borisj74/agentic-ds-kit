@@ -1,0 +1,75 @@
+{
+  "id": "progress",
+  "status": "stable",
+  "intent": "Task completion as a bar from 0 to 100. One piece. Optional label and percent.",
+  "useWhen": [
+    "Upload, import, or task completion",
+    "A determinate percent in a form, card, or page",
+    "DataTable Cell type=progress (Cell composes this)"
+  ],
+  "doNotUseWhen": [
+    "A spinner with no known percent \u2014 not this component",
+    "A rating out of 5 \u2014 that stays a Cell type",
+    "A KPI number \u2014 use Scorecard"
+  ],
+  "props": {
+    "value": {
+      "type": "number",
+      "default": 0,
+      "note": "0 to 100. Clamped."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md",
+      "note": "Track height. sm is space-1, md is space-2."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Visible name above the track. Prefer this over ProgressLabel."
+    },
+    "showValue": {
+      "type": "boolean",
+      "default": false,
+      "note": "Shows the rounded percent opposite the label. Prefer this over ProgressValue."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Required when label is omitted. Cell passes the percent or its label."
+    }
+  },
+  "tokens": [
+    "fill.brand",
+    "fill.brandSubtle",
+    "text.primary",
+    "text.muted",
+    "radius.full",
+    "space.1",
+    "space.2",
+    "type.size.bodySm",
+    "type.size.caption",
+    "motion.interactionDuration"
+  ],
+  "a11y": {
+    "element": "div[role=progressbar]",
+    "requirements": [
+      "role=progressbar on the track",
+      "aria-valuemin 0, aria-valuemax 100, aria-valuenow rounded percent",
+      "aria-valuetext is '{n}%'",
+      "Visible label uses aria-labelledby; unlabeled needs ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not invent ProgressLabel, ProgressValue, ProgressTrack, ProgressIndicator, or ProgressRoot",
+    "Do not use radix or @base-ui/react",
+    "Do not use a native progress element",
+    "Do not use raw hex",
+    "Do not add indeterminate, circular, or extra tones yet"
+  ],
+  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />"
+}

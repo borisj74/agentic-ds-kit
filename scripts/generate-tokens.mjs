@@ -138,26 +138,42 @@ function gridVars() {
 }
 
 
-function effectVars() {
-  return [
-    "  --radius-0: 0;",
-    "  --radius-50: 2px;",
-    "  --radius-100: 4px;",
-    "  --radius-200: 8px;",
-    "  --radius-300: 12px;",
-    "  --radius-400: 16px;",
-    "  --radius-500: 20px;",
-    "  --radius-600: 24px;",
+
+function radiusVars() {
+  const r = tokens.primitive.radius;
+  const lines = ["  /* Radius scale */"];
+  for (const [step, value] of Object.entries(r)) {
+    lines.push(`  --radius-${step}: ${value};`);
+  }
+  lines.push(
+    "  --radius-sm: var(--radius-100);",
+    "  --radius-md: var(--radius-200);",
+    "  --radius-lg: var(--radius-300);",
+    "",
+    "  /* Control - buttons, inputs, selects */",
     "  --radius-control-sm: var(--radius-100);",
     "  --radius-control-md: var(--radius-200);",
     "  --radius-control-lg: var(--radius-300);",
+    "",
+    "  /* Surface - cards, panels, dialogs */",
     "  --radius-surface-sm: var(--radius-200);",
     "  --radius-surface-md: var(--radius-300);",
     "  --radius-surface-lg: var(--radius-400);",
+    "",
+    "  /* Media - images, video, avatars */",
     "  --radius-media-sm: var(--radius-200);",
     "  --radius-media-md: var(--radius-300);",
     "  --radius-media-lg: var(--radius-400);",
+    "",
+    "  /* Pill - chips, badges, tags */",
     "  --radius-pill: var(--radius-full);",
+  );
+  return lines;
+}
+
+function effectVars() {
+  return [
+    ...radiusVars(),
     "",
     "  --border-0: 0;",
     "  --border-100: 1px;",
@@ -255,11 +271,6 @@ function staticVars() {
       .map(([k, v]) => `  --space-${k}: ${v};`),
     "",
     ...spaceRoleVars(),
-    "",
-    `  --radius-sm: ${p.radius.sm};`,
-    `  --radius-md: ${p.radius.md};`,
-    `  --radius-lg: ${p.radius.lg};`,
-    `  --radius-full: ${p.radius.full};`,
     "",
     ...effectVars(),
     "",

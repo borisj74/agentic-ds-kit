@@ -35,7 +35,7 @@
         "key": "string",
         "label": "string"
       },
-      "note": "Each is a native select of unique values from that column on the full rows, plus All {label}"
+      "note": "Each is a kit DropdownMenu of unique values from that column on the full rows, plus All {label}. Not a native select."
     },
     "columnSettings": {
       "type": "boolean",
@@ -98,17 +98,17 @@
       "table + thead th scope=col",
       "caption element when set",
       "search input aria-label from searchPlaceholder",
-      "filter selects labelled (aria-label = filter label)",
+      "filter DropdownMenu ariaLabel = filter label",
       "Columns button aria-expanded / aria-haspopup",
       "Row checkboxes ariaLabel like Select Maya Chen; header Select all rows",
       "sortable th aria-sort none | ascending | descending"
     ]
   },
   "doNot": [
+    "Do not use a native select for filters \u2014 use kit DropdownMenu",
+    "Do not wrap search in Field \u2014 DataTable owns its input",
     "Do not invent FilterBar, ColumnPicker, DataGrid, Pagination, or a second Table",
     "Do not invent a local Cell, DataTableCell, HeaderCell, Tag, Trend, FileIcon, or PaymentMethod \u2014 use Cell and HeaderCell",
-    "Do not wrap search in Field \u2014 DataTable owns its input and filter selects",
-    "Do not use kit Input or Select (uncontrolled) for search or filters",
     "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
     "Do not use raw hex",
     "Do not put a checkbox on every Cell \u2014 row selection stays on DataTable",
@@ -120,6 +120,7 @@
     "cell",
     "headercell",
     "checkbox",
-    "button"
+    "button",
+    "dropdownmenu"
   ]
 }

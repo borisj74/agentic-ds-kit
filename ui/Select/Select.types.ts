@@ -1,4 +1,5 @@
 export type SelectSize = "md" | "sm";
+export type SelectItemCheck = "check" | "checkbox";
 
 export interface SelectOption {
   value: string;
@@ -11,7 +12,14 @@ export interface SelectProps {
   options: SelectOption[];
   disabled?: boolean;
   error?: boolean;
-  defaultValue?: string;
+  multiple?: boolean;
+  itemCheck?: SelectItemCheck;
+  maxVisible?: number;
+  searchable?: boolean;
+  placeholder?: string;
+  defaultValue?: string | string[];
+  value?: string | string[];
+  onChange?: (value: string | string[]) => void;
   name?: string;
   ariaLabel?: string;
   describedBy?: string;

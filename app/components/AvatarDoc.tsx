@@ -6,6 +6,7 @@ import type { AvatarSize } from "@/ui/Avatar";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const SIZES: AvatarSize[] = ["sm", "md", "lg"];
 const APPEARANCES = ["photo", "initials"] as const;
@@ -43,26 +44,7 @@ export function AvatarDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>Switch size and source to preview a photo or derived initials.</p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "preview"}
-              className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`}
-              onClick={() => setTab("preview")}
-            >
-              Preview
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === "variants"}
-              className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`}
-              onClick={() => setTab("variants")}
-            >
-              Variants
-            </button>
-          </div>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
         {tab === "preview" ? (
