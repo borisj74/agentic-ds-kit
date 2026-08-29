@@ -23,6 +23,7 @@ const COMPONENT_ITEMS = [
   "field",
   "headercell",
   "input",
+  "inputotp",
   "insightcard",
   "modal",
   "modalcard",
@@ -52,6 +53,7 @@ function componentLabel(id: string): string {
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "modalcard") return "ModalCard";
+  if (id === "inputotp") return "InputOTP";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 

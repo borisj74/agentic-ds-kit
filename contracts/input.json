@@ -7,9 +7,10 @@
     "Inside a Field wrapper when label, hint, or error messaging is needed"
   ],
   "doNotUseWhen": [
-    "Multi-line content \u2014 use Textarea",
-    "Choosing from fixed options \u2014 use Select or RadioGroup",
-    "Standalone labeled forms without Field \u2014 you must wire label association yourself"
+    "One-time code or PIN — use InputOTP",
+    "Multi-line content — use Textarea",
+    "Choosing from fixed options — use Select or RadioGroup",
+    "Standalone labeled forms without Field — you must wire label association yourself"
   ],
   "props": {
     "id": {
@@ -96,7 +97,7 @@
   "doNot": [
     "Do not invent local Input variants or InputGroup",
     "Do not use raw hex in styles",
-    "Do not use start or end as the accessible name \u2014 wrap with Field label",
+    "Do not use start or end as the accessible name — wrap with Field label",
     "Do not use Lucide except via LucideByName from @/ui/Button/lucideName"
   ],
   "snippet": "<Field label=\"Website\" htmlFor=\"website\"><Input id=\"website\" start=\"https://\" placeholder=\"example.com\" /></Field>"

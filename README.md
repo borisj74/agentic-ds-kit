@@ -17,6 +17,7 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 | Scorecard | Single KPI tile |
 | Scoreboard | Horizontal row of Scorecards |
 | Input, Textarea, Select | Form controls |
+| InputOTP | One-time code / PIN as separate slots. Paste and autocomplete work |
 | Checkbox, RadioGroup | Boolean and single-choice inputs |
 | Switch | Immediate on/off setting — pill track, not Checkbox |
 | Field | Label + control + hint/error wrapper |

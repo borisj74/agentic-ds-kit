@@ -1,0 +1,139 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+}
+
+.root[data-disabled] {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.native {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font: inherit;
+  cursor: text;
+}
+
+.native:disabled {
+  cursor: not-allowed;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.separator {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--icon-muted);
+  pointer-events: none;
+}
+
+.slot {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--type-weight-label);
+  line-height: 1;
+  color: var(--text-primary);
+  text-align: center;
+  transition:
+    border-color var(--motion-fast) ease,
+    outline-color var(--motion-fast) ease;
+}
+
+.sm .slot {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: var(--type-size-caption);
+}
+
+.md .slot {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: var(--type-size-body-sm);
+}
+
+.lg .slot {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: var(--type-size-body);
+}
+
+.root:not([data-disabled]):not([data-error]):not(:focus-within):hover .slot {
+  border-color: var(--border-strong);
+}
+
+.root:focus-within .slotActive {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+  border-color: var(--border-focus);
+}
+
+.root[data-error] .slot {
+  border-color: var(--status-danger);
+}
+
+.root[data-error]:focus-within .slotActive {
+  outline-color: var(--status-danger);
+  border-color: var(--status-danger);
+}
+
+.char {
+  display: block;
+}
+
+.caret {
+  display: none;
+  width: var(--border-width-thin);
+  height: 1em;
+  background-color: var(--text-primary);
+}
+
+.root:focus-within .slotActive .caret {
+  display: block;
+  animation: otpCaret var(--motion-duration-600) var(--motion-ease-linear) infinite alternate;
+}
+
+@keyframes otpCaret {
+  from {
+    opacity: var(--opacity-full);
+  }
+  to {
+    opacity: var(--opacity-0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root:focus-within .slotActive .caret {
+    animation: none;
+    opacity: var(--opacity-full);
+  }
+}

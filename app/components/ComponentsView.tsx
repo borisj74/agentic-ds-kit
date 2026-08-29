@@ -23,6 +23,7 @@ import { ModalDoc } from "./ModalDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
+import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { OtherComponent } from "./OtherComponents";
 import { SwitchDoc } from "./SwitchDoc";
@@ -41,6 +42,7 @@ const TITLES: Record<string, string> = {
   scorecard: "Scorecard",
   scoreboard: "Scoreboard",
   input: "Input",
+  inputotp: "InputOTP",
   insightcard: "InsightCard",
   textarea: "Textarea",
   select: "Select",
@@ -109,6 +111,7 @@ export function ComponentsView() {
   if (id === "drawer") return <DrawerDoc />;
   if (id === "headercell") return <HeaderCellDoc />;
   if (id === "input") return <InputDoc />;
+  if (id === "inputotp") return <InputOTPDoc />;
   if (id === "insightcard") return <InsightCardDoc />;
   if (id === "switch") return <SwitchDoc />;
   return <OtherComponent id={id} title={TITLES[id]} />;

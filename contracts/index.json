@@ -42,6 +42,13 @@
     "status": "stable"
   },
   {
+    "id": "inputotp",
+    "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
+    "group": "component",
+    "path": "contracts/inputotp.json",
+    "status": "stable"
+  },
+  {
     "id": "insightcard",
     "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
     "group": "component",
