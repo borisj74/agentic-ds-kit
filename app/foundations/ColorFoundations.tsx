@@ -12,6 +12,18 @@ import styles from "./ColorFoundations.module.css";
 
 type ColorTab = "primitives" | "semantics";
 
+interface SemanticToken {
+  name: string;
+  var: string;
+}
+
+interface SemanticFamily {
+  title: string;
+  pattern: string;
+  tokens?: SemanticToken[];
+  subgroups?: { title: string; tokens: SemanticToken[] }[];
+}
+
 const PRIMITIVE_RAMPS: {
   hue: string;
   steps: readonly string[];
@@ -26,9 +38,10 @@ const PRIMITIVE_RAMPS: {
   { hue: "black", steps: ["black"], single: true },
 ];
 
-const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] }[] = [
+const SEMANTIC_FAMILIES: SemanticFamily[] = [
   {
     title: "Text",
+    pattern: "text-*",
     tokens: [
       { name: "text.primary", var: "--text-primary" },
       { name: "text.secondary", var: "--text-secondary" },
@@ -39,14 +52,8 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
     ],
   },
   {
-    title: "Icon",
-    tokens: [
-      { name: "icon.default", var: "--icon-default" },
-      { name: "icon.muted", var: "--icon-muted" },
-    ],
-  },
-  {
     title: "Surface",
+    pattern: "surface-*",
     tokens: [
       { name: "surface.page", var: "--surface-page" },
       { name: "surface.card", var: "--surface-card" },
@@ -58,6 +65,7 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
   },
   {
     title: "Border",
+    pattern: "border-*",
     tokens: [
       { name: "border.faint", var: "--border-faint" },
       { name: "border.strong", var: "--border-strong" },
@@ -67,23 +75,40 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
   },
   {
     title: "Status",
-    tokens: [
-      { name: "status.success", var: "--status-success" },
-      { name: "status.success-subtle", var: "--status-success-subtle" },
-      { name: "status.success-border", var: "--status-success-border" },
-      { name: "status.warning", var: "--status-warning" },
-      { name: "status.warning-subtle", var: "--status-warning-subtle" },
-      { name: "status.warning-border", var: "--status-warning-border" },
-      { name: "status.danger", var: "--status-danger" },
-      { name: "status.danger-subtle", var: "--status-danger-subtle" },
-      { name: "status.danger-border", var: "--status-danger-border" },
-      { name: "status.info", var: "--status-info" },
-      { name: "status.info-subtle", var: "--status-info-subtle" },
-      { name: "status.info-border", var: "--status-info-border" },
+    pattern: "status-*",
+    subgroups: [
+      {
+        title: "Ink",
+        tokens: [
+          { name: "status.success", var: "--status-success" },
+          { name: "status.warning", var: "--status-warning" },
+          { name: "status.danger", var: "--status-danger" },
+          { name: "status.info", var: "--status-info" },
+        ],
+      },
+      {
+        title: "Subtle",
+        tokens: [
+          { name: "status.success-subtle", var: "--status-success-subtle" },
+          { name: "status.warning-subtle", var: "--status-warning-subtle" },
+          { name: "status.danger-subtle", var: "--status-danger-subtle" },
+          { name: "status.info-subtle", var: "--status-info-subtle" },
+        ],
+      },
+      {
+        title: "Border",
+        tokens: [
+          { name: "status.success-border", var: "--status-success-border" },
+          { name: "status.warning-border", var: "--status-warning-border" },
+          { name: "status.danger-border", var: "--status-danger-border" },
+          { name: "status.info-border", var: "--status-info-border" },
+        ],
+      },
     ],
   },
   {
     title: "Action",
+    pattern: "action-*",
     tokens: [
       { name: "action.primary", var: "--action-primary" },
       { name: "action.primary-hover", var: "--action-primary-hover" },
@@ -96,6 +121,7 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
   },
   {
     title: "Disabled",
+    pattern: "*.disabled",
     tokens: [
       { name: "text.disabled", var: "--text-disabled" },
       { name: "surface.disabled", var: "--surface-disabled" },
@@ -104,10 +130,19 @@ const SEMANTIC_GROUPS: { title: string; tokens: { name: string; var: string }[] 
   },
   {
     title: "Focus",
+    pattern: "focus-*",
     tokens: [
       { name: "focus.ring", var: "--focus-ring" },
       { name: "focus.ring-offset", var: "--focus-ring-offset" },
       { name: "border.focus", var: "--border-focus" },
+    ],
+  },
+  {
+    title: "Icon",
+    pattern: "icon-*",
+    tokens: [
+      { name: "icon.default", var: "--icon-default" },
+      { name: "icon.muted", var: "--icon-muted" },
     ],
   },
 ];
@@ -199,22 +234,38 @@ function SemanticChip({ id, name, cssVar, copiedId, onCopy }: SemanticChipProps)
   );
 }
 
+function SemanticChipRow({
+  tokens,
+  copiedId,
+  onCopy,
+}: {
+  tokens: SemanticToken[];
+  copiedId: string | null;
+  onCopy: (hex: string, id: string) => void;
+}) {
+  return (
+    <div className={styles.chipRow}>
+      {tokens.map((token) => (
+        <SemanticChip
+          key={token.var}
+          id={token.var}
+          name={token.name}
+          cssVar={token.var}
+          copiedId={copiedId}
+          onCopy={onCopy}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function ColorFoundations() {
-  const [tab, setTab] = useState<ColorTab>("primitives");
+  const [tab, setTab] = useState<ColorTab>("semantics");
   const { copiedId, copyHex } = useCopyHex();
 
   return (
     <section className={styles.colorSection}>
       <div className={styles.tabList} role="tablist" aria-label="Color foundation views">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "primitives"}
-          className={`${styles.tab} ${tab === "primitives" ? styles.tabActive : ""}`}
-          onClick={() => setTab("primitives")}
-        >
-          Primitives
-        </button>
         <button
           type="button"
           role="tab"
@@ -224,9 +275,43 @@ export function ColorFoundations() {
         >
           Semantics
         </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "primitives"}
+          className={`${styles.tab} ${tab === "primitives" ? styles.tabActive : ""}`}
+          onClick={() => setTab("primitives")}
+        >
+          Primitives
+        </button>
       </div>
 
-      {tab === "primitives" ? (
+      {tab === "semantics" ? (
+        <div className={styles.semantics} role="tabpanel">
+          <p className={styles.lead}>
+            Semantic roles from <code>lib/tokens.css</code>. Click a chip to copy its resolved hex.
+            Components bind to these names only — never primitives.
+          </p>
+          {SEMANTIC_FAMILIES.map((family) => (
+            <div key={family.title} className={styles.hueSection}>
+              <div className={styles.hueHeader}>
+                <h3 className={styles.hueTitle}>{family.title}</h3>
+                <code className={styles.huePattern}>{family.pattern}</code>
+              </div>
+              {family.subgroups ? (
+                family.subgroups.map((subgroup) => (
+                  <div key={subgroup.title} className={styles.subgroup}>
+                    <h4 className={styles.subgroupTitle}>{subgroup.title}</h4>
+                    <SemanticChipRow tokens={subgroup.tokens} copiedId={copiedId} onCopy={copyHex} />
+                  </div>
+                ))
+              ) : (
+                <SemanticChipRow tokens={family.tokens ?? []} copiedId={copiedId} onCopy={copyHex} />
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
         <div className={styles.primitives} role="tabpanel">
           <p className={styles.lead}>
             Fixed palette ramps from <code>tokens/tokens.json</code>. Click a chip to copy its hex.
@@ -253,29 +338,6 @@ export function ColorFoundations() {
                     />
                   );
                 })}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className={styles.semantics} role="tabpanel">
-          <p className={styles.lead}>
-            Semantic roles from <code>lib/tokens.css</code>. Click a chip to copy its resolved hex.
-          </p>
-          {SEMANTIC_GROUPS.map((group) => (
-            <div key={group.title} className={styles.group}>
-              <h3 className={styles.groupTitle}>{group.title}</h3>
-              <div className={styles.semanticChipRow}>
-                {group.tokens.map((token) => (
-                  <SemanticChip
-                    key={token.var}
-                    id={token.var}
-                    name={token.name}
-                    cssVar={token.var}
-                    copiedId={copiedId}
-                    onCopy={copyHex}
-                  />
-                ))}
               </div>
             </div>
           ))}

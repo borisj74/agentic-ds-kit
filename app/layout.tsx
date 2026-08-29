@@ -9,7 +9,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Kit Sandbox — Boris Jovanovic",
+  title: "Agentic DS Kit — Boris Jovanovic",
   description: "Personal design-system playground with JSON contracts and kit components.",
 };
 

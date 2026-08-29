@@ -53,5 +53,5 @@
     "Do not use AppNav for tab panels — use Tabs",
     "Do not nest more than one subgroup level"
   ],
-  "snippet": "<AppNav title=\"Kit sandbox\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
+  "snippet": "<AppNav title=\"Agentic DS Kit\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
 }

@@ -22,7 +22,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <AppNav title="Kit sandbox" groups={groups} />
+        <AppNav title="Agentic DS Kit" groups={groups} />
       </aside>
       <main className={styles.main}>{children}</main>
     </div>

@@ -1,4 +1,4 @@
-# Kit Sandbox
+# Agentic DS Kit
 
 Personal experiment (Florence-style, code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
 

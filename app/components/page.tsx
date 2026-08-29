@@ -27,7 +27,7 @@ export default function ComponentsPage() {
           <div id="appnav" className={styles.anchor}>
             <Section title="AppNav" description="Grouped sidebar navigation for catalog shells">
               <div className={styles.appNavDemo}>
-                <AppNav title="Kit sandbox" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
+                <AppNav title="Agentic DS Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
               </div>
             </Section>
           </div>
