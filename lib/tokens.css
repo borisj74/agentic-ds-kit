@@ -1,32 +1,101 @@
-/* Semantic CSS variables resolved from tokens/tokens.json — components use these names only. */
+/* Generated from tokens/tokens.json — run: npm run generate:tokens */
+/* Components use semantic vars only. Primitives are for foundations reference. */
 
 :root {
+  /* Primitive color ramps (fixed across themes) */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+
+  /* Semantic colors — light (default) */
   --text-primary: #171717;
   --text-secondary: #737373;
-  --text-muted: #404040;
+  --text-muted: #a3a3a3;
   --text-inverse: #fafafa;
   --text-danger: #dc2626;
-
+  --text-disabled: #d4d4d4;
+  --icon-default: #737373;
+  --icon-muted: #a3a3a3;
   --surface-page: #fafafa;
   --surface-card: #ffffff;
   --surface-muted: #f5f5f5;
-  --surface-overlay: rgba(23, 23, 23, 0.4);
+  --surface-overlay: color-mix(in srgb, #171717 40%, transparent);
   --surface-elevated: #ffffff;
-
+  --surface-disabled: #f5f5f5;
   --border-faint: #e5e5e5;
   --border-strong: #d4d4d4;
   --border-focus: #2563eb;
-
+  --border-disabled: #e5e5e5;
   --status-success: #16a34a;
+  --status-success-subtle: #f0fdf4;
+  --status-success-border: #bbf7d0;
   --status-warning: #d97706;
+  --status-warning-subtle: #fffbeb;
+  --status-warning-border: #fde68a;
   --status-danger: #dc2626;
+  --status-danger-subtle: #fef2f2;
+  --status-danger-border: #fecaca;
   --status-info: #2563eb;
-
+  --status-info-subtle: #eff6ff;
+  --status-info-border: #bfdbfe;
   --action-primary: #2563eb;
   --action-primary-hover: #1d4ed8;
+  --action-primary-pressed: #1e40af;
+  --action-on-primary: #ffffff;
   --action-danger: #dc2626;
   --action-danger-hover: #b91c1c;
-
+  --action-danger-pressed: #991b1b;
+  --focus-ring: color-mix(in srgb, #2563eb 25%, transparent);
+  --focus-ring-offset: #ffffff;
   --shadow-none: none;
   --shadow-sm: 0 1px 2px rgba(23, 23, 23, 0.06);
   --shadow-md: 0 4px 12px rgba(23, 23, 23, 0.08);
@@ -74,4 +143,49 @@
   --z-overlay: 40;
   --z-modal: 50;
   --z-tooltip: 60;
+}
+
+[data-theme="dark"] {
+  --text-primary: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --text-inverse: #171717;
+  --text-danger: #f87171;
+  --text-disabled: #525252;
+  --icon-default: #a3a3a3;
+  --icon-muted: #737373;
+  --surface-page: #171717;
+  --surface-card: #262626;
+  --surface-muted: #262626;
+  --surface-overlay: color-mix(in srgb, #000000 60%, transparent);
+  --surface-elevated: #262626;
+  --surface-disabled: #262626;
+  --border-faint: #404040;
+  --border-strong: #525252;
+  --border-focus: #60a5fa;
+  --border-disabled: #404040;
+  --status-success: #4ade80;
+  --status-success-subtle: #14532d;
+  --status-success-border: #15803d;
+  --status-warning: #fbbf24;
+  --status-warning-subtle: #78350f;
+  --status-warning-border: #b45309;
+  --status-danger: #f87171;
+  --status-danger-subtle: #7f1d1d;
+  --status-danger-border: #b91c1c;
+  --status-info: #60a5fa;
+  --status-info-subtle: #1e3a8a;
+  --status-info-border: #1d4ed8;
+  --action-primary: #3b82f6;
+  --action-primary-hover: #60a5fa;
+  --action-primary-pressed: #93c5fd;
+  --action-on-primary: #ffffff;
+  --action-danger: #ef4444;
+  --action-danger-hover: #f87171;
+  --action-danger-pressed: #fca5a5;
+  --focus-ring: color-mix(in srgb, #60a5fa 35%, transparent);
+  --focus-ring-offset: #171717;
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
 }

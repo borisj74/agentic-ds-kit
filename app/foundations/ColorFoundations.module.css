@@ -1,0 +1,189 @@
+.colorSection {
+  margin-bottom: var(--space-12);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.tabList {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-md);
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.tabActive {
+  color: var(--text-primary);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.themeToggle {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-md);
+}
+
+.themeBtn {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.themeBtn:hover {
+  color: var(--text-primary);
+}
+
+.themeBtn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.themeBtnActive {
+  color: var(--text-primary);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.lead {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.lead code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.primitives,
+.semantics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.rampBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.rampTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.rampRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.rampSwatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 4.5rem;
+}
+
+.rampColor {
+  height: 3rem;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-sm);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.groupTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: var(--space-3);
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.swatchColor {
+  height: 3.5rem;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-md);
+}
+
+.swatchLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-primary);
+}
+
+.varName {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: var(--text-muted);
+}
+
+.tokenName {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}

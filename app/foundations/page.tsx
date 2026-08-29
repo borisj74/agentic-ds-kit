@@ -1,18 +1,6 @@
+import { ColorFoundations } from "./ColorFoundations";
 import styles from "./foundations.module.css";
 import playground from "../playground.module.css";
-
-const colors = [
-  { name: "text.primary", var: "--text-primary" },
-  { name: "text.secondary", var: "--text-secondary" },
-  { name: "surface.page", var: "--surface-page" },
-  { name: "surface.card", var: "--surface-card" },
-  { name: "surface.muted", var: "--surface-muted" },
-  { name: "border.faint", var: "--border-faint" },
-  { name: "status.success", var: "--status-success" },
-  { name: "status.warning", var: "--status-warning" },
-  { name: "status.danger", var: "--status-danger" },
-  { name: "action.primary", var: "--action-primary" },
-];
 
 const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-6", "--space-8", "--space-12"];
 const radii = ["--radius-sm", "--radius-md", "--radius-lg", "--radius-full"];
@@ -24,20 +12,13 @@ export default function FoundationsPage() {
       <div className={playground.wideShell}>
         <h1 className={playground.pageTitle}>Foundations</h1>
         <p className={playground.pageLead}>
-          Semantic tokens from tokens/tokens.json, resolved in lib/tokens.css. Components bind to
-          these names only.
+          Palette ramps map to semantic roles in lib/tokens.css. Components bind to semantic vars
+          only — never primitives, never hex.
         </p>
 
         <section className={styles.section}>
-          <h2 className={styles.heading}>Color & surface</h2>
-          <div className={styles.swatches}>
-            {colors.map((color) => (
-              <div key={color.name} className={styles.swatch}>
-                <div className={styles.swatchColor} style={{ backgroundColor: `var(${color.var})` }} />
-                <span className={styles.swatchLabel}>{color.name}</span>
-              </div>
-            ))}
-          </div>
+          <h2 className={styles.heading}>Color</h2>
+          <ColorFoundations />
         </section>
 
         <section className={styles.section}>

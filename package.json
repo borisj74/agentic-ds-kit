@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:tokens": "node scripts/generate-tokens.mjs",
     "dev": "next dev --port 43123",
-    "build": "next build",
+    "build": "npm run generate:tokens && next build",
     "start": "next start --port 43123",
     "lint": "eslint"
   },
