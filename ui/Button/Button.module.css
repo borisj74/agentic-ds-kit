@@ -1,0 +1,75 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: 1rem;
+}
+
+.md {
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.875rem;
+}
+
+.sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.75rem;
+}
+
+.primary {
+  background-color: var(--action-primary);
+  color: var(--text-inverse);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--action-primary-hover);
+}
+
+.secondary {
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+  border-color: var(--border-faint);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--surface-muted);
+}
+
+.tertiary {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+
+.tertiary:hover:not(:disabled) {
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.danger {
+  background-color: var(--action-danger);
+  color: var(--text-inverse);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: var(--action-danger-hover);
+}

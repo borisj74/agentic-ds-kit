@@ -1,0 +1,38 @@
+{
+  "id": "scoreboard",
+  "status": "stable",
+  "intent": "Lay out a horizontal row of kit Scorecards for a dashboard metrics strip.",
+  "useWhen": [
+    "Showing two or more KPIs side by side at the top of a dashboard",
+    "Replacing ad-hoc flex rows of metric boxes"
+  ],
+  "doNotUseWhen": [
+    "A single KPI — render Scorecard directly",
+    "Vertical stacks of metrics — not supported by this contract",
+    "Metrics that need dividers, borders between cards, or custom card padding"
+  ],
+  "contains": ["scorecard"],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemContract": "scorecard",
+      "required": true,
+      "minItems": 1
+    }
+  },
+  "tokens": ["surface.page"],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "Expose aria-label describing the metrics group",
+      "Each child Scorecard retains its own semantics"
+    ]
+  },
+  "doNot": [
+    "Do not define a local Scoreboard component",
+    "Do not fake dividers with CSS borders between items",
+    "Do not restyle Scorecard padding or borders inside Scoreboard",
+    "Do not inline Scorecard markup — import from ui/Scorecard"
+  ],
+  "snippet": "<Scoreboard items={[{ title: 'Revenue', metric: '$48.2k', trend: 'up', trendLabel: '+12%' }, { title: 'Churn', metric: '2.1%', trend: 'down', trendLabel: '-0.3%' }]} />"
+}

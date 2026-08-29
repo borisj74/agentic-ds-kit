@@ -1,0 +1,23 @@
+[
+  {
+    "id": "button",
+    "intent": "Primary action control for forms and dashboards.",
+    "group": "actions",
+    "path": "contracts/button.json",
+    "status": "stable"
+  },
+  {
+    "id": "scorecard",
+    "intent": "Single KPI tile with title, metric, and optional trend.",
+    "group": "data-display",
+    "path": "contracts/scorecard.json",
+    "status": "stable"
+  },
+  {
+    "id": "scoreboard",
+    "intent": "Horizontal row of Scorecards for a metrics strip.",
+    "group": "data-display",
+    "path": "contracts/scoreboard.json",
+    "status": "stable"
+  }
+]

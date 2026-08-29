@@ -1,0 +1,70 @@
+{
+  "id": "button",
+  "status": "stable",
+  "intent": "Clickable action control with a fixed set of sizes and visual variants.",
+  "useWhen": [
+    "Submitting a form or triggering a primary workflow action",
+    "Offering a secondary or tertiary action alongside content",
+    "Destructive actions that need explicit danger styling"
+  ],
+  "doNotUseWhen": [
+    "Navigation that should be a link — use an anchor styled elsewhere",
+    "Icon-only controls without visible text — not supported by this contract",
+    "More than one primary button in the same view"
+  ],
+  "props": {
+    "size": {
+      "type": "enum",
+      "values": ["lg", "md", "sm"],
+      "default": "md"
+    },
+    "variant": {
+      "type": "enum",
+      "values": ["primary", "secondary", "tertiary", "danger"],
+      "default": "primary"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "children": {
+      "type": "string",
+      "required": true
+    },
+    "onClick": {
+      "type": "function",
+      "required": false
+    },
+    "type": {
+      "type": "enum",
+      "values": ["button", "submit", "reset"],
+      "default": "button"
+    }
+  },
+  "tokens": [
+    "text.inverse",
+    "text.primary",
+    "text.secondary",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "action.primary",
+    "action.primaryHover",
+    "action.danger",
+    "action.dangerHover"
+  ],
+  "a11y": {
+    "element": "button",
+    "requirements": [
+      "Visible label via children",
+      "disabled sets aria-disabled and prevents interaction",
+      "Focus ring must be visible on keyboard focus"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Button variants outside the enum",
+    "Do not use raw hex colors in styles",
+    "Do not place more than one variant=primary Button in a single view"
+  ],
+  "snippet": "<Button variant=\"primary\" size=\"md\">Save changes</Button>"
+}

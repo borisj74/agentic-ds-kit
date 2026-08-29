@@ -1,0 +1,12 @@
+.scoreboard {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .scoreboard {
+    flex-direction: column;
+  }
+}

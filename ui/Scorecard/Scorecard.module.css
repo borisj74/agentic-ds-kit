@@ -1,0 +1,44 @@
+.card {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-4);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-lg);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.metric {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.trend {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.trendUp {
+  color: var(--status-success);
+}
+
+.trendDown {
+  color: var(--status-danger);
+}
+
+.trendNeutral {
+  color: var(--text-secondary);
+}
