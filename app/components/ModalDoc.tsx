@@ -1,23 +1,30 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "@/ui/Button";
 import { ButtonGroup } from "@/ui/ButtonGroup";
-import { Dialog } from "@/ui/Dialog";
-import type { DialogSize } from "@/ui/Dialog";
 import { Field } from "@/ui/Field";
 import { Input } from "@/ui/Input";
+import { Modal } from "@/ui/Modal";
+import type { ModalSize } from "@/ui/Modal";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
-const SIZES: DialogSize[] = ["lg", "md"];
+const SIZES: ModalSize[] = ["sm", "md", "lg"];
 const STACK = { display: "grid", gap: "var(--space-4)" } as const;
+const FRAME: CSSProperties = {
+  position: "relative",
+  minHeight: "24rem",
+  width: "100%",
+  overflow: "hidden",
+  borderRadius: "var(--radius-surface-md)",
+};
 
-type VariantKey = "plain" | "footer" | "noclose" | "large" | "scrollable";
+type VariantKey = "footer" | "noclose" | "large" | "scrollable";
 
-function masterCode(size: DialogSize, showDescription: boolean, showClose: boolean) {
+function masterCode(size: ModalSize, showDescription: boolean, showClose: boolean) {
   const lines = [
-    "<Dialog",
+    "<Modal",
     "  open={open}",
     '  title="Edit profile"',
   ];
@@ -29,7 +36,7 @@ function masterCode(size: DialogSize, showDescription: boolean, showClose: boole
   lines.push(
     "  onClose={close}",
     "  footer={",
-    '    <ButtonGroup ariaLabel="Dialog actions">',
+    '    <ButtonGroup ariaLabel="Modal actions">',
     '      <Button variant="secondary" onClick={close}>Cancel</Button>',
     '      <Button variant="primary" onClick={save}>Save</Button>',
     "    </ButtonGroup>",
@@ -41,7 +48,7 @@ function masterCode(size: DialogSize, showDescription: boolean, showClose: boole
     '  <Field label="Email" htmlFor="email">',
     '    <Input id="email" type="email" />',
     "  </Field>",
-    "</Dialog>",
+    "</Modal>",
   );
   return lines.join("\n");
 }
@@ -72,7 +79,7 @@ function StateSwitch({
 
 function Actions({
   onClose,
-  ariaLabel = "Dialog actions",
+  ariaLabel = "Modal actions",
 }: {
   onClose: () => void;
   ariaLabel?: string;
@@ -107,17 +114,16 @@ function ScrollCopy() {
     <div style={STACK}>
       {Array.from({ length: 12 }, (_, index) => (
         <p key={index} style={{ margin: 0 }}>
-          Extra profile notes line {index + 1}. The header and footer stay put while this body
-          scrolls.
+          Extra profile notes line {index + 1}. The body scrolls while the title and footer stay put.
         </p>
       ))}
     </div>
   );
 }
 
-export function DialogDoc() {
+export function ModalDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
-  const [size, setSize] = useState<DialogSize>("md");
+  const [size, setSize] = useState<ModalSize>("md");
   const [showDescription, setShowDescription] = useState(true);
   const [showClose, setShowClose] = useState(true);
   const [open, setOpen] = useState(false);
@@ -131,18 +137,18 @@ export function DialogDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Dialog</h1>
-        <p className={styles.lede}>Dismissible overlay. Not AlertDialog. Not Drawer.</p>
+        <h1 className={styles.heroTitle}>Modal</h1>
+        <p className={styles.lede}>Dismissible overlay. Composes ModalCard. Not AlertDialog. Not Drawer.</p>
       </header>
 
-      <section className={styles.master} aria-labelledby="dialog-master">
+      <section className={styles.master} aria-labelledby="modal-master">
         <div className={styles.masterHeader}>
-          <h2 id="dialog-master" className={styles.masterTitle}>
+          <h2 id="modal-master" className={styles.masterTitle}>
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Open the dialog, then switch size, description, and close. Overlay click and Escape
-            dismiss.
+            Open the modal in the preview frame, then switch size, description, and close. Scrim click
+            and Escape dismiss.
           </p>
           <div className={styles.tabList} role="tablist" aria-label="Master views">
             <button
@@ -176,10 +182,24 @@ export function DialogDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewRow}>
-                  <Button variant="primary" size="md" onClick={() => setOpen(true)}>
-                    Open dialog
-                  </Button>
+                <div style={FRAME}>
+                  <div className={styles.previewRow} style={{ minHeight: "24rem" }}>
+                    <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+                      Open modal
+                    </Button>
+                  </div>
+                  <Modal
+                    contained
+                    open={open}
+                    title="Edit profile"
+                    description={showDescription ? "Make changes to your profile here." : undefined}
+                    size={size}
+                    showClose={showClose}
+                    onClose={close}
+                    footer={<Actions onClose={close} />}
+                  >
+                    <ProfileFields nameId="modal-name" emailId="modal-email" />
+                  </Modal>
                 </div>
               </div>
               <aside className={styles.panel} aria-label="Controls">
@@ -210,78 +230,57 @@ export function DialogDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Dialog for short forms and extra detail that can be dismissed. Use AlertDialog
-                  when they must choose. Use Drawer for an edge panel.
+                  Use Modal for short forms and extra detail that can be dismissed. Use AlertDialog when
+                  they must choose. Use Drawer for an edge panel. Use ModalCard when you need the panel
+                  without an overlay. Product screens omit contained so Modal portals to the page.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, showDescription, showClose)} />
             </div>
-            <Dialog
-              open={open}
-              title="Edit profile"
-              description={showDescription ? "Make changes to your profile here." : undefined}
-              size={size}
-              showClose={showClose}
-              onClose={close}
-              footer={<Actions onClose={close} />}
-            >
-              <ProfileFields nameId="dialog-name" emailId="dialog-email" />
-            </Dialog>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <Variant
-              title="Plain"
-              usage="Title and a short body. No description. Close is on."
-              code={`<Dialog open={open} title="Edit profile" onClose={close}>\n  Make changes to your profile.\n</Dialog>`}
-              onOpen={() => setVariantOpen("plain")}
-            >
-              <Dialog open={variantOpen === "plain"} title="Edit profile" onClose={close}>
-                Make changes to your profile.
-              </Dialog>
-            </Variant>
-
-            <Variant
               title="With footer"
-              usage="Title, description, and footer actions. Overlay click and Escape still close."
-              code={`<Dialog\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Dialog actions">\n      <Button variant="secondary" onClick={close}>Cancel</Button>\n      <Button variant="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Dialog>`}
+              usage="Title, description, and footer actions. Scrim click and Escape still close."
+              code={`<Modal\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button variant="secondary" onClick={close}>Cancel</Button>\n      <Button variant="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("footer")}
             >
-              <Dialog
+              <Modal
                 open={variantOpen === "footer"}
                 title="Edit profile"
                 description="Make changes to your profile here."
                 onClose={close}
                 footer={<Actions onClose={close} />}
               >
-                <ProfileFields nameId="dialog-footer-name" emailId="dialog-footer-email" />
-              </Dialog>
+                <ProfileFields nameId="modal-footer-name" emailId="modal-footer-email" />
+              </Modal>
             </Variant>
 
             <Variant
               title="No close"
-              usage="showClose is false. Footer still has Cancel. Overlay click and Escape still close."
-              code={`<Dialog\n  open={open}\n  title="Edit profile"\n  showClose={false}\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Dialog actions">\n      <Button variant="secondary" onClick={close}>Cancel</Button>\n      <Button variant="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Dialog>`}
+              usage="showClose is false. Footer still has Cancel. Scrim click and Escape still close."
+              code={`<Modal\n  open={open}\n  title="Edit profile"\n  showClose={false}\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button variant="secondary" onClick={close}>Cancel</Button>\n      <Button variant="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("noclose")}
             >
-              <Dialog
+              <Modal
                 open={variantOpen === "noclose"}
                 title="Edit profile"
                 showClose={false}
                 onClose={close}
                 footer={<Actions onClose={close} />}
               >
-                <ProfileFields nameId="dialog-noclose-name" emailId="dialog-noclose-email" />
-              </Dialog>
+                <ProfileFields nameId="modal-noclose-name" emailId="modal-noclose-email" />
+              </Modal>
             </Variant>
 
             <Variant
               title="Large"
               usage="size lg. Use when the body needs more room than md."
-              code={`<Dialog open={open} title="Edit profile" size="lg" onClose={close}>\n  ...\n</Dialog>`}
+              code={`<Modal open={open} title="Edit profile" size="lg" onClose={close}>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("large")}
             >
-              <Dialog
+              <Modal
                 open={variantOpen === "large"}
                 title="Edit profile"
                 description="Make changes to your profile here."
@@ -289,17 +288,17 @@ export function DialogDoc() {
                 onClose={close}
                 footer={<Actions onClose={close} />}
               >
-                <ProfileFields nameId="dialog-lg-name" emailId="dialog-lg-email" />
-              </Dialog>
+                <ProfileFields nameId="modal-lg-name" emailId="modal-lg-email" />
+              </Modal>
             </Variant>
 
             <Variant
               title="Scrollable"
-              usage="Long body. Header and footer stay put. Body scrolls."
-              code={`<Dialog open={open} title="Edit profile" onClose={close} footer={footer}>\n  {longBody}\n</Dialog>`}
+              usage="Long body. Title and footer stay put. Body scrolls inside the panel."
+              code={`<Modal open={open} title="Edit profile" onClose={close} footer={footer}>\n  {longBody}\n</Modal>`}
               onOpen={() => setVariantOpen("scrollable")}
             >
-              <Dialog
+              <Modal
                 open={variantOpen === "scrollable"}
                 title="Edit profile"
                 description="Make changes to your profile here."
@@ -307,7 +306,7 @@ export function DialogDoc() {
                 footer={<Actions onClose={close} />}
               >
                 <ScrollCopy />
-              </Dialog>
+              </Modal>
             </Variant>
           </div>
         )}
@@ -335,7 +334,7 @@ function Variant({
       <div className={styles.exampleCanvas}>
         <div className={styles.previewRow}>
           <Button variant="primary" size="md" onClick={onOpen}>
-            Open dialog
+            Open modal
           </Button>
         </div>
       </div>

@@ -1,14 +1,15 @@
 import type { ReactNode } from "react";
 
-export type DialogSize = "md" | "lg";
+export type ModalSize = "sm" | "md" | "lg";
 
-export interface DialogProps {
+export interface ModalProps {
   open: boolean;
   title: string;
   description?: string;
-  size?: DialogSize;
+  size?: ModalSize;
   showClose?: boolean;
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  contained?: boolean;
 }

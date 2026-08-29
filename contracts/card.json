@@ -10,7 +10,7 @@
   "doNotUseWhen": [
     "Page-level grouping — use Section",
     "One KPI — use Scorecard",
-    "Dialogs — use Dialog or AlertDialog",
+    "Dialogs — use Modal or AlertDialog",
     "Recommended insight — use InsightCard"
   ],
   "props": {

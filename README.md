@@ -22,7 +22,8 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 | Badge | Status/category pill |
 | Tooltip | Hover/focus supplementary text |
 | Tabs | In-page panel switching |
-| Dialog | Dismissible overlay for short tasks |
+| Modal | Dismissible overlay for short tasks. Composes ModalCard |
+| ModalCard | Panel chrome for a modal (title, body, footer) |
 | Drawer | Edge panel for secondary tasks |
 | PageHeader | Page title block |
 | Section | Grouped content block |

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/ui/Button";
-import { Dialog } from "@/ui/Dialog";
+import { Modal } from "@/ui/Modal";
 import { Tabs } from "@/ui/Tabs";
 import { Tooltip } from "@/ui/Tooltip";
 
@@ -38,11 +38,11 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
     return (
       <>
         <Button variant="tertiary" size="sm" onClick={() => setOpen(true)}>
-          Open dialog
+          Open modal
         </Button>
-        <Dialog open={open} title="Confirm export" onClose={() => setOpen(false)}>
+        <Modal open={open} title="Confirm export" onClose={() => setOpen(false)}>
           Your report will be emailed within a few minutes.
-        </Dialog>
+        </Modal>
       </>
     );
   }
@@ -61,11 +61,11 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
         ]}
       />
       <Button variant="tertiary" size="sm" onClick={() => setOpen(true)}>
-        Open dialog
+        Open modal
       </Button>
-      <Dialog open={open} title="Confirm export" onClose={() => setOpen(false)}>
+      <Modal open={open} title="Confirm export" onClose={() => setOpen(false)}>
         Your report will be emailed within a few minutes.
-      </Dialog>
+      </Modal>
     </>
   );
 }

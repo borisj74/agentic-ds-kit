@@ -8,7 +8,7 @@
   ],
   "doNotUseWhen": [
     "Whole page title \u2014 use PageHeader",
-    "Dialog body layout \u2014 keep content minimal inside Dialog",
+    "Modal body layout \u2014 keep content minimal inside Modal",
     "App-wide navigation \u2014 use AppNav",
     "Framed tiles \u2014 use Card"
   ],

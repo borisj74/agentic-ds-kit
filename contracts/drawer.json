@@ -1,7 +1,7 @@
 {
   "id": "drawer",
   "status": "stable",
-  "intent": "Edge panel for secondary tasks that need more room than a Dialog.",
+  "intent": "Edge panel for secondary tasks that need more room than a Modal.",
   "useWhen": [
     "Settings",
     "Filters",
@@ -9,7 +9,7 @@
     "Mobile-style sheet from the bottom"
   ],
   "doNotUseWhen": [
-    "Centered short task \u2014 use Dialog",
+    "Centered short task \u2014 use Modal",
     "Must-choose confirm \u2014 use AlertDialog",
     "Persistent nav \u2014 use AppNav",
     "Full page \u2014 use a route"

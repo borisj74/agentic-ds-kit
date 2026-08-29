@@ -132,7 +132,7 @@ export function DrawerDoc() {
     <div>
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Drawer</h1>
-        <p className={styles.lede}>Edge panel. Not Dialog. Not AlertDialog.</p>
+        <p className={styles.lede}>Edge panel. Not Modal. Not AlertDialog.</p>
       </header>
 
       <section className={styles.master} aria-labelledby="drawer-master">
@@ -210,7 +210,7 @@ export function DrawerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Drawer for settings, filters, or detail alongside the page. Use Dialog for a
+                  Use Drawer for settings, filters, or detail alongside the page. Use Modal for a
                   centered short task. Use AlertDialog when they must choose.
                 </p>
               </div>

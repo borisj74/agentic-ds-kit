@@ -8,7 +8,7 @@
   ],
   "doNotUseWhen": [
     "Inline status on the page \u2014 use Alert",
-    "Dismissible short tasks or forms \u2014 use Dialog",
+    "Dismissible short tasks or forms \u2014 use Modal",
     "Passive help \u2014 use Tooltip"
   ],
   "props": {
@@ -81,7 +81,7 @@
   "doNot": [
     "Do not invent a local confirm dialog or use window.confirm",
     "Do not use raw hex",
-    "Do not put forms, tables, or extra actions in AlertDialog \u2014 use Dialog",
+    "Do not put forms, tables, or extra actions in AlertDialog \u2014 use Modal",
     "Do not add a close X or dismiss on overlay",
     "Do not use more than one primary/danger action (the action button is the one)"
   ],

@@ -9,7 +9,7 @@
   "doNotUseWhen": [
     "Transient confirmations that disappear — not a toast; ask before adding one",
     "Compact status chips — use Badge",
-    "Blocking decisions — use Dialog",
+    "Dismissible overlay — use Modal",
     "Must-choose overlay confirm — use AlertDialog",
     "A dismissible insight tile — use InsightCard"
   ],

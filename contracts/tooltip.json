@@ -8,7 +8,7 @@
   ],
   "doNotUseWhen": [
     "Essential instructions \u2014 put them in visible hint text via Field",
-    "Large content or forms \u2014 use Dialog",
+    "Large content or forms \u2014 use Modal",
     "Navigation \u2014 use AppNav"
   ],
   "props": {

@@ -61,7 +61,7 @@ export function AlertDialogDoc() {
     <div>
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>AlertDialog</h1>
-        <p className={styles.lede}>Must-choose overlay. Not Alert. Not Dialog.</p>
+        <p className={styles.lede}>Must-choose overlay. Not Alert. Not Modal.</p>
       </header>
 
       <section className={styles.master} aria-labelledby="alertdialog-master">
@@ -150,7 +150,7 @@ export function AlertDialogDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Alert for inline status. Use Dialog when they can dismiss. Use AlertDialog when they
+                  Use Alert for inline status. Use Modal when they can dismiss. Use AlertDialog when they
                   must choose. Escape cancels. Overlay does not close.
                 </p>
               </div>

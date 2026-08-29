@@ -19,12 +19,13 @@ const COMPONENT_ITEMS = [
   "command",
   "datatable",
   "datepicker",
-  "dialog",
   "drawer",
   "field",
   "headercell",
   "input",
   "insightcard",
+  "modal",
+  "modalcard",
   "pageheader",
   "radiogroup",
   "scorecard",
@@ -49,6 +50,7 @@ function componentLabel(id: string): string {
   if (id === "headercell") return "HeaderCell";
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
+  if (id === "modalcard") return "ModalCard";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 

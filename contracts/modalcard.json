@@ -1,0 +1,88 @@
+{
+  "id": "modalcard",
+  "status": "stable",
+  "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
+  "useWhen": [
+    "The surface inside a Modal",
+    "Showing modal sizes in the catalog without an overlay"
+  ],
+  "doNotUseWhen": [
+    "Page tile — use Card",
+    "One KPI — use Scorecard",
+    "Recommended insight — use InsightCard",
+    "Overlay behavior — use Modal",
+    "Must-choose confirm — use AlertDialog"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "onClose": {
+      "type": "function",
+      "required": false,
+      "note": "X only when provided"
+    },
+    "children": {
+      "type": "slot",
+      "required": false,
+      "note": "Body"
+    },
+    "footer": {
+      "type": "slot",
+      "required": false,
+      "note": "kit Buttons / ButtonGroup"
+    }
+  },
+  "tokens": [
+    "surface.page",
+    "surface.muted",
+    "shadow.modal",
+    "radius.controlLg",
+    "text.primary",
+    "text.muted",
+    "icon.muted",
+    "icon.primary",
+    "border.focus",
+    "space.inset.md",
+    "space.inset.lg",
+    "space.inset.xl",
+    "space.stack.xs",
+    "space.inline.sm",
+    "type.size.body",
+    "type.size.bodySm",
+    "type.size.heading"
+  ],
+  "a11y": {
+    "element": "group",
+    "requirements": [
+      "role=group when standalone",
+      "When used inside Modal: role=dialog, aria-modal=true, tabIndex=-1",
+      "Title is the accessible name via aria-labelledby",
+      "description is aria-describedby when present",
+      "Close is a button with aria-label Close, only when onClose is set",
+      "Unique ids via useId"
+    ]
+  },
+  "doNot": [
+    "Do not invent local ModalCard, Dialog, or DialogContent",
+    "Do not use raw hex",
+    "Do not use Card, Scorecard, or InsightCard as modal chrome",
+    "Do not add a footer divider",
+    "Footer actions must be kit Buttons / ButtonGroup"
+  ],
+  "snippet": "<ModalCard title=\"Edit profile\" description=\"Make changes to your profile.\" footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button variant=\"secondary\">Cancel</Button><Button variant=\"primary\">Save</Button></ButtonGroup>}>Make changes to your profile here.</ModalCard>"
+}

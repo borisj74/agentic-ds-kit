@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/ui/Button";
 import { Command } from "@/ui/Command";
 import type { CommandGroup } from "@/ui/Command";
-import { Dialog } from "@/ui/Dialog";
+import { Modal } from "@/ui/Modal";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 
@@ -50,9 +50,9 @@ const MASTER_CODE = `<>
   <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
     Open command
   </Button>
-  <Dialog open={open} title="Command menu" onClose={() => setOpen(false)}>
+  <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
     <Command groups={groups} onSelect={() => setOpen(false)} />
-  </Dialog>
+  </Modal>
 </>`;
 
 const INLINE_CODE = `<Command
@@ -127,7 +127,7 @@ export function CommandDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Kit Button opens kit Dialog with Command. ⌘K or Ctrl+K toggles it. No CommandDialog.
+            Kit Button opens kit Modal with Command. ⌘K or Ctrl+K toggles it. No CommandDialog.
           </p>
           <div className={styles.tabList} role="tablist" aria-label="Master views">
             <button
@@ -158,16 +158,16 @@ export function CommandDoc() {
                 <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
                   Open command
                 </Button>
-                <Dialog open={open} title="Command menu" onClose={() => setOpen(false)}>
+                <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
                   <Command groups={MASTER_GROUPS} onSelect={() => setOpen(false)} />
-                </Dialog>
+                </Modal>
               </div>
             </div>
             <div className={styles.docs}>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Command is the list. A kit Button opens it. Kit Dialog is the overlay. Select stays
+                  Command is the list. A kit Button opens it. Kit Modal is the overlay. Select stays
                   the short Field dropdown.
                 </p>
               </div>
@@ -242,19 +242,19 @@ export function CommandDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>In Dialog</h2>
+              <h2 className={styles.exampleTitle}>In Modal</h2>
               <div className={styles.exampleCanvas}>
                 <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
                   Open command
                 </Button>
-                <Dialog open={open} title="Command menu" onClose={() => setOpen(false)}>
+                <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
                   <Command groups={MASTER_GROUPS} onSelect={() => setOpen(false)} />
-                </Dialog>
+                </Modal>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Same as Master. Command does not close itself. The Button and Dialog own that.
+                  Same as Master. Command does not close itself. The Button and Modal own that.
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />

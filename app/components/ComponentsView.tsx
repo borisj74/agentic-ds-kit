@@ -18,7 +18,8 @@ import { CollapsibleDoc } from "./CollapsibleDoc";
 import { CommandDoc } from "./CommandDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
-import { DialogDoc } from "./DialogDoc";
+import { ModalCardDoc } from "./ModalCardDoc";
+import { ModalDoc } from "./ModalDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
@@ -54,7 +55,8 @@ const TITLES: Record<string, string> = {
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
-  dialog: "Dialog",
+  modal: "Modal",
+  modalcard: "ModalCard",
   drawer: "Drawer",
   pageheader: "PageHeader",
   section: "Section",
@@ -81,7 +83,7 @@ export function ComponentsView() {
     };
   }, []);
 
-  const resolved = hash === "modal" ? "dialog" : hash;
+  const resolved = hash === "dialog" ? "modal" : hash;
   const id = resolved in TITLES ? resolved : "button";
   if (id === "badge") return <BadgeDoc />;
   if (id === "breadcrumb") return <BreadcrumbDoc />;
@@ -100,7 +102,8 @@ export function ComponentsView() {
   if (id === "command") return <CommandDoc />;
   if (id === "datatable") return <DataTableDoc />;
   if (id === "datepicker") return <DatePickerDoc />;
-  if (id === "dialog") return <DialogDoc />;
+  if (id === "modal") return <ModalDoc />;
+  if (id === "modalcard") return <ModalCardDoc />;
   if (id === "drawer") return <DrawerDoc />;
   if (id === "headercell") return <HeaderCellDoc />;
   if (id === "input") return <InputDoc />;

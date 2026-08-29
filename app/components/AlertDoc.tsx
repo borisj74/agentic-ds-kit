@@ -93,7 +93,7 @@ export function AlertDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Keep it on the page. Use Badge for a compact chip. Use Dialog when they can dismiss. Use AlertDialog when they must choose.
+                  Keep it on the page. Use Badge for a compact chip. Use Modal when they can dismiss. Use AlertDialog when they must choose.
                 </p>
               </div>
               <CodeBlock

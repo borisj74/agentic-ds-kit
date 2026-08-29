@@ -168,15 +168,22 @@
     "status": "stable"
   },
   {
-    "id": "dialog",
-    "intent": "Dismissible overlay for short tasks, forms, or extra detail. Not a must-choose confirm.",
+    "id": "modal",
+    "intent": "Dismissible overlay for short tasks, forms, or extra detail. Composes ModalCard. Not a must-choose confirm.",
     "group": "component",
-    "path": "contracts/dialog.json",
+    "path": "contracts/modal.json",
+    "status": "stable"
+  },
+  {
+    "id": "modalcard",
+    "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
+    "group": "component",
+    "path": "contracts/modalcard.json",
     "status": "stable"
   },
   {
     "id": "drawer",
-    "intent": "Edge panel for secondary tasks that need more room than a Dialog.",
+    "intent": "Edge panel for secondary tasks that need more room than a Modal.",
     "group": "component",
     "path": "contracts/drawer.json",
     "status": "stable"

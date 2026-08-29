@@ -1,0 +1,48 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: var(--space-inset-lg);
+  animation: overlayEnter var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.contained {
+  position: absolute;
+}
+
+.scrim {
+  grid-area: 1 / 1;
+  justify-self: stretch;
+  align-self: stretch;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: var(--surface-overlay);
+  cursor: pointer;
+}
+
+.scrim:focus-visible {
+  outline: var(--border-focus-width) solid var(--border-focus);
+  outline-offset: -2px;
+}
+
+.root > :not(.scrim) {
+  grid-area: 1 / 1;
+  z-index: var(--z-modal);
+  min-width: 0;
+  max-width: 100%;
+}
+
+@keyframes overlayEnter {
+  from {
+    opacity: var(--opacity-0);
+  }
+  to {
+    opacity: var(--opacity-full);
+  }
+}
