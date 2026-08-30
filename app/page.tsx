@@ -1,95 +1,69 @@
 import { Chat } from "@/ui/Chat";
 import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
+import { SideNav } from "@/ui/SideNav";
+import type { SideNavGroup, SideNavItem } from "@/ui/SideNav";
 import styles from "./playground.module.css";
 
-const metrics = [
+const NAV_GROUPS: SideNavGroup[] = [
   {
-    label: "Active users",
-    value: "12,480",
-    trend: "down" as const,
-    delta: "-18.1%",
-    hint: "vs last week",
+    label: "Workspace",
+    items: [
+      { id: "overview", label: "Overview", href: "/", icon: "House", active: true },
+      { id: "activity", label: "Activity", icon: "ChartBar" },
+      { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
+    ],
   },
   {
-    label: "Conversion",
-    value: "3.6%",
-    trend: "up" as const,
-    delta: "+0.4%",
-    hint: "vs prior period",
+    label: "Sprint 24",
+    items: [
+      {
+        id: "projects",
+        label: "Projects",
+        icon: "Folder",
+        items: [
+          { id: "launch-brief", label: "Launch brief", icon: "File" },
+          { id: "qa-checklist", label: "QA checklist", icon: "CircleCheck" },
+          { id: "release-notes", label: "Release notes", icon: "File" },
+        ],
+      },
+      { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
+      { id: "insights", label: "Insights", icon: "Sparkles" },
+      { id: "resources", label: "Resources", icon: "Layers" },
+    ],
   },
   {
-    label: "Open tasks",
-    value: "18",
-    trend: "down" as const,
-    delta: "-2",
-    hint: "cleared this week",
-  },
-  {
-    label: "Revenue",
-    value: "$48.2k",
-    trend: "up" as const,
-    delta: "+12.4%",
-    hint: "vs last month",
+    label: "Tags",
+    items: [
+      { id: "tag-important", label: "Important", icon: "Star", badge: "3" },
+      { id: "tag-at-risk", label: "At risk", icon: "TriangleAlert", badge: "5" },
+    ],
   },
 ];
 
-const pie = [
-  { label: "Under contract", value: 770 },
-  { label: "Closed", value: 514 },
-  { label: "Under offer", value: 385 },
-  { label: "Off market", value: 385 },
-  { label: "Draft", value: 258 },
-  { label: "Listed", value: 256 },
+const NAV_FOOTER: SideNavItem[] = [
+  { id: "invite", label: "Invite members", icon: "CirclePlus" },
+  { id: "settings", label: "Settings", icon: "Settings" },
 ];
-
-const bar = [
-  { label: "North", value: 2500 },
-  { label: "South", value: 2600 },
-  { label: "East", value: 1800 },
-  { label: "West", value: 2100 },
-];
-
-const line = [
-  { label: "Mon", value: 1240 },
-  { label: "Tue", value: 1380 },
-  { label: "Wed", value: 1290 },
-  { label: "Thu", value: 1520 },
-  { label: "Fri", value: 1680 },
-  { label: "Sat", value: 1410 },
-  { label: "Sun", value: 1320 },
-];
-
-const table = {
-  caption: "Sprint backlog",
-  columns: [
-    { key: "task", header: "Task" },
-    { key: "owner", header: "Owner" },
-    { key: "status", header: "Status" },
-  ],
-  rows: [
-    { task: "Launch brief", owner: "Maya Chen", status: "In review" },
-    { task: "QA checklist", owner: "Unassigned", status: "Blocked" },
-    { task: "Release notes", owner: "Jordan Lee", status: "Ready" },
-    { task: "Support macros", owner: "Alex Rivera", status: "In progress" },
-  ],
-};
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <div className={styles.opsShell}>
         <div className={styles.ops}>
-          <DashboardPattern metrics={metrics} table={table} pie={pie} bar={bar} line={line} />
+          <SideNav title="Operations" mark="O" groups={NAV_GROUPS} footer={NAV_FOOTER} />
+          <DashboardPattern />
           <aside className={styles.rail}>
             <Chat
               title="Workspace assistant"
               status="Ready"
               placeholder="Message the assistant..."
+              menuItems={[{ label: "Refresh" }]}
               suggestions={["Assign Final QA", "Draft sprint update"]}
               messages={[
                 {
                   role: "assistant",
-                  content: "I can summarize open work, draft updates, or assign owners from this sprint.",
+                  content:
+                    "I can summarize open work, draft updates, or assign owners from this sprint.",
                   timestamp: "Just now",
                 },
                 {

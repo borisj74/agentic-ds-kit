@@ -1,34 +1,61 @@
-import { BarChart } from "@/ui/BarChart";
 import { Button } from "@/ui/Button";
+import { DataTable } from "@/ui/DataTable";
+import type { DataTableColumn, DataTableRow } from "@/ui/DataTable";
 import { LineChart } from "@/ui/LineChart";
 import { PageHeader } from "@/ui/PageHeader";
-import { PieChart } from "@/ui/PieChart";
-import { Scoreboard } from "@/ui/Scoreboard";
 import { Section } from "@/ui/Section";
-import { Table } from "@/ui/Table";
 import type { ChartDatum } from "@/ui/shared/chartMath";
-import type { ScorecardProps } from "@/ui/Scorecard";
-import type { TableColumn } from "@/ui/Table";
 import styles from "./patterns.module.css";
 
-export interface DashboardPatternProps {
-  metrics: ScorecardProps[];
-  table: {
-    columns: TableColumn[];
-    rows: Record<string, string>[];
-    caption?: string;
-  };
-  pie?: ChartDatum[];
-  bar?: ChartDatum[];
-  line?: ChartDatum[];
-}
+const WEEKLY_USERS: ChartDatum[] = [
+  { label: "Mon", value: 1280 },
+  { label: "Tue", value: 1410 },
+  { label: "Wed", value: 1320 },
+  { label: "Thu", value: 1480 },
+  { label: "Fri", value: 1360 },
+  { label: "Sat", value: 1440 },
+  { label: "Sun", value: 1390 },
+];
 
-export function DashboardPattern({ metrics, table, pie, bar, line }: DashboardPatternProps) {
+const TASK_COLUMNS: DataTableColumn[] = [
+  { key: "task", header: "Task" },
+  { key: "owner", header: "Owner" },
+  { key: "status", header: "Status" },
+];
+
+const TASK_ROWS: DataTableRow[] = [
+  {
+    id: "launch-brief",
+    task: "Launch brief",
+    owner: "Maya Chen",
+    status: { type: "badge", label: "In review", tone: "warning" },
+  },
+  {
+    id: "qa-checklist",
+    task: "QA checklist",
+    owner: "Unassigned",
+    status: { type: "badge", label: "Blocked", tone: "danger" },
+  },
+  {
+    id: "release-notes",
+    task: "Release notes",
+    owner: "Jordan Lee",
+    status: { type: "badge", label: "Ready", tone: "success" },
+  },
+  {
+    id: "support-macros",
+    task: "Support macros",
+    owner: "Alex Rivera",
+    status: { type: "badge", label: "In progress", tone: "info" },
+  },
+];
+
+export function DashboardPattern() {
   return (
     <div className={styles.pattern}>
       <PageHeader
-        title="Insights"
-        subtitle="Product health for the current sprint"
+        title="Overview"
+        subtitle="Product health for the current sprint."
         actions={
           <>
             <Button variant="secondary" size="md">
@@ -40,24 +67,21 @@ export function DashboardPattern({ metrics, table, pie, bar, line }: DashboardPa
           </>
         }
       />
-      <Scoreboard items={metrics} aria-label="Sprint health" />
-      {pie ? (
-        <PieChart title="Properties by status" data={pie} />
-      ) : null}
-      {bar ? <BarChart title="Revenue by region" data={bar} /> : null}
-      {line ? (
-        <LineChart title="Weekly active users" data={line} variant="area" />
-      ) : null}
-      <Section
-        title="Open tasks"
-        description="Items that need attention"
-        actions={
-          <Button variant="secondary" size="sm">
-            View all
-          </Button>
-        }
-      >
-        <Table columns={table.columns} rows={table.rows} caption={table.caption} />
+      <LineChart data={WEEKLY_USERS} variant="line" showTable={false} />
+      <Section title="Open tasks" description="4 items need attention" collapsible={false}>
+        <DataTable
+          caption="Sprint backlog"
+          selectable
+          toolbar
+          searchPlaceholder="Search tasks..."
+          filters={[
+            { key: "status", label: "Status" },
+            { key: "owner", label: "Owner" },
+          ]}
+          columnSettings
+          columns={TASK_COLUMNS}
+          rows={TASK_ROWS}
+        />
       </Section>
     </div>
   );

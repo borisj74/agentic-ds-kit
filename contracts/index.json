@@ -407,7 +407,7 @@
   },
   {
     "id": "dashboard",
-    "intent": "Dashboard blueprint: PageHeader, Scoreboard, charts, Section, Table, Buttons.",
+    "intent": "Dashboard blueprint: PageHeader, LineChart, Section, DataTable, Buttons.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable"

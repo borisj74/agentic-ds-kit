@@ -95,6 +95,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       const frag = fragment.toLowerCase();
       if (!h && path === "/foundations" && frag === "color") return true;
       if (!h && path === "/components" && frag === "button") return true;
+      if (!h && path === "/patterns" && frag === "dashboard") return true;
       return h === frag;
     }
     return !h;
@@ -147,11 +148,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Patterns",
-      items: [
-        leaf("/patterns#dashboard", "dashboard"),
-        leaf("/patterns#settings-form", "settings-form"),
-        leaf("/patterns#list-detail", "list-detail"),
-      ],
+      items: [leaf("/patterns#dashboard", "dashboard")],
     },
   ];
 }

@@ -1,13 +1,12 @@
 {
   "id": "dashboard",
   "status": "stable",
-  "intent": "Product dashboard blueprint: page title, KPI strip, charts, activity table, and actions.",
-  "contains": ["pageheader", "scoreboard", "section", "table", "button", "piechart", "barchart", "linechart"],
+  "intent": "Overview dashboard: page title, line chart, searchable task table, and actions.",
+  "contains": ["pageheader", "linechart", "section", "datatable", "button"],
   "doNot": [
     "Do not restyle kit components inside the pattern",
-    "Do not add one-off metric rows — use Scoreboard",
     "Do not define a local dashboard layout component",
-    "Do not fake Scoreboard with bordered flex children"
+    "Do not invent a local table, filter bar, or chart wrapper"
   ],
-  "snippet": "<DashboardPattern metrics={...} table={...} onExport={...} />"
+  "snippet": "<DashboardPattern />"
 }
