@@ -3,6 +3,16 @@
   margin-bottom: var(--space-8);
 }
 
+.heroKicker {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-overline);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 .heroTitle {
   margin: 0;
   font-family: var(--font-sans);
@@ -328,3 +338,4 @@
     margin: var(--space-3);
   }
 }
+

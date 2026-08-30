@@ -1,7 +1,7 @@
 {
   "id": "drawer",
   "status": "stable",
-  "intent": "Edge panel for secondary tasks that need more room than a Modal.",
+  "intent": "Edge panel for secondary tasks. Bottom is a floating sheet.",
   "useWhen": [
     "Settings",
     "Filters",
@@ -36,7 +36,8 @@
         "bottom",
         "top"
       ],
-      "default": "right"
+      "default": "right",
+      "note": "bottom is a centered floating sheet with radius-surface-lg, not a flush full-bleed bar."
     },
     "showClose": {
       "type": "boolean",
@@ -54,7 +55,7 @@
     "footer": {
       "type": "slot",
       "required": false,
-      "note": "kit Buttons / ButtonGroup"
+      "note": "kit Buttons. Bottom stacks them full width. Use shape=pill and block."
     }
   },
   "tokens": [
@@ -67,7 +68,9 @@
     "shadow.md",
     "motion.overlay",
     "motion.modal",
-    "icon.muted"
+    "icon.muted",
+    "radius.surfaceLg",
+    "surface.card"
   ],
   "a11y": {
     "element": "dialog",
@@ -86,5 +89,5 @@
     "Do not add snap points or swipe",
     "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Overlay click and Escape still close."
   ],
-  "snippet": "<Drawer open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" side=\"right\" onClose={close} footer={<ButtonGroup ariaLabel=\"Drawer actions\"><Button variant=\"secondary\" onClick={close}>Cancel</Button><Button variant=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Drawer>"
+  "snippet": "<Drawer open={open} title=\"Pick a delivery time\" description=\"We'll prepare your order as soon as possible.\" side=\"bottom\" showClose={false} onClose={close} footer={<><Button variant=\"primary\" size=\"lg\" shape=\"pill\" block>Confirm Delivery Time</Button><Button variant=\"secondary\" size=\"lg\" shape=\"pill\" block onClick={close}>Cancel</Button></>}><RadioGroup name=\"delivery-time\" legend=\"Delivery time\" hideLegend layout=\"card\" defaultValue=\"standard\" options={slots} /></Drawer>"
 }

@@ -169,11 +169,11 @@
   border: 0;
   border-radius: var(--radius-control-md);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: var(--type-size-label);
-  font-weight: var(--type-weight-label);
-  line-height: 1.25;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
   text-align: start;
   text-decoration: none;
   cursor: pointer;

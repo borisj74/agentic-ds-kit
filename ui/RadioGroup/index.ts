@@ -4,4 +4,5 @@ export type {
   RadioGroupOption,
   RadioGroupOrientation,
   RadioGroupSize,
+  RadioGroupLayout,
 } from "./RadioGroup.types";

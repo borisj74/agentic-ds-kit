@@ -2,7 +2,7 @@ import type { ButtonProps } from "./Button.types";
 import { LucideByName } from "./lucideName";
 import styles from "./Button.module.css";
 
-export type { ButtonProps, ButtonSize, ButtonVariant, ButtonType } from "./Button.types";
+export type { ButtonProps, ButtonSize, ButtonVariant, ButtonType, ButtonShape } from "./Button.types";
 
 const ICON_SIZE = { sm: 14, md: 16, lg: 18 } as const;
 
@@ -10,6 +10,8 @@ export function Button({
   children,
   size = "md",
   variant = "primary",
+  shape = "default",
+  block = false,
   disabled = false,
   type = "button",
   onClick,
@@ -28,7 +30,16 @@ export function Button({
       aria-disabled={disabled || undefined}
       aria-label={iconOnly ? ariaLabel : undefined}
       onClick={onClick}
-      className={`${styles.button} ${styles[size]} ${styles[variant]}${iconOnly ? ` ${styles.iconOnly}` : ""}`}
+      className={[
+        styles.button,
+        styles[size],
+        styles[variant],
+        shape === "pill" ? styles.pill : "",
+        block ? styles.block : "",
+        iconOnly ? styles.iconOnly : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <LucideByName name={iconStart} size={iconPx} className={styles.icon} />
       {hasLabel ? <span>{children}</span> : null}

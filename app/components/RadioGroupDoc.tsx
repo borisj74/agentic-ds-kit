@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: RadioGroupSize[] = ["lg", "md", "sm"];
+const SIZES: RadioGroupSize[] = ["sm", "md", "lg"];
 const PLAN = [
   { value: "starter", label: "Starter" },
   { value: "pro", label: "Studio Pro" },

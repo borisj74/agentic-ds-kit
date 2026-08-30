@@ -91,3 +91,11 @@
 .iconOnly.sm {
   padding: var(--space-2);
 }
+
+.pill {
+  border-radius: var(--radius-pill);
+}
+
+.block {
+  width: 100%;
+}

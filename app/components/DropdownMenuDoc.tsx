@@ -76,7 +76,7 @@ const DESTRUCTIVE_GROUPS: DropdownMenuGroup[] = [
   },
 ];
 
-const SIZES: ButtonSize[] = ["lg", "md", "sm"];
+const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 
 const MASTER_CODE = `<DropdownMenu
   trigger="Open"

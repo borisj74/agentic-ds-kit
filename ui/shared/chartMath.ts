@@ -181,6 +181,10 @@ export function polarToCartesian(cx: number, cy: number, radius: number, angle: 
   };
 }
 
+export function pointOnCircle(cx: number, cy: number, radius: number, angle: number) {
+  return polarToCartesian(cx, cy, radius, angle);
+}
+
 export function wedgePath(options: {
   cx: number;
   cy: number;

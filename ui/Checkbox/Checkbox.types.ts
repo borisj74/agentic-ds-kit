@@ -1,4 +1,4 @@
-export type CheckboxSize = "lg" | "md" | "sm";
+export type CheckboxSize = "sm" | "md" | "lg";
 
 export interface CheckboxProps {
   id: string;

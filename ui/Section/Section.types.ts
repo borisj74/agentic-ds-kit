@@ -8,4 +8,8 @@ export interface SectionProps {
   size?: SectionSize;
   actions?: ReactNode;
   children: ReactNode;
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }

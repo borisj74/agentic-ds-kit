@@ -1,4 +1,4 @@
-export type SelectSize = "md" | "sm";
+export type SelectSize = "sm" | "md";
 export type SelectItemCheck = "check" | "checkbox";
 
 export interface SelectOption {

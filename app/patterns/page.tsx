@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { ChatPattern, type ChatPatternMessage } from "@/ui/patterns/ChatPattern";
 import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
 import { ListDetailPattern } from "@/ui/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "@/ui/patterns/SettingsFormPattern";
@@ -27,23 +25,6 @@ const dashboardTable = {
 };
 
 export default function PatternsPage() {
-  const [messages, setMessages] = useState<ChatPatternMessage[]>([
-    { role: "assistant", content: "Hi — ask for a task, summary, or draft." },
-  ]);
-  const [thinking, setThinking] = useState(false);
-
-  function handleSend(message: string) {
-    setMessages((current) => [...current, { role: "user", content: message }]);
-    setThinking(true);
-    window.setTimeout(() => {
-      setMessages((current) => [
-        ...current,
-        { role: "assistant", content: `Got it — “${message}”. Here is a short placeholder reply.` },
-      ]);
-      setThinking(false);
-    }, 1200);
-  }
-
   return (
     <div className={playground.page}>
       <div className={playground.wideShell}>
@@ -51,25 +32,6 @@ export default function PatternsPage() {
         <p className={playground.pageLead}>
           Blueprint compositions that only import kit components. Use these before inventing layouts.
         </p>
-
-        <div id="chat" className={styles.anchor}>
-          <Section title="chat" description="Assistant shell with messages, suggestions, composer, and thinking state">
-            <div className={styles.preview}>
-              <ChatPattern
-                title="Workspace assistant"
-                status={thinking ? "Thinking" : "Ready"}
-                messages={messages}
-                suggestions={thinking ? [] : ["Create a task", "Draft an update"]}
-                isThinking={thinking}
-                disabled={thinking}
-                menuItems={[
-                  { id: "reset", label: "Reset example", onSelect: () => setMessages([{ role: "assistant", content: "Hi — ask for a task, summary, or draft." }]) },
-                ]}
-                onSend={handleSend}
-              />
-            </div>
-          </Section>
-        </div>
 
         <div id="dashboard" className={styles.anchor}>
           <Section title="dashboard" description="PageHeader + Scoreboard + Section + Table + Buttons">

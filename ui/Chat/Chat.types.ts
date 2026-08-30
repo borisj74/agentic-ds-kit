@@ -1,23 +1,23 @@
 export type ChatMessageRole = "user" | "assistant";
 
-export interface ChatPatternMessage {
+export interface ChatMessage {
   id?: string;
   role: ChatMessageRole;
   content: string;
   timestamp?: string;
 }
 
-export interface ChatPatternMenuItem {
+export interface ChatMenuItem {
   id?: string;
   label: string;
   tone?: "default" | "danger";
   onSelect?: () => void;
 }
 
-export interface ChatPatternProps {
+export interface ChatProps {
   title?: string;
   status?: string;
-  messages?: ChatPatternMessage[];
+  messages?: ChatMessage[];
   suggestions?: string[];
   placeholder?: string;
   emptyState?: string;
@@ -29,7 +29,7 @@ export interface ChatPatternProps {
   onSend?: (message: string) => void;
   onClose?: () => void;
   closeLabel?: string;
-  menuItems?: ChatPatternMenuItem[];
+  menuItems?: ChatMenuItem[];
   menuLabel?: string;
   className?: string;
 }

@@ -161,6 +161,20 @@
     "status": "stable"
   },
   {
+    "id": "carousel",
+    "intent": "Paged track of slides with prev/next kit Buttons. One piece.",
+    "group": "component",
+    "path": "contracts/carousel.json",
+    "status": "stable"
+  },
+  {
+    "id": "chat",
+    "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
+    "group": "component",
+    "path": "contracts/chat.json",
+    "status": "stable"
+  },
+  {
     "id": "radiogroup",
     "intent": "Choose exactly one option from a small visible radio set.",
     "group": "component",
@@ -260,7 +274,7 @@
   },
   {
     "id": "pageheader",
-    "intent": "Top-of-page title block with optional actions.",
+    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
     "group": "component",
     "path": "contracts/pageheader.json",
     "status": "stable"
@@ -281,7 +295,7 @@
   },
   {
     "id": "progress",
-    "intent": "Task completion as a bar from 0 to 100. Optional label and percent.",
+    "intent": "Task completion as a bar or circle from 0 to 100. Optional label and percent.",
     "group": "component",
     "path": "contracts/progress.json",
     "status": "stable"
@@ -309,7 +323,7 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for text rows — not a data grid.",
+    "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable"
@@ -330,7 +344,7 @@
   },
   {
     "id": "toast",
-    "intent": "Short non-blocking feedback after an action or background event.",
+    "intent": "Floating notice after an action. Status colors the icon only. Title + optional description + dismiss.",
     "group": "component",
     "path": "contracts/toast.json",
     "status": "stable"
@@ -368,13 +382,6 @@
     "intent": "Overlapping row of kit Avatars with an optional leftover count.",
     "group": "component",
     "path": "contracts/avatargroup.json",
-    "status": "stable"
-  },
-  {
-    "id": "chat",
-    "intent": "Assistant workspace with messages, suggestions, composer, and thinking state.",
-    "group": "pattern",
-    "path": "contracts/patterns/chat.json",
     "status": "stable"
   },
   {

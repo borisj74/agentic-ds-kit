@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: CalendarSize[] = ["lg", "md", "sm"];
+const SIZES: CalendarSize[] = ["sm", "md", "lg"];
 const SNIPPET = `<Calendar size="md" defaultValue="2026-08-29" onValueChange={(date) => setDate(date)} />`;
 const MASTER_DEFAULT = "2026-08-29";
 

@@ -1,0 +1,19 @@
+.frame {
+  width: min(24rem, 100%);
+  min-block-size: 32rem;
+  block-size: 32rem;
+}
+
+.exampleFrame {
+  width: min(24rem, 100%);
+  min-block-size: 28rem;
+  block-size: 28rem;
+}
+
+.canvas {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: 32rem;
+  width: 100%;
+}

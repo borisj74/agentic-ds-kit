@@ -117,8 +117,9 @@ export function BreadcrumbDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Breadcrumb for the path to this page. PageHeader for the title block. AppNav for the
-                  sidebar. Last crumb is the current page and is not a link.
+                  Breadcrumb for the path to this page. PageHeader composes Breadcrumb when the page
+                  also needs a title. AppNav for the sidebar. Last crumb is the current page and is
+                  not a link.
                 </p>
               </div>
               <CodeBlock code={masterCode(separator, collapsed)} />
@@ -191,22 +192,26 @@ export function BreadcrumbDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>With PageHeader</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewStack}>
-                  <Breadcrumb items={BASIC_ITEMS} />
-                  <PageHeader title="Breadcrumb" subtitle="Path to this page" />
+                <div className={styles.previewFill}>
+                  <PageHeader
+                    title="Breadcrumb"
+                    subtitle="Path to this page"
+                    breadcrumbs={BASIC_ITEMS}
+                  />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Sit Breadcrumb above PageHeader. Do not bake crumbs into the title block.
+                  PageHeader composes Breadcrumb when the page also needs a title.
                 </p>
               </div>
               <CodeBlock
-                code={`<>
-  <Breadcrumb items={[{ label: "Home", href: "#" }, { label: "Components", href: "#" }, { label: "Breadcrumb" }]} />
-  <PageHeader title="Breadcrumb" subtitle="Path to this page" />
-</>`}
+                code={`<PageHeader
+  title="Breadcrumb"
+  subtitle="Path to this page"
+  breadcrumbs={[{ label: "Home", href: "#" }, { label: "Components", href: "#" }, { label: "Breadcrumb" }]}
+/>`}
               />
             </section>
           </div>

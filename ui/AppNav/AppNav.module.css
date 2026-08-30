@@ -118,11 +118,12 @@
 }
 
 .subgroupLabel {
-  padding: var(--space-1) var(--space-3);
+  padding: var(--space-2) var(--space-3);
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: var(--type-weight-label);
-  color: var(--text-muted);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
 }
 
 .subList {
@@ -139,8 +140,9 @@
   padding: var(--space-2) var(--space-3);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  color: var(--text-secondary);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
   text-decoration: none;
   border-radius: var(--radius-control-md);
   transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease;
@@ -148,7 +150,6 @@
 
 .linkNested {
   padding-left: var(--space-4);
-  font-size: 0.8125rem;
 }
 
 .link:hover {

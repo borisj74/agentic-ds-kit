@@ -1,23 +1,26 @@
 {
   "id": "scoreboard",
   "status": "stable",
-  "intent": "Lay out a horizontal row of kit Scorecards for a dashboard metrics strip.",
+  "intent": "Metrics strip of kit Scorecards. Two to four fill the row. More than four compose Carousel.",
   "useWhen": [
     "Showing two or more KPIs side by side at the top of a dashboard",
     "Replacing ad-hoc flex rows of metric boxes"
   ],
   "doNotUseWhen": [
-    "A single KPI — render Scorecard directly",
-    "Vertical stacks of metrics — not supported by this contract",
-    "Metrics that need dividers, borders between cards, or custom card padding"
+    "A single KPI \u2014 render Scorecard directly",
+    "Vertical stacks of metrics \u2014 not supported by this contract"
   ],
-  "contains": ["scorecard"],
+  "contains": [
+    "scorecard",
+    "carousel"
+  ],
   "props": {
     "items": {
       "type": "array",
       "itemContract": "scorecard",
       "required": true,
-      "minItems": 1
+      "minItems": 2,
+      "note": "2\u20134 fill equal columns. More than 4 pages four-up in kit Carousel."
     }
   },
   "tokens": [
@@ -33,10 +36,11 @@
     ]
   },
   "doNot": [
-    "Do not define a local Scoreboard component",
+    "Do not invent a local Scoreboard",
     "Do not fake dividers with CSS borders between items",
     "Do not restyle Scorecard padding or borders inside Scoreboard",
-    "Do not inline Scorecard markup — import from ui/Scorecard"
+    "Do not inline Scorecard markup \u2014 import from ui/Scorecard",
+    "More than four items \u2014 Scoreboard composes kit Carousel, do not invent a local scroller"
   ],
-  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }]} />"
+  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }, { label: 'Users', value: '12.4k', delta: '+4.1%', trend: 'up' }, { label: 'NPS', value: '64', delta: '+2', trend: 'up' }]} />"
 }

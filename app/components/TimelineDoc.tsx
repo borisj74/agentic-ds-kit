@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Timeline } from "@/ui/Timeline";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
 
 const ITEMS = [
   { status: "now" as const, phase: "Now", title: "Ship beta", body: "Final QA and release notes this week." },
@@ -11,50 +12,75 @@ const ITEMS = [
   { status: "later" as const, phase: "Later", title: "Public launch", body: "Marketing site and pricing go live." },
 ];
 
+const MASTER_CODE = `<Timeline
+  label="Release plan"
+  items={[
+    { status: "now", phase: "Now", title: "Ship beta", body: "Final QA this week" },
+    { status: "next", phase: "Next", title: "Onboard partners" },
+    { status: "later", phase: "Later", title: "Public launch" },
+  ]}
+/>`;
+
 export function TimelineDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
 
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Timelines</h1>
-        <p className={styles.lede}>A vertical sequence of now, next, and later — for roadmaps and multi-stage work.</p>
+        <h1 className={styles.heroTitle}>Timeline</h1>
+        <p className={styles.lede}>
+          A vertical sequence of now, next, and later — for roadmaps and multi-stage work. One
+          piece. Not a Stepper cousin.
+        </p>
       </header>
-      <section className={styles.master}>
+
+      <section className={styles.master} aria-labelledby="timeline-master">
         <div className={styles.masterHeader}>
-          <h2 className={styles.masterTitle}>Master</h2>
-          <p className={styles.masterSummary}>Filled node is current. Hollow is next. Muted is later.</p>
-          <div className={styles.tabList} role="tablist" aria-label="Master views">
-            <button type="button" role="tab" aria-selected={tab === "preview"} className={`${styles.tab} ${tab === "preview" ? styles.tabActive : ""}`} onClick={() => setTab("preview")}>Preview</button>
-            <button type="button" role="tab" aria-selected={tab === "variants"} className={`${styles.tab} ${tab === "variants" ? styles.tabActive : ""}`} onClick={() => setTab("variants")}>Variants</button>
-          </div>
+          <h2 id="timeline-master" className={styles.masterTitle}>
+            Master
+          </h2>
+          <p className={styles.masterSummary}>
+            Filled node is current. Hollow is next. Muted is later.
+          </p>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
+
         {tab === "preview" ? (
-          <div role="tabpanel">
+          <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewFill}><Timeline items={ITEMS} label="Release plan" /></div>
+                <div className={styles.previewFill}>
+                  <Timeline items={ITEMS} label="Release plan" />
+                </div>
               </div>
             </div>
             <div className={styles.docs}>
-              <CodeBlock
-                code={`<Timeline
-  items={[
-    { status: "now", title: "Ship beta", body: "Final QA this week" },
-    { status: "next", title: "Onboard partners" },
-    { status: "later", title: "Public launch" },
-  ]}
-/>`}
-              />
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Use Timeline for now, next, and later. Filled node is current. Hollow is next.
+                  Muted is later.
+                </p>
+              </div>
+              <CodeBlock code={MASTER_CODE} />
             </div>
           </div>
         ) : (
-          <div className={styles.variants} role="tabpanel">
+          <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Single step</h2>
               <div className={styles.exampleCanvas}>
                 <Timeline items={[{ status: "now", title: "Current milestone", body: "Only one active step." }]} />
               </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  A single now step is valid. Do not invent a Stepper cousin.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Timeline items={[{ status: "now", title: "Current milestone", body: "Only one active step." }]} />'}
+              />
             </section>
           </div>
         )}

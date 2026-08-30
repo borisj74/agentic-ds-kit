@@ -1,0 +1,32 @@
+.previewPad {
+  width: 100%;
+  max-width: min(36rem, 100%);
+  min-width: 0;
+  padding-inline: var(--space-12);
+  padding-block: var(--space-4);
+}
+
+.previewPadVertical {
+  max-width: min(20rem, 100%);
+  padding-inline: var(--space-6);
+  padding-block: var(--space-12);
+}
+
+.previewPadWide {
+  max-width: min(40rem, 100%);
+}
+
+.panel {
+  display: grid;
+  place-items: center;
+  min-block-size: 10rem;
+  height: 100%;
+  background-color: var(--surface-card);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-display);
+  font-weight: var(--type-weight-title);
+  line-height: var(--type-line-heading);
+}

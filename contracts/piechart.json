@@ -24,6 +24,11 @@
       "values": ["donut", "pie"],
       "default": "donut"
     },
+    "layout": {
+      "type": "enum",
+      "values": ["split", "stack"],
+      "default": "split"
+    },
     "showCenterTotal": { "type": "boolean", "default": true },
     "showTable": { "type": "boolean", "default": true },
     "sort": { "type": "boolean", "default": true },
@@ -41,13 +46,16 @@
     "fill.danger",
     "fill.info",
     "border.faint",
-    "shadow.sm"
+    "radius.surface",
+    "shadow.md",
+    "focus-ring"
   ],
   "a11y": {
     "element": "figure",
     "requirements": [
       "Title exposed on the figure when provided",
-      "Segments have accessible names with values",
+      "Slices expose name, value, and percent on the hit target",
+      "Legend highlight matches slice hover; tooltip is supplementary",
       "Table toggle keeps values readable in table view"
     ]
   },

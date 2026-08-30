@@ -1,16 +1,20 @@
 {
   "id": "pageheader",
   "status": "stable",
-  "intent": "Top-of-page title block with optional eyebrow, subtitle, and action slot.",
+  "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
   "useWhen": [
-    "Every playground screen and product page needs a clear heading hierarchy",
+    "Product page title with optional Breadcrumb trail and actions",
     "Placing primary/secondary Buttons aligned to the page title"
   ],
   "doNotUseWhen": [
-    "In-card section titles \u2014 use Section",
-    "Sidebar branding \u2014 use AppNav title",
-    "Modal titles \u2014 use Modal title prop",
-    "Path to this page \u2014 use Breadcrumb"
+    "In-card titles — use Section",
+    "Sidebar — use AppNav or SideNav",
+    "Modal titles — use ModalCard",
+    "Path-only without a page title — use Breadcrumb"
+  ],
+  "contains": [
+    "breadcrumb",
+    "button"
   ],
   "props": {
     "title": {
@@ -23,33 +27,69 @@
     },
     "eyebrow": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "Kept for existing call sites. Breadcrumbs replace eyebrow as the default where-am-I."
     },
     "actions": {
       "type": "slot",
       "allowedContracts": [
         "button"
       ],
-      "required": false
+      "required": false,
+      "note": "kit Buttons. At most one primary."
+    },
+    "breadcrumbs": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "href": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb."
+    },
+    "breadcrumbSeparator": {
+      "type": "enum",
+      "values": [
+        "chevron",
+        "slash"
+      ],
+      "default": "chevron",
+      "note": "Passed through to kit Breadcrumb separator."
+    },
+    "breadcrumbMaxItems": {
+      "type": "number",
+      "required": false,
+      "note": "Passed through to kit Breadcrumb maxItems."
     }
   },
   "tokens": [
     "text.primary",
     "text.secondary",
     "type.size.title",
-    "type.size.body"
+    "type.size.body",
+    "space.3",
+    "space.4"
   ],
   "a11y": {
     "element": "header",
     "requirements": [
       "Page title is h1",
+      "Composed Breadcrumb keeps nav aria-label=Breadcrumb",
       "Actions remain keyboard accessible"
     ]
   },
   "doNot": [
     "Do not invent local PageHeader",
+    "Do not invent BreadcrumbItem or BreadcrumbLink cousins — compose kit Breadcrumb",
+    "Do not restyle Breadcrumb internals from PageHeader",
     "Do not use raw hex",
     "Do not put more than one primary Button in actions"
   ],
-  "snippet": "<PageHeader title=\"Settings\" subtitle=\"Manage your account\" eyebrow=\"Studio\" />"
+  "snippet": "<PageHeader title=\"Aurora\" subtitle=\"Campaign settings and collaborators.\" breadcrumbs={[{ label: \"Home\", href: \"#\" }, { label: \"Projects\", href: \"#\" }, { label: \"Aurora\" }]} actions={<><Button variant=\"secondary\">Edit</Button><Button>Save</Button></>} />"
 }

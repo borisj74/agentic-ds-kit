@@ -8,13 +8,14 @@ const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
-  "barchart",
   "breadcrumb",
   "button",
   "buttongroup",
   "calendar",
   "card",
+  "carousel",
   "cell",
+  "chat",
   "checkbox",
   "collapsible",
   "command",
@@ -28,7 +29,6 @@ const COMPONENT_ITEMS = [
   "input",
   "inputotp",
   "insightcard",
-  "linechart",
   "loadinganimation",
   "modal",
   "modalcard",
@@ -36,7 +36,6 @@ const COMPONENT_ITEMS = [
   "numbertransition",
   "pageheader",
   "pagination",
-  "piechart",
   "progress",
   "radiogroup",
   "scorecard",
@@ -75,9 +74,6 @@ function componentLabel(id: string): string {
   if (id === "inputotp") return "InputOTP";
   if (id === "dropdownmenu") return "DropdownMenu";
   if (id === "fieldset") return "FieldSet";
-  if (id === "piechart") return "PieChart";
-  if (id === "barchart") return "BarChart";
-  if (id === "linechart") return "LineChart";
   if (id === "loadinganimation") return "LoadingAnimation";
   if (id === "numbertransition") return "NumberTransition";
   if (id === "shimmertext") return "ShimmerText";
@@ -129,12 +125,26 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Components",
-      items: COMPONENT_ITEMS.map((id) => leaf(`/components#${id}`, componentLabel(id))),
+      items: COMPONENT_ITEMS.flatMap((id) => {
+        const item = leaf(`/components#${id}`, componentLabel(id));
+        if (id !== "cell") return [item];
+        return [
+          item,
+          {
+            href: "/components#chart",
+            label: "Chart",
+            items: [
+              leaf("/components#barchart", "Bar"),
+              leaf("/components#linechart", "Line"),
+              leaf("/components#piechart", "Pie"),
+            ],
+          },
+        ];
+      }),
     },
     {
       label: "Patterns",
       items: [
-        leaf("/patterns#chat", "chat"),
         leaf("/patterns#dashboard", "dashboard"),
         leaf("/patterns#settings-form", "settings-form"),
         leaf("/patterns#list-detail", "list-detail"),

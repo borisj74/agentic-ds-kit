@@ -13,7 +13,9 @@ import { ButtonDoc } from "./ButtonDoc";
 import { ButtonGroupDoc } from "./ButtonGroupDoc";
 import { CalendarDoc } from "./CalendarDoc";
 import { CardDoc } from "./CardDoc";
+import { CarouselDoc } from "./CarouselDoc";
 import { CellDoc } from "./CellDoc";
+import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
 import { CommandDoc } from "./CommandDoc";
@@ -33,6 +35,7 @@ import { ModalDoc } from "./ModalDoc";
 import { NavigationMenuDoc } from "./NavigationMenuDoc";
 import { NumberTransitionDoc } from "./NumberTransitionDoc";
 import { OtherComponent } from "./OtherComponents";
+import { PageHeaderDoc } from "./PageHeaderDoc";
 import { PaginationDoc } from "./PaginationDoc";
 import { PieChartDoc } from "./PieChartDoc";
 import { ProgressDoc } from "./ProgressDoc";
@@ -44,6 +47,7 @@ import { SelectDoc } from "./SelectDoc";
 import { ShimmerTextDoc } from "./ShimmerTextDoc";
 import { SideNavDoc } from "./SideNavDoc";
 import { SwitchDoc } from "./SwitchDoc";
+import { TableDoc } from "./TableDoc";
 import { TabsDoc } from "./TabsDoc";
 import { TextareaDoc } from "./TextareaDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
@@ -61,7 +65,9 @@ const TITLES: Record<string, string> = {
   buttongroup: "ButtonGroup",
   calendar: "Calendar",
   card: "Cards",
+  carousel: "Carousel",
   cell: "Cell",
+  chat: "Chat",
   scorecard: "Scorecard",
   scoreboard: "Scoreboard",
   input: "Input",
@@ -80,7 +86,7 @@ const TITLES: Record<string, string> = {
   field: "Field",
   fieldset: "FieldSet",
   badge: "Badge",
-  barchart: "BarChart",
+  barchart: "Bar",
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
@@ -92,8 +98,8 @@ const TITLES: Record<string, string> = {
   dropdownmenu: "DropdownMenu",
   pageheader: "PageHeader",
   pagination: "Pagination",
-  piechart: "PieChart",
-  linechart: "LineChart",
+  piechart: "Pie",
+  linechart: "Line",
   loadinganimation: "LoadingAnimation",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
@@ -119,6 +125,8 @@ function resolveHash(hash: string): string {
     outsidebar: "sidenav",
     navmenu: "navigationmenu",
     "navigation-menu": "navigationmenu",
+    chart: "barchart",
+    charts: "barchart",
     pie: "piechart",
     "pie-chart": "piechart",
     bar: "barchart",
@@ -141,6 +149,7 @@ function resolveHash(hash: string): string {
     kpicards: "scorecard",
     "kpi-card": "scorecard",
     "kpi-cards": "scorecard",
+    carousels: "carousel",
   };
   return aliases[hash] ?? hash;
 }
@@ -174,7 +183,9 @@ export function ComponentsView() {
   if (resolved === "avatargroup") return <AvatarGroupDoc />;
   if (resolved === "calendar") return <CalendarDoc />;
   if (resolved === "card") return <CardDoc />;
+  if (resolved === "carousel") return <CarouselDoc />;
   if (resolved === "cell") return <CellDoc />;
+  if (resolved === "chat") return <ChatDoc />;
   if (resolved === "checkbox") return <CheckboxDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
   if (resolved === "command") return <CommandDoc />;
@@ -194,6 +205,7 @@ export function ComponentsView() {
   if (resolved === "linechart") return <LineChartDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
   if (resolved === "numbertransition") return <NumberTransitionDoc />;
+  if (resolved === "pageheader") return <PageHeaderDoc />;
   if (resolved === "pagination") return <PaginationDoc />;
   if (resolved === "piechart") return <PieChartDoc />;
   if (resolved === "progress") return <ProgressDoc />;
@@ -204,6 +216,7 @@ export function ComponentsView() {
   if (resolved === "select") return <SelectDoc />;
   if (resolved === "shimmertext") return <ShimmerTextDoc />;
   if (resolved === "switch") return <SwitchDoc />;
+  if (resolved === "table") return <TableDoc />;
   if (resolved === "tabs") return <TabsDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;

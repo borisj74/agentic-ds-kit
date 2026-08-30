@@ -44,6 +44,9 @@
       "itemShape": {
         "value": "string",
         "label": "string",
+        "description": "string?",
+        "badge": "string?",
+        "badgeTone": "BadgeTone?",
         "disabled": "boolean?"
       },
       "required": true
@@ -75,6 +78,20 @@
     "hint": {
       "type": "string",
       "required": false
+    },
+    "hideLegend": {
+      "type": "boolean",
+      "default": false,
+      "note": "Keeps the legend for assistive tech, hides it visually. Use when Drawer already shows the title."
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "list",
+        "card"
+      ],
+      "default": "list",
+      "note": "card is bordered rows with the radio on the right. Compose Badge via option.badge."
     }
   },
   "tokens": [
@@ -87,7 +104,10 @@
     "action.primary",
     "action.danger",
     "surface.page",
-    "radius.pill"
+    "radius.pill",
+    "surface.card",
+    "surface.muted",
+    "radius.surfaceMd"
   ],
   "a11y": {
     "element": "fieldset",
@@ -105,5 +125,8 @@
     "Do not use for tabbed content \u2014 use Tabs",
     "Do not use for multi-select \u2014 use Checkbox"
   ],
-  "snippet": "<RadioGroup name=\"plan\" legend=\"Plan\" size=\"lg\" defaultValue=\"pro\" options={[\n  { value: 'starter', label: 'Starter' },\n  { value: 'pro', label: 'Studio Pro' },\n]} />"
+  "snippet": "<RadioGroup name=\"plan\" legend=\"Plan\" size=\"lg\" defaultValue=\"pro\" options={[\n  { value: 'starter', label: 'Starter' },\n  { value: 'pro', label: 'Studio Pro' },\n]} />",
+  "contains": [
+    "badge"
+  ]
 }

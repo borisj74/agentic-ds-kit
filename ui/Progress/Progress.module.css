@@ -5,6 +5,11 @@
   min-width: 0;
 }
 
+.circle,
+.semicircle {
+  width: fit-content;
+}
+
 .meta {
   display: flex;
   align-items: baseline;
@@ -29,14 +34,61 @@
   font-size: var(--type-size-caption);
   line-height: var(--type-line-body);
   font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
+  color: var(--text-primary);
 }
 
 .track {
   width: 100%;
   overflow: hidden;
-  background-color: var(--fill-brand-subtle);
   border-radius: var(--radius-pill);
+}
+
+.brand .track {
+  background-color: var(--fill-brand-subtle);
+}
+
+.brand .fill {
+  background-color: var(--fill-brand);
+}
+
+.brand .trackArc {
+  stroke: var(--fill-brand-subtle);
+}
+
+.brand .valueArc {
+  stroke: var(--fill-brand);
+}
+
+.danger .track {
+  background-color: var(--fill-danger-subtle);
+}
+
+.danger .fill {
+  background-color: var(--fill-danger);
+}
+
+.danger .trackArc {
+  stroke: var(--fill-danger-subtle);
+}
+
+.danger .valueArc {
+  stroke: var(--fill-danger);
+}
+
+.muted .track {
+  background-color: var(--fill-subtle);
+}
+
+.muted .fill {
+  background-color: var(--fill-strong);
+}
+
+.muted .trackArc {
+  stroke: var(--fill-subtle);
+}
+
+.muted .valueArc {
+  stroke: var(--fill-strong);
 }
 
 .sm .track {
@@ -47,9 +99,128 @@
   height: var(--space-2);
 }
 
+.lg .track {
+  height: var(--space-3);
+}
+
+.overlay .track {
+  height: var(--space-5);
+  position: relative;
+}
+
+.overlayValue {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-control-sm);
+  background: var(--surface-card);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.row .track {
+  flex: 1;
+  min-width: 0;
+}
+
 .fill {
   height: 100%;
-  background-color: var(--fill-brand);
   border-radius: inherit;
+  transform-origin: left center;
+  animation: progressLoad var(--motion-duration-400) var(--motion-ease-out) both;
   transition: width var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.meter {
+  position: relative;
+  width: var(--progress-size);
+  height: var(--progress-size);
+  overflow: hidden;
+}
+
+.semicircle .meter {
+  display: grid;
+  align-items: end; /* U sits in the bottom half */
+}
+
+.ring {
+  display: block;
+  overflow: hidden;
+}
+
+.semicircle .ring {
+  justify-self: stretch;
+}
+
+.trackArc,
+.valueArc {
+  fill: none;
+  stroke-linecap: butt;
+}
+
+.valueArc {
+  stroke-dashoffset: var(--progress-offset);
+  animation: progressArcLoad var(--motion-duration-400) var(--motion-ease-out) both;
+  transition: stroke-dashoffset var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.holeValue {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.semicircle .holeValue {
+  top: 50%;
+  transform: translate(-50%, 0);
+  padding-top: var(--space-2);
+}
+
+@keyframes progressLoad {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes progressArcLoad {
+  from {
+    stroke-dashoffset: var(--progress-c);
+  }
+  to {
+    stroke-dashoffset: var(--progress-offset);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .valueArc {
+    animation: none;
+    transition: none;
+  }
 }

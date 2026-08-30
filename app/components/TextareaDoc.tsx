@@ -10,7 +10,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: TextareaSize[] = ["lg", "md", "sm"];
+const SIZES: TextareaSize[] = ["sm", "md", "lg"];
 const LABEL_POSITIONS: FieldLabelPosition[] = ["top", "start"];
 
 function masterCode(

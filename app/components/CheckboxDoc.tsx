@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: CheckboxSize[] = ["lg", "md", "sm"];
+const SIZES: CheckboxSize[] = ["sm", "md", "lg"];
 const LABEL_MODES = ["labeled", "unlabeled"] as const;
 
 type LabelMode = (typeof LABEL_MODES)[number];

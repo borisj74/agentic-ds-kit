@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: DatePickerSize[] = ["md", "sm"];
+const SIZES: DatePickerSize[] = ["sm", "md"];
 const MASTER_DEFAULT = "2026-08-29";
 
 function masterCode(size: DatePickerSize, disabled: boolean, value: string) {

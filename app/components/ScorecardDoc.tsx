@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: ScorecardSize[] = ["lg", "md", "sm"];
+const SIZES: ScorecardSize[] = ["sm", "md", "lg"];
 const TRENDS: ScorecardTrend[] = ["up", "down", "flat", "neutral"];
 
 const DELTA: Record<ScorecardTrend, string> = {
@@ -141,7 +141,7 @@ export function ScorecardDoc() {
               <h2 className={styles.exampleTitle}>Sizes</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  {SIZES.slice().reverse().map((step) => (
+                  {SIZES.map((step) => (
                     <Scorecard
                       key={step}
                       label="Active users"

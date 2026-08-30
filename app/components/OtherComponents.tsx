@@ -3,7 +3,6 @@
 import { AppNav } from "@/ui/AppNav";
 import { Field } from "@/ui/Field";
 import { Input } from "@/ui/Input";
-import { PageHeader } from "@/ui/PageHeader";
 import { Select } from "@/ui/Select";
 import { Table } from "@/ui/Table";
 import { Textarea } from "@/ui/Textarea";
@@ -64,7 +63,6 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
             />
           </Field>
         )}
-        {id === "pageheader" && <PageHeader title="Example page" subtitle="Subtitle text" eyebrow="Eyebrow" />}
         {id === "table" && (
           <Table
             caption="Sample rows"

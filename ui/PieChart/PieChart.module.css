@@ -1,56 +1,116 @@
-.wrap {
-  position: relative;
+.root {
+  container-type: inline-size;
+  overflow: visible;
+}
+
+.stackPlot {
   display: grid;
   place-items: center;
-  width: 100%;
+}
+
+.split {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.plot {
+  position: relative;
+  flex: none;
+  overflow: visible;
 }
 
 .chart {
   display: block;
-  max-width: 100%;
-  height: auto;
+  overflow: visible;
 }
 
-.chart path {
-  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+.slice {
+  transform-box: view-box;
+  transform-origin: center;
+  transition:
+    transform 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sliceActive {
+  transform: scale(1.015);
+}
+
+.sliceDimmed {
+  opacity: 0.45;
+  filter: blur(1.5px);
+}
+
+.glow {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sliceActive .glow {
+  opacity: 0.38;
+}
+
+.mark {
+  pointer-events: none;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
   outline: none;
 }
 
-.chart path:focus-visible {
+.hit:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
 }
 
-.active {
-  filter: brightness(1.05);
-}
-
 .center {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  gap: var(--space-1);
-  text-align: center;
   pointer-events: none;
 }
 
-.centerLabel {
-  font-family: var(--font-sans);
-  font-size: var(--type-size-caption);
-  color: var(--text-muted);
-}
-
 .centerValue {
+  fill: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
   font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
+}
+
+.centerLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-caption);
+}
+
+
+@container (max-width: 30rem) {
+  .split {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chart path {
-    transition: none;
+  .slice,
+  .glow {
+    transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+  }
+
+  .sliceActive {
+    transform: none;
+  }
+
+  .sliceDimmed {
+    filter: none;
+  }
+
+  .sliceActive .glow {
+    opacity: 0;
   }
 }

@@ -27,19 +27,10 @@
   pointer-events: none;
   opacity: 0;
   transform-origin: left center;
-  transition:
-    transform var(--motion-modal-duration) var(--motion-ease-out),
-    width var(--motion-modal-duration) var(--motion-ease-out),
-    height var(--motion-modal-duration) var(--motion-ease-out),
-    opacity var(--motion-interaction-duration) var(--motion-ease-out);
 }
 
 .indicator[data-ready] {
   opacity: 1;
-}
-
-.indicator:not([data-ready]) {
-  transition: none;
 }
 
 .trigger {
@@ -55,7 +46,6 @@
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
   cursor: pointer;
-  transition: color var(--motion-overlay-duration) var(--motion-ease-out);
 }
 
 .trigger:hover:not(:disabled) {
@@ -85,7 +75,6 @@
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-body);
   outline: none;
-  animation: tabs-content-in var(--motion-page-duration) var(--motion-ease-out) both;
 }
 
 .segmented .list {
@@ -171,25 +160,3 @@
   font-size: var(--type-size-body);
 }
 
-@keyframes tabs-content-in {
-  from {
-    opacity: 0;
-    filter: blur(0.28rem);
-    transform: translateY(var(--space-inset-sm));
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .trigger,
-  .content,
-  .indicator {
-    transition: none;
-    animation: none;
-    filter: none;
-  }
-}

@@ -38,6 +38,8 @@
     "element": "figure",
     "requirements": [
       "Title on figure when provided",
+      "Hover reads the sample",
+      "Legend highlight emphasises one series",
       "Table view keeps values readable"
     ]
   },

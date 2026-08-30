@@ -1,7 +1,34 @@
 .scoreboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--layout-metrics-min)), 1fr));
   gap: var(--space-4);
   width: 100%;
-  align-items: start;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.count1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.count2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.count3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.count4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.overflow {
+  width: 100%;
+  min-width: 0;
+  padding-inline: var(--space-12);
+  box-sizing: border-box;
+}
+
+.overflow article {
+  box-shadow: none;
 }

@@ -46,6 +46,36 @@
   color: var(--text-primary);
 }
 
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+  border-radius: var(--radius-control-sm);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}
+
+.collapsible .description {
+  padding-inline-start: calc(18px + var(--space-2));
+}
+
 .description {
   margin: 0;
   font-family: var(--font-sans);
@@ -66,3 +96,4 @@
   width: 100%;
   min-width: 0;
 }
+

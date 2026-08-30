@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { Badge } from "@/ui/Badge";
 import type { RadioGroupProps } from "./RadioGroup.types";
 import styles from "./RadioGroup.module.css";
 
@@ -9,13 +10,16 @@ export type {
   RadioGroupOption,
   RadioGroupOrientation,
   RadioGroupSize,
+  RadioGroupLayout,
 } from "./RadioGroup.types";
 
 export function RadioGroup({
   name,
   legend,
+  hideLegend = false,
   size = "md",
   orientation = "vertical",
+  layout = "list",
   options,
   defaultValue,
   value: valueProp,
@@ -39,14 +43,14 @@ export function RadioGroup({
 
   return (
     <fieldset
-      className={`${styles.group} ${styles[size]}${error ? ` ${styles.groupError}` : ""}`}
+      className={`${styles.group} ${styles[size]} ${layout === "card" ? styles.card : ""}${error ? ` ${styles.groupError}` : ""}`}
       disabled={disabled}
       aria-invalid={error ? true : undefined}
       aria-describedby={messageId}
     >
-      <legend className={styles.legend}>{legend}</legend>
+      <legend className={hideLegend ? styles.legendHidden : styles.legend}>{legend}</legend>
       <div
-        className={`${styles.options} ${orientation === "horizontal" ? styles.horizontal : ""}`}
+        className={`${styles.options} ${orientation === "horizontal" && layout !== "card" ? styles.horizontal : ""}`}
       >
         {options.map((option) => {
           const optionId = `${uid}-${option.value || "empty"}`;
@@ -71,10 +75,33 @@ export function RadioGroup({
                 aria-invalid={error ? true : undefined}
                 onChange={() => emit(option.value)}
               />
-              <span className={styles.control} aria-hidden>
-                <span className={styles.dot} />
-              </span>
-              <span className={styles.label}>{option.label}</span>
+              {layout === "card" ? (
+                <span className={styles.copy}>
+                  <span className={styles.titleRow}>
+                    <span className={styles.label}>{option.label}</span>
+                    {option.badge ? (
+                      <Badge size="sm" tone={option.badgeTone ?? "neutral"}>
+                        {option.badge}
+                      </Badge>
+                    ) : null}
+                  </span>
+                  {option.description ? (
+                    <span className={styles.description}>{option.description}</span>
+                  ) : null}
+                </span>
+              ) : (
+                <>
+                  <span className={styles.control} aria-hidden>
+                    <span className={styles.dot} />
+                  </span>
+                  <span className={styles.label}>{option.label}</span>
+                </>
+              )}
+              {layout === "card" ? (
+                <span className={styles.control} aria-hidden>
+                  <span className={styles.dot} />
+                </span>
+              ) : null}
             </label>
           );
         })}

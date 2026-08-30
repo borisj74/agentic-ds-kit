@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
+import { Field } from "@/ui/Field";
+import { Input } from "@/ui/Input";
+import { Scoreboard } from "@/ui/Scoreboard";
 import { Section } from "@/ui/Section";
 import type { SectionSize } from "@/ui/Section";
 import { Switch } from "@/ui/Switch";
@@ -10,7 +14,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: SectionSize[] = ["lg", "md", "sm"];
+const SIZES: SectionSize[] = ["sm", "md", "lg"];
 const MASTER_TITLE = "Recent activity";
 const MASTER_DESCRIPTION = "Last 30 days";
 const COLUMNS = [
@@ -20,6 +24,26 @@ const COLUMNS = [
 const ROWS = [
   { task: "Invoice Q3", owner: "Boris" },
   { task: "Renewals", owner: "Mila" },
+];
+const METRICS = [
+  {
+    label: "Revenue",
+    value: "$48.2k",
+    delta: "+12.4%",
+    trend: "up" as const,
+    hint: "vs last 30 days",
+    badge: "Live",
+    badgeTone: "success" as const,
+  },
+  {
+    label: "Churn",
+    value: "1.2%",
+    delta: "-0.3%",
+    trend: "down" as const,
+    hint: "vs last 30 days",
+    badge: "Watch",
+    badgeTone: "warning" as const,
+  },
 ];
 
 function masterCode(size: SectionSize, showDescription: boolean, showActions: boolean) {
@@ -48,7 +72,8 @@ export function SectionDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Section</h1>
         <p className={styles.lede}>
-          Grouped page block with a heading, optional description, and optional actions. Not PageHeader. Not Card. Not FieldSet.
+          Grouped page block with a heading, optional description, and optional actions. Collapsible,
+          with a chevron before the title. Not PageHeader. Not Card. Not FieldSet. Not Accordion.
         </p>
       </header>
 
@@ -58,7 +83,7 @@ export function SectionDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle size, description, and actions. Body is kit Table.
+            Toggle size, description, and actions. Click the chevron to collapse. Body is kit Table.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -120,9 +145,10 @@ export function SectionDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Section to group a heading with related content on a page. Page title stays
-                  on PageHeader. Framed tiles stay Card. Form legends stay FieldSet. Actions must
-                  be kit Buttons. One primary per view.
+                  Use Section to group a heading with related content on a page. The chevron sits
+                  before the title and collapses the body. Page title stays on PageHeader. Framed
+                  tiles stay Card. Form legends stay FieldSet. Exclusive FAQ lists stay Accordion.
+                  Actions must be kit Buttons.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, showDescription, showActions)} />
@@ -130,6 +156,71 @@ export function SectionDoc() {
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Content</h2>
+              <div className={styles.exampleCanvas}>
+                <Section title="Key metrics" description="Overview for the current period">
+                  <Scoreboard items={METRICS} />
+                </Section>
+                <Section
+                  title="Recent activity"
+                  description="Latest project updates"
+                  actions={
+                    <Button variant="secondary" size="sm">
+                      View all
+                    </Button>
+                  }
+                >
+                  <Table columns={COLUMNS} rows={ROWS} />
+                </Section>
+                <Section title="Notices" description="Things that need a look">
+                  <Alert variant="warning" title="Seats running low">
+                    Three seats left on the Studio plan.
+                  </Alert>
+                </Section>
+                <Section title="Account" description="Name used on invoices">
+                  <Field label="Display name" htmlFor="section-display-name" hint="Shown on exported PDFs">
+                    <Input id="section-display-name" defaultValue="Boris Jovanovic" />
+                  </Field>
+                </Section>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Each Section takes a different kit body: Scoreboard, Table, Alert, or Field. Do
+                  not invent a local block. Collapse each heading on its own. Accordion is for
+                  exclusive FAQ lists.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Section title="Key metrics"><Scoreboard items={metrics} /></Section>
+<Section title="Recent activity"><Table columns={columns} rows={rows} /></Section>
+<Section title="Notices"><Alert variant="warning" title="Seats running low">Three seats left on the Studio plan.</Alert></Section>
+<Section title="Account"><Field label="Display name" htmlFor="name"><Input id="name" /></Field></Section>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Closed</h2>
+              <div className={styles.exampleCanvas}>
+                <Section title="Archived invoices" description="Hidden until you need them" defaultOpen={false}>
+                  <Table columns={COLUMNS} rows={ROWS} />
+                </Section>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Pass defaultOpen false when the body should start collapsed. Controlled open and
+                  onOpenChange are available when the page owns the state.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Section title="Archived invoices" description="Hidden until you need them" defaultOpen={false}>
+  <Table columns={columns} rows={rows} />
+</Section>`}
+              />
+            </section>
+
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Sizes</h2>
               <div className={styles.exampleCanvas}>
@@ -153,59 +244,6 @@ export function SectionDoc() {
                       `<Section title="Activity (${step})" size="${step}">\n  <Table columns={columns} rows={rows} />\n</Section>`,
                   )
                   .join("\n")}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Actions</h2>
-              <div className={styles.exampleCanvas}>
-                <Section
-                  title="Recent activity"
-                  description="Latest project updates"
-                  actions={
-                    <Button variant="secondary" size="sm">
-                      View all
-                    </Button>
-                  }
-                >
-                  <Table columns={COLUMNS} rows={ROWS} />
-                </Section>
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Put kit Buttons in actions for a section-level next step. Keep them secondary
-                  unless this is the only primary on the view.
-                </p>
-              </div>
-              <CodeBlock
-                code={`<Section
-  title="Recent activity"
-  description="Latest project updates"
-  actions={<Button variant="secondary" size="sm">View all</Button>}
->
-  <Table columns={columns} rows={rows} />
-</Section>`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Title only</h2>
-              <div className={styles.exampleCanvas}>
-                <Section title="Notifications">
-                  <Table columns={COLUMNS} rows={ROWS} />
-                </Section>
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Skip description when the heading is enough. Keep the body as kit pieces.
-                </p>
-              </div>
-              <CodeBlock
-                code={`<Section title="Notifications">
-  <Table columns={columns} rows={rows} />
-</Section>`}
               />
             </section>
           </div>

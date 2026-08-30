@@ -1,0 +1,98 @@
+{
+  "id": "carousel",
+  "status": "stable",
+  "intent": "Paged track of slides with prev/next kit Buttons. One piece.",
+  "useWhen": [
+    "galleries",
+    "featured cards",
+    "paged media"
+  ],
+  "doNotUseWhen": [
+    "Tabs for views",
+    "Pagination for lists",
+    "don't use for primary nav"
+  ],
+  "contains": [
+    "button"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "minItems": 1,
+      "note": "ReactNode slides. No CarouselCard or Slide cousins."
+    },
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal"
+    },
+    "loop": {
+      "type": "boolean",
+      "default": false
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "start",
+        "center"
+      ],
+      "default": "start"
+    },
+    "slidesPerView": {
+      "type": "enum",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "default": 1,
+      "note": "1 = full slide; 3 = one-third; 4 = quarter. Scoreboard uses 4 when items > 4."
+    },
+    "showControls": {
+      "type": "boolean",
+      "default": true
+    },
+    "showIndex": {
+      "type": "boolean",
+      "default": false,
+      "note": "Caption under the track: Slide N of M, aria-live polite"
+    },
+    "onIndexChange": {
+      "type": "function",
+      "required": false,
+      "note": "(index: number) => void // 0-based"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Carousel"
+    }
+  },
+  "tokens": [
+    "text.muted",
+    "focus.ring",
+    "space.4",
+    "space.12"
+  ],
+  "a11y": {
+    "element": "div[role=region]",
+    "requirements": [
+      "region with aria-roledescription=carousel",
+      "slides are role=group with aria-roledescription=slide",
+      "button names Previous slide / Next slide",
+      "index live region if shown"
+    ]
+  },
+  "doNot": [
+    "no CarouselContent/Item/Previous/Next",
+    "do not use raw hex",
+    "compose kit Button for controls",
+    "no autoplay in v1"
+  ],
+  "snippet": "<Carousel items={[<span>1</span>, <span>2</span>, <span>3</span>]} />"
+}

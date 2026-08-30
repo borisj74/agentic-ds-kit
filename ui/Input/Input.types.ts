@@ -1,4 +1,4 @@
-export type InputSize = "lg" | "md" | "sm";
+export type InputSize = "sm" | "md" | "lg";
 export type InputType = "text" | "email" | "password" | "search";
 
 export interface InputProps {

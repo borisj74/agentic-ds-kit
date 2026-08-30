@@ -32,11 +32,12 @@ export function Scorecard({
   badge,
   badgeTone = "neutral",
   onClick,
+  fill = false,
 }: ScorecardProps) {
   const labelId = useId();
   const valueId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
-  const className = [styles.card, styles[size], onClick ? styles.interactive : ""]
+  const className = [styles.card, styles[size], fill ? styles.fill : "", onClick ? styles.interactive : ""]
     .filter(Boolean)
     .join(" ");
 

@@ -1,6 +1,8 @@
-.wrap {
+.plot {
+  position: relative;
   width: 100%;
   min-width: 0;
+  overflow: visible;
 }
 
 .chart {
@@ -10,20 +12,82 @@
 }
 
 .grid {
-  stroke: var(--border-faint);
+  stroke: var(--border-strong);
   stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.crosshair {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.series {
+  transition: opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.seriesDimmed {
+  opacity: 0.45;
+}
+
+.area {
+  fill-opacity: 0.15;
+  pointer-events: none;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.dot {
+  stroke: var(--surface-card);
+  stroke-width: 2.5;
+  pointer-events: none;
 }
 
 .categoryLabel,
 .tickLabel {
   fill: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--type-size-caption);
   font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+  pointer-events: none;
+}
+
+.hit:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.overlay {
+  fill: transparent;
+  cursor: pointer;
+  touch-action: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chart * {
-    transition: none;
+  .series {
+    transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
   }
 }

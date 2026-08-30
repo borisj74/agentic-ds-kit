@@ -70,6 +70,20 @@
         "reset"
       ],
       "default": "button"
+    },
+    "shape": {
+      "type": "enum",
+      "values": [
+        "default",
+        "pill"
+      ],
+      "default": "default",
+      "note": "pill uses radius-pill. Drawer footers use pill."
+    },
+    "block": {
+      "type": "boolean",
+      "default": false,
+      "note": "Full width of the parent."
     }
   },
   "tokens": [
@@ -83,7 +97,8 @@
     "action.primaryHover",
     "action.danger",
     "action.dangerHover",
-    "icon.default"
+    "icon.default",
+    "radius.pill"
   ],
   "a11y": {
     "element": "button",

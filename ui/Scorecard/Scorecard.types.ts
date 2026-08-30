@@ -14,4 +14,5 @@ export interface ScorecardProps {
   badge?: string;
   badgeTone?: BadgeTone;
   onClick?: () => void;
+  fill?: boolean;
 }

@@ -71,6 +71,11 @@
       "type": "function",
       "required": false,
       "note": "When set, the whole card is a button that opens a detail view"
+    },
+    "fill": {
+      "type": "boolean",
+      "default": false,
+      "note": "Stretch to the parent width. Scoreboard passes fill so cards share the row."
     }
   },
   "tokens": [

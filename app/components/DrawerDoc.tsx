@@ -7,13 +7,38 @@ import { Drawer } from "@/ui/Drawer";
 import type { DrawerSide } from "@/ui/Drawer";
 import { Field } from "@/ui/Field";
 import { Input } from "@/ui/Input";
+import { RadioGroup } from "@/ui/RadioGroup";
 import { Switch } from "@/ui/Switch";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIDES: DrawerSide[] = ["right", "left", "bottom", "top"];
-const STACK = { display: "grid", gap: "var(--space-4)" } as const;
+
+const SLOTS = [
+  {
+    value: "standard",
+    label: "Standard delivery",
+    badge: "Fastest",
+    description: "25–35 min · Driver assigned now",
+  },
+  {
+    value: "5-00",
+    label: "5:00 PM – 5:15 PM",
+    description: "Prep starts at 4:45 PM",
+  },
+  {
+    value: "5-15",
+    label: "5:15 PM – 5:30 PM",
+    description: "Prep starts at 5:00 PM",
+  },
+  {
+    value: "5-30",
+    label: "5:30 PM – 5:45 PM",
+    badge: "Most popular",
+    description: "High demand",
+  },
+];
 
 type VariantKey = "right" | "left" | "bottom" | "top" | "footer" | "scrollable";
 
@@ -21,31 +46,61 @@ function masterCode(side: DrawerSide, showDescription: boolean, showClose: boole
   const lines = [
     "<Drawer",
     "  open={open}",
-    '  title="Edit profile"',
+    '  title="Pick a delivery time"',
   ];
   if (showDescription) {
-    lines.push('  description="Make changes to your profile here."');
+    lines.push(`  description="We'll prepare your order as soon as possible."`);
   }
   lines.push(`  side="${side}"`);
   if (!showClose) lines.push("  showClose={false}");
   lines.push(
     "  onClose={close}",
     "  footer={",
-    '    <ButtonGroup ariaLabel="Drawer actions">',
-    '      <Button variant="secondary" onClick={close}>Cancel</Button>',
-    '      <Button variant="primary" onClick={save}>Save</Button>',
-    "    </ButtonGroup>",
+    "    <>",
+    '      <Button variant="primary" size="lg" shape="pill" block>Confirm Delivery Time</Button>',
+    '      <Button variant="secondary" size="lg" shape="pill" block onClick={close}>Cancel</Button>',
+    "    </>",
     "  }",
     ">",
-    '  <Field label="Name" htmlFor="name">',
-    '    <Input id="name" />',
-    "  </Field>",
-    '  <Field label="Email" htmlFor="email">',
-    '    <Input id="email" type="email" />',
-    "  </Field>",
+    "  <RadioGroup",
+    '    name="delivery-time"',
+    '    legend="Delivery time"',
+    "    hideLegend",
+    '    layout="card"',
+    '    defaultValue="standard"',
+    "    options={slots}",
+    "  />",
     "</Drawer>",
   );
   return lines.join("\n");
+}
+
+function DeliveryFooter({ onClose }: { onClose: () => void }) {
+  return (
+    <>
+      <Button variant="primary" size="lg" shape="pill" block onClick={onClose}>
+        Confirm Delivery Time
+      </Button>
+      <Button variant="secondary" size="lg" shape="pill" block onClick={onClose}>
+        Cancel
+      </Button>
+    </>
+  );
+}
+
+function DeliverySlots({ name }: { name: string }) {
+  const [value, setValue] = useState("standard");
+  return (
+    <RadioGroup
+      name={name}
+      legend="Delivery time"
+      hideLegend
+      layout="card"
+      value={value}
+      onChange={setValue}
+      options={SLOTS}
+    />
+  );
 }
 
 function Actions({
@@ -69,7 +124,7 @@ function Actions({
 
 function ProfileFields({ nameId, emailId }: { nameId: string; emailId: string }) {
   return (
-    <div style={STACK}>
+    <div style={{ display: "grid", gap: "var(--space-4)" }}>
       <Field label="Name" htmlFor={nameId}>
         <Input id={nameId} placeholder="Boris Jovanovic" />
       </Field>
@@ -82,7 +137,7 @@ function ProfileFields({ nameId, emailId }: { nameId: string; emailId: string })
 
 function ScrollCopy() {
   return (
-    <div style={STACK}>
+    <div style={{ display: "grid", gap: "var(--space-4)" }}>
       {Array.from({ length: 12 }, (_, index) => (
         <p key={index} style={{ margin: 0 }}>
           Extra profile notes line {index + 1}. The header and footer stay put while this body
@@ -95,9 +150,9 @@ function ScrollCopy() {
 
 export function DrawerDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
-  const [side, setSide] = useState<DrawerSide>("right");
+  const [side, setSide] = useState<DrawerSide>("bottom");
   const [showDescription, setShowDescription] = useState(true);
-  const [showClose, setShowClose] = useState(true);
+  const [showClose, setShowClose] = useState(false);
   const [open, setOpen] = useState(false);
   const [variantOpen, setVariantOpen] = useState<VariantKey | null>(null);
 
@@ -119,8 +174,8 @@ export function DrawerDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Open the drawer, then switch side, description, and close. Overlay click and Escape
-            dismiss.
+            Bottom sheet for a delivery window. Switch side, description, and close. Overlay click
+            and Escape dismiss.
           </p>
           <DocTabList
             value={tab}
@@ -138,7 +193,7 @@ export function DrawerDoc() {
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
                   <Button variant="primary" size="md" onClick={() => setOpen(true)}>
-                    Open drawer
+                    Pick a delivery time
                   </Button>
                 </div>
               </div>
@@ -170,29 +225,32 @@ export function DrawerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Drawer for settings, filters, or detail alongside the page. Use Modal for a
-                  centered short task. Use AlertDialog when they must choose.
+                  Use Drawer for a sheet or side panel. Bottom is a floating sheet. Compose kit
+                  RadioGroup for the slots and kit Buttons in the footer. Use Modal for a centered
+                  short task. Use AlertDialog when they must choose.
                 </p>
               </div>
               <CodeBlock code={masterCode(side, showDescription, showClose)} />
             </div>
             <Drawer
               open={open}
-              title="Edit profile"
-              description={showDescription ? "Make changes to your profile here." : undefined}
+              title="Pick a delivery time"
+              description={
+                showDescription ? "We'll prepare your order as soon as possible." : undefined
+              }
               side={side}
               showClose={showClose}
               onClose={close}
-              footer={<Actions onClose={close} />}
+              footer={<DeliveryFooter onClose={close} />}
             >
-              <ProfileFields nameId="drawer-name" emailId="drawer-email" />
+              <DeliverySlots name="drawer-delivery" />
             </Drawer>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <Variant
               title="Right"
-              usage="Default. Panel slides from the right. Use for SaaS settings."
+              usage="Panel slides from the right. Use for SaaS settings."
               code={`<Drawer open={open} title="Edit profile" side="right" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("right")}
             >
@@ -214,12 +272,20 @@ export function DrawerDoc() {
 
             <Variant
               title="Bottom"
-              usage="Sheet from the bottom. Top corners use radius-surface-md."
-              code={`<Drawer open={open} title="Edit profile" side="bottom" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
+              usage="Floating sheet from the bottom. Corners use radius-surface-lg. Compose RadioGroup cards for a picker."
+              code={`<Drawer open={open} title="Pick a delivery time" side="bottom" showClose={false} onClose={close} footer={footer}>\n  <RadioGroup layout="card" hideLegend ... />\n</Drawer>`}
               onOpen={() => setVariantOpen("bottom")}
             >
-              <Drawer open={variantOpen === "bottom"} title="Edit profile" side="bottom" onClose={close}>
-                Make changes to your profile.
+              <Drawer
+                open={variantOpen === "bottom"}
+                title="Pick a delivery time"
+                description="We'll prepare your order as soon as possible."
+                side="bottom"
+                showClose={false}
+                onClose={close}
+                footer={<DeliveryFooter onClose={close} />}
+              >
+                <DeliverySlots name="drawer-bottom-delivery" />
               </Drawer>
             </Variant>
 

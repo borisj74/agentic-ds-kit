@@ -9,7 +9,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: ButtonSize[] = ["lg", "md", "sm"];
+const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 
 function periodCode(size: ButtonSize, disabled: boolean) {
   const disabledAttr = disabled ? " disabled" : "";

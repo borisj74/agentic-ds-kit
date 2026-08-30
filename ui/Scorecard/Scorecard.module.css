@@ -29,6 +29,11 @@
   padding: var(--space-inset-lg);
 }
 
+.fill {
+  width: 100%;
+  max-width: none;
+}
+
 .header {
   display: flex;
   align-items: center;

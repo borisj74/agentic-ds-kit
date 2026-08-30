@@ -8,7 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: ButtonSize[] = ["lg", "md", "sm"];
+const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 const VARIANTS: ButtonVariant[] = ["primary", "secondary", "tertiary", "danger"];
 const ICON_MODES = ["none", "start", "end", "both", "only"] as const;
 

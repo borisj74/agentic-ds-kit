@@ -1,16 +1,18 @@
 {
   "id": "progress",
   "status": "stable",
-  "intent": "Task completion as a bar from 0 to 100. One piece. Optional label and percent.",
+  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
   "useWhen": [
     "Upload, import, or task completion",
     "A determinate percent in a form, card, or page",
+    "A determinate percent as a ring or semicircle",
     "DataTable Cell type=progress (Cell composes this)"
   ],
   "doNotUseWhen": [
     "A spinner with no known percent \u2014 not this component",
     "A rating out of 5 \u2014 that stays a Cell type",
-    "A KPI number \u2014 use Scorecard"
+    "A KPI number \u2014 use Scorecard",
+    "Part-to-whole share across segments \u2014 use PieChart"
   ],
   "props": {
     "value": {
@@ -22,10 +24,21 @@
       "type": "enum",
       "values": [
         "sm",
-        "md"
+        "md",
+        "lg"
       ],
       "default": "md",
-      "note": "Track height. sm is space-1, md is space-2."
+      "note": "Bar track height: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
+    },
+    "shape": {
+      "type": "enum",
+      "values": [
+        "bar",
+        "circle",
+        "semicircle"
+      ],
+      "default": "bar",
+      "note": "bar is the track. circle is a donut ring. semicircle is a bottom U gauge: 0 to 100 maps onto 180 degrees, not a cropped 360 degree ring. Same piece. Size sets the ring, not bar height."
     },
     "label": {
       "type": "string",
@@ -35,7 +48,25 @@
     "showValue": {
       "type": "boolean",
       "default": false,
-      "note": "Shows the rounded percent opposite the label. Prefer this over ProgressValue."
+      "note": "Shows the rounded percent. Overlay sits on the bar. End sits after the bar, or in meta when a name label is set. Circle puts it in the hole. Semicircle puts it in the bowl."
+    },
+    "valuePosition": {
+      "type": "enum",
+      "values": [
+        "overlay",
+        "end"
+      ],
+      "default": "end",
+      "note": "Bar only. overlay centers the percent on the track. end puts it after the bar, or opposite a name label in the meta row. Circle uses the hole. Semicircle uses the bowl."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "brand",
+        "danger",
+        "muted"
+      ],
+      "default": "brand"
     },
     "ariaLabel": {
       "type": "string",
@@ -46,19 +77,29 @@
   "tokens": [
     "fill.brand",
     "fill.brandSubtle",
+    "fill.danger",
+    "fill.dangerSubtle",
+    "fill.subtle",
+    "fill.strong",
     "text.primary",
-    "text.muted",
+    "surface.card",
     "radius.full",
+    "radius.controlSm",
     "space.1",
     "space.2",
+    "space.3",
+    "space.5",
     "type.size.bodySm",
     "type.size.caption",
-    "motion.interactionDuration"
+    "type.weight.label",
+    "motion.interactionDuration",
+    "motion.duration400",
+    "motion.easeOut"
   ],
   "a11y": {
     "element": "div[role=progressbar]",
     "requirements": [
-      "role=progressbar on the track",
+      "role=progressbar on the track or ring",
       "aria-valuemin 0, aria-valuemax 100, aria-valuenow rounded percent",
       "aria-valuetext is '{n}%'",
       "Visible label uses aria-labelledby; unlabeled needs ariaLabel"
@@ -66,10 +107,16 @@
   },
   "doNot": [
     "Do not invent ProgressLabel, ProgressValue, ProgressTrack, ProgressIndicator, or ProgressRoot",
+    "Do not invent MeterCircle or ProgressCircle",
+    "Do not use PieChart for a determinate percent ring",
+    "Do not use img assets for the ring",
+    "Do not add threshold-zone rings, datatip, or reference lines",
     "Do not use radix or @base-ui/react",
     "Do not use a native progress element",
     "Do not use raw hex",
-    "Do not add indeterminate, circular, or extra tones yet"
+    "Do not add indeterminate",
+    "Do not add a multi-segment status bar",
+    "Do not skip prefers-reduced-motion on the load animation"
   ],
-  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />"
+  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />\n<Progress value={50} showValue valuePosition=\"overlay\" />\n<Progress value={50} showValue tone=\"danger\" />\n<Progress value={50} shape=\"circle\" showValue />"
 }

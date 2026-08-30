@@ -7,7 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: TabsSize[] = ["lg", "md", "sm"];
+const SIZES: TabsSize[] = ["sm", "md", "lg"];
 const VARIANTS: TabsVariant[] = ["segmented", "line"];
 
 const MASTER_ITEMS: TabItem[] = [

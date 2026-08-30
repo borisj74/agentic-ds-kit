@@ -41,6 +41,8 @@
     "element": "figure",
     "requirements": [
       "Title on figure when provided",
+      "Hover reads the category",
+      "Legend highlight emphasises one series",
       "Bars expose category and value in accessible names",
       "Table view keeps values readable"
     ]
