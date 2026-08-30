@@ -70,7 +70,9 @@
     "space.section.sm",
     "space.section.md",
     "space.section.lg",
-    "space.stack.sm"
+    "space.stack.sm",
+    "space.stack.md",
+    "space.stack.lg"
   ],
   "a11y": {
     "element": "section",

@@ -8,17 +8,17 @@
 
 .sm {
   --section-space: var(--space-section-sm);
-  --section-header-gap: var(--space-stack-xs);
+  --section-header-gap: var(--space-stack-sm);
 }
 
 .md {
   --section-space: var(--space-section-md);
-  --section-header-gap: var(--space-stack-sm);
+  --section-header-gap: var(--space-stack-md);
 }
 
 .lg {
   --section-space: var(--space-section-lg);
-  --section-header-gap: var(--space-stack-md);
+  --section-header-gap: var(--space-stack-lg);
 }
 
 .header {
@@ -27,7 +27,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-inline-sm) var(--space-inline-lg);
-  margin: 0 0 var(--section-header-gap);
+  margin: 0;
+  padding-bottom: var(--section-header-gap);
 }
 
 .heading {
