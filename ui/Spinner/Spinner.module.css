@@ -9,7 +9,7 @@
 .icon {
   display: block;
   flex-shrink: 0;
-  animation: spinner-spin var(--motion-duration-400) linear infinite;
+  animation: spinner-spin calc(var(--motion-duration-600) * 2) var(--motion-ease-linear) infinite;
 }
 
 .sm .icon {

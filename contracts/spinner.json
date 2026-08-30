@@ -31,8 +31,8 @@
     "type.size.label",
     "type.size.bodySm",
     "space.2",
-    "motion.duration400",
-    "motion.easeOut"
+    "motion.duration600",
+    "motion.easeLinear"
   ],
   "a11y": {
     "element": "span[role=status]",
