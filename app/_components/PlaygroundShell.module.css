@@ -20,6 +20,17 @@
   border-bottom: var(--border-width-thin) solid var(--border-faint);
 }
 
+.tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.colorSelect {
+  width: 8.5rem;
+}
+
 .brand {
   display: flex;
   align-items: baseline;

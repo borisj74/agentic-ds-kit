@@ -4,17 +4,28 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav } from "@/ui/AppNav";
 import { Button } from "@/ui/Button";
+import { Select } from "@/ui/Select";
 import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
-import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
+import {
+  PLAYGROUND_COLOR_THEMES,
+  applyPlaygroundColorTheme,
+  applyPlaygroundTheme,
+  readPlaygroundColorTheme,
+  readPlaygroundTheme,
+  type PlaygroundColorTheme,
+  type PlaygroundTheme,
+} from "@/lib/playground-theme";
 import styles from "./PlaygroundShell.module.css";
 
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
   const [theme, setTheme] = useState<PlaygroundTheme>("light");
+  const [colorTheme, setColorTheme] = useState<PlaygroundColorTheme>("blue");
 
   useEffect(() => {
     setTheme(readPlaygroundTheme());
+    setColorTheme(readPlaygroundColorTheme());
   }, []);
 
   useEffect(() => {
@@ -37,6 +48,13 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     setTheme(next);
   };
 
+  const handleColorTheme = (value: string | string[]) => {
+    if (typeof value !== "string") return;
+    if (value !== "blue" && value !== "violet" && value !== "teal") return;
+    applyPlaygroundColorTheme(value);
+    setColorTheme(value);
+  };
+
   return (
     <div className={styles.frame}>
       <header className={styles.topbar}>
@@ -44,15 +62,27 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           <span className={styles.productName}>Agentic DS Kit</span>
           <span className={styles.tagline}>Code-only design system</span>
         </div>
-        <Button
-          size="sm"
-          variant="secondary"
-          shape="pill"
-          iconStart={isDark ? "Sun" : "Moon"}
-          onClick={handleThemeToggle}
-        >
-          {isDark ? "Light" : "Dark"}
-        </Button>
+        <div className={styles.tools}>
+          <div className={styles.colorSelect}>
+            <Select
+              id="playground-color-theme"
+              size="sm"
+              ariaLabel="Color theme"
+              value={colorTheme}
+              onChange={handleColorTheme}
+              options={PLAYGROUND_COLOR_THEMES}
+            />
+          </div>
+          <Button
+            size="sm"
+            variant="secondary"
+            shape="pill"
+            iconStart={isDark ? "Sun" : "Moon"}
+            onClick={handleThemeToggle}
+          >
+            {isDark ? "Light" : "Dark"}
+          </Button>
+        </div>
       </header>
       <div className={styles.shell}>
         <aside className={styles.sidebar}>

@@ -55,6 +55,26 @@
   --color-amber-700: #b45309;
   --color-amber-800: #92400e;
   --color-amber-900: #78350f;
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
 
   /* Semantic colors — light (default) */
   --text-primary: #171717;
@@ -473,3 +493,140 @@
   --link-visited: #bfdbfe;
   --link-active: #dbeafe;
 }
+
+[data-color="violet"] {
+  --text-brand: #6d28d9;
+  --text-info: #6d28d9;
+  --icon-brand: #7c3aed;
+  --icon-info: #7c3aed;
+  --surface-brand: #7c3aed;
+  --surface-brand-subtle: #f5f3ff;
+  --border-focus: #8b5cf6;
+  --border-brand: #7c3aed;
+  --status-info: #7c3aed;
+  --status-info-subtle: #f5f3ff;
+  --status-info-border: #ddd6fe;
+  --status-info-text: #5b21b6;
+  --action-primary: #7c3aed;
+  --action-primary-hover: #6d28d9;
+  --action-primary-pressed: #5b21b6;
+  --action-selected: #f5f3ff;
+  --action-selected-border: #7c3aed;
+  --focus-ring: #8b5cf6;
+  --focus-ring-inverse: #c4b5fd;
+  --fill-brand: #7c3aed;
+  --fill-brand-subtle: #f5f3ff;
+  --fill-info: #7c3aed;
+  --fill-info-subtle: #f5f3ff;
+  --brand-primary: #7c3aed;
+  --brand-primary-hover: #6d28d9;
+  --brand-primary-active: #5b21b6;
+  --brand-subtle: #f5f3ff;
+  --link-default: #6d28d9;
+  --link-hover: #5b21b6;
+  --link-visited: #5b21b6;
+  --link-active: #4c1d95;
+}
+
+[data-theme="dark"][data-color="violet"] {
+  --text-brand: #c4b5fd;
+  --text-info: #c4b5fd;
+  --icon-brand: #a78bfa;
+  --icon-info: #a78bfa;
+  --surface-brand: #8b5cf6;
+  --surface-brand-subtle: #4c1d95;
+  --border-focus: #a78bfa;
+  --border-brand: #a78bfa;
+  --status-info: #a78bfa;
+  --status-info-subtle: #4c1d95;
+  --status-info-border: #6d28d9;
+  --status-info-text: #ddd6fe;
+  --action-primary: #8b5cf6;
+  --action-primary-hover: #a78bfa;
+  --action-primary-pressed: #c4b5fd;
+  --action-selected: #4c1d95;
+  --action-selected-border: #a78bfa;
+  --focus-ring: #a78bfa;
+  --focus-ring-inverse: #c4b5fd;
+  --fill-brand: #a78bfa;
+  --fill-brand-subtle: #4c1d95;
+  --fill-info: #a78bfa;
+  --fill-info-subtle: #4c1d95;
+  --brand-primary: #a78bfa;
+  --brand-primary-hover: #c4b5fd;
+  --brand-primary-active: #ddd6fe;
+  --brand-subtle: #4c1d95;
+  --link-default: #c4b5fd;
+  --link-hover: #ddd6fe;
+  --link-visited: #ddd6fe;
+  --link-active: #ede9fe;
+}
+
+[data-color="teal"] {
+  --text-brand: #0f766e;
+  --text-info: #0f766e;
+  --icon-brand: #0d9488;
+  --icon-info: #0d9488;
+  --surface-brand: #0d9488;
+  --surface-brand-subtle: #f0fdfa;
+  --border-focus: #14b8a6;
+  --border-brand: #0d9488;
+  --status-info: #0d9488;
+  --status-info-subtle: #f0fdfa;
+  --status-info-border: #99f6e4;
+  --status-info-text: #115e59;
+  --action-primary: #0d9488;
+  --action-primary-hover: #0f766e;
+  --action-primary-pressed: #115e59;
+  --action-selected: #f0fdfa;
+  --action-selected-border: #0d9488;
+  --focus-ring: #14b8a6;
+  --focus-ring-inverse: #5eead4;
+  --fill-brand: #0d9488;
+  --fill-brand-subtle: #f0fdfa;
+  --fill-info: #0d9488;
+  --fill-info-subtle: #f0fdfa;
+  --brand-primary: #0d9488;
+  --brand-primary-hover: #0f766e;
+  --brand-primary-active: #115e59;
+  --brand-subtle: #f0fdfa;
+  --link-default: #0f766e;
+  --link-hover: #115e59;
+  --link-visited: #115e59;
+  --link-active: #134e4a;
+}
+
+[data-theme="dark"][data-color="teal"] {
+  --text-brand: #5eead4;
+  --text-info: #5eead4;
+  --icon-brand: #2dd4bf;
+  --icon-info: #2dd4bf;
+  --surface-brand: #14b8a6;
+  --surface-brand-subtle: #134e4a;
+  --border-focus: #2dd4bf;
+  --border-brand: #2dd4bf;
+  --status-info: #2dd4bf;
+  --status-info-subtle: #134e4a;
+  --status-info-border: #0f766e;
+  --status-info-text: #99f6e4;
+  --action-primary: #14b8a6;
+  --action-primary-hover: #2dd4bf;
+  --action-primary-pressed: #5eead4;
+  --action-selected: #134e4a;
+  --action-selected-border: #2dd4bf;
+  --focus-ring: #2dd4bf;
+  --focus-ring-inverse: #5eead4;
+  --fill-brand: #2dd4bf;
+  --fill-brand-subtle: #134e4a;
+  --fill-info: #2dd4bf;
+  --fill-info-subtle: #134e4a;
+  --brand-primary: #2dd4bf;
+  --brand-primary-hover: #5eead4;
+  --brand-primary-active: #99f6e4;
+  --brand-subtle: #134e4a;
+  --link-default: #5eead4;
+  --link-hover: #99f6e4;
+  --link-visited: #99f6e4;
+  --link-active: #ccfbf1;
+}
+

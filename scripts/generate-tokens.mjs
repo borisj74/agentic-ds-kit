@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Generates lib/tokens.css from tokens/tokens.json.
- * Primitives are fixed; semantic color roles remap under [data-theme="dark"].
+ * Primitives are fixed. Appearance remaps under [data-theme="dark"].
+ * Brand remaps under [data-color="violet"] and [data-color="teal"].
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -72,12 +73,28 @@ function primitiveColorVars() {
 }
 
 function resolveThemeVars(themeName) {
-  const theme = tokens.semantic[themeName];
-  const flat = flattenSemantic(theme);
-  return flat.map(([name, ref]) => {
+  return resolvePartialThemeVars(tokens.semantic[themeName]);
+}
+
+function resolvePartialThemeVars(themeObj) {
+  return flattenSemantic(themeObj).map(([name, ref]) => {
     const resolved = resolveRef(ref, tokens.primitive);
     return `  --${name}: ${resolved};`;
   });
+}
+
+function colorThemeBlocks() {
+  const themes = tokens.semantic.colorThemes ?? {};
+  return Object.entries(themes).flatMap(([name, modes]) => [
+    `[data-color="${name}"] {`,
+    resolvePartialThemeVars(modes.light).join("\n"),
+    `}`,
+    ``,
+    `[data-theme="dark"][data-color="${name}"] {`,
+    resolvePartialThemeVars(modes.dark).join("\n"),
+    `}`,
+    ``,
+  ]);
 }
 
 
@@ -328,6 +345,8 @@ ${staticVars().join("\n")}
 [data-theme="dark"] {
 ${resolveThemeVars("dark").join("\n")}
 }
+
+${colorThemeBlocks().join("\n")}
 `;
 
 writeFileSync(join(root, "lib/tokens.css"), css);

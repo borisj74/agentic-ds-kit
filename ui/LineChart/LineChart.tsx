@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useId, useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ChartFrame } from "@/ui/shared/ChartFrame";
 import frameStyles from "@/ui/shared/ChartFrame.module.css";
 import {
@@ -158,6 +158,7 @@ export function LineChart({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const { ref, width } = useChartSize(height);
+  const gridMaskId = `linechart-grid-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
   const { labels, series } = useMemo(
     () => normalizeLineInput({ data, labels: labelsProp, series: seriesProp }),
@@ -259,8 +260,25 @@ export function LineChart({
     >
       <div ref={ref} className={styles.plot}>
         <svg className={styles.chart} width={width || "100%"} height={height} role="img" aria-label={title}>
-          {showGrid
-            ? layout.ticks.map((tick) => (
+          {showGrid && isArea && width > 0 ? (
+            <defs>
+              <mask id={gridMaskId} maskUnits="userSpaceOnUse">
+                <rect
+                  x={layout.plotLeft}
+                  y={layout.plotTop}
+                  width={Math.max(layout.plotRight - layout.plotLeft, 1)}
+                  height={Math.max(layout.plotBottom - layout.plotTop, 1)}
+                  fill="white"
+                />
+                {layout.lines.map((line) =>
+                  line.areaPath ? <path key={`grid-mask-${line.label}`} d={line.areaPath} fill="black" /> : null,
+                )}
+              </mask>
+            </defs>
+          ) : null}
+          {showGrid ? (
+            <g mask={isArea && width > 0 ? `url(#${gridMaskId})` : undefined}>
+              {layout.ticks.map((tick) => (
                 <line
                   key={tick.value}
                   x1={tick.gridX1}
@@ -270,8 +288,9 @@ export function LineChart({
                   className={styles.grid}
                   vectorEffect="non-scaling-stroke"
                 />
-              ))
-            : null}
+              ))}
+            </g>
+          ) : null}
           {width > 0 && !showGrid ? (
             <>
               <line
