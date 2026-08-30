@@ -1,85 +1,36 @@
-import { Chat } from "@/ui/Chat";
-import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
-import { SideNav } from "@/ui/SideNav";
-import type { SideNavGroup, SideNavItem } from "@/ui/SideNav";
-import styles from "./playground.module.css";
-
-const NAV_GROUPS: SideNavGroup[] = [
-  {
-    label: "Workspace",
-    items: [
-      { id: "overview", label: "Overview", href: "/", icon: "House", active: true },
-      { id: "activity", label: "Activity", icon: "ChartBar" },
-      { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-    ],
-  },
-  {
-    label: "Sprint 24",
-    items: [
-      {
-        id: "projects",
-        label: "Projects",
-        icon: "Folder",
-        items: [
-          { id: "launch-brief", label: "Launch brief", icon: "File" },
-          { id: "qa-checklist", label: "QA checklist", icon: "CircleCheck" },
-          { id: "release-notes", label: "Release notes", icon: "File" },
-        ],
-      },
-      { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
-      { id: "insights", label: "Insights", icon: "Sparkles" },
-      { id: "resources", label: "Resources", icon: "Layers" },
-    ],
-  },
-  {
-    label: "Tags",
-    items: [
-      { id: "tag-important", label: "Important", icon: "Star", badge: "3" },
-      { id: "tag-at-risk", label: "At risk", icon: "TriangleAlert", badge: "5" },
-    ],
-  },
-];
-
-const NAV_FOOTER: SideNavItem[] = [
-  { id: "invite", label: "Invite members", icon: "CirclePlus" },
-  { id: "settings", label: "Settings", icon: "Settings" },
-];
+import { Section } from "@/ui/Section";
+import playground from "./playground.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <div className={styles.opsShell}>
-        <div className={styles.ops}>
-          <SideNav title="Operations" mark="O" groups={NAV_GROUPS} footer={NAV_FOOTER} />
-          <DashboardPattern />
-          <aside className={styles.rail}>
-            <Chat
-              title="Workspace assistant"
-              status="Ready"
-              placeholder="Message the assistant..."
-              menuItems={[{ label: "Refresh" }]}
-              suggestions={["Assign Final QA", "Draft sprint update"]}
-              messages={[
-                {
-                  role: "assistant",
-                  content:
-                    "I can summarize open work, draft updates, or assign owners from this sprint.",
-                  timestamp: "Just now",
-                },
-                {
-                  role: "user",
-                  content: "Who still needs an owner?",
-                  timestamp: "Just now",
-                },
-                {
-                  role: "assistant",
-                  content: "QA checklist is still unassigned. Want me to draft an ask for Maya?",
-                  timestamp: "Just now",
-                },
-              ]}
-            />
-          </aside>
-        </div>
+    <div className={playground.page}>
+      <div className={playground.shell}>
+        <h1 className={playground.pageTitle}>Getting started</h1>
+        <p className={playground.pageLead}>
+          Code-only design system. Compose from kit contracts and components — do not invent local
+          cousins.
+        </p>
+
+        <Section
+          title="What this is"
+          description="A Next.js playground that proves JSON contracts, a short always-on rule, and one skill help agents prototype without inventing local components."
+          collapsible={false}
+        >
+          <p className={playground.body}>
+            Read contracts/index.json, open the matching contract, and import from ui/. If a pattern
+            matches the screen, compose from ui/patterns/.
+          </p>
+        </Section>
+
+        <Section
+          title="Patterns"
+          description="Blueprint compositions that only import kit components. Use these before inventing layouts."
+          collapsible={false}
+        >
+          <p className={playground.body}>
+            The dashboard lives under Patterns — SideNav, overview, task table, and assistant rail.
+          </p>
+        </Section>
       </div>
     </div>
   );

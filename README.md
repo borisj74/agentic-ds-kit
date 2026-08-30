@@ -38,13 +38,13 @@ A Next.js playground that proves JSON component contracts + a short always-on ru
 - `list-detail` — AppNav + Table + detail Section
 
 ### Playground
-Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page.
+Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. Dashboard lives under Patterns.
 
 ### Playground routes
-- `/` — Dashboard pattern (home)
+- `/` — Getting started (introduction)
 - `/foundations` — Token scales
-- `/components` — Live component gallery
-- `/patterns` — Pattern blueprints
+- `/components` — Component gallery (`#gallery`) and per-component docs
+- `/patterns` — Pattern blueprints (`#dashboard`)
 
 ### Agent files
 - `contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups

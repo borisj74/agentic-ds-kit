@@ -26,8 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-      <body>
+      <head>
         <script dangerouslySetInnerHTML={{ __html: PLAYGROUND_THEME_INIT_SCRIPT }} />
+      </head>
+      <body>
         <PlaygroundShell>{children}</PlaygroundShell>
       </body>
     </html>

@@ -57,10 +57,11 @@ import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
 import { ToastDoc } from "./ToastDoc";
 import { TooltipDoc } from "./TooltipDoc";
+import { ComponentGallery } from "./ComponentGallery";
 
 function currentHash(): string {
-  if (typeof window === "undefined") return "button";
-  return window.location.hash.replace(/^#/, "").toLowerCase() || "button";
+  if (typeof window === "undefined") return "gallery";
+  return window.location.hash.replace(/^#/, "").toLowerCase() || "gallery";
 }
 
 const TITLES: Record<string, string> = {
@@ -114,7 +115,6 @@ const TITLES: Record<string, string> = {
   toast: "Toast",
   progress: "Progress",
   section: "Section",
-  appnav: "AppNav",
   table: "Table",
   accordion: "Accordion",
   alert: "Alert",
@@ -162,7 +162,7 @@ function resolveHash(hash: string): string {
 }
 
 export function ComponentsView() {
-  const [hash, setHash] = useState("button");
+  const [hash, setHash] = useState("gallery");
 
   useEffect(() => {
     const sync = () => setHash(currentHash());
@@ -176,7 +176,9 @@ export function ComponentsView() {
   }, []);
 
   const id = resolveHash(hash);
-  const resolved = id in TITLES ? id : "button";
+  if (id === "gallery") return <ComponentGallery />;
+  const resolved = id in TITLES ? id : "gallery";
+  if (resolved === "gallery") return <ComponentGallery />;
 
   if (resolved === "badge") return <BadgeDoc />;
   if (resolved === "barchart") return <BarChartDoc />;

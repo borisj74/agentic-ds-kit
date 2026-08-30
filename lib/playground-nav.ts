@@ -1,10 +1,9 @@
 import type { AppNavGroup } from "@/ui/AppNav";
 
-const COMPONENT_ITEMS = [
+export const COMPONENT_ITEMS = [
   "accordion",
   "alert",
   "alertdialog",
-  "appnav",
   "avatar",
   "avatargroup",
   "badge",
@@ -57,7 +56,7 @@ const COMPONENT_ITEMS = [
   "tooltip",
 ] as const;
 
-function componentLabel(id: string): string {
+export function componentLabel(id: string): string {
   if (id === "appnav") return "AppNav";
   if (id === "pageheader") return "PageHeader";
   if (id === "radiogroup") return "RadioGroup";
@@ -65,12 +64,15 @@ function componentLabel(id: string): string {
   if (id === "alertdialog") return "AlertDialog";
   if (id === "avatar") return "Avatar";
   if (id === "avatargroup") return "AvatarGroup";
+  if (id === "barchart") return "Bar";
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
+  if (id === "linechart") return "Line";
   if (id === "modalcard") return "ModalCard";
   if (id === "navigationmenu") return "NavigationMenu";
+  if (id === "piechart") return "Pie";
   if (id === "scorecard") return "Scorecard";
   if (id === "scoreboard") return "Scoreboard";
   if (id === "sidenav") return "SideNav";
@@ -94,7 +96,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     if (fragment) {
       const frag = fragment.toLowerCase();
       if (!h && path === "/foundations" && frag === "color") return true;
-      if (!h && path === "/components" && frag === "button") return true;
+      if (!h && path === "/components" && frag === "gallery") return true;
       if (!h && path === "/patterns" && frag === "dashboard") return true;
       return h === frag;
     }
@@ -110,7 +112,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
   return [
     {
       label: "Getting started",
-      items: [leaf("/", "Dashboard")],
+      items: [leaf("/", "Introduction")],
     },
     {
       label: "Foundations",
@@ -129,22 +131,25 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Components",
-      items: COMPONENT_ITEMS.flatMap((id) => {
-        const item = leaf(`/components#${id}`, componentLabel(id));
-        if (id !== "cell") return [item];
-        return [
-          item,
-          {
-            href: "/components#chart",
-            label: "Chart",
-            items: [
-              leaf("/components#barchart", "Bar"),
-              leaf("/components#linechart", "Line"),
-              leaf("/components#piechart", "Pie"),
-            ],
-          },
-        ];
-      }),
+      items: [
+        leaf("/components#gallery", "Gallery"),
+        ...COMPONENT_ITEMS.flatMap((id) => {
+          const item = leaf(`/components#${id}`, componentLabel(id));
+          if (id !== "cell") return [item];
+          return [
+            item,
+            {
+              href: "/components#chart",
+              label: "Chart",
+              items: [
+                leaf("/components#barchart", "Bar"),
+                leaf("/components#linechart", "Line"),
+                leaf("/components#piechart", "Pie"),
+              ],
+            },
+          ];
+        }),
+      ],
     },
     {
       label: "Patterns",
@@ -156,7 +161,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
 export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
   {
     label: "Getting started",
-    items: [{ href: "/", label: "Dashboard", active: false }],
+    items: [{ href: "/", label: "Introduction", active: false }],
   },
   {
     label: "Components",

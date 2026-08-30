@@ -20,7 +20,7 @@ export function Card({
 
   return (
     <article
-      className={`${styles.card} ${styles[size]}`}
+      className={[styles.card, styles[size]].filter(Boolean).join(" ")}
       aria-labelledby={title ? titleId : undefined}
     >
       {imageSrc ? (

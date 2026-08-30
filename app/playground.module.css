@@ -2,7 +2,13 @@
   min-height: 100vh;
   min-width: 0;
   max-width: 100%;
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-8) var(--space-10);
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: var(--space-6) var(--space-4);
+  }
 }
 
 .shell {
@@ -69,8 +75,17 @@
   color: var(--text-secondary);
 }
 
-@media (min-width: 768px) {
-  .page {
-    padding: var(--space-8);
+.body {
+  margin: 0;
+  max-width: 40rem;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+@media (min-width: 1024px) {
+  .wideShell {
+    max-width: none;
   }
 }

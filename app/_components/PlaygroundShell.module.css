@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--surface-page);
+  background-color: var(--surface-card);
 }
 
 .topbar {
@@ -16,7 +16,7 @@
   gap: var(--space-stack-md);
   height: var(--playground-topbar-height);
   padding-inline: var(--layout-margin-md);
-  background-color: var(--surface-page);
+  background-color: var(--surface-card);
   border-bottom: var(--border-width-thin) solid var(--border-faint);
 }
 

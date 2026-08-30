@@ -23,7 +23,7 @@ body {
 }
 
 body {
-  background-color: var(--surface-page);
+  background-color: var(--surface-card);
   color: var(--text-primary);
   font-family: var(--font-sans);
   line-height: 1.5;

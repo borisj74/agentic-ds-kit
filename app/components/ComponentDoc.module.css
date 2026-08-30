@@ -159,7 +159,7 @@
   padding: var(--space-4);
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-page);
+  background: var(--surface-card);
   box-shadow: var(--shadow-overlay-md);
 }
 
