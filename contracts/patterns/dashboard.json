@@ -1,8 +1,8 @@
 {
   "id": "dashboard",
   "status": "stable",
-  "intent": "Product dashboard blueprint: page title, KPI strip, activity table, and actions.",
-  "contains": ["pageheader", "scoreboard", "section", "table", "button"],
+  "intent": "Product dashboard blueprint: page title, KPI strip, charts, activity table, and actions.",
+  "contains": ["pageheader", "scoreboard", "section", "table", "button", "piechart", "barchart", "linechart"],
   "doNot": [
     "Do not restyle kit components inside the pattern",
     "Do not add one-off metric rows — use Scoreboard",

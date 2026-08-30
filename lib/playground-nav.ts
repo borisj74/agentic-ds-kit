@@ -109,7 +109,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
   return [
     {
       label: "Getting started",
-      items: [leaf("/", "Home")],
+      items: [leaf("/", "Dashboard")],
     },
     {
       label: "Foundations",
@@ -159,7 +159,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
 export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
   {
     label: "Getting started",
-    items: [{ href: "/", label: "Home", active: false }],
+    items: [{ href: "/", label: "Dashboard", active: false }],
   },
   {
     label: "Components",

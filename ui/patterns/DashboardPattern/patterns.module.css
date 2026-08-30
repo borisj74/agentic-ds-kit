@@ -1,3 +1,6 @@
 .pattern {
+  display: grid;
+  gap: var(--space-8);
   width: 100%;
+  min-width: 0;
 }
