@@ -23,6 +23,7 @@ import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
+import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { InputDoc } from "./InputDoc";
@@ -46,6 +47,8 @@ import { ScorecardDoc } from "./ScorecardDoc";
 import { SelectDoc } from "./SelectDoc";
 import { ShimmerTextDoc } from "./ShimmerTextDoc";
 import { SideNavDoc } from "./SideNavDoc";
+import { SliderDoc } from "./SliderDoc";
+import { SpinnerDoc } from "./SpinnerDoc";
 import { SwitchDoc } from "./SwitchDoc";
 import { TableDoc } from "./TableDoc";
 import { TabsDoc } from "./TabsDoc";
@@ -96,6 +99,7 @@ const TITLES: Record<string, string> = {
   sidenav: "SideNav",
   drawer: "Drawer",
   dropdownmenu: "DropdownMenu",
+  empty: "Empty",
   pageheader: "PageHeader",
   pagination: "Pagination",
   piechart: "Pie",
@@ -103,6 +107,8 @@ const TITLES: Record<string, string> = {
   loadinganimation: "LoadingAnimation",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
+  slider: "Slider",
+  spinner: "Spinner",
   thinkinganimation: "ThinkingAnimation",
   timeline: "Timeline",
   toast: "Toast",
@@ -139,6 +145,7 @@ function resolveHash(hash: string): string {
     "shimmer-text": "shimmertext",
     loading: "loadinganimation",
     "loading-animation": "loadinganimation",
+    spin: "spinner",
     "number-transition": "numbertransition",
     radio: "radiogroup",
     radios: "radiogroup",
@@ -197,6 +204,7 @@ export function ComponentsView() {
   if (resolved === "sidenav") return <SideNavDoc />;
   if (resolved === "drawer") return <DrawerDoc />;
   if (resolved === "dropdownmenu") return <DropdownMenuDoc />;
+  if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
   if (resolved === "input") return <InputDoc />;
@@ -215,6 +223,8 @@ export function ComponentsView() {
   if (resolved === "section") return <SectionDoc />;
   if (resolved === "select") return <SelectDoc />;
   if (resolved === "shimmertext") return <ShimmerTextDoc />;
+  if (resolved === "slider") return <SliderDoc />;
+  if (resolved === "spinner") return <SpinnerDoc />;
   if (resolved === "switch") return <SwitchDoc />;
   if (resolved === "table") return <TableDoc />;
   if (resolved === "tabs") return <TabsDoc />;

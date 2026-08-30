@@ -1,0 +1,81 @@
+{
+  "id": "slider",
+  "status": "stable",
+  "intent": "Pick a value or range along a track. One piece. Range is a two-value array, not a RangeSlider cousin.",
+  "useWhen": [
+    "Adjust a numeric setting on a continuous scale",
+    "Pick a min and max range for filters",
+    "Volume, brightness, or percent controls in a form"
+  ],
+  "doNotUseWhen": [
+    "Discrete choices from a short list — use RadioGroup or Select",
+    "On/off settings — use Switch",
+    "Determinate task completion — use Progress"
+  ],
+  "props": {
+    "value": {
+      "type": "number | number[]",
+      "required": true,
+      "note": "Current value. Single number for one thumb. Two numbers for a range."
+    },
+    "min": {
+      "type": "number",
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "default": 100
+    },
+    "step": {
+      "type": "number",
+      "default": 1
+    },
+    "orientation": {
+      "type": "enum",
+      "values": ["horizontal", "vertical"],
+      "default": "horizontal",
+      "note": "Vertical is orientation, not a VerticalSlider cousin."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "Called with the next value or value array."
+    }
+  },
+  "tokens": [
+    "fill.brand",
+    "fill.subtle",
+    "surface.card",
+    "border.faint",
+    "border.strong",
+    "action.primary",
+    "action.onPrimary",
+    "focus.ring",
+    "radius.pill",
+    "radius.full",
+    "space.1",
+    "space.2",
+    "motion.interactionDuration",
+    "motion.interactionEasing"
+  ],
+  "a11y": {
+    "element": "span[role=slider]",
+    "requirements": [
+      "Each thumb has role=slider",
+      "aria-valuemin, aria-valuemax, aria-valuenow on each thumb",
+      "Arrow keys adjust by step. Home and End jump to min and max",
+      "Focus ring on thumb focus-visible"
+    ]
+  },
+  "doNot": [
+    "Do not invent SliderTrack, SliderThumb, SliderRange, RangeSlider, or VerticalSlider",
+    "Do not use raw hex",
+    "Do not use radix or @base-ui/react",
+    "Do not use a native range input"
+  ],
+  "snippet": "<Slider value={33} onValueChange={setValue} />\n<Slider value={[25, 75]} onValueChange={setRange} />\n<Slider value={50} orientation=\"vertical\" disabled />"
+}

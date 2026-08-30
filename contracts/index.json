@@ -91,6 +91,20 @@
     "status": "stable"
   },
   {
+    "id": "slider",
+    "intent": "Pick a value or range along a track.",
+    "group": "component",
+    "path": "contracts/slider.json",
+    "status": "stable"
+  },
+  {
+    "id": "spinner",
+    "intent": "Spinning circular loader for indeterminate waits.",
+    "group": "component",
+    "path": "contracts/spinner.json",
+    "status": "stable"
+  },
+  {
     "id": "switch",
     "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
     "group": "component",
@@ -256,6 +270,13 @@
     "intent": "Actions or value menu from a button, field, or nav trigger.",
     "group": "component",
     "path": "contracts/dropdownmenu.json",
+    "status": "stable"
+  },
+  {
+    "id": "empty",
+    "intent": "Placeholder when a list, page, or region has nothing to show.",
+    "group": "component",
+    "path": "contracts/empty.json",
     "status": "stable"
   },
   {
