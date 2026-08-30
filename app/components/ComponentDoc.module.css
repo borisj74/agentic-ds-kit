@@ -119,6 +119,10 @@
   background: var(--surface-muted);
 }
 
+.layout:not(:has(.panel)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .canvas {
   display: grid;
   place-items: center;
