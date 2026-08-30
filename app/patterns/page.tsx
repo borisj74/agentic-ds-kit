@@ -56,9 +56,9 @@ export default function PatternsPage() {
                 nav={{
                   title: "Studio",
                   items: [
-                    { href: "#", label: "Projects", active: true },
-                    { href: "#", label: "Archive" },
-                    { href: "#", label: "Settings" },
+                    { href: "#projects", label: "Projects", active: true },
+                    { href: "#archive", label: "Archive" },
+                    { href: "#settings", label: "Settings" },
                   ],
                 }}
                 table={{

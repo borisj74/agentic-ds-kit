@@ -8,6 +8,10 @@ import styles from "./AppNav.module.css";
 
 export type { AppNavProps, AppNavItem, AppNavLeaf, AppNavGroup } from "./AppNav.types";
 
+function navKey(item: AppNavLeaf, index: number): string {
+  return `${item.href}::${item.label}::${index}`;
+}
+
 function groupHasActive(group: AppNavGroup): boolean {
   return group.items.some((item) => item.active || item.items?.some((child) => child.active));
 }
@@ -39,8 +43,8 @@ function NavItem({ item }: { item: AppNavItem }) {
       <li className={styles.item}>
         <span className={styles.subgroupLabel}>{item.label}</span>
         <ul className={styles.subList}>
-          {item.items.map((child) => (
-            <li key={child.href}>
+          {item.items.map((child, index) => (
+            <li key={navKey(child, index)}>
               <NavLink {...child} nested />
             </li>
           ))}
@@ -83,8 +87,8 @@ function NavGroup({
       <div className={styles.accordion} id={groupId} aria-hidden={!open} inert={open ? undefined : true}>
         <div className={styles.accordionInner}>
           <ul className={styles.list}>
-            {group.items.map((item) => (
-              <NavItem key={item.href + item.label} item={item} />
+            {group.items.map((item, index) => (
+              <NavItem key={navKey(item, index)} item={item} />
             ))}
           </ul>
         </div>
@@ -123,8 +127,8 @@ export function AppNav({ title, items = [], groups }: AppNavProps) {
         </ul>
       ) : (
         <ul className={styles.list}>
-          {items.map((item) => (
-            <NavItem key={item.href} item={item} />
+          {items.map((item, index) => (
+            <NavItem key={navKey(item, index)} item={item} />
           ))}
         </ul>
       )}
