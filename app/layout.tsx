@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PlaygroundShell } from "./_components/PlaygroundShell";
+import { PLAYGROUND_THEME_INIT_SCRIPT } from "@/lib/playground-theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,8 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: PLAYGROUND_THEME_INIT_SCRIPT }} />
         <PlaygroundShell>{children}</PlaygroundShell>
       </body>
     </html>

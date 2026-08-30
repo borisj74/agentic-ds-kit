@@ -77,6 +77,8 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
@@ -158,6 +160,8 @@ const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
   AlignLeft,
   AlignCenter,
   AlignRight,
+  Moon,
+  Sun,
 };
 
 export function LucideByName({
