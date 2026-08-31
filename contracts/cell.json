@@ -164,6 +164,7 @@
   },
   "tokens": [
     "text.primary",
+    "text.secondary",
     "icon.muted",
     "icon.warning",
     "status.success",

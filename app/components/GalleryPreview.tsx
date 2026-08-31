@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Accordion } from "@/ui/Accordion";
 import { Alert } from "@/ui/Alert";
+import { AppHeader } from "@/ui/AppHeader";
 import { Avatar } from "@/ui/Avatar";
 import { AvatarGroup } from "@/ui/AvatarGroup";
 import { Badge } from "@/ui/Badge";
@@ -34,6 +35,7 @@ import { PageHeader } from "@/ui/PageHeader";
 import { Pagination } from "@/ui/Pagination";
 import { PieChart } from "@/ui/PieChart";
 import { Progress } from "@/ui/Progress";
+import { ProgressSteps } from "@/ui/ProgressSteps";
 import { RadioGroup } from "@/ui/RadioGroup";
 import { Scoreboard } from "@/ui/Scoreboard";
 import { Scorecard } from "@/ui/Scorecard";
@@ -92,6 +94,19 @@ export function GalleryPreview({ id }: { id: string }) {
         <Button size="sm" variant="danger">
           Delete
         </Button>
+      );
+    case "appheader":
+      return (
+        <Stage variant="wide">
+          <AppHeader
+            title="Acme"
+            mark="A"
+            searchPlaceholder="Search"
+            actions={
+              <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+            }
+          />
+        </Stage>
       );
     case "avatar":
       return <Avatar name="Maya Chen" size="sm" />;
@@ -285,6 +300,20 @@ export function GalleryPreview({ id }: { id: string }) {
       return <PieChart data={CHART} size={96} showTable={false} />;
     case "progress":
       return <Progress value={64} size="md" shape="circle" showValue ariaLabel="Progress" />;
+    case "progresssteps":
+      return (
+        <Stage variant="wide">
+          <ProgressSteps
+            size="sm"
+            current={1}
+            steps={[
+              { id: "one", label: "Details" },
+              { id: "two", label: "Company" },
+              { id: "three", label: "Review" },
+            ]}
+          />
+        </Stage>
+      );
     case "radiogroup":
       return (
         <Stage variant="wide">

@@ -10,7 +10,7 @@ const PATTERNS = [
   { name: "App shell", className: ".layout-app", copy: "Fixed product nav + fluid canvas. First layout every SaaS screen should use." },
   { name: "Canvas", className: ".layout-canvas", copy: "Header bar over a fill-height body. Lives inside the app shell canvas column." },
   { name: "Workspace", className: ".layout-workspace", copy: "Primary content + optional context rail (assistant, inspector, detail)." },
-  { name: "Content", className: ".layout-content", copy: "Scrollable dashboard body with section stack and page inset." },
+  { name: "Content", className: ".layout-content", copy: "Scrollable dashboard body. Stacks sections with space-gap-lg and page inset." },
   { name: "Metrics", className: ".layout-metrics", copy: "KPI / summary card strip. Use --fixed-3 or --fixed-4 when the count is known." },
   { name: "Header", className: ".layout-header", copy: "Title cluster + actions row for the canvas top bar." },
 ] as const;

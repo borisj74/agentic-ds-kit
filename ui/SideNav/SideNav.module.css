@@ -7,17 +7,15 @@
   max-width: var(--layout-sidebar);
   min-height: 0;
   overflow: hidden;
-  border: var(--border-surface) solid var(--border-subtle);
-  border-radius: var(--radius-surface-md);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-0);
   background: var(--surface-card);
-  box-shadow: var(--shadow-raised-depth);
   color: var(--text-primary);
 }
 
 .rootClosed {
   width: var(--layout-sidebar-compact);
   max-width: var(--layout-sidebar-compact);
-  box-shadow: none;
 }
 
 .header {

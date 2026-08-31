@@ -258,9 +258,15 @@ export function Cell({
     );
   }
 
+  const avatarSupport = type === "avatar" && name && label && label !== name ? label : "";
+  const showAvatarCopy = type === "avatar" && text && Boolean(personName);
   const showSideLabel =
-    text && shown && type !== "trendPositive" && type !== "trendNegative";
-  const empty = !checkbox && !visual && !showSideLabel;
+    text &&
+    shown &&
+    type !== "trendPositive" &&
+    type !== "trendNegative" &&
+    type !== "avatar";
+  const empty = !checkbox && !visual && !showSideLabel && !showAvatarCopy;
 
   const actionMenu = type === "actionMenu";
 
@@ -280,7 +286,14 @@ export function Cell({
         />
       ) : null}
       {visual ? <span className={styles.visual}>{visual}</span> : null}
-      {showSideLabel ? <span className={styles.label}>{shown}</span> : null}
+      {showAvatarCopy ? (
+        <span className={styles.copy}>
+          <span className={styles.label}>{personName}</span>
+          {avatarSupport ? <span className={styles.support}>{avatarSupport}</span> : null}
+        </span>
+      ) : showSideLabel ? (
+        <span className={styles.label}>{shown}</span>
+      ) : null}
       {empty ? "\u00a0" : null}
     </span>
   );

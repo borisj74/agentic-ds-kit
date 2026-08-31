@@ -30,7 +30,7 @@ export function TimelineDoc() {
         <h1 className={styles.heroTitle}>Timeline</h1>
         <p className={styles.lede}>
           A vertical sequence of now, next, and later — for roadmaps and multi-stage work. One
-          piece. Not a Stepper cousin.
+          piece. Numbered wizard steps use ProgressSteps.
         </p>
       </header>
 
@@ -75,7 +75,7 @@ export function TimelineDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  A single now step is valid. Do not invent a Stepper cousin.
+                  A single now step is valid. Numbered wizard steps use ProgressSteps.
                 </p>
               </div>
               <CodeBlock

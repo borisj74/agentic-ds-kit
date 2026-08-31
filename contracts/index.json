@@ -322,10 +322,24 @@
     "status": "stable"
   },
   {
+    "id": "progresssteps",
+    "intent": "Ordered wizard steps as numbered circles with complete, current, and upcoming.",
+    "group": "component",
+    "path": "contracts/progresssteps.json",
+    "status": "stable"
+  },
+  {
     "id": "section",
     "intent": "Grouped page block with heading, optional description and actions.",
     "group": "component",
     "path": "contracts/section.json",
+    "status": "stable"
+  },
+  {
+    "id": "appheader",
+    "intent": "Product top chrome: brand mark, centered search, trailing actions.",
+    "group": "component",
+    "path": "contracts/appheader.json",
     "status": "stable"
   },
   {

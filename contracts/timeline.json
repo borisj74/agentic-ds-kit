@@ -8,7 +8,8 @@
   ],
   "doNotUseWhen": [
     "Comparing values — use charts",
-    "Switching peer views — use Tabs"
+    "Switching peer views — use Tabs",
+    "Numbered wizard or checkout steps — use ProgressSteps"
   ],
   "props": {
     "items": {
@@ -41,6 +42,7 @@
   },
   "doNot": [
     "Do not invent TimelineItem cousins",
+    "Do not use Timeline for numbered wizard steps — use ProgressSteps",
     "Do not use raw hex"
   ],
   "snippet": "<Timeline items={[{ status: 'now', title: 'Ship beta', body: 'Final QA this week' }]} />"

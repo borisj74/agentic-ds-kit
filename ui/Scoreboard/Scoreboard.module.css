@@ -19,7 +19,7 @@
 }
 
 .count4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
 }
 
 .overflow {
@@ -27,8 +27,4 @@
   min-width: 0;
   padding-inline: var(--space-12);
   box-sizing: border-box;
-}
-
-.overflow article {
-  box-shadow: none;
 }

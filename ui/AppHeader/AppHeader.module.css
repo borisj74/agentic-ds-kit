@@ -1,0 +1,113 @@
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--layout-rail)) minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-4);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: calc(var(--space-10) + var(--space-2) + var(--space-2));
+  padding: var(--space-2) var(--space-5);
+  border-bottom: var(--border-divider) solid var(--border-faint);
+  border-radius: 0;
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  justify-self: start;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  max-height: var(--space-8);
+  overflow: hidden;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--space-8);
+  height: var(--space-8);
+  margin: 0;
+  border-radius: var(--radius-control-md);
+  background: var(--fill-brand);
+  color: var(--brand-on-brand);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: 1;
+}
+
+.title {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.search {
+  width: 100%;
+  min-width: 0;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  min-width: 0;
+  justify-self: end;
+}
+
+.header[data-search="false"] {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+@media (max-width: 40rem) {
+  .header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "start end"
+      "search search";
+    row-gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .header[data-search="false"] {
+    grid-template-areas: "start end";
+  }
+
+  .start {
+    grid-area: start;
+  }
+
+  .center {
+    grid-area: search;
+  }
+
+  .end {
+    grid-area: end;
+  }
+}

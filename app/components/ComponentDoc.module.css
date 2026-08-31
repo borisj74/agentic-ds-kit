@@ -156,7 +156,7 @@
   gap: var(--space-4);
   width: 15.5rem;
   margin: 0;
-  padding: var(--space-4);
+  padding: var(--space-6);
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   background: var(--surface-card);

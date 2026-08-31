@@ -212,7 +212,8 @@ export function SideNavDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Put SideNav next to the page. Pass groups of icon items with optional badges.
-                  X closes. The brand mark reopens. Use AppNav for a docs catalog. Use Drawer
+                  X closes. The brand mark reopens. When AppHeader already provides brand, pass{" "}
+                  <code>showHeader={"{false}"}</code>. Use AppNav for a docs catalog. Use Drawer
                   for a temporary overlay panel.
                 </p>
               </div>

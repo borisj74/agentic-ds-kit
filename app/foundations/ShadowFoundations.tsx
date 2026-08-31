@@ -25,7 +25,7 @@ const ROLES = [
     { name: "shadow-raised-md", note: "md" },
     { name: "shadow-raised-lg", note: "lg" },
     { name: "shadow-raised-soft", note: "soft" },
-    { name: "shadow-raised-depth", note: "glass rim" },
+    { name: "shadow-raised-depth", note: "glass rim; drop only in dark" },
   ]},
   { title: "Overlay", code: "shadow-overlay-*", tokens: [
     { name: "shadow-overlay-sm", note: "sm" },

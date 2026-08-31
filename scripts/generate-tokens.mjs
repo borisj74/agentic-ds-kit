@@ -344,6 +344,10 @@ ${staticVars().join("\n")}
 
 [data-theme="dark"] {
 ${resolveThemeVars("dark").join("\n")}
+  --shadow-inset-top-light: inset 0 0 0 transparent;
+  --shadow-inset-start-light: inset 0 0 0 transparent;
+  --shadow-inset-end-light: inset 0 0 0 transparent;
+  --shadow-inset-bottom-light: inset 0 0 0 transparent;
 }
 
 ${colorThemeBlocks().join("\n")}

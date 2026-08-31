@@ -22,6 +22,8 @@ export interface SideNavProps {
   title: string;
   /** Brand letter; default first char of title. */
   mark?: string;
+  /** Brand header and close. Default true. Set false when AppHeader already provides brand. */
+  showHeader?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;

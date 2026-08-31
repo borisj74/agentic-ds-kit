@@ -4,6 +4,7 @@ export const COMPONENT_ITEMS = [
   "accordion",
   "alert",
   "alertdialog",
+  "appheader",
   "avatar",
   "avatargroup",
   "badge",
@@ -37,6 +38,7 @@ export const COMPONENT_ITEMS = [
   "pageheader",
   "pagination",
   "progress",
+  "progresssteps",
   "radiogroup",
   "scorecard",
   "scoreboard",
@@ -58,6 +60,7 @@ export const COMPONENT_ITEMS = [
 
 export function componentLabel(id: string): string {
   if (id === "appnav") return "AppNav";
+  if (id === "appheader") return "AppHeader";
   if (id === "pageheader") return "PageHeader";
   if (id === "radiogroup") return "RadioGroup";
   if (id === "buttongroup") return "ButtonGroup";
@@ -73,6 +76,7 @@ export function componentLabel(id: string): string {
   if (id === "modalcard") return "ModalCard";
   if (id === "navigationmenu") return "NavigationMenu";
   if (id === "piechart") return "Pie";
+  if (id === "progresssteps") return "ProgressSteps";
   if (id === "scorecard") return "Scorecard";
   if (id === "scoreboard") return "Scoreboard";
   if (id === "sidenav") return "SideNav";
@@ -153,7 +157,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Patterns",
-      items: [leaf("/patterns#dashboard", "dashboard")],
+      items: [leaf("/patterns#dashboard", "Dashboard")],
     },
   ];
 }

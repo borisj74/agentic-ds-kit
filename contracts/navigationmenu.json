@@ -11,7 +11,8 @@
     "Playground catalog list — use AppNav",
     "Path to the current page — use Breadcrumb",
     "In-page panels — use Tabs",
-    "Actions from a button — use DropdownMenu"
+    "Actions from a button — use DropdownMenu",
+    "Product top bar with logo and search — use AppHeader"
   ],
   "props": {
     "items": {

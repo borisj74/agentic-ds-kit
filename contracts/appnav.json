@@ -11,7 +11,8 @@
     "In-page panel switching \u2014 use Tabs",
     "Horizontal site nav \u2014 use NavigationMenu",
     "Breadcrumb trails \u2014 not supported",
-    "Closeable product chrome \u2014 use SideNav"
+    "Closeable product chrome \u2014 use SideNav",
+    "Product top bar with logo and search \u2014 use AppHeader"
   ],
   "props": {
     "title": {

@@ -1,8 +1,8 @@
 {
   "id": "dashboard",
   "status": "stable",
-  "intent": "Overview dashboard: page title, line chart, searchable task table, and actions.",
-  "contains": ["pageheader", "linechart", "section", "datatable", "button"],
+  "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
+  "contains": ["pageheader", "scoreboard", "linechart", "section", "datatable", "button"],
   "doNot": [
     "Do not restyle kit components inside the pattern",
     "Do not define a local dashboard layout component",

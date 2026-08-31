@@ -1,0 +1,129 @@
+{
+  "id": "appheader",
+  "status": "stable",
+  "intent": "Product top chrome: brand mark on the start, centered kit Input search, trailing actions. Not a page title. Not a sidebar.",
+  "useWhen": [
+    "Persistent product shell top bar with logo, global search, and utility actions",
+    "A full-bleed header above the page, not the page’s title block"
+  ],
+  "doNotUseWhen": [
+    "Page title, subtitle, Breadcrumb, or in-page actions — use PageHeader",
+    "Vertical sidebar catalog — use AppNav",
+    "Closeable product side nav — use SideNav",
+    "Horizontal site destinations and dropdowns — use NavigationMenu",
+    "Command palette overlay — use Command; AppHeader search is a kit Input"
+  ],
+  "contains": [
+    "input",
+    "button"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Product name next to the mark. Not an h1. Page titles belong on PageHeader."
+    },
+    "mark": {
+      "type": "string",
+      "required": false,
+      "note": "Brand letter. Defaults to the first character of title. Same idea as SideNav mark. Not a branded SVG."
+    },
+    "logo": {
+      "type": "slot",
+      "required": false,
+      "note": "Custom mark or wordmark ReactNode. Replaces the default letter mark. Consumers pass their own logo. Do not copy a file-specific brand mark into the kit."
+    },
+    "search": {
+      "type": "boolean",
+      "default": true,
+      "note": "Renders a centered kit Input. Hide only when the shell has no global search."
+    },
+    "searchPlaceholder": {
+      "type": "string",
+      "default": "Search"
+    },
+    "searchValue": {
+      "type": "string",
+      "required": false,
+      "note": "controlled. When set, pair with onSearch."
+    },
+    "defaultSearchValue": {
+      "type": "string",
+      "required": false
+    },
+    "onSearch": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void. Input onChange."
+    },
+    "searchShortcut": {
+      "type": "string",
+      "required": false,
+      "note": "Decorative Input end slot, e.g. ⌘K. Not a keybinding."
+    },
+    "searchId": {
+      "type": "string",
+      "required": false,
+      "note": "Passed to kit Input. Generated when omitted."
+    },
+    "actions": {
+      "type": "slot",
+      "allowedContracts": [
+        "button"
+      ],
+      "required": false,
+      "note": "kit Buttons. At most one primary. Do not put an assistant/Copilot CTA in the kit."
+    },
+    "className": {
+      "type": "string",
+      "required": false
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "header label. Defaults to title, then Application."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "text.primary",
+    "fill.brand",
+    "brand.onBrand",
+    "border.faint",
+    "border.divider",
+    "radius.control.md",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.5",
+    "space.8",
+    "space.10",
+    "layout.rail",
+    "type.size.heading",
+    "type.size.label",
+    "type.weight.heading",
+    "type.weight.label"
+  ],
+  "a11y": {
+    "element": "header",
+    "requirements": [
+      "header has aria-label from ariaLabel, title, or Application",
+      "Search is kit Input type=search with aria-label from searchPlaceholder",
+      "Default letter mark is aria-hidden",
+      "Actions remain keyboard accessible",
+      "Do not use h1 — page titles belong on PageHeader"
+    ]
+  },
+  "doNot": [
+    "Do not invent TopBar, SearchBar, Logo, Masthead, or AppBar cousins",
+    "Do not use PageHeader for product chrome",
+    "Do not use AppNav, SideNav, or NavigationMenu as a top bar with search",
+    "Do not bake a product logo SVG into the kit — use logo or mark",
+    "Do not add a Copilot, assistant, or sparkle CTA",
+    "Do not restyle kit Input internals",
+    "Do not put more than one primary Button in actions",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AppHeader title=\"Acme\" mark=\"A\" searchPlaceholder=\"Search\" searchShortcut=\"⌘K\" onSearch={setQuery} actions={<><Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /></>} />"
+}

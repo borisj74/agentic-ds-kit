@@ -5,18 +5,18 @@
   min-width: 0;
   max-width: 100%;
   width: 100%;
-  background-color: var(--surface-card);
+  background-color: transparent;
 }
 
 .sm {
-  min-height: 3rem;
-  padding: var(--space-2) var(--space-3);
+  min-height: 2.25rem;
+  padding: var(--space-2) var(--space-4);
   gap: var(--space-2);
 }
 
 .md {
-  min-height: 4rem;
-  padding: var(--space-3) var(--space-4);
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-6);
   gap: var(--space-2);
 }
 
@@ -47,12 +47,9 @@
   overflow-wrap: anywhere;
 }
 
-.sm .label {
-  font-size: var(--type-size-caption);
-}
-
+.sm .label,
 .md .label {
-  font-size: var(--type-size-label);
+  font-size: var(--type-size-caption);
 }
 
 .sort {

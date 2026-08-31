@@ -7,14 +7,18 @@ export type { ScoreboardProps } from "./Scoreboard.types";
 
 const STRIP_MAX = 4;
 
-export function Scoreboard({ items, "aria-label": ariaLabel = "Key metrics" }: ScoreboardProps) {
+export function Scoreboard({
+  items,
+  "aria-label": ariaLabel = "Key metrics",
+  className = "",
+}: ScoreboardProps) {
   const cards = items.map((item) => (
     <Scorecard key={item.label} {...item} fill />
   ));
 
   if (items.length > STRIP_MAX) {
     return (
-      <div className={styles.overflow}>
+      <div className={`${styles.overflow} ${className}`.trim()}>
         <Carousel items={cards} slidesPerView={4} ariaLabel={ariaLabel} />
       </div>
     );
@@ -30,7 +34,7 @@ export function Scoreboard({ items, "aria-label": ariaLabel = "Key metrics" }: S
           : styles.count4;
 
   return (
-    <section className={`${styles.scoreboard} ${countClass}`} aria-label={ariaLabel}>
+    <section className={`${styles.scoreboard} ${countClass} ${className}`.trim()} aria-label={ariaLabel}>
       {cards}
     </section>
   );

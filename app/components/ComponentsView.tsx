@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AccordionDoc } from "./AccordionDoc";
 import { AlertDialogDoc } from "./AlertDialogDoc";
 import { AlertDoc } from "./AlertDoc";
+import { AppHeaderDoc } from "./AppHeaderDoc";
 import { AvatarDoc } from "./AvatarDoc";
 import { AvatarGroupDoc } from "./AvatarGroupDoc";
 import { BadgeDoc } from "./BadgeDoc";
@@ -40,6 +41,7 @@ import { PageHeaderDoc } from "./PageHeaderDoc";
 import { PaginationDoc } from "./PaginationDoc";
 import { PieChartDoc } from "./PieChartDoc";
 import { ProgressDoc } from "./ProgressDoc";
+import { ProgressStepsDoc } from "./ProgressStepsDoc";
 import { RadioGroupDoc } from "./RadioGroupDoc";
 import { ScoreboardDoc } from "./ScoreboardDoc";
 import { SectionDoc } from "./SectionDoc";
@@ -114,11 +116,13 @@ const TITLES: Record<string, string> = {
   timeline: "Timeline",
   toast: "Toast",
   progress: "Progress",
+  progresssteps: "ProgressSteps",
   section: "Section",
   table: "Table",
   accordion: "Accordion",
   alert: "Alert",
   alertdialog: "AlertDialog",
+  appheader: "AppHeader",
   avatar: "Avatar",
   avatargroup: "AvatarGroup",
 };
@@ -146,6 +150,14 @@ function resolveHash(hash: string): string {
     loading: "loadinganimation",
     "loading-animation": "loadinganimation",
     spin: "spinner",
+    stepper: "progresssteps",
+    steps: "progresssteps",
+    "progress-steps": "progresssteps",
+    progressstep: "progresssteps",
+    topbar: "appheader",
+    "app-header": "appheader",
+    masthead: "appheader",
+    appbar: "appheader",
     "number-transition": "numbertransition",
     radio: "radiogroup",
     radios: "radiogroup",
@@ -188,6 +200,7 @@ export function ComponentsView() {
   if (resolved === "accordion") return <AccordionDoc />;
   if (resolved === "alert") return <AlertDoc />;
   if (resolved === "alertdialog") return <AlertDialogDoc />;
+  if (resolved === "appheader") return <AppHeaderDoc />;
   if (resolved === "avatar") return <AvatarDoc />;
   if (resolved === "avatargroup") return <AvatarGroupDoc />;
   if (resolved === "calendar") return <CalendarDoc />;
@@ -219,6 +232,7 @@ export function ComponentsView() {
   if (resolved === "pagination") return <PaginationDoc />;
   if (resolved === "piechart") return <PieChartDoc />;
   if (resolved === "progress") return <ProgressDoc />;
+  if (resolved === "progresssteps") return <ProgressStepsDoc />;
   if (resolved === "radiogroup") return <RadioGroupDoc />;
   if (resolved === "scorecard") return <ScorecardDoc />;
   if (resolved === "scoreboard") return <ScoreboardDoc />;

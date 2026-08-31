@@ -10,18 +10,24 @@
     "Docs catalog \u2014 use AppNav",
     "Overlay task panel \u2014 use Drawer",
     "Centered short task \u2014 use Modal",
-    "Horizontal site nav \u2014 use NavigationMenu"
+    "Horizontal site nav \u2014 use NavigationMenu",
+    "Product top bar with logo and search \u2014 use AppHeader"
   ],
   "props": {
     "title": {
       "type": "string",
       "required": true,
-      "note": "Brand title in the header"
+      "note": "Brand title in the header. Accessible name on the aside when showHeader is false"
     },
     "mark": {
       "type": "string",
       "required": false,
       "note": "Brand letter. Defaults to the first character of title"
+    },
+    "showHeader": {
+      "type": "boolean",
+      "default": true,
+      "note": "Brand mark, title, and close. Set false when AppHeader already provides brand. Rail stays expanded."
     },
     "open": {
       "type": "boolean",
@@ -81,7 +87,6 @@
     "icon.brand",
     "icon.muted",
     "focus.ring",
-    "shadow.raisedDepth",
     "layout.sidebar",
     "layout.sidebarCompact"
   ],
@@ -93,6 +98,7 @@
       "Close is a kit Button with ariaLabel Close",
       "Closed rail reopens via the brand mark button with ariaLabel Open",
       "Title is visible in the header when open; clipped when closed",
+      "When showHeader is false, omit the header and close; title remains the accessible name via aria-label",
       "Active leaf uses aria-current=page",
       "Parent with nested items is a disclosure with aria-expanded",
       "Closed rail keeps labels available as sr-only text"

@@ -39,12 +39,17 @@
 
 .layout-content {
   display: grid;
-  gap: var(--space-stack-lg);
+  gap: var(--space-gap-lg);
   align-content: start;
   min-width: 0;
   min-height: 0;
   padding: var(--layout-margin-md);
   overflow: auto;
+}
+
+/* Parent gap owns the stack; kit Section also sets space-section margin. */
+.layout-content > section {
+  margin-bottom: 0;
 }
 
 .layout-metrics {
@@ -69,6 +74,24 @@
   gap: var(--layout-gutter-sm);
   padding-block: var(--space-inset-md);
   padding-inline: var(--layout-margin-md);
+}
+
+/* Canvas is the scrollport. Header and content flow together. */
+.layout-canvas--sticky-header {
+  overflow: auto;
+  align-content: start;
+  align-items: start;
+  grid-template-rows: max-content max-content;
+}
+
+.layout-canvas--sticky-header > .layout-content {
+  overflow: visible;
+  width: 100%;
+  padding-bottom: var(--space-10);
+}
+
+.layout-canvas--sticky-header > .layout-header {
+  width: 100%;
 }
 
 .layout-split {

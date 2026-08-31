@@ -8,7 +8,6 @@
   border: var(--border-highlight) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   background: var(--surface-card);
-  box-shadow: var(--shadow-raised-depth);
   font-family: var(--font-sans);
   text-align: start;
 }
@@ -124,13 +123,11 @@
   cursor: pointer;
   transition:
     transform var(--motion-interaction-duration) var(--motion-interaction-easing),
-    box-shadow var(--motion-interaction-duration) var(--motion-interaction-easing),
     border-color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
 .interactive:hover {
-  border-color: var(--border-faint);
-  box-shadow: var(--shadow-raised-depth);
+  border-color: var(--border-strong);
 }
 
 .interactive:active {

@@ -9,6 +9,7 @@
   "doNotUseWhen": [
     "In-card titles — use Section",
     "Sidebar — use AppNav or SideNav",
+    "Product top chrome with logo and search — use AppHeader",
     "Modal titles — use ModalCard",
     "Path-only without a page title — use Breadcrumb"
   ],

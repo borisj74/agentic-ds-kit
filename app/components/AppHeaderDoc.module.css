@@ -1,0 +1,47 @@
+.canvas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 20rem;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-6);
+  background: var(--surface-muted);
+}
+
+.bar {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.exampleCanvas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 12rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: var(--space-6);
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.wordmark {
+  display: grid;
+  place-items: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--fill-strong);
+  color: var(--icon-inverse);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: 1;
+}

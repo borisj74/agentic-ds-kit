@@ -1,4 +1,6 @@
-import { Chat } from "@/ui/Chat";
+import { AppHeader } from "@/ui/AppHeader";
+import { Avatar } from "@/ui/Avatar";
+import { Button } from "@/ui/Button";
 import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
 import { SideNav } from "@/ui/SideNav";
 import type { SideNavGroup, SideNavItem } from "@/ui/SideNav";
@@ -47,37 +49,33 @@ const NAV_FOOTER: SideNavItem[] = [
 
 export function DashboardDemo() {
   return (
-    <div className={styles.opsShell}>
-      <div className={styles.ops}>
-        <SideNav title="Operations" mark="O" groups={NAV_GROUPS} footer={NAV_FOOTER} />
-        <DashboardPattern />
-        <aside className={styles.rail}>
-          <Chat
-            title="Workspace assistant"
-            status="Ready"
-            placeholder="Message the assistant..."
-            menuItems={[{ label: "Refresh" }]}
-            suggestions={["Assign Final QA", "Draft sprint update"]}
-            messages={[
-              {
-                role: "assistant",
-                content:
-                  "I can summarize open work, draft updates, or assign owners from this sprint.",
-                timestamp: "Just now",
-              },
-              {
-                role: "user",
-                content: "Who still needs an owner?",
-                timestamp: "Just now",
-              },
-              {
-                role: "assistant",
-                content: "QA checklist is still unassigned. Want me to draft an ask for Maya?",
-                timestamp: "Just now",
-              },
-            ]}
-          />
-        </aside>
+    <div className={styles.browser}>
+      <div className={styles.browserChrome} aria-hidden="true">
+        <div className={styles.traffic}>
+          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
+        </div>
+        <div className={styles.urlBar}>app.operations.dev/overview</div>
+      </div>
+      <div className={styles.product}>
+        <AppHeader
+          title="Operations"
+          mark="O"
+          searchPlaceholder="Search"
+          searchShortcut="⌘K"
+          actions={
+            <>
+              <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+              <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+              <Avatar name="Maya Chen" size="sm" src="/faces/maya-chen.jpg" />
+            </>
+          }
+        />
+        <div className={`layout-app ${styles.demo}`}>
+          <SideNav title="Operations" mark="O" showHeader={false} groups={NAV_GROUPS} footer={NAV_FOOTER} />
+          <DashboardPattern />
+        </div>
       </div>
     </div>
   );

@@ -255,7 +255,7 @@ export function DataTable({
   }
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-size={cellSize}>
       {toolbar ? (
         <div className={styles.toolbar}>
           <div className={styles.search}>
@@ -400,7 +400,7 @@ export function DataTable({
                 const checked = selected.includes(id);
                 const name = rowLabel(row, lockedKey, id);
                 return (
-                  <tr key={id} className={styles.tr}>
+                  <tr key={id} className={styles.tr} data-selected={checked || undefined}>
                     {selectable ? (
                       <td className={`${styles.td} ${styles.checkCell}`}>
                         <Checkbox

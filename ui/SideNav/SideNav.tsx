@@ -127,6 +127,7 @@ function NavList({ items, rail }: { items: SideNavItem[]; rail: boolean }) {
 export function SideNav({
   title,
   mark,
+  showHeader = true,
   open: openProp,
   defaultOpen = true,
   onOpenChange,
@@ -137,7 +138,7 @@ export function SideNav({
 }: SideNavProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  const open = isControlled ? openProp : uncontrolledOpen;
+  const expanded = showHeader ? (isControlled ? openProp : uncontrolledOpen) : true;
   const useGroups = Boolean(groups && groups.length > 0);
   const markLetter = (mark && mark.length > 0 ? mark : title.charAt(0)) || "·";
 
@@ -148,53 +149,55 @@ export function SideNav({
 
   return (
     <aside
-      className={`${styles.root} ${open ? "" : styles.rootClosed}`.trim()}
+      className={`${styles.root} ${expanded ? "" : styles.rootClosed}`.trim()}
       aria-label={title}
       data-side={side}
     >
-      <header className={styles.header}>
-        {open ? (
-          <span className={styles.mark} aria-hidden>
-            {markLetter}
-          </span>
-        ) : (
-          <button
-            type="button"
-            className={`${styles.mark} ${styles.markButton}`}
-            aria-label="Open"
-            onClick={() => setOpen(true)}
-          >
-            {markLetter}
-          </button>
-        )}
-        <p className={styles.title}>{title}</p>
-        {open ? (
-          <span className={styles.close}>
-            <Button
-              variant="tertiary"
-              size="sm"
-              iconStart="X"
-              ariaLabel="Close"
-              onClick={() => setOpen(false)}
-            />
-          </span>
-        ) : null}
-      </header>
+      {showHeader ? (
+        <header className={styles.header}>
+          {expanded ? (
+            <span className={styles.mark} aria-hidden>
+              {markLetter}
+            </span>
+          ) : (
+            <button
+              type="button"
+              className={`${styles.mark} ${styles.markButton}`}
+              aria-label="Open"
+              onClick={() => setOpen(true)}
+            >
+              {markLetter}
+            </button>
+          )}
+          <p className={styles.title}>{title}</p>
+          {expanded ? (
+            <span className={styles.close}>
+              <Button
+                variant="tertiary"
+                size="sm"
+                iconStart="X"
+                ariaLabel="Close"
+                onClick={() => setOpen(false)}
+              />
+            </span>
+          ) : null}
+        </header>
+      ) : null}
 
       <nav className={styles.nav} aria-label={title}>
         {useGroups
           ? groups!.map((group) => (
               <div key={group.label} className={styles.section}>
                 <p className={styles.sectionLabel}>{group.label}</p>
-                <NavList items={group.items} rail={!open} />
+                <NavList items={group.items} rail={!expanded} />
               </div>
             ))
-          : <NavList items={items} rail={!open} />}
+          : <NavList items={items} rail={!expanded} />}
       </nav>
 
       {footer ? (
         <div className={styles.footer}>
-          <NavList items={Array.isArray(footer) ? footer : [footer]} rail={!open} />
+          <NavList items={Array.isArray(footer) ? footer : [footer]} rail={!expanded} />
         </div>
       ) : null}
     </aside>
