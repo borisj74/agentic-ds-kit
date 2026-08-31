@@ -10,6 +10,7 @@ export type {
   SideNavGroup,
   SideNavItem,
   SideNavProps,
+  SideNavRadius,
   SideNavSide,
 } from "./SideNav.types";
 
@@ -86,6 +87,21 @@ function NavItem({ item, rail }: { item: SideNavItem; rail: boolean }) {
     );
   }
 
+  if (item.onClick && !item.disabled) {
+    return (
+      <li className={styles.entry}>
+        <button
+          type="button"
+          className={className}
+          aria-current={item.active ? "page" : undefined}
+          onClick={item.onClick}
+        >
+          <ItemBody item={item} />
+        </button>
+      </li>
+    );
+  }
+
   if (item.href && !item.disabled) {
     return (
       <li className={styles.entry}>
@@ -128,6 +144,7 @@ export function SideNav({
   title,
   mark,
   showHeader = true,
+  radius = "md",
   open: openProp,
   defaultOpen = true,
   onOpenChange,
@@ -149,7 +166,7 @@ export function SideNav({
 
   return (
     <aside
-      className={`${styles.root} ${expanded ? "" : styles.rootClosed}`.trim()}
+      className={`${styles.root} ${radius === "none" ? styles.radiusNone : ""} ${expanded ? "" : styles.rootClosed}`.trim()}
       aria-label={title}
       data-side={side}
     >
@@ -175,7 +192,7 @@ export function SideNav({
               <Button
                 variant="tertiary"
                 size="sm"
-                iconStart="X"
+                iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
                 ariaLabel="Close"
                 onClick={() => setOpen(false)}
               />

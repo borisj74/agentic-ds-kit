@@ -8,9 +8,16 @@
   min-height: 0;
   overflow: hidden;
   border: var(--border-surface) solid var(--border-faint);
-  border-radius: var(--radius-0);
+  border-radius: var(--radius-surface-md);
   background: var(--surface-card);
   color: var(--text-primary);
+  transition:
+    width var(--motion-expand-duration) var(--motion-expand-easing),
+    max-width var(--motion-expand-duration) var(--motion-expand-easing);
+}
+
+.radiusNone {
+  border-radius: var(--radius-0);
 }
 
 .rootClosed {
@@ -27,10 +34,13 @@
   min-width: 0;
   padding: var(--space-inset-md) var(--space-inset-lg);
   border-bottom: var(--border-divider) solid var(--border-subtle);
+  overflow: hidden;
+  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .header {
   justify-content: center;
+  gap: 0;
   padding: var(--space-inset-sm);
 }
 
@@ -73,24 +83,25 @@
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-heading);
   color: var(--text-primary);
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .rootClosed .title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  height: 0;
+  margin: 0;
+  opacity: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
+  pointer-events: none;
 }
 
 .close {
   margin-inline-start: auto;
   flex-shrink: 0;
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .nav {
@@ -103,6 +114,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none;
+  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .nav::-webkit-scrollbar {
@@ -123,23 +135,23 @@
 .sectionLabel {
   margin: 0;
   padding-inline: var(--space-inset-md);
+  overflow: hidden;
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
   color: var(--text-secondary);
+  max-height: 2rem;
+  transition:
+    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
+    max-height var(--motion-expand-duration) var(--motion-expand-easing),
+    padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .sectionLabel {
-  position: absolute;
-  width: 1px;
-  height: 1px;
+  opacity: 0;
+  max-height: 0;
   padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
+  pointer-events: none;
 }
 
 .list {
@@ -175,11 +187,18 @@
   text-align: start;
   text-decoration: none;
   cursor: pointer;
+  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .item {
+  width: auto;
+  justify-self: center;
   justify-content: center;
+  gap: 0;
   padding: var(--space-inset-sm);
+  aspect-ratio: 1;
+  line-height: 1;
+  overflow: hidden;
 }
 
 .item:hover:not(:disabled):not(.itemDisabled) {
@@ -229,20 +248,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .rootClosed .label,
 .rootClosed .meta {
-  position: absolute;
-  width: 1px;
-  height: 1px;
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  height: 0;
+  margin: 0;
   padding: 0;
-  margin: -1px;
+  opacity: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
+  pointer-events: none;
 }
 
 .meta {
@@ -251,6 +271,8 @@
   gap: var(--space-inline-xs);
   margin-inline-start: auto;
   flex-shrink: 0;
+  overflow: hidden;
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .badge {
@@ -274,6 +296,7 @@
   place-items: center;
   flex-shrink: 0;
   color: var(--icon-muted);
+  transition: transform var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .chevronOpen {
@@ -300,8 +323,25 @@
   flex-shrink: 0;
   padding: var(--space-inset-md) var(--space-inset-lg);
   border-top: var(--border-divider) solid var(--border-subtle);
+  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .footer {
   padding: var(--space-inset-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .header,
+  .nav,
+  .footer,
+  .item,
+  .title,
+  .label,
+  .sectionLabel,
+  .meta,
+  .close,
+  .chevron {
+    transition: none;
+  }
 }

@@ -64,6 +64,10 @@ export function Breadcrumb({ items, separator = "chevron", maxItems }: Breadcrum
             <span className={styles.current} aria-current="page">
               {node.item.label}
             </span>
+          ) : node.item.onClick ? (
+            <button type="button" className={styles.link} onClick={node.item.onClick}>
+              {node.item.label}
+            </button>
           ) : node.item.href ? (
             <a className={styles.link} href={node.item.href}>
               {node.item.label}

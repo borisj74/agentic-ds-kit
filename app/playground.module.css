@@ -2,7 +2,7 @@
   min-height: 100vh;
   min-width: 0;
   max-width: 100%;
-  padding: var(--space-8) var(--space-10);
+  padding: var(--space-8) var(--space-10) var(--space-4);
 }
 
 @media (max-width: 767px) {
@@ -99,31 +99,44 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-  background: var(--surface-page);
+  overflow: hidden;
+  padding: var(--space-inset-md);
+  gap: var(--space-inset-md);
+  background: var(--surface-muted);
 }
 
-.demo {
+.productBody {
+  display: flex;
   flex: 1;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  gap: var(--space-inset-md);
 }
 
-.demo > :first-child {
-  align-self: stretch;
+.pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
 }
 
-.demo :global(.layout-canvas) {
+.pane :global(.layout-canvas) {
+  flex: 1;
   min-width: 0;
   min-height: 0;
 }
 
-.demo :global(.layout-header) {
+.pane :global(.layout-header) {
   min-width: 0;
 }
 
-.demo :global(.layout-header) > * {
+.pane :global(.layout-header) > * {
   flex: 1;
   min-width: 0;
 }
@@ -134,22 +147,25 @@
     min-height: 0;
   }
 
-  .demo {
-    grid-template-columns: minmax(0, 1fr);
+  .product {
+    flex-direction: column;
     overflow: visible;
   }
 
-  .demo > :first-child,
-  .demo :global(.layout-canvas) {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .demo :global(.layout-canvas) {
+  .productBody {
+    flex-direction: column;
     overflow: visible;
   }
 
-  .demo :global(.layout-content) {
+  .pane {
+    overflow: visible;
+  }
+
+  .pane :global(.layout-canvas) {
+    overflow: visible;
+  }
+
+  .pane :global(.layout-content) {
     overflow: visible;
   }
 }

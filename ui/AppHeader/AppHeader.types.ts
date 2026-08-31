@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+export type AppHeaderRadius = "md" | "none";
+
 export interface AppHeaderProps {
   /** Product name next to the mark. Ignored as a heading — this is chrome, not PageHeader. */
   title?: string;
@@ -21,4 +23,6 @@ export interface AppHeaderProps {
   actions?: ReactNode;
   className?: string;
   ariaLabel?: string;
+  /** Bar corners. none is flush; md is radius-surface-md. */
+  radius?: AppHeaderRadius;
 }

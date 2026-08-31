@@ -71,6 +71,10 @@ import {
   Layers,
   LogIn,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
 } from "lucide-react";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./IconsFoundations.module.css";
@@ -145,6 +149,10 @@ const ICONS = [
   { name: "Layers", Icon: Layers },
   { name: "LogIn", Icon: LogIn },
   { name: "LogOut", Icon: LogOut },
+  { name: "PanelLeftClose", Icon: PanelLeftClose },
+  { name: "PanelLeftOpen", Icon: PanelLeftOpen },
+  { name: "PanelRightClose", Icon: PanelRightClose },
+  { name: "PanelRightOpen", Icon: PanelRightOpen },
 ] as const;
 
 function CopyCode({ value }: { value: string }) {

@@ -24,6 +24,11 @@
         "href": {
           "type": "string",
           "required": false
+        },
+        "onClick": {
+          "type": "function",
+          "required": false,
+          "note": "In-app select. When set, the crumb is a button. Last item is still the current page and is never a control."
         }
       },
       "note": "Last item is the current page (no href used even if passed). Need at least 2 items."

@@ -1,2 +1,2 @@
 export { AppHeader } from "./AppHeader";
-export type { AppHeaderProps } from "./AppHeader.types";
+export type { AppHeaderProps, AppHeaderRadius } from "./AppHeader.types";

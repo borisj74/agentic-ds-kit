@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/ui/Button";
 import { DataTable } from "@/ui/DataTable";
 import type { DataTableColumn, DataTableRow } from "@/ui/DataTable";
 import { LineChart } from "@/ui/LineChart";
 import { PageHeader } from "@/ui/PageHeader";
+import type { PageHeaderProps } from "@/ui/PageHeader";
 import { Scoreboard } from "@/ui/Scoreboard";
 import { Section } from "@/ui/Section";
 import type { ChartDatum } from "@/ui/shared/chartMath";
@@ -59,28 +59,14 @@ const TASK_ROWS: DataTableRow[] = [
   },
 ];
 
-export function DashboardPattern() {
+export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProps["breadcrumbs"] }) {
   return (
     <div className="layout-canvas layout-canvas--sticky-header">
       <div className="layout-header">
         <PageHeader
           title="Overview"
-          subtitle="Product health for the current sprint."
-          breadcrumbs={[
-            { label: "Home", href: "#" },
-            { label: "Workspace", href: "#" },
-            { label: "Overview" },
-          ]}
-          actions={
-            <>
-              <Button variant="secondary" size="md">
-                Export
-              </Button>
-              <Button variant="primary" size="md">
-                Create task
-              </Button>
-            </>
-          }
+          subtitle="Workspace overview for the current team."
+          breadcrumbs={breadcrumbs}
         />
       </div>
       <div className="layout-content">

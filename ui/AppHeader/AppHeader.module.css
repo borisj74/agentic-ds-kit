@@ -7,11 +7,18 @@
   width: 100%;
   min-width: 0;
   min-height: calc(var(--space-10) + var(--space-2) + var(--space-2));
+  flex-shrink: 0;
   padding: var(--space-2) var(--space-5);
   border-bottom: var(--border-divider) solid var(--border-faint);
-  border-radius: 0;
+  border-radius: var(--radius-0);
   background: var(--surface-card);
   color: var(--text-primary);
+}
+
+.radiusMd {
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  overflow: hidden;
 }
 
 .start {

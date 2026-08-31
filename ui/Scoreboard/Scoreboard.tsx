@@ -34,8 +34,8 @@ export function Scoreboard({
           : styles.count4;
 
   return (
-    <section className={`${styles.scoreboard} ${countClass} ${className}`.trim()} aria-label={ariaLabel}>
-      {cards}
+    <section className={styles.scoreboard} aria-label={ariaLabel}>
+      <div className={`${styles.grid} ${countClass} ${className}`.trim()}>{cards}</div>
     </section>
   );
 }

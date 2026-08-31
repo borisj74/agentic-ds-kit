@@ -79,6 +79,10 @@ import {
   AlignRight,
   Moon,
   Sun,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
 } from "lucide-react";
 
 const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
@@ -162,6 +166,10 @@ const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
   AlignRight,
   Moon,
   Sun,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
 };
 
 export function LucideByName({

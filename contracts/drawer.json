@@ -1,7 +1,7 @@
 {
   "id": "drawer",
   "status": "stable",
-  "intent": "Edge panel for secondary tasks. Bottom is a floating sheet.",
+  "intent": "Edge panel for secondary tasks. Floating sheet inset from the opening edge.",
   "useWhen": [
     "Settings",
     "Filters",
@@ -37,7 +37,7 @@
         "top"
       ],
       "default": "right",
-      "note": "bottom is a centered floating sheet with radius-surface-lg, not a flush full-bleed bar."
+      "note": "Floating sheet with radius-surface-lg. Right/left inset from top, bottom, and the opening edge. Bottom is centered. Top insets from top, left, and right. Not a flush full-bleed bar."
     },
     "showClose": {
       "type": "boolean",

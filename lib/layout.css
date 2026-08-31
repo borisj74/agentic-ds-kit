@@ -45,6 +45,8 @@
   min-height: 0;
   padding: var(--layout-margin-md);
   overflow: auto;
+  container-type: inline-size;
+  container-name: layout-content;
 }
 
 /* Parent gap owns the stack; kit Section also sets space-section margin. */
@@ -58,12 +60,39 @@
   gap: var(--layout-gutter-md);
 }
 
+/* Room for Carousel prev/next, which sit in a space-12 gutter. */
+.layout-carousel {
+  width: 100%;
+  min-width: 0;
+  padding-inline: var(--space-12);
+  box-sizing: border-box;
+}
+
 .layout-metrics--fixed-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .layout-metrics--fixed-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@container layout-content (max-width: calc(2 * var(--layout-metrics-min) + var(--layout-gutter-md))) {
+  .layout-metrics--fixed-3,
+  .layout-metrics--fixed-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container layout-content (max-width: calc(3 * var(--layout-metrics-min) + 2 * var(--layout-gutter-md))) {
+  .layout-metrics--fixed-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container layout-content (min-width: calc(4 * var(--layout-metrics-min) + 3 * var(--layout-gutter-md))) {
+  .layout-metrics--fixed-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .layout-header {

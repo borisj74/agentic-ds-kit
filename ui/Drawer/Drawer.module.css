@@ -2,18 +2,25 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: var(--space-4);
   background-color: var(--surface-overlay);
   animation: overlayEnter var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .panel {
-  position: absolute;
+  position: relative;
   z-index: var(--z-modal);
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
   background-color: var(--surface-elevated);
   border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
   box-shadow: var(--shadow-md);
   animation-duration: var(--motion-modal-duration);
   animation-timing-function: var(--motion-modal-easing);
@@ -21,38 +28,32 @@
 }
 
 .right {
-  top: 0;
-  right: 0;
+  margin-left: auto;
   width: min(24rem, 100%);
-  height: 100%;
+  max-height: 100%;
   animation-name: enterRight;
 }
 
 .left {
-  top: 0;
-  left: 0;
+  margin-right: auto;
   width: min(24rem, 100%);
-  height: 100%;
+  max-height: 100%;
   animation-name: enterLeft;
 }
 
 .bottom {
-  bottom: var(--space-4);
-  left: 50%;
-  width: min(24rem, calc(100% - var(--space-8)));
-  max-height: calc(100dvh - 6rem);
-  border-radius: var(--radius-surface-lg);
+  align-self: flex-end;
+  margin-inline: auto;
+  width: min(24rem, 100%);
+  max-height: 100%;
   background-color: var(--surface-card);
-  transform: translateX(-50%);
   animation-name: enterBottom;
 }
 
 .top {
-  top: 0;
-  left: 0;
+  align-self: flex-start;
   width: 100%;
-  max-height: calc(100dvh - 6rem);
-  border-radius: 0 0 var(--radius-surface-md) var(--radius-surface-md);
+  max-height: 100%;
   animation-name: enterTop;
 }
 
@@ -186,10 +187,10 @@
 
 @keyframes enterBottom {
   from {
-    transform: translate(-50%, 100%);
+    transform: translateY(100%);
   }
   to {
-    transform: translate(-50%, 0);
+    transform: translateY(0);
   }
 }
 

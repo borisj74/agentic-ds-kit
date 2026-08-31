@@ -82,6 +82,15 @@
       "type": "string",
       "required": false,
       "note": "header label. Defaults to title, then Application."
+    },
+    "radius": {
+      "type": "enum",
+      "values": [
+        "md",
+        "none"
+      ],
+      "default": "none",
+      "note": "Bar corners. none is a flush full-bleed bar. md is radius-surface-md for an inset floating bar."
     }
   },
   "tokens": [
@@ -92,6 +101,8 @@
     "border.faint",
     "border.divider",
     "radius.control.md",
+    "radius.surfaceMd",
+    "radius.0",
     "space.1",
     "space.2",
     "space.3",

@@ -29,6 +29,15 @@
       "default": true,
       "note": "Brand mark, title, and close. Set false when AppHeader already provides brand. Rail stays expanded."
     },
+    "radius": {
+      "type": "enum",
+      "values": [
+        "md",
+        "none"
+      ],
+      "default": "md",
+      "note": "Rail corners. md is radius-surface-md. none is a flush square column next to AppHeader."
+    },
     "open": {
       "type": "boolean",
       "required": false,
@@ -60,7 +69,7 @@
     "items": {
       "type": "array",
       "required": false,
-      "note": "Flat list when groups is omitted"
+      "note": "Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
       "type": "object",
@@ -88,14 +97,21 @@
     "icon.muted",
     "focus.ring",
     "layout.sidebar",
-    "layout.sidebarCompact"
+    "layout.sidebarCompact",
+    "radius.surfaceMd",
+    "radius.controlMd",
+    "radius.0",
+    "motion.expand.duration",
+    "motion.expand.easing",
+    "motion.overlay.duration",
+    "motion.overlay.easing"
   ],
   "a11y": {
     "element": "aside",
     "requirements": [
       "In-flow aside, not a dialog and not position:fixed",
       "No overlay, no focus trap, no Escape-to-close",
-      "Close is a kit Button with ariaLabel Close",
+      "Close is a kit Button with PanelLeftClose or PanelRightClose and ariaLabel Close",
       "Closed rail reopens via the brand mark button with ariaLabel Open",
       "Title is visible in the header when open; clipped when closed",
       "When showHeader is false, omit the header and close; title remains the accessible name via aria-label",

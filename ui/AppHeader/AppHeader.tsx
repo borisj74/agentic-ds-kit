@@ -3,7 +3,7 @@ import { Input } from "@/ui/Input";
 import type { AppHeaderProps } from "./AppHeader.types";
 import styles from "./AppHeader.module.css";
 
-export type { AppHeaderProps } from "./AppHeader.types";
+export type { AppHeaderProps, AppHeaderRadius } from "./AppHeader.types";
 
 export function AppHeader({
   title,
@@ -19,6 +19,7 @@ export function AppHeader({
   actions,
   className = "",
   ariaLabel,
+  radius = "none",
 }: AppHeaderProps) {
   const generatedId = useId();
   const inputId = searchId ?? generatedId;
@@ -27,7 +28,7 @@ export function AppHeader({
 
   return (
     <header
-      className={`${styles.header} ${className}`.trim()}
+      className={`${styles.header} ${radius === "md" ? styles.radiusMd : ""} ${className}`.trim()}
       aria-label={label}
       data-search={search ? undefined : "false"}
     >

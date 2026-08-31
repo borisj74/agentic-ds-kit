@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { SideNav } from "@/ui/SideNav";
-import type { SideNavGroup, SideNavItem, SideNavSide } from "@/ui/SideNav";
+import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "@/ui/SideNav";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";
@@ -78,6 +78,8 @@ const CLOSED_CODE = `<SideNav title="Agentix" mark="A" defaultOpen={false} group
 
 const RIGHT_CODE = `<SideNav title="Agentix" mark="A" side="right" groups={groups} footer={footer} />`;
 
+const FLUSH_CODE = `<SideNav title="Agentix" mark="A" showHeader={false} radius="none" groups={groups} footer={footer} />`;
+
 function MainPane() {
   return (
     <div className={demo.main}>
@@ -107,11 +109,15 @@ function DemoBar({
   onOpenChange,
   side,
   defaultOpen,
+  showHeader,
+  radius,
 }: {
   open?: boolean;
   onOpenChange?: (next: boolean) => void;
   side?: SideNavSide;
   defaultOpen?: boolean;
+  showHeader?: boolean;
+  radius?: SideNavRadius;
 }) {
   return (
     <SideNav
@@ -121,6 +127,8 @@ function DemoBar({
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}
       side={side}
+      showHeader={showHeader}
+      radius={radius}
       groups={GROUPS}
       footer={FOOTER}
     />
@@ -212,9 +220,12 @@ export function SideNavDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Put SideNav next to the page. Pass groups of icon items with optional badges.
-                  X closes. The brand mark reopens. When AppHeader already provides brand, pass{" "}
-                  <code>showHeader={"{false}"}</code>. Use AppNav for a docs catalog. Use Drawer
-                  for a temporary overlay panel.
+                  The panel icon closes. The brand mark reopens. Rail corners use
+                  radius-surface-md. Item hover, active, and focus fills use
+                  radius-control-md. When
+                  AppHeader already provides brand, pass <code>showHeader={"{false}"}</code> and{" "}
+                  <code>radius="none"</code> so the column sits flush. Use AppNav for a docs
+                  catalog. Use Drawer for a temporary overlay panel.
                 </p>
               </div>
               <CodeBlock code={masterCode()} />
@@ -258,6 +269,25 @@ export function SideNavDoc() {
                 </p>
               </div>
               <CodeBlock code={RIGHT_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Flush</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.fill}>
+                  <Shell side="left">
+                    <DemoBar showHeader={false} radius="none" />
+                  </Shell>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  radius="none" for a square column in an app shell. Pair with showHeader false
+                  when AppHeader already shows brand.
+                </p>
+              </div>
+              <CodeBlock code={FLUSH_CODE} />
             </section>
           </div>
         )}

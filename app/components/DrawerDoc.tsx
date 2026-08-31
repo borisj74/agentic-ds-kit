@@ -225,9 +225,10 @@ export function DrawerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Drawer for a sheet or side panel. Bottom is a floating sheet. Compose kit
-                  RadioGroup for the slots and kit Buttons in the footer. Use Modal for a centered
-                  short task. Use AlertDialog when they must choose.
+                  Use Drawer for a sheet or side panel. The panel floats inset from the opening
+                  edge with radius-surface-lg. Compose kit RadioGroup for the slots and kit Buttons
+                  in the footer. Use Modal for a centered short task. Use AlertDialog when they must
+                  choose.
                 </p>
               </div>
               <CodeBlock code={masterCode(side, showDescription, showClose)} />
@@ -250,7 +251,7 @@ export function DrawerDoc() {
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <Variant
               title="Right"
-              usage="Panel slides from the right. Use for SaaS settings."
+              usage="Panel slides from the right, inset from top, bottom, and right. Corners use radius-surface-lg."
               code={`<Drawer open={open} title="Edit profile" side="right" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("right")}
             >
@@ -261,7 +262,7 @@ export function DrawerDoc() {
 
             <Variant
               title="Left"
-              usage="Panel slides from the left."
+              usage="Panel slides from the left, inset from top, bottom, and left. Corners use radius-surface-lg."
               code={`<Drawer open={open} title="Edit profile" side="left" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("left")}
             >
@@ -291,7 +292,7 @@ export function DrawerDoc() {
 
             <Variant
               title="Top"
-              usage="Panel slides from the top. Bottom corners use radius-surface-md."
+              usage="Panel slides from the top, inset from top, left, and right. Corners use radius-surface-lg."
               code={`<Drawer open={open} title="Edit profile" side="top" onClose={close}>\n  Make changes to your profile.\n</Drawer>`}
               onOpen={() => setVariantOpen("top")}
             >
