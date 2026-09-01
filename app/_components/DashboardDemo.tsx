@@ -1,14 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityView } from "./ActivityView";
-import { InboxView } from "./InboxView";
 import { AppHeader } from "@/ui/AppHeader";
 import { Button } from "@/ui/Button";
 import { Empty } from "@/ui/Empty";
 import { PageHeader } from "@/ui/PageHeader";
 import type { PageHeaderProps } from "@/ui/PageHeader";
+import { ActivityPattern } from "@/ui/patterns/ActivityPattern";
+import { AssistantWorkspacePattern } from "@/ui/patterns/AssistantWorkspacePattern";
 import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
+import { EmptyFirstRunPattern } from "@/ui/patterns/EmptyFirstRunPattern";
+import { InboxPattern } from "@/ui/patterns/InboxPattern";
+import { InviteMembersPattern } from "@/ui/patterns/InviteMembersPattern";
 import { ListDetailPattern } from "@/ui/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "@/ui/patterns/SettingsFormPattern";
 import { SideNav } from "@/ui/SideNav";
@@ -177,6 +180,11 @@ function isListDetailPage(id: string) {
 
 function hashForPage(id: string) {
   if (id === "settings") return "settings";
+  if (id === "invite") return "invite";
+  if (id === "insights") return "insights";
+  if (id === "activity") return "activity";
+  if (id === "inbox") return "inbox";
+  if (id === "research") return "empty";
   if (id === "projects" || id === "list-detail") return "list-detail";
   if (LIST_DETAIL_HASHES.has(id)) return id;
   return "dashboard";
@@ -192,6 +200,11 @@ export function DashboardDemo() {
     if (typeof window === "undefined") return "overview";
     const hash = window.location.hash.replace(/^#/, "");
     if (hash === "settings") return "settings";
+    if (hash === "invite") return "invite";
+    if (hash === "insights") return "insights";
+    if (hash === "activity") return "activity";
+    if (hash === "inbox") return "inbox";
+    if (hash === "empty" || hash === "research") return "research";
     if (hash === "list-detail" || hash === "projects") return "launch-brief";
     if (LIST_DETAIL_HASHES.has(hash)) return hash;
     return "overview";
@@ -214,6 +227,26 @@ export function DashboardDemo() {
         setPage("settings");
         return;
       }
+      if (hash === "invite") {
+        setPage("invite");
+        return;
+      }
+      if (hash === "insights") {
+        setPage("insights");
+        return;
+      }
+      if (hash === "activity") {
+        setPage("activity");
+        return;
+      }
+      if (hash === "inbox") {
+        setPage("inbox");
+        return;
+      }
+      if (hash === "empty" || hash === "research") {
+        setPage("research");
+        return;
+      }
       if (hash === "list-detail" || hash === "projects") {
         setPage("launch-brief");
         return;
@@ -224,7 +257,15 @@ export function DashboardDemo() {
       }
       if (hash === "dashboard" || hash === "") {
         setPage((current) =>
-          current === "settings" || isListDetailPage(current) ? "overview" : current,
+          current === "settings" ||
+          current === "invite" ||
+          current === "insights" ||
+          current === "activity" ||
+          current === "inbox" ||
+          current === "research" ||
+          isListDetailPage(current)
+            ? "overview"
+            : current,
         );
       }
     };
@@ -283,11 +324,17 @@ export function DashboardDemo() {
             {page === "overview" ? (
               <DashboardPattern breadcrumbs={trail} />
             ) : page === "activity" ? (
-              <ActivityView breadcrumbs={trail} />
+              <ActivityPattern breadcrumbs={trail} />
             ) : page === "inbox" ? (
-              <InboxView breadcrumbs={trail} />
+              <InboxPattern breadcrumbs={trail} />
             ) : page === "settings" ? (
               <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
+            ) : page === "invite" ? (
+              <InviteMembersPattern breadcrumbs={trail} />
+            ) : page === "insights" ? (
+              <AssistantWorkspacePattern breadcrumbs={trail} />
+            ) : page === "research" ? (
+              <EmptyFirstRunPattern breadcrumbs={trail} />
             ) : isListDetailPage(page) ? (
               <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
             ) : current ? (

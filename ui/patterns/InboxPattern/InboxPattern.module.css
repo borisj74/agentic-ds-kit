@@ -1,15 +1,3 @@
-.stack {
-  display: grid;
-  gap: var(--space-stack-md);
-}
-
-.from {
-  display: flex;
-  align-items: center;
-  gap: var(--space-inline-sm);
-  min-width: 0;
-}
-
 .detail {
   display: grid;
   gap: var(--space-stack-lg);

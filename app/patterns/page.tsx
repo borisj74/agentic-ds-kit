@@ -15,8 +15,13 @@ export default function PatternsPage() {
 
         <div className={styles.anchor}>
           <div id="dashboard" />
+          <div id="activity" />
+          <div id="inbox" />
           <div id="settings" />
           <div id="list-detail" />
+          <div id="invite" />
+          <div id="insights" />
+          <div id="empty" />
           <DashboardDemo />
         </div>
       </div>

@@ -1,2 +1,2 @@
 export { Chat } from "./Chat";
-export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps } from "./Chat.types";
+export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";

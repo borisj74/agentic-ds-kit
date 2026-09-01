@@ -439,5 +439,40 @@
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
     "status": "stable"
+  },
+  {
+    "id": "invite-members",
+    "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
+    "group": "pattern",
+    "path": "contracts/patterns/invite-members.json",
+    "status": "stable"
+  },
+  {
+    "id": "assistant-workspace",
+    "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
+    "group": "pattern",
+    "path": "contracts/patterns/assistant-workspace.json",
+    "status": "stable"
+  },
+  {
+    "id": "empty-first-run",
+    "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
+    "group": "pattern",
+    "path": "contracts/patterns/empty-first-run.json",
+    "status": "stable"
+  },
+  {
+    "id": "activity",
+    "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
+    "group": "pattern",
+    "path": "contracts/patterns/activity.json",
+    "status": "stable"
+  },
+  {
+    "id": "inbox",
+    "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
+    "group": "pattern",
+    "path": "contracts/patterns/inbox.json",
+    "status": "stable"
   }
 ]

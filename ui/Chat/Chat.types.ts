@@ -14,6 +14,8 @@ export interface ChatMenuItem {
   onSelect?: () => void;
 }
 
+export type ChatRadius = "lg" | "none";
+
 export interface ChatProps {
   title?: string;
   status?: string;
@@ -31,5 +33,7 @@ export interface ChatProps {
   closeLabel?: string;
   menuItems?: ChatMenuItem[];
   menuLabel?: string;
+  /** `lg` is the standalone card. `none` squares the panel and drops the outer block/end borders so Chat can sit flush in a workspace rail. */
+  radius?: ChatRadius;
   className?: string;
 }

@@ -8,7 +8,7 @@ import { ThinkingAnimation } from "@/ui/ThinkingAnimation";
 import type { ChatProps } from "./Chat.types";
 import styles from "./Chat.module.css";
 
-export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps } from "./Chat.types";
+export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
 
 export function Chat({
   title = "Assistant",
@@ -27,6 +27,7 @@ export function Chat({
   closeLabel = "Close",
   menuItems = [],
   menuLabel = "More",
+  radius = "lg",
   className = "",
 }: ChatProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -53,7 +54,10 @@ export function Chat({
   }
 
   return (
-    <section className={`${styles.panel} ${className}`.trim()} aria-label={title}>
+    <section
+      className={`${styles.panel} ${radius === "none" ? styles.radiusNone : ""} ${className}`.trim()}
+      aria-label={title}
+    >
       <header className={styles.header}>
         <span className={styles.identity}>
           <span className={styles.title}>{title}</span>

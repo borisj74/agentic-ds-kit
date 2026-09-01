@@ -111,6 +111,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
           h === "support-macros"
         );
       }
+      if (frag === "empty") return h === "empty" || h === "research";
       return h === frag;
     }
     return !h;
@@ -168,8 +169,13 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       label: "Patterns",
       items: [
         leaf("/patterns#dashboard", "Dashboard"),
+        leaf("/patterns#activity", "Activity"),
+        leaf("/patterns#inbox", "Inbox"),
         leaf("/patterns#settings", "Settings"),
         leaf("/patterns#list-detail", "List detail"),
+        leaf("/patterns#invite", "Invite"),
+        leaf("/patterns#insights", "Assistant"),
+        leaf("/patterns#empty", "Empty"),
       ],
     },
   ];

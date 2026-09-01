@@ -1,0 +1,14 @@
+{
+  "id": "invite-members",
+  "status": "stable",
+  "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
+  "contains": ["pageheader", "empty", "avatargroup", "modal", "fieldset", "field", "input", "radiogroup", "button", "buttongroup", "toast"],
+  "doNot": [
+    "Do not invent a local dialog, invite form, or member stack",
+    "Do not use AlertDialog for a dismissible invite",
+    "Do not skip Field wrappers on labeled inputs",
+    "Do not wrap RadioGroup in Field — it has its own legend",
+    "Do not add more than one primary Button"
+  ],
+  "snippet": "<InviteMembersPattern />"
+}

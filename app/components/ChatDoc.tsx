@@ -144,6 +144,30 @@ export function ChatDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Docked rail</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={doc.exampleFrame}>
+                  <Chat
+                    title="Assistant"
+                    messages={STARTER}
+                    radius="none"
+                    onClose={() => {}}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  radius none squares the panel and drops the outer block and end borders so Chat
+                  can sit flush in a workspace rail. Default lg is the standalone card.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Chat title="Assistant" messages={messages} radius="none" onClose={close} />'}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Suggestions</h2>
               <div className={styles.exampleCanvas}>
                 <div className={doc.exampleFrame}>

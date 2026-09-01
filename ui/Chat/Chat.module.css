@@ -13,6 +13,12 @@
   color: var(--text-primary);
 }
 
+.radiusNone {
+  border-radius: var(--radius-0);
+  border-block-width: 0;
+  border-inline-end-width: 0;
+}
+
 .header {
   display: flex;
   align-items: center;

@@ -84,6 +84,12 @@
       "type": "string",
       "default": "More"
     },
+    "radius": {
+      "type": "enum",
+      "values": ["lg", "none"],
+      "default": "lg",
+      "note": "lg is the standalone card. none squares the panel and drops the outer block/end borders so Chat can sit flush in a workspace rail."
+    },
     "className": {
       "type": "string",
       "required": false
@@ -97,6 +103,7 @@
     "text.secondary",
     "text.muted",
     "radius.surfaceLg",
+    "radius.0",
     "radius.full",
     "space.5",
     "type.size.label",
@@ -116,6 +123,7 @@
   "doNot": [
     "Do not invent ChatMessage, ChatInput, ChatHeader, ChatBubble, or ChatAvatar cousins",
     "Do not use Modal for an inline assistant panel",
+    "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
     "Do not use raw hex",
     "Do not use Florence, BillingPlatform, or copilot wording in copy"
   ],
