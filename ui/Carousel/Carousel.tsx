@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Button } from "@/ui/Button";
 import type { CarouselProps } from "./Carousel.types";
@@ -24,11 +24,15 @@ export function Carousel({
   onIndexChange,
   ariaLabel = "Carousel",
 }: CarouselProps) {
-  const [viewportRef, emblaApi] = useEmblaCarousel({
-    axis: orientation === "vertical" ? "y" : "x",
-    loop,
-    align,
-  });
+  const emblaOptions = useMemo(
+    () => ({
+      axis: (orientation === "vertical" ? "y" : "x") as "x" | "y",
+      loop,
+      align,
+    }),
+    [orientation, loop, align],
+  );
+  const [viewportRef, emblaApi] = useEmblaCarousel(emblaOptions);
 
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
