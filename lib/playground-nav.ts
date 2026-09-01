@@ -102,6 +102,15 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       if (!h && path === "/foundations" && frag === "color") return true;
       if (!h && path === "/components" && frag === "gallery") return true;
       if (!h && path === "/patterns" && frag === "dashboard") return true;
+      if (frag === "list-detail") {
+        return (
+          h === "list-detail" ||
+          h === "launch-brief" ||
+          h === "qa-checklist" ||
+          h === "release-notes" ||
+          h === "support-macros"
+        );
+      }
       return h === frag;
     }
     return !h;
@@ -157,7 +166,11 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Patterns",
-      items: [leaf("/patterns#dashboard", "Dashboard")],
+      items: [
+        leaf("/patterns#dashboard", "Dashboard"),
+        leaf("/patterns#settings", "Settings"),
+        leaf("/patterns#list-detail", "List detail"),
+      ],
     },
   ];
 }

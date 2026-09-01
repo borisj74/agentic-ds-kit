@@ -13,7 +13,10 @@ export default function PatternsPage() {
           Blueprint compositions that only import kit components. Use these before inventing layouts.
         </p>
 
-        <div id="dashboard" className={styles.anchor}>
+        <div className={styles.anchor}>
+          <div id="dashboard" />
+          <div id="settings" />
+          <div id="list-detail" />
           <DashboardDemo />
         </div>
       </div>

@@ -2,7 +2,7 @@
   "id": "settings-form",
   "status": "stable",
   "intent": "Settings page blueprint: header, grouped fields, and save/cancel actions.",
-  "contains": ["pageheader", "section", "field", "input", "select", "checkbox", "button"],
+  "contains": ["pageheader", "section", "field", "input", "select", "checkbox", "button", "toast"],
   "doNot": [
     "Do not restyle Field or Input inside the pattern",
     "Do not invent local form layouts",

@@ -31,6 +31,10 @@
   padding-bottom: var(--section-header-gap);
 }
 
+.collapsible:has(> .body[hidden]) .header {
+  padding-bottom: 0;
+}
+
 .heading {
   display: grid;
   gap: var(--space-stack-xs);

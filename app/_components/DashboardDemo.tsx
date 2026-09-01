@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityView } from "./ActivityView";
 import { InboxView } from "./InboxView";
 import { AppHeader } from "@/ui/AppHeader";
@@ -9,6 +9,8 @@ import { Empty } from "@/ui/Empty";
 import { PageHeader } from "@/ui/PageHeader";
 import type { PageHeaderProps } from "@/ui/PageHeader";
 import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
+import { ListDetailPattern } from "@/ui/patterns/ListDetailPattern";
+import { SettingsFormPattern } from "@/ui/patterns/SettingsFormPattern";
 import { SideNav } from "@/ui/SideNav";
 import type { SideNavGroup, SideNavItem } from "@/ui/SideNav";
 import styles from "../playground.module.css";
@@ -152,15 +154,90 @@ function PlaceholderPage({
   );
 }
 
+const LIST_DETAIL_PAGES = new Set([
+  "projects",
+  "list-detail",
+  "launch-brief",
+  "qa-checklist",
+  "release-notes",
+  "support-macros",
+]);
+
+const LIST_DETAIL_HASHES = new Set([
+  "list-detail",
+  "launch-brief",
+  "qa-checklist",
+  "release-notes",
+  "support-macros",
+]);
+
+function isListDetailPage(id: string) {
+  return LIST_DETAIL_PAGES.has(id);
+}
+
+function hashForPage(id: string) {
+  if (id === "settings") return "settings";
+  if (id === "projects" || id === "list-detail") return "list-detail";
+  if (LIST_DETAIL_HASHES.has(id)) return id;
+  return "dashboard";
+}
+
+function selectedProjectId(page: string) {
+  if (page === "projects" || page === "list-detail") return "launch-brief";
+  return page;
+}
+
 export function DashboardDemo() {
-  const [page, setPage] = useState("overview");
+  const [page, setPage] = useState(() => {
+    if (typeof window === "undefined") return "overview";
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash === "settings") return "settings";
+    if (hash === "list-detail" || hash === "projects") return "launch-brief";
+    if (LIST_DETAIL_HASHES.has(hash)) return hash;
+    return "overview";
+  });
   const [query, setQuery] = useState("");
 
+  const go = useCallback((id: string) => {
+    setPage(id);
+    const next = hashForPage(id);
+    if (typeof window === "undefined") return;
+    if (window.location.hash.replace(/^#/, "") !== next) {
+      window.location.hash = next;
+    }
+  }, []);
+
+  useEffect(() => {
+    const apply = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (hash === "settings") {
+        setPage("settings");
+        return;
+      }
+      if (hash === "list-detail" || hash === "projects") {
+        setPage("launch-brief");
+        return;
+      }
+      if (LIST_DETAIL_HASHES.has(hash)) {
+        setPage(hash);
+        return;
+      }
+      if (hash === "dashboard" || hash === "") {
+        setPage((current) =>
+          current === "settings" || isListDetailPage(current) ? "overview" : current,
+        );
+      }
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
+
   const groups = useMemo(
-    () => NAV_GROUPS.map((group) => ({ ...group, items: bindItems(group.items, page, setPage) })),
-    [page],
+    () => NAV_GROUPS.map((group) => ({ ...group, items: bindItems(group.items, page, go) })),
+    [page, go],
   );
-  const footer = useMemo(() => bindItems(NAV_FOOTER, page, setPage), [page]);
+  const footer = useMemo(() => bindItems(NAV_FOOTER, page, go), [page, go]);
 
   const allItems = [...NAV_GROUPS.flatMap((group) => group.items), ...NAV_FOOTER];
   const current = findItem(allItems, page);
@@ -172,7 +249,7 @@ export function DashboardDemo() {
         ? "app.operations.dev/activity"
         : `app.operations.dev/${page}`;
 
-  const trail = breadcrumbsFor(page, setPage);
+  const trail = breadcrumbsFor(page, go);
 
   return (
     <div className={styles.browser}>
@@ -209,6 +286,10 @@ export function DashboardDemo() {
               <ActivityView breadcrumbs={trail} />
             ) : page === "inbox" ? (
               <InboxView breadcrumbs={trail} />
+            ) : page === "settings" ? (
+              <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
+            ) : isListDetailPage(page) ? (
+              <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
             ) : current ? (
               <PlaceholderPage item={current} breadcrumbs={trail} />
             ) : (
