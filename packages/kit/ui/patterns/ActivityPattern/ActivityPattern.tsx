@@ -54,11 +54,7 @@ export function ActivityPattern({ breadcrumbs }: ActivityPatternProps) {
       </div>
       <div className="layout-content">
         <Section title="This week">
-          <Scoreboard
-            className="layout-metrics layout-metrics--fixed-4"
-            aria-label="Activity this week"
-            items={ACTIVITY_METRICS}
-          />
+          <Scoreboard aria-label="Activity this week" items={ACTIVITY_METRICS} />
         </Section>
         <Section
           title="Tasks"

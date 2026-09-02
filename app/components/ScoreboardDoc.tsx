@@ -93,8 +93,8 @@ export function ScoreboardDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Scoreboard</h1>
         <p className={styles.lede}>
-          A metrics strip of kit Scorecards. Two to four fill the row. More than four compose
-          Carousel. One KPI alone is Scorecard.
+          A metrics strip of kit Scorecards. Two to four fill the row. Four stay in one row until
+          the strip narrows. More than four compose Carousel. One KPI alone is Scorecard.
         </p>
       </header>
 
@@ -119,8 +119,9 @@ export function ScoreboardDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Pass items with label, value, delta, trend, hint, and optional badge. Two to four
-                  cards share the row equally. More than four pages four-up in kit Carousel. Do not
-                  restyle the cards from here.
+                  cards share the row equally. Four stay four-up until the strip narrows, then two,
+                  then one. More than four pages four-up in kit Carousel. Do not restyle the cards
+                  from here.
                 </p>
               </div>
               <CodeBlock code={SNIPPET} />
@@ -147,7 +148,10 @@ export function ScoreboardDoc() {
               <div className={styles.exampleCanvas}>
                 <Scoreboard items={FOUR} />
               </div>
-              <p className={styles.usageBody}>Four Scorecards fill the row. This is the Master count.</p>
+              <p className={styles.usageBody}>
+                Four Scorecards fill the row. This is the Master count. They stay in one row until
+                the strip is too narrow.
+              </p>
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>More</h2>

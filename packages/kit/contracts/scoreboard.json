@@ -1,7 +1,7 @@
 {
   "id": "scoreboard",
   "status": "stable",
-  "intent": "Metrics strip of kit Scorecards. Two to four fill the row. More than four compose Carousel.",
+  "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Carousel.",
   "useWhen": [
     "Showing two or more KPIs side by side at the top of a dashboard",
     "Replacing ad-hoc flex rows of metric boxes"
@@ -20,7 +20,7 @@
       "itemContract": "scorecard",
       "required": true,
       "minItems": 2,
-      "note": "2\u20134 fill equal columns. More than 4 pages four-up in kit Carousel."
+      "note": "2\u20134 fill equal columns. Four stay four-up until the strip narrows. More than 4 pages four-up in kit Carousel."
     }
   },
   "tokens": [

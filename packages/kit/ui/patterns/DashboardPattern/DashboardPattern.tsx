@@ -71,11 +71,7 @@ export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProp
       </div>
       <div className="layout-content">
         <Section title="Sprint metrics">
-          <Scoreboard
-            className="layout-metrics layout-metrics--fixed-4"
-            aria-label="Sprint metrics"
-            items={SPRINT_METRICS}
-          />
+          <Scoreboard aria-label="Sprint metrics" items={SPRINT_METRICS} />
         </Section>
         <Section title="Weekly users">
           <LineChart data={WEEKLY_USERS} variant="line" showTable={false} />

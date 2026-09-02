@@ -104,7 +104,6 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
       <div className="layout-content">
         <Section title="At a glance">
           <Scoreboard
-            className="layout-metrics layout-metrics--fixed-4"
             aria-label="Inbox this week"
             items={[
               { label: "Unread", value: String(unread), delta: `+${unread}`, trend: "up" as const, hint: "need a look", size: "lg" as const, badge: "Live", badgeTone: "danger" as const },

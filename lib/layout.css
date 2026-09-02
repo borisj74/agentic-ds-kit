@@ -73,26 +73,24 @@
 }
 
 .layout-metrics--fixed-4 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-/* Lengths match tokens: metrics-min 12rem, gutter-md 1rem. Container queries cannot use calc(var()). */
-@container layout-content (max-width: 25rem) {
-  .layout-metrics--fixed-3,
-  .layout-metrics--fixed-4 {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
+/* Collapse as the content column narrows. Lengths match tokens: metrics-min 12rem, gutter-md 1rem. Container queries cannot use calc(var()). */
 @container layout-content (max-width: 38rem) {
   .layout-metrics--fixed-3 {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .layout-metrics--fixed-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-@container layout-content (min-width: 51rem) {
+@container layout-content (max-width: 25rem) {
+  .layout-metrics--fixed-3,
   .layout-metrics--fixed-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
