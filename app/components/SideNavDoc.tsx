@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { SideNav } from "@/ui/SideNav";
-import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "@/ui/SideNav";
+import { SideNav } from "agentic-ds-kit";
+import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";

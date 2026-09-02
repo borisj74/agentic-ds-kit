@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Progress } from "@/ui/Progress";
-import type { ProgressShape, ProgressSize } from "@/ui/Progress";
+import { Progress } from "agentic-ds-kit";
+import type { ProgressShape, ProgressSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Badge } from "@/ui/Badge";
-import type { BadgeSize, BadgeTone } from "@/ui/Badge";
-import { Switch } from "@/ui/Switch";
+import { Badge } from "agentic-ds-kit";
+import type { BadgeSize, BadgeTone } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

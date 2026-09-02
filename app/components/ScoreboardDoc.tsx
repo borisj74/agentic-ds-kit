@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Scoreboard } from "@/ui/Scoreboard";
+import { Scoreboard } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

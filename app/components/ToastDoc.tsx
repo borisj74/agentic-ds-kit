@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Toast } from "@/ui/Toast";
-import type { ToastSize, ToastStatus } from "@/ui/Toast";
+import { Button } from "agentic-ds-kit";
+import { Toast } from "agentic-ds-kit";
+import type { ToastSize, ToastStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

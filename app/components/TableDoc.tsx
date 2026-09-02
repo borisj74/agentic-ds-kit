@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DropdownMenu } from "@/ui/DropdownMenu";
-import { Table } from "@/ui/Table";
-import type { TableColumn, TableSize } from "@/ui/Table";
+import { DropdownMenu } from "agentic-ds-kit";
+import { Table } from "agentic-ds-kit";
+import type { TableColumn, TableSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

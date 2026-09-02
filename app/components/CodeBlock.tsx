@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/ui/Button";
+import { Button } from "agentic-ds-kit";
 import styles from "./ComponentDoc.module.css";
 
 export function CodeBlock({ code }: { code: string }) {

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Avatar } from "@/ui/Avatar";
-import { AppHeader } from "@/ui/AppHeader";
-import { Button } from "@/ui/Button";
-import { Switch } from "@/ui/Switch";
+import { Avatar } from "agentic-ds-kit";
+import { AppHeader } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./AppHeaderDoc.module.css";

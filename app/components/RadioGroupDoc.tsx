@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { RadioGroup } from "@/ui/RadioGroup";
-import type { RadioGroupSize } from "@/ui/RadioGroup";
-import { Switch } from "@/ui/Switch";
+import { RadioGroup } from "agentic-ds-kit";
+import type { RadioGroupSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

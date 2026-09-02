@@ -1,0 +1,60 @@
+{
+  "name": "agentic-ds-kit",
+  "version": "0.1.0",
+  "description": "Code-only agentic design system: contracts, tokens, and React components.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/borisj74/agentic-ds-kit.git",
+    "directory": "packages/kit"
+  },
+  "homepage": "https://github.com/borisj74/agentic-ds-kit#readme",
+  "bugs": {
+    "url": "https://github.com/borisj74/agentic-ds-kit/issues"
+  },
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "src",
+    "ui",
+    "contracts",
+    "tokens",
+    "lib",
+    "skills",
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./lib/tokens.css",
+    "./contracts/index.json": "./contracts/index.json",
+    "./contracts/*.json": "./contracts/*.json",
+    "./contracts/patterns/*.json": "./contracts/patterns/*.json",
+    "./tokens/tokens.json": "./tokens/tokens.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "generate:tokens": "node scripts/generate-tokens.mjs"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "embla-carousel-react": "^8.6.0",
+    "lucide-react": "^1.37.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

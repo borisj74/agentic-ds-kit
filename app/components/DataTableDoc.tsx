@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable } from "@/ui/DataTable";
-import type { DataTableColumn, DataTableRow } from "@/ui/DataTable";
+import { DataTable } from "agentic-ds-kit";
+import type { DataTableColumn, DataTableRow } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";

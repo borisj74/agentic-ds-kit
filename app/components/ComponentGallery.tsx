@@ -2,8 +2,8 @@
 
 import { useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import Link from "next/link";
-import { Card } from "@/ui/Card";
-import { Tabs } from "@/ui/Tabs";
+import { Card } from "agentic-ds-kit";
+import { Tabs } from "agentic-ds-kit";
 import { filterGalleryItems, type GalleryFilter, type GalleryItem } from "@/lib/component-gallery";
 import { GalleryPreview } from "./GalleryPreview";
 import playground from "../playground.module.css";

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { ButtonGroup } from "@/ui/ButtonGroup";
-import { ModalCard } from "@/ui/ModalCard";
-import type { ModalCardSize } from "@/ui/ModalCard";
-import { Switch } from "@/ui/Switch";
+import { Button } from "agentic-ds-kit";
+import { ButtonGroup } from "agentic-ds-kit";
+import { ModalCard } from "agentic-ds-kit";
+import type { ModalCardSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

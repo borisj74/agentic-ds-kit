@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar } from "@/ui/Calendar";
-import type { CalendarSize } from "@/ui/Calendar";
-import { Switch } from "@/ui/Switch";
+import { Calendar } from "agentic-ds-kit";
+import type { CalendarSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

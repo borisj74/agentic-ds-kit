@@ -1,21 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AppHeader } from "@/ui/AppHeader";
-import { Button } from "@/ui/Button";
-import { Empty } from "@/ui/Empty";
-import { PageHeader } from "@/ui/PageHeader";
-import type { PageHeaderProps } from "@/ui/PageHeader";
-import { ActivityPattern } from "@/ui/patterns/ActivityPattern";
-import { AssistantWorkspacePattern } from "@/ui/patterns/AssistantWorkspacePattern";
-import { DashboardPattern } from "@/ui/patterns/DashboardPattern";
-import { EmptyFirstRunPattern } from "@/ui/patterns/EmptyFirstRunPattern";
-import { InboxPattern } from "@/ui/patterns/InboxPattern";
-import { InviteMembersPattern } from "@/ui/patterns/InviteMembersPattern";
-import { ListDetailPattern } from "@/ui/patterns/ListDetailPattern";
-import { SettingsFormPattern } from "@/ui/patterns/SettingsFormPattern";
-import { SideNav } from "@/ui/SideNav";
-import type { SideNavGroup, SideNavItem } from "@/ui/SideNav";
+import { AppHeader } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { Empty } from "agentic-ds-kit";
+import { PageHeader } from "agentic-ds-kit";
+import type { PageHeaderProps } from "agentic-ds-kit";
+import { ActivityPattern } from "agentic-ds-kit";
+import { AssistantWorkspacePattern } from "agentic-ds-kit";
+import { DashboardPattern } from "agentic-ds-kit";
+import { EmptyFirstRunPattern } from "agentic-ds-kit";
+import { InboxPattern } from "agentic-ds-kit";
+import { InviteMembersPattern } from "agentic-ds-kit";
+import { ListDetailPattern } from "agentic-ds-kit";
+import { SettingsFormPattern } from "agentic-ds-kit";
+import { SideNav } from "agentic-ds-kit";
+import type { SideNavGroup, SideNavItem } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
 const NAV_GROUPS: SideNavGroup[] = [

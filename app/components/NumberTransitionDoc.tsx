@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { NumberTransition } from "@/ui/NumberTransition";
-import type { NumberTransitionSize } from "@/ui/NumberTransition";
+import { Button } from "agentic-ds-kit";
+import { NumberTransition } from "agentic-ds-kit";
+import type { NumberTransitionSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

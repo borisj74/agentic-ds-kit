@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Avatar } from "@/ui/Avatar";
-import { AvatarGroup } from "@/ui/AvatarGroup";
-import { Button } from "@/ui/Button";
-import { Empty } from "@/ui/Empty";
+import { Avatar } from "agentic-ds-kit";
+import { AvatarGroup } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { Empty } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -148,7 +148,7 @@ export function EmptyDoc() {
                 <p className={styles.usageBody}>Overlapping avatars in the media slot.</p>
               </div>
               <CodeBlock
-                code={`import { AvatarGroup } from "@/ui/AvatarGroup";
+                code={`import { AvatarGroup } from "agentic-ds-kit";
 
 <Empty
   title="No team members"

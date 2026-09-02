@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Field } from "@/ui/Field";
-import { InputOTP } from "@/ui/InputOTP";
-import type { InputOTPSize } from "@/ui/InputOTP";
-import { Switch } from "@/ui/Switch";
+import { Button } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { InputOTP } from "agentic-ds-kit";
+import type { InputOTPSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

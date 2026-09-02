@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Field } from "@/ui/Field";
-import type { FieldLabelPosition } from "@/ui/Field";
-import { Textarea } from "@/ui/Textarea";
-import type { TextareaSize } from "@/ui/Textarea";
-import { Switch } from "@/ui/Switch";
+import { Field } from "agentic-ds-kit";
+import type { FieldLabelPosition } from "agentic-ds-kit";
+import { Textarea } from "agentic-ds-kit";
+import type { TextareaSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

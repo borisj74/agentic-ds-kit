@@ -1,11 +1,11 @@
 "use client";
 
-import { AppNav } from "@/ui/AppNav";
-import { Field } from "@/ui/Field";
-import { Input } from "@/ui/Input";
-import { Select } from "@/ui/Select";
-import { Table } from "@/ui/Table";
-import { Textarea } from "@/ui/Textarea";
+import { AppNav } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { Input } from "agentic-ds-kit";
+import { Select } from "agentic-ds-kit";
+import { Table } from "agentic-ds-kit";
+import { Textarea } from "agentic-ds-kit";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
 import styles from "./components.module.css";
 import doc from "./ComponentDoc.module.css";

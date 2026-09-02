@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { LoadingAnimation } from "@/ui/LoadingAnimation";
-import type { LoadingAnimationSize } from "@/ui/LoadingAnimation";
+import { LoadingAnimation } from "agentic-ds-kit";
+import type { LoadingAnimationSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

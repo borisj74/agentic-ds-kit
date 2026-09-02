@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Badge } from "@/ui/Badge";
-import { Collapsible } from "@/ui/Collapsible";
+import { Badge } from "agentic-ds-kit";
+import { Collapsible } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./CollapsibleDoc.module.css";

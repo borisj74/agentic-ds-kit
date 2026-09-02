@@ -1,4 +1,4 @@
-import { Section } from "@/ui/Section";
+import { Section } from "agentic-ds-kit";
 import playground from "./playground.module.css";
 
 export default function Home() {
@@ -13,12 +13,12 @@ export default function Home() {
 
         <Section
           title="What this is"
-          description="A Next.js playground that proves JSON contracts, a short always-on rule, and one skill help agents prototype without inventing local components."
+          description="The npm package agentic-ds-kit: JSON contracts, tokens, and React components. This playground is the catalog that consumes it."
           collapsible={false}
         >
           <p className={playground.body}>
-            Read contracts/index.json, open the matching contract, and import from ui/. If a pattern
-            matches the screen, compose from ui/patterns/.
+            Read packages/kit/contracts/index.json, open the matching contract, and import from
+            agentic-ds-kit. If a pattern matches the screen, import that pattern from the package.
           </p>
         </Section>
 

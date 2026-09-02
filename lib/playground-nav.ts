@@ -1,4 +1,4 @@
-import type { AppNavGroup } from "@/ui/AppNav";
+import type { AppNavGroup } from "agentic-ds-kit";
 
 export const COMPONENT_ITEMS = [
   "accordion",

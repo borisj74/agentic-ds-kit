@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Cell } from "@/ui/Cell";
-import type { CellSize } from "@/ui/Cell";
-import { Switch } from "@/ui/Switch";
+import { Cell } from "agentic-ds-kit";
+import type { CellSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";

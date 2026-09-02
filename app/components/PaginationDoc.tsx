@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Pagination } from "@/ui/Pagination";
-import type { PaginationSize } from "@/ui/Pagination";
+import { Pagination } from "agentic-ds-kit";
+import type { PaginationSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

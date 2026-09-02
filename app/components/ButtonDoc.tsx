@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import type { ButtonSize, ButtonVariant } from "@/ui/Button";
-import { Switch } from "@/ui/Switch";
+import { Button } from "agentic-ds-kit";
+import type { ButtonSize, ButtonVariant } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

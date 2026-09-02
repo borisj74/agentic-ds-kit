@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Spinner } from "@/ui/Spinner";
-import type { SpinnerSize } from "@/ui/Spinner";
+import { Button } from "agentic-ds-kit";
+import { Spinner } from "agentic-ds-kit";
+import type { SpinnerSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -130,8 +130,8 @@ export function SpinnerDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={`import { Button } from "@/ui/Button";
-import { Spinner } from "@/ui/Spinner";
+                code={`import { Button } from "agentic-ds-kit";
+import { Spinner } from "agentic-ds-kit";
 
 <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
   <Spinner size="sm" />

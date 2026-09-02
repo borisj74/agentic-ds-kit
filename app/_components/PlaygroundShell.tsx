@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav } from "@/ui/AppNav";
-import { Button } from "@/ui/Button";
-import { Select } from "@/ui/Select";
+import { AppNav } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { Select } from "agentic-ds-kit";
 import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
 import {
   PLAYGROUND_COLOR_THEMES,

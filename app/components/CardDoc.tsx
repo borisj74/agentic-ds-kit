@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/ui/Card";
-import type { CardSize } from "@/ui/Card";
-import { Field } from "@/ui/Field";
-import { Input } from "@/ui/Input";
+import { Card } from "agentic-ds-kit";
+import type { CardSize } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { Input } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

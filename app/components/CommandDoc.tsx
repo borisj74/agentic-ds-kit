@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/ui/Button";
-import { Command } from "@/ui/Command";
-import type { CommandGroup } from "@/ui/Command";
-import { Modal } from "@/ui/Modal";
+import { Button } from "agentic-ds-kit";
+import { Command } from "agentic-ds-kit";
+import type { CommandGroup } from "agentic-ds-kit";
+import { Modal } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Carousel } from "@/ui/Carousel";
-import type { CarouselOrientation } from "@/ui/Carousel";
-import { Switch } from "@/ui/Switch";
+import { Carousel } from "agentic-ds-kit";
+import type { CarouselOrientation } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import doc from "./CarouselDoc.module.css";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { InsightCard } from "@/ui/InsightCard";
-import type { InsightCardSize, InsightCardTone } from "@/ui/InsightCard";
-import { Switch } from "@/ui/Switch";
+import { InsightCard } from "agentic-ds-kit";
+import type { InsightCardSize, InsightCardTone } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

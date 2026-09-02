@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs } from "@/ui/Tabs";
-import type { TabItem, TabsSize, TabsVariant } from "@/ui/Tabs";
+import { Tabs } from "agentic-ds-kit";
+import type { TabItem, TabsSize, TabsVariant } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

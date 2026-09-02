@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, type CSSProperties, type ReactNode } from "react";
-import { Button } from "@/ui/Button";
-import { ButtonGroup } from "@/ui/ButtonGroup";
-import { Field } from "@/ui/Field";
-import { Input } from "@/ui/Input";
-import { Modal } from "@/ui/Modal";
-import type { ModalSize } from "@/ui/Modal";
-import { Switch } from "@/ui/Switch";
+import { Button } from "agentic-ds-kit";
+import { ButtonGroup } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { Input } from "agentic-ds-kit";
+import { Modal } from "agentic-ds-kit";
+import type { ModalSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

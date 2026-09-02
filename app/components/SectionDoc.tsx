@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Alert } from "@/ui/Alert";
-import { Button } from "@/ui/Button";
-import { Field } from "@/ui/Field";
-import { Input } from "@/ui/Input";
-import { Scoreboard } from "@/ui/Scoreboard";
-import { Section } from "@/ui/Section";
-import type { SectionSize } from "@/ui/Section";
-import { Switch } from "@/ui/Switch";
-import { Table } from "@/ui/Table";
+import { Alert } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { Input } from "agentic-ds-kit";
+import { Scoreboard } from "agentic-ds-kit";
+import { Section } from "agentic-ds-kit";
+import type { SectionSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
+import { Table } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Avatar } from "@/ui/Avatar";
-import type { AvatarSize } from "@/ui/Avatar";
+import { Avatar } from "agentic-ds-kit";
+import type { AvatarSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";

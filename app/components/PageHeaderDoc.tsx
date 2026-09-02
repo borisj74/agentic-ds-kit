@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { BreadcrumbItem } from "@/ui/Breadcrumb";
-import { Button } from "@/ui/Button";
-import { PageHeader } from "@/ui/PageHeader";
-import { Switch } from "@/ui/Switch";
+import type { BreadcrumbItem } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
+import { PageHeader } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { LineChart } from "@/ui/LineChart";
-import type { LineChartVariant } from "@/ui/LineChart";
-import { Switch } from "@/ui/Switch";
+import { LineChart } from "agentic-ds-kit";
+import type { LineChartVariant } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     "*.cursor.sh",
     "*.cursor.com",
   ],
+  transpilePackages: ["agentic-ds-kit"],
   turbopack: {
     root,
   },

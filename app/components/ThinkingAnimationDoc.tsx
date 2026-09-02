@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ThinkingAnimation } from "@/ui/ThinkingAnimation";
-import type { ThinkingAnimationSize } from "@/ui/ThinkingAnimation";
-import { Switch } from "@/ui/Switch";
+import { ThinkingAnimation } from "agentic-ds-kit";
+import type { ThinkingAnimationSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

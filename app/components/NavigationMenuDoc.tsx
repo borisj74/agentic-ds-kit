@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { NavigationMenu } from "@/ui/NavigationMenu";
-import type { NavigationMenuItem } from "@/ui/NavigationMenu";
+import { NavigationMenu } from "agentic-ds-kit";
+import type { NavigationMenuItem } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import demo from "./NavigationMenuDoc.module.css";

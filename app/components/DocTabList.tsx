@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs } from "@/ui/Tabs";
+import { Tabs } from "agentic-ds-kit";
 import styles from "./ComponentDoc.module.css";
 
 export function DocTabList({

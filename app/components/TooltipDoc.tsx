@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Tooltip } from "@/ui/Tooltip";
-import type { TooltipPlacement } from "@/ui/Tooltip";
+import { Button } from "agentic-ds-kit";
+import { Tooltip } from "agentic-ds-kit";
+import type { TooltipPlacement } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

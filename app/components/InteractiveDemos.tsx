@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/ui/Button";
-import { Modal } from "@/ui/Modal";
-import { Tabs } from "@/ui/Tabs";
-import { Tooltip } from "@/ui/Tooltip";
+import { Button } from "agentic-ds-kit";
+import { Modal } from "agentic-ds-kit";
+import { Tabs } from "agentic-ds-kit";
+import { Tooltip } from "agentic-ds-kit";
 
 export interface InteractiveDemosProps {
   mode?: "all" | "tooltip" | "tabs" | "modal";

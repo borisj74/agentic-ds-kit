@@ -1,4 +1,4 @@
-import tokens from "@/tokens/tokens.json";
+import tokens from "agentic-ds-kit/tokens/tokens.json";
 
 type PrimitiveColors = typeof tokens.primitive.color;
 

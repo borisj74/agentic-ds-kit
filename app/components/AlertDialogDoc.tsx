@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AlertDialog } from "@/ui/AlertDialog";
-import type { AlertDialogActionVariant, AlertDialogSize } from "@/ui/AlertDialog";
-import { Button } from "@/ui/Button";
+import { AlertDialog } from "agentic-ds-kit";
+import type { AlertDialogActionVariant, AlertDialogSize } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

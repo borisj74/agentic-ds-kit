@@ -1,4 +1,4 @@
-import contracts from "@/contracts/index.json";
+import contracts from "agentic-ds-kit/contracts/index.json";
 import { COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
 
 export type GalleryFilter = "all" | "agent" | "base" | "motion";

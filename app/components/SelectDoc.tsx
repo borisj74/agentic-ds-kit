@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Field } from "@/ui/Field";
-import { Select } from "@/ui/Select";
-import type { SelectSize } from "@/ui/Select";
+import { Field } from "agentic-ds-kit";
+import { Select } from "agentic-ds-kit";
+import type { SelectSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

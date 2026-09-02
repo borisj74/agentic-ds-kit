@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Chat } from "@/ui/Chat";
-import type { ChatMessage } from "@/ui/Chat";
+import { Chat } from "agentic-ds-kit";
+import type { ChatMessage } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import doc from "./ChatDoc.module.css";

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DropdownMenu } from "@/ui/DropdownMenu";
-import type { DropdownMenuGroup } from "@/ui/DropdownMenu";
-import type { ButtonSize } from "@/ui/Button";
+import { DropdownMenu } from "agentic-ds-kit";
+import type { DropdownMenuGroup } from "agentic-ds-kit";
+import type { ButtonSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

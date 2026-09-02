@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Alert } from "@/ui/Alert";
-import type { AlertVariant } from "@/ui/Alert";
+import { Alert } from "agentic-ds-kit";
+import type { AlertVariant } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

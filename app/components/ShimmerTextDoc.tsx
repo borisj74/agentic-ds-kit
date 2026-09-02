@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ShimmerText } from "@/ui/ShimmerText";
-import type { ShimmerTextSize } from "@/ui/ShimmerText";
+import { ShimmerText } from "agentic-ds-kit";
+import type { ShimmerTextSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

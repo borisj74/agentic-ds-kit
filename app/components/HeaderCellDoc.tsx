@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { HeaderCell } from "@/ui/HeaderCell";
-import type { HeaderCellSize, HeaderCellSort } from "@/ui/HeaderCell";
-import { Switch } from "@/ui/Switch";
+import { HeaderCell } from "agentic-ds-kit";
+import type { HeaderCellSize, HeaderCellSort } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

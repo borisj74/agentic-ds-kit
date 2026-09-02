@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DatePicker } from "@/ui/DatePicker";
-import type { DatePickerSize } from "@/ui/DatePicker";
-import { Field } from "@/ui/Field";
+import { DatePicker } from "agentic-ds-kit";
+import type { DatePickerSize } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";

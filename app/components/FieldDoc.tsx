@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/ui/Card";
-import { Checkbox } from "@/ui/Checkbox";
-import { Field } from "@/ui/Field";
-import { FieldSet } from "@/ui/FieldSet";
-import { Input } from "@/ui/Input";
-import { Select } from "@/ui/Select";
-import { Switch } from "@/ui/Switch";
-import { Textarea } from "@/ui/Textarea";
+import { Card } from "agentic-ds-kit";
+import { Checkbox } from "agentic-ds-kit";
+import { Field } from "agentic-ds-kit";
+import { FieldSet } from "agentic-ds-kit";
+import { Input } from "agentic-ds-kit";
+import { Select } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
+import { Textarea } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import local from "./FieldDoc.module.css";

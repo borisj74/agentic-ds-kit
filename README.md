@@ -2,13 +2,31 @@
 
 Personal experiment (code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
 
-A Next.js playground that proves JSON component contracts + a short always-on rule + one skill help agents prototype faster without inventing local components.
+The **kit** is the npm package `agentic-ds-kit` (`packages/kit`): contracts, tokens, React components, patterns. The **playground** in this repo is the docs site that consumes that package.
+
+## Install in an app
+
+```bash
+npm install agentic-ds-kit
+```
+
+```ts
+// next.config.ts
+transpilePackages: ["agentic-ds-kit"]
+```
+
+```tsx
+import "agentic-ds-kit/tokens.css";
+import { Button, Scoreboard } from "agentic-ds-kit";
+```
+
+Copy `packages/kit/AGENTS.md` and `packages/kit/CLAUDE.md` into the app root so Cursor and Claude Code follow the kit. Full install notes: [docs/getting-started.md](docs/getting-started.md).
 
 ## What's here
 
 ### Foundations
-- `tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
-- `lib/tokens.css` — semantic CSS variables (components bind to these only)
+- `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
+- `packages/kit/lib/tokens.css` — semantic CSS variables (import as `agentic-ds-kit/tokens.css`)
 
 ### Components (17)
 | Component | Purpose |
@@ -52,16 +70,25 @@ Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundation
 - `/patterns` — Pattern blueprints (`#dashboard`)
 
 ### Agent files
-- `contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups
-- `CLAUDE.md` / `.cursor/rules/kit.mdc` — always-on rules
-- `.cursor/skills/prototype-from-kit/` — composition skill
+- `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups
+- `AGENTS.md` — always-on kit rules (shared; this repo points at `packages/kit`)
+- `CLAUDE.md` — Claude Code loads this; it imports `AGENTS.md`
+- `.cursor/rules/kit.mdc` — same rules for Cursor
+- `.cursor/skills/prototype-from-kit/` and `.claude/skills/prototype-from-kit/` — compose-from-kit skill
+- `packages/kit/AGENTS.md` — copy this into consumer apps
 
 ## Origin repository
 
-- **Codebase:** https://cursor.com/codebase/bojo74/agentic-ds-kit
-- **Clone:** `git clone https://origin.cursor.com/bojo74/agentic-ds-kit.git`
+Clone from **GitHub**. Cursor Origin stays as a private mirror; people without Origin should not need it.
+
+- **GitHub (public):** `git clone git@github.com:borisj74/agentic-ds-kit.git`
+- **Cursor origin (private mirror):** `git clone https://origin.cursor.com/bojo74/agentic-ds-kit.git`
+
+Install and Claude vs Cursor agent files are in [docs/getting-started.md](docs/getting-started.md).
 
 ## Run locally
+
+Node.js 20+.
 
 ```bash
 npm install
@@ -82,7 +109,7 @@ npm run build
 
 > Add another metric row to the dashboard.
 
-Expected: agent reads `contracts/index.json`, opens `scoreboard.json`, and composes with `<Scoreboard items={[...]} />` from `ui/`.
+Expected: agent reads `packages/kit/contracts/index.json`, opens `scoreboard.json`, and composes with `<Scoreboard items={[...]} />` from `agentic-ds-kit`.
 
 **B — Should refuse shortcuts**
 

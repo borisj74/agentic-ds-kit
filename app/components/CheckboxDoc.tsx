@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox } from "@/ui/Checkbox";
-import type { CheckboxSize } from "@/ui/Checkbox";
-import { Switch } from "@/ui/Switch";
+import { Checkbox } from "agentic-ds-kit";
+import type { CheckboxSize } from "agentic-ds-kit";
+import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
