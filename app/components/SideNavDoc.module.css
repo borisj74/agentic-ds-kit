@@ -1,0 +1,68 @@
+.fill {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  height: 100%;
+}
+
+.canvas {
+  display: grid;
+  place-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 42rem;
+  padding: var(--space-4);
+}
+
+.exampleCanvas {
+  display: grid;
+  place-items: stretch;
+  min-height: 42rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-4);
+  overflow-x: auto;
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.shell {
+  display: flex;
+  min-height: 42rem;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--space-inset-md);
+  gap: var(--space-inset-md);
+  background-color: var(--surface-muted);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+.shellRight {
+  flex-direction: row-reverse;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-6);
+  background-color: var(--surface-card);
+  border-radius: var(--radius-surface-md);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+}
+
+.copy {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-muted);
+}

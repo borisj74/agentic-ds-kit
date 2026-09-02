@@ -1,0 +1,85 @@
+.cell {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
+.sm {
+  min-height: 2.25rem;
+  padding: var(--space-2) var(--space-4);
+  gap: var(--space-2);
+}
+
+.md {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-6);
+  gap: var(--space-2);
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.center {
+  justify-content: center;
+}
+
+.checkboxOnly {
+  width: auto;
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.label {
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.sm .label,
+.md .label {
+  font-size: var(--type-size-caption);
+}
+
+.sort {
+  display: inline-flex;
+  align-items: center;
+  justify-content: inherit;
+  gap: inherit;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+.sort:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.sortIcon {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}
+
+.sortIconActive {
+  flex-shrink: 0;
+  color: var(--icon-primary);
+}

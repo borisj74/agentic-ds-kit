@@ -1,0 +1,38 @@
+{
+  "id": "accordion",
+  "status": "stable",
+  "intent": "One-open disclosure list for short related sections.",
+  "useWhen": [
+    "FAQ or help copy grouped under short titles",
+    "Settings or detail blocks the user opens one at a time"
+  ],
+  "doNotUseWhen": [
+    "In-page peer views — use Tabs",
+    "Sidebar catalog groups — use AppNav",
+    "A single show/hide block — use Collapsible"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemShape": { "id": "string", "title": "string", "content": "string" },
+      "required": true,
+      "minItems": 2
+    },
+    "defaultOpen": { "type": "string", "required": false, "note": "Item id that starts open. Omit to start all closed." }
+  },
+  "tokens": ["text.primary", "text.secondary", "surface.card", "border.faint", "icon.muted", "icon.default"],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Each header is a button with aria-expanded",
+      "Button aria-controls the matching panel",
+      "Closed panels are hidden from AT"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Accordion or Collapse — use Collapsible for one block",
+    "Do not use raw hex",
+    "Do not open more than one item at a time"
+  ],
+  "snippet": "<Accordion items={[{ id: 'hours', title: 'Hours', content: 'Weekdays 9–5.' }, { id: 'address', title: 'Address', content: 'Knez Mihailova 1.' }]} defaultOpen=\"hours\" />"
+}

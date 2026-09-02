@@ -1,0 +1,75 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.dot {
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--text-muted);
+  animation: thinking-dot 1.2s var(--motion-ease-in-out) infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.sm {
+  gap: var(--space-1);
+  font-size: var(--type-size-caption);
+}
+
+.sm .dot {
+  inline-size: 0.3rem;
+  block-size: 0.3rem;
+}
+
+.lg {
+  gap: var(--space-3);
+  font-size: var(--type-size-body);
+}
+
+.lg .dot {
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+}
+
+.label {
+  color: var(--text-secondary);
+}
+
+@keyframes thinking-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(-0.15rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+    opacity: 1;
+  }
+}

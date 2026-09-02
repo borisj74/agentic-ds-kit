@@ -1,0 +1,79 @@
+{
+  "id": "empty",
+  "status": "stable",
+  "intent": "Placeholder when a list, page, or region has nothing to show. One piece.",
+  "useWhen": [
+    "A list or table has no rows",
+    "A page section has no content yet",
+    "A panel needs a centered placeholder with optional actions"
+  ],
+  "doNotUseWhen": [
+    "Inline page status — use Alert",
+    "Chart with no data — charts use their own emptyLabel",
+    "Loading with no content — use Spinner or LoadingAnimation"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "note": "Primary heading for the empty state."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "Supporting copy under the title."
+    },
+    "icon": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide export name. Shown in a circular media well. Not EmptyMedia."
+    },
+    "media": {
+      "type": "slot",
+      "required": false,
+      "note": "Custom media slot. Compose kit Avatar or AvatarGroup. Not EmptyMedia."
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Action row. Compose kit Buttons only. Not EmptyContent."
+    },
+    "outlined": {
+      "type": "boolean",
+      "default": false,
+      "note": "Bordered empty state with surface-card background."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "text.primary",
+    "text.secondary",
+    "icon.secondary",
+    "border.faint",
+    "radius.surfaceSm",
+    "radius.full",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.6",
+    "type.size.heading",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.weight.body"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Title uses a heading element",
+      "Icon media is aria-hidden",
+      "Actions are regular interactive controls"
+    ]
+  },
+  "doNot": [
+    "Do not invent EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, or EmptyContent",
+    "Do not use raw hex",
+    "Do not use glass, color-mix, or backdrop-blur"
+  ],
+  "snippet": "<Empty title=\"No projects yet\" description=\"You haven't created any projects yet.\" icon=\"Folder\" actions={<><Button>Create</Button><Button variant=\"secondary\">Import</Button></>} />"
+}

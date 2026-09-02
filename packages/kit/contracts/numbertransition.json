@@ -1,0 +1,33 @@
+{
+  "id": "numbertransition",
+  "status": "stable",
+  "intent": "Rolling number treatment for live metrics and counters.",
+  "useWhen": [
+    "Dashboard metrics that update in place",
+    "Animated count-ups with tabular numerals"
+  ],
+  "doNotUseWhen": [
+    "Static labels without changing values",
+    "Non-numeric copy"
+  ],
+  "props": {
+    "value": { "type": "number|string", "required": true },
+    "format": { "type": "function", "required": false },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md"
+    },
+    "label": { "type": "string", "required": false }
+  },
+  "tokens": ["text.primary"],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "aria-live=polite",
+      "aria-label mirrors formatted value when label omitted"
+    ]
+  },
+  "doNot": ["Do not use raw hex"],
+  "snippet": "<NumberTransition value={12840} format={(n) => n.toLocaleString()} />"
+}

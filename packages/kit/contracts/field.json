@@ -1,0 +1,49 @@
+{
+  "id": "field",
+  "status": "stable",
+  "intent": "One labeled control with optional hint and error. Label on top or start (left).",
+  "useWhen": [
+    "Any labeled Input, Textarea, Select, DatePicker, or Switch",
+    "When helper text or a validation error sits with the control"
+  ],
+  "doNotUseWhen": [
+    "Checkbox with its own label and no extra hint/error — use Checkbox",
+    "RadioGroup — it provides its own legend",
+    "A group of fields with a legend — use FieldSet",
+    "Display-only content — use Section"
+  ],
+  "props": {
+    "label": { "type": "string", "required": true },
+    "htmlFor": { "type": "string", "required": true },
+    "hint": { "type": "string", "required": false, "note": "helper text. Hidden when error is set." },
+    "error": { "type": "string", "required": false },
+    "labelPosition": {
+      "type": "enum",
+      "values": ["top", "start"],
+      "default": "top",
+      "note": "top stacks. start is horizontal (label left). Hint and error stay under the control."
+    },
+    "children": {
+      "type": "slot",
+      "allowedContracts": ["input", "textarea", "select", "datepicker", "switch", "checkbox"],
+      "required": true
+    }
+  },
+  "tokens": ["text.primary", "text.muted", "text.danger"],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "role=group",
+      "Label htmlFor matches child control id",
+      "Hint or error id is passed to the child as describedBy",
+      "data-invalid when error is set"
+    ]
+  },
+  "doNot": [
+    "Do not invent FieldLabel, FieldContent, FieldDescription, FieldError, FieldTitle, FieldGroup, FieldLegend, FieldSeparator, Form, FormField, FormItem, FormControl, or FormMessage",
+    "Do not wrap Button or layout components",
+    "Do not use start on Field for prefix text — that is Input start",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\"><Input id=\"email\" type=\"email\" /></Field>"
+}

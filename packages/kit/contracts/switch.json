@@ -1,0 +1,94 @@
+{
+  "id": "switch",
+  "status": "stable",
+  "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
+  "useWhen": [
+    "Settings rows (notifications, dark mode)",
+    "Binary preference that takes effect now"
+  ],
+  "doNotUseWhen": [
+    "Multi-select or agree-to-terms — use Checkbox",
+    "Choosing one of several options — use RadioGroup",
+    "Primary form submit actions — use Button"
+  ],
+  "props": {
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "useId fallback"
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "visible text; required unless ariaLabel is set"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "required when label is omitted"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "checked": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "default": false,
+      "note": "uncontrolled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(checked: boolean) => void"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.disabled",
+    "action.primary",
+    "action.primaryHover",
+    "action.secondary",
+    "action.onPrimary",
+    "border.faint",
+    "border.strong",
+    "border.control",
+    "radius.pill",
+    "focus.ring",
+    "opacity.disabled",
+    "motion.modalDuration",
+    "motion.easeSpring"
+  ],
+  "a11y": {
+    "element": "button[role=switch]",
+    "requirements": [
+      "role=switch",
+      "aria-checked reflects on/off",
+      "Keyboard uses button defaults (Space/Enter)",
+      "focus-visible kit ring",
+      "Disabled state is exposed",
+      "Visible label via label/htmlFor OR ariaLabel when unlabeled"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Switch, Toggle, or ToggleGroup",
+    "Do not use Checkbox for instant settings",
+    "Do not use raw hex",
+    "Do not ship unlabeled without ariaLabel",
+    "Do not export Thumb or SwitchGroup"
+  ],
+  "snippet": "<Switch label=\"Notifications\" />\n<Switch ariaLabel=\"Dark mode\" />"
+}

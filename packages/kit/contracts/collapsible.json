@@ -1,0 +1,66 @@
+{
+  "id": "collapsible",
+  "status": "stable",
+  "intent": "Single show/hide panel with a title and a toggle.",
+  "useWhen": [
+    "One disclosure whose body composes kit pieces",
+    "Order, product, or extra spec the user can hide"
+  ],
+  "doNotUseWhen": [
+    "Two or more related sections, one open at a time — use Accordion",
+    "In-page peer views — use Tabs"
+  ],
+  "props": {
+    "trigger": {
+      "type": "string",
+      "required": true,
+      "note": "Title on the left. Toggle is a ChevronsUpDown button, not the whole row"
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Revealed body. Compose kit pieces, never a local cousin"
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "default": false
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "icon.muted",
+    "surface.muted",
+    "surface.card",
+    "border.faint",
+    "border.focus",
+    "radius.surface.md",
+    "radius.control.sm"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Title is not the toggle",
+      "Toggle is a button with aria-expanded and aria-label Toggle {trigger}",
+      "Button aria-controls the panel",
+      "Panel is role=region, aria-labelledby the title",
+      "Closed panel is hidden from AT"
+    ]
+  },
+  "doNot": [
+    "Do not invent CollapsibleTrigger or CollapsibleContent cousins",
+    "Do not use Accordion for a single block",
+    "Do not make the whole header row the button",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Collapsible trigger=\"Order #4189\" defaultOpen>\n  {children}\n</Collapsible>"
+}

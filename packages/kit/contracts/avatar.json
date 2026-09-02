@@ -1,0 +1,63 @@
+{
+  "id": "avatar",
+  "status": "stable",
+  "intent": "Face or initials for a person. Not a status chip and not a button.",
+  "useWhen": [
+    "user menus",
+    "table assignee",
+    "comment authors",
+    "profile headers"
+  ],
+  "doNotUseWhen": [
+    "status or category chips — use Badge",
+    "actions — use Button",
+    "logos/brands — ask first"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "src": {
+      "type": "string",
+      "required": false
+    },
+    "initials": {
+      "type": "string",
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "text.primary",
+    "radius.full",
+    "space.8",
+    "space.10",
+    "space.12"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "when image shows, img alt=name",
+      "when fallback, role=img and aria-label=name",
+      "Decorative User icon is aria-hidden"
+    ]
+  },
+  "doNot": [
+    "do not invent local Avatar",
+    "do not use raw hex",
+    "do not make Avatar clickable without a new contract",
+    "do not add AvatarGroup or a status badge on Avatar in this contract",
+    "do not use Badge for people"
+  ],
+  "snippet": "<Avatar name=\"Boris Jovanovic\" src=\"/faces/boris.jpg\" size=\"md\" />"
+}

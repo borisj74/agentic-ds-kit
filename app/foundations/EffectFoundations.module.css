@@ -1,0 +1,163 @@
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+}
+
+.pattern {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}
+
+.credit {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  color: var(--text-muted);
+}
+
+.credit a {
+  color: var(--text-secondary);
+}
+
+.list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.listOpacity {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) 5.5rem max-content;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: var(--border-width-thin) solid var(--border-faint);
+}
+
+.rowRadius {
+  grid-template-columns: minmax(12rem, 16rem) 5.5rem max-content;
+}
+
+.rowRadiusSemantic {
+  grid-template-columns: minmax(12rem, 16rem) max-content;
+}
+
+.rowShadow {
+  padding: 0.85rem 0;
+}
+
+.rowOpacity {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) 5.5rem minmax(8rem, 12rem);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list .row:last-child,
+.listOpacity .rowOpacity:last-child {
+  border-bottom: none;
+}
+
+.token {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.token:hover {
+  color: var(--text-secondary);
+}
+
+.token:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.note {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.swatch {
+  width: 3rem;
+  height: 3rem;
+  background: var(--color-neutral-200);
+}
+
+.swatchBorder {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--surface-card);
+  border-style: solid;
+  border-color: var(--color-neutral-300);
+  border-radius: var(--radius-control-sm);
+}
+
+.swatchWide {
+  width: 4.5rem;
+  height: 3rem;
+  background: var(--surface-page);
+  border-radius: var(--radius-surface-sm);
+  border: var(--border-100) solid var(--border-faint);
+}
+
+.opacityTrack {
+  position: relative;
+  width: min(100%, 12rem);
+  height: 2.75rem;
+  border-radius: var(--radius-control-md);
+  overflow: hidden;
+  background-color: var(--surface-page);
+  background-image:
+    linear-gradient(45deg, var(--color-neutral-200) 25%, transparent 25%, transparent 75%, var(--color-neutral-200) 75%),
+    linear-gradient(45deg, var(--color-neutral-200) 25%, transparent 25%, transparent 75%, var(--color-neutral-200) 75%);
+  background-position: 0 0, 0.5rem 0.5rem;
+  background-size: 1rem 1rem;
+}
+
+.opacityFill {
+  width: 100%;
+  height: 100%;
+  background: var(--text-primary);
+}

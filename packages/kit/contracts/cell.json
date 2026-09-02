@@ -1,0 +1,203 @@
+{
+  "id": "cell",
+  "status": "stable",
+  "intent": "Inline cell content for datasets: text, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
+  "useWhen": [
+    "DataTable body cells",
+    "Mixed visual and label content in a row"
+  ],
+  "doNotUseWhen": [
+    "A full searchable dataset \u2014 use DataTable, which composes Cell",
+    "A short static text table \u2014 use Table"
+  ],
+  "contains": [
+    "avatar",
+    "avatargroup",
+    "badge",
+    "buttongroup",
+    "button",
+    "checkbox",
+    "select",
+    "progress"
+  ],
+  "props": {
+    "type": {
+      "type": "enum",
+      "values": [
+        "text",
+        "avatar",
+        "file",
+        "payment",
+        "badge",
+        "badges",
+        "trendPositive",
+        "trendNegative",
+        "avatarGroup",
+        "select",
+        "progress",
+        "rating",
+        "actions",
+        "actionIcons",
+        "actionMenu"
+      ],
+      "default": "text"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md",
+      "note": "Avatar, AvatarGroup, and Badge map sm/md. Checkbox is always sm."
+    },
+    "text": {
+      "type": "boolean",
+      "default": true,
+      "note": "When false, hide the label (visual-only). type=text with text=false and no checkbox is an empty slot."
+    },
+    "checkbox": {
+      "type": "boolean",
+      "default": false,
+      "note": "Leading unlabeled kit Checkbox. ariaLabel is Select ${label || name || \"row\"}."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Text shown when text is true. For type=text this is the content."
+    },
+    "name": {
+      "type": "string",
+      "required": false,
+      "note": "Avatar / AvatarGroup person name; required for those types; falls back to label."
+    },
+    "src": {
+      "type": "string",
+      "required": false
+    },
+    "initials": {
+      "type": "string",
+      "required": false
+    },
+    "people": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "name": "string",
+        "src": "string?",
+        "initials": "string?"
+      },
+      "note": "Required for avatarGroup. Passed to kit AvatarGroup, max default 3."
+    },
+    "icon": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide catalog name. file default File, payment default CreditCard."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "brand",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "default": "neutral",
+      "note": "Single Badge. Demos use success for Active-like, else neutral."
+    },
+    "badges": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "label": "string",
+        "tone": "BadgeTone?"
+      },
+      "note": "type=badges. Cap at 3 kit Badges."
+    },
+    "value": {
+      "type": "string | number",
+      "required": false,
+      "note": "Trend number, progress 0-100, rating 0-5, or select value."
+    },
+    "checked": {
+      "type": "boolean",
+      "required": false,
+      "note": "only when checkbox"
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "required": false,
+      "note": "only when checkbox"
+    },
+    "onCheckedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(checked: boolean) => void \u2014 only when checkbox"
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "checkbox id; useId if omitted"
+    },
+    "options": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "value": "string",
+        "label": "string"
+      },
+      "note": "Required for type=select. Passed to kit Select."
+    },
+    "actions": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "label": "string?",
+        "icon": "string?",
+        "ariaLabel": "string?",
+        "variant": "ButtonVariant?"
+      },
+      "note": "type=actions (labeled Buttons in ButtonGroup, cap 3), actionIcons (icon-only Buttons, each ariaLabel), actionMenu composes kit DropdownMenu from actions."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "icon.muted",
+    "icon.warning",
+    "status.success",
+    "status.danger",
+    "fill.brand",
+    "surface.muted",
+    "space.2",
+    "radius.full"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "type=text is text (or text plus checkbox)",
+      "Avatar and AvatarGroup keep their own a11y",
+      "File and payment icons are aria-hidden; if text=false set aria-label on the cell from label or name",
+      "Trend aria-label is Up {value} or Down {value} when text is false",
+      "When checkbox, unlabeled kit Checkbox with ariaLabel Select ${label || name || \"row\"}",
+      "type=select uses kit Select with ariaLabel from label",
+      "type=progress composes kit Progress",
+      "type=rating is role=img, '{n} of 5'",
+      "type=actionIcons each icon-only Button needs ariaLabel",
+      "type=actionMenu ariaLabel is Row actions unless label is set"
+    ]
+  },
+  "doNot": [
+    "Do not invent DataTableCell, Tag, Trend, FileIcon, PaymentMethod, or a second Badge",
+    "Do not use raw hex",
+    "Do not use Badge for trends",
+    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",
+    "Do not use Lucide except via LucideByName from @/ui/Button/lucideName",
+    "Do not invent a local progress bar \u2014 type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
+    "Do not invent a local DropdownMenu \u2014 type=actionMenu composes kit DropdownMenu",
+    "Do not invent local Select, Button, or ButtonGroup \u2014 compose the kit pieces"
+  ],
+  "snippet": "<Cell type=\"progress\" size=\"md\" value={64} />"
+}

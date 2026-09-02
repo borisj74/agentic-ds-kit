@@ -1,0 +1,119 @@
+{
+  "id": "inputotp",
+  "status": "stable",
+  "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
+  "useWhen": [
+    "email/SMS verification, PIN, 2FA code"
+  ],
+  "doNotUseWhen": [
+    "normal text — Input",
+    "multi-line — Textarea",
+    "choosing options — Select/RadioGroup"
+  ],
+  "props": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "length": {
+      "type": "number",
+      "default": 6
+    },
+    "groups": {
+      "type": "number[]",
+      "required": false,
+      "note": "Slot counts per group; must sum to length. Default [3, 3] when length is 6, else [length]. Separator sits between groups only."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "boolean",
+      "default": false
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled"
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "uncontrolled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void"
+    },
+    "onComplete": {
+      "type": "function",
+      "required": false,
+      "note": "fires when value.length === length"
+    },
+    "pattern": {
+      "type": "enum",
+      "values": [
+        "digits",
+        "alphanumeric"
+      ],
+      "default": "digits"
+    },
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "autoComplete": {
+      "type": "string",
+      "default": "one-time-code"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "required when not wrapped in Field"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "icon.muted",
+    "surface.card",
+    "border.faint",
+    "border.focus",
+    "border.strong",
+    "focus.ring",
+    "status.danger",
+    "opacity.disabled",
+    "radius.control.md",
+    "motion.duration.600",
+    "motion.ease.linear"
+  ],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Single native input so paste, autocomplete, and form submit work",
+      "id associates with Field htmlFor",
+      "Unlabeled needs Field or ariaLabel (default One-time code)",
+      "aria-invalid when error",
+      "Disabled is exposed on the input"
+    ]
+  },
+  "doNot": [
+    "Do not invent InputOTPGroup, InputOTPSlot, or InputOTPSeparator",
+    "Do not wrap kit Input N times",
+    "Do not add the input-otp package",
+    "Do not use raw hex",
+    "Do not use Lucide except via LucideByName from @/ui/Button/lucideName",
+    "Unlabeled needs Field or ariaLabel"
+  ],
+  "snippet": "<Field label=\"Verification code\" htmlFor=\"otp\"><InputOTP id=\"otp\" /></Field>"
+}

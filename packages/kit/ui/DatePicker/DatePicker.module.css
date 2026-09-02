@@ -1,0 +1,44 @@
+.root {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+}
+
+.trigger {
+  appearance: none;
+  font: inherit;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: start;
+  cursor: pointer;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}
+
+.value {
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+.placeholder {
+  min-width: 0;
+  color: var(--text-muted);
+}
+
+.panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--space-1));
+  left: 0;
+}

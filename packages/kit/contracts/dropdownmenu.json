@@ -1,0 +1,190 @@
+{
+  "id": "dropdownmenu",
+  "status": "stable",
+  "intent": "Actions or value menu from a button, field, or nav trigger.",
+  "useWhen": [
+    "A button that opens a short list of actions",
+    "Row actions in a DataTable via Cell type=actionMenu",
+    "Select composes this with triggerStyle=field"
+  ],
+  "doNotUseWhen": [
+    "Choosing one value in a form \u2014 use Select (it composes this with triggerStyle=field)",
+    "Searchable commands \u2014 use Command in a Modal",
+    "Must-choose confirm \u2014 use AlertDialog",
+    "Top-of-page site nav with dropdowns \u2014 use NavigationMenu (it composes this with triggerStyle=nav)"
+  ],
+  "props": {
+    "trigger": {
+      "type": "string",
+      "required": false,
+      "note": "Kit Button label. Omit for icon-only; then ariaLabel is required."
+    },
+    "iconStart": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide name on the kit Button"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "required when trigger is omitted"
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "primary",
+        "secondary",
+        "tertiary",
+        "danger"
+      ],
+      "default": "secondary"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "default": "md"
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "start",
+        "end"
+      ],
+      "default": "start"
+    },
+    "groups": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "heading": "string?",
+        "items": [
+          {
+            "id": "string",
+            "label": "string",
+            "icon": "string?",
+            "shortcut": "string?",
+            "disabled": "boolean?",
+            "danger": "boolean?",
+            "submenu": "DropdownMenuGroup[]? one level",
+            "description": "string?",
+            "href": "string? renders a when set and not disabled",
+            "selected": "boolean? Check when true unless checkbox is set.",
+            "checkbox": "boolean? Compose kit Checkbox (visual, inert). Not DropdownMenuCheckboxItem."
+          }
+        ]
+      }
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void"
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void"
+    },
+    "triggerStyle": {
+      "type": "enum",
+      "values": [
+        "button",
+        "field",
+        "nav"
+      ],
+      "default": "button",
+      "note": "button is kit Button. field is a full-width control with ChevronsUpDown. Select uses field. nav is a ghost text control with ChevronDown; NavigationMenu uses nav."
+    },
+    "iconEnd": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide name on a field trigger (default ChevronsUpDown) or kit Button trigger."
+    },
+    "columns": {
+      "type": "enum",
+      "values": [
+        1,
+        2
+      ],
+      "default": 1,
+      "note": "2 uses a CSS grid panel, min-width 28rem. 1 stays a list."
+    },
+    "closeOnSelect": {
+      "type": "boolean",
+      "default": true,
+      "note": "false keeps the menu open. Select multiple uses false."
+    },
+    "triggerMuted": {
+      "type": "boolean",
+      "default": false,
+      "note": "Muted field trigger text for a placeholder."
+    },
+    "triggerBadge": {
+      "type": "string",
+      "required": false,
+      "note": "Kit Badge on a field trigger next to the label, e.g. +2. Select overflow uses this."
+    },
+    "searchable": {
+      "type": "boolean",
+      "default": false,
+      "note": "Kit Input at the top of the panel. Filters item labels. Select searchable uses this."
+    },
+    "searchPlaceholder": {
+      "type": "string",
+      "required": false,
+      "default": "Search"
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "radius.surface.sm",
+    "shadow.sm",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "text.danger",
+    "icon.muted",
+    "type.size.caption",
+    "type.weight.label",
+    "radius.control.md",
+    "focus.ring"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Trigger has aria-haspopup=menu, aria-expanded, aria-controls. button is kit Button; field is a field control; nav is a ghost text control",
+      "Panel is role=menu",
+      "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
+      "Escape and outside click close; arrows move; Tab closes. Search Input is focused first when searchable",
+      "Icon-only trigger needs ariaLabel",
+      "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens, ArrowLeft closes"
+    ]
+  },
+  "doNot": [
+    "Do not invent DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuGroup, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuSub, or DropdownMenuPortal",
+    "Do not use Select for actions from a button",
+    "Do not use Command or Modal for a small action menu",
+    "Do not invent DropdownMenuSub \u2014 nest groups on the item, one level",
+    "Do not invent CheckboxItem or RadioItem cousins \u2014 compose kit Checkbox on the item",
+    "Do not use radix, cmdk, or @base-ui/react",
+    "Do not use raw hex"
+  ],
+  "contains": [
+    "button",
+    "checkbox",
+    "input",
+    "badge"
+  ],
+  "snippet": "<DropdownMenu\n  trigger=\"Open\"\n  groups={[{\n    heading: \"My Account\",\n    items: [\n      { id: \"profile\", label: \"Profile\", shortcut: \"\u21e7\u2318P\" },\n      { id: \"invite\", label: \"Invite users\", submenu: [{ items: [{ id: \"email\", label: \"Email\" }] }] },\n    ],\n  }]}\n  onSelect={(id) => {}}\n/>"
+}

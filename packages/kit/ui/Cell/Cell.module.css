@@ -1,0 +1,133 @@
+.cell {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
+.sm {
+  min-height: 3rem;
+  padding: var(--space-2) var(--space-4);
+  gap: var(--space-3);
+}
+
+.md {
+  min-height: 3.5rem;
+  padding: var(--space-3) var(--space-6);
+  gap: var(--space-3);
+}
+
+.visual {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  gap: 0;
+}
+
+.label {
+  min-width: 0;
+  font-family: var(--font-sans);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.copy .label {
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-heading);
+}
+
+.support {
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-heading);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.sm .label,
+.md .label {
+  font-size: var(--type-size-body-sm);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.trendPositive {
+  color: var(--status-success);
+}
+
+.trendNegative {
+  color: var(--status-danger);
+}
+
+.trend .label {
+  color: inherit;
+}
+
+.badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.selectWrap {
+  display: block;
+  width: 10rem;
+  max-width: 100%;
+}
+
+.progressWrap {
+  display: block;
+  width: 8rem;
+  max-width: 100%;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.starOn {
+  color: var(--icon-warning);
+  fill: currentColor;
+}
+
+.starOff {
+  color: var(--icon-muted);
+}
+
+.actionIcons {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.actionMenu {
+  justify-content: center;
+}

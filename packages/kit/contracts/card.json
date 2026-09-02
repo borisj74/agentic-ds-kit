@@ -1,0 +1,123 @@
+{
+  "id": "card",
+  "status": "stable",
+  "intent": "Framed tile with optional header, body, and footer actions.",
+  "useWhen": [
+    "Login or settings tiles",
+    "Feature summaries",
+    "Grouped content that should sit on a card surface"
+  ],
+  "doNotUseWhen": [
+    "Page-level grouping — use Section",
+    "One KPI — use Scorecard",
+    "Dialogs — use Modal or AlertDialog",
+    "Recommended insight — use InsightCard"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Body. Compose kit Field/Input/Button/Badge/etc, never a local cousin"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md"
+    },
+    "headerAction": {
+      "type": "object",
+      "required": false,
+      "note": "Header kit Button (shadcn CardAction). One max. Tertiary or secondary, not a second primary.",
+      "label": {
+        "type": "string",
+        "required": true
+      },
+      "variant": {
+        "type": "enum",
+        "values": [
+          "primary",
+          "secondary",
+          "tertiary",
+          "danger"
+        ],
+        "required": false
+      },
+      "onClick": {
+        "type": "function",
+        "required": false
+      }
+    },
+    "actions": {
+      "type": "array",
+      "required": false,
+      "note": "Footer kit Buttons, max 2, still one primary per view",
+      "items": {
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "danger"
+          ],
+          "required": false
+        },
+        "onClick": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    "imageSrc": {
+      "type": "string",
+      "required": false
+    },
+    "imageAlt": {
+      "type": "string",
+      "required": false,
+      "note": "Required when imageSrc is set"
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "border.faint",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "text.primary",
+    "text.secondary",
+    "space.6",
+    "space.4",
+    "space.2"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "title is heading when set (use useId)",
+      "aria-labelledby when title exists"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Card, Panel, or Tile",
+    "Do not use raw hex",
+    "Do not use Card as a Scorecard-in-disguise — do not put a lone metric here",
+    "Footer actions must be kit Buttons",
+    "Do not invent CardHeader components",
+    "headerAction is tertiary/secondary, not a second primary"
+  ],
+  "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", variant: \"tertiary\" }} actions={[{ label: \"Login\", variant: \"primary\" }, { label: \"Login with Google\", variant: \"secondary\" }]}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field></Card>"
+}

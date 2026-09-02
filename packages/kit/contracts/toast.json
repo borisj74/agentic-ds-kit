@@ -1,0 +1,104 @@
+{
+  "id": "toast",
+  "status": "stable",
+  "intent": "Floating notice after an action. Status colors the icon only. Title + optional description + dismiss.",
+  "useWhen": [
+    "Saved, sent, or completed confirmations",
+    "Transient warnings that do not need a choice"
+  ],
+  "doNotUseWhen": [
+    "Inline page status \u2014 use Alert",
+    "Must-choose interruption \u2014 use AlertDialog",
+    "Long forms or multi-step work \u2014 use Modal"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "default": true
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "default",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "default": "default",
+      "note": "Colors the icon only. Card stays surface-card. default is a neutral icon."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "Padding only. sm is space-2/space-3, md is space-3/space-4, lg is space-4/space-5. Layout stays two rows."
+    },
+    "duration": {
+      "type": "number|null",
+      "default": null,
+      "note": "auto-dismiss ms; null keeps open"
+    },
+    "onClose": {
+      "type": "function",
+      "required": false
+    },
+    "action": {
+      "type": "slot",
+      "required": false,
+      "note": "Optional control under the description. Compose kit Button. Not ToastAction."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "text.primary",
+    "text.secondary",
+    "icon.info",
+    "icon.success",
+    "icon.warning",
+    "icon.danger",
+    "icon.secondary",
+    "status.info",
+    "status.success",
+    "status.warning",
+    "status.danger",
+    "radius.controlSm",
+    "shadow.raisedDepth",
+    "space.1",
+    "space.3",
+    "space.4",
+    "type.size.label",
+    "type.size.caption"
+  ],
+  "a11y": {
+    "element": "div[role=status]",
+    "requirements": [
+      "role=status with aria-live=polite",
+      "Dismiss control has accessible name",
+      "Title and description wired with ids when present"
+    ]
+  },
+  "doNot": [
+    "Do not invent ToastTitle, ToastDescription, ToastViewport, or ToastAction cousins",
+    "Do not use Alert for toast feedback",
+    "Do not use raw hex",
+    "Do not use glass, color-mix, or backdrop-blur"
+  ],
+  "snippet": "<Toast title=\"Message sent\" description=\"Thanks for sharing your ideas, we can explain the next steps here.\" status=\"info\" onClose={() => {}} />"
+}

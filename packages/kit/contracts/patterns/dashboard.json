@@ -1,0 +1,12 @@
+{
+  "id": "dashboard",
+  "status": "stable",
+  "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
+  "contains": ["pageheader", "scoreboard", "linechart", "section", "datatable"],
+  "doNot": [
+    "Do not restyle kit components inside the pattern",
+    "Do not define a local dashboard layout component",
+    "Do not invent a local table, filter bar, or chart wrapper"
+  ],
+  "snippet": "<DashboardPattern />"
+}

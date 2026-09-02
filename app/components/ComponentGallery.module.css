@@ -1,0 +1,122 @@
+.gallery {
+  container-type: inline-size;
+  container-name: gallery;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@container gallery (min-width: 34rem) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+@container gallery (min-width: 52rem) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@container gallery (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cardLink {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  color: inherit;
+}
+
+.cardHit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.cardLink > :global(article) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.cardLink > :global(article) > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.cardLink > :global(article) > div > header {
+  order: 2;
+  flex: 0 0 auto;
+  min-height: 4.5rem;
+  padding: var(--space-4);
+}
+
+.cardLink > :global(article) > div > :last-child {
+  display: flex;
+  flex-direction: column;
+  order: 1;
+  min-width: 0;
+}
+
+.cardLink > :global(article) h2 {
+  overflow: hidden;
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardLink > :global(article) > div > header p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.preview {
+  box-sizing: border-box;
+  width: auto;
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+  margin: var(--space-3);
+  margin-bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-surface-sm);
+}
+
+.previewFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.previewScale {
+  position: relative;
+  overflow: hidden;
+}
+
+.previewScene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: top left;
+}

@@ -1,0 +1,478 @@
+[
+  {
+    "id": "tokens",
+    "intent": "Design tokens: color, space, radius, type, shadow, and motion primitives with semantic roles.",
+    "group": "foundation",
+    "path": "tokens/tokens.json",
+    "status": "stable"
+  },
+  {
+    "id": "button",
+    "intent": "Primary action control for forms and dashboards.",
+    "group": "component",
+    "path": "contracts/button.json",
+    "status": "stable"
+  },
+  {
+    "id": "buttongroup",
+    "intent": "Joined row of kit Buttons.",
+    "group": "component",
+    "path": "contracts/buttongroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "scorecard",
+    "intent": "Single KPI tile with label, value, optional delta and trend.",
+    "group": "component",
+    "path": "contracts/scorecard.json",
+    "status": "stable"
+  },
+  {
+    "id": "scoreboard",
+    "intent": "Horizontal row of Scorecards for a metrics strip.",
+    "group": "component",
+    "path": "contracts/scoreboard.json",
+    "status": "stable"
+  },
+  {
+    "id": "input",
+    "intent": "Single-line text entry with optional start and end slots inside the field.",
+    "group": "component",
+    "path": "contracts/input.json",
+    "status": "stable"
+  },
+  {
+    "id": "inputotp",
+    "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
+    "group": "component",
+    "path": "contracts/inputotp.json",
+    "status": "stable"
+  },
+  {
+    "id": "insightcard",
+    "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
+    "group": "component",
+    "path": "contracts/insightcard.json",
+    "status": "stable"
+  },
+  {
+    "id": "linechart",
+    "intent": "Change and progress over ordered samples as a line or area chart.",
+    "group": "component",
+    "path": "contracts/linechart.json",
+    "status": "stable"
+  },
+  {
+    "id": "loadinganimation",
+    "intent": "Square dot-grid loading indicator for compact waits.",
+    "group": "component",
+    "path": "contracts/loadinganimation.json",
+    "status": "stable"
+  },
+  {
+    "id": "textarea",
+    "intent": "Multi-line text for notes. Wrap with Field.",
+    "group": "component",
+    "path": "contracts/textarea.json",
+    "status": "stable"
+  },
+  {
+    "id": "select",
+    "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
+    "group": "component",
+    "path": "contracts/select.json",
+    "status": "stable"
+  },
+  {
+    "id": "shimmertext",
+    "intent": "Animated text for short indeterminate processing copy.",
+    "group": "component",
+    "path": "contracts/shimmertext.json",
+    "status": "stable"
+  },
+  {
+    "id": "slider",
+    "intent": "Pick a value or range along a track.",
+    "group": "component",
+    "path": "contracts/slider.json",
+    "status": "stable"
+  },
+  {
+    "id": "spinner",
+    "intent": "Spinning circular loader for indeterminate waits.",
+    "group": "component",
+    "path": "contracts/spinner.json",
+    "status": "stable"
+  },
+  {
+    "id": "switch",
+    "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
+    "group": "component",
+    "path": "contracts/switch.json",
+    "status": "stable"
+  },
+  {
+    "id": "checkbox",
+    "intent": "Multi-select or confirmation control. Optional visible label.",
+    "group": "component",
+    "path": "contracts/checkbox.json",
+    "status": "stable"
+  },
+  {
+    "id": "collapsible",
+    "intent": "Single show/hide panel.",
+    "group": "component",
+    "path": "contracts/collapsible.json",
+    "status": "stable"
+  },
+  {
+    "id": "command",
+    "intent": "Searchable command menu for quick actions.",
+    "group": "component",
+    "path": "contracts/command.json",
+    "status": "stable"
+  },
+  {
+    "id": "datatable",
+    "intent": "Responsive structured data with search, filters, column settings, and clear empty states.",
+    "group": "component",
+    "path": "contracts/datatable.json",
+    "status": "stable"
+  },
+  {
+    "id": "datepicker",
+    "intent": "Form field that opens kit Calendar to pick one date.",
+    "group": "component",
+    "path": "contracts/datepicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "calendar",
+    "intent": "Month grid for picking one date.",
+    "group": "component",
+    "path": "contracts/calendar.json",
+    "status": "stable"
+  },
+  {
+    "id": "cell",
+    "intent": "Inline cell content for datasets: text, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions.",
+    "group": "component",
+    "path": "contracts/cell.json",
+    "status": "stable"
+  },
+  {
+    "id": "headercell",
+    "intent": "Column header for DataTable: label, optional select-all checkbox, sm or md.",
+    "group": "component",
+    "path": "contracts/headercell.json",
+    "status": "stable"
+  },
+  {
+    "id": "card",
+    "intent": "Framed tile with optional header, body, and footer actions.",
+    "group": "component",
+    "path": "contracts/card.json",
+    "status": "stable"
+  },
+  {
+    "id": "carousel",
+    "intent": "Paged track of slides with prev/next kit Buttons. One piece.",
+    "group": "component",
+    "path": "contracts/carousel.json",
+    "status": "stable"
+  },
+  {
+    "id": "chat",
+    "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
+    "group": "component",
+    "path": "contracts/chat.json",
+    "status": "stable"
+  },
+  {
+    "id": "radiogroup",
+    "intent": "Choose exactly one option from a small visible radio set.",
+    "group": "component",
+    "path": "contracts/radiogroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "field",
+    "intent": "One labeled control with optional hint and error. Label on top or start (left).",
+    "group": "component",
+    "path": "contracts/field.json",
+    "status": "stable"
+  },
+  {
+    "id": "fieldset",
+    "intent": "Semantic group of fields with a legend and optional description.",
+    "group": "component",
+    "path": "contracts/fieldset.json",
+    "status": "stable"
+  },
+  {
+    "id": "badge",
+    "intent": "Compact status or category pill.",
+    "group": "component",
+    "path": "contracts/badge.json",
+    "status": "stable"
+  },
+  {
+    "id": "barchart",
+    "intent": "Compare magnitudes across categories with vertical or horizontal bars.",
+    "group": "component",
+    "path": "contracts/barchart.json",
+    "status": "stable"
+  },
+  {
+    "id": "breadcrumb",
+    "intent": "Path to the current page as a hierarchy of links.",
+    "group": "component",
+    "path": "contracts/breadcrumb.json",
+    "status": "stable"
+  },
+  {
+    "id": "tooltip",
+    "intent": "Brief supplementary text on hover or focus.",
+    "group": "component",
+    "path": "contracts/tooltip.json",
+    "status": "stable"
+  },
+  {
+    "id": "tabs",
+    "intent": "Switch between related views in place. Segmented or line, in lg, md, and sm.",
+    "group": "component",
+    "path": "contracts/tabs.json",
+    "status": "stable"
+  },
+  {
+    "id": "modal",
+    "intent": "Dismissible overlay for short tasks, forms, or extra detail. Composes ModalCard. Not a must-choose confirm.",
+    "group": "component",
+    "path": "contracts/modal.json",
+    "status": "stable"
+  },
+  {
+    "id": "modalcard",
+    "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
+    "group": "component",
+    "path": "contracts/modalcard.json",
+    "status": "stable"
+  },
+  {
+    "id": "drawer",
+    "intent": "Edge panel for secondary tasks that need more room than a Modal.",
+    "group": "component",
+    "path": "contracts/drawer.json",
+    "status": "stable"
+  },
+  {
+    "id": "dropdownmenu",
+    "intent": "Actions or value menu from a button, field, or nav trigger.",
+    "group": "component",
+    "path": "contracts/dropdownmenu.json",
+    "status": "stable"
+  },
+  {
+    "id": "empty",
+    "intent": "Placeholder when a list, page, or region has nothing to show.",
+    "group": "component",
+    "path": "contracts/empty.json",
+    "status": "stable"
+  },
+  {
+    "id": "navigationmenu",
+    "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
+    "group": "component",
+    "path": "contracts/navigationmenu.json",
+    "status": "stable"
+  },
+  {
+    "id": "numbertransition",
+    "intent": "Rolling number treatment for live metrics and counters.",
+    "group": "component",
+    "path": "contracts/numbertransition.json",
+    "status": "stable"
+  },
+  {
+    "id": "pageheader",
+    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+    "group": "component",
+    "path": "contracts/pageheader.json",
+    "status": "stable"
+  },
+  {
+    "id": "pagination",
+    "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
+    "group": "component",
+    "path": "contracts/pagination.json",
+    "status": "stable"
+  },
+  {
+    "id": "piechart",
+    "intent": "Part-to-whole share for a handful of segments, as a donut or solid pie.",
+    "group": "component",
+    "path": "contracts/piechart.json",
+    "status": "stable"
+  },
+  {
+    "id": "progress",
+    "intent": "Task completion as a bar or circle from 0 to 100. Optional label and percent.",
+    "group": "component",
+    "path": "contracts/progress.json",
+    "status": "stable"
+  },
+  {
+    "id": "progresssteps",
+    "intent": "Ordered wizard steps as numbered circles with complete, current, and upcoming.",
+    "group": "component",
+    "path": "contracts/progresssteps.json",
+    "status": "stable"
+  },
+  {
+    "id": "section",
+    "intent": "Grouped page block with heading, optional description and actions.",
+    "group": "component",
+    "path": "contracts/section.json",
+    "status": "stable"
+  },
+  {
+    "id": "appheader",
+    "intent": "Product top chrome: brand mark, centered search, trailing actions.",
+    "group": "component",
+    "path": "contracts/appheader.json",
+    "status": "stable"
+  },
+  {
+    "id": "appnav",
+    "intent": "Vertical sidebar navigation with active item state.",
+    "group": "component",
+    "path": "contracts/appnav.json",
+    "status": "stable"
+  },
+  {
+    "id": "sidenav",
+    "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+    "group": "component",
+    "path": "contracts/sidenav.json",
+    "status": "stable"
+  },
+  {
+    "id": "table",
+    "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
+    "group": "component",
+    "path": "contracts/table.json",
+    "status": "stable"
+  },
+  {
+    "id": "thinkinganimation",
+    "intent": "Calm processing indicator for assistants and short system waits.",
+    "group": "component",
+    "path": "contracts/thinkinganimation.json",
+    "status": "stable"
+  },
+  {
+    "id": "timeline",
+    "intent": "Vertical sequence of now, next, and later for ordered multi-stage work.",
+    "group": "component",
+    "path": "contracts/timeline.json",
+    "status": "stable"
+  },
+  {
+    "id": "toast",
+    "intent": "Floating notice after an action. Status colors the icon only. Title + optional description + dismiss.",
+    "group": "component",
+    "path": "contracts/toast.json",
+    "status": "stable"
+  },
+  {
+    "id": "accordion",
+    "intent": "One-open disclosure list for short related sections.",
+    "group": "component",
+    "path": "contracts/accordion.json",
+    "status": "stable"
+  },
+  {
+    "id": "alert",
+    "intent": "Inline status banner that stays on the page.",
+    "group": "component",
+    "path": "contracts/alert.json",
+    "status": "stable"
+  },
+  {
+    "id": "alertdialog",
+    "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
+    "group": "component",
+    "path": "contracts/alertdialog.json",
+    "status": "stable"
+  },
+  {
+    "id": "avatar",
+    "intent": "Face or initials for a person. Not a status chip and not a button.",
+    "group": "component",
+    "path": "contracts/avatar.json",
+    "status": "stable"
+  },
+  {
+    "id": "avatargroup",
+    "intent": "Overlapping row of kit Avatars with an optional leftover count.",
+    "group": "component",
+    "path": "contracts/avatargroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "dashboard",
+    "intent": "Dashboard blueprint: PageHeader, LineChart, Section, DataTable, Buttons.",
+    "group": "pattern",
+    "path": "contracts/patterns/dashboard.json",
+    "status": "stable"
+  },
+  {
+    "id": "settings-form",
+    "intent": "Settings blueprint: PageHeader, Fields, and save actions.",
+    "group": "pattern",
+    "path": "contracts/patterns/settings-form.json",
+    "status": "stable"
+  },
+  {
+    "id": "list-detail",
+    "intent": "List-detail blueprint: AppNav, Table, and detail Section.",
+    "group": "pattern",
+    "path": "contracts/patterns/list-detail.json",
+    "status": "stable"
+  },
+  {
+    "id": "invite-members",
+    "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
+    "group": "pattern",
+    "path": "contracts/patterns/invite-members.json",
+    "status": "stable"
+  },
+  {
+    "id": "assistant-workspace",
+    "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
+    "group": "pattern",
+    "path": "contracts/patterns/assistant-workspace.json",
+    "status": "stable"
+  },
+  {
+    "id": "empty-first-run",
+    "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
+    "group": "pattern",
+    "path": "contracts/patterns/empty-first-run.json",
+    "status": "stable"
+  },
+  {
+    "id": "activity",
+    "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
+    "group": "pattern",
+    "path": "contracts/patterns/activity.json",
+    "status": "stable"
+  },
+  {
+    "id": "inbox",
+    "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
+    "group": "pattern",
+    "path": "contracts/patterns/inbox.json",
+    "status": "stable"
+  }
+]

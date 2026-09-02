@@ -1,0 +1,92 @@
+{
+  "id": "badge",
+  "status": "stable",
+  "intent": "Compact status or category pill.",
+  "useWhen": [
+    "Status badges on table rows or cards",
+    "Filtering labels and category markers"
+  ],
+  "doNotUseWhen": [
+    "Primary actions — use Button",
+    "Clickable navigation — use AppNav links",
+    "People or faces — use Avatar",
+    "Long sentences — use body text"
+  ],
+  "props": {
+    "children": {
+      "type": "string",
+      "required": true
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "brand",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "default": "neutral"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "removable": {
+      "type": "boolean",
+      "default": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "onRemove": {
+      "type": "function",
+      "required": false,
+      "note": "used when removable"
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "surface.card",
+    "text.secondary",
+    "border.faint",
+    "border.focus",
+    "action.primary",
+    "status.success",
+    "status.successSubtle",
+    "status.successBorder",
+    "status.warning",
+    "status.warningSubtle",
+    "status.warningBorder",
+    "status.danger",
+    "status.dangerSubtle",
+    "status.dangerBorder",
+    "status.info",
+    "status.infoSubtle",
+    "status.infoBorder",
+    "radius.controlSm"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Text content must be readable",
+      "disabled sets aria-disabled and prevents interaction",
+      "When removable, the X control is a button with aria-label Remove {children}",
+      "If removable and disabled, the remove control does not fire",
+      "Remove control shows a focus-visible ring using --border-focus"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Badge or Tag",
+    "Do not use raw hex",
+    "Do not use Badge as a button except the remove control"
+  ],
+  "snippet": "<Badge tone=\"info\" size=\"md\">In progress</Badge>"
+}

@@ -1,0 +1,135 @@
+.label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-body);
+  color: var(--text-primary);
+}
+
+.label[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input {
+  appearance: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.label[data-disabled] .input {
+  cursor: not-allowed;
+}
+
+.box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: var(--border-width-thin) solid var(--border-strong);
+  border-radius: var(--radius-control-sm);
+  background-color: var(--surface-card);
+  color: var(--action-on-primary);
+  transition:
+    border-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    background var(--motion-interaction-duration) var(--motion-interaction-easing),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0.12rem;
+  transform-origin: center;
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform var(--motion-expand-duration) var(--motion-ease-spring),
+    opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.sm {
+  font-size: var(--type-size-caption);
+}
+
+.md {
+  font-size: var(--type-size-body-sm);
+}
+
+.lg {
+  font-size: var(--type-size-body);
+}
+
+.sm .input,
+.sm .box {
+  width: 1rem;
+  height: 1rem;
+}
+
+.md .input,
+.md .box {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.lg .input,
+.lg .box {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.input:checked + .box,
+.input:indeterminate + .box {
+  background-color: var(--action-primary);
+  border-color: var(--action-primary);
+}
+
+.input:checked + .box .icon,
+.input:indeterminate + .box .icon {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.label[data-error] .box {
+  border-color: var(--status-danger);
+}
+
+.label[data-error] .input:checked + .box,
+.label[data-error] .input:indeterminate + .box {
+  background-color: var(--action-primary);
+  border-color: var(--status-danger);
+}
+
+.input:focus-visible + .box {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.text {
+  line-height: var(--type-line-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .icon {
+    transition: none;
+  }
+
+  .input:checked + .box .icon,
+  .input:indeterminate + .box .icon {
+    transform: none;
+  }
+}

@@ -1,0 +1,318 @@
+"use client";
+
+import { useState } from "react";
+import { DataTable } from "agentic-ds-kit";
+import type { DataTableColumn, DataTableRow } from "agentic-ds-kit";
+import { CodeBlock } from "./CodeBlock";
+import { FACES } from "./faces";
+import styles from "./ComponentDoc.module.css";
+import { DocTabList } from "./DocTabList";
+
+const ACTION = {
+  type: "actionMenu" as const,
+  label: "Row actions",
+  actions: [
+    { label: "Edit", icon: "Pencil" },
+    { label: "Make a copy", icon: "Copy" },
+    { label: "Delete", icon: "Trash2", variant: "danger" as const },
+  ],
+};
+
+const COLUMNS: DataTableColumn[] = [
+  { key: "name", header: "Name", sortable: true },
+  { key: "role", header: "Role", sortable: true },
+  { key: "status", header: "Status", sortable: true },
+  { key: "projects", header: "Projects", type: "number", sortable: true },
+  { key: "actions", header: "Actions" },
+];
+
+const ROWS: DataTableRow[] = [
+  { name: "Maya Chen", role: "Product designer", status: "Active", projects: 8, actions: ACTION },
+  { name: "Noah Williams", role: "Engineer", status: "Active", projects: 5, actions: ACTION },
+  { name: "Iris Okafor", role: "Product manager", status: "Active", projects: 3, actions: ACTION },
+  { name: "Jordan Lee", role: "Designer", status: "Away", projects: 6, actions: ACTION },
+  { name: "Alex Rivera", role: "Engineer", status: "Active", projects: 4, actions: ACTION },
+];
+
+const CELL_TYPE_COLUMNS: DataTableColumn[] = [
+  { key: "name", header: "Name", sortable: true },
+  { key: "file", header: "File", sortable: true },
+  { key: "payment", header: "Payment", sortable: true },
+  { key: "tags", header: "Tags", sortable: true },
+  { key: "trend", header: "Trend", sortable: true },
+  { key: "team", header: "Team", sortable: true },
+];
+
+const CELL_TYPE_ROWS: DataTableRow[] = [
+  {
+    name: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: FACES["Maya Chen"] },
+    file: { type: "file", label: "brief.pdf" },
+    payment: { type: "payment", label: "Visa" },
+    tags: {
+      type: "badges",
+      badges: [
+        { label: "Design", tone: "info" },
+        { label: "Core" },
+      ],
+    },
+    trend: { type: "trendPositive", value: "12%" },
+    team: {
+      type: "avatarGroup",
+      people: [
+        { name: "Maya Chen", src: FACES["Maya Chen"] },
+        { name: "Noah Williams", src: FACES["Noah Williams"] },
+        { name: "Iris Okafor", src: FACES["Iris Okafor"] },
+        { name: "Jordan Lee", src: FACES["Jordan Lee"] },
+      ],
+    },
+  },
+  {
+    name: { type: "avatar", label: "Noah Williams", name: "Noah Williams", src: FACES["Noah Williams"] },
+    file: { type: "file", label: "spec.md" },
+    payment: { type: "payment", label: "Mastercard" },
+    tags: {
+      type: "badges",
+      badges: [{ label: "Eng", tone: "brand" }],
+    },
+    trend: { type: "trendNegative", value: "4%" },
+    team: {
+      type: "avatarGroup",
+      people: [{ name: "Noah Williams", src: FACES["Noah Williams"] }, { name: "Alex Rivera", src: FACES["Alex Rivera"] }],
+    },
+  },
+];
+
+
+const INTERACTIVE_COLUMNS: DataTableColumn[] = [
+  { key: "status", header: "Status" },
+  { key: "progress", header: "Progress" },
+  { key: "rating", header: "Rating" },
+  { key: "actions", header: "Actions" },
+  { key: "icons", header: "Icons" },
+  { key: "menu", header: "Menu" },
+];
+
+const INTERACTIVE_ROWS: DataTableRow[] = [
+  {
+    status: {
+      type: "select",
+      label: "Status",
+      value: "active",
+      options: [
+        { value: "active", label: "Active" },
+        { value: "invited", label: "Invited" },
+        { value: "away", label: "Away" },
+      ],
+    },
+    progress: { type: "progress", value: 64 },
+    rating: { type: "rating", value: 4 },
+    actions: {
+      type: "actions",
+      actions: [{ label: "Edit" }, { label: "Delete", variant: "danger" }],
+    },
+    icons: {
+      type: "actionIcons",
+      actions: [
+        { icon: "Pencil", ariaLabel: "Edit" },
+        { icon: "Trash2", ariaLabel: "Delete", variant: "danger" },
+      ],
+    },
+    menu: {
+      type: "actionMenu",
+      label: "Row actions",
+      actions: [
+        { label: "Edit", icon: "Pencil" },
+        { label: "Make a copy", icon: "Copy" },
+        { label: "Delete", icon: "Trash2", variant: "danger" },
+      ],
+    },
+  },
+];
+
+const INTERACTIVE_CODE = `<DataTable
+  caption="Interactive cells"
+  columns={[
+    { key: "status", header: "Status" },
+    { key: "progress", header: "Progress" },
+    { key: "rating", header: "Rating" },
+    { key: "actions", header: "Actions" },
+  ]}
+  rows={rows}
+/>`;
+const FILTERS = [
+  { key: "status", label: "Status" },
+  { key: "role", label: "Role" },
+];
+
+const TOOLBAR_CODE = `<DataTable
+  caption="Team members"
+  selectable
+  toolbar
+  cellSize="sm"
+  searchPlaceholder="Search members..."
+  filters={[
+    { key: "status", label: "Status" },
+    { key: "role", label: "Role" },
+  ]}
+  columnSettings
+  columns={[
+    { key: "name", header: "Name" },
+    { key: "role", header: "Role" },
+    { key: "status", header: "Status" },
+    { key: "projects", header: "Projects", type: "number" },
+    { key: "actions", header: "Actions" },
+  ]}
+  rows={[
+    {
+      name: "Maya Chen",
+      role: "Product designer",
+      status: "Active",
+      projects: 8,
+      actions: {
+        type: "actionMenu",
+        label: "Row actions",
+        actions: [
+          { label: "Edit", icon: "Pencil" },
+          { label: "Make a copy", icon: "Copy" },
+          { label: "Delete", icon: "Trash2", variant: "danger" },
+        ],
+      },
+    },
+  ]}
+/>`;
+
+const EMPTY_CODE = `<DataTable columns={columns} rows={[]} emptyMessage="No team members yet." />`;
+
+const CELL_TYPES_CODE = `<DataTable
+  caption="Cell types"
+  columns={[
+    { key: "name", header: "Name" },
+    { key: "file", header: "File" },
+    { key: "payment", header: "Payment" },
+    { key: "tags", header: "Tags" },
+    { key: "trend", header: "Trend" },
+    { key: "team", header: "Team" },
+  ]}
+  rows={rows}
+/>`;
+
+const PREVIEW_FILL = { maxWidth: "100%" } as const;
+const MASTER_LAYOUT = { gridTemplateColumns: "minmax(0, 1fr)" } as const;
+
+export function DataTableDoc() {
+  const [tab, setTab] = useState<"preview" | "variants">("preview");
+
+  const toolbarTable = (
+    <DataTable
+      caption="Team members"
+      selectable
+      toolbar
+      cellSize="sm"
+      searchPlaceholder="Search members..."
+      filters={FILTERS}
+      columnSettings
+      columns={COLUMNS}
+      rows={ROWS}
+    />
+  );
+
+  return (
+    <div>
+      <header className={styles.hero}>
+        <h1 className={styles.heroTitle}>DataTable</h1>
+        <p className={styles.lede}>
+          Responsive structured data with search, filters, column settings, and clear empty states.
+        </p>
+      </header>
+
+      <section className={styles.master} aria-labelledby="datatable-master">
+        <div className={styles.masterHeader}>
+          <h2 id="datatable-master" className={styles.masterTitle}>
+            Master
+          </h2>
+          <p className={styles.masterSummary}>
+            Small cells. Actions is kit Cell type=actionMenu. Table stays the short static list.
+          </p>
+          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
+        </div>
+
+        {tab === "preview" ? (
+          <div role="tabpanel" aria-label="Preview">
+            <div className={styles.layout} style={MASTER_LAYOUT}>
+              <div className={styles.canvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  {toolbarTable}
+                </div>
+              </div>
+            </div>
+            <div className={styles.docs}>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  DataTable for searchable datasets. Table for a short static list. Each td is a kit Cell. Compose Avatar or Badge in a cell when the row needs them.
+                </p>
+              </div>
+              <CodeBlock code={TOOLBAR_CODE} />
+            </div>
+          </div>
+        ) : (
+          <div className={styles.variants} role="tabpanel" aria-label="Variants">
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Toolbar</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  {toolbarTable}
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Search, filters, and Columns. Result strip, then the caption as the table title.
+                </p>
+              </div>
+              <CodeBlock code={TOOLBAR_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Cell types</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <DataTable
+                    caption="Cell types"
+                    columns={CELL_TYPE_COLUMNS}
+                    rows={CELL_TYPE_ROWS}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  File, payment, badges, trend, and avatarGroup are Cell types. Do not invent Tag,
+                  Trend, FileIcon, or PaymentMethod.
+                </p>
+              </div>
+              <CodeBlock code={CELL_TYPES_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Empty state</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <DataTable columns={COLUMNS} rows={[]} emptyMessage="No team members yet." />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Keep the header row. Centered emptyMessage when rows is empty or search and filters
+                  match nothing.
+                </p>
+              </div>
+              <CodeBlock code={EMPTY_CODE} />
+            </section>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}

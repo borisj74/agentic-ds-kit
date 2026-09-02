@@ -1,0 +1,13 @@
+{
+  "id": "list-detail",
+  "status": "stable",
+  "intent": "List-detail shell: sidebar nav, table list, and detail section.",
+  "contains": ["pageheader", "appnav", "table", "section", "badge"],
+  "doNot": [
+    "Do not restyle AppNav or Table",
+    "Do not replace Table with custom list markup",
+    "Do not add a local sidebar component",
+    "Do not use Tabs instead of AppNav for route-level sections"
+  ],
+  "snippet": "<ListDetailPattern />"
+}

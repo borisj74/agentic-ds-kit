@@ -1,0 +1,49 @@
+{
+  "id": "timeline",
+  "status": "stable",
+  "intent": "Vertical sequence of now, next, and later for ordered multi-stage work.",
+  "useWhen": [
+    "Roadmaps and phased delivery",
+    "Status order matters more than dates or magnitudes"
+  ],
+  "doNotUseWhen": [
+    "Comparing values — use charts",
+    "Switching peer views — use Tabs",
+    "Numbered wizard or checkout steps — use ProgressSteps"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": false,
+      "note": "{ id?, title?, body?, phase?, status?: now|next|later }[]"
+    },
+    "label": { "type": "string", "required": false },
+    "headingLevel": {
+      "type": "enum",
+      "values": [2, 3, 4],
+      "default": 3
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "border.faint",
+    "border.strong",
+    "border.subtle"
+  ],
+  "a11y": {
+    "element": "ol",
+    "requirements": [
+      "Ordered list semantics",
+      "Optional aria-label on the list",
+      "One now step at a time in content"
+    ]
+  },
+  "doNot": [
+    "Do not invent TimelineItem cousins",
+    "Do not use Timeline for numbered wizard steps — use ProgressSteps",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Timeline items={[{ status: 'now', title: 'Ship beta', body: 'Final QA this week' }]} />"
+}

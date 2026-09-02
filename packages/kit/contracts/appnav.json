@@ -1,0 +1,72 @@
+{
+  "id": "appnav",
+  "status": "stable",
+  "intent": "Vertical sidebar navigation with title, optional grouped catalog, and active item state.",
+  "useWhen": [
+    "Playground or product shells with a persistent left sidebar",
+    "Grouped docs/catalog IA (foundations, components, patterns)",
+    "List-detail layouts with a small flat list of section links"
+  ],
+  "doNotUseWhen": [
+    "In-page panel switching \u2014 use Tabs",
+    "Horizontal site nav \u2014 use NavigationMenu",
+    "Breadcrumb trails \u2014 not supported",
+    "Closeable product chrome \u2014 use SideNav",
+    "Product top bar with logo and search \u2014 use AppHeader"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "items": {
+      "type": "array",
+      "itemShape": {
+        "href": "string",
+        "label": "string",
+        "active": "boolean",
+        "items": "optional array of leaf links (one subgroup level)"
+      },
+      "required": false,
+      "note": "Flat list for simple shells. Ignored when groups is provided."
+    },
+    "groups": {
+      "type": "array",
+      "itemShape": {
+        "label": "string",
+        "defaultOpen": "boolean",
+        "items": "array of AppNavItem"
+      },
+      "required": false,
+      "note": "Grouped catalog nav. Takes precedence over items when present. Groups collapse; only one is open at a time. defaultOpen sets the initial group when no leaf is active."
+    }
+  },
+  "precedence": "When both items and groups are passed, groups wins; items is ignored.",
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "action.primary"
+  ],
+  "a11y": {
+    "element": "nav",
+    "requirements": [
+      "nav has aria-label",
+      "Group labels are disclosure buttons with aria-expanded",
+      "Closed group lists are aria-hidden and inert",
+      "Active leaf uses aria-current=page",
+      "All leaves are keyboard-focusable links"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Sidebar or AppNav",
+    "Do not invent Sidebar, SidebarProvider, or local nav chrome \u2014 use SideNav",
+    "Do not use raw hex",
+    "Do not use AppNav for tab panels \u2014 use Tabs",
+    "Do not nest more than one subgroup level"
+  ],
+  "snippet": "<AppNav title=\"Agentic DS Kit\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
+}

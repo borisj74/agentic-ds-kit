@@ -1,0 +1,76 @@
+{
+  "id": "breadcrumb",
+  "status": "stable",
+  "intent": "Path to the current page as a hierarchy of links.",
+  "useWhen": [
+    "show where this page sits in the app",
+    "sit above PageHeader or in a list-detail chrome"
+  ],
+  "doNotUseWhen": [
+    "page title block — use PageHeader",
+    "sidebar nav — use AppNav",
+    "in-page sections — use Tabs or Section"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "minItems": 2,
+      "itemShape": {
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "href": {
+          "type": "string",
+          "required": false
+        },
+        "onClick": {
+          "type": "function",
+          "required": false,
+          "note": "In-app select. When set, the crumb is a button. Last item is still the current page and is never a control."
+        }
+      },
+      "note": "Last item is the current page (no href used even if passed). Need at least 2 items."
+    },
+    "separator": {
+      "type": "enum",
+      "values": [
+        "chevron",
+        "slash"
+      ],
+      "default": "chevron",
+      "note": "chevron = Lucide ChevronRight. slash = text /."
+    },
+    "maxItems": {
+      "type": "number",
+      "required": false,
+      "note": "When items.length > maxItems, show the first item, an ellipsis, then the last (maxItems - 1) items. Ellipsis is aria-hidden, not interactive."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "icon.muted",
+    "border.focus",
+    "type.size.body-sm"
+  ],
+  "a11y": {
+    "element": "nav",
+    "requirements": [
+      "nav with aria-label=\"Breadcrumb\"",
+      "ordered list",
+      "current page has aria-current=\"page\" and is not a link",
+      "separators aria-hidden",
+      "collapsed ellipsis is aria-hidden and not interactive"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Breadcrumb, BreadcrumbItem, or BreadcrumbLink",
+    "Do not use raw hex",
+    "Do not turn the current page into a link",
+    "Do not put a dropdown on the ellipsis (no DropdownMenu in the kit)"
+  ],
+  "snippet": "<Breadcrumb items={[{ label: \"Home\", href: \"/\" }, { label: \"Components\", href: \"/components\" }, { label: \"Breadcrumb\" }]} />"
+}

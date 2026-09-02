@@ -1,0 +1,58 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  color: var(--icon-secondary);
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  animation: spinner-spin calc(var(--motion-duration-600) * 4) var(--motion-ease-linear) infinite;
+}
+
+.sm .icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.md .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.lg .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.label {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.sm .label {
+  font-size: var(--type-size-caption);
+}
+
+.lg .label {
+  font-size: var(--type-size-label);
+}
+
+@keyframes spinner-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    animation: none;
+  }
+}

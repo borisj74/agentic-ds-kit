@@ -1,0 +1,30 @@
+{
+  "id": "activity",
+  "status": "stable",
+  "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
+  "contains": [
+    "pageheader",
+    "scoreboard",
+    "section",
+    "carousel",
+    "insightcard",
+    "table",
+    "badge",
+    "buttongroup",
+    "button",
+    "empty",
+    "tabs",
+    "datatable",
+    "drawer",
+    "avatar",
+    "progress"
+  ],
+  "doNot": [
+    "Do not invent a local activity feed, task carousel, or schedule grid",
+    "Do not skip Scoreboard for the metrics strip",
+    "Do not put a month calendar on this page",
+    "Do not add more than one primary Button",
+    "Do not restyle kit components inside the pattern"
+  ],
+  "snippet": "<ActivityPattern />"
+}

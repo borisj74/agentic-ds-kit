@@ -1,0 +1,100 @@
+{
+  "id": "modal",
+  "status": "stable",
+  "intent": "Dismissible overlay for short tasks, forms, or extra detail. Composes ModalCard. Not a must-choose confirm.",
+  "useWhen": [
+    "Short forms",
+    "Extra detail",
+    "Command palettes",
+    "Anything that can be dismissed"
+  ],
+  "doNotUseWhen": [
+    "Must-choose confirm — use AlertDialog",
+    "Inline status — use Alert",
+    "Side panel — use Drawer",
+    "Full-page — use a route",
+    "Panel without overlay — use ModalCard",
+    "Passive help — use Tooltip"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "showClose": {
+      "type": "boolean",
+      "default": true
+    },
+    "onClose": {
+      "type": "function",
+      "required": true
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Body"
+    },
+    "footer": {
+      "type": "slot",
+      "required": false,
+      "note": "kit Buttons / ButtonGroup"
+    },
+    "contained": {
+      "type": "boolean",
+      "default": false,
+      "note": "In-canvas docs only. Product screens omit it (portal to document.body)."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "surface.overlay",
+    "surface.page",
+    "surface.muted",
+    "shadow.modal",
+    "radius.controlLg",
+    "border.focus",
+    "motion.overlay",
+    "motion.modal",
+    "icon.muted",
+    "icon.primary",
+    "z.overlay",
+    "z.modal"
+  ],
+  "a11y": {
+    "element": "dialog",
+    "requirements": [
+      "Composes ModalCard with role=dialog and aria-modal",
+      "Title is the accessible name, description is aria-describedby when present",
+      "Focus is trapped while open",
+      "Escape closes",
+      "Scrim click closes",
+      "Focus restores to the previously focused element on close",
+      "Unique ids via useId — do not hardcode modal-title"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Dialog, Modal, DialogTrigger, or CommandDialog",
+    "Do not use raw hex",
+    "Do not use AlertDialog for dismissible work",
+    "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Scrim click and Escape still close."
+  ],
+  "snippet": "<Modal open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" onClose={close} footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button variant=\"secondary\" onClick={close}>Cancel</Button><Button variant=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Modal>"
+}

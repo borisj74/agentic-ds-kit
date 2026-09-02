@@ -1,0 +1,149 @@
+.panel {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  width: 100%;
+  min-block-size: 32rem;
+  block-size: 100%;
+  max-block-size: 100%;
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
+
+.radiusNone {
+  border-radius: var(--radius-0);
+  border-block-width: 0;
+  border-inline-end-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--fill-brand-subtle);
+}
+
+.identity {
+  flex: 1;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  color: var(--text-secondary);
+}
+
+.statusDot {
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--status-success);
+}
+
+.headerActions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.thread {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-block-size: 0;
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.messageUser {
+  justify-content: flex-end;
+}
+
+.messageAssistant {
+  justify-content: flex-start;
+}
+
+.mark {
+  flex: none;
+  width: var(--space-5);
+  height: var(--space-5);
+  border-radius: var(--radius-full);
+  background: var(--fill-brand);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  max-width: 85%;
+}
+
+.copy {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.messageUser .copy {
+  text-align: right;
+}
+
+.timestamp {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  color: var(--text-muted);
+}
+
+.messageUser .timestamp {
+  text-align: right;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: var(--border-width-thin) solid var(--border-faint);
+}

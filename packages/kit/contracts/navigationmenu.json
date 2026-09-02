@@ -1,0 +1,65 @@
+{
+  "id": "navigationmenu",
+  "status": "stable",
+  "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
+  "useWhen": [
+    "Top-of-page site navigation with links and dropdowns",
+    "A horizontal bar of destinations, some of which open a menu"
+  ],
+  "doNotUseWhen": [
+    "Vertical product chrome — use SideNav",
+    "Playground catalog list — use AppNav",
+    "Path to the current page — use Breadcrumb",
+    "In-page panels — use Tabs",
+    "Actions from a button — use DropdownMenu",
+    "Product top bar with logo and search — use AppHeader"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "id": "string",
+        "label": "string",
+        "href": "string? link items",
+        "active": "boolean? link items",
+        "groups": "DropdownMenuGroup[]? dropdown items — presence of groups means dropdown",
+        "columns": "1 | 2? dropdown items, default 1"
+      },
+      "note": "A dropdown item is detected by groups. A link item has href and no groups."
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void"
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "surface.muted",
+    "radius.control.md",
+    "focus.ring",
+    "type.size.body-sm",
+    "type.weight.label"
+  ],
+  "a11y": {
+    "element": "nav",
+    "requirements": [
+      "nav with aria-label",
+      "Link items are a with aria-current=page when active",
+      "Dropdowns are kit DropdownMenu with triggerStyle=nav",
+      "Only one dropdown open at a time"
+    ]
+  },
+  "doNot": [
+    "Do not invent NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuViewport, or NavigationMenuIndicator",
+    "Do not use radix or @base-ui/react navigation-menu",
+    "Do not use native select or details for dropdowns — use kit DropdownMenu",
+    "Do not use SideNav or AppNav for horizontal site nav",
+    "Do not use raw hex"
+  ],
+  "contains": [
+    "dropdownmenu"
+  ],
+  "snippet": "<NavigationMenu items={[{ id: \"home\", label: \"Home\", href: \"/\", active: true }, { id: \"docs\", label: \"Docs\", groups: [{ items: [{ id: \"intro\", label: \"Introduction\", href: \"/docs\" }] }] }]} />"
+}

@@ -1,0 +1,130 @@
+{
+  "id": "insightcard",
+  "status": "stable",
+  "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
+  "useWhen": [
+    "surface a recommendation, warning, or finding on a dashboard",
+    "next to Scorecards when the metric needs a suggested action"
+  ],
+  "doNotUseWhen": [
+    "one KPI number — Scorecard",
+    "login/settings tile — Card",
+    "inline page status — Alert",
+    "toast — not in kit, ask"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "eyebrow": {
+      "type": "string",
+      "default": "Insight"
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "opportunity",
+        "warning",
+        "danger",
+        "info",
+        "neutral"
+      ],
+      "default": "opportunity"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "confidence": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. High confidence"
+    },
+    "source": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. From last 7 days"
+    },
+    "primaryAction": {
+      "type": "object",
+      "required": false,
+      "note": "kit Button primary. One primary per view.",
+      "label": {
+        "type": "string",
+        "required": true
+      },
+      "onClick": {
+        "type": "function",
+        "required": false
+      }
+    },
+    "secondaryAction": {
+      "type": "object",
+      "required": false,
+      "note": "kit Button secondary",
+      "label": {
+        "type": "string",
+        "required": true
+      },
+      "onClick": {
+        "type": "function",
+        "required": false
+      }
+    },
+    "onDismiss": {
+      "type": "function",
+      "required": false,
+      "note": "text Dismiss control, not a Button cousin"
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "border.highlight",
+    "border.faint",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "icon.brand",
+    "icon.secondary",
+    "icon.warning",
+    "icon.danger",
+    "icon.info",
+    "space.4",
+    "space.6",
+    "space.8",
+    "type.size.heading",
+    "type.size.bodySm",
+    "type.size.caption",
+    "border.focus"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "title is h3 with useId",
+      "aria-labelledby",
+      "aria-describedby when description",
+      "tone icon aria-hidden",
+      "Dismiss is a button"
+    ]
+  },
+  "doNot": [
+    "Do not invent local InsightCard, Insight, or RecommendationCard",
+    "Do not use raw hex",
+    "Do not put a metric as the title (that is Scorecard)",
+    "Actions must be kit Buttons",
+    "One primary per view (the primaryAction is the one)"
+  ],
+  "snippet": "<InsightCard title=\"Rebook no-shows automatically\" description=\"Fill empty slots from the waitlist when clients cancel.\" tone=\"opportunity\" primaryAction={{ label: \"Review\" }} />"
+}

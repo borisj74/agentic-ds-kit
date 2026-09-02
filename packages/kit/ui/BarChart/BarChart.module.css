@@ -1,0 +1,56 @@
+.plot {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.grid {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.bar {
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.barDimmed {
+  opacity: 0.45;
+}
+
+.bar:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.categoryLabel,
+.tickLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+  }
+}

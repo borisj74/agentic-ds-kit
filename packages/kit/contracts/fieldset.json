@@ -1,0 +1,29 @@
+{
+  "id": "fieldset",
+  "status": "stable",
+  "intent": "Semantic group of fields with a legend and optional description.",
+  "useWhen": [
+    "Related fields that need a shared heading, like billing or profile",
+    "A checkbox or switch sitting under a group legend"
+  ],
+  "doNotUseWhen": [
+    "A single labeled control — use Field",
+    "Page title — use PageHeader or Card title"
+  ],
+  "props": {
+    "legend": { "type": "string", "required": true },
+    "description": { "type": "string", "required": false },
+    "children": { "type": "slot", "required": true, "note": "kit Field, Checkbox, Switch, or RadioGroup" }
+  },
+  "tokens": ["text.primary", "text.muted"],
+  "a11y": {
+    "element": "fieldset",
+    "requirements": ["legend is the accessible name of the group"]
+  },
+  "doNot": [
+    "Do not invent FieldLegend, FieldGroup, or FieldSeparator",
+    "Do not nest FieldSet unless the inner group is truly nested",
+    "Do not use raw hex"
+  ],
+  "snippet": "<FieldSet legend=\"Billing Address\" description=\"The billing address associated with your payment method\"><Checkbox id=\"same\" label=\"Same as shipping address\" /></FieldSet>"
+}

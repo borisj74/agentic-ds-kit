@@ -1,0 +1,101 @@
+{
+  "id": "checkbox",
+  "status": "stable",
+  "intent": "Multi-select or confirmation control. Optional visible label.",
+  "useWhen": [
+    "Independent booleans such as agree to terms or enable notifications",
+    "Confirmations that are not a submit action",
+    "Table row or icon-only select without visible text — set ariaLabel"
+  ],
+  "doNotUseWhen": [
+    "Choosing one of several options — use RadioGroup",
+    "Primary form submit actions — use Button",
+    "Immediate on/off setting — use Switch"
+  ],
+  "props": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "visible text; required unless ariaLabel is set"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "required when label is omitted (table row, icon-only slot)"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "boolean",
+      "default": false
+    },
+    "checked": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled"
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "default": false,
+      "note": "uncontrolled"
+    },
+    "indeterminate": {
+      "type": "boolean",
+      "default": false,
+      "note": "visual + aria-checked mixed; set via input.indeterminate"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(checked: boolean) => void"
+    },
+    "name": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "action.primary",
+    "action.onPrimary",
+    "surface.card",
+    "border.strong",
+    "border.faint",
+    "border.focus",
+    "status.danger",
+    "radius.controlSm"
+  ],
+  "a11y": {
+    "element": "input[type=checkbox]",
+    "requirements": [
+      "Visible label via label/htmlFor OR aria-label when no text",
+      "Disabled state is exposed",
+      "Error described if used with Field",
+      "Indeterminate is aria-checked=mixed",
+      "Do not ship unlabeled without ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Checkbox",
+    "Do not use raw hex",
+    "Do not use RadioGroup for booleans",
+    "Do not ship unlabeled without ariaLabel",
+    "Do not use Switch as a checkbox"
+  ],
+  "snippet": "<Checkbox id=\"updates\" label=\"Send me product updates\" />\n<Checkbox id=\"row-1\" ariaLabel=\"Select row\" />"
+}

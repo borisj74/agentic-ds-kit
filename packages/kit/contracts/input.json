@@ -1,0 +1,119 @@
+{
+  "id": "input",
+  "status": "stable",
+  "intent": "Single-line text entry for forms and filters. Optional start and end slots sit inside the field.",
+  "useWhen": [
+    "Collecting short text such as name, email, or search queries",
+    "Inside a Field wrapper when label, hint, or error messaging is needed"
+  ],
+  "doNotUseWhen": [
+    "One-time code or PIN \u2014 use InputOTP",
+    "Multi-line content \u2014 use Textarea",
+    "Choosing from fixed options \u2014 use Select or RadioGroup",
+    "Standalone labeled forms without Field \u2014 you must wire label association yourself"
+  ],
+  "props": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enum",
+      "values": [
+        "text",
+        "email",
+        "password",
+        "search"
+      ],
+      "default": "text"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "default": "md"
+    },
+    "placeholder": {
+      "type": "string",
+      "required": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "boolean",
+      "default": false
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "start": {
+      "type": "string",
+      "required": false,
+      "note": "Prefix text inside the field on the left. Not a label."
+    },
+    "end": {
+      "type": "string",
+      "required": false,
+      "note": "Suffix text inside the field on the right. Not a label."
+    },
+    "iconStart": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide catalog name on the left."
+    },
+    "iconEnd": {
+      "type": "string",
+      "required": false,
+      "note": "Lucide catalog name on the right."
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled. When set, do not also rely on defaultValue."
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void"
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "When there is no Field label, such as search inside DropdownMenu."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "icon.muted",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "status.danger"
+  ],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Must have associated label via Field or aria-label",
+      "error state should be described by Field error text"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Input variants or InputGroup",
+    "Do not use raw hex in styles",
+    "Do not use start or end as the accessible name \u2014 wrap with Field label",
+    "Do not use Lucide except via LucideByName from @/ui/Button/lucideName"
+  ],
+  "snippet": "<Field label=\"Website\" htmlFor=\"website\"><Input id=\"website\" start=\"https://\" placeholder=\"example.com\" /></Field>"
+}

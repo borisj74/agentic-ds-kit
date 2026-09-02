@@ -1,0 +1,116 @@
+.root {
+  container-type: inline-size;
+  overflow: visible;
+}
+
+.stackPlot {
+  display: grid;
+  place-items: center;
+}
+
+.split {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.plot {
+  position: relative;
+  flex: none;
+  overflow: visible;
+}
+
+.chart {
+  display: block;
+  overflow: visible;
+}
+
+.slice {
+  transform-box: view-box;
+  transform-origin: center;
+  transition:
+    transform 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sliceActive {
+  transform: scale(1.015);
+}
+
+.sliceDimmed {
+  opacity: 0.45;
+  filter: blur(1.5px);
+}
+
+.glow {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sliceActive .glow {
+  opacity: 0.38;
+}
+
+.mark {
+  pointer-events: none;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.hit:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.center {
+  pointer-events: none;
+}
+
+.centerValue {
+  fill: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.centerLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-caption);
+}
+
+
+@container (max-width: 30rem) {
+  .split {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slice,
+  .glow {
+    transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+  }
+
+  .sliceActive {
+    transform: none;
+  }
+
+  .sliceDimmed {
+    filter: none;
+  }
+
+  .sliceActive .glow {
+    opacity: 0;
+  }
+}

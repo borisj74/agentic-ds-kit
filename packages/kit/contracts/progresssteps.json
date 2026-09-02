@@ -1,0 +1,91 @@
+{
+  "id": "progresssteps",
+  "status": "stable",
+  "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
+  "useWhen": [
+    "Checkout, onboarding, or multi-step forms",
+    "A required sequence the user walks through in order",
+    "Numbered steps with complete, current, and upcoming"
+  ],
+  "doNotUseWhen": [
+    "A determinate percent 0 to 100 — use Progress",
+    "A vertical now/next/later roadmap — use Timeline",
+    "Peer views the user can switch freely — use Tabs",
+    "Paging a list or table — use Pagination"
+  ],
+  "props": {
+    "steps": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, description?, status?: complete|current|upcoming|error }[]. Status is derived from current when omitted."
+    },
+    "current": {
+      "type": "number",
+      "default": 0,
+      "note": "0-based index of the current step. Pass steps.length to mark every step complete."
+    },
+    "orientation": {
+      "type": "enum",
+      "values": ["horizontal", "vertical"],
+      "default": "horizontal",
+      "note": "horizontal is the Untitled UI default. vertical stacks marker, then copy."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md",
+      "note": "Marker is space-6 (sm) or space-8 (md)."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "nav label. Defaults to Progress."
+    }
+  },
+  "tokens": [
+    "fill.strong",
+    "fill.brandSubtle",
+    "fill.danger",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "text.brand",
+    "text.danger",
+    "icon.inverse",
+    "surface.card",
+    "border.faint",
+    "border.strong",
+    "border.brand",
+    "radius.full",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.6",
+    "space.8",
+    "type.size.bodySm",
+    "type.size.label",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.body",
+    "motion.interactionDuration"
+  ],
+  "a11y": {
+    "element": "nav > ol",
+    "requirements": [
+      "nav with aria-label Progress or ariaLabel",
+      "Ordered list of steps",
+      "Current step sets aria-current=step",
+      "Marker is aria-hidden; status is announced as Completed, Current, Upcoming, or Error with step n of m"
+    ]
+  },
+  "doNot": [
+    "Do not invent StepItem, Stepper, ProgressStep, or Icon cousins",
+    "Do not use Progress for ordered wizard steps",
+    "Do not use Timeline for numbered checkout or onboarding steps",
+    "Do not use Tabs for a required sequence",
+    "Do not use raw hex",
+    "Do not copy Untitled UI CSS or hex"
+  ],
+  "snippet": "<ProgressSteps current={1} steps={[{ id: 'details', label: 'Your details', description: 'Name and email' }, { id: 'company', label: 'Company details' }]} />"
+}

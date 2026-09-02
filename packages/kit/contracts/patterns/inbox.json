@@ -1,0 +1,32 @@
+{
+  "id": "inbox",
+  "status": "stable",
+  "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
+  "contains": [
+    "pageheader",
+    "scoreboard",
+    "section",
+    "tabs",
+    "table",
+    "cell",
+    "badge",
+    "button",
+    "empty",
+    "drawer",
+    "fieldset",
+    "field",
+    "input",
+    "textarea",
+    "toast",
+    "avatar"
+  ],
+  "doNot": [
+    "Do not invent a local inbox row, from stack, or reply dialog",
+    "Do not skip Cell type=avatar for the From column",
+    "Do not use AlertDialog for a dismissible reply",
+    "Do not skip Field wrappers on labeled inputs",
+    "Do not add more than one primary Button",
+    "Do not restyle kit components inside the pattern"
+  ],
+  "snippet": "<InboxPattern />"
+}

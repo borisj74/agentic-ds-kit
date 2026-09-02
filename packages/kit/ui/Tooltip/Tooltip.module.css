@@ -1,0 +1,111 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.bubble {
+  --tooltip-offset: calc(100% + 0.5rem);
+  position: absolute;
+  z-index: var(--z-tooltip);
+  width: max-content;
+  max-width: 16rem;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control-md);
+  background: var(--surface-inverse);
+  box-shadow: var(--shadow-md);
+  color: var(--text-inverse);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-overlay-exit-duration) var(--motion-overlay-exit-easing),
+    transform var(--motion-overlay-exit-duration) var(--motion-overlay-exit-easing),
+    visibility 0s linear var(--motion-overlay-exit-duration);
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
+    transform var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.arrow {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--surface-inverse);
+  transform: rotate(45deg);
+}
+
+.top {
+  bottom: var(--tooltip-offset);
+  left: 50%;
+  transform: translate(-50%, 0.25rem) scale(0.96);
+}
+
+.top.open {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.top .arrow {
+  bottom: -0.2rem;
+  left: calc(50% - 0.25rem);
+}
+
+.bottom {
+  top: var(--tooltip-offset);
+  left: 50%;
+  transform: translate(-50%, -0.25rem) scale(0.96);
+}
+
+.bottom.open {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.bottom .arrow {
+  top: -0.2rem;
+  left: calc(50% - 0.25rem);
+}
+
+.left {
+  right: var(--tooltip-offset);
+  top: 50%;
+  transform: translate(0.25rem, -50%) scale(0.96);
+}
+
+.left.open {
+  transform: translate(0, -50%) scale(1);
+}
+
+.left .arrow {
+  right: -0.2rem;
+  top: calc(50% - 0.25rem);
+}
+
+.right {
+  left: var(--tooltip-offset);
+  top: 50%;
+  transform: translate(-0.25rem, -50%) scale(0.96);
+}
+
+.right.open {
+  transform: translate(0, -50%) scale(1);
+}
+
+.right .arrow {
+  left: -0.2rem;
+  top: calc(50% - 0.25rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble {
+    transition: none;
+  }
+}

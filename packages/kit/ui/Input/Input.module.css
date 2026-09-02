@@ -1,0 +1,59 @@
+.shell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.shell:hover:not([data-disabled]),
+.shell[data-demo="hover"]:not([data-disabled]) {
+  border-color: var(--border-strong);
+}
+
+.shell:focus-within,
+.shell[data-demo="focus"] {
+  border-color: var(--border-focus);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.shell.controlError:focus-within,
+.shell.controlError[data-demo="focus"] {
+  border-color: var(--status-danger);
+  outline-color: var(--status-danger);
+}
+
+.shell[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--surface-muted);
+}
+
+.native {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.native:disabled {
+  cursor: not-allowed;
+}
+
+.slot {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}

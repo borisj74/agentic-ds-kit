@@ -1,0 +1,131 @@
+{
+  "id": "chat",
+  "status": "stable",
+  "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
+  "useWhen": [
+    "An inline assistant beside a workspace",
+    "A help thread with send and a thinking state",
+    "Suggested prompts above a composer"
+  ],
+  "doNotUseWhen": [
+    "A blocking overlay — use Modal",
+    "A must-choose confirm — use AlertDialog",
+    "A short notice after an action — use Toast"
+  ],
+  "contains": ["button", "input", "thinkinganimation", "dropdownmenu"],
+  "props": {
+    "title": {
+      "type": "string",
+      "default": "Assistant"
+    },
+    "status": {
+      "type": "string",
+      "required": false
+    },
+    "messages": {
+      "type": "array",
+      "required": false,
+      "note": "ChatMessage[] with role user | assistant, content, optional id and timestamp. Type only — not a ChatMessage component."
+    },
+    "suggestions": {
+      "type": "array",
+      "required": false,
+      "note": "Prompt chips above the composer. kit Button sm tertiary."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "How can we help you?"
+    },
+    "emptyState": {
+      "type": "string",
+      "required": false,
+      "default": "Start a conversation."
+    },
+    "isThinking": {
+      "type": "boolean",
+      "default": false,
+      "note": "Shows kit ThinkingAnimation in the thread."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "value": {
+      "type": "string",
+      "required": false
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false
+    },
+    "onSend": {
+      "type": "function",
+      "required": false,
+      "note": "(message: string) => void"
+    },
+    "onClose": {
+      "type": "function",
+      "required": false
+    },
+    "closeLabel": {
+      "type": "string",
+      "default": "Close"
+    },
+    "menuItems": {
+      "type": "array",
+      "required": false,
+      "note": "Optional overflow actions. kit DropdownMenu."
+    },
+    "menuLabel": {
+      "type": "string",
+      "default": "More"
+    },
+    "radius": {
+      "type": "enum",
+      "values": ["lg", "none"],
+      "default": "lg",
+      "note": "lg is the standalone card. none squares the panel and drops the outer block/end borders so Chat can sit flush in a workspace rail."
+    },
+    "className": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "fill.brandSubtle",
+    "fill.brand",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "radius.surfaceLg",
+    "radius.0",
+    "radius.full",
+    "space.5",
+    "type.size.label",
+    "type.weight.heading",
+    "type.size.bodySm"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section named by title",
+      "thread is role=log with aria-live=polite",
+      "aria-busy while thinking",
+      "composer input has an accessible name",
+      "Send and Close are named icon-only kit Buttons"
+    ]
+  },
+  "doNot": [
+    "Do not invent ChatMessage, ChatInput, ChatHeader, ChatBubble, or ChatAvatar cousins",
+    "Do not use Modal for an inline assistant panel",
+    "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
+    "Do not use raw hex",
+    "Do not use Florence, BillingPlatform, or copilot wording in copy"
+  ],
+  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />"
+}

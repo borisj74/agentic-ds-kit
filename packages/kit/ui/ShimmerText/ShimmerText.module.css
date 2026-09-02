@@ -1,0 +1,46 @@
+.root {
+  --shimmer-text-duration: calc(var(--motion-modal-duration) * var(--shimmer-duration-factor, 4));
+  display: inline-block;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+}
+
+.content {
+  white-space: pre-wrap;
+}
+
+.character {
+  display: inline-block;
+  opacity: 0.45;
+  animation: shimmer-wave var(--shimmer-text-duration) var(--motion-expand-easing) infinite;
+  animation-delay: calc(var(--shimmer-text-duration) * var(--shimmer-phase) * -1);
+}
+
+.sm {
+  font-size: var(--type-size-body-sm);
+}
+
+.lg {
+  font-size: var(--type-size-heading-sm);
+  font-weight: var(--type-weight-heading);
+}
+
+@keyframes shimmer-wave {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character {
+    opacity: 1;
+    animation: none;
+  }
+}

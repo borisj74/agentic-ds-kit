@@ -1,0 +1,52 @@
+{
+  "id": "spinner",
+  "status": "stable",
+  "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
+  "useWhen": [
+    "Button or inline action is processing",
+    "Short indeterminate page or panel load",
+    "Waiting state with no known percent"
+  ],
+  "doNotUseWhen": [
+    "Square dot-grid compact wait — use LoadingAnimation",
+    "Assistant thinking — use ThinkingAnimation",
+    "Known percent completion — use Progress"
+  ],
+  "props": {
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md"
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Visible label beside the spinner. When omitted, aria-label is Loading."
+    }
+  },
+  "tokens": [
+    "icon.secondary",
+    "text.secondary",
+    "type.size.caption",
+    "type.size.label",
+    "type.size.bodySm",
+    "space.2",
+    "motion.duration600",
+    "motion.easeLinear"
+  ],
+  "a11y": {
+    "element": "span[role=status]",
+    "requirements": [
+      "role=status with aria-live=polite",
+      "aria-label Loading when label is omitted",
+      "Visible label is not duplicated in aria-label"
+    ]
+  },
+  "doNot": [
+    "Do not invent SpinnerIcon or merge Spinner into LoadingAnimation",
+    "Do not add Spinner as a LoadingAnimation variant",
+    "Do not change Button to accept spinner children",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Spinner />\n<Spinner size=\"lg\" label=\"Processing payment…\" />\n<div style={{ display: \"flex\", gap: \"var(--space-2)\", alignItems: \"center\" }}><Spinner size=\"sm\" /><Button disabled>Loading…</Button></div>"
+}

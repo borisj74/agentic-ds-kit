@@ -1,0 +1,16 @@
+{
+  "id": "assistant-workspace",
+  "status": "stable",
+  "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
+  "contains": ["pageheader", "section", "insightcard", "chat", "button"],
+  "doNot": [
+    "Do not put Chat in a Modal",
+    "Do not invent a local assistant rail or insight stack",
+    "Do not skip layout-workspace for the rail",
+    "Do not skip layout-split for the InsightCards",
+    "Do not skip Chat radius none for the rail",
+    "Do not give InsightCards primaryAction while Chat is open — Chat Send is the one primary",
+    "Do not restyle Chat or InsightCard"
+  ],
+  "snippet": "<AssistantWorkspacePattern />"
+}

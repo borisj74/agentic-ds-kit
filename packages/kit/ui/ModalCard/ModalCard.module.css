@@ -1,0 +1,137 @@
+.card {
+  display: grid;
+  gap: var(--space-stack-xs);
+  width: min(100%, 28rem);
+  min-width: 0;
+  padding: var(--space-inset-lg);
+  overflow: auto;
+  background-color: var(--surface-page);
+  border: none;
+  border-radius: var(--radius-control-lg);
+  box-shadow: var(--shadow-modal);
+  outline: none;
+}
+
+.sm {
+  width: min(100%, 22rem);
+  padding: var(--space-inset-md);
+}
+
+.md {
+  width: min(100%, 28rem);
+  padding: var(--space-inset-lg);
+}
+
+.lg {
+  width: min(100%, 36rem);
+  padding: var(--space-inset-xl);
+}
+
+.card[role="dialog"] {
+  max-height: min(90vh, 40rem, 100%);
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  animation: cardEnter var(--motion-modal-duration) var(--motion-modal-easing);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-inline-sm);
+  min-width: 0;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.sm .title {
+  font-size: var(--type-size-body-sm);
+}
+
+.md .title {
+  font-size: var(--type-size-body);
+}
+
+.lg .title {
+  font-size: var(--type-size-heading);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-muted);
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  color: var(--icon-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-control-sm);
+  cursor: pointer;
+}
+
+.close:hover {
+  background-color: var(--surface-muted);
+  color: var(--icon-primary);
+}
+
+.close:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.body {
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.card[role="dialog"] .body {
+  min-height: 0;
+  overflow: auto;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-inline-sm);
+  min-width: 0;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: var(--opacity-0);
+  }
+  to {
+    opacity: var(--opacity-full);
+  }
+}

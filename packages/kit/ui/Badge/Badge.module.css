@@ -1,0 +1,92 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-control-sm);
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+.sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--type-size-caption);
+}
+
+.md {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--type-size-label);
+}
+
+.lg {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--type-size-body-sm);
+}
+
+.neutral {
+  background-color: var(--surface-muted);
+  color: var(--text-secondary);
+  border-color: var(--border-faint);
+}
+
+.brand {
+  background-color: color-mix(in srgb, var(--action-primary) 12%, var(--surface-card));
+  color: var(--action-primary);
+  border-color: color-mix(in srgb, var(--action-primary) 35%, var(--surface-card));
+}
+
+.success {
+  background-color: var(--status-success-subtle);
+  color: var(--status-success);
+  border-color: var(--status-success-border);
+}
+
+.warning {
+  background-color: var(--status-warning-subtle);
+  color: var(--status-warning);
+  border-color: var(--status-warning-border);
+}
+
+.danger {
+  background-color: var(--status-danger-subtle);
+  color: var(--status-danger);
+  border-color: var(--status-danger-border);
+}
+
+.info {
+  background-color: var(--status-info-subtle);
+  color: var(--status-info);
+  border-color: var(--status-info-border);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.remove:disabled {
+  cursor: not-allowed;
+}
+
+.remove:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}

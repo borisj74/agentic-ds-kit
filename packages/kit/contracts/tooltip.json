@@ -1,0 +1,66 @@
+{
+  "id": "tooltip",
+  "status": "stable",
+  "intent": "Brief supplementary text on hover or focus of a trigger element.",
+  "useWhen": [
+    "Explaining an icon or abbreviated label",
+    "Non-critical context that should not clutter the layout"
+  ],
+  "doNotUseWhen": [
+    "Essential instructions \u2014 put them in visible hint text via Field",
+    "Large content or forms \u2014 use Modal",
+    "Navigation \u2014 use AppNav"
+  ],
+  "props": {
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "placement": {
+      "type": "enum",
+      "values": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "default": "top"
+    },
+    "delay": {
+      "type": "number",
+      "default": 150
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled visibility"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "children": {
+      "type": "slot",
+      "required": true
+    }
+  },
+  "tokens": [
+    "text.inverse",
+    "surface.elevated",
+    "shadow.md",
+    "motion.fast"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Trigger must be focusable",
+      "Tooltip content available to assistive tech on focus"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Tooltip",
+    "Do not use raw hex",
+    "Do not hide required form labels in tooltips"
+  ],
+  "snippet": "<Tooltip content=\"Export includes all projects\"><Button variant=\"secondary\" size=\"sm\">Export</Button></Tooltip>"
+}
