@@ -1,6 +1,6 @@
 {
   "name": "agentic-ds-kit",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Code-only agentic design system: contracts, tokens, and React components.",
   "license": "MIT",
   "repository": {
@@ -14,20 +14,27 @@
   },
   "type": "module",
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "**/*.module.js",
+    "./src/tokens.ts",
+    "./dist/src/tokens.js"
   ],
   "files": [
-    "src",
-    "ui",
+    "dist",
     "contracts",
     "tokens",
     "lib",
     "skills",
     "AGENTS.md",
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "LICENSE"
   ],
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    },
     "./tokens.css": "./lib/tokens.css",
     "./contracts/index.json": "./contracts/index.json",
     "./contracts/*.json": "./contracts/*.json",
@@ -36,20 +43,33 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "generate:tokens": "node scripts/generate-tokens.mjs"
+    "generate:tokens": "node scripts/generate-tokens.mjs",
+    "build": "npm run generate:tokens && vite build",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
+    "next": ">=14",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "dependencies": {
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.37.0"
   },
   "devDependencies": {
+    "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5"
+    "@vitejs/plugin-react": "^6.1.1",
+    "rollup-preserve-directives": "^1.1.3",
+    "typescript": "^5",
+    "vite": "^8.2.2",
+    "vite-plugin-dts": "^5.1.0"
   },
   "engines": {
     "node": ">=20"

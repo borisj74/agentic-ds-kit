@@ -10,17 +10,11 @@ The **kit** is the npm package `agentic-ds-kit` (`packages/kit`): contracts, tok
 npm install agentic-ds-kit
 ```
 
-```ts
-// next.config.ts
-transpilePackages: ["agentic-ds-kit"]
-```
-
 ```tsx
-import "agentic-ds-kit/tokens.css";
 import { Button, Scoreboard } from "agentic-ds-kit";
 ```
 
-Copy `packages/kit/AGENTS.md` and `packages/kit/CLAUDE.md` into the app root so Cursor and Claude Code follow the kit. Full install notes: [docs/getting-started.md](docs/getting-started.md).
+Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package into the app root so Cursor and Claude Code follow the kit. Step-by-step (existing app, new folder, upgrade from 0.1.0, troubleshooting): [docs/getting-started.md](docs/getting-started.md#install-the-package-in-your-app).
 
 ## What's here
 
@@ -65,6 +59,8 @@ Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundation
 
 ### Playground routes
 - `/` — Getting started (introduction)
+- `/installation` — Install the package
+- `/theming` — Semantic tokens, dark mode, brand color
 - `/foundations` — Token scales
 - `/components` — Component gallery (`#gallery`) and per-component docs
 - `/patterns` — Pattern blueprints (`#dashboard`)

@@ -46,11 +46,17 @@ const METRICS = [
   },
 ];
 
-function masterCode(size: SectionSize, showDescription: boolean, showActions: boolean) {
+function masterCode(
+  size: SectionSize,
+  showDescription: boolean,
+  showActions: boolean,
+  collapsible: boolean,
+) {
   const buttonSize = size === "lg" ? "md" : "sm";
   const lines = ["<Section", `  title="${MASTER_TITLE}"`];
   if (showDescription) lines.push(`  description="${MASTER_DESCRIPTION}"`);
   lines.push(`  size="${size}"`);
+  if (!collapsible) lines.push("  collapsible={false}");
   if (showActions) {
     lines.push(`  actions={<Button variant="secondary" size="${buttonSize}">View all</Button>}`);
   }
@@ -65,6 +71,7 @@ export function SectionDoc() {
   const [size, setSize] = useState<SectionSize>("md");
   const [showDescription, setShowDescription] = useState(true);
   const [showActions, setShowActions] = useState(true);
+  const [collapsible, setCollapsible] = useState(true);
   const buttonSize = size === "lg" ? "md" : "sm";
 
   return (
@@ -72,8 +79,9 @@ export function SectionDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Section</h1>
         <p className={styles.lede}>
-          Grouped page block with a heading, optional description, and optional actions. Collapsible,
-          with a chevron before the title. Not PageHeader. Not Card. Not FieldSet. Not Accordion.
+          Grouped page block. Title, description, and body share one surface. Collapsible by default;
+          pass collapsible false for a static heading. Not PageHeader. Not Card. Not FieldSet. Not
+          Accordion.
         </p>
       </header>
 
@@ -83,7 +91,7 @@ export function SectionDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle size, description, and actions. Click the chevron to collapse. Body is kit Table.
+            Toggle size, collapse, description, and actions. Body is kit Table.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -96,6 +104,7 @@ export function SectionDoc() {
                   title={MASTER_TITLE}
                   description={showDescription ? MASTER_DESCRIPTION : undefined}
                   size={size}
+                  collapsible={collapsible}
                   actions={
                     showActions ? (
                       <Button variant="secondary" size={buttonSize}>
@@ -128,6 +137,12 @@ export function SectionDoc() {
                   <span className={styles.panelLabel}>Structure</span>
                   <Switch
                     size="sm"
+                    label="Collapsible"
+                    checked={collapsible}
+                    onChange={setCollapsible}
+                  />
+                  <Switch
+                    size="sm"
                     label="Description"
                     checked={showDescription}
                     onChange={setShowDescription}
@@ -145,13 +160,14 @@ export function SectionDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Section to group a heading with related content on a page. The chevron sits
-                  before the title and collapses the body. Page title stays on PageHeader. Framed
-                  tiles stay Card. Form legends stay FieldSet. Exclusive FAQ lists stay Accordion.
-                  Actions must be kit Buttons.
+                  Use Section to group a heading with related content on a page. Heading and body
+                  share one surface. Collapsible is the default: a chevron before the title toggles
+                  the body. Pass collapsible false when the block should stay open. Page title stays
+                  on PageHeader. Compact tiles with an image or footer stay Card. Form legends stay
+                  FieldSet. Exclusive FAQ lists stay Accordion. Actions must be kit Buttons.
                 </p>
               </div>
-              <CodeBlock code={masterCode(size, showDescription, showActions)} />
+              <CodeBlock code={masterCode(size, showDescription, showActions, collapsible)} />
             </div>
           </div>
         ) : (
@@ -197,6 +213,31 @@ export function SectionDoc() {
 <Section title="Recent activity"><Table columns={columns} rows={rows} /></Section>
 <Section title="Notices"><Alert variant="warning" title="Seats running low">Three seats left on the Studio plan.</Alert></Section>
 <Section title="Account"><Field label="Display name" htmlFor="name"><Input id="name" /></Field></Section>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Always open</h2>
+              <div className={styles.exampleCanvas}>
+                <Section
+                  title="Weekly users"
+                  description="Daily average, last 7 days"
+                  collapsible={false}
+                >
+                  <Table columns={COLUMNS} rows={ROWS} />
+                </Section>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Pass collapsible false when the heading is a label, not a control. No chevron. The
+                  body stays visible. Docs pages and chart blocks usually want this.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Section title="Weekly users" description="Daily average, last 7 days" collapsible={false}>
+  <Table columns={columns} rows={rows} />
+</Section>`}
               />
             </section>
 

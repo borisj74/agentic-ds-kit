@@ -26,20 +26,21 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-@container scoreboard (max-width: calc(2 * var(--layout-metrics-min) + var(--space-4))) {
+/* Lengths match tokens: metrics-min 12rem, space-4 1rem. Container queries cannot use calc(var()). */
+@container scoreboard (max-width: 25rem) {
   .count2,
   .count4 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@container scoreboard (max-width: calc(3 * var(--layout-metrics-min) + 2 * var(--space-4))) {
+@container scoreboard (max-width: 38rem) {
   .count3 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@container scoreboard (min-width: calc(4 * var(--layout-metrics-min) + 3 * var(--space-4))) {
+@container scoreboard (min-width: 51rem) {
   .count4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

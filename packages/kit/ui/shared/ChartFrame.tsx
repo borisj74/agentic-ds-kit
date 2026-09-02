@@ -34,10 +34,11 @@ export function ChartFrame({
   const descriptionId = useId();
   const panelId = useId();
   const showTable = view === "table" && Boolean(table);
+  const hasChrome = Boolean(title || description || table || footnote || legend);
 
   return (
     <figure
-      className={`${styles.frame} ${className}`.trim()}
+      className={`${hasChrome ? styles.frame : styles.flush} ${className}`.trim()}
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={description ? descriptionId : undefined}
     >

@@ -1,24 +1,36 @@
 .section {
   --section-space: var(--space-section-md);
-  --section-header-gap: var(--space-stack-sm);
+  --section-header-gap: var(--space-stack-md);
+  --section-inset: var(--space-6);
+  display: grid;
+  gap: var(--section-header-gap);
   width: 100%;
   min-width: 0;
   margin: 0 0 var(--section-space);
+  padding: var(--section-inset);
+  box-sizing: border-box;
+  background: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .sm {
   --section-space: var(--space-section-sm);
   --section-header-gap: var(--space-stack-sm);
+  --section-inset: var(--space-4);
 }
 
 .md {
   --section-space: var(--space-section-md);
   --section-header-gap: var(--space-stack-md);
+  --section-inset: var(--space-6);
 }
 
 .lg {
   --section-space: var(--space-section-lg);
   --section-header-gap: var(--space-stack-lg);
+  --section-inset: var(--space-8);
 }
 
 .header {
@@ -28,11 +40,6 @@
   justify-content: space-between;
   gap: var(--space-inline-sm) var(--space-inline-lg);
   margin: 0;
-  padding-bottom: var(--section-header-gap);
-}
-
-.collapsible:has(> .body[hidden]) .header {
-  padding-bottom: 0;
 }
 
 .heading {

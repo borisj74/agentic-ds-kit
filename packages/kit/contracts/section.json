@@ -1,14 +1,14 @@
 {
   "id": "section",
   "status": "stable",
-  "intent": "Grouped page block with optional heading, description, and actions. Collapsible, chevron before the title.",
+  "intent": "Grouped page block with optional heading, description, and actions on one surface. Pass collapsible false to keep the body always open.",
   "useWhen": [
     "Separating metrics, tables, or form groups on a page",
     "Under PageHeader to structure dashboard or settings content"
   ],
   "doNotUseWhen": [
     "Whole page title \u2014 use PageHeader",
-    "Framed tiles \u2014 use Card",
+    "Compact tiles with image or footer \u2014 use Card",
     "Form legends and grouped fields \u2014 use FieldSet",
     "Modal body layout \u2014 keep content minimal inside Modal",
     "App-wide navigation \u2014 use AppNav",
@@ -45,7 +45,7 @@
     "collapsible": {
       "type": "boolean",
       "default": true,
-      "note": "When title is set, a chevron sits before the title and toggles the body. False keeps the body always open."
+      "note": "Default true: chevron before the title toggles the body. False is always open, no chevron. Requires title."
     },
     "defaultOpen": {
       "type": "boolean",
@@ -63,6 +63,10 @@
     }
   },
   "tokens": [
+    "surface.card",
+    "border.faint",
+    "radius.surface.md",
+    "shadow.sm",
     "text.primary",
     "text.secondary",
     "type.size.heading",
@@ -86,12 +90,12 @@
   "doNot": [
     "Do not invent a local Section or SectionHeader",
     "Do not use raw hex",
-    "Do not frame Section \u2014 that is Card",
+    "Do not use Section as a compact marketing tile \u2014 that is Card",
     "Do not use Section as the page title \u2014 that is PageHeader",
     "Do not embed one-off metric flex rows \u2014 use Scoreboard",
     "Actions must be kit Buttons",
     "Do not compose Accordion or Collapsible for page sections \u2014 Section owns collapse"
   ],
-  "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\" actions={<Button variant=\"secondary\" size=\"sm\">View all</Button>}><Table ... /></Section>",
+  "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\" collapsible={false}><Table ... /></Section>",
   "contains": []
 }

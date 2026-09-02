@@ -23,6 +23,17 @@ export default function Home() {
         </Section>
 
         <Section
+          title="Theming"
+          description="Semantic CSS variables. Dark mode is data-theme on html. Brand hues are data-color."
+          collapsible={false}
+        >
+          <p className={playground.body}>
+            Override roles such as --action-primary in your CSS. Do not rewrite component classes
+            or use primitive --color-* ramps in UI. Open Theming in the sidebar.
+          </p>
+        </Section>
+
+        <Section
           title="Patterns"
           description="Blueprint compositions that only import kit components. Use these before inventing layouts."
           collapsible={false}

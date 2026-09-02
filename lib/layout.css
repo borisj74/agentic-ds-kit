@@ -76,20 +76,21 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@container layout-content (max-width: calc(2 * var(--layout-metrics-min) + var(--layout-gutter-md))) {
+/* Lengths match tokens: metrics-min 12rem, gutter-md 1rem. Container queries cannot use calc(var()). */
+@container layout-content (max-width: 25rem) {
   .layout-metrics--fixed-3,
   .layout-metrics--fixed-4 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@container layout-content (max-width: calc(3 * var(--layout-metrics-min) + 2 * var(--layout-gutter-md))) {
+@container layout-content (max-width: 38rem) {
   .layout-metrics--fixed-3 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@container layout-content (min-width: calc(4 * var(--layout-metrics-min) + 3 * var(--layout-gutter-md))) {
+@container layout-content (min-width: 51rem) {
   .layout-metrics--fixed-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

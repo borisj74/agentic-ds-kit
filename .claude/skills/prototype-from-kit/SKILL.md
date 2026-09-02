@@ -18,7 +18,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 ## Hard rules
 
 - Never define local cousins of kit components.
-- Import tokens once: `import "agentic-ds-kit/tokens.css"`.
+- Importing from `agentic-ds-kit` loads tokens. Do not add a second tokens import unless your own CSS needs the variables first.
 - Never use raw hex in component styles; semantic tokens only.
 - Metric rows use `<Scoreboard items={...} />`, not flex layouts with borders.
 - Settings pages use the `settings-form` pattern with `Field` wrappers.
