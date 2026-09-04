@@ -178,7 +178,7 @@ html[data-theme="dark"] {
 }
 ```
 
-Brand overlays: omit `data-color` for blue, or set `violet` / `teal`.
+Brand overlays: omit `data-color` for ink, or set `blue` / `violet` / `teal`.
 
 ```html
 <html lang="en" data-color="violet">
@@ -212,10 +212,11 @@ npm run dev
 
 | Route | What you get |
 | --- | --- |
-| `/` | Introduction |
+| `/` | Redirects to Patterns |
+| `/patterns` | Live pattern screens (Dashboard, Activity, Inbox, …) |
+| `/installation` | Install the package |
 | `/foundations` | Token scales |
 | `/components` | Gallery and per-component docs |
-| `/patterns` | Screen blueprints (Dashboard, Activity, Inbox, …) |
 
 ```bash
 npm run build    # kit dist + playground production build

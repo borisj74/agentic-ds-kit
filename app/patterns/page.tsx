@@ -10,7 +10,8 @@ export default function PatternsPage() {
       <div className={playground.opsShell}>
         <h1 className={playground.pageTitle}>Patterns</h1>
         <p className={playground.pageLead}>
-          Blueprint compositions that only import kit components. Use these before inventing layouts.
+          Code is the contract. Agents install the kit, then compose these screens instead of
+          inventing layouts.
         </p>
 
         <div className={styles.anchor}>

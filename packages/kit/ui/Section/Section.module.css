@@ -1,36 +1,39 @@
 .section {
   --section-space: var(--space-section-md);
   --section-header-gap: var(--space-stack-md);
-  --section-inset: var(--space-6);
+  --section-inset-block: var(--space-6);
+  --section-inset-inline: var(--space-4);
   display: grid;
   gap: var(--section-header-gap);
   width: 100%;
   min-width: 0;
   margin: 0 0 var(--section-space);
-  padding: var(--section-inset);
+  padding: var(--section-inset-block) var(--section-inset-inline);
   box-sizing: border-box;
   background: var(--surface-card);
-  border: var(--border-width-thin) solid var(--border-faint);
+  border: none;
   border-radius: var(--radius-surface-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .sm {
   --section-space: var(--space-section-sm);
   --section-header-gap: var(--space-stack-sm);
-  --section-inset: var(--space-4);
+  --section-inset-block: var(--space-4);
+  --section-inset-inline: var(--space-3);
 }
 
 .md {
   --section-space: var(--space-section-md);
   --section-header-gap: var(--space-stack-md);
-  --section-inset: var(--space-6);
+  --section-inset-block: var(--space-6);
+  --section-inset-inline: var(--space-4);
 }
 
 .lg {
   --section-space: var(--space-section-lg);
   --section-header-gap: var(--space-stack-lg);
-  --section-inset: var(--space-8);
+  --section-inset-block: var(--space-8);
+  --section-inset-inline: var(--space-6);
 }
 
 .header {
@@ -51,7 +54,7 @@
 
 .title {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-heading);

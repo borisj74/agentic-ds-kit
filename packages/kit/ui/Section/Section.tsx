@@ -13,7 +13,7 @@ export function Section({
   size = "md",
   actions,
   children,
-  collapsible = true,
+  collapsible = false,
   defaultOpen = true,
   open: openProp,
   onOpenChange,

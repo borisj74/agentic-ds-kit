@@ -15,53 +15,20 @@ import { InviteMembersPattern } from "agentic-ds-kit";
 import { ListDetailPattern } from "agentic-ds-kit";
 import { SettingsFormPattern } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
-import type { SideNavGroup, SideNavItem } from "agentic-ds-kit";
+import type { SideNavItem } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
-const NAV_GROUPS: SideNavGroup[] = [
-  {
-    label: "Workspace",
-    items: [
-      { id: "overview", label: "Overview", icon: "House" },
-      { id: "activity", label: "Activity", icon: "ChartBar", badge: "6" },
-      { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-    ],
-  },
-  {
-    label: "Sprint 24",
-    items: [
-      {
-        id: "projects",
-        label: "Projects",
-        icon: "Folder",
-        badge: "4",
-        items: [
-          { id: "launch-brief", label: "Launch brief", icon: "File" },
-          { id: "qa-checklist", label: "QA checklist", icon: "CircleCheck" },
-          { id: "release-notes", label: "Release notes", icon: "File" },
-        ],
-      },
-      { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
-      { id: "insights", label: "Insights", icon: "Sparkles" },
-      {
-        id: "resources",
-        label: "Resources",
-        icon: "Layers",
-        items: [
-          { id: "support-macros", label: "Support macros", icon: "File" },
-          { id: "research", label: "User research", icon: "User" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Tags",
-    items: [
-      { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
-      { id: "tag-at-risk", label: "At risk", icon: "Info", badge: "5" },
-      { id: "tag-shipped", label: "Shipped", icon: "CircleCheck", badge: "12" },
-    ],
-  },
+const NAV_ITEMS: SideNavItem[] = [
+  { id: "overview", label: "Overview", icon: "House" },
+  { id: "activity", label: "Activity", icon: "ChartBar", badge: "6" },
+  { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
+  { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
+  { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
+  { id: "insights", label: "Insights", icon: "Sparkles" },
+  { id: "resources", label: "Resources", icon: "Layers" },
+  { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
+  { id: "tag-at-risk", label: "At risk", icon: "Info", badge: "5" },
+  { id: "tag-shipped", label: "Shipped", icon: "CircleCheck", badge: "12" },
 ];
 
 const NAV_FOOTER: SideNavItem[] = [
@@ -113,12 +80,9 @@ function breadcrumbsFor(page: string, go: (id: string) => void): PageHeaderProps
   const footerHit = NAV_FOOTER.find((item) => item.id === page);
   if (footerHit) return [home, { label: footerHit.label }];
 
-  for (const group of NAV_GROUPS) {
-    const path = findTrail(group.items, page);
-    if (!path) continue;
-
+  const path = findTrail(NAV_ITEMS, page);
+  if (path) {
     const crumbs: NonNullable<PageHeaderProps["breadcrumbs"]> = [home, workspace];
-    if (group.label !== "Workspace") crumbs.push({ label: group.label });
     path.slice(0, -1).forEach((parent) => {
       crumbs.push({ label: parent.label });
     });
@@ -205,11 +169,12 @@ export function DashboardDemo() {
     if (hash === "activity") return "activity";
     if (hash === "inbox") return "inbox";
     if (hash === "empty" || hash === "research") return "research";
-    if (hash === "list-detail" || hash === "projects") return "launch-brief";
+    if (hash === "list-detail" || hash === "projects") return "projects";
     if (LIST_DETAIL_HASHES.has(hash)) return hash;
     return "overview";
   });
   const [query, setQuery] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const go = useCallback((id: string) => {
     setPage(id);
@@ -248,7 +213,7 @@ export function DashboardDemo() {
         return;
       }
       if (hash === "list-detail" || hash === "projects") {
-        setPage("launch-brief");
+        setPage("projects");
         return;
       }
       if (LIST_DETAIL_HASHES.has(hash)) {
@@ -274,13 +239,22 @@ export function DashboardDemo() {
     return () => window.removeEventListener("hashchange", apply);
   }, []);
 
-  const groups = useMemo(
-    () => NAV_GROUPS.map((group) => ({ ...group, items: bindItems(group.items, page, go) })),
-    [page, go],
-  );
-  const footer = useMemo(() => bindItems(NAV_FOOTER, page, go), [page, go]);
+  const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
+  const footer = useMemo(() => {
+    const navFooter = bindItems(NAV_FOOTER, page, go);
+    const toggleLabel = sidebarOpen ? "Close sidebar" : "Open sidebar";
+    const toggleIcon = sidebarOpen ? "PanelLeftClose" : "PanelLeftOpen";
+    const toggle: SideNavItem = {
+      id: "toggle-sidebar",
+      label: toggleLabel,
+      icon: toggleIcon,
+      active: false,
+      onClick: () => setSidebarOpen((current) => !current),
+    };
+    return [...navFooter, toggle];
+  }, [page, go, sidebarOpen]);
 
-  const allItems = [...NAV_GROUPS.flatMap((group) => group.items), ...NAV_FOOTER];
+  const allItems = [...NAV_ITEMS, ...NAV_FOOTER];
   const current = findItem(allItems, page);
 
   const path =
@@ -319,7 +293,16 @@ export function DashboardDemo() {
           }
         />
         <div className={styles.productBody}>
-          <SideNav title="Agentix" mark="A" showHeader={false} radius="md" groups={groups} footer={footer} />
+          <SideNav
+            title="Agentix"
+            mark="A"
+            showHeader={false}
+            radius="md"
+            open={sidebarOpen}
+            onOpenChange={setSidebarOpen}
+            items={items}
+            footer={footer}
+          />
           <div className={styles.pane}>
             {page === "overview" ? (
               <DashboardPattern breadcrumbs={trail} />

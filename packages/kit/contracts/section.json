@@ -1,7 +1,7 @@
 {
   "id": "section",
   "status": "stable",
-  "intent": "Grouped page block with optional heading, description, and actions on one surface. Pass collapsible false to keep the body always open.",
+  "intent": "Grouped page block with optional heading, description, and actions on one surface. Pass collapsible for a chevron that toggles the body.",
   "useWhen": [
     "Separating metrics, tables, or form groups on a page",
     "Under PageHeader to structure dashboard or settings content"
@@ -44,8 +44,8 @@
     },
     "collapsible": {
       "type": "boolean",
-      "default": true,
-      "note": "Default true: chevron before the title toggles the body. False is always open, no chevron. Requires title."
+      "default": false,
+      "note": "Default false: static heading, no chevron. True: chevron before the title toggles the body. Requires title."
     },
     "defaultOpen": {
       "type": "boolean",
@@ -64,9 +64,7 @@
   },
   "tokens": [
     "surface.card",
-    "border.faint",
     "radius.surface.md",
-    "shadow.sm",
     "text.primary",
     "text.secondary",
     "type.size.heading",
@@ -83,7 +81,7 @@
     "requirements": [
       "title is h2 with useId",
       "aria-labelledby when title is set",
-      "Collapse control is a button inside the h2, aria-expanded and aria-controls",
+      "When collapsible, the control is a button inside the h2 with aria-expanded and aria-controls",
       "Body uses hidden when collapsed"
     ]
   },
@@ -96,6 +94,6 @@
     "Actions must be kit Buttons",
     "Do not compose Accordion or Collapsible for page sections \u2014 Section owns collapse"
   ],
-  "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\" collapsible={false}><Table ... /></Section>",
+  "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\"><Table ... /></Section>",
   "contains": []
 }

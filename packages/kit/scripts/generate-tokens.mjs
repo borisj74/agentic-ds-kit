@@ -2,7 +2,8 @@
 /**
  * Generates lib/tokens.css from tokens/tokens.json.
  * Primitives are fixed. Appearance remaps under [data-theme="dark"].
- * Brand remaps under [data-color="violet"] and [data-color="teal"].
+ * Brand remaps under [data-color="blue"], [data-color="violet"], and [data-color="teal"].
+ * Default brand (no data-color) is ink — the warm neutral ramp.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -163,24 +164,24 @@ function radiusVars() {
     lines.push(`  --radius-${step}: ${value};`);
   }
   lines.push(
-    "  --radius-sm: var(--radius-100);",
-    "  --radius-md: var(--radius-200);",
-    "  --radius-lg: var(--radius-300);",
+    "  --radius-sm: var(--radius-50);",
+    "  --radius-md: var(--radius-100);",
+    "  --radius-lg: var(--radius-200);",
     "",
     "  /* Control - buttons, inputs, selects */",
-    "  --radius-control-sm: var(--radius-100);",
-    "  --radius-control-md: var(--radius-200);",
-    "  --radius-control-lg: var(--radius-300);",
+    "  --radius-control-sm: var(--radius-50);",
+    "  --radius-control-md: var(--radius-100);",
+    "  --radius-control-lg: var(--radius-200);",
     "",
     "  /* Surface - cards, panels, dialogs */",
-    "  --radius-surface-sm: var(--radius-200);",
-    "  --radius-surface-md: var(--radius-300);",
-    "  --radius-surface-lg: var(--radius-400);",
+    "  --radius-surface-sm: var(--radius-100);",
+    "  --radius-surface-md: var(--radius-100);",
+    "  --radius-surface-lg: var(--radius-200);",
     "",
     "  /* Media - images, video, avatars */",
-    "  --radius-media-sm: var(--radius-200);",
-    "  --radius-media-md: var(--radius-300);",
-    "  --radius-media-lg: var(--radius-400);",
+    "  --radius-media-sm: var(--radius-100);",
+    "  --radius-media-md: var(--radius-100);",
+    "  --radius-media-lg: var(--radius-200);",
     "",
     "  /* Pill - chips, badges, tags */",
     "  --radius-pill: var(--radius-full);",
@@ -295,7 +296,11 @@ function staticVars() {
     `  --border-width-medium: ${p.borderWidth.medium};`,
     "",
     `  --font-sans: ${tokens.semantic.type.family.sans};`,
+    `  --font-display: ${tokens.semantic.type.family.display};`,
     `  --font-mono: ${tokens.semantic.type.family.mono};`,
+    `  --type-family-body: var(--font-sans);`,
+    `  --type-family-heading: var(--font-display);`,
+    `  --type-family-code: var(--font-mono);`,
     "",
     `  --type-size-body: ${p.fontSize.base};`,
     `  --type-size-body-sm: ${p.fontSize.sm};`,

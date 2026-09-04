@@ -43,5 +43,5 @@ Components consume **semantic** variables (`--surface-page`, `--action-primary`,
 Override semantic tokens in your CSS after tokens load. Do not rewrite component classes.
 
 - Light is `:root`. Dark is `[data-theme="dark"]` on `html` (not a `.dark` class).
-- Brand overlays: omit `data-color` for blue, or set `data-color="violet"` / `data-color="teal"`.
+- Brand overlays: omit `data-color` for ink, or set `data-color="blue"` / `data-color="violet"` / `data-color="teal"`.
 - For another hue, reassign brand, action, and focus roles to primitive ramps — not hex in React.

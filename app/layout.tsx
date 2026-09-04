@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { PlaygroundShell } from "./_components/PlaygroundShell";
 import { PLAYGROUND_THEME_INIT_SCRIPT } from "@/lib/playground-theme";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-ibm-plex-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
   title: "Agentic DS Kit — Boris Jovanovic",
-  description: "Personal design-system playground with JSON contracts and kit components.",
+  description: "Code is the contract. Installable kit of JSON contracts, tokens, and React patterns for agents.",
 };
 
 export default function RootLayout({
@@ -25,7 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${plexSans.variable} ${plexMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: PLAYGROUND_THEME_INIT_SCRIPT }} />
       </head>

@@ -90,7 +90,7 @@ export function ComponentGallery() {
     <div className={styles.gallery}>
       <h1 className={playground.pageTitle}>Components</h1>
       <p className={playground.pageLead}>
-        Gallery of every building block — open any card for full docs and variants.
+        Atoms the patterns already compose. Open a card when you need the contract and variants.
       </p>
       <Tabs
         variant="line"

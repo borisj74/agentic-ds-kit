@@ -21,7 +21,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
   const [theme, setTheme] = useState<PlaygroundTheme>("light");
-  const [colorTheme, setColorTheme] = useState<PlaygroundColorTheme>("blue");
+  const [colorTheme, setColorTheme] = useState<PlaygroundColorTheme>("ink");
 
   useEffect(() => {
     setTheme(readPlaygroundTheme());
@@ -50,7 +50,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
 
   const handleColorTheme = (value: string | string[]) => {
     if (typeof value !== "string") return;
-    if (value !== "blue" && value !== "violet" && value !== "teal") return;
+    if (value !== "ink" && value !== "blue" && value !== "violet" && value !== "teal") return;
     applyPlaygroundColorTheme(value);
     setColorTheme(value);
   };
@@ -60,7 +60,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
       <header className={styles.topbar}>
         <div className={styles.brand}>
           <span className={styles.productName}>Agentic DS Kit</span>
-          <span className={styles.tagline}>Code-only design system</span>
+          <span className={styles.tagline}>Code is the contract</span>
         </div>
         <div className={styles.tools}>
           <div className={styles.colorSelect}>
@@ -76,7 +76,6 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           <Button
             size="sm"
             variant="secondary"
-            shape="pill"
             iconStart={isDark ? "Sun" : "Moon"}
             onClick={handleThemeToggle}
           >

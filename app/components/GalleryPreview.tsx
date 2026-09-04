@@ -344,7 +344,7 @@ export function GalleryPreview({ id }: { id: string }) {
     case "section":
       return (
         <Stage variant="wide">
-          <Section title="Open tasks" description="4 items" collapsible={false} size="sm">
+          <Section title="Open tasks" description="4 items" size="sm">
             <Badge>Ready</Badge>
           </Section>
         </Stage>

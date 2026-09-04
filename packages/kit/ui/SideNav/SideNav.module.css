@@ -6,23 +6,35 @@
   width: var(--layout-sidebar);
   max-width: var(--layout-sidebar);
   min-height: 0;
-  overflow: hidden;
-  border: var(--border-surface) solid var(--border-faint);
-  border-radius: var(--radius-surface-md);
-  background: var(--surface-card);
   color: var(--text-primary);
+  overflow: hidden;
+  border: 0;
+  background: transparent;
   transition:
     width var(--motion-expand-duration) var(--motion-expand-easing),
     max-width var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
-.radiusNone {
+.radiusNone .panel {
   border-radius: var(--radius-0);
 }
 
 .rootClosed {
   width: var(--layout-sidebar-compact);
   max-width: var(--layout-sidebar-compact);
+}
+
+.panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-card);
+  color: var(--text-primary);
 }
 
 .header {
@@ -32,16 +44,13 @@
   gap: var(--space-inline-md);
   flex-shrink: 0;
   min-width: 0;
-  padding: var(--space-inset-md) var(--space-inset-lg);
+  padding: var(--space-inset-sm);
   border-bottom: var(--border-divider) solid var(--border-subtle);
   overflow: hidden;
-  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .header {
-  justify-content: center;
   gap: 0;
-  padding: var(--space-inset-sm);
 }
 
 .mark {
@@ -110,19 +119,15 @@
   align-content: start;
   gap: var(--space-stack-md);
   min-height: 0;
-  padding: var(--space-inset-md) var(--space-inset-lg);
+  /* Keep horizontal inset constant so icons do not slide when the rail collapses. */
+  padding: var(--space-inset-md) var(--space-inset-sm);
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none;
-  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .nav::-webkit-scrollbar {
   display: none;
-}
-
-.rootClosed .nav {
-  padding: var(--space-inset-sm);
 }
 
 .section {
@@ -174,7 +179,7 @@
   gap: var(--space-inline-md);
   width: 100%;
   margin: 0;
-  padding: var(--space-inset-sm) var(--space-inset-md);
+  padding: var(--space-inset-sm);
   appearance: none;
   border: 0;
   border-radius: var(--radius-control-md);
@@ -187,15 +192,14 @@
   text-align: start;
   text-decoration: none;
   cursor: pointer;
-  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
+  transition: gap var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .rootClosed .item {
   width: auto;
-  justify-self: center;
+  max-width: 100%;
   justify-content: center;
   gap: 0;
-  padding: var(--space-inset-sm);
   aspect-ratio: 1;
   line-height: 1;
   overflow: hidden;
@@ -321,20 +325,12 @@
 
 .footer {
   flex-shrink: 0;
-  padding: var(--space-inset-md) var(--space-inset-lg);
+  padding: var(--space-inset-md) var(--space-inset-sm);
   border-top: var(--border-divider) solid var(--border-subtle);
-  transition: padding var(--motion-expand-duration) var(--motion-expand-easing);
-}
-
-.rootClosed .footer {
-  padding: var(--space-inset-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .header,
-  .nav,
-  .footer,
   .item,
   .title,
   .label,

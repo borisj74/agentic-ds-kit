@@ -2,6 +2,8 @@
 
 Personal experiment (code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
 
+**Code is the contract.** Agents install the kit; they do not invent local cousins.
+
 The **kit** is the npm package `agentic-ds-kit` (`packages/kit`): contracts, tokens, React components, patterns. The **playground** in this repo is the docs site that consumes that package.
 
 ## Install in an app
@@ -55,15 +57,15 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
 
 ### Playground
-Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. Dashboard lives under Patterns.
+Persistent left sidebar via kit **AppNav** (grouped: Patterns, Getting started, Foundations, Components). Hash links scroll to sections on each page. The playground opens on Patterns.
 
 ### Playground routes
-- `/` — Getting started (introduction)
+- `/` — Redirects to Patterns
 - `/installation` — Install the package
 - `/theming` — Semantic tokens, dark mode, brand color
 - `/foundations` — Token scales
 - `/components` — Component gallery (`#gallery`) and per-component docs
-- `/patterns` — Pattern blueprints (`#dashboard`)
+- `/patterns` — Live pattern screens (`#dashboard`)
 
 ### Agent files
 - `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups

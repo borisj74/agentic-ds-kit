@@ -44,7 +44,7 @@
 
 .title {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-body);

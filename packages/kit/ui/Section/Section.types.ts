@@ -8,6 +8,7 @@ export interface SectionProps {
   size?: SectionSize;
   actions?: ReactNode;
   children: ReactNode;
+  /** When true, a chevron before the title toggles the body. Default false. */
   collapsible?: boolean;
   defaultOpen?: boolean;
   open?: boolean;

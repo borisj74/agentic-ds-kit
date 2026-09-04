@@ -56,7 +56,7 @@ function masterCode(
   const lines = ["<Section", `  title="${MASTER_TITLE}"`];
   if (showDescription) lines.push(`  description="${MASTER_DESCRIPTION}"`);
   lines.push(`  size="${size}"`);
-  if (!collapsible) lines.push("  collapsible={false}");
+  if (collapsible) lines.push("  collapsible");
   if (showActions) {
     lines.push(`  actions={<Button variant="secondary" size="${buttonSize}">View all</Button>}`);
   }
@@ -71,7 +71,7 @@ export function SectionDoc() {
   const [size, setSize] = useState<SectionSize>("md");
   const [showDescription, setShowDescription] = useState(true);
   const [showActions, setShowActions] = useState(true);
-  const [collapsible, setCollapsible] = useState(true);
+  const [collapsible, setCollapsible] = useState(false);
   const buttonSize = size === "lg" ? "md" : "sm";
 
   return (
@@ -79,9 +79,9 @@ export function SectionDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Section</h1>
         <p className={styles.lede}>
-          Grouped page block. Title, description, and body share one surface. Collapsible by default;
-          pass collapsible false for a static heading. Not PageHeader. Not Card. Not FieldSet. Not
-          Accordion.
+          Grouped page block. Title, description, and body share one surface. Headings are static by
+          default; pass collapsible for a chevron that toggles the body. Not PageHeader. Not Card.
+          Not FieldSet. Not Accordion.
         </p>
       </header>
 
@@ -161,10 +161,10 @@ export function SectionDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Use Section to group a heading with related content on a page. Heading and body
-                  share one surface. Collapsible is the default: a chevron before the title toggles
-                  the body. Pass collapsible false when the block should stay open. Page title stays
-                  on PageHeader. Compact tiles with an image or footer stay Card. Form legends stay
-                  FieldSet. Exclusive FAQ lists stay Accordion. Actions must be kit Buttons.
+                  share one surface. The heading is a label by default — no chevron. Pass collapsible
+                  when the block should fold. Page title stays on PageHeader. Compact tiles with an
+                  image or footer stay Card. Form legends stay FieldSet. Exclusive FAQ lists stay
+                  Accordion. Actions must be kit Buttons.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, showDescription, showActions, collapsible)} />
@@ -204,8 +204,8 @@ export function SectionDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Each Section takes a different kit body: Scoreboard, Table, Alert, or Field. Do
-                  not invent a local block. Collapse each heading on its own. Accordion is for
-                  exclusive FAQ lists.
+                  not invent a local block. Headings stay static unless you pass collapsible.
+                  Accordion is for exclusive FAQ lists.
                 </p>
               </div>
               <CodeBlock
@@ -217,12 +217,12 @@ export function SectionDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Always open</h2>
+              <h2 className={styles.exampleTitle}>Collapsible</h2>
               <div className={styles.exampleCanvas}>
                 <Section
                   title="Weekly users"
                   description="Daily average, last 7 days"
-                  collapsible={false}
+                  collapsible
                 >
                   <Table columns={COLUMNS} rows={ROWS} />
                 </Section>
@@ -230,12 +230,12 @@ export function SectionDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Pass collapsible false when the heading is a label, not a control. No chevron. The
-                  body stays visible. Docs pages and chart blocks usually want this.
+                  Pass collapsible when the heading should toggle the body. Chevron before the title.
+                  Docs pages and chart blocks usually stay static.
                 </p>
               </div>
               <CodeBlock
-                code={`<Section title="Weekly users" description="Daily average, last 7 days" collapsible={false}>
+                code={`<Section title="Weekly users" description="Daily average, last 7 days" collapsible>
   <Table columns={columns} rows={rows} />
 </Section>`}
               />
@@ -244,19 +244,24 @@ export function SectionDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Closed</h2>
               <div className={styles.exampleCanvas}>
-                <Section title="Archived invoices" description="Hidden until you need them" defaultOpen={false}>
+                <Section
+                  title="Archived invoices"
+                  description="Hidden until you need them"
+                  collapsible
+                  defaultOpen={false}
+                >
                   <Table columns={COLUMNS} rows={ROWS} />
                 </Section>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Pass defaultOpen false when the body should start collapsed. Controlled open and
-                  onOpenChange are available when the page owns the state.
+                  Pass collapsible and defaultOpen false when the body should start collapsed.
+                  Controlled open and onOpenChange are available when the page owns the state.
                 </p>
               </div>
               <CodeBlock
-                code={`<Section title="Archived invoices" description="Hidden until you need them" defaultOpen={false}>
+                code={`<Section title="Archived invoices" description="Hidden until you need them" collapsible defaultOpen={false}>
   <Table columns={columns} rows={rows} />
 </Section>`}
               />

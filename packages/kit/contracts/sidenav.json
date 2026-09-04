@@ -27,7 +27,7 @@
     "showHeader": {
       "type": "boolean",
       "default": true,
-      "note": "Brand mark, title, and close. Set false when AppHeader already provides brand. Rail stays expanded."
+      "note": "Brand mark, title, and close. Set false when AppHeader already provides brand. Rail open/close is controlled by `open`."
     },
     "radius": {
       "type": "enum",

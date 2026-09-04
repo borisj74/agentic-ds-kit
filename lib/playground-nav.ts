@@ -125,9 +125,21 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
 
   return [
     {
+      label: "Patterns",
+      items: [
+        leaf("/patterns#dashboard", "Dashboard"),
+        leaf("/patterns#activity", "Activity"),
+        leaf("/patterns#inbox", "Inbox"),
+        leaf("/patterns#settings", "Settings"),
+        leaf("/patterns#list-detail", "List detail"),
+        leaf("/patterns#invite", "Invite"),
+        leaf("/patterns#insights", "Assistant"),
+        leaf("/patterns#empty", "Empty"),
+      ],
+    },
+    {
       label: "Getting started",
       items: [
-        leaf("/", "Introduction"),
         leaf("/installation", "Installation"),
         leaf("/theming", "Theming"),
       ],
@@ -169,36 +181,22 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
         }),
       ],
     },
-    {
-      label: "Patterns",
-      items: [
-        leaf("/patterns#dashboard", "Dashboard"),
-        leaf("/patterns#activity", "Activity"),
-        leaf("/patterns#inbox", "Inbox"),
-        leaf("/patterns#settings", "Settings"),
-        leaf("/patterns#list-detail", "List detail"),
-        leaf("/patterns#invite", "Invite"),
-        leaf("/patterns#insights", "Assistant"),
-        leaf("/patterns#empty", "Empty"),
-      ],
-    },
   ];
 }
 
 export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
   {
-    label: "Getting started",
+    label: "Patterns",
     items: [
-      { href: "/", label: "Introduction", active: false },
-      { href: "/installation", label: "Installation", active: false },
-      { href: "/theming", label: "Theming", active: false },
+      { href: "/patterns#inbox", label: "Inbox", active: true },
+      { href: "/patterns#activity", label: "Activity", active: false },
     ],
   },
   {
-    label: "Components",
+    label: "Getting started",
     items: [
-      { href: "/components#button", label: "Button", active: true },
-      { href: "/components#input", label: "Input", active: false },
+      { href: "/installation", label: "Installation", active: false },
+      { href: "/theming", label: "Theming", active: false },
     ],
   },
 ];

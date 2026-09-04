@@ -34,13 +34,12 @@ export default function InstallationPage() {
         <h1 className={playground.pageTitle}>Installation</h1>
         <p className={playground.pageLead}>
           Add the kit to a Next.js app on React 19. You do not clone this repo. You do not need
-          transpilePackages. Use package version 0.2.1 or later.
+          transpilePackages. Copy AGENTS.md so the agent follows the contract.
         </p>
 
         <Section
           title="Existing app"
           description="From the Next app root — the folder that already has package.json."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <p className={playground.body}>Install, then smoke-test a primary Button.</p>
@@ -56,7 +55,6 @@ export default function InstallationPage() {
         <Section
           title="Components and patterns"
           description="Read contracts/index.json in the package, then import the matching piece."
-          collapsible={false}
         >
           <CodeBlock code={USAGE} />
         </Section>
@@ -64,7 +62,6 @@ export default function InstallationPage() {
         <Section
           title="Tokens in your CSS"
           description="Only if your own stylesheets use kit variables before any kit component is imported."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={TOKENS} />
@@ -79,7 +76,6 @@ export default function InstallationPage() {
         <Section
           title="New folder"
           description="The kit is not an app. Scaffold Next first."
-          collapsible={false}
         >
           <CodeBlock code={NEW_APP} />
         </Section>
@@ -87,7 +83,6 @@ export default function InstallationPage() {
         <Section
           title="Agent files"
           description="Optional. Copy these so Cursor and Claude Code follow the kit. The UI works without them."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={AGENT_FILES} />
@@ -101,7 +96,6 @@ export default function InstallationPage() {
         <Section
           title="Upgrade from 0.1.0"
           description="Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={UPGRADE} />

@@ -124,12 +124,12 @@ const OVERRIDE = `:root {
   --focus-ring: var(--color-violet-400);
 }`;
 
-const RADIUS = `--radius-control-sm: var(--radius-100);
---radius-control-md: var(--radius-200);
---radius-control-lg: var(--radius-300);
---radius-surface-sm: var(--radius-200);
---radius-surface-md: var(--radius-300);
---radius-surface-lg: var(--radius-400);
+const RADIUS = `--radius-control-sm: var(--radius-50);
+--radius-control-md: var(--radius-100);
+--radius-control-lg: var(--radius-200);
+--radius-surface-sm: var(--radius-100);
+--radius-surface-md: var(--radius-100);
+--radius-surface-lg: var(--radius-200);
 --radius-pill: var(--radius-full);`;
 
 export default function ThemingPage() {
@@ -146,7 +146,6 @@ export default function ThemingPage() {
         <Section
           title="CSS variables"
           description="Importing from agentic-ds-kit loads tokens. Components read semantic vars, not primitive ramps."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <p className={playground.body}>
@@ -160,7 +159,6 @@ export default function ThemingPage() {
         <Section
           title="Token convention"
           description="Primitives are the source ramps. Semantics are the roles components consume."
-          collapsible={false}
         >
           <p className={playground.body}>
             Light values live on :root. Dark values live on [data-theme="dark"]. Brand hues overlay
@@ -172,7 +170,6 @@ export default function ThemingPage() {
         <Section
           title="Theme tokens"
           description="These families live in agentic-ds-kit/tokens.css. Override the role, not the component."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <Table
@@ -199,7 +196,6 @@ export default function ThemingPage() {
         <Section
           title="Dark mode"
           description="Set data-theme on the document element. The kit does not use a .dark class."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={DARK_HTML} />
@@ -213,14 +209,13 @@ export default function ThemingPage() {
 
         <Section
           title="Brand color"
-          description="Blue is the default. Violet and teal ship as data-color overlays."
-          collapsible={false}
+          description="Ink (warm black) is the default. Blue, violet, and teal ship as data-color overlays."
         >
           <div className={playground.stack}>
             <CodeBlock code={BRAND_HTML} />
             <p className={playground.body}>
-              Valid values: violet, teal. Leave data-color unset for blue. Dark + brand is
-              [data-theme="dark"][data-color="violet"].
+              Valid values: blue, violet, teal. Leave data-color unset for ink. Dark + brand is
+              [data-theme="dark"][data-color="blue"].
             </p>
           </div>
         </Section>
@@ -228,7 +223,6 @@ export default function ThemingPage() {
         <Section
           title="Radius scale"
           description="Semantic radius aliases a primitive scale. Change the primitive to move a whole family."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={RADIUS} />
@@ -242,12 +236,11 @@ export default function ThemingPage() {
         <Section
           title="Override tokens"
           description="After tokens.css loads, reassign semantic roles in your stylesheet. Point them at primitive ramps."
-          collapsible={false}
         >
           <div className={playground.stack}>
             <CodeBlock code={OVERRIDE} />
             <p className={playground.body}>
-              Prefer data-color when violet or teal is enough. For another hue, override the
+              Prefer data-color when blue, violet, or teal is enough. For another hue, override the
               brand, action, and focus roles together. Do not put hex in React components. If a
               role is missing from the kit, stop and ask — do not add a one-off.
             </p>

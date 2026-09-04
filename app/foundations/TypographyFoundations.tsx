@@ -202,10 +202,10 @@ export function TypographyFoundations() {
             </div>
             <div className={styles.familyPanel}>
               <p className={styles.pangram} style={{ fontFamily: "var(--font-sans)" }}>
-                Geist Sans. The quick brown fox jumps over the lazy dog
+                IBM Plex Sans. The quick brown fox jumps over the lazy dog
               </p>
               <p className={styles.pangramMono} style={{ fontFamily: "var(--font-mono)" }}>
-                Geist Mono. The quick brown fox jumps over the lazy dog 0123456789
+                IBM Plex Mono. The quick brown fox jumps over the lazy dog 0123456789
               </p>
             </div>
           </section>
