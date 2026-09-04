@@ -47,7 +47,7 @@ export default function InstallationPage() {
             <CodeBlock code={SMOKE} />
             <p className={playground.body}>
               The button should look like the kit primary, not a default browser control. Importing
-              from the package loads tokens. Do not add transpilePackages for agentic-ds-kit.
+              from the package loads tokens and pattern layout classes. Do not add transpilePackages for agentic-ds-kit.
             </p>
           </div>
         </Section>

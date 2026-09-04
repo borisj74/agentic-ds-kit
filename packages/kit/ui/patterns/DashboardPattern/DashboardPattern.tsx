@@ -36,7 +36,7 @@ const TASK_ROWS: DataTableRow[] = [
   {
     id: "launch-brief",
     task: { type: "file", label: "Launch brief" },
-    owner: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: "/faces/maya-chen.jpg" },
+    owner: { type: "avatar", label: "Maya Chen", name: "Maya Chen" },
     status: { type: "badge", label: "In review", tone: "warning" },
   },
   {
@@ -48,13 +48,13 @@ const TASK_ROWS: DataTableRow[] = [
   {
     id: "release-notes",
     task: { type: "file", label: "Release notes" },
-    owner: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee", src: "/faces/jordan-lee.jpg" },
+    owner: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee" },
     status: { type: "badge", label: "Ready", tone: "success" },
   },
   {
     id: "support-macros",
     task: { type: "file", label: "Support macros" },
-    owner: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera", src: "/faces/alex-rivera.jpg" },
+    owner: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera" },
     status: { type: "badge", label: "In progress", tone: "info" },
   },
 ];

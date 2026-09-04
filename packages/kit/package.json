@@ -1,6 +1,6 @@
 {
   "name": "agentic-ds-kit",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "Code-only agentic design system: contracts, tokens, and React components.",
   "license": "MIT",
   "repository": {
@@ -17,7 +17,9 @@
     "**/*.css",
     "**/*.module.js",
     "./src/tokens.ts",
-    "./dist/src/tokens.js"
+    "./src/layout.ts",
+    "./dist/src/tokens.js",
+    "./dist/src/layout.js"
   ],
   "files": [
     "dist",
@@ -36,6 +38,7 @@
       "default": "./dist/src/index.js"
     },
     "./tokens.css": "./lib/tokens.css",
+    "./layout.css": "./lib/layout.css",
     "./contracts/index.json": "./contracts/index.json",
     "./contracts/*.json": "./contracts/*.json",
     "./contracts/patterns/*.json": "./contracts/patterns/*.json",

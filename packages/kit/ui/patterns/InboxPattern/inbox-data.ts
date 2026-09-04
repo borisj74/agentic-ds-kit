@@ -18,7 +18,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "maya-comment",
     from: "Maya Chen",
-    fromSrc: "/faces/maya-chen.jpg",
     subject: "Comments on Launch brief",
     body: "Two notes on positioning. Close them before the freeze so copy can lock.",
     kind: "Comment",
@@ -39,7 +38,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "alex-reply",
     from: "Alex Rivera",
-    fromSrc: "/faces/alex-rivera.jpg",
     subject: "Replied on Support macros",
     body: "Refund and delay macros are drafted. Escalation paths still need a pass.",
     kind: "Comment",
@@ -50,7 +48,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "maya-mention",
     from: "Maya Chen",
-    fromSrc: "/faces/maya-chen.jpg",
     subject: "Mentioned you in Launch brief",
     body: "Can you confirm the hero line before legal looks at the brief?",
     kind: "Mention",
@@ -61,7 +58,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "jordan-status",
     from: "Jordan Lee",
-    fromSrc: "/faces/jordan-lee.jpg",
     subject: "Release notes moved to Ready",
     body: "Changelog is drafted. Confirm the known-issues list before we tag.",
     kind: "Status",
@@ -72,7 +68,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "iris-request",
     from: "Iris Okafor",
-    fromSrc: "/faces/iris-okafor.jpg",
     subject: "Review User research",
     body: "Five interviews are in. Need a read on the onboarding friction before Friday.",
     kind: "Request",
@@ -83,7 +78,6 @@ export const INBOX: InboxMessage[] = [
   {
     id: "noah-request",
     from: "Noah Williams",
-    fromSrc: "/faces/noah-williams.jpg",
     subject: "Legal sign-off on QA",
     body: "The last two device passes are still open. Legal will not sign until they close.",
     kind: "Request",

@@ -11,7 +11,7 @@ const EVENT_COLUMNS: DataTableColumn[] = [
 const EVENT_ROWS: DataTableRow[] = [
   {
     id: "comment-launch",
-    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: "/faces/maya-chen.jpg" },
+    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen" },
     event: { type: "file", label: "Commented on Launch brief" },
     type: { type: "badge", label: "Comment", tone: "info" },
     when: "2h ago",
@@ -25,28 +25,28 @@ const EVENT_ROWS: DataTableRow[] = [
   },
   {
     id: "macros-update",
-    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera", src: "/faces/alex-rivera.jpg" },
+    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera" },
     event: { type: "file", label: "Updated Support macros" },
     type: { type: "badge", label: "Edit", tone: "neutral" },
     when: "5h ago",
   },
   {
     id: "ready-notes",
-    actor: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee", src: "/faces/jordan-lee.jpg" },
+    actor: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee" },
     event: { type: "file", label: "Moved Release notes to Ready" },
     type: { type: "badge", label: "Status", tone: "success" },
     when: "Yesterday",
   },
   {
     id: "mention-launch",
-    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen", src: "/faces/maya-chen.jpg" },
+    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen" },
     event: { type: "file", label: "Mentioned you in Launch brief" },
     type: { type: "badge", label: "Mention", tone: "brand" },
     when: "Yesterday",
   },
   {
     id: "macros-comment",
-    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera", src: "/faces/alex-rivera.jpg" },
+    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera" },
     event: { type: "file", label: "Replied on Support macros" },
     type: { type: "badge", label: "Comment", tone: "info" },
     when: "Mon",

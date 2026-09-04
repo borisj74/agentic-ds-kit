@@ -1,6 +1,7 @@
 /** Public kit API. Import components and patterns from `agentic-ds-kit`. */
 
 import "./tokens";
+import "./layout";
 
 export * from "../ui/Accordion";
 export * from "../ui/Alert";

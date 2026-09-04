@@ -53,7 +53,7 @@ export default function Page() {
 
 Run `npm run dev` and confirm the button is the kit primary (filled, kit radius/type) — not a raw browser `<button>`.
 
-Importing from `agentic-ds-kit` loads semantic tokens (`--text-primary`, `--space-4`, …). You do **not** add `transpilePackages: ["agentic-ds-kit"]` in `next.config`. That was required for 0.1.0 only.
+Importing from `agentic-ds-kit` loads semantic tokens (`--text-primary`, `--space-4`, …) and pattern layout roles (`layout-canvas`, `layout-header`, `layout-content`). You do **not** add `transpilePackages: ["agentic-ds-kit"]` in `next.config`. That was required for 0.1.0 only.
 
 **3. Use components and patterns**
 
@@ -76,6 +76,8 @@ import "agentic-ds-kit/tokens.css";
 ```
 
 If every screen already imports a kit component, you can skip this. Importing tokens twice is harmless.
+
+If your own markup uses kit layout classes (`layout-canvas`, `layout-header`, `layout-content`, …) before any kit component is imported, also add `agentic-ds-kit/layout.css` the same way. A kit import already loads it.
 
 **5. `AppNav`**
 
@@ -134,7 +136,7 @@ Then:
 
 ```bash
 npm view agentic-ds-kit version
-# expect 0.2.3 or higher
+# expect 0.2.5 or higher
 ```
 
 ### Get later kit versions
@@ -147,7 +149,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.2.3"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.2.5"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -158,13 +160,14 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 - [ ] No `transpilePackages` for this package (0.2.1+)
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
+- [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
 - [ ] Optional: copy `AGENTS.md`, `CLAUDE.md`, and the prototype skill for agents
 
 ### If something looks wrong
 
 | What you see | Likely cause |
 | --- | --- |
-| Kit button looks like a native `<button>` | Installed **0.2.0**, or CSS not loading. Install **0.2.1+** and hard-refresh |
+| Pattern looks like unstyled stacked divs | Layout CSS not loading. Import from `agentic-ds-kit` (or `agentic-ds-kit/layout.css`) and hard-refresh |
 | `Module not found: agentic-ds-kit` | Install was run in the wrong directory (not the Next app root) |
 | `ENEEDAUTH` / not logged in | Only needed to **publish** the kit, not to install it |
 | `No workspaces found: --workspace=agentic-ds-kit` | That flag is for **this** monorepo. In your app use `npm install agentic-ds-kit` |

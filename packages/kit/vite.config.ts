@@ -43,6 +43,9 @@ function importEmittedCss(): Plugin {
         if (fileName.endsWith("src/tokens.js")) {
           candidates.push("lib/tokens.css");
         }
+        if (fileName.endsWith("src/layout.js")) {
+          candidates.push("lib/layout.css");
+        }
         for (const css of candidates) {
           if (!cssFiles.includes(css)) continue;
           const spec = posixRelative(dir, css).replace(/\.module\.css$/, ".kit.css");

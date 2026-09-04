@@ -15,9 +15,9 @@ import { RadioGroup } from "../../RadioGroup";
 import { Toast } from "../../Toast";
 
 const TEAM = [
-  { name: "Maya Chen", src: "/faces/maya-chen.jpg" },
-  { name: "Noah Williams", src: "/faces/noah-williams.jpg" },
-  { name: "Iris Okafor", src: "/faces/iris-okafor.jpg" },
+  { name: "Maya Chen" },
+  { name: "Noah Williams" },
+  { name: "Iris Okafor" },
 ];
 
 const ROLE_OPTIONS = [
