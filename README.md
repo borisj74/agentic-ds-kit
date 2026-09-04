@@ -57,7 +57,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
 
 ### Playground
-Persistent left sidebar via kit **AppNav** (grouped: Patterns, Getting started, Foundations, Components). Hash links scroll to sections on each page. The playground opens on Patterns.
+Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. The playground opens on Patterns.
 
 ### Playground routes
 - `/` — Redirects to Patterns
