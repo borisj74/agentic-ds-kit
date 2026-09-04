@@ -71,7 +71,7 @@
     "status.info",
     "status.infoSubtle",
     "status.infoBorder",
-    "radius.controlSm"
+    "radius.controlLg"
   ],
   "a11y": {
     "element": "span",
