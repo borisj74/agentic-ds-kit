@@ -1,12 +1,10 @@
 "use client";
 
-import { AppNav } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import { Select } from "agentic-ds-kit";
 import { Table } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
-import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
 import styles from "./components.module.css";
 import doc from "./ComponentDoc.module.css";
 
@@ -18,11 +16,6 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
         <p className={doc.lede}>Kit example with live controls and contract snippets.</p>
       </header>
       <div className={styles.anchor} id={id}>
-        {id === "appnav" && (
-          <div className={styles.appNavDemo}>
-            <AppNav title="Agentic DS Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
-          </div>
-        )}
         {id === "field" && (
           <div className={styles.stack}>
             <Field label="Name" htmlFor="demo-name" hint="Your display name">

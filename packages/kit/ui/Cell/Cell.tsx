@@ -200,18 +200,29 @@ export function Cell({
     if (items.length > 0) {
       visual = (
         <ButtonGroup ariaLabel={label || "Row actions"}>
-          {items.map((item, index) => (
-            <Button
-              key={`${item.label || item.icon || "action"}-${index}`}
-              size={buttonSize}
-              variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
-              iconStart={item.icon}
-              ariaLabel={item.ariaLabel}
-              onClick={item.onClick}
-            >
-              {item.label}
-            </Button>
-          ))}
+          {items.map((item, index) =>
+            item.label ? (
+              <Button
+                key={`${item.label || item.icon || "action"}-${index}`}
+                size={buttonSize}
+                variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
+                iconStart={item.icon}
+                ariaLabel={item.ariaLabel}
+                onClick={item.onClick}
+              >
+                {item.label}
+              </Button>
+            ) : (
+              <Button
+                key={`${item.label || item.icon || "action"}-${index}`}
+                size={buttonSize}
+                variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
+                iconStart={item.icon}
+                ariaLabel={item.ariaLabel || "Action"}
+                onClick={item.onClick}
+              />
+            ),
+          )}
         </ButtonGroup>
       );
     }

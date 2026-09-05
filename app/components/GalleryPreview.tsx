@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { Alert } from "agentic-ds-kit";
 import { AppHeader } from "agentic-ds-kit";
+import { AppNav } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
 import { AvatarGroup } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
@@ -53,6 +54,7 @@ import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
 import { Toast } from "agentic-ds-kit";
 import { Tooltip } from "agentic-ds-kit";
+import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
 import previewStyles from "./GalleryPreview.module.css";
 
 function Stage({
@@ -106,6 +108,12 @@ export function GalleryPreview({ id }: { id: string }) {
               <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
             }
           />
+        </Stage>
+      );
+    case "appnav":
+      return (
+        <Stage variant="sidebar">
+          <AppNav title="Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
         </Stage>
       );
     case "avatar":

@@ -313,7 +313,9 @@ export function DropdownMenu({
         }
         break;
       case "Tab":
+        event.preventDefault();
         setOpen(false);
+        triggerButton()?.focus();
         break;
       default:
         break;
@@ -349,7 +351,9 @@ export function DropdownMenu({
         if (openSubId) queryItem(panelRef.current, openSubId)?.focus();
         break;
       case "Tab":
+        event.preventDefault();
         setOpen(false);
+        triggerButton()?.focus();
         break;
       default:
         break;
@@ -561,17 +565,31 @@ export function DropdownMenu({
           {hasLabel ? trigger : null}
           <LucideByName name="ChevronDown" size={14} className={styles.navChevron} />
         </button>
+      ) : hasLabel ? (
+        <Button
+          variant={variant}
+          size={size}
+          iconStart={iconStart}
+          iconEnd={iconEnd}
+          disabled={disabled}
+          onClick={() => {
+            if (!disabled) setOpen(!open);
+          }}
+        >
+          {trigger as string}
+        </Button>
       ) : (
         <Button
           variant={variant}
           size={size}
           iconStart={iconStart}
           iconEnd={iconEnd}
-          ariaLabel={hasLabel ? undefined : ariaLabel}
-          onClick={() => setOpen(!open)}
-        >
-          {hasLabel ? trigger : undefined}
-        </Button>
+          disabled={disabled}
+          ariaLabel={ariaLabel ?? "Open menu"}
+          onClick={() => {
+            if (!disabled) setOpen(!open);
+          }}
+        />
       )}
       {panel}
       {subPanel}

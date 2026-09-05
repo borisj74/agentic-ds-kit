@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Avatar } from "../../Avatar";
 import { Badge } from "../../Badge";
 import { Button } from "../../Button";
 import { Cell } from "../../Cell";
@@ -151,11 +150,7 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
           {selected ? (
             <div className={styles.detail}>
               <div className={styles.meta}>
-                <Avatar name={selected.from} src={selected.fromSrc} size="md" />
-                <div className={styles.copy}>
-                  <p className={styles.label}>From</p>
-                  <p className={styles.value}>{selected.from}</p>
-                </div>
+                <Cell type="avatar" size="md" name={selected.from} src={selected.fromSrc} label={selected.from} />
                 <Badge tone={selected.kindTone}>{selected.kind}</Badge>
               </div>
               <p className={styles.body}>{selected.body}</p>

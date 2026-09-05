@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { LucideByName } from "../Button/lucideName";
 import type { DrawerProps } from "./Drawer.types";
 import styles from "./Drawer.module.css";
@@ -23,11 +24,19 @@ export function Drawer({
   const descriptionId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   onCloseRef.current = onClose;
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
+
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
     const root = panelRef.current;
     if (!root) return;
@@ -65,12 +74,20 @@ export function Drawer({
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocusRef.current?.focus();
+    };
+  }, [open, mounted]);
 
   if (!open) return null;
+  if (!mounted) return null;
 
-  return (
+  return createPortal(
     <div
       className={styles.overlay}
       role="presentation"
@@ -107,6 +124,7 @@ export function Drawer({
         <div className={styles.body}>{children}</div>
         {footer ? <div className={styles.footer}>{footer}</div> : null}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

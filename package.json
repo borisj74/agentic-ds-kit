@@ -10,7 +10,8 @@
     "dev": "next dev -H 127.0.0.1 -p 43123",
     "build": "npm run build -w agentic-ds-kit && next build",
     "start": "next start -H 127.0.0.1 -p 43123",
-    "lint": "eslint"
+    "lint": "eslint",
+    "publish:kit": "npm publish -w agentic-ds-kit --access public"
   },
   "dependencies": {
     "agentic-ds-kit": "*",

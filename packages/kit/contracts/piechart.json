@@ -33,7 +33,11 @@
     "showTable": { "type": "boolean", "default": true },
     "sort": { "type": "boolean", "default": true },
     "maxSegments": { "type": "number", "default": 6 },
-    "emptyLabel": { "type": "string", "default": "No data for this range" }
+    "size": { "type": "number", "default": 240 },
+    "otherLabel": { "type": "string", "default": "Other" },
+    "centerLabel": { "type": "string", "default": "Total" },
+    "emptyLabel": { "type": "string", "default": "No data for this range" },
+    "isLoading": { "type": "boolean", "default": false }
   },
   "tokens": [
     "surface.card",

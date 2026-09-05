@@ -12,4 +12,5 @@ export interface CheckboxProps {
   indeterminate?: boolean;
   onChange?: (checked: boolean) => void;
   name?: string;
+  describedBy?: string;
 }

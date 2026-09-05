@@ -8,6 +8,8 @@ export interface TextareaProps {
   disabled?: boolean;
   error?: boolean;
   defaultValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
   name?: string;
   demo?: "hover" | "focus";
   describedBy?: string;

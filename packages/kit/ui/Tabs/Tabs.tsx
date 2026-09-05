@@ -123,7 +123,7 @@ export function Tabs({
               role="tab"
               className={styles.trigger}
               aria-selected={isSelected}
-              aria-controls={panelId}
+              aria-controls={showPanel ? panelId : undefined}
               tabIndex={isSelected ? 0 : -1}
               disabled={item.disabled}
               data-state={isSelected ? "active" : "inactive"}

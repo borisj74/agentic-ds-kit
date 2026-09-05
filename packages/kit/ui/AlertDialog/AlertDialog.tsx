@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import { ButtonGroup } from "../ButtonGroup";
 import type { AlertDialogProps } from "./AlertDialog.types";
@@ -24,11 +25,19 @@ export function AlertDialog({
   const dialogRef = useRef<HTMLDivElement>(null);
   const cancelRef = useRef<HTMLButtonElement | null>(null);
   const onCancelRef = useRef(onCancel);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   onCancelRef.current = onCancel;
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
+
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
     const root = dialogRef.current;
     if (!root) return;
@@ -66,12 +75,20 @@ export function AlertDialog({
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocusRef.current?.focus();
+    };
+  }, [open, mounted]);
 
   if (!open) return null;
+  if (!mounted) return null;
 
-  return (
+  return createPortal(
     <div
       className={styles.overlay}
       role="presentation"
@@ -86,6 +103,7 @@ export function AlertDialog({
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
         className={`${styles.dialog} ${styles[size]}`}
+        tabIndex={-1}
       >
         <h2 id={titleId} className={styles.title}>
           {title}
@@ -104,6 +122,7 @@ export function AlertDialog({
           </ButtonGroup>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

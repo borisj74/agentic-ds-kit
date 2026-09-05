@@ -20,7 +20,7 @@ export function Button({
   ariaLabel,
 }: ButtonProps) {
   const hasLabel = Boolean(children && children.trim());
-  const iconOnly = !hasLabel && Boolean(iconStart);
+  const iconOnly = !hasLabel && Boolean(iconStart || iconEnd);
   const iconPx = ICON_SIZE[size];
 
   return (
@@ -28,7 +28,7 @@ export function Button({
       type={type}
       disabled={disabled}
       aria-disabled={disabled || undefined}
-      aria-label={iconOnly ? ariaLabel : undefined}
+      aria-label={hasLabel ? undefined : ariaLabel}
       onClick={onClick}
       className={[
         styles.button,

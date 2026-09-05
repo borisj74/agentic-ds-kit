@@ -67,6 +67,11 @@
     "name": {
       "type": "string",
       "required": false
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Field wires hint and error ids onto the input"
     }
   },
   "tokens": [

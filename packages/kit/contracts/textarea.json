@@ -19,6 +19,16 @@
     "disabled": { "type": "boolean", "default": false },
     "error": { "type": "boolean", "default": false },
     "defaultValue": { "type": "string", "required": false },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled. When set, do not also rely on defaultValue."
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void"
+    },
     "name": { "type": "string", "required": false },
     "demo": { "type": "enum", "values": ["hover", "focus"], "required": false, "note": "playground only" }
   },

@@ -1,0 +1,30 @@
+.canvas {
+  display: flex;
+  align-items: stretch;
+  min-height: 20rem;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-6);
+  background: var(--surface-muted);
+}
+
+.exampleCanvas {
+  display: flex;
+  align-items: stretch;
+  min-height: 16rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: var(--space-6);
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.nav {
+  width: 15rem;
+  min-width: 0;
+  background: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}

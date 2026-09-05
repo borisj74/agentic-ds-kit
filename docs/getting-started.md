@@ -136,7 +136,7 @@ Then:
 
 ```bash
 npm view agentic-ds-kit version
-# expect 0.2.6 or higher
+# expect 0.2.7 or higher
 ```
 
 ### Get later kit versions
@@ -149,7 +149,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.2.6"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.2.7"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -336,10 +336,16 @@ This workspace keeps **origin** on Cursor Origin as a private mirror. GitHub is 
 
 Optional: deploy the playground (Vercel) so non-git people can browse.
 
-Publish a new kit version (maintainers):
+Publish a new kit version (maintainers). Run this from the **repo root** (the Cursor terminal in this project is already there):
 
 ```bash
-npm publish -w agentic-ds-kit --access public
+npm run publish:kit
 ```
 
-You must be logged in to npm (`npm login`). Bump `packages/kit/package.json` `version` first. Do not republish a version that already exists.
+If npm asks for 2FA:
+
+```bash
+npm run publish:kit -- --otp=123456
+```
+
+You must be logged in (`npm login`). Bump `packages/kit/package.json` `version` first. Do not republish a version that already exists.

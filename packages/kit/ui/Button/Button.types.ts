@@ -3,8 +3,7 @@ export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 export type ButtonType = "button" | "submit" | "reset";
 export type ButtonShape = "default" | "pill";
 
-export interface ButtonProps {
-  children?: string;
+interface ButtonBase {
   size?: ButtonSize;
   variant?: ButtonVariant;
   shape?: ButtonShape;
@@ -14,5 +13,14 @@ export interface ButtonProps {
   onClick?: () => void;
   iconStart?: string;
   iconEnd?: string;
-  ariaLabel?: string;
 }
+
+export type ButtonProps =
+  | (ButtonBase & {
+      children: string;
+      ariaLabel?: string;
+    })
+  | (ButtonBase & {
+      children?: undefined;
+      ariaLabel: string;
+    });

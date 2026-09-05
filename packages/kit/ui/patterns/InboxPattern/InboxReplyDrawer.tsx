@@ -24,21 +24,23 @@ export function InboxReplyDrawer({
   const toId = `${baseId}-to`;
   const subjectId = `${baseId}-subject`;
   const replyId = `${baseId}-reply`;
+  const [reply, setReply] = useState("");
   const [error, setError] = useState<string | undefined>();
 
   function close() {
     setError(undefined);
+    setReply("");
     onClose();
   }
 
   function send() {
-    const reply = (document.getElementById(replyId) as HTMLTextAreaElement | null)?.value.trim() ?? "";
-    if (!reply) {
+    if (!reply.trim()) {
       setError("Write a reply before sending.");
       return;
     }
     onSend();
     setError(undefined);
+    setReply("");
     onClose();
   }
 
@@ -86,7 +88,11 @@ export function InboxReplyDrawer({
                 name="reply"
                 rows={6}
                 placeholder="Write a reply..."
-                error={Boolean(error)}
+                value={reply}
+                onChange={(value) => {
+                  setReply(value);
+                  if (error) setError(undefined);
+                }}
               />
             </Field>
           </FieldSet>

@@ -10,25 +10,9 @@
   min-width: 0;
 }
 
-.copy {
-  min-width: 0;
+.meta > :first-child {
   flex: 1;
-}
-
-.label {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-caption);
-  color: var(--text-secondary);
-}
-
-.value {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  color: var(--text-primary);
+  min-width: 0;
 }
 
 .body {

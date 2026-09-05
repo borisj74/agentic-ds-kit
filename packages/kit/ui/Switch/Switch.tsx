@@ -15,6 +15,7 @@ export function Switch({
   checked,
   defaultChecked = false,
   onChange,
+  describedBy,
 }: SwitchProps) {
   const generatedId = useId();
   const switchId = id ?? generatedId;
@@ -53,6 +54,7 @@ export function Switch({
         className={styles.control}
         aria-checked={isChecked}
         aria-label={label ? undefined : ariaLabel}
+        aria-describedby={describedBy}
         disabled={disabled}
         data-jelly={jelly || undefined}
         onClick={toggle}

@@ -76,6 +76,12 @@
       "required": false,
       "note": "Lucide catalog name on the right."
     },
+    "demo": {
+      "type": "enum",
+      "values": ["hover", "focus"],
+      "required": false,
+      "note": "playground only"
+    },
     "value": {
       "type": "string",
       "required": false,

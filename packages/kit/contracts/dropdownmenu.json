@@ -14,6 +14,25 @@
     "Top-of-page site nav with dropdowns \u2014 use NavigationMenu (it composes this with triggerStyle=nav)"
   ],
   "props": {
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "Trigger id for Field htmlFor"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "boolean",
+      "default": false,
+      "note": "Field and Select composition"
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Field wires hint and error ids onto the trigger"
+    },
     "trigger": {
       "type": "string",
       "required": false,

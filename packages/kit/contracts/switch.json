@@ -54,6 +54,11 @@
       "type": "function",
       "required": false,
       "note": "(checked: boolean) => void"
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Field wires hint and error ids onto the switch"
     }
   },
   "tokens": [

@@ -21,6 +21,7 @@ export function Checkbox({
   indeterminate = false,
   onChange,
   name,
+  describedBy,
 }: CheckboxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isControlled = typeof checked === "boolean";
@@ -55,6 +56,7 @@ export function Checkbox({
         }}
         aria-label={label ? undefined : ariaLabel}
         aria-invalid={error || undefined}
+        aria-describedby={describedBy}
         aria-checked={indeterminate ? "mixed" : undefined}
       />
       <span className={styles.box} aria-hidden>

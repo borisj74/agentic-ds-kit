@@ -12,4 +12,5 @@ export interface DatePickerProps {
   minDate?: string;
   maxDate?: string;
   name?: string;
+  describedBy?: string;
 }

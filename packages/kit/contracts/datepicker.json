@@ -70,6 +70,11 @@
       "type": "string",
       "required": false,
       "note": "Hidden input for forms"
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Field wires hint and error ids onto the trigger"
     }
   },
   "tokens": [
@@ -87,9 +92,10 @@
     "element": "button",
     "requirements": [
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
-      "Overlay is role=dialog labelled Choose date and contains kit Calendar",
-      "Escape and pointer down outside close and return focus to the trigger",
-      "Must have associated label via Field or a visible label pointing at id"
+      "Overlay is role=dialog aria-modal labelled Choose date and contains kit Calendar",
+      "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger",
+      "Must have associated label via Field or a visible label pointing at id",
+      "error described by Field via describedBy"
     ]
   },
   "doNot": [

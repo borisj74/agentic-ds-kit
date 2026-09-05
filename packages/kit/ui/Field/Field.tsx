@@ -15,10 +15,13 @@ export function Field({
   const hintId = hint && !error ? `${htmlFor}-hint` : undefined;
   const errorId = error ? `${htmlFor}-error` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
+  const controlProps: { describedBy?: string; error?: boolean } = {};
+  if (describedBy) controlProps.describedBy = describedBy;
+  if (error) controlProps.error = true;
 
   const control =
-    describedBy && isValidElement(children)
-      ? cloneElement(children as ReactElement<{ describedBy?: string }>, { describedBy })
+    Object.keys(controlProps).length > 0 && isValidElement(children)
+      ? cloneElement(children as ReactElement<{ describedBy?: string; error?: boolean }>, controlProps)
       : children;
 
   return (

@@ -25,7 +25,8 @@
     "showTable": { "type": "boolean", "default": true },
     "includeZero": { "type": "boolean", "default": false },
     "height": { "type": "number", "default": 240 },
-    "emptyLabel": { "type": "string", "default": "No data for this range" }
+    "emptyLabel": { "type": "string", "default": "No data for this range" },
+    "isLoading": { "type": "boolean", "default": false }
   },
   "tokens": [
     "surface.card",

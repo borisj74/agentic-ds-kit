@@ -9,4 +9,5 @@ export interface SwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
+  describedBy?: string;
 }

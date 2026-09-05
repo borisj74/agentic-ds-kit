@@ -85,7 +85,7 @@ export function InviteMembersPattern({ breadcrumbs, onInvite }: InviteMembersPat
           media={<AvatarGroup ariaLabel="Current members" items={TEAM} max={3} />}
           outlined
           actions={
-            <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+            <Button variant={open ? "secondary" : "primary"} size="md" onClick={() => setOpen(true)}>
               Invite members
             </Button>
           }

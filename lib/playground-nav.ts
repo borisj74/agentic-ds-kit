@@ -5,6 +5,7 @@ export const COMPONENT_ITEMS = [
   "alert",
   "alertdialog",
   "appheader",
+  "appnav",
   "avatar",
   "avatargroup",
   "badge",

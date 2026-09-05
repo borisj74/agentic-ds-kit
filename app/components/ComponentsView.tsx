@@ -5,6 +5,7 @@ import { AccordionDoc } from "./AccordionDoc";
 import { AlertDialogDoc } from "./AlertDialogDoc";
 import { AlertDoc } from "./AlertDoc";
 import { AppHeaderDoc } from "./AppHeaderDoc";
+import { AppNavDoc } from "./AppNavDoc";
 import { AvatarDoc } from "./AvatarDoc";
 import { AvatarGroupDoc } from "./AvatarGroupDoc";
 import { BadgeDoc } from "./BadgeDoc";
@@ -123,6 +124,7 @@ const TITLES: Record<string, string> = {
   alert: "Alert",
   alertdialog: "AlertDialog",
   appheader: "AppHeader",
+  appnav: "AppNav",
   avatar: "Avatar",
   avatargroup: "AvatarGroup",
 };
@@ -201,6 +203,7 @@ export function ComponentsView() {
   if (resolved === "alert") return <AlertDoc />;
   if (resolved === "alertdialog") return <AlertDialogDoc />;
   if (resolved === "appheader") return <AppHeaderDoc />;
+  if (resolved === "appnav") return <AppNavDoc />;
   if (resolved === "avatar") return <AvatarDoc />;
   if (resolved === "avatargroup") return <AvatarGroupDoc />;
   if (resolved === "calendar") return <CalendarDoc />;

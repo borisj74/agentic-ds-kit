@@ -8,10 +8,6 @@
   scroll-margin-top: var(--space-6);
 }
 
-.appNavDemo {
-  max-width: 15rem;
-}
-
 .sectionBody {
   margin: 0;
   font-family: var(--font-sans);

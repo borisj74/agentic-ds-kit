@@ -66,7 +66,7 @@ export function EmptyFirstRunPattern({ breadcrumbs, onCreate }: EmptyFirstRunPat
           icon="User"
           outlined
           actions={
-            <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+            <Button variant={open ? "secondary" : "primary"} size="md" onClick={() => setOpen(true)}>
               New study
             </Button>
           }

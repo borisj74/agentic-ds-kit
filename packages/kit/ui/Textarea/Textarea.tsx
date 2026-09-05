@@ -17,6 +17,8 @@ export function Textarea({
   disabled = false,
   error = false,
   defaultValue,
+  value,
+  onChange,
   name,
   demo,
   describedBy,
@@ -28,7 +30,9 @@ export function Textarea({
       rows={rows}
       placeholder={placeholder}
       disabled={disabled}
-      defaultValue={defaultValue}
+      value={value}
+      defaultValue={value === undefined ? defaultValue : undefined}
+      onChange={(event) => onChange?.(event.target.value)}
       aria-invalid={error || undefined}
       aria-describedby={describedBy}
       data-demo={disabled ? undefined : demo}
