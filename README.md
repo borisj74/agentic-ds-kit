@@ -1,10 +1,12 @@
 # Agentic DS Kit
 
-Personal experiment (code-only) for Boris Jovanovic — not BillingPlatform, not PracticeFlow.
+A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
 
-**Code is the contract.** Agents install the kit; they do not invent local cousins.
+**Code is the contract.** Agents read the catalog and import from the package. They do not invent local cousins.
 
-The **kit** is the npm package `agentic-ds-kit` (`packages/kit`): contracts, tokens, React components, patterns. The **playground** in this repo is the docs site that consumes that package.
+The **kit** lives in `packages/kit`. The **playground** in this repo is the docs site that consumes that package. Unrelated to BillingPlatform or PracticeFlow.
+
+[![npm](https://img.shields.io/npm/v/agentic-ds-kit)](https://www.npmjs.com/package/agentic-ds-kit)
 
 ## Install in an app
 
@@ -20,34 +22,24 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (59 components, 8 patterns).
+
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
 - `packages/kit/lib/tokens.css` — semantic CSS variables (import as `agentic-ds-kit/tokens.css`)
 
-### Components (17)
-| Component | Purpose |
-|-----------|---------|
-| Button | Actions — `primary`, `secondary`, `tertiary`, `danger` |
-| Scorecard | Single KPI tile |
-| Scoreboard | Horizontal row of Scorecards |
-| Input, Textarea, Select | Form controls |
-| InputOTP | One-time code / PIN as separate slots. Paste and autocomplete work |
-| Checkbox, RadioGroup | Boolean and single-choice inputs |
-| Switch | Immediate on/off setting — pill track, not Checkbox |
-| Field | Label + control + hint/error wrapper |
-| Badge | Status/category pill |
-| Tooltip | Hover/focus supplementary text |
-| Tabs | In-page panel switching |
-| Modal | Dismissible overlay for short tasks. Composes ModalCard |
-| ModalCard | Panel chrome for a modal (title, body, footer) |
-| Drawer | Edge panel for secondary tasks |
-| PageHeader | Page title block |
-| Section | Grouped content block |
-| AppNav | Sidebar navigation — flat `items` or grouped `groups` catalog |
-| Table | Simple semantic table |
+### Components
+
+- **Actions** — Button, ButtonGroup, DropdownMenu
+- **Forms** — Input, Textarea, Select, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker, Calendar
+- **Data & charts** — Table, DataTable, Cell, HeaderCell, Scorecard, Scoreboard, LineChart, BarChart, PieChart, NumberTransition, InsightCard
+- **Feedback** — Alert, Badge, Tooltip, Toast, Empty, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText
+- **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command
+- **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
+- **Structure** — Card, Accordion, Collapsible, Carousel, Avatar, AvatarGroup, Chat, Timeline
 
 ### Patterns (8)
-- `dashboard` — PageHeader + Scoreboard + Section + Table + Buttons
+- `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
 - `invite-members` — Empty + AvatarGroup + Modal + FieldSet + invite actions
