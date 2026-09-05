@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { DataTable } from "../../DataTable";
 import type { DataTableColumn, DataTableRow } from "../../DataTable";
 import { LineChart } from "../../LineChart";
@@ -60,6 +61,8 @@ const TASK_ROWS: DataTableRow[] = [
 ];
 
 export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProps["breadcrumbs"] }) {
+  const [taskRows, setTaskRows] = useState(TASK_ROWS);
+
   return (
     <div className="layout-canvas layout-canvas--sticky-header">
       <div className="layout-header">
@@ -88,8 +91,26 @@ export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProp
               { key: "owner", label: "Owner" },
             ]}
             columnSettings
+            bulkActions={[
+              {
+                id: "export",
+                label: "Export",
+                variant: "secondary",
+                iconStart: "Download",
+                onClick: () => undefined,
+              },
+              {
+                id: "delete",
+                label: "Delete",
+                variant: "danger",
+                iconStart: "Trash2",
+                onClick: (ids) => {
+                  setTaskRows((current) => current.filter((row) => !ids.includes(String(row.id))));
+                },
+              },
+            ]}
             columns={TASK_COLUMNS}
-            rows={TASK_ROWS}
+            rows={taskRows}
           />
         </Section>
       </div>

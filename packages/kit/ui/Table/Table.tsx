@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import type { TableColumn, TableProps } from "./Table.types";
 import styles from "./Table.module.css";
 
@@ -40,11 +40,23 @@ export function Table({
   const empty = rows.length === 0;
   const colCount = Math.max(columns.length, 1);
   const footerLabelSpan = columns.length > 1 ? columns.length - 1 : 1;
+  const uid = useId();
+  const captionId = caption ? `${uid}-caption` : undefined;
 
   return (
-    <div className={classNames(styles.wrapper, styles[size])}>
+    <div
+      className={classNames(styles.wrapper, styles[size])}
+      tabIndex={0}
+      role="region"
+      aria-labelledby={captionId}
+      aria-label={captionId ? undefined : "Table"}
+    >
       <table className={styles.table}>
-        {caption ? <caption className={styles.caption}>{caption}</caption> : null}
+        {caption ? (
+          <caption id={captionId} className={styles.caption}>
+            {caption}
+          </caption>
+        ) : null}
         <thead className={styles.thead}>
           <tr className={styles.tr}>
             {columns.map((column) => (

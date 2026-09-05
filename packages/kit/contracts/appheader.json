@@ -123,7 +123,8 @@
       "Search is kit Input type=search with aria-label from searchPlaceholder",
       "Default letter mark is aria-hidden",
       "Actions remain keyboard accessible",
-      "Do not use h1 — page titles belong on PageHeader"
+      "Do not use h1 — page titles belong on PageHeader",
+      "At container 38rem, search stacks under brand and actions"
     ]
   },
   "doNot": [

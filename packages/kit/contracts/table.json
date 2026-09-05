@@ -70,6 +70,8 @@
     "type.weight.label",
     "space.2",
     "space.4",
+    "layout.metricsMin",
+    "border.focus",
     "motion.interaction"
   ],
   "a11y": {
@@ -78,7 +80,8 @@
       "Column headers in thead with th scope=col",
       "Optional caption describes the table and sits below",
       "Empty state is one td with colSpan=columns.length and emptyLabel",
-      "Optional footer is tfoot with label spanning leading columns and value end-aligned"
+      "Optional footer is tfoot with label spanning leading columns and value end-aligned",
+      "Narrow container keeps column min-width and scrolls horizontally; the scroller is a focusable region"
     ]
   },
   "doNot": [
@@ -86,6 +89,7 @@
     "Do not compose HeaderCell or Cell — those stay on DataTable",
     "Search, filters, selection — use DataTable",
     "Do not add @tanstack/react-table",
+    "Do not squash columns to the container — overflow-x on the wrapper",
     "Do not use raw hex"
   ],
   "snippet": "<Table caption=\"A list of your recent invoices.\" columns={[{ key: 'invoice', header: 'Invoice', emphasis: true }, { key: 'status', header: 'Status' }, { key: 'method', header: 'Method' }, { key: 'amount', header: 'Amount', numeric: true, align: 'end' }]} rows={[{ invoice: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' }]} footer={{ label: 'Total', value: '$2,500.00' }} emptyLabel=\"No results.\" />"

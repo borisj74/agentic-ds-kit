@@ -76,6 +76,18 @@
       "type": "function",
       "required": false,
       "note": "(ids: string[]) => void"
+    },
+    "bulkActions": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "id": "string",
+        "label": "string",
+        "variant": "secondary | tertiary | danger?",
+        "iconStart": "string?",
+        "onClick": "(ids: string[]) => void"
+      },
+      "note": "Shown when selectable and at least one row is checked. kit Buttons. Never primary."
     }
   },
   "tokens": [
@@ -90,7 +102,8 @@
     "text.primary",
     "text.secondary",
     "text.muted",
-    "icon.muted"
+    "icon.muted",
+    "layout.metricsMin"
   ],
   "a11y": {
     "element": "table",
@@ -101,7 +114,11 @@
       "filter DropdownMenu ariaLabel = filter label",
       "Columns button aria-expanded / aria-haspopup",
       "Row checkboxes ariaLabel like Select Maya Chen; header Select all rows",
-      "sortable th aria-sort none | ascending | descending"
+      "sortable th aria-sort none | ascending | descending",
+      "Narrow container keeps column min-width and scrolls horizontally; the scroller is a focusable region",
+      "Narrow container: search full width when filters are present; filter buttons share the row width; Columns stays start-aligned; toolbar actions are not in a horizontal scroller",
+      "The filter DropdownMenu trigger is the selected value; when any facet is set, Reset filters is a tertiary kit Button after the filter menus",
+      "When rows are selected, a selection row names the count, kit bulk action Buttons, and Clear selection"
     ]
   },
   "doNot": [
@@ -112,8 +129,12 @@
     "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
     "Do not use raw hex",
     "Do not put a checkbox on every Cell \u2014 row selection stays on DataTable",
-    "Do not add pagination, loading, row actions, expandable rows, sticky header, density, infinite scroll, or a bulk-action bar",
-    "Do not invent a SortButton or use TanStack Table for sort"
+    "Do not add pagination, loading, row actions, expandable rows, sticky header, density, or infinite scroll",
+    "Do not invent FilterChip, Tag, or a second filter summary — the dropdown trigger is the selected value; Reset filters and selection actions are kit Button",
+    "Do not put a primary Button in bulkActions",
+    "Do not invent a SortButton or use TanStack Table for sort",
+    "Do not squash columns to the container — overflow-x on the scroller",
+    "Do not put toolbar actions in a horizontal scroller — search full width, filter buttons fill the row, Columns stays start-aligned"
   ],
   "snippet": "<DataTable\n  caption=\"Team members\"\n  selectable\n  toolbar\n  searchPlaceholder=\"Search members...\"\n  filters={[\n    { key: \"status\", label: \"Status\" },\n    { key: \"role\", label: \"Role\" },\n  ]}\n  columnSettings\n  columns={[\n    { key: \"name\", header: \"Name\", sortable: true },\n    { key: \"role\", header: \"Role\", sortable: true },\n    { key: \"status\", header: \"Status\", sortable: true },\n    { key: \"projects\", header: \"Projects\", type: \"number\", sortable: true },\n  ]}\n  rows={rows}\n/>",
   "contains": [

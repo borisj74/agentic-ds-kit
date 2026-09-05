@@ -16,6 +16,16 @@ export interface DataTableFilter {
   label: string;
 }
 
+export type DataTableBulkActionVariant = "secondary" | "tertiary" | "danger";
+
+export interface DataTableBulkAction {
+  id: string;
+  label: string;
+  variant?: DataTableBulkActionVariant;
+  iconStart?: string;
+  onClick: (ids: string[]) => void;
+}
+
 export type DataTableCell = string | number | CellValue;
 
 export type DataTableRow = Record<string, DataTableCell>;
@@ -32,4 +42,5 @@ export interface DataTableProps {
   rows: DataTableRow[];
   emptyMessage?: string;
   onSelectionChange?: (ids: string[]) => void;
+  bulkActions?: DataTableBulkAction[];
 }

@@ -32,38 +32,40 @@ export function AppHeader({
       aria-label={label}
       data-search={search ? undefined : "false"}
     >
-      <div className={styles.start}>
-        {logo ? (
-          <div className={styles.logo}>{logo}</div>
-        ) : (
-          <span className={styles.mark} aria-hidden>
-            {markLetter}
-          </span>
-        )}
-        {title ? <p className={styles.title}>{title}</p> : null}
-      </div>
-
-      {search ? (
-        <div className={styles.center}>
-          <div className={styles.search}>
-            <Input
-              id={inputId}
-              type="search"
-              size="md"
-              placeholder={searchPlaceholder}
-              value={searchValue}
-              defaultValue={defaultSearchValue}
-              onChange={onSearch}
-              iconStart="Search"
-              end={searchShortcut}
-              ariaLabel={searchPlaceholder}
-            />
-          </div>
+      <div className={styles.bar}>
+        <div className={styles.start}>
+          {logo ? (
+            <div className={styles.logo}>{logo}</div>
+          ) : (
+            <span className={styles.mark} aria-hidden>
+              {markLetter}
+            </span>
+          )}
+          {title ? <p className={styles.title}>{title}</p> : null}
         </div>
-      ) : null}
 
-      <div className={styles.end} role={actions ? "group" : undefined} aria-label={actions ? "Actions" : undefined}>
-        {actions}
+        {search ? (
+          <div className={styles.center}>
+            <div className={styles.search}>
+              <Input
+                id={inputId}
+                type="search"
+                size="md"
+                placeholder={searchPlaceholder}
+                value={searchValue}
+                defaultValue={defaultSearchValue}
+                onChange={onSearch}
+                iconStart="Search"
+                end={searchShortcut}
+                ariaLabel={searchPlaceholder}
+              />
+            </div>
+          </div>
+        ) : null}
+
+        <div className={styles.end} role={actions ? "group" : undefined} aria-label={actions ? "Actions" : undefined}>
+          {actions}
+        </div>
       </div>
     </header>
   );

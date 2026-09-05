@@ -143,30 +143,8 @@
 
 @media (max-width: 900px) {
   .browser {
-    height: auto;
-    min-height: 0;
-  }
-
-  .product {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .productBody {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .pane {
-    overflow: visible;
-  }
-
-  .pane :global(.layout-canvas) {
-    overflow: visible;
-  }
-
-  .pane :global(.layout-content) {
-    overflow: visible;
+    height: min(40rem, calc(100dvh - var(--playground-topbar-height) - var(--space-16)));
+    min-height: 24rem;
   }
 }
 

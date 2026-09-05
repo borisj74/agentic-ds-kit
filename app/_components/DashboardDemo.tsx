@@ -174,7 +174,7 @@ export function DashboardDemo() {
     return "overview";
   });
   const [query, setQuery] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const go = useCallback((id: string) => {
     setPage(id);

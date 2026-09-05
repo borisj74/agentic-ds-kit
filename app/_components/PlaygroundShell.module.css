@@ -12,12 +12,16 @@
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-stack-md);
+  gap: var(--space-3);
   height: var(--playground-topbar-height);
   padding-inline: var(--layout-margin-md);
   background-color: var(--surface-card);
   border-bottom: var(--border-width-thin) solid var(--border-faint);
+}
+
+.menu {
+  display: none;
+  flex-shrink: 0;
 }
 
 .tools {
@@ -25,6 +29,7 @@
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
+  margin-inline-start: auto;
 }
 
 .colorSelect {
@@ -44,6 +49,8 @@
   font-size: var(--type-size-body);
   font-weight: var(--type-weight-title);
   line-height: var(--type-line-heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -56,6 +63,7 @@
 }
 
 .shell {
+  position: relative;
   display: flex;
   flex: 1;
   min-height: 0;
@@ -72,6 +80,10 @@
   background-color: var(--surface-page);
 }
 
+.scrim {
+  display: none;
+}
+
 .main {
   flex: 1;
   min-width: 0;
@@ -82,25 +94,47 @@
     padding-inline: var(--layout-margin-sm);
   }
 
-  .brand {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-stack-2xs);
+  .menu {
+    display: flex;
   }
 
   .tagline {
-    white-space: normal;
+    display: none;
   }
 
-  .shell {
-    flex-direction: column;
+  .colorSelect {
+    width: 7.25rem;
   }
 
   .sidebar {
-    position: static;
-    width: 100%;
+    position: fixed;
+    top: var(--playground-topbar-height);
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-overlay);
+    width: max-content;
+    max-width: min(20rem, 90vw);
     height: auto;
-    border-right: none;
-    border-bottom: var(--border-width-thin) solid var(--border-faint);
+    border-right: var(--border-width-thin) solid var(--border-faint);
+    border-bottom: none;
+    box-shadow: var(--shadow-md);
+    transform: translateX(-100%);
+    transition: transform var(--motion-overlay-duration) var(--motion-overlay-easing);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: var(--playground-topbar-height) 0 0 0;
+    z-index: calc(var(--z-overlay) - 1);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--surface-overlay);
+    cursor: pointer;
   }
 }

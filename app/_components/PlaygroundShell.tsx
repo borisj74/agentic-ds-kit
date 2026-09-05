@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav } from "agentic-ds-kit";
-import { Button } from "agentic-ds-kit";
-import { Select } from "agentic-ds-kit";
+import { AppNav, Button, Select } from "agentic-ds-kit";
 import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
 import {
   PLAYGROUND_COLOR_THEMES,
@@ -17,15 +15,30 @@ import {
 } from "@/lib/playground-theme";
 import styles from "./PlaygroundShell.module.css";
 
+const COMPACT_NAV = "(max-width: 767px)";
+
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
   const [theme, setTheme] = useState<PlaygroundTheme>("light");
   const [colorTheme, setColorTheme] = useState<PlaygroundColorTheme>("ink");
+  const [compact, setCompact] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     setTheme(readPlaygroundTheme());
     setColorTheme(readPlaygroundColorTheme());
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(COMPACT_NAV);
+    const apply = () => {
+      setCompact(media.matches);
+      if (!media.matches) setNavOpen(false);
+    };
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
   }, []);
 
   useEffect(() => {
@@ -39,8 +52,22 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    setNavOpen(false);
+  }, [pathname, hash]);
+
+  useEffect(() => {
+    if (!compact || !navOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setNavOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [compact, navOpen]);
+
   const groups = buildPlaygroundNavGroups(pathname, hash);
   const isDark = theme === "dark";
+  const overlayNav = compact && navOpen;
 
   const handleThemeToggle = () => {
     const next: PlaygroundTheme = isDark ? "light" : "dark";
@@ -58,6 +85,15 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.frame}>
       <header className={styles.topbar}>
+        <div className={styles.menu}>
+          <Button
+            size="sm"
+            variant="tertiary"
+            iconStart={overlayNav ? "X" : "Menu"}
+            ariaLabel={overlayNav ? "Close navigation" : "Open navigation"}
+            onClick={() => setNavOpen((open) => !open)}
+          />
+        </div>
         <div className={styles.brand}>
           <span className={styles.productName}>Agentic DS Kit</span>
           <span className={styles.tagline}>Code is the contract</span>
@@ -77,14 +113,27 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
             size="sm"
             variant="secondary"
             iconStart={isDark ? "Sun" : "Moon"}
+            ariaLabel={isDark ? "Switch to light theme" : "Switch to dark theme"}
             onClick={handleThemeToggle}
           >
-            {isDark ? "Light" : "Dark"}
+            {compact ? undefined : isDark ? "Light" : "Dark"}
           </Button>
         </div>
       </header>
       <div className={styles.shell}>
-        <aside className={styles.sidebar}>
+        {overlayNav ? (
+          <button
+            type="button"
+            className={styles.scrim}
+            aria-label="Close navigation"
+            onClick={() => setNavOpen(false)}
+          />
+        ) : null}
+        <aside
+          id="playground-nav"
+          className={`${styles.sidebar} ${overlayNav ? styles.sidebarOpen : ""}`}
+          inert={compact && !navOpen ? true : undefined}
+        >
           <AppNav groups={groups} />
         </aside>
         <main className={styles.main}>{children}</main>

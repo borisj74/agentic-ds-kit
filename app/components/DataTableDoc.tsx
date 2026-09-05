@@ -27,11 +27,11 @@ const COLUMNS: DataTableColumn[] = [
 ];
 
 const ROWS: DataTableRow[] = [
-  { name: "Maya Chen", role: "Product designer", status: "Active", projects: 8, actions: ACTION },
-  { name: "Noah Williams", role: "Engineer", status: "Active", projects: 5, actions: ACTION },
-  { name: "Iris Okafor", role: "Product manager", status: "Active", projects: 3, actions: ACTION },
-  { name: "Jordan Lee", role: "Designer", status: "Away", projects: 6, actions: ACTION },
-  { name: "Alex Rivera", role: "Engineer", status: "Active", projects: 4, actions: ACTION },
+  { id: "maya", name: "Maya Chen", role: "Product designer", status: "Active", projects: 8, actions: ACTION },
+  { id: "noah", name: "Noah Williams", role: "Engineer", status: "Active", projects: 5, actions: ACTION },
+  { id: "iris", name: "Iris Okafor", role: "Product manager", status: "Active", projects: 3, actions: ACTION },
+  { id: "jordan", name: "Jordan Lee", role: "Designer", status: "Away", projects: 6, actions: ACTION },
+  { id: "alex", name: "Alex Rivera", role: "Engineer", status: "Active", projects: 4, actions: ACTION },
 ];
 
 const CELL_TYPE_COLUMNS: DataTableColumn[] = [
@@ -155,6 +155,10 @@ const TOOLBAR_CODE = `<DataTable
     { key: "role", label: "Role" },
   ]}
   columnSettings
+  bulkActions={[
+    { id: "export", label: "Export", variant: "secondary", iconStart: "Download", onClick: onExport },
+    { id: "delete", label: "Delete", variant: "danger", iconStart: "Trash2", onClick: onDelete },
+  ]}
   columns={[
     { key: "name", header: "Name" },
     { key: "role", header: "Role" },
@@ -201,6 +205,7 @@ const MASTER_LAYOUT = { gridTemplateColumns: "minmax(0, 1fr)" } as const;
 
 export function DataTableDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
+  const [rows, setRows] = useState(ROWS);
 
   const toolbarTable = (
     <DataTable
@@ -211,8 +216,26 @@ export function DataTableDoc() {
       searchPlaceholder="Search members..."
       filters={FILTERS}
       columnSettings
+      bulkActions={[
+        {
+          id: "export",
+          label: "Export",
+          variant: "secondary",
+          iconStart: "Download",
+          onClick: () => undefined,
+        },
+        {
+          id: "delete",
+          label: "Delete",
+          variant: "danger",
+          iconStart: "Trash2",
+          onClick: (ids) => {
+            setRows((current) => current.filter((row) => !ids.includes(String(row.id))));
+          },
+        },
+      ]}
       columns={COLUMNS}
-      rows={ROWS}
+      rows={rows}
     />
   );
 
@@ -267,7 +290,7 @@ export function DataTableDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Search, filters, and Columns. Result strip, then the caption as the table title.
+          Search, filters, Columns, and Reset filters when a facet is set. Select rows for bulk actions.
                 </p>
               </div>
               <CodeBlock code={TOOLBAR_CODE} />

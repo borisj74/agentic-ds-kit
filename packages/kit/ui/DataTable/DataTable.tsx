@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../Button";
 import { Checkbox } from "../Checkbox";
 import { Cell } from "../Cell";
@@ -9,6 +9,7 @@ import { DropdownMenu } from "../DropdownMenu";
 import type { CellSize, CellValue } from "../Cell";
 import { LucideByName } from "../Button/lucideName";
 import type {
+  DataTableBulkAction,
   DataTableCell,
   DataTableColumn,
   DataTableFilter,
@@ -21,6 +22,8 @@ export type {
   DataTableProps,
   DataTableColumn,
   DataTableFilter,
+  DataTableBulkAction,
+  DataTableBulkActionVariant,
   DataTableCell,
   DataTableRow,
 } from "./DataTable.types";
@@ -117,8 +120,10 @@ export function DataTable({
   rows,
   emptyMessage = DEFAULT_EMPTY,
   onSelectionChange,
+  bulkActions,
 }: DataTableProps) {
   const uid = useId();
+  const captionId = caption ? `${uid}-caption` : undefined;
   const columnsWrapRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
@@ -184,6 +189,9 @@ export function DataTable({
   const someVisibleSelected = selectedVisible.length > 0 && !allVisibleSelected;
   const colSpan = visibleColumns.length + (selectable ? 1 : 0);
   const empty = visibleRows.length === 0;
+  const activeFilters = filterDefs.filter((filter) => Boolean(filterValues[filter.key]));
+  const selectedCount = selectedVisible.length;
+  const actions = bulkActions ?? [];
 
   useLayoutEffect(() => {
     if (!columnSettings || !toolbar) return;
@@ -210,6 +218,12 @@ export function DataTable({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const ids = new Set(indexedRows.map((entry) => entry.id));
+    const next = selected.filter((id) => ids.has(id));
+    if (next.length !== selected.length) emitSelection(next);
+  }, [indexedRows, selected]);
 
   function emitSelection(next: string[]) {
     setSelected(next);
@@ -248,6 +262,23 @@ export function DataTable({
     setHidden((prev) => ({ ...prev, [key]: !checked }));
   }
 
+  function resetFilters() {
+    setFilterValues({});
+  }
+
+  function clearSelection() {
+    emitSelection([]);
+  }
+
+  function runBulkAction(action: DataTableBulkAction) {
+    action.onClick(selectedVisible);
+  }
+
+  function bulkVariant(action: DataTableBulkAction): "secondary" | "tertiary" | "danger" {
+    if (action.variant === "tertiary" || action.variant === "danger") return action.variant;
+    return "secondary";
+  }
+
   function columnClass(column: DataTableColumn): string {
     if (column.type === "number") return ` ${styles.numeric}`;
     if (isActionColumn(column, rows)) return ` ${styles.actionCell}`;
@@ -270,65 +301,104 @@ export function DataTable({
               aria-label={searchPlaceholder}
             />
           </div>
-          {filterDefs.map((filter) => {
-            const allId = `__all-${filter.key}`;
-            const allLabel = `All ${filter.label.toLowerCase()}`;
-            const selected = filterValues[filter.key] ?? "";
-            const items = [
-              { id: allId, label: allLabel },
-              ...(facetValues[filter.key] ?? [])
-                .filter((value) => value !== "")
-                .map((value) => ({ id: value, label: value })),
-            ];
-            return (
-              <div key={filter.key} className={styles.filter}>
-                <DropdownMenu
-                  trigger={selected || allLabel}
-                  variant="secondary"
-                  size="md"
-                  iconEnd="ChevronDown"
-                  ariaLabel={filter.label}
-                  groups={[{ items }]}
-                  onSelect={(id) =>
-                    setFilterValues((prev) => ({
-                      ...prev,
-                      [filter.key]: id === allId ? "" : id,
-                    }))
-                  }
-                />
-              </div>
-            );
-          })}
-          {columnSettings ? (
-            <div ref={columnsWrapRef} className={styles.columns}>
-              <Button
-                variant="secondary"
-                size="md"
-                iconStart="Settings"
-                onClick={() => setMenuOpen((open) => !open)}
-              >
-                Columns
-              </Button>
-              {menuOpen ? (
-                <div className={styles.columnMenu} role="group" aria-label="Columns">
-                  {columns.map((column) => {
-                    const locked = column.key === lockedKey;
+          {filterDefs.length > 0 || columnSettings ? (
+            <div className={styles.controls}>
+              {filterDefs.length > 0 ? (
+                <div className={styles.filters}>
+                  {filterDefs.map((filter) => {
+                    const allId = `__all-${filter.key}`;
+                    const allLabel = `All ${filter.label.toLowerCase()}`;
+                    const value = filterValues[filter.key] ?? "";
+                    const items = [
+                      { id: allId, label: allLabel },
+                      ...(facetValues[filter.key] ?? [])
+                        .filter((item) => item !== "")
+                        .map((item) => ({ id: item, label: item })),
+                    ];
                     return (
-                      <Checkbox
-                        key={column.key}
-                        id={`${uid}-col-${column.key}`}
-                        size="sm"
-                        label={column.header}
-                        checked={locked || hidden[column.key] !== true}
-                        disabled={locked}
-                        onChange={(checked) => toggleColumn(column.key, checked)}
-                      />
+                      <div key={filter.key} className={styles.filter}>
+                        <DropdownMenu
+                          trigger={value || allLabel}
+                          variant="secondary"
+                          size="md"
+                          iconEnd="ChevronDown"
+                          ariaLabel={filter.label}
+                          groups={[{ items }]}
+                          onSelect={(id) =>
+                            setFilterValues((prev) => ({
+                              ...prev,
+                              [filter.key]: id === allId ? "" : id,
+                            }))
+                          }
+                        />
+                      </div>
                     );
                   })}
                 </div>
               ) : null}
+              {activeFilters.length > 0 ? (
+                <div className={styles.reset}>
+                  <Button size="md" variant="tertiary" onClick={resetFilters}>
+                    Reset filters
+                  </Button>
+                </div>
+              ) : null}
+              {columnSettings ? (
+                <div ref={columnsWrapRef} className={styles.columns}>
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    iconStart="Settings"
+                    onClick={() => setMenuOpen((open) => !open)}
+                  >
+                    Columns
+                  </Button>
+                  {menuOpen ? (
+                    <div className={styles.columnMenu} role="group" aria-label="Columns">
+                      {columns.map((column) => {
+                        const locked = column.key === lockedKey;
+                        return (
+                          <Checkbox
+                            key={column.key}
+                            id={`${uid}-col-${column.key}`}
+                            size="sm"
+                            label={column.header}
+                            checked={locked || hidden[column.key] !== true}
+                            disabled={locked}
+                            onChange={(checked) => toggleColumn(column.key, checked)}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           ) : null}
+        </div>
+      ) : null}
+
+      {selectable && selectedCount > 0 ? (
+        <div className={styles.selection} role="region" aria-label="Selected rows">
+          <p className={styles.selectionCount}>
+            {selectedCount} selected
+          </p>
+          <div className={styles.selectionActions}>
+            {actions.map((action) => (
+              <Button
+                key={action.id}
+                size="sm"
+                variant={bulkVariant(action)}
+                iconStart={action.iconStart}
+                onClick={() => runBulkAction(action)}
+              >
+                {action.label}
+              </Button>
+            ))}
+            <Button size="sm" variant="tertiary" onClick={clearSelection}>
+              Clear selection
+            </Button>
+          </div>
         </div>
       ) : null}
 
@@ -338,9 +408,19 @@ export function DataTable({
         </p>
       ) : null}
 
-      <div className={styles.scroller}>
+      <div
+        className={styles.scroller}
+        tabIndex={0}
+        role="region"
+        aria-labelledby={captionId}
+        aria-label={captionId ? undefined : "Table"}
+      >
         <table className={styles.table}>
-          {caption ? <caption className={styles.caption}>{caption}</caption> : null}
+          {caption ? (
+            <caption id={captionId} className={styles.caption}>
+              {caption}
+            </caption>
+          ) : null}
           <thead>
             <tr>
               {selectable ? (

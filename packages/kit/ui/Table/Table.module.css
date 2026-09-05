@@ -3,10 +3,18 @@
   width: 100%;
   min-width: 0;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.wrapper:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   caption-side: bottom;
   border-collapse: collapse;
   font-family: var(--font-sans);
@@ -69,6 +77,11 @@
   vertical-align: middle;
   text-align: start;
   white-space: nowrap;
+}
+
+.th:not(.numeric),
+.td:not(.numeric):not(.empty) {
+  min-width: var(--layout-metrics-min);
 }
 
 .th {

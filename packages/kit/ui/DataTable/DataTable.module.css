@@ -6,13 +6,16 @@
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   box-shadow: var(--shadow-sm);
+  container-type: inline-size;
+  container-name: datatable;
 }
 
 .toolbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-2);
+  min-width: 0;
   padding: var(--space-3) var(--space-4);
   border-bottom: var(--border-divider) solid var(--border-faint);
   background: transparent;
@@ -71,6 +74,25 @@
   appearance: none;
 }
 
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .filter {
   position: relative;
   display: inline-flex;
@@ -79,10 +101,55 @@
   flex-shrink: 0;
 }
 
+.reset {
+  flex-shrink: 0;
+}
+
 .columns {
   position: relative;
   margin-left: auto;
   flex-shrink: 0;
+}
+
+/* Search takes the row; filters share the full width; Columns stays start-aligned. */
+@container datatable (max-width: 38rem) {
+  .toolbar:has(.filter) {
+    flex-wrap: wrap;
+  }
+
+  .toolbar:has(.filter) .search {
+    flex: 1 0 100%;
+    max-width: none;
+  }
+
+  .toolbar:has(.filter) .controls {
+    flex: 1 0 100%;
+    justify-content: flex-start;
+  }
+
+  .toolbar:has(.filter) .filters {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .toolbar:has(.filter) .filter {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .toolbar:has(.filter) .filter > * {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar:has(.filter) .filter :global(button) {
+    width: 100%;
+  }
+
+  .toolbar:has(.filter) .columns {
+    margin-left: 0;
+  }
 }
 
 .columnMenu {
@@ -101,6 +168,35 @@
   box-shadow: var(--shadow-sm);
 }
 
+.selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2) var(--space-4);
+  border-bottom: var(--border-divider) solid var(--border-faint);
+  background-color: var(--surface-muted);
+}
+
+.selectionCount {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.selectionActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
 .count {
   margin: 0;
   padding: var(--space-2) var(--space-4);
@@ -116,11 +212,19 @@
   width: 100%;
   min-width: 0;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--surface-card);
 }
 
+.scroller:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
 .table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-family: var(--font-sans);
 }
@@ -145,6 +249,23 @@
   text-align: left;
   vertical-align: middle;
   border-bottom: var(--border-divider) solid var(--border-faint);
+}
+
+.th:not(.numeric):not(.checkCell):not(.actionCell),
+.td:not(.numeric):not(.checkCell):not(.actionCell):not(.emptyCell) {
+  min-width: var(--layout-metrics-min);
+  white-space: nowrap;
+}
+
+.td:not(.emptyCell) > *,
+.th:not(.checkCell):not(.numeric):not(.actionCell) > * {
+  max-width: none;
+  width: max-content;
+  min-width: 100%;
+}
+
+.td:not(.emptyCell) :global(*) {
+  overflow-wrap: normal;
 }
 
 .th {
