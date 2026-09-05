@@ -88,6 +88,7 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
       { name: "fill.danger-subtle", var: "--fill-danger-subtle" },
       { name: "fill.info", var: "--fill-info" },
       { name: "fill.info-subtle", var: "--fill-info-subtle" },
+      { name: "fill.accent", var: "--fill-accent" },
     ],
   },
   {

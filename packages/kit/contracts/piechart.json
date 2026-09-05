@@ -45,6 +45,7 @@
     "fill.warning",
     "fill.danger",
     "fill.info",
+    "fill.accent",
     "border.faint",
     "radius.surface",
     "shadow.md",

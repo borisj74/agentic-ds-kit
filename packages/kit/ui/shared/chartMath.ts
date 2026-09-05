@@ -16,6 +16,7 @@ export const CHART_COLORS = [
   "var(--fill-warning)",
   "var(--fill-danger)",
   "var(--fill-info)",
+  "var(--fill-accent)",
 ] as const;
 
 export function formatValue(value: number): string {
