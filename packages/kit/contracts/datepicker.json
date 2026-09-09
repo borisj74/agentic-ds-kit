@@ -94,6 +94,7 @@
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose date and contains kit Calendar",
       "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger",
+      "Calendar overlay anchors to the end of the trigger so it fits in drawers without horizontal scroll",
       "Must have associated label via Field or a visible label pointing at id",
       "error described by Field via describedBy"
     ]

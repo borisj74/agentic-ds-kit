@@ -39,6 +39,16 @@
       "default": "right",
       "note": "Floating sheet with radius-surface-lg. Right/left inset from top, bottom, and the opening edge. Bottom is centered. Top insets from top, left, and right. Not a flush full-bleed bar."
     },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "Width for left/right/bottom sheets (layout-drawer-*). Use lg when the body has DatePicker or other overlays that must fit without horizontal scroll. Top stays full width."
+    },
     "showClose": {
       "type": "boolean",
       "default": true
@@ -70,7 +80,10 @@
     "motion.modal",
     "icon.muted",
     "radius.surfaceLg",
-    "surface.card"
+    "surface.card",
+    "layout.drawerSm",
+    "layout.drawerMd",
+    "layout.drawerLg"
   ],
   "a11y": {
     "element": "dialog",
