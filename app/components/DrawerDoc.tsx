@@ -4,16 +4,19 @@ import { useState, type ReactNode } from "react";
 import { Button } from "agentic-ds-kit";
 import { ButtonGroup } from "agentic-ds-kit";
 import { Drawer } from "agentic-ds-kit";
-import type { DrawerSide } from "agentic-ds-kit";
+import type { DrawerSide, DrawerSize } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
+import { DatePicker } from "agentic-ds-kit";
 import { RadioGroup } from "agentic-ds-kit";
+import { Select } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIDES: DrawerSide[] = ["right", "left", "bottom", "top"];
+const SIZES: DrawerSize[] = ["sm", "md", "lg"];
 
 const SLOTS = [
   {
@@ -40,9 +43,9 @@ const SLOTS = [
   },
 ];
 
-type VariantKey = "right" | "left" | "bottom" | "top" | "footer" | "scrollable";
+type VariantKey = "right" | "left" | "bottom" | "top" | "footer" | "scrollable" | "large";
 
-function masterCode(side: DrawerSide, showDescription: boolean, showClose: boolean) {
+function masterCode(side: DrawerSide, size: DrawerSize, showDescription: boolean, showClose: boolean) {
   const lines = [
     "<Drawer",
     "  open={open}",
@@ -52,6 +55,7 @@ function masterCode(side: DrawerSide, showDescription: boolean, showClose: boole
     lines.push(`  description="We'll prepare your order as soon as possible."`);
   }
   lines.push(`  side="${side}"`);
+  if (size !== "md") lines.push(`  size="${size}"`);
   if (!showClose) lines.push("  showClose={false}");
   lines.push(
     "  onClose={close}",
@@ -151,10 +155,12 @@ function ScrollCopy() {
 export function DrawerDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [side, setSide] = useState<DrawerSide>("bottom");
+  const [size, setSize] = useState<DrawerSize>("md");
   const [showDescription, setShowDescription] = useState(true);
   const [showClose, setShowClose] = useState(false);
   const [open, setOpen] = useState(false);
   const [variantOpen, setVariantOpen] = useState<VariantKey | null>(null);
+  const [startDate, setStartDate] = useState("2026-03-01");
 
   const close = () => {
     setOpen(false);
@@ -174,8 +180,8 @@ export function DrawerDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Bottom sheet for a delivery window. Switch side, description, and close. Overlay click
-            and Escape dismiss.
+            Bottom sheet for a delivery window. Switch side, size, description, and close. Overlay
+            click and Escape dismiss.
           </p>
           <DocTabList
             value={tab}
@@ -215,6 +221,22 @@ export function DrawerDoc() {
                   </div>
                 </div>
                 <div className={styles.panelGroup}>
+                  <span className={styles.panelLabel}>Size</span>
+                  <div className={styles.sizeGroup} role="group" aria-label="Size">
+                    {SIZES.map((step) => (
+                      <button
+                        key={step}
+                        type="button"
+                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
+                        aria-pressed={size === step}
+                        onClick={() => setSize(step)}
+                      >
+                        {step}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>State</span>
                   <Switch size="sm" label="Description" checked={showDescription} onChange={setShowDescription} />
                   <Switch size="sm" label="Close" checked={showClose} onChange={setShowClose} />
@@ -225,13 +247,13 @@ export function DrawerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Drawer for a sheet or side panel. The panel floats inset from the opening
-                  edge with radius-surface-lg. Compose kit RadioGroup for the slots and kit Buttons
-                  in the footer. Use Modal for a centered short task. Use AlertDialog when they must
-                  choose.
+                  Use Drawer for a sheet or side panel. Size is sm, md, or lg for left/right/bottom.
+                  Use lg when the body has DatePicker or other overlays that must fit without
+                  horizontal scroll. Compose kit RadioGroup for the slots and kit Buttons in the
+                  footer. Use Modal for a centered short task. Use AlertDialog when they must choose.
                 </p>
               </div>
-              <CodeBlock code={masterCode(side, showDescription, showClose)} />
+              <CodeBlock code={masterCode(side, size, showDescription, showClose)} />
             </div>
             <Drawer
               open={open}
@@ -240,6 +262,7 @@ export function DrawerDoc() {
                 showDescription ? "We'll prepare your order as soon as possible." : undefined
               }
               side={side}
+              size={size}
               showClose={showClose}
               onClose={close}
               footer={<DeliveryFooter onClose={close} />}
@@ -298,6 +321,49 @@ export function DrawerDoc() {
             >
               <Drawer open={variantOpen === "top"} title="Edit profile" side="top" onClose={close}>
                 Make changes to your profile.
+              </Drawer>
+            </Variant>
+
+            <Variant
+              title="Large with DatePicker"
+              usage="size=lg for forms with DatePicker in a trailing column. Calendar stays inside the sheet — no horizontal scroll."
+              code={`<Drawer open={open} title="Subscription" side="right" size="lg" onClose={close}>\n  <Field label="Term">…</Field>\n  <Field label="Start date" htmlFor="start-date">\n    <DatePicker id="start-date" value={date} onValueChange={setDate} />\n  </Field>\n</Drawer>`}
+              onOpen={() => setVariantOpen("large")}
+            >
+              <Drawer
+                open={variantOpen === "large"}
+                title="Subscription"
+                description="Choose term and start date."
+                side="right"
+                size="lg"
+                onClose={close}
+                footer={<Actions onClose={close} />}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "var(--space-4)",
+                  }}
+                >
+                  <Field label="Term" htmlFor="drawer-term">
+                    <Select
+                      id="drawer-term"
+                      options={[
+                        { value: "monthly", label: "Monthly" },
+                        { value: "annual", label: "Annual" },
+                      ]}
+                      defaultValue="monthly"
+                    />
+                  </Field>
+                  <Field label="Start date" htmlFor="drawer-start-date">
+                    <DatePicker
+                      id="drawer-start-date"
+                      value={startDate}
+                      onValueChange={setStartDate}
+                    />
+                  </Field>
+                </div>
               </Drawer>
             </Variant>
 

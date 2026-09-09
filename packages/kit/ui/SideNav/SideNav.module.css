@@ -1,18 +1,19 @@
+/* Gmail-style rail: outer shell width animates; inner panel stays at full
+   sidebar width and is clipped. Icons keep a fixed left edge — no recenter. */
+
 .root {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   align-self: stretch;
   width: var(--layout-sidebar);
-  max-width: var(--layout-sidebar);
+  min-width: 0;
   min-height: 0;
   color: var(--text-primary);
   overflow: hidden;
   border: 0;
   background: transparent;
-  transition:
-    width var(--motion-expand-duration) var(--motion-expand-easing),
-    max-width var(--motion-expand-duration) var(--motion-expand-easing);
+  transition: width var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
 .radiusNone .panel {
@@ -21,14 +22,16 @@
 
 .rootClosed {
   width: var(--layout-sidebar-compact);
-  max-width: var(--layout-sidebar-compact);
 }
 
 .panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  box-sizing: border-box;
+  width: var(--layout-sidebar);
+  min-width: var(--layout-sidebar);
+  max-width: var(--layout-sidebar);
   min-height: 0;
   height: 100%;
   border: var(--border-surface) solid var(--border-faint);
@@ -47,10 +50,6 @@
   padding: var(--space-inset-sm);
   border-bottom: var(--border-divider) solid var(--border-subtle);
   overflow: hidden;
-}
-
-.rootClosed .header {
-  gap: 0;
 }
 
 .mark {
@@ -81,6 +80,10 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+.markButton:disabled {
+  cursor: default;
+}
+
 .title {
   min-width: 0;
   margin: 0;
@@ -96,14 +99,7 @@
 }
 
 .rootClosed .title {
-  flex: 0 0 0;
-  width: 0;
-  min-width: 0;
-  max-width: 0;
-  height: 0;
-  margin: 0;
   opacity: 0;
-  overflow: hidden;
   pointer-events: none;
 }
 
@@ -111,6 +107,11 @@
   margin-inline-start: auto;
   flex-shrink: 0;
   transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.rootClosed .close {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .nav {
@@ -141,21 +142,16 @@
   margin: 0;
   padding-inline: var(--space-inset-md);
   overflow: hidden;
+  white-space: nowrap;
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
   color: var(--text-secondary);
-  max-height: 2rem;
-  transition:
-    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
-    max-height var(--motion-expand-duration) var(--motion-expand-easing),
-    padding var(--motion-expand-duration) var(--motion-expand-easing);
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
 .rootClosed .sectionLabel {
   opacity: 0;
-  max-height: 0;
-  padding: 0;
   pointer-events: none;
 }
 
@@ -192,22 +188,40 @@
   text-align: start;
   text-decoration: none;
   cursor: pointer;
-  transition: gap var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
-.rootClosed .item {
-  width: auto;
-  max-width: 100%;
-  justify-content: center;
-  gap: 0;
-  aspect-ratio: 1;
-  line-height: 1;
-  overflow: hidden;
+/* Closed rail: keep the item box size (no open/close jump) and paint a
+   square chip over the icon instead of clipping a full-width row bg. */
+.rootClosed .item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(var(--space-inset-sm) * 2 + var(--space-inset-lg));
+  height: calc(var(--space-inset-sm) * 2 + var(--space-inset-lg));
+  translate: 0 -50%;
+  border-radius: var(--radius-control-md);
+  background: transparent;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rootClosed .item > * {
+  position: relative;
+  z-index: 1;
 }
 
 .item:hover:not(:disabled):not(.itemDisabled) {
   background: var(--surface-muted);
   color: var(--text-primary);
+}
+
+.rootClosed .item:hover:not(:disabled):not(.itemDisabled) {
+  background: transparent;
+}
+
+.rootClosed .item:hover:not(:disabled):not(.itemDisabled)::before {
+  background: var(--surface-muted);
 }
 
 .itemActive,
@@ -216,9 +230,28 @@
   color: var(--text-brand);
 }
 
+.rootClosed .itemActive,
+.rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled) {
+  background: transparent;
+}
+
+.rootClosed .itemActive::before,
+.rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled)::before {
+  background: var(--surface-brand-subtle);
+}
+
 .item:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+.rootClosed .item:focus-visible {
+  outline: none;
+}
+
+.rootClosed .item:focus-visible::before {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--border-focus-width));
 }
 
 .item:disabled,
@@ -226,6 +259,16 @@
   background: var(--surface-disabled);
   color: var(--text-disabled);
   cursor: not-allowed;
+}
+
+.rootClosed .item:disabled,
+.rootClosed .itemDisabled {
+  background: transparent;
+}
+
+.rootClosed .item:disabled::before,
+.rootClosed .itemDisabled::before {
+  background: var(--surface-disabled);
 }
 
 .icon {
@@ -257,15 +300,7 @@
 
 .rootClosed .label,
 .rootClosed .meta {
-  flex: 0 0 0;
-  width: 0;
-  min-width: 0;
-  max-width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
   opacity: 0;
-  overflow: hidden;
   pointer-events: none;
 }
 
@@ -307,6 +342,18 @@
   transform: rotate(90deg);
 }
 
+.submenuSlot {
+  display: grid;
+  grid-template-rows: 1fr;
+  min-height: 0;
+  transition: grid-template-rows var(--motion-expand-duration) var(--motion-expand-easing);
+}
+
+.submenuSlotClosed,
+.rootClosed .submenuSlot {
+  grid-template-rows: 0fr;
+}
+
 .submenu {
   display: grid;
   margin: 0;
@@ -315,12 +362,8 @@
   padding-inline-start: var(--space-inset-xs);
   list-style: none;
   border-inline-start: var(--border-divider) solid var(--border-faint);
-}
-
-.rootClosed .submenu {
-  margin-inline-start: 0;
-  padding-inline-start: 0;
-  border-inline-start: 0;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .footer {
@@ -331,13 +374,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .item,
   .title,
   .label,
   .sectionLabel,
   .meta,
   .close,
-  .chevron {
+  .chevron,
+  .submenuSlot {
     transition: none;
   }
 }

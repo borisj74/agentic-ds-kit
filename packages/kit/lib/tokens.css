@@ -395,8 +395,11 @@
   --layout-margin-md: var(--grid-margin-md);
   --layout-margin-lg: var(--grid-margin-lg);
   --layout-sidebar: 14rem;
-  --layout-sidebar-compact: var(--space-section-lg);
+  --layout-sidebar-compact: calc((var(--border-100) * 2) + (var(--space-inset-sm) * 4) + var(--space-inset-lg));
   --layout-rail: 22rem;
+  --layout-drawer-sm: 20rem;
+  --layout-drawer-md: 24rem;
+  --layout-drawer-lg: 36rem;
   --layout-metrics-min: 12rem;
   --layout-auto-min: 16rem;
   --layout-split-primary: 8;

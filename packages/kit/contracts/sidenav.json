@@ -117,7 +117,10 @@
       "When showHeader is false, omit the header and close; title remains the accessible name via aria-label",
       "Active leaf uses aria-current=page",
       "Parent with nested items is a disclosure with aria-expanded",
-      "Closed rail keeps labels available as sr-only text"
+      "Closed rail clips labels via overflow; labels stay in the DOM for assistive tech",
+      "Outer shell width animates; inner panel stays at layout-sidebar width so icons do not recenter",
+      "Closed rail must not change item width or height — size snaps cause open/close jump",
+      "Closed rail paints a square chip over the icon; do not clip a full-width row background"
     ]
   },
   "doNot": [

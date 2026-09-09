@@ -6,15 +6,22 @@ import { LucideByName } from "../Button/lucideName";
 import type { DrawerProps } from "./Drawer.types";
 import styles from "./Drawer.module.css";
 
-export type { DrawerProps, DrawerSide } from "./Drawer.types";
+export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
 
 const FOCUSABLE = "a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])";
+
+const SIZE_CLASS = {
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
+} as const;
 
 export function Drawer({
   open,
   title,
   description,
   side = "right",
+  size = "md",
   showClose = true,
   onClose,
   children,
@@ -101,7 +108,7 @@ export function Drawer({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className={`${styles.panel} ${styles[side]}`}
+        className={`${styles.panel} ${styles[side]} ${SIZE_CLASS[size]}`}
         tabIndex={-1}
       >
         <header className={styles.header}>

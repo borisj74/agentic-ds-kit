@@ -51,6 +51,7 @@ function NavItem({ item, rail }: { item: SideNavItem; rail: boolean }) {
   const nested = Boolean(item.items && item.items.length > 0);
   const submenuId = useId();
   const [expanded, setExpanded] = useState(nested);
+  const submenuOpen = expanded && !rail;
 
   const className = [
     styles.item,
@@ -67,22 +68,24 @@ function NavItem({ item, rail }: { item: SideNavItem; rail: boolean }) {
           type="button"
           className={className}
           disabled={item.disabled}
-          aria-expanded={expanded}
+          aria-expanded={submenuOpen}
           aria-controls={submenuId}
           aria-current={item.active ? "page" : undefined}
           onClick={() => {
             if (!rail) setExpanded((current) => !current);
           }}
         >
-          <ItemBody item={item} expanded={expanded} />
+          <ItemBody item={item} expanded={submenuOpen} />
         </button>
-        {expanded && !rail ? (
+        <div
+          className={`${styles.submenuSlot} ${submenuOpen ? "" : styles.submenuSlotClosed}`.trim()}
+        >
           <ul className={styles.submenu} id={submenuId}>
             {item.items!.map((child) => (
               <NavItem key={child.id} item={child} rail={rail} />
             ))}
           </ul>
-        ) : null}
+        </div>
       </li>
     );
   }
@@ -174,32 +177,29 @@ export function SideNav({
       <div className={styles.panel}>
         {showHeader ? (
           <header className={styles.header}>
-            {expanded ? (
-              <span className={styles.mark} aria-hidden>
-                {markLetter}
-              </span>
-            ) : (
-              <button
-                type="button"
-                className={`${styles.mark} ${styles.markButton}`}
-                aria-label="Open"
-                onClick={() => setOpen(true)}
-              >
-                {markLetter}
-              </button>
-            )}
+            <button
+              type="button"
+              className={`${styles.mark} ${styles.markButton}`}
+              aria-label={expanded ? undefined : "Open"}
+              aria-hidden={expanded ? true : undefined}
+              tabIndex={expanded ? -1 : 0}
+              disabled={expanded}
+              onClick={() => {
+                if (!expanded) setOpen(true);
+              }}
+            >
+              {markLetter}
+            </button>
             <p className={styles.title}>{title}</p>
-            {expanded ? (
-              <span className={styles.close}>
-                <Button
-                  variant="tertiary"
-                  size="sm"
-                  iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
-                  ariaLabel="Close"
-                  onClick={() => setOpen(false)}
-                />
-              </span>
-            ) : null}
+            <span className={styles.close} {...(!expanded ? { inert: true } : {})}>
+              <Button
+                variant="tertiary"
+                size="sm"
+                iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
+                ariaLabel="Close"
+                onClick={() => setOpen(false)}
+              />
+            </span>
           </header>
         ) : null}
 

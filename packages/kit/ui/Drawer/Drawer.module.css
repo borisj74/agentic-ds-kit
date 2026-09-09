@@ -29,14 +29,14 @@
 
 .right {
   margin-left: auto;
-  width: min(24rem, 100%);
+  width: min(var(--layout-drawer-md), 100%);
   max-height: 100%;
   animation-name: enterRight;
 }
 
 .left {
   margin-right: auto;
-  width: min(24rem, 100%);
+  width: min(var(--layout-drawer-md), 100%);
   max-height: 100%;
   animation-name: enterLeft;
 }
@@ -44,7 +44,7 @@
 .bottom {
   align-self: flex-end;
   margin-inline: auto;
-  width: min(24rem, 100%);
+  width: min(var(--layout-drawer-md), 100%);
   max-height: 100%;
   background-color: var(--surface-card);
   animation-name: enterBottom;
@@ -55,6 +55,24 @@
   width: 100%;
   max-height: 100%;
   animation-name: enterTop;
+}
+
+.sizeSm.right,
+.sizeSm.left,
+.sizeSm.bottom {
+  width: min(var(--layout-drawer-sm), 100%);
+}
+
+.sizeMd.right,
+.sizeMd.left,
+.sizeMd.bottom {
+  width: min(var(--layout-drawer-md), 100%);
+}
+
+.sizeLg.right,
+.sizeLg.left,
+.sizeLg.bottom {
+  width: min(var(--layout-drawer-lg), 100%);
 }
 
 .header {
