@@ -105,8 +105,9 @@
     "element": "table",
     "requirements": [
       "Native table named by label, with kit HeaderCell headers and th scope=col",
-      "Each idle cell is a button named by its column and row with its value, like Value, row 2: 100",
-      "Enter or click opens a kit Input, Select, or DatePicker named the same way, and focus moves into it",
+      "Each idle text cell is a button named by its column and row with its value, like Value, row 2: 100",
+      "Select and date columns always show the kit Select or DatePicker in the cell so the grid does not shift when the value changes",
+      "Enter or click on a text cell opens a kit Input named the same way, inset in the cell, and focus moves into it",
       "Enter saves and Escape cancels; focus goes back to the cell. Tab moves to the next cell",
       "Remove row buttons are named Remove row 2 and show that in a Tooltip",
       "A date cell editor is a kit DatePicker named by its column and row, like Start date, row 2",
