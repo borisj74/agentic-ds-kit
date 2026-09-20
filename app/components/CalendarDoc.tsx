@@ -30,7 +30,10 @@ export function CalendarDoc() {
     <div>
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Calendars</h1>
-        <p className={styles.lede}>Month view for picking a single date in lg, md, and sm.</p>
+        <p className={styles.lede}>
+          Month view for picking a date in lg, md, and sm. Optional start and end highlight a range.
+          Not an event calendar.
+        </p>
       </header>
 
       <section className={styles.master} aria-labelledby="calendar-master">
@@ -39,7 +42,7 @@ export function CalendarDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle size and disabled to preview the month grid. One date only.
+            Toggle size and disabled to preview the month grid. One date by default.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -79,8 +82,8 @@ export function CalendarDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One date only. Range is not this component. Date field overlay uses this Calendar.
-                  Nav is kit Buttons. minDate and maxDate are YYYY-MM-DD bounds.
+                  One date by default. start and end highlight a span. Date field overlay uses this
+                  Calendar. Nav is kit Buttons. minDate and maxDate are YYYY-MM-DD bounds.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, disabled, value)} />
@@ -146,12 +149,27 @@ export function CalendarDoc() {
               />
             </section>
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Range</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Calendar size="md" start="2026-08-10" end="2026-08-18" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  start and end highlight the span. DatePicker mode=&quot;range&quot; drives this. Not an
+                  event calendar and not DualCalendar.
+                </p>
+              </div>
+              <CodeBlock code={'<Calendar start="2026-08-10" end="2026-08-18" />'} />
+            </section>
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Contract snippet</h2>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One date only. Range is not this component. Date field overlay uses this Calendar.
-                  Nav is kit Buttons.
+                  One date by default. Date field overlay uses this Calendar. Nav is kit Buttons.
                 </p>
               </div>
               <CodeBlock code={SNIPPET} />

@@ -4,6 +4,8 @@ export interface CalendarProps {
   value?: string;
   defaultValue?: string;
   onValueChange?: (date: string) => void;
+  start?: string;
+  end?: string;
   size?: CalendarSize;
   disabled?: boolean;
   minDate?: string;

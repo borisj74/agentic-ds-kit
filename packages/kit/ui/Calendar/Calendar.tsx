@@ -80,7 +80,18 @@ function dayIsDisabled(date: Date, minDate?: string, maxDate?: string, calendarD
   return false;
 }
 
-function dayName(date: Date, isToday: boolean, isSelected: boolean): string {
+function orderedSpan(from: string, to: string): { start: string; end: string } {
+  return to < from ? { start: to, end: from } : { start: from, end: to };
+}
+
+function dayName(
+  date: Date,
+  isToday: boolean,
+  isSelected: boolean,
+  rangeStart: boolean,
+  rangeEnd: boolean,
+  inRange: boolean,
+): string {
   const label = date.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -89,7 +100,10 @@ function dayName(date: Date, isToday: boolean, isSelected: boolean): string {
   });
   const extras = [label];
   if (isToday) extras.push("today");
-  if (isSelected) extras.push("selected");
+  if (rangeStart) extras.push("start of range");
+  if (rangeEnd && !rangeStart) extras.push("end of range");
+  if (inRange) extras.push("in range");
+  if (isSelected && !rangeStart && !rangeEnd) extras.push("selected");
   return extras.join(", ");
 }
 
@@ -97,6 +111,8 @@ export function Calendar({
   value,
   defaultValue,
   onValueChange,
+  start,
+  end,
   size = "md",
   disabled = false,
   minDate,
@@ -107,11 +123,13 @@ export function Calendar({
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const selectedISO = isControlled ? value : uncontrolledValue;
   const selectedDate = parseISODate(selectedISO);
+  const rangeMode = Boolean(start);
 
-  const [view, setView] = useState(() => monthFromISO(selectedISO ?? defaultValue));
+  const [view, setView] = useState(() => monthFromISO(start ?? selectedISO ?? defaultValue));
   const [focusedISO, setFocusedISO] = useState(
-    () => selectedISO ?? toISODate(new Date()),
+    () => start ?? selectedISO ?? toISODate(new Date()),
   );
+  const [hoverISO, setHoverISO] = useState<string | null>(null);
   const [seenValue, setSeenValue] = useState(value);
 
   if (isControlled && value !== seenValue) {
@@ -133,6 +151,14 @@ export function Calendar({
   const weeks = buildWeeks(view);
   const monthLabel = view.toLocaleString("en-US", { month: "long", year: "numeric" });
 
+  const previewISO = rangeMode && !end ? (hoverISO ?? focusedISO) : undefined;
+  const span =
+    start && (end || (previewISO && previewISO !== start))
+      ? orderedSpan(start, end ?? previewISO ?? start)
+      : start
+        ? { start, end: start }
+        : null;
+
   const lastPrev = new Date(view.getFullYear(), view.getMonth(), 0);
   const firstNext = new Date(view.getFullYear(), view.getMonth() + 1, 1);
   const prevDisabled = disabled || Boolean(minDate && toISODate(lastPrev) < minDate);
@@ -147,7 +173,7 @@ export function Calendar({
   function commit(date: Date) {
     if (dayIsDisabled(date, minDate, maxDate, disabled)) return;
     const iso = toISODate(date);
-    if (!isControlled) setUncontrolledValue(iso);
+    if (!rangeMode && !isControlled) setUncontrolledValue(iso);
     onValueChange?.(iso);
     setView(startOfMonth(date));
     setFocusedISO(iso);
@@ -242,6 +268,7 @@ export function Calendar({
         aria-labelledby={headingId}
         aria-disabled={disabled || undefined}
         onKeyDown={onGridKeyDown}
+        onMouseLeave={() => setHoverISO(null)}
       >
         <div role="row" className={styles.weekdays}>
           {WEEKDAYS.map((label) => (
@@ -256,7 +283,12 @@ export function Calendar({
               const iso = toISODate(date);
               const outside = date.getMonth() !== view.getMonth();
               const isToday = iso === todayISO;
-              const isSelected = Boolean(selectedDate && isSameDay(date, selectedDate));
+              const isRangeStart = Boolean(span && iso === span.start);
+              const isRangeEnd = Boolean(span && iso === span.end && span.end !== span.start);
+              const isInRange = Boolean(span && span.end !== span.start && iso > span.start && iso < span.end);
+              const isSelected = rangeMode
+                ? isRangeStart || iso === span?.end
+                : Boolean(selectedDate && isSameDay(date, selectedDate));
               const isFocused = iso === focusedISO;
               const dayDisabled = dayIsDisabled(date, minDate, maxDate, disabled);
 
@@ -265,7 +297,7 @@ export function Calendar({
                   key={iso}
                   role="gridcell"
                   className={styles.cell}
-                  aria-selected={isSelected || undefined}
+                  aria-selected={isSelected || isInRange || undefined}
                 >
                   <button
                     ref={(node) => {
@@ -275,13 +307,19 @@ export function Calendar({
                     type="button"
                     className={styles.day}
                     tabIndex={isFocused ? 0 : -1}
-                    aria-label={dayName(date, isToday, isSelected)}
+                    aria-label={dayName(date, isToday, isSelected, isRangeStart, isRangeEnd, isInRange)}
                     aria-disabled={dayDisabled || undefined}
                     data-outside={outside || undefined}
                     data-today={isToday || undefined}
                     data-selected={isSelected || undefined}
+                    data-in-range={isInRange || undefined}
+                    data-range-start={isRangeStart || undefined}
+                    data-range-end={isRangeEnd || undefined}
                     onClick={() => commit(date)}
                     onFocus={() => setFocusedISO(iso)}
+                    onMouseEnter={() => {
+                      if (rangeMode && !end) setHoverISO(iso);
+                    }}
                   >
                     {date.getDate()}
                   </button>

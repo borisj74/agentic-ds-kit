@@ -1,10 +1,13 @@
 export type DatePickerSize = "sm" | "md";
+export type DatePickerMode = "single" | "range";
 
-export interface DatePickerProps {
+export interface DatePickerRange {
+  start: string;
+  end?: string;
+}
+
+interface DatePickerShared {
   id: string;
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (date: string) => void;
   size?: DatePickerSize;
   placeholder?: string;
   disabled?: boolean;
@@ -14,3 +17,19 @@ export interface DatePickerProps {
   name?: string;
   describedBy?: string;
 }
+
+export interface DatePickerSingleProps extends DatePickerShared {
+  mode?: "single";
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (date: string) => void;
+}
+
+export interface DatePickerRangeProps extends DatePickerShared {
+  mode: "range";
+  value?: DatePickerRange;
+  defaultValue?: DatePickerRange;
+  onValueChange?: (range: DatePickerRange) => void;
+}
+
+export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;

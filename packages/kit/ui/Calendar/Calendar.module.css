@@ -117,6 +117,16 @@
   opacity: var(--opacity-muted);
 }
 
+.day[data-in-range]:not([data-selected]) {
+  background: var(--fill-brand-subtle);
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.day[data-in-range]:not([data-selected]):hover:not([aria-disabled="true"]) {
+  background: var(--fill-brand-subtle);
+}
+
 .day[data-selected] {
   background: var(--action-primary);
   color: var(--action-on-primary);

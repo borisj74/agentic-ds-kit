@@ -155,14 +155,14 @@
   },
   {
     "id": "datepicker",
-    "intent": "Form field that opens kit Calendar to pick one date.",
+    "intent": "Form field that opens kit Calendar to pick one date or a date range.",
     "group": "component",
     "path": "contracts/datepicker.json",
     "status": "stable"
   },
   {
     "id": "calendar",
-    "intent": "Month grid for picking one date.",
+    "intent": "Month grid for picking one date or showing a date range.",
     "group": "component",
     "path": "contracts/calendar.json",
     "status": "stable"

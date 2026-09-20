@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { DatePicker } from "agentic-ds-kit";
-import type { DatePickerSize } from "agentic-ds-kit";
+import type { DatePickerRange, DatePickerSize } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -10,6 +10,8 @@ import { DocTabList } from "./DocTabList";
 
 const SIZES: DatePickerSize[] = ["sm", "md"];
 const MASTER_DEFAULT = "2026-08-29";
+const RANGE_DEFAULT: DatePickerRange = { start: "2026-08-10", end: "2026-08-18" };
+const OVERLAY_CANVAS = { minHeight: "28rem", overflow: "visible" } as const;
 
 function masterCode(size: DatePickerSize, disabled: boolean, value: string) {
   const lines = ["<DatePicker", '  id="start-date"', `  size="${size}"`, `  value="${value}"`];
@@ -25,13 +27,15 @@ export function DatePickerDoc() {
   const [disabled, setDisabled] = useState(false);
   const [value, setValue] = useState(MASTER_DEFAULT);
   const [fieldValue, setFieldValue] = useState(MASTER_DEFAULT);
+  const [range, setRange] = useState<DatePickerRange>(RANGE_DEFAULT);
 
   return (
     <div>
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>DatePicker</h1>
         <p className={styles.lede}>
-          Form field that opens kit Calendar. Calendar stays the month grid. Not a native date input.
+          Form field that opens kit Calendar. One date by default. mode range picks a start and an
+          end. Wrap with Field. Not a native date input.
         </p>
       </header>
 
@@ -94,7 +98,7 @@ export function DatePickerDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Use DatePicker in a form. Use Calendar when the month grid is already on the page.
-                  Value is YYYY-MM-DD. Do not invent Popover or a native date input.
+                  Value is YYYY-MM-DD. Do not invent Popover, DateRangePicker, or a native date input.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, disabled, value)} />
@@ -104,7 +108,7 @@ export function DatePickerDoc() {
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Empty</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewRow}>
                   <DatePicker id="datepicker-empty" placeholder="Pick a date" />
                 </div>
@@ -117,8 +121,62 @@ export function DatePickerDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Range</h2>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
+                <div className={styles.previewRow}>
+                  <Field label="Report period" htmlFor="datepicker-range" hint="First click start, second click end">
+                    <DatePicker
+                      id="datepicker-range"
+                      mode="range"
+                      value={range}
+                      onValueChange={setRange}
+                    />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  mode=&quot;range&quot; on one DatePicker. Not two fields and not DateRangePicker. Value is
+                  {" { start, end }"} as YYYY-MM-DD.
+                </p>
+              </div>
+              <CodeBlock
+                code={[
+                  '<Field label="Report period" htmlFor="period">',
+                  '  <DatePicker id="period" mode="range" value={range} onValueChange={setRange} />',
+                  "</Field>",
+                ].join("\n")}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Min and max</h2>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
+                <div className={styles.previewRow}>
+                  <DatePicker
+                    id="datepicker-bounds"
+                    defaultValue="2026-08-29"
+                    minDate="2026-08-10"
+                    maxDate="2026-09-15"
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  minDate and maxDate pass through to kit Calendar. Days outside the window cannot
+                  be picked.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<DatePicker id="start-date" defaultValue="2026-08-29" minDate="2026-08-10" maxDate="2026-09-15" />'}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>With Field</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewRow}>
                   <Field label="Start date" htmlFor="datepicker-field" hint="YYYY-MM-DD under the hood">
                     <DatePicker
@@ -158,7 +216,7 @@ export function DatePickerDoc() {
 
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Error</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewRow}>
                   <Field label="Due date" htmlFor="datepicker-error" error="Choose a date in range">
                     <DatePicker id="datepicker-error" error />
