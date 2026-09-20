@@ -1,106 +1,160 @@
 {
   "id": "calendar",
   "status": "stable",
-  "intent": "Month grid for picking one date or showing a date range.",
+  "intent": "A full calendar of events by month, week, day, or list. Browse dates, filter calendars, add / edit / delete events.",
   "useWhen": [
-    "Booking, scheduling, or choosing a single calendar day",
-    "A date field’s overlay content",
-    "Highlighting a start and end on the month grid"
+    "A schedule people browse by date: shifts, PTO, holidays, billing runs, meetings",
+    "Adding and editing dated events in place",
+    "Several calendars layered on one view, each in its own tone"
   ],
   "doNotUseWhen": [
-    "Time-only — ask first",
-    "A typed date field without a grid — use DatePicker",
-    "A form date field — use DatePicker",
-    "A schedule of events (month/week/day/list) — not this Calendar"
+    "Picking one date or a range in a form — use DatePicker",
+    "A timeline of one record — use Table or Timeline"
+  ],
+  "contains": [
+    "button",
+    "tabs",
+    "drawer",
+    "field",
+    "input",
+    "textarea",
+    "switch",
+    "datepicker",
+    "select",
+    "dropdownmenu",
+    "tooltip",
+    "empty"
   ],
   "props": {
-    "value": {
+    "label": {
       "type": "string",
-      "required": false,
-      "note": "controlled YYYY-MM-DD. Default is one selected day."
+      "default": "Calendar",
+      "note": "Names the calendar region for screen readers."
     },
-    "defaultValue": {
-      "type": "string",
-      "required": false,
-      "note": "uncontrolled YYYY-MM-DD"
+    "events": {
+      "type": "CalendarEvent[]",
+      "itemShape": "{ id: string; title: string; start: string; end?: string; allDay?: boolean; calendar?: string; tone?: CalendarTone; note?: string }",
+      "note": "Controlled events. start and end are local ISO: 2024-10-09 all-day, 2024-10-09T08:30 timed. An all-day end is the last day, inclusive. A timed event with no end lasts one hour. tone overrides the source calendar’s color."
     },
-    "onValueChange": {
+    "defaultEvents": {
+      "type": "CalendarEvent[]",
+      "note": "Starting events when the Calendar keeps changes itself."
+    },
+    "onEventsChange": {
       "type": "function",
-      "required": false,
-      "note": "(date: string) => void // ISO date. With start/end this is the clicked day; DatePicker range sets start then end."
+      "signature": "(events: CalendarEvent[]) => void",
+      "note": "Called with the full new list after an event is created, edited, or deleted."
     },
-    "start": {
+    "onEventClick": {
+      "type": "function",
+      "signature": "(event: CalendarEvent) => void",
+      "note": "Called when an event is clicked, before the edit drawer opens (or instead of it when readOnly)."
+    },
+    "calendars": {
+      "type": "CalendarSource[]",
+      "itemShape": "{ id: string; name: string; tone?: CalendarTone; hidden?: boolean }",
+      "note": "Sources. Color events, fill the event-form Calendar field, list in the Calendars drawer. hidden starts one hidden. Without calendars there is no Calendars button."
+    },
+    "view": {
+      "enum": ["month", "week", "day", "list"],
+      "note": "Controlled view. Leave it out to let the switch change it."
+    },
+    "defaultView": {
+      "enum": ["month", "week", "day", "list"],
+      "default": "month",
+      "note": "The first view."
+    },
+    "onViewChange": {
+      "type": "function",
+      "signature": "(view: CalendarView) => void"
+    },
+    "views": {
+      "type": "CalendarView[]",
+      "note": "Which views the switch offers, in order. Defaults to month, week, day, and list. With one view there is no switch."
+    },
+    "date": {
       "type": "string",
-      "required": false,
-      "note": "YYYY-MM-DD range start. When set without end, that day is selected."
+      "note": "Controlled focused date, YYYY-MM-DD. The view shows the month, week, or day around it."
     },
-    "end": {
+    "defaultDate": {
       "type": "string",
-      "required": false,
-      "note": "YYYY-MM-DD range end. When both start and end are set, days between are in-range."
+      "note": "The first focused date. Defaults to today."
     },
-    "size": {
-      "type": "enum",
-      "values": [
-        "sm",
-        "md",
-        "lg"
-      ],
-      "default": "md"
+    "onDateChange": {
+      "type": "function",
+      "signature": "(date: string) => void"
     },
-    "disabled": {
+    "weekStart": {
+      "enum": ["sunday", "monday"],
+      "default": "sunday",
+      "note": "The first day of each week row and of Week and List."
+    },
+    "startHour": {
+      "type": "number",
+      "default": 7,
+      "note": "Week and Day open scrolled to this hour (0–23). The whole day can still be scrolled."
+    },
+    "readOnly": {
       "type": "boolean",
-      "default": false
-    },
-    "minDate": {
-      "type": "string",
-      "required": false,
-      "note": "YYYY-MM-DD inclusive lower bound"
-    },
-    "maxDate": {
-      "type": "string",
-      "required": false,
-      "note": "YYYY-MM-DD inclusive upper bound"
+      "default": false,
+      "note": "Hides New event and turns off creating, editing, and deleting. Events can still be clicked through onEventClick."
     }
   },
   "tokens": [
-    "surface.page",
     "surface.card",
     "surface.muted",
+    "surface.page",
     "text.primary",
     "text.muted",
-    "text.inverse",
+    "text.brand",
+    "text.success",
+    "text.warning",
+    "text.danger",
+    "text.info",
+    "fill.brand",
+    "fill.brandSubtle",
+    "fill.success",
+    "fill.successSubtle",
+    "fill.warning",
+    "fill.warningSubtle",
+    "fill.danger",
+    "fill.dangerSubtle",
+    "fill.info",
+    "fill.infoSubtle",
+    "fill.accent",
+    "fill.subtle",
     "border.faint",
-    "border.strong",
-    "border.focus",
+    "border.subtle",
+    "status.danger",
     "action.primary",
     "action.onPrimary",
-    "fill.brandSubtle",
-    "radius.surfaceMd",
+    "focus.ring",
+    "radius.surfaceSm",
     "radius.controlSm",
-    "shadow.sm",
-    "opacity.disabled",
-    "opacity.muted"
+    "radius.pill",
+    "space.6"
   ],
   "a11y": {
-    "element": "div[role=grid]",
+    "element": "div[role=region]",
     "requirements": [
-      "role=grid for the month days",
-      "Heading names the visible month and uses aria-live polite",
-      "Previous and next month controls have aria-labels",
-      "Selected day is aria-selected",
-      "Today is announced in the day accessible name",
-      "Range start and end are named in the day accessible name; days between are in-range and aria-selected",
-      "Disabled days are not selectable",
-      "Keyboard arrows move day focus (roving tabindex)"
+      "role=region named by label",
+      "Visible title (month, week, or day) is a heading and aria-live polite when it changes",
+      "Month is role=grid; one day is in the tab order; arrows move a day or a week; Home and End go to the week’s ends; Page Up and Page Down change the month; Enter opens a new event (or Day view when readOnly)",
+      "Day accessible name is the full date and event count",
+      "Every event is a button named title + time + calendar. Color is never the only cue",
+      "Month event chips, +N more, and day numbers are at least 24px tall",
+      "Icon-only Previous and Next are kit Buttons with a kit Tooltip; aria-labels name the step (month, week, or day)",
+      "The event form and the Calendars list open in a kit Drawer, which traps focus",
+      "+N more and the day numbers open Day view"
     ]
   },
   "doNot": [
-    "Do not invent a local calendar or DualCalendar",
-    "Do not use raw hex",
-    "Do not use Calendar as a form field — use DatePicker",
-    "Do not turn Calendar into an event or schedule calendar",
-    "Do not replace nav with custom icon buttons — use kit Buttons"
+    "Do not invent EventCalendar, Scheduler, MonthGrid, or DateGrid as public components",
+    "Do not use DatePicker for this schedule — DatePicker is a form date field",
+    "Do not put a primary Button in the toolbar; the event form’s Save is the primary action",
+    "Do not use raw hex or primitive --color-* ramps; pick a tone (brand, success, warning, danger, info, accent)",
+    "Do not use Calendar as a form control — use DatePicker",
+    "Do not ship a second month-grid Calendar in the catalog"
   ],
-  "snippet": "<Calendar size=\"md\" defaultValue=\"2026-08-29\" onValueChange={(date) => setDate(date)} />\n<Calendar start=\"2026-08-10\" end=\"2026-08-18\" />"
+  "snippet": "<Calendar\n  label=\"Team calendar\"\n  calendars={calendars}\n  events={events}\n  onEventsChange={setEvents}\n  defaultView=\"week\"\n/>"
 }

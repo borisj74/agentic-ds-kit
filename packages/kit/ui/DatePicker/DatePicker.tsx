@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Calendar } from "../Calendar";
+import { MonthGrid } from "./MonthGrid";
 import { LucideByName } from "../Button/lucideName";
 import controlStyles from "../shared/controls.module.css";
 import type { DatePickerProps, DatePickerRange } from "./DatePicker.types";
@@ -236,7 +236,7 @@ export function DatePicker(props: DatePickerProps) {
               {rangeStatus}
             </span>
           ) : null}
-          <Calendar
+          <MonthGrid
             size={size === "sm" ? "sm" : "md"}
             value={isRange ? undefined : typeof selected === "string" ? selected : undefined}
             start={picking?.start}

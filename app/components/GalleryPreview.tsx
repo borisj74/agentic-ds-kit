@@ -162,7 +162,22 @@ export function GalleryPreview({ id }: { id: string }) {
         </ButtonGroup>
       );
     case "calendar":
-      return <Calendar size="sm" defaultValue="2026-08-30" />;
+      return (
+        <Stage variant="wide">
+          <Calendar
+            label="Team"
+            views={["month"]}
+            defaultView="month"
+            defaultDate="2026-09-20"
+            calendars={[{ id: "meetings", name: "Meetings", tone: "brand" }]}
+            defaultEvents={[
+              { id: "standup", title: "Standup", start: "2026-09-20T09:00", calendar: "meetings" },
+              { id: "review", title: "Review", start: "2026-09-22T13:00", calendar: "meetings" },
+            ]}
+            readOnly
+          />
+        </Stage>
+      );
     case "card":
       return (
         <Stage variant="wide">

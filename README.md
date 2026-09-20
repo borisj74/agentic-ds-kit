@@ -31,8 +31,8 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 ### Components
 
 - **Actions** — Button, ButtonGroup, DropdownMenu
-- **Forms** — Input, Textarea, Select, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker, Calendar
-- **Data & charts** — Table, DataTable, Cell, HeaderCell, Scorecard, Scoreboard, LineChart, BarChart, PieChart, NumberTransition, InsightCard
+- **Forms** — Input, Textarea, Select, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker
+- **Data & charts** — Table, DataTable, Cell, HeaderCell, Scorecard, Scoreboard, LineChart, BarChart, PieChart, NumberTransition, InsightCard, Calendar
 - **Feedback** — Alert, Badge, Tooltip, Toast, Empty, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText
 - **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section

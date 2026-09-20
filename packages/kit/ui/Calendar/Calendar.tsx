@@ -1,334 +1,347 @@
 "use client";
 
-import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
 import { Button } from "../Button";
-import type { CalendarProps } from "./Calendar.types";
+import { DropdownMenu } from "../DropdownMenu";
+import { Tabs } from "../Tabs";
+import { Tooltip } from "../Tooltip";
+import { CalendarsDrawer, EventDrawer } from "./CalendarDrawers";
+import { CalendarViews } from "./CalendarViews";
+import type { CalendarEvent, CalendarProps, CalendarView } from "./Calendar.types";
+import {
+  addDays,
+  addMinutes,
+  addMonths,
+  ALL_VIEWS,
+  dayOf,
+  draftFrom,
+  longDate,
+  monthTitle,
+  parseStamp,
+  PLACEHOLDER_DAY,
+  placeEvent,
+  rangeTitle,
+  toISO,
+  toStamp,
+  VIEW_LABELS,
+  weekOf,
+  type EventDraft,
+  type PlacedEvent,
+} from "./calendarModel";
 import styles from "./Calendar.module.css";
 
-export type { CalendarProps, CalendarSize } from "./Calendar.types";
+export type {
+  CalendarEvent,
+  CalendarProps,
+  CalendarSource,
+  CalendarTone,
+  CalendarView,
+  CalendarWeekStart,
+} from "./Calendar.types";
 
-const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
+const subscribeNow = (tick: () => void) => {
+  const timer = window.setInterval(tick, 30000);
+  return () => window.clearInterval(timer);
+};
 
-function parseISODate(iso?: string): Date | null {
-  if (!iso) return null;
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-  if (!match) return null;
-  const year = Number(match[1]);
-  const month = Number(match[2]) - 1;
-  const day = Number(match[3]);
-  const date = new Date(year, month, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
-    return null;
-  }
-  return date;
-}
-
-function toISODate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function startOfMonth(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-}
-
-function addDays(date: Date, delta: number): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + delta);
-}
-
-function addMonths(date: Date, delta: number): Date {
-  const nextMonth = new Date(date.getFullYear(), date.getMonth() + delta, 1);
-  const lastDay = new Date(nextMonth.getFullYear(), nextMonth.getMonth() + 1, 0).getDate();
-  return new Date(nextMonth.getFullYear(), nextMonth.getMonth(), Math.min(date.getDate(), lastDay));
-}
-
-function monthFromISO(iso?: string): Date {
-  const parsed = parseISODate(iso);
-  const base = parsed ?? new Date();
-  return startOfMonth(base);
-}
-
-function buildWeeks(view: Date): Date[][] {
-  const first = new Date(view.getFullYear(), view.getMonth(), 1);
-  const start = new Date(view.getFullYear(), view.getMonth(), 1 - first.getDay());
-  const weeks: Date[][] = [];
-  for (let weekIndex = 0; weekIndex < 6; weekIndex += 1) {
-    const week: Date[] = [];
-    for (let dayIndex = 0; dayIndex < 7; dayIndex += 1) {
-      week.push(addDays(start, weekIndex * 7 + dayIndex));
-    }
-    weeks.push(week);
-  }
-  return weeks;
-}
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function dayIsDisabled(date: Date, minDate?: string, maxDate?: string, calendarDisabled?: boolean): boolean {
-  if (calendarDisabled) return true;
-  const iso = toISODate(date);
-  if (minDate && iso < minDate) return true;
-  if (maxDate && iso > maxDate) return true;
-  return false;
-}
-
-function orderedSpan(from: string, to: string): { start: string; end: string } {
-  return to < from ? { start: to, end: from } : { start: from, end: to };
-}
-
-function dayName(
-  date: Date,
-  isToday: boolean,
-  isSelected: boolean,
-  rangeStart: boolean,
-  rangeEnd: boolean,
-  inRange: boolean,
-): string {
-  const label = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-  const extras = [label];
-  if (isToday) extras.push("today");
-  if (rangeStart) extras.push("start of range");
-  if (rangeEnd && !rangeStart) extras.push("end of range");
-  if (inRange) extras.push("in range");
-  if (isSelected && !rangeStart && !rangeEnd) extras.push("selected");
-  return extras.join(", ");
-}
+const useNow = () => {
+  const minute = useSyncExternalStore(subscribeNow, () => Math.floor(Date.now() / 60000), () => null);
+  return minute === null ? null : new Date(minute * 60000);
+};
 
 export function Calendar({
-  value,
-  defaultValue,
-  onValueChange,
-  start,
-  end,
-  size = "md",
-  disabled = false,
-  minDate,
-  maxDate,
+  label = "Calendar",
+  events: eventsProp,
+  defaultEvents,
+  onEventsChange,
+  onEventClick,
+  calendars = [],
+  view: viewProp,
+  defaultView = "month",
+  onViewChange,
+  views = ALL_VIEWS,
+  date: dateProp,
+  defaultDate,
+  onDateChange,
+  weekStart = "sunday",
+  startHour = 7,
+  readOnly = false,
 }: CalendarProps) {
-  const headingId = useId();
-  const isControlled = value !== undefined;
-  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
-  const selectedISO = isControlled ? value : uncontrolledValue;
-  const selectedDate = parseISODate(selectedISO);
-  const rangeMode = Boolean(start);
+  const titleId = useId();
+  const formId = useId();
+  const now = useNow();
+  const [viewState, setViewState] = useState<CalendarView>(defaultView);
+  const [dateState, setDateState] = useState<string | null>(defaultDate ?? null);
+  const [eventsState, setEventsState] = useState<CalendarEvent[]>(defaultEvents ?? []);
+  const [hidden, setHidden] = useState(() => new Set(calendars.filter((calendar) => calendar.hidden).map((calendar) => calendar.id)));
+  const [panel, setPanel] = useState<"calendars" | "event" | null>(null);
+  const [draft, setDraft] = useState<EventDraft | null>(null);
+  const [errors, setErrors] = useState<{ title?: string; end?: string }>({});
+  const gridRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const focusDay = useRef(false);
 
-  const [view, setView] = useState(() => monthFromISO(start ?? selectedISO ?? defaultValue));
-  const [focusedISO, setFocusedISO] = useState(
-    () => start ?? selectedISO ?? toISODate(new Date()),
-  );
-  const [hoverISO, setHoverISO] = useState<string | null>(null);
-  const [seenValue, setSeenValue] = useState(value);
+  const offered = views.length ? views : ALL_VIEWS;
+  const view = offered.includes(viewProp ?? viewState) ? (viewProp ?? viewState) : offered[0];
+  const date = dateProp ?? dateState ?? (now ? toISO(now) : "");
+  const events = eventsProp ?? eventsState;
+  const pending = !date;
+  const focus = parseStamp(date) ?? PLACEHOLDER_DAY;
+  const today = now ? dayOf(now) : null;
 
-  if (isControlled && value !== seenValue) {
-    setSeenValue(value);
-    const next = parseISODate(value);
-    if (next) {
-      if (view.getFullYear() !== next.getFullYear() || view.getMonth() !== next.getMonth()) {
-        setView(startOfMonth(next));
-      }
-      setFocusedISO(value);
-    }
-  }
+  const setView = (next: CalendarView) => {
+    if (viewProp === undefined) setViewState(next);
+    onViewChange?.(next);
+  };
+  const setDate = (next: Date) => {
+    const iso = toISO(next);
+    if (dateProp === undefined) setDateState(iso);
+    onDateChange?.(iso);
+  };
+  const commit = (next: CalendarEvent[]) => {
+    if (eventsProp === undefined) setEventsState(next);
+    onEventsChange?.(next);
+  };
 
-  const dayRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const moveFocusRef = useRef(false);
+  const placed = events
+    .filter((event) => !event.calendar || !hidden.has(event.calendar))
+    .map((event) => placeEvent(event, calendars))
+    .filter((item): item is PlacedEvent => Boolean(item));
 
-  const today = new Date();
-  const todayISO = toISODate(today);
-  const weeks = buildWeeks(view);
-  const monthLabel = view.toLocaleString("en-US", { month: "long", year: "numeric" });
-
-  const previewISO = rangeMode && !end ? (hoverISO ?? focusedISO) : undefined;
-  const span =
-    start && (end || (previewISO && previewISO !== start))
-      ? orderedSpan(start, end ?? previewISO ?? start)
-      : start
-        ? { start, end: start }
-        : null;
-
-  const lastPrev = new Date(view.getFullYear(), view.getMonth(), 0);
-  const firstNext = new Date(view.getFullYear(), view.getMonth() + 1, 1);
-  const prevDisabled = disabled || Boolean(minDate && toISODate(lastPrev) < minDate);
-  const nextDisabled = disabled || Boolean(maxDate && toISODate(firstNext) > maxDate);
+  const week = weekOf(focus, weekStart);
+  const weekDays = Array.from({ length: 7 }, (_, index) => addDays(week, index));
+  const title = view === "month" ? monthTitle(focus) : view === "day" ? longDate(focus) : rangeTitle(weekDays[0], weekDays[6]);
+  const unit = view === "month" ? "month" : view === "day" ? "day" : "week";
+  const step = (delta: number) => setDate(view === "month" ? addMonths(focus, delta) : addDays(focus, delta * (view === "day" ? 1 : 7)));
+  const openDay = (day: Date) => {
+    setDate(day);
+    if (offered.includes("day")) setView("day");
+  };
 
   useLayoutEffect(() => {
-    if (!moveFocusRef.current) return;
-    moveFocusRef.current = false;
-    dayRefs.current.get(focusedISO)?.focus();
-  }, [focusedISO, view]);
+    const node = scrollRef.current;
+    if (node) node.scrollTop = (node.scrollHeight / 24) * Math.max(Math.min(startHour, 23) - 0.25, 0);
+  }, [view, startHour]);
 
-  function commit(date: Date) {
-    if (dayIsDisabled(date, minDate, maxDate, disabled)) return;
-    const iso = toISODate(date);
-    if (!rangeMode && !isControlled) setUncontrolledValue(iso);
-    onValueChange?.(iso);
-    setView(startOfMonth(date));
-    setFocusedISO(iso);
-  }
+  useLayoutEffect(() => {
+    if (!focusDay.current) return;
+    focusDay.current = false;
+    gridRef.current?.querySelector<HTMLElement>(`[data-date="${date}"]`)?.focus();
+  }, [date]);
 
-  function goMonth(delta: number) {
-    const next = startOfMonth(addMonths(view, delta));
-    const from = parseISODate(focusedISO) ?? view;
-    const last = new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate();
-    const day = Math.min(from.getDate(), last);
-    setView(next);
-    setFocusedISO(toISODate(new Date(next.getFullYear(), next.getMonth(), day)));
-  }
+  const openCreate = (day: Date, hour?: number, allDay = false) => {
+    if (readOnly) return;
+    const start = new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(hour ?? 9), ((hour ?? 9) % 1) * 60);
+    const end = addMinutes(start, 60);
+    const firstShown = calendars.find((calendar) => !hidden.has(calendar.id)) ?? calendars[0];
+    setDraft({
+      title: "",
+      calendar: firstShown?.id ?? "",
+      allDay,
+      note: "",
+      startDate: toISO(start),
+      startTime: toStamp(start).slice(11),
+      endDate: toISO(end),
+      endTime: toStamp(end).slice(11),
+    });
+    setErrors({});
+    setPanel("event");
+  };
 
-  function moveTo(date: Date) {
-    moveFocusRef.current = true;
-    setFocusedISO(toISODate(date));
-    setView(startOfMonth(date));
-  }
+  const openEvent = (item: PlacedEvent) => {
+    onEventClick?.(item.ev);
+    if (readOnly) return;
+    setDraft(draftFrom(item));
+    setErrors({});
+    setPanel("event");
+  };
 
-  function onGridKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    const current = parseISODate(focusedISO) ?? today;
-    let next: Date | null = null;
+  const closePanel = () => setPanel(null);
+  const edit = (patch: Partial<EventDraft>) => setDraft((current) => (current ? { ...current, ...patch } : current));
 
-    switch (event.key) {
-      case "ArrowLeft":
-        next = addDays(current, -1);
-        break;
-      case "ArrowRight":
-        next = addDays(current, 1);
-        break;
-      case "ArrowUp":
-        next = addDays(current, -7);
-        break;
-      case "ArrowDown":
-        next = addDays(current, 7);
-        break;
-      case "Home":
-        next = addDays(current, -current.getDay());
-        break;
-      case "End":
-        next = addDays(current, 6 - current.getDay());
-        break;
-      case "PageUp":
-        next = addMonths(current, -1);
-        break;
-      case "PageDown":
-        next = addMonths(current, 1);
-        break;
-      case "Enter":
-      case " ":
-        event.preventDefault();
-        commit(current);
-        return;
-      default:
-        return;
+  const save = () => {
+    if (!draft) return;
+    const start = draft.allDay ? parseStamp(draft.startDate) : parseStamp(`${draft.startDate}T${draft.startTime}`);
+    const end = draft.allDay ? parseStamp(draft.endDate) : parseStamp(`${draft.endDate}T${draft.endTime}`);
+    const next: { title?: string; end?: string } = {};
+    if (!draft.title.trim()) next.title = "Enter an event name.";
+    if (!start || !end || (draft.allDay ? end < start : end <= start)) next.end = "End must be after the start.";
+    setErrors(next);
+    if (next.title || next.end || !start || !end) return;
+    const event: CalendarEvent = {
+      id: draft.id ?? `event-${Date.now().toString(36)}`,
+      title: draft.title.trim(),
+      start: draft.allDay ? toISO(start) : toStamp(start),
+      end: draft.allDay ? toISO(end) : toStamp(end),
+      ...(draft.allDay ? { allDay: true } : {}),
+      ...(draft.calendar ? { calendar: draft.calendar } : {}),
+      ...(draft.note.trim() ? { note: draft.note.trim() } : {}),
+    };
+    const previous = draft.id ? events.find((item) => item.id === draft.id) : undefined;
+    if (previous?.tone) event.tone = previous.tone;
+    commit(draft.id ? events.map((item) => (item.id === draft.id ? event : item)) : [...events, event]);
+    closePanel();
+  };
+
+  const remove = () => {
+    if (!draft?.id) return;
+    commit(events.filter((item) => item.id !== draft.id));
+    closePanel();
+  };
+
+  const setStartDate = (value: string) => edit({ startDate: value, ...(draft && value > draft.endDate ? { endDate: value } : {}) });
+  const setStartTime = (value: string) => {
+    if (!draft) return;
+    const start = parseStamp(`${draft.startDate}T${value}`);
+    const end = parseStamp(`${draft.endDate}T${draft.endTime}`);
+    edit(
+      start && end && end <= start
+        ? { startTime: value, endDate: toISO(addMinutes(start, 60)), endTime: toStamp(addMinutes(start, 60)).slice(11) }
+        : { startTime: value },
+    );
+  };
+
+  const onMonthKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).dataset.date === undefined) return;
+    const moves: Record<string, () => Date> = {
+      ArrowLeft: () => addDays(focus, -1),
+      ArrowRight: () => addDays(focus, 1),
+      ArrowUp: () => addDays(focus, -7),
+      ArrowDown: () => addDays(focus, 7),
+      Home: () => weekOf(focus, weekStart),
+      End: () => addDays(weekOf(focus, weekStart), 6),
+      PageUp: () => addMonths(focus, -1),
+      PageDown: () => addMonths(focus, 1),
+    };
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (readOnly) openDay(focus);
+      else openCreate(focus);
+      return;
     }
-
+    if (!moves[event.key]) return;
     event.preventDefault();
-    if (next) moveTo(next);
-  }
+    focusDay.current = true;
+    setDate(moves[event.key]());
+  };
+
+  const year = focus.getFullYear();
+  const months = Array.from({ length: 12 }, (_, month) => new Date(year, month, 1));
+
+  const iconButton = (name: string, icon: string, onClick: () => void) => (
+    <Tooltip content={name}>
+      <Button variant="tertiary" size="sm" iconStart={icon} ariaLabel={name} onClick={onClick} />
+    </Tooltip>
+  );
 
   return (
     <div
-      className={`${styles.calendar} ${styles[size]}`}
-      data-disabled={disabled || undefined}
+      className={`${styles.calendar} ${pending ? styles.pending : ""}`}
+      role="region"
+      aria-label={label}
     >
       <div className={styles.header}>
-        <Button
-          variant="tertiary"
-          size="sm"
-          iconStart="ChevronLeft"
-          ariaLabel="Previous month"
-          disabled={prevDisabled}
-          onClick={() => goMonth(-1)}
-        />
-        <div className={styles.heading} id={headingId} role="heading" aria-level={2} aria-live="polite">
-          {monthLabel}
+        <div className={styles.titleRow}>
+          <h2 id={titleId} className={styles.title} aria-live="polite">
+            {title}
+          </h2>
+          <Tooltip content="Choose month">
+          <DropdownMenu
+            ariaLabel="Choose month"
+            trigger=""
+            variant="tertiary"
+            size="sm"
+            iconEnd="ChevronDown"
+            groups={[
+              {
+                items: months.map((month) => ({
+                  id: toISO(month),
+                  label: monthTitle(month),
+                  selected: month.getMonth() === focus.getMonth(),
+                })),
+              },
+            ]}
+            onSelect={(id) => {
+              const next = parseStamp(id);
+              if (next) setDate(addMonths(focus, next.getMonth() - focus.getMonth()));
+            }}
+          />
+          </Tooltip>
         </div>
-        <Button
-          variant="tertiary"
-          size="sm"
-          iconStart="ChevronRight"
-          ariaLabel="Next month"
-          disabled={nextDisabled}
-          onClick={() => goMonth(1)}
-        />
-      </div>
-      <div
-        className={styles.grid}
-        role="grid"
-        aria-labelledby={headingId}
-        aria-disabled={disabled || undefined}
-        onKeyDown={onGridKeyDown}
-        onMouseLeave={() => setHoverISO(null)}
-      >
-        <div role="row" className={styles.weekdays}>
-          {WEEKDAYS.map((label) => (
-            <div key={label} role="columnheader" className={styles.weekday}>
-              {label}
-            </div>
-          ))}
-        </div>
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} role="row" className={styles.row}>
-            {week.map((date) => {
-              const iso = toISODate(date);
-              const outside = date.getMonth() !== view.getMonth();
-              const isToday = iso === todayISO;
-              const isRangeStart = Boolean(span && iso === span.start);
-              const isRangeEnd = Boolean(span && iso === span.end && span.end !== span.start);
-              const isInRange = Boolean(span && span.end !== span.start && iso > span.start && iso < span.end);
-              const isSelected = rangeMode
-                ? isRangeStart || iso === span?.end
-                : Boolean(selectedDate && isSameDay(date, selectedDate));
-              const isFocused = iso === focusedISO;
-              const dayDisabled = dayIsDisabled(date, minDate, maxDate, disabled);
-
-              return (
-                <div
-                  key={iso}
-                  role="gridcell"
-                  className={styles.cell}
-                  aria-selected={isSelected || isInRange || undefined}
-                >
-                  <button
-                    ref={(node) => {
-                      if (node) dayRefs.current.set(iso, node);
-                      else dayRefs.current.delete(iso);
-                    }}
-                    type="button"
-                    className={styles.day}
-                    tabIndex={isFocused ? 0 : -1}
-                    aria-label={dayName(date, isToday, isSelected, isRangeStart, isRangeEnd, isInRange)}
-                    aria-disabled={dayDisabled || undefined}
-                    data-outside={outside || undefined}
-                    data-today={isToday || undefined}
-                    data-selected={isSelected || undefined}
-                    data-in-range={isInRange || undefined}
-                    data-range-start={isRangeStart || undefined}
-                    data-range-end={isRangeEnd || undefined}
-                    onClick={() => commit(date)}
-                    onFocus={() => setFocusedISO(iso)}
-                    onMouseEnter={() => {
-                      if (rangeMode && !end) setHoverISO(iso);
-                    }}
-                  >
-                    {date.getDate()}
-                  </button>
-                </div>
-              );
-            })}
+        <div className={styles.toolbar}>
+          <div className={styles.tools}>
+            {readOnly ? null : iconButton("New event", "Plus", () => openCreate(focus))}
+            {iconButton(`Previous ${unit}`, "ChevronLeft", () => step(-1))}
+            {iconButton(`Next ${unit}`, "ChevronRight", () => step(1))}
+            <Button variant="secondary" size="sm" onClick={() => today && setDate(today)}>
+              Today
+            </Button>
+            {calendars.length > 0 ? (
+              <Button variant="secondary" size="sm" onClick={() => setPanel("calendars")}>
+                Calendars
+              </Button>
+            ) : null}
           </div>
-        ))}
+          {offered.length > 1 ? (
+            <Tabs
+              size="sm"
+              variant="segmented"
+              ariaLabel="Calendar view"
+              value={view}
+              onChange={(id) => setView(id as CalendarView)}
+              items={offered.map((item) => ({ id: item, label: VIEW_LABELS[item] }))}
+            />
+          ) : null}
+        </div>
       </div>
+      <div className={styles.body}>
+        <CalendarViews
+          view={view}
+          views={offered}
+          date={date}
+          focus={focus}
+          today={today}
+          now={now}
+          weekStart={weekStart}
+          readOnly={readOnly}
+          placed={placed}
+          gridRef={gridRef}
+          scrollRef={scrollRef}
+          setDate={setDate}
+          openDay={openDay}
+          openCreate={openCreate}
+          openEvent={openEvent}
+          onMonthKey={onMonthKey}
+        />
+      </div>
+      <CalendarsDrawer
+        open={panel === "calendars"}
+        calendars={calendars}
+        hidden={hidden}
+        onClose={closePanel}
+        onToggle={(id, shown) => {
+          setHidden((current) => {
+            const next = new Set(current);
+            if (shown) next.delete(id);
+            else next.add(id);
+            return next;
+          });
+        }}
+      />
+      <EventDrawer
+        open={panel === "event"}
+        formId={formId}
+        draft={draft}
+        errors={errors}
+        calendars={calendars}
+        isEdit={Boolean(draft?.id)}
+        onClose={closePanel}
+        onEdit={edit}
+        onSave={save}
+        onRemove={remove}
+        onStartDate={setStartDate}
+        onStartTime={setStartTime}
+      />
     </div>
   );
 }

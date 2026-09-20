@@ -1,19 +1,15 @@
 {
   "id": "datepicker",
   "status": "stable",
-  "intent": "Form field that opens kit Calendar to pick one date or a date range.",
+  "intent": "Form field that opens a month grid to pick one date or a date range.",
   "useWhen": [
     "A date in a form or filter",
-    "Need a typed-looking field whose overlay is Calendar",
+    "Need a typed-looking field whose overlay is a month grid",
     "A period between two dates (mode range), like invoice due vs last month for a report"
   ],
   "doNotUseWhen": [
-    "The month grid is already on the page — use Calendar",
-    "Time-only — ask first",
-    "A schedule of events — not DatePicker and not this kit Calendar"
-  ],
-  "contains": [
-    "calendar"
+    "A schedule of events — use Calendar",
+    "Time-only — ask first"
   ],
   "props": {
     "id": {
@@ -43,7 +39,7 @@
     "onValueChange": {
       "type": "function",
       "required": false,
-      "note": "(date: string) => void when single; (range: { start: string, end?: string }) => void when range"
+      "note": "(date: string) => void when single; (range: { start, end?: string }) => void when range"
     },
     "size": {
       "type": "enum",
@@ -52,7 +48,7 @@
         "sm"
       ],
       "default": "md",
-      "note": "Trigger size; Calendar in the overlay is sm when size is sm, else md. No lg on the field."
+      "note": "Trigger size; overlay month grid is sm when size is sm, else md. No lg on the field."
     },
     "placeholder": {
       "type": "string",
@@ -70,12 +66,12 @@
     "minDate": {
       "type": "string",
       "required": false,
-      "note": "Passed to kit Calendar"
+      "note": "Passed to the overlay month grid"
     },
     "maxDate": {
       "type": "string",
       "required": false,
-      "note": "Passed to kit Calendar"
+      "note": "Passed to the overlay month grid"
     },
     "name": {
       "type": "string",
@@ -103,10 +99,10 @@
     "element": "button",
     "requirements": [
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
-      "Overlay is role=dialog aria-modal labelled Choose date (or Choose dates in range) and contains kit Calendar",
+      "Overlay is role=dialog aria-modal labelled Choose date (or Choose dates in range) and contains DatePicker’s own month grid",
       "Range: first click sets start, second click sets end and closes. Escape discards an in-progress range",
       "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger",
-      "Calendar overlay anchors to the end of the trigger so it fits in drawers without horizontal scroll",
+      "Month-grid overlay anchors to the end of the trigger so it fits in drawers without horizontal scroll",
       "Must have associated label via Field or a visible label pointing at id",
       "error described by Field via describedBy"
     ]
@@ -114,7 +110,7 @@
   "doNot": [
     "Do not invent a local calendar, Popover, DatePickerDialog, DateRangePicker, PeriodPicker, DualCalendar, or native input type=date",
     "Do not use two DatePickers for start and end — use mode=range",
-    "Do not skip kit Calendar in the overlay",
+    "Do not use the event Calendar as a date field",
     "Do not add built-in label, hint, error text, help, or hideLabel — wrap with Field",
     "Do not add time, Density, or a third field size",
     "Do not use raw hex"

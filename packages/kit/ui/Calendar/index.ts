@@ -1,2 +1,9 @@
 export { Calendar } from "./Calendar";
-export type { CalendarProps, CalendarSize } from "./Calendar.types";
+export type {
+  CalendarEvent,
+  CalendarProps,
+  CalendarSource,
+  CalendarTone,
+  CalendarView,
+  CalendarWeekStart,
+} from "./Calendar.types";

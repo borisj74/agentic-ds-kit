@@ -34,8 +34,8 @@ export function DatePickerDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>DatePicker</h1>
         <p className={styles.lede}>
-          Form field that opens kit Calendar. One date by default. mode range picks a start and an
-          end. Wrap with Field. Not a native date input.
+          Form field that opens a month grid. One date by default. mode range picks a start and an
+          end. Wrap with Field. Not a native date input. Not the event Calendar.
         </p>
       </header>
 
@@ -45,7 +45,8 @@ export function DatePickerDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Trigger shows the chosen day. Click to open Calendar. Escape or a click outside closes it.
+            Trigger shows the chosen day. Click to open the overlay month grid. Escape or a click
+            outside closes it.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -97,8 +98,8 @@ export function DatePickerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use DatePicker in a form. Use Calendar when the month grid is already on the page.
-                  Value is YYYY-MM-DD. Do not invent Popover, DateRangePicker, or a native date input.
+                  Use DatePicker in a form. Use Calendar for a schedule of events. Value is
+                  YYYY-MM-DD. Do not invent Popover, DateRangePicker, or a native date input.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, disabled, value)} />
@@ -165,7 +166,7 @@ export function DatePickerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  minDate and maxDate pass through to kit Calendar. Days outside the window cannot
+                  minDate and maxDate bound the overlay month grid. Days outside the window cannot
                   be picked.
                 </p>
               </div>
@@ -209,7 +210,7 @@ export function DatePickerDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Disabled blocks the trigger and the calendar.</p>
+                <p className={styles.usageBody}>Disabled blocks the trigger and the overlay.</p>
               </div>
               <CodeBlock code={'<DatePicker id="start-date" defaultValue="2026-08-29" disabled />'} />
             </section>

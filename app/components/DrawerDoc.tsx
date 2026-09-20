@@ -326,7 +326,7 @@ export function DrawerDoc() {
 
             <Variant
               title="Large with DatePicker"
-              usage="size=lg for forms with DatePicker in a trailing column. Calendar stays inside the sheet — no horizontal scroll."
+              usage="size=lg for forms with DatePicker in a trailing column. The month grid stays inside the sheet — no horizontal scroll."
               code={`<Drawer open={open} title="Subscription" side="right" size="lg" onClose={close}>\n  <Field label="Term">…</Field>\n  <Field label="Start date" htmlFor="start-date">\n    <DatePicker id="start-date" value={date} onValueChange={setDate} />\n  </Field>\n</Drawer>`}
               onOpen={() => setVariantOpen("large")}
             >
