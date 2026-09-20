@@ -63,6 +63,13 @@
     "status": "stable"
   },
   {
+    "id": "listview",
+    "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
+    "group": "component",
+    "path": "contracts/listview.json",
+    "status": "stable"
+  },
+  {
     "id": "loadinganimation",
     "intent": "Square dot-grid loading indicator for compact waits.",
     "group": "component",

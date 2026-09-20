@@ -31,6 +31,7 @@ export const COMPONENT_ITEMS = [
   "input",
   "inputotp",
   "insightcard",
+  "listview",
   "loadinganimation",
   "modal",
   "modalcard",
@@ -74,6 +75,7 @@ export function componentLabel(id: string): string {
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "linechart") return "Line";
+  if (id === "listview") return "ListView";
   if (id === "modalcard") return "ModalCard";
   if (id === "navigationmenu") return "NavigationMenu";
   if (id === "piechart") return "Pie";

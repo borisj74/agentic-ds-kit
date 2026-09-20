@@ -32,6 +32,7 @@ import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { LineChartDoc } from "./LineChartDoc";
+import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
@@ -108,6 +109,7 @@ const TITLES: Record<string, string> = {
   pagination: "Pagination",
   piechart: "Pie",
   linechart: "Line",
+  listview: "ListView",
   loadinganimation: "LoadingAnimation",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
@@ -145,6 +147,7 @@ function resolveHash(hash: string): string {
     "bar-chart": "barchart",
     line: "linechart",
     "line-chart": "linechart",
+    "list-view": "listview",
     thinking: "thinkinganimation",
     "thinking-animation": "thinkinganimation",
     shimmer: "shimmertext",
@@ -229,6 +232,7 @@ export function ComponentsView() {
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
+  if (resolved === "listview") return <ListViewDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
   if (resolved === "numbertransition") return <NumberTransitionDoc />;
   if (resolved === "pageheader") return <PageHeaderDoc />;

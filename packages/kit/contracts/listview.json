@@ -1,0 +1,163 @@
+{
+  "id": "listview",
+  "status": "stable",
+  "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
+  "useWhen": [
+    "People, files, or other records shown one per row",
+    "Pick one, check several, or open a row without comparing columns"
+  ],
+  "doNotUseWhen": [
+    "Values compared across columns — use Table or DataTable",
+    "A hierarchy visible at once, more than one level — use TreeView",
+    "A list plus a detail pane beside it — use the list-detail pattern",
+    "Ordered activity, not a record list — use Timeline",
+    "Picking or comparing tiles — use Card",
+    "App navigation — use SideNav or AppNav",
+    "Only the no-rows state — use Empty"
+  ],
+  "contains": [
+    "avatar",
+    "badge",
+    "checkbox",
+    "button",
+    "empty",
+    "dropdownmenu"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemShape": {
+        "id": "string",
+        "primary": "string",
+        "secondary": "string?",
+        "name": "string?",
+        "src": "string?",
+        "initials": "string?",
+        "icon": "string?",
+        "badge": "string?",
+        "badgeTone": "neutral | brand | success | warning | danger | info?",
+        "disabled": "boolean?",
+        "group": "string?",
+        "actions": "{ id, label, icon?, danger?, disabled? }[]?"
+      },
+      "required": true,
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Lucide names via Button/lucideName."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "note": "Accessible name for the list"
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md"
+    },
+    "selection": {
+      "type": "enum",
+      "values": ["none", "single", "multiple"],
+      "default": "none",
+      "note": "multiple composes kit Checkbox"
+    },
+    "selected": {
+      "type": "string[]",
+      "required": false,
+      "note": "controlled item ids. Single keeps 0 or 1 id. Ignored when selection is none."
+    },
+    "defaultSelected": {
+      "type": "string[]",
+      "required": false,
+      "note": "uncontrolled initial item ids"
+    },
+    "onSelectedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(selected: string[]) => void"
+    },
+    "interaction": {
+      "type": "enum",
+      "values": ["none", "drill"],
+      "default": "none",
+      "note": "drill shows a trailing chevron and calls onOpen(id). The row body is a button."
+    },
+    "onOpen": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void. Used when interaction is drill."
+    },
+    "onAction": {
+      "type": "function",
+      "required": false,
+      "note": "(itemId: string, actionId: string) => void"
+    },
+    "groups": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "id": "string",
+        "label": "string"
+      },
+      "note": "Optional section headers. item.group selects the section."
+    },
+    "collapsibleGroups": {
+      "type": "boolean",
+      "default": false,
+      "note": "When true, group headers toggle their rows. Expanded by default."
+    },
+    "empty": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "title": "string",
+        "description": "string?",
+        "icon": "string?",
+        "outlined": "boolean?"
+      },
+      "note": "When items is [], ListView renders kit Empty. title is required."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.disabled",
+    "icon.muted",
+    "icon.secondary",
+    "surface.muted",
+    "action.selected",
+    "border.faint",
+    "border.focus",
+    "opacity.disabled",
+    "radius.control.sm"
+  ],
+  "a11y": {
+    "element": "div[role=list|listbox]",
+    "requirements": [
+      "The list has an accessible name from label",
+      "selection=none uses role=list and role=listitem; selection=single|multiple uses role=listbox and role=option",
+      "selection=multiple sets aria-multiselectable and composes kit Checkbox",
+      "Selected rows set aria-selected; disabled rows set aria-disabled and are not selectable or opened",
+      "interaction=drill makes the row body a button and exposes a trailing chevron; Enter opens, Space selects when selection is on",
+      "Grouped rows sit in role=group labelled by the header; collapsible headers are buttons with aria-expanded",
+      "When items is empty, kit Empty is rendered (title required) and the list keeps its accessible name",
+      "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order"
+    ]
+  },
+  "doNot": [
+    "Do not use Table or DataTable for a record list without comparable columns",
+    "Do not use TreeView — that is a nested hierarchy, more than one level",
+    "Do not use the list-detail pattern for the list itself; put detail beside the list",
+    "Do not add an in-list detail slot under the selected row",
+    "Do not add nested children, path, step-in, or expand-under-row",
+    "Do not add drag, reorder, or onItemsChange",
+    "Do not add Density, Material Symbols, or LinkList",
+    "Do not invent a local blank slate — empty items render kit Empty",
+    "Do not assemble rows from local Cards + Avatars + Buttons; this is the piece",
+    "Do not use SideNav or AppNav for a record list",
+    "Do not use Timeline for a record list",
+    "Do not use Card for picking records in a list",
+    "Do not use more than two inline row actions — overflow is kit DropdownMenu",
+    "Do not place variant=primary Button on a row",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<ListView label=\"People\" items={[{ id: 'maya', primary: 'Maya Chen', secondary: 'maya@acme.com', name: 'Maya Chen', badge: 'Admin', badgeTone: 'info' }]} />"
+}

@@ -28,6 +28,7 @@ import { Input } from "agentic-ds-kit";
 import { InputOTP } from "agentic-ds-kit";
 import { InsightCard } from "agentic-ds-kit";
 import { LineChart } from "agentic-ds-kit";
+import { ListView } from "agentic-ds-kit";
 import { LoadingAnimation } from "agentic-ds-kit";
 import { ModalCard } from "agentic-ds-kit";
 import { NavigationMenu } from "agentic-ds-kit";
@@ -268,6 +269,19 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <LineChart data={CHART} variant="line" height={96} showTable={false} />
+        </Stage>
+      );
+    case "listview":
+      return (
+        <Stage variant="wide">
+          <ListView
+            label="People"
+            size="sm"
+            items={[
+              { id: "maya", primary: "Maya Chen", secondary: "Design", name: "Maya Chen" },
+              { id: "jon", primary: "Jon Hale", secondary: "Engineering", name: "Jon Hale" },
+            ]}
+          />
         </Stage>
       );
     case "loadinganimation":
