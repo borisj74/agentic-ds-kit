@@ -18,6 +18,7 @@ import { Chat } from "agentic-ds-kit";
 import { Checkbox } from "agentic-ds-kit";
 import { Collapsible } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
+import { DataGrid } from "agentic-ds-kit";
 import { DataTable } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
@@ -200,6 +201,20 @@ export function GalleryPreview({ id }: { id: string }) {
           <Command
             placeholder="Search"
             groups={[{ items: [{ id: "home", label: "Home" }, { id: "docs", label: "Docs" }] }]}
+          />
+        </Stage>
+      );
+    case "datagrid":
+      return (
+        <Stage variant="table">
+          <DataGrid
+            label="Conditions"
+            size="sm"
+            columns={[
+              { key: "field", header: "Field" },
+              { key: "value", header: "Value" },
+            ]}
+            defaultRows={[{ id: "1", field: "Plan name", value: "Enterprise" }]}
           />
         </Stage>
       );

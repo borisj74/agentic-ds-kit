@@ -23,6 +23,7 @@ export * from "../ui/Chat";
 export * from "../ui/Checkbox";
 export * from "../ui/Collapsible";
 export * from "../ui/Command";
+export * from "../ui/DataGrid";
 export * from "../ui/DataTable";
 export * from "../ui/DatePicker";
 export * from "../ui/Drawer";

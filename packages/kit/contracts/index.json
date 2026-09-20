@@ -140,6 +140,13 @@
     "status": "stable"
   },
   {
+    "id": "datagrid",
+    "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
+    "group": "component",
+    "path": "contracts/datagrid.json",
+    "status": "stable"
+  },
+  {
     "id": "datatable",
     "intent": "Responsive structured data with search, filters, column settings, and clear empty states.",
     "group": "component",

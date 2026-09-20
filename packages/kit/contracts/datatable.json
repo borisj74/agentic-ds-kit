@@ -8,7 +8,8 @@
   ],
   "doNotUseWhen": [
     "A short static list \u2014 use Table",
-    "Dashboard or list-detail activity lists \u2014 use Table"
+    "Dashboard or list-detail activity lists \u2014 use Table",
+    "Editable cells \u2014 use DataGrid"
   ],
   "props": {
     "caption": {
@@ -124,7 +125,8 @@
   "doNot": [
     "Do not use a native select for filters \u2014 use kit DropdownMenu",
     "Do not wrap search in Field \u2014 DataTable owns its input",
-    "Do not invent FilterBar, ColumnPicker, DataGrid, Pagination, or a second Table",
+    "Do not invent FilterBar, ColumnPicker, Pagination, or a second Table",
+    "Editable in-place rows \u2014 use DataGrid",
     "Do not invent a local Cell, DataTableCell, HeaderCell, Tag, Trend, FileIcon, or PaymentMethod \u2014 use Cell and HeaderCell",
     "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
     "Do not use raw hex",

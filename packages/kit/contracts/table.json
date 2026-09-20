@@ -8,6 +8,7 @@
   ],
   "doNotUseWhen": [
     "Search, filters, selection, or column settings — use DataTable",
+    "Editable cells — use DataGrid",
     "Layout for metrics — use Scoreboard",
     "Forms — use Field and inputs"
   ],
@@ -88,6 +89,7 @@
     "Do not invent TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, or TableCaption cousins",
     "Do not compose HeaderCell or Cell — those stay on DataTable",
     "Search, filters, selection — use DataTable",
+    "Editable in-place rows — use DataGrid",
     "Do not add @tanstack/react-table",
     "Do not squash columns to the container — overflow-x on the wrapper",
     "Do not use raw hex"
