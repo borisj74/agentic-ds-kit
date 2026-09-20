@@ -6,6 +6,7 @@ export interface TreeViewItem {
   label: string;
   children?: TreeViewItem[];
   disabled?: boolean;
+  icon?: string;
 }
 
 export interface TreeViewProps {
@@ -21,4 +22,6 @@ export interface TreeViewProps {
   onSelectedChange?: (selected: string[]) => void;
   showLines?: boolean;
   showIcons?: boolean;
+  reorderable?: boolean;
+  onItemsChange?: (items: TreeViewItem[]) => void;
 }

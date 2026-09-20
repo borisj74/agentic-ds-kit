@@ -1,3 +1,4 @@
+import type { DragEventHandler } from "react";
 import type { ButtonSize, ButtonVariant } from "../Button/Button.types";
 
 export type DropdownMenuAlign = "start" | "end";
@@ -45,4 +46,7 @@ export interface DropdownMenuProps {
   triggerBadge?: string;
   searchable?: boolean;
   searchPlaceholder?: string;
+  triggerDraggable?: boolean;
+  onTriggerDragStart?: DragEventHandler<HTMLButtonElement>;
+  onTriggerDragEnd?: DragEventHandler<HTMLButtonElement>;
 }

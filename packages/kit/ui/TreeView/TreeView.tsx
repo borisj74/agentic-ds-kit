@@ -1,8 +1,19 @@
 "use client";
 
-import { useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type DragEvent,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { Checkbox } from "../Checkbox";
 import { LucideByName } from "../Button/lucideName";
+import { DropdownMenu } from "../DropdownMenu";
 import type { TreeViewItem, TreeViewProps } from "./TreeView.types";
 import styles from "./TreeView.module.css";
 
@@ -110,8 +121,150 @@ function bindCheckbox(el: HTMLSpanElement | null) {
   if (input) input.tabIndex = -1;
 }
 
+type MoveAction = "up" | "down" | "into" | "out";
+type DropPlacement = "before" | "after" | "into";
+
+interface ItemLocation {
+  siblings: TreeViewItem[];
+  index: number;
+  parent: TreeViewItem | null;
+  parentSiblings: TreeViewItem[] | null;
+  parentIndex: number;
+}
+
+function cloneItems(items: TreeViewItem[]): TreeViewItem[] {
+  return items.map((item) => ({
+    ...item,
+    children: item.children ? cloneItems(item.children) : item.children,
+  }));
+}
+
+function locate(
+  id: string,
+  siblings: TreeViewItem[],
+  parent: TreeViewItem | null = null,
+  parentSiblings: TreeViewItem[] | null = null,
+  parentIndex = -1,
+): ItemLocation | null {
+  const index = siblings.findIndex((item) => item.id === id);
+  if (index >= 0) return { siblings, index, parent, parentSiblings, parentIndex };
+  for (let i = 0; i < siblings.length; i += 1) {
+    const item = siblings[i];
+    if (!item.children) continue;
+    const found = locate(id, item.children, item, siblings, i);
+    if (found) return found;
+  }
+  return null;
+}
+
+function moveItem(items: TreeViewItem[], id: string, action: MoveAction): TreeViewItem[] | null {
+  const next = cloneItems(items);
+  const loc = locate(id, next);
+  if (!loc) return null;
+  const current = loc.siblings[loc.index];
+  if (!current || current.disabled) return null;
+
+  if (action === "up") {
+    if (loc.index === 0) return null;
+    [loc.siblings[loc.index - 1], loc.siblings[loc.index]] = [
+      loc.siblings[loc.index],
+      loc.siblings[loc.index - 1],
+    ];
+    return next;
+  }
+
+  if (action === "down") {
+    if (loc.index >= loc.siblings.length - 1) return null;
+    [loc.siblings[loc.index], loc.siblings[loc.index + 1]] = [
+      loc.siblings[loc.index + 1],
+      loc.siblings[loc.index],
+    ];
+    return next;
+  }
+
+  if (action === "out") {
+    if (!loc.parent || !loc.parentSiblings || loc.parentIndex < 0) return null;
+    const [removed] = loc.siblings.splice(loc.index, 1);
+    loc.parentSiblings.splice(loc.parentIndex + 1, 0, removed);
+    return next;
+  }
+
+  if (loc.index === 0) return null;
+  const previous = loc.siblings[loc.index - 1];
+  if (!previous || !isFolder(previous) || previous.disabled) return null;
+  const [removed] = loc.siblings.splice(loc.index, 1);
+  previous.children = [...(previous.children ?? []), removed];
+  return next;
+}
+
+function isDescendantOf(items: TreeViewItem[], ancestorId: string, targetId: string): boolean {
+  if (ancestorId === targetId) return true;
+  const ancestor = findItem(items, ancestorId);
+  if (!ancestor) return false;
+  return descendantsOf(ancestor).some((node) => node.id === targetId);
+}
+
+function repositionItem(
+  items: TreeViewItem[],
+  sourceId: string,
+  targetId: string,
+  placement: DropPlacement,
+): TreeViewItem[] | null {
+  if (sourceId === targetId) return null;
+  const next = cloneItems(items);
+  if (isDescendantOf(next, sourceId, targetId)) return null;
+
+  const sourceLoc = locate(sourceId, next);
+  if (!sourceLoc) return null;
+  const sourceItem = sourceLoc.siblings[sourceLoc.index];
+  if (!sourceItem || sourceItem.disabled) return null;
+
+  const [removed] = sourceLoc.siblings.splice(sourceLoc.index, 1);
+
+  const targetLoc = locate(targetId, next);
+  if (!targetLoc) return null;
+  const targetItem = targetLoc.siblings[targetLoc.index];
+  if (!targetItem || targetItem.disabled) return null;
+
+  if (placement === "into") {
+    if (!isFolder(targetItem)) return null;
+    targetItem.children = [...(targetItem.children ?? []), removed];
+    return next;
+  }
+
+  const insertAt = placement === "before" ? targetLoc.index : targetLoc.index + 1;
+  targetLoc.siblings.splice(insertAt, 0, removed);
+  return next;
+}
+
+function dropPlacement(event: DragEvent<HTMLElement>, folder: boolean): DropPlacement {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const ratio = (event.clientY - rect.top) / rect.height;
+  if (folder) {
+    if (ratio < 0.25) return "before";
+    if (ratio > 0.75) return "after";
+    return "into";
+  }
+  return ratio < 0.5 ? "before" : "after";
+}
+
+function moveOptions(items: TreeViewItem[], id: string) {
+  const loc = locate(id, items);
+  if (!loc) {
+    return { up: false, down: false, into: false, out: false };
+  }
+  const current = loc.siblings[loc.index];
+  const previous = loc.index > 0 ? loc.siblings[loc.index - 1] : undefined;
+  return {
+    up: loc.index > 0 && !current?.disabled,
+    down: loc.index < loc.siblings.length - 1 && !current?.disabled,
+    into: Boolean(previous && isFolder(previous) && !current?.disabled && !previous.disabled),
+    out: loc.parent !== null && !current?.disabled,
+  };
+}
+
 export function TreeView({
-  items,
+  items: itemsProp,
   label,
   size = "md",
   selection = "none",
@@ -123,9 +276,17 @@ export function TreeView({
   onSelectedChange,
   showLines = false,
   showIcons = false,
+  reorderable = false,
+  onItemsChange,
 }: TreeViewProps) {
   const uid = useId();
   const itemRefs = useRef(new Map<string, HTMLDivElement>());
+  const [innerItems, setInnerItems] = useState(itemsProp);
+  const items = onItemsChange ? itemsProp : innerItems;
+
+  useEffect(() => {
+    if (!onItemsChange) setInnerItems(itemsProp);
+  }, [itemsProp, onItemsChange]);
   const expandedControlled = expandedProp !== undefined;
   const selectedControlled = selectedProp !== undefined;
   const [expandedUncontrolled, setExpandedUncontrolled] = useState<string[]>(defaultExpanded ?? []);
@@ -143,6 +304,10 @@ export function TreeView({
   }, [items]);
   const shown = useMemo(() => visibleIds(items, expanded), [items, expanded]);
   const [focusedId, setFocusedId] = useState<string | null>(shown[0] ?? null);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dropTarget, setDropTarget] = useState<{ id: string; placement: DropPlacement } | null>(
+    null,
+  );
   const iconPx = size === "sm" ? 14 : 16;
 
   function setExpanded(next: string[]) {
@@ -177,12 +342,77 @@ export function TreeView({
     else setSelected(nextMultiple(items, id, selected));
   }
 
+  function commitItems(next: TreeViewItem[]) {
+    if (!onItemsChange) setInnerItems(next);
+    onItemsChange?.(next);
+  }
+
+  function applyMove(id: string, action: MoveAction) {
+    const before = locate(id, items);
+    const next = moveItem(items, id, action);
+    if (!next) return;
+    commitItems(next);
+    if (action === "into" && before && before.index > 0) {
+      const targetId = before.siblings[before.index - 1]?.id;
+      if (targetId) {
+        const expandedNext = new Set(expanded);
+        expandedNext.add(targetId);
+        setExpanded([...expandedNext]);
+      }
+    }
+    focusNode(id);
+  }
+
+  function applyDrop(sourceId: string, targetId: string, placement: DropPlacement) {
+    const next = repositionItem(items, sourceId, targetId, placement);
+    if (!next) return;
+    commitItems(next);
+    if (placement === "into") {
+      const expandedNext = new Set(expanded);
+      expandedNext.add(targetId);
+      setExpanded([...expandedNext]);
+    }
+    focusNode(sourceId);
+  }
+
+  function canDropOn(sourceId: string, targetId: string, placement: DropPlacement, folder: boolean) {
+    if (!reorderable || sourceId === targetId) return false;
+    if (isDescendantOf(items, sourceId, targetId)) return false;
+    const target = findItem(items, targetId);
+    if (!target || target.disabled) return false;
+    if (placement === "into" && !folder) return false;
+    return true;
+  }
+
   function onTreeKeyDown(event: KeyboardEvent<HTMLDivElement>, id: string) {
     if (event.currentTarget !== event.target) return;
     const item = findItem(items, id);
     if (!item) return;
     const index = shown.indexOf(id);
     const key = event.key;
+
+    if (reorderable && event.altKey) {
+      if (key === "ArrowUp") {
+        event.preventDefault();
+        applyMove(id, "up");
+        return;
+      }
+      if (key === "ArrowDown") {
+        event.preventDefault();
+        applyMove(id, "down");
+        return;
+      }
+      if (key === "ArrowRight") {
+        event.preventDefault();
+        applyMove(id, "into");
+        return;
+      }
+      if (key === "ArrowLeft") {
+        event.preventDefault();
+        applyMove(id, "out");
+        return;
+      }
+    }
 
     if (key === "ArrowDown") {
       event.preventDefault();
@@ -246,7 +476,9 @@ export function TreeView({
       const tabIndex = focusedId === item.id || (focusedId === null && shown[0] === item.id) ? 0 : -1;
       const check = folder ? branchState(item, selected) : selected.has(item.id) ? "checked" : "unchecked";
       const isSelected = selection !== "none" && check === "checked";
-      const iconName = folder ? (open ? "FolderOpen" : "Folder") : "File";
+      const iconName = item.icon ?? (folder ? (open ? "FolderOpen" : "Folder") : "File");
+      const moves = reorderable ? moveOptions(items, item.id) : null;
+      const stopHandle = (event: MouseEvent) => event.stopPropagation();
 
       return (
         <div
@@ -258,6 +490,7 @@ export function TreeView({
           }}
           role="treeitem"
           className={styles.item}
+          data-dragging={draggingId === item.id || undefined}
           tabIndex={tabIndex}
           aria-label={item.label}
           aria-level={level}
@@ -283,6 +516,52 @@ export function TreeView({
             className={styles.row}
             data-selected={isSelected || undefined}
             data-disabled={item.disabled || undefined}
+            data-drop={
+              reorderable && dropTarget?.id === item.id ? dropTarget.placement : undefined
+            }
+            onDragOver={
+              reorderable
+                ? (event) => {
+                    if (!draggingId) return;
+                    const placement = dropPlacement(event, folder);
+                    if (!canDropOn(draggingId, item.id, placement, folder)) {
+                      setDropTarget((current) => (current?.id === item.id ? null : current));
+                      return;
+                    }
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = "move";
+                    setDropTarget({ id: item.id, placement });
+                  }
+                : undefined
+            }
+            onDragLeave={
+              reorderable
+                ? (event) => {
+                    const related = event.relatedTarget as Node | null;
+                    if (!event.currentTarget.contains(related)) {
+                      setDropTarget((current) => (current?.id === item.id ? null : current));
+                    }
+                  }
+                : undefined
+            }
+            onDrop={
+              reorderable
+                ? (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const sourceId = draggingId ?? event.dataTransfer.getData("text/plain");
+                    if (!sourceId) return;
+                    const placement =
+                      dropTarget?.id === item.id
+                        ? dropTarget.placement
+                        : dropPlacement(event, folder);
+                    if (!canDropOn(sourceId, item.id, placement, folder)) return;
+                    applyDrop(sourceId, item.id, placement);
+                    setDraggingId(null);
+                    setDropTarget(null);
+                  }
+                : undefined
+            }
           >
             {folder ? (
               <button
@@ -328,6 +607,64 @@ export function TreeView({
               </span>
             ) : null}
             <span className={styles.labelText}>{item.label}</span>
+            {reorderable && moves ? (
+              <span className={styles.handle} onClick={stopHandle}>
+                <DropdownMenu
+                  iconStart="GripVertical"
+                  ariaLabel={`Move ${item.label}`}
+                  variant="tertiary"
+                  size={size}
+                  align="end"
+                  disabled={item.disabled}
+                  triggerDraggable={!item.disabled}
+                  onTriggerDragStart={(event) => {
+                    event.stopPropagation();
+                    setDraggingId(item.id);
+                    event.dataTransfer.effectAllowed = "move";
+                    event.dataTransfer.setData("text/plain", item.id);
+                  }}
+                  onTriggerDragEnd={() => {
+                    setDraggingId(null);
+                    setDropTarget(null);
+                  }}
+                  groups={[
+                    {
+                      items: [
+                        {
+                          id: "up",
+                          label: "Move up",
+                          icon: "ChevronUp",
+                          disabled: !moves.up,
+                        },
+                        {
+                          id: "down",
+                          label: "Move down",
+                          icon: "ChevronDown",
+                          disabled: !moves.down,
+                        },
+                        {
+                          id: "into",
+                          label: "Move into folder above",
+                          icon: "ChevronRight",
+                          disabled: !moves.into,
+                        },
+                        {
+                          id: "out",
+                          label: "Move out of folder",
+                          icon: "ChevronLeft",
+                          disabled: !moves.out,
+                        },
+                      ],
+                    },
+                  ]}
+                  onSelect={(actionId) => {
+                    if (actionId === "up" || actionId === "down" || actionId === "into" || actionId === "out") {
+                      applyMove(item.id, actionId);
+                    }
+                  }}
+                />
+              </span>
+            ) : null}
           </div>
           {folder && open ? (
             <div role="group" className={styles.group}>

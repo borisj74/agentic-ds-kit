@@ -4,7 +4,8 @@
   "intent": "Nested hierarchy people open and close level by level to browse, pick, or check items.",
   "useWhen": [
     "Teams, folders, or account trees the user walks level by level",
-    "Browse, pick one, or check several items in a nested data hierarchy"
+    "Browse, pick one, or check several items in a nested data hierarchy",
+    "Arranging a hierarchy with reorderable and onItemsChange"
   ],
   "doNotUseWhen": [
     "Page sections that disclose copy — use Accordion or Collapsible",
@@ -13,7 +14,8 @@
     "A short flat choice list — use Select or RadioGroup"
   ],
   "contains": [
-    "checkbox"
+    "checkbox",
+    "dropdownmenu"
   ],
   "props": {
     "items": {
@@ -22,10 +24,11 @@
         "id": "string",
         "label": "string",
         "children": "TreeViewItem[]",
-        "disabled": "boolean"
+        "disabled": "boolean",
+        "icon": "string"
       },
       "required": true,
-      "note": "A node with children (even []) is a folder. Omit children on a leaf."
+      "note": "A node with children (even []) is a folder. Omit children on a leaf. Optional icon is a LucideByName when showIcons."
     },
     "label": {
       "type": "string",
@@ -80,6 +83,16 @@
       "type": "boolean",
       "default": false,
       "note": "Folder, FolderOpen, and File via LucideByName. Not Material Symbols."
+    },
+    "reorderable": {
+      "type": "boolean",
+      "default": false,
+      "note": "Grip handle with drag-and-drop, Move menu, and Alt+Arrow moves among siblings or in/out of folders. Calls onItemsChange."
+    },
+    "onItemsChange": {
+      "type": "function",
+      "required": false,
+      "note": "(items: TreeViewItem[]) => void when reorderable moves a node"
     }
   },
   "tokens": [
@@ -104,7 +117,8 @@
       "Expanded children sit in role=group",
       "selection=single uses aria-selected; selection=multiple sets aria-multiselectable and aria-checked (including mixed on branches)",
       "Disabled nodes set aria-disabled and are not selectable",
-      "Keyboard: Up/Down move among visible nodes; Left/Right collapse, expand, or move to parent/child; Home/End; Space/Enter select or toggle"
+      "Keyboard: Up/Down move among visible nodes; Left/Right collapse, expand, or move to parent/child; Home/End; Space/Enter select or toggle",
+      "reorderable: drag grip to reorder; Alt+Up/Down swap siblings; Alt+Right nest into folder above; Alt+Left move out; Shift+F10 or grip opens Move menu"
     ]
   },
   "doNot": [
@@ -112,9 +126,9 @@
     "Do not use SideNav or AppNav for a data tree",
     "Do not use Table or DataTable for nested browse/pick",
     "Do not use Select or RadioGroup for a nested tree",
-    "Do not invent a local nested list, folder row, or tree checkbox — compose kit Checkbox",
-    "Do not add Density or drag-and-drop",
+    "Do not invent a local nested list, folder row, tree checkbox, or move handle — compose kit Checkbox and DropdownMenu",
+    "Do not add Density",
     "Do not use Material Symbols or raw hex"
   ],
-  "snippet": "<TreeView label=\"Workspace\" selection=\"multiple\" defaultExpanded={['design']} items={[{ id: 'design', label: 'Design', children: [{ id: 'brand', label: 'Brand' }] }, { id: 'legal', label: 'Legal' }]} />"
+  "snippet": "<TreeView label=\"Workspace\" selection=\"multiple\" showIcons showLines reorderable defaultExpanded={['org', 'design']} defaultSelected={['design', 'sienna']} items={workspace} onItemsChange={setWorkspace} />"
 }

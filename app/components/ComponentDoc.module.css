@@ -136,6 +136,15 @@
   min-width: 0;
 }
 
+.previewSurface {
+  width: 100%;
+  max-width: 25rem;
+  min-width: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-surface-sm);
+  background: var(--surface-card);
+}
+
 .previewStack {
   display: grid;
   gap: var(--space-3);

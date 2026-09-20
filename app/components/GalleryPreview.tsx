@@ -490,10 +490,25 @@ export function GalleryPreview({ id }: { id: string }) {
           <TreeView
             label="Workspace"
             size="sm"
-            defaultExpanded={["design"]}
+            selection="multiple"
+            showIcons
+            showLines
+            defaultExpanded={["org", "design"]}
+            defaultSelected={["design", "sienna"]}
             items={[
-              { id: "design", label: "Design", children: [{ id: "brand", label: "Brand" }] },
-              { id: "legal", label: "Legal" },
+              {
+                id: "org",
+                label: "Organization",
+                children: [
+                  {
+                    id: "design",
+                    label: "Design",
+                    children: [{ id: "sienna", label: "Sienna Hewitt", icon: "User" }],
+                  },
+                  { id: "eng", label: "Engineering", children: [] },
+                ],
+              },
+              { id: "projects", label: "Projects", children: [] },
             ]}
           />
         </Stage>

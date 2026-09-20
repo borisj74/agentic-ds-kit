@@ -24,7 +24,8 @@
 }
 
 .lines .group {
-  margin-inline-start: var(--space-3);
+  --tree-guide-x: calc(var(--space-2) + var(--space-6) / 2);
+  margin-inline-start: calc(var(--tree-guide-x) - var(--border-width-thin) / 2);
   padding-inline-start: var(--space-3);
   border-inline-start: var(--border-width-thin) solid var(--border-faint);
 }
@@ -66,14 +67,16 @@
 }
 
 .sm .row {
-  padding: var(--space-1) var(--space-2);
+  min-height: var(--space-6);
+  padding: 0 var(--space-2);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-body);
 }
 
 .md .row {
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--type-size-body-sm);
+  min-height: var(--space-8);
+  padding: 0 var(--space-2);
+  font-size: var(--type-size-body);
   line-height: var(--type-line-body);
 }
 
@@ -130,9 +133,40 @@
 }
 
 .labelText {
+  flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
   font-weight: var(--type-weight-body);
+}
+
+.handle {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+.handle button {
+  cursor: grab;
+}
+
+.handle button:active {
+  cursor: grabbing;
+}
+
+.item[data-dragging] > .row {
+  opacity: var(--opacity-disabled);
+}
+
+.row[data-drop="before"] {
+  box-shadow: inset 0 var(--border-focus-width) 0 0 var(--focus-ring);
+}
+
+.row[data-drop="after"] {
+  box-shadow: inset 0 calc(-1 * var(--border-focus-width)) 0 0 var(--focus-ring);
+}
+
+.row[data-drop="into"] {
+  background-color: var(--action-selected);
 }
 
 @media (prefers-reduced-motion: reduce) {

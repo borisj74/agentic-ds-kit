@@ -55,6 +55,9 @@ export function DropdownMenu({
   triggerBadge,
   searchable = false,
   searchPlaceholder = "Search",
+  triggerDraggable,
+  onTriggerDragStart,
+  onTriggerDragEnd,
 }: DropdownMenuProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -572,6 +575,9 @@ export function DropdownMenu({
           iconStart={iconStart}
           iconEnd={iconEnd}
           disabled={disabled}
+          draggable={triggerDraggable}
+          onDragStart={onTriggerDragStart}
+          onDragEnd={onTriggerDragEnd}
           onClick={() => {
             if (!disabled) setOpen(!open);
           }}
@@ -586,6 +592,9 @@ export function DropdownMenu({
           iconEnd={iconEnd}
           disabled={disabled}
           ariaLabel={ariaLabel ?? "Open menu"}
+          draggable={triggerDraggable}
+          onDragStart={onTriggerDragStart}
+          onDragEnd={onTriggerDragEnd}
           onClick={() => {
             if (!disabled) setOpen(!open);
           }}

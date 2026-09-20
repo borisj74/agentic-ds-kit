@@ -18,6 +18,9 @@ export function Button({
   iconStart,
   iconEnd,
   ariaLabel,
+  draggable,
+  onDragStart,
+  onDragEnd,
 }: ButtonProps) {
   const hasLabel = Boolean(children && children.trim());
   const iconOnly = !hasLabel && Boolean(iconStart || iconEnd);
@@ -27,9 +30,12 @@ export function Button({
     <button
       type={type}
       disabled={disabled}
+      draggable={draggable}
       aria-disabled={disabled || undefined}
       aria-label={hasLabel ? undefined : ariaLabel}
       onClick={onClick}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       className={[
         styles.button,
         styles[size],

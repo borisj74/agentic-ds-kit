@@ -1,3 +1,5 @@
+import type { DragEventHandler } from "react";
+
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 export type ButtonType = "button" | "submit" | "reset";
@@ -13,6 +15,9 @@ interface ButtonBase {
   onClick?: () => void;
   iconStart?: string;
   iconEnd?: string;
+  draggable?: boolean;
+  onDragStart?: DragEventHandler<HTMLButtonElement>;
+  onDragEnd?: DragEventHandler<HTMLButtonElement>;
 }
 
 export type ButtonProps =
