@@ -25,6 +25,7 @@ import { Empty } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { FieldSet } from "agentic-ds-kit";
 import { HeaderCell } from "agentic-ds-kit";
+import { HelpPopover } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import { InputOTP } from "agentic-ds-kit";
 import { InsightCard } from "agentic-ds-kit";
@@ -267,6 +268,12 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "headercell":
       return <HeaderCell label="Owner" size="sm" sortable />;
+    case "helppopover":
+      return (
+        <HelpPopover content="We use this date on the PDF.">
+          <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+        </HelpPopover>
+      );
     case "input":
       return (
         <Stage variant="wide">

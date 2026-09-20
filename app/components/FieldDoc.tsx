@@ -159,6 +159,31 @@ export function FieldDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Help</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
+                  <Field
+                    label="Invoice date"
+                    htmlFor="field-invoice-help"
+                    help="We use this date on the PDF. It does not change when payment is recorded."
+                    hint="Required for billing."
+                  >
+                    <Input id="field-invoice-help" placeholder="2026-09-20" />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  help opens HelpPopover beside the label. hint stays visible under the control.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Field label="Invoice date" htmlFor="invoice-date" help="We use this date on the PDF. It does not change when payment is recorded." hint="Required for billing."><Input id="invoice-date" /></Field>'}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Error</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>

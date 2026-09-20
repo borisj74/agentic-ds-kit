@@ -182,6 +182,13 @@
     "status": "stable"
   },
   {
+    "id": "helppopover",
+    "intent": "Small help panel: optional title plus one to three short sentences.",
+    "group": "component",
+    "path": "contracts/helppopover.json",
+    "status": "stable"
+  },
+  {
     "id": "card",
     "intent": "Framed tile with optional header, body, and footer actions.",
     "group": "component",

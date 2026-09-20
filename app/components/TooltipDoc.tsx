@@ -74,8 +74,8 @@ export function TooltipDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Tooltip for brief, non-essential help on hover or focus. Keep copy short. Do
-                  not put actions in it.
+                  Use Tooltip for brief, non-essential help on hover or focus. Keep copy short. Use
+                  HelpPopover for a sentence or two. Do not put actions in it.
                 </p>
               </div>
               <CodeBlock code={masterCode(placement)} />

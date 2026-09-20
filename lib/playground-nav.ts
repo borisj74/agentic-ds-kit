@@ -29,6 +29,7 @@ export const COMPONENT_ITEMS = [
   "field",
   "fieldset",
   "headercell",
+  "helppopover",
   "input",
   "inputotp",
   "insightcard",
@@ -75,6 +76,7 @@ export function componentLabel(id: string): string {
   if (id === "datagrid") return "DataGrid";
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
+  if (id === "helppopover") return "HelpPopover";
   if (id === "datepicker") return "DatePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "linechart") return "Line";

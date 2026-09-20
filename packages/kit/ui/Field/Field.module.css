@@ -17,9 +17,17 @@
   align-items: center;
 }
 
-.start .label {
+.start .label,
+.start .labelRow {
   grid-column: 1;
   grid-row: 1;
+}
+
+.labelRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
 }
 
 .start .body {

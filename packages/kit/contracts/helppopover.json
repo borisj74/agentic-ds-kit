@@ -1,0 +1,92 @@
+{
+  "id": "helppopover",
+  "status": "stable",
+  "intent": "Small help panel: optional title plus one to three short sentences.",
+  "useWhen": [
+    "Extra explanation beside a Field label or a setting",
+    "Copy that is longer than a Tooltip name but not always-visible hint"
+  ],
+  "doNotUseWhen": [
+    "One-line name on an icon — use Tooltip",
+    "Required instructions — keep them in Field hint (always visible)",
+    "Links, buttons, or forms — use Modal",
+    "Always-visible helper under a control — use Field hint"
+  ],
+  "contains": [
+    "button"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Bold header. Omit for body only."
+    },
+    "content": {
+      "type": "string",
+      "required": true,
+      "note": "Plain text. One to three short sentences. No links or markdown."
+    },
+    "placement": {
+      "type": "enum",
+      "values": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "default": "bottom"
+    },
+    "delay": {
+      "type": "number",
+      "default": 150,
+      "note": "Hover waits; focus and click show at once."
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled visibility"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "No panel; child still renders."
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "One focusable trigger. Gets aria-describedby. Typical: kit Button variant=tertiary size=sm iconStart=CircleHelp ariaLabel=Help. Field help composes this."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "surface.elevated",
+    "border.faint",
+    "shadow.md",
+    "z.tooltip",
+    "motion.fast"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Trigger must be focusable",
+      "Title and content stay in the DOM as the trigger description (aria-describedby) so AT gets them on focus",
+      "Hover after delay; focus shows immediately; Enter, Space, click, or tap pins",
+      "Escape, click outside, or moving focus away closes",
+      "Escape must not close an enclosing Modal",
+      "Pointer can move onto the panel to read it",
+      "Portal the panel to document.body so Field overflow never clips it"
+    ]
+  },
+  "doNot": [
+    "Do not invent local Popover, HoverCard, InfoTip, ContextInfo, or a one-off ?",
+    "Do not use Tooltip for a sentence or two",
+    "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
+    "Do not put links, buttons, or forms in the panel",
+    "Do not add size, Density, or lg",
+    "Do not use variant=primary on the trigger",
+    "Do not add an Icon component or Material Symbols — Lucide via Button/lucideName only",
+    "Do not use raw hex"
+  ],
+  "snippet": "<HelpPopover title=\"Invoice date\" content=\"We use this date on the PDF. It does not change when payment is recorded.\">\n  <Button variant=\"tertiary\" size=\"sm\" iconStart=\"CircleHelp\" ariaLabel=\"Help\" />\n</HelpPopover>"
+}
