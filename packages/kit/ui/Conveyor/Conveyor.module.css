@@ -1,0 +1,205 @@
+.root {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: conveyor;
+}
+
+.vertical {
+  grid-template-columns: none;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100%;
+}
+
+.track {
+  min-width: 0;
+  scrollbar-width: none;
+  outline: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal .track {
+  grid-column: 2;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.vertical .track {
+  grid-row: 2;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.track:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .track {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}
+
+.end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.vertical .end {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.trackFadeStart {
+  mask-image: linear-gradient(to right, transparent, black var(--space-16));
+  -webkit-mask-image: linear-gradient(to right, transparent, black var(--space-16));
+}
+
+.trackFadeEnd {
+  mask-image: linear-gradient(to right, black calc(100% - var(--space-16)), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--space-16)), transparent);
+}
+
+.trackFadeBoth {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--space-16),
+    black calc(100% - var(--space-16)),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--space-16),
+    black calc(100% - var(--space-16)),
+    transparent
+  );
+}
+
+.vertical .trackFadeStart {
+  mask-image: linear-gradient(to bottom, transparent, black var(--space-16));
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black var(--space-16));
+}
+
+.vertical .trackFadeEnd {
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--space-16)), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - var(--space-16)), transparent);
+}
+
+.vertical .trackFadeBoth {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--space-16),
+    black calc(100% - var(--space-16)),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--space-16),
+    black calc(100% - var(--space-16)),
+    transparent
+  );
+}
+
+.fade {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--space-8);
+  z-index: 2;
+  width: var(--space-16);
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--surface-page) 0%,
+    var(--surface-page) 20%,
+    transparent 100%
+  );
+  backdrop-filter: blur(var(--space-2));
+  -webkit-backdrop-filter: blur(var(--space-2));
+}
+
+.fadeLast {
+  inset-inline-start: auto;
+  inset-inline-end: var(--space-8);
+  background: linear-gradient(
+    to left,
+    var(--surface-page) 0%,
+    var(--surface-page) 20%,
+    transparent 100%
+  );
+}
+
+.vertical .fade {
+  inset-block: auto;
+  inset-inline: 0;
+  inset-block-start: var(--space-8);
+  width: auto;
+  height: var(--space-16);
+  background: linear-gradient(
+    to bottom,
+    var(--surface-page) 0%,
+    var(--surface-page) 20%,
+    transparent 100%
+  );
+}
+
+.vertical .fadeLast {
+  inset-block-start: auto;
+  inset-block-end: var(--space-8);
+  background: linear-gradient(
+    to top,
+    var(--surface-page) 0%,
+    var(--surface-page) 20%,
+    transparent 100%
+  );
+}
+
+.fadeClear {
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+@container conveyor (max-width: 40rem) {
+  .end,
+  .fade {
+    display: none;
+  }
+
+  .horizontal .track {
+    grid-column: 1 / -1;
+    scroll-snap-type: inline mandatory;
+  }
+
+  .vertical .track {
+    grid-row: 1 / -1;
+    scroll-snap-type: block mandatory;
+  }
+
+  .track > * {
+    scroll-snap-align: start;
+  }
+}

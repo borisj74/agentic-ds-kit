@@ -10,7 +10,8 @@
   "doNotUseWhen": [
     "Tabs for views",
     "Pagination for lists",
-    "don't use for primary nav"
+    "don't use for primary nav",
+    "overflow row of cards/chips — use Conveyor"
   ],
   "contains": [
     "button"
@@ -51,7 +52,7 @@
         4
       ],
       "default": 1,
-      "note": "1 = full slide; 3 = one-third; 4 = quarter. Scoreboard uses 4 when items > 4."
+      "note": "1 = full slide; 3 = one-third; 4 = quarter."
     },
     "showControls": {
       "type": "boolean",

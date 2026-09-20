@@ -20,6 +20,7 @@ export const COMPONENT_ITEMS = [
   "checkbox",
   "collapsible",
   "command",
+  "conveyor",
   "datagrid",
   "datatable",
   "datepicker",

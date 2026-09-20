@@ -203,6 +203,13 @@
     "status": "stable"
   },
   {
+    "id": "conveyor",
+    "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
+    "group": "component",
+    "path": "contracts/conveyor.json",
+    "status": "stable"
+  },
+  {
     "id": "chat",
     "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
     "group": "component",

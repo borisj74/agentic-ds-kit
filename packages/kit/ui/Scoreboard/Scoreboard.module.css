@@ -47,9 +47,28 @@
   }
 }
 
-.overflow {
-  width: 100%;
-  min-width: 0;
-  padding-inline: var(--space-12);
-  box-sizing: border-box;
+.overflowStrip {
+  width: max-content;
+  max-width: none;
+}
+
+.overflowRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  width: max-content;
+}
+
+.overflowItem {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--layout-metrics-min);
+  width: var(--layout-metrics-min);
+  min-width: var(--layout-metrics-min);
+  scroll-snap-align: start;
+}
+
+.overflowItem > * {
+  flex: 1 1 auto;
+  height: 100%;
 }

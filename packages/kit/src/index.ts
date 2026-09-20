@@ -18,6 +18,7 @@ export * from "../ui/ButtonGroup";
 export * from "../ui/Calendar";
 export * from "../ui/Card";
 export * from "../ui/Carousel";
+export * from "../ui/Conveyor";
 export * from "../ui/Cell";
 export * from "../ui/Chat";
 export * from "../ui/Checkbox";

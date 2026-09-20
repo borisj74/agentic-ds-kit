@@ -1,0 +1,75 @@
+{
+  "id": "conveyor",
+  "status": "stable",
+  "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
+  "useWhen": [
+    "A row of Scorecards, chips, or cards that runs past the edge",
+    "A row of Badge chips that runs past the edge",
+    "A tall list in a narrow column, scrolled up and down"
+  ],
+  "doNotUseWhen": [
+    "Paged slides or a gallery with Slide N of M — use Carousel",
+    "Paging a table — use Pagination",
+    "A second scrolling box inside the run — turn that one's scrolling off"
+  ],
+  "contains": [
+    "button"
+  ],
+  "props": {
+    "children": {
+      "type": "ReactNode",
+      "required": true,
+      "note": "The run that scrolls (Scoreboard, a row of Badge chips, a stack of cards). Not an items[] of slides."
+    },
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "note": "Horizontal: arrows left/right. Vertical: arrows above/below; the Conveyor needs a height."
+    },
+    "step": {
+      "type": "number",
+      "required": false,
+      "note": "Pixels one press moves. Omit: 80% of the visible size."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "default": "Content",
+      "note": "Names the group and the arrows (“Scroll key metrics right”). Scoreboard passes its aria-label."
+    }
+  },
+  "tokens": [
+    "surface.page",
+    "focus.ring",
+    "space.2",
+    "space.8",
+    "space.16",
+    "grid.breakpoint.sm"
+  ],
+  "a11y": {
+    "element": "div[role=group]",
+    "requirements": [
+      "The run is a group with the label, and a focus stop, so the arrow keys scroll it",
+      "Each arrow is a kit Button that says what it does, like Scroll key metrics right",
+      "An arrow turns off at its end of the run",
+      "Smooth scrolling is off when the person prefers reduced motion",
+      "Narrower than --grid-breakpoint-sm (40rem): arrows give way to swipe; keys still move it"
+    ]
+  },
+  "doNot": [
+    "Do not use Conveyor for paged slides or a gallery — use Carousel",
+    "Do not use Conveyor to page a table — use Pagination",
+    "Do not put a second scrolling box inside it; pass scroll={false} on Scoreboard",
+    "Do not nest two Conveyors",
+    "Do not invent ScrollArea, Overflow, Marquee, or a local scroller",
+    "Do not use embla or Carousel internals",
+    "Do not add loop, showIndex, or slidesPerView",
+    "Do not use variant=primary on the arrows — tertiary icon-only only",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Conveyor label=\"Key metrics\">\n  <Scoreboard scroll={false} items={[{ label: 'Revenue', value: '$48.2k' }, { label: 'Churn', value: '1.2%' }, { label: 'Users', value: '12.4k' }, { label: 'NPS', value: '64' }, { label: 'Tickets', value: '38' }]} />\n</Conveyor>"
+}

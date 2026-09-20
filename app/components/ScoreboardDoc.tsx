@@ -74,6 +74,25 @@ const MORE = [
     badge: "Open",
     badgeTone: "danger" as const,
   },
+  {
+    label: "Credits",
+    value: "$4,800",
+    hint: "This month",
+  },
+  {
+    label: "Refunds",
+    value: "$1,240",
+    delta: "-0.3%",
+    trend: "down" as const,
+    hint: "This month",
+  },
+  {
+    label: "Trials",
+    value: "48",
+    hint: "12 converting",
+    badge: "Week",
+    badgeTone: "brand" as const,
+  },
 ];
 
 const SNIPPET = `<Scoreboard
@@ -94,7 +113,7 @@ export function ScoreboardDoc() {
         <h1 className={styles.heroTitle}>Scoreboard</h1>
         <p className={styles.lede}>
           A metrics strip of kit Scorecards. Two to four fill the row. Four stay in one row until
-          the strip narrows. More than four compose Carousel. One KPI alone is Scorecard.
+          the strip narrows. More than four compose Conveyor. One KPI alone is Scorecard.
         </p>
       </header>
 
@@ -120,8 +139,7 @@ export function ScoreboardDoc() {
                 <p className={styles.usageBody}>
                   Pass items with label, value, delta, trend, hint, and optional badge. Two to four
                   cards share the row equally. Four stay four-up until the strip narrows, then two,
-                  then one. More than four pages four-up in kit Carousel. Do not restyle the cards
-                  from here.
+                  then one. More than four compose kit Conveyor. Do not restyle the cards from here.
                 </p>
               </div>
               <CodeBlock code={SNIPPET} />
@@ -159,7 +177,8 @@ export function ScoreboardDoc() {
                 <Scoreboard items={MORE} />
               </div>
               <p className={styles.usageBody}>
-                More than four compose kit Carousel, four visible at a time. Do not invent a local scroller.
+                More than four compose kit Conveyor. Do not invent a local scroller. Pass
+                scroll={false} when a page already wraps Scoreboard in Conveyor.
               </p>
               <CodeBlock
                 code={`<Scoreboard

@@ -1,4 +1,4 @@
-import { Carousel } from "../Carousel";
+import { Conveyor } from "../Conveyor";
 import { Scorecard } from "../Scorecard";
 import type { ScoreboardProps } from "./Scoreboard.types";
 import styles from "./Scoreboard.module.css";
@@ -9,20 +9,31 @@ const STRIP_MAX = 4;
 
 export function Scoreboard({
   items,
+  scroll = true,
   "aria-label": ariaLabel = "Key metrics",
   className = "",
 }: ScoreboardProps) {
+  if (items.length > STRIP_MAX) {
+    const strip = (
+      <section className={`${styles.scoreboard} ${styles.overflowStrip} ${className}`.trim()} aria-label={ariaLabel}>
+        <div className={styles.overflowRow}>
+          {items.map((item) => (
+            <div key={item.label} className={styles.overflowItem}>
+              <Scorecard {...item} fill />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+
+    if (!scroll) return strip;
+
+    return <Conveyor label={ariaLabel}>{strip}</Conveyor>;
+  }
+
   const cards = items.map((item) => (
     <Scorecard key={item.label} {...item} fill />
   ));
-
-  if (items.length > STRIP_MAX) {
-    return (
-      <div className={`${styles.overflow} ${className}`.trim()}>
-        <Carousel items={cards} slidesPerView={4} ariaLabel={ariaLabel} />
-      </div>
-    );
-  }
 
   const countClass =
     items.length <= 1
