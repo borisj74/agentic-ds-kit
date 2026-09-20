@@ -25,6 +25,7 @@
 .table {
   width: 100%;
   min-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
@@ -44,6 +45,8 @@
 .th:not(.hug),
 .td:not(.hug):not(.index):not(.remove):not(.empty) {
   width: auto;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .th {
@@ -66,6 +69,11 @@
   height: 2.25rem;
 }
 
+.td.editing,
+.td.date {
+  overflow: visible;
+}
+
 .tr:hover .td {
   background-color: var(--surface-muted);
 }
@@ -75,13 +83,17 @@
 }
 
 .hug,
-.index,
 .remove {
   width: 0;
   white-space: nowrap;
 }
 
-.index {
+.th.hug:not(:last-child),
+.td.index {
+  width: 2.75rem;
+}
+
+.td.index {
   padding-inline: var(--space-4);
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -113,21 +125,25 @@
   background-color: var(--surface-card);
 }
 
-.cellButton {
+.cellButton,
+.editor {
   display: flex;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   height: 100%;
-  min-height: 100%;
   margin: 0;
+}
+
+.cellButton {
   padding: var(--space-2) var(--space-6);
   border: 0;
   background: transparent;
   font: inherit;
   color: inherit;
   text-align: start;
-  cursor: pointer;
+  cursor: text;
 }
 
 .root[data-size="sm"] .cellButton {
@@ -139,35 +155,36 @@
   outline-offset: calc(var(--space-inset-2xs) * -1);
 }
 
-.value {
+.value,
+.placeholder {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
   color: var(--text-primary);
 }
 
 .placeholder {
-  min-width: 0;
   color: var(--text-muted);
 }
 
 .editor {
-  display: flex;
-  align-items: stretch;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  padding: 0;
+  width: 0;
+  min-width: 100%;
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
 }
 
-.editor > div {
-  display: flex;
-  align-items: center;
+.editor > div,
+.editor > button {
+  flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
   max-width: none;
-  height: 100%;
-  min-height: 0;
   box-sizing: border-box;
-  padding-block: 0;
 }
 
 .editor > div:focus-within {

@@ -362,24 +362,14 @@ export function DataGrid({
                           className={classNames(
                             styles.td,
                             isEditing && styles.editing,
+                            type === "date" && styles.date,
                             stickyFirstColumn && column.key === firstKey && styles.stickyFirst,
                           )}
                           style={column.width ? { width: column.width, minWidth: column.width } : undefined}
                           onKeyDown={isEditing ? onEditorKey(column) : undefined}
                           onBlur={isEditing ? onEditorBlur(column) : undefined}
                         >
-                          {isEditing && type === "text" ? (
-                            <span className={styles.editor}>
-                              <Input
-                                id={editorId}
-                                size="sm"
-                                placeholder={column.placeholder}
-                                value={draft}
-                                onChange={setDraft}
-                                ariaLabel={name}
-                              />
-                            </span>
-                          ) : isEditing && type === "select" ? (
+                          {type === "select" ? (
                             <span className={styles.editor}>
                               <Select
                                 id={editorId}
@@ -390,13 +380,11 @@ export function DataGrid({
                                 onChange={(next) => {
                                   const picked = Array.isArray(next) ? (next[0] ?? "") : next;
                                   setCell(row.id, column.key, picked);
-                                  returnTo.current = { row: row.id, key: column.key };
-                                  setEditing(null);
                                 }}
                                 ariaLabel={name}
                               />
                             </span>
-                          ) : isEditing && type === "date" ? (
+                          ) : type === "date" ? (
                             <span className={styles.editor}>
                               <label className={styles.srOnly} htmlFor={editorId}>
                                 {name}
@@ -406,11 +394,18 @@ export function DataGrid({
                                 size="sm"
                                 placeholder={column.placeholder}
                                 value={value}
-                                onValueChange={(next) => {
-                                  setCell(row.id, column.key, next);
-                                  returnTo.current = { row: row.id, key: column.key };
-                                  setEditing(null);
-                                }}
+                                onValueChange={(next) => setCell(row.id, column.key, next)}
+                              />
+                            </span>
+                          ) : isEditing ? (
+                            <span className={styles.editor}>
+                              <Input
+                                id={editorId}
+                                size="sm"
+                                placeholder={column.placeholder}
+                                value={draft}
+                                onChange={setDraft}
+                                ariaLabel={name}
                               />
                             </span>
                           ) : (
