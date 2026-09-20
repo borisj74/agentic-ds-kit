@@ -8,7 +8,8 @@
   ],
   "doNotUseWhen": [
     "A full searchable dataset \u2014 use DataTable, which composes Cell",
-    "A short static text table \u2014 use Table"
+    "A short static text table \u2014 use Table",
+    "Editable in-place cells \u2014 use DataGrid"
   ],
   "contains": [
     "avatar",

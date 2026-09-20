@@ -21,6 +21,7 @@ import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
 import { CommandDoc } from "./CommandDoc";
+import { DataGridDoc } from "./DataGridDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
 import { DrawerDoc } from "./DrawerDoc";
@@ -86,6 +87,7 @@ const TITLES: Record<string, string> = {
   checkbox: "Checkbox",
   collapsible: "Collapsible",
   command: "Command",
+  datagrid: "DataGrid",
   datatable: "DataTable",
   datepicker: "DatePicker",
   headercell: "HeaderCell",
@@ -145,6 +147,7 @@ function resolveHash(hash: string): string {
     "bar-chart": "barchart",
     line: "linechart",
     "line-chart": "linechart",
+    "data-grid": "datagrid",
     thinking: "thinkinganimation",
     "thinking-animation": "thinkinganimation",
     shimmer: "shimmertext",
@@ -214,6 +217,7 @@ export function ComponentsView() {
   if (resolved === "checkbox") return <CheckboxDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
   if (resolved === "command") return <CommandDoc />;
+  if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
   if (resolved === "modal") return <ModalDoc />;

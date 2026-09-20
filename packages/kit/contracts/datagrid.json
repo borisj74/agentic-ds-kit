@@ -1,0 +1,137 @@
+{
+  "id": "datagrid",
+  "status": "stable",
+  "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
+  "useWhen": [
+    "People build or change rows in place: rule conditions, price tiers, field mappings, line items",
+    "Short editable lists where a form per row would be slow"
+  ],
+  "doNotUseWhen": [
+    "Short read-only text rows \u2014 use Table",
+    "Searchable, filterable datasets people read and select \u2014 use DataTable",
+    "One primary/secondary line \u2014 use ListView",
+    "A form of Fields and Inputs per row"
+  ],
+  "props": {
+    "columns": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "key": "string",
+        "header": "string",
+        "type": "text | select | date?",
+        "options": "{ value: string, label: string }[]?",
+        "placeholder": "string?",
+        "width": "string?"
+      },
+      "note": "type defaults to text. select needs options. date is kit DatePicker; value is YYYY-MM-DD. Do not add type formula \u2014 this kit has no FormulaEditor; stop and ask."
+    },
+    "rows": {
+      "type": "array",
+      "required": false,
+      "itemShape": "{ id: string, [columnKey: string]: string }",
+      "note": "Controlled rows, one string per column key. Save with onRowsChange. Do not wrap the grid in Form."
+    },
+    "defaultRows": {
+      "type": "array",
+      "required": false,
+      "itemShape": "{ id: string, [columnKey: string]: string }",
+      "note": "Starting rows when rows is not controlled."
+    },
+    "onRowsChange": {
+      "type": "function",
+      "required": false,
+      "note": "(rows: DataGridRow[]) => void. Runs when a cell is saved and when rows are added or removed."
+    },
+    "label": {
+      "type": "string",
+      "default": "Data grid",
+      "note": "Accessible name for the table, and each cell, like Value, row 2."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md",
+      "note": "Passed to HeaderCell. Edit controls are size sm."
+    },
+    "canAddRows": {
+      "type": "boolean",
+      "default": false,
+      "note": "Add row button under the grid. Not primary. New row starts empty; first cell opens for editing."
+    },
+    "canRemoveRows": {
+      "type": "boolean",
+      "default": false,
+      "note": "Remove control at the end of each row. Named in a kit Tooltip."
+    },
+    "emptyLabel": {
+      "type": "string",
+      "default": "No rows yet.",
+      "note": "Shown in one td with colSpan when there are no rows."
+    },
+    "rowNumbers": {
+      "type": "boolean",
+      "default": false,
+      "note": "A # column with each row's number."
+    },
+    "stickyFirstColumn": {
+      "type": "boolean",
+      "default": false,
+      "note": "The # column (if shown) and the first data column stay in place while the grid scrolls sideways."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "radius.surfaceMd",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "icon.muted",
+    "layout.metricsMin",
+    "shadow.sm",
+    "space.1",
+    "space.2",
+    "space.4",
+    "type.size.bodySm",
+    "motion.interaction"
+  ],
+  "a11y": {
+    "element": "table",
+    "requirements": [
+      "Native table named by label, with kit HeaderCell headers and th scope=col",
+      "Each idle cell is a button named by its column and row with its value, like Value, row 2: 100",
+      "Enter or click opens a kit Input, Select, or DatePicker named the same way, and focus moves into it",
+      "Enter saves and Escape cancels; focus goes back to the cell. Tab moves to the next cell",
+      "Remove row buttons are named Remove row 2 and show that in a Tooltip",
+      "A date cell editor is a kit DatePicker named by its column and row, like Start date, row 2",
+      "Empty state is one td with colSpan and emptyLabel",
+      "Narrow container keeps column min-width and scrolls horizontally; the scroller is a focusable region"
+    ]
+  },
+  "doNot": [
+    "Do not invent EditableCell, GridRow, or a table of loose Inputs. Pass columns with a type.",
+    "Do not wrap the grid in Form. Save the rows from onRowsChange.",
+    "Search, filters, column settings, sort, or bulk selection \u2014 use DataTable",
+    "Short read-only text rows \u2014 use Table",
+    "One primary/secondary line \u2014 use ListView",
+    "Do not use Cell for editable body cells \u2014 Cell is display content for DataTable",
+    "Do not add type formula. This kit has no FormulaEditor. Stop and ask.",
+    "Do not add Density, expandable row detail, or a primary Add row Button",
+    "Do not use raw hex"
+  ],
+  "snippet": "<DataGrid\n  label=\"Conditions\"\n  columns={[\n    { key: \"field\", header: \"Field\" },\n    { key: \"condition\", header: \"Condition\", type: \"select\", options: conditions, width: \"12rem\" },\n    { key: \"value\", header: \"Value\" },\n  ]}\n  rows={rules}\n  onRowsChange={setRules}\n  canAddRows\n  canRemoveRows\n/>",
+  "contains": [
+    "headercell",
+    "input",
+    "select",
+    "datepicker",
+    "button",
+    "tooltip"
+  ]
+}

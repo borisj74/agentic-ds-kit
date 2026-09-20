@@ -1,0 +1,227 @@
+.root {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background-color: var(--surface-card);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.scroller {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--surface-card);
+}
+
+.scroller:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.th,
+.td {
+  padding: 0;
+  text-align: start;
+  vertical-align: middle;
+  border-bottom: var(--border-divider) solid var(--border-faint);
+  background-color: var(--surface-card);
+}
+
+.th:not(.hug),
+.td:not(.hug):not(.index):not(.remove):not(.empty) {
+  width: auto;
+}
+
+.th {
+  font-weight: var(--type-weight-label);
+  color: var(--text-secondary);
+  background-color: var(--surface-muted);
+}
+
+.td {
+  color: var(--text-primary);
+  transition: background-color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.td:not(.empty) {
+  height: 2.75rem;
+  box-sizing: border-box;
+}
+
+.root[data-size="sm"] .td:not(.empty) {
+  height: 2.25rem;
+}
+
+.tr:hover .td {
+  background-color: var(--surface-muted);
+}
+
+.tr:last-child .td {
+  border-bottom: none;
+}
+
+.hug,
+.index,
+.remove {
+  width: 0;
+  white-space: nowrap;
+}
+
+.index {
+  padding-inline: var(--space-4);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.th.hug:last-child,
+.td.remove {
+  width: 2.5rem;
+  contain: inline-size;
+  padding: 0;
+  text-align: center;
+}
+
+.removeTrigger {
+  justify-content: center;
+}
+
+.empty {
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  white-space: normal;
+  color: var(--text-secondary);
+  background-color: var(--surface-card);
+}
+
+.tr:hover .empty,
+.empty:hover {
+  background-color: var(--surface-card);
+}
+
+.cellButton {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: var(--space-2) var(--space-6);
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.root[data-size="sm"] .cellButton {
+  padding: var(--space-2) var(--space-4);
+}
+
+.cellButton:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(var(--space-inset-2xs) * -1);
+}
+
+.value {
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+.placeholder {
+  min-width: 0;
+  color: var(--text-muted);
+}
+
+.editor {
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+.editor > div {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding-block: 0;
+}
+
+.editor > div:focus-within {
+  outline-offset: calc(var(--space-inset-2xs) * -1);
+}
+
+.editing {
+  background-color: var(--surface-card);
+}
+
+.stickyIndex,
+.stickyFirst {
+  position: sticky;
+  z-index: 1;
+  box-shadow: var(--shadow-sm);
+}
+
+.stickyIndex {
+  left: 0;
+  z-index: 2;
+}
+
+.stickyFirst {
+  left: var(--datagrid-index-width);
+}
+
+.th.stickyIndex,
+.th.stickyFirst {
+  z-index: 3;
+  background-color: var(--surface-muted);
+}
+
+.add {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  border-top: var(--border-divider) solid var(--border-faint);
+  background-color: var(--surface-card);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .td {
+    transition: none;
+  }
+}

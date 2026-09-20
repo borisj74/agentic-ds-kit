@@ -58,6 +58,7 @@ const PRIORITY = [
   "numbertransition",
   "button",
   "input",
+  "datagrid",
   "datatable",
   "sidenav",
   "switch",

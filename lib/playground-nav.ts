@@ -20,6 +20,7 @@ export const COMPONENT_ITEMS = [
   "checkbox",
   "collapsible",
   "command",
+  "datagrid",
   "datatable",
   "datepicker",
   "drawer",
@@ -69,6 +70,7 @@ export function componentLabel(id: string): string {
   if (id === "avatar") return "Avatar";
   if (id === "avatargroup") return "AvatarGroup";
   if (id === "barchart") return "Bar";
+  if (id === "datagrid") return "DataGrid";
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
   if (id === "datepicker") return "DatePicker";

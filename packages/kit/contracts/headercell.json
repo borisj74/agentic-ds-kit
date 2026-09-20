@@ -4,6 +4,7 @@
   "intent": "Column header for DataTable: label, optional select-all checkbox, optional sort, sm or md.",
   "useWhen": [
     "DataTable column titles",
+    "DataGrid column titles",
     "Select-all in the leading header column",
     "Sortable DataTable column titles"
   ],
