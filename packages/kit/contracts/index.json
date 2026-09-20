@@ -406,6 +406,13 @@
     "status": "stable"
   },
   {
+    "id": "treeview",
+    "intent": "Nested hierarchy people open and close level by level to browse, pick, or check items.",
+    "group": "component",
+    "path": "contracts/treeview.json",
+    "status": "stable"
+  },
+  {
     "id": "alert",
     "intent": "Inline status banner that stays on the page.",
     "group": "component",
