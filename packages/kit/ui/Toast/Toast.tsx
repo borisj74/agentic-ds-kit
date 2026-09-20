@@ -1,89 +1,136 @@
 "use client";
 
-import { CircleAlert, CircleCheck, Info, Minus, TriangleAlert, X } from "lucide-react";
-import { useEffect, useId, useRef } from "react";
+import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type FocusEvent } from "react";
+import { createPortal } from "react-dom";
+import { Button } from "../Button";
 import type { ToastProps, ToastStatus } from "./Toast.types";
 import styles from "./Toast.module.css";
 
-export type { ToastProps, ToastSize, ToastStatus } from "./Toast.types";
+export type { ToastProps, ToastStatus } from "./Toast.types";
 
 const ICONS: Record<ToastStatus, typeof Info> = {
   info: Info,
   success: CircleCheck,
   warning: TriangleAlert,
   danger: CircleAlert,
-  default: Minus,
 };
 
-export function Toast({
-  open = true,
-  onOpenChange,
-  title,
-  description,
-  status = "default",
-  size = "md",
-  duration = null,
-  onClose,
-  action,
-  className = "",
-}: ToastProps) {
-  const titleId = useId();
-  const descriptionId = useId();
-  const timerRef = useRef<number | null>(null);
-  const Icon = ICONS[status];
+const STACK_ID = "agentic-ds-kit-toasts";
 
-  function handleClose() {
-    onClose?.();
-    onOpenChange?.(false);
+function getStack(): HTMLElement {
+  let el = document.getElementById(STACK_ID);
+  if (!el) {
+    el = document.createElement("div");
+    el.id = STACK_ID;
+    document.body.appendChild(el);
   }
+  el.className = styles.stack;
+  el.setAttribute("role", "status");
+  el.setAttribute("aria-live", "polite");
+  return el;
+}
+
+export function Toast(props: ToastProps) {
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!open || duration == null || duration <= 0) return undefined;
+    setMounted(true);
+  }, []);
 
-    timerRef.current = window.setTimeout(() => {
-      onClose?.();
-      onOpenChange?.(false);
-    }, duration);
+  if (!props.open || !mounted) return null;
+  return createPortal(<ToastCard {...props} />, getStack());
+}
+
+function ToastCard({
+  onClose,
+  title,
+  description,
+  status = "info",
+  actionLabel,
+  onAction,
+  duration: durationProp,
+}: ToastProps) {
+  const duration = durationProp === undefined ? 5000 : durationProp;
+  const titleId = useId();
+  const descriptionId = useId();
+  const [paused, setPaused] = useState(false);
+  const remaining = useRef(duration ?? 0);
+  const onCloseRef = useRef(onClose);
+  const Icon = ICONS[status];
+  const isDanger = status === "danger";
+
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
+  useEffect(() => {
+    if (duration == null || duration <= 0 || paused) return undefined;
+
+    const started = Date.now();
+    const timer = window.setTimeout(() => onCloseRef.current(), remaining.current);
 
     return () => {
-      if (timerRef.current != null) window.clearTimeout(timerRef.current);
+      window.clearTimeout(timer);
+      remaining.current = Math.max(remaining.current - (Date.now() - started), 0);
     };
-  }, [open, duration, onClose, onOpenChange]);
+  }, [paused, duration]);
 
-  if (!open) return null;
+  function handleBlur(event: FocusEvent<HTMLDivElement>) {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      setPaused(false);
+    }
+  }
+
+  function handleAction() {
+    onAction?.();
+    onClose();
+  }
 
   return (
     <div
-      className={[styles.toast, styles[status], styles[size], className].filter(Boolean).join(" ")}
-      role="status"
-      aria-live="polite"
+      className={[styles.toast, styles[status]].join(" ")}
+      role={isDanger ? "alert" : "status"}
+      aria-live={isDanger ? undefined : "polite"}
       aria-atomic="true"
-      aria-labelledby={title ? titleId : undefined}
+      aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={handleBlur}
     >
-      <div className={styles.header}>
-        <div className={styles.lead}>
-          <span className={styles.icon}>
-            <Icon aria-hidden="true" size={20} strokeWidth={2} />
-          </span>
-          {title ? (
-            <p id={titleId} className={styles.title}>
-              {title}
+      {duration != null && duration > 0 ? (
+        <span className={styles.bar} aria-hidden="true">
+          <span
+            className={`${styles.fill} ${paused ? styles.paused : ""}`}
+            style={{ animationDuration: `${duration}ms` }}
+          />
+        </span>
+      ) : null}
+      <div className={styles.body}>
+        <span className={styles.icon}>
+          <Icon aria-hidden="true" size={20} strokeWidth={2} />
+        </span>
+        <div className={styles.content}>
+          <p id={titleId} className={styles.title}>
+            {title}
+          </p>
+          {description ? (
+            <p id={descriptionId} className={styles.description}>
+              {description}
             </p>
           ) : null}
+          {actionLabel ? (
+            <div className={styles.action}>
+              <Button variant="tertiary" size="sm" onClick={handleAction}>
+                {actionLabel}
+              </Button>
+            </div>
+          ) : null}
         </div>
-        {onClose || onOpenChange ? (
-          <button type="button" className={styles.close} aria-label="Dismiss" onClick={handleClose}>
-            <X aria-hidden="true" size={20} strokeWidth={2} />
-          </button>
-        ) : null}
+        <Button variant="tertiary" size="sm" iconStart="X" ariaLabel="Dismiss" onClick={onClose} />
       </div>
-      {description ? (
-        <p id={descriptionId} className={styles.description}>
-          {description}
-        </p>
-      ) : null}
-      {action ? <div className={styles.action}>{action}</div> : null}
     </div>
   );
 }

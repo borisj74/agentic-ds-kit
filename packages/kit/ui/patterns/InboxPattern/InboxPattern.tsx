@@ -179,7 +179,6 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
         status="success"
         duration={3000}
         onClose={() => setToastOpen(false)}
-        onOpenChange={setToastOpen}
       />
     </div>
   );

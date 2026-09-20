@@ -3,41 +3,94 @@
 import { useState } from "react";
 import { Button } from "agentic-ds-kit";
 import { Toast } from "agentic-ds-kit";
-import type { ToastSize, ToastStatus } from "agentic-ds-kit";
+import type { ToastStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
-const STATUSES: ToastStatus[] = ["info", "success", "warning", "danger", "default"];
-const SIZES: ToastSize[] = ["sm", "md", "lg"];
+const STATUSES: ToastStatus[] = ["info", "success", "warning", "danger"];
 
-const MASTER_TITLE = "Message sent";
-const MASTER_DESCRIPTION = "Thanks for sharing your ideas, we can explain the next steps here.";
+const COPY: Record<
+  ToastStatus,
+  { heading: string; title: string; description: string; actionLabel?: string; about: string }
+> = {
+  info: {
+    heading: "Info",
+    title: "Saved successfully",
+    description: "Your changes have been saved.",
+    actionLabel: "Undo",
+    about: "Info counts down 5 seconds. Undo is still there. Point at the toast to pause.",
+  },
+  success: {
+    heading: "Success",
+    title: "Invoice sent",
+    description: "INV-1042 went to billing@acme.com.",
+    about: "Success counts down 5 seconds. Point at the toast to pause.",
+  },
+  warning: {
+    heading: "Warning",
+    title: "Sync delayed",
+    description: "Changes will sync when you are back online.",
+    about: "Warning counts down 5 seconds. Status colors the icon and the bar.",
+  },
+  danger: {
+    heading: "Danger",
+    title: "Couldn't delete",
+    description: "The account still has open invoices.",
+    actionLabel: "Try again",
+    about: "Danger counts down 5 seconds. role=alert. Try again still runs before it closes.",
+  },
+};
 
-function masterCode(status: ToastStatus, size: ToastSize) {
+const STAYS_OPEN = {
+  heading: "Stays open",
+  title: "Export ready",
+  description: "Your report is ready to download.",
+  actionLabel: "Download",
+  about: "duration={null} keeps the toast until it is closed, with no countdown bar.",
+} as const;
+
+function toastCode(
+  current: { title: string; description: string; actionLabel?: string },
+  status: ToastStatus,
+  durationNull = false,
+) {
   const lines = [
     "<Toast",
-    `  title="${MASTER_TITLE}"`,
-    `  description="${MASTER_DESCRIPTION}"`,
-    `  status="${status}"`,
+    "  open={open}",
+    "  onClose={() => setOpen(false)}",
+    `  title="${current.title}"`,
+    `  description="${current.description}"`,
   ];
-  if (size !== "md") lines.push(`  size="${size}"`);
-  lines.push("  onClose={() => {}}", "/>");
+  if (status !== "info") lines.push(`  status="${status}"`);
+  if (current.actionLabel) {
+    lines.push(`  actionLabel="${current.actionLabel}"`);
+    lines.push("  onAction={onAction}");
+  }
+  if (durationNull) lines.push("  duration={null}");
+  lines.push("/>");
   return lines.join("\n");
 }
 
 export function ToastDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [status, setStatus] = useState<ToastStatus>("info");
-  const [size, setSize] = useState<ToastSize>("md");
+  const [masterOpen, setMasterOpen] = useState(false);
+  const [variantOpen, setVariantOpen] = useState<Partial<Record<ToastStatus | "stays", boolean>>>({});
+  const current = COPY[status];
+
+  function closeAll() {
+    setMasterOpen(false);
+    setVariantOpen({});
+  }
 
   return (
     <div>
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Toast</h1>
         <p className={styles.lede}>
-          Short non-blocking notice after an action. One piece. Not Alert — Alert stays on the
-          page.
+          A short note that floats in after an action, like Saved successfully, and goes away on
+          its own after a few seconds, with an optional Undo.
         </p>
       </header>
 
@@ -47,53 +100,43 @@ export function ToastDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle status and size. Status colors the icon only. Card stays the same.
+            Every status counts down 5 seconds. Point at the toast to pause. Pass duration null when
+            it must stay until closed.
           </p>
-          <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
+          <DocTabList
+            value={tab}
+            onChange={(id) => {
+              setTab(id as "preview" | "variants");
+              closeAll();
+            }}
+          />
         </div>
 
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <Toast
-                  title={MASTER_TITLE}
-                  description={MASTER_DESCRIPTION}
-                  status={status}
-                  size={size}
-                  onClose={() => {}}
-                />
+                <div className={styles.previewRow}>
+                  <Button variant="secondary" size="md" onClick={() => setMasterOpen(true)}>
+                    {`Show ${status} toast`}
+                  </Button>
+                </div>
               </div>
               <aside className={styles.panel} aria-label="Controls">
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>Status</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Status">
+                  <div className={styles.radioList} role="radiogroup" aria-label="Status">
                     {STATUSES.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${status === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={status === option}
-                        onClick={() => setStatus(option)}
-                      >
+                      <label key={option} className={styles.radio}>
+                        <input
+                          type="radio"
+                          name="toast-status"
+                          value={option}
+                          checked={status === option}
+                          onChange={() => setStatus(option)}
+                        />
                         {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
+                      </label>
                     ))}
                   </div>
                 </div>
@@ -103,162 +146,116 @@ export function ToastDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Toast for a short confirmation after an action. Title plus optional
-                  description and dismiss. Not a page-level Alert.
+                  Use Toast to confirm an action people just took, or to offer a quick Undo. Render
+                  it with open and onClose, and set open when the action happens. It floats at the
+                  bottom right; several stack. Status colors the icon and the bar. For messages that
+                  must stay on the page, use Alert.
                 </p>
               </div>
-              <CodeBlock code={masterCode(status, size)} />
+              <CodeBlock code={toastCode(current, status)} />
             </div>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Info</h2>
-              <div className={styles.exampleCanvas}>
-                <Toast
-                  title="Message sent"
-                  description="Thanks for sharing your ideas, we can explain the next steps here."
-                  status="info"
-                  onClose={() => {}}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Neutral notice after send. Status colors the icon only.</p>
-              </div>
-              <CodeBlock
-                code={`<Toast
-  title="Message sent"
-  description="Thanks for sharing your ideas, we can explain the next steps here."
-  status="info"
-  onClose={() => {}}
-/>`}
-              />
-            </section>
+            {STATUSES.map((option) => (
+              <section key={option} className={styles.example}>
+                <h2 className={styles.exampleTitle}>{COPY[option].heading}</h2>
+                <div className={styles.exampleCanvas}>
+                  <div className={styles.previewRow}>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      onClick={() => setVariantOpen((prev) => ({ ...prev, [option]: true }))}
+                    >
+                      {`Show ${option} toast`}
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <h3 className={styles.usageTitle}>Usage</h3>
+                  <p className={styles.usageBody}>{COPY[option].about}</p>
+                </div>
+                <CodeBlock code={toastCode(COPY[option], option)} />
+              </section>
+            ))}
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Success</h2>
+              <h2 className={styles.exampleTitle}>{STAYS_OPEN.heading}</h2>
               <div className={styles.exampleCanvas}>
-                <Toast
-                  title="Saved"
-                  description="Your changes are live."
-                  status="success"
-                  onClose={() => {}}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>After a write that already completed.</p>
-              </div>
-              <CodeBlock
-                code={`<Toast title="Saved" description="Your changes are live." status="success" onClose={() => {}} />`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Warning</h2>
-              <div className={styles.exampleCanvas}>
-                <Toast
-                  title="Card expires soon"
-                  description="Update billing before the 12th."
-                  status="warning"
-                  onClose={() => {}}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Something they can still fix. Not a blocking dialog.</p>
-              </div>
-              <CodeBlock
-                code={`<Toast title="Card expires soon" description="Update billing before the 12th." status="warning" onClose={() => {}} />`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Danger</h2>
-              <div className={styles.exampleCanvas}>
-                <Toast
-                  title="Export failed"
-                  description="We could not reach the file store."
-                  status="danger"
-                  onClose={() => {}}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>A failure they should know about. Still dismissible.</p>
-              </div>
-              <CodeBlock
-                code={`<Toast title="Export failed" description="We could not reach the file store." status="danger" onClose={() => {}} />`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Title only</h2>
-              <div className={styles.exampleCanvas}>
-                <Toast title="Message sent" status="info" onClose={() => {}} />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Skip description when the title is enough.</p>
-              </div>
-              <CodeBlock code={`<Toast title="Message sent" status="info" onClose={() => {}} />`} />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>With action</h2>
-              <div className={styles.exampleCanvas}>
-                <Toast
-                  title="Saved"
-                  description="Your changes are live."
-                  status="success"
-                  action={<Button size="sm">Undo</Button>}
-                  onClose={() => {}}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Pass a kit Button in action. Sit it under the description. Not ToastAction.
-                </p>
-              </div>
-              <CodeBlock
-                code={`<Toast
-  title="Saved"
-  description="Your changes are live."
-  status="success"
-  action={<Button size="sm">Undo</Button>}
-  onClose={() => {}}
-/>`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Sizes</h2>
-              <div className={styles.exampleCanvas}>
-                <div className={styles.previewStack}>
-                  <Toast size="sm" title="Small" description="Compact padding." status="info" onClose={() => {}} />
-                  <Toast size="md" title="Medium" description="Default padding." status="info" onClose={() => {}} />
-                  <Toast size="lg" title="Large" description="Roomier padding." status="info" onClose={() => {}} />
+                <div className={styles.previewRow}>
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    onClick={() => setVariantOpen((prev) => ({ ...prev, stays: true }))}
+                  >
+                    Show toast
+                  </Button>
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Size changes padding only. Layout stays two rows: title row, then description.
-                </p>
+                <p className={styles.usageBody}>{STAYS_OPEN.about}</p>
               </div>
-              <CodeBlock
-                code={[
-                  '<Toast size="sm" title="Small" description="Compact padding." status="info" onClose={() => {}} />',
-                  '<Toast size="md" title="Medium" description="Default padding." status="info" onClose={() => {}} />',
-                  '<Toast size="lg" title="Large" description="Roomier padding." status="info" onClose={() => {}} />',
-                ].join("\n")}
-              />
+              <CodeBlock code={toastCode(STAYS_OPEN, "info", true)} />
             </section>
           </div>
         )}
       </section>
+
+      <Toast
+        key={status}
+        open={masterOpen}
+        onClose={() => setMasterOpen(false)}
+        title={current.title}
+        description={current.description}
+        status={status}
+        actionLabel={current.actionLabel}
+        onAction={current.actionLabel ? () => setMasterOpen(false) : undefined}
+      />
+      {STATUSES.map((option) => (
+        <Toast
+          key={option}
+          open={Boolean(variantOpen[option])}
+          onClose={() => setVariantOpen((prev) => ({ ...prev, [option]: false }))}
+          title={COPY[option].title}
+          description={COPY[option].description}
+          status={option}
+          actionLabel={COPY[option].actionLabel}
+          onAction={
+            COPY[option].actionLabel
+              ? () => setVariantOpen((prev) => ({ ...prev, [option]: false }))
+              : undefined
+          }
+        />
+      ))}
+      <Toast
+        open={Boolean(variantOpen.stays)}
+        onClose={() => setVariantOpen((prev) => ({ ...prev, stays: false }))}
+        title={STAYS_OPEN.title}
+        description={STAYS_OPEN.description}
+        actionLabel={STAYS_OPEN.actionLabel}
+        onAction={() => setVariantOpen((prev) => ({ ...prev, stays: false }))}
+        duration={null}
+      />
     </div>
+  );
+}
+
+export function ToastGalleryTile() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
+        Show toast
+      </Button>
+      <Toast
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Saved"
+        description="Draft updated."
+        status="success"
+      />
+    </>
   );
 }

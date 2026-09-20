@@ -400,7 +400,7 @@
   },
   {
     "id": "toast",
-    "intent": "Floating notice after an action. Status colors the icon only. Title + optional description + dismiss.",
+    "intent": "A short note that floats in after an action, like Saved successfully, and goes away on its own after a few seconds, with an optional Undo.",
     "group": "component",
     "path": "contracts/toast.json",
     "status": "stable"

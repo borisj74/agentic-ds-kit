@@ -141,7 +141,6 @@ export function InviteMembersPattern({ breadcrumbs, onInvite }: InviteMembersPat
         status="success"
         duration={3000}
         onClose={() => setToastOpen(false)}
-        onOpenChange={setToastOpen}
       />
     </div>
   );

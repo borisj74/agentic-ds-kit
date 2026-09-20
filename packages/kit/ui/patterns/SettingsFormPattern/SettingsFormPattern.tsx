@@ -81,7 +81,6 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
           status="success"
           duration={3000}
           onClose={() => setToastOpen(false)}
-          onOpenChange={setToastOpen}
         />
       </form>
     </div>

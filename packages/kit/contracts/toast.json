@@ -1,68 +1,65 @@
 {
   "id": "toast",
   "status": "stable",
-  "intent": "Floating notice after an action. Status colors the icon only. Title + optional description + dismiss.",
+  "intent": "A short note that floats in after an action, like Saved successfully, and goes away on its own after a few seconds, with an optional Undo.",
   "useWhen": [
-    "Saved, sent, or completed confirmations",
-    "Transient warnings that do not need a choice"
+    "Confirming an action people just took: saved, sent, deleted",
+    "Offering a quick Undo right after a change"
   ],
   "doNotUseWhen": [
-    "Inline page status \u2014 use Alert",
-    "Must-choose interruption \u2014 use AlertDialog",
-    "Long forms or multi-step work \u2014 use Modal"
+    "Errors people must fix or read later — use Alert on the page",
+    "Must-choose interruption — use AlertDialog",
+    "Long forms or multi-step work — use Modal"
+  ],
+  "contains": [
+    "button"
   ],
   "props": {
     "open": {
       "type": "boolean",
-      "default": true
+      "required": true,
+      "note": "Shows the toast. Set it when the action happens."
     },
-    "onOpenChange": {
+    "onClose": {
       "type": "function",
-      "required": false
+      "required": true,
+      "note": "() => void. Time up, Dismiss, or after the action."
     },
     "title": {
       "type": "string",
-      "required": false
+      "required": true,
+      "note": "The bold line, like Saved successfully."
     },
     "description": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "One line under the title."
     },
     "status": {
       "type": "enum",
       "values": [
-        "default",
+        "info",
         "success",
         "warning",
-        "danger",
-        "info"
+        "danger"
       ],
-      "default": "default",
-      "note": "Colors the icon only. Card stays surface-card. default is a neutral icon."
+      "default": "info",
+      "note": "Colors the icon and the countdown bar. Card stays surface-card. info an i, success a check, warning a triangle, danger an alert mark."
     },
-    "size": {
-      "type": "enum",
-      "values": [
-        "sm",
-        "md",
-        "lg"
-      ],
-      "default": "md",
-      "note": "Padding only. sm is space-2/space-3, md is space-3/space-4, lg is space-4/space-5. Layout stays two rows."
+    "actionLabel": {
+      "type": "string",
+      "required": false,
+      "note": "One action under the text, like Undo."
+    },
+    "onAction": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Runs when the action is picked; the toast then closes. Required in practice when actionLabel is set."
     },
     "duration": {
       "type": "number|null",
-      "default": null,
-      "note": "auto-dismiss ms; null keeps open"
-    },
-    "onClose": {
-      "type": "function",
-      "required": false
-    },
-    "action": {
-      "type": "slot",
-      "required": false,
-      "note": "Optional control under the description. Compose kit Button. Not ToastAction."
+      "default": 5000,
+      "note": "How long it stays, in ms, while the bar counts down. Default 5000 for every status. null keeps it until closed, with no bar."
     }
   },
   "tokens": [
@@ -73,32 +70,48 @@
     "icon.success",
     "icon.warning",
     "icon.danger",
-    "icon.secondary",
     "status.info",
     "status.success",
     "status.warning",
     "status.danger",
+    "status.infoSubtle",
+    "status.successSubtle",
+    "status.warningSubtle",
+    "status.dangerSubtle",
+    "border.faint",
     "radius.controlSm",
     "shadow.raisedDepth",
+    "z.toast",
     "space.1",
     "space.3",
     "space.4",
+    "space.6",
     "type.size.label",
-    "type.size.caption"
+    "type.size.caption",
+    "motion.overlay"
   ],
   "a11y": {
     "element": "div[role=status]",
     "requirements": [
-      "role=status with aria-live=polite",
-      "Dismiss control has accessible name",
-      "Title and description wired with ids when present"
+      "Every open Toast portals into one shared stack at the bottom right. Create the stack if missing (role=status, aria-live=polite). Newest at the bottom. No Toaster.",
+      "info, success, and warning use role=status with aria-live=polite. danger uses role=alert (assertive).",
+      "The countdown pauses while the pointer is over the toast or focus is inside it.",
+      "Hover or focus pauses the timer so people can reach Dismiss or the action.",
+      "Dismiss is a kit Button named Dismiss. The icon and the bar are decorative.",
+      "The action is at least 24px tall (WCAG 2.5.8).",
+      "It fades in unless the person prefers reduced motion."
     ]
   },
   "doNot": [
-    "Do not invent ToastTitle, ToastDescription, ToastViewport, or ToastAction cousins",
-    "Do not use Alert for toast feedback",
+    "Do not invent ToastTitle, ToastDescription, ToastAction, ToastViewport, or Toaster. Render Toast.",
+    "Do not use Alert for toast feedback — Alert stays on the page",
+    "Do not pass action as a ReactNode slot — use actionLabel",
+    "Do not put more than one action in a toast",
+    "Do not use variant=primary inside the toast",
+    "Do not use status=default, size, onOpenChange, density, HelpPopover, or Icon",
+    "Do not make duration shorter than people need to read it and reach the action",
     "Do not use raw hex",
     "Do not use glass, color-mix, or backdrop-blur"
   ],
-  "snippet": "<Toast title=\"Message sent\" description=\"Thanks for sharing your ideas, we can explain the next steps here.\" status=\"info\" onClose={() => {}} />"
+  "snippet": "<Toast\n  open={saved}\n  onClose={() => setSaved(false)}\n  title=\"Saved successfully\"\n  description=\"Your changes have been saved.\"\n  actionLabel=\"Undo\"\n  onAction={undo}\n/>"
 }

@@ -331,6 +331,7 @@ function staticVars() {
     "",
     `  --z-overlay: 40;`,
     `  --z-modal: 50;`,
+    `  --z-toast: 55;`,
     `  --z-tooltip: 60;`,
     "",
     ...gridVars(),

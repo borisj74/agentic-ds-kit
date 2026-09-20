@@ -55,10 +55,10 @@ import { Tabs } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
 import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
-import { Toast } from "agentic-ds-kit";
 import { Tooltip } from "agentic-ds-kit";
 import { TreeView } from "agentic-ds-kit";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
+import { ToastGalleryTile } from "./ToastDoc";
 import previewStyles from "./GalleryPreview.module.css";
 
 function Stage({
@@ -474,8 +474,8 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "toast":
       return (
-        <Stage variant="wide">
-          <Toast open duration={null} title="Saved" description="Draft updated." status="success" />
+        <Stage>
+          <ToastGalleryTile />
         </Stage>
       );
     case "tooltip":

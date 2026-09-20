@@ -118,7 +118,6 @@ export function EmptyFirstRunPattern({ breadcrumbs, onCreate }: EmptyFirstRunPat
         status="success"
         duration={3000}
         onClose={() => setToastOpen(false)}
-        onOpenChange={setToastOpen}
       />
     </div>
   );
