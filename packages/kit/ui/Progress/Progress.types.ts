@@ -1,6 +1,6 @@
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressValuePosition = "overlay" | "end";
-export type ProgressTone = "brand" | "danger" | "muted";
+export type ProgressTone = "brand" | "warning" | "danger" | "muted";
 export type ProgressShape = "bar" | "circle" | "semicircle";
 
 export interface ProgressProps {

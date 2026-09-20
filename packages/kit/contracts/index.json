@@ -427,6 +427,13 @@
     "status": "stable"
   },
   {
+    "id": "usagelist",
+    "intent": "A list of usage limits, one a row: the limit's name, how much is used of it, a bar, and a short note.",
+    "group": "component",
+    "path": "contracts/usagelist.json",
+    "status": "stable"
+  },
+  {
     "id": "alert",
     "intent": "Inline status banner that stays on the page.",
     "group": "component",

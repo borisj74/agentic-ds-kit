@@ -40,8 +40,8 @@ export function ProgressDoc() {
         <h1 className={styles.heroTitle}>Progress</h1>
         <p className={styles.lede}>
           Task completion as a bar or circle, 0 to 100. Percent can overlay the track, sit at the
-          end, or sit in the ring hole. Tones are brand, danger, and muted. Fill grows once on
-          load. One piece. Not ProgressLabel or ProgressIndicator.
+          end, or sit in the ring hole. Tones are brand, warning, danger, and muted. Fill grows once
+          on load. One piece. Not ProgressLabel or ProgressIndicator.
         </p>
       </header>
 
@@ -170,6 +170,7 @@ export function ProgressDoc() {
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <div style={STACK}>
                     <Progress value={50} showValue valuePosition="overlay" tone="brand" />
+                    <Progress value={50} showValue valuePosition="overlay" tone="warning" />
                     <Progress value={50} showValue valuePosition="overlay" tone="danger" />
                     <Progress value={50} showValue valuePosition="overlay" tone="muted" />
                   </div>
@@ -178,12 +179,12 @@ export function ProgressDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  brand, danger, and muted on the same piece. No extra tones.
+                  brand, warning, danger, and muted on the same piece. No extra tones.
                 </p>
               </div>
               <CodeBlock
                 code={
-                  '<Progress value={50} showValue valuePosition="overlay" tone="brand" />\n<Progress value={50} showValue valuePosition="overlay" tone="danger" />\n<Progress value={50} showValue valuePosition="overlay" tone="muted" />'
+                  '<Progress value={50} showValue valuePosition="overlay" tone="brand" />\n<Progress value={50} showValue valuePosition="overlay" tone="warning" />\n<Progress value={50} showValue valuePosition="overlay" tone="danger" />\n<Progress value={50} showValue valuePosition="overlay" tone="muted" />'
                 }
               />
             </section>

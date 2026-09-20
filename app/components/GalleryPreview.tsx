@@ -58,6 +58,7 @@ import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
 import { Tooltip } from "agentic-ds-kit";
 import { TreeView } from "agentic-ds-kit";
+import { UsageList } from "agentic-ds-kit";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
 import { ToastGalleryTile } from "./ToastDoc";
 import previewStyles from "./GalleryPreview.module.css";
@@ -513,6 +514,19 @@ export function GalleryPreview({ id }: { id: string }) {
         <Tooltip content="More info" open>
           <Badge>Hint</Badge>
         </Tooltip>
+      );
+    case "usagelist":
+      return (
+        <Stage variant="wide">
+          <UsageList
+            label="Plan usage"
+            items={[
+              { id: "storage", label: "Storage", used: 32, limit: 50, unit: "GB" },
+              { id: "api", label: "API calls", used: 8420, limit: 10000 },
+              { id: "seats", label: "Seats", used: 12, limit: 12 },
+            ]}
+          />
+        </Stage>
       );
     case "treeview":
       return (

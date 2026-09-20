@@ -1,7 +1,7 @@
 {
   "id": "progress",
   "status": "stable",
-  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
+  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
   "useWhen": [
     "Upload, import, or task completion",
     "A determinate percent in a form, card, or page",
@@ -13,7 +13,8 @@
     "A rating out of 5 \u2014 that stays a Cell type",
     "A KPI number \u2014 use Scorecard",
     "Part-to-whole share across segments \u2014 use PieChart",
-    "Numbered wizard or checkout steps \u2014 use ProgressSteps"
+    "Numbered wizard or checkout steps \u2014 use ProgressSteps",
+    "Usage against a plan limit \u2014 use UsageList"
   ],
   "props": {
     "value": {
@@ -64,6 +65,7 @@
       "type": "enum",
       "values": [
         "brand",
+        "warning",
         "danger",
         "muted"
       ],
@@ -78,6 +80,8 @@
   "tokens": [
     "fill.brand",
     "fill.brandSubtle",
+    "fill.warning",
+    "fill.warningSubtle",
     "fill.danger",
     "fill.dangerSubtle",
     "fill.subtle",
@@ -118,7 +122,8 @@
     "Do not add indeterminate",
     "Do not add a multi-segment status bar",
     "Do not use Progress for ordered wizard steps — use ProgressSteps",
+    "Do not use Progress alone for usage against a plan limit — use UsageList",
     "Do not skip prefers-reduced-motion on the load animation"
   ],
-  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />\n<Progress value={50} showValue valuePosition=\"overlay\" />\n<Progress value={50} showValue tone=\"danger\" />\n<Progress value={50} shape=\"circle\" showValue />"
+  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />\n<Progress value={50} showValue valuePosition=\"overlay\" />\n<Progress value={50} showValue tone=\"warning\" />\n<Progress value={50} showValue tone=\"danger\" />\n<Progress value={50} shape=\"circle\" showValue />"
 }

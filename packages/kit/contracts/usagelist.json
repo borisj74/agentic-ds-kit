@@ -1,0 +1,78 @@
+{
+  "id": "usagelist",
+  "status": "stable",
+  "intent": "A list of usage limits, one a row: the limit's name, how much is used of it, a bar, and a short note.",
+  "useWhen": [
+    "A plan, account, or billing page that shows usage against limits, like API calls, storage, and seats",
+    "A usage panel where people need to spot the limits that are nearly or fully used"
+  ],
+  "doNotUseWhen": [
+    "Task progress, an upload, or a setup checklist — use Progress or ProgressSteps",
+    "Records one per row — use ListView",
+    "Values compared across columns — use Table or DataTable",
+    "A single KPI — use Scorecard",
+    "Numbered wizard or checkout steps — use ProgressSteps"
+  ],
+  "contains": [
+    "progress"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "id": "string",
+        "label": "string",
+        "used": "number",
+        "limit": "number",
+        "unit": "string?",
+        "note": "string?"
+      },
+      "note": "The limits in order. Keep it short: one to eight. used and limit are real amounts, not a percent. unit writes after the numbers, like GB. note is a quieter line under the bar, like Resets on Oct 1."
+    },
+    "label": {
+      "type": "string",
+      "default": "Usage",
+      "note": "Names the list for screen readers, like Plan usage."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "fill.brand",
+    "fill.warning",
+    "fill.danger",
+    "icon.warning",
+    "icon.danger",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.body",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4"
+  ],
+  "a11y": {
+    "element": "div[role=list]",
+    "requirements": [
+      "The list is named by label so the number of limits is read (role=list / listitem)",
+      "Each bar is role=progressbar, named by the limit, the used/limit text, and from 80% Almost at limit or Limit reached",
+      "State is never color alone",
+      "Warning and error icons are decorative (aria-hidden) and not in the tab order; their meaning lives in the bar name and in visually hidden text beside the numbers"
+    ]
+  },
+  "doNot": [
+    "Do not build usage rows from a Table with a Progress column, or from loose bars and text. Use UsageList.",
+    "Do not use it for task progress, like an upload or a setup checklist. Use Progress or ProgressSteps.",
+    "Do not use it to compare records across columns. Use Table.",
+    "Do not use ListView — that is records, not plan limits.",
+    "Do not use Scorecard — that is a single KPI.",
+    "Do not pass a percent as used. Pass the real used and limit numbers; the list works out the percent.",
+    "Do not put it in a Card and a Section at once, or draw a box around it yourself. Title comes from a parent Section or Card.",
+    "Do not invent a local progress bar — compose kit Progress with showValue={false} and ariaLabel.",
+    "Do not invent a local icon set — use TriangleAlert and CircleAlert from lucide-react, same as Alert and Toast.",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<UsageList\n  label=\"Plan usage\"\n  items={[\n    { id: 'api', label: 'API calls', used: 8420, limit: 10000, note: 'Resets on Oct 1' },\n    { id: 'storage', label: 'Storage', used: 32, limit: 50, unit: 'GB' },\n    { id: 'seats', label: 'Seats', used: 12, limit: 12, note: 'All seats in use' },\n  ]}\n/>"
+}

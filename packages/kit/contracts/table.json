@@ -10,7 +10,8 @@
     "Search, filters, selection, or column settings — use DataTable",
     "Editable cells — use DataGrid",
     "Layout for metrics — use Scoreboard",
-    "Forms — use Field and inputs"
+    "Forms — use Field and inputs",
+    "Usage against a plan limit — use UsageList"
   ],
   "props": {
     "columns": {
@@ -92,7 +93,8 @@
     "Editable in-place rows — use DataGrid",
     "Do not add @tanstack/react-table",
     "Do not squash columns to the container — overflow-x on the wrapper",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not build usage rows from a Table with a Progress column — use UsageList"
   ],
   "snippet": "<Table caption=\"A list of your recent invoices.\" columns={[{ key: 'invoice', header: 'Invoice', emphasis: true }, { key: 'status', header: 'Status' }, { key: 'method', header: 'Method' }, { key: 'amount', header: 'Amount', numeric: true, align: 'end' }]} rows={[{ invoice: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' }]} footer={{ label: 'Total', value: '$2,500.00' }} emptyLabel=\"No results.\" />"
 }

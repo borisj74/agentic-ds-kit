@@ -62,6 +62,7 @@ export const COMPONENT_ITEMS = [
   "toast",
   "tooltip",
   "treeview",
+  "usagelist",
 ] as const;
 
 export function componentLabel(id: string): string {
@@ -99,6 +100,7 @@ export function componentLabel(id: string): string {
   if (id === "timeline") return "Timeline";
   if (id === "toast") return "Toast";
   if (id === "treeview") return "TreeView";
+  if (id === "usagelist") return "UsageList";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 

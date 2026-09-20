@@ -67,6 +67,7 @@ export * from "../ui/Timeline";
 export * from "../ui/Toast";
 export * from "../ui/Tooltip";
 export * from "../ui/TreeView";
+export * from "../ui/UsageList";
 
 export * from "../ui/patterns/ActivityPattern";
 export * from "../ui/patterns/AssistantWorkspacePattern";

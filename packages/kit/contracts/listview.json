@@ -13,7 +13,8 @@
     "Ordered activity, not a record list — use Timeline",
     "Picking or comparing tiles — use Card",
     "App navigation — use SideNav or AppNav",
-    "Only the no-rows state — use Empty"
+    "Only the no-rows state — use Empty",
+    "Usage against a plan limit — use UsageList"
   ],
   "contains": [
     "avatar",
@@ -155,6 +156,7 @@
     "Do not use SideNav or AppNav for a record list",
     "Do not use Timeline for a record list",
     "Do not use Card for picking records in a list",
+    "Do not use ListView for usage against a plan limit — use UsageList",
     "Do not use more than two inline row actions — overflow is kit DropdownMenu",
     "Do not place variant=primary Button on a row",
     "Do not use raw hex or primitive --color-* ramps"

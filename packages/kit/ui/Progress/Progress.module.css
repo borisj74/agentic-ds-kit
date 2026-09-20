@@ -59,6 +59,22 @@
   stroke: var(--fill-brand);
 }
 
+.warning .track {
+  background-color: var(--fill-warning-subtle);
+}
+
+.warning .fill {
+  background-color: var(--fill-warning);
+}
+
+.warning .trackArc {
+  stroke: var(--fill-warning-subtle);
+}
+
+.warning .valueArc {
+  stroke: var(--fill-warning);
+}
+
 .danger .track {
   background-color: var(--fill-danger-subtle);
 }
