@@ -1,0 +1,109 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.panel {
+  position: fixed;
+  z-index: var(--z-tooltip);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 20rem;
+  padding: var(--space-3);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--motion-overlay-exit-duration) var(--motion-overlay-exit-easing),
+    visibility 0s linear var(--motion-overlay-exit-duration);
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
+    visibility 0s linear 0s;
+}
+
+.title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-muted);
+}
+
+.arrow {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--surface-elevated);
+  border: var(--border-surface) solid var(--border-faint);
+  transform: rotate(45deg);
+}
+
+.top .arrow {
+  bottom: -0.28rem;
+  left: var(--help-arrow);
+  margin-left: -0.25rem;
+  border-top: 0;
+  border-left: 0;
+}
+
+.bottom .arrow {
+  top: -0.28rem;
+  left: var(--help-arrow);
+  margin-left: -0.25rem;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.left .arrow {
+  right: -0.28rem;
+  top: var(--help-arrow);
+  margin-top: -0.25rem;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.right .arrow {
+  left: -0.28rem;
+  top: var(--help-arrow);
+  margin-top: -0.25rem;
+  border-top: 0;
+  border-right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}

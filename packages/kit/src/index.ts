@@ -32,6 +32,7 @@ export * from "../ui/Empty";
 export * from "../ui/Field";
 export * from "../ui/FieldSet";
 export * from "../ui/HeaderCell";
+export * from "../ui/HelpPopover";
 export * from "../ui/Input";
 export * from "../ui/InputOTP";
 export * from "../ui/InsightCard";

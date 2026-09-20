@@ -8,6 +8,7 @@
   ],
   "doNotUseWhen": [
     "Essential instructions \u2014 put them in visible hint text via Field",
+    "A sentence or two of help \u2014 use HelpPopover",
     "Large content or forms \u2014 use Modal",
     "Navigation \u2014 use AppNav"
   ],

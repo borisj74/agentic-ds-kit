@@ -10,12 +10,17 @@
     "Checkbox with its own label and no extra hint/error — use Checkbox",
     "RadioGroup — it provides its own legend",
     "A group of fields with a legend — use FieldSet",
-    "Display-only content — use Section"
+    "Display-only content — use Section",
+    "Required instructions stay in hint — help is extra explanation, not a substitute"
+  ],
+  "contains": [
+    "helppopover"
   ],
   "props": {
     "label": { "type": "string", "required": true },
     "htmlFor": { "type": "string", "required": true },
     "hint": { "type": "string", "required": false, "note": "helper text. Hidden when error is set." },
+    "help": { "type": "string", "required": false, "note": "Extra explanation. Field puts HelpPopover beside the label (placement right). title is the Field label. content is help. Not a substitute for hint." },
     "error": { "type": "string", "required": false },
     "labelPosition": {
       "type": "enum",
@@ -36,6 +41,7 @@
       "role=group",
       "Label htmlFor matches child control id",
       "Hint or error id is passed to the child as describedBy",
+      "When help is set, HelpPopover sits beside the label; hint and error stay under the control",
       "data-invalid when error is set"
     ]
   },
@@ -43,6 +49,7 @@
     "Do not invent FieldLabel, FieldContent, FieldDescription, FieldError, FieldTitle, FieldGroup, FieldLegend, FieldSeparator, Form, FormField, FormItem, FormControl, or FormMessage",
     "Do not wrap Button or layout components",
     "Do not use start on Field for prefix text — that is Input start",
+    "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
     "Do not use raw hex"
   ],
   "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\"><Input id=\"email\" type=\"email\" /></Field>"

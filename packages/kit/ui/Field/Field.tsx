@@ -1,4 +1,6 @@
 import { cloneElement, isValidElement, type ReactElement } from "react";
+import { Button } from "../Button";
+import { HelpPopover } from "../HelpPopover";
 import type { FieldProps } from "./Field.types";
 import styles from "./Field.module.css";
 
@@ -8,6 +10,7 @@ export function Field({
   label,
   htmlFor,
   hint,
+  help,
   error,
   labelPosition = "top",
   children,
@@ -24,15 +27,28 @@ export function Field({
       ? cloneElement(children as ReactElement<{ describedBy?: string; error?: boolean }>, controlProps)
       : children;
 
+  const labelNode = (
+    <label className={styles.label} htmlFor={htmlFor}>
+      {label}
+    </label>
+  );
+
   return (
     <div
       className={`${styles.field} ${styles[labelPosition]}`}
       role="group"
       data-invalid={error ? "true" : undefined}
     >
-      <label className={styles.label} htmlFor={htmlFor}>
-        {label}
-      </label>
+      {help ? (
+        <div className={styles.labelRow}>
+          {labelNode}
+          <HelpPopover title={label} content={help} placement="right">
+            <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+          </HelpPopover>
+        </div>
+      ) : (
+        labelNode
+      )}
       <div className={styles.body}>{control}</div>
       {hint && !error ? (
         <p id={hintId} className={styles.hint}>

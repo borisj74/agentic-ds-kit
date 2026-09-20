@@ -29,6 +29,7 @@ import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
+import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
@@ -93,6 +94,7 @@ const TITLES: Record<string, string> = {
   datatable: "DataTable",
   datepicker: "DatePicker",
   headercell: "HeaderCell",
+  helppopover: "HelpPopover",
   radiogroup: "RadioGroup",
   field: "Field",
   fieldset: "FieldSet",
@@ -181,6 +183,8 @@ function resolveHash(hash: string): string {
     carousels: "carousel",
     tree: "treeview",
     "tree-view": "treeview",
+    "help-popover": "helppopover",
+    help: "helppopover",
   };
   return aliases[hash] ?? hash;
 }
@@ -236,6 +240,7 @@ export function ComponentsView() {
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
+  if (resolved === "helppopover") return <HelpPopoverDoc />;
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
