@@ -54,6 +54,7 @@ import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
 import { Toast } from "agentic-ds-kit";
 import { Tooltip } from "agentic-ds-kit";
+import { TreeView } from "agentic-ds-kit";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
 import previewStyles from "./GalleryPreview.module.css";
 
@@ -446,6 +447,20 @@ export function GalleryPreview({ id }: { id: string }) {
         <Tooltip content="More info" open>
           <Badge>Hint</Badge>
         </Tooltip>
+      );
+    case "treeview":
+      return (
+        <Stage variant="wide">
+          <TreeView
+            label="Workspace"
+            size="sm"
+            defaultExpanded={["design"]}
+            items={[
+              { id: "design", label: "Design", children: [{ id: "brand", label: "Brand" }] },
+              { id: "legal", label: "Legal" },
+            ]}
+          />
+        </Stage>
       );
     default:
       return <Badge>{id}</Badge>;

@@ -60,6 +60,7 @@ import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
 import { ToastDoc } from "./ToastDoc";
 import { TooltipDoc } from "./TooltipDoc";
+import { TreeViewDoc } from "./TreeViewDoc";
 import { ComponentGallery } from "./ComponentGallery";
 
 function currentHash(): string {
@@ -116,6 +117,7 @@ const TITLES: Record<string, string> = {
   thinkinganimation: "ThinkingAnimation",
   timeline: "Timeline",
   toast: "Toast",
+  treeview: "TreeView",
   progress: "Progress",
   progresssteps: "ProgressSteps",
   section: "Section",
@@ -171,6 +173,8 @@ function resolveHash(hash: string): string {
     "kpi-card": "scorecard",
     "kpi-cards": "scorecard",
     carousels: "carousel",
+    tree: "treeview",
+    "tree-view": "treeview",
   };
   return aliases[hash] ?? hash;
 }
@@ -252,5 +256,6 @@ export function ComponentsView() {
   if (resolved === "timeline") return <TimelineDoc />;
   if (resolved === "toast") return <ToastDoc />;
   if (resolved === "tooltip") return <TooltipDoc />;
+  if (resolved === "treeview") return <TreeViewDoc />;
   return <OtherComponent id={resolved} title={TITLES[resolved]} />;
 }

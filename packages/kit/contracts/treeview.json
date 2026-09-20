@@ -1,0 +1,120 @@
+{
+  "id": "treeview",
+  "status": "stable",
+  "intent": "Nested hierarchy people open and close level by level to browse, pick, or check items.",
+  "useWhen": [
+    "Teams, folders, or account trees the user walks level by level",
+    "Browse, pick one, or check several items in a nested data hierarchy"
+  ],
+  "doNotUseWhen": [
+    "Page sections that disclose copy — use Accordion or Collapsible",
+    "App navigation — use SideNav or AppNav",
+    "Flat comparable columns — use Table or DataTable",
+    "A short flat choice list — use Select or RadioGroup"
+  ],
+  "contains": [
+    "checkbox"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemShape": {
+        "id": "string",
+        "label": "string",
+        "children": "TreeViewItem[]",
+        "disabled": "boolean"
+      },
+      "required": true,
+      "note": "A node with children (even []) is a folder. Omit children on a leaf."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "note": "Accessible name for role=tree"
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md"
+    },
+    "selection": {
+      "type": "enum",
+      "values": ["none", "single", "multiple"],
+      "default": "none"
+    },
+    "expanded": {
+      "type": "string[]",
+      "required": false,
+      "note": "controlled folder ids"
+    },
+    "defaultExpanded": {
+      "type": "string[]",
+      "required": false,
+      "note": "uncontrolled initial folder ids"
+    },
+    "onExpandedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(expanded: string[]) => void"
+    },
+    "selected": {
+      "type": "string[]",
+      "required": false,
+      "note": "controlled node ids. Single keeps 0 or 1 id. Ignored when selection is none."
+    },
+    "defaultSelected": {
+      "type": "string[]",
+      "required": false,
+      "note": "uncontrolled initial node ids"
+    },
+    "onSelectedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(selected: string[]) => void"
+    },
+    "showLines": {
+      "type": "boolean",
+      "default": false
+    },
+    "showIcons": {
+      "type": "boolean",
+      "default": false,
+      "note": "Folder, FolderOpen, and File via LucideByName. Not Material Symbols."
+    }
+  },
+  "tokens": [
+    "text.primary",
+    "text.disabled",
+    "icon.muted",
+    "icon.default",
+    "icon.secondary",
+    "surface.muted",
+    "action.selected",
+    "border.faint",
+    "border.focus",
+    "opacity.disabled",
+    "radius.control.sm"
+  ],
+  "a11y": {
+    "element": "div[role=tree]",
+    "requirements": [
+      "Tree has an accessible name from label",
+      "Each node is role=treeitem with aria-level",
+      "Folders set aria-expanded; collapsed children are hidden from AT",
+      "Expanded children sit in role=group",
+      "selection=single uses aria-selected; selection=multiple sets aria-multiselectable and aria-checked (including mixed on branches)",
+      "Disabled nodes set aria-disabled and are not selectable",
+      "Keyboard: Up/Down move among visible nodes; Left/Right collapse, expand, or move to parent/child; Home/End; Space/Enter select or toggle"
+    ]
+  },
+  "doNot": [
+    "Do not use Accordion or Collapsible for a data hierarchy",
+    "Do not use SideNav or AppNav for a data tree",
+    "Do not use Table or DataTable for nested browse/pick",
+    "Do not use Select or RadioGroup for a nested tree",
+    "Do not invent a local nested list, folder row, or tree checkbox — compose kit Checkbox",
+    "Do not add Density or drag-and-drop",
+    "Do not use Material Symbols or raw hex"
+  ],
+  "snippet": "<TreeView label=\"Workspace\" selection=\"multiple\" defaultExpanded={['design']} items={[{ id: 'design', label: 'Design', children: [{ id: 'brand', label: 'Brand' }] }, { id: 'legal', label: 'Legal' }]} />"
+}
