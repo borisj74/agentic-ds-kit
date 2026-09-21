@@ -53,11 +53,12 @@ export function ActivityPattern({ breadcrumbs }: ActivityPatternProps) {
         />
       </div>
       <div className="layout-content">
-        <Section title="This week">
+        <Section title="This week" size="sm">
           <Scoreboard aria-label="Activity this week" items={ACTIVITY_METRICS} />
         </Section>
         <Section
           title="Tasks"
+          size="sm"
           description={taskCount}
           actions={
             tasks.length > 0 ? (
@@ -95,7 +96,7 @@ export function ActivityPattern({ breadcrumbs }: ActivityPatternProps) {
             />
           )}
         </Section>
-        <Section title="Feed" description="Newest first">
+        <Section title="Feed" description="Newest first" size="sm">
           <Tabs
             ariaLabel="Activity type"
             variant="line"

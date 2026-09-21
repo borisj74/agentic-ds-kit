@@ -101,7 +101,7 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
         />
       </div>
       <div className="layout-content">
-        <Section title="At a glance">
+        <Section title="At a glance" size="sm">
           <Scoreboard
             aria-label="Inbox this week"
             items={[
@@ -112,7 +112,7 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
             ]}
           />
         </Section>
-        <Section title="Messages" description={`${unread} unread`}>
+        <Section title="Messages" description={`${unread} unread`} size="sm">
           <Tabs
             ariaLabel="Inbox type"
             variant="line"
@@ -129,6 +129,7 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
         </Section>
         <Section
           title={selected?.subject ?? "Message"}
+          size="sm"
           description={selected ? `${selected.from} · ${selected.when}` : "Select a row"}
           actions={
             selected ? (

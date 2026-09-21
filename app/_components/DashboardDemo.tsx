@@ -174,7 +174,7 @@ export function DashboardDemo() {
     return "overview";
   });
   const [query, setQuery] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const go = useCallback((id: string) => {
     setPage(id);
@@ -276,11 +276,10 @@ export function DashboardDemo() {
         </div>
         <div className={styles.urlBar}>{path}</div>
       </div>
-      <div className={styles.product}>
+      <div className="layout-shell">
         <AppHeader
           title="Agentix"
           mark="A"
-          radius="md"
           searchPlaceholder="Search"
           searchShortcut="⌘K"
           searchValue={query}
@@ -292,40 +291,38 @@ export function DashboardDemo() {
             </>
           }
         />
-        <div className={styles.productBody}>
+        <div className="layout-app">
           <SideNav
             title="Agentix"
             mark="A"
             showHeader={false}
-            radius="md"
+            radius="none"
             open={sidebarOpen}
             onOpenChange={setSidebarOpen}
             items={items}
             footer={footer}
           />
-          <div className={styles.pane}>
-            {page === "overview" ? (
-              <DashboardPattern breadcrumbs={trail} />
-            ) : page === "activity" ? (
-              <ActivityPattern breadcrumbs={trail} />
-            ) : page === "inbox" ? (
-              <InboxPattern breadcrumbs={trail} />
-            ) : page === "settings" ? (
-              <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
-            ) : page === "invite" ? (
-              <InviteMembersPattern breadcrumbs={trail} />
-            ) : page === "insights" ? (
-              <AssistantWorkspacePattern breadcrumbs={trail} />
-            ) : page === "research" ? (
-              <EmptyFirstRunPattern breadcrumbs={trail} />
-            ) : isListDetailPage(page) ? (
-              <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
-            ) : current ? (
-              <PlaceholderPage item={current} breadcrumbs={trail} />
-            ) : (
-              <DashboardPattern breadcrumbs={trail} />
-            )}
-          </div>
+          {page === "overview" ? (
+            <DashboardPattern breadcrumbs={trail} />
+          ) : page === "activity" ? (
+            <ActivityPattern breadcrumbs={trail} />
+          ) : page === "inbox" ? (
+            <InboxPattern breadcrumbs={trail} />
+          ) : page === "settings" ? (
+            <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
+          ) : page === "invite" ? (
+            <InviteMembersPattern breadcrumbs={trail} />
+          ) : page === "insights" ? (
+            <AssistantWorkspacePattern breadcrumbs={trail} />
+          ) : page === "research" ? (
+            <EmptyFirstRunPattern breadcrumbs={trail} />
+          ) : isListDetailPage(page) ? (
+            <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
+          ) : current ? (
+            <PlaceholderPage item={current} breadcrumbs={trail} />
+          ) : (
+            <DashboardPattern breadcrumbs={trail} />
+          )}
         </div>
       </div>
     </div>

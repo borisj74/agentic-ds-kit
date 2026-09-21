@@ -7,7 +7,8 @@
     "Do not restyle Field or Input inside the pattern",
     "Do not invent local form layouts",
     "Do not skip Field wrappers on labeled inputs",
-    "Do not add more than one primary Button"
+    "Do not add more than one primary Button",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<SettingsFormPattern />"
 }

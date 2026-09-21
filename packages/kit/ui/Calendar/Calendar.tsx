@@ -285,7 +285,7 @@ export function Calendar({
           {offered.length > 1 ? (
             <Tabs
               size="sm"
-              variant="segmented"
+              variant="line"
               ariaLabel="Calendar view"
               value={view}
               onChange={(id) => setView(id as CalendarView)}

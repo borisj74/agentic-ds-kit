@@ -1,7 +1,7 @@
 {
   "id": "tabs",
   "status": "stable",
-  "intent": "Switch between related views in place. Segmented or line, in lg, md, and sm.",
+  "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
   "useWhen": [
     "Grouped settings or detail sections on one page",
     "Two to five peer views sharing one context",
@@ -48,10 +48,10 @@
     "variant": {
       "type": "enum",
       "values": [
-        "segmented",
-        "line"
+        "line",
+        "segmented"
       ],
-      "default": "segmented"
+      "default": "line"
     },
     "ariaLabel": {
       "type": "string",
@@ -86,5 +86,5 @@
     "Do not use Tabs for main app navigation \u2014 use AppNav",
     "Do not nest tabs inside tabs"
   ],
-  "snippet": "<Tabs defaultValue=\"overview\" variant=\"segmented\" items={[{ id: 'overview', label: 'Overview', content: '\u2026' }, { id: 'docs', label: 'Docs', content: '\u2026' }]} />"
+  "snippet": "<Tabs defaultValue=\"overview\" variant=\"line\" items={[{ id: 'overview', label: 'Overview', content: '\u2026' }, { id: 'docs', label: 'Docs', content: '\u2026' }]} />"
 }

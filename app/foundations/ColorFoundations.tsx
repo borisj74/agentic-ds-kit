@@ -8,6 +8,7 @@ import {
   primitiveTokenPattern,
   rgbStringToHex,
 } from "./color-utils";
+import { FoundationTabList } from "./FoundationTabList";
 import styles from "./ColorFoundations.module.css";
 
 type ColorTab = "primitives" | "semantics";
@@ -334,58 +335,14 @@ function SemanticList({
 }
 
 export function ColorFoundations() {
-  const [tab, setTab] = useState<ColorTab>("semantics");
+  const [tab, setTab] = useState<ColorTab>("primitives");
   const { copiedId, copyHex } = useCopyHex();
 
   return (
     <section className={styles.colorSection}>
-      <div className={styles.tabList} role="tablist" aria-label="Color foundation views">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "semantics"}
-          className={`${styles.tab} ${tab === "semantics" ? styles.tabActive : ""}`}
-          onClick={() => setTab("semantics")}
-        >
-          Semantics
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "primitives"}
-          className={`${styles.tab} ${tab === "primitives" ? styles.tabActive : ""}`}
-          onClick={() => setTab("primitives")}
-        >
-          Primitives
-        </button>
-      </div>
+      <FoundationTabList value={tab} onChange={setTab} ariaLabel="Color foundation views" />
 
-      {tab === "semantics" ? (
-        <div className={styles.semantics} role="tabpanel">
-          <p className={styles.lead}>
-            Start with the palette ramps, then map meaning through semantic roles.
-            Click a chip to copy the CSS variable.
-          </p>
-          {SEMANTIC_FAMILIES.map((family) => (
-            <div key={family.title} className={styles.hueSection}>
-              <div className={styles.hueHeader}>
-                <h3 className={styles.hueTitle}>{family.title}</h3>
-                <code className={styles.huePattern}>{family.pattern}</code>
-              </div>
-              {family.subgroups ? (
-                family.subgroups.map((subgroup) => (
-                  <div key={subgroup.title} className={styles.subgroup}>
-                    <h4 className={styles.subgroupTitle}>{subgroup.title}</h4>
-                    <SemanticList tokens={subgroup.tokens} copiedId={copiedId} onCopy={copyHex} />
-                  </div>
-                ))
-              ) : (
-                <SemanticList tokens={family.tokens ?? []} copiedId={copiedId} onCopy={copyHex} />
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
+      {tab === "primitives" ? (
         <div className={styles.primitives} role="tabpanel">
           <p className={styles.lead}>
             Fixed palette ramps from <code>tokens/tokens.json</code>. Click a chip to copy its hex.
@@ -413,6 +370,31 @@ export function ColorFoundations() {
                   );
                 })}
               </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.semantics} role="tabpanel">
+          <p className={styles.lead}>
+            Semantic roles for UI. Map from the primitive ramps on the other tab — never use primitives in components.
+            Click a chip to copy the CSS variable.
+          </p>
+          {SEMANTIC_FAMILIES.map((family) => (
+            <div key={family.title} className={styles.hueSection}>
+              <div className={styles.hueHeader}>
+                <h3 className={styles.hueTitle}>{family.title}</h3>
+                <code className={styles.huePattern}>{family.pattern}</code>
+              </div>
+              {family.subgroups ? (
+                family.subgroups.map((subgroup) => (
+                  <div key={subgroup.title} className={styles.subgroup}>
+                    <h4 className={styles.subgroupTitle}>{subgroup.title}</h4>
+                    <SemanticList tokens={subgroup.tokens} copiedId={copiedId} onCopy={copyHex} />
+                  </div>
+                ))
+              ) : (
+                <SemanticList tokens={family.tokens ?? []} copiedId={copiedId} onCopy={copyHex} />
+              )}
             </div>
           ))}
         </div>

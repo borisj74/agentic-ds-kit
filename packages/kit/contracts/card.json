@@ -115,6 +115,7 @@
     "Do not invent local Card, Panel, or Tile",
     "Do not use raw hex",
     "Do not use Card as a Scorecard-in-disguise — do not put a lone metric here",
+    "Do not use Card for page grouping — that is unframed Section",
     "Footer actions must be kit Buttons",
     "Do not invent CardHeader components",
     "headerAction is tertiary/secondary, not a second primary"

@@ -73,13 +73,13 @@ export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProp
         />
       </div>
       <div className="layout-content">
-        <Section title="Sprint metrics">
+        <Section title="Sprint metrics" size="sm">
           <Scoreboard aria-label="Sprint metrics" items={SPRINT_METRICS} />
         </Section>
-        <Section title="Weekly users">
+        <Section title="Weekly users" size="sm">
           <LineChart data={WEEKLY_USERS} variant="line" showTable={false} />
         </Section>
-        <Section title="Open tasks" description="4 items need attention">
+        <Section title="Open tasks" description="4 items need attention" size="sm">
           <DataTable
             caption="Sprint backlog"
             selectable

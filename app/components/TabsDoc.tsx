@@ -8,7 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIZES: TabsSize[] = ["sm", "md", "lg"];
-const VARIANTS: TabsVariant[] = ["segmented", "line"];
+const VARIANTS: TabsVariant[] = ["line", "segmented"];
 
 const MASTER_ITEMS: TabItem[] = [
   { id: "overview", label: "Overview", content: "What’s shipping now and how this kit is positioned." },
@@ -44,7 +44,7 @@ function masterCode(size: TabsSize, variant: TabsVariant) {
 export function TabsDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [size, setSize] = useState<TabsSize>("md");
-  const [variant, setVariant] = useState<TabsVariant>("segmented");
+  const [variant, setVariant] = useState<TabsVariant>("line");
   const [value, setValue] = useState("overview");
 
   return (
@@ -52,7 +52,7 @@ export function TabsDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Tabs</h1>
         <p className={styles.lede}>
-          Switch between related views in place. Segmented or line, in lg, md, and sm. One piece.
+          Switch between related views in place. Line by default, or segmented, in lg, md, and sm. One piece.
           Not AppNav. Not RadioGroup. Not TabsList or TabsTrigger cousins.
         </p>
       </header>
@@ -129,6 +129,41 @@ export function TabsDoc() {
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Line</h2>
+              <div className={styles.exampleCanvas}>
+                <Tabs
+                  defaultValue="activity"
+                  size="lg"
+                  variant="line"
+                  items={[
+                    { id: "activity", label: "Activity", content: "Recent updates." },
+                    { id: "members", label: "Members", content: "People with access." },
+                    { id: "settings", label: "Settings", content: "Workspace preferences." },
+                  ]}
+                />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Default for page-level sections where the list should stretch with the content
+                  width.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Tabs
+  defaultValue="activity"
+  size="lg"
+  variant="line"
+  items={[
+    { id: "activity", label: "Activity", content: "Recent updates." },
+    { id: "members", label: "Members", content: "People with access." },
+    { id: "settings", label: "Settings", content: "Workspace preferences." },
+  ]}
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Segmented</h2>
               <div className={styles.exampleCanvas}>
                 <Tabs
@@ -162,41 +197,6 @@ export function TabsDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Line</h2>
-              <div className={styles.exampleCanvas}>
-                <Tabs
-                  defaultValue="activity"
-                  size="lg"
-                  variant="line"
-                  items={[
-                    { id: "activity", label: "Activity", content: "Recent updates." },
-                    { id: "members", label: "Members", content: "People with access." },
-                    { id: "settings", label: "Settings", content: "Workspace preferences." },
-                  ]}
-                />
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  Use line tabs for page-level sections where the list should stretch with the
-                  content width.
-                </p>
-              </div>
-              <CodeBlock
-                code={`<Tabs
-  defaultValue="activity"
-  size="lg"
-  variant="line"
-  items={[
-    { id: "activity", label: "Activity", content: "Recent updates." },
-    { id: "members", label: "Members", content: "People with access." },
-    { id: "settings", label: "Settings", content: "Workspace preferences." },
-  ]}
-/>`}
-              />
-            </section>
-
-            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Sizes</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewStack}>
@@ -205,7 +205,7 @@ export function TabsDoc() {
                       key={step}
                       defaultValue="one"
                       size={step}
-                      variant="segmented"
+                      variant="line"
                       items={[
                         { id: "one", label: `One (${step})`, content: `Content for ${step}.` },
                         { id: "two", label: "Two", content: "Second panel." },
@@ -224,7 +224,7 @@ export function TabsDoc() {
                 code={["sm", "md", "lg"]
                   .map(
                     (step) =>
-                      `<Tabs defaultValue="one" size="${step}" variant="segmented" items={[{ id: "one", label: "One", content: "…" }, { id: "two", label: "Two", content: "…" }]} />`,
+                      `<Tabs defaultValue="one" size="${step}" variant="line" items={[{ id: "one", label: "One", content: "…" }, { id: "two", label: "Two", content: "…" }]} />`,
                   )
                   .join("\n")}
               />

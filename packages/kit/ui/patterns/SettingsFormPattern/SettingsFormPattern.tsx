@@ -39,7 +39,7 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
         />
       </div>
       <form className="layout-content" onSubmit={handleSubmit}>
-        <Section title="Profile" description="Basic information visible to collaborators">
+        <Section title="Profile" description="Basic information visible to collaborators" size="sm">
           <div className={formStyles.form}>
             <Field label="Display name" htmlFor={`${uid}-display-name`} hint="Shown on shared projects">
               <Input id={`${uid}-display-name`} defaultValue="Maya Chen" />
@@ -60,7 +60,7 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
             </Field>
           </div>
         </Section>
-        <Section title="Notifications">
+        <Section title="Notifications" size="sm">
           <div className={formStyles.form}>
             <Checkbox id={`${uid}-email-updates`} label="Email me weekly summaries" defaultChecked />
             <Checkbox id={`${uid}-product-news`} label="Product news and tips" />

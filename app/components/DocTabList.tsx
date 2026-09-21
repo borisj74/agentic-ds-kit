@@ -16,7 +16,7 @@ export function DocTabList({
     <div className={styles.tabListHost}>
       <Tabs
         size="md"
-        variant="segmented"
+        variant="line"
         value={value}
         onChange={onChange}
         ariaLabel={ariaLabel}

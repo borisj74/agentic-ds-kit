@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./EffectFoundations.module.css";
 import { CopyToken } from "./CopyToken";
@@ -35,13 +36,10 @@ const ROLES = [
 ] as const;
 
 export function BorderFoundations() {
-  const [tab, setTab] = useState<Tab>("semantics");
+  const [tab, setTab] = useState<Tab>("primitives");
   return (
     <div className={colorStyles.colorSection}>
-      <div className={colorStyles.tabList} role="tablist" aria-label="Border views">
-        <button type="button" role="tab" aria-selected={tab === "semantics"} className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`} onClick={() => setTab("semantics")}>Semantics</button>
-        <button type="button" role="tab" aria-selected={tab === "primitives"} className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`} onClick={() => setTab("primitives")}>Primitives</button>
-      </div>
+      <FoundationTabList value={tab} onChange={setTab} ariaLabel="Border views" />
       <p className={colorStyles.lead}>Use semantic border widths in components. Pair with color border tokens for stroke color.</p>
       {tab === "semantics" ? (
         <div className={styles.sections}>

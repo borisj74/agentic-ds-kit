@@ -34,13 +34,15 @@ export function AppHeader({
     >
       <div className={styles.bar}>
         <div className={styles.start}>
-          {logo ? (
-            <div className={styles.logo}>{logo}</div>
-          ) : (
-            <span className={styles.mark} aria-hidden>
-              {markLetter}
-            </span>
-          )}
+          <div className={styles.brand}>
+            {logo ? (
+              <div className={styles.logo}>{logo}</div>
+            ) : (
+              <span className={styles.mark} aria-hidden>
+                {markLetter}
+              </span>
+            )}
+          </div>
           {title ? <p className={styles.title}>{title}</p> : null}
         </div>
 

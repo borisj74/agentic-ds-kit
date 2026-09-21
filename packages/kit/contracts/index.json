@@ -267,7 +267,7 @@
   },
   {
     "id": "tabs",
-    "intent": "Switch between related views in place. Segmented or line, in lg, md, and sm.",
+    "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
     "group": "component",
     "path": "contracts/tabs.json",
     "status": "stable"
@@ -358,7 +358,7 @@
   },
   {
     "id": "section",
-    "intent": "Grouped page block with heading, optional description and actions.",
+    "intent": "Grouped page block with heading, optional description and actions. Unframed \u2014 Card owns the framed surface; layout-content owns page inset.",
     "group": "component",
     "path": "contracts/section.json",
     "status": "stable"

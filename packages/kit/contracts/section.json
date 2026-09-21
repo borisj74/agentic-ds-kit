@@ -1,7 +1,7 @@
 {
   "id": "section",
   "status": "stable",
-  "intent": "Grouped page block with optional heading, description, and actions on one surface. Pass collapsible for a chevron that toggles the body.",
+  "intent": "Grouped page block with optional heading, description, and actions. Unframed: no fill, radius, border, shadow, or box padding \u2014 Card owns the framed surface; layout-content owns page inset. Pass collapsible for a chevron that toggles the body.",
   "useWhen": [
     "Separating metrics, tables, or form groups on a page",
     "Under PageHeader to structure dashboard or settings content"
@@ -31,7 +31,7 @@
         "lg"
       ],
       "default": "md",
-      "note": "Controls gap under the heading and between stacked sections via space-section tokens"
+      "note": "Controls gap under the heading and between stacked sections via space-section tokens. Does not add box padding."
     },
     "actions": {
       "type": "slot",
@@ -63,8 +63,6 @@
     }
   },
   "tokens": [
-    "surface.card",
-    "radius.surface.md",
     "text.primary",
     "text.secondary",
     "type.size.heading",
@@ -89,6 +87,7 @@
     "Do not invent a local Section or SectionHeader",
     "Do not use raw hex",
     "Do not use Section as a compact marketing tile \u2014 that is Card",
+    "Do not give Section a fill, radius, border, shadow, or box padding \u2014 Card owns the framed surface; layout-content owns page inset",
     "Do not use Section as the page title \u2014 that is PageHeader",
     "Do not embed one-off metric flex rows \u2014 use Scoreboard",
     "Actions must be kit Buttons",

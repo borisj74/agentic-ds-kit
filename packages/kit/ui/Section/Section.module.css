@@ -1,39 +1,30 @@
 .section {
   --section-space: var(--space-section-md);
   --section-header-gap: var(--space-stack-md);
-  --section-inset-block: var(--space-6);
-  --section-inset-inline: var(--space-4);
   display: grid;
   gap: var(--section-header-gap);
   width: 100%;
   min-width: 0;
   margin: 0 0 var(--section-space);
-  padding: var(--section-inset-block) var(--section-inset-inline);
+  padding: 0;
   box-sizing: border-box;
-  background: var(--surface-card);
+  background: transparent;
   border: none;
-  border-radius: var(--radius-surface-md);
 }
 
 .sm {
   --section-space: var(--space-section-sm);
   --section-header-gap: var(--space-stack-sm);
-  --section-inset-block: var(--space-4);
-  --section-inset-inline: var(--space-3);
 }
 
 .md {
   --section-space: var(--space-section-md);
   --section-header-gap: var(--space-stack-md);
-  --section-inset-block: var(--space-6);
-  --section-inset-inline: var(--space-4);
 }
 
 .lg {
   --section-space: var(--space-section-lg);
   --section-header-gap: var(--space-stack-lg);
-  --section-inset-block: var(--space-8);
-  --section-inset-inline: var(--space-6);
 }
 
 .header {

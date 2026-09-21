@@ -17,7 +17,7 @@ The **kit** is the npm package `agentic-ds-kit`. The Next app in this GitHub rep
 
 Optional: [Cursor](https://cursor.com) or Claude Code so agent rules load from files instead of chat paste.
 
-Confirm the registry version (use **0.2.1 or later** — 0.2.0 ships CSS that Next re-scopes and kit UI looks unstyled):
+Confirm the registry version. Current latest is **0.2.10**. Skip **0.2.0** — it ships CSS that Next re-scopes and kit UI looks unstyled:
 
 ```bash
 npm view agentic-ds-kit version
@@ -132,11 +132,11 @@ Then:
 2. You can remove a standalone `import "agentic-ds-kit/tokens.css"` if a kit import is already on the tree.
 3. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules/agentic-ds-kit/` if those files changed.
 
-**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.2.1 or later**.
+**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.2.10 or later**.
 
 ```bash
 npm view agentic-ds-kit version
-# expect 0.2.7 or higher
+# expect 0.2.10 or higher
 ```
 
 ### Get later kit versions
@@ -149,7 +149,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.2.7"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.2.10"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -157,7 +157,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 
 - [ ] `npm install agentic-ds-kit` in the Next app (not in `$HOME`)
 - [ ] React 19 already in the app
-- [ ] No `transpilePackages` for this package (0.2.1+)
+- [ ] No `transpilePackages` for this package (0.2.10+)
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
@@ -339,8 +339,11 @@ Optional: deploy the playground (Vercel) so non-git people can browse.
 Publish a new kit version (maintainers). Run this from the **repo root** (the Cursor terminal in this project is already there):
 
 ```bash
+npm run bump:kit -- patch
 npm run publish:kit
 ```
+
+`bump:kit` writes `packages/kit/package.json` and rewrites the current-version pins in this file. Use `minor` or an exact version (`0.3.0`) instead of `patch` when that is the bump. `publish:kit` syncs the pins again, then publishes. Historical notes for **0.1.0** and **0.2.0** stay as written.
 
 If npm asks for 2FA:
 
@@ -348,4 +351,4 @@ If npm asks for 2FA:
 npm run publish:kit -- --otp=123456
 ```
 
-You must be logged in (`npm login`). Bump `packages/kit/package.json` `version` first. Do not republish a version that already exists.
+You must be logged in (`npm login`). Do not republish a version that already exists.

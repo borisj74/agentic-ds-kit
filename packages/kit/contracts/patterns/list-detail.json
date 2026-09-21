@@ -1,13 +1,14 @@
 {
   "id": "list-detail",
   "status": "stable",
-  "intent": "List-detail shell: sidebar nav, table list, and detail section.",
+  "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
   "contains": ["pageheader", "appnav", "table", "section", "badge"],
   "doNot": [
     "Do not restyle AppNav or Table",
     "Do not replace Table with custom list markup",
-    "Do not add a local sidebar component",
-    "Do not use Tabs instead of AppNav for route-level sections"
+    "Do not add a local sidebar — product chrome is SideNav under AppHeader; in-page files stay AppNav",
+    "Do not use Tabs instead of AppNav for route-level sections",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<ListDetailPattern />"
 }

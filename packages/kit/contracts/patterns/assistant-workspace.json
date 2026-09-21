@@ -10,7 +10,8 @@
     "Do not skip layout-split for the InsightCards",
     "Do not skip Chat radius none for the rail",
     "Do not give InsightCards primaryAction while Chat is open — Chat Send is the one primary",
-    "Do not restyle Chat or InsightCard"
+    "Do not restyle Chat or InsightCard",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<AssistantWorkspacePattern />"
 }

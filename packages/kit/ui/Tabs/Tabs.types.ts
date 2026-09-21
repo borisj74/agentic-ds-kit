@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 export type TabsSize = "sm" | "md" | "lg";
-export type TabsVariant = "segmented" | "line";
+export type TabsVariant = "line" | "segmented";
 
 export interface TabItem {
   id: string;
