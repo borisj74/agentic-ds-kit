@@ -8,7 +8,8 @@
     "Do not use AlertDialog for a dismissible invite",
     "Do not skip Field wrappers on labeled inputs",
     "Do not wrap RadioGroup in Field — it has its own legend",
-    "Do not add more than one primary Button"
+    "Do not add more than one primary Button",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<InviteMembersPattern />"
 }

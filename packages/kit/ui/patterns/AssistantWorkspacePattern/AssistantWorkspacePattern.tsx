@@ -118,7 +118,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
           />
         </div>
         <div className="layout-content">
-          <Section title="Recommended" description="Ask the assistant about a card, or send a prompt in the rail.">
+          <Section title="Recommended" description="Ask the assistant about a card, or send a prompt in the rail." size="sm">
             <div className={`layout-split ${styles.insights}`}>
               {INSIGHTS.map((insight) => (
                 <InsightCard

@@ -26,7 +26,8 @@
     "Do not use AlertDialog for a dismissible reply",
     "Do not skip Field wrappers on labeled inputs",
     "Do not add more than one primary Button",
-    "Do not restyle kit components inside the pattern"
+    "Do not restyle kit components inside the pattern",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<InboxPattern />"
 }

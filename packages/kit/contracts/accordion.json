@@ -9,7 +9,8 @@
   "doNotUseWhen": [
     "In-page peer views — use Tabs",
     "Sidebar catalog groups — use AppNav",
-    "A single show/hide block — use Collapsible"
+    "A single show/hide block — use Collapsible",
+    "Page grouping under a heading — use Section (collapsible if it folds)"
   ],
   "props": {
     "items": {

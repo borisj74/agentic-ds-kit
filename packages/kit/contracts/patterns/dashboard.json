@@ -6,7 +6,8 @@
   "doNot": [
     "Do not restyle kit components inside the pattern",
     "Do not define a local dashboard layout component",
-    "Do not invent a local table, filter bar, or chart wrapper"
+    "Do not invent a local table, filter bar, or chart wrapper",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<DashboardPattern />"
 }

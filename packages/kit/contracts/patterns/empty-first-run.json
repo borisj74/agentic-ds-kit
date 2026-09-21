@@ -9,7 +9,8 @@
     "Do not skip Field wrappers on labeled inputs",
     "Do not wrap a single Field in FieldSet",
     "Do not add more than one primary Button",
-    "Do not put a primary on PageHeader while Empty already has one"
+    "Do not put a primary on PageHeader while Empty already has one",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
   ],
   "snippet": "<EmptyFirstRunPattern />"
 }

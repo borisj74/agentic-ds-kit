@@ -3,37 +3,7 @@
 }
 
 .tabList {
-  display: inline-flex;
-  gap: var(--space-6);
   margin-bottom: var(--space-6);
-  border-bottom: var(--border-width-thin) solid var(--border-faint);
-}
-
-.tab {
-  margin-bottom: -1px;
-  padding: var(--space-2) 0 var(--space-3);
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  color: var(--text-secondary);
-  background: transparent;
-  border: none;
-  border-bottom: var(--border-width-medium) solid transparent;
-  cursor: pointer;
-}
-
-.tab:hover {
-  color: var(--text-primary);
-}
-
-.tab:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
-}
-
-.tabActive {
-  color: var(--text-primary);
-  border-bottom-color: var(--text-primary);
 }
 
 .lead {

@@ -16,12 +16,23 @@
   transition: width var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
+/* Trailing edge lives on the shell. The inner panel stays full sidebar
+   width and is clipped when closed — a panel border would vanish. */
+.radiusNone {
+  border-inline-end: var(--border-divider) solid var(--border-faint);
+}
+
 .radiusNone .panel {
+  border: 0;
   border-radius: var(--radius-0);
 }
 
 .rootClosed {
   width: var(--layout-sidebar-compact);
+}
+
+.rootClosed:not(.radiusNone) {
+  border-inline-end: var(--border-surface) solid var(--border-faint);
 }
 
 .panel {
@@ -157,7 +168,7 @@
 
 .list {
   display: grid;
-  gap: 0;
+  gap: var(--space-stack-2xs);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -356,6 +367,7 @@
 
 .submenu {
   display: grid;
+  gap: var(--space-stack-2xs);
   margin: 0;
   margin-inline-start: var(--space-inset-lg);
   padding: 0;

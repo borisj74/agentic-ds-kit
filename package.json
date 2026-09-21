@@ -11,7 +11,9 @@
     "build": "npm run build -w agentic-ds-kit && next build",
     "start": "next start -H 127.0.0.1 -p 43123",
     "lint": "eslint",
-    "publish:kit": "npm publish -w agentic-ds-kit --access public"
+    "sync:kit-docs": "node scripts/sync-kit-version-docs.mjs",
+    "bump:kit": "npm version --no-git-tag-version -w agentic-ds-kit",
+    "publish:kit": "npm run sync:kit-docs && npm publish -w agentic-ds-kit --access public"
   },
   "dependencies": {
     "agentic-ds-kit": "*",

@@ -128,10 +128,10 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
         <div className={styles.shell}>
           <AppNav title="Files" items={navItems} />
           <div className={styles.main}>
-            <Section title="Projects" description="Select a file in the list to view details">
+            <Section title="Projects" description="Select a file in the list to view details" size="sm">
               <Table columns={COLUMNS} rows={rows} caption="Sprint 24 projects" />
             </Section>
-            <Section title={selected.name} description={`${selected.owner} · ${selected.updated}`}>
+            <Section title={selected.name} description={`${selected.owner} · ${selected.updated}`} size="sm">
               <div className={styles.detail}>
                 <Badge tone={selected.statusTone}>{selected.status}</Badge>
                 <p className={styles.body}>{selected.body}</p>

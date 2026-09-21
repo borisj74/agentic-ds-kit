@@ -111,6 +111,7 @@
     "space.8",
     "space.10",
     "layout.rail",
+    "layout.sidebarCompact",
     "type.size.heading",
     "type.size.label",
     "type.weight.heading",
@@ -122,6 +123,7 @@
       "header has aria-label from ariaLabel, title, or Application",
       "Search is kit Input type=search with aria-label from searchPlaceholder",
       "Default letter mark is aria-hidden",
+      "Mark sits in a layout-sidebar-compact slot, centered, so it shares the SideNav icon axis in layout-shell",
       "Actions remain keyboard accessible",
       "Do not use h1 — page titles belong on PageHeader",
       "At container 38rem, search stacks under brand and actions"
@@ -130,6 +132,8 @@
   "doNot": [
     "Do not invent TopBar, SearchBar, Logo, Masthead, or AppBar cousins",
     "Do not use PageHeader for product chrome",
+    "Do not leave a gap between AppHeader and SideNav — compose layout-shell over layout-app, both radius none",
+    "Do not pad the mark independently of layout-sidebar-compact — it must stay centered on SideNav icons",
     "Do not use AppNav, SideNav, or NavigationMenu as a top bar with search",
     "Do not bake a product logo SVG into the kit — use logo or mark",
     "Do not add a Copilot, assistant, or sparkle CTA",

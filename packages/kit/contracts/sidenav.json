@@ -96,6 +96,7 @@
     "icon.brand",
     "icon.muted",
     "focus.ring",
+    "space.stack.2xs",
     "layout.sidebar",
     "layout.sidebarCompact",
     "radius.surfaceMd",
@@ -119,8 +120,10 @@
       "Parent with nested items is a disclosure with aria-expanded",
       "Closed rail clips labels via overflow; labels stay in the DOM for assistive tech",
       "Outer shell width animates; inner panel stays at layout-sidebar width so icons do not recenter",
+      "Closed rail trailing border is on the outer shell — the inner panel is clipped",
       "Closed rail must not change item width or height — size snaps cause open/close jump",
-      "Closed rail paints a square chip over the icon; do not clip a full-width row background"
+      "Closed rail paints a square chip over the icon; do not clip a full-width row background",
+      "List items keep space-stack-2xs between rows so selected and hover surfaces do not touch"
     ]
   },
   "doNot": [
@@ -128,6 +131,7 @@
     "Do not compose AppNav inside SideNav",
     "Do not use Drawer for persistent app chrome",
     "Do not use AppNav as closeable product chrome",
+    "Do not leave a gap between AppHeader and SideNav — radius none, showHeader false, layout-app with no gap",
     "Do not use position:fixed, an overlay, a focus trap, or Escape-to-close",
     "Do not use the shadcn sidebar package",
     "Do not use raw hex"

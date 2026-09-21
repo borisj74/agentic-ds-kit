@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./TypographyFoundations.module.css";
 
@@ -137,30 +138,11 @@ function CopyCode({ value }: { value: string }) {
 }
 
 export function TypographyFoundations() {
-  const [tab, setTab] = useState<TypeTab>("semantics");
+  const [tab, setTab] = useState<TypeTab>("primitives");
 
   return (
     <div className={colorStyles.colorSection}>
-      <div className={colorStyles.tabList} role="tablist" aria-label="Typography views">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "semantics"}
-          className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("semantics")}
-        >
-          Semantics
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "primitives"}
-          className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("primitives")}
-        >
-          Primitives
-        </button>
-      </div>
+      <FoundationTabList value={tab} onChange={setTab} ariaLabel="Typography views" />
 
       <p className={colorStyles.lead}>
         Use semantic text styles in components. Primitives are the source type scale.

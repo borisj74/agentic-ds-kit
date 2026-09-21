@@ -19,7 +19,7 @@ export function Tabs({
   defaultValue,
   onChange,
   size = "md",
-  variant = "segmented",
+  variant = "line",
   ariaLabel = "Tabs",
 }: TabsProps) {
   const baseId = useId();

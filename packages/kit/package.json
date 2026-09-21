@@ -1,6 +1,6 @@
 {
   "name": "agentic-ds-kit",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Code-only agentic design system: contracts, tokens, and React components.",
   "license": "MIT",
   "repository": {
@@ -48,6 +48,7 @@
   "scripts": {
     "generate:tokens": "node scripts/generate-tokens.mjs",
     "build": "npm run generate:tokens && vite build",
+    "version": "node ../../scripts/sync-kit-version-docs.mjs",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {

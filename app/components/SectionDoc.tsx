@@ -79,7 +79,7 @@ export function SectionDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Section</h1>
         <p className={styles.lede}>
-          Grouped page block. Title, description, and body share one surface. Headings are static by
+          Grouped page block. Unframed: no fill, radius, border, or box padding. Headings are static by
           default; pass collapsible for a chevron that toggles the body. Not PageHeader. Not Card.
           Not FieldSet. Not Accordion.
         </p>
@@ -160,8 +160,9 @@ export function SectionDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Section to group a heading with related content on a page. Heading and body
-                  share one surface. The heading is a label by default — no chevron. Pass collapsible
+                  Use Section to group a heading with related content on a page. It has no fill,
+                  radius, border, or box padding — Card owns the framed surface; layout-content owns
+                  page inset. The heading is a label by default — no chevron. Pass collapsible
                   when the block should fold. Page title stays on PageHeader. Compact tiles with an
                   image or footer stay Card. Form legends stay FieldSet. Exclusive FAQ lists stay
                   Accordion. Actions must be kit Buttons.

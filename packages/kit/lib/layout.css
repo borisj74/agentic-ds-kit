@@ -1,8 +1,23 @@
 /* Semantic layout roles. Use these instead of inventing per-page grids. */
 
+/* Product chrome: AppHeader full-bleed, then SideNav + page. No gap. */
+.layout-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface-muted);
+}
+
+.layout-shell > .layout-app {
+  min-height: 0;
+  overflow: hidden;
+}
+
 .layout-app {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0;
   min-width: 0;
   min-height: 0;
 }
@@ -12,12 +27,22 @@
   min-height: 0;
 }
 
+.layout-app > .layout-canvas,
+.layout-app > .layout-workspace {
+  overflow: hidden;
+}
+
+.layout-app > .layout-canvas.layout-canvas--sticky-header {
+  overflow: auto;
+}
+
 .layout-canvas {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  background: var(--surface-card);
 }
 
 .layout-workspace {
@@ -26,6 +51,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  background: var(--surface-card);
 }
 
 .layout-workspace > * {

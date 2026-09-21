@@ -1,14 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./GridFoundations.module.css";
 
 type GridTab = "primitives" | "semantics";
 
 const PATTERNS = [
-  { name: "App shell", className: ".layout-app", copy: "Fixed product nav + fluid canvas. First layout every SaaS screen should use." },
-  { name: "Canvas", className: ".layout-canvas", copy: "Header bar over a fill-height body. Lives inside the app shell canvas column." },
+  { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav." },
+  { name: "App", className: ".layout-app", copy: "SideNav column + fluid canvas. Lives under layout-shell." },
+  { name: "Canvas", className: ".layout-canvas", copy: "White surface-card column: page header over a fill-height body. Lives inside the app shell." },
   { name: "Workspace", className: ".layout-workspace", copy: "Primary content + optional context rail (assistant, inspector, detail)." },
   { name: "Content", className: ".layout-content", copy: "Scrollable dashboard body. Stacks sections with space-gap-lg and page inset." },
   { name: "Metrics", className: ".layout-metrics", copy: "KPI / summary card strip. Use --fixed-3 or --fixed-4 when the count is known." },
@@ -72,16 +74,19 @@ const PRIMITIVES = [
   },
 ] as const;
 
-const SNIPPET = `<div className="layout-app">
-  <aside>{/* AppNav */}</aside>
-  <div className="layout-canvas">
-    <header className="layout-header">…</header>
-    <div className="layout-workspace">
-      <main className="layout-content">
-        <section className="layout-metrics layout-metrics--fixed-3">…</section>
-        <section className="layout-split--primary">…</section>
-      </main>
-      <aside>{/* detail rail */}</aside>
+const SNIPPET = `<div className="layout-shell">
+  {/* AppHeader radius none */}
+  <div className="layout-app">
+    {/* SideNav radius none, showHeader false */}
+    <div className="layout-canvas">
+      <header className="layout-header">…</header>
+      <div className="layout-workspace">
+        <main className="layout-content">
+          <section className="layout-metrics layout-metrics--fixed-3">…</section>
+          <section className="layout-split--primary">…</section>
+        </main>
+        <aside>{/* detail rail */}</aside>
+      </div>
     </div>
   </div>
 </div>`;
@@ -111,34 +116,14 @@ function CopyCode({ value }: { value: string }) {
 }
 
 export function GridFoundations() {
-  const [tab, setTab] = useState<GridTab>("semantics");
+  const [tab, setTab] = useState<GridTab>("primitives");
 
   return (
     <div className={colorStyles.colorSection}>
-      <div className={colorStyles.tabList} role="tablist" aria-label="Grid systems views">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "semantics"}
-          className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("semantics")}
-        >
-          Semantics
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "primitives"}
-          className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("primitives")}
-        >
-          Primitives
-        </button>
-      </div>
+      <FoundationTabList value={tab} onChange={setTab} ariaLabel="Grid systems views" />
 
       <p className={colorStyles.lead}>
-        SaaS layout patterns first - app shell, canvas, workspace, metrics, and content splits.
-        Primitives stay available as the source scale.
+        Primitives are the source scale. Semantic patterns map them onto SaaS shells, canvases, and splits.
       </p>
 
       {tab === "semantics" ? (

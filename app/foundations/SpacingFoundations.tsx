@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./SpacingFoundations.module.css";
 
@@ -54,30 +55,11 @@ function CopyCode({ value }: { value: string }) {
 }
 
 export function SpacingFoundations() {
-  const [tab, setTab] = useState<SpaceTab>("semantics");
+  const [tab, setTab] = useState<SpaceTab>("primitives");
 
   return (
     <div className={colorStyles.colorSection}>
-      <div className={colorStyles.tabList} role="tablist" aria-label="Spacing views">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "semantics"}
-          className={`${colorStyles.tab} ${tab === "semantics" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("semantics")}
-        >
-          Semantics
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "primitives"}
-          className={`${colorStyles.tab} ${tab === "primitives" ? colorStyles.tabActive : ""}`}
-          onClick={() => setTab("primitives")}
-        >
-          Primitives
-        </button>
-      </div>
+      <FoundationTabList value={tab} onChange={setTab} ariaLabel="Spacing views" />
 
       <p className={colorStyles.lead}>
         Use semantic spacing roles in components. Primitives are the source scale.
