@@ -98,7 +98,12 @@
     "action.danger",
     "action.dangerHover",
     "icon.default",
-    "radius.pill"
+    "radius.pill",
+    "type.weight.heading",
+    "type.line.heading",
+    "type.size.body",
+    "type.size.bodySm",
+    "type.size.caption"
   ],
   "a11y": {
     "element": "button",
