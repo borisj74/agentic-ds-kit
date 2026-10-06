@@ -37,7 +37,7 @@ export function kitVersionOptions(published: string[] = []): KitVersionOption[] 
     .sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: "base" }));
 
   return [
-    { value: KIT_LATEST, label: "Latest" },
+    { value: KIT_LATEST, label: "Latest (@latest)" },
     ...versions.map((value) => ({ value, label: value })),
   ];
 }

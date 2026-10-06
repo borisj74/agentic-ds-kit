@@ -47,7 +47,7 @@ export function KitVersionField({ value, onChange }: KitVersionFieldProps) {
       <Field
         label="Version"
         htmlFor="kit-version"
-        hint="Latest installs the current published package, not a pinned older release."
+        hint="Latest installs agentic-ds-kit@latest — the current published package, not a pinned older release."
       >
         <Select
           id="kit-version"

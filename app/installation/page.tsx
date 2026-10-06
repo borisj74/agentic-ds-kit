@@ -39,13 +39,14 @@ export default function InstallationPage() {
           transpilePackages. Copy AGENTS.md so the agent follows the contract.
         </p>
 
+        <KitVersionField value={version} onChange={setVersion} />
+
         <Section
           title="Existing app"
           description="From the Next app root — the folder that already has package.json."
         >
           <div className={playground.stack}>
             <p className={playground.body}>Install, then smoke-test a primary Button.</p>
-            <KitVersionField value={version} onChange={setVersion} />
             <CodeBlock code={install} />
             <CodeBlock code={SMOKE} />
             <p className={playground.body}>

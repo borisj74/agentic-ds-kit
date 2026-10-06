@@ -148,6 +148,7 @@
 
 .versionField {
   max-width: 16rem;
+  margin-bottom: var(--space-8);
 }
 
 @media (min-width: 1024px) {
