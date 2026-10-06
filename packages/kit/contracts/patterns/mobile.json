@@ -1,0 +1,23 @@
+{
+  "id": "mobile",
+  "status": "stable",
+  "intent": "Compact product shell: AppHeader menu, Drawer with AppNav, and a phone-width canvas.",
+  "contains": [
+    "appheader",
+    "button",
+    "drawer",
+    "appnav",
+    "pageheader",
+    "listview"
+  ],
+  "doNot": [
+    "Do not invent MobileNav, HamburgerMenu, BottomNav, or TabBar",
+    "Do not use SideNav as an overlay — SideNav is in-flow chrome",
+    "Do not use a local scrim or fixed aside — kit Drawer is the overlay menu",
+    "Do not put the menu trigger in a local header cousin — AppHeader actions hold the Menu Button",
+    "Do not add more than one primary Button",
+    "Do not restyle kit components inside the pattern",
+    "Do not invent a padded app shell. Compact chrome is AppHeader over the canvas; the menu is a left Drawer with AppNav."
+  ],
+  "snippet": "<MobilePattern />"
+}

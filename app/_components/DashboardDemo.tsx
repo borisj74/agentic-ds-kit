@@ -13,18 +13,23 @@ import { EmptyFirstRunPattern } from "agentic-ds-kit";
 import { InboxPattern } from "agentic-ds-kit";
 import { InviteMembersPattern } from "agentic-ds-kit";
 import { ListDetailPattern } from "agentic-ds-kit";
+import { MobilePattern } from "agentic-ds-kit";
+import { PlannerPattern } from "agentic-ds-kit";
 import { SettingsFormPattern } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
+import { TaskManagerPattern } from "agentic-ds-kit";
 import type { SideNavItem } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItem[] = [
   { id: "overview", label: "Overview", icon: "House" },
+  { id: "planner", label: "Planner", icon: "CalendarDays" },
   { id: "activity", label: "Activity", icon: "ChartBar", badge: "6" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
   { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
-  { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
+  { id: "tasks", label: "Tasks", icon: "Check", badge: "7" },
   { id: "insights", label: "Insights", icon: "Sparkles" },
+  { id: "mobile", label: "Mobile", icon: "Phone" },
   { id: "resources", label: "Resources", icon: "Layers" },
   { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
   { id: "tag-at-risk", label: "At risk", icon: "Info", badge: "5" },
@@ -148,10 +153,43 @@ function hashForPage(id: string) {
   if (id === "insights") return "insights";
   if (id === "activity") return "activity";
   if (id === "inbox") return "inbox";
+  if (id === "planner") return "planner";
+  if (id === "tasks") return "tasks";
+  if (id === "mobile") return "mobile";
   if (id === "research") return "empty";
   if (id === "projects" || id === "list-detail") return "list-detail";
   if (LIST_DETAIL_HASHES.has(id)) return id;
   return "dashboard";
+}
+
+function pageFromHash(hash: string): string | undefined {
+  if (hash === "settings") return "settings";
+  if (hash === "invite") return "invite";
+  if (hash === "insights") return "insights";
+  if (hash === "activity") return "activity";
+  if (hash === "inbox") return "inbox";
+  if (hash === "planner") return "planner";
+  if (hash === "tasks") return "tasks";
+  if (hash === "mobile") return "mobile";
+  if (hash === "empty" || hash === "research") return "research";
+  if (hash === "list-detail" || hash === "projects") return "projects";
+  if (LIST_DETAIL_HASHES.has(hash)) return hash;
+  return undefined;
+}
+
+function isPatternPage(id: string) {
+  return (
+    id === "settings" ||
+    id === "invite" ||
+    id === "insights" ||
+    id === "activity" ||
+    id === "inbox" ||
+    id === "planner" ||
+    id === "tasks" ||
+    id === "mobile" ||
+    id === "research" ||
+    isListDetailPage(id)
+  );
 }
 
 function selectedProjectId(page: string) {
@@ -162,16 +200,7 @@ function selectedProjectId(page: string) {
 export function DashboardDemo() {
   const [page, setPage] = useState(() => {
     if (typeof window === "undefined") return "overview";
-    const hash = window.location.hash.replace(/^#/, "");
-    if (hash === "settings") return "settings";
-    if (hash === "invite") return "invite";
-    if (hash === "insights") return "insights";
-    if (hash === "activity") return "activity";
-    if (hash === "inbox") return "inbox";
-    if (hash === "empty" || hash === "research") return "research";
-    if (hash === "list-detail" || hash === "projects") return "projects";
-    if (LIST_DETAIL_HASHES.has(hash)) return hash;
-    return "overview";
+    return pageFromHash(window.location.hash.replace(/^#/, "")) ?? "overview";
   });
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -188,50 +217,13 @@ export function DashboardDemo() {
   useEffect(() => {
     const apply = () => {
       const hash = window.location.hash.replace(/^#/, "");
-      if (hash === "settings") {
-        setPage("settings");
-        return;
-      }
-      if (hash === "invite") {
-        setPage("invite");
-        return;
-      }
-      if (hash === "insights") {
-        setPage("insights");
-        return;
-      }
-      if (hash === "activity") {
-        setPage("activity");
-        return;
-      }
-      if (hash === "inbox") {
-        setPage("inbox");
-        return;
-      }
-      if (hash === "empty" || hash === "research") {
-        setPage("research");
-        return;
-      }
-      if (hash === "list-detail" || hash === "projects") {
-        setPage("projects");
-        return;
-      }
-      if (LIST_DETAIL_HASHES.has(hash)) {
-        setPage(hash);
+      const next = pageFromHash(hash);
+      if (next) {
+        setPage(next);
         return;
       }
       if (hash === "dashboard" || hash === "") {
-        setPage((current) =>
-          current === "settings" ||
-          current === "invite" ||
-          current === "insights" ||
-          current === "activity" ||
-          current === "inbox" ||
-          current === "research" ||
-          isListDetailPage(current)
-            ? "overview"
-            : current,
-        );
+        setPage((current) => (isPatternPage(current) ? "overview" : current));
       }
     };
     apply();
@@ -276,6 +268,9 @@ export function DashboardDemo() {
         </div>
         <div className={styles.urlBar}>{path}</div>
       </div>
+      {page === "mobile" ? (
+        <MobilePattern />
+      ) : (
       <div className="layout-shell">
         <AppHeader
           title="Agentix"
@@ -304,10 +299,14 @@ export function DashboardDemo() {
           />
           {page === "overview" ? (
             <DashboardPattern breadcrumbs={trail} />
+          ) : page === "planner" ? (
+            <PlannerPattern breadcrumbs={trail} />
           ) : page === "activity" ? (
             <ActivityPattern breadcrumbs={trail} />
           ) : page === "inbox" ? (
             <InboxPattern breadcrumbs={trail} />
+          ) : page === "tasks" ? (
+            <TaskManagerPattern breadcrumbs={trail} />
           ) : page === "settings" ? (
             <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
           ) : page === "invite" ? (
@@ -325,6 +324,7 @@ export function DashboardDemo() {
           )}
         </div>
       </div>
+      )}
     </div>
   );
 }

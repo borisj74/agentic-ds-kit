@@ -1,0 +1,17 @@
+{
+  "id": "planner",
+  "status": "stable",
+  "intent": "Planner blueprint: PageHeader and a kit Calendar of team events.",
+  "contains": [
+    "pageheader",
+    "calendar"
+  ],
+  "doNot": [
+    "Do not invent EventCalendar, Scheduler, MonthGrid, or DateGrid",
+    "Do not use DatePicker for this schedule — DatePicker is a form date field",
+    "Do not put a primary Button on the page — Calendar’s event Save is the primary action",
+    "Do not restyle kit Calendar internals",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
+  ],
+  "snippet": "<PlannerPattern />"
+}

@@ -516,5 +516,26 @@
     "group": "pattern",
     "path": "contracts/patterns/inbox.json",
     "status": "stable"
+  },
+  {
+    "id": "planner",
+    "intent": "Planner blueprint: PageHeader and a kit Calendar of team events.",
+    "group": "pattern",
+    "path": "contracts/patterns/planner.json",
+    "status": "stable"
+  },
+  {
+    "id": "task-manager",
+    "intent": "Task manager blueprint: PageHeader, Scoreboard, grouped ListView, add Modal, and detail Drawer.",
+    "group": "pattern",
+    "path": "contracts/patterns/task-manager.json",
+    "status": "stable"
+  },
+  {
+    "id": "mobile",
+    "intent": "Compact product shell: AppHeader menu, Drawer with AppNav, and a phone-width canvas.",
+    "group": "pattern",
+    "path": "contracts/patterns/mobile.json",
+    "status": "stable"
   }
 ]

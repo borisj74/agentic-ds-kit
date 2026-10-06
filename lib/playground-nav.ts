@@ -184,13 +184,16 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       label: "Patterns",
       items: [
         leaf("/patterns#dashboard", "Dashboard"),
+        leaf("/patterns#planner", "Planner"),
         leaf("/patterns#activity", "Activity"),
         leaf("/patterns#inbox", "Inbox"),
+        leaf("/patterns#tasks", "Tasks"),
         leaf("/patterns#settings", "Settings"),
         leaf("/patterns#list-detail", "List detail"),
         leaf("/patterns#invite", "Invite"),
         leaf("/patterns#insights", "Assistant"),
         leaf("/patterns#empty", "Empty"),
+        leaf("/patterns#mobile", "Mobile"),
       ],
     },
   ];

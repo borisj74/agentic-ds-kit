@@ -225,12 +225,12 @@ npm install
 npm run dev
 ```
 
-`npm run dev` builds the kit, then starts Next. Wait until the server is up, then open [http://127.0.0.1:43123](http://127.0.0.1:43123) (prefer `127.0.0.1` over `localhost` on machines that resolve `localhost` to IPv6).
+`npm run dev` builds the kit, then starts Next on `0.0.0.0:43123`. Wait until the server is up, then open [http://127.0.0.1:43123](http://127.0.0.1:43123) (prefer `127.0.0.1` over `localhost` on machines that resolve `localhost` to IPv6).
 
 | Route | What you get |
 | --- | --- |
 | `/` | Redirects to Patterns |
-| `/patterns` | Live pattern screens (Dashboard, Activity, Inbox, …) |
+| `/patterns` | Live pattern screens (Dashboard, Planner, Tasks, Mobile, …) |
 | `/installation` | Install the package |
 | `/foundations` | Token scales |
 | `/components` | Gallery and per-component docs |

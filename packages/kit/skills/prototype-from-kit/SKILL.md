@@ -11,7 +11,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 
 1. **Search the index** — Read `node_modules/agentic-ds-kit/contracts/index.json` (or `packages/kit/contracts/index.json` in this repo). Note `group`: `foundation`, `component`, or `pattern`.
 2. **Open contracts** — Read only the 1–2 contract files that match the UI you need.
-3. **Check patterns** — If the screen matches `dashboard`, `settings-form`, `list-detail`, `invite-members`, `assistant-workspace`, `empty-first-run`, `activity`, or `inbox`, import that pattern from `agentic-ds-kit` instead of hand-rolling the layout.
+3. **Check patterns** — If the screen matches `dashboard`, `settings-form`, `list-detail`, `invite-members`, `assistant-workspace`, `empty-first-run`, `activity`, `inbox`, `planner`, `task-manager`, or `mobile`, import that pattern from `agentic-ds-kit` instead of hand-rolling the layout.
 4. **Compose from the package** — `import { Button, Scoreboard } from "agentic-ds-kit"`. Match props exactly to contract enums; do not add variants.
 5. **Stop if missing** — If no contract or pattern covers what you need, stop and ask. Do not scaffold a one-off.
 
@@ -27,3 +27,6 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 - Empty / first-run screens use the `empty-first-run` pattern (PageHeader + Empty + one primary that opens a create Modal).
 - Activity screens use the `activity` pattern (Scoreboard + task cards or list + tabbed DataTable feed).
 - Inbox screens use the `inbox` pattern (Scoreboard + tabbed Table + detail Section + reply Drawer).
+- Planner screens use the `planner` pattern (PageHeader + Calendar).
+- Task manager screens use the `task-manager` pattern (PageHeader + Scoreboard + grouped ListView + add Modal + detail Drawer).
+- Compact / phone shells use the `mobile` pattern (AppHeader menu + left Drawer with AppNav).

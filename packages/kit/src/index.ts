@@ -76,5 +76,8 @@ export * from "../ui/patterns/EmptyFirstRunPattern";
 export * from "../ui/patterns/InboxPattern";
 export * from "../ui/patterns/InviteMembersPattern";
 export * from "../ui/patterns/ListDetailPattern";
+export * from "../ui/patterns/MobilePattern";
+export * from "../ui/patterns/PlannerPattern";
 export * from "../ui/patterns/SettingsFormPattern";
+export * from "../ui/patterns/TaskManagerPattern";
 

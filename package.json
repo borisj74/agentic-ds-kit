@@ -7,9 +7,9 @@
   ],
   "scripts": {
     "generate:tokens": "npm run generate:tokens -w agentic-ds-kit",
-    "dev": "next dev -H 127.0.0.1 -p 43123",
+    "dev": "next dev -H 0.0.0.0 -p 43123",
     "build": "npm run build -w agentic-ds-kit && next build",
-    "start": "next start -H 127.0.0.1 -p 43123",
+    "start": "next start -H 0.0.0.0 -p 43123",
     "lint": "eslint",
     "sync:kit-docs": "node scripts/sync-kit-version-docs.mjs",
     "bump:kit": "npm version --no-git-tag-version -w agentic-ds-kit",

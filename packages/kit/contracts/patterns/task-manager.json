@@ -1,0 +1,34 @@
+{
+  "id": "task-manager",
+  "status": "stable",
+  "intent": "Task manager blueprint: PageHeader, Scoreboard, grouped ListView, add Modal, and detail Drawer.",
+  "contains": [
+    "pageheader",
+    "scoreboard",
+    "section",
+    "alert",
+    "listview",
+    "button",
+    "modal",
+    "fieldset",
+    "field",
+    "input",
+    "textarea",
+    "select",
+    "datepicker",
+    "drawer",
+    "avatar",
+    "badge",
+    "progress",
+    "toast"
+  ],
+  "doNot": [
+    "Do not invent TodoList, TaskRow, Checklist, or Kanban as public components — ListView is the record list",
+    "Do not assemble rows from local Cards + Checkboxes; ListView owns selection and groups",
+    "Do not skip Scoreboard for the metrics strip",
+    "Do not add more than one primary Button",
+    "Do not restyle kit components inside the pattern",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
+  ],
+  "snippet": "<TaskManagerPattern />"
+}

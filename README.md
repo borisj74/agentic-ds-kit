@@ -22,7 +22,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (65 components, 8 patterns).
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (65 components, 11 patterns).
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -38,7 +38,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 
-### Patterns (8)
+### Patterns (11)
 - `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
@@ -47,6 +47,9 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
 - `activity` — PageHeader + Scoreboard + task cards or list + tabbed DataTable feed
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
+- `planner` — PageHeader + Calendar
+- `task-manager` — PageHeader + Scoreboard + grouped ListView + add Modal + detail Drawer
+- `mobile` — AppHeader menu + left Drawer with AppNav + phone-width canvas
 
 ### Playground
 Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. The playground opens on Patterns.
@@ -57,7 +60,7 @@ Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundation
 - `/theming` — Semantic tokens, dark mode, brand color
 - `/foundations` — Token scales
 - `/components` — Component gallery (`#gallery`) and per-component docs
-- `/patterns` — Live pattern screens (`#dashboard`)
+- `/patterns` — Live pattern screens (`#dashboard`, `#planner`, `#tasks`, `#mobile`, …)
 
 ### Agent files
 - `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups
@@ -85,7 +88,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:43123](http://localhost:43123).
+Open [http://127.0.0.1:43123](http://127.0.0.1:43123) (the playground binds `0.0.0.0:43123`).
 
 ## Build
 
