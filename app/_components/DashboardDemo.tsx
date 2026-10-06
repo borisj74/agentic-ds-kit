@@ -198,10 +198,7 @@ function selectedProjectId(page: string) {
 }
 
 export function DashboardDemo() {
-  const [page, setPage] = useState(() => {
-    if (typeof window === "undefined") return "overview";
-    return pageFromHash(window.location.hash.replace(/^#/, "")) ?? "overview";
-  });
+  const [page, setPage] = useState("overview");
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
