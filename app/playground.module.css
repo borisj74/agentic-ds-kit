@@ -146,6 +146,10 @@
   gap: var(--space-4);
 }
 
+.versionField {
+  max-width: 16rem;
+}
+
 @media (min-width: 1024px) {
   .wideShell {
     max-width: none;

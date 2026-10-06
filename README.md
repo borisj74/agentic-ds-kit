@@ -11,7 +11,7 @@ The **kit** lives in `packages/kit`. The **playground** in this repo is the docs
 ## Install in an app
 
 ```bash
-npm install agentic-ds-kit
+npm install agentic-ds-kit@latest
 ```
 
 ```tsx

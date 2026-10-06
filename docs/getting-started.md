@@ -34,7 +34,7 @@ From the app root (the folder that already has `package.json` and `app/` or `src
 **1. Install**
 
 ```bash
-npm install agentic-ds-kit
+npm install agentic-ds-kit@latest
 ```
 
 That pulls React peers only if they are missing. You should already have `react` and `react-dom` 19 from Next.
@@ -111,7 +111,7 @@ Do not `npm init` and stop there — the kit is not an app.
 mkdir my-app
 cd my-app
 npx create-next-app@latest . --yes
-npm install agentic-ds-kit
+npm install agentic-ds-kit@latest
 ```
 
 Then follow **Smoke test** through **Agent files** above. `create-next-app` installs React 19.
@@ -155,7 +155,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 
 ### Install checklist
 
-- [ ] `npm install agentic-ds-kit` in the Next app (not in `$HOME`)
+- [ ] `npm install agentic-ds-kit@latest` in the Next app (not in `$HOME`)
 - [ ] React 19 already in the app
 - [ ] No `transpilePackages` for this package (0.2.10+)
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
@@ -170,7 +170,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 | Pattern looks like unstyled stacked divs | Layout CSS not loading. Import from `agentic-ds-kit` (or `agentic-ds-kit/layout.css`) and hard-refresh |
 | `Module not found: agentic-ds-kit` | Install was run in the wrong directory (not the Next app root) |
 | `ENEEDAUTH` / not logged in | Only needed to **publish** the kit, not to install it |
-| `No workspaces found: --workspace=agentic-ds-kit` | That flag is for **this** monorepo. In your app use `npm install agentic-ds-kit` |
+| `No workspaces found: --workspace=agentic-ds-kit` | That flag is for **this** monorepo. In your app use `npm install agentic-ds-kit@latest` |
 | `npm audit fix` prompt | Ignore unless `npm audit` lists a real issue. It is not caused by the kit |
 | Peer React 19 warning | The app is on React 18. Use Next 15/16 with React 19, or wait — the kit does not support 18 |
 | `AppNav` / `next/link` error | You imported `AppNav` in a non-Next bundler. Use another nav or run inside Next |

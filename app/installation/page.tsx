@@ -1,8 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import { Section } from "agentic-ds-kit";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
-
-const INSTALL = `npm install agentic-ds-kit`;
+import { KitVersionField } from "./KitVersionField";
+import { KIT_LATEST, kitInstallCommand, newAppInstallCommand } from "@/lib/kit-install";
 
 const SMOKE = `import { Button } from "agentic-ds-kit";
 
@@ -14,11 +17,6 @@ const USAGE = `import { Button, Scoreboard, ActivityPattern } from "agentic-ds-k
 
 const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 
-const NEW_APP = `mkdir my-app
-cd my-app
-npx create-next-app@latest . --yes
-npm install agentic-ds-kit`;
-
 const AGENT_FILES = `cp node_modules/agentic-ds-kit/AGENTS.md ./AGENTS.md
 cp node_modules/agentic-ds-kit/CLAUDE.md ./CLAUDE.md
 mkdir -p .cursor/skills/prototype-from-kit .claude/skills/prototype-from-kit
@@ -28,6 +26,10 @@ cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills
 const UPGRADE = `npm install agentic-ds-kit@latest`;
 
 export default function InstallationPage() {
+  const [version, setVersion] = useState(KIT_LATEST);
+  const install = kitInstallCommand(version);
+  const newApp = newAppInstallCommand(version);
+
   return (
     <div className={playground.page}>
       <div className={playground.shell}>
@@ -43,7 +45,8 @@ export default function InstallationPage() {
         >
           <div className={playground.stack}>
             <p className={playground.body}>Install, then smoke-test a primary Button.</p>
-            <CodeBlock code={INSTALL} />
+            <KitVersionField value={version} onChange={setVersion} />
+            <CodeBlock code={install} />
             <CodeBlock code={SMOKE} />
             <p className={playground.body}>
               The button should look like the kit primary, not a default browser control. Importing
@@ -77,7 +80,7 @@ export default function InstallationPage() {
           title="New folder"
           description="The kit is not an app. Scaffold Next first."
         >
-          <CodeBlock code={NEW_APP} />
+          <CodeBlock code={newApp} />
         </Section>
 
         <Section
