@@ -29,14 +29,18 @@ import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
+import { FilterButtonDoc } from "./FilterButtonDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { LineChartDoc } from "./LineChartDoc";
+import { LinkListDoc } from "./LinkListDoc";
 import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
+import { MeterDoc } from "./MeterDoc";
+import { CountDoc } from "./CountDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
 import { NavigationMenuDoc } from "./NavigationMenuDoc";
@@ -54,6 +58,7 @@ import { ScorecardDoc } from "./ScorecardDoc";
 import { SelectDoc } from "./SelectDoc";
 import { ShimmerTextDoc } from "./ShimmerTextDoc";
 import { SideNavDoc } from "./SideNavDoc";
+import { SkeletonDoc } from "./SkeletonDoc";
 import { SliderDoc } from "./SliderDoc";
 import { SpinnerDoc } from "./SpinnerDoc";
 import { SwitchDoc } from "./SwitchDoc";
@@ -93,6 +98,7 @@ const TITLES: Record<string, string> = {
   collapsible: "Collapsible",
   command: "Command",
   conveyor: "Conveyor",
+  count: "Count",
   datagrid: "DataGrid",
   datatable: "DataTable",
   datepicker: "DatePicker",
@@ -101,6 +107,7 @@ const TITLES: Record<string, string> = {
   radiogroup: "RadioGroup",
   field: "Field",
   fieldset: "FieldSet",
+  filterbutton: "FilterButton",
   badge: "Badge",
   barchart: "Bar",
   breadcrumb: "Breadcrumb",
@@ -117,10 +124,13 @@ const TITLES: Record<string, string> = {
   pagination: "Pagination",
   piechart: "Pie",
   linechart: "Line",
+  linklist: "LinkList",
   listview: "ListView",
   loadinganimation: "LoadingAnimation",
+  meter: "Meter",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
+  skeleton: "Skeleton",
   slider: "Slider",
   spinner: "Spinner",
   thinkinganimation: "ThinkingAnimation",
@@ -192,6 +202,14 @@ function resolveHash(hash: string): string {
     help: "helppopover",
     "usage-list": "usagelist",
     usage: "usagelist",
+    "filter-button": "filterbutton",
+    filterchip: "filterbutton",
+    "link-list": "linklist",
+    quicklinks: "linklist",
+    skeleton: "skeleton",
+    placeholder: "skeleton",
+    gauge: "meter",
+    countbadge: "count",
   };
   return aliases[hash] ?? hash;
 }
@@ -236,6 +254,7 @@ export function ComponentsView() {
   if (resolved === "collapsible") return <CollapsibleDoc />;
   if (resolved === "command") return <CommandDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
+  if (resolved === "count") return <CountDoc />;
   if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
@@ -247,14 +266,17 @@ export function ComponentsView() {
   if (resolved === "dropdownmenu") return <DropdownMenuDoc />;
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
+  if (resolved === "filterbutton") return <FilterButtonDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
   if (resolved === "helppopover") return <HelpPopoverDoc />;
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
+  if (resolved === "linklist") return <LinkListDoc />;
   if (resolved === "listview") return <ListViewDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
+  if (resolved === "meter") return <MeterDoc />;
   if (resolved === "numbertransition") return <NumberTransitionDoc />;
   if (resolved === "pageheader") return <PageHeaderDoc />;
   if (resolved === "pagination") return <PaginationDoc />;
@@ -267,6 +289,7 @@ export function ComponentsView() {
   if (resolved === "section") return <SectionDoc />;
   if (resolved === "select") return <SelectDoc />;
   if (resolved === "shimmertext") return <ShimmerTextDoc />;
+  if (resolved === "skeleton") return <SkeletonDoc />;
   if (resolved === "slider") return <SliderDoc />;
   if (resolved === "spinner") return <SpinnerDoc />;
   if (resolved === "switch") return <SwitchDoc />;

@@ -1,0 +1,91 @@
+{
+  "id": "count",
+  "status": "stable",
+  "intent": "Small number badge for counts, like unread items on a nav link or tab.",
+  "useWhen": [
+    "Unread or pending counts on nav items, tabs, and buttons",
+    "A total next to a section title",
+    "FilterButton applied-value counts"
+  ],
+  "doNotUseWhen": [
+    "Words or status labels — use Badge",
+    "A clickable control — use Button",
+    "A KPI or metric tile — use Scorecard"
+  ],
+  "props": {
+    "count": {
+      "type": "number",
+      "required": true
+    },
+    "intent": {
+      "type": "enum",
+      "values": ["info", "danger", "neutral"],
+      "default": "info",
+      "note": "info is the default brand (ink) fill. danger for items that need action now. neutral for plain totals."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md",
+      "note": "Heights space-4 / space-5 / space-6. sm and md are the standard counts; lg is for larger controls."
+    },
+    "subtle": {
+      "type": "boolean",
+      "default": false,
+      "note": "Lighter fill. Defined for info, neutral, and danger."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Muted fill and faint text."
+    },
+    "max": {
+      "type": "number",
+      "default": 99,
+      "note": "Above max the Count shows max+."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "What is counted, for screen readers, like unread messages."
+    }
+  },
+  "tokens": [
+    "fill.brand",
+    "fill.brandSubtle",
+    "fill.danger",
+    "fill.dangerSubtle",
+    "fill.strong",
+    "surface.muted",
+    "surface.disabled",
+    "text.inverse",
+    "text.brand",
+    "text.danger",
+    "text.secondary",
+    "text.disabled",
+    "status.danger",
+    "radius.controlMd",
+    "space.4",
+    "space.5",
+    "space.6",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.weight.label"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "The visible number is hidden from screen readers; they hear the full count plus label instead, like 150 unread messages",
+      "Intent is never the only signal; the number carries the meaning",
+      "disabled sets aria-disabled"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local counter or notification dot",
+    "Do not put words in a Count — use Badge",
+    "Do not use Count as a button",
+    "Do not show more than one danger Count in a row",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<Count count={3} label=\"unread messages\" />"
+}

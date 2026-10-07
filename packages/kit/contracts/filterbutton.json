@@ -1,0 +1,108 @@
+{
+  "id": "filterbutton",
+  "status": "stable",
+  "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
+  "useWhen": [
+    "Filters above a table or list, like Status, Owner, or Date",
+    "A filter the user can keep but switch off for a moment, without losing what they picked"
+  ],
+  "doNotUseWhen": [
+    "Page actions or view switches — use Button or DropdownMenu",
+    "Status or category labels that are not filters — use Badge",
+    "A number without a filter name — use Count"
+  ],
+  "contains": ["count"],
+  "props": {
+    "children": {
+      "type": "string",
+      "required": true,
+      "note": "Filter name, like Status."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md",
+      "note": "Heights space-8 / space-10 / space-12. The chevron part is square."
+    },
+    "open": {
+      "type": "boolean",
+      "default": false,
+      "note": "Options are open. Sets aria-expanded and turns the chevron."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "count": {
+      "type": "number",
+      "default": 0,
+      "note": "Applied values, like 3 statuses. Above 0 the filter is set and shows a kit Count."
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "The chosen value. Shows as Status: Pending, the name quieter than the value."
+    },
+    "toggle": {
+      "type": "enum",
+      "values": ["on", "off"],
+      "required": false,
+      "note": "On or off once a filter is set. Leave it out and a set filter is on. Off keeps the selection but does not apply it: dashed outline, muted count."
+    },
+    "onToggle": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. With a filter set, the name part becomes its own button that turns it on or off, and only the chevron opens the options."
+    },
+    "hasDropdown": {
+      "type": "boolean",
+      "default": true,
+      "note": "false: a plain on/off chip with no chevron, for filters with no value to pick. Clicking it calls onToggle."
+    },
+    "onClick": {
+      "type": "function",
+      "required": false,
+      "note": "Opens the options: the whole button when nothing is set, or the chevron once it splits."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "text.primary",
+    "text.secondary",
+    "icon.muted",
+    "border.faint",
+    "border.strong",
+    "border.focus",
+    "radius.controlMd",
+    "opacity.disabled",
+    "space.8",
+    "space.10",
+    "space.12",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.size.body",
+    "type.weight.heading",
+    "type.line.heading",
+    "motion.interactionDuration",
+    "motion.expandDuration"
+  ],
+  "a11y": {
+    "element": "button",
+    "requirements": [
+      "Nothing set: one native button with aria-haspopup=menu and aria-expanded",
+      "Split: the name is a toggle button with aria-pressed; the chevron is a separate button named {children} options, with aria-haspopup and aria-expanded",
+      "Its name is the filter name or Name: value, plus the count, like Status, 3 filters applied",
+      "Each button has its own focus ring"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local split button, filter chip, or dropdown trigger",
+    "Do not use for page actions or view switches — use Button or DropdownMenu",
+    "Do not put more than one word or two in the name",
+    "Do not show the count as text in the label — pass count and compose kit Count",
+    "Do not invent FilterChip, SplitButton, or FilterTrigger",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<FilterButton count={3} onClick={() => {}}>Status</FilterButton>"
+}

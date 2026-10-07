@@ -14,7 +14,8 @@
     "A KPI number \u2014 use Scorecard",
     "Part-to-whole share across segments \u2014 use PieChart",
     "Numbered wizard or checkout steps \u2014 use ProgressSteps",
-    "Usage against a plan limit \u2014 use UsageList"
+    "Usage against a plan limit \u2014 use UsageList",
+    "A measure against a range with red, amber, and green zones, a datatip, or indeterminate \u2014 use Meter"
   ],
   "props": {
     "value": {
@@ -115,7 +116,7 @@
     "Do not invent MeterCircle or ProgressCircle",
     "Do not use PieChart for a determinate percent ring",
     "Do not use img assets for the ring",
-    "Do not add threshold-zone rings, datatip, or reference lines",
+    "Do not add threshold-zone rings, datatip, reference lines, or indeterminate — use Meter",
     "Do not use radix or @base-ui/react",
     "Do not use a native progress element",
     "Do not use raw hex",

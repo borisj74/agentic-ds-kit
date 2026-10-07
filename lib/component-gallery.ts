@@ -24,6 +24,7 @@ const MOTION_IDS = new Set([
   "loadinganimation",
   "numbertransition",
   "shimmertext",
+  "skeleton",
   "spinner",
   "thinkinganimation",
 ]);

@@ -21,6 +21,7 @@ export const COMPONENT_ITEMS = [
   "collapsible",
   "command",
   "conveyor",
+  "count",
   "datagrid",
   "datatable",
   "datepicker",
@@ -29,13 +30,16 @@ export const COMPONENT_ITEMS = [
   "empty",
   "field",
   "fieldset",
+  "filterbutton",
   "headercell",
   "helppopover",
   "input",
   "inputotp",
   "insightcard",
+  "linklist",
   "listview",
   "loadinganimation",
+  "meter",
   "modal",
   "modalcard",
   "navigationmenu",
@@ -53,6 +57,7 @@ export const COMPONENT_ITEMS = [
   "slider",
   "spinner",
   "sidenav",
+  "skeleton",
   "switch",
   "table",
   "tabs",
@@ -93,6 +98,8 @@ export function componentLabel(id: string): string {
   if (id === "inputotp") return "InputOTP";
   if (id === "dropdownmenu") return "DropdownMenu";
   if (id === "fieldset") return "FieldSet";
+  if (id === "filterbutton") return "FilterButton";
+  if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
   if (id === "numbertransition") return "NumberTransition";
   if (id === "shimmertext") return "ShimmerText";

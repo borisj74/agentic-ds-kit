@@ -10,7 +10,9 @@
   "doNotUseWhen": [
     "Square dot-grid compact wait — use LoadingAnimation",
     "Assistant thinking — use ThinkingAnimation",
-    "Known percent completion — use Progress"
+    "Known percent completion — use Progress",
+    "An indeterminate bar that sits with the work — use Meter value=indeterminate",
+    "Placeholder layout while data arrives — use Skeleton"
   ],
   "props": {
     "size": {
