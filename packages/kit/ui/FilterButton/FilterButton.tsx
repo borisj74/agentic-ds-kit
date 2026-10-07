@@ -47,7 +47,7 @@ export function FilterButton({
         <Count
           count={count}
           size={size === "lg" ? "md" : "sm"}
-          intent={state === "off" ? "neutral" : undefined}
+          intent="neutral"
           label="filters applied"
           disabled={disabled}
         />

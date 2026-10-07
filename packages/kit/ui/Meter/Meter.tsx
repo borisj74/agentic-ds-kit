@@ -41,7 +41,7 @@ export function Meter({
     : Math.min(Math.max(Number.isFinite(value) ? value : 0, 0), 100);
   const rounded = Math.round(percent);
   const zone = zoneOf(percent);
-  const fillIntent: MeterIntent | Zone = intent ?? (thresholds === "bar" ? zone : "info");
+  const fillIntent: MeterIntent | Zone | "brand" = intent ?? (thresholds === "bar" ? zone : "brand");
   const trackIntent = thresholds === "plotArea" ? zone : "neutral";
   const a11y = indeterminate
     ? ({
@@ -65,7 +65,7 @@ export function Meter({
         <div className={styles.barRow}>
           <div className={styles.trackWrap}>
             <div className={`${styles.track} ${styles.neutral}`}>
-              <span className={`${styles.fill} ${styles.slide} ${styles[intent ?? "info"]}`} />
+              <span className={`${styles.fill} ${styles.slide} ${styles[intent ?? "brand"]}`} />
             </div>
           </div>
         </div>

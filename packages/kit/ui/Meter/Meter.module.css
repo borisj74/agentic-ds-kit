@@ -89,6 +89,10 @@
   background: var(--fill-success);
 }
 
+.fill.brand {
+  background: var(--fill-brand);
+}
+
 .fill.info {
   background: var(--fill-info);
 }
@@ -172,6 +176,10 @@
 
 .arc.neutral {
   stroke: color-mix(in srgb, var(--fill-strong) 12%, var(--surface-card));
+}
+
+.arc.brand {
+  stroke: var(--fill-brand);
 }
 
 .arc.info {

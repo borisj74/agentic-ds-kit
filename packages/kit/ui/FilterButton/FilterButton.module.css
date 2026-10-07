@@ -14,7 +14,8 @@
   background: var(--surface-card);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
   white-space: nowrap;
   transition: background-color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
@@ -96,15 +97,6 @@
   outline-offset: var(--space-inset-2xs);
 }
 
-.applied {
-  --line: var(--border-brand);
-  background: color-mix(in srgb, var(--action-primary) 12%, var(--surface-card));
-}
-
-.applied:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--action-primary) 18%, var(--surface-card));
-}
-
 .off {
   --line: var(--border-strong);
   border-style: dashed;
@@ -119,10 +111,6 @@
 .split:hover {
   background: transparent;
   cursor: default;
-}
-
-.split.applied {
-  background: color-mix(in srgb, var(--action-primary) 12%, var(--surface-card));
 }
 
 .part {
@@ -149,10 +137,6 @@
 
 .part:hover:not(:disabled) {
   background: var(--surface-muted);
-}
-
-.applied .part:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--action-primary) 18%, var(--surface-card));
 }
 
 .part:focus-visible {

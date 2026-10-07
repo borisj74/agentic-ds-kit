@@ -33,8 +33,8 @@ export function FilterButtonDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>FilterButton</h1>
         <p className={styles.lede}>
-          Filter chip for lists and tables. Nothing set is a quiet outline. Applied shows a kit Count.
-          With onToggle the name turns the filter on or off. Not Button. Not Badge.
+          Filter chip for lists and tables. Same chrome as a secondary Button. Applied shows a kit Count
+          in ink. With onToggle the name turns the filter on or off. Not Button. Not Badge.
         </p>
       </header>
 
@@ -128,7 +128,7 @@ export function FilterButtonDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Brand tint once one or more filters are picked. Count shows how many.</p>
+                <p className={styles.usageBody}>Same secondary chrome when applied. Count shows how many, in ink.</p>
               </div>
               <CodeBlock code={'<FilterButton count={1}>Status</FilterButton>\n<FilterButton count={3}>Owner</FilterButton>'} />
             </section>
