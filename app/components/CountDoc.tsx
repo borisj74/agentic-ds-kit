@@ -118,7 +118,8 @@ export function CountDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  info is the default. danger for items that need action now. neutral for plain totals.
+                  info is the default ink fill. danger for items that need action now. neutral for plain
+                  totals.
                 </p>
               </div>
               <CodeBlock

@@ -21,7 +21,7 @@
       "type": "enum",
       "values": ["info", "danger", "neutral"],
       "default": "info",
-      "note": "danger for items that need action now. neutral for plain totals."
+      "note": "info is the default brand (ink) fill. danger for items that need action now. neutral for plain totals."
     },
     "size": {
       "type": "enum",
@@ -51,19 +51,18 @@
     }
   },
   "tokens": [
-    "fill.info",
-    "fill.infoSubtle",
+    "fill.brand",
+    "fill.brandSubtle",
     "fill.danger",
     "fill.dangerSubtle",
     "fill.strong",
     "surface.muted",
     "surface.disabled",
     "text.inverse",
-    "text.info",
+    "text.brand",
     "text.danger",
     "text.secondary",
     "text.disabled",
-    "status.info",
     "status.danger",
     "radius.controlMd",
     "space.4",

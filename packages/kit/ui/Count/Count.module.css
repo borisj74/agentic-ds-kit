@@ -35,7 +35,7 @@
 }
 
 .info {
-  background-color: var(--fill-info);
+  background-color: var(--fill-brand);
   color: var(--text-inverse);
 }
 
@@ -50,8 +50,8 @@
 }
 
 .subtle.info {
-  background-color: var(--fill-info-subtle);
-  color: var(--text-info);
+  background-color: var(--fill-brand-subtle);
+  color: var(--text-brand);
 }
 
 .subtle.danger {
