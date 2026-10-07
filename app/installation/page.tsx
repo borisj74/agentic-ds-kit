@@ -5,7 +5,7 @@ import playground from "../playground.module.css";
 
 const VERSION = kitPackage.version;
 
-const INSTALL = `npm install agentic-ds-kit@${VERSION}`;
+const INSTALL = `npm install agentic-ds-kit@latest`;
 
 const SMOKE = `import { Button } from "agentic-ds-kit";
 
@@ -20,7 +20,7 @@ const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 const NEW_APP = `mkdir my-app
 cd my-app
 npx create-next-app@latest . --yes
-npm install agentic-ds-kit@${VERSION}`;
+npm install agentic-ds-kit@latest`;
 
 const AGENT_FILES = `cp node_modules/agentic-ds-kit/AGENTS.md ./AGENTS.md
 cp node_modules/agentic-ds-kit/CLAUDE.md ./CLAUDE.md
@@ -28,7 +28,7 @@ mkdir -p .cursor/skills/prototype-from-kit .claude/skills/prototype-from-kit
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .cursor/skills/prototype-from-kit/
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills/prototype-from-kit/`;
 
-const UPGRADE = `npm install agentic-ds-kit@${VERSION}`;
+const UPGRADE = `npm install agentic-ds-kit@latest`;
 
 export default function InstallationPage() {
   return (
@@ -99,7 +99,7 @@ export default function InstallationPage() {
 
         <Section
           title="Upgrade from 0.1.0"
-          description={`Install ${VERSION}. Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes.`}
+          description={`Current version is ${VERSION}. Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes.`}
         >
           <div className={playground.stack}>
             <CodeBlock code={UPGRADE} />
