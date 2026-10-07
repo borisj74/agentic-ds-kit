@@ -1,8 +1,11 @@
 import { Section } from "agentic-ds-kit";
+import kitPackage from "agentic-ds-kit/package.json";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
 
-const INSTALL = `npm install agentic-ds-kit`;
+const VERSION = kitPackage.version;
+
+const INSTALL = `npm install agentic-ds-kit@${VERSION}`;
 
 const SMOKE = `import { Button } from "agentic-ds-kit";
 
@@ -17,7 +20,7 @@ const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 const NEW_APP = `mkdir my-app
 cd my-app
 npx create-next-app@latest . --yes
-npm install agentic-ds-kit`;
+npm install agentic-ds-kit@${VERSION}`;
 
 const AGENT_FILES = `cp node_modules/agentic-ds-kit/AGENTS.md ./AGENTS.md
 cp node_modules/agentic-ds-kit/CLAUDE.md ./CLAUDE.md
@@ -25,7 +28,7 @@ mkdir -p .cursor/skills/prototype-from-kit .claude/skills/prototype-from-kit
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .cursor/skills/prototype-from-kit/
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills/prototype-from-kit/`;
 
-const UPGRADE = `npm install agentic-ds-kit@latest`;
+const UPGRADE = `npm install agentic-ds-kit@${VERSION}`;
 
 export default function InstallationPage() {
   return (
@@ -33,8 +36,9 @@ export default function InstallationPage() {
       <div className={playground.shell}>
         <h1 className={playground.pageTitle}>Installation</h1>
         <p className={playground.pageLead}>
-          Add the kit to a Next.js app on React 19. You do not clone this repo. You do not need
-          transpilePackages. Copy AGENTS.md so the agent follows the contract.
+          Add the kit to a Next.js app on React 19. Current version is {VERSION}. You do not clone
+          this repo. You do not need transpilePackages. Copy AGENTS.md so the agent follows the
+          contract.
         </p>
 
         <Section
@@ -95,7 +99,7 @@ export default function InstallationPage() {
 
         <Section
           title="Upgrade from 0.1.0"
-          description="Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes."
+          description={`Install ${VERSION}. Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes.`}
         >
           <div className={playground.stack}>
             <CodeBlock code={UPGRADE} />
