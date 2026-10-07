@@ -7,26 +7,28 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
+const noop = () => undefined;
+
 const QUICK = [
-  { id: "tax", label: "Tax Related List", href: "#tax" },
-  { id: "subscription", label: "Subscription Configuration", href: "#subscription" },
-  { id: "portal", label: "Customer Portal", href: "#portal" },
-  { id: "orders", label: "Orders", href: "#orders" },
-  { id: "documents", label: "Document Information", href: "#documents" },
+  { id: "tax", label: "Tax Related List", onClick: noop },
+  { id: "subscription", label: "Subscription Configuration", onClick: noop },
+  { id: "portal", label: "Customer Portal", onClick: noop },
+  { id: "orders", label: "Orders", onClick: noop },
+  { id: "documents", label: "Document Information", onClick: noop },
 ];
 
 const RELATED = [
   {
     id: "invoices",
     label: "Invoices",
-    href: "#invoices",
+    onClick: noop,
     icon: "File",
     description: "Every invoice on this account",
   },
   {
     id: "payments",
     label: "Payments",
-    href: "#payments",
+    onClick: noop,
     icon: "CreditCard",
     description: "Payments and refunds",
   },

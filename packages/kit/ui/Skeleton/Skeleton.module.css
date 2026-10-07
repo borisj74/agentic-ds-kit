@@ -22,7 +22,7 @@
 .bone {
   display: block;
   flex: none;
-  background-color: var(--surface-muted);
+  background-color: color-mix(in srgb, var(--fill-strong) 14%, var(--surface-card));
 }
 
 .text .bone {

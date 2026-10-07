@@ -68,7 +68,7 @@
 }
 
 .track.neutral {
-  background: var(--fill-subtle);
+  background: color-mix(in srgb, var(--fill-strong) 12%, var(--surface-card));
 }
 
 .track.danger,
@@ -171,7 +171,7 @@
 }
 
 .arc.neutral {
-  stroke: var(--fill-subtle);
+  stroke: color-mix(in srgb, var(--fill-strong) 12%, var(--surface-card));
 }
 
 .arc.info {

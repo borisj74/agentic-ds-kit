@@ -64,8 +64,8 @@
     }
   },
   "tokens": [
-    "surface.muted",
     "surface.card",
+    "fill.strong",
     "radius.controlSm",
     "radius.controlMd",
     "radius.full",
