@@ -14,7 +14,8 @@
     "Picking or comparing tiles — use Card",
     "App navigation — use SideNav or AppNav",
     "Only the no-rows state — use Empty",
-    "Usage against a plan limit — use UsageList"
+    "Usage against a plan limit — use UsageList",
+    "Quick links in a rail — use LinkList"
   ],
   "contains": [
     "avatar",
@@ -150,7 +151,8 @@
     "Do not add an in-list detail slot under the selected row",
     "Do not add nested children, path, step-in, or expand-under-row",
     "Do not add drag, reorder, or onItemsChange",
-    "Do not add Density, Material Symbols, or LinkList",
+    "Do not add Density or Material Symbols",
+    "Do not use LinkList for record rows — LinkList is quick links",
     "Do not invent a local blank slate — empty items render kit Empty",
     "Do not assemble rows from local Cards + Avatars + Buttons; this is the piece",
     "Do not use SideNav or AppNav for a record list",

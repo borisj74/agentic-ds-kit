@@ -51,8 +51,8 @@ export function FieldDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Field</h1>
         <p className={styles.lede}>
-          Label, control, hint, and error as one piece. FieldSet groups related fields. No FieldLabel
-          or Form cousins.
+          Label, control, hint, and error as one piece. FieldSet is the form group. No FieldLabel,
+          Form, or FormDisplay.
         </p>
       </header>
 

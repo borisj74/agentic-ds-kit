@@ -1,0 +1,101 @@
+{
+  "id": "skeleton",
+  "status": "stable",
+  "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
+  "useWhen": [
+    "Content with a known layout is loading: a card, a list, a table, a profile",
+    "Keeping the page from jumping while data arrives"
+  ],
+  "doNotUseWhen": [
+    "A short status line saying work is happening — use ShimmerText",
+    "A known amount done — use Progress or Meter",
+    "A short indeterminate wait with no layout to hold — use Spinner",
+    "Assistant thinking — use ThinkingAnimation",
+    "The load failed — show Alert or Empty"
+  ],
+  "props": {
+    "shape": {
+      "type": "enum",
+      "values": ["text", "circle", "rect"],
+      "default": "text",
+      "note": "text: rounded lines as tall as the text. circle: an avatar or icon. rect: a block, like an image, chart, or card."
+    },
+    "lines": {
+      "type": "number",
+      "default": 1,
+      "note": "For text. With more than one, the last line is shorter, like the end of a paragraph."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md", "lg"],
+      "default": "md",
+      "note": "text: line height like caption, body-sm, or body. circle: space-8, space-10, or space-12, like Avatar."
+    },
+    "width": {
+      "type": "string | number",
+      "required": false,
+      "note": "Any CSS width, or px. Text and blocks fill the width by default; circles are square."
+    },
+    "height": {
+      "type": "string | number",
+      "required": false,
+      "note": "For rect. Defaults to calc(space-12 * 2)."
+    },
+    "animation": {
+      "type": "enum",
+      "values": ["shimmer", "pulse", "none"],
+      "default": "shimmer",
+      "note": "shimmer: a band of light moves across, in step on every skeleton. pulse: a slow fade. none: still gray."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": true,
+      "note": "Off shows children instead."
+    },
+    "children": {
+      "type": "slot",
+      "required": false,
+      "note": "The real content, shown when loading is off."
+    },
+    "label": {
+      "type": "string",
+      "default": "Loading",
+      "note": "Read by screen readers in place of the shapes. Give one label to a group and an empty label to the rest."
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "surface.card",
+    "radius.controlSm",
+    "radius.controlMd",
+    "radius.full",
+    "space.8",
+    "space.10",
+    "space.12",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.size.body",
+    "motion.duration600",
+    "motion.easeLinear",
+    "opacity.full",
+    "opacity.400"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "The shapes are hidden from screen readers; a visually hidden label (Loading) stands in, and the wrapper is aria-busy while loading",
+      "In a group, label one Skeleton and give the rest an empty label, so the page says Loading once",
+      "No motion when the person prefers reduced motion: the shapes stay still gray"
+    ]
+  },
+  "doNot": [
+    "Do not use it for a short status line — use ShimmerText",
+    "Do not use it when the amount done is known — use Progress or Meter",
+    "Do not leave it up when the load failed — show Alert or Empty",
+    "Do not draw loading bars with local gray divs — use Skeleton",
+    "Do not invent SkeletonText, SkeletonCircle, or Pulse",
+    "Do not skip prefers-reduced-motion",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<Skeleton loading={!data} lines={3}>\n  <p>{data?.summary}</p>\n</Skeleton>"
+}

@@ -19,6 +19,11 @@ import { Checkbox } from "agentic-ds-kit";
 import { Collapsible } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
+import { Count } from "agentic-ds-kit";
+import { FilterButton } from "agentic-ds-kit";
+import { LinkList } from "agentic-ds-kit";
+import { Meter } from "agentic-ds-kit";
+import { Skeleton } from "agentic-ds-kit";
 import { DataGrid } from "agentic-ds-kit";
 import { DataTable } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
@@ -235,6 +240,34 @@ export function GalleryPreview({ id }: { id: string }) {
               <Badge>Credits</Badge>
             </div>
           </Conveyor>
+        </Stage>
+      );
+    case "count":
+      return <Count count={3} label="unread" />;
+    case "filterbutton":
+      return <FilterButton size="sm" count={2}>Status</FilterButton>;
+    case "linklist":
+      return (
+        <Stage variant="wide">
+          <LinkList
+            label="Quick links"
+            items={[
+              { id: "tax", label: "Tax Related List", href: "#" },
+              { id: "portal", label: "Customer Portal", href: "#" },
+            ]}
+          />
+        </Stage>
+      );
+    case "meter":
+      return (
+        <Stage variant="wide">
+          <Meter label="Budget spent" value={60} size="sm" showValue />
+        </Stage>
+      );
+    case "skeleton":
+      return (
+        <Stage variant="wide">
+          <Skeleton lines={3} size="sm" />
         </Stage>
       );
     case "datagrid":

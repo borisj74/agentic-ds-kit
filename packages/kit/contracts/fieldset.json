@@ -1,10 +1,11 @@
 {
   "id": "fieldset",
   "status": "stable",
-  "intent": "Semantic group of fields with a legend and optional description.",
+  "intent": "Semantic group of fields with a legend and optional description. This is the form group.",
   "useWhen": [
     "Related fields that need a shared heading, like billing or profile",
-    "A checkbox or switch sitting under a group legend"
+    "A checkbox or switch sitting under a group legend",
+    "Form chrome — FieldSet is the form; do not invent Form"
   ],
   "doNotUseWhen": [
     "A single labeled control — use Field",
@@ -21,7 +22,7 @@
     "requirements": ["legend is the accessible name of the group"]
   },
   "doNot": [
-    "Do not invent FieldLegend, FieldGroup, or FieldSeparator",
+    "Do not invent FieldLegend, FieldGroup, FieldSeparator, Form, or FormDisplay — FieldSet is the form group",
     "Do not nest FieldSet unless the inner group is truly nested",
     "Do not use raw hex"
   ],

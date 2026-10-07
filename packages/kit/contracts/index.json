@@ -63,6 +63,13 @@
     "status": "stable"
   },
   {
+    "id": "linklist",
+    "intent": "A column of links, one a row with a chevron at the end, like an account's quick links.",
+    "group": "component",
+    "path": "contracts/linklist.json",
+    "status": "stable"
+  },
+  {
     "id": "listview",
     "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
     "group": "component",
@@ -74,6 +81,13 @@
     "intent": "Square dot-grid loading indicator for compact waits.",
     "group": "component",
     "path": "contracts/loadinganimation.json",
+    "status": "stable"
+  },
+  {
+    "id": "meter",
+    "intent": "How far along or how full something is, from 0 to 100, as a bar, a ring, or a half ring, with optional red, amber, and green zones.",
+    "group": "component",
+    "path": "contracts/meter.json",
     "status": "stable"
   },
   {
@@ -210,6 +224,13 @@
     "status": "stable"
   },
   {
+    "id": "count",
+    "intent": "Small number badge for counts, like unread items on a nav link or tab.",
+    "group": "component",
+    "path": "contracts/count.json",
+    "status": "stable"
+  },
+  {
     "id": "chat",
     "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
     "group": "component",
@@ -232,9 +253,16 @@
   },
   {
     "id": "fieldset",
-    "intent": "Semantic group of fields with a legend and optional description.",
+    "intent": "Semantic group of fields with a legend and optional description. This is the form group.",
     "group": "component",
     "path": "contracts/fieldset.json",
+    "status": "stable"
+  },
+  {
+    "id": "filterbutton",
+    "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
+    "group": "component",
+    "path": "contracts/filterbutton.json",
     "status": "stable"
   },
   {
@@ -382,6 +410,13 @@
     "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
     "group": "component",
     "path": "contracts/sidenav.json",
+    "status": "stable"
+  },
+  {
+    "id": "skeleton",
+    "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
+    "group": "component",
+    "path": "contracts/skeleton.json",
     "status": "stable"
   },
   {
