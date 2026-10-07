@@ -110,16 +110,16 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "appheader":
       return (
-        <Stage variant="wide">
-          <AppHeader
-            title="Acme"
-            mark="A"
-            searchPlaceholder="Search"
-            actions={
-              <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
-            }
-          />
-        </Stage>
+        <AppHeader
+          className={previewStyles.appHeader}
+          title="Acme"
+          mark="A"
+          radius="md"
+          searchPlaceholder="Search"
+          actions={
+            <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+          }
+        />
       );
     case "appnav":
       return (
