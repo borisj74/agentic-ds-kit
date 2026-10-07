@@ -2,8 +2,7 @@
 
 import { useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import Link from "next/link";
-import { Card } from "agentic-ds-kit";
-import { Tabs } from "agentic-ds-kit";
+import { Card, Empty, Field, Input, Tabs } from "agentic-ds-kit";
 import { filterGalleryItems, type GalleryFilter, type GalleryItem } from "@/lib/component-gallery";
 import { GalleryPreview } from "./GalleryPreview";
 import playground from "../playground.module.css";
@@ -81,27 +80,86 @@ function GalleryGrid({ items }: { items: GalleryItem[] }) {
   );
 }
 
-function panel(filter: GalleryFilter) {
-  return <GalleryGrid items={filterGalleryItems(filter)} />;
+const GROUPS: { id: GalleryFilter; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "agent", label: "Agent UI" },
+  { id: "base", label: "Base" },
+  { id: "motion", label: "Motion" },
+];
+
+function isGalleryFilter(id: string): id is GalleryFilter {
+  return GROUPS.some((group) => group.id === id);
+}
+
+function GalleryPanel({ items, query, elsewhere }: { items: GalleryItem[]; query: string; elsewhere: string }) {
+  if (items.length === 0) {
+    const searching = query.trim().length > 0;
+    const description = searching
+      ? `Nothing matches that search in this group.${elsewhere ? ` ${elsewhere}` : " Try another name."}`
+      : "This group has no components yet.";
+
+    return <Empty outlined icon="Search" title="No components found" description={description} />;
+  }
+
+  return <GalleryGrid items={items} />;
+}
+
+function elsewhereLabel(filter: GalleryFilter, query: string): string {
+  const others = GROUPS.filter((group) => group.id !== filter)
+    .map((group) => ({ label: group.label, count: filterGalleryItems(group.id, query).length }))
+    .filter((group) => group.count > 0);
+
+  if (others.length === 0) return "";
+  return `Also in ${others.map((group) => `${group.label} (${group.count})`).join(", ")}.`;
 }
 
 export function ComponentGallery() {
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<GalleryFilter>("all");
+  const trimmed = query.trim();
+  const items = filterGalleryItems(filter, trimmed);
+  const elsewhere = items.length === 0 && trimmed ? elsewhereLabel(filter, trimmed) : "";
+  const resultLabel = items.length === 1 ? "1 component" : `${items.length} components`;
+
   return (
     <div className={styles.gallery}>
       <h1 className={playground.pageTitle}>Components</h1>
       <p className={playground.pageLead}>
         Atoms the patterns already compose. Open a card when you need the contract and variants.
       </p>
+      <div className={styles.search} role="search">
+        <Field label="Search components" htmlFor="gallery-search" hint="Name or description">
+          <Input
+            id="gallery-search"
+            type="search"
+            placeholder="Search components"
+            iconStart="Search"
+            value={query}
+            onChange={setQuery}
+          />
+        </Field>
+        {trimmed ? (
+          <p className={styles.resultCount} aria-live="polite">
+            {resultLabel}
+          </p>
+        ) : null}
+      </div>
       <Tabs
         variant="line"
-        defaultValue="all"
+        value={filter}
+        onChange={(id: string) => {
+          if (isGalleryFilter(id)) setFilter(id);
+        }}
         ariaLabel="Component groups"
-        items={[
-          { id: "all", label: "All", content: panel("all") },
-          { id: "agent", label: "Agent UI", content: panel("agent") },
-          { id: "base", label: "Base", content: panel("base") },
-          { id: "motion", label: "Motion", content: panel("motion") },
-        ]}
+        items={GROUPS.map((group) => {
+          const count = trimmed ? filterGalleryItems(group.id, trimmed).length : null;
+          return {
+            id: group.id,
+            label: count === null ? group.label : `${group.label} (${count})`,
+            content:
+              group.id === filter ? <GalleryPanel items={items} query={query} elsewhere={elsewhere} /> : null,
+          };
+        })}
       />
     </div>
   );

@@ -51,49 +51,63 @@ function toItem(id: string): GalleryItem {
   };
 }
 
-const PRIORITY = [
-  "chat",
-  "thinkinganimation",
-  "shimmertext",
-  "loadinganimation",
-  "numbertransition",
-  "button",
-  "input",
-  "datagrid",
-  "datatable",
-  "sidenav",
-  "switch",
-  "radiogroup",
-  "checkbox",
-  "select",
-  "tabs",
-  "textarea",
-  "modal",
-  "modalcard",
-  "scorecard",
-  "insightcard",
-  "piechart",
-  "barchart",
-  "linechart",
-  "calendar",
-  "timeline",
-  "badge",
-  "tooltip",
-  "toast",
-];
-
 export const GALLERY_ITEMS: GalleryItem[] = [...COMPONENT_ITEMS, ...EXTRA_IDS]
   .map(toItem)
-  .sort((a, b) => {
-    const aRank = PRIORITY.indexOf(a.id);
-    const bRank = PRIORITY.indexOf(b.id);
-    if (aRank === -1 && bRank === -1) return a.label.localeCompare(b.label);
-    if (aRank === -1) return 1;
-    if (bRank === -1) return -1;
-    return aRank - bRank;
-  });
+  .sort(
+    (a, b) =>
+      a.label.localeCompare(b.label, "en", { sensitivity: "base", numeric: true }) ||
+      a.id.localeCompare(b.id, "en"),
+  );
 
-export function filterGalleryItems(filter: GalleryFilter): GalleryItem[] {
-  if (filter === "all") return GALLERY_ITEMS;
-  return GALLERY_ITEMS.filter((item) => item.filters.includes(filter));
+function compact(value: string): string {
+  return value.replace(/[^a-z0-9]/g, "");
+}
+
+function queryWords(query: string): string[] {
+  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+}
+
+function matchesName(item: GalleryItem, query: string): boolean {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return true;
+
+  const name = `${item.label} ${item.id}`.toLowerCase();
+  const compactName = compact(name);
+  const compactQuery = compact(normalized);
+  if (name.includes(normalized) || (compactQuery.length > 0 && compactName.includes(compactQuery))) {
+    return true;
+  }
+
+  const words = queryWords(query);
+  return words.length > 1 && words.every((word) => name.includes(word) || compactName.includes(compact(word)));
+}
+
+function searchableDescription(description: string): string {
+  return description.replace(/\bnot\b[^.]*(?:\.|$)/gi, " ");
+}
+
+function matchesDescription(item: GalleryItem, query: string): boolean {
+  const words = queryWords(query);
+  if (words.length === 0) return true;
+
+  const tokens = searchableDescription(item.description)
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
+
+  return words.every((word) => tokens.some((token) => token === word || (word.length >= 3 && token.startsWith(word))));
+}
+
+export function filterGalleryItems(filter: GalleryFilter, query = ""): GalleryItem[] {
+  const group = filter === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.filters.includes(filter));
+  const normalized = query.trim();
+  if (!normalized) return group;
+
+  const named = GALLERY_ITEMS.filter((item) => matchesName(item, normalized));
+  if (named.length > 0) {
+    const ids = new Set(named.map((item) => item.id));
+    return group.filter((item) => ids.has(item.id));
+  }
+
+  return group.filter((item) => matchesDescription(item, normalized));
 }
