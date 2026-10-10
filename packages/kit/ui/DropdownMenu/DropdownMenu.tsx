@@ -174,7 +174,7 @@ export function DropdownMenu({
     button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", open ? "true" : "false");
     button.setAttribute("aria-controls", menuId);
-  }, [open, menuId]);
+  }, [open, menuId, triggerStyle, triggerTags === undefined]);
 
   // A removed Tag unmounts; move focus to the next remove button, or the trigger.
   useLayoutEffect(() => {
@@ -584,6 +584,9 @@ export function DropdownMenu({
             data-menu-trigger=""
             disabled={disabled}
             aria-label={ariaLabel}
+            aria-haspopup="menu"
+            aria-expanded={open}
+            aria-controls={menuId}
             aria-invalid={error || undefined}
             aria-describedby={describedBy}
             className={`${styles.fieldTrigger} ${styles.tagsTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}`}
