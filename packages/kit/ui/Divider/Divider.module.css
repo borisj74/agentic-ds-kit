@@ -1,0 +1,51 @@
+.faint {
+  --divider-line: var(--border-faint);
+}
+
+.default {
+  --divider-line: var(--border-strong);
+}
+
+.rule {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: var(--border-divider) solid var(--divider-line);
+}
+
+.vertical {
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 0;
+  min-height: 1lh;
+  border-inline-start: var(--border-divider) solid var(--divider-line);
+}
+
+.labelled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-md);
+  width: 100%;
+}
+
+.line {
+  flex: 1 1 0;
+  min-width: var(--space-inline-lg);
+  border-top: var(--border-divider) solid var(--divider-line);
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  flex-shrink: 0;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-heading);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

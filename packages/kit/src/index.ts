@@ -28,6 +28,7 @@ export * from "../ui/Command";
 export * from "../ui/DataGrid";
 export * from "../ui/DataTable";
 export * from "../ui/DatePicker";
+export * from "../ui/Divider";
 export * from "../ui/Drawer";
 export * from "../ui/DropdownMenu";
 export * from "../ui/Empty";
