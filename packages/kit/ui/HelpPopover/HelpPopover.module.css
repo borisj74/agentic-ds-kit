@@ -63,8 +63,9 @@
 
 .arrow {
   position: absolute;
-  width: 0.5rem;
-  height: 0.5rem;
+  --help-arrow-size: 0.5rem;
+  width: var(--help-arrow-size);
+  height: var(--help-arrow-size);
   background: var(--surface-elevated);
   border: var(--border-surface) solid var(--border-faint);
   transform: rotate(45deg);
@@ -73,7 +74,7 @@
 .top .arrow {
   bottom: -0.28rem;
   left: var(--help-arrow);
-  margin-left: -0.25rem;
+  margin-left: calc(var(--help-arrow-size) / -2);
   border-top: 0;
   border-left: 0;
 }
@@ -81,7 +82,7 @@
 .bottom .arrow {
   top: -0.28rem;
   left: var(--help-arrow);
-  margin-left: -0.25rem;
+  margin-left: calc(var(--help-arrow-size) / -2);
   border-bottom: 0;
   border-right: 0;
 }
@@ -89,7 +90,7 @@
 .left .arrow {
   right: -0.28rem;
   top: var(--help-arrow);
-  margin-top: -0.25rem;
+  margin-top: calc(var(--help-arrow-size) / -2);
   border-bottom: 0;
   border-left: 0;
 }
@@ -97,7 +98,7 @@
 .right .arrow {
   left: -0.28rem;
   top: var(--help-arrow);
-  margin-top: -0.25rem;
+  margin-top: calc(var(--help-arrow-size) / -2);
   border-top: 0;
   border-right: 0;
 }
