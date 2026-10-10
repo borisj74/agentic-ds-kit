@@ -202,6 +202,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
         leaf("/patterns#invite", "Invite"),
         leaf("/patterns#insights", "Assistant"),
         leaf("/patterns#empty", "Empty"),
+        leaf("/patterns#sign-in", "Sign in"),
       ],
     },
   ];

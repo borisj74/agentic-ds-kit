@@ -85,4 +85,5 @@ export * from "../ui/patterns/InboxPattern";
 export * from "../ui/patterns/InviteMembersPattern";
 export * from "../ui/patterns/ListDetailPattern";
 export * from "../ui/patterns/SettingsFormPattern";
+export * from "../ui/patterns/SignInPattern";
 
