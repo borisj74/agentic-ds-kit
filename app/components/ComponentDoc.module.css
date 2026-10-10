@@ -10,7 +10,7 @@
   font-weight: var(--type-weight-overline);
   letter-spacing: var(--type-tracking-overline);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .heroTitle {
@@ -27,7 +27,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-body);
   line-height: var(--type-line-body);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .master {
@@ -55,7 +55,7 @@
   max-width: 36rem;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .tabListHost {
@@ -89,7 +89,7 @@
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -260,7 +260,7 @@
   font-size: var(--type-size-overline);
   font-weight: var(--type-weight-overline);
   letter-spacing: var(--type-tracking-overline);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .usageBody {
@@ -269,7 +269,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .variants {
