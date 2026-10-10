@@ -16,6 +16,7 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Checkbox } from "../Checkbox";
 import { Input } from "../Input";
+import { Tag } from "../Tag";
 import { LucideByName } from "../Button/lucideName";
 import type { DropdownMenuGroup, DropdownMenuItem, DropdownMenuProps } from "./DropdownMenu.types";
 import styles from "./DropdownMenu.module.css";
@@ -26,6 +27,7 @@ export type {
   DropdownMenuItem,
   DropdownMenuAlign,
   DropdownMenuTriggerStyle,
+  DropdownMenuTriggerTag,
 } from "./DropdownMenu.types";
 
 function flattenItems(groups: DropdownMenuGroup[]): DropdownMenuItem[] {
@@ -53,6 +55,8 @@ export function DropdownMenu({
   closeOnSelect = true,
   triggerMuted = false,
   triggerBadge,
+  triggerTags,
+  onTriggerTagRemove,
   searchable = false,
   searchPlaceholder = "Search",
   triggerDraggable,
@@ -67,6 +71,8 @@ export function DropdownMenu({
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const subPanelRef = useRef<HTMLDivElement>(null);
+  const tagsLayerRef = useRef<HTMLDivElement>(null);
+  const pendingTagFocus = useRef<number | null>(null);
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const [openSubId, setOpenSubId] = useState<string | null>(null);
   const [coords, setCoords] = useState<CSSProperties | null>(null);
@@ -109,7 +115,9 @@ export function DropdownMenu({
   }
 
   function triggerButton(): HTMLButtonElement | null {
-    return rootRef.current?.querySelector("button") ?? null;
+    const root = rootRef.current;
+    // Tag remove buttons come first in a tags field, so prefer the marked trigger.
+    return root?.querySelector<HTMLButtonElement>("[data-menu-trigger]") ?? root?.querySelector("button") ?? null;
   }
 
   function queryItem(root: HTMLElement | null, id: string): HTMLElement | null {
@@ -166,7 +174,17 @@ export function DropdownMenu({
     button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", open ? "true" : "false");
     button.setAttribute("aria-controls", menuId);
-  }, [open, menuId]);
+  }, [open, menuId, triggerStyle, triggerTags === undefined]);
+
+  // A removed Tag unmounts; move focus to the next remove button, or the trigger.
+  useLayoutEffect(() => {
+    const index = pendingTagFocus.current;
+    if (index === null) return;
+    pendingTagFocus.current = null;
+    const removes = tagsLayerRef.current?.querySelectorAll<HTMLButtonElement>("button");
+    const next = removes && removes.length > 0 ? removes[Math.min(index, removes.length - 1)] : null;
+    (next ?? triggerButton())?.focus();
+  }, [triggerTags]);
 
   useLayoutEffect(() => {
     if (!open) {
@@ -523,12 +541,68 @@ export function DropdownMenu({
       : null;
 
   const fieldTrigger = triggerStyle === "field";
+  const tagsField = fieldTrigger && triggerTags !== undefined;
   const navTrigger = triggerStyle === "nav";
   const iconPx = size === "sm" ? 14 : size === "lg" ? 18 : 16;
 
   return (
     <div ref={rootRef} className={`${styles.root}${fieldTrigger ? ` ${styles.rootField}` : ""}`}>
-      {fieldTrigger ? (
+      {tagsField && triggerTags ? (
+        <div className={`${styles.tagsField} ${styles[`tagsField${size}`]}`}>
+          <div
+            ref={tagsLayerRef}
+            className={`${styles.tagsLayer}${triggerTags.length > 0 ? ` ${styles.tagsLayerFilled}` : ""}`}
+          >
+            {triggerTags.length > 0 ? (
+              triggerTags.map((tag, index) => (
+                <Tag
+                  key={tag.id}
+                  size={size === "sm" ? "sm" : "md"}
+                  removable
+                  disabled={disabled}
+                  onRemove={(event) => {
+                    event.stopPropagation();
+                    pendingTagFocus.current = index;
+                    onTriggerTagRemove?.(tag.id);
+                  }}
+                >
+                  {tag.label}
+                </Tag>
+              ))
+            ) : (
+              <span className={`${styles.fieldLabel} ${styles.tagsPlaceholder}`}>{trigger || "Select"}</span>
+            )}
+            {triggerBadge ? (
+              <Badge size="sm" tone="neutral">
+                {triggerBadge}
+              </Badge>
+            ) : null}
+          </div>
+          <button
+            type="button"
+            id={id}
+            data-menu-trigger=""
+            disabled={disabled}
+            aria-label={ariaLabel}
+            aria-haspopup="menu"
+            aria-expanded={open}
+            aria-controls={menuId}
+            aria-invalid={error || undefined}
+            aria-describedby={describedBy}
+            className={`${styles.fieldTrigger} ${styles.tagsTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}`}
+            onClick={() => {
+              if (!disabled) setOpen(!open);
+            }}
+          >
+            <span className={styles.srOnly}>
+              {triggerTags.length > 0
+                ? `${triggerTags.map((tag) => tag.label).join(", ")}${triggerBadge ? ` ${triggerBadge}` : ""}`
+                : trigger || "Select"}
+            </span>
+            <LucideByName name={iconEnd || "ChevronsUpDown"} size={iconPx} className={styles.fieldIcon} />
+          </button>
+        </div>
+      ) : fieldTrigger ? (
         <button
           type="button"
           id={id}

@@ -18,6 +18,12 @@ export interface DropdownMenuItem {
   submenu?: DropdownMenuGroup[];
 }
 
+/** Removable kit Tag shown in a field trigger (Select valueDisplay="tags"). */
+export interface DropdownMenuTriggerTag {
+  id: string;
+  label: string;
+}
+
 export interface DropdownMenuGroup {
   heading?: string;
   items: DropdownMenuItem[];
@@ -44,6 +50,8 @@ export interface DropdownMenuProps {
   closeOnSelect?: boolean;
   triggerMuted?: boolean;
   triggerBadge?: string;
+  triggerTags?: DropdownMenuTriggerTag[];
+  onTriggerTagRemove?: (id: string) => void;
   searchable?: boolean;
   searchPlaceholder?: string;
   triggerDraggable?: boolean;

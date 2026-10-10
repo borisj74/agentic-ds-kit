@@ -14,7 +14,8 @@
     "Mutually exclusive choices with visible options \u2014 prefer RadioGroup"
   ],
   "contains": [
-    "dropdownmenu"
+    "dropdownmenu",
+    "tag"
   ],
   "props": {
     "id": {
@@ -91,7 +92,16 @@
     "maxVisible": {
       "type": "number",
       "required": false,
-      "note": "When multiple and selected count exceeds this, trigger shows the first labels plus a kit Badge +N. Omit to list all labels."
+      "note": "When multiple and selected count exceeds this, the trigger shows the first labels (or Tags) plus a kit Badge +N. Omit to show all."
+    },
+    "valueDisplay": {
+      "type": "enum",
+      "values": [
+        "text",
+        "tags"
+      ],
+      "default": "text",
+      "note": "multiple only. text lists labels in the trigger. tags shows each pick as a removable kit Tag (sm Select: Tag sm; md: Tag md) that wraps onto more lines. Removing a Tag deselects that value without opening the menu. maxVisible still caps Tags with the +N Badge."
     },
     "searchable": {
       "type": "boolean",
@@ -115,7 +125,9 @@
       "Must have associated label via Field or ariaLabel",
       "Each option needs a human-readable label",
       "Selected options show a Check, or kit Checkbox when itemCheck=checkbox",
-      "Overflow count is kit Badge on the trigger"
+      "Overflow count is kit Badge on the trigger",
+      "valueDisplay=tags: Tags are siblings of the trigger button, never inside it (no nested buttons). Each Tag remove is its own button labelled Remove {label}",
+      "valueDisplay=tags: Tab order is each Tag remove button, then the trigger. Removing a Tag moves focus to the next remove button, or the trigger after the last one. Backspace does not remove Tags"
     ]
   },
   "doNot": [
@@ -123,8 +135,9 @@
     "Do not use kit Button as the Select trigger \u2014 Select uses DropdownMenu triggerStyle=field",
     "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, MultiSelect, or Combobox",
     "Do not invent a local overflow chip \u2014 overflow count is kit Badge",
+    "Do not render Tags inside the trigger button or add a local chip list \u2014 use valueDisplay=tags",
     "Do not use raw hex",
     "Do not use for navigation \u2014 use AppNav or links"
   ],
-  "snippet": "<Field label=\"Fruit\" htmlFor=\"fruit\">\n  <Select id=\"fruit\" placeholder=\"Select a fruit\" options={[{ value: 'apple', label: 'Apple' }]} />\n</Field>\n<Select id=\"fruits\" multiple itemCheck=\"checkbox\" maxVisible={2} placeholder=\"Select fruits\" options={fruits} />\n<Select id=\"city\" searchable placeholder=\"Select a city\" options={cities} />"
+  "snippet": "<Field label=\"Fruit\" htmlFor=\"fruit\">\n  <Select id=\"fruit\" placeholder=\"Select a fruit\" options={[{ value: 'apple', label: 'Apple' }]} />\n</Field>\n<Select id=\"fruits\" multiple itemCheck=\"checkbox\" maxVisible={2} placeholder=\"Select fruits\" options={fruits} />\n<Select id=\"city\" searchable placeholder=\"Select a city\" options={cities} />\n<Select id=\"teams\" multiple valueDisplay=\"tags\" maxVisible={2} placeholder=\"Select teams\" options={teams} />"
 }

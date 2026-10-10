@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DropdownMenu } from "../DropdownMenu";
 import type { SelectProps } from "./Select.types";
 
-export type { SelectProps, SelectOption, SelectSize, SelectItemCheck } from "./Select.types";
+export type { SelectProps, SelectOption, SelectSize, SelectItemCheck, SelectValueDisplay } from "./Select.types";
 
 function optionId(value: string): string {
   return value === "" ? "__empty" : value;
@@ -37,6 +37,7 @@ export function Select({
   multiple = false,
   itemCheck = "check",
   maxVisible,
+  valueDisplay = "text",
   searchable = false,
   placeholder,
   defaultValue,
@@ -62,6 +63,7 @@ export function Select({
     shown.length > 0 ? shown.map((option) => option.label).join(", ") : placeholder || "Select";
   const muted = selectedOptions.length === 0;
   const useCheckbox = multiple && itemCheck === "checkbox";
+  const showTags = multiple && valueDisplay === "tags";
 
   function emit(next: string | string[]) {
     if (!isControlled) setUncontrolled(next);
@@ -79,6 +81,10 @@ export function Select({
         trigger={trigger}
         triggerMuted={muted}
         triggerBadge={overflow > 0 ? `+${overflow}` : undefined}
+        triggerTags={showTags ? shown.map((option) => ({ id: optionId(option.value), label: option.label })) : undefined}
+        onTriggerTagRemove={(tagId) => {
+          emit(values.filter((value) => optionId(value) !== tagId));
+        }}
         iconEnd="ChevronsUpDown"
         size={size === "sm" ? "sm" : "md"}
         disabled={disabled}

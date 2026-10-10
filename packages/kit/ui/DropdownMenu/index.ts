@@ -5,4 +5,5 @@ export type {
   DropdownMenuItem,
   DropdownMenuAlign,
   DropdownMenuTriggerStyle,
+  DropdownMenuTriggerTag,
 } from "./DropdownMenu.types";

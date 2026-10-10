@@ -151,6 +151,20 @@
       "required": false,
       "note": "Kit Badge on a field trigger next to the label, e.g. +2. Select overflow uses this."
     },
+    "triggerTags": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "id": "string",
+        "label": "string"
+      },
+      "note": "Field trigger only. Removable kit Tags in a field wrapper beside the trigger button (not inside it); the button fills the field behind them. Empty array shows the trigger text as a muted placeholder. Select valueDisplay=tags uses this."
+    },
+    "onTriggerTagRemove": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void. Does not open the menu."
+    },
     "searchable": {
       "type": "boolean",
       "default": false,
@@ -183,6 +197,7 @@
     "element": "div",
     "requirements": [
       "Trigger has aria-haspopup=menu, aria-expanded, aria-controls. button is kit Button; field is a field control; nav is a ghost text control",
+      "With triggerTags, each Tag remove is a sibling button before the trigger in Tab order; the trigger keeps aria-haspopup, aria-expanded, aria-controls",
       "Panel is role=menu",
       "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
       "Escape and outside click close; arrows move; Tab closes. Search Input is focused first when searchable",
@@ -203,7 +218,8 @@
     "button",
     "checkbox",
     "input",
-    "badge"
+    "badge",
+    "tag"
   ],
   "snippet": "<DropdownMenu\n  trigger=\"Open\"\n  groups={[{\n    heading: \"My Account\",\n    items: [\n      { id: \"profile\", label: \"Profile\", shortcut: \"\u21e7\u2318P\" },\n      { id: \"invite\", label: \"Invite users\", submenu: [{ items: [{ id: \"email\", label: \"Email\" }] }] },\n    ],\n  }]}\n  onSelect={(id) => {}}\n/>"
 }
