@@ -1,5 +1,6 @@
 export type SelectSize = "sm" | "md";
 export type SelectItemCheck = "check" | "checkbox";
+export type SelectValueDisplay = "text" | "tags";
 
 export interface SelectOption {
   value: string;
@@ -15,6 +16,7 @@ export interface SelectProps {
   multiple?: boolean;
   itemCheck?: SelectItemCheck;
   maxVisible?: number;
+  valueDisplay?: SelectValueDisplay;
   searchable?: boolean;
   placeholder?: string;
   defaultValue?: string | string[];

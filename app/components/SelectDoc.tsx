@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Field } from "agentic-ds-kit";
 import { Select } from "agentic-ds-kit";
-import type { SelectSize } from "agentic-ds-kit";
+import type { SelectSize, SelectValueDisplay } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIZES: SelectSize[] = ["sm", "md"];
+const DISPLAYS: SelectValueDisplay[] = ["text", "tags"];
 const FRUITS = [
   { value: "apple", label: "Apple" },
   { value: "banana", label: "Banana" },
@@ -40,16 +41,25 @@ const CITIES = [
   { value: "zagreb", label: "Zagreb" },
   { value: "zurich", label: "Zurich" },
 ];
+const TEAMS = [
+  { value: "design", label: "Design" },
+  { value: "engineering", label: "Engineering" },
+  { value: "marketing", label: "Marketing" },
+  { value: "product", label: "Product" },
+  { value: "sales", label: "Sales" },
+  { value: "support", label: "Support" },
+];
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
 
-function masterCode(size: SelectSize) {
+function masterCode(size: SelectSize, display: SelectValueDisplay) {
+  const tags = display === "tags";
   const lines = [
-    '<Field label="Fruit" htmlFor="fruit">',
+    `<Field label="${tags ? "Fruits" : "Fruit"}" htmlFor="${tags ? "fruits" : "fruit"}">`,
     "  <Select",
-    '    id="fruit"',
-    '    placeholder="Select a fruit"',
-    "    options={fruits}",
+    `    id="${tags ? "fruits" : "fruit"}"`,
   ];
+  if (tags) lines.push("    multiple", '    valueDisplay="tags"');
+  lines.push(`    placeholder="${tags ? "Select fruits" : "Select a fruit"}"`, "    options={fruits}");
   if (size !== "md") lines.push(`    size="${size}"`);
   lines.push("  />", "</Field>");
   return lines.join("\n");
@@ -58,6 +68,14 @@ function masterCode(size: SelectSize) {
 export function SelectDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [size, setSize] = useState<SelectSize>("md");
+  const [display, setDisplay] = useState<SelectValueDisplay>("text");
+  const [previewFruits, setPreviewFruits] = useState<string | string[]>(["apple", "banana"]);
+  const [teams, setTeams] = useState<string | string[]>([
+    "design",
+    "engineering",
+    "marketing",
+    "product",
+  ]);
   const [fruit, setFruit] = useState<string | string[]>("");
   const [fruits, setFruits] = useState<string | string[]>(["apple", "banana"]);
   const [checkedFruits, setCheckedFruits] = useState<string | string[]>([
@@ -95,16 +113,31 @@ export function SelectDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
-                  <Field label="Fruit" htmlFor="select-fruit">
-                    <Select
-                      id="select-fruit"
-                      size={size}
-                      placeholder="Select a fruit"
-                      options={FRUITS}
-                      value={fruit}
-                      onChange={setFruit}
-                    />
-                  </Field>
+                  {display === "tags" ? (
+                    <Field label="Fruits" htmlFor="select-fruit-tags">
+                      <Select
+                        id="select-fruit-tags"
+                        size={size}
+                        multiple
+                        valueDisplay="tags"
+                        placeholder="Select fruits"
+                        options={FRUITS}
+                        value={previewFruits}
+                        onChange={setPreviewFruits}
+                      />
+                    </Field>
+                  ) : (
+                    <Field label="Fruit" htmlFor="select-fruit">
+                      <Select
+                        id="select-fruit"
+                        size={size}
+                        placeholder="Select a fruit"
+                        options={FRUITS}
+                        value={fruit}
+                        onChange={setFruit}
+                      />
+                    </Field>
+                  )}
                 </div>
               </div>
               <aside className={styles.panel} aria-label="Controls">
@@ -124,6 +157,22 @@ export function SelectDoc() {
                     ))}
                   </div>
                 </div>
+                <div className={styles.panelGroup}>
+                  <span className={styles.panelLabel}>Value display</span>
+                  <div className={styles.sizeGroup} role="group" aria-label="Value display">
+                    {DISPLAYS.map((step) => (
+                      <button
+                        key={step}
+                        type="button"
+                        className={`${styles.sizeTab} ${display === step ? styles.sizeTabActive : ""}`}
+                        aria-pressed={display === step}
+                        onClick={() => setDisplay(step)}
+                      >
+                        {step}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </aside>
             </div>
             <div className={styles.docs}>
@@ -135,7 +184,7 @@ export function SelectDoc() {
                   or MultiSelect.
                 </p>
               </div>
-              <CodeBlock code={masterCode(size)} />
+              <CodeBlock code={masterCode(size, display)} />
             </div>
           </div>
         ) : (
@@ -188,13 +237,48 @@ export function SelectDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   itemCheck=&quot;checkbox&quot; composes kit Checkbox in the menu. After maxVisible
-                  labels, the trigger shows a kit Badge with the overflow count. Not Tag. Not
+                  labels, the trigger shows a kit Badge with the overflow count. Not
                   DropdownMenuCheckboxItem.
                 </p>
               </div>
               <CodeBlock
                 code={
                   '<Select id="fruits" multiple itemCheck="checkbox" maxVisible={2} placeholder="Select fruits" options={fruits} />'
+                }
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Tags</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <Field label="Teams" htmlFor="select-tags">
+                    <Select
+                      id="select-tags"
+                      multiple
+                      valueDisplay="tags"
+                      itemCheck="checkbox"
+                      maxVisible={2}
+                      placeholder="Select teams"
+                      options={TEAMS}
+                      value={teams}
+                      onChange={setTeams}
+                    />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  valueDisplay=&quot;tags&quot; shows each pick as a removable kit Tag that wraps
+                  inside the field. The X deselects without opening the menu. Tags sit beside the
+                  trigger button, not inside it: Tab visits each remove, then the trigger.
+                  maxVisible still caps Tags with the +N Badge.
+                </p>
+              </div>
+              <CodeBlock
+                code={
+                  '<Select id="teams" multiple valueDisplay="tags" itemCheck="checkbox" maxVisible={2} placeholder="Select teams" options={teams} />'
                 }
               />
             </section>
