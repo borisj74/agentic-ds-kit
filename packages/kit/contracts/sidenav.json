@@ -1,7 +1,7 @@
 {
   "id": "sidenav",
   "status": "stable",
-  "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not Drawer.",
+  "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
   "useWhen": [
     "Product app chrome",
     "Persistent nav with icons"
@@ -132,7 +132,8 @@
     "Do not use Drawer for persistent app chrome",
     "Do not use AppNav as closeable product chrome",
     "Do not leave a gap between AppHeader and SideNav — radius none, showHeader false, layout-app with no gap",
-    "Do not use position:fixed, an overlay, a focus trap, or Escape-to-close",
+    "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; for narrow screens use AppShellPattern, which renders SideNav inside kit Drawer",
+    "Do not hand-roll a narrow-screen menu (hamburger, bottom tab bar, collapsed rail); use AppShellPattern (app-shell)",
     "Do not use the shadcn sidebar package",
     "Do not use raw hex"
   ],
