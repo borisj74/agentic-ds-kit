@@ -17,7 +17,7 @@ The **kit** is the npm package `agentic-ds-kit`. The Next app in this GitHub rep
 
 Optional: [Cursor](https://cursor.com) or Claude Code so agent rules load from files instead of chat paste.
 
-Confirm the registry version. Current latest is **0.2.12**. Skip **0.2.0** — it ships CSS that Next re-scopes and kit UI looks unstyled:
+Confirm the registry version. Current latest is **0.2.13**. Skip **0.2.0** — it ships CSS that Next re-scopes and kit UI looks unstyled:
 
 ```bash
 npm view agentic-ds-kit version
@@ -132,11 +132,11 @@ Then:
 2. You can remove a standalone `import "agentic-ds-kit/tokens.css"` if a kit import is already on the tree.
 3. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules/agentic-ds-kit/` if those files changed.
 
-**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.2.12 or later**.
+**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.2.13 or later**.
 
 ```bash
 npm view agentic-ds-kit version
-# expect 0.2.12 or higher
+# expect 0.2.13 or higher
 ```
 
 ### Get later kit versions
@@ -149,7 +149,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.2.12"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.2.13"` (or another `^0.2.x` range), `npm update agentic-ds-kit` also works. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -157,7 +157,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 
 - [ ] `npm install agentic-ds-kit` in the Next app (not in `$HOME`)
 - [ ] React 19 already in the app
-- [ ] No `transpilePackages` for this package (0.2.12+)
+- [ ] No `transpilePackages` for this package (0.2.13+)
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
