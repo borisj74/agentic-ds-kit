@@ -115,7 +115,7 @@ function Legend({
               onBlur={onClear}
             >
               <span
-                className={`${frameStyles.legendSwatch} ${frameStyles.legendSwatchPill}`}
+                className={`${frameStyles.legendSwatch} ${frameStyles.legendSwatchDot}`}
                 style={{ background: entry.color }}
                 aria-hidden
               />

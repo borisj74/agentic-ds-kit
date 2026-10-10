@@ -187,9 +187,9 @@
   flex: none;
 }
 
-.legendSwatchPill {
+.legendSwatchDot {
   width: 0.5rem;
-  height: 0.375rem;
+  height: 0.5rem;
   border-radius: var(--radius-pill);
 }
 
