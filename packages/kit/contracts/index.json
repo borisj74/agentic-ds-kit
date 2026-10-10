@@ -259,6 +259,13 @@
     "status": "stable"
   },
   {
+    "id": "fileupload",
+    "intent": "Drop zone plus file rows with progress, done, and error. Presentational: the app does the upload.",
+    "group": "component",
+    "path": "contracts/fileupload.json",
+    "status": "stable"
+  },
+  {
     "id": "fieldset",
     "intent": "Semantic group of fields with a legend and optional description. This is the form group.",
     "group": "component",

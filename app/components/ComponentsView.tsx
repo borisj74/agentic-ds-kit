@@ -30,6 +30,7 @@ import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
+import { FileUploadDoc } from "./FileUploadDoc";
 import { FilterButtonDoc } from "./FilterButtonDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { HelpPopoverDoc } from "./HelpPopoverDoc";
@@ -110,6 +111,7 @@ const TITLES: Record<string, string> = {
   field: "Field",
   fieldset: "FieldSet",
   filterbutton: "FilterButton",
+  fileupload: "FileUpload",
   badge: "Badge",
   barchart: "Bar",
   breadcrumb: "Breadcrumb",
@@ -206,6 +208,9 @@ function resolveHash(hash: string): string {
     usage: "usagelist",
     "filter-button": "filterbutton",
     filterchip: "filterbutton",
+    "file-upload": "fileupload",
+    upload: "fileupload",
+    dropzone: "fileupload",
     "link-list": "linklist",
     quicklinks: "linklist",
     skeleton: "skeleton",
@@ -272,6 +277,7 @@ export function ComponentsView() {
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "filterbutton") return <FilterButtonDoc />;
+  if (resolved === "fileupload") return <FileUploadDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
   if (resolved === "helppopover") return <HelpPopoverDoc />;
   if (resolved === "input") return <InputDoc />;
