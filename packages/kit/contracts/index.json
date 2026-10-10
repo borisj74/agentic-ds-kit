@@ -567,6 +567,13 @@
     "status": "stable"
   },
   {
+    "id": "sign-in",
+    "intent": "Sign-in / sign-up page outside the app shell: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
+    "group": "pattern",
+    "path": "contracts/patterns/sign-in.json",
+    "status": "stable"
+  },
+  {
     "id": "inbox",
     "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
     "group": "pattern",

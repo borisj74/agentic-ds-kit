@@ -151,3 +151,21 @@
     max-width: none;
   }
 }
+
+/* Sign-in pattern frame: no app shell, the page scrolls inside the browser. */
+.signInDemo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.signInDemo .browser {
+  align-self: stretch;
+}
+
+.browserPage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}

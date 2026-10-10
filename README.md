@@ -22,7 +22,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 8 patterns).
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 9 patterns).
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -38,7 +38,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 
-### Patterns (8)
+### Patterns (9)
 - `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
@@ -47,6 +47,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
 - `activity` — PageHeader + Scoreboard + task cards or list + tabbed DataTable feed
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
+- `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons (no app shell)
 
 ### Playground
 Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. The playground opens on Patterns.
