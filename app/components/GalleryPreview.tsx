@@ -20,6 +20,7 @@ import { Collapsible } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
 import { Count } from "agentic-ds-kit";
+import { FileUpload } from "agentic-ds-kit";
 import { FilterButton } from "agentic-ds-kit";
 import { LinkList } from "agentic-ds-kit";
 import { Meter } from "agentic-ds-kit";
@@ -244,6 +245,18 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "count":
       return <Count count={3} label="unread" />;
+    case "fileupload":
+      return (
+        <Stage variant="wide">
+          <FileUpload
+            maxSizeLabel="PDF, max 10 MB"
+            onFilesSelected={noop}
+            files={[
+              { id: "a", name: "invoice-q3.pdf", size: 1_240_000, progress: 64, status: "uploading" },
+            ]}
+          />
+        </Stage>
+      );
     case "filterbutton":
       return <FilterButton size="sm" count={2}>Status</FilterButton>;
     case "linklist":

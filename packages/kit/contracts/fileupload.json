@@ -1,0 +1,141 @@
+{
+  "id": "fileupload",
+  "status": "stable",
+  "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
+  "useWhen": [
+    "Attaching files to a form, message, or record",
+    "Showing per-file upload progress, completion, and failures with retry",
+    "Inside Field when the upload needs a label, hint, or error"
+  ],
+  "doNotUseWhen": [
+    "A single overall task percent with no file rows — use Progress",
+    "Choosing an avatar or image crop — not this component",
+    "Picking a value from a list — use Select",
+    "Uploading on the network — FileUpload has no fetch; the app owns the request"
+  ],
+  "contains": [
+    "button",
+    "progress"
+  ],
+  "props": {
+    "onFilesSelected": {
+      "type": "function",
+      "required": true,
+      "note": "(files: File[]) => void. Called after a pick or a drop. Dropped files are filtered by accept; multiple=false keeps the first."
+    },
+    "files": {
+      "type": "array",
+      "required": false,
+      "default": [],
+      "note": "{ id, name, size (bytes), progress? (0 to 100), status: 'uploading' | 'done' | 'error', error? }[]. Rows render in this order."
+    },
+    "onRemove": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. When set, every row shows a remove Button (X while uploading, Trash2 after)."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. When set, error rows show a retry Button."
+    },
+    "accept": {
+      "type": "string",
+      "required": false,
+      "note": "Same as the input accept attribute: extensions (.pdf) and MIME types (image/*)."
+    },
+    "multiple": {
+      "type": "boolean",
+      "default": true
+    },
+    "maxSizeLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Hint under the drop zone text, e.g. 'SVG, PNG or PDF, max 10 MB'. Text only; the app enforces limits and reports them as row errors."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "Drop zone button id. Inside Field, pass the same value as htmlFor."
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Set by Field (hint or error id)."
+    },
+    "error": {
+      "type": "boolean",
+      "default": false,
+      "note": "Set by Field when it has an error. Danger border on the drop zone, like Input."
+    }
+  },
+  "tokens": [
+    "surface.card",
+    "surface.muted",
+    "surface.disabled",
+    "border.strong",
+    "border.brand",
+    "border.faint",
+    "border.disabled",
+    "border.width.thin",
+    "border.focusWidth",
+    "focus.ring",
+    "status.danger",
+    "status.dangerBorder",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "text.brand",
+    "text.danger",
+    "text.disabled",
+    "icon.default",
+    "icon.muted",
+    "icon.success",
+    "icon.danger",
+    "icon.disabled",
+    "radius.surfaceSm",
+    "radius.controlMd",
+    "space.inset.lg",
+    "space.inset.md",
+    "space.inset.sm",
+    "space.inset.xs",
+    "space.stack.sm",
+    "space.stack.xs",
+    "space.stack.2xs",
+    "space.inline.sm",
+    "space.inline.xs",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.line.body",
+    "type.line.heading",
+    "motion.interactionDuration",
+    "motion.interactionEasing"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Drop zone is a button that opens the hidden file input; Enter and Space work. Drag and drop is an enhancement.",
+      "The file input is hidden and out of the tab order",
+      "Drop zone hint (maxSizeLabel) is linked with aria-describedby, plus Field's hint or error id",
+      "Each row's status text (Uploading, Complete, or the error) sits in aria-live=polite; the percent does not, so ticks are not announced",
+      "Uploading rows use Progress with ariaLabel 'Uploading {name}'",
+      "Remove Button has aria-label 'Remove {name}'; retry Button has aria-label 'Retry {name}'",
+      "Status is never color alone: icon plus text",
+      "Focus ring uses --focus-ring at --border-focus-width, like Button"
+    ]
+  },
+  "doNot": [
+    "Do not invent Dropzone, FileInput, FileList, FileRow, UploadItem, or UploadProgress",
+    "Do not fetch or upload inside the component — the app owns the request and passes files back",
+    "Do not use a native progress element — rows compose kit Progress",
+    "Do not show a raw input type=file as the control",
+    "Do not use raw hex",
+    "Do not rely on color alone for done or error"
+  ],
+  "snippet": "<Field label=\"Attachments\" htmlFor=\"attachments\" hint=\"Up to 5 files.\">\n  <FileUpload\n    id=\"attachments\"\n    accept=\".pdf,image/*\"\n    maxSizeLabel=\"SVG, PNG or PDF, max 10 MB\"\n    files={files}\n    onFilesSelected={startUploads}\n    onRemove={removeFile}\n    onRetry={retryFile}\n  />\n</Field>"
+}

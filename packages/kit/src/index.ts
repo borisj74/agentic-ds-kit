@@ -33,6 +33,7 @@ export * from "../ui/DropdownMenu";
 export * from "../ui/Empty";
 export * from "../ui/Field";
 export * from "../ui/FieldSet";
+export * from "../ui/FileUpload";
 export * from "../ui/FilterButton";
 export * from "../ui/HeaderCell";
 export * from "../ui/HelpPopover";

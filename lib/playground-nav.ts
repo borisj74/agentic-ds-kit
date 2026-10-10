@@ -31,6 +31,7 @@ export const COMPONENT_ITEMS = [
   "field",
   "fieldset",
   "filterbutton",
+  "fileupload",
   "headercell",
   "helppopover",
   "input",
@@ -99,6 +100,7 @@ export function componentLabel(id: string): string {
   if (id === "dropdownmenu") return "DropdownMenu";
   if (id === "fieldset") return "FieldSet";
   if (id === "filterbutton") return "FilterButton";
+  if (id === "fileupload") return "FileUpload";
   if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
   if (id === "numbertransition") return "NumberTransition";
