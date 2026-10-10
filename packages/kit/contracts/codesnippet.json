@@ -46,7 +46,7 @@
     "copyable": {
       "type": "boolean",
       "default": true,
-      "note": "kit Button sm: tertiary in the header, secondary floating when there is no header. Copy -> Copied for 1.2s"
+      "note": "kit Button sm: tertiary in the header, secondary in its own column beside the code when there is no header, so text never scrolls under it. Copy -> Copied for 1.2s"
     },
     "wrap": {
       "type": "boolean",

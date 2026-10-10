@@ -90,10 +90,6 @@
   font: inherit;
 }
 
-/* Room for the floating Copy button when there is no header. */
-.bare .pre {
-  padding-inline-end: calc(var(--space-16) + var(--space-6));
-}
 
 .wrap .pre {
   width: auto;
@@ -117,10 +113,15 @@
   user-select: none;
 }
 
+/* No header: Copy gets its own column so scrolled text never runs under it. */
+.bare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
 .floatingCopy {
-  position: absolute;
-  top: var(--space-inset-md);
-  right: var(--space-inset-md);
+  padding: var(--space-inset-md) var(--space-inset-md) 0 0;
 }
 
 .srOnly {
