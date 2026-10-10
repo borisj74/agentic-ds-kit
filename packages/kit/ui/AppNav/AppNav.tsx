@@ -109,8 +109,6 @@ export function AppNav({ title, items = [], groups }: AppNavProps) {
     if (activeLabel) setOpenLabel(activeLabel);
   }, [activeLabel]);
 
-  const resolvedOpen = openLabel ?? activeLabel ?? fallbackLabel;
-
   return (
     <nav className={styles.nav} aria-label="Application">
       {title ? <p className={styles.title}>{title}</p> : null}
@@ -120,7 +118,7 @@ export function AppNav({ title, items = [], groups }: AppNavProps) {
             <NavGroup
               key={group.label}
               group={group}
-              open={resolvedOpen === group.label}
+              open={openLabel === group.label}
               onToggle={() => setOpenLabel((current) => (current === group.label ? null : group.label))}
             />
           ))}
