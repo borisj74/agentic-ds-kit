@@ -80,6 +80,7 @@ export * from "../ui/TreeView";
 export * from "../ui/UsageList";
 
 export * from "../ui/patterns/ActivityPattern";
+export * from "../ui/patterns/AppShellPattern";
 export * from "../ui/patterns/AssistantWorkspacePattern";
 export * from "../ui/patterns/DashboardPattern";
 export * from "../ui/patterns/EmptyFirstRunPattern";

@@ -38,7 +38,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 
-### Patterns (9)
+### Patterns (10)
 - `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
@@ -48,6 +48,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - `activity` — PageHeader + Scoreboard + task cards or list + tabbed DataTable feed
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
 - `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons (no app shell)
+- `app-shell` — AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 
 ### Playground
 Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. The playground opens on Patterns.

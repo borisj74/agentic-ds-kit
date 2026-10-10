@@ -1,0 +1,43 @@
+{
+  "id": "app-shell",
+  "status": "stable",
+  "intent": "Product chrome at every width. Wide (>= --grid-breakpoint-md, 64rem): AppHeader over SideNav + content (layout-shell / layout-app, radius none, no gap, SideNav showHeader false). Narrow: SideNav hidden; a Menu Button at the start of AppHeader opens the same nav in a left Drawer.",
+  "contains": ["appheader", "sidenav", "drawer", "button"],
+  "props": {
+    "header": { "type": "object", "required": true, "note": "AppHeader props except radius (always none). On narrow screens the Menu Button takes the logo slot, so the mark or logo shows only when wide." },
+    "nav": { "type": "object", "required": true, "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title." },
+    "children": { "type": "slot", "required": true, "note": "Page content: a layout-canvas or layout-workspace, or another pattern. Pages own their one primary Button." },
+    "className": { "type": "string", "required": false, "note": "Extra class on the layout-shell root, e.g. to give it the viewport height." }
+  },
+  "responsive": {
+    "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; the CSS module repeats 64rem only for the first paint before hydration.",
+    "narrow": [
+      "No SideNav in the layout; content takes the full width",
+      "Menu Button (tertiary sm, lucide Menu, ariaLabel \"Open navigation\") sits in AppHeader's start column",
+      "Left Drawer size sm holds SideNav showHeader false, always expanded",
+      "Picking a leaf, Escape, or a scrim click closes the Drawer; focus returns to the Menu Button",
+      "AppHeader search stays an Input; below 38rem AppHeader already stacks it under the brand row",
+      "Widening past the breakpoint closes the Drawer and brings SideNav back without a reload"
+    ]
+  },
+  "a11y": {
+    "requirements": [
+      "Menu Button is a kit Button with ariaLabel \"Open navigation\"",
+      "The Drawer is the kit dialog: aria-modal, focus trapped, Escape and scrim close, focus restored to the trigger",
+      "Parent nav items (disclosures) do not close the Drawer; leaves do",
+      "Active leaf keeps aria-current=page in both SideNav and the Drawer"
+    ]
+  },
+  "doNot": [
+    "Do not invent MobileNav, HamburgerMenu, BottomNav, TabBar, or a bottom tab bar",
+    "Do not make SideNav itself an overlay (position:fixed, its own scrim, focus trap); on narrow screens it renders inside kit Drawer",
+    "Do not add a local scrim, sheet, or fixed aside; kit Drawer is the only overlay",
+    "Do not put the menu trigger outside AppHeader or in a local header cousin; it lives at the start of AppHeader",
+    "Do not keep a fixed SideNav or a collapsed rail below the breakpoint",
+    "Do not read var() inside a media query; use 64rem with a comment naming --grid-breakpoint-md, or matchMedia reading the token",
+    "Do not put a primary Button in the shell; pages own theirs",
+    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav.",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
+}
