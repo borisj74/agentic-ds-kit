@@ -147,7 +147,15 @@ export function BadgeDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Badge for status; Avatar for people; Button for actions. Removable only for dismissible filters.
+                  Badge for status; Avatar for people; Button for actions. Removable only for dismissible filters; user-managed labels use Tag.
+                </p>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Badge or Tag?</h3>
+                <p className={styles.usageBody}>
+                  Badge is read-only status or category the system sets, like Paid, Overdue, or Beta. Tag is a label the
+                  user applies or manages: filter chips, keywords, assigned people. If the user can remove or select it,
+                  use Tag.
                 </p>
               </div>
               <CodeBlock code={masterCode(tone, size, removable, disabled, label)} />

@@ -52,7 +52,7 @@
     "badge": {
       "type": "string",
       "required": false,
-      "note": "kit Badge on the header, aligned with label. Compose Badge. No Tag."
+      "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag."
     },
     "badgeTone": {
       "type": "enum",
@@ -115,7 +115,7 @@
     "Do not use raw hex colors in styles",
     "Do not pack multiple KPIs into one Scorecard",
     "Do not put buttons or links inside Scorecard besides the whole-card onClick",
-    "Do not invent a local Tag or Status on Scorecard \u2014 use kit Badge via badge"
+    "Do not invent a local Tag or Status on Scorecard \u2014 status uses kit Badge via badge"
   ],
   "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />",
   "contains": [

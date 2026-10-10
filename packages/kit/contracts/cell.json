@@ -191,7 +191,7 @@
     ]
   },
   "doNot": [
-    "Do not invent DataTableCell, Tag, Trend, FileIcon, PaymentMethod, or a second Badge",
+    "Do not invent DataTableCell, a local Tag, Trend, FileIcon, PaymentMethod, or a second Badge — status stays Badge; user labels use kit Tag",
     "Do not use raw hex",
     "Do not use Badge for trends",
     "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",

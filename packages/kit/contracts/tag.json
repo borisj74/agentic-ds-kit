@@ -1,0 +1,138 @@
+{
+  "id": "tag",
+  "status": "stable",
+  "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
+  "useWhen": [
+    "Filter chips the user picks or clears",
+    "Keywords, topics, or labels the user adds to a record",
+    "Assigned people or teams shown as removable labels",
+    "Removable chips inside another control, like picked values in a Select"
+  ],
+  "doNotUseWhen": [
+    "Read-only status or category set by the system (Paid, Overdue, Beta) — use Badge",
+    "Overflow +N counts — use Badge (Select) or Count",
+    "Primary or secondary actions — use Button",
+    "A person on their own — use Avatar",
+    "Single-choice segmented options — use ButtonGroup or Tabs"
+  ],
+  "props": {
+    "children": {
+      "type": "string",
+      "required": true
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "Same sizes as Badge"
+    },
+    "removable": {
+      "type": "boolean",
+      "default": false
+    },
+    "onRemove": {
+      "type": "function",
+      "required": false,
+      "note": "(event) => void; used when removable. The event lets a parent control stop propagation."
+    },
+    "selectable": {
+      "type": "boolean",
+      "default": false,
+      "note": "Leading kit Checkbox, labelled by the Tag text"
+    },
+    "selected": {
+      "type": "boolean",
+      "required": false,
+      "note": "controlled; selectable only"
+    },
+    "defaultSelected": {
+      "type": "boolean",
+      "default": false,
+      "note": "uncontrolled; selectable only"
+    },
+    "onSelectedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(selected: boolean) => void"
+    },
+    "count": {
+      "type": "number",
+      "required": false,
+      "note": "Trailing kit Count, size sm, intent neutral, subtle"
+    },
+    "dot": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "success",
+        "warning",
+        "danger",
+        "info"
+      ],
+      "required": false,
+      "note": "Leading status dot; decorative, the text carries the meaning"
+    },
+    "avatar": {
+      "type": "object",
+      "required": false,
+      "note": "{ name: string; src?: string } — leading kit Avatar sized to the Tag (20/24/32px via space tokens) with an even space.inset.2xs inset when it leads; sm shows one initial"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "Checkbox id when selectable; generated when omitted"
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "surface.card",
+    "text.secondary",
+    "text.primary",
+    "border.faint",
+    "border.focus",
+    "status.success",
+    "status.warning",
+    "status.danger",
+    "status.info",
+    "radius.controlLg",
+    "radius.pill",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.5",
+    "space.6",
+    "space.8",
+    "space.inset.2xs",
+    "type.size.caption",
+    "type.size.label",
+    "type.size.bodySm",
+    "type.weight.label"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Plain Tag is a span with readable text",
+      "Selectable: the kit Checkbox is the control; it is labelled by the Tag text and the text is its <label>",
+      "Removable: the X is a button with aria-label Remove {children}",
+      "disabled sets aria-disabled and disables both the checkbox and the remove button",
+      "Dot is aria-hidden; never the only signal",
+      "Checkbox and remove button show a focus-visible ring using --border-focus"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Tag, Chip, or FilterChip",
+    "Do not use Tag for system status — use Badge",
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not make the whole Tag a button; only the checkbox and the remove control are interactive",
+    "Do not stack more than one leading visual (pick one of checkbox, dot, avatar) unless the design needs it"
+  ],
+  "snippet": "<Tag removable onRemove={() => {}}>Design</Tag>\n<Tag selectable defaultSelected count={4}>Engineering</Tag>\n<Tag dot=\"success\">Active</Tag>\n<Tag avatar={{ name: \"Ana Ruiz\" }}>Ana Ruiz</Tag>"
+}

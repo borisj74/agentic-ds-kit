@@ -68,6 +68,7 @@ export * from "../ui/Spinner";
 export * from "../ui/Switch";
 export * from "../ui/Table";
 export * from "../ui/Tabs";
+export * from "../ui/Tag";
 export * from "../ui/Textarea";
 export * from "../ui/ThinkingAnimation";
 export * from "../ui/Timeline";

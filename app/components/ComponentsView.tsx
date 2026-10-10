@@ -66,6 +66,7 @@ import { SpinnerDoc } from "./SpinnerDoc";
 import { SwitchDoc } from "./SwitchDoc";
 import { TableDoc } from "./TableDoc";
 import { TabsDoc } from "./TabsDoc";
+import { TagDoc } from "./TagDoc";
 import { TextareaDoc } from "./TextareaDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
@@ -117,6 +118,7 @@ const TITLES: Record<string, string> = {
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
   tabs: "Tabs",
+  tag: "Tag",
   modal: "Modal",
   modalcard: "ModalCard",
   navigationmenu: "NavigationMenu",
@@ -193,6 +195,9 @@ function resolveHash(hash: string): string {
     radios: "radiogroup",
     tab: "tabs",
     tablist: "tabs",
+    tags: "tag",
+    chip: "tag",
+    chips: "tag",
     kpi: "scorecard",
     kpicard: "scorecard",
     kpicards: "scorecard",
@@ -306,6 +311,7 @@ export function ComponentsView() {
   if (resolved === "switch") return <SwitchDoc />;
   if (resolved === "table") return <TableDoc />;
   if (resolved === "tabs") return <TabsDoc />;
+  if (resolved === "tag") return <TagDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
   if (resolved === "timeline") return <TimelineDoc />;
