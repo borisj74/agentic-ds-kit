@@ -1,0 +1,36 @@
+{
+  "id": "sign-in",
+  "status": "stable",
+  "intent": "Standalone sign-in / sign-up page: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
+  "contains": ["card", "field", "input", "checkbox", "button", "divider", "alert"],
+  "props": {
+    "mode": { "type": "enum", "values": ["sign-in", "sign-up"], "default": "sign-in", "note": "sign-up adds a Name field, drops Remember me and Forgot password, and swaps the copy." },
+    "productName": { "type": "string", "required": false },
+    "logo": { "type": "slot", "required": false, "note": "App mark above the card." },
+    "providers": { "type": "array", "required": false, "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is a Lucide export name. Omit for email only." },
+    "onSubmit": { "type": "function", "required": false, "note": "(values: { email, password, name?, remember? }) => void. Called only after required and email-format checks pass." },
+    "onProvider": { "type": "function", "required": false, "note": "(id: string) => void" },
+    "onForgotPassword": { "type": "function", "required": false, "note": "Shows 'Forgot password?' (tertiary sm) in sign-in mode." },
+    "onSwitchMode": { "type": "function", "required": false, "note": "(next: mode) => void. Shows the footer switch link." },
+    "error": { "type": "string", "required": false, "note": "Server failure. Danger Alert above the form." },
+    "loading": { "type": "boolean", "default": false, "note": "Primary disabled with a busy label; SSO disabled; form aria-busy." }
+  },
+  "a11y": {
+    "requirements": [
+      "Tab order: (name) → email → password → remember → forgot → primary → SSO → switch link",
+      "Enter in any input submits (form with a type=submit primary)",
+      "Validation errors go through Field error; focus moves to the first invalid input",
+      "The form is noValidate so browser bubbles never replace Field errors"
+    ]
+  },
+  "doNot": [
+    "Do not put this inside the app shell (no AppHeader, no SideNav); it is a full page on surface.page",
+    "Do not add more than one primary Button; SSO is secondary, forgot and switch are tertiary",
+    "Do not skip Field wrappers on email, password, or name",
+    "Do not invent a local divider or 'or' rule; use Divider label=\"or\"",
+    "Do not use Card footer actions for submit; the primary lives inside the form",
+    "Do not call an auth API or store credentials in the pattern; pass callbacks",
+    "Do not use raw hex or brand-coloured SSO buttons"
+  ],
+  "snippet": "<SignInPattern productName=\"Agentix\" providers={[{ id: \"google\", label: \"Continue with Google\" }]} onSubmit={(values) => signIn(values)} onProvider={(id) => sso(id)} onForgotPassword={() => {}} onSwitchMode={setMode} />"
+}

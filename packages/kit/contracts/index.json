@@ -147,6 +147,13 @@
     "status": "stable"
   },
   {
+    "id": "colorpicker",
+    "intent": "Inline colour picker: saturation/brightness area, hue, optional opacity, hex input, and preset swatches.",
+    "group": "component",
+    "path": "contracts/colorpicker.json",
+    "status": "stable"
+  },
+  {
     "id": "command",
     "intent": "Searchable command menu for quick actions.",
     "group": "component",
@@ -571,6 +578,13 @@
     "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
     "group": "pattern",
     "path": "contracts/patterns/activity.json",
+    "status": "stable"
+  },
+  {
+    "id": "sign-in",
+    "intent": "Sign-in / sign-up page outside the app shell: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
+    "group": "pattern",
+    "path": "contracts/patterns/sign-in.json",
     "status": "stable"
   },
   {

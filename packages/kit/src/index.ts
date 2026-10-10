@@ -25,6 +25,7 @@ export * from "../ui/Chat";
 export * from "../ui/Checkbox";
 export * from "../ui/CodeSnippet";
 export * from "../ui/Collapsible";
+export * from "../ui/ColorPicker";
 export * from "../ui/Command";
 export * from "../ui/DataGrid";
 export * from "../ui/DataTable";
@@ -86,4 +87,5 @@ export * from "../ui/patterns/InboxPattern";
 export * from "../ui/patterns/InviteMembersPattern";
 export * from "../ui/patterns/ListDetailPattern";
 export * from "../ui/patterns/SettingsFormPattern";
+export * from "../ui/patterns/SignInPattern";
 

@@ -30,7 +30,7 @@
     },
     "children": {
       "type": "slot",
-      "allowedContracts": ["input", "textarea", "select", "datepicker", "switch", "checkbox", "fileupload"],
+      "allowedContracts": ["input", "textarea", "select", "datepicker", "switch", "checkbox", "fileupload", "colorpicker"],
       "required": true
     }
   },

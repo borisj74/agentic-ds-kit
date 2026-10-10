@@ -18,6 +18,7 @@ import { Chat } from "agentic-ds-kit";
 import { Checkbox } from "agentic-ds-kit";
 import { CodeSnippet } from "agentic-ds-kit";
 import { Collapsible } from "agentic-ds-kit";
+import { ColorPicker } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
 import { Count } from "agentic-ds-kit";
@@ -221,6 +222,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <CodeSnippet title="install.sh" code="npm i agentic-ds-kit" />
+        </Stage>
+      );
+    case "colorpicker":
+      return (
+        <Stage variant="wide">
+          <ColorPicker defaultValue="#2F6FEB" />
         </Stage>
       );
     case "collapsible":

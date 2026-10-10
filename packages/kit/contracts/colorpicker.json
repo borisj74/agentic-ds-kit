@@ -1,0 +1,131 @@
+{
+  "id": "colorpicker",
+  "status": "stable",
+  "intent": "Inline colour picker for theming and branding settings: saturation/brightness area, hue track, optional opacity track, hex Input, and optional preset swatches. One piece, no popover.",
+  "useWhen": [
+    "Picking a brand, theme, label, or chart colour in a settings form",
+    "Offering a short brand palette as presets with a free-form fallback",
+    "Inside Field when the colour needs a label, hint, or error"
+  ],
+  "doNotUseWhen": [
+    "Choosing among a few named options that happen to be colours, with no free pick — use RadioGroup",
+    "Styling the kit's own UI — use semantic tokens, not a picked colour",
+    "A trigger button that opens a picker panel — not built yet; place ColorPicker inline"
+  ],
+  "contains": [
+    "input"
+  ],
+  "props": {
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled hex. #RRGGBB, or #RRGGBBAA when showAlpha and opacity is below 100%. Accepts #RGB / #RGBA / #RRGGBB / #RRGGBBAA, case-insensitive."
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled starting hex. With neither value nor defaultValue the picker starts at black."
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(hex: string) => void. Uppercase #RRGGBB, or #RRGGBBAA with showAlpha below 100% opacity. Fires on every committed change (drag, keys, swatch, valid hex)."
+    },
+    "swatches": {
+      "type": "array",
+      "required": false,
+      "note": "(string | { value, label? })[]. Preset colours shown as a radio group. The label is the accessible name; without it the hex is read out."
+    },
+    "showAlpha": {
+      "type": "boolean",
+      "default": false,
+      "note": "Adds an opacity track over a checkerboard and a percent readout."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "note": "Hex Input id. Inside Field, pass the same value as htmlFor so the Field label names the hex Input."
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Set by Field (hint or error id)."
+    },
+    "error": {
+      "type": "boolean",
+      "default": false,
+      "note": "Set by Field when it has an error. Danger border on the hex Input."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "default": "Colour",
+      "note": "Names the group and prefixes the slider names: '{ariaLabel} saturation and brightness', '{ariaLabel} hue', '{ariaLabel} opacity', '{ariaLabel} presets'. Use the Field label text, e.g. 'Brand colour'."
+    },
+    "invalidMessage": {
+      "type": "string",
+      "default": "Enter a hex colour like 3366FF.",
+      "note": "Shown under the hex Input while the typed text is not a valid hex. The last valid colour is kept."
+    }
+  },
+  "colorData": {
+    "note": "The picked colour is user data, not a design decision. It is painted with inline style on the area hue, the thumbs, the preview, the opacity track, and the swatches. The hue spectrum and the white/black area overlays are built from the component's own HSV math, never literal colours in CSS. This is not a token violation. All chrome — borders, focus rings, radius, thumb rings, checkerboard, text, spacing — uses the semantic tokens listed under tokens."
+  },
+  "tokens": [
+    "border.faint",
+    "border.strong",
+    "border.focusWidth",
+    "border.widthThin",
+    "border.widthMedium",
+    "focus.ring",
+    "surface.card",
+    "fill.subtle",
+    "text.secondary",
+    "text.danger",
+    "shadow.raisedSm",
+    "radius.surfaceSm",
+    "radius.controlMd",
+    "radius.pill",
+    "radius.full",
+    "space.stackSm",
+    "space.inlineSm",
+    "space.gapSm",
+    "space.inset2xs",
+    "space.px",
+    "space.2",
+    "type.sizeBodySm",
+    "type.sizeCaption",
+    "type.lineBody",
+    "font.sans",
+    "opacity.disabled",
+    "motion.interactionDuration",
+    "motion.interactionEasing"
+  ],
+  "a11y": {
+    "element": "div[role=group]",
+    "requirements": [
+      "Area is one role=slider with aria-roledescription '2D slider': ← → saturation, ↑ ↓ brightness, 1 per press, Shift ×10; PageUp/PageDown brightness ±10; Home/End saturation 0/100. aria-valuetext 'Saturation 80%, brightness 60%'",
+      "Hue is role=slider 0 to 359: ← → (or ↑ ↓) 1 degree, Shift ×10, PageUp/PageDown ±10, Home/End. aria-valuetext '210 degrees, blue'",
+      "Opacity (showAlpha) is role=slider 0 to 100 with the same keys. aria-valuetext '80%'",
+      "Pointer: click or drag the area and tracks; the control takes focus so keys continue from there",
+      "Swatches are role=radiogroup of role=radio buttons with aria-checked, one Tab stop (roving tabindex). Arrows move and select, Home/End jump. Name is the swatch label or its hex",
+      "Hex Input uses kit Input with '#' in the start slot. A complete 6 or 8 digit hex applies while typing; 3 or 4 digit short forms apply on blur or Enter. 3/6 digits keep the current opacity; 4/8 digits set it. A swatch sets full opacity",
+      "Invalid hex sets aria-invalid on the Input, shows invalidMessage (role=alert) linked by aria-describedby, and keeps the last valid colour",
+      "Inside Field, Field label htmlFor matches id; Field describedBy and error land on the hex Input",
+      "disabled removes every part from the Tab order and blocks pointer and keys",
+      "Colour is never the only cue: the selected swatch has a ring, and every value has text (hex, valuetext, percent)"
+    ]
+  },
+  "doNot": [
+    "Do not invent ColorArea, HueSlider, AlphaSlider, ColorSwatch, ColorInput, or SwatchPicker cousins — use ColorPicker props",
+    "Do not use a native input type=color",
+    "Do not add a colour library; hex/HSV conversion lives in the component",
+    "Do not use a picked colour for kit chrome; it is content",
+    "Do not put raw hex or rgb()/hsl() in CSS; the picked colour arrives through inline style only",
+    "Do not wrap ColorPicker in a Popover or Drawer as a picker trigger without a plan task"
+  ],
+  "snippet": "<Field label=\"Brand colour\" htmlFor=\"brand-colour\" hint=\"Used for buttons and links.\">\n  <ColorPicker id=\"brand-colour\" ariaLabel=\"Brand colour\" value={brand} onChange={setBrand} swatches={[\"#2F6FEB\", { value: \"#0E9F6E\", label: \"Green\" }]} />\n</Field>"
+}

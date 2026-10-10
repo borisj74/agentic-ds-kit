@@ -20,6 +20,7 @@ export const COMPONENT_ITEMS = [
   "checkbox",
   "codesnippet",
   "collapsible",
+  "colorpicker",
   "command",
   "conveyor",
   "count",
@@ -105,6 +106,7 @@ export function componentLabel(id: string): string {
   if (id === "filterbutton") return "FilterButton";
   if (id === "fileupload") return "FileUpload";
   if (id === "codesnippet") return "CodeSnippet";
+  if (id === "colorpicker") return "ColorPicker";
   if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
   if (id === "numbertransition") return "NumberTransition";
@@ -204,6 +206,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
         leaf("/patterns#invite", "Invite"),
         leaf("/patterns#insights", "Assistant"),
         leaf("/patterns#empty", "Empty"),
+        leaf("/patterns#sign-in", "Sign in"),
       ],
     },
   ];
