@@ -1,0 +1,86 @@
+{
+  "id": "divider",
+  "status": "stable",
+  "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action on the line.",
+  "useWhen": [
+    "Separating groups of content inside one surface (form groups, menu-like stacks, card bodies)",
+    "An 'or' break between two choices, e.g. between sign-in methods",
+    "A 'Show more' or 'Add' action sitting on the line between list sections",
+    "A vertical rule between items in a toolbar or metadata row"
+  ],
+  "doNotUseWhen": [
+    "Card or Section edges that already draw a border — let the container own it",
+    "Inside Section headers or PageHeader — they have their own structure",
+    "As a spacer — use space tokens (gap, margin) for whitespace",
+    "Between table rows or list rows — Table, DataTable, and ListView draw their own row lines",
+    "Headed groups of content — use Section or a heading"
+  ],
+  "props": {
+    "orientation": {
+      "type": "enum",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal"
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Short text on the line. Horizontal only; ignored when vertical."
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "start",
+        "center",
+        "end"
+      ],
+      "default": "center",
+      "note": "Position of label and action on the line. Horizontal only."
+    },
+    "action": {
+      "type": "slot",
+      "required": false,
+      "note": "One inline control, normally kit Button variant=\"tertiary\" size=\"sm\". Horizontal only."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "faint",
+        "default"
+      ],
+      "default": "faint",
+      "note": "faint uses border.faint; default uses border.strong"
+    }
+  },
+  "tokens": [
+    "border.faint",
+    "border.strong",
+    "border.divider",
+    "text.secondary",
+    "type.size.label",
+    "type.weight.label",
+    "type.line.heading",
+    "space.inline.sm",
+    "space.inline.md",
+    "space.inline.lg"
+  ],
+  "a11y": {
+    "element": "hr",
+    "requirements": [
+      "Plain horizontal divider renders <hr> (implicit separator role)",
+      "Vertical divider renders role=\"separator\" with aria-orientation=\"vertical\"",
+      "With label or action, the line segments are aria-hidden and the label is plain text; no separator role, so the label stays readable",
+      "action keeps its own accessible name (a kit Button with visible text)"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Divider, Separator, or <hr> style",
+    "Do not use Divider for spacing or to add margins",
+    "Do not stack Divider against a container border",
+    "Do not put long text in label — keep it to a word or two",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Divider label=\"or\" />"
+}
