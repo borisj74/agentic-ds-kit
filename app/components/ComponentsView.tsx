@@ -19,6 +19,7 @@ import { CarouselDoc } from "./CarouselDoc";
 import { CellDoc } from "./CellDoc";
 import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
+import { CodeSnippetDoc } from "./CodeSnippetDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
 import { CommandDoc } from "./CommandDoc";
 import { ConveyorDoc } from "./ConveyorDoc";
@@ -98,6 +99,7 @@ const TITLES: Record<string, string> = {
   select: "Select",
   switch: "Switch",
   checkbox: "Checkbox",
+  codesnippet: "CodeSnippet",
   collapsible: "Collapsible",
   command: "Command",
   conveyor: "Conveyor",
@@ -224,6 +226,8 @@ function resolveHash(hash: string): string {
     countbadge: "count",
     separator: "divider",
     hr: "divider",
+    "code-snippet": "codesnippet",
+    codeblock: "codesnippet",
   };
   return aliases[hash] ?? hash;
 }
@@ -265,6 +269,7 @@ export function ComponentsView() {
   if (resolved === "cell") return <CellDoc />;
   if (resolved === "chat") return <ChatDoc />;
   if (resolved === "checkbox") return <CheckboxDoc />;
+  if (resolved === "codesnippet") return <CodeSnippetDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
   if (resolved === "command") return <CommandDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;

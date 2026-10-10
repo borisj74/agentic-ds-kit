@@ -175,6 +175,13 @@
     "status": "stable"
   },
   {
+    "id": "codesnippet",
+    "intent": "Read-only code block with copy, optional title, language label, tabs, and line numbers.",
+    "group": "component",
+    "path": "contracts/codesnippet.json",
+    "status": "stable"
+  },
+  {
     "id": "divider",
     "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action.",
     "group": "component",

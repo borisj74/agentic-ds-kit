@@ -1,0 +1,107 @@
+{
+  "id": "codesnippet",
+  "status": "stable",
+  "intent": "Read-only block of code with a copy button, optional title, language label, tabs, and line numbers. No syntax highlighting.",
+  "useWhen": [
+    "Showing a command, config, or code sample the reader will copy",
+    "Install or usage snippets in docs, onboarding, or developer settings",
+    "Several variants of one snippet (npm / pnpm, React / HTML) behind tabs"
+  ],
+  "doNotUseWhen": [
+    "Editable code \u2014 use Textarea",
+    "A short inline token or path inside a sentence \u2014 use a <code> element in body text",
+    "Secrets the user must not see in full (API keys) \u2014 mask them before passing code"
+  ],
+  "props": {
+    "code": {
+      "type": "string",
+      "required": false,
+      "note": "required unless tabs is set; ignored when tabs is set"
+    },
+    "tabs": {
+      "type": "array",
+      "itemShape": {
+        "label": "string",
+        "code": "string",
+        "language": "string"
+      },
+      "required": false,
+      "note": "renders kit Tabs (line, sm) in the header; a tab's language wins over language"
+    },
+    "language": {
+      "type": "string",
+      "required": false,
+      "note": "label in the header only; no highlighting"
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "filename or caption in the header; with tabs it only names the code region"
+    },
+    "showLineNumbers": {
+      "type": "boolean",
+      "default": false,
+      "note": "decorative (aria-hidden, not selectable, never copied)"
+    },
+    "copyable": {
+      "type": "boolean",
+      "default": true,
+      "note": "kit Button sm: tertiary in the header, secondary floating when there is no header. Copy -> Copied for 1.2s"
+    },
+    "wrap": {
+      "type": "boolean",
+      "default": false,
+      "note": "false scrolls long lines horizontally"
+    },
+    "maxHeight": {
+      "type": "string | number",
+      "required": false,
+      "note": "scrolls inside past this height"
+    }
+  },
+  "tokens": [
+    "surface.muted",
+    "surface.card",
+    "border.faint",
+    "border.divider",
+    "border.focusWidth",
+    "focus.ring",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "radius.surfaceMd",
+    "type.family.code",
+    "type.size.code",
+    "type.weight.code",
+    "type.size.caption",
+    "type.line.body",
+    "space.inset.xs",
+    "space.inset.sm",
+    "space.inset.md",
+    "space.inset.lg",
+    "space.inline.sm",
+    "space.inline.md",
+    "space.inline.lg",
+    "space.6",
+    "space.10",
+    "space.16"
+  ],
+  "a11y": {
+    "element": "pre > code inside a div role=region",
+    "requirements": [
+      "Code renders in <pre><code>",
+      "The region is named by title, the active tab label, or the language",
+      "The region is focusable (tabIndex 0) only when it scrolls, so keyboard users can scroll it",
+      "Copy button is named by its visible text (Copy, then Copied); a polite live region announces Copied",
+      "Line numbers are aria-hidden and user-select none; copy writes the raw code string",
+      "Tabs follow kit Tabs keyboard (arrows, Home, End)"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local code block; use kit CodeSnippet",
+    "Do not add a syntax highlighting dependency",
+    "Do not use raw hex or a local monospace font; use type.family.code",
+    "Do not put line numbers into the code string"
+  ],
+  "snippet": "<CodeSnippet title=\"install.sh\" language=\"bash\" code=\"npm install agentic-ds-kit\" />\n<CodeSnippet\n  tabs={[\n    { label: \"npm\", code: \"npm install agentic-ds-kit\" },\n    { label: \"pnpm\", code: \"pnpm add agentic-ds-kit\" }\n  ]}\n/>"
+}

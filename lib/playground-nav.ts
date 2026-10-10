@@ -18,6 +18,7 @@ export const COMPONENT_ITEMS = [
   "cell",
   "chat",
   "checkbox",
+  "codesnippet",
   "collapsible",
   "command",
   "conveyor",
@@ -103,6 +104,7 @@ export function componentLabel(id: string): string {
   if (id === "fieldset") return "FieldSet";
   if (id === "filterbutton") return "FilterButton";
   if (id === "fileupload") return "FileUpload";
+  if (id === "codesnippet") return "CodeSnippet";
   if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
   if (id === "numbertransition") return "NumberTransition";

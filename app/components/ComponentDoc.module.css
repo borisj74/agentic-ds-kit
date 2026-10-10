@@ -307,32 +307,6 @@
   background: var(--surface-muted);
 }
 
-.codeWrap {
-  position: relative;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.code {
-  margin: 0;
-  padding: var(--space-4) 5.5rem var(--space-4) var(--space-4);
-  max-width: 100%;
-  overflow-x: auto;
-  border-radius: var(--radius-surface-sm);
-  background: var(--surface-muted);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: var(--type-size-code);
-  line-height: 1.6;
-  white-space: pre;
-}
-
-.copy {
-  position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
-}
-
 @media (max-width: 860px) {
   .layout {
     display: flex;

@@ -16,6 +16,7 @@ import { Carousel } from "agentic-ds-kit";
 import { Cell } from "agentic-ds-kit";
 import { Chat } from "agentic-ds-kit";
 import { Checkbox } from "agentic-ds-kit";
+import { CodeSnippet } from "agentic-ds-kit";
 import { Collapsible } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
@@ -216,6 +217,12 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "checkbox":
       return <Checkbox id="gallery-checkbox" label="Remind me" defaultChecked />;
+    case "codesnippet":
+      return (
+        <Stage variant="wide">
+          <CodeSnippet title="install.sh" code="npm i agentic-ds-kit" />
+        </Stage>
+      );
     case "collapsible":
       return (
         <Collapsible trigger="More" defaultOpen>
