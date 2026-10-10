@@ -5,7 +5,7 @@ React components, JSON contracts, and tokens for agent-built UI. This is the **i
 ## Install
 
 ```bash
-npm install agentic-ds-kit
+npm install agentic-ds-kit@latest
 ```
 
 Peer: React 19. `AppNav` uses `next/link`; Next.js is an optional peer if you use that component.
