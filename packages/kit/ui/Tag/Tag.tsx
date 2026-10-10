@@ -13,6 +13,11 @@ export type { TagProps, TagSize, TagDotTone, TagAvatar } from "./Tag.types";
 const ICON_SIZE = { sm: 12, md: 14, lg: 16 } as const;
 const CHECKBOX_SIZE = { sm: "sm", md: "md", lg: "md" } as const;
 
+/** First letter of the name; two letters do not fit the sm avatar legibly. */
+function firstInitial(name: string): string | undefined {
+  return Array.from(name).find((ch) => /\p{L}/u.test(ch));
+}
+
 export function Tag({
   children,
   size = "md",
@@ -32,7 +37,14 @@ export function Tag({
   const checkboxId = id ?? `tag-${generatedId}`;
   const iconPx = ICON_SIZE[size];
 
-  const className = [styles.tag, styles[size], disabled ? styles.disabled : ""].filter(Boolean).join(" ");
+  const className = [
+    styles.tag,
+    styles[size],
+    avatar && !selectable ? styles.avatarLead : "",
+    disabled ? styles.disabled : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <span className={className} aria-disabled={disabled || undefined}>
@@ -52,7 +64,12 @@ export function Tag({
       {dot ? <span className={`${styles.dot} ${styles[`dot-${dot}`]}`} aria-hidden /> : null}
       {avatar ? (
         <span className={styles.avatarSlot}>
-          <Avatar name={avatar.name} src={avatar.src} size="sm" />
+          <Avatar
+            name={avatar.name}
+            src={avatar.src}
+            initials={size === "sm" ? firstInitial(avatar.name) : undefined}
+            size="sm"
+          />
         </span>
       ) : null}
       {selectable ? (

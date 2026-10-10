@@ -288,10 +288,23 @@ export function TagDoc() {
                     </Tag>
                   ))}
                 </div>
+                <div className={styles.previewRow}>
+                  {SIZES.map((step) => (
+                    <Tag
+                      key={step}
+                      size={step}
+                      avatar={{ name: "Maya Chen", src: "/faces/maya-chen.jpg" }}
+                      removable
+                      onRemove={() => {}}
+                    >
+                      Maya Chen
+                    </Tag>
+                  ))}
+                </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Assigned people. Leading kit Avatar, scaled to the Tag line.</p>
+                <p className={styles.usageBody}>Assigned people. Leading kit Avatar sized to the Tag; sm shows one initial so it stays legible.</p>
               </div>
               <CodeBlock code={'<Tag avatar={{ name: "Ana Ruiz" }} removable onRemove={() => {}}>\n  Ana Ruiz\n</Tag>'} />
             </section>

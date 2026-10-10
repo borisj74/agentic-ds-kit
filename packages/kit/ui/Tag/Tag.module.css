@@ -46,26 +46,36 @@ label.text {
   flex-shrink: 0;
 }
 
-/* Kit Avatar has no size below sm; the slot scales it to the Tag's line.
-   Card surface so the fallback circle shows on the muted Tag. */
+/* Kit Avatar has no size below sm; the slot sizes it to the Tag.
+   Card surface so the fallback circle shows on the muted Tag.
+   Negative block margin equal to the Tag's block padding lets the avatar
+   fill the Tag's height without making the Tag taller. */
 .avatarSlot > span {
   font-size: var(--type-size-caption);
   background-color: var(--surface-card);
 }
 
 .sm .avatarSlot > span {
-  width: var(--space-4);
-  height: var(--space-4);
+  width: var(--space-5);
+  height: var(--space-5);
+  margin-block: calc(var(--space-1) * -1);
 }
 
 .md .avatarSlot > span {
-  width: var(--space-5);
-  height: var(--space-5);
+  width: var(--space-6);
+  height: var(--space-6);
+  margin-block: calc(var(--space-1) * -1);
 }
 
 .lg .avatarSlot > span {
-  width: var(--space-6);
-  height: var(--space-6);
+  width: var(--space-8);
+  height: var(--space-8);
+  margin-block: calc(var(--space-2) * -1);
+}
+
+/* Avatar leads: pull it toward the start edge instead of padding the Tag. */
+.avatarLead {
+  padding-inline-start: var(--space-inset-2xs);
 }
 
 .dot {
