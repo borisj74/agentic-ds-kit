@@ -1,0 +1,137 @@
+.root {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--border-divider) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  background: var(--surface-muted);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-inline-md);
+  min-height: var(--space-10);
+  padding: var(--space-inset-xs) var(--space-inset-xs) var(--space-inset-xs) var(--space-inset-md);
+  border-bottom: var(--border-divider) solid var(--border-faint);
+  background: var(--surface-card);
+}
+
+.withTabs {
+  align-items: flex-end;
+  padding-block: 0;
+}
+
+.withTabs .meta {
+  align-self: center;
+}
+
+/* The tab line sits on the header's bottom border. */
+.tabs {
+  min-width: 0;
+  margin-bottom: calc(-1 * var(--border-divider));
+}
+
+.title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  margin-inline-start: auto;
+}
+
+.language {
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-body);
+}
+
+.body {
+  min-width: 0;
+  overflow: auto;
+}
+
+.body:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--border-focus-width));
+}
+
+.pre {
+  margin: 0;
+  padding: var(--space-inset-lg);
+  width: max-content;
+  min-width: 100%;
+  color: var(--text-primary);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+  font-weight: var(--type-weight-code);
+  line-height: var(--type-line-body);
+  white-space: pre;
+  tab-size: 2;
+}
+
+.pre code {
+  font: inherit;
+}
+
+
+.wrap .pre {
+  width: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.numbered {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-inline-lg);
+}
+
+.line {
+  display: contents;
+}
+
+.number {
+  color: var(--text-muted);
+  text-align: end;
+  user-select: none;
+}
+
+/* No header: Copy gets its own column so scrolled text never runs under it. */
+.bare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.floatingCopy {
+  padding: var(--space-inset-md) var(--space-inset-md) 0 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

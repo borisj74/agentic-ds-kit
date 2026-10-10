@@ -23,6 +23,7 @@ export * from "../ui/Count";
 export * from "../ui/Cell";
 export * from "../ui/Chat";
 export * from "../ui/Checkbox";
+export * from "../ui/CodeSnippet";
 export * from "../ui/Collapsible";
 export * from "../ui/ColorPicker";
 export * from "../ui/Command";
