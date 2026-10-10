@@ -115,14 +115,14 @@
       "Must have associated label via Field or ariaLabel",
       "Each option needs a human-readable label",
       "Selected options show a Check, or kit Checkbox when itemCheck=checkbox",
-      "Overflow count uses kit Badge on the trigger, not Tag"
+      "Overflow count is kit Badge on the trigger"
     ]
   },
   "doNot": [
     "Do not use a native select",
     "Do not use kit Button as the Select trigger \u2014 Select uses DropdownMenu triggerStyle=field",
     "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, MultiSelect, or Combobox",
-    "Do not invent Tag for overflow \u2014 use kit Badge",
+    "Do not invent a local overflow chip \u2014 overflow count is kit Badge",
     "Do not use raw hex",
     "Do not use for navigation \u2014 use AppNav or links"
   ],

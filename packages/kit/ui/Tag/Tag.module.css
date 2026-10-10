@@ -1,0 +1,145 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  box-sizing: border-box;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-control-lg);
+  background-color: var(--surface-muted);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-heading);
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--type-size-caption);
+}
+
+.md {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--type-size-label);
+}
+
+.lg {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--type-size-body-sm);
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+label.text {
+  cursor: pointer;
+}
+
+.checkSlot,
+.avatarSlot {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Kit Avatar has no size below sm; the slot scales it to the Tag's line.
+   Card surface so the fallback circle shows on the muted Tag. */
+.avatarSlot > span {
+  font-size: var(--type-size-caption);
+  background-color: var(--surface-card);
+}
+
+.sm .avatarSlot > span {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.md .avatarSlot > span {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.lg .avatarSlot > span {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.dot {
+  flex-shrink: 0;
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.dot-neutral {
+  background-color: var(--text-secondary);
+}
+
+.dot-success {
+  background-color: var(--status-success);
+}
+
+.dot-warning {
+  background-color: var(--status-warning);
+}
+
+.dot-danger {
+  background-color: var(--status-danger);
+}
+
+.dot-info {
+  background-color: var(--status-info);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled label.text {
+  cursor: not-allowed;
+}
+
+/* The Tag already dims as a whole; keep the nested Checkbox from dimming twice. */
+.tag.disabled .checkSlot > * {
+  opacity: 1;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control-lg);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  line-height: 0;
+  transition: color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.remove:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.remove:disabled {
+  cursor: not-allowed;
+}
+
+.remove:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .remove {
+    transition: none;
+  }
+}

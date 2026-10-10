@@ -60,6 +60,7 @@ import { Spinner } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { Table } from "agentic-ds-kit";
 import { Tabs } from "agentic-ds-kit";
+import { Tag } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
 import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
@@ -536,6 +537,17 @@ export function GalleryPreview({ id }: { id: string }) {
             ]}
           />
         </Stage>
+      );
+    case "tag":
+      return (
+        <div className={previewStyles.chipRow}>
+          <Tag removable onRemove={noop}>
+            Design
+          </Tag>
+          <Tag selectable defaultSelected count={4}>
+            Engineering
+          </Tag>
+        </div>
       );
     case "textarea":
       return (

@@ -63,6 +63,7 @@ export const COMPONENT_ITEMS = [
   "switch",
   "table",
   "tabs",
+  "tag",
   "textarea",
   "thinkinganimation",
   "timeline",

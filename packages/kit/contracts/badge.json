@@ -1,16 +1,17 @@
 {
   "id": "badge",
   "status": "stable",
-  "intent": "Compact status or category pill.",
+  "intent": "Compact read-only status or category pill set by the system.",
   "useWhen": [
     "Status badges on table rows or cards",
-    "Filtering labels and category markers"
+    "Category markers set by the system (user-managed labels use Tag)"
   ],
   "doNotUseWhen": [
     "Primary actions — use Button",
     "Clickable navigation — use AppNav links",
     "People or faces — use Avatar",
-    "Long sentences — use body text"
+    "Long sentences — use body text",
+    "Labels the user applies, removes, or selects — use Tag"
   ],
   "props": {
     "children": {
@@ -49,7 +50,7 @@
     "onRemove": {
       "type": "function",
       "required": false,
-      "note": "used when removable"
+      "note": "used when removable. Kept for dismissible filters; prefer kit Tag for user-removable labels"
     }
   },
   "tokens": [
@@ -84,7 +85,7 @@
     ]
   },
   "doNot": [
-    "Do not invent local Badge or Tag",
+    "Do not invent a local Badge; for user-managed labels use kit Tag",
     "Do not use raw hex",
     "Do not use Badge as a button except the remove control"
   ],

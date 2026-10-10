@@ -280,6 +280,13 @@
     "status": "stable"
   },
   {
+    "id": "tag",
+    "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
+    "group": "component",
+    "path": "contracts/tag.json",
+    "status": "stable"
+  },
+  {
     "id": "badge",
     "intent": "Compact status or category pill.",
     "group": "component",
