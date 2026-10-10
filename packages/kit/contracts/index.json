@@ -147,6 +147,13 @@
     "status": "stable"
   },
   {
+    "id": "colorpicker",
+    "intent": "Inline colour picker: saturation/brightness area, hue, optional opacity, hex input, and preset swatches.",
+    "group": "component",
+    "path": "contracts/colorpicker.json",
+    "status": "stable"
+  },
+  {
     "id": "command",
     "intent": "Searchable command menu for quick actions.",
     "group": "component",

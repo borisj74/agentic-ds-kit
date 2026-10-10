@@ -1,0 +1,165 @@
+/* Chrome only. The picked colour and the colour-model gradients are inline style (user data). */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  width: 100%;
+  max-width: 20rem;
+  min-width: 0;
+}
+
+.root[data-disabled] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.root[data-disabled] .area,
+.root[data-disabled] .channel {
+  cursor: not-allowed;
+}
+
+.area {
+  position: relative;
+  height: 10rem;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  cursor: crosshair;
+  touch-action: none;
+  outline: none;
+}
+
+.area:focus-visible,
+.channel:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.areaThumb,
+.channelThumb {
+  position: absolute;
+  box-sizing: border-box;
+  width: 1rem;
+  height: 1rem;
+  border: var(--border-width-medium) solid var(--surface-card);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-raised-sm);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.channel {
+  position: relative;
+  height: 0.75rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+
+.channelFill {
+  position: absolute;
+  inset: 0;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: inherit;
+}
+
+.channelThumb {
+  top: 50%;
+  background: var(--surface-card);
+}
+
+/* Transparency checkerboard under alpha previews: two semantic surfaces. */
+.checkered {
+  background-color: var(--surface-card);
+  background-image: conic-gradient(
+    var(--fill-subtle) 25%,
+    var(--surface-card) 0 50%,
+    var(--fill-subtle) 0 75%,
+    var(--surface-card) 0
+  );
+  background-size: var(--space-2) var(--space-2);
+}
+
+.hexRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-inline-sm);
+}
+
+.preview {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.5rem;
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+}
+
+.previewFill {
+  position: absolute;
+  inset: 0;
+}
+
+.hexInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.alphaText {
+  align-self: center;
+  flex-shrink: 0;
+  min-width: 2.75rem;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  color: var(--text-secondary);
+}
+
+.message {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+  color: var(--text-danger);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-sm);
+}
+
+.swatch {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: outline-color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.swatch[aria-checked="true"] {
+  outline: var(--border-width-medium) solid var(--border-strong);
+  outline-offset: var(--space-px);
+}
+
+.swatch:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.swatch:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swatch {
+    transition: none;
+  }
+}
