@@ -28,6 +28,7 @@ import { Skeleton } from "agentic-ds-kit";
 import { DataGrid } from "agentic-ds-kit";
 import { DataTable } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
+import { Divider } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { FieldSet } from "agentic-ds-kit";
@@ -309,6 +310,12 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "datepicker":
       return <DatePicker id="gallery-date" size="sm" placeholder="Pick date" />;
+    case "divider":
+      return (
+        <Stage variant="wide">
+          <Divider label="or" />
+        </Stage>
+      );
     case "drawer":
       return (
         <Button size="sm" variant="secondary">

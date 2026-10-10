@@ -175,6 +175,13 @@
     "status": "stable"
   },
   {
+    "id": "divider",
+    "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action.",
+    "group": "component",
+    "path": "contracts/divider.json",
+    "status": "stable"
+  },
+  {
     "id": "calendar",
     "intent": "A full calendar of events by month, week, day, or list. Browse dates, filter calendars, add / edit / delete events.",
     "group": "component",

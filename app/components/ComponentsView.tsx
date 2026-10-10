@@ -25,6 +25,7 @@ import { ConveyorDoc } from "./ConveyorDoc";
 import { DataGridDoc } from "./DataGridDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
+import { DividerDoc } from "./DividerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
@@ -103,6 +104,7 @@ const TITLES: Record<string, string> = {
   datagrid: "DataGrid",
   datatable: "DataTable",
   datepicker: "DatePicker",
+  divider: "Divider",
   headercell: "HeaderCell",
   helppopover: "HelpPopover",
   radiogroup: "RadioGroup",
@@ -215,6 +217,8 @@ function resolveHash(hash: string): string {
     placeholder: "skeleton",
     gauge: "meter",
     countbadge: "count",
+    separator: "divider",
+    hr: "divider",
   };
   return aliases[hash] ?? hash;
 }
@@ -263,6 +267,7 @@ export function ComponentsView() {
   if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
+  if (resolved === "divider") return <DividerDoc />;
   if (resolved === "modal") return <ModalDoc />;
   if (resolved === "modalcard") return <ModalCardDoc />;
   if (resolved === "navigationmenu") return <NavigationMenuDoc />;
