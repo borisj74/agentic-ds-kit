@@ -9,7 +9,7 @@
     "Do not skip Field wrappers on labeled inputs",
     "Do not wrap RadioGroup in Field — it has its own legend",
     "Do not add more than one primary Button",
-    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav."
+    "Do not invent a padded app shell or a narrow-screen menu. Render this pattern as the children of AppShellPattern (app-shell): AppHeader over SideNav when wide, Menu Button + left Drawer below 64rem."
   ],
   "snippet": "<InviteMembersPattern />"
 }
