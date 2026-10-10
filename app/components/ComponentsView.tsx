@@ -20,6 +20,7 @@ import { CellDoc } from "./CellDoc";
 import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
+import { ColorPickerDoc } from "./ColorPickerDoc";
 import { CommandDoc } from "./CommandDoc";
 import { ConveyorDoc } from "./ConveyorDoc";
 import { DataGridDoc } from "./DataGridDoc";
@@ -99,6 +100,7 @@ const TITLES: Record<string, string> = {
   switch: "Switch",
   checkbox: "Checkbox",
   collapsible: "Collapsible",
+  colorpicker: "ColorPicker",
   command: "Command",
   conveyor: "Conveyor",
   count: "Count",
@@ -216,6 +218,9 @@ function resolveHash(hash: string): string {
     "file-upload": "fileupload",
     upload: "fileupload",
     dropzone: "fileupload",
+    "color-picker": "colorpicker",
+    "colour-picker": "colorpicker",
+    colourpicker: "colorpicker",
     "link-list": "linklist",
     quicklinks: "linklist",
     skeleton: "skeleton",
@@ -266,6 +271,7 @@ export function ComponentsView() {
   if (resolved === "chat") return <ChatDoc />;
   if (resolved === "checkbox") return <CheckboxDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
+  if (resolved === "colorpicker") return <ColorPickerDoc />;
   if (resolved === "command") return <CommandDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
   if (resolved === "count") return <CountDoc />;
