@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { SignInDemo } from "../_components/SignInDemo";
 import styles from "./patterns.module.css";
 import playground from "../playground.module.css";
 
-/** Patterns that render as a whole page, outside the DashboardDemo app shell. */
-const STANDALONE = new Set(["sign-in"]);
+/** Patterns that render on their own, outside the DashboardDemo app shell. */
+const STANDALONE = new Set(["sign-in", "app-shell"]);
 
 function readStandalone() {
   const hash = window.location.hash.replace(/^#/, "");
@@ -43,7 +44,14 @@ export default function PatternsPage() {
           <div id="insights" />
           <div id="empty" />
           <div id="sign-in" />
-          {standalone === "sign-in" ? <SignInDemo /> : <DashboardDemo />}
+          <div id="app-shell" />
+          {standalone === "sign-in" ? (
+            <SignInDemo />
+          ) : standalone === "app-shell" ? (
+            <AppShellDemo />
+          ) : (
+            <DashboardDemo />
+          )}
         </div>
       </div>
     </div>

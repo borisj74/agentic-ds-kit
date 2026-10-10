@@ -1,0 +1,29 @@
+/* Holds SideNav in the layout-app first column; stretches it to full height. */
+.rail {
+  display: flex;
+  min-height: 0;
+}
+
+/* Below --grid-breakpoint-md (media queries cannot read var()). Only covers the
+   first paint before hydration; after it, the component drops the rail. */
+@media (width < 64rem) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail {
+    display: none;
+  }
+}
+
+/* Fills the Drawer body so the SideNav footer sits at the bottom, as on the rail. */
+.drawerNav {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Wraps the Menu Button so the shell can return focus to it. */
+.menu {
+  display: contents;
+}

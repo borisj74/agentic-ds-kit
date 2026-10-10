@@ -581,6 +581,13 @@
     "status": "stable"
   },
   {
+    "id": "app-shell",
+    "intent": "Responsive product chrome: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer.",
+    "group": "pattern",
+    "path": "contracts/patterns/app-shell.json",
+    "status": "stable"
+  },
+  {
     "id": "sign-in",
     "intent": "Sign-in / sign-up page outside the app shell: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
     "group": "pattern",
