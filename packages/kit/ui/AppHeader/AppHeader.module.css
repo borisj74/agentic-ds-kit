@@ -128,8 +128,10 @@
     grid-area: start;
   }
 
+  /* The bar has no start padding (brand aligns to the rail); inset the stacked search to match the end. */
   .center {
     grid-area: search;
+    padding-inline-start: var(--space-4);
   }
 
   .end {
