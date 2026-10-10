@@ -434,7 +434,7 @@
   background: var(--tone-bg);
   box-shadow: 0 0 0 var(--border-width-thin) var(--surface-card);
   font-size: var(--type-size-caption);
-  line-height: 1.2;
+  line-height: var(--type-line-heading);
 }
 
 .block:hover {

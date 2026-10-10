@@ -7,7 +7,7 @@
   font-family: var(--font-sans);
   font-weight: var(--type-weight-label);
   white-space: nowrap;
-  line-height: 1.25;
+  line-height: var(--type-line-heading);
 }
 
 .sm {
