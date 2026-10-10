@@ -34,7 +34,7 @@
 
 .copy {
   display: grid;
-  gap: 0.15rem;
+  gap: var(--space-stack-2xs);
   min-width: 0;
 }
 
