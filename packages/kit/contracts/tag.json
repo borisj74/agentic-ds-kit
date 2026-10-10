@@ -79,7 +79,7 @@
     "avatar": {
       "type": "object",
       "required": false,
-      "note": "{ name: string; src?: string } — leading kit Avatar sized to the Tag (20/24/32px via space tokens, without growing the Tag); sm shows one initial"
+      "note": "{ name: string; src?: string } — leading kit Avatar sized to the Tag (20/24/32px via space tokens) with an even space.inset.2xs inset when it leads; sm shows one initial"
     },
     "disabled": {
       "type": "boolean",

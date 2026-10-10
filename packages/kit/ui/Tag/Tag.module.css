@@ -47,9 +47,7 @@ label.text {
 }
 
 /* Kit Avatar has no size below sm; the slot sizes it to the Tag.
-   Card surface so the fallback circle shows on the muted Tag.
-   Negative block margin equal to the Tag's block padding lets the avatar
-   fill the Tag's height without making the Tag taller. */
+   Card surface so the fallback circle shows on the muted Tag. */
 .avatarSlot > span {
   font-size: var(--type-size-caption);
   background-color: var(--surface-card);
@@ -58,24 +56,33 @@ label.text {
 .sm .avatarSlot > span {
   width: var(--space-5);
   height: var(--space-5);
-  margin-block: calc(var(--space-1) * -1);
 }
 
 .md .avatarSlot > span {
   width: var(--space-6);
   height: var(--space-6);
-  margin-block: calc(var(--space-1) * -1);
 }
 
 .lg .avatarSlot > span {
   width: var(--space-8);
   height: var(--space-8);
-  margin-block: calc(var(--space-2) * -1);
 }
 
-/* Avatar leads: pull it toward the start edge instead of padding the Tag. */
+/* Avatar leads: an even inset on top, bottom, and start so the avatar sits
+   just off the border instead of the Tag's full text padding. */
 .avatarLead {
+  padding-block: var(--space-inset-2xs);
   padding-inline-start: var(--space-inset-2xs);
+}
+
+/* Avatar after a checkbox: overlap the block padding so the Tag keeps its height. */
+.tag:not(.avatarLead).sm .avatarSlot > span,
+.tag:not(.avatarLead).md .avatarSlot > span {
+  margin-block: calc(var(--space-1) * -1);
+}
+
+.tag:not(.avatarLead).lg .avatarSlot > span {
+  margin-block: calc(var(--space-2) * -1);
 }
 
 .dot {
