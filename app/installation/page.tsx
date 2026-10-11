@@ -22,6 +22,14 @@ const USE_COPY = `import { DashboardPattern } from "@/components/patterns/dashbo
 
 const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 
+const FONTS = `// app/layout.tsx
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+
+const plexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-ibm-plex-sans" });
+const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
+
+// <html className={\`\${plexSans.variable} \${plexMono.variable}\`}>`;
+
 const NEW_APP = `mkdir my-app
 cd my-app
 npx create-next-app@latest . --yes
@@ -105,6 +113,20 @@ export default function InstallationPage() {
               harmless. AppNav uses next/link — Next is an optional peer for that component only.
               Dark mode and brand color are on the Theming page.
             </p>
+          </div>
+        </Section>
+
+        <Section
+          title="Fonts"
+          description="The kit sets the body font but ships no font files."
+        >
+          <div className={playground.stack}>
+            <p className={playground.body}>
+              A kit import sets body font-family to var(--font-sans), with zero specificity so your
+              own body rule wins. Without IBM Plex loaded it falls back to system-ui. Load Plex with
+              next/font and the variables the tokens read, or override --font-sans in :root.
+            </p>
+            <CodeBlock code={FONTS} />
           </div>
         </Section>
 
