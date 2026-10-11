@@ -1,8 +1,10 @@
 "use client";
 
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { LucideByName } from "../Button/lucideName";
 import type { InputOTPPattern, InputOTPProps, InputOTPSize } from "./InputOTP.types";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./InputOTP.module.css";
 
 export type { InputOTPProps, InputOTPSize, InputOTPPattern } from "./InputOTP.types";
@@ -41,8 +43,12 @@ export function InputOTP({
   name,
   autoComplete = "one-time-code",
   ariaLabel,
+  className,
+  ref,
+  ...rest
 }: InputOTPProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const setInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
   const isControlled = typeof value === "string";
   const [uncontrolled, setUncontrolled] = useState(() =>
     sanitize(defaultValue, pattern, length),
@@ -72,13 +78,14 @@ export function InputOTP({
 
   return (
     <div
-      className={`${styles.root} ${styles[size]}`}
+      className={cx(styles.root, styles[size], className)}
       data-disabled={disabled || undefined}
       data-error={error || undefined}
       onClick={focusInput}
     >
       <input
-        ref={inputRef}
+        {...rest}
+        ref={setInputRef}
         id={id}
         name={name}
         className={styles.native}

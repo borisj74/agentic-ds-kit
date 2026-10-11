@@ -46,6 +46,12 @@
       "note": "Called with the next value or value array."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "fill.brand",
     "fill.subtle",

@@ -1,5 +1,6 @@
 import type { ButtonProps } from "./Button.types";
 import { LucideByName } from "./lucideName";
+import { cx } from "../shared/cx";
 import styles from "./Button.module.css";
 
 export type { ButtonProps, ButtonSize, ButtonVariant, ButtonType, ButtonShape } from "./Button.types";
@@ -21,6 +22,9 @@ export function Button({
   draggable,
   onDragStart,
   onDragEnd,
+  className,
+  ref,
+  ...rest
 }: ButtonProps) {
   const hasLabel = Boolean(children && children.trim());
   const iconOnly = !hasLabel && Boolean(iconStart || iconEnd);
@@ -28,6 +32,8 @@ export function Button({
 
   return (
     <button
+      {...rest}
+      ref={ref}
       type={type}
       disabled={disabled}
       draggable={draggable}
@@ -36,16 +42,15 @@ export function Button({
       onClick={onClick}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      className={[
+      className={cx(
         styles.button,
         styles[size],
         styles[variant],
-        shape === "pill" ? styles.pill : "",
-        block ? styles.block : "",
-        iconOnly ? styles.iconOnly : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+        shape === "pill" && styles.pill,
+        block && styles.block,
+        iconOnly && styles.iconOnly,
+        className,
+      )}
     >
       <LucideByName name={iconStart} size={iconPx} className={styles.icon} />
       {hasLabel ? <span>{children}</span> : null}

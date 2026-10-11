@@ -74,6 +74,12 @@
   "colorData": {
     "note": "The picked colour is user data, not a design decision. It is painted with inline style on the area hue, the thumbs, the preview, the opacity track, and the swatches. The hue spectrum and the white/black area overlays are built from the component's own HSV math, never literal colours in CSS. This is not a token violation. All chrome — borders, focus rings, radius, thumb rings, checkerboard, text, spacing — uses the semantic tokens listed under tokens."
   },
+  "passthrough": {
+    "root": "div[role=group]",
+    "ref": "hex input",
+    "className": "root",
+    "rest": "hex input"
+  },
   "tokens": [
     "border.faint",
     "border.strong",

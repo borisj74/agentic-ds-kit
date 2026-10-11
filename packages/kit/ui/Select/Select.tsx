@@ -46,6 +46,9 @@ export function Select({
   name,
   ariaLabel,
   describedBy,
+  className,
+  ref,
+  ...rest
 }: SelectProps) {
   const [uncontrolled, setUncontrolled] = useState<string | string[]>(() =>
     initialValue(multiple, placeholder, defaultValue, options[0]?.value),
@@ -76,6 +79,9 @@ export function Select({
         <input type="hidden" name={name} value={multiple ? values.join(",") : (values[0] ?? "")} />
       ) : null}
       <DropdownMenu
+        className={className}
+        triggerRef={ref}
+        triggerProps={rest}
         id={id}
         triggerStyle="field"
         trigger={trigger}

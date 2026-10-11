@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { Badge } from "../Badge";
 import type { RadioGroupProps } from "./RadioGroup.types";
+import { cx } from "../shared/cx";
 import styles from "./RadioGroup.module.css";
 
 export type {
@@ -27,6 +28,9 @@ export function RadioGroup({
   disabled = false,
   error,
   hint,
+  className,
+  ref,
+  ...rest
 }: RadioGroupProps) {
   const uid = useId();
   const isControlled = valueProp !== undefined;
@@ -43,7 +47,9 @@ export function RadioGroup({
 
   return (
     <fieldset
-      className={`${styles.group} ${styles[size]} ${layout === "card" ? styles.card : ""}${error ? ` ${styles.groupError}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.group, styles[size], layout === "card" && styles.card, error && styles.groupError, className)}
       disabled={disabled}
       aria-invalid={error ? true : undefined}
       aria-describedby={messageId}

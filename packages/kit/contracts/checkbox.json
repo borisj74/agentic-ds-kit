@@ -74,6 +74,12 @@
       "note": "Field wires hint and error ids onto the input"
     }
   },
+  "passthrough": {
+    "root": "label",
+    "ref": "input[type=checkbox]",
+    "className": "root",
+    "rest": "input[type=checkbox]"
+  },
   "tokens": [
     "text.primary",
     "action.primary",

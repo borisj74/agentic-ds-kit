@@ -98,6 +98,12 @@
       "note": "When there is no Field label, such as search inside DropdownMenu."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "input",
+    "className": "root",
+    "rest": "input"
+  },
   "tokens": [
     "text.primary",
     "text.muted",

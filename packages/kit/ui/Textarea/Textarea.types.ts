@@ -1,6 +1,12 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export type TextareaSize = "sm" | "md" | "lg";
 
-export interface TextareaProps {
+/** Native textarea attributes the kit sets itself (or replaces with its own prop). */
+type TextareaOwnedKeys = "children" | "onChange" | "aria-invalid" | "aria-describedby";
+
+/** The `<textarea>` is both the root and the native control: `ref`, `className` and other attributes all land on it. */
+export interface TextareaProps extends Omit<ComponentPropsWithoutRef<"textarea">, TextareaOwnedKeys> {
   id: string;
   size?: TextareaSize;
   rows?: number;
@@ -13,4 +19,5 @@ export interface TextareaProps {
   name?: string;
   demo?: "hover" | "focus";
   describedBy?: string;
+  ref?: Ref<HTMLTextAreaElement>;
 }

@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Minus } from "lucide-react";
 import type { CheckboxProps } from "./Checkbox.types";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Checkbox.module.css";
 
 export type { CheckboxProps, CheckboxSize } from "./Checkbox.types";
@@ -22,8 +24,12 @@ export function Checkbox({
   onChange,
   name,
   describedBy,
+  className,
+  ref,
+  ...rest
 }: CheckboxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const setInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
   const isControlled = typeof checked === "boolean";
   const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
   const isChecked = isControlled ? checked : uncontrolledChecked;
@@ -36,13 +42,14 @@ export function Checkbox({
 
   return (
     <label
-      className={`${styles.label} ${styles[size]}`}
+      className={cx(styles.label, styles[size], className)}
       htmlFor={id}
       data-disabled={disabled || undefined}
       data-error={error || undefined}
     >
       <input
-        ref={inputRef}
+        {...rest}
+        ref={setInputRef}
         className={styles.input}
         type="checkbox"
         id={id}

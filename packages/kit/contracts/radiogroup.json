@@ -94,6 +94,12 @@
       "note": "card is bordered rows with the radio on the right. Compose Badge via option.badge."
     }
   },
+  "passthrough": {
+    "root": "fieldset",
+    "ref": "fieldset",
+    "className": "root",
+    "rest": "fieldset"
+  },
   "tokens": [
     "text.primary",
     "text.muted",

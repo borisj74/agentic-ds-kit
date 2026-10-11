@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, type KeyboardEvent, type PointerEvent } from "react";
 import type { SliderProps } from "./Slider.types";
+import { cx } from "../shared/cx";
 import styles from "./Slider.module.css";
 
 export type { SliderProps, SliderOrientation } from "./Slider.types";
@@ -42,6 +43,9 @@ export function Slider({
   orientation = "horizontal",
   disabled = false,
   onValueChange,
+  className,
+  ref,
+  ...rest
 }: SliderProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const values = Array.isArray(value) ? value : [value];
@@ -141,7 +145,9 @@ export function Slider({
 
   return (
     <div
-      className={`${styles.root} ${styles[orientation]}${disabled ? ` ${styles.disabled}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[orientation], disabled && styles.disabled, className)}
     >
       <div
         ref={trackRef}

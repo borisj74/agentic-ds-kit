@@ -17,6 +17,7 @@ import {
   type Hsva,
 } from "./color";
 import type { ColorPickerProps, ColorPickerSwatch } from "./ColorPicker.types";
+import { cx } from "../shared/cx";
 import styles from "./ColorPicker.module.css";
 
 export type { ColorPickerProps, ColorPickerSwatch } from "./ColorPicker.types";
@@ -150,6 +151,9 @@ export function ColorPicker({
   error = false,
   ariaLabel = "Colour",
   invalidMessage = "Enter a hex colour like 3366FF.",
+  className,
+  ref,
+  ...rest
 }: ColorPickerProps) {
   const uid = useId();
   const inputId = id ?? `${uid}-hex`;
@@ -281,7 +285,7 @@ export function ColorPicker({
 
   return (
     <div
-      className={styles.root}
+      className={cx(styles.root, className)}
       role="group"
       aria-label={ariaLabel}
       aria-disabled={disabled || undefined}
@@ -351,6 +355,8 @@ export function ColorPicker({
           }}
         >
           <Input
+            {...rest}
+            ref={ref}
             id={inputId}
             size="md"
             start="#"

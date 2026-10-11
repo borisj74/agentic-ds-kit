@@ -16,6 +16,12 @@
     "description": { "type": "string", "required": false },
     "children": { "type": "slot", "required": true, "note": "kit Field, Checkbox, Switch, or RadioGroup" }
   },
+  "passthrough": {
+    "root": "fieldset",
+    "ref": "fieldset",
+    "className": "root",
+    "rest": "fieldset"
+  },
   "tokens": ["text.primary", "text.muted"],
   "a11y": {
     "element": "fieldset",

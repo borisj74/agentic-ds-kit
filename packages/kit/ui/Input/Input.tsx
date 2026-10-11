@@ -1,5 +1,6 @@
 import { LucideByName } from "../Button/lucideName";
 import type { InputProps } from "./Input.types";
+import { cx } from "../shared/cx";
 import controlStyles from "../shared/controls.module.css";
 import styles from "./Input.module.css";
 
@@ -25,12 +26,21 @@ export function Input({
   demo,
   describedBy,
   ariaLabel,
+  className,
+  ref,
+  ...rest
 }: InputProps) {
   const iconPx = ICON_PX[size];
 
   return (
     <div
-      className={`${controlStyles.control} ${size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd} ${error ? controlStyles.controlError : ""} ${styles.shell}`}
+      className={cx(
+        controlStyles.control,
+        size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd,
+        error && controlStyles.controlError,
+        styles.shell,
+        className,
+      )}
       data-disabled={disabled || undefined}
       data-demo={disabled ? undefined : demo}
     >
@@ -41,6 +51,8 @@ export function Input({
         </span>
       ) : null}
       <input
+        {...rest}
+        ref={ref}
         id={id}
         name={name}
         type={type}

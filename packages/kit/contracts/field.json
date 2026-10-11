@@ -34,6 +34,12 @@
       "required": true
     }
   },
+  "passthrough": {
+    "root": "div[role=group]",
+    "ref": "div[role=group]",
+    "className": "root",
+    "rest": "div[role=group]"
+  },
   "tokens": ["text.primary", "text.muted", "text.danger"],
   "a11y": {
     "element": "div",

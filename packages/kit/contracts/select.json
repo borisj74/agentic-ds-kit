@@ -109,6 +109,12 @@
       "note": "Kit Input at the top of the panel. Filters option labels. For a long fixed list. Not Command."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "trigger button",
+    "className": "root",
+    "rest": "trigger button"
+  },
   "tokens": [
     "text.primary",
     "text.muted",

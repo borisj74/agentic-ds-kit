@@ -5,6 +5,7 @@ import { CircleAlert, CircleCheck, File as FileIcon, Upload } from "lucide-react
 import { Button } from "../Button";
 import { Progress } from "../Progress";
 import type { FileUploadItem, FileUploadProps } from "./FileUpload.types";
+import { cx } from "../shared/cx";
 import styles from "./FileUpload.module.css";
 
 export type { FileUploadProps, FileUploadItem, FileUploadStatus } from "./FileUpload.types";
@@ -121,6 +122,9 @@ export function FileUpload({
   onRetry,
   describedBy,
   error = false,
+  className,
+  ref,
+  ...rest
 }: FileUploadProps) {
   const uid = useId();
   const zoneId = id ?? `${uid}-zone`;
@@ -168,17 +172,13 @@ export function FileUpload({
   const describedByIds = [hintId, describedBy].filter(Boolean).join(" ");
 
   return (
-    <div className={styles.root}>
+    <div className={cx(styles.root, className)}>
       <button
+        {...rest}
+        ref={ref}
         type="button"
         id={zoneId}
-        className={[
-          styles.zone,
-          dragging ? styles.dragging : "",
-          error ? styles.invalid : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
+        className={cx(styles.zone, dragging && styles.dragging, error && styles.invalid)}
         disabled={disabled}
         aria-disabled={disabled || undefined}
         aria-describedby={describedByIds}

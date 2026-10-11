@@ -61,6 +61,12 @@
       "note": "Field wires hint and error ids onto the switch"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "button[role=switch]",
+    "className": "root",
+    "rest": "button[role=switch]"
+  },
   "tokens": [
     "text.primary",
     "text.disabled",

@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export type FileUploadStatus = "uploading" | "done" | "error";
 
 export interface FileUploadItem {
@@ -12,7 +14,24 @@ export interface FileUploadItem {
   error?: string;
 }
 
-export interface FileUploadProps {
+/** Native button attributes the kit sets itself (or replaces with its own prop). */
+type FileUploadOwnedKeys =
+  | "children"
+  | "type"
+  | "onClick"
+  | "onDragEnter"
+  | "onDragOver"
+  | "onDragLeave"
+  | "onDrop"
+  | "aria-disabled"
+  | "aria-describedby"
+  | "aria-invalid";
+
+/**
+ * The drop zone `<button>` is the focusable control: `ref` and other native attributes go to it.
+ * `className` goes to the root wrapper. The hidden file `<input>` stays kit-owned.
+ */
+export interface FileUploadProps extends Omit<ComponentPropsWithoutRef<"button">, FileUploadOwnedKeys> {
   /** Drop zone button id. Pass the same value as Field htmlFor. */
   id?: string;
   accept?: string;
@@ -28,4 +47,5 @@ export interface FileUploadProps {
   describedBy?: string;
   /** Set by Field when it has an error. */
   error?: boolean;
+  ref?: Ref<HTMLButtonElement>;
 }

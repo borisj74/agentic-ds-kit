@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import type { SwitchProps } from "./Switch.types";
+import { cx } from "../shared/cx";
 import styles from "./Switch.module.css";
 
 export type { SwitchProps, SwitchSize } from "./Switch.types";
@@ -16,6 +17,9 @@ export function Switch({
   defaultChecked = false,
   onChange,
   describedBy,
+  className,
+  ref,
+  ...rest
 }: SwitchProps) {
   const generatedId = useId();
   const switchId = id ?? generatedId;
@@ -39,7 +43,7 @@ export function Switch({
 
   return (
     <div
-      className={`${styles.switch} ${styles[size]}${label ? ` ${styles.labeled}` : ""}`}
+      className={cx(styles.switch, styles[size], label && styles.labeled, className)}
       data-disabled={disabled || undefined}
     >
       {label ? (
@@ -48,6 +52,8 @@ export function Switch({
         </label>
       ) : null}
       <button
+        {...rest}
+        ref={ref}
         type="button"
         role="switch"
         id={switchId}

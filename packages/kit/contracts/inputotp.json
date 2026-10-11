@@ -83,6 +83,12 @@
       "note": "required when not wrapped in Field"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "input",
+    "className": "root",
+    "rest": "input"
+  },
   "tokens": [
     "text.primary",
     "icon.muted",
