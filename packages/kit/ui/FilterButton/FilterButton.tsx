@@ -3,6 +3,7 @@
 import { LucideByName } from "../Button/lucideName";
 import { Count } from "../Count";
 import type { FilterButtonProps } from "./FilterButton.types";
+import { cx } from "../shared/cx";
 import styles from "./FilterButton.module.css";
 
 export type { FilterButtonProps, FilterButtonSize, FilterButtonToggle } from "./FilterButton.types";
@@ -20,18 +21,20 @@ export function FilterButton({
   hasDropdown = true,
   children,
   onClick,
+  className: userClassName,
+  ref,
+  ...rest
 }: FilterButtonProps) {
   const state = toggle ?? (count > 0 || value ? "on" : "none");
   const split = hasDropdown && state !== "none" && Boolean(onToggle);
-  const className = [
+  const className = cx(
     styles.filter,
     styles[size],
-    state === "on" ? styles.applied : "",
-    state === "off" ? styles.off : "",
-    split ? styles.split : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    state === "on" && styles.applied,
+    state === "off" && styles.off,
+    split && styles.split,
+    userClassName,
+  );
 
   const label = (
     <span className={styles.main}>
@@ -64,6 +67,8 @@ export function FilterButton({
   if (!hasDropdown) {
     return (
       <button
+        {...rest}
+        ref={ref}
         type="button"
         className={className}
         disabled={disabled}
@@ -78,7 +83,15 @@ export function FilterButton({
   if (split) {
     return (
       <span className={className}>
-        <button type="button" className={styles.part} disabled={disabled} aria-pressed={state === "on"} onClick={onToggle}>
+        <button
+          {...rest}
+          ref={ref}
+          type="button"
+          className={styles.part}
+          disabled={disabled}
+          aria-pressed={state === "on"}
+          onClick={onToggle}
+        >
           {label}
         </button>
         <button
@@ -98,6 +111,8 @@ export function FilterButton({
 
   return (
     <button
+      {...rest}
+      ref={ref}
       type="button"
       className={className}
       disabled={disabled}

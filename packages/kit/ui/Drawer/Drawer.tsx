@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LucideByName } from "../Button/lucideName";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import type { DrawerProps } from "./Drawer.types";
 import styles from "./Drawer.module.css";
 
@@ -26,10 +28,14 @@ export function Drawer({
   onClose,
   children,
   footer,
+  className,
+  ref,
+  ...rest
 }: DrawerProps) {
   const titleId = useId();
   const descriptionId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const setPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -103,12 +109,13 @@ export function Drawer({
       }}
     >
       <div
-        ref={panelRef}
+        {...rest}
+        ref={setPanelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
-        className={`${styles.panel} ${styles[side]} ${SIZE_CLASS[size]}`}
+        className={cx(styles.panel, styles[side], SIZE_CLASS[size], className)}
         tabIndex={-1}
       >
         <header className={styles.header}>

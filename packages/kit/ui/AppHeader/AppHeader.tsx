@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { Input } from "../Input";
 import type { AppHeaderProps } from "./AppHeader.types";
+import { cx } from "../shared/cx";
 import styles from "./AppHeader.module.css";
 
 export type { AppHeaderProps, AppHeaderRadius } from "./AppHeader.types";
@@ -17,9 +18,11 @@ export function AppHeader({
   searchShortcut,
   searchId,
   actions,
-  className = "",
+  className,
   ariaLabel,
   radius = "none",
+  ref,
+  ...rest
 }: AppHeaderProps) {
   const generatedId = useId();
   const inputId = searchId ?? generatedId;
@@ -28,7 +31,9 @@ export function AppHeader({
 
   return (
     <header
-      className={`${styles.header} ${radius === "md" ? styles.radiusMd : ""} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(styles.header, radius === "md" && styles.radiusMd, className)}
       aria-label={label}
       data-search={search ? undefined : "false"}
     >

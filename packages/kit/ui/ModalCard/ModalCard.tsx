@@ -1,38 +1,40 @@
 "use client";
 
-import { forwardRef, useId } from "react";
+import { useId } from "react";
 import { LucideByName } from "../Button/lucideName";
 import type { ModalCardProps } from "./ModalCard.types";
+import { cx } from "../shared/cx";
 import styles from "./ModalCard.module.css";
 
 export type { ModalCardProps, ModalCardSize } from "./ModalCard.types";
 
-export const ModalCard = forwardRef<HTMLDivElement, ModalCardProps>(function ModalCard(
-  {
-    title,
-    description,
-    size = "md",
-    onClose,
-    children,
-    footer,
-    role = "group",
-    tabIndex,
-    "aria-modal": ariaModal,
-  },
+export function ModalCard({
+  title,
+  description,
+  size = "md",
+  onClose,
+  children,
+  footer,
+  role = "group",
+  tabIndex,
+  "aria-modal": ariaModal,
+  className,
   ref,
-) {
+  ...rest
+}: ModalCardProps) {
   const titleId = useId();
   const descriptionId = useId();
 
   return (
     <div
+      {...rest}
       ref={ref}
       role={role}
       tabIndex={tabIndex}
       aria-modal={ariaModal}
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
-      className={`${styles.card} ${styles[size]}`}
+      className={cx(styles.card, styles[size], className)}
     >
       <header className={styles.header}>
         <div className={styles.copy}>
@@ -55,4 +57,4 @@ export const ModalCard = forwardRef<HTMLDivElement, ModalCardProps>(function Mod
       {footer ? <div className={styles.footer}>{footer}</div> : null}
     </div>
   );
-});
+}

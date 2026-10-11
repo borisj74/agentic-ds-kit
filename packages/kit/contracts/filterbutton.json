@@ -65,6 +65,12 @@
       "note": "Opens the options: the whole button when nothing is set, or the chevron once it splits."
     }
   },
+  "passthrough": {
+    "root": "button (span when split)",
+    "ref": "main button (toggle half when split)",
+    "className": "root",
+    "rest": "main button (toggle half when split)"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

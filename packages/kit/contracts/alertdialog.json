@@ -58,6 +58,13 @@
       "required": true
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "alertdialog panel",
+    "className": "alertdialog panel",
+    "rest": "alertdialog panel",
+    "note": "Not the portal or overlay. Focus trap, Escape, scroll lock and focus return are kit-owned."
+  },
   "tokens": [
     "text.primary",
     "text.muted",

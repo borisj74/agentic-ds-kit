@@ -34,6 +34,13 @@
       "note": "(id: string) => void"
     }
   },
+  "passthrough": {
+    "root": "nav",
+    "ref": "nav",
+    "className": "root",
+    "rest": "nav",
+    "note": "aria-label defaults to \"Site\" and can be overridden."
+  },
   "tokens": [
     "text.primary",
     "surface.muted",

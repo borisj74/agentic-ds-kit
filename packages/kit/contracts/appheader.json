@@ -93,6 +93,12 @@
       "note": "Bar corners. none is a flush full-bleed bar. md is radius-surface-md for an inset floating bar."
     }
   },
+  "passthrough": {
+    "root": "header",
+    "ref": "header",
+    "className": "root",
+    "rest": "header"
+  },
   "tokens": [
     "surface.card",
     "text.primary",

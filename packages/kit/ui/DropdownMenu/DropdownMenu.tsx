@@ -19,6 +19,7 @@ import { Input } from "../Input";
 import { Tag } from "../Tag";
 import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import type { DropdownMenuGroup, DropdownMenuItem, DropdownMenuProps } from "./DropdownMenu.types";
 import styles from "./DropdownMenu.module.css";
 
@@ -64,8 +65,10 @@ export function DropdownMenu({
   onTriggerDragStart,
   onTriggerDragEnd,
   className,
+  ref,
   triggerRef,
   triggerProps,
+  ...rest
 }: DropdownMenuProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -84,6 +87,8 @@ export function DropdownMenu({
   const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState("");
   const searchId = `${uid}-search`;
+  const setTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [triggerRef, ref]);
+  const passthrough = { ...(triggerProps as typeof rest | undefined), ...rest };
 
   const visibleGroups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -583,8 +588,8 @@ export function DropdownMenu({
             ) : null}
           </div>
           <button
-            {...triggerProps}
-            ref={triggerRef}
+            {...passthrough}
+            ref={setTriggerRef}
             type="button"
             id={id}
             data-menu-trigger=""
@@ -610,8 +615,8 @@ export function DropdownMenu({
         </div>
       ) : fieldTrigger ? (
         <button
-          {...triggerProps}
-          ref={triggerRef}
+          {...passthrough}
+          ref={setTriggerRef}
           type="button"
           id={id}
           disabled={disabled}
@@ -635,6 +640,8 @@ export function DropdownMenu({
         </button>
       ) : navTrigger ? (
         <button
+          {...passthrough}
+          ref={setTriggerRef}
           type="button"
           id={id}
           disabled={disabled}
@@ -652,6 +659,9 @@ export function DropdownMenu({
         </button>
       ) : hasLabel ? (
         <Button
+          {...passthrough}
+          ref={setTriggerRef}
+          id={id}
           variant={variant}
           size={size}
           iconStart={iconStart}
@@ -668,6 +678,9 @@ export function DropdownMenu({
         </Button>
       ) : (
         <Button
+          {...passthrough}
+          ref={setTriggerRef}
+          id={id}
           variant={variant}
           size={size}
           iconStart={iconStart}

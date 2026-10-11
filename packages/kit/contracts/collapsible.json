@@ -37,6 +37,12 @@
       "note": "(open: boolean) => void"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "text.primary",
     "icon.muted",

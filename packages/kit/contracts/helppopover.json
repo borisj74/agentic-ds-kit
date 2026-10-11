@@ -57,6 +57,13 @@
       "note": "One focusable trigger. Gets aria-describedby. Typical: kit Button variant=tertiary size=sm iconStart=CircleHelp ariaLabel=Help. Field help composes this."
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "floating panel",
+    "className": "floating panel",
+    "rest": "floating panel",
+    "note": "Panel is portaled and mounted only while open, so ref is null while closed. style is kit-owned (positioning)."
+  },
   "tokens": [
     "text.primary",
     "text.muted",

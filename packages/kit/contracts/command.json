@@ -49,6 +49,12 @@
       "note": "Accessible name on the combobox input"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

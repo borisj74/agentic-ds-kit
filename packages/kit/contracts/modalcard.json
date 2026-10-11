@@ -47,6 +47,12 @@
       "note": "kit Buttons / ButtonGroup"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "card div",
+    "className": "root",
+    "rest": "card div"
+  },
   "tokens": [
     "surface.page",
     "surface.muted",

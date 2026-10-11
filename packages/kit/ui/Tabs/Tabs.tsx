@@ -2,6 +2,7 @@
 
 import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import type { TabsProps } from "./Tabs.types";
+import { cx } from "../shared/cx";
 import styles from "./Tabs.module.css";
 
 export type { TabsProps, TabItem, TabsSize, TabsVariant } from "./Tabs.types";
@@ -21,6 +22,9 @@ export function Tabs({
   size = "md",
   variant = "line",
   ariaLabel = "Tabs",
+  className,
+  ref,
+  ...rest
 }: TabsProps) {
   const baseId = useId();
   const isControlled = value !== undefined;
@@ -88,7 +92,9 @@ export function Tabs({
 
   return (
     <div
-      className={`${styles.tabs} ${styles[size]} ${styles[variant]}${showPanel ? "" : ` ${styles.listOnly}`}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.tabs, styles[size], styles[variant], !showPanel && styles.listOnly, className)}
     >
       <div
         ref={listRef}

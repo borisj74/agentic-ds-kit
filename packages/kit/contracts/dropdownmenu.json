@@ -176,6 +176,13 @@
       "default": "Search"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "trigger button",
+    "className": "root",
+    "rest": "trigger button",
+    "note": "ref goes to the always-mounted trigger (same as Select); the menu panel mounts only while open and stays kit-owned."
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

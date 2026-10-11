@@ -7,14 +7,24 @@ import {
   useId,
   useRef,
   useState,
+  type ComponentPropsWithoutRef,
   type ReactElement,
   type ReactNode,
+  type Ref,
 } from "react";
+import { cx } from "../shared/cx";
 import styles from "./Tooltip.module.css";
 
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
-export interface TooltipProps {
+/** Native span attributes the kit sets itself on the bubble (or replaces with its own prop). */
+type TooltipOwnedKeys = "children" | "content" | "className" | "id" | "role";
+
+/**
+ * `ref` and other native attributes go to the `role="tooltip"` bubble.
+ * `className` stays on the wrapper around the trigger (its meaning before escape hatches).
+ */
+export interface TooltipProps extends Omit<ComponentPropsWithoutRef<"span">, TooltipOwnedKeys> {
   content: string;
   placement?: TooltipPlacement;
   delay?: number;
@@ -22,6 +32,7 @@ export interface TooltipProps {
   disabled?: boolean;
   children: ReactNode;
   className?: string;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 export function Tooltip({
@@ -31,7 +42,9 @@ export function Tooltip({
   open: controlledOpen,
   disabled = false,
   children,
-  className = "",
+  className,
+  ref,
+  ...rest
 }: TooltipProps) {
   const tooltipId = useId();
   const timerRef = useRef<number | null>(null);
@@ -81,7 +94,7 @@ export function Tooltip({
 
   return (
     <span
-      className={`${styles.wrapper} ${className}`.trim()}
+      className={cx(styles.wrapper, className)}
       onPointerEnter={() => show()}
       onPointerLeave={hide}
       onFocus={() => show(true)}
@@ -89,9 +102,11 @@ export function Tooltip({
     >
       {trigger}
       <span
+        {...rest}
+        ref={ref}
         id={tooltipId}
         role="tooltip"
-        className={`${styles.bubble} ${styles[placement]}${open ? ` ${styles.open}` : ""}`}
+        className={cx(styles.bubble, styles[placement], open && styles.open)}
       >
         {content}
         <span className={styles.arrow} aria-hidden="true" />

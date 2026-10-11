@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export type SideNavSide = "left" | "right";
 
 export type SideNavRadius = "md" | "none";
@@ -22,7 +24,11 @@ export interface SideNavGroup {
   items: SideNavItem[];
 }
 
-export interface SideNavProps {
+/** Native aside attributes the kit sets itself (or replaces with its own prop). */
+type SideNavOwnedKeys = "children" | "title";
+
+/** `ref`, `className` and other native attributes go to the root `<aside>`. `aria-label` defaults to `title`. */
+export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, SideNavOwnedKeys> {
   title: string;
   /** Brand letter; default first char of title. */
   mark?: string;
@@ -39,4 +45,5 @@ export interface SideNavProps {
   items?: SideNavItem[];
   /** Footer rows. One or many. */
   footer?: SideNavItem | SideNavItem[];
+  ref?: Ref<HTMLElement>;
 }

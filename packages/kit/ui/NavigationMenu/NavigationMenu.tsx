@@ -7,6 +7,7 @@ import type {
   NavigationMenuItem,
   NavigationMenuProps,
 } from "./NavigationMenu.types";
+import { cx } from "../shared/cx";
 import styles from "./NavigationMenu.module.css";
 
 export type {
@@ -20,11 +21,18 @@ function isDropdown(item: NavigationMenuItem): item is NavigationMenuDropdownIte
   return "groups" in item && Array.isArray((item as NavigationMenuDropdownItem).groups);
 }
 
-export function NavigationMenu({ items, onSelect }: NavigationMenuProps) {
+export function NavigationMenu({
+  items,
+  onSelect,
+  "aria-label": ariaLabel = "Site",
+  className,
+  ref,
+  ...rest
+}: NavigationMenuProps) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <nav className={styles.root} aria-label="Site">
+    <nav {...rest} ref={ref} className={cx(styles.root, className)} aria-label={ariaLabel}>
       {items.map((item) => {
         if (isDropdown(item)) {
           return (

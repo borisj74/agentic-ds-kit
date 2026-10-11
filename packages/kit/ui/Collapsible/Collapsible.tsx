@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { ChevronsUpDown } from "lucide-react";
 import type { CollapsibleProps } from "./Collapsible.types";
+import { cx } from "../shared/cx";
 import styles from "./Collapsible.module.css";
 
 export type { CollapsibleProps } from "./Collapsible.types";
@@ -13,6 +14,9 @@ export function Collapsible({
   defaultOpen = false,
   open: openProp,
   onOpenChange,
+  className,
+  ref,
+  ...rest
 }: CollapsibleProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -28,7 +32,7 @@ export function Collapsible({
   }
 
   return (
-    <div className={styles.root}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)}>
       <div className={styles.header}>
         <p id={titleId} className={styles.title}>
           {trigger}

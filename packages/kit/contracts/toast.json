@@ -62,6 +62,13 @@
       "note": "How long it stays, in ms, while the bar counts down. Default 5000 for every status. null keeps it until closed, with no bar."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "toast card",
+    "className": "toast card",
+    "rest": "toast card",
+    "note": "Not the shared live-region stack."
+  },
   "tokens": [
     "surface.card",
     "text.primary",

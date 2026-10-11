@@ -77,6 +77,13 @@
       "note": "Single footer row (e.g. Settings)"
     }
   },
+  "passthrough": {
+    "root": "aside",
+    "ref": "aside",
+    "className": "root",
+    "rest": "aside",
+    "note": "aria-label defaults to title and can be overridden."
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

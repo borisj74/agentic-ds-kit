@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModalCard } from "../ModalCard";
 import type { ModalProps } from "./Modal.types";
+import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Modal.module.css";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
@@ -20,8 +21,11 @@ export function Modal({
   children,
   footer,
   contained = false,
+  ref,
+  ...rest
 }: ModalProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const setCardRef = useMemo(() => mergeRefs(cardRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -94,7 +98,8 @@ export function Modal({
     <div className={`${styles.root} ${contained ? styles.contained : ""}`}>
       <button type="button" className={styles.scrim} aria-label="Close dialog" onClick={onClose} />
       <ModalCard
-        ref={cardRef}
+        {...rest}
+        ref={setCardRef}
         role="dialog"
         aria-modal="true"
         tabIndex={-1}

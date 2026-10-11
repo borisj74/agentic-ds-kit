@@ -29,7 +29,29 @@ export interface DropdownMenuGroup {
   items: DropdownMenuItem[];
 }
 
-export interface DropdownMenuProps {
+/** Native button attributes the kit sets itself on the trigger (or replaces with its own prop). */
+type DropdownMenuOwnedKeys =
+  | "children"
+  | "className"
+  | "type"
+  | "onClick"
+  | "onSelect"
+  | "draggable"
+  | "onDragStart"
+  | "onDragEnd"
+  | "aria-label"
+  | "aria-disabled"
+  | "aria-haspopup"
+  | "aria-expanded"
+  | "aria-controls"
+  | "aria-invalid"
+  | "aria-describedby";
+
+/**
+ * `ref` and other native attributes go to the trigger button (always mounted, the control users focus).
+ * `className` goes to the root wrapper. The menu panel stays kit-owned.
+ */
+export interface DropdownMenuProps extends Omit<ComponentPropsWithoutRef<"button">, DropdownMenuOwnedKeys> {
   trigger?: string;
   triggerStyle?: DropdownMenuTriggerStyle;
   iconStart?: string;
@@ -57,10 +79,10 @@ export interface DropdownMenuProps {
   triggerDraggable?: boolean;
   onTriggerDragStart?: DragEventHandler<HTMLButtonElement>;
   onTriggerDragEnd?: DragEventHandler<HTMLButtonElement>;
-  /** @internal Select's pass-through: merged onto the root. K24 owns DropdownMenu's own escape hatches. */
   className?: string;
-  /** @internal Select's pass-through: ref to the field trigger button (`triggerStyle="field"` only). */
+  ref?: Ref<HTMLButtonElement>;
+  /** @internal Select's pass-through: merged with `ref` on the trigger button. */
   triggerRef?: Ref<HTMLButtonElement>;
-  /** @internal Select's pass-through: spread on the field trigger button before kit attributes. */
+  /** @internal Select's pass-through: spread on the trigger button before `rest` and kit attributes. */
   triggerProps?: ComponentPropsWithoutRef<"button">;
 }

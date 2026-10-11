@@ -68,6 +68,13 @@
       "note": "kit Buttons. Bottom stacks them full width. Use shape=pill and block."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "dialog panel",
+    "className": "dialog panel",
+    "rest": "dialog panel",
+    "note": "Not the portal or overlay. Focus trap, Escape, scroll lock and focus return are kit-owned."
+  },
   "tokens": [
     "text.primary",
     "text.muted",

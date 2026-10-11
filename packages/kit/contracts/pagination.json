@@ -60,6 +60,13 @@
       "note": "passed to kit Button"
     }
   },
+  "passthrough": {
+    "root": "nav",
+    "ref": "nav",
+    "className": "root",
+    "rest": "nav",
+    "note": "aria-label defaults to \"Pagination\" and can be overridden."
+  },
   "tokens": [
     "space.1",
     "icon.muted"
