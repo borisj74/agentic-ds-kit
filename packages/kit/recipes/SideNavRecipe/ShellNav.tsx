@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AppHeaderMark, AppHeaderTitle } from "../../ui/AppHeader";
 import {
+  SideNavBrand,
   SideNavFooter,
   SideNavHeader,
   SideNavItem,
@@ -29,7 +29,8 @@ export interface ShellNavProps {
 
 /**
  * SideNav for your app, built from the SideNav blocks so you can rearrange it. On its own
- * it is a closeable rail with a brand header and Toggle. As
+ * it is a closeable rail with a brand header (SideNavBrand: its mark reopens the closed rail)
+ * and a Toggle. As
  * `<AppShellPattern nav={<ShellNav />} …>` it drops the header (AppHeader has the brand),
  * sits flush in the rail when wide, and is forced open inside the Drawer.
  */
@@ -53,8 +54,7 @@ export function ShellNav({ title = "Acme", mark, current = "overview", onNavigat
     >
       {shell ? null : (
         <SideNavHeader>
-          <AppHeaderMark>{mark ?? title.charAt(0)}</AppHeaderMark>
-          <AppHeaderTitle>{title}</AppHeaderTitle>
+          <SideNavBrand title={title} mark={mark} />
           <SideNavToggle />
         </SideNavHeader>
       )}

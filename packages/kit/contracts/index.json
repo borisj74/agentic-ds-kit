@@ -442,7 +442,7 @@
   },
   {
     "id": "sidenav",
-    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Nav/Section/Item/Toggle blocks. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
+    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
     "group": "component",
     "path": "contracts/sidenav.json",
     "status": "stable"

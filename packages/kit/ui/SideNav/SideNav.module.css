@@ -164,6 +164,32 @@
     visibility 0s linear var(--motion-overlay-duration);
 }
 
+/* SideNav.Brand beside a Toggle (the preset header): on the closed rail the mark stays put
+   and reopens the rail, the title fades as before, and the Toggle steps aside in place. */
+.rootClosed .header:has(> .toggle) > .markButton,
+.rootClosed .header:has(> .toggle) > .title {
+  visibility: visible;
+}
+
+.rootClosed .header:has(> .toggle) > .markButton {
+  opacity: 1;
+}
+
+.header:has(> .markButton) > .toggle {
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.rootClosed .header:has(> .markButton) > .toggle {
+  position: static;
+  translate: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
+    visibility 0s linear var(--motion-overlay-duration);
+}
+
 /* Slot keepOnRail (e.g. pinned rows) stays visible and usable on the closed rail. */
 .slotKeep {
   opacity: 1;

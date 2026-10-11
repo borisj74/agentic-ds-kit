@@ -2,6 +2,7 @@ export { SideNav } from "./SideNav";
 export {
   SideNavRoot,
   SideNavHeader,
+  SideNavBrand,
   SideNavToggle,
   SideNavSlot,
   SideNavNav,
@@ -20,6 +21,7 @@ export type {
   SideNavRenderItem,
   SideNavRootProps,
   SideNavHeaderProps,
+  SideNavBrandProps,
   SideNavToggleProps,
   SideNavSlotProps,
   SideNavNavProps,

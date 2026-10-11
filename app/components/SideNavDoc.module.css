@@ -85,7 +85,3 @@
   color: var(--text-primary);
 }
 
-.switcher {
-  flex: 1;
-  min-width: 0;
-}

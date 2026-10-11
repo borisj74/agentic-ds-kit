@@ -4,6 +4,7 @@ import { isValidElement, type ReactNode } from "react";
 import { Button } from "../Button";
 import type { SideNavItemData, SideNavProps, SideNavRenderItem } from "./SideNav.types";
 import {
+  SideNavBrand,
   SideNavFooter,
   SideNavHeader,
   SideNavItem as SideNavItemBlock,
@@ -57,31 +58,7 @@ function DataList({ items, renderItem }: { items: SideNavItemData[]; renderItem?
   );
 }
 
-/** Preset brand: the mark (reopens the closed rail) and the title. */
-function PresetBrand({ title, mark }: { title: string; mark?: string }) {
-  const { open, setOpen } = useSideNav();
-  const markLetter = (mark && mark.length > 0 ? mark : title.charAt(0)) || "·";
-  return (
-    <>
-      <button
-        type="button"
-        className={`${styles.mark} ${styles.markButton}`}
-        aria-label={open ? undefined : "Open"}
-        aria-hidden={open ? true : undefined}
-        tabIndex={open ? -1 : 0}
-        disabled={open}
-        onClick={() => {
-          if (!open) setOpen(true);
-        }}
-      >
-        {markLetter}
-      </button>
-      <p className={styles.title}>{title}</p>
-    </>
-  );
-}
-
-/** Preset Close: hidden on the closed rail, where the mark reopens instead. */
+/** Close beside a custom `header` slot: hidden and inert on the closed rail (nothing reopens it there). */
 function PresetClose() {
   const { open, side, setOpen } = useSideNav();
   return (
@@ -125,7 +102,7 @@ function footerItems(footer: SideNavProps["footer"]): SideNavItemData[] | null {
 
 /**
  * Preset: the data-driven SideNav, assembled from the building blocks
- * (`SideNav.Root`, `.Header`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`).
+ * (`SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`).
  */
 function SideNavPreset({
   title,
@@ -161,8 +138,17 @@ function SideNavPreset({
     >
       {showHeader ? (
         <SideNavHeader>
-          {header !== undefined ? <PresetHeaderSlot>{header}</PresetHeaderSlot> : <PresetBrand title={title} mark={mark} />}
-          <PresetClose />
+          {header !== undefined ? (
+            <>
+              <PresetHeaderSlot>{header}</PresetHeaderSlot>
+              <PresetClose />
+            </>
+          ) : (
+            <>
+              <SideNavBrand title={title} mark={mark || undefined} />
+              <SideNavToggle />
+            </>
+          )}
         </SideNavHeader>
       ) : null}
 
@@ -195,12 +181,13 @@ function SideNavPreset({
 
 /**
  * `<SideNav title groups … />` is the preset. Build your own with the blocks:
- * `SideNav.Root`, `.Header`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`
+ * `SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`
  * (also exported by name: `SideNavRoot`, `SideNavHeader`, … — use those from Server Components).
  */
 export const SideNav = Object.assign(SideNavPreset, {
   Root: SideNavRoot,
   Header: SideNavHeader,
+  Brand: SideNavBrand,
   Toggle: SideNavToggle,
   Slot: SideNavSlot,
   Nav: SideNavNav,

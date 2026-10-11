@@ -75,7 +75,7 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   ref?: Ref<HTMLElement>;
 }
 
-/* ---------- Building blocks (SideNav.Root, .Header, .Nav, .Section, .Item, .Slot, .Footer, .Toggle) ---------- */
+/* ---------- Building blocks (SideNav.Root, .Header, .Brand, .Nav, .Section, .Item, .Slot, .Footer, .Toggle) ---------- */
 
 /** Native aside attributes the kit sets itself on `SideNav.Root`. */
 type SideNavRootOwnedKeys = "data-side";
@@ -93,7 +93,7 @@ export interface SideNavRootProps extends Omit<ComponentPropsWithoutRef<"aside">
   ref?: Ref<HTMLElement>;
 }
 
-/** `SideNav.Header`: the top bar. Put brand, a switcher, and `SideNav.Toggle` (as a direct child) in it. */
+/** `SideNav.Header`: the top bar. Put `SideNav.Brand` (or a switcher) and `SideNav.Toggle` (as direct children) in it. */
 export interface SideNavHeaderProps extends ComponentPropsWithoutRef<"header"> {
   ref?: Ref<HTMLElement>;
 }
@@ -158,12 +158,39 @@ export interface SideNavFooterProps extends ComponentPropsWithoutRef<"div"> {
   ref?: Ref<HTMLDivElement>;
 }
 
+/** Native button attributes the kit sets itself on the `SideNav.Brand` mark. */
+type SideNavBrandOwnedKeys =
+  | "children"
+  | "type"
+  | "title"
+  | "aria-label"
+  | "aria-hidden"
+  | "tabIndex"
+  | "disabled"
+  | "draggable";
+
+/**
+ * `SideNav.Brand`: mark + title, inside `SideNav.Header`. On the closed rail the title fades,
+ * the mark stays and becomes the button that reopens the rail (a `SideNav.Toggle` in the same
+ * header then hides instead of moving). `ref`, `className` and attributes go to the mark button.
+ */
+export interface SideNavBrandProps extends Omit<ComponentPropsWithoutRef<"button">, SideNavBrandOwnedKeys> {
+  /** Product name beside the mark. */
+  title: ReactNode;
+  /** Brand letter or your own node (logo). Defaults to the first character of a string `title`. */
+  mark?: ReactNode;
+  /** Accessible name of the mark on the closed rail, where it reopens the nav. Default "Open". */
+  openLabel?: string;
+  ref?: Ref<HTMLButtonElement>;
+}
+
 /** Native button attributes the kit sets itself on `SideNav.Toggle`. */
 type SideNavToggleOwnedKeys = "children" | "type" | "aria-label" | "draggable";
 
 /**
  * `SideNav.Toggle`: kit Button that closes the open rail and reopens the closed one.
- * Stays at the rail's start edge when closed. `ref` and attributes go to the button.
+ * Stays at the rail's start edge when closed; beside a `SideNav.Brand` it hides there instead
+ * (the mark reopens). `ref` and attributes go to the button.
  */
 export interface SideNavToggleProps extends Omit<ComponentPropsWithoutRef<"button">, SideNavToggleOwnedKeys> {
   /** Accessible name while open. Default "Close". */
