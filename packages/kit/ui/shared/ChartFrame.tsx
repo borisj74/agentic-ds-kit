@@ -1,10 +1,15 @@
 "use client";
 
 import { BarChart3, Table2 } from "lucide-react";
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
+import { cx } from "./cx";
 import styles from "./ChartFrame.module.css";
 
-export interface ChartFrameProps {
+/** Figure attributes the frame sets itself (`title` is the chart heading, not a tooltip). */
+export type ChartFrameOwnedKeys = "children" | "title" | "aria-labelledby" | "aria-describedby";
+
+/** `ref`, `className` and other attributes land on the root `<figure>`. */
+export interface ChartFrameProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
   title?: string;
   description?: string;
   legend?: ReactNode;
@@ -15,6 +20,7 @@ export interface ChartFrameProps {
   emptyLabel?: string;
   isLoading?: boolean;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }
 
 export function ChartFrame({
@@ -27,7 +33,9 @@ export function ChartFrame({
   isEmpty = false,
   emptyLabel = "No data for this range",
   isLoading = false,
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ChartFrameProps) {
   const [view, setView] = useState<"chart" | "table">("chart");
   const titleId = useId();
@@ -38,7 +46,9 @@ export function ChartFrame({
 
   return (
     <figure
-      className={`${hasChrome ? styles.frame : styles.flush} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(hasChrome ? styles.frame : styles.flush, className)}
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={description ? descriptionId : undefined}
     >

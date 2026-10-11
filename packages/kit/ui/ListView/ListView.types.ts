@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 
 export type ListViewSize = "sm" | "md";
@@ -39,7 +40,16 @@ export interface ListViewEmpty {
   outlined?: boolean;
 }
 
-export interface ListViewProps {
+/** Root attributes the kit sets itself. */
+type ListViewOwnedKeys = 
+  | "children"
+  | "role"
+  | "tabIndex"
+  | "aria-label"
+  | "aria-multiselectable";
+
+/** `ref`, `className` and other attributes land on the root list `<div>` (`role="listbox"`/`"list"`, `aria-label` from `label`). */
+export interface ListViewProps extends Omit<ComponentPropsWithoutRef<"div">, ListViewOwnedKeys> {
   items: ListViewItem[];
   label: string;
   size?: ListViewSize;
@@ -53,4 +63,5 @@ export interface ListViewProps {
   groups?: ListViewGroup[];
   collapsibleGroups?: boolean;
   empty?: ListViewEmpty;
+  ref?: Ref<HTMLDivElement>;
 }

@@ -74,6 +74,12 @@
       "default": "Carousel"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "text.muted",
     "focus.ring",

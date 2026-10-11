@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { LoadingAnimationProps } from "./LoadingAnimation.types";
+import { cx } from "../shared/cx";
 import styles from "./LoadingAnimation.module.css";
 
 export type {
@@ -14,11 +15,15 @@ export function LoadingAnimation({
   label = "Loading",
   size = "md",
   variant = "grid",
-  className = "",
+  className,
+  ref,
+  ...rest
 }: LoadingAnimationProps) {
   return (
     <span
-      className={`${styles.root} ${styles[size]} ${styles[variant]} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], styles[variant], className)}
       role="status"
       aria-label={label}
       aria-live="polite"

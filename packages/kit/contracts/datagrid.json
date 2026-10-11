@@ -83,6 +83,12 @@
       "note": "The # column (if shown) and the first data column stay in place while the grid scrolls sideways."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

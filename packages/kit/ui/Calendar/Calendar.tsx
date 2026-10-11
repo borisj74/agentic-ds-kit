@@ -28,6 +28,7 @@ import {
   type EventDraft,
   type PlacedEvent,
 } from "./calendarModel";
+import { cx } from "../shared/cx";
 import styles from "./Calendar.module.css";
 
 export type {
@@ -66,6 +67,9 @@ export function Calendar({
   weekStart = "sunday",
   startHour = 7,
   readOnly = false,
+  className,
+  ref,
+  ...rest
 }: CalendarProps) {
   const titleId = useId();
   const formId = useId();
@@ -236,7 +240,9 @@ export function Calendar({
 
   return (
     <div
-      className={`${styles.calendar} ${pending ? styles.pending : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.calendar, pending && styles.pending, className)}
       role="region"
       aria-label={label}
     >

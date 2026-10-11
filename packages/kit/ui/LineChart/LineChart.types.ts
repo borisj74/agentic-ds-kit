@@ -1,8 +1,11 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 import type { ChartDatum, ChartSeries } from "../shared/chartMath";
 
 export type LineChartVariant = "line" | "area";
 
-export interface LineChartProps {
+/** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
+export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
   data?: ChartDatum[];
   labels?: string[];
   series?: ChartSeries[];
@@ -16,4 +19,5 @@ export interface LineChartProps {
   emptyLabel?: string;
   isLoading?: boolean;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }

@@ -31,6 +31,12 @@
     "emptyLabel": { "type": "string", "default": "No data for this range" },
     "isLoading": { "type": "boolean", "default": false }
   },
+  "passthrough": {
+    "root": "figure",
+    "ref": "figure",
+    "className": "root",
+    "rest": "figure"
+  },
   "tokens": [
     "surface.card",
     "text.primary",

@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
 export type CalendarView = "month" | "week" | "day" | "list";
 export type CalendarWeekStart = "sunday" | "monday";
 export type CalendarTone = "brand" | "success" | "warning" | "danger" | "info" | "accent";
@@ -20,7 +21,11 @@ export interface CalendarSource {
   hidden?: boolean;
 }
 
-export interface CalendarProps {
+/** Root attributes the kit sets itself. */
+type CalendarOwnedKeys = "children" | "role" | "aria-label";
+
+/** `ref`, `className` and other attributes land on the root `role="region"` `<div>` (`aria-label` from `label`). */
+export interface CalendarProps extends Omit<ComponentPropsWithoutRef<"div">, CalendarOwnedKeys> {
   label?: string;
   events?: CalendarEvent[];
   defaultEvents?: CalendarEvent[];
@@ -37,4 +42,5 @@ export interface CalendarProps {
   weekStart?: CalendarWeekStart;
   startHour?: number;
   readOnly?: boolean;
+  ref?: Ref<HTMLDivElement>;
 }

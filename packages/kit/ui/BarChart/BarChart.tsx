@@ -140,7 +140,9 @@ export function BarChart({
   showTable = true,
   emptyLabel = "No data for this range",
   isLoading = false,
-  className = "",
+  className,
+  ref: rootRef,
+  ...rest
 }: BarChartProps) {
   const [activeBar, setActiveBar] = useState<string | null>(null);
   const [highlighted, setHighlighted] = useState<string | null>(null);
@@ -259,6 +261,8 @@ export function BarChart({
 
   return (
     <ChartFrame
+      {...rest}
+      ref={rootRef}
       title={title}
       description={description}
       legend={showLegend ? (

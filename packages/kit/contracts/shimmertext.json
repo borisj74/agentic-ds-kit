@@ -23,6 +23,12 @@
       "default": "normal"
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": ["text.primary", "text.muted"],
   "a11y": {
     "element": "span",
