@@ -84,6 +84,10 @@ import {
   PanelRightClose,
   PanelRightOpen,
   GripVertical,
+  LayoutDashboard,
+  FileText,
+  Users,
+  ChartLine,
 } from "lucide-react";
 
 const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
@@ -172,6 +176,10 @@ const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
   PanelRightClose,
   PanelRightOpen,
   GripVertical,
+  LayoutDashboard,
+  FileText,
+  Users,
+  ChartLine,
 };
 
 export function LucideByName({
