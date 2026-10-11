@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated copy of ui/patterns for `agentic-ds-kit add`.
+    "packages/kit/patterns-src/**",
   ]),
 ]);
 

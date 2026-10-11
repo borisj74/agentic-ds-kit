@@ -63,6 +63,31 @@ import { Button, Scoreboard, ActivityPattern } from "agentic-ds-kit";
 
 Agents (and you) should read `node_modules/agentic-ds-kit/contracts/index.json`, then the matching contract JSON, then import that piece. Do not invent a local cousin.
 
+**Copy a pattern into your app**
+
+Importing a pattern gives you the kit's layout and sample data as-is. To change it (sections, copy, real data), copy its source into your app and edit that instead:
+
+```bash
+npx agentic-ds-kit add --list
+npx agentic-ds-kit add dashboard
+```
+
+This writes `components/patterns/dashboard/` (or `src/components/patterns/dashboard/` when the app uses `src/`): the pattern's `.tsx` files, any `.module.css`, an `index.ts`, and `dashboard.contract.json`. Kit imports in the copy point at `agentic-ds-kit`, so it compiles with no edits. Then import your copy:
+
+```tsx
+import { DashboardPattern } from "@/components/patterns/dashboard";
+```
+
+You own the copied files. Keep the contract JSON beside them so agents keep the kit rules (semantic tokens, one primary Button, kit components only). The CSS modules use semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
+
+| Option | What it does |
+| --- | --- |
+| `--dir <path>` | Write somewhere else, e.g. `--dir app/overview/_pattern` |
+| `--force` | Overwrite files that already exist (otherwise `add` stops and writes nothing) |
+| `--list` | Print every pattern name with its one-line intent |
+
+Upgrading the kit does not touch copied files. Re-run `add` with `--force` (into a clean branch) to pull a newer version of a pattern.
+
 **4. Tokens in your own CSS**
 
 If `layout.tsx` or a global stylesheet uses kit variables (`var(--surface-card)`, `var(--font-sans)`, …) **before** any kit component is imported, add this once in the root layout or `globals.css`:
@@ -162,6 +187,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
 - [ ] Optional: copy `AGENTS.md`, `CLAUDE.md`, and the prototype skill for agents
+- [ ] Optional: `npx agentic-ds-kit add <pattern>` for any pattern you want to edit
 
 ### If something looks wrong
 

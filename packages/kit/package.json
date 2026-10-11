@@ -13,6 +13,9 @@
     "url": "https://github.com/borisj74/agentic-ds-kit/issues"
   },
   "type": "module",
+  "bin": {
+    "agentic-ds-kit": "./bin/agentic-ds-kit.mjs"
+  },
   "sideEffects": [
     "**/*.css",
     "**/*.module.js",
@@ -23,6 +26,8 @@
   ],
   "files": [
     "dist",
+    "bin",
+    "patterns-src",
     "contracts",
     "tokens",
     "lib",
@@ -47,7 +52,8 @@
   },
   "scripts": {
     "generate:tokens": "node scripts/generate-tokens.mjs",
-    "build": "npm run generate:tokens && vite build",
+    "build:patterns-src": "node scripts/build-patterns-src.mjs",
+    "build": "npm run generate:tokens && vite build && npm run build:patterns-src",
     "version": "node ../../scripts/sync-kit-version-docs.mjs",
     "prepublishOnly": "npm run build"
   },

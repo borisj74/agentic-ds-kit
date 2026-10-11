@@ -12,6 +12,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 1. **Search the index** — Read `node_modules/agentic-ds-kit/contracts/index.json` (or `packages/kit/contracts/index.json` in this repo). Note `group`: `foundation`, `component`, or `pattern`.
 2. **Open contracts** — Read only the 1–2 contract files that match the UI you need.
 3. **Check patterns** — If the screen matches `dashboard`, `settings-form`, `list-detail`, `invite-members`, `assistant-workspace`, `empty-first-run`, `activity`, `inbox`, `sign-in`, or `app-shell`, import that pattern from `agentic-ds-kit` instead of hand-rolling the layout.
+   - **Need to change the pattern itself** (its sections, copy, or sample data)? Copy it into the app with `npx agentic-ds-kit add <pattern>` (`add --list` shows the names), then import the local copy. It lands in `components/patterns/<pattern>/` with `<pattern>.contract.json` beside it: follow that contract's rules while editing.
 4. **Compose from the package** — `import { Button, Scoreboard } from "agentic-ds-kit"`. Match props exactly to contract enums; do not add variants.
 5. **Stop if missing** — If no contract or pattern covers what you need, stop and ask. Do not scaffold a one-off.
 
