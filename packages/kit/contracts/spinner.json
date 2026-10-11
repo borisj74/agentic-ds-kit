@@ -26,6 +26,12 @@
       "note": "Visible label beside the spinner. When omitted, aria-label is Loading."
     }
   },
+  "passthrough": {
+    "root": "span[role=status]",
+    "ref": "span[role=status]",
+    "className": "root",
+    "rest": "span[role=status]"
+  },
   "tokens": [
     "icon.secondary",
     "text.secondary",

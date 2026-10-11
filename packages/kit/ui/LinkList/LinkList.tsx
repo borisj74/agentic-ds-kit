@@ -2,15 +2,16 @@
 
 import { LucideByName } from "../Button/lucideName";
 import type { LinkListProps } from "./LinkList.types";
+import { cx } from "../shared/cx";
 import styles from "./LinkList.module.css";
 
 export type { LinkListItem, LinkListProps } from "./LinkList.types";
 
 const ICON_SIZE = 16;
 
-export function LinkList({ items, label = "Links" }: LinkListProps) {
+export function LinkList({ items, label = "Links", className, ref, ...rest }: LinkListProps) {
   return (
-    <ul className={styles.list} aria-label={label}>
+    <ul {...rest} ref={ref} className={cx(styles.list, className)} aria-label={label}>
       {items.map((item) => {
         const body = (
           <>

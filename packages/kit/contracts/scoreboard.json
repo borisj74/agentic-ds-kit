@@ -28,6 +28,12 @@
       "note": "false renders the overflow strip without Conveyor so a page can wrap Scoreboard in its own Conveyor."
     }
   },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
   "tokens": [
     "surface.page",
     "layout.metricsMin",

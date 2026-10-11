@@ -93,6 +93,12 @@
       "note": "Required when imageSrc is set"
     }
   },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
   "tokens": [
     "surface.card",
     "border.faint",

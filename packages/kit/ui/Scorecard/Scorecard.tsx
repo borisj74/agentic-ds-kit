@@ -1,9 +1,10 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type Ref } from "react";
 import { Badge } from "../Badge";
 import { LucideByName } from "../Button/lucideName";
 import type { ScorecardProps, ScorecardTrend } from "./Scorecard.types";
+import { cx } from "../shared/cx";
 import styles from "./Scorecard.module.css";
 
 export type { ScorecardProps, ScorecardTrend, ScorecardSize } from "./Scorecard.types";
@@ -33,13 +34,14 @@ export function Scorecard({
   badgeTone = "neutral",
   onClick,
   fill = false,
+  className: userClassName,
+  ref,
+  ...rest
 }: ScorecardProps) {
   const labelId = useId();
   const valueId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
-  const className = [styles.card, styles[size], fill ? styles.fill : "", onClick ? styles.interactive : ""]
-    .filter(Boolean)
-    .join(" ");
+  const className = cx(styles.card, styles[size], fill && styles.fill, onClick && styles.interactive, userClassName);
 
   const body = (
     <>
@@ -78,14 +80,21 @@ export function Scorecard({
 
   if (onClick) {
     return (
-      <button type="button" className={className} onClick={onClick} aria-labelledby={labelledBy}>
+      <button
+        {...rest}
+        ref={ref as Ref<HTMLButtonElement>}
+        type="button"
+        className={className}
+        onClick={onClick}
+        aria-labelledby={labelledBy}
+      >
         {body}
       </button>
     );
   }
 
   return (
-    <article className={className} aria-labelledby={labelledBy}>
+    <article {...rest} ref={ref} className={className} aria-labelledby={labelledBy}>
       {body}
     </article>
   );

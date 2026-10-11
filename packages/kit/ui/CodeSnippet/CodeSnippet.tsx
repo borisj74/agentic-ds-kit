@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { Button } from "../Button";
 import { Tabs } from "../Tabs";
 import type { CodeSnippetProps } from "./CodeSnippet.types";
+import { cx } from "../shared/cx";
 import styles from "./CodeSnippet.module.css";
 
 export type { CodeSnippetProps, CodeSnippetTab } from "./CodeSnippet.types";
@@ -40,6 +41,9 @@ export function CodeSnippet({
   copyable = true,
   wrap = false,
   maxHeight,
+  className,
+  ref,
+  ...rest
 }: CodeSnippetProps) {
   const hasTabs = Boolean(tabs && tabs.length > 0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -95,7 +99,7 @@ export function CodeSnippet({
   ) : null;
 
   return (
-    <div className={`${styles.root}${hasHeader ? "" : ` ${styles.bare}`}`}>
+    <div {...rest} ref={ref} className={cx(styles.root, !hasHeader && styles.bare, className)}>
       {hasHeader ? (
         <div className={`${styles.header}${hasTabs ? ` ${styles.withTabs}` : ""}`}>
           {hasTabs ? (

@@ -1,5 +1,6 @@
 import { Breadcrumb } from "../Breadcrumb";
 import type { PageHeaderProps } from "./PageHeader.types";
+import { cx } from "../shared/cx";
 import styles from "./PageHeader.module.css";
 
 export type { PageHeaderProps } from "./PageHeader.types";
@@ -12,11 +13,14 @@ export function PageHeader({
   breadcrumbs,
   breadcrumbSeparator,
   breadcrumbMaxItems,
+  className,
+  ref,
+  ...rest
 }: PageHeaderProps) {
   const trail = breadcrumbs && breadcrumbs.length >= 2 ? breadcrumbs : undefined;
 
   return (
-    <header className={styles.header}>
+    <header {...rest} ref={ref} className={cx(styles.header, className)}>
       {trail ? (
         <div className={styles.trail}>
           <Breadcrumb

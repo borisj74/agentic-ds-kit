@@ -44,6 +44,12 @@
       "note": "Bordered empty state with surface-card background."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

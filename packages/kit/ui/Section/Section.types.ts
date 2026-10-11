@@ -1,8 +1,12 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 
 export type SectionSize = "sm" | "md" | "lg";
 
-export interface SectionProps {
+/** Native section attributes the kit sets itself (or replaces with its own prop). */
+type SectionOwnedKeys = "children" | "title" | "aria-labelledby";
+
+/** `ref`, `className` and other native attributes land on the root `<section>`. */
+export interface SectionProps extends Omit<ComponentPropsWithoutRef<"section">, SectionOwnedKeys> {
   title?: string;
   description?: string;
   size?: SectionSize;
@@ -13,4 +17,5 @@ export interface SectionProps {
   defaultOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  ref?: Ref<HTMLElement>;
 }

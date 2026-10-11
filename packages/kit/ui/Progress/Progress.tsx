@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useId } from "react";
 import type { ProgressProps } from "./Progress.types";
+import { cx } from "../shared/cx";
 import styles from "./Progress.module.css";
 
 export type {
@@ -31,6 +32,9 @@ export function Progress({
   valuePosition = "end",
   tone = "brand",
   ariaLabel,
+  className,
+  ref,
+  ...rest
 }: ProgressProps) {
   const uid = useId();
   const percent = clamp(value);
@@ -128,18 +132,12 @@ export function Progress({
     );
   }
 
-  const rootClass = [
-    styles.root,
-    styles[size],
-    styles[tone],
-    styles[shape],
-    overlay ? styles.overlay : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <div className={rootClass}>
+    <div
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], styles[tone], styles[shape], overlay && styles.overlay, className)}
+    >
       {showMeta ? (
         <div className={styles.meta}>
           {label ? (

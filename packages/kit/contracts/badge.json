@@ -53,6 +53,12 @@
       "note": "used when removable. Kept for dismissible filters; prefer kit Tag for user-removable labels"
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": [
     "surface.muted",
     "surface.card",

@@ -1,5 +1,6 @@
 import { Check, X } from "lucide-react";
 import type { ProgressStepsItem, ProgressStepsProps, ProgressStepsStatus } from "./ProgressSteps.types";
+import { cx } from "../shared/cx";
 import styles from "./ProgressSteps.module.css";
 
 export type {
@@ -42,7 +43,9 @@ export function ProgressSteps({
   orientation = "horizontal",
   size = "md",
   ariaLabel = "Progress",
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ProgressStepsProps) {
   if (!steps.length) return null;
 
@@ -51,7 +54,12 @@ export function ProgressSteps({
   const statuses = steps.map((step, index) => resolveStatus(step, index, currentIndex));
 
   return (
-    <nav aria-label={ariaLabel} className={`${styles.root} ${styles[orientation]} ${styles[size]} ${className}`.trim()}>
+    <nav
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[orientation], styles[size], className)}
+      aria-label={ariaLabel}
+    >
       <ol className={styles.list}>
         {steps.map((step, index) => {
           const status = statuses[index];

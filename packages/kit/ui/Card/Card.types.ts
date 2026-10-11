@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import type { ButtonVariant } from "../Button";
 
 export type CardSize = "sm" | "md";
@@ -10,7 +10,11 @@ export interface CardAction {
   onClick?: () => void;
 }
 
-export interface CardProps {
+/** Native article attributes the kit sets itself (or replaces with its own prop). */
+type CardOwnedKeys = "children" | "title" | "aria-labelledby";
+
+/** `ref`, `className` and other native attributes land on the root `<article>`. */
+export interface CardProps extends Omit<ComponentPropsWithoutRef<"article">, CardOwnedKeys> {
   title?: string;
   description?: string;
   children: ReactNode;
@@ -20,4 +24,5 @@ export interface CardProps {
   imageSrc?: string;
   /** Required when imageSrc is set. */
   imageAlt?: string;
+  ref?: Ref<HTMLElement>;
 }

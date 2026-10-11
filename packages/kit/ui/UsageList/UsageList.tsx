@@ -1,6 +1,7 @@
 import { CircleAlert, TriangleAlert } from "lucide-react";
 import { Progress } from "../Progress";
 import type { UsageListItem, UsageListProps } from "./UsageList.types";
+import { cx } from "../shared/cx";
 import styles from "./UsageList.module.css";
 
 export type { UsageListItem, UsageListProps } from "./UsageList.types";
@@ -52,9 +53,9 @@ function barTone(level: Threshold): "brand" | "warning" | "danger" {
   return "brand";
 }
 
-export function UsageList({ items, label = "Usage" }: UsageListProps) {
+export function UsageList({ items, label = "Usage", className, ref, ...rest }: UsageListProps) {
   return (
-    <div className={styles.root} role="list" aria-label={label}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)} role="list" aria-label={label}>
       {items.map((item) => {
         const ratio = usageRatio(item);
         const level = thresholdOf(ratio);

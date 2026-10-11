@@ -78,6 +78,12 @@
       "note": "Stretch to the parent width. Scoreboard passes fill so cards share the row."
     }
   },
+  "passthrough": {
+    "root": "button (onClick) or article",
+    "ref": "button (onClick) or article",
+    "className": "root",
+    "rest": "button (onClick) or article"
+  },
   "tokens": [
     "surface.card",
     "border.highlight",

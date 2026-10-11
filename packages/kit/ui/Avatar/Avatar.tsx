@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import type { AvatarProps } from "./Avatar.types";
+import { cx } from "../shared/cx";
 import styles from "./Avatar.module.css";
 
 export type { AvatarProps, AvatarSize } from "./Avatar.types";
@@ -36,7 +37,7 @@ function resolveInitials(name: string, initials?: string): string {
   return deriveInitials(name);
 }
 
-export function Avatar({ name, src, initials, size = "md" }: AvatarProps) {
+export function Avatar({ name, src, initials, size = "md", className, ref, ...rest }: AvatarProps) {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -48,14 +49,20 @@ export function Avatar({ name, src, initials, size = "md" }: AvatarProps) {
 
   if (showImage) {
     return (
-      <span className={`${styles.avatar} ${styles[size]}`}>
+      <span {...rest} ref={ref} className={cx(styles.avatar, styles[size], className)}>
         <img className={styles.image} src={src} alt={name} onError={() => setFailed(true)} />
       </span>
     );
   }
 
   return (
-    <span className={`${styles.avatar} ${styles[size]} ${styles.fallback}`} role="img" aria-label={name}>
+    <span
+      {...rest}
+      ref={ref}
+      className={cx(styles.avatar, styles[size], styles.fallback, className)}
+      role="img"
+      aria-label={name}
+    >
       {label ? label : <User className={styles.icon} aria-hidden />}
     </span>
   );

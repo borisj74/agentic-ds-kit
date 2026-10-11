@@ -74,6 +74,12 @@
       "note": "Passed through to kit Breadcrumb maxItems."
     }
   },
+  "passthrough": {
+    "root": "header",
+    "ref": "header",
+    "className": "root",
+    "rest": "header"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

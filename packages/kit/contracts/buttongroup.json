@@ -25,6 +25,12 @@
       "note": "names the group"
     }
   },
+  "passthrough": {
+    "root": "div[role=group]",
+    "ref": "div[role=group]",
+    "className": "root",
+    "rest": "div[role=group]"
+  },
   "tokens": [
     "border.faint",
     "radius.md"

@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { MeterIntent, MeterProps } from "./Meter.types";
+import { cx } from "../shared/cx";
 import styles from "./Meter.module.css";
 
 export type {
@@ -34,6 +35,9 @@ export function Meter({
   referenceLines = false,
   showValue = false,
   datatip,
+  className,
+  ref,
+  ...rest
 }: MeterProps) {
   const indeterminate = value === "indeterminate";
   const percent = indeterminate
@@ -61,7 +65,7 @@ export function Meter({
 
   if (indeterminate) {
     return (
-      <div className={`${styles.progress} ${styles.bar} ${styles[size]}`} {...a11y}>
+      <div {...rest} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
         <div className={styles.barRow}>
           <div className={styles.trackWrap}>
             <div className={`${styles.track} ${styles.neutral}`}>
@@ -75,7 +79,7 @@ export function Meter({
 
   if (shape === "bar") {
     return (
-      <div className={`${styles.progress} ${styles.bar} ${styles[size]}`} {...a11y}>
+      <div {...rest} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
         {datatip ? (
           <div className={styles.tipRow} aria-hidden="true">
             <span className={styles.tip} style={{ left: `${percent}%`, transform: `translateX(-${percent}%)` }}>
@@ -135,7 +139,12 @@ export function Meter({
   } as CSSProperties;
 
   return (
-    <div className={`${styles.progress} ${styles.ring}${semi ? ` ${styles.semi}` : ""} ${styles[size]}`} {...a11y}>
+    <div
+      {...rest}
+      ref={ref}
+      className={cx(styles.progress, styles.ring, semi && styles.semi, styles[size], className)}
+      {...a11y}
+    >
       <svg className={styles.svg} viewBox={`0 0 ${CENTER * 2} ${height}`} aria-hidden="true">
         <g style={ringStyle} strokeWidth={STROKE} fill="none">
           {arc(0, total, `${styles.arc} ${styles[trackIntent]}`)}

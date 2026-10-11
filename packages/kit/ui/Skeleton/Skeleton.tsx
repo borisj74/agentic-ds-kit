@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { SkeletonProps } from "./Skeleton.types";
+import { cx } from "../shared/cx";
 import styles from "./Skeleton.module.css";
 
 export type { SkeletonProps, SkeletonShape, SkeletonSize, SkeletonAnimation } from "./Skeleton.types";
@@ -19,6 +20,10 @@ export function Skeleton({
   loading = true,
   children,
   label = "Loading",
+  className,
+  style,
+  ref,
+  ...rest
 }: SkeletonProps) {
   if (!loading) return <>{children}</>;
 
@@ -28,8 +33,10 @@ export function Skeleton({
 
   return (
     <span
-      className={`${styles.root} ${styles[shape]} ${styles[size]} ${styles[animation]}`}
-      style={shape === "text" ? { width: px(width) } : undefined}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[shape], styles[size], styles[animation], className)}
+      style={shape === "text" ? { ...style, width: px(width) } : style}
       aria-busy="true"
     >
       {label ? <span className={styles.srOnly}>{label}</span> : null}

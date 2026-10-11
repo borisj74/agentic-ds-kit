@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { LucideByName } from "../Button/lucideName";
 import type { SectionProps } from "./Section.types";
+import { cx } from "../shared/cx";
 import styles from "./Section.module.css";
 
 export type { SectionProps, SectionSize } from "./Section.types";
@@ -17,6 +18,9 @@ export function Section({
   defaultOpen = true,
   open: openProp,
   onOpenChange,
+  className,
+  ref,
+  ...rest
 }: SectionProps) {
   const headingId = useId();
   const panelId = useId();
@@ -34,7 +38,9 @@ export function Section({
 
   return (
     <section
-      className={`${styles.section} ${styles[size]}${canCollapse ? ` ${styles.collapsible}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.section, styles[size], canCollapse && styles.collapsible, className)}
       aria-labelledby={title ? headingId : undefined}
     >
       {showHeader ? (

@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import type { BadgeProps } from "./Badge.types";
+import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
 
 export type { BadgeProps, BadgeTone, BadgeSize } from "./Badge.types";
@@ -15,12 +16,17 @@ export function Badge({
   removable = false,
   disabled = false,
   onRemove,
+  className,
+  ref,
+  ...rest
 }: BadgeProps) {
   const iconPx = ICON_SIZE[size];
 
   return (
     <span
-      className={`${styles.badge} ${styles[tone]} ${styles[size]}${disabled ? ` ${styles.disabled}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.badge, styles[tone], styles[size], disabled && styles.disabled, className)}
       aria-disabled={disabled || undefined}
     >
       {children}

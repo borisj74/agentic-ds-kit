@@ -48,6 +48,12 @@
       "note": "When items.length > maxItems, show the first item, an ellipsis, then the last (maxItems - 1) items. Ellipsis is aria-hidden, not interactive."
     }
   },
+  "passthrough": {
+    "root": "nav",
+    "ref": "nav",
+    "className": "root",
+    "rest": "nav"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

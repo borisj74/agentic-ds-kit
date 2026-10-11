@@ -59,6 +59,12 @@
       "note": "scrolls inside past this height"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.muted",
     "surface.card",

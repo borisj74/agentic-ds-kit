@@ -6,6 +6,7 @@ import { Avatar } from "../Avatar";
 import { Checkbox } from "../Checkbox";
 import { Count } from "../Count";
 import type { TagProps } from "./Tag.types";
+import { cx } from "../shared/cx";
 import styles from "./Tag.module.css";
 
 export type { TagProps, TagSize, TagDotTone, TagAvatar } from "./Tag.types";
@@ -32,22 +33,21 @@ export function Tag({
   avatar,
   disabled = false,
   id,
+  className,
+  ref,
+  ...rest
 }: TagProps) {
   const generatedId = useId();
   const checkboxId = id ?? `tag-${generatedId}`;
   const iconPx = ICON_SIZE[size];
 
-  const className = [
-    styles.tag,
-    styles[size],
-    avatar && !selectable ? styles.avatarLead : "",
-    disabled ? styles.disabled : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <span className={className} aria-disabled={disabled || undefined}>
+    <span
+      {...rest}
+      ref={ref}
+      className={cx(styles.tag, styles[size], avatar && !selectable && styles.avatarLead, disabled && styles.disabled, className)}
+      aria-disabled={disabled || undefined}
+    >
       {selectable ? (
         <span className={styles.checkSlot}>
           <Checkbox

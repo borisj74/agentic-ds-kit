@@ -2,6 +2,7 @@ import { useId } from "react";
 import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
 import type { InsightCardProps, InsightCardTone } from "./InsightCard.types";
+import { cx } from "../shared/cx";
 import styles from "./InsightCard.module.css";
 
 export type {
@@ -32,6 +33,9 @@ export function InsightCard({
   primaryAction,
   secondaryAction,
   onDismiss,
+  className,
+  ref,
+  ...rest
 }: InsightCardProps) {
   const titleId = useId();
   const descriptionId = useId();
@@ -40,7 +44,9 @@ export function InsightCard({
 
   return (
     <article
-      className={`${styles.card} ${styles[size]} ${styles[tone]}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.card, styles[size], styles[tone], className)}
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
     >

@@ -1,4 +1,5 @@
 import type { CountProps } from "./Count.types";
+import { cx } from "../shared/cx";
 import styles from "./Count.module.css";
 
 export type { CountProps, CountIntent, CountSize } from "./Count.types";
@@ -11,20 +12,18 @@ export function Count({
   count,
   max = 99,
   label,
+  className,
+  ref,
+  ...rest
 }: CountProps) {
   const shown = count > max ? `${max}+` : String(count);
-  const className = [
-    styles.count,
-    styles[intent],
-    styles[size],
-    subtle ? styles.subtle : "",
-    disabled ? styles.disabled : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <span className={className} aria-disabled={disabled || undefined}>
+    <span
+      {...rest}
+      ref={ref}
+      className={cx(styles.count, styles[intent], styles[size], subtle && styles.subtle, disabled && styles.disabled, className)}
+      aria-disabled={disabled || undefined}
+    >
       <span aria-hidden="true">{shown}</span>
       <span className={styles.srOnly}>{label ? `${count} ${label}` : String(count)}</span>
     </span>

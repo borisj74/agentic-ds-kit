@@ -1,5 +1,6 @@
 import { LucideByName } from "../Button/lucideName";
 import type { EmptyProps } from "./Empty.types";
+import { cx } from "../shared/cx";
 import styles from "./Empty.module.css";
 
 export type { EmptyProps } from "./Empty.types";
@@ -13,12 +14,15 @@ export function Empty({
   media,
   actions,
   outlined = false,
+  className,
+  ref,
+  ...rest
 }: EmptyProps) {
   const showIcon = Boolean(icon) && !media;
   const showMedia = Boolean(media);
 
   return (
-    <div className={`${styles.root}${outlined ? ` ${styles.outlined}` : ""}`}>
+    <div {...rest} ref={ref} className={cx(styles.root, outlined && styles.outlined, className)}>
       {showIcon ? (
         <div className={styles.mediaWell} aria-hidden>
           <LucideByName name={icon} size={ICON_SIZE} />

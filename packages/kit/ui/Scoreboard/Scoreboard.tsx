@@ -1,6 +1,7 @@
 import { Conveyor } from "../Conveyor";
 import { Scorecard } from "../Scorecard";
 import type { ScoreboardProps } from "./Scoreboard.types";
+import { cx } from "../shared/cx";
 import styles from "./Scoreboard.module.css";
 
 export type { ScoreboardProps } from "./Scoreboard.types";
@@ -11,11 +12,18 @@ export function Scoreboard({
   items,
   scroll = true,
   "aria-label": ariaLabel = "Key metrics",
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ScoreboardProps) {
   if (items.length > STRIP_MAX) {
     const strip = (
-      <section className={`${styles.scoreboard} ${styles.overflowStrip} ${className}`.trim()} aria-label={ariaLabel}>
+      <section
+        {...rest}
+        ref={ref}
+        className={cx(styles.scoreboard, styles.overflowStrip, className)}
+        aria-label={ariaLabel}
+      >
         <div className={styles.overflowRow}>
           {items.map((item) => (
             <div key={item.label} className={styles.overflowItem}>
@@ -45,8 +53,8 @@ export function Scoreboard({
           : styles.count4;
 
   return (
-    <section className={styles.scoreboard} aria-label={ariaLabel}>
-      <div className={`${styles.grid} ${countClass} ${className}`.trim()}>{cards}</div>
+    <section {...rest} ref={ref} className={cx(styles.scoreboard, className)} aria-label={ariaLabel}>
+      <div className={cx(styles.grid, countClass)}>{cards}</div>
     </section>
   );
 }

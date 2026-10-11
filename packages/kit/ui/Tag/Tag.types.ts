@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import type { ComponentPropsWithoutRef, MouseEvent, Ref } from "react";
 
 export type TagSize = "sm" | "md" | "lg";
 export type TagDotTone = "neutral" | "success" | "warning" | "danger" | "info";
@@ -8,7 +8,11 @@ export interface TagAvatar {
   src?: string;
 }
 
-export interface TagProps {
+/** Native span attributes the kit sets itself (or replaces with its own prop). */
+type TagOwnedKeys = "children" | "id" | "aria-disabled";
+
+/** `ref`, `className` and other native attributes land on the root `<span>`. `id` stays the kit's: it names the Checkbox when selectable. */
+export interface TagProps extends Omit<ComponentPropsWithoutRef<"span">, TagOwnedKeys> {
   children: string;
   size?: TagSize;
   /** Show a trailing remove (X) button. */
@@ -31,4 +35,5 @@ export interface TagProps {
   disabled?: boolean;
   /** Checkbox id when selectable; generated when omitted. */
   id?: string;
+  ref?: Ref<HTMLSpanElement>;
 }

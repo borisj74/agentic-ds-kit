@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export interface CodeSnippetTab {
   label: string;
   code: string;
@@ -5,7 +7,11 @@ export interface CodeSnippetTab {
   language?: string;
 }
 
-export interface CodeSnippetProps {
+/** Native div attributes the kit sets itself (or replaces with its own prop). */
+type CodeSnippetOwnedKeys = "children" | "title";
+
+/** `ref`, `className` and other native attributes land on the root `<div>`. */
+export interface CodeSnippetProps extends Omit<ComponentPropsWithoutRef<"div">, CodeSnippetOwnedKeys> {
   /** The code. Ignored when `tabs` is set. */
   code?: string;
   /** Several snippets behind kit Tabs (line, sm) in the header. */
@@ -22,4 +28,5 @@ export interface CodeSnippetProps {
   wrap?: boolean;
   /** Scroll inside past this height (CSS length or px number). */
   maxHeight?: string | number;
+  ref?: Ref<HTMLDivElement>;
 }

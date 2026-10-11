@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { Button } from "../Button";
 import type { CardProps } from "./Card.types";
+import { cx } from "../shared/cx";
 import styles from "./Card.module.css";
 
 export type { CardProps, CardSize, CardAction, CardActionVariant } from "./Card.types";
@@ -14,13 +15,18 @@ export function Card({
   headerAction,
   imageSrc,
   imageAlt,
+  className,
+  ref,
+  ...rest
 }: CardProps) {
   const titleId = useId();
   const footerActions = (actions ?? []).slice(0, 2);
 
   return (
     <article
-      className={[styles.card, styles[size]].filter(Boolean).join(" ")}
+      {...rest}
+      ref={ref}
+      className={cx(styles.card, styles[size], className)}
       aria-labelledby={title ? titleId : undefined}
     >
       {imageSrc ? (
