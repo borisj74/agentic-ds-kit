@@ -2,12 +2,53 @@
   "id": "app-shell",
   "status": "stable",
   "intent": "Product chrome at every width. Wide (>= --grid-breakpoint-md, 64rem): AppHeader over SideNav + content (layout-shell / layout-app, radius none, no gap, SideNav showHeader false). Narrow: SideNav hidden; a Menu Button at the start of AppHeader opens the same nav in a left Drawer.",
-  "contains": ["appheader", "sidenav", "drawer", "button"],
+  "contains": [
+    "appheader",
+    "sidenav",
+    "drawer",
+    "button"
+  ],
   "props": {
-    "header": { "type": "object", "required": true, "note": "AppHeader props except radius (always none). On narrow screens the Menu Button takes the logo slot, so the mark or logo shows only when wide." },
-    "nav": { "type": "object", "required": true, "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title." },
-    "children": { "type": "slot", "required": true, "note": "Page content: a layout-canvas or layout-workspace, or another pattern. Pages own their one primary Button." },
-    "className": { "type": "string", "required": false, "note": "Extra class on the layout-shell root, e.g. to give it the viewport height." }
+    "header": {
+      "type": "object | slot",
+      "required": true,
+      "note": "AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
+    },
+    "nav": {
+      "type": "object | slot",
+      "required": true,
+      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav, later SideNav blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer)."
+    },
+    "navLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Drawer title on narrow screens. Default nav.title, or Navigation for a built nav."
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Page content: a layout-canvas or layout-workspace, or another pattern. Pages own their one primary Button."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "note": "Extra class on the layout-shell root, e.g. to give it the viewport height."
+    }
+  },
+  "customChrome": {
+    "note": "header and nav accept nodes built from kit blocks. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
+    "exports": {
+      "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
+      "useAppShell()": "Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null }. Null outside AppShellPattern. Client components only."
+    },
+    "rules": [
+      "A built header must contain AppShellPattern.MenuButton; without it the shell warns and narrow screens cannot reach the nav",
+      "Put the Menu Button in AppHeader.Brand's logo so it sits on the rail axis, as the preset does",
+      "A built nav is one landmark (SideNav or SideNav blocks); the same node moves between rail and Drawer, it is never rendered twice",
+      "In the Drawer, keep the nav expanded and radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not"
+    ],
+    "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
+    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader and ShellNav, built for this slot."
   },
   "responsive": {
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; the CSS module repeats 64rem only for the first paint before hydration.",
@@ -25,7 +66,8 @@
       "Menu Button is a kit Button with ariaLabel \"Open navigation\"",
       "The Drawer is the kit dialog: aria-modal, focus trapped, Escape and scrim close, focus restored to the trigger",
       "Parent nav items (disclosures) do not close the Drawer; leaves do",
-      "Active leaf keeps aria-current=page in both SideNav and the Drawer"
+      "Active leaf keeps aria-current=page in both SideNav and the Drawer",
+      "With a built header, AppShellPattern.MenuButton is the only Drawer trigger; it carries the same label and focus return as the injected one"
     ]
   },
   "doNot": [
@@ -37,7 +79,8 @@
     "Do not read var() inside a media query; use 64rem with a comment naming --grid-breakpoint-md, or matchMedia reading the token",
     "Do not put a primary Button in the shell; pages own theirs",
     "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav.",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not build your own Menu Button or Drawer toggle for a custom header; place AppShellPattern.MenuButton"
   ],
   "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
 }

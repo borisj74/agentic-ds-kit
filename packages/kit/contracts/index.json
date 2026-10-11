@@ -428,7 +428,7 @@
   },
   {
     "id": "appheader",
-    "intent": "Product top chrome: brand mark, centered search, trailing actions.",
+    "intent": "Product top chrome: brand mark, centered search, trailing actions. Preset, or AppHeader.Root building blocks.",
     "group": "component",
     "path": "contracts/appheader.json",
     "status": "stable"

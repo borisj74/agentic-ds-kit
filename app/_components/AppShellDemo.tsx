@@ -1,8 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { AppShellPattern, Button, Empty, PageHeader } from "agentic-ds-kit";
-import type { SideNavItem } from "agentic-ds-kit";
+import {
+  AppHeader,
+  AppShellPattern,
+  Avatar,
+  Badge,
+  Button,
+  Empty,
+  PageHeader,
+  Select,
+  SideNav,
+  useAppShell,
+} from "agentic-ds-kit";
+import type { SideNavGroup, SideNavItem } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItem[] = [
@@ -65,6 +76,114 @@ export function AppShellDemo() {
             <Empty
               title={`${current.label} goes here`}
               description="The shell owns the chrome. Pages render their own content and their one primary action."
+              icon={current.icon}
+              outlined
+            />
+          </div>
+        </div>
+      </AppShellPattern>
+    </div>
+  );
+}
+
+const CUSTOM_GROUPS: SideNavGroup[] = [
+  {
+    label: "Work",
+    items: [
+      { id: "home", label: "Home", icon: "House" },
+      { id: "reviews", label: "Reviews", icon: "Check", badge: "3" },
+      { id: "runs", label: "Agent runs", icon: "Sparkles" },
+    ],
+  },
+  {
+    label: "Library",
+    items: [
+      { id: "docs", label: "Docs", icon: "Folder" },
+      { id: "people", label: "People", icon: "User" },
+    ],
+  },
+];
+
+const CUSTOM_ITEMS = CUSTOM_GROUPS.flatMap((group) => group.items);
+
+const WORKSPACES = [
+  { value: "agentix", label: "Agentix" },
+  { value: "northwind", label: "Northwind" },
+];
+
+/** Built nav: one SideNav that adapts to where the shell renders it (rail or Drawer). */
+function CustomNav({ page, onPick }: { page: string; onPick: (id: string) => void }) {
+  const shell = useAppShell();
+  const inDrawer = shell?.navPlacement === "drawer";
+  const groups = CUSTOM_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.map((item) => ({ ...item, active: item.id === page, onClick: () => onPick(item.id) })),
+  }));
+
+  return (
+    <SideNav
+      title="Agentix"
+      showHeader={false}
+      radius={inDrawer ? "md" : "none"}
+      open
+      groups={groups}
+      beforeGroups={
+        <Select id={inDrawer ? "shell-ws-drawer" : "shell-ws"} size="sm" ariaLabel="Workspace" defaultValue="agentix" options={WORKSPACES} />
+      }
+    />
+  );
+}
+
+/**
+ * The same shell with chrome built from blocks: AppHeader.Root with a Beta Badge
+ * and Avatar, and a grouped SideNav with a workspace Select.
+ */
+export function AppShellCustomDemo() {
+  const [page, setPage] = useState("home");
+  const [query, setQuery] = useState("");
+  const current = CUSTOM_ITEMS.find((item) => item.id === page) ?? CUSTOM_ITEMS[0];
+
+  return (
+    <div className={styles.browser}>
+      <div className={styles.browserChrome} aria-hidden="true">
+        <div className={styles.traffic}>
+          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
+        </div>
+        <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
+      </div>
+      <AppShellPattern
+        navLabel="Agentix"
+        header={
+          <AppHeader.Root ariaLabel="Agentix">
+            <AppHeader.Brand
+              logo={
+                <AppShellPattern.MenuButton>
+                  <AppHeader.Mark>A</AppHeader.Mark>
+                </AppShellPattern.MenuButton>
+              }
+            >
+              <AppHeader.Title>Agentix</AppHeader.Title>
+              <Badge tone="info" size="sm">Beta</Badge>
+            </AppHeader.Brand>
+            <AppHeader.Search placeholder="Search runs" shortcut="⌘K" value={query} onSearch={setQuery} />
+            <AppHeader.Actions>
+              <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+              <Avatar name="Maya Chen" size="sm" />
+            </AppHeader.Actions>
+          </AppHeader.Root>
+        }
+        nav={<CustomNav page={page} onPick={setPage} />}
+      >
+        <div className="layout-canvas layout-canvas--sticky-header">
+          <div className="layout-header">
+            <PageHeader title={current.label} subtitle="Header and nav built from blocks; the shell still owns layout and the Drawer." />
+          </div>
+          <div className="layout-content">
+            <Empty
+              title={`${current.label} goes here`}
+              description="Below 64rem the Menu Button in the brand cell opens this nav in the left Drawer."
               icon={current.icon}
               outlined
             />

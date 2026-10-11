@@ -53,6 +53,18 @@ const SLOTS_CODE = `<AppHeader
   }
 />`;
 
+const BLOCKS_CODE = `<AppHeader.Root ariaLabel="Acme">
+  <AppHeader.Brand mark="A">
+    <AppHeader.Title>Acme</AppHeader.Title>
+    <Badge tone="info" size="sm">Beta</Badge>
+  </AppHeader.Brand>
+  <AppHeader.Search placeholder="Search docs" shortcut="⌘K" onSearch={setQuery} />
+  <AppHeader.Actions>
+    <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+    <Avatar name="Maya Chen" size="sm" />
+  </AppHeader.Actions>
+</AppHeader.Root>`;
+
 function DemoActions() {
   return (
     <>
@@ -271,6 +283,37 @@ export function AppHeaderDoc() {
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Build your own header</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.bar}>
+                  <AppHeader.Root ariaLabel="Acme">
+                    <AppHeader.Brand mark="A">
+                      <AppHeader.Title>Acme</AppHeader.Title>
+                      <Badge tone="info" size="sm">Beta</Badge>
+                    </AppHeader.Brand>
+                    <AppHeader.Search placeholder="Search docs" shortcut="⌘K" onSearch={setQuery} />
+                    <AppHeader.Actions>
+                      <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+                      <Avatar name="Maya Chen" size="sm" />
+                    </AppHeader.Actions>
+                  </AppHeader.Root>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  The preset is built from these blocks. Root is the labelled header landmark;
+                  Brand is the start column (rail-width mark cell, then children); Search, Center
+                  or Spacer fill the center; Actions is the labelled end group. Leave the center
+                  out and the bar drops to two columns. To start from the preset&apos;s source, run
+                  npx agentic-ds-kit add app-header. In AppShellPattern, put
+                  AppShellPattern.MenuButton in Brand&apos;s logo.
+                </p>
+              </div>
+              <CodeBlock code={BLOCKS_CODE} />
             </section>
           </div>
         )}

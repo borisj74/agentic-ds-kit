@@ -114,6 +114,122 @@
     "className": "root",
     "rest": "header"
   },
+  "compose": {
+    "note": "Building blocks for a header you arrange yourself. <AppHeader …/> is the preset built from them; output identical. Also exported as AppHeaderRoot, AppHeaderBrand, AppHeaderMark, AppHeaderTitle, AppHeaderSearch, AppHeaderCenter, AppHeaderSpacer, AppHeaderActions.",
+    "nesting": [
+      "AppHeader.Root holds, in order: one AppHeader.Brand (start), at most one of AppHeader.Search / AppHeader.Center / AppHeader.Spacer (center), one AppHeader.Actions (end)",
+      "AppHeader.Brand children follow the brand cell: AppHeader.Title, then optional kit components (Badge, Select, DropdownMenu)",
+      "AppHeader.Mark goes in a logo slot (Brand logo, AppShellPattern.MenuButton children); Brand renders it itself from mark",
+      "Without a center block the bar uses two columns (start, end), as with search={false}"
+    ],
+    "blocks": {
+      "AppHeader.Root": {
+        "element": "header",
+        "props": {
+          "ariaLabel": "Landmark label. Default Application. Pass the product name.",
+          "radius": "none (default) | md",
+          "children": "Brand, center block, Actions"
+        },
+        "passthrough": {
+          "root": "header",
+          "ref": "header",
+          "className": "root",
+          "rest": "header"
+        },
+        "note": "Owns the landmark, the container query (stack below 38rem) and the bar grid. data-search=\"false\" forces two columns; otherwise CSS :has() picks two columns when there is no center block."
+      },
+      "AppHeader.Brand": {
+        "element": "div",
+        "props": {
+          "mark": "Brand letter in the rail-width cell",
+          "logo": "ReactNode in the rail-width cell; replaces the letter. AppShellPattern.MenuButton goes here in a built shell header.",
+          "children": "After the brand cell, e.g. AppHeader.Title"
+        },
+        "passthrough": {
+          "root": "div",
+          "ref": "div",
+          "className": "root",
+          "rest": "div"
+        },
+        "note": "Start column. The brand cell (--appheader-brand-width, layout-sidebar-compact) renders only when mark or logo is set; it centers the mark on the SideNav rail icons."
+      },
+      "AppHeader.Mark": {
+        "element": "span",
+        "passthrough": {
+          "root": "span",
+          "ref": "span",
+          "className": "root",
+          "rest": "span"
+        },
+        "note": "Letter mark on fill-brand, aria-hidden. One letter."
+      },
+      "AppHeader.Title": {
+        "element": "p",
+        "passthrough": {
+          "root": "p",
+          "ref": "p",
+          "className": "root",
+          "rest": "p"
+        },
+        "note": "Product name, ellipsis on overflow. Not a heading."
+      },
+      "AppHeader.Search": {
+        "element": "div > kit Input type=search",
+        "props": {
+          "placeholder": "Placeholder and accessible name. Default Search.",
+          "value": "controlled; pair with onSearch",
+          "defaultValue": "uncontrolled start value",
+          "onSearch": "(value: string) => void",
+          "shortcut": "Decorative hint in the Input end slot, e.g. ⌘K",
+          "id": "Input id; generated when omitted",
+          "ariaLabel": "When the name should differ from placeholder"
+        },
+        "passthrough": {
+          "root": "div",
+          "ref": "input",
+          "className": "root",
+          "rest": "input"
+        },
+        "note": "Center column with the kit Input. Form-control passthrough: ref and native attributes reach the input."
+      },
+      "AppHeader.Center": {
+        "element": "div",
+        "passthrough": {
+          "root": "div",
+          "ref": "div",
+          "className": "root",
+          "rest": "div"
+        },
+        "note": "Center column for other kit content (ButtonGroup view switcher, Tabs). Stacks under the bar below 38rem, like Search."
+      },
+      "AppHeader.Spacer": {
+        "element": "div",
+        "passthrough": {
+          "root": "div",
+          "ref": "div",
+          "className": "root",
+          "rest": "div"
+        },
+        "note": "Empty, aria-hidden center column: keeps the three-column rhythm without search. Hidden below 38rem."
+      },
+      "AppHeader.Actions": {
+        "element": "div",
+        "props": {
+          "ariaLabel": "Group label. Default Actions.",
+          "children": "kit Buttons (tertiary sm icon buttons), Avatar. At most one primary."
+        },
+        "passthrough": {
+          "root": "div",
+          "ref": "div",
+          "className": "root",
+          "rest": "div"
+        },
+        "note": "End column. role=group with its label only when it has children."
+      }
+    },
+    "snippet": "<AppHeader.Root ariaLabel=\"Acme\">\n  <AppHeader.Brand mark=\"A\">\n    <AppHeader.Title>Acme</AppHeader.Title>\n    <Badge tone=\"info\" size=\"sm\">Beta</Badge>\n  </AppHeader.Brand>\n  <AppHeader.Search placeholder=\"Search\" shortcut=\"⌘K\" onSearch={setQuery} />\n  <AppHeader.Actions>\n    <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" />\n  </AppHeader.Actions>\n</AppHeader.Root>",
+    "copyIn": "npx agentic-ds-kit add app-header copies ShellHeader (the preset built from these blocks) into components/chrome/app-header/."
+  },
   "cssVars": {
     "--appheader-height": "Minimum bar height (calc(space-10 + space-2 + space-2))",
     "--appheader-padding-inline": "Bar end padding and the stacked-search inset; the start stays 0 so the brand lines up with the SideNav rail (space-5 wide, space-4 in narrow containers)",
@@ -157,7 +273,9 @@
       "Actions remain keyboard accessible",
       "Do not use h1 — page titles belong on PageHeader",
       "At container 38rem, search stacks under brand and actions",
-      "Slots replace a region only; the header landmark and its aria-label stay"
+      "Slots replace a region only; the header landmark and its aria-label stay",
+      "Built headers keep the landmark: AppHeader.Root is the only <header>; pass ariaLabel",
+      "AppHeader.Actions is a labelled group; AppHeader.Search keeps the Input's accessible name"
     ]
   },
   "doNot": [
@@ -171,7 +289,10 @@
     "Do not restyle kit Input internals",
     "Do not put more than one primary Button in actions",
     "Do not use raw hex",
-    "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens"
+    "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens",
+    "Do not hand-roll a header bar, brand cell, or search field around the blocks — compose AppHeader.Root and its blocks",
+    "Do not put blocks outside AppHeader.Root, or more than one center block in one Root",
+    "Do not use h1–h6 for AppHeader.Title"
   ],
   "snippet": "<AppHeader title=\"Acme\" mark=\"A\" searchPlaceholder=\"Search\" searchShortcut=\"⌘K\" onSearch={setQuery} actions={<><Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /></>} />"
 }

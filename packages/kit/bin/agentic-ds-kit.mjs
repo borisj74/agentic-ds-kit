@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * agentic-ds-kit add <pattern>: copy a pattern's source into your app so you own it.
- * Reads patterns-src/ (built from ui/patterns/ at publish time). No dependencies.
+ * agentic-ds-kit add <name>: copy a pattern's (or a chrome recipe's) source into your app
+ * so you own it. Reads patterns-src/ (built from ui/patterns/ and recipes/ at publish
+ * time). No dependencies.
  */
 import { existsSync } from "node:fs";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
@@ -12,14 +13,15 @@ import { parseArgs } from "node:util";
 const pkgRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const srcRoot = join(pkgRoot, "patterns-src");
 
-const HELP = `Usage: npx agentic-ds-kit add <pattern> [options]
+const HELP = `Usage: npx agentic-ds-kit add <name> [options]
 
-Copy a kit pattern's source into your app so you can edit it.
+Copy a kit pattern, or a chrome recipe (a component preset rebuilt from its
+building blocks), into your app so you can edit it.
 
 Options:
-  --list         List patterns you can add
-  --dir <path>   Target folder (default: components/patterns/<pattern>,
-                 or src/components/patterns/<pattern> when the app uses src/)
+  --list         List patterns and recipes you can add
+  --dir <path>   Target folder (default: components/patterns/<name> for patterns,
+                 components/chrome/<name> for recipes; under src/ when the app uses src/)
   --force        Overwrite files that already exist
   --cwd <path>   App root (default: current folder)
   -h, --help     Show this help
@@ -27,6 +29,7 @@ Options:
 Examples:
   npx agentic-ds-kit add --list
   npx agentic-ds-kit add dashboard
+  npx agentic-ds-kit add app-header
   npx agentic-ds-kit add inbox --dir app/inbox/_pattern`;
 
 function fail(message) {
@@ -52,11 +55,23 @@ function normalize(name) {
     .replace(/-?pattern$/, "");
 }
 
+/** Manifests from before recipes have no `kind`: every entry is a pattern. */
+const kindOf = (entry) => entry.kind ?? "pattern";
+
 function printList(manifest) {
   const width = Math.max(...manifest.map((p) => p.id.length));
-  console.log("Patterns you can add:\n");
-  for (const p of manifest) console.log(`  ${p.id.padEnd(width)}  ${p.intent}`);
-  console.log("\nnpx agentic-ds-kit add <pattern>");
+  const sections = [
+    ["Patterns you can add:", "pattern"],
+    ["Recipes (chrome presets built from blocks):", "recipe"],
+  ];
+  for (const [heading, kind] of sections) {
+    const entries = manifest.filter((p) => kindOf(p) === kind);
+    if (!entries.length) continue;
+    console.log(`${heading}\n`);
+    for (const p of entries) console.log(`  ${p.id.padEnd(width)}  ${p.intent}`);
+    console.log("");
+  }
+  console.log("npx agentic-ds-kit add <name>");
 }
 
 let parsed;
@@ -93,18 +108,19 @@ if (opts.list) {
   process.exit(0);
 }
 if (names.length !== 1) {
-  fail(names.length ? "add one pattern at a time." : "name a pattern. Run: npx agentic-ds-kit add --list");
+  fail(names.length ? "add one at a time." : "name a pattern or recipe. Run: npx agentic-ds-kit add --list");
 }
 
 const id = normalize(names[0]);
 const pattern = manifest.find((p) => p.id === id);
 if (!pattern) {
-  fail(`unknown pattern "${names[0]}". Available: ${manifest.map((p) => p.id).join(", ")}\nRun: npx agentic-ds-kit add --list`);
+  fail(`unknown pattern or recipe "${names[0]}". Available: ${manifest.map((p) => p.id).join(", ")}\nRun: npx agentic-ds-kit add --list`);
 }
 
 const cwd = resolve(opts.cwd ?? process.cwd());
 const usesSrc = existsSync(join(cwd, "src")) && !existsSync(join(cwd, "components"));
-const target = resolve(cwd, opts.dir ?? join(usesSrc ? "src" : "", "components/patterns", pattern.id));
+const folder = kindOf(pattern) === "recipe" ? "components/chrome" : "components/patterns";
+const target = resolve(cwd, opts.dir ?? join(usesSrc ? "src" : "", folder, pattern.id));
 
 const clashes = pattern.files.filter((file) => existsSync(join(target, file)));
 if (clashes.length && !opts.force) {
@@ -133,5 +149,5 @@ console.log(`
 Use it:
   import { ${pattern.name} } from "${spec}";
 
-You own these files now; edit them freely. Keep ${pattern.id}.contract.json next to them so
-agents keep the kit rules (tokens, one primary Button, kit components only).`);
+You own these files now; edit them freely. Keep ${pattern.files.filter((f) => f.endsWith(".contract.json")).join(", ")} next to
+them so agents keep the kit rules (tokens, one primary Button, kit components only).`);

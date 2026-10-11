@@ -1,6 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
+import {
+  createContext,
+  isValidElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { AppHeader } from "../../AppHeader";
 import type { AppHeaderProps } from "../../AppHeader";
 import { Button } from "../../Button";
@@ -16,12 +27,77 @@ export type AppShellHeader = Omit<AppHeaderProps, "radius">;
 export type AppShellNav = Omit<SideNavProps, "showHeader" | "radius" | "side">;
 
 export interface AppShellPatternProps {
-  header: AppShellHeader;
-  nav: AppShellNav;
+  /**
+   * AppHeader props (the shell injects the narrow-screen Menu Button), or a header you
+   * built from `AppHeader.Root` and its blocks. A built header places
+   * `AppShellPattern.MenuButton` itself, usually as the `AppHeader.Brand` logo.
+   */
+  header: AppShellHeader | ReactNode;
+  /**
+   * SideNav props, or a nav you built (a `SideNav`, later SideNav blocks). A built nav
+   * renders in the rail when wide and inside the left Drawer when narrow; read
+   * `useAppShell().navPlacement` to adapt it (e.g. always expanded in the Drawer).
+   */
+  nav: AppShellNav | ReactNode;
+  /** Drawer title on narrow screens. Default: `nav.title`, or "Navigation" for a built nav. */
+  navLabel?: string;
   /** Page content: usually a `layout-canvas` or `layout-workspace`, or another pattern. */
   children: ReactNode;
   /** Extra class on the `layout-shell` root, e.g. to give it the viewport height. */
   className?: string;
+}
+
+export type AppShellNavPlacement = "rail" | "drawer";
+
+export interface AppShellContextValue {
+  /** Below --grid-breakpoint-md: no rail, the nav lives in the Drawer. */
+  narrow: boolean;
+  /** The narrow-screen Drawer is open. */
+  navOpen: boolean;
+  openNav: () => void;
+  closeNav: () => void;
+  /** Where the calling component renders: in the wide rail, in the narrow Drawer, or neither (null). */
+  navPlacement: AppShellNavPlacement | null;
+}
+
+interface MenuSlot {
+  ref: RefObject<HTMLSpanElement | null>;
+  /** Counts mounted Menu Buttons; returns the unregister call. */
+  register: () => () => void;
+}
+
+const AppShellContext = createContext<AppShellContextValue | null>(null);
+const MenuSlotContext = createContext<MenuSlot | null>(null);
+
+/** Shell state for custom chrome: `narrow`, `navOpen`, `openNav`, `closeNav`, `navPlacement`. Null outside AppShellPattern. */
+export function useAppShell(): AppShellContextValue | null {
+  return useContext(AppShellContext);
+}
+
+export interface AppShellMenuButtonProps {
+  /** Rendered when wide (no Menu Button needed), e.g. `<AppHeader.Mark>A</AppHeader.Mark>`. Default nothing. */
+  children?: ReactNode;
+  /** Accessible name. Default "Open navigation". */
+  ariaLabel?: string;
+}
+
+/**
+ * The narrow-screen Menu Button (tertiary sm, lucide Menu) that opens the nav Drawer.
+ * Renders `children` when wide. Place it in a built header, usually as the
+ * `AppHeader.Brand` logo so it sits on the rail axis. Focus returns here when the Drawer closes.
+ */
+export function AppShellMenuButton({ children = null, ariaLabel = "Open navigation" }: AppShellMenuButtonProps) {
+  const shell = useContext(AppShellContext);
+  const slot = useContext(MenuSlotContext);
+
+  useEffect(() => slot?.register(), [slot]);
+
+  if (!shell?.narrow) return <>{children}</>;
+  return (
+    <span ref={slot?.ref} className={styles.menu}>
+      <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel={ariaLabel} onClick={shell.openNav} />
+    </span>
+  );
 }
 
 /*
@@ -51,16 +127,36 @@ function useNarrow(): boolean {
   );
 }
 
+/** A props object (preset chrome) rather than a built node. */
+function isPropsObject<T extends object>(value: T | ReactNode): value is T {
+  return typeof value === "object" && value !== null && !isValidElement(value) && !(Symbol.iterator in value);
+}
+
 /**
  * Product chrome at every width. Wide: AppHeader over SideNav + content
  * (layout-shell / layout-app, radius none, no gap). Narrow: no SideNav; a Menu
  * Button at the start of AppHeader opens the same nav in a left Drawer.
+ * `header` and `nav` take preset props or nodes built from the kit blocks.
  */
-export function AppShellPattern({ header, nav, children, className = "" }: AppShellPatternProps) {
+function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }: AppShellPatternProps) {
   const narrow = useNarrow();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
+  const menuMounted = useRef(0);
+  const [menuSlot] = useState<MenuSlot>(() => ({
+    ref: menuRef,
+    register: () => {
+      menuMounted.current += 1;
+      return () => {
+        menuMounted.current -= 1;
+      };
+    },
+  }));
   const wasOpen = useRef(false);
+  const headerProps = isPropsObject<AppShellHeader>(header) ? header : null;
+  const navProps = isPropsObject<AppShellNav>(nav) ? nav : null;
+  const headerNode = headerProps ? null : (header as ReactNode);
+  const navNode = navProps ? null : (nav as ReactNode);
 
   // Widening past the breakpoint closes the Drawer (adjusted during render, not in an effect).
   const [wasNarrow, setWasNarrow] = useState(narrow);
@@ -76,6 +172,15 @@ export function AppShellPattern({ header, nav, children, className = "" }: AppSh
     wasOpen.current = menuOpen;
   }, [menuOpen]);
 
+  // A built header must place AppShellPattern.MenuButton, or narrow screens lose the nav.
+  useEffect(() => {
+    if (narrow && !headerProps && menuMounted.current === 0) {
+      console.warn(
+        "AppShellPattern: the custom header has no AppShellPattern.MenuButton, so the nav cannot be opened on narrow screens.",
+      );
+    }
+  }, [narrow, headerProps]);
+
   // A leaf pick closes the Drawer; parent disclosures (aria-expanded) do not.
   function closeOnPick(event: MouseEvent<HTMLDivElement>) {
     const target = event.target as HTMLElement;
@@ -85,42 +190,64 @@ export function AppShellPattern({ header, nav, children, className = "" }: AppSh
     }
   }
 
+  const shell: AppShellContextValue = {
+    narrow,
+    navOpen: menuOpen,
+    openNav: () => setMenuOpen(true),
+    closeNav: () => setMenuOpen(false),
+    navPlacement: null,
+  };
+
   return (
-    <div className={`layout-shell ${className}`.trim()}>
-      <AppHeader
-        {...header}
-        radius="none"
-        logo={
-          narrow ? (
-            <span ref={menuRef} className={styles.menu}>
-              <Button
-                variant="tertiary"
-                size="sm"
-                iconStart="Menu"
-                ariaLabel="Open navigation"
-                onClick={() => setMenuOpen(true)}
-              />
-            </span>
+    <AppShellContext.Provider value={shell}>
+      <MenuSlotContext.Provider value={menuSlot}>
+        <div className={`layout-shell ${className}`.trim()}>
+          {headerProps ? (
+            <AppHeader
+              {...headerProps}
+              radius="none"
+              logo={narrow ? <AppShellMenuButton /> : headerProps.logo}
+            />
           ) : (
-            header.logo
-          )
-        }
-      />
-      <div className={`layout-app ${styles.app}`}>
-        {narrow ? null : (
-          <div className={styles.rail}>
-            <SideNav {...nav} showHeader={false} radius="none" />
+            headerNode
+          )}
+          <div className={`layout-app ${styles.app}`}>
+            {narrow ? null : (
+              <div className={styles.rail}>
+                <AppShellContext.Provider value={{ ...shell, navPlacement: "rail" }}>
+                  {navProps ? <SideNav {...navProps} showHeader={false} radius="none" /> : navNode}
+                </AppShellContext.Provider>
+              </div>
+            )}
+            {children}
           </div>
-        )}
-        {children}
-      </div>
-      {narrow ? (
-        <Drawer open={menuOpen} title={nav.title} side="left" size="sm" onClose={() => setMenuOpen(false)}>
-          <div className={styles.drawerNav} onClick={closeOnPick}>
-            <SideNav {...nav} open showHeader={false} radius="md" onOpenChange={undefined} />
-          </div>
-        </Drawer>
-      ) : null}
-    </div>
+          {narrow ? (
+            <Drawer
+              open={menuOpen}
+              title={navLabel ?? navProps?.title ?? "Navigation"}
+              side="left"
+              size="sm"
+              onClose={() => setMenuOpen(false)}
+            >
+              <div className={styles.drawerNav} onClick={closeOnPick}>
+                <AppShellContext.Provider value={{ ...shell, navPlacement: "drawer" }}>
+                  {navProps ? (
+                    <SideNav {...navProps} open showHeader={false} radius="md" onOpenChange={undefined} />
+                  ) : (
+                    navNode
+                  )}
+                </AppShellContext.Provider>
+              </div>
+            </Drawer>
+          ) : null}
+        </div>
+      </MenuSlotContext.Provider>
+    </AppShellContext.Provider>
   );
 }
+
+/**
+ * `AppShellPattern.MenuButton` is `AppShellMenuButton`. From a Server Component use the
+ * named export: dot access on a client component does not cross the server boundary.
+ */
+export const AppShellPattern = Object.assign(AppShellPatternRoot, { MenuButton: AppShellMenuButton });

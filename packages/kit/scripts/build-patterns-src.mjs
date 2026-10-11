@@ -1,8 +1,9 @@
 /**
- * Copies ui/patterns/<Name>Pattern/ into patterns-src/<id>/ for `agentic-ds-kit add`.
- * Kit-relative imports (`../../Button`, `../../shared/chartMath`) become one import
- * from "agentic-ds-kit", so the copied files compile inside a user's app.
- * Writes patterns-src/index.json: id, export name, intent, files.
+ * Copies ui/patterns/<Name>Pattern/ into patterns-src/<id>/ for `agentic-ds-kit add`,
+ * and the RECIPES below (component presets rebuilt from their blocks, in recipes/).
+ * Kit-relative imports (`../../Button`, `../../shared/chartMath`, `../../ui/AppHeader`)
+ * become one import from "agentic-ds-kit", so the copied files compile inside a user's app.
+ * Writes patterns-src/index.json: id, kind (pattern | recipe), export name, intent, files.
  */
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -22,14 +23,38 @@ function toId(dirName) {
     .toLowerCase();
 }
 
-const KIT_IMPORT = /^import\s+(type\s+)?\{([^}]*)\}\s+from\s+"(\.\.\/[^"]+)";\n/gm;
+/**
+ * Component presets rebuilt from their blocks. `add <id>` copies recipes/<dir>/ plus the
+ * listed component contracts, so agents keep the kit rules in the copy.
+ */
+const RECIPES = [
+  {
+    id: "app-header",
+    dir: "AppHeaderRecipe",
+    name: "ShellHeader",
+    contracts: ["appheader"],
+    intent: "AppHeader preset built from AppHeader.Root / Brand / Title / Search / Actions, with the AppShell Menu Button.",
+  },
+  {
+    id: "side-nav",
+    dir: "SideNavRecipe",
+    name: "ShellNav",
+    contracts: ["sidenav"],
+    intent: "SideNav for your app: standalone rail, or flush in AppShellPattern's rail and expanded in its Drawer.",
+  },
+];
 
-function rewriteImports(source, file) {
+const KIT_IMPORT = /^import\s+(type\s+)?\{([^}]*)\}\s+from\s+"(\.\.\/[^"]+)";\n/gm;
+/** Pattern files sit in ui/patterns/<Name>/; recipe files in recipes/<Name>/ (beside ui/). */
+const PATTERN_SPEC = /^\.\.\/\.\.\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/;
+const RECIPE_SPEC = /^\.\.\/\.\.\/ui\/(?:[A-Z][A-Za-z]*|patterns\/[A-Z][A-Za-z]*Pattern|shared\/[A-Za-z]+)$/;
+
+function rewriteImports(source, file, specOk = PATTERN_SPEC) {
   const values = [];
   const types = [];
   let firstAt = -1;
   const stripped = source.replace(KIT_IMPORT, (_match, typeOnly, names, spec, offset) => {
-    if (!/^\.\.\/\.\.\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/.test(spec)) {
+    if (!specOk.test(spec)) {
       throw new Error(`${file}: cannot map import "${spec}" to agentic-ds-kit`);
     }
     for (const raw of names.split(",")) {
@@ -37,7 +62,7 @@ function rewriteImports(source, file) {
       if (!name) continue;
       const isType = Boolean(typeOnly) || name.startsWith("type ");
       const bare = name.replace(/^type\s+/, "");
-      if (spec.startsWith("../../shared/") && !new RegExp(`\\b${bare}\\b`).test(publicBarrel)) {
+      if (/^\.\.\/\.\.\/(?:ui\/)?shared\//.test(spec) && !new RegExp(`\\b${bare}\\b`).test(publicBarrel)) {
         throw new Error(`${file}: ${bare} from "${spec}" is not exported by src/index.ts`);
       }
       (isType ? types : values).push(bare);
@@ -90,8 +115,33 @@ for (const dirName of dirs) {
   await cp(join(root, entry.path), join(target, `${id}.contract.json`));
   files.push(`${id}.contract.json`);
 
-  manifest.push({ id, name: dirName, intent: entry.intent, files });
+  manifest.push({ id, kind: "pattern", name: dirName, intent: entry.intent, files });
+}
+
+for (const recipe of RECIPES) {
+  const source = join(root, "recipes", recipe.dir);
+  const target = join(outDir, recipe.id);
+  await mkdir(target, { recursive: true });
+  const files = [];
+  for (const file of (await readdir(source)).sort()) {
+    const from = join(source, file);
+    if (/\.(tsx?|jsx?)$/.test(file)) {
+      const text = await readFile(from, "utf8");
+      await writeFile(join(target, file), rewriteImports(text, `recipes/${recipe.dir}/${file}`, RECIPE_SPEC));
+    } else {
+      await cp(from, join(target, file));
+    }
+    files.push(file);
+  }
+  for (const contractId of recipe.contracts) {
+    const entry = contractIndex.find((c) => c.group !== "pattern" && c.id === contractId);
+    if (!entry) throw new Error(`recipe ${recipe.id}: no component contract "${contractId}" in contracts/index.json`);
+    await cp(join(root, entry.path), join(target, `${contractId}.contract.json`));
+    files.push(`${contractId}.contract.json`);
+  }
+  manifest.push({ id: recipe.id, kind: "recipe", name: recipe.name, intent: recipe.intent, files });
 }
 
 await writeFile(join(outDir, "index.json"), `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(`patterns-src: ${manifest.length} patterns`);
+const count = (kind) => manifest.filter((m) => m.kind === kind).length;
+console.log(`patterns-src: ${count("pattern")} patterns, ${count("recipe")} recipes`);

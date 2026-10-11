@@ -1,12 +1,35 @@
 import { useId } from "react";
-import { Input } from "../Input";
+import {
+  AppHeaderActions,
+  AppHeaderBrand,
+  AppHeaderCenter,
+  AppHeaderMark,
+  AppHeaderRoot,
+  AppHeaderSearch,
+  AppHeaderSpacer,
+  AppHeaderTitle,
+} from "./AppHeader.blocks";
 import type { AppHeaderProps } from "./AppHeader.types";
-import { cx } from "../shared/cx";
-import styles from "./AppHeader.module.css";
 
-export type { AppHeaderProps, AppHeaderRadius } from "./AppHeader.types";
+export type {
+  AppHeaderProps,
+  AppHeaderRadius,
+  AppHeaderRootProps,
+  AppHeaderBrandProps,
+  AppHeaderMarkProps,
+  AppHeaderTitleProps,
+  AppHeaderCenterProps,
+  AppHeaderSearchProps,
+  AppHeaderActionsProps,
+  AppHeaderSpacerProps,
+} from "./AppHeader.types";
 
-export function AppHeader({
+/**
+ * Preset: brand, search, actions from props. Built from the blocks
+ * (`AppHeader.Root`, `.Brand`, `.Title`, `.Search`, `.Actions`); compose those
+ * directly to rearrange the bar.
+ */
+function AppHeaderPreset({
   title,
   mark,
   logo,
@@ -28,64 +51,56 @@ export function AppHeader({
   ...rest
 }: AppHeaderProps) {
   const generatedId = useId();
-  const inputId = searchId ?? generatedId;
   const markLetter = (mark && mark.length > 0 ? mark : title?.charAt(0)) || "·";
-  const label = ariaLabel ?? title ?? "Application";
 
-  const brand = (
-    <>
-      <div className={styles.brand}>
-        {logo ? (
-          <div className={styles.logo}>{logo}</div>
-        ) : (
-          <span className={styles.mark} aria-hidden>
-            {markLetter}
-          </span>
-        )}
-      </div>
-      {title ? <p className={styles.title}>{title}</p> : null}
-    </>
-  );
-
-  const centerContent =
+  const centerNode =
     center !== undefined ? (
-      center
+      center === null || center === false ? null : <AppHeaderCenter>{center}</AppHeaderCenter>
     ) : search ? (
-      <div className={styles.search}>
-        <Input
-          id={inputId}
-          type="search"
-          size="md"
-          placeholder={searchPlaceholder}
-          value={searchValue}
-          defaultValue={defaultSearchValue}
-          onChange={onSearch}
-          iconStart="Search"
-          end={searchShortcut}
-          ariaLabel={searchPlaceholder}
-        />
-      </div>
+      <AppHeaderSearch
+        id={searchId ?? generatedId}
+        placeholder={searchPlaceholder}
+        value={searchValue}
+        defaultValue={defaultSearchValue}
+        onSearch={onSearch}
+        shortcut={searchShortcut}
+      />
     ) : null;
-  const hasCenter = centerContent !== null && centerContent !== undefined && centerContent !== false;
-  const endContent = end !== undefined ? end : actions;
 
   return (
-    <header
+    <AppHeaderRoot
       {...rest}
       ref={ref}
-      className={cx(styles.header, radius === "md" && styles.radiusMd, className)}
-      aria-label={label}
-      data-search={hasCenter ? undefined : "false"}
+      className={className}
+      radius={radius}
+      ariaLabel={ariaLabel ?? title ?? "Application"}
+      data-search={centerNode ? undefined : "false"}
     >
-      <div className={styles.bar}>
-        <div className={styles.start}>{start !== undefined ? start : brand}</div>
-
-        {hasCenter ? <div className={styles.center}>{centerContent}</div> : null}
-
-        <div className={styles.end} role={endContent ? "group" : undefined} aria-label={endContent ? "Actions" : undefined}>
-          {endContent}
-        </div>
-      </div>
-    </header>
+      {start !== undefined ? (
+        <AppHeaderBrand>{start}</AppHeaderBrand>
+      ) : (
+        <AppHeaderBrand mark={markLetter} logo={logo}>
+          {title ? <AppHeaderTitle>{title}</AppHeaderTitle> : null}
+        </AppHeaderBrand>
+      )}
+      {centerNode}
+      <AppHeaderActions>{end !== undefined ? end : actions}</AppHeaderActions>
+    </AppHeaderRoot>
   );
 }
+
+/**
+ * Product top chrome. `<AppHeader … />` is the preset; `AppHeader.Root`, `.Brand`,
+ * `.Mark`, `.Title`, `.Search`, `.Center`, `.Spacer`, `.Actions` are the building
+ * blocks (also exported as `AppHeaderRoot`, `AppHeaderBrand`, …).
+ */
+export const AppHeader = Object.assign(AppHeaderPreset, {
+  Root: AppHeaderRoot,
+  Brand: AppHeaderBrand,
+  Mark: AppHeaderMark,
+  Title: AppHeaderTitle,
+  Search: AppHeaderSearch,
+  Center: AppHeaderCenter,
+  Spacer: AppHeaderSpacer,
+  Actions: AppHeaderActions,
+});

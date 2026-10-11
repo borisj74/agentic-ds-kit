@@ -8,3 +8,17 @@
 .anchor {
   scroll-margin-top: var(--space-6);
 }
+
+/* Second App shell demo (custom chrome) below the default one. */
+.variantTitle {
+  margin: var(--space-10) 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--type-size-heading);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading);
+  color: var(--text-primary);
+}
+
+.variantFrame {
+  margin-top: var(--space-6);
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AppShellDemo } from "../_components/AppShellDemo";
+import { AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { SignInDemo } from "../_components/SignInDemo";
 import styles from "./patterns.module.css";
@@ -48,7 +48,18 @@ export default function PatternsPage() {
           {standalone === "sign-in" ? (
             <SignInDemo />
           ) : standalone === "app-shell" ? (
-            <AppShellDemo />
+            <>
+              <AppShellDemo />
+              <h2 className={styles.variantTitle}>Custom chrome</h2>
+              <p className={playground.body}>
+                header and nav also take nodes built from the kit blocks. The header places
+                AppShellPattern.MenuButton in its brand cell; the nav reads useAppShell() to stay
+                expanded in the Drawer.
+              </p>
+              <div className={styles.variantFrame}>
+                <AppShellCustomDemo />
+              </div>
+            </>
           ) : (
             <DashboardDemo />
           )}
