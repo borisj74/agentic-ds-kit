@@ -309,23 +309,37 @@ The rule is short on purpose:
 
 ## Passing props through
 
-Kit components are strict on look and accessibility and open on everything else. The form controls (Button, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Slider, DatePicker, InputOTP, ColorPicker, FileUpload, Field, FieldSet) take, on top of their own props:
+Kit components are strict on look and accessibility and open on everything else. Every component takes, on top of its own props:
 
-- **`ref`** — a plain prop (React 19, no `forwardRef`). On form controls it reaches the native element, so form libraries can register it.
-- **`className`** — merged onto the visual root after the kit's classes. Use it for layout (width, margin, grid placement), not to restyle the component.
+- **`ref`** — a plain prop (React 19, no `forwardRef`). On form controls it reaches the native element, so form libraries can register it; elsewhere it reaches the component's root.
+- **`className`** — merged after the kit's classes. Use it for layout (width, margin, grid placement), not to restyle the component.
 - **Any other HTML attribute** — `id`, `data-testid`, `aria-*` the kit does not manage, event handlers. These go to the same element as `ref`.
 
 ```tsx
 const emailRef = useRef<HTMLInputElement>(null);
 
-<Field label="Email" htmlFor="email">
-  <Input id="email" ref={emailRef} className="signup-email" data-testid="email" autoComplete="email" />
-</Field>
+<Card className="signup-card" data-testid="signup">
+  <Field label="Email" htmlFor="email">
+    <Input id="email" ref={emailRef} className="signup-email" data-testid="email" autoComplete="email" />
+  </Field>
+</Card>
 ```
 
-Where each one lands is in the contract's `passthrough` block, for example Input: `{ "root": "div", "ref": "input", "className": "root", "rest": "input" }`. Composite widgets (Select, DatePicker) put `ref` on the trigger button; ColorPicker puts it on the hex input.
+Where each one lands is in the contract's `passthrough` block, for example Input: `{ "root": "div", "ref": "input", "className": "root", "rest": "input" }`. The cases worth knowing:
 
-The kit always wins on what it owns: `role`, the `aria-*` it manages, `data-state`, and its own props. When a kit prop has the same name as an HTML attribute with a different meaning (`size`, `onChange` on Input that passes the value instead of the event, `pattern` on InputOTP), the kit prop is the one you get.
+- **Form controls** (Button, Input, Textarea, Checkbox, Switch, InputOTP): `ref` and attributes on the native element, `className` on the visual root.
+- **Composite widgets:** Select, DatePicker and DropdownMenu put `ref` on the trigger button; ColorPicker on the hex input; FileUpload on the drop-zone button.
+- **Overlays** (Modal, AlertDialog, Drawer, HelpPopover): everything goes on the dialog panel, not the portal or scrim. The ref is `null` while the overlay is closed. Tooltip keeps `className` on the trigger wrapper and puts `ref` and attributes on the tooltip bubble.
+- **Charts** (BarChart, LineChart, PieChart): the `<figure>` wrapper, not the SVG.
+- **Group roots** (RadioGroup, Slider, Field, FieldSet): the root, since there is no single native control.
+
+The kit always wins on what it owns: `role`, the `aria-*` it manages, `data-state`, its own event handlers and its own props. When a kit prop has the same name as an HTML attribute with a different meaning, the kit prop is the one you get:
+
+- `title` is heading text on Card, Section, PageHeader, Alert, Modal, Drawer, charts and others, not a tooltip.
+- `onChange` on form controls passes the value, not the event. With react-hook-form, use `Controller`, or spread `register()` without its `onChange`.
+- `size`, `value` / `defaultValue`, and `pattern` on InputOTP keep their kit meaning.
+- `id` on Tag, Cell and HeaderCell names the inner checkbox; target the root with `data-*`.
+- Navigation landmarks (Pagination, NavigationMenu, AppNav, SideNav) accept your `aria-label` so several navs on one page can be told apart.
 
 ## How the catalog works
 
