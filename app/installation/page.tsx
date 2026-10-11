@@ -86,6 +86,11 @@ export default function InstallationPage() {
               agentic-ds-kit/tokens.css and agentic-ds-kit/layout.css in the root layout. Upgrading the
               kit does not change copied files.
             </p>
+            <p className={playground.body}>
+              The same command copies chrome recipes: add app-header and add side-nav write
+              ShellHeader and ShellNav (the AppHeader and SideNav presets rebuilt from their building
+              blocks) to components/chrome/, ready to pass to AppShellPattern as header and nav.
+            </p>
           </div>
         </Section>
 
