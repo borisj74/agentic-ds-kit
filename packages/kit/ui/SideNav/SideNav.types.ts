@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type {
   ComponentPropsWithoutRef,
   HTMLAttributes,
@@ -18,8 +19,8 @@ export interface SideNavItemData {
   href?: string;
   /** In-app select. When set, the leaf is a button and href is not used. */
   onClick?: () => void;
-  /** Lucide name, via LucideByName from @/ui/Button/lucideName */
-  icon?: string;
+  /** Lucide name (curated renders instantly, others load on demand) or a Lucide component. */
+  icon?: KitIcon;
   active?: boolean;
   disabled?: boolean;
   badge?: string;
@@ -127,8 +128,8 @@ type SideNavItemOwnedKeys =
  */
 export interface SideNavItemProps extends Omit<HTMLAttributes<HTMLElement>, SideNavItemOwnedKeys> {
   label: string;
-  /** Lucide name (e.g. "House") or your own icon node. */
-  icon?: ReactNode;
+  /** Lucide name (e.g. "House"), a Lucide component, or your own icon node. */
+  icon?: KitIcon | ReactNode;
   badge?: ReactNode;
   /** Current page: `aria-current="page"` and the active fill. */
   active?: boolean;

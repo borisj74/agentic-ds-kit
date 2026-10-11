@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { CellSize, CellValue } from "../Cell/Cell.types";
 
@@ -23,7 +24,7 @@ export interface DataTableBulkAction {
   id: string;
   label: string;
   variant?: DataTableBulkActionVariant;
-  iconStart?: string;
+  iconStart?: KitIcon;
   onClick: (ids: string[]) => void;
 }
 

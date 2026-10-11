@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 
@@ -8,7 +9,7 @@ export type ListViewInteraction = "none" | "drill";
 export interface ListViewAction {
   id: string;
   label: string;
-  icon?: string;
+  icon?: KitIcon;
   danger?: boolean;
   disabled?: boolean;
 }
@@ -20,7 +21,7 @@ export interface ListViewItem {
   name?: string;
   src?: string;
   initials?: string;
-  icon?: string;
+  icon?: KitIcon;
   badge?: string;
   badgeTone?: BadgeTone;
   disabled?: boolean;
@@ -36,7 +37,7 @@ export interface ListViewGroup {
 export interface ListViewEmpty {
   title: string;
   description?: string;
-  icon?: string;
+  icon?: KitIcon;
   outlined?: boolean;
 }
 

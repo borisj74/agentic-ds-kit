@@ -25,10 +25,10 @@
         "label": "string",
         "children": "TreeViewItem[]",
         "disabled": "boolean",
-        "icon": "string"
+        "icon": "KitIcon"
       },
       "required": true,
-      "note": "A node with children (even []) is a folder. Omit children on a leaf. Optional icon is a LucideByName when showIcons."
+      "note": "A node with children (even []) is a folder. Omit children on a leaf. Optional icon when showIcons. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "label": {
       "type": "string",

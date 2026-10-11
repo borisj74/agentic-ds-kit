@@ -85,7 +85,7 @@
         "id": "string",
         "label": "string",
         "variant": "secondary | tertiary | danger?",
-        "iconStart": "string?",
+        "iconStart": "KitIcon?",
         "onClick": "(ids: string[]) => void"
       },
       "note": "Shown when selectable and at least one row is checked. kit Buttons. Never primary."

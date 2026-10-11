@@ -37,6 +37,7 @@ const GROUPS: SideNavGroup[] = [
       },
       { id: "tasks", label: "Open tasks", href: H, icon: "Check", badge: "18" },
       { id: "insights", label: "Insights", href: H, icon: "Sparkles" },
+      { id: "launches", label: "Launches", href: H, icon: "Rocket" },
       {
         id: "resources",
         label: "Resources",

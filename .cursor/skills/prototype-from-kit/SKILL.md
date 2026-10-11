@@ -21,6 +21,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 - Never define local cousins of kit components.
 - Importing from `agentic-ds-kit` loads tokens. Do not add a second tokens import unless your own CSS needs the variables first.
 - Never use raw hex in component styles; semantic tokens only.
+- Icon props (`iconStart`, `icon`, …) take any Lucide name (`"Rocket"` or `"rocket"`): curated names render instantly, others load on demand; or pass the Lucide component (`iconStart={Rocket}`; in a Server Component feeding a client kit component, use a name or `<Rocket />`). Never hand-roll an `<svg>` or wrap an icon beside a kit component.
 - Kit components take `className` (merged onto the root, for layout only), `ref` (a plain prop; on form controls it reaches the native element) and other HTML attributes such as `id` or `data-testid`. Check the contract's `passthrough` block for where each lands. Do not use `className` to restyle a component or override a kit-owned `role` or `aria-*`.
 - App chrome (AppHeader, SideNav, AppNav) has four layers; take the lowest one that does the job and never hand-roll a header, nav row or Menu button:
   1. **Variables** — restyle through the contract's `cssVars` (e.g. `--sidenav-width-collapsed` on `:root`; AppHeader's brand column follows it), set to semantic tokens.

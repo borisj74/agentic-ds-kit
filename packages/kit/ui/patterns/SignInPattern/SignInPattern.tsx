@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 import { Alert } from "../../Alert";
-import { Button } from "../../Button";
+import { Button, type KitIcon } from "../../Button";
 import { Card } from "../../Card";
 import { Checkbox } from "../../Checkbox";
 import { Divider } from "../../Divider";
@@ -15,8 +15,8 @@ export type SignInMode = "sign-in" | "sign-up";
 export interface SignInProvider {
   id: string;
   label: string;
-  /** Lucide export name, same as Button iconStart. */
-  icon?: string;
+  /** Same as Button iconStart: a Lucide name or component. */
+  icon?: KitIcon;
 }
 
 export interface SignInValues {

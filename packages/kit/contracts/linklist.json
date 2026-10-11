@@ -35,9 +35,9 @@
           "required": false
         },
         "icon": {
-          "type": "string",
+          "type": "KitIcon",
           "required": false,
-          "note": "lucide-react export name from the Foundations catalog, before the label."
+          "note": "Before the label. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
         },
         "description": {
           "type": "string",
@@ -92,7 +92,7 @@
     "Do not put it in a Card or draw a box round it yourself — put it in a Section",
     "Do not build a list of Links or a one-column Table for quick links — use LinkList",
     "Do not use ListView for quick links",
-    "Do not pass custom SVG as icon — use lucide-react export names",
+    "Do not pass custom SVG markup as icon — use a Lucide name or Lucide component",
     "Do not use raw hex or primitive --color-* ramps"
   ],
   "snippet": "<Section title=\"Quick links\">\n  <LinkList label=\"Quick links\" items={[{ id: \"tax\", label: \"Tax Related List\", href: \"/tax\" }, { id: \"portal\", label: \"Customer Portal\", href: \"/portal\" }]} />\n</Section>"

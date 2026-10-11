@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 import type { ButtonVariant } from "../Button/Button.types";
@@ -39,7 +40,7 @@ export interface CellOption {
 
 export interface CellAction {
   label?: string;
-  icon?: string;
+  icon?: KitIcon;
   ariaLabel?: string;
   variant?: ButtonVariant;
   onClick?: () => void;
@@ -59,7 +60,7 @@ export interface CellProps extends Omit<ComponentPropsWithoutRef<"span">, CellOw
   src?: string;
   initials?: string;
   people?: CellPerson[];
-  icon?: string;
+  icon?: KitIcon;
   tone?: BadgeTone;
   badges?: CellBadgeItem[];
   value?: string | number;

@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 export type TreeViewSize = "sm" | "md";
 export type TreeViewSelection = "none" | "single" | "multiple";
@@ -7,7 +8,7 @@ export interface TreeViewItem {
   label: string;
   children?: TreeViewItem[];
   disabled?: boolean;
-  icon?: string;
+  icon?: KitIcon;
 }
 
 /** Root attributes the kit sets itself. */

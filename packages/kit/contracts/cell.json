@@ -91,9 +91,9 @@
       "note": "Required for avatarGroup. Passed to kit AvatarGroup, max default 3."
     },
     "icon": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide catalog name. file default File, payment default CreditCard."
+      "note": "file default File, payment default CreditCard. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "tone": {
       "type": "enum",
@@ -156,7 +156,7 @@
       "required": false,
       "itemShape": {
         "label": "string?",
-        "icon": "string?",
+        "icon": "KitIcon?",
         "ariaLabel": "string?",
         "variant": "ButtonVariant?"
       },
@@ -201,7 +201,7 @@
     "Do not use raw hex",
     "Do not use Badge for trends",
     "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",
-    "Do not use Lucide except via LucideByName from @/ui/Button/lucideName",
+    "Do not render a separate Lucide icon beside it \u2014 pass a Lucide name or component to the icon props",
     "Do not invent a local progress bar \u2014 type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
     "Do not invent a local DropdownMenu \u2014 type=actionMenu composes kit DropdownMenu",
     "Do not invent local Select, Button, or ButtonGroup \u2014 compose the kit pieces"

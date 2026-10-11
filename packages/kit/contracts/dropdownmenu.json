@@ -39,9 +39,9 @@
       "note": "Kit Button label. Omit for icon-only; then ariaLabel is required."
     },
     "iconStart": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide name on the kit Button"
+      "note": "Icon on the kit Button. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "ariaLabel": {
       "type": "string",
@@ -84,7 +84,7 @@
           {
             "id": "string",
             "label": "string",
-            "icon": "string?",
+            "icon": "KitIcon? (from a Server Component: a name or element, not a component reference)",
             "shortcut": "string?",
             "disabled": "boolean?",
             "danger": "boolean?",
@@ -123,9 +123,9 @@
       "note": "button is kit Button. field is a full-width control with ChevronsUpDown. Select uses field. nav is a ghost text control with ChevronDown; NavigationMenu uses nav."
     },
     "iconEnd": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide name on a field trigger (default ChevronsUpDown) or kit Button trigger."
+      "note": "Icon on a field trigger (default ChevronsUpDown) or kit Button trigger. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "columns": {
       "type": "enum",

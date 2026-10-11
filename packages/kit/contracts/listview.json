@@ -35,7 +35,7 @@
         "name": "string?",
         "src": "string?",
         "initials": "string?",
-        "icon": "string?",
+        "icon": "KitIcon?",
         "badge": "string?",
         "badgeTone": "neutral | brand | success | warning | danger | info?",
         "disabled": "boolean?",
@@ -43,7 +43,7 @@
         "actions": "{ id, label, icon?, danger?, disabled? }[]?"
       },
       "required": true,
-      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Lucide names via Button/lucideName."
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "label": {
       "type": "string",
@@ -112,7 +112,7 @@
       "itemShape": {
         "title": "string",
         "description": "string?",
-        "icon": "string?",
+        "icon": "KitIcon?",
         "outlined": "boolean?"
       },
       "note": "When items is [], ListView renders kit Empty. title is required."

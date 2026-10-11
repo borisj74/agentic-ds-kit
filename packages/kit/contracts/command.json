@@ -30,13 +30,13 @@
           {
             "id": "string",
             "label": "string",
-            "icon": "string?",
+            "icon": "KitIcon?",
             "shortcut": "string?",
             "disabled": "boolean?"
           }
         ]
       },
-      "note": "Each group has optional heading and a required items array. Item icon is a Lucide PascalCase name from the catalog."
+      "note": "Each group has optional heading and a required items array. Item icon: Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "onSelect": {
       "type": "function",

@@ -75,7 +75,13 @@ import {
   PanelLeftOpen,
   PanelRightClose,
   PanelRightOpen,
+  LayoutDashboard,
+  FileText,
+  Users,
+  ChartLine,
+  Rocket,
 } from "lucide-react";
+import { Button, type KitIcon } from "agentic-ds-kit";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./IconsFoundations.module.css";
 
@@ -153,7 +159,23 @@ const ICONS = [
   { name: "PanelLeftOpen", Icon: PanelLeftOpen },
   { name: "PanelRightClose", Icon: PanelRightClose },
   { name: "PanelRightOpen", Icon: PanelRightOpen },
+  { name: "LayoutDashboard", Icon: LayoutDashboard },
+  { name: "FileText", Icon: FileText },
+  { name: "Users", Icon: Users },
+  { name: "ChartLine", Icon: ChartLine },
 ] as const;
+
+const KIT_DEMOS: { label: string; icon: KitIcon; code: string; note: string }[] = [
+  { label: "Add", icon: "Plus", code: 'iconStart="Plus"', note: "Curated: renders instantly." },
+  { label: "Launch", icon: "Rocket", code: 'iconStart="Rocket"', note: "Any other Lucide name: loads on demand." },
+  {
+    label: "Unknown",
+    icon: "NotAnIcon",
+    code: 'iconStart="NotAnIcon"',
+    note: "Not a Lucide icon: renders nothing, warns once in development.",
+  },
+  { label: "Launch", icon: Rocket, code: "iconStart={Rocket}", note: "Lucide component: tree-shaken, instant." },
+];
 
 function CopyCode({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
@@ -201,7 +223,7 @@ export function IconsFoundations() {
           </div>
           <p className={styles.note}>
             Start with familiar, literal symbols. Keep the same icon for the same concept across the
-            product.
+            product. These are the kit&rsquo;s curated names: they render instantly in kit icon props.
           </p>
           <div className={styles.grid}>
             {ICONS.map(({ name, Icon }) => (
@@ -211,6 +233,37 @@ export function IconsFoundations() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className={styles.scale}>
+          <div className={colorStyles.hueHeader}>
+            <h3 className={colorStyles.hueTitle}>In kit components</h3>
+            <code className={colorStyles.huePattern}>KitIcon</code>
+          </div>
+          <p className={styles.note}>
+            Kit icon props (Button <code>iconStart</code>, SideNav.Item <code>icon</code>, Empty{" "}
+            <code>icon</code>, &hellip;) take any Lucide name, PascalCase or kebab-case. Curated names
+            render instantly; any other name loads its icon on demand, keeping its space while it
+            loads. Or pass the Lucide component for a tree-shaken, synchronous icon (in a Server Component that renders a client kit component such as SideNav, pass a name or an element like <code>{"<Rocket />"}</code> instead).
+          </p>
+          <div className={styles.demos}>
+            {KIT_DEMOS.map(({ label, icon, code, note }) => (
+              <div key={code} className={styles.demo}>
+                <Button variant="secondary" size="sm" iconStart={icon}>
+                  {label}
+                </Button>
+                <code className={styles.demoCode}>{code}</code>
+                <span className={styles.demoNote}>{note}</span>
+              </div>
+            ))}
+          </div>
+          <pre className={styles.code}>
+            <code>{`import { Rocket } from "lucide-react"
+
+<Button iconStart="Plus">Add</Button>          // curated, instant
+<Button iconStart="Rocket">Launch</Button>     // on demand
+<Button iconStart={Rocket}>Launch</Button>     // component, instant`}</code>
+          </pre>
         </section>
 
         <section className={styles.scale}>

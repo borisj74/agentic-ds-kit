@@ -1,3 +1,4 @@
+import type { KitIcon } from "./lucideName";
 import type { ComponentPropsWithoutRef, DragEventHandler, MouseEventHandler, Ref } from "react";
 
 export type ButtonSize = "sm" | "md" | "lg";
@@ -16,8 +17,8 @@ interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwne
   disabled?: boolean;
   type?: ButtonType;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  iconStart?: string;
-  iconEnd?: string;
+  iconStart?: KitIcon;
+  iconEnd?: KitIcon;
   draggable?: boolean;
   onDragStart?: DragEventHandler<HTMLButtonElement>;
   onDragEnd?: DragEventHandler<HTMLButtonElement>;

@@ -7,7 +7,7 @@
     "mode": { "type": "enum", "values": ["sign-in", "sign-up"], "default": "sign-in", "note": "sign-up adds a Name field, drops Remember me and Forgot password, and swaps the copy." },
     "productName": { "type": "string", "required": false },
     "logo": { "type": "slot", "required": false, "note": "App mark above the card." },
-    "providers": { "type": "array", "required": false, "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is a Lucide export name. Omit for email only." },
+    "providers": { "type": "array", "required": false, "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is any Lucide name or a Lucide component (same as Button iconStart). Omit for email only." },
     "onSubmit": { "type": "function", "required": false, "note": "(values: { email, password, name?, remember? }) => void. Called only after required and email-format checks pass." },
     "onProvider": { "type": "function", "required": false, "note": "(id: string) => void" },
     "onForgotPassword": { "type": "function", "required": false, "note": "Shows 'Forgot password?' (tertiary sm) in sign-in mode." },
