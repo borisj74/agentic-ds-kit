@@ -17,6 +17,7 @@ import { Input } from "../Input";
 import { Select } from "../Select";
 import { Tooltip } from "../Tooltip";
 import type { DataGridColumn, DataGridProps, DataGridRow } from "./DataGrid.types";
+import { cx } from "../shared/cx";
 import styles from "./DataGrid.module.css";
 
 export type {
@@ -117,6 +118,9 @@ export function DataGrid({
   emptyLabel = DEFAULT_EMPTY,
   rowNumbers = false,
   stickyFirstColumn = false,
+  className,
+  ref,
+  ...rest
 }: DataGridProps) {
   const uid = useId();
   const added = useRef(0);
@@ -290,7 +294,7 @@ export function DataGrid({
   } as CSSProperties;
 
   return (
-    <div className={styles.root} data-size={size}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)} data-size={size}>
       <div className={styles.scroller} tabIndex={0} role="region" aria-label={label}>
         <table ref={tableRef} className={styles.table} aria-label={label} style={stickyStyle}>
           <thead>

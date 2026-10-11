@@ -118,6 +118,12 @@
       "note": "When items is [], ListView renders kit Empty. title is required."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

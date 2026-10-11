@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { ShimmerTextProps, ShimmerTextSpeed } from "./ShimmerText.types";
+import { cx } from "../shared/cx";
 import styles from "./ShimmerText.module.css";
 
 export type { ShimmerTextProps, ShimmerTextSize, ShimmerTextSpeed } from "./ShimmerText.types";
@@ -19,8 +20,10 @@ export function ShimmerText({
   children,
   size = "md",
   speed = "normal",
-  className = "",
+  className,
+  ref,
   style,
+  ...rest
 }: ShimmerTextProps) {
   const text = String(children);
   const characters = Array.from(text);
@@ -31,7 +34,13 @@ export function ShimmerText({
   } as CSSProperties;
 
   return (
-    <span className={`${styles.root} ${styles[size]} ${className}`.trim()} style={cssVars} aria-label={text}>
+    <span
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], className)}
+      style={cssVars}
+      aria-label={text}
+    >
       <span className={styles.content} aria-hidden="true">
         {characters.map((character, index) => (
           <span

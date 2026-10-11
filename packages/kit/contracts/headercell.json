@@ -79,6 +79,12 @@
       "note": "() => void. DataTable cycles asc, desc, off."
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": [
     "surface.muted",
     "text.secondary",

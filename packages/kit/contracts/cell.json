@@ -163,6 +163,12 @@
       "note": "type=actions (labeled Buttons in ButtonGroup, cap 3), actionIcons (icon-only Buttons, each ariaLabel), actionMenu composes kit DropdownMenu from actions."
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

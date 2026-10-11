@@ -153,7 +153,9 @@ export function LineChart({
   includeZero = false,
   emptyLabel = "No data for this range",
   isLoading = false,
-  className = "",
+  className,
+  ref: rootRef,
+  ...rest
 }: LineChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState<string | null>(null);
@@ -242,6 +244,8 @@ export function LineChart({
 
   return (
     <ChartFrame
+      {...rest}
+      ref={rootRef}
       title={title}
       description={description}
       legend={showLegend ? (

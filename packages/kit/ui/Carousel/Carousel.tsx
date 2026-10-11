@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import useEmblaCarousel from "embla-carousel-react";
 import { Button } from "../Button";
 import type { CarouselProps } from "./Carousel.types";
+import { cx } from "../shared/cx";
 import styles from "./Carousel.module.css";
 
 export type {
@@ -23,6 +24,9 @@ export function Carousel({
   showIndex = false,
   onIndexChange,
   ariaLabel = "Carousel",
+  className,
+  ref,
+  ...rest
 }: CarouselProps) {
   const emblaOptions = useMemo(
     () => ({
@@ -94,7 +98,9 @@ export function Carousel({
 
   return (
     <div
-      className={`${styles.root} ${styles[orientation]} ${perClass}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[orientation], perClass, className)}
       role="region"
       aria-roledescription="carousel"
       aria-label={ariaLabel}

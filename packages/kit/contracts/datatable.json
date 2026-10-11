@@ -91,6 +91,12 @@
       "note": "Shown when selectable and at least one row is checked. kit Buttons. Never primary."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.card",
     "surface.elevated",

@@ -42,6 +42,12 @@
       "note": "Names the group and the arrows (“Scroll key metrics right”). Scoreboard passes its aria-label."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.page",
     "focus.ring",

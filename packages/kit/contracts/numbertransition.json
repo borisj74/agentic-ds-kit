@@ -20,6 +20,12 @@
     },
     "label": { "type": "string", "required": false }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": ["text.primary"],
   "a11y": {
     "element": "span",

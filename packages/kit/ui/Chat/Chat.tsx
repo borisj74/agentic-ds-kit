@@ -6,6 +6,7 @@ import { DropdownMenu } from "../DropdownMenu";
 import { Input } from "../Input";
 import { ThinkingAnimation } from "../ThinkingAnimation";
 import type { ChatProps } from "./Chat.types";
+import { cx } from "../shared/cx";
 import styles from "./Chat.module.css";
 
 export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
@@ -28,7 +29,9 @@ export function Chat({
   menuItems = [],
   menuLabel = "More",
   radius = "lg",
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ChatProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const threadRef = useRef<HTMLDivElement>(null);
@@ -55,7 +58,9 @@ export function Chat({
 
   return (
     <section
-      className={`${styles.panel} ${radius === "none" ? styles.radiusNone : ""} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(styles.panel, radius === "none" && styles.radiusNone, className)}
       aria-label={title}
     >
       <header className={styles.header}>

@@ -9,6 +9,7 @@ import { Checkbox } from "../Checkbox";
 import { DropdownMenu } from "../DropdownMenu";
 import { Empty } from "../Empty";
 import type { ListViewGroup, ListViewItem, ListViewProps } from "./ListView.types";
+import { cx } from "../shared/cx";
 import styles from "./ListView.module.css";
 
 export type {
@@ -71,6 +72,9 @@ export function ListView({
   groups,
   collapsibleGroups = false,
   empty,
+  className,
+  ref,
+  ...rest
 }: ListViewProps) {
   const uid = useId();
   const itemRefs = useRef(new Map<string, HTMLElement>());
@@ -314,11 +318,11 @@ export function ListView({
     );
   }
 
-  const rootClass = `${styles.root} ${styles[size]}`;
+  const rootClass = cx(styles.root, styles[size], className);
 
   if (items.length === 0) {
     return (
-      <div className={rootClass} role={listRole} aria-label={label} tabIndex={0}>
+      <div {...rest} ref={ref} className={rootClass} role={listRole} aria-label={label} tabIndex={0}>
         <Empty
           title={empty?.title ?? "No records"}
           description={empty?.description}
@@ -331,6 +335,8 @@ export function ListView({
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={rootClass}
       role={listRole}
       aria-label={label}

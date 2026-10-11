@@ -4,6 +4,7 @@ import { useId } from "react";
 import { Checkbox } from "../Checkbox";
 import { LucideByName } from "../Button/lucideName";
 import type { HeaderCellProps } from "./HeaderCell.types";
+import { cx } from "../shared/cx";
 import styles from "./HeaderCell.module.css";
 
 export type {
@@ -26,6 +27,9 @@ export function HeaderCell({
   sort,
   onSort,
   id,
+  className,
+  ref,
+  ...rest
 }: HeaderCellProps) {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
@@ -41,7 +45,9 @@ export function HeaderCell({
 
   return (
     <span
-      className={`${styles.cell} ${styles[size]} ${styles[align]}${checkboxOnly ? ` ${styles.checkboxOnly}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.cell, styles[size], styles[align], checkboxOnly && styles.checkboxOnly, className)}
     >
       {checkbox ? (
         <Checkbox

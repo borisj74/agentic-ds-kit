@@ -62,6 +62,12 @@
       "note": "Renders tfoot one row: label in a td colSpan={columns.length-1}, value in last td end-aligned."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.muted",
     "text.primary",

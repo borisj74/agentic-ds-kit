@@ -16,6 +16,7 @@ import type {
   DataTableProps,
   DataTableRow,
 } from "./DataTable.types";
+import { cx } from "../shared/cx";
 import styles from "./DataTable.module.css";
 
 export type {
@@ -121,6 +122,9 @@ export function DataTable({
   emptyMessage = DEFAULT_EMPTY,
   onSelectionChange,
   bulkActions,
+  className,
+  ref,
+  ...rest
 }: DataTableProps) {
   const uid = useId();
   const captionId = caption ? `${uid}-caption` : undefined;
@@ -286,7 +290,7 @@ export function DataTable({
   }
 
   return (
-    <div className={styles.root} data-size={cellSize}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)} data-size={cellSize}>
       {toolbar ? (
         <div className={styles.toolbar}>
           <div className={styles.search}>

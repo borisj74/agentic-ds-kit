@@ -12,6 +12,7 @@ import { Checkbox } from "../Checkbox";
 import { Select } from "../Select";
 import { LucideByName } from "../Button/lucideName";
 import type { CellProps, CellType } from "./Cell.types";
+import { cx } from "../shared/cx";
 import styles from "./Cell.module.css";
 
 export type {
@@ -101,6 +102,9 @@ export function Cell({
   defaultChecked,
   onCheckedChange,
   id,
+  className,
+  ref,
+  ...rest
 }: CellProps) {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
@@ -283,7 +287,9 @@ export function Cell({
 
   return (
     <span
-      className={`${styles.cell} ${styles[size]}${actionMenu ? ` ${styles.actionMenu}` : ""}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.cell, styles[size], actionMenu && styles.actionMenu, className)}
       aria-label={rootAria}
     >
       {checkbox ? (

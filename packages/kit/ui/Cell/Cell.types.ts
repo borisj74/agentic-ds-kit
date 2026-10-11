@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 import type { ButtonVariant } from "../Button/Button.types";
 
@@ -44,7 +45,11 @@ export interface CellAction {
   onClick?: () => void;
 }
 
-export interface CellProps {
+/** Root attributes the kit sets itself. `id` is the kit's prop for the row checkbox. */
+type CellOwnedKeys = "children" | "id" | "aria-label";
+
+/** `ref`, `className` and other attributes land on the root `<span>`; `id` goes to the checkbox. */
+export interface CellProps extends Omit<ComponentPropsWithoutRef<"span">, CellOwnedKeys> {
   type?: CellType;
   size?: CellSize;
   text?: boolean;
@@ -64,6 +69,7 @@ export interface CellProps {
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   id?: string;
+  ref?: Ref<HTMLSpanElement>;
 }
 
 export type CellValue = CellProps;

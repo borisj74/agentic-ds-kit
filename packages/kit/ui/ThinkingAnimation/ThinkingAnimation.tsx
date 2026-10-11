@@ -1,4 +1,5 @@
 import type { ThinkingAnimationProps } from "./ThinkingAnimation.types";
+import { cx } from "../shared/cx";
 import styles from "./ThinkingAnimation.module.css";
 
 export type { ThinkingAnimationProps, ThinkingAnimationSize } from "./ThinkingAnimation.types";
@@ -7,11 +8,15 @@ export function ThinkingAnimation({
   label = "Thinking",
   size = "md",
   showLabel = true,
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ThinkingAnimationProps) {
   return (
     <span
-      className={`${styles.root} ${styles[size]} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], className)}
       role="status"
       aria-label={label}
       aria-live="polite"

@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useState } from "react";
 import type { NumberTransitionProps } from "./NumberTransition.types";
+import { cx } from "../shared/cx";
 import styles from "./NumberTransition.module.css";
 
 export type { NumberTransitionProps, NumberTransitionSize } from "./NumberTransition.types";
@@ -15,7 +16,9 @@ export function NumberTransition({
   format,
   size = "md",
   label,
-  className = "",
+  className,
+  ref,
+  ...rest
 }: NumberTransitionProps) {
   const formattedValue = String(format ? format(value) : value);
   const numericValue = Number(value);
@@ -51,7 +54,9 @@ export function NumberTransition({
 
   return (
     <span
-      className={`${styles.root} ${styles[size]} ${className}`.trim()}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], className)}
       aria-label={label ?? formattedValue}
       aria-live="polite"
     >

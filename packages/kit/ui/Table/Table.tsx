@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from "react";
 import type { TableColumn, TableProps } from "./Table.types";
+import { cx } from "../shared/cx";
 import styles from "./Table.module.css";
 
 export type {
@@ -36,6 +37,10 @@ export function Table({
   size = "md",
   emptyLabel = DEFAULT_EMPTY,
   footer,
+  className,
+  ref,
+  "aria-label": ariaLabel,
+  ...rest
 }: TableProps) {
   const empty = rows.length === 0;
   const colCount = Math.max(columns.length, 1);
@@ -45,11 +50,13 @@ export function Table({
 
   return (
     <div
-      className={classNames(styles.wrapper, styles[size])}
+      {...rest}
+      ref={ref}
+      className={cx(styles.wrapper, styles[size], className)}
       tabIndex={0}
       role="region"
       aria-labelledby={captionId}
-      aria-label={captionId ? undefined : "Table"}
+      aria-label={captionId ? undefined : (ariaLabel ?? "Table")}
     >
       <table className={styles.table}>
         {caption ? (

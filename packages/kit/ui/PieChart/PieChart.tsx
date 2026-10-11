@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import { ChartFrame } from "../shared/ChartFrame";
+import { cx } from "../shared/cx";
 import frameStyles from "../shared/ChartFrame.module.css";
 import {
   formatValue,
@@ -116,7 +117,9 @@ export function PieChart({
   showTable = true,
   emptyLabel = "No data for this range",
   isLoading = false,
-  className = "",
+  className,
+  ref: rootRef,
+  ...rest
 }: PieChartProps) {
   const [active, setActive] = useState<string | null>(null);
   const rawId = useId();
@@ -271,6 +274,8 @@ export function PieChart({
 
   return (
     <ChartFrame
+      {...rest}
+      ref={rootRef}
       title={title}
       description={description}
       legend={!isSplit ? legend : undefined}
@@ -278,7 +283,7 @@ export function PieChart({
       isEmpty={isEmpty}
       emptyLabel={emptyLabel}
       isLoading={isLoading}
-      className={`pie-chart pie-chart--${layout} ${styles.root} ${className}`.trim()}
+      className={cx("pie-chart", `pie-chart--${layout}`, styles.root, className)}
     >
       {isSplit ? (
         <div className={styles.split}>

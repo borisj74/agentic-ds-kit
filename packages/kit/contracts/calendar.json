@@ -100,6 +100,12 @@
       "note": "Hides New event and turns off creating, editing, and deleting. Events can still be clicked through onEventClick."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

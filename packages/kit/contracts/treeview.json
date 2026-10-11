@@ -95,6 +95,12 @@
       "note": "(items: TreeViewItem[]) => void when reorderable moves a node"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "text.primary",
     "text.disabled",

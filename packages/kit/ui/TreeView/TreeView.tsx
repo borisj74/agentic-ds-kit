@@ -15,6 +15,7 @@ import { Checkbox } from "../Checkbox";
 import { LucideByName } from "../Button/lucideName";
 import { DropdownMenu } from "../DropdownMenu";
 import type { TreeViewItem, TreeViewProps } from "./TreeView.types";
+import { cx } from "../shared/cx";
 import styles from "./TreeView.module.css";
 
 export type {
@@ -278,6 +279,9 @@ export function TreeView({
   showIcons = false,
   reorderable = false,
   onItemsChange,
+  className,
+  ref,
+  ...rest
 }: TreeViewProps) {
   const uid = useId();
   const itemRefs = useRef(new Map<string, HTMLDivElement>());
@@ -676,10 +680,12 @@ export function TreeView({
     });
   }
 
-  const rootClass = `${styles.root} ${styles[size]}${showLines ? ` ${styles.lines}` : ""}`;
+  const rootClass = cx(styles.root, styles[size], showLines && styles.lines, className);
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={rootClass}
       role="tree"
       aria-label={label}

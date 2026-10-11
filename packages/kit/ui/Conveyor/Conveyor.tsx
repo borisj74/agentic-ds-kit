@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Button } from "../Button";
 import type { ConveyorProps } from "./Conveyor.types";
+import { cx } from "../shared/cx";
 import styles from "./Conveyor.module.css";
 
 export type { ConveyorProps, ConveyorOrientation } from "./Conveyor.types";
@@ -17,7 +18,9 @@ export function Conveyor({
   orientation = "horizontal",
   step,
   label = "Content",
-  className = "",
+  className,
+  ref,
+  ...rest
 }: ConveyorProps) {
   const across = orientation === "horizontal";
   const trackRef = useRef<HTMLDivElement>(null);
@@ -85,7 +88,7 @@ export function Conveyor({
           : "";
 
   return (
-    <div className={`${styles.root} ${styles[orientation]} ${className}`.trim()}>
+    <div {...rest} ref={ref} className={cx(styles.root, styles[orientation], className)}>
       {shown ? (
         <div className={styles.end}>
           <Button

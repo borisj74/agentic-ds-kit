@@ -19,6 +19,12 @@
     },
     "showLabel": { "type": "boolean", "default": true }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": ["text.secondary", "text.muted"],
   "a11y": {
     "element": "span[role=status]",
