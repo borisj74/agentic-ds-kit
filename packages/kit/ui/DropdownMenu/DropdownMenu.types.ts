@@ -1,4 +1,4 @@
-import type { DragEventHandler } from "react";
+import type { ComponentPropsWithoutRef, DragEventHandler, Ref } from "react";
 import type { ButtonSize, ButtonVariant } from "../Button/Button.types";
 
 export type DropdownMenuAlign = "start" | "end";
@@ -57,4 +57,10 @@ export interface DropdownMenuProps {
   triggerDraggable?: boolean;
   onTriggerDragStart?: DragEventHandler<HTMLButtonElement>;
   onTriggerDragEnd?: DragEventHandler<HTMLButtonElement>;
+  /** @internal Select's pass-through: merged onto the root. K24 owns DropdownMenu's own escape hatches. */
+  className?: string;
+  /** @internal Select's pass-through: ref to the field trigger button (`triggerStyle="field"` only). */
+  triggerRef?: Ref<HTMLButtonElement>;
+  /** @internal Select's pass-through: spread on the field trigger button before kit attributes. */
+  triggerProps?: ComponentPropsWithoutRef<"button">;
 }

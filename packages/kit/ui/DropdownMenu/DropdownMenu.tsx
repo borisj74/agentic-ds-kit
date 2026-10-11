@@ -18,6 +18,7 @@ import { Checkbox } from "../Checkbox";
 import { Input } from "../Input";
 import { Tag } from "../Tag";
 import { LucideByName } from "../Button/lucideName";
+import { cx } from "../shared/cx";
 import type { DropdownMenuGroup, DropdownMenuItem, DropdownMenuProps } from "./DropdownMenu.types";
 import styles from "./DropdownMenu.module.css";
 
@@ -62,6 +63,9 @@ export function DropdownMenu({
   triggerDraggable,
   onTriggerDragStart,
   onTriggerDragEnd,
+  className,
+  triggerRef,
+  triggerProps,
 }: DropdownMenuProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
@@ -546,7 +550,7 @@ export function DropdownMenu({
   const iconPx = size === "sm" ? 14 : size === "lg" ? 18 : 16;
 
   return (
-    <div ref={rootRef} className={`${styles.root}${fieldTrigger ? ` ${styles.rootField}` : ""}`}>
+    <div ref={rootRef} className={cx(styles.root, fieldTrigger && styles.rootField, className)}>
       {tagsField && triggerTags ? (
         <div className={`${styles.tagsField} ${styles[`tagsField${size}`]}`}>
           <div
@@ -579,6 +583,8 @@ export function DropdownMenu({
             ) : null}
           </div>
           <button
+            {...triggerProps}
+            ref={triggerRef}
             type="button"
             id={id}
             data-menu-trigger=""
@@ -604,6 +610,8 @@ export function DropdownMenu({
         </div>
       ) : fieldTrigger ? (
         <button
+          {...triggerProps}
+          ref={triggerRef}
           type="button"
           id={id}
           disabled={disabled}

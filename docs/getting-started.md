@@ -281,6 +281,26 @@ The rule is short on purpose:
 
 **Eval prompts** (also in the README) are the smoke test that a coworker’s agent is actually using the kit.
 
+## Passing props through
+
+Kit components are strict on look and accessibility and open on everything else. The form controls (Button, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Slider, DatePicker, InputOTP, ColorPicker, FileUpload, Field, FieldSet) take, on top of their own props:
+
+- **`ref`** — a plain prop (React 19, no `forwardRef`). On form controls it reaches the native element, so form libraries can register it.
+- **`className`** — merged onto the visual root after the kit's classes. Use it for layout (width, margin, grid placement), not to restyle the component.
+- **Any other HTML attribute** — `id`, `data-testid`, `aria-*` the kit does not manage, event handlers. These go to the same element as `ref`.
+
+```tsx
+const emailRef = useRef<HTMLInputElement>(null);
+
+<Field label="Email" htmlFor="email">
+  <Input id="email" ref={emailRef} className="signup-email" data-testid="email" autoComplete="email" />
+</Field>
+```
+
+Where each one lands is in the contract's `passthrough` block, for example Input: `{ "root": "div", "ref": "input", "className": "root", "rest": "input" }`. Composite widgets (Select, DatePicker) put `ref` on the trigger button; ColorPicker puts it on the hex input.
+
+The kit always wins on what it owns: `role`, the `aria-*` it manages, `data-state`, and its own props. When a kit prop has the same name as an HTML attribute with a different meaning (`size`, `onChange` on Input that passes the value instead of the event, `pattern` on InputOTP), the kit prop is the one you get.
+
 ## How the catalog works
 
 Three groups in `contracts/index.json`:

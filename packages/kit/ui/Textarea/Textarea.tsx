@@ -1,4 +1,5 @@
 import type { TextareaProps } from "./Textarea.types";
+import { cx } from "../shared/cx";
 import styles from "./Textarea.module.css";
 
 export type { TextareaProps, TextareaSize } from "./Textarea.types";
@@ -22,9 +23,14 @@ export function Textarea({
   name,
   demo,
   describedBy,
+  className,
+  ref,
+  ...rest
 }: TextareaProps) {
   return (
     <textarea
+      {...rest}
+      ref={ref}
       id={id}
       name={name}
       rows={rows}
@@ -36,7 +42,7 @@ export function Textarea({
       aria-invalid={error || undefined}
       aria-describedby={describedBy}
       data-demo={disabled ? undefined : demo}
-      className={`${styles.textarea} ${SIZE_CLASS[size]}${error ? ` ${styles.error}` : ""}`}
+      className={cx(styles.textarea, SIZE_CLASS[size], error && styles.error, className)}
     />
   );
 }

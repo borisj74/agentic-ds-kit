@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export interface ColorPickerSwatch {
   /** Hex colour, e.g. "#1A73E8". */
   value: string;
@@ -5,7 +7,23 @@ export interface ColorPickerSwatch {
   label?: string;
 }
 
-export interface ColorPickerProps {
+/** Native input attributes the kit sets itself (or replaces with its own prop). */
+type ColorPickerOwnedKeys =
+  | "children"
+  | "size"
+  | "type"
+  | "value"
+  | "defaultValue"
+  | "onChange"
+  | "aria-invalid"
+  | "aria-label"
+  | "aria-describedby";
+
+/**
+ * The hex input is the primary control: `ref` and other native attributes go to it.
+ * `className` goes to the root `<div role="group">`.
+ */
+export interface ColorPickerProps extends Omit<ComponentPropsWithoutRef<"input">, ColorPickerOwnedKeys> {
   /** Controlled hex: #RRGGBB, or #RRGGBBAA when showAlpha and opacity is below 100%. */
   value?: string;
   /** Uncontrolled starting hex. */
@@ -27,4 +45,5 @@ export interface ColorPickerProps {
   ariaLabel?: string;
   /** Shown under the hex input while the typed text is not a valid hex. */
   invalidMessage?: string;
+  ref?: Ref<HTMLInputElement>;
 }

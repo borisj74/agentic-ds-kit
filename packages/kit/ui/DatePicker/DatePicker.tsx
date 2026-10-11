@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { MonthGrid } from "./MonthGrid";
 import { LucideByName } from "../Button/lucideName";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import controlStyles from "../shared/controls.module.css";
 import type { DatePickerProps, DatePickerRange } from "./DatePicker.types";
 import styles from "./DatePicker.module.css";
@@ -66,18 +68,26 @@ export function DatePicker(props: DatePickerProps) {
     maxDate,
     name,
     describedBy,
+    className,
+    ref,
+    mode,
+    value,
+    defaultValue,
+    onValueChange,
+    ...rest
   } = props;
-  const isRange = props.mode === "range";
+  const isRange = mode === "range";
   const fallbackId = useId();
   const triggerId = id || fallbackId;
   const panelId = `${triggerId}-calendar`;
-  const isControlled = props.value !== undefined;
-  const [uncontrolled, setUncontrolled] = useState<string | DatePickerRange | undefined>(props.defaultValue);
-  const selected = isControlled ? props.value : uncontrolled;
+  const isControlled = value !== undefined;
+  const [uncontrolled, setUncontrolled] = useState<string | DatePickerRange | undefined>(defaultValue);
+  const selected = isControlled ? value : uncontrolled;
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DatePickerRange | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const setTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [ref]);
   const panelRef = useRef<HTMLDivElement>(null);
   const resolvedPlaceholder = placeholder ?? (isRange ? "Pick dates" : "Pick a date");
   const display = isRange
@@ -172,13 +182,13 @@ export function DatePicker(props: DatePickerProps) {
 
   function commitSingle(iso: string) {
     if (!isControlled) setUncontrolled(iso);
-    if (props.mode !== "range") props.onValueChange?.(iso);
+    if (!isRange) (onValueChange as ((date: string) => void) | undefined)?.(iso);
     closeOverlay();
   }
 
   function commitRange(range: DatePickerRange) {
     if (!isControlled) setUncontrolled(range);
-    if (props.mode === "range") props.onValueChange?.(range);
+    if (isRange) (onValueChange as ((next: DatePickerRange) => void) | undefined)?.(range);
     setDraft(null);
     closeOverlay();
   }
@@ -199,9 +209,10 @@ export function DatePicker(props: DatePickerProps) {
       : "Pick an end date";
 
   return (
-    <div ref={rootRef} className={styles.root}>
+    <div ref={rootRef} className={cx(styles.root, className)}>
       <button
-        ref={triggerRef}
+        {...rest}
+        ref={setTriggerRef}
         id={triggerId}
         type="button"
         disabled={disabled}
@@ -210,7 +221,12 @@ export function DatePicker(props: DatePickerProps) {
         aria-controls={panelId}
         aria-invalid={error || undefined}
         aria-describedby={describedBy}
-        className={`${controlStyles.control} ${size === "sm" ? controlStyles.controlSm : controlStyles.controlMd} ${error ? controlStyles.controlError : ""} ${styles.trigger}`}
+        className={cx(
+          controlStyles.control,
+          size === "sm" ? controlStyles.controlSm : controlStyles.controlMd,
+          error && controlStyles.controlError,
+          styles.trigger,
+        )}
         onClick={() => {
           if (disabled) return;
           if (open) closeOverlay();

@@ -32,6 +32,12 @@
     "name": { "type": "string", "required": false },
     "demo": { "type": "enum", "values": ["hover", "focus"], "required": false, "note": "playground only" }
   },
+  "passthrough": {
+    "root": "textarea",
+    "ref": "textarea",
+    "className": "root",
+    "rest": "textarea"
+  },
   "tokens": [
     "text.primary",
     "text.muted",

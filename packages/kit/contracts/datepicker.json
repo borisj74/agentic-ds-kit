@@ -84,6 +84,12 @@
       "note": "Field wires hint and error ids onto the trigger"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "trigger button",
+    "className": "root",
+    "rest": "trigger button"
+  },
   "tokens": [
     "text.primary",
     "text.muted",

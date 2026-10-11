@@ -73,6 +73,12 @@
       "note": "Set by Field when it has an error. Danger border on the drop zone, like Input."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "drop zone button",
+    "className": "root",
+    "rest": "drop zone button"
+  },
   "tokens": [
     "surface.card",
     "surface.muted",

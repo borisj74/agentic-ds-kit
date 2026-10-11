@@ -2,6 +2,7 @@ import { cloneElement, isValidElement, type ReactElement } from "react";
 import { Button } from "../Button";
 import { HelpPopover } from "../HelpPopover";
 import type { FieldProps } from "./Field.types";
+import { cx } from "../shared/cx";
 import styles from "./Field.module.css";
 
 export type { FieldProps, FieldLabelPosition } from "./Field.types";
@@ -14,6 +15,9 @@ export function Field({
   error,
   labelPosition = "top",
   children,
+  className,
+  ref,
+  ...rest
 }: FieldProps) {
   const hintId = hint && !error ? `${htmlFor}-hint` : undefined;
   const errorId = error ? `${htmlFor}-error` : undefined;
@@ -35,7 +39,9 @@ export function Field({
 
   return (
     <div
-      className={`${styles.field} ${styles[labelPosition]}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.field, styles[labelPosition], className)}
       role="group"
       data-invalid={error ? "true" : undefined}
     >
