@@ -137,6 +137,38 @@
   transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
+/* SideNav.Toggle: closes the open rail; on the closed rail it moves to the start
+   edge (where the preset mark sits) so it stays in view and reopens the rail. */
+.toggle {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.rootClosed .toggle {
+  position: absolute;
+  inset-inline-start: var(--space-inset-sm);
+  top: 50%;
+  translate: 0 -50%;
+}
+
+/* A header that holds a Toggle: the rest of it fades and leaves the tab order on the closed rail. */
+.header:has(> .toggle) > :not(.toggle) {
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.rootClosed .header:has(> .toggle) > :not(.toggle) {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-overlay-duration) var(--motion-overlay-easing),
+    visibility 0s linear var(--motion-overlay-duration);
+}
+
+/* Slot keepOnRail (e.g. pinned rows) stays visible and usable on the closed rail. */
+.slotKeep {
+  opacity: 1;
+}
+
 /* beforeGroups / afterGroups slots: pinned above and below the scrolling nav. */
 .slot {
   flex-shrink: 0;
@@ -154,7 +186,7 @@
 }
 
 .rootClosed .headerSlot,
-.rootClosed .slot {
+.rootClosed .slot:not(.slotKeep) {
   opacity: 0;
   pointer-events: none;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Alert, Avatar, Button, Select, SideNav, Tooltip } from "agentic-ds-kit";
+import { Alert, Avatar, Button, DropdownMenu, Select, SideNav, Tooltip } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "agentic-ds-kit";
 import contract from "agentic-ds-kit/contracts/sidenav.json";
 import { CodeBlock } from "./CodeBlock";
@@ -138,6 +138,105 @@ function SlotsBar() {
         )
       }
     />
+  );
+}
+
+const COMPOSE_CODE = `<SideNav.Root aria-label="Agentix">
+  <SideNav.Header>
+    <div className="switcher">
+      <DropdownMenu
+        triggerStyle="field"
+        size="sm"
+        ariaLabel="Workspace"
+        trigger={workspace.label}
+        groups={[{ heading: "Workspaces", items: workspaces }]}
+        onSelect={setWorkspace}
+      />
+    </div>
+    <SideNav.Toggle />
+  </SideNav.Header>
+
+  <SideNav.Slot keepOnRail>
+    <SideNav.Section label="Pinned">
+      <SideNav.Item label="Q4 roadmap" icon="Star" onClick={() => go("roadmap")} active={page === "roadmap"} />
+    </SideNav.Section>
+  </SideNav.Slot>
+
+  <SideNav.Nav>
+    <SideNav.Section label="Workspace">
+      <SideNav.Item label="Overview" icon="House" onClick={() => go("overview")} active={page === "overview"} />
+      <SideNav.Item label="Inbox" icon="Mail" badge="7" onClick={() => go("inbox")} active={page === "inbox"} />
+    </SideNav.Section>
+    <SideNav.Section label="Projects">
+      <SideNav.Item label="Launch" icon="Folder" badge="2">
+        <SideNav.Item label="Brief" icon="File" onClick={() => go("brief")} active={page === "brief"} />
+        <SideNav.Item label="QA checklist" icon="CircleCheck" onClick={() => go("qa")} active={page === "qa"} />
+      </SideNav.Item>
+    </SideNav.Section>
+  </SideNav.Nav>
+
+  <SideNav.Footer>
+    <SideNav.Section>
+      <SideNav.Item label="Settings" icon="Settings" onClick={() => go("settings")} active={page === "settings"} />
+    </SideNav.Section>
+  </SideNav.Footer>
+</SideNav.Root>`;
+
+const COMPOSE_WORKSPACES = [
+  { id: "agentix", label: "Agentix" },
+  { id: "northwind", label: "Northwind" },
+];
+
+function ComposedBar() {
+  const [page, setPage] = useState("overview");
+  const [workspace, setWorkspace] = useState("agentix");
+  const current = COMPOSE_WORKSPACES.find((w) => w.id === workspace) ?? COMPOSE_WORKSPACES[0];
+  const row = (id: string, label: string, icon: string, badge?: string) => (
+    <SideNav.Item label={label} icon={icon} badge={badge} active={page === id} onClick={() => setPage(id)} />
+  );
+
+  return (
+    <SideNav.Root aria-label="Agentix">
+      <SideNav.Header>
+        <div className={demo.switcher}>
+          <DropdownMenu
+            triggerStyle="field"
+            size="sm"
+            ariaLabel="Workspace"
+            trigger={current.label}
+            groups={[
+              {
+                heading: "Workspaces",
+                items: COMPOSE_WORKSPACES.map((w) => ({ ...w, selected: w.id === workspace })),
+              },
+            ]}
+            onSelect={setWorkspace}
+          />
+        </div>
+        <SideNav.Toggle />
+      </SideNav.Header>
+
+      <SideNav.Slot keepOnRail>
+        <SideNav.Section label="Pinned">{row("roadmap", "Q4 roadmap", "Star")}</SideNav.Section>
+      </SideNav.Slot>
+
+      <SideNav.Nav>
+        <SideNav.Section label="Workspace">
+          {row("overview", "Overview", "House")}
+          {row("inbox", "Inbox", "Mail", "7")}
+        </SideNav.Section>
+        <SideNav.Section label="Projects">
+          <SideNav.Item label="Launch" icon="Folder" badge="2">
+            {row("brief", "Brief", "File")}
+            {row("qa", "QA checklist", "CircleCheck")}
+          </SideNav.Item>
+        </SideNav.Section>
+      </SideNav.Nav>
+
+      <SideNav.Footer>
+        <SideNav.Section>{row("settings", "Settings", "Settings")}</SideNav.Section>
+      </SideNav.Footer>
+    </SideNav.Root>
   );
 }
 
@@ -371,6 +470,30 @@ export function SideNavDoc() {
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Build your own nav</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.fill}>
+                  <Shell side="left">
+                    <ComposedBar />
+                  </Shell>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Assemble the blocks when the data props are not enough. SideNav.Root holds the
+                  open state; SideNav.Toggle closes the rail and, on the closed rail, reopens it from
+                  the start edge, so a custom header works. Section takes a label and Item rows;
+                  Item children make a disclosure. Slot pins content outside the scroll
+                  (keepOnRail keeps pinned rows usable). On the closed rail every Item shows its
+                  label in a kit Tooltip. In Server Components use the named exports
+                  (SideNavRoot, SideNavItem, …). The preset SideNav is built from these blocks.
+                </p>
+              </div>
+              <CodeBlock code={COMPOSE_CODE} />
             </section>
           </div>
         )}

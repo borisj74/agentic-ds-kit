@@ -84,3 +84,8 @@
   font-weight: var(--type-weight-label);
   color: var(--text-primary);
 }
+
+.switcher {
+  flex: 1;
+  min-width: 0;
+}
