@@ -18,6 +18,9 @@ export function AppHeader({
   searchShortcut,
   searchId,
   actions,
+  start,
+  center,
+  end,
   className,
   ariaLabel,
   radius = "none",
@@ -29,49 +32,58 @@ export function AppHeader({
   const markLetter = (mark && mark.length > 0 ? mark : title?.charAt(0)) || "·";
   const label = ariaLabel ?? title ?? "Application";
 
+  const brand = (
+    <>
+      <div className={styles.brand}>
+        {logo ? (
+          <div className={styles.logo}>{logo}</div>
+        ) : (
+          <span className={styles.mark} aria-hidden>
+            {markLetter}
+          </span>
+        )}
+      </div>
+      {title ? <p className={styles.title}>{title}</p> : null}
+    </>
+  );
+
+  const centerContent =
+    center !== undefined ? (
+      center
+    ) : search ? (
+      <div className={styles.search}>
+        <Input
+          id={inputId}
+          type="search"
+          size="md"
+          placeholder={searchPlaceholder}
+          value={searchValue}
+          defaultValue={defaultSearchValue}
+          onChange={onSearch}
+          iconStart="Search"
+          end={searchShortcut}
+          ariaLabel={searchPlaceholder}
+        />
+      </div>
+    ) : null;
+  const hasCenter = centerContent !== null && centerContent !== undefined && centerContent !== false;
+  const endContent = end !== undefined ? end : actions;
+
   return (
     <header
       {...rest}
       ref={ref}
       className={cx(styles.header, radius === "md" && styles.radiusMd, className)}
       aria-label={label}
-      data-search={search ? undefined : "false"}
+      data-search={hasCenter ? undefined : "false"}
     >
       <div className={styles.bar}>
-        <div className={styles.start}>
-          <div className={styles.brand}>
-            {logo ? (
-              <div className={styles.logo}>{logo}</div>
-            ) : (
-              <span className={styles.mark} aria-hidden>
-                {markLetter}
-              </span>
-            )}
-          </div>
-          {title ? <p className={styles.title}>{title}</p> : null}
-        </div>
+        <div className={styles.start}>{start !== undefined ? start : brand}</div>
 
-        {search ? (
-          <div className={styles.center}>
-            <div className={styles.search}>
-              <Input
-                id={inputId}
-                type="search"
-                size="md"
-                placeholder={searchPlaceholder}
-                value={searchValue}
-                defaultValue={defaultSearchValue}
-                onChange={onSearch}
-                iconStart="Search"
-                end={searchShortcut}
-                ariaLabel={searchPlaceholder}
-              />
-            </div>
-          </div>
-        ) : null}
+        {hasCenter ? <div className={styles.center}>{centerContent}</div> : null}
 
-        <div className={styles.end} role={actions ? "group" : undefined} aria-label={actions ? "Actions" : undefined}>
-          {actions}
+        <div className={styles.end} role={endContent ? "group" : undefined} aria-label={endContent ? "Actions" : undefined}>
+          {endContent}
         </div>
       </div>
     </header>

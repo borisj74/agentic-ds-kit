@@ -1,10 +1,13 @@
+/* Component variables. Override on :root, a wrapper, className, or style.
+   Defaults are semantic tokens; listed under cssVars in contracts/appheader.json. */
+
 .header {
   width: 100%;
   min-width: 0;
   flex-shrink: 0;
-  border-bottom: var(--border-divider) solid var(--border-faint);
+  border-bottom: var(--border-divider) solid var(--appheader-border-color, var(--border-faint));
   border-radius: var(--radius-0);
-  background: var(--surface-card);
+  background: var(--appheader-background, var(--surface-card));
   color: var(--text-primary);
   container-type: inline-size;
   container-name: appheader;
@@ -12,17 +15,17 @@
 
 .bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, var(--layout-rail)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--appheader-search-max-width, var(--layout-rail))) minmax(0, 1fr);
   align-items: center;
-  column-gap: var(--space-4);
+  column-gap: var(--appheader-gap, var(--space-4));
   box-sizing: border-box;
   width: 100%;
-  min-height: calc(var(--space-10) + var(--space-2) + var(--space-2));
-  padding: var(--space-2) var(--space-5) var(--space-2) 0;
+  min-height: var(--appheader-height, calc(var(--space-10) + var(--space-2) + var(--space-2)));
+  padding: var(--space-2) var(--appheader-padding-inline, var(--space-5)) var(--space-2) 0;
 }
 
 .radiusMd {
-  border: var(--border-surface) solid var(--border-faint);
+  border: var(--border-surface) solid var(--appheader-border-color, var(--border-faint));
   border-radius: var(--radius-surface-md);
   overflow: hidden;
 }
@@ -41,7 +44,7 @@
   place-items: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: var(--layout-sidebar-compact);
+  width: var(--appheader-brand-width, var(--layout-sidebar-compact));
   height: var(--space-8);
 }
 
@@ -117,7 +120,7 @@
       "start end"
       "search search";
     row-gap: var(--space-2);
-    padding: var(--space-2) var(--space-4) var(--space-2) 0;
+    padding: var(--space-2) var(--appheader-padding-inline, var(--space-4)) var(--space-2) 0;
   }
 
   .header[data-search="false"] .bar {
@@ -131,7 +134,7 @@
   /* The bar has no start padding (brand aligns to the rail); inset the stacked search to match the end. */
   .center {
     grid-area: search;
-    padding-inline-start: var(--space-4);
+    padding-inline-start: var(--appheader-padding-inline, var(--space-4));
   }
 
   .end {

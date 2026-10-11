@@ -5,4 +5,5 @@ export type {
   SideNavSide,
   SideNavItem,
   SideNavGroup,
+  SideNavRenderItem,
 } from "./SideNav.types";

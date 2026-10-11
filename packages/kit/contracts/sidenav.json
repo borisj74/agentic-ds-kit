@@ -72,9 +72,29 @@
       "note": "Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
-      "type": "object",
+      "type": "slot",
       "required": false,
-      "note": "Single footer row (e.g. Settings)"
+      "note": "SideNavItem, SideNavItem[] (e.g. Settings), or any ReactNode such as an account card."
+    },
+    "header": {
+      "type": "slot",
+      "required": false,
+      "note": "Replaces the brand (mark + title) in the header. The Close button stays. The mark is what reopens a closed rail, so with a custom header control open yourself. Ignored when showHeader is false."
+    },
+    "beforeGroups": {
+      "type": "slot",
+      "required": false,
+      "note": "Pinned above the scrolling groups, e.g. a workspace switcher. Faded and inert on the closed rail."
+    },
+    "afterGroups": {
+      "type": "slot",
+      "required": false,
+      "note": "Pinned below the scrolling groups, above the footer, e.g. a promo card. Faded and inert on the closed rail."
+    },
+    "renderItem": {
+      "type": "function",
+      "required": false,
+      "note": "(item, defaultNode) => ReactNode. Customise one row. defaultNode is the kit link or button with aria-current and disclosure attributes: wrap it, put content beside it, or cloneElement it with new children. Keep it in the tree. Applies to nested and footer rows too."
     }
   },
   "passthrough": {
@@ -83,6 +103,19 @@
     "className": "root",
     "rest": "aside",
     "note": "aria-label defaults to title and can be overridden."
+  },
+  "cssVars": {
+    "--sidenav-width": "Open width of the rail and its inner panel (layout-sidebar)",
+    "--sidenav-width-collapsed": "Closed rail width; keep it equal to --appheader-brand-width (layout-sidebar-compact)",
+    "--sidenav-background": "Panel background (surface-card)",
+    "--sidenav-item-padding": "Row padding; sets row height and the closed-rail icon chip (space-inset-sm)",
+    "--sidenav-item-radius": "Row and closed-rail chip corners (radius-control-md)",
+    "--sidenav-item-gap": "Gap between rows, top level and submenu (space-stack-2xs)",
+    "--sidenav-item-hover-background": "Row hover fill (surface-muted)",
+    "--sidenav-item-active-background": "Active row fill and active badge fill (surface-brand-subtle)",
+    "--sidenav-item-active-text": "Active row and active badge text (text-brand)",
+    "--sidenav-item-active-icon": "Active row icon (icon-brand)",
+    "--sidenav-group-label-color": "Group label text (text-secondary)"
   },
   "tokens": [
     "text.primary",
@@ -130,7 +163,9 @@
       "Closed rail trailing border is on the outer shell — the inner panel is clipped",
       "Closed rail must not change item width or height — size snaps cause open/close jump",
       "Closed rail paints a square chip over the icon; do not clip a full-width row background",
-      "List items keep space-stack-2xs between rows so selected and hover surfaces do not touch"
+      "List items keep space-stack-2xs between rows so selected and hover surfaces do not touch",
+      "renderItem keeps defaultNode in the tree so aria-current and aria-expanded stay on the row",
+      "Slot content is inert on the closed rail so clipped controls are not focusable"
     ]
   },
   "doNot": [
@@ -142,7 +177,8 @@
     "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; for narrow screens use AppShellPattern, which renders SideNav inside kit Drawer",
     "Do not hand-roll a narrow-screen menu (hamburger, bottom tab bar, collapsed rail); use AppShellPattern (app-shell)",
     "Do not use the shadcn sidebar package",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens"
   ],
   "snippet": "<SideNav title=\"Agentix\" mark=\"A\" open={open} onOpenChange={setOpen} groups={groups} footer={[{ id: \"invite\", label: \"Invite members\", icon: \"CirclePlus\" }, { id: \"settings\", label: \"Settings\", icon: \"Settings\" }]} />"
 }

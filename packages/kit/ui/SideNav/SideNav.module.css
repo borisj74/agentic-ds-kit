@@ -1,12 +1,15 @@
 /* Gmail-style rail: outer shell width animates; inner panel stays at full
-   sidebar width and is clipped. Icons keep a fixed left edge — no recenter. */
+   sidebar width and is clipped. Icons keep a fixed left edge — no recenter.
+
+   Component variables (override on :root, a wrapper, className, or style).
+   Defaults are semantic tokens; listed under cssVars in contracts/sidenav.json. */
 
 .root {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   align-self: stretch;
-  width: var(--layout-sidebar);
+  width: var(--sidenav-width, var(--layout-sidebar));
   min-width: 0;
   min-height: 0;
   color: var(--text-primary);
@@ -28,7 +31,7 @@
 }
 
 .rootClosed {
-  width: var(--layout-sidebar-compact);
+  width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
 }
 
 .rootClosed:not(.radiusNone) {
@@ -40,14 +43,14 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: var(--layout-sidebar);
-  min-width: var(--layout-sidebar);
-  max-width: var(--layout-sidebar);
+  width: var(--sidenav-width, var(--layout-sidebar));
+  min-width: var(--sidenav-width, var(--layout-sidebar));
+  max-width: var(--sidenav-width, var(--layout-sidebar));
   min-height: 0;
   height: 100%;
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-card);
+  background: var(--sidenav-background, var(--surface-card));
   color: var(--text-primary);
 }
 
@@ -125,6 +128,37 @@
   pointer-events: none;
 }
 
+/* header slot: replaces mark + title; the Close button stays. */
+.headerSlot {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+/* beforeGroups / afterGroups slots: pinned above and below the scrolling nav. */
+.slot {
+  flex-shrink: 0;
+  min-width: 0;
+  padding-inline: var(--space-inset-sm);
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.slotBefore {
+  padding-block-start: var(--space-inset-md);
+}
+
+.slotAfter {
+  padding-block-end: var(--space-inset-md);
+}
+
+.rootClosed .headerSlot,
+.rootClosed .slot {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .nav {
   flex: 1;
   display: grid;
@@ -157,7 +191,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
-  color: var(--text-secondary);
+  color: var(--sidenav-group-label-color, var(--text-secondary));
   transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
@@ -168,7 +202,7 @@
 
 .list {
   display: grid;
-  gap: var(--space-stack-2xs);
+  gap: var(--sidenav-item-gap, var(--space-stack-2xs));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -186,10 +220,10 @@
   gap: var(--space-inline-md);
   width: 100%;
   margin: 0;
-  padding: var(--space-inset-sm);
+  padding: var(--sidenav-item-padding, var(--space-inset-sm));
   appearance: none;
   border: 0;
-  border-radius: var(--radius-control-md);
+  border-radius: var(--sidenav-item-radius, var(--radius-control-md));
   background: transparent;
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -208,10 +242,10 @@
   position: absolute;
   top: 50%;
   left: 0;
-  width: calc(var(--space-inset-sm) * 2 + var(--space-inset-lg));
-  height: calc(var(--space-inset-sm) * 2 + var(--space-inset-lg));
+  width: calc(var(--sidenav-item-padding, var(--space-inset-sm)) * 2 + var(--space-inset-lg));
+  height: calc(var(--sidenav-item-padding, var(--space-inset-sm)) * 2 + var(--space-inset-lg));
   translate: 0 -50%;
-  border-radius: var(--radius-control-md);
+  border-radius: var(--sidenav-item-radius, var(--radius-control-md));
   background: transparent;
   pointer-events: none;
   z-index: 0;
@@ -223,7 +257,7 @@
 }
 
 .item:hover:not(:disabled):not(.itemDisabled) {
-  background: var(--surface-muted);
+  background: var(--sidenav-item-hover-background, var(--surface-muted));
   color: var(--text-primary);
 }
 
@@ -232,13 +266,13 @@
 }
 
 .rootClosed .item:hover:not(:disabled):not(.itemDisabled)::before {
-  background: var(--surface-muted);
+  background: var(--sidenav-item-hover-background, var(--surface-muted));
 }
 
 .itemActive,
 .itemActive:hover:not(:disabled):not(.itemDisabled) {
-  background: var(--surface-brand-subtle);
-  color: var(--text-brand);
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+  color: var(--sidenav-item-active-text, var(--text-brand));
 }
 
 .rootClosed .itemActive,
@@ -248,7 +282,7 @@
 
 .rootClosed .itemActive::before,
 .rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled)::before {
-  background: var(--surface-brand-subtle);
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
 }
 
 .item:focus-visible {
@@ -292,7 +326,7 @@
 }
 
 .itemActive .icon {
-  color: var(--icon-brand);
+  color: var(--sidenav-item-active-icon, var(--icon-brand));
 }
 
 .item:disabled .icon,
@@ -337,8 +371,8 @@
 }
 
 .itemActive .badge {
-  background: var(--surface-brand-subtle);
-  color: var(--text-brand);
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+  color: var(--sidenav-item-active-text, var(--text-brand));
 }
 
 .chevron {
@@ -367,7 +401,7 @@
 
 .submenu {
   display: grid;
-  gap: var(--space-stack-2xs);
+  gap: var(--sidenav-item-gap, var(--space-stack-2xs));
   margin: 0;
   margin-inline-start: var(--space-inset-lg);
   padding: 0;
@@ -391,6 +425,8 @@
   .sectionLabel,
   .meta,
   .close,
+  .headerSlot,
+  .slot,
   .chevron,
   .submenuSlot {
     transition: none;

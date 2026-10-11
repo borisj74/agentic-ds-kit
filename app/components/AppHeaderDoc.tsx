@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { Avatar } from "agentic-ds-kit";
 import { AppHeader } from "agentic-ds-kit";
+import { Badge } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
+import { ButtonGroup } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
+import contract from "agentic-ds-kit/contracts/appheader.json";
 import { CodeBlock } from "./CodeBlock";
+import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./AppHeaderDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -30,6 +34,24 @@ function masterCode(showSearch: boolean, showActions: boolean, shortcut: boolean
   lines.push("/>");
   return lines.join("\n");
 }
+
+const SLOTS_CODE = `<AppHeader
+  title="Acme"
+  mark="A"
+  center={
+    <ButtonGroup ariaLabel="View">
+      <Button variant="secondary" size="sm">Board</Button>
+      <Button variant="secondary" size="sm">List</Button>
+      <Button variant="secondary" size="sm">Timeline</Button>
+    </ButtonGroup>
+  }
+  end={
+    <>
+      <Badge tone="info" size="sm">Beta</Badge>
+      <Avatar name="Maya Chen" size="sm" />
+    </>
+  }
+/>`;
 
 function DemoActions() {
   return (
@@ -105,6 +127,7 @@ export function AppHeaderDoc() {
               </div>
               <CodeBlock code={masterCode(showSearch, showActions, shortcut)} />
             </div>
+            <CssVarsTable cssVars={contract.cssVars} selector={'.myHeader { --appheader-height: var(--space-12); }'} />
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
@@ -214,6 +237,40 @@ export function AppHeaderDoc() {
               <CodeBlock
                 code={'<AppHeader title="Acme" mark="A" radius="md" searchPlaceholder="Search" />'}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Slots</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.bar}>
+                  <AppHeader
+                    title="Acme"
+                    mark="A"
+                    center={
+                      <ButtonGroup ariaLabel="View">
+                        <Button variant="secondary" size="sm">Board</Button>
+                        <Button variant="secondary" size="sm">List</Button>
+                        <Button variant="secondary" size="sm">Timeline</Button>
+                      </ButtonGroup>
+                    }
+                    end={
+                      <>
+                        <Badge tone="info" size="sm">Beta</Badge>
+                        <Avatar name="Maya Chen" size="sm" />
+                      </>
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  start, center and end each replace one region: brand, search, actions. Unset
+                  slots keep their default. center stacks under the bar in narrow containers, like
+                  search. Compose kit components in slots only.
+                </p>
+              </div>
+              <CodeBlock code={SLOTS_CODE} />
             </section>
           </div>
         )}

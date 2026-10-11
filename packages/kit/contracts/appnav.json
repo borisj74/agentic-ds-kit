@@ -49,6 +49,16 @@
     "rest": "nav",
     "note": "aria-label defaults to \"Application\" and can be overridden."
   },
+  "cssVars": {
+    "--appnav-width": "Nav width (calc(layout-sidebar + space-2 \u00d7 2), 15rem)",
+    "--appnav-padding": "Inner padding (space-4)",
+    "--appnav-background": "Background (surface-card)",
+    "--appnav-item-gap": "Gap between groups, rows and sub-rows (space-1)",
+    "--appnav-item-padding": "Padding of links, group toggles and subgroup labels (space-2 space-3)",
+    "--appnav-item-radius": "Link corners (radius-control-md)",
+    "--appnav-item-active-background": "Active link fill (action-primary at 10% over surface-card)",
+    "--appnav-item-active-text": "Active link text (action-primary)"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",
@@ -56,7 +66,13 @@
     "surface.card",
     "surface.muted",
     "border.faint",
-    "action.primary"
+    "action.primary",
+    "layout.sidebar",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "radius.controlMd"
   ],
   "a11y": {
     "element": "nav",
@@ -73,7 +89,8 @@
     "Do not invent Sidebar, SidebarProvider, or local nav chrome \u2014 use SideNav",
     "Do not use raw hex",
     "Do not use AppNav for tab panels \u2014 use Tabs",
-    "Do not nest more than one subgroup level"
+    "Do not nest more than one subgroup level",
+    "Do not set component variables to raw hex or primitive --color-* ramps \u2014 use semantic tokens"
   ],
   "snippet": "<AppNav title=\"Agentic DS Kit\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
 }

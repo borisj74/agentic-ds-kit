@@ -66,3 +66,21 @@
   line-height: var(--type-line-body);
   color: var(--text-muted);
 }
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-md);
+  min-width: 0;
+}
+
+.accountName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}

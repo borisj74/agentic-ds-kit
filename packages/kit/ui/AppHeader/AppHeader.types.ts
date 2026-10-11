@@ -25,6 +25,18 @@ export interface AppHeaderProps extends Omit<ComponentPropsWithoutRef<"header">,
   searchId?: string;
   /** Trailing kit Buttons (and optional Avatar). At most one primary. */
   actions?: ReactNode;
+  /**
+   * Slot: replaces the start region (default brand: mark or logo, then title).
+   * `title` still names the header landmark.
+   */
+  start?: ReactNode;
+  /**
+   * Slot: replaces the center region (default: the search Input when `search` is true).
+   * Pass `null` for an empty center. Stacks under start/end in narrow containers like search does.
+   */
+  center?: ReactNode;
+  /** Slot: replaces the end region (default: `actions`). Kept in a group labelled "Actions". */
+  end?: ReactNode;
   className?: string;
   ariaLabel?: string;
   /** Bar corners. none is flush; md is radius-surface-md. */
