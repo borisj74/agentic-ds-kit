@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, DragEventHandler, Ref } from "react";
 import type { ButtonSize, ButtonVariant } from "../Button/Button.types";
 
@@ -7,7 +8,7 @@ export type DropdownMenuTriggerStyle = "button" | "field" | "nav";
 export interface DropdownMenuItem {
   id: string;
   label: string;
-  icon?: string;
+  icon?: KitIcon;
   shortcut?: string;
   disabled?: boolean;
   danger?: boolean;
@@ -54,8 +55,8 @@ type DropdownMenuOwnedKeys =
 export interface DropdownMenuProps extends Omit<ComponentPropsWithoutRef<"button">, DropdownMenuOwnedKeys> {
   trigger?: string;
   triggerStyle?: DropdownMenuTriggerStyle;
-  iconStart?: string;
-  iconEnd?: string;
+  iconStart?: KitIcon;
+  iconEnd?: KitIcon;
   id?: string;
   disabled?: boolean;
   error?: boolean;

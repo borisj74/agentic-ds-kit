@@ -69,7 +69,7 @@
     "items": {
       "type": "array",
       "required": false,
-      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: any Lucide name or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
       "type": "slot",
@@ -150,7 +150,7 @@
       "SideNav.Item": {
         "export": "SideNavItem",
         "element": "li > a | button",
-        "props": "label (string), icon (Lucide name or node), badge, active, disabled, href, onClick, defaultExpanded, children",
+        "props": "label (string), icon (any Lucide name — curated instant, others on demand — a Lucide component, or a node; from a Server Component pass a name or element, not a component reference), badge, active, disabled, href, onClick, defaultExpanded, children",
         "note": "active \u2192 aria-current=page and the active fill. href \u2192 link; onClick \u2192 button. Nested SideNav.Item children \u2192 disclosure button with aria-expanded/aria-controls (one level). ref/className/rest go to the row control, not the li. On the closed rail the label shows in a kit Tooltip automatically."
       },
       "SideNav.Footer": {

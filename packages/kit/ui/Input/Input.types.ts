@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type InputSize = "sm" | "md" | "lg";
@@ -27,8 +28,8 @@ export interface InputProps extends Omit<ComponentPropsWithoutRef<"input">, Inpu
   name?: string;
   start?: string;
   end?: string;
-  iconStart?: string;
-  iconEnd?: string;
+  iconStart?: KitIcon;
+  iconEnd?: KitIcon;
   demo?: "hover" | "focus";
   describedBy?: string;
   ariaLabel?: string;

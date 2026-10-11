@@ -24,9 +24,9 @@
       "note": "Supporting copy under the title."
     },
     "icon": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide export name. Shown in a circular media well. Not EmptyMedia."
+      "note": "Shown in a circular media well. Not EmptyMedia. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "media": {
       "type": "slot",

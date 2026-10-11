@@ -1,3 +1,4 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export interface LinkListItem {
@@ -5,7 +6,7 @@ export interface LinkListItem {
   label: string;
   href?: string;
   onClick?: () => void;
-  icon?: string;
+  icon?: KitIcon;
   description?: string;
   external?: boolean;
 }

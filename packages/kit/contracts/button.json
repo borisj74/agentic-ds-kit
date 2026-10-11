@@ -44,14 +44,14 @@
       "note": "required unless icon-only"
     },
     "iconStart": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "lucide-react export name from the Foundations catalog (Plus, ArrowRight, \u2026)"
+      "note": "Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "iconEnd": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "lucide-react export name from the Foundations catalog (Plus, ArrowRight, \u2026)"
+      "note": "Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "ariaLabel": {
       "type": "string",
@@ -124,7 +124,7 @@
     "Do not invent local Button variants outside the enum",
     "Do not use raw hex colors in styles",
     "Do not place more than one variant=primary Button in a single view",
-    "Do not pass custom SVG or React nodes as icons \u2014 use lucide-react export names on iconStart/iconEnd",
+    "Do not pass custom SVG markup as icons \u2014 use a Lucide name or Lucide component on iconStart/iconEnd",
     "Do not ship icon-only without ariaLabel"
   ],
   "snippet": "<Button variant=\"primary\" size=\"md\">Save changes</Button>\n<Button variant=\"secondary\" iconStart=\"Plus\">Add</Button>"

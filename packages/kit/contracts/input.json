@@ -67,14 +67,14 @@
       "note": "Suffix text inside the field on the right. Not a label."
     },
     "iconStart": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide catalog name on the left."
+      "note": "Left icon. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "iconEnd": {
-      "type": "string",
+      "type": "KitIcon",
       "required": false,
-      "note": "Lucide catalog name on the right."
+      "note": "Right icon. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
     "demo": {
       "type": "enum",
@@ -125,7 +125,7 @@
     "Do not invent local Input variants or InputGroup",
     "Do not use raw hex in styles",
     "Do not use start or end as the accessible name \u2014 wrap with Field label",
-    "Do not use Lucide except via LucideByName from @/ui/Button/lucideName"
+    "Do not render a separate Lucide icon beside it \u2014 pass a Lucide name or component to the icon props"
   ],
   "snippet": "<Field label=\"Website\" htmlFor=\"website\"><Input id=\"website\" start=\"https://\" placeholder=\"example.com\" /></Field>"
 }

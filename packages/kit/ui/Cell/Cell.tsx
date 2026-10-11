@@ -207,7 +207,7 @@ export function Cell({
           {items.map((item, index) =>
             item.label ? (
               <Button
-                key={`${item.label || item.icon || "action"}-${index}`}
+                key={`${item.label || "action"}-${index}`}
                 size={buttonSize}
                 variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
                 iconStart={item.icon}
@@ -218,7 +218,7 @@ export function Cell({
               </Button>
             ) : (
               <Button
-                key={`${item.label || item.icon || "action"}-${index}`}
+                key={`${item.label || "action"}-${index}`}
                 size={buttonSize}
                 variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
                 iconStart={item.icon}
@@ -237,7 +237,7 @@ export function Cell({
         <span className={styles.actionIcons} role="group" aria-label={label || "Row actions"}>
           {items.map((item, index) => (
             <Button
-              key={`${item.icon || item.label || "icon"}-${index}`}
+              key={`${item.label || "icon"}-${index}`}
               size={buttonSize}
               variant={item.variant ?? "tertiary"}
               iconStart={item.icon}
@@ -250,7 +250,7 @@ export function Cell({
     }
   } else if (type === "actionMenu") {
     const menuItems = (actions ?? []).map((item, index) => ({
-      id: item.label || item.ariaLabel || item.icon || `action-${index}`,
+      id: item.label || item.ariaLabel || (typeof item.icon === "string" ? item.icon : "") || `action-${index}`,
       label: item.label || item.ariaLabel || "Action",
       icon: item.icon,
       danger: item.variant === "danger",
@@ -265,7 +265,7 @@ export function Cell({
         groups={[{ items: menuItems }]}
         onSelect={(id) => {
           const hit = (actions ?? []).find(
-            (item, index) => (item.label || item.ariaLabel || item.icon || `action-${index}`) === id,
+            (item, index) => (item.label || item.ariaLabel || (typeof item.icon === "string" ? item.icon : "") || `action-${index}`) === id,
           );
           hit?.onClick?.();
         }}

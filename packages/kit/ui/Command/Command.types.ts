@@ -1,9 +1,10 @@
+import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export interface CommandItem {
   id: string;
   label: string;
-  icon?: string;
+  icon?: KitIcon;
   shortcut?: string;
   disabled?: boolean;
 }

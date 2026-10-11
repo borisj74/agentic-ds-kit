@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { Button } from "../Button";
-import { LucideByName } from "../Button/lucideName";
+import { LucideByName, isKitIcon, type KitIcon } from "../Button/lucideName";
 import { Tooltip } from "../Tooltip";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
@@ -246,7 +246,7 @@ function ItemBody({
   expanded,
 }: {
   label: string;
-  icon?: ReactNode;
+  icon?: KitIcon | ReactNode;
   badge?: ReactNode;
   nested: boolean;
   expanded?: boolean;
@@ -255,7 +255,7 @@ function ItemBody({
     <>
       {icon ? (
         <span className={styles.icon} aria-hidden>
-          {typeof icon === "string" ? <LucideByName name={icon} size={ICON_SIZE} /> : icon}
+          {isKitIcon(icon) ? <LucideByName name={icon} size={ICON_SIZE} /> : icon}
         </span>
       ) : null}
       <span className={styles.label}>{label}</span>
