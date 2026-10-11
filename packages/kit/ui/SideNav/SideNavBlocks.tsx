@@ -3,6 +3,7 @@
 import {
   Children,
   useContext,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -50,15 +51,40 @@ export function SideNavRoot({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const open = isControlled ? openProp : uncontrolledOpen;
   const rootRef = useRef<HTMLElement | null>(null);
+  const focusOnOpen = useRef(false);
   const label = rest["aria-label"];
 
   const context = useMemo<SideNavContextValue>(() => {
-    function setOpen(next: boolean) {
+    function setOpen(next: boolean, options?: { focus?: boolean }) {
+      focusOnOpen.current = next && Boolean(options?.focus);
       if (!isControlled) setUncontrolledOpen(next);
       onOpenChange?.(next);
     }
-    return { open, rail: !open, setOpen, toggle: () => setOpen(!open), side, label, rootRef };
+    return {
+      open,
+      rail: !open,
+      setOpen,
+      toggle: (options) => setOpen(!open, options),
+      side,
+      label,
+      rootRef,
+    };
   }, [open, isControlled, onOpenChange, side, label]);
+
+  // A user reopen (mark or Toggle) moves focus into the opened rail: the Toggle ("Close")
+  // if there is one, else the first nav row. The mark that was pressed is disabled once open.
+  useEffect(() => {
+    if (!open || !focusOnOpen.current) return;
+    focusOnOpen.current = false;
+    const root = rootRef.current;
+    if (!root) return;
+    const target =
+      root.querySelector<HTMLElement>(`.${styles.toggle} button:not(:disabled)`) ??
+      root.querySelector<HTMLElement>(
+        `.${styles.nav} :is(a[href], button:not(:disabled)):not([tabindex="-1"])`,
+      );
+    target?.focus();
+  }, [open]);
 
   return (
     <SideNavContext.Provider value={context}>
@@ -116,7 +142,7 @@ export function SideNavBrand({
         disabled={open}
         onClick={(event) => {
           onClick?.(event);
-          if (!event.defaultPrevented && !open) setOpen(true);
+          if (!event.defaultPrevented && !open) setOpen(true, { focus: true });
         }}
       >
         {markContent}
@@ -159,7 +185,7 @@ export function SideNavToggle({
         ariaLabel={open ? closeLabel : openLabel}
         onClick={(event) => {
           onClick?.(event);
-          if (!event.defaultPrevented) toggle();
+          if (!event.defaultPrevented) toggle({ focus: true });
         }}
       />
     </span>

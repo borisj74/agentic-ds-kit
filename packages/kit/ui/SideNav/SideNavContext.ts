@@ -8,8 +8,13 @@ export interface SideNavContextValue {
   open: boolean;
   /** Rail is closed: icons only, labels clipped. Same as `!open`. */
   rail: boolean;
-  setOpen: (next: boolean) => void;
-  toggle: () => void;
+  /**
+   * `{ focus: true }` (used by `SideNav.Brand` and `SideNav.Toggle`) moves focus into the
+   * reopened rail: the Toggle if present, else the first nav row. Pass it from your own
+   * reopen control; leave it off for programmatic changes.
+   */
+  setOpen: (next: boolean, options?: { focus?: boolean }) => void;
+  toggle: (options?: { focus?: boolean }) => void;
   side: SideNavSide;
   /** Accessible name of the root; `SideNav.Nav` uses it when it has no `aria-label`. */
   label?: string;

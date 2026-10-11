@@ -117,18 +117,8 @@
   pointer-events: none;
 }
 
-.close {
-  margin-inline-start: auto;
-  flex-shrink: 0;
-  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
-}
-
-.rootClosed .close {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* header slot: replaces mark + title; the Close button stays. */
+/* header slot: replaces mark + title; a SideNav.Toggle beside it closes the rail and,
+   on the closed rail, moves to the start edge to reopen it. */
 .headerSlot {
   display: flex;
   align-items: center;
@@ -482,7 +472,6 @@
   .label,
   .sectionLabel,
   .meta,
-  .close,
   .headerSlot,
   .slot,
   .chevron,

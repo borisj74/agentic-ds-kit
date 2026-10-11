@@ -468,10 +468,12 @@ export function SideNavDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  header replaces the brand; Close stays. beforeGroups and afterGroups pin above and
-                  below the scrolling groups. footer takes items or any node. renderItem wraps one
-                  row: keep the node it gives you, it carries aria-current and the disclosure state.
-                  With a custom header the mark is gone, so control open yourself.
+                  header replaces the brand; a custom header keeps a Toggle, which closes the rail
+                  and, on the closed rail, moves to the start edge to reopen it. For a mark inside
+                  your header, build it from blocks with SideNav.Brand. beforeGroups and afterGroups
+                  pin above and below the scrolling groups. footer takes items or any node.
+                  renderItem wraps one row: keep the node it gives you, it carries aria-current and
+                  the disclosure state.
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
@@ -493,7 +495,7 @@ export function SideNavDoc() {
                   open state. SideNav.Brand is the mark and title; with SideNav.Toggle beside it the
                   Toggle closes the rail and the mark stays on the closed rail to reopen it (without
                   a Brand, the Toggle itself moves to the start edge and reopens, so a header with
-                  only a switcher works too). Slot holds the workspace switcher. Section takes a label and Item rows;
+                  only a switcher works too). Reopening by mark or Toggle moves focus to Close. Slot holds the workspace switcher. Section takes a label and Item rows;
                   Item children make a disclosure. Slot pins content outside the scroll
                   (keepOnRail keeps pinned rows usable). On the closed rail every Item shows its
                   label in a kit Tooltip. In Server Components use the named exports
