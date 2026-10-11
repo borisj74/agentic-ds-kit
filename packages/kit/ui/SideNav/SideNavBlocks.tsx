@@ -20,7 +20,7 @@ import { SideNavContext, useSideNav, type SideNavContextValue } from "./SideNavC
 import type {
   SideNavFooterProps,
   SideNavHeaderProps,
-  SideNavItem as SideNavItemData,
+  SideNavItemData,
   SideNavItemProps,
   SideNavNavProps,
   SideNavRootProps,
@@ -362,5 +362,8 @@ export function SideNavItem(props: SideNavItemProps) {
   return <SideNavItemImpl {...props} />;
 }
 
-/** Data item type (the preset's `groups` / `items`). Same name as the block on purpose: type vs component. */
+/**
+ * @deprecated Use `SideNavItemData` for the preset's row data. This type alias shares its name
+ * with the `SideNavItem` component and will be removed in the next release.
+ */
 export type SideNavItem = SideNavItemData;

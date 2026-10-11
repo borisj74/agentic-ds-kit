@@ -11,7 +11,8 @@ export type SideNavSide = "left" | "right";
 
 export type SideNavRadius = "md" | "none";
 
-export interface SideNavItem {
+/** One preset row (the data shape of `groups` / `items` / `footer`). The component is `SideNavItem`. */
+export interface SideNavItemData {
   id: string;
   label: string;
   href?: string;
@@ -23,12 +24,12 @@ export interface SideNavItem {
   disabled?: boolean;
   badge?: string;
   /** One nested submenu level. */
-  items?: SideNavItem[];
+  items?: SideNavItemData[];
 }
 
 export interface SideNavGroup {
   label: string;
-  items: SideNavItem[];
+  items: SideNavItemData[];
 }
 
 /**
@@ -37,7 +38,7 @@ export interface SideNavGroup {
  * Return it wrapped, beside other content, or cloned with new children — keep it in the
  * tree so the row stays accessible. Nested submenus still render below parent rows.
  */
-export type SideNavRenderItem = (item: SideNavItem, defaultNode: ReactElement) => ReactNode;
+export type SideNavRenderItem = (item: SideNavItemData, defaultNode: ReactElement) => ReactNode;
 
 /** Native aside attributes the kit sets itself (or replaces with its own prop). */
 type SideNavOwnedKeys = "children" | "title";
@@ -57,9 +58,9 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   side?: SideNavSide;
   groups?: SideNavGroup[];
   /** Flat list if no groups. */
-  items?: SideNavItem[];
+  items?: SideNavItemData[];
   /** Footer rows (one or many items), or any ReactNode (e.g. an account card). */
-  footer?: SideNavItem | SideNavItem[] | ReactNode;
+  footer?: SideNavItemData | SideNavItemData[] | ReactNode;
   /**
    * Slot: replaces the brand (mark + title) in the header. The Close button stays.
    * The mark is what reopens a closed rail, so with a custom header control `open` yourself.

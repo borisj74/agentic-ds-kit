@@ -44,7 +44,7 @@
   place-items: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: var(--appheader-brand-width, var(--layout-sidebar-compact));
+  width: var(--appheader-brand-width, var(--sidenav-width-collapsed, var(--layout-sidebar-compact)));
   height: var(--space-8);
 }
 

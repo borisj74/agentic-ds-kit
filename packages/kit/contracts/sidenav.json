@@ -64,17 +64,17 @@
     "groups": {
       "type": "array",
       "required": false,
-      "note": "Labeled sections of SideNavItem. Takes precedence over items"
+      "note": "SideNavGroup[]: { label, items: SideNavItemData[] }. Takes precedence over items"
     },
     "items": {
       "type": "array",
       "required": false,
-      "note": "Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
       "type": "slot",
       "required": false,
-      "note": "SideNavItem, SideNavItem[] (e.g. Settings), or any ReactNode such as an account card."
+      "note": "SideNavItemData, SideNavItemData[] (e.g. Settings), or any ReactNode such as an account card."
     },
     "header": {
       "type": "slot",
@@ -105,7 +105,7 @@
     "note": "aria-label defaults to title and can be overridden."
   },
   "compose": {
-    "note": "The data props above are the preset. Build your own nav from these blocks; the preset is built from them. Dot access (SideNav.Root) in client components; named exports (SideNavRoot, SideNavItem, \u2026) in Server Components, which cannot dot into a client module. Every block takes ref, className and native attributes (K22).",
+    "note": "The data props above are the preset. Build your own nav from these blocks; the preset is built from them. Dot access (SideNav.Root) in client components; named exports (SideNavRoot, SideNavItem, \u2026) in Server Components, which cannot dot into a client module. SideNavItem is the row component; the preset row data type is SideNavItemData (the SideNavItem type alias is deprecated). Every block takes ref, className and native attributes (K22).",
     "blocks": {
       "SideNav.Root": {
         "export": "SideNavRoot",
@@ -187,7 +187,7 @@
   },
   "cssVars": {
     "--sidenav-width": "Open width of the rail and its inner panel (layout-sidebar)",
-    "--sidenav-width-collapsed": "Closed rail width; keep it equal to --appheader-brand-width (layout-sidebar-compact)",
+    "--sidenav-width-collapsed": "Closed rail width (layout-sidebar-compact). AppHeader's brand column follows it unless --appheader-brand-width is set, so set it on :root to move both",
     "--sidenav-background": "Panel background (surface-card)",
     "--sidenav-item-padding": "Row padding; sets row height and the closed-rail icon chip (space-inset-sm)",
     "--sidenav-item-radius": "Row and closed-rail chip corners (radius-control-md)",

@@ -2,7 +2,7 @@
 
 import { isValidElement, type ReactNode } from "react";
 import { Button } from "../Button";
-import type { SideNavItem, SideNavProps, SideNavRenderItem } from "./SideNav.types";
+import type { SideNavItemData, SideNavProps, SideNavRenderItem } from "./SideNav.types";
 import {
   SideNavFooter,
   SideNavHeader,
@@ -20,6 +20,7 @@ import styles from "./SideNav.module.css";
 
 export type {
   SideNavGroup,
+  SideNavItemData,
   SideNavProps,
   SideNavRadius,
   SideNavRenderItem,
@@ -27,7 +28,7 @@ export type {
 } from "./SideNav.types";
 
 /** Preset row from data: the `SideNav.Item` block, with `renderItem` applied to its control. */
-function DataItem({ item, renderItem }: { item: SideNavItem; renderItem?: SideNavRenderItem }) {
+function DataItem({ item, renderItem }: { item: SideNavItemData; renderItem?: SideNavRenderItem }) {
   return (
     <SideNavItemImpl
       label={item.label}
@@ -46,7 +47,7 @@ function DataItem({ item, renderItem }: { item: SideNavItem; renderItem?: SideNa
   );
 }
 
-function DataList({ items, renderItem }: { items: SideNavItem[]; renderItem?: SideNavRenderItem }) {
+function DataList({ items, renderItem }: { items: SideNavItemData[]; renderItem?: SideNavRenderItem }) {
   return (
     <SideNavList>
       {items.map((item) => (
@@ -106,18 +107,18 @@ function PresetHeaderSlot({ children }: { children: ReactNode }) {
   );
 }
 
-function isNavItem(value: unknown): value is SideNavItem {
+function isNavItem(value: unknown): value is SideNavItemData {
   return (
     typeof value === "object" &&
     value !== null &&
     !isValidElement(value) &&
-    typeof (value as SideNavItem).id === "string" &&
-    typeof (value as SideNavItem).label === "string"
+    typeof (value as SideNavItemData).id === "string" &&
+    typeof (value as SideNavItemData).label === "string"
   );
 }
 
-/** footer accepts SideNavItem, SideNavItem[], or any ReactNode. */
-function footerItems(footer: SideNavProps["footer"]): SideNavItem[] | null {
+/** footer accepts SideNavItemData, SideNavItemData[], or any ReactNode. */
+function footerItems(footer: SideNavProps["footer"]): SideNavItemData[] | null {
   if (Array.isArray(footer)) return footer.length > 0 && footer.every(isNavItem) ? footer : null;
   return isNavItem(footer) ? [footer] : null;
 }

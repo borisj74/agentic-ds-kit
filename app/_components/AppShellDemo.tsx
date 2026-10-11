@@ -10,13 +10,17 @@ import {
   Empty,
   PageHeader,
   Select,
-  SideNav,
+  SideNavItem,
+  SideNavNav,
+  SideNavRoot,
+  SideNavSection,
+  SideNavSlot,
   useAppShell,
 } from "agentic-ds-kit";
-import type { SideNavGroup, SideNavItem } from "agentic-ds-kit";
+import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
-const NAV_ITEMS: SideNavItem[] = [
+const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
   { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
@@ -24,7 +28,7 @@ const NAV_ITEMS: SideNavItem[] = [
   { id: "insights", label: "Insights", icon: "Sparkles" },
 ];
 
-const NAV_FOOTER: SideNavItem[] = [{ id: "settings", label: "Settings", icon: "Settings" }];
+const NAV_FOOTER: SideNavItemData[] = [{ id: "settings", label: "Settings", icon: "Settings" }];
 
 /**
  * Responsive app shell in the playground browser frame. Narrow the window
@@ -35,7 +39,7 @@ export function AppShellDemo() {
   const [query, setQuery] = useState("");
   const [navOpen, setNavOpen] = useState(true);
 
-  const bind = (items: SideNavItem[]) =>
+  const bind = (items: SideNavItemData[]) =>
     items.map((item) => ({ ...item, active: item.id === page, onClick: () => setPage(item.id) }));
   const current = [...NAV_ITEMS, ...NAV_FOOTER].find((item) => item.id === page) ?? NAV_ITEMS[0];
 
@@ -111,32 +115,42 @@ const WORKSPACES = [
   { value: "northwind", label: "Northwind" },
 ];
 
-/** Built nav: one SideNav that adapts to where the shell renders it (rail or Drawer). */
+/**
+ * Built nav from the SideNav blocks (named exports, so a Server Component could render it too).
+ * One nav adapts to where the shell renders it: flush in the rail, forced open in the Drawer.
+ */
 function CustomNav({ page, onPick }: { page: string; onPick: (id: string) => void }) {
   const shell = useAppShell();
   const inDrawer = shell?.navPlacement === "drawer";
-  const groups = CUSTOM_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.map((item) => ({ ...item, active: item.id === page, onClick: () => onPick(item.id) })),
-  }));
 
   return (
-    <SideNav
-      title="Agentix"
-      showHeader={false}
-      radius={inDrawer ? "md" : "none"}
-      open
-      groups={groups}
-      beforeGroups={
+    <SideNavRoot aria-label="Agentix" radius={inDrawer ? "md" : "none"} open>
+      <SideNavSlot>
         <Select id={inDrawer ? "shell-ws-drawer" : "shell-ws"} size="sm" ariaLabel="Workspace" defaultValue="agentix" options={WORKSPACES} />
-      }
-    />
+      </SideNavSlot>
+      <SideNavNav>
+        {CUSTOM_GROUPS.map((group) => (
+          <SideNavSection key={group.label} label={group.label}>
+            {group.items.map((item) => (
+              <SideNavItem
+                key={item.id}
+                label={item.label}
+                icon={item.icon}
+                badge={item.badge}
+                active={item.id === page}
+                onClick={() => onPick(item.id)}
+              />
+            ))}
+          </SideNavSection>
+        ))}
+      </SideNavNav>
+    </SideNavRoot>
   );
 }
 
 /**
  * The same shell with chrome built from blocks: AppHeader.Root with a Beta Badge
- * and Avatar, and a grouped SideNav with a workspace Select.
+ * and Avatar, and a grouped nav from the SideNav blocks with a workspace Select.
  */
 export function AppShellCustomDemo() {
   const [page, setPage] = useState("home");
