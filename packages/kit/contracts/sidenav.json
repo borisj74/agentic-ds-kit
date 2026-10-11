@@ -1,7 +1,7 @@
 {
   "id": "sidenav",
   "status": "stable",
-  "intent": "Product side nav: brand header, icon items, optional badges, closeable. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
+  "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Nav/Section/Item/Toggle blocks. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
   "useWhen": [
     "Product app chrome",
     "Persistent nav with icons"
@@ -79,7 +79,7 @@
     "header": {
       "type": "slot",
       "required": false,
-      "note": "Replaces the brand (mark + title) in the header. The Close button stays. The mark is what reopens a closed rail, so with a custom header control open yourself. Ignored when showHeader is false."
+      "note": "Replaces the brand (mark + title) in the header. The Close button stays. The mark is what reopens a closed rail, so with a custom header control open yourself, or build the nav from blocks with SideNav.Toggle. Ignored when showHeader is false."
     },
     "beforeGroups": {
       "type": "slot",
@@ -103,6 +103,87 @@
     "className": "root",
     "rest": "aside",
     "note": "aria-label defaults to title and can be overridden."
+  },
+  "compose": {
+    "note": "The data props above are the preset. Build your own nav from these blocks; the preset is built from them. Dot access (SideNav.Root) in client components; named exports (SideNavRoot, SideNavItem, \u2026) in Server Components, which cannot dot into a client module. Every block takes ref, className and native attributes (K22).",
+    "blocks": {
+      "SideNav.Root": {
+        "export": "SideNavRoot",
+        "element": "aside > div.panel",
+        "props": "open, defaultOpen, onOpenChange, side, radius, aria-label",
+        "note": "Owns open/closed state (context). ref/className/rest on the aside. aria-label names the aside and is the default name of SideNav.Nav."
+      },
+      "SideNav.Header": {
+        "export": "SideNavHeader",
+        "element": "header",
+        "note": "Top bar. Put brand, a workspace switcher, and SideNav.Toggle as a direct child. With a Toggle inside, everything else in the header fades and leaves the tab order on the closed rail."
+      },
+      "SideNav.Toggle": {
+        "export": "SideNavToggle",
+        "element": "kit Button (tertiary, sm)",
+        "props": "closeLabel (default Close), openLabel (default Open)",
+        "note": "Closes the open rail; on the closed rail it moves to the start edge and reopens it. ref/rest to the button. onClick runs first; preventDefault skips the toggle."
+      },
+      "SideNav.Slot": {
+        "export": "SideNavSlot",
+        "element": "div",
+        "props": "placement before|after, keepOnRail",
+        "note": "Pinned outside the scroll (switcher, promo, pinned rows). Faded and inert on the closed rail unless keepOnRail."
+      },
+      "SideNav.Nav": {
+        "export": "SideNavNav",
+        "element": "nav",
+        "note": "The scrolling navigation landmark. aria-label defaults to the root's aria-label."
+      },
+      "SideNav.Section": {
+        "export": "SideNavSection",
+        "element": "div > p? + ul",
+        "props": "label?",
+        "note": "Optional caption plus the list of rows. Without label it is just the list (use it to wrap footer rows)."
+      },
+      "SideNav.Item": {
+        "export": "SideNavItem",
+        "element": "li > a | button",
+        "props": "label (string), icon (Lucide name or node), badge, active, disabled, href, onClick, defaultExpanded, children",
+        "note": "active \u2192 aria-current=page and the active fill. href \u2192 link; onClick \u2192 button. Nested SideNav.Item children \u2192 disclosure button with aria-expanded/aria-controls (one level). ref/className/rest go to the row control, not the li. On the closed rail the label shows in a kit Tooltip automatically."
+      },
+      "SideNav.Footer": {
+        "export": "SideNavFooter",
+        "element": "div",
+        "note": "Bottom bar: a SideNav.Section of rows or any node (account card)."
+      }
+    },
+    "nesting": {
+      "SideNav.Root": [
+        "SideNav.Header",
+        "SideNav.Slot",
+        "SideNav.Nav",
+        "SideNav.Footer"
+      ],
+      "SideNav.Header": [
+        "SideNav.Toggle",
+        "any node (brand, DropdownMenu switcher)"
+      ],
+      "SideNav.Slot": [
+        "SideNav.Section",
+        "any node"
+      ],
+      "SideNav.Nav": [
+        "SideNav.Section"
+      ],
+      "SideNav.Section": [
+        "SideNav.Item"
+      ],
+      "SideNav.Item": [
+        "SideNav.Item (one level, no deeper)"
+      ],
+      "SideNav.Footer": [
+        "SideNav.Section",
+        "any node"
+      ]
+    },
+    "hook": "useSideNav() \u2192 { open, rail, setOpen, toggle, side } inside SideNav.Root, for a custom toggle or rail-aware content.",
+    "snippet": "<SideNav.Root aria-label=\"Agentix\">\n  <SideNav.Header>\n    <div className=\"switcher\"><DropdownMenu triggerStyle=\"field\" size=\"sm\" ariaLabel=\"Workspace\" trigger=\"Agentix\" groups={workspaces} /></div>\n    <SideNav.Toggle />\n  </SideNav.Header>\n  <SideNav.Nav>\n    <SideNav.Section label=\"Workspace\">\n      <SideNav.Item label=\"Overview\" icon=\"House\" href=\"/\" active />\n      <SideNav.Item label=\"Projects\" icon=\"Folder\">\n        <SideNav.Item label=\"Launch\" href=\"/projects/launch\" />\n      </SideNav.Item>\n    </SideNav.Section>\n  </SideNav.Nav>\n  <SideNav.Footer>\n    <SideNav.Section><SideNav.Item label=\"Settings\" icon=\"Settings\" href=\"/settings\" /></SideNav.Section>\n  </SideNav.Footer>\n</SideNav.Root>"
   },
   "cssVars": {
     "--sidenav-width": "Open width of the rail and its inner panel (layout-sidebar)",
@@ -160,25 +241,30 @@
       "Parent with nested items is a disclosure with aria-expanded",
       "Closed rail clips labels via overflow; labels stay in the DOM for assistive tech",
       "Outer shell width animates; inner panel stays at layout-sidebar width so icons do not recenter",
-      "Closed rail trailing border is on the outer shell — the inner panel is clipped",
-      "Closed rail must not change item width or height — size snaps cause open/close jump",
+      "Closed rail trailing border is on the outer shell \u2014 the inner panel is clipped",
+      "Closed rail must not change item width or height \u2014 size snaps cause open/close jump",
       "Closed rail paints a square chip over the icon; do not clip a full-width row background",
       "List items keep space-stack-2xs between rows so selected and hover surfaces do not touch",
       "renderItem keeps defaultNode in the tree so aria-current and aria-expanded stay on the row",
-      "Slot content is inert on the closed rail so clipped controls are not focusable"
+      "Slot content is inert on the closed rail so clipped controls are not focusable",
+      "Closed rail: every Item names itself in a kit Tooltip (placed outside the rail edge)",
+      "SideNav.Toggle stays visible and focusable on the closed rail and reopens it"
     ]
   },
   "doNot": [
     "Do not invent Sidebar, SidebarHeader, SidebarNav, SidebarSection, SidebarItem, SidebarSubmenu, SidebarFooter, SidebarProvider, SidebarTrigger, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, or SidebarRail",
+    "Do not hand-roll nav rows (a, button, li with your own active/hover styles) inside SideNav \u2014 use SideNav.Item, which carries aria-current, the disclosure attributes and the closed-rail tooltip",
+    "Do not nest SideNav.Item deeper than one level, or put rows outside a SideNav.Section",
+    "Do not use SideNav.Root without a SideNav.Toggle (or the preset mark) when the rail can close \u2014 nothing would reopen it",
     "Do not compose AppNav inside SideNav",
     "Do not use Drawer for persistent app chrome",
     "Do not use AppNav as closeable product chrome",
-    "Do not leave a gap between AppHeader and SideNav — radius none, showHeader false, layout-app with no gap",
+    "Do not leave a gap between AppHeader and SideNav \u2014 radius none, showHeader false, layout-app with no gap",
     "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; for narrow screens use AppShellPattern, which renders SideNav inside kit Drawer",
     "Do not hand-roll a narrow-screen menu (hamburger, bottom tab bar, collapsed rail); use AppShellPattern (app-shell)",
     "Do not use the shadcn sidebar package",
     "Do not use raw hex",
-    "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens"
+    "Do not set component variables to raw hex or primitive --color-* ramps \u2014 use semantic tokens"
   ],
   "snippet": "<SideNav title=\"Agentix\" mark=\"A\" open={open} onOpenChange={setOpen} groups={groups} footer={[{ id: \"invite\", label: \"Invite members\", icon: \"CirclePlus\" }, { id: \"settings\", label: \"Settings\", icon: \"Settings\" }]} />"
 }

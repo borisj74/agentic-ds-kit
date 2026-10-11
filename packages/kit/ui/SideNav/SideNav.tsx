@@ -1,161 +1,108 @@
 "use client";
 
-import { isValidElement, useId, useState, type ReactElement, type ReactNode } from "react";
+import { isValidElement, type ReactNode } from "react";
 import { Button } from "../Button";
-import { LucideByName } from "../Button/lucideName";
 import type { SideNavItem, SideNavProps, SideNavRenderItem } from "./SideNav.types";
-import { cx } from "../shared/cx";
+import {
+  SideNavFooter,
+  SideNavHeader,
+  SideNavItem as SideNavItemBlock,
+  SideNavItemImpl,
+  SideNavList,
+  SideNavNav,
+  SideNavRoot,
+  SideNavSection,
+  SideNavSlot,
+  SideNavToggle,
+} from "./SideNavBlocks";
+import { useSideNav } from "./SideNavContext";
 import styles from "./SideNav.module.css";
 
 export type {
   SideNavGroup,
-  SideNavItem,
   SideNavProps,
   SideNavRadius,
   SideNavRenderItem,
   SideNavSide,
 } from "./SideNav.types";
 
-const ICON_SIZE = 16;
+/** Preset row from data: the `SideNav.Item` block, with `renderItem` applied to its control. */
+function DataItem({ item, renderItem }: { item: SideNavItem; renderItem?: SideNavRenderItem }) {
+  return (
+    <SideNavItemImpl
+      label={item.label}
+      icon={item.icon}
+      badge={item.badge}
+      active={item.active}
+      disabled={item.disabled}
+      href={item.href}
+      onClick={item.onClick ? () => item.onClick!() : undefined}
+      wrap={renderItem ? (control) => renderItem(item, control) : undefined}
+    >
+      {item.items && item.items.length > 0
+        ? item.items.map((child) => <DataItem key={child.id} item={child} renderItem={renderItem} />)
+        : null}
+    </SideNavItemImpl>
+  );
+}
 
-function ItemBody({
-  item,
-  expanded,
-}: {
-  item: SideNavItem;
-  expanded?: boolean;
-}) {
-  const nested = Boolean(item.items && item.items.length > 0);
+function DataList({ items, renderItem }: { items: SideNavItem[]; renderItem?: SideNavRenderItem }) {
+  return (
+    <SideNavList>
+      {items.map((item) => (
+        <DataItem key={item.id} item={item} renderItem={renderItem} />
+      ))}
+    </SideNavList>
+  );
+}
 
+/** Preset brand: the mark (reopens the closed rail) and the title. */
+function PresetBrand({ title, mark }: { title: string; mark?: string }) {
+  const { open, setOpen } = useSideNav();
+  const markLetter = (mark && mark.length > 0 ? mark : title.charAt(0)) || "·";
   return (
     <>
-      {item.icon ? (
-        <span className={styles.icon} aria-hidden>
-          <LucideByName name={item.icon} size={ICON_SIZE} />
-        </span>
-      ) : null}
-      <span className={styles.label}>{item.label}</span>
-      {item.badge || nested ? (
-        <span className={styles.meta}>
-          {item.badge ? <span className={styles.badge}>{item.badge}</span> : null}
-          {nested ? (
-            <span className={`${styles.chevron} ${expanded ? styles.chevronOpen : ""}`}>
-              <LucideByName name="ChevronRight" size={ICON_SIZE} />
-            </span>
-          ) : null}
-        </span>
-      ) : null}
+      <button
+        type="button"
+        className={`${styles.mark} ${styles.markButton}`}
+        aria-label={open ? undefined : "Open"}
+        aria-hidden={open ? true : undefined}
+        tabIndex={open ? -1 : 0}
+        disabled={open}
+        onClick={() => {
+          if (!open) setOpen(true);
+        }}
+      >
+        {markLetter}
+      </button>
+      <p className={styles.title}>{title}</p>
     </>
   );
 }
 
-function NavItem({
-  item,
-  rail,
-  renderItem,
-}: {
-  item: SideNavItem;
-  rail: boolean;
-  renderItem?: SideNavRenderItem;
-}) {
-  const nested = Boolean(item.items && item.items.length > 0);
-  const submenuId = useId();
-  const [expanded, setExpanded] = useState(nested);
-  const submenuOpen = expanded && !rail;
-
-  const className = [
-    styles.item,
-    item.active ? styles.itemActive : "",
-    item.disabled ? styles.itemDisabled : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  let control: ReactElement;
-
-  if (nested) {
-    control = (
-      <button
-        type="button"
-        className={className}
-        disabled={item.disabled}
-        aria-expanded={submenuOpen}
-        aria-controls={submenuId}
-        aria-current={item.active ? "page" : undefined}
-        onClick={() => {
-          if (!rail) setExpanded((current) => !current);
-        }}
-      >
-        <ItemBody item={item} expanded={submenuOpen} />
-      </button>
-    );
-  } else if (item.onClick && !item.disabled) {
-    control = (
-      <button
-        type="button"
-        className={className}
-        aria-current={item.active ? "page" : undefined}
-        onClick={item.onClick}
-      >
-        <ItemBody item={item} />
-      </button>
-    );
-  } else if (item.href && !item.disabled) {
-    control = (
-      <a
-        href={item.href}
-        className={className}
-        aria-current={item.active ? "page" : undefined}
-      >
-        <ItemBody item={item} />
-      </a>
-    );
-  } else {
-    control = (
-      <button
-        type="button"
-        className={className}
-        disabled={item.disabled}
-        aria-current={item.active ? "page" : undefined}
-      >
-        <ItemBody item={item} />
-      </button>
-    );
-  }
-
+/** Preset Close: hidden on the closed rail, where the mark reopens instead. */
+function PresetClose() {
+  const { open, side, setOpen } = useSideNav();
   return (
-    <li className={styles.entry}>
-      {renderItem ? renderItem(item, control) : control}
-      {nested ? (
-        <div
-          className={`${styles.submenuSlot} ${submenuOpen ? "" : styles.submenuSlotClosed}`.trim()}
-        >
-          <ul className={styles.submenu} id={submenuId}>
-            {item.items!.map((child) => (
-              <NavItem key={child.id} item={child} rail={rail} renderItem={renderItem} />
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </li>
+    <span className={styles.close} {...(!open ? { inert: true } : {})}>
+      <Button
+        variant="tertiary"
+        size="sm"
+        iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
+        ariaLabel="Close"
+        onClick={() => setOpen(false)}
+      />
+    </span>
   );
 }
 
-function NavList({
-  items,
-  rail,
-  renderItem,
-}: {
-  items: SideNavItem[];
-  rail: boolean;
-  renderItem?: SideNavRenderItem;
-}) {
+/** Custom `header` slot wrapper: faded and inert on the closed rail. */
+function PresetHeaderSlot({ children }: { children: ReactNode }) {
+  const { rail } = useSideNav();
   return (
-    <ul className={styles.list}>
-      {items.map((item) => (
-        <NavItem key={item.id} item={item} rail={rail} renderItem={renderItem} />
-      ))}
-    </ul>
+    <div className={styles.headerSlot} {...(rail ? { inert: true } : {})}>
+      {children}
+    </div>
   );
 }
 
@@ -175,12 +122,16 @@ function footerItems(footer: SideNavProps["footer"]): SideNavItem[] | null {
   return isNavItem(footer) ? [footer] : null;
 }
 
-export function SideNav({
+/**
+ * Preset: the data-driven SideNav, assembled from the building blocks
+ * (`SideNav.Root`, `.Header`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`).
+ */
+function SideNavPreset({
   title,
   mark,
   showHeader = true,
   radius = "md",
-  open: openProp,
+  open,
   defaultOpen = true,
   onOpenChange,
   side = "left",
@@ -192,103 +143,67 @@ export function SideNav({
   afterGroups,
   renderItem,
   "aria-label": ariaLabel = title,
-  className,
-  ref,
   ...rest
 }: SideNavProps) {
-  const isControlled = typeof openProp === "boolean";
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  // When showHeader is false we still allow rail open/close; consumers can provide a custom toggle.
-  const expanded = isControlled ? openProp : uncontrolledOpen;
   const useGroups = Boolean(groups && groups.length > 0);
-  const markLetter = (mark && mark.length > 0 ? mark : title.charAt(0)) || "·";
-  const rail = !expanded;
   const footerRows = footerItems(footer);
-  const closedProps = rail ? { inert: true } : {};
-
-  function setOpen(next: boolean) {
-    if (!isControlled) setUncontrolledOpen(next);
-    onOpenChange?.(next);
-  }
 
   return (
-    <aside
+    <SideNavRoot
       {...rest}
-      ref={ref}
-      className={cx(styles.root, radius === "none" && styles.radiusNone, !expanded && styles.rootClosed, className)}
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      side={side}
+      radius={radius}
       aria-label={ariaLabel}
-      data-side={side}
     >
-      <div className={styles.panel}>
-        {showHeader ? (
-          <header className={styles.header}>
-            {header !== undefined ? (
-              <div className={styles.headerSlot} {...closedProps}>
-                {header}
-              </div>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className={`${styles.mark} ${styles.markButton}`}
-                  aria-label={expanded ? undefined : "Open"}
-                  aria-hidden={expanded ? true : undefined}
-                  tabIndex={expanded ? -1 : 0}
-                  disabled={expanded}
-                  onClick={() => {
-                    if (!expanded) setOpen(true);
-                  }}
-                >
-                  {markLetter}
-                </button>
-                <p className={styles.title}>{title}</p>
-              </>
-            )}
-            <span className={styles.close} {...(!expanded ? { inert: true } : {})}>
-              <Button
-                variant="tertiary"
-                size="sm"
-                iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
-                ariaLabel="Close"
-                onClick={() => setOpen(false)}
-              />
-            </span>
-          </header>
-        ) : null}
+      {showHeader ? (
+        <SideNavHeader>
+          {header !== undefined ? <PresetHeaderSlot>{header}</PresetHeaderSlot> : <PresetBrand title={title} mark={mark} />}
+          <PresetClose />
+        </SideNavHeader>
+      ) : null}
 
-        {beforeGroups ? (
-          <div className={`${styles.slot} ${styles.slotBefore}`} {...closedProps}>
-            {beforeGroups}
-          </div>
-        ) : null}
+      {beforeGroups ? <SideNavSlot placement="before">{beforeGroups}</SideNavSlot> : null}
 
-        <nav className={styles.nav} aria-label={title}>
-          {useGroups
-            ? groups!.map((group) => (
-                <div key={group.label} className={styles.section}>
-                  <p className={styles.sectionLabel}>{group.label}</p>
-                  <NavList items={group.items} rail={rail} renderItem={renderItem} />
-                </div>
-              ))
-            : <NavList items={items} rail={rail} renderItem={renderItem} />}
-        </nav>
+      <SideNavNav aria-label={title}>
+        {useGroups ? (
+          groups!.map((group) => (
+            <SideNavSection key={group.label} label={group.label}>
+              {group.items.map((item) => (
+                <DataItem key={item.id} item={item} renderItem={renderItem} />
+              ))}
+            </SideNavSection>
+          ))
+        ) : (
+          <DataList items={items} renderItem={renderItem} />
+        )}
+      </SideNavNav>
 
-        {afterGroups ? (
-          <div className={`${styles.slot} ${styles.slotAfter}`} {...closedProps}>
-            {afterGroups}
-          </div>
-        ) : null}
+      {afterGroups ? <SideNavSlot placement="after">{afterGroups}</SideNavSlot> : null}
 
-        {footer ? (
-          <div className={styles.footer}>
-            {footerRows ? (
-              <NavList items={footerRows} rail={rail} renderItem={renderItem} />
-            ) : (
-              (footer as ReactNode)
-            )}
-          </div>
-        ) : null}
-      </div>
-    </aside>
+      {footer ? (
+        <SideNavFooter>
+          {footerRows ? <DataList items={footerRows} renderItem={renderItem} /> : (footer as ReactNode)}
+        </SideNavFooter>
+      ) : null}
+    </SideNavRoot>
   );
 }
+
+/**
+ * `<SideNav title groups … />` is the preset. Build your own with the blocks:
+ * `SideNav.Root`, `.Header`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`
+ * (also exported by name: `SideNavRoot`, `SideNavHeader`, … — use those from Server Components).
+ */
+export const SideNav = Object.assign(SideNavPreset, {
+  Root: SideNavRoot,
+  Header: SideNavHeader,
+  Toggle: SideNavToggle,
+  Slot: SideNavSlot,
+  Nav: SideNavNav,
+  Section: SideNavSection,
+  Item: SideNavItemBlock,
+  Footer: SideNavFooter,
+});
