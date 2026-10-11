@@ -15,6 +15,11 @@ export default function Page() {
 
 const USAGE = `import { Button, Scoreboard, ActivityPattern } from "agentic-ds-kit";`;
 
+const ADD_PATTERN = `npx agentic-ds-kit add --list
+npx agentic-ds-kit add dashboard`;
+
+const USE_COPY = `import { DashboardPattern } from "@/components/patterns/dashboard";`;
+
 const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 
 const NEW_APP = `mkdir my-app
@@ -61,6 +66,27 @@ export default function InstallationPage() {
           description="Read contracts/index.json in the package, then import the matching piece."
         >
           <CodeBlock code={USAGE} />
+        </Section>
+
+        <Section
+          title="Copy a pattern into your app"
+          description="When you need to change a pattern's sections, copy, or data, copy its source in and own it."
+        >
+          <div className={playground.stack}>
+            <CodeBlock code={ADD_PATTERN} />
+            <p className={playground.body}>
+              This writes components/patterns/dashboard/ (src/components/patterns/ when the app
+              uses src/): the pattern files plus dashboard.contract.json. Kit imports point at
+              agentic-ds-kit, so the copy compiles with no edits. Import it from there:
+            </p>
+            <CodeBlock code={USE_COPY} />
+            <p className={playground.body}>
+              Use --dir to pick another folder and --force to overwrite. Keep the contract JSON next
+              to the files so agents keep the kit rules. If the copy renders unstyled, import
+              agentic-ds-kit/tokens.css and agentic-ds-kit/layout.css in the root layout. Upgrading the
+              kit does not change copied files.
+            </p>
+          </div>
         </Section>
 
         <Section

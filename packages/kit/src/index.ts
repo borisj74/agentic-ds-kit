@@ -79,6 +79,9 @@ export * from "../ui/Tooltip";
 export * from "../ui/TreeView";
 export * from "../ui/UsageList";
 
+/** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
+export type { ChartDatum, ChartSeries } from "../ui/shared/chartMath";
+
 export * from "../ui/patterns/ActivityPattern";
 export * from "../ui/patterns/AppShellPattern";
 export * from "../ui/patterns/AssistantWorkspacePattern";
