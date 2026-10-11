@@ -74,6 +74,21 @@
       "required": false,
       "note": "kit Buttons. At most one primary. Do not put an assistant/Copilot CTA in the kit."
     },
+    "start": {
+      "type": "slot",
+      "required": false,
+      "note": "Replaces the start region (default: brand mark or logo, then title). title still names the header landmark."
+    },
+    "center": {
+      "type": "slot",
+      "required": false,
+      "note": "Replaces the center region (default: the search Input when search is true). null leaves the center empty. Stacks under start and end in narrow containers, like search."
+    },
+    "end": {
+      "type": "slot",
+      "required": false,
+      "note": "Replaces the end region (default: actions). Rendered in a group labelled Actions. At most one primary Button."
+    },
     "className": {
       "type": "string",
       "required": false
@@ -98,6 +113,15 @@
     "ref": "header",
     "className": "root",
     "rest": "header"
+  },
+  "cssVars": {
+    "--appheader-height": "Minimum bar height (calc(space-10 + space-2 + space-2))",
+    "--appheader-padding-inline": "Bar end padding and the stacked-search inset; the start stays 0 so the brand lines up with the SideNav rail (space-5 wide, space-4 in narrow containers)",
+    "--appheader-gap": "Gap between the start, center and end columns (space-4)",
+    "--appheader-background": "Bar background (surface-card)",
+    "--appheader-border-color": "Bottom border colour, or the full border with radius md (border-faint)",
+    "--appheader-brand-width": "Column the default mark centers in; keep it equal to --sidenav-width-collapsed (layout-sidebar-compact)",
+    "--appheader-search-max-width": "Max width of the center column (layout-rail)"
   },
   "tokens": [
     "surface.card",
@@ -132,7 +156,8 @@
       "Mark sits in a layout-sidebar-compact slot, centered, so it shares the SideNav icon axis in layout-shell",
       "Actions remain keyboard accessible",
       "Do not use h1 — page titles belong on PageHeader",
-      "At container 38rem, search stacks under brand and actions"
+      "At container 38rem, search stacks under brand and actions",
+      "Slots replace a region only; the header landmark and its aria-label stay"
     ]
   },
   "doNot": [
@@ -145,7 +170,8 @@
     "Do not add a Copilot, assistant, or sparkle CTA",
     "Do not restyle kit Input internals",
     "Do not put more than one primary Button in actions",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens"
   ],
   "snippet": "<AppHeader title=\"Acme\" mark=\"A\" searchPlaceholder=\"Search\" searchShortcut=\"⌘K\" onSearch={setQuery} actions={<><Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /></>} />"
 }

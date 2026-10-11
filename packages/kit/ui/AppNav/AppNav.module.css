@@ -1,8 +1,11 @@
+/* Component variables (override on :root, a wrapper, className, or style).
+   Defaults are semantic tokens; listed under cssVars in contracts/appnav.json. */
+
 .nav {
-  width: 15rem;
+  width: var(--appnav-width, calc(var(--layout-sidebar) + var(--space-2) * 2));
   flex-shrink: 0;
-  padding: var(--space-4);
-  background-color: var(--surface-card);
+  padding: var(--appnav-padding, var(--space-4));
+  background-color: var(--appnav-background, var(--surface-card));
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
 }
@@ -22,7 +25,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--appnav-item-gap, var(--space-1));
 }
 
 .group {
@@ -37,7 +40,7 @@
   gap: var(--space-2);
   width: 100%;
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--appnav-item-padding, var(--space-2) var(--space-3));
   border: 0;
   border-radius: var(--radius-control-sm);
   background: transparent;
@@ -108,17 +111,17 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--appnav-item-gap, var(--space-1));
 }
 
 .item {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--appnav-item-gap, var(--space-1));
 }
 
 .subgroupLabel {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--appnav-item-padding, var(--space-2) var(--space-3));
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);
@@ -132,19 +135,19 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--appnav-item-gap, var(--space-1));
 }
 
 .link {
   display: block;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--appnav-item-padding, var(--space-2) var(--space-3));
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-body);
   color: var(--text-primary);
   text-decoration: none;
-  border-radius: var(--radius-control-md);
+  border-radius: var(--appnav-item-radius, var(--radius-control-md));
   transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease;
 }
 
@@ -163,6 +166,6 @@
 }
 
 .active {
-  background-color: color-mix(in srgb, var(--action-primary) 10%, var(--surface-card));
-  color: var(--action-primary);
+  background-color: var(--appnav-item-active-background, color-mix(in srgb, var(--action-primary) 10%, var(--surface-card)));
+  color: var(--appnav-item-active-text, var(--action-primary));
 }

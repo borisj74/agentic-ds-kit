@@ -22,6 +22,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 - Importing from `agentic-ds-kit` loads tokens. Do not add a second tokens import unless your own CSS needs the variables first.
 - Never use raw hex in component styles; semantic tokens only.
 - Kit components take `className` (merged onto the root, for layout only), `ref` (a plain prop; on form controls it reaches the native element) and other HTML attributes such as `id` or `data-testid`. Check the contract's `passthrough` block for where each lands. Do not use `className` to restyle a component or override a kit-owned `role` or `aria-*`.
+- App chrome (AppHeader, SideNav, AppNav) is restyled through the component variables in the contract's `cssVars` block, set to semantic tokens, and rearranged through slots (AppHeader `start`/`center`/`end`; SideNav `header`/`beforeGroups`/`afterGroups`/`footer`/`renderItem`). Do not hand-roll a header or nav row instead.
 - Metric rows use `<Scoreboard items={...} />`, not flex layouts with borders.
 - Settings pages use the `settings-form` pattern with `Field` wrappers.
 - Invite / add-people screens use the `invite-members` pattern (Empty + Modal + FieldSet).

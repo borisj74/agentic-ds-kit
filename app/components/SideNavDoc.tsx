@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { SideNav } from "agentic-ds-kit";
+import { Alert, Avatar, Button, Select, SideNav, Tooltip } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "agentic-ds-kit";
+import contract from "agentic-ds-kit/contracts/sidenav.json";
 import { CodeBlock } from "./CodeBlock";
+import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -79,6 +81,65 @@ const CLOSED_CODE = `<SideNav title="Agentix" mark="A" defaultOpen={false} group
 const RIGHT_CODE = `<SideNav title="Agentix" mark="A" side="right" groups={groups} footer={footer} />`;
 
 const FLUSH_CODE = `<SideNav title="Agentix" mark="A" showHeader={false} radius="none" groups={groups} footer={footer} />`;
+
+const SLOTS_CODE = `<SideNav
+  title="Agentix"
+  groups={groups}
+  header={
+    <Select id="workspace" size="sm" ariaLabel="Workspace" defaultValue="agentix" options={workspaces} />
+  }
+  beforeGroups={<Button variant="secondary" size="sm" iconStart="Plus">New project</Button>}
+  afterGroups={<Alert variant="info" title="Trial">5 days left.</Alert>}
+  footer={
+    <div className="account">
+      <Avatar name="Maya Chen" size="sm" />
+      <span>Maya Chen</span>
+    </div>
+  }
+  renderItem={(item, node) =>
+    item.badge ? <Tooltip content={\`\${item.badge} new\`} placement="right">{node}</Tooltip> : node
+  }
+/>`;
+
+const WORKSPACES = [
+  { value: "agentix", label: "Agentix" },
+  { value: "northwind", label: "Northwind" },
+];
+
+function SlotsBar() {
+  return (
+    <SideNav
+      title="Agentix"
+      groups={GROUPS.slice(0, 1)}
+      header={<Select id="sidenav-workspace" size="sm" ariaLabel="Workspace" defaultValue="agentix" options={WORKSPACES} />}
+      beforeGroups={
+        <Button variant="secondary" size="sm" iconStart="Plus">
+          New project
+        </Button>
+      }
+      afterGroups={
+        <Alert variant="info" title="Trial">
+          5 days left.
+        </Alert>
+      }
+      footer={
+        <div className={demo.account}>
+          <Avatar name="Maya Chen" size="sm" />
+          <span className={demo.accountName}>Maya Chen</span>
+        </div>
+      }
+      renderItem={(item, node) =>
+        item.badge ? (
+          <Tooltip content={`${item.badge} new`} placement="right">
+            {node}
+          </Tooltip>
+        ) : (
+          node
+        )
+      }
+    />
+  );
+}
 
 function MainPane() {
   return (
@@ -230,6 +291,7 @@ export function SideNavDoc() {
               </div>
               <CodeBlock code={masterCode()} />
             </div>
+            <CssVarsTable cssVars={contract.cssVars} selector={'.myNav { --sidenav-width: var(--layout-rail); }'} />
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
@@ -288,6 +350,27 @@ export function SideNavDoc() {
                 </p>
               </div>
               <CodeBlock code={FLUSH_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Slots</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.fill}>
+                  <Shell side="left">
+                    <SlotsBar />
+                  </Shell>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  header replaces the brand; Close stays. beforeGroups and afterGroups pin above and
+                  below the scrolling groups. footer takes items or any node. renderItem wraps one
+                  row: keep the node it gives you, it carries aria-current and the disclosure state.
+                  With a custom header the mark is gone, so control open yourself.
+                </p>
+              </div>
+              <CodeBlock code={SLOTS_CODE} />
             </section>
           </div>
         )}

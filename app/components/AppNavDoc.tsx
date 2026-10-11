@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { AppNav } from "agentic-ds-kit";
 import { PLAYGROUND_APPNAV_DEMO_GROUPS } from "@/lib/playground-nav";
+import contract from "agentic-ds-kit/contracts/appnav.json";
 import { CodeBlock } from "./CodeBlock";
+import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./AppNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -15,6 +17,20 @@ const FLAT_ITEMS = [
   { href: "/patterns#qa-checklist", label: "QA checklist" },
   { href: "/patterns#release-notes", label: "Release notes" },
 ];
+
+const THEMED_STYLE = {
+  "--appnav-item-radius": "var(--radius-pill)",
+  "--appnav-item-active-background": "var(--surface-brand-subtle)",
+  "--appnav-item-active-text": "var(--text-brand)",
+} as CSSProperties;
+
+const THEMED_CODE = `.myNav {
+  --appnav-item-radius: var(--radius-pill);
+  --appnav-item-active-background: var(--surface-brand-subtle);
+  --appnav-item-active-text: var(--text-brand);
+}
+
+<AppNav className="myNav" title="Sprint 24" items={items} />`;
 
 export function AppNavDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
@@ -59,6 +75,7 @@ export function AppNavDoc() {
               </div>
               <CodeBlock code={CODE} />
             </div>
+            <CssVarsTable cssVars={contract.cssVars} selector={'.myNav { --appnav-width: var(--layout-sidebar); }'} />
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
@@ -98,6 +115,22 @@ export function AppNavDoc() {
   ]}
 />`}
               />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Variables</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.nav}>
+                  <AppNav title="Sprint 24" items={FLAT_ITEMS} style={THEMED_STYLE} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Restyle with the component variables, set to semantic tokens. Structure, active
+                  state and aria-current stay with the kit.
+                </p>
+              </div>
+              <CodeBlock code={THEMED_CODE} />
             </section>
           </div>
         )}
