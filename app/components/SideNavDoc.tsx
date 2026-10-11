@@ -143,18 +143,20 @@ function SlotsBar() {
 
 const COMPOSE_CODE = `<SideNav.Root aria-label="Agentix">
   <SideNav.Header>
-    <div className="switcher">
-      <DropdownMenu
-        triggerStyle="field"
-        size="sm"
-        ariaLabel="Workspace"
-        trigger={workspace.label}
-        groups={[{ heading: "Workspaces", items: workspaces }]}
-        onSelect={setWorkspace}
-      />
-    </div>
+    <SideNav.Brand title="Agentix" />
     <SideNav.Toggle />
   </SideNav.Header>
+
+  <SideNav.Slot>
+    <DropdownMenu
+      triggerStyle="field"
+      size="sm"
+      ariaLabel="Workspace"
+      trigger={workspace.label}
+      groups={[{ heading: "Workspaces", items: workspaces }]}
+      onSelect={setWorkspace}
+    />
+  </SideNav.Slot>
 
   <SideNav.Slot keepOnRail>
     <SideNav.Section label="Pinned">
@@ -198,23 +200,25 @@ function ComposedBar() {
   return (
     <SideNav.Root aria-label="Agentix">
       <SideNav.Header>
-        <div className={demo.switcher}>
-          <DropdownMenu
-            triggerStyle="field"
-            size="sm"
-            ariaLabel="Workspace"
-            trigger={current.label}
-            groups={[
-              {
-                heading: "Workspaces",
-                items: COMPOSE_WORKSPACES.map((w) => ({ ...w, selected: w.id === workspace })),
-              },
-            ]}
-            onSelect={setWorkspace}
-          />
-        </div>
+        <SideNav.Brand title="Agentix" />
         <SideNav.Toggle />
       </SideNav.Header>
+
+      <SideNav.Slot>
+        <DropdownMenu
+          triggerStyle="field"
+          size="sm"
+          ariaLabel="Workspace"
+          trigger={current.label}
+          groups={[
+            {
+              heading: "Workspaces",
+              items: COMPOSE_WORKSPACES.map((w) => ({ ...w, selected: w.id === workspace })),
+            },
+          ]}
+          onSelect={setWorkspace}
+        />
+      </SideNav.Slot>
 
       <SideNav.Slot keepOnRail>
         <SideNav.Section label="Pinned">{row("roadmap", "Q4 roadmap", "Star")}</SideNav.Section>
@@ -485,12 +489,14 @@ export function SideNavDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Assemble the blocks when the data props are not enough. SideNav.Root holds the
-                  open state; SideNav.Toggle closes the rail and, on the closed rail, reopens it from
-                  the start edge, so a custom header works. Section takes a label and Item rows;
+                  open state. SideNav.Brand is the mark and title; with SideNav.Toggle beside it the
+                  Toggle closes the rail and the mark stays on the closed rail to reopen it (without
+                  a Brand, the Toggle itself moves to the start edge and reopens, so a header with
+                  only a switcher works too). Slot holds the workspace switcher. Section takes a label and Item rows;
                   Item children make a disclosure. Slot pins content outside the scroll
                   (keepOnRail keeps pinned rows usable). On the closed rail every Item shows its
                   label in a kit Tooltip. In Server Components use the named exports
-                  (SideNavRoot, SideNavItem, …). The preset SideNav is built from these blocks.
+                  (SideNavRoot, SideNavBrand, SideNavItem, …). The preset SideNav is built from these blocks.
                 </p>
               </div>
               <CodeBlock code={COMPOSE_CODE} />

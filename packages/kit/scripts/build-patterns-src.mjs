@@ -39,8 +39,8 @@ const RECIPES = [
     id: "side-nav",
     dir: "SideNavRecipe",
     name: "ShellNav",
-    contracts: ["sidenav", "appheader"],
-    intent: "SideNav built from SideNavRoot / Header / Nav / Section / Item / Footer: standalone rail, or flush in AppShellPattern's rail and forced open in its Drawer.",
+    contracts: ["sidenav"],
+    intent: "SideNav built from SideNavRoot / Header / Brand / Toggle / Nav / Section / Item / Footer: standalone rail, or flush in AppShellPattern's rail and forced open in its Drawer.",
   },
 ];
 

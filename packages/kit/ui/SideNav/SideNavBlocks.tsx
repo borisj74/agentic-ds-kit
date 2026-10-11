@@ -18,9 +18,9 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { SideNavContext, useSideNav, type SideNavContextValue } from "./SideNavContext";
 import type {
+  SideNavBrandProps,
   SideNavFooterProps,
   SideNavHeaderProps,
-  SideNavItemData,
   SideNavItemProps,
   SideNavNavProps,
   SideNavRootProps,
@@ -82,6 +82,47 @@ export function SideNavHeader({ className, children, ref, ...rest }: SideNavHead
     <header {...rest} ref={ref} className={cx(styles.header, className)}>
       {children}
     </header>
+  );
+}
+
+/* ---------- Brand ---------- */
+
+/**
+ * Mark + title, inside `SideNav.Header`. The mark stays on the closed rail and reopens it;
+ * a `SideNav.Toggle` beside it steps aside there instead of moving to the start edge.
+ */
+export function SideNavBrand({
+  title,
+  mark,
+  openLabel = "Open",
+  onClick,
+  className,
+  ref,
+  ...rest
+}: SideNavBrandProps) {
+  const { open, setOpen } = useSideNav();
+  const hasMark = mark !== undefined && mark !== null && mark !== false && mark !== "";
+  const markContent = hasMark ? mark : (typeof title === "string" && title.charAt(0)) || "·";
+  return (
+    <>
+      <button
+        {...rest}
+        ref={ref}
+        type="button"
+        className={cx(styles.mark, styles.markButton, className)}
+        aria-label={open ? undefined : openLabel}
+        aria-hidden={open ? true : undefined}
+        tabIndex={open ? -1 : 0}
+        disabled={open}
+        onClick={(event) => {
+          onClick?.(event);
+          if (!event.defaultPrevented && !open) setOpen(true);
+        }}
+      >
+        {markContent}
+      </button>
+      <p className={styles.title}>{title}</p>
+    </>
   );
 }
 
@@ -362,8 +403,3 @@ export function SideNavItem(props: SideNavItemProps) {
   return <SideNavItemImpl {...props} />;
 }
 
-/**
- * @deprecated Use `SideNavItemData` for the preset's row data. This type alias shares its name
- * with the `SideNavItem` component and will be removed in the next release.
- */
-export type SideNavItem = SideNavItemData;
