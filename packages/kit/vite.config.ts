@@ -23,6 +23,12 @@ async function walkFiles(dir: string): Promise<string[]> {
   return out;
 }
 
+/** Prepend an import, keeping any leading directive ("use client") first. */
+function prependImport(code: string, spec: string): string {
+  const directive = /^(?:\s*(?:"[^"]*"|'[^']*');?[^\S\n]*\n)+/.exec(code)?.[0] ?? "";
+  return `${directive}import "${spec}";\n${code.slice(directive.length)}`;
+}
+
 /**
  * Rolldown emits CSS assets and JS class maps but does not import the CSS.
  * Next.js re-scopes any `*.module.css` import from node_modules, which would
@@ -50,7 +56,18 @@ function importEmittedCss(): Plugin {
           if (!cssFiles.includes(css)) continue;
           const spec = posixRelative(dir, css).replace(/\.module\.css$/, ".kit.css");
           if (item.code.includes(`"${spec}"`)) continue;
-          item.code = `import "${spec}";\n${item.code}`;
+          item.code = prependImport(item.code, spec);
+        }
+        // Bundlers skip the side-effect-free barrel (src/index.js) when an app
+        // imports a named component, dropping its tokens/layout imports. Each
+        // component module pulls them in itself so any kit import loads both.
+        if (fileName.startsWith("ui/") && !fileName.endsWith(".module.js")) {
+          for (const base of ["src/layout.js", "src/tokens.js"]) {
+            if (!(base in bundle)) continue;
+            const spec = posixRelative(dir, base);
+            if (item.code.includes(`"${spec}"`)) continue;
+            item.code = prependImport(item.code, spec);
+          }
         }
       }
     },
