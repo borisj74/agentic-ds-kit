@@ -16,6 +16,7 @@ export type {
   SideNavRadius,
   SideNavSide,
   SideNavGroup,
+  SideNavItemData,
   SideNavRenderItem,
   SideNavRootProps,
   SideNavHeaderProps,

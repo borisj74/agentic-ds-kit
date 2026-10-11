@@ -12,12 +12,12 @@
     "header": {
       "type": "object | slot",
       "required": true,
-      "note": "AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
+      "note": "AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from blocks). Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
     },
     "nav": {
       "type": "object | slot",
       "required": true,
-      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav, later SideNav blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer)."
+      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer)."
     },
     "navLabel": {
       "type": "string",
@@ -44,11 +44,15 @@
     "rules": [
       "A built header must contain AppShellPattern.MenuButton; without it the shell warns and narrow screens cannot reach the nav",
       "Put the Menu Button in AppHeader.Brand's logo so it sits on the rail axis, as the preset does",
-      "A built nav is one landmark (SideNav or SideNav blocks); the same node moves between rail and Drawer, it is never rendered twice",
-      "In the Drawer, keep the nav expanded and radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not"
+      "A built nav is one landmark (SideNav preset or SideNavRoot + blocks); the same node moves between rail and Drawer, it is never rendered twice",
+      "Build the nav from the named block exports (SideNavRoot, SideNavSlot, SideNavNav, SideNavSection, SideNavItem, SideNavFooter): they work from Server Components, where SideNav.Root dot access does not",
+      "In the shell, drop SideNavHeader and SideNavToggle (AppHeader has the brand and the Menu Button); in the Drawer force the nav open (open, or inDrawer || open) so it is never a closed rail",
+      "A props header that sets start loses the injected Menu Button: place AppShellPattern.MenuButton inside your start",
+      "In the Drawer, radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not"
     ],
     "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
-    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader and ShellNav, built for this slot."
+    "navSnippet": "function MyNav({ page, go }) {\n  const inDrawer = useAppShell()?.navPlacement === \"drawer\";\n  return (\n    <SideNavRoot aria-label=\"Acme\" radius={inDrawer ? \"md\" : \"none\"} open>\n      <SideNavNav>\n        <SideNavSection label=\"Work\">\n          <SideNavItem label=\"Home\" icon=\"House\" active={page === \"home\"} onClick={() => go(\"home\")} />\n        </SideNavSection>\n      </SideNavNav>\n    </SideNavRoot>\n  );\n}",
+    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader blocks + AppShellPattern.MenuButton) and ShellNav (SideNavRoot / Nav / Section / Item / Footer blocks), built for this slot."
   },
   "responsive": {
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; the CSS module repeats 64rem only for the first paint before hydration.",

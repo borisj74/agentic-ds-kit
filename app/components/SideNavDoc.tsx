@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { Alert, Avatar, Button, DropdownMenu, Select, SideNav, Tooltip } from "agentic-ds-kit";
-import type { SideNavGroup, SideNavItem, SideNavRadius, SideNavSide } from "agentic-ds-kit";
+import type { SideNavGroup, SideNavItemData, SideNavRadius, SideNavSide } from "agentic-ds-kit";
 import contract from "agentic-ds-kit/contracts/sidenav.json";
 import { CodeBlock } from "./CodeBlock";
 import { CssVarsTable } from "./CssVarsTable";
@@ -58,7 +58,7 @@ const GROUPS: SideNavGroup[] = [
   },
 ];
 
-const FOOTER: SideNavItem[] = [
+const FOOTER: SideNavItemData[] = [
   { id: "invite", label: "Invite members", href: H, icon: "CirclePlus" },
   { id: "settings", label: "Settings", href: H, icon: "Settings" },
 ];

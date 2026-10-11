@@ -77,7 +77,7 @@
     "start": {
       "type": "slot",
       "required": false,
-      "note": "Replaces the start region (default: brand mark or logo, then title). title still names the header landmark."
+      "note": "Replaces the start region (default: brand mark or logo, then title). title still names the header landmark. In AppShellPattern with a props header, start also replaces the Menu Button the shell injects as logo: put AppShellPattern.MenuButton inside your start."
     },
     "center": {
       "type": "slot",
@@ -151,7 +151,7 @@
           "className": "root",
           "rest": "div"
         },
-        "note": "Start column. The brand cell (--appheader-brand-width, layout-sidebar-compact) renders only when mark or logo is set; it centers the mark on the SideNav rail icons."
+        "note": "Start column. The brand cell (--appheader-brand-width, which follows --sidenav-width-collapsed) renders only when mark or logo is set; it centers the mark on the SideNav rail icons."
       },
       "AppHeader.Mark": {
         "element": "span",
@@ -236,7 +236,7 @@
     "--appheader-gap": "Gap between the start, center and end columns (space-4)",
     "--appheader-background": "Bar background (surface-card)",
     "--appheader-border-color": "Bottom border colour, or the full border with radius md (border-faint)",
-    "--appheader-brand-width": "Column the default mark centers in; keep it equal to --sidenav-width-collapsed (layout-sidebar-compact)",
+    "--appheader-brand-width": "Column the default mark centers in (default: --sidenav-width-collapsed, then layout-sidebar-compact). Set --sidenav-width-collapsed on :root and the brand column follows; set this only to break the match",
     "--appheader-search-max-width": "Max width of the center column (layout-rail)"
   },
   "tokens": [

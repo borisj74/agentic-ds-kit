@@ -15,10 +15,10 @@ import { InviteMembersPattern } from "agentic-ds-kit";
 import { ListDetailPattern } from "agentic-ds-kit";
 import { SettingsFormPattern } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
-import type { SideNavItem } from "agentic-ds-kit";
+import type { SideNavItemData } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
-const NAV_ITEMS: SideNavItem[] = [
+const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
   { id: "activity", label: "Activity", icon: "ChartBar", badge: "6" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
@@ -31,12 +31,12 @@ const NAV_ITEMS: SideNavItem[] = [
   { id: "tag-shipped", label: "Shipped", icon: "CircleCheck", badge: "12" },
 ];
 
-const NAV_FOOTER: SideNavItem[] = [
+const NAV_FOOTER: SideNavItemData[] = [
   { id: "invite", label: "Invite members", icon: "CirclePlus" },
   { id: "settings", label: "Settings", icon: "Settings" },
 ];
 
-function bindItems(items: SideNavItem[], page: string, go: (id: string) => void): SideNavItem[] {
+function bindItems(items: SideNavItemData[], page: string, go: (id: string) => void): SideNavItemData[] {
   return items.map((item) => {
     const nested = Boolean(item.items && item.items.length > 0);
     return {
@@ -48,7 +48,7 @@ function bindItems(items: SideNavItem[], page: string, go: (id: string) => void)
   });
 }
 
-function findItem(items: SideNavItem[], id: string): SideNavItem | undefined {
+function findItem(items: SideNavItemData[], id: string): SideNavItemData | undefined {
   for (const item of items) {
     if (item.id === id) return item;
     if (item.items) {
@@ -59,7 +59,7 @@ function findItem(items: SideNavItem[], id: string): SideNavItem | undefined {
   return undefined;
 }
 
-function findTrail(items: SideNavItem[], id: string, ancestors: SideNavItem[] = []): SideNavItem[] | null {
+function findTrail(items: SideNavItemData[], id: string, ancestors: SideNavItemData[] = []): SideNavItemData[] | null {
   for (const item of items) {
     if (item.id === id) return [...ancestors, item];
     if (item.items) {
@@ -97,7 +97,7 @@ function PlaceholderPage({
   item,
   breadcrumbs,
 }: {
-  item: SideNavItem;
+  item: SideNavItemData;
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
 }) {
   return (
@@ -244,7 +244,7 @@ export function DashboardDemo() {
     const navFooter = bindItems(NAV_FOOTER, page, go);
     const toggleLabel = sidebarOpen ? "Close sidebar" : "Open sidebar";
     const toggleIcon = sidebarOpen ? "PanelLeftClose" : "PanelLeftOpen";
-    const toggle: SideNavItem = {
+    const toggle: SideNavItemData = {
       id: "toggle-sidebar",
       label: toggleLabel,
       icon: toggleIcon,

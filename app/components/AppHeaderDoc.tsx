@@ -279,7 +279,9 @@ export function AppHeaderDoc() {
                 <p className={styles.usageBody}>
                   start, center and end each replace one region: brand, search, actions. Unset
                   slots keep their default. center stacks under the bar in narrow containers, like
-                  search. Compose kit components in slots only.
+                  search. Compose kit components in slots only. In AppShellPattern, start also
+                  replaces the Menu Button the shell puts in the brand cell on narrow screens, so
+                  a header that sets start must place AppShellPattern.MenuButton inside it.
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
