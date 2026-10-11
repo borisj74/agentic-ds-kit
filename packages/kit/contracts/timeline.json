@@ -24,6 +24,12 @@
       "default": 3
     }
   },
+  "passthrough": {
+    "root": "ol",
+    "ref": "ol",
+    "className": "root",
+    "rest": "ol"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

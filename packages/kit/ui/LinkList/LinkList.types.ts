@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export interface LinkListItem {
   id: string;
   label: string;
@@ -8,7 +10,12 @@ export interface LinkListItem {
   external?: boolean;
 }
 
-export interface LinkListProps {
+/** Native ul attributes the kit sets itself (or replaces with its own prop). */
+type LinkListOwnedKeys = "children" | "aria-label";
+
+/** `ref`, `className` and other native attributes land on the root `<ul>`. */
+export interface LinkListProps extends Omit<ComponentPropsWithoutRef<"ul">, LinkListOwnedKeys> {
   items: LinkListItem[];
   label?: string;
+  ref?: Ref<HTMLUListElement>;
 }

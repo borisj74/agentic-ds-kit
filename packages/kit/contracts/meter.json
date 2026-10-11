@@ -65,6 +65,12 @@
       "note": "A short note in a tip at the end of the value, like $6,000 of $10,000."
     }
   },
+  "passthrough": {
+    "root": "div[role=progressbar]",
+    "ref": "div[role=progressbar]",
+    "className": "root",
+    "rest": "div[role=progressbar]"
+  },
   "tokens": [
     "fill.brand",
     "fill.info",

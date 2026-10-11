@@ -1,4 +1,6 @@
+import type { Ref } from "react";
 import type { DividerProps } from "./Divider.types";
+import { cx } from "../shared/cx";
 import styles from "./Divider.module.css";
 
 export type { DividerProps, DividerOrientation, DividerAlign, DividerTone } from "./Divider.types";
@@ -9,25 +11,30 @@ export function Divider({
   align = "center",
   action,
   tone = "faint",
+  className,
+  ref,
+  ...rest
 }: DividerProps) {
   const toneClass = styles[tone];
 
   if (orientation === "vertical") {
     return (
       <div
+        {...rest}
+        ref={ref as Ref<HTMLDivElement>}
+        className={cx(styles.vertical, toneClass, className)}
         role="separator"
         aria-orientation="vertical"
-        className={`${styles.vertical} ${toneClass}`}
       />
     );
   }
 
   if (!label && !action) {
-    return <hr className={`${styles.rule} ${toneClass}`} />;
+    return <hr {...rest} ref={ref as Ref<HTMLHRElement>} className={cx(styles.rule, toneClass, className)} />;
   }
 
   return (
-    <div className={`${styles.labelled} ${toneClass}`}>
+    <div {...rest} ref={ref as Ref<HTMLDivElement>} className={cx(styles.labelled, toneClass, className)}>
       {align !== "start" ? <span className={styles.line} aria-hidden /> : null}
       <span className={styles.content}>
         {label ? <span className={styles.label}>{label}</span> : null}

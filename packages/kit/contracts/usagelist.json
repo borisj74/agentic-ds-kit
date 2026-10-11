@@ -36,6 +36,12 @@
       "note": "Names the list for screen readers, like Plan usage."
     }
   },
+  "passthrough": {
+    "root": "div[role=list]",
+    "ref": "div[role=list]",
+    "className": "root",
+    "rest": "div[role=list]"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

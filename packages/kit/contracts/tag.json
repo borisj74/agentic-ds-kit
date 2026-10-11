@@ -91,6 +91,12 @@
       "note": "Checkbox id when selectable; generated when omitted"
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": [
     "surface.muted",
     "surface.card",

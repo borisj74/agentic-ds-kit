@@ -1,13 +1,16 @@
 import { Loader } from "lucide-react";
 import type { SpinnerProps } from "./Spinner.types";
+import { cx } from "../shared/cx";
 import styles from "./Spinner.module.css";
 
 export type { SpinnerProps, SpinnerSize } from "./Spinner.types";
 
-export function Spinner({ size = "md", label }: SpinnerProps) {
+export function Spinner({ size = "md", label, className, ref, ...rest }: SpinnerProps) {
   return (
     <span
-      className={`${styles.root} ${styles[size]}`}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, styles[size], className)}
       role="status"
       aria-live="polite"
       aria-label={label ? undefined : "Loading"}

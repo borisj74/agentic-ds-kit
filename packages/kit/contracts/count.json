@@ -50,6 +50,12 @@
       "note": "What is counted, for screen readers, like unread messages."
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
   "tokens": [
     "fill.brand",
     "fill.brandSubtle",

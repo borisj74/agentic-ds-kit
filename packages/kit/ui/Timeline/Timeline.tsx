@@ -1,4 +1,5 @@
 import type { TimelineProps } from "./Timeline.types";
+import { cx } from "../shared/cx";
 import styles from "./Timeline.module.css";
 
 export type { TimelineItem, TimelineProps, TimelineStatus } from "./Timeline.types";
@@ -15,14 +16,16 @@ export function Timeline({
   items = [],
   label,
   headingLevel = 3,
-  className = "",
+  className,
+  ref,
+  ...rest
 }: TimelineProps) {
   if (!items.length) return null;
 
   const TitleTag = headingTag(headingLevel);
 
   return (
-    <ol className={`${styles.timeline} ${className}`.trim()} aria-label={label}>
+    <ol {...rest} ref={ref} className={cx(styles.timeline, className)} aria-label={label}>
       {items.map((item, index) => {
         const status = STATUSES.includes(item.status ?? "next")
           ? (item.status ?? "next")

@@ -78,6 +78,12 @@
       "note": "Required when label is omitted. Cell passes the percent or its label."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "fill.brand",
     "fill.brandSubtle",

@@ -54,6 +54,12 @@
       "note": "faint uses border.faint; default uses border.strong"
     }
   },
+  "passthrough": {
+    "root": "hr (plain rule) or div (vertical, labelled)",
+    "ref": "hr (plain rule) or div (vertical, labelled)",
+    "className": "root",
+    "rest": "hr (plain rule) or div (vertical, labelled)"
+  },
   "tokens": [
     "border.faint",
     "border.strong",

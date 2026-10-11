@@ -58,6 +58,12 @@
       "note": "Names the list for screen readers, like Quick links."
     }
   },
+  "passthrough": {
+    "root": "ul",
+    "ref": "ul",
+    "className": "root",
+    "rest": "ul"
+  },
   "tokens": [
     "link.default",
     "link.hover",

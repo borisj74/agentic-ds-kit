@@ -87,6 +87,12 @@
       "note": "text Dismiss control, not a Button cousin"
     }
   },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
   "tokens": [
     "surface.card",
     "border.highlight",

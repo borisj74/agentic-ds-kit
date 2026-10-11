@@ -53,6 +53,12 @@
       "note": "names the group, e.g. Assignees"
     }
   },
+  "passthrough": {
+    "root": "div[role=group]",
+    "ref": "div[role=group]",
+    "className": "root",
+    "rest": "div[role=group]"
+  },
   "tokens": [
     "surface.muted",
     "text.secondary",

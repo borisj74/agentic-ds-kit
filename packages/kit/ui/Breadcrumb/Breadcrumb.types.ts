@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
+
 export interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -7,8 +9,13 @@ export interface BreadcrumbItem {
 
 export type BreadcrumbSeparator = "chevron" | "slash";
 
-export interface BreadcrumbProps {
+/** Native nav attributes the kit sets itself (or replaces with its own prop). */
+type BreadcrumbOwnedKeys = "children" | "aria-label";
+
+/** `ref`, `className` and other native attributes land on the root `<nav>`. */
+export interface BreadcrumbProps extends Omit<ComponentPropsWithoutRef<"nav">, BreadcrumbOwnedKeys> {
   items: BreadcrumbItem[];
   separator?: BreadcrumbSeparator;
   maxItems?: number;
+  ref?: Ref<HTMLElement>;
 }

@@ -42,6 +42,12 @@
       "note": "nav label. Defaults to Progress."
     }
   },
+  "passthrough": {
+    "root": "nav",
+    "ref": "nav",
+    "className": "root",
+    "rest": "nav"
+  },
   "tokens": [
     "fill.strong",
     "fill.brandSubtle",

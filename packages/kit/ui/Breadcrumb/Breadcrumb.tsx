@@ -30,12 +30,12 @@ function visibleNodes(items: BreadcrumbItem[], maxItems?: number): VisibleNode[]
   return nodes;
 }
 
-export function Breadcrumb({ items, separator = "chevron", maxItems }: BreadcrumbProps) {
+export function Breadcrumb({ items, separator = "chevron", maxItems, className, ref, ...rest }: BreadcrumbProps) {
   const nodes = visibleNodes(items, maxItems);
   const lastIndex = items.length - 1;
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav {...rest} ref={ref} className={className} aria-label="Breadcrumb">
       <ol className={styles.list}>
         {nodes.map((node, position) => {
           const key = node.kind === "ellipsis" ? "ellipsis" : `crumb-${node.index}`;

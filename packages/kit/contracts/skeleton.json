@@ -63,6 +63,12 @@
       "note": "Read by screen readers in place of the shapes. Give one label to a group and an empty label to the rest."
     }
   },
+  "passthrough": {
+    "root": "span (while loading)",
+    "ref": "span (while loading)",
+    "className": "root",
+    "rest": "span (while loading)"
+  },
   "tokens": [
     "surface.card",
     "fill.strong",

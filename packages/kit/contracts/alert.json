@@ -33,6 +33,12 @@
       "required": true
     }
   },
+  "passthrough": {
+    "root": "div[role=alert|status]",
+    "ref": "div[role=alert|status]",
+    "className": "root",
+    "rest": "div[role=alert|status]"
+  },
   "tokens": [
     "text.primary",
     "status.info",

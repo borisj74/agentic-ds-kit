@@ -62,6 +62,12 @@
       "note": "(open: boolean) => void"
     }
   },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",
