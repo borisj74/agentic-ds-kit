@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { DropdownMenuGroup } from "../DropdownMenu/DropdownMenu.types";
 
 export interface NavigationMenuLinkItem {
@@ -16,7 +17,12 @@ export interface NavigationMenuDropdownItem {
 
 export type NavigationMenuItem = NavigationMenuLinkItem | NavigationMenuDropdownItem;
 
-export interface NavigationMenuProps {
+/** Native nav attributes the kit sets itself (or replaces with its own prop). */
+type NavigationMenuOwnedKeys = "children" | "onSelect";
+
+/** `ref`, `className` and other native attributes go to the `<nav>`. `aria-label` defaults to "Site". */
+export interface NavigationMenuProps extends Omit<ComponentPropsWithoutRef<"nav">, NavigationMenuOwnedKeys> {
   items: NavigationMenuItem[];
   onSelect?: (id: string) => void;
+  ref?: Ref<HTMLElement>;
 }

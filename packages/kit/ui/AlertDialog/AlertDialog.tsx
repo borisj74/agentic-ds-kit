@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import { ButtonGroup } from "../ButtonGroup";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
 
@@ -19,10 +21,14 @@ export function AlertDialog({
   size = "md",
   onCancel,
   onAction,
+  className,
+  ref,
+  ...rest
 }: AlertDialogProps) {
   const titleId = useId();
   const descriptionId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const setDialogRef = useMemo(() => mergeRefs(dialogRef, ref), [ref]);
   const cancelRef = useRef<HTMLButtonElement | null>(null);
   const onCancelRef = useRef(onCancel);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -97,12 +103,13 @@ export function AlertDialog({
       }}
     >
       <div
-        ref={dialogRef}
+        {...rest}
+        ref={setDialogRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className={`${styles.dialog} ${styles[size]}`}
+        className={cx(styles.dialog, styles[size], className)}
         tabIndex={-1}
       >
         <h2 id={titleId} className={styles.title}>

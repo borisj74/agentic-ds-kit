@@ -45,6 +45,13 @@
       "required": true
     }
   },
+  "passthrough": {
+    "root": "span",
+    "ref": "tooltip bubble (role=tooltip)",
+    "className": "root",
+    "rest": "tooltip bubble",
+    "note": "className keeps its original meaning: the wrapper around the trigger."
+  },
   "tokens": [
     "text.inverse",
     "surface.elevated",

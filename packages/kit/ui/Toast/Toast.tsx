@@ -5,6 +5,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type FocusEvent } 
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import type { ToastProps, ToastStatus } from "./Toast.types";
+import { cx } from "../shared/cx";
 import styles from "./Toast.module.css";
 
 export type { ToastProps, ToastStatus } from "./Toast.types";
@@ -31,15 +32,15 @@ function getStack(): HTMLElement {
   return el;
 }
 
-export function Toast(props: ToastProps) {
+export function Toast({ open, ...cardProps }: ToastProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!props.open || !mounted) return null;
-  return createPortal(<ToastCard {...props} />, getStack());
+  if (!open || !mounted) return null;
+  return createPortal(<ToastCard {...cardProps} />, getStack());
 }
 
 function ToastCard({
@@ -50,7 +51,10 @@ function ToastCard({
   actionLabel,
   onAction,
   duration: durationProp,
-}: ToastProps) {
+  className,
+  ref,
+  ...rest
+}: Omit<ToastProps, "open">) {
   const duration = durationProp === undefined ? 5000 : durationProp;
   const titleId = useId();
   const descriptionId = useId();
@@ -89,7 +93,9 @@ function ToastCard({
 
   return (
     <div
-      className={[styles.toast, styles[status]].join(" ")}
+      {...rest}
+      ref={ref}
+      className={cx(styles.toast, styles[status], className)}
       role={isDanger ? "alert" : "status"}
       aria-live={isDanger ? undefined : "polite"}
       aria-atomic="true"

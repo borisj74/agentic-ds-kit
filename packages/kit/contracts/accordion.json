@@ -21,6 +21,12 @@
     },
     "defaultOpen": { "type": "string", "required": false, "note": "Item id that starts open. Omit to start all closed." }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": ["text.primary", "text.secondary", "surface.card", "border.faint", "icon.muted", "icon.default"],
   "a11y": {
     "element": "div",

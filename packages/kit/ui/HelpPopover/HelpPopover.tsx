@@ -4,6 +4,7 @@ import {
   useEffect,
   useId,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -11,6 +12,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { HelpPopoverPlacement, HelpPopoverProps } from "./HelpPopover.types";
+import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./HelpPopover.module.css";
 
 export type { HelpPopoverProps, HelpPopoverPlacement } from "./HelpPopover.types";
@@ -117,10 +120,14 @@ export function HelpPopover({
   open: controlledOpen,
   disabled = false,
   children,
+  className,
+  ref,
+  ...rest
 }: HelpPopoverProps) {
   const descriptionId = useId();
   const wrapperRef = useRef<HTMLSpanElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const setPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
   const showTimerRef = useRef<number | null>(null);
   const hideTimerRef = useRef<number | null>(null);
   const pinnedRef = useRef(false);
@@ -275,8 +282,9 @@ export function HelpPopover({
   const panel = open && mounted
     ? createPortal(
         <div
-          ref={panelRef}
-          className={`${styles.panel} ${styles[resolvedPlacement]}${coords ? ` ${styles.open}` : ""}`}
+          {...rest}
+          ref={setPanelRef}
+          className={cx(styles.panel, styles[resolvedPlacement], coords && styles.open, className)}
           style={coords ?? undefined}
           aria-hidden="true"
           onPointerEnter={() => {

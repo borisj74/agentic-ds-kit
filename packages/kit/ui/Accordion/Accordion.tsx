@@ -3,15 +3,16 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { AccordionProps } from "./Accordion.types";
+import { cx } from "../shared/cx";
 import styles from "./Accordion.module.css";
 
 export type { AccordionProps, AccordionItem } from "./Accordion.types";
 
-export function Accordion({ items, defaultOpen }: AccordionProps) {
+export function Accordion({ items, defaultOpen, className, ref, ...rest }: AccordionProps) {
   const [openId, setOpenId] = useState<string | null>(defaultOpen ?? null);
 
   return (
-    <div className={styles.root}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)}>
       {items.map((item) => {
         const open = openId === item.id;
         const panelId = `accordion-panel-${item.id}`;

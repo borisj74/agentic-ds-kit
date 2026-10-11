@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
 import type { PaginationProps } from "./Pagination.types";
+import { cx } from "../shared/cx";
 import styles from "./Pagination.module.css";
 
 export type { PaginationProps, PaginationSize } from "./Pagination.types";
@@ -52,6 +53,10 @@ export function Pagination({
   showLabels = true,
   showPreviousNext = true,
   size = "md",
+  "aria-label": ariaLabel = "Pagination",
+  className,
+  ref,
+  ...rest
 }: PaginationProps) {
   const count = clampCount(pageCount);
   const isControlled = typeof page === "number";
@@ -67,7 +72,7 @@ export function Pagination({
   }
 
   return (
-    <nav aria-label="Pagination" className={styles.nav}>
+    <nav {...rest} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, className)}>
       {showPreviousNext ? (
         showLabels ? (
           <Button

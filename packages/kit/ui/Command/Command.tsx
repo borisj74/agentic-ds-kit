@@ -3,6 +3,7 @@
 import { useId, useMemo, useState, type KeyboardEvent } from "react";
 import { LucideByName } from "../Button/lucideName";
 import type { CommandProps } from "./Command.types";
+import { cx } from "../shared/cx";
 import styles from "./Command.module.css";
 
 export type { CommandProps, CommandGroup, CommandItem } from "./Command.types";
@@ -17,6 +18,9 @@ export function Command({
   groups,
   onSelect,
   label = DEFAULT_LABEL,
+  className,
+  ref,
+  ...rest
 }: CommandProps) {
   const uid = useId();
   const listboxId = `${uid}-list`;
@@ -91,7 +95,7 @@ export function Command({
   }
 
   return (
-    <div className={styles.root}>
+    <div {...rest} ref={ref} className={cx(styles.root, className)}>
       <div className={styles.search}>
         <LucideByName name="Search" size={16} className={styles.searchIcon} />
         <input

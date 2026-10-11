@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
 import type { SideNavItem, SideNavProps } from "./SideNav.types";
+import { cx } from "../shared/cx";
 import styles from "./SideNav.module.css";
 
 export type {
@@ -155,6 +156,10 @@ export function SideNav({
   groups,
   items = [],
   footer,
+  "aria-label": ariaLabel = title,
+  className,
+  ref,
+  ...rest
 }: SideNavProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -170,8 +175,10 @@ export function SideNav({
 
   return (
     <aside
-      className={`${styles.root} ${radius === "none" ? styles.radiusNone : ""} ${expanded ? "" : styles.rootClosed}`.trim()}
-      aria-label={title}
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, radius === "none" && styles.radiusNone, !expanded && styles.rootClosed, className)}
+      aria-label={ariaLabel}
       data-side={side}
     >
       <div className={styles.panel}>

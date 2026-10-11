@@ -42,6 +42,13 @@
     }
   },
   "precedence": "When both items and groups are passed, groups wins; items is ignored.",
+  "passthrough": {
+    "root": "nav",
+    "ref": "nav",
+    "className": "root",
+    "rest": "nav",
+    "note": "aria-label defaults to \"Application\" and can be overridden."
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

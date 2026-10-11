@@ -59,6 +59,12 @@
       "default": "Tabs"
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
   "tokens": [
     "text.primary",
     "text.secondary",

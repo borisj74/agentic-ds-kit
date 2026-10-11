@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { AppNavGroup, AppNavItem, AppNavLeaf, AppNavProps } from "./AppNav.types";
+import { cx } from "../shared/cx";
 import styles from "./AppNav.module.css";
 
 export type { AppNavProps, AppNavItem, AppNavLeaf, AppNavGroup } from "./AppNav.types";
@@ -97,7 +98,15 @@ function NavGroup({
   );
 }
 
-export function AppNav({ title, items = [], groups }: AppNavProps) {
+export function AppNav({
+  title,
+  items = [],
+  groups,
+  "aria-label": ariaLabel = "Application",
+  className,
+  ref,
+  ...rest
+}: AppNavProps) {
   const useGroups = Boolean(groups && groups.length > 0);
   const activeLabel = useGroups ? groups!.find(groupHasActive)?.label ?? null : null;
   const fallbackLabel = useGroups
@@ -110,7 +119,7 @@ export function AppNav({ title, items = [], groups }: AppNavProps) {
   }, [activeLabel]);
 
   return (
-    <nav className={styles.nav} aria-label="Application">
+    <nav {...rest} ref={ref} className={cx(styles.nav, className)} aria-label={ariaLabel}>
       {title ? <p className={styles.title}>{title}</p> : null}
       {useGroups ? (
         <ul className={styles.groupList}>

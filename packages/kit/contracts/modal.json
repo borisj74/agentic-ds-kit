@@ -62,6 +62,13 @@
       "note": "In-canvas docs only. Product screens omit it (portal to document.body)."
     }
   },
+  "passthrough": {
+    "root": "div",
+    "ref": "dialog panel (ModalCard, role=dialog)",
+    "className": "dialog panel",
+    "rest": "dialog panel",
+    "note": "Not the portal, root or scrim. Focus trap, Escape, scroll lock and focus return are kit-owned."
+  },
   "tokens": [
     "text.primary",
     "text.muted",

@@ -1,8 +1,12 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 
 export type AppHeaderRadius = "md" | "none";
 
-export interface AppHeaderProps {
+/** Native header attributes the kit sets itself (or replaces with its own prop). */
+type AppHeaderOwnedKeys = "children" | "title" | "aria-label";
+
+/** `ref`, `className` and other native attributes go to the `<header>`. */
+export interface AppHeaderProps extends Omit<ComponentPropsWithoutRef<"header">, AppHeaderOwnedKeys> {
   /** Product name next to the mark. Ignored as a heading — this is chrome, not PageHeader. */
   title?: string;
   /** Brand letter. Defaults to the first character of title. Used when logo is omitted. */
@@ -25,4 +29,5 @@ export interface AppHeaderProps {
   ariaLabel?: string;
   /** Bar corners. none is flush; md is radius-surface-md. */
   radius?: AppHeaderRadius;
+  ref?: Ref<HTMLElement>;
 }
