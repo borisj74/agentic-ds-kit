@@ -7,8 +7,10 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
@@ -31,6 +33,18 @@ export type {
   DropdownMenuTriggerStyle,
   DropdownMenuTriggerTag,
 } from "./DropdownMenu.types";
+
+const subscribeNoop = () => () => {};
+
+/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
+function useIsClient() {
+  return useSyncExternalStore(subscribeNoop, () => true, () => false);
+}
+
+// Tag remove buttons come first in a tags field, so prefer the marked trigger.
+function findTrigger(root: HTMLElement | null): HTMLButtonElement | null {
+  return root?.querySelector<HTMLButtonElement>("[data-menu-trigger]") ?? root?.querySelector("button") ?? null;
+}
 
 function flattenItems(groups: DropdownMenuGroup[]): DropdownMenuItem[] {
   return groups.flatMap((group) => group.items);
@@ -84,9 +98,18 @@ export function DropdownMenu({
   const [openSubId, setOpenSubId] = useState<string | null>(null);
   const [coords, setCoords] = useState<CSSProperties | null>(null);
   const [subCoords, setSubCoords] = useState<CSSProperties | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const [query, setQuery] = useState("");
   const searchId = `${uid}-search`;
+
+  // Drop stale positions while closed, so a reopen measures fresh before showing.
+  const subKey = open ? openSubId : null;
+  const [placedFor, setPlacedFor] = useState({ open, subKey });
+  if (placedFor.open !== open || placedFor.subKey !== subKey) {
+    setPlacedFor({ open, subKey });
+    if (!open) setCoords(null);
+    if (subKey === null) setSubCoords(null);
+  }
   const setTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [triggerRef, ref]);
   const passthrough = { ...(triggerProps as typeof rest | undefined), ...rest };
 
@@ -124,9 +147,7 @@ export function DropdownMenu({
   }
 
   function triggerButton(): HTMLButtonElement | null {
-    const root = rootRef.current;
-    // Tag remove buttons come first in a tags field, so prefer the marked trigger.
-    return root?.querySelector<HTMLButtonElement>("[data-menu-trigger]") ?? root?.querySelector("button") ?? null;
+    return findTrigger(rootRef.current);
   }
 
   function queryItem(root: HTMLElement | null, id: string): HTMLElement | null {
@@ -134,10 +155,7 @@ export function DropdownMenu({
     return root?.querySelector<HTMLElement>(`[data-id="${escaped}"]`) ?? null;
   }
 
-  function placePanel() {
-    const button = triggerButton();
-    if (!button) return;
-    const rect = button.getBoundingClientRect();
+  function panelStyle(rect: DOMRect): CSSProperties {
     const next: CSSProperties = {
       top: rect.bottom + 4,
     };
@@ -155,13 +173,10 @@ export function DropdownMenu({
       next.left = rect.left;
       next.right = "auto";
     }
-    setCoords(next);
+    return next;
   }
 
-  function placeSubPanel(id: string) {
-    const el = queryItem(panelRef.current, id);
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
+  function subPanelStyle(rect: DOMRect): CSSProperties {
     const next: CSSProperties = { top: rect.top, minWidth: 160 };
     if (window.innerWidth - rect.right < 168) {
       next.right = window.innerWidth - rect.left + 4;
@@ -170,12 +185,20 @@ export function DropdownMenu({
       next.left = rect.right + 4;
       next.right = "auto";
     }
-    setSubCoords(next);
+    return next;
   }
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  function placePanel() {
+    const button = triggerButton();
+    if (!button) return;
+    setCoords(panelStyle(button.getBoundingClientRect()));
+  }
+
+  function placeSubPanel(id: string) {
+    const el = queryItem(panelRef.current, id);
+    if (!el) return;
+    setSubCoords(subPanelStyle(el.getBoundingClientRect()));
+  }
 
   useLayoutEffect(() => {
     const button = triggerButton();
@@ -195,20 +218,19 @@ export function DropdownMenu({
     (next ?? triggerButton())?.focus();
   }, [triggerTags]);
 
+  // Measure straight from the refs so the layout reads stay visible to the hooks linter.
   useLayoutEffect(() => {
-    if (!open) {
-      setCoords(null);
-      return;
-    }
-    placePanel();
+    if (!open) return;
+    const button = findTrigger(rootRef.current);
+    if (!button) return;
+    setCoords(panelStyle(button.getBoundingClientRect()));
   }, [open, align, size, triggerStyle, columns]);
 
   useLayoutEffect(() => {
-    if (!open || !openSubId) {
-      setSubCoords(null);
-      return;
-    }
-    placeSubPanel(openSubId);
+    if (!open || !openSubId) return;
+    const el = queryItem(panelRef.current, openSubId);
+    if (!el) return;
+    setSubCoords(subPanelStyle(el.getBoundingClientRect()));
   }, [open, openSubId, coords]);
 
   useEffect(() => {
@@ -277,6 +299,18 @@ export function DropdownMenu({
     if (!closeOnSelect) return;
     setOpen(false);
     triggerButton()?.focus();
+  }
+
+  // One handler for every item, keyed by data-id, so render never builds closures over refs.
+  function onItemClick(event: ReactMouseEvent<HTMLElement>) {
+    const id = event.currentTarget.dataset.id;
+    if (!id) return;
+    const submenu = findItem(id)?.submenu;
+    if (submenu && submenu.length > 0) {
+      setOpenSubId(id);
+      return;
+    }
+    select(id);
   }
 
   function highlight(id: string) {
@@ -454,28 +488,21 @@ export function DropdownMenu({
             "aria-haspopup": hasSub ? ("menu" as const) : undefined,
             "aria-expanded": hasSub ? openSubId === item.id : undefined,
             tabIndex: highlighted ? 0 : -1,
-            onMouseEnter: () => {
-              if (item.disabled) return;
-              if (inSubmenu) return;
-              highlight(item.id);
-            },
-            onClick: () => {
-              if (hasSub) {
-                setOpenSubId(item.id);
-                return;
-              }
-              select(item.id);
-            },
+          };
+          const onMouseEnter = () => {
+            if (item.disabled) return;
+            if (inSubmenu) return;
+            highlight(item.id);
           };
           if (asLink) {
             return (
-              <a key={item.id} href={item.href} {...shared}>
+              <a key={item.id} href={item.href} {...shared} onMouseEnter={onMouseEnter} onClick={onItemClick}>
                 {body}
               </a>
             );
           }
           return (
-            <button key={item.id} type="button" {...shared}>
+            <button key={item.id} type="button" {...shared} onMouseEnter={onMouseEnter} onClick={onItemClick}>
               {body}
             </button>
           );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import { ButtonGroup } from "../ButtonGroup";
@@ -10,6 +10,13 @@ import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
+
+const subscribeNoop = () => () => {};
+
+/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
+function useIsClient() {
+  return useSyncExternalStore(subscribeNoop, () => true, () => false);
+}
 
 export function AlertDialog({
   open,
@@ -32,13 +39,11 @@ export function AlertDialog({
   const cancelRef = useRef<HTMLButtonElement | null>(null);
   const onCancelRef = useRef(onCancel);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
 
-  onCancelRef.current = onCancel;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useLayoutEffect(() => {
+    onCancelRef.current = onCancel;
+  });
 
   useEffect(() => {
     if (!open) return;
