@@ -81,7 +81,7 @@ function EventChip({
   );
 }
 
-function MonthView(props: CalendarViewsProps) {
+function MonthView({ gridRef, onMonthKey, ...props }: CalendarViewsProps) {
   const first = new Date(props.focus.getFullYear(), props.focus.getMonth(), 1);
   const start = weekOf(first, props.weekStart);
   const weeks = Array.from({ length: 6 }, (_, week) =>
@@ -90,11 +90,11 @@ function MonthView(props: CalendarViewsProps) {
 
   return (
     <div
-      ref={props.gridRef}
+      ref={gridRef}
       className={styles.month}
       role="grid"
       aria-label="Month"
-      onKeyDown={props.onMonthKey}
+      onKeyDown={onMonthKey}
     >
       <div role="row" className={styles.weekdays}>
         {weeks[0].map((day) => (
@@ -170,7 +170,7 @@ function MonthView(props: CalendarViewsProps) {
   );
 }
 
-function TimeView(props: CalendarViewsProps & { days: Date[] }) {
+function TimeView({ scrollRef, ...props }: CalendarViewsProps & { days: Date[] }) {
   const grid = { "--days": props.days.length } as CSSProperties;
   const slot = (day: Date) => (event: MouseEvent<HTMLDivElement>) => {
     if (props.readOnly || (event.target as HTMLElement).closest("button")) return;
@@ -220,7 +220,7 @@ function TimeView(props: CalendarViewsProps & { days: Date[] }) {
           </div>
         ))}
       </div>
-      <div ref={props.scrollRef} className={styles.scroll}>
+      <div ref={scrollRef} className={styles.scroll}>
         <div className={styles.timeRow}>
           <div className={styles.hours}>
             {Array.from({ length: 24 }, (_, hour) => (

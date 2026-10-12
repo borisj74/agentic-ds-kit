@@ -67,7 +67,11 @@ export function CodeSnippet({
     return () => window.clearTimeout(timer);
   }, [copied]);
 
-  useEffect(() => setCopied(false), [text]);
+  const [copiedText, setCopiedText] = useState(text);
+  if (copiedText !== text) {
+    setCopiedText(text);
+    setCopied(false);
+  }
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const [scrollable, setScrollable] = useState(false);

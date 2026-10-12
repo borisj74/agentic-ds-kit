@@ -131,7 +131,8 @@ export function DataGrid({
   const [innerRows, setInnerRows] = useState<DataGridRow[]>(defaultRows ?? EMPTY_ROWS);
   const [editing, setEditing] = useState<Spot | null>(null);
   const [draft, setDraft] = useState("");
-  const [indexWidth, setIndexWidth] = useState(0);
+  const [measuredIndexWidth, setIndexWidth] = useState(0);
+  const indexWidth = stickyFirstColumn && rowNumbers ? measuredIndexWidth : 0;
   const rows = rowsProp ?? innerRows;
   const firstKey = columns[0]?.key;
   const colSpan = columns.length + (rowNumbers ? 1 : 0) + (canRemoveRows ? 1 : 0);
@@ -200,10 +201,7 @@ export function DataGrid({
   }
 
   useLayoutEffect(() => {
-    if (!stickyFirstColumn || !rowNumbers) {
-      setIndexWidth(0);
-      return;
-    }
+    if (!stickyFirstColumn || !rowNumbers) return;
     const measure = () => {
       setIndexWidth(indexRef.current?.getBoundingClientRect().width ?? 0);
     };

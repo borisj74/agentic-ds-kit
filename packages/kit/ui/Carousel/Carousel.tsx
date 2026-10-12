@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore, type KeyboardEvent } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Button } from "../Button";
 import type { CarouselProps } from "./Carousel.types";
@@ -38,33 +38,56 @@ export function Carousel({
   );
   const [viewportRef, emblaApi] = useEmblaCarousel(emblaOptions);
 
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-  const [index, setIndex] = useState(0);
-  const [snapCount, setSnapCount] = useState(Math.max(items.length, 1));
+  const fallbackCount = Math.max(items.length, 1);
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (!emblaApi) return () => {};
+      emblaApi.on("select", onChange);
+      emblaApi.on("reInit", onChange);
+      return () => {
+        emblaApi.off("select", onChange);
+        emblaApi.off("reInit", onChange);
+      };
+    },
+    [emblaApi],
+  );
+  const canScrollPrev = useSyncExternalStore(
+    subscribe,
+    () => emblaApi?.canScrollPrev() ?? false,
+    () => false,
+  );
+  const canScrollNext = useSyncExternalStore(
+    subscribe,
+    () => emblaApi?.canScrollNext() ?? false,
+    () => false,
+  );
+  const index = useSyncExternalStore(
+    subscribe,
+    () => emblaApi?.selectedScrollSnap() ?? 0,
+    () => 0,
+  );
+  const snapCount = useSyncExternalStore(
+    subscribe,
+    () => (emblaApi ? emblaApi.scrollSnapList().length : fallbackCount),
+    () => fallbackCount,
+  );
   const onIndexChangeRef = useRef(onIndexChange);
-  onIndexChangeRef.current = onIndexChange;
 
-  const sync = useCallback(() => {
-    if (!emblaApi) return;
-    const nextIndex = emblaApi.selectedScrollSnap();
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-    setIndex(nextIndex);
-    setSnapCount(emblaApi.scrollSnapList().length);
-    onIndexChangeRef.current?.(nextIndex);
-  }, [emblaApi]);
+  useEffect(() => {
+    onIndexChangeRef.current = onIndexChange;
+  });
 
   useEffect(() => {
     if (!emblaApi) return;
-    sync();
-    emblaApi.on("select", sync);
-    emblaApi.on("reInit", sync);
+    const notify = () => onIndexChangeRef.current?.(emblaApi.selectedScrollSnap());
+    notify();
+    emblaApi.on("select", notify);
+    emblaApi.on("reInit", notify);
     return () => {
-      emblaApi.off("select", sync);
-      emblaApi.off("reInit", sync);
+      emblaApi.off("select", notify);
+      emblaApi.off("reInit", notify);
     };
-  }, [emblaApi, sync]);
+  }, [emblaApi]);
 
   useEffect(() => {
     emblaApi?.reInit();
