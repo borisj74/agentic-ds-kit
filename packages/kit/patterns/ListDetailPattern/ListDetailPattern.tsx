@@ -29,9 +29,13 @@ function projectById(id: string | undefined): ListDetailItem {
 export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPatternProps) {
   const [activeId, setActiveId] = useState(projectById(selectedId).id);
 
-  useEffect(() => {
+  // Follow a changed `selectedId` prop by adjusting state during render
+  // (https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes).
+  const [prevSelectedId, setPrevSelectedId] = useState(selectedId);
+  if (selectedId !== prevSelectedId) {
+    setPrevSelectedId(selectedId);
     if (selectedId) setActiveId(projectById(selectedId).id);
-  }, [selectedId]);
+  }
 
   useEffect(() => {
     const apply = () => {
