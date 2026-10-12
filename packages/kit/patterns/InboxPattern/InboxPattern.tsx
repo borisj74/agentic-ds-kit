@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Badge } from "../../Badge";
-import { Button } from "../../Button";
-import { Cell } from "../../Cell";
-import { Empty } from "../../Empty";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { Scoreboard } from "../../Scoreboard";
-import { Section } from "../../Section";
-import { Table } from "../../Table";
-import { Tabs } from "../../Tabs";
-import { Toast } from "../../Toast";
+import { Badge } from "../../ui/Badge";
+import { Button } from "../../ui/Button";
+import { Cell } from "../../ui/Cell";
+import { Empty } from "../../ui/Empty";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { Scoreboard } from "../../ui/Scoreboard";
+import { Section } from "../../ui/Section";
+import { Table } from "../../ui/Table";
+import { Tabs } from "../../ui/Tabs";
+import { Toast } from "../../ui/Toast";
 import { filterMessages, INBOX, type InboxMessage } from "./inbox-data";
 import { InboxReplyDrawer } from "./InboxReplyDrawer";
 import styles from "./InboxPattern.module.css";

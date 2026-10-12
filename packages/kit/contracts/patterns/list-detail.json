@@ -1,9 +1,14 @@
 {
   "id": "list-detail",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add list-detail",
+  "import": "import { ListDetailPattern } from \"@/components/patterns/list-detail\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/list-detail/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
   "contains": ["pageheader", "appnav", "table", "section", "badge"],
   "doNot": [
+    "Do not import ListDetailPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add list-detail)",
     "Do not restyle AppNav or Table",
     "Do not replace Table with custom list markup",
     "Do not add a local sidebar — product chrome is SideNav under AppHeader; in-page files stay AppNav",

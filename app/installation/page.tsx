@@ -13,7 +13,7 @@ export default function Page() {
   return <Button variant="primary">Save</Button>;
 }`;
 
-const USAGE = `import { Button, Scoreboard, ActivityPattern } from "agentic-ds-kit";`;
+const USAGE = `import { Button, Scoreboard, AppShellPattern } from "agentic-ds-kit";`;
 
 const ADD_PATTERN = `npx agentic-ds-kit add --list
 npx agentic-ds-kit add dashboard`;
@@ -73,18 +73,25 @@ export default function InstallationPage() {
           title="Components and patterns"
           description="Read contracts/index.json in the package, then import the matching piece."
         >
-          <CodeBlock code={USAGE} />
+          <div className={playground.stack}>
+            <CodeBlock code={USAGE} />
+            <p className={playground.body}>
+              AppShellPattern and SignInPattern are the only pattern imports. Content patterns (dashboard,
+              activity, inbox, settings-form, list-detail, invite-members, assistant-workspace,
+              empty-first-run) are copy-in: see the next section.
+            </p>
+          </div>
         </Section>
 
         <Section
           title="Copy a pattern into your app"
-          description="When you need to change a pattern's sections, copy, or data, copy its source in and own it."
+          description="Content patterns are not exported from the package. Copy one's source in and own its sections, copy, and data."
         >
           <div className={playground.stack}>
             <CodeBlock code={ADD_PATTERN} />
             <p className={playground.body}>
               This writes components/patterns/dashboard/ (src/components/patterns/ when the app
-              uses src/): the pattern files plus dashboard.contract.json. Kit imports point at
+              uses src/): the pattern files, dashboard-data.ts with the demo data to replace, and dashboard.contract.json. Kit imports point at
               agentic-ds-kit, so the copy compiles with no edits. Import it from there:
             </p>
             <CodeBlock code={USE_COPY} />

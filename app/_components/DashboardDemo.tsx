@@ -6,16 +6,18 @@ import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
-import { ActivityPattern } from "agentic-ds-kit";
-import { AssistantWorkspacePattern } from "agentic-ds-kit";
-import { DashboardPattern } from "agentic-ds-kit";
-import { EmptyFirstRunPattern } from "agentic-ds-kit";
-import { InboxPattern } from "agentic-ds-kit";
-import { InviteMembersPattern } from "agentic-ds-kit";
-import { ListDetailPattern } from "agentic-ds-kit";
-import { SettingsFormPattern } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
 import type { SideNavItemData } from "agentic-ds-kit";
+// Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
+// render them from their kit source.
+import { ActivityPattern } from "../../packages/kit/patterns/ActivityPattern";
+import { AssistantWorkspacePattern } from "../../packages/kit/patterns/AssistantWorkspacePattern";
+import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
+import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
+import { InboxPattern } from "../../packages/kit/patterns/InboxPattern";
+import { InviteMembersPattern } from "../../packages/kit/patterns/InviteMembersPattern";
+import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
+import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItemData[] = [

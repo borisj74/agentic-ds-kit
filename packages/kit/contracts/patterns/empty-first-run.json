@@ -1,9 +1,14 @@
 {
   "id": "empty-first-run",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add empty-first-run",
+  "import": "import { EmptyFirstRunPattern } from \"@/components/patterns/empty-first-run\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/empty-first-run/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
   "contains": ["pageheader", "empty", "modal", "field", "input", "button", "buttongroup", "toast"],
   "doNot": [
+    "Do not import EmptyFirstRunPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add empty-first-run)",
     "Do not invent a local empty stack, illustration, or create dialog",
     "Do not use AlertDialog for a dismissible first create",
     "Do not skip Field wrappers on labeled inputs",

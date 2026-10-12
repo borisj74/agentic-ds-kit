@@ -1,26 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../../Button";
-import { ButtonGroup } from "../../ButtonGroup";
-import { Empty } from "../../Empty";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { Scoreboard } from "../../Scoreboard";
-import { Section } from "../../Section";
-import { Tabs } from "../../Tabs";
+import { Button } from "../../ui/Button";
+import { ButtonGroup } from "../../ui/ButtonGroup";
+import { Empty } from "../../ui/Empty";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { Scoreboard } from "../../ui/Scoreboard";
+import { Section } from "../../ui/Section";
+import { Tabs } from "../../ui/Tabs";
 import { ActivityFeed } from "./ActivityFeed";
 import { TaskCards, TaskList } from "./ActivityTasks";
-import { TASK_INSIGHTS, TaskDrawer } from "./TaskDrawer";
+import { ACTIVITY_METRICS, TASK_INSIGHTS } from "./activity-data";
+import { TaskDrawer } from "./TaskDrawer";
 
 type TaskView = "cards" | "list";
-
-const ACTIVITY_METRICS = [
-  { label: "Today", value: "6", delta: "+2", trend: "up" as const, hint: "vs yesterday", size: "lg" as const, badge: "Live", badgeTone: "success" as const },
-  { label: "Comments", value: "5", delta: "+1", trend: "up" as const, hint: "this sprint", size: "lg" as const, badge: "Sprint", badgeTone: "info" as const },
-  { label: "Status changes", value: "4", delta: "0", trend: "flat" as const, hint: "this sprint", size: "lg" as const, badge: "Ship", badgeTone: "brand" as const },
-  { label: "Mentions", value: "2", delta: "+2", trend: "up" as const, hint: "need reply", size: "lg" as const, badge: "At risk", badgeTone: "danger" as const },
-];
 
 export interface ActivityPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];

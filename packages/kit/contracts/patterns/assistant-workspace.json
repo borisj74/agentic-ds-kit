@@ -1,9 +1,14 @@
 {
   "id": "assistant-workspace",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add assistant-workspace",
+  "import": "import { AssistantWorkspacePattern } from \"@/components/patterns/assistant-workspace\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/assistant-workspace/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
   "contains": ["pageheader", "section", "insightcard", "chat", "button"],
   "doNot": [
+    "Do not import AssistantWorkspacePattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add assistant-workspace)",
     "Do not put Chat in a Modal",
     "Do not invent a local assistant rail or insight stack",
     "Do not skip layout-workspace for the rail",

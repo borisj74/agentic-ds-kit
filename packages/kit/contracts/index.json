@@ -536,69 +536,87 @@
     "intent": "Dashboard blueprint: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add dashboard"
   },
   {
     "id": "settings-form",
     "intent": "Settings blueprint: PageHeader, Fields, and save actions.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add settings-form"
   },
   {
     "id": "list-detail",
     "intent": "List-detail blueprint: AppNav, Table, and detail Section.",
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add list-detail"
   },
   {
     "id": "invite-members",
     "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
     "group": "pattern",
     "path": "contracts/patterns/invite-members.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add invite-members"
   },
   {
     "id": "assistant-workspace",
     "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
     "group": "pattern",
     "path": "contracts/patterns/assistant-workspace.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add assistant-workspace"
   },
   {
     "id": "empty-first-run",
     "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
     "group": "pattern",
     "path": "contracts/patterns/empty-first-run.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add empty-first-run"
   },
   {
     "id": "activity",
     "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
     "group": "pattern",
     "path": "contracts/patterns/activity.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add activity"
   },
   {
     "id": "app-shell",
     "intent": "Responsive product chrome: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer.",
     "group": "pattern",
     "path": "contracts/patterns/app-shell.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "import"
   },
   {
     "id": "sign-in",
     "intent": "Sign-in / sign-up page outside the app shell: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
     "group": "pattern",
     "path": "contracts/patterns/sign-in.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "import"
   },
   {
     "id": "inbox",
     "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
     "group": "pattern",
     "path": "contracts/patterns/inbox.json",
-    "status": "stable"
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add inbox"
   }
 ]

@@ -1,15 +1,15 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Button } from "../../Button";
-import { ButtonGroup } from "../../ButtonGroup";
-import { Empty } from "../../Empty";
-import { Field } from "../../Field";
-import { Input } from "../../Input";
-import { Modal } from "../../Modal";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { Toast } from "../../Toast";
+import { Button } from "../../ui/Button";
+import { ButtonGroup } from "../../ui/ButtonGroup";
+import { Empty } from "../../ui/Empty";
+import { Field } from "../../ui/Field";
+import { Input } from "../../ui/Input";
+import { Modal } from "../../ui/Modal";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { Toast } from "../../ui/Toast";
 
 export interface EmptyFirstRunPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];

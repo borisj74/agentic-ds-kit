@@ -22,9 +22,24 @@ Importing from the package loads semantic tokens. If your own CSS uses those var
 import "agentic-ds-kit/tokens.css";
 ```
 
+Chrome patterns are imports:
+
 ```tsx
-import { ActivityPattern } from "agentic-ds-kit";
+import { AppShellPattern, SignInPattern } from "agentic-ds-kit";
 ```
+
+Content patterns (activity, assistant-workspace, dashboard, empty-first-run, inbox, invite-members, list-detail, settings-form) are not exported. Copy one into your app and own it:
+
+```bash
+npx agentic-ds-kit add --list
+npx agentic-ds-kit add dashboard
+```
+
+```tsx
+import { DashboardPattern } from "@/components/patterns/dashboard";
+```
+
+The copy imports kit components from `agentic-ds-kit`, keeps its demo data in a `*-data.ts` file for you to replace, and ships its contract JSON beside it.
 
 Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Copy `AGENTS.md` (and `CLAUDE.md`) from this package into your app so Cursor and Claude Code follow the kit.
 

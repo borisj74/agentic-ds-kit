@@ -1,7 +1,9 @@
 /**
- * Copies ui/patterns/<Name>Pattern/ into patterns-src/<id>/ for `agentic-ds-kit add`,
- * and the RECIPES below (component presets rebuilt from their blocks, in recipes/).
- * Kit-relative imports (`../../Button`, `../../shared/chartMath`, `../../ui/AppHeader`)
+ * Copies pattern sources into patterns-src/<id>/ for `agentic-ds-kit add`:
+ * - patterns/<Name>Pattern/: content patterns (dashboard, inbox, …). Copy-in only; not in dist.
+ * - ui/patterns/<Name>Pattern/: chrome patterns (AppShellPattern, SignInPattern), also exported.
+ * - the RECIPES below (component presets rebuilt from their blocks, in recipes/).
+ * Kit-relative imports (`../../Button`, `../../ui/shared/chartMath`, `../../ui/AppHeader`)
  * become one import from "agentic-ds-kit", so the copied files compile inside a user's app.
  * Writes patterns-src/index.json: id, kind (pattern | recipe), export name, intent, files.
  */
@@ -10,7 +12,6 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const patternsDir = join(root, "ui/patterns");
 const outDir = join(root, "patterns-src");
 const contractIndex = JSON.parse(await readFile(join(root, "contracts/index.json"), "utf8"));
 const publicBarrel = await readFile(join(root, "src/index.ts"), "utf8");
@@ -45,9 +46,14 @@ const RECIPES = [
 ];
 
 const KIT_IMPORT = /^import\s+(type\s+)?\{([^}]*)\}\s+from\s+"(\.\.\/[^"]+)";\n/gm;
-/** Pattern files sit in ui/patterns/<Name>/; recipe files in recipes/<Name>/ (beside ui/). */
+/** Chrome pattern files sit in ui/patterns/<Name>/; content patterns and recipes in patterns/ and recipes/ (beside ui/). */
 const PATTERN_SPEC = /^\.\.\/\.\.\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/;
 const RECIPE_SPEC = /^\.\.\/\.\.\/ui\/(?:[A-Z][A-Za-z]*|patterns\/[A-Z][A-Za-z]*Pattern|shared\/[A-Za-z]+)$/;
+/** Pattern folders and the import specs their files use (content patterns sit beside ui/, like recipes). */
+const PATTERN_SOURCES = [
+  { folder: "patterns", spec: RECIPE_SPEC },
+  { folder: "ui/patterns", spec: PATTERN_SPEC },
+];
 
 function rewriteImports(source, file, specOk = PATTERN_SPEC) {
   const values = [];
@@ -89,12 +95,16 @@ await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
 const manifest = [];
-const dirs = (await readdir(patternsDir, { withFileTypes: true }))
-  .filter((ent) => ent.isDirectory() && ent.name.endsWith("Pattern"))
-  .map((ent) => ent.name)
-  .sort();
+const dirs = [];
+for (const { folder, spec } of PATTERN_SOURCES) {
+  for (const ent of await readdir(join(root, folder), { withFileTypes: true })) {
+    if (!ent.isDirectory() || !ent.name.endsWith("Pattern")) continue;
+    dirs.push({ dirName: ent.name, patternsDir: join(root, folder), spec });
+  }
+}
+dirs.sort((a, b) => a.dirName.localeCompare(b.dirName));
 
-for (const dirName of dirs) {
+for (const { dirName, patternsDir, spec } of dirs) {
   const id = toId(dirName);
   const entry = contractIndex.find((c) => c.group === "pattern" && c.id === id);
   if (!entry) throw new Error(`${dirName}: no pattern contract with id "${id}" in contracts/index.json`);
@@ -106,7 +116,7 @@ for (const dirName of dirs) {
     const from = join(patternsDir, dirName, file);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const source = await readFile(from, "utf8");
-      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`));
+      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`, spec));
     } else {
       await cp(from, join(target, file));
     }

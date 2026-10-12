@@ -5,6 +5,14 @@
   border-radius: var(--radius-surface-md);
 }
 
+/* add command (content patterns) or import line (AppShell, SignIn) above the demo. */
+.usage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
 .anchor {
   scroll-margin-top: var(--space-6);
 }

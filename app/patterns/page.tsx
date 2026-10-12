@@ -4,22 +4,57 @@ import { useEffect, useState } from "react";
 import { AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { SignInDemo } from "../_components/SignInDemo";
+import { CodeBlock } from "../components/CodeBlock";
 import styles from "./patterns.module.css";
 import playground from "../playground.module.css";
 
 /** Patterns that render on their own, outside the DashboardDemo app shell. */
 const STANDALONE = new Set(["sign-in", "app-shell"]);
 
-function readStandalone() {
-  const hash = window.location.hash.replace(/^#/, "");
-  return STANDALONE.has(hash) ? hash : null;
+/** Page hash → copy-in id for `npx agentic-ds-kit add`. Content patterns are not package exports. */
+const ADD_ID: Record<string, string> = {
+  dashboard: "dashboard",
+  activity: "activity",
+  inbox: "inbox",
+  settings: "settings-form",
+  "list-detail": "list-detail",
+  "launch-brief": "list-detail",
+  "qa-checklist": "list-detail",
+  "release-notes": "list-detail",
+  "support-macros": "list-detail",
+  projects: "list-detail",
+  invite: "invite-members",
+  insights: "assistant-workspace",
+  empty: "empty-first-run",
+  research: "empty-first-run",
+};
+
+/** Chrome patterns stay imports from the package. */
+const IMPORT_LINE: Record<string, string> = {
+  "sign-in": `import { SignInPattern } from "agentic-ds-kit";`,
+  "app-shell": `import { AppShellPattern } from "agentic-ds-kit";`,
+};
+
+function readHash() {
+  return window.location.hash.replace(/^#/, "");
+}
+
+function usageFor(hash: string) {
+  if (IMPORT_LINE[hash]) return { note: "Import it from the package.", code: IMPORT_LINE[hash] };
+  const id = ADD_ID[hash] ?? "dashboard";
+  return {
+    note: "Copy it into your app, then edit the data file and sections.",
+    code: `npx agentic-ds-kit add ${id}`,
+  };
 }
 
 export default function PatternsPage() {
-  const [standalone, setStandalone] = useState<string | null>(null);
+  const [hash, setHash] = useState("");
+  const standalone = STANDALONE.has(hash) ? hash : null;
+  const usage = usageFor(hash);
 
   useEffect(() => {
-    const apply = () => setStandalone(readStandalone());
+    const apply = () => setHash(readHash());
     apply();
     window.addEventListener("hashchange", apply);
     return () => window.removeEventListener("hashchange", apply);
@@ -33,6 +68,11 @@ export default function PatternsPage() {
           Code is the contract. Agents install the kit, then compose these screens instead of
           inventing layouts.
         </p>
+
+        <div className={styles.usage}>
+          <p className={playground.body}>{usage.note}</p>
+          <CodeBlock code={usage.code} />
+        </div>
 
         <div className={styles.anchor}>
           <div id="dashboard" />
