@@ -81,7 +81,8 @@
       "Group labels are disclosure buttons with aria-expanded",
       "Closed group lists are aria-hidden and inert",
       "Active leaf uses aria-current=page",
-      "All leaves are keyboard-focusable links"
+      "All leaves are keyboard-focusable links",
+      "Same-page hash links push a history entry via history.pushState (not location.hash), fire hashchange and scroll the target into view, so Back/Forward stay in sync in Next App Router; cross-page and modified (cmd/ctrl/shift/alt, middle) clicks keep default Link behaviour"
     ]
   },
   "doNot": [

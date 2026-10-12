@@ -7,28 +7,29 @@ function emit() {
   for (const onChange of listeners) onChange();
 }
 
-function onHashChange() {
-  // `location.hash = …` (AppNav same-page links, the demos) adds a history entry with no
-  // state, and Next ignores a popstate back to it from another page, leaving that page on
-  // screen under this URL. Stamping it through Next's replaceState records the router state.
-  if (window.history.state === null) {
-    window.history.replaceState(null, "", window.location.href);
-  }
-  emit();
-}
-
 function subscribe(onChange: () => void) {
   if (listeners.size === 0) {
-    window.addEventListener("hashchange", onHashChange);
+    window.addEventListener("hashchange", emit);
     window.addEventListener("popstate", emit);
   }
   listeners.add(onChange);
   return () => {
     listeners.delete(onChange);
     if (listeners.size > 0) return;
-    window.removeEventListener("hashchange", onHashChange);
+    window.removeEventListener("hashchange", emit);
     window.removeEventListener("popstate", emit);
   };
+}
+
+/**
+ * Same-page hash navigation, as AppNav does it. Assigning `location.hash` adds an entry
+ * with no router state, which Next ignores on Back; its patched pushState records one.
+ */
+export function pushHash(fragment: string) {
+  if (window.location.hash !== `#${fragment}`) window.history.pushState(null, "", `#${fragment}`);
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.getElementById(fragment)?.scrollIntoView({ behavior: reduce ? "instant" : "auto" });
 }
 
 function readHash() {
