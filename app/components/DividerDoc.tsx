@@ -209,7 +209,7 @@ export function DividerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  A word or two on the line, like an "or" between sign-in methods. Align moves it to the start or
+                  A word or two on the line, like an &quot;or&quot; between sign-in methods. Align moves it to the start or
                   end.
                 </p>
               </div>

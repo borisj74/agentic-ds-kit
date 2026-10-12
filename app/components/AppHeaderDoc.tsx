@@ -242,7 +242,7 @@ export function AppHeaderDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  radius="md" is radius-surface-md for an inset floating bar. Default none is a
+                  radius=&quot;md&quot; is radius-surface-md for an inset floating bar. Default none is a
                   flush full-bleed bar.
                 </p>
               </div>

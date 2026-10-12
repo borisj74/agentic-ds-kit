@@ -161,7 +161,7 @@ export default function ThemingPage() {
           description="Primitives are the source ramps. Semantics are the roles components consume."
         >
           <p className={playground.body}>
-            Light values live on :root. Dark values live on [data-theme="dark"]. Brand hues overlay
+            Light values live on :root. Dark values live on [data-theme=&quot;dark&quot;]. Brand hues overlay
             brand, action, focus, and link roles via [data-color]. Hex in tokens.css
             is generated from tokens.json — components still only see var().
           </p>
@@ -215,7 +215,7 @@ export default function ThemingPage() {
             <CodeBlock code={BRAND_HTML} />
             <p className={playground.body}>
               Valid values: blue, violet, teal. Leave data-color unset for ink. Dark + brand is
-              [data-theme="dark"][data-color="blue"].
+              [data-theme=&quot;dark&quot;][data-color=&quot;blue&quot;].
             </p>
           </div>
         </Section>

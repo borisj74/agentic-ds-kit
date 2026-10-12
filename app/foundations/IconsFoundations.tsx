@@ -294,7 +294,7 @@ export function IconsFoundations() {
             </li>
             <li>Let controls determine icon size. Do not set one-off pixel sizes.</li>
             <li>
-              Mark decorative icons <code>aria-hidden="true"</code>. Give every icon-only control an
+              Mark decorative icons <code>aria-hidden=&quot;true&quot;</code>. Give every icon-only control an
               accessible label.
             </li>
             <li>Do not use brand marks as generic interface icons.</li>
