@@ -1,9 +1,14 @@
 {
   "id": "invite-members",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add invite-members",
+  "import": "import { InviteMembersPattern } from \"@/components/patterns/invite-members\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/invite-members/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
   "contains": ["pageheader", "empty", "avatargroup", "modal", "fieldset", "field", "input", "radiogroup", "button", "buttongroup", "toast"],
   "doNot": [
+    "Do not import InviteMembersPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add invite-members)",
     "Do not invent a local dialog, invite form, or member stack",
     "Do not use AlertDialog for a dismissible invite",
     "Do not skip Field wrappers on labeled inputs",

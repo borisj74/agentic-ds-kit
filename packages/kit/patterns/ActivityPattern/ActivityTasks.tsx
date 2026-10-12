@@ -1,11 +1,11 @@
-import { Badge } from "../../Badge";
-import { Button } from "../../Button";
-import { ButtonGroup } from "../../ButtonGroup";
-import { Carousel } from "../../Carousel";
-import type { CarouselSlidesPerView } from "../../Carousel";
-import { InsightCard } from "../../InsightCard";
-import { Table } from "../../Table";
-import type { TaskInsight } from "./TaskDrawer";
+import { Badge } from "../../ui/Badge";
+import { Button } from "../../ui/Button";
+import { ButtonGroup } from "../../ui/ButtonGroup";
+import { Carousel } from "../../ui/Carousel";
+import type { CarouselSlidesPerView } from "../../ui/Carousel";
+import { InsightCard } from "../../ui/InsightCard";
+import { Table } from "../../ui/Table";
+import type { TaskInsight } from "./activity-data";
 
 export function TaskCards({
   tasks,

@@ -1,9 +1,14 @@
 {
   "id": "settings-form",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add settings-form",
+  "import": "import { SettingsFormPattern } from \"@/components/patterns/settings-form\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/settings-form/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "Settings page blueprint: header, grouped fields, and save/cancel actions.",
   "contains": ["pageheader", "section", "field", "input", "select", "checkbox", "button", "toast"],
   "doNot": [
+    "Do not import SettingsFormPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add settings-form)",
     "Do not restyle Field or Input inside the pattern",
     "Do not invent local form layouts",
     "Do not skip Field wrappers on labeled inputs",

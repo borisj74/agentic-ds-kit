@@ -1,30 +1,19 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { AvatarGroup } from "../../AvatarGroup";
-import { Button } from "../../Button";
-import { ButtonGroup } from "../../ButtonGroup";
-import { Empty } from "../../Empty";
-import { Field } from "../../Field";
-import { FieldSet } from "../../FieldSet";
-import { Input } from "../../Input";
-import { Modal } from "../../Modal";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { RadioGroup } from "../../RadioGroup";
-import { Toast } from "../../Toast";
-
-const TEAM = [
-  { name: "Maya Chen" },
-  { name: "Noah Williams" },
-  { name: "Iris Okafor" },
-];
-
-const ROLE_OPTIONS = [
-  { value: "admin", label: "Admin" },
-  { value: "member", label: "Member" },
-  { value: "viewer", label: "Viewer" },
-];
+import { AvatarGroup } from "../../ui/AvatarGroup";
+import { Button } from "../../ui/Button";
+import { ButtonGroup } from "../../ui/ButtonGroup";
+import { Empty } from "../../ui/Empty";
+import { Field } from "../../ui/Field";
+import { FieldSet } from "../../ui/FieldSet";
+import { Input } from "../../ui/Input";
+import { Modal } from "../../ui/Modal";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { RadioGroup } from "../../ui/RadioGroup";
+import { Toast } from "../../ui/Toast";
+import { ROLE_OPTIONS, TEAM } from "./invite-members-data";
 
 export interface InviteMembersPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];

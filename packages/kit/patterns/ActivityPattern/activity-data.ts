@@ -1,13 +1,14 @@
-"use client";
+/** Demo data for ActivityPattern. Replace with your own: metrics, tasks, and feed events. */
+import type { BadgeTone } from "../../ui/Badge";
+import type { DataTableRow } from "../../ui/DataTable";
+import type { InsightCardTone } from "../../ui/InsightCard";
 
-import { Avatar } from "../../Avatar";
-import { Badge } from "../../Badge";
-import type { BadgeTone } from "../../Badge";
-import { Button } from "../../Button";
-import { Drawer } from "../../Drawer";
-import type { InsightCardTone } from "../../InsightCard";
-import { Progress } from "../../Progress";
-import styles from "./TaskDrawer.module.css";
+export const ACTIVITY_METRICS = [
+  { label: "Today", value: "6", delta: "+2", trend: "up" as const, hint: "vs yesterday", size: "lg" as const, badge: "Live", badgeTone: "success" as const },
+  { label: "Comments", value: "5", delta: "+1", trend: "up" as const, hint: "this sprint", size: "lg" as const, badge: "Sprint", badgeTone: "info" as const },
+  { label: "Status changes", value: "4", delta: "0", trend: "flat" as const, hint: "this sprint", size: "lg" as const, badge: "Ship", badgeTone: "brand" as const },
+  { label: "Mentions", value: "2", delta: "+2", trend: "up" as const, hint: "need reply", size: "lg" as const, badge: "At risk", badgeTone: "danger" as const },
+];
 
 export interface TaskInsight {
   id: string;
@@ -131,50 +132,47 @@ export const TASK_INSIGHTS: TaskInsight[] = [
   },
 ];
 
-export function TaskDrawer({
-  task,
-  onClose,
-}: {
-  task: TaskInsight | null;
-  onClose: () => void;
-}) {
-  const unassigned = task?.owner === "Unassigned";
-
-  return (
-    <Drawer
-      open={Boolean(task)}
-      title={task?.title ?? "Task"}
-      description={task ? `${task.status} · Due ${task.due}` : undefined}
-      onClose={onClose}
-      footer={
-        task ? (
-          <>
-            {unassigned ? (
-              <Button variant="primary" block onClick={onClose}>
-                Assign owner
-              </Button>
-            ) : null}
-            <Button variant="secondary" block onClick={onClose}>
-              Close
-            </Button>
-          </>
-        ) : null
-      }
-    >
-      {task ? (
-        <div className={styles.stack}>
-          <div className={styles.row}>
-            <Avatar name={task.owner} src={task.ownerSrc} size="md" />
-            <div className={styles.meta}>
-              <p className={styles.label}>Owner</p>
-              <p className={styles.value}>{task.owner}</p>
-            </div>
-            <Badge tone={task.statusTone}>{task.status}</Badge>
-          </div>
-          <p className={styles.summary}>{task.summary}</p>
-          <Progress value={task.progress} size="sm" label="Progress" showValue />
-        </div>
-      ) : null}
-    </Drawer>
-  );
-}
+export const EVENT_ROWS: DataTableRow[] = [
+  {
+    id: "comment-launch",
+    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen" },
+    event: { type: "file", label: "Commented on Launch brief" },
+    type: { type: "badge", label: "Comment", tone: "info" },
+    when: "2h ago",
+  },
+  {
+    id: "blocked-qa",
+    actor: { type: "avatar", label: "Unassigned", name: "Unassigned" },
+    event: { type: "file", label: "QA checklist marked Blocked" },
+    type: { type: "badge", label: "Status", tone: "danger" },
+    when: "4h ago",
+  },
+  {
+    id: "macros-update",
+    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera" },
+    event: { type: "file", label: "Updated Support macros" },
+    type: { type: "badge", label: "Edit", tone: "neutral" },
+    when: "5h ago",
+  },
+  {
+    id: "ready-notes",
+    actor: { type: "avatar", label: "Jordan Lee", name: "Jordan Lee" },
+    event: { type: "file", label: "Moved Release notes to Ready" },
+    type: { type: "badge", label: "Status", tone: "success" },
+    when: "Yesterday",
+  },
+  {
+    id: "mention-launch",
+    actor: { type: "avatar", label: "Maya Chen", name: "Maya Chen" },
+    event: { type: "file", label: "Mentioned you in Launch brief" },
+    type: { type: "badge", label: "Mention", tone: "brand" },
+    when: "Yesterday",
+  },
+  {
+    id: "macros-comment",
+    actor: { type: "avatar", label: "Alex Rivera", name: "Alex Rivera" },
+    event: { type: "file", label: "Replied on Support macros" },
+    type: { type: "badge", label: "Comment", tone: "info" },
+    when: "Mon",
+  },
+];

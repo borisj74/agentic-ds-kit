@@ -1,6 +1,10 @@
 {
   "id": "inbox",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add inbox",
+  "import": "import { InboxPattern } from \"@/components/patterns/inbox\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/inbox/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
   "contains": [
     "pageheader",
@@ -21,6 +25,7 @@
     "avatar"
   ],
   "doNot": [
+    "Do not import InboxPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add inbox)",
     "Do not invent a local inbox row, from stack, or reply dialog",
     "Do not skip Cell type=avatar for the From column",
     "Do not use AlertDialog for a dismissible reply",

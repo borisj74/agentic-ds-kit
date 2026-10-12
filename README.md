@@ -22,7 +22,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 9 patterns).
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 10 patterns).
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -39,6 +39,9 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 
 ### Patterns (10)
+
+Content patterns are copy-in: `npx agentic-ds-kit add <id>` writes the source into your app (not exported from the package). `sign-in` and `app-shell` are imports (`SignInPattern`, `AppShellPattern`).
+
 - `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
 - `list-detail` — AppNav + Table + detail Section
@@ -113,37 +116,37 @@ Expected: agent refuses the one-off, cites the contract `doNot` rules, and uses 
 
 > Add a settings page.
 
-Expected: agent finds the `settings-form` pattern, uses `SettingsFormPattern` or composes PageHeader + Section + Field + kit inputs — no local form layout.
+Expected: agent finds the `settings-form` pattern, copies `SettingsFormPattern` in with `npx agentic-ds-kit add settings-form` or composes PageHeader + Section + Field + kit inputs — no local form layout.
 
 **D — Should use invite-members**
 
 > Add an invite members screen.
 
-Expected: agent finds the `invite-members` pattern, uses `InviteMembersPattern` or composes Empty + AvatarGroup + Modal + FieldSet — no local dialog.
+Expected: agent finds the `invite-members` pattern, copies `InviteMembersPattern` in with `npx agentic-ds-kit add invite-members` or composes Empty + AvatarGroup + Modal + FieldSet — no local dialog.
 
 **E — Should use assistant-workspace**
 
 > Add an insights screen with an assistant on the side.
 
-Expected: agent finds the `assistant-workspace` pattern, uses `AssistantWorkspacePattern` or composes `layout-workspace` + InsightCard + Chat — no local rail or Modal chat.
+Expected: agent finds the `assistant-workspace` pattern, copies `AssistantWorkspacePattern` in with `npx agentic-ds-kit add assistant-workspace` or composes `layout-workspace` + InsightCard + Chat — no local rail or Modal chat.
 
 **F — Should use empty-first-run**
 
 > Add a first-run empty page for a list that has nothing yet.
 
-Expected: agent finds the `empty-first-run` pattern, uses `EmptyFirstRunPattern` or composes PageHeader + Empty + one primary that opens a Modal — no local empty stack.
+Expected: agent finds the `empty-first-run` pattern, copies `EmptyFirstRunPattern` in with `npx agentic-ds-kit add empty-first-run` or composes PageHeader + Empty + one primary that opens a Modal — no local empty stack.
 
 **G — Should use activity**
 
 > Add an activity page with a feed of what the team shipped and commented on.
 
-Expected: agent finds the `activity` pattern, uses `ActivityPattern` or composes PageHeader + Scoreboard + InsightCard/Table tasks + tabbed DataTable — no local feed or calendar.
+Expected: agent finds the `activity` pattern, copies `ActivityPattern` in with `npx agentic-ds-kit add activity` or composes PageHeader + Scoreboard + InsightCard/Table tasks + tabbed DataTable — no local feed or calendar.
 
 **H — Should use inbox**
 
 > Add an inbox for replies, mentions, and requests.
 
-Expected: agent finds the `inbox` pattern, uses `InboxPattern` or composes PageHeader + Scoreboard + Table + detail Section + reply Drawer — no local from stack or reply dialog.
+Expected: agent finds the `inbox` pattern, copies `InboxPattern` in with `npx agentic-ds-kit add inbox` or composes PageHeader + Scoreboard + Table + detail Section + reply Drawer — no local from stack or reply dialog.
 
 ## Stack
 

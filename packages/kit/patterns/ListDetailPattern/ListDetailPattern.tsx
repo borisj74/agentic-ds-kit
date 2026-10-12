@@ -1,68 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AppNav } from "../../AppNav";
-import { Badge } from "../../Badge";
-import type { BadgeTone } from "../../Badge";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { Section } from "../../Section";
-import { Table } from "../../Table";
+import { AppNav } from "../../ui/AppNav";
+import { Badge } from "../../ui/Badge";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { Section } from "../../ui/Section";
+import { Table } from "../../ui/Table";
+import { PROJECTS, type ListDetailItem } from "./list-detail-data";
 import styles from "./ListDetailPattern.module.css";
-
-export interface ListDetailItem {
-  id: string;
-  name: string;
-  owner: string;
-  status: string;
-  statusTone: BadgeTone;
-  updated: string;
-  body: string;
-}
 
 export interface ListDetailPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
   selectedId?: string;
 }
-
-const PROJECTS: ListDetailItem[] = [
-  {
-    id: "launch-brief",
-    name: "Launch brief",
-    owner: "Maya Chen",
-    status: "In review",
-    statusTone: "warning",
-    updated: "2h ago",
-    body: "Two notes on positioning. Close them before the freeze so copy can lock.",
-  },
-  {
-    id: "qa-checklist",
-    name: "QA checklist",
-    owner: "Unassigned",
-    status: "Blocked",
-    statusTone: "danger",
-    updated: "4h ago",
-    body: "No owner for 2 days. Assign someone before Thursday's review.",
-  },
-  {
-    id: "release-notes",
-    name: "Release notes",
-    owner: "Jordan Lee",
-    status: "Ready",
-    statusTone: "success",
-    updated: "Yesterday",
-    body: "Changelog is drafted. Confirm the known-issues list before we tag.",
-  },
-  {
-    id: "support-macros",
-    name: "Support macros",
-    owner: "Alex Rivera",
-    status: "In progress",
-    statusTone: "info",
-    updated: "5h ago",
-    body: "Refund and delay macros are drafted. Escalation paths still need a pass.",
-  },
-];
 
 const COLUMNS = [
   { key: "name", header: "Project", emphasis: true },

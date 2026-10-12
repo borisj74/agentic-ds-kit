@@ -1,12 +1,12 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Button } from "../../Button";
-import { Drawer } from "../../Drawer";
-import { Field } from "../../Field";
-import { FieldSet } from "../../FieldSet";
-import { Input } from "../../Input";
-import { Textarea } from "../../Textarea";
+import { Button } from "../../ui/Button";
+import { Drawer } from "../../ui/Drawer";
+import { Field } from "../../ui/Field";
+import { FieldSet } from "../../ui/FieldSet";
+import { Input } from "../../ui/Input";
+import { Textarea } from "../../ui/Textarea";
 import type { InboxMessage } from "./inbox-data";
 
 export function InboxReplyDrawer({

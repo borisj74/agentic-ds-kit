@@ -1,15 +1,16 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Button } from "../../Button";
-import { Checkbox } from "../../Checkbox";
-import { Field } from "../../Field";
-import { Input } from "../../Input";
-import { PageHeader } from "../../PageHeader";
-import type { PageHeaderProps } from "../../PageHeader";
-import { Section } from "../../Section";
-import { Select } from "../../Select";
-import { Toast } from "../../Toast";
+import { Button } from "../../ui/Button";
+import { Checkbox } from "../../ui/Checkbox";
+import { Field } from "../../ui/Field";
+import { Input } from "../../ui/Input";
+import { PageHeader } from "../../ui/PageHeader";
+import type { PageHeaderProps } from "../../ui/PageHeader";
+import { Section } from "../../ui/Section";
+import { Select } from "../../ui/Select";
+import { Toast } from "../../ui/Toast";
+import { PROFILE, TIMEZONE_OPTIONS } from "./settings-form-data";
 import formStyles from "./SettingsFormPattern.module.css";
 
 export interface SettingsFormPatternProps {
@@ -42,28 +43,24 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
         <Section title="Profile" description="Basic information visible to collaborators" size="sm">
           <div className={formStyles.form}>
             <Field label="Display name" htmlFor={`${uid}-display-name`} hint="Shown on shared projects">
-              <Input id={`${uid}-display-name`} defaultValue="Maya Chen" />
+              <Input id={`${uid}-display-name`} defaultValue={PROFILE.displayName} />
             </Field>
             <Field label="Email" htmlFor={`${uid}-email`}>
-              <Input id={`${uid}-email`} type="email" defaultValue="maya@agentix.dev" />
+              <Input id={`${uid}-email`} type="email" defaultValue={PROFILE.email} />
             </Field>
             <Field label="Timezone" htmlFor={`${uid}-timezone`}>
               <Select
                 id={`${uid}-timezone`}
-                options={[
-                  { value: "utc", label: "UTC" },
-                  { value: "cet", label: "Central European Time" },
-                  { value: "est", label: "Eastern Time" },
-                ]}
-                defaultValue="cet"
+                options={TIMEZONE_OPTIONS}
+                defaultValue={PROFILE.timezone}
               />
             </Field>
           </div>
         </Section>
         <Section title="Notifications" size="sm">
           <div className={formStyles.form}>
-            <Checkbox id={`${uid}-email-updates`} label="Email me weekly summaries" defaultChecked />
-            <Checkbox id={`${uid}-product-news`} label="Product news and tips" />
+            <Checkbox id={`${uid}-email-updates`} label="Email me weekly summaries" defaultChecked={PROFILE.weeklySummaries} />
+            <Checkbox id={`${uid}-product-news`} label="Product news and tips" defaultChecked={PROFILE.productNews} />
           </div>
         </Section>
         <div className={formStyles.actions}>

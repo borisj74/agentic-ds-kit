@@ -1,4 +1,4 @@
-import type { BadgeTone } from "../../Badge";
+import type { BadgeTone } from "../../ui/Badge";
 
 export type InboxKind = "Comment" | "Mention" | "Request" | "Status" | "Alert";
 

@@ -1,9 +1,14 @@
 {
   "id": "dashboard",
   "status": "stable",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add dashboard",
+  "import": "import { DashboardPattern } from \"@/components/patterns/dashboard\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/dashboard/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
   "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
   "contains": ["pageheader", "scoreboard", "linechart", "section", "datatable"],
   "doNot": [
+    "Do not import DashboardPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add dashboard)",
     "Do not restyle kit components inside the pattern",
     "Do not define a local dashboard layout component",
     "Do not invent a local table, filter bar, or chart wrapper",
