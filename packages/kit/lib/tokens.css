@@ -332,9 +332,9 @@
   --border-width-thin: 1px;
   --border-width-medium: 2px;
 
-  --font-sans: var(--font-ibm-plex-sans), "IBM Plex Sans", system-ui, sans-serif;
-  --font-display: var(--font-ibm-plex-sans), "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+  --font-sans: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
+  --font-display: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono, "IBM Plex Mono"), ui-monospace, monospace;
   --type-family-body: var(--font-sans);
   --type-family-heading: var(--font-display);
   --type-family-code: var(--font-mono);

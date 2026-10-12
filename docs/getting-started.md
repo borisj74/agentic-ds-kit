@@ -104,6 +104,26 @@ If every screen already imports a kit component, you can skip this. Importing to
 
 If your own markup uses kit layout classes (`layout-canvas`, `layout-header`, `layout-content`, …) before any kit component is imported, also add `agentic-ds-kit/layout.css` the same way. A kit import already loads it.
 
+**Fonts.** A kit import sets a default body font (`var(--font-sans)`), text colour and page background with zero specificity, so any `body` rule of yours wins. The kit does not ship font files. `--font-sans` is `var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif`, so without Plex loaded you get `system-ui`. To get IBM Plex, load it with `next/font` and expose the CSS variables the tokens read:
+
+```tsx
+// app/layout.tsx
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+
+const plexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-ibm-plex-sans" });
+const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+Or use another font by overriding the token: `:root { --font-sans: "Inter", system-ui, sans-serif; }`.
+
 **5. `AppNav`**
 
 `AppNav` uses `next/link`. Next.js is an **optional** peer. Other kit pieces do not need Next. If you import `AppNav` outside Next, routing will not resolve.
@@ -186,6 +206,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
+- [ ] Optional: load IBM Plex Sans/Mono (`next/font`, variables `--font-ibm-plex-sans` / `--font-ibm-plex-mono`) or override `--font-sans`; the kit ships no font files
 - [ ] Optional: copy `AGENTS.md`, `CLAUDE.md`, and the prototype skill for agents
 - [ ] Optional: `npx agentic-ds-kit add <pattern>` for any pattern you want to edit
 
@@ -193,6 +214,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 
 | What you see | Likely cause |
 | --- | --- |
+| Text is `system-ui`, not IBM Plex | The kit ships no font files. Load Plex with `next/font` (step 4) or override `--font-sans` |
 | Pattern looks like unstyled stacked divs | Layout CSS not loading. Import from `agentic-ds-kit` (or `agentic-ds-kit/layout.css`) and hard-refresh |
 | `Module not found: agentic-ds-kit` | Install was run in the wrong directory (not the Next app root) |
 | `ENEEDAUTH` / not logged in | Only needed to **publish** the kit, not to install it |

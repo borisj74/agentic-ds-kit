@@ -1,5 +1,15 @@
 /* Semantic layout roles. Use these instead of inventing per-page grids. */
 
+/* Page defaults so a fresh app is not browser serif. :where() keeps specificity
+   at zero, so any app rule on body wins. The kit ships no font files: load
+   IBM Plex Sans (e.g. next/font, variable --font-ibm-plex-sans) or override
+   --font-sans; otherwise this falls back to system-ui. */
+:where(body) {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--surface-page);
+}
+
 /* Product chrome: AppHeader full-bleed, then SideNav + page. No gap. */
 .layout-shell {
   display: grid;
