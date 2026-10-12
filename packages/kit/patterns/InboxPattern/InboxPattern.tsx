@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Cell } from "../../ui/Cell";
@@ -66,16 +66,26 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
   const selected = messages.find((item) => item.id === selectedId) ?? null;
   const unread = messages.filter((item) => item.unread).length;
 
-  useEffect(() => {
-    const next = filterMessages(messages, tab);
-    if (selectedId && next.some((item) => item.id === selectedId)) return;
-    setSelectedId(next[0]?.id ?? null);
+  // Keep the selection inside the visible tab: when it drops out (tab switch,
+  // archive, or a reply clearing "unread"), select the first visible row and
+  // close the drawer.
+  function settleSelection(nextMessages: InboxMessage[], nextTab: string) {
+    const visible = filterMessages(nextMessages, nextTab);
+    if (selectedId && visible.some((item) => item.id === selectedId)) return;
+    setSelectedId(visible[0]?.id ?? null);
     setDrawerOpen(false);
-  }, [selectedId, tab, messages]);
+  }
+
+  function changeTab(next: string) {
+    setTab(next);
+    settleSelection(messages, next);
+  }
 
   function archive(id: string) {
-    setMessages((current) => current.filter((item) => item.id !== id));
+    const next = messages.filter((item) => item.id !== id);
+    setMessages(next);
     setDrawerOpen(false);
+    settleSelection(next, tab);
   }
 
   function openMessage(id: string) {
@@ -85,10 +95,12 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
 
   function sendReply() {
     if (!selected) return;
-    setMessages((current) =>
-      current.map((item) => (item.id === selected.id ? { ...item, unread: false } : item)),
+    const next = messages.map((item) =>
+      item.id === selected.id ? { ...item, unread: false } : item,
     );
+    setMessages(next);
     setToastOpen(true);
+    settleSelection(next, tab);
   }
 
   return (
@@ -118,7 +130,7 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
             variant="line"
             size="md"
             value={tab}
-            onChange={setTab}
+            onChange={changeTab}
             items={[
               { id: "all", label: "All", content: <InboxTable messages={filterMessages(messages, "all")} onOpen={openMessage} /> },
               { id: "unread", label: "Unread", content: <InboxTable messages={filterMessages(messages, "unread")} onOpen={openMessage} /> },
