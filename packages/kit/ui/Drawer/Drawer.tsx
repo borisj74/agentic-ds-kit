@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
@@ -17,6 +17,13 @@ const SIZE_CLASS = {
   md: styles.sizeMd,
   lg: styles.sizeLg,
 } as const;
+
+const subscribeNoop = () => () => {};
+
+/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
+function useIsClient() {
+  return useSyncExternalStore(subscribeNoop, () => true, () => false);
+}
 
 export function Drawer({
   open,
@@ -38,13 +45,11 @@ export function Drawer({
   const setPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
 
-  onCloseRef.current = onClose;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return;

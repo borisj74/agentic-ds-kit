@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type FocusEvent as ReactFocusEvent,
 } from "react";
@@ -112,6 +113,39 @@ function placePanel(
   return { top, left, placement, arrow };
 }
 
+function measure(
+  preferred: HelpPopoverPlacement,
+  trigger: HTMLElement,
+  panel: HTMLElement,
+): { placement: HelpPopoverPlacement; style: CSSProperties } {
+  const gap = tokenPx("--space-2", 8);
+  const margin = tokenPx("--space-2", 8);
+  const next = placePanel(
+    preferred,
+    trigger.getBoundingClientRect(),
+    { width: panel.offsetWidth, height: panel.offsetHeight },
+    gap,
+    margin,
+    window.innerWidth,
+    window.innerHeight,
+  );
+  return {
+    placement: next.placement,
+    style: {
+      top: next.top,
+      left: next.left,
+      ["--help-arrow" as string]: `${next.arrow}px`,
+    },
+  };
+}
+
+const subscribeNoop = () => () => {};
+
+/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
+function useIsClient() {
+  return useSyncExternalStore(subscribeNoop, () => true, () => false);
+}
+
 export function HelpPopover({
   title,
   content,
@@ -134,11 +168,24 @@ export function HelpPopover({
   const isControlled = controlledOpen !== undefined;
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const [coords, setCoords] = useState<CSSProperties | null>(null);
   const [resolvedPlacement, setResolvedPlacement] = useState(placement);
   const open = !disabled && (isControlled ? controlledOpen : uncontrolledOpen);
-  pinnedRef.current = pinned;
+
+  // Closed: forget the last position and go back to the preferred side.
+  const [resetFor, setResetFor] = useState({ open, placement });
+  if (resetFor.open !== open || resetFor.placement !== placement) {
+    setResetFor({ open, placement });
+    if (!open) {
+      setCoords(null);
+      setResolvedPlacement(placement);
+    }
+  }
+
+  useLayoutEffect(() => {
+    pinnedRef.current = pinned;
+  });
 
   function clearTimers() {
     if (showTimerRef.current != null) {
@@ -188,28 +235,10 @@ export function HelpPopover({
     const trigger = wrapperRef.current;
     const panel = panelRef.current;
     if (!trigger || !panel) return;
-    const gap = tokenPx("--space-2", 8);
-    const margin = tokenPx("--space-2", 8);
-    const next = placePanel(
-      placement,
-      trigger.getBoundingClientRect(),
-      { width: panel.offsetWidth, height: panel.offsetHeight },
-      gap,
-      margin,
-      window.innerWidth,
-      window.innerHeight,
-    );
+    const next = measure(placement, trigger, panel);
     setResolvedPlacement(next.placement);
-    setCoords({
-      top: next.top,
-      left: next.left,
-      ["--help-arrow" as string]: `${next.arrow}px`,
-    });
+    setCoords(next.style);
   }
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => () => clearTimers(), []);
 
@@ -226,13 +255,15 @@ export function HelpPopover({
     };
   }, [disabled, descriptionId, children]);
 
+  // Same as updatePosition, but reads the refs inline so the hooks linter sees a layout measurement.
   useLayoutEffect(() => {
-    if (!open) {
-      setCoords(null);
-      setResolvedPlacement(placement);
-      return;
-    }
-    updatePosition();
+    if (!open) return;
+    const trigger = wrapperRef.current;
+    const panel = panelRef.current;
+    if (!trigger || !panel) return;
+    const next = measure(placement, trigger, panel);
+    setResolvedPlacement(next.placement);
+    setCoords(next.style);
   }, [open, placement, title, content]);
 
   useEffect(() => {
