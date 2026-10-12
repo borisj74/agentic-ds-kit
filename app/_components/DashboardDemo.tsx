@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AppHeader } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
@@ -8,6 +8,7 @@ import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
 import type { SideNavItemData } from "agentic-ds-kit";
+import { useLocationHash } from "@/lib/use-location-hash";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { ActivityPattern } from "../../packages/kit/patterns/ActivityPattern";
@@ -161,20 +162,6 @@ function selectedProjectId(page: string) {
   return page;
 }
 
-function subscribeHash(onChange: () => void) {
-  window.addEventListener("hashchange", onChange);
-  return () => window.removeEventListener("hashchange", onChange);
-}
-
-function readHash() {
-  return window.location.hash.replace(/^#/, "");
-}
-
-/** The server has no hash; the first client render must match it. */
-function readServerHash() {
-  return null;
-}
-
 /** Page a pattern hash links to, or null for the dashboard (whose page lives in state). */
 function pageForHash(hash: string): string | null {
   if (hash === "settings") return "settings";
@@ -190,7 +177,7 @@ function pageForHash(hash: string): string | null {
 
 export function DashboardDemo() {
   // null until hydrated, so the server and the first client render agree on "overview".
-  const hash = useSyncExternalStore<string | null>(subscribeHash, readHash, readServerHash);
+  const hash = useLocationHash();
   const [dashboardPage, setDashboardPage] = useState("overview");
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
