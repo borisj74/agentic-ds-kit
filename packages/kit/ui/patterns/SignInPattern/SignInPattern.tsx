@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
+import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { Alert } from "../../Alert";
 import { Button, type KitIcon } from "../../Button";
 import { Card } from "../../Card";
@@ -110,9 +110,12 @@ export function SignInPattern({
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
 
-  useEffect(() => {
+  const [errorsMode, setErrorsMode] = useState(mode);
+
+  if (errorsMode !== mode) {
+    setErrorsMode(mode);
     setErrors({});
-  }, [mode]);
+  }
 
   function clear(key: keyof FieldErrors) {
     if (errors[key]) setErrors((current) => ({ ...current, [key]: undefined }));

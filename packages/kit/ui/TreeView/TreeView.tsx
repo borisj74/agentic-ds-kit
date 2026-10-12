@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useEffect,
   useId,
   useMemo,
   useRef,
@@ -288,9 +287,12 @@ export function TreeView({
   const [innerItems, setInnerItems] = useState(itemsProp);
   const items = onItemsChange ? itemsProp : innerItems;
 
-  useEffect(() => {
+  const [prevSource, setPrevSource] = useState({ itemsProp, onItemsChange });
+
+  if (prevSource.itemsProp !== itemsProp || prevSource.onItemsChange !== onItemsChange) {
+    setPrevSource({ itemsProp, onItemsChange });
     if (!onItemsChange) setInnerItems(itemsProp);
-  }, [itemsProp, onItemsChange]);
+  }
   const expandedControlled = expandedProp !== undefined;
   const selectedControlled = selectedProp !== undefined;
   const [expandedUncontrolled, setExpandedUncontrolled] = useState<string[]>(defaultExpanded ?? []);

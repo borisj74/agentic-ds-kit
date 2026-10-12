@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "lucide-react";
 import type { AvatarProps } from "./Avatar.types";
 import { cx } from "../shared/cx";
@@ -39,10 +39,12 @@ function resolveInitials(name: string, initials?: string): string {
 
 export function Avatar({ name, src, initials, size = "md", className, ref, ...rest }: AvatarProps) {
   const [failed, setFailed] = useState(false);
+  const [prevSrc, setPrevSrc] = useState(src);
 
-  useEffect(() => {
+  if (prevSrc !== src) {
+    setPrevSrc(src);
     setFailed(false);
-  }, [src]);
+  }
 
   const label = resolveInitials(name, initials);
   const showImage = Boolean(src) && !failed;

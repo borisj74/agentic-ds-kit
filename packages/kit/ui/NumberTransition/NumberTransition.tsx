@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import type { NumberTransitionProps } from "./NumberTransition.types";
 import { cx } from "../shared/cx";
 import styles from "./NumberTransition.module.css";
@@ -30,23 +30,20 @@ export function NumberTransition({
     id: 0,
   }));
 
-  useLayoutEffect(() => {
-    setFrame((current) => {
-      if (current.current === formattedValue) return current;
-      return {
-        previous: current.current,
-        current: formattedValue,
-        currentValue: numericValue,
-        direction:
-          Number.isFinite(numericValue) &&
-          Number.isFinite(current.currentValue) &&
-          numericValue < current.currentValue
-            ? "down"
-            : "up",
-        id: current.id + 1,
-      };
+  if (frame.current !== formattedValue) {
+    setFrame({
+      previous: frame.current,
+      current: formattedValue,
+      currentValue: numericValue,
+      direction:
+        Number.isFinite(numericValue) &&
+        Number.isFinite(frame.currentValue) &&
+        numericValue < frame.currentValue
+          ? "down"
+          : "up",
+      id: frame.id + 1,
     });
-  }, [formattedValue, numericValue]);
+  }
 
   const length = Math.max(frame.previous.length, frame.current.length);
   const previousCharacters = frame.previous.padStart(length, " ").split("");

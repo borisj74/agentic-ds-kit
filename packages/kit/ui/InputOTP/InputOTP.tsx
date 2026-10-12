@@ -74,7 +74,9 @@ export function InputOTP({
     el.setSelectionRange(pos, pos);
   }
 
-  let offset = 0;
+  const groupStarts = slotGroups.map((_, groupIndex) =>
+    slotGroups.slice(0, groupIndex).reduce((sum, count) => sum + count, 0),
+  );
 
   return (
     <div
@@ -105,8 +107,7 @@ export function InputOTP({
         }}
       />
       {slotGroups.map((count, groupIndex) => {
-        const start = offset;
-        offset += count;
+        const start = groupStarts[groupIndex];
         return (
           <Fragment key={`group-${groupIndex}-${start}`}>
             {groupIndex > 0 ? (

@@ -166,8 +166,11 @@ export function ColorPicker({
   const [invalid, setInvalid] = useState(false);
   const lastHex = useRef(hex);
   const hueRef = useRef(color.h);
-  hueRef.current = color.h;
   const swatchRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    hueRef.current = color.h;
+  });
 
   // Follow a controlled value the parent changes from outside.
   useEffect(() => {

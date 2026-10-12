@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { AppNavGroup, AppNavItem, AppNavLeaf, AppNavProps } from "./AppNav.types";
@@ -113,10 +113,12 @@ export function AppNav({
     ? groups!.find((group) => group.defaultOpen !== false)?.label ?? groups![0].label
     : null;
   const [openLabel, setOpenLabel] = useState<string | null>(activeLabel ?? fallbackLabel);
+  const [prevActiveLabel, setPrevActiveLabel] = useState(activeLabel);
 
-  useEffect(() => {
+  if (prevActiveLabel !== activeLabel) {
+    setPrevActiveLabel(activeLabel);
     if (activeLabel) setOpenLabel(activeLabel);
-  }, [activeLabel]);
+  }
 
   return (
     <nav {...rest} ref={ref} className={cx(styles.nav, className)} aria-label={ariaLabel}>
