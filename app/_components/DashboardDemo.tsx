@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { AppHeader } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
@@ -161,84 +161,50 @@ function selectedProjectId(page: string) {
   return page;
 }
 
+function subscribeHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
+function readHash() {
+  return window.location.hash.replace(/^#/, "");
+}
+
+/** The server has no hash; the first client render must match it. */
+function readServerHash() {
+  return null;
+}
+
+/** Page a pattern hash links to, or null for the dashboard (whose page lives in state). */
+function pageForHash(hash: string): string | null {
+  if (hash === "settings") return "settings";
+  if (hash === "invite") return "invite";
+  if (hash === "insights") return "insights";
+  if (hash === "activity") return "activity";
+  if (hash === "inbox") return "inbox";
+  if (hash === "empty" || hash === "research") return "research";
+  if (hash === "list-detail" || hash === "projects") return "projects";
+  if (LIST_DETAIL_HASHES.has(hash)) return hash;
+  return null;
+}
+
 export function DashboardDemo() {
-  const [page, setPage] = useState(() => {
-    if (typeof window === "undefined") return "overview";
-    const hash = window.location.hash.replace(/^#/, "");
-    if (hash === "settings") return "settings";
-    if (hash === "invite") return "invite";
-    if (hash === "insights") return "insights";
-    if (hash === "activity") return "activity";
-    if (hash === "inbox") return "inbox";
-    if (hash === "empty" || hash === "research") return "research";
-    if (hash === "list-detail" || hash === "projects") return "projects";
-    if (LIST_DETAIL_HASHES.has(hash)) return hash;
-    return "overview";
-  });
+  // null until hydrated, so the server and the first client render agree on "overview".
+  const hash = useSyncExternalStore<string | null>(subscribeHash, readHash, readServerHash);
+  const [dashboardPage, setDashboardPage] = useState("overview");
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const hashPage = hash === null ? null : pageForHash(hash);
+  const page =
+    hashPage ?? (hashForPage(dashboardPage) === "dashboard" ? dashboardPage : "overview");
+
   const go = useCallback((id: string) => {
-    setPage(id);
     const next = hashForPage(id);
-    if (typeof window === "undefined") return;
+    if (next === "dashboard") setDashboardPage(id);
     if (window.location.hash.replace(/^#/, "") !== next) {
       window.location.hash = next;
     }
-  }, []);
-
-  useEffect(() => {
-    const apply = () => {
-      const hash = window.location.hash.replace(/^#/, "");
-      if (hash === "settings") {
-        setPage("settings");
-        return;
-      }
-      if (hash === "invite") {
-        setPage("invite");
-        return;
-      }
-      if (hash === "insights") {
-        setPage("insights");
-        return;
-      }
-      if (hash === "activity") {
-        setPage("activity");
-        return;
-      }
-      if (hash === "inbox") {
-        setPage("inbox");
-        return;
-      }
-      if (hash === "empty" || hash === "research") {
-        setPage("research");
-        return;
-      }
-      if (hash === "list-detail" || hash === "projects") {
-        setPage("projects");
-        return;
-      }
-      if (LIST_DETAIL_HASHES.has(hash)) {
-        setPage(hash);
-        return;
-      }
-      if (hash === "dashboard" || hash === "") {
-        setPage((current) =>
-          current === "settings" ||
-          current === "invite" ||
-          current === "insights" ||
-          current === "activity" ||
-          current === "inbox" ||
-          current === "research" ||
-          isListDetailPage(current)
-            ? "overview"
-            : current,
-        );
-      }
-    };
-    apply();
-    window.addEventListener("hashchange", apply);
-    return () => window.removeEventListener("hashchange", apply);
   }, []);
 
   const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
@@ -278,7 +244,7 @@ export function DashboardDemo() {
         </div>
         <div className={styles.urlBar}>{path}</div>
       </div>
-      <div className="layout-shell">
+      <div className={hash === null ? `layout-shell ${styles.pending}` : "layout-shell"}>
         <AppHeader
           title="Agentix"
           mark="A"

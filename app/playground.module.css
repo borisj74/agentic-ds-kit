@@ -98,6 +98,11 @@
   min-height: 0;
 }
 
+/* Until the hash is read after hydration, keep the shell's space but don't show the overview. */
+.pending {
+  visibility: hidden;
+}
+
 .browser :global(.layout-header) {
   min-width: 0;
 }
