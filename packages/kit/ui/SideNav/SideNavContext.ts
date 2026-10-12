@@ -9,9 +9,11 @@ export interface SideNavContextValue {
   /** Rail is closed: icons only, labels clipped. Same as `!open`. */
   rail: boolean;
   /**
-   * `{ focus: true }` (used by `SideNav.Brand` and `SideNav.Toggle`) moves focus into the
-   * reopened rail: the Toggle if present, else the first nav row. Pass it from your own
-   * reopen control; leave it off for programmatic changes.
+   * `{ focus: true }` (used by `SideNav.Brand` and `SideNav.Toggle`) keeps keyboard focus in
+   * the rail. Open: focus moves to the Toggle if present, else the first nav row. Close: if the
+   * focused control is hidden on the closed rail, focus moves to the `SideNav.Brand` mark, else
+   * the visible Toggle. Pass it from your own open/close control in the same event; leave it
+   * off for programmatic changes. A request a controlled parent ignores is dropped.
    */
   setOpen: (next: boolean, options?: { focus?: boolean }) => void;
   toggle: (options?: { focus?: boolean }) => void;
