@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
@@ -33,13 +32,7 @@ export type {
   DropdownMenuTriggerStyle,
   DropdownMenuTriggerTag,
 } from "./DropdownMenu.types";
-
-const subscribeNoop = () => () => {};
-
-/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
-function useIsClient() {
-  return useSyncExternalStore(subscribeNoop, () => true, () => false);
-}
+import { useIsClient } from "../shared/useIsClient";
 
 // Tag remove buttons come first in a tags field, so prefer the marked trigger.
 function findTrigger(root: HTMLElement | null): HTMLButtonElement | null {

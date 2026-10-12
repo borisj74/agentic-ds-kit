@@ -1,12 +1,13 @@
 "use client";
 
 import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
-import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type FocusEvent } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type FocusEvent } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import type { ToastProps, ToastStatus } from "./Toast.types";
 import { cx } from "../shared/cx";
 import styles from "./Toast.module.css";
+import { useIsClient } from "../shared/useIsClient";
 
 export type { ToastProps, ToastStatus } from "./Toast.types";
 
@@ -30,13 +31,6 @@ function getStack(): HTMLElement {
   el.setAttribute("role", "status");
   el.setAttribute("aria-live", "polite");
   return el;
-}
-
-const subscribeNoop = () => () => {};
-
-/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
-function useIsClient() {
-  return useSyncExternalStore(subscribeNoop, () => true, () => false);
 }
 
 export function Toast({ open, ...cardProps }: ToastProps) {

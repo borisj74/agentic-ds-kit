@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
   type FocusEvent as ReactFocusEvent,
 } from "react";
@@ -16,6 +15,7 @@ import type { HelpPopoverPlacement, HelpPopoverProps } from "./HelpPopover.types
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./HelpPopover.module.css";
+import { useIsClient } from "../shared/useIsClient";
 
 export type { HelpPopoverProps, HelpPopoverPlacement } from "./HelpPopover.types";
 
@@ -137,13 +137,6 @@ function measure(
       ["--help-arrow" as string]: `${next.arrow}px`,
     },
   };
-}
-
-const subscribeNoop = () => () => {};
-
-/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
-function useIsClient() {
-  return useSyncExternalStore(subscribeNoop, () => true, () => false);
 }
 
 export function HelpPopover({

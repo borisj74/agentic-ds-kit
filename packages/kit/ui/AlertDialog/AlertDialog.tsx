@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import { ButtonGroup } from "../ButtonGroup";
@@ -8,15 +8,9 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
+import { useIsClient } from "../shared/useIsClient";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
-
-const subscribeNoop = () => () => {};
-
-/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
-function useIsClient() {
-  return useSyncExternalStore(subscribeNoop, () => true, () => false);
-}
 
 export function AlertDialog({
   open,
