@@ -1,22 +1,16 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { ModalCard } from "../ModalCard";
 import type { ModalProps } from "./Modal.types";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Modal.module.css";
+import { useIsClient } from "../shared/useIsClient";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
 
 const FOCUSABLE = "a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])";
-
-const subscribeNoop = () => () => {};
-
-/** False during SSR and hydration, true once the client has taken over — portals need `document`. */
-function useIsClient() {
-  return useSyncExternalStore(subscribeNoop, () => true, () => false);
-}
 
 export function Modal({
   open,
