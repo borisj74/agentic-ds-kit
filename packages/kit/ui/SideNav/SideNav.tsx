@@ -1,7 +1,6 @@
 "use client";
 
 import { isValidElement, type ReactNode } from "react";
-import { Button } from "../Button";
 import type { SideNavItemData, SideNavProps, SideNavRenderItem } from "./SideNav.types";
 import {
   SideNavBrand,
@@ -55,22 +54,6 @@ function DataList({ items, renderItem }: { items: SideNavItemData[]; renderItem?
         <DataItem key={item.id} item={item} renderItem={renderItem} />
       ))}
     </SideNavList>
-  );
-}
-
-/** Close beside a custom `header` slot: hidden and inert on the closed rail (nothing reopens it there). */
-function PresetClose() {
-  const { open, side, setOpen } = useSideNav();
-  return (
-    <span className={styles.close} {...(!open ? { inert: true } : {})}>
-      <Button
-        variant="tertiary"
-        size="sm"
-        iconStart={side === "right" ? "PanelRightClose" : "PanelLeftClose"}
-        ariaLabel="Close"
-        onClick={() => setOpen(false)}
-      />
-    </span>
   );
 }
 
@@ -141,7 +124,7 @@ function SideNavPreset({
           {header !== undefined ? (
             <>
               <PresetHeaderSlot>{header}</PresetHeaderSlot>
-              <PresetClose />
+              <SideNavToggle />
             </>
           ) : (
             <>
