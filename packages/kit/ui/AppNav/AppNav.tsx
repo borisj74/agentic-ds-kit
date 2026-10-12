@@ -17,6 +17,24 @@ function groupHasActive(group: AppNavGroup): boolean {
   return group.items.some((item) => item.active || item.items?.some((child) => child.active));
 }
 
+/**
+ * Same-page hash navigation through the History API. Assigning `location.hash` adds an
+ * entry with no router state, which Next's App Router ignores on Back; its patched
+ * pushState records one. Listeners still get `hashchange`, and the target scrolls in.
+ */
+function pushHash(fragment: string) {
+  if (window.location.hash !== `#${fragment}`) window.history.pushState(null, "", `#${fragment}`);
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+  let target: HTMLElement | null = null;
+  try {
+    target = document.getElementById(decodeURIComponent(fragment));
+  } catch {
+    target = document.getElementById(fragment);
+  }
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target?.scrollIntoView({ behavior: reduce ? "instant" : "auto" });
+}
+
 function NavLink({ href, label, active, nested }: AppNavLeaf & { nested?: boolean }) {
   return (
     <Link
@@ -24,13 +42,14 @@ function NavLink({ href, label, active, nested }: AppNavLeaf & { nested?: boolea
       className={`${styles.link} ${nested ? styles.linkNested : ""} ${active ? styles.active : ""}`}
       aria-current={active ? "page" : undefined}
       onClick={(event) => {
+        if (event.defaultPrevented || event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         const [path, fragment] = href.split("#");
         if (!fragment) return;
         const here = window.location.pathname;
         if (path && path !== here) return;
         event.preventDefault();
-        window.location.hash = fragment;
-        window.dispatchEvent(new HashChangeEvent("hashchange"));
+        pushHash(fragment);
       }}
     >
       {label}

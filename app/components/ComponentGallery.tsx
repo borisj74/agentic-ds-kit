@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } fr
 import Link from "next/link";
 import { Card, Empty, Field, Input, Tabs } from "agentic-ds-kit";
 import { filterGalleryItems, type GalleryFilter, type GalleryItem } from "@/lib/component-gallery";
+import { pushHash } from "@/lib/use-location-hash";
 import { GalleryPreview } from "./GalleryPreview";
 import playground from "../playground.module.css";
 import styles from "./ComponentGallery.module.css";
@@ -49,11 +50,7 @@ function openComponent(event: MouseEvent<HTMLAnchorElement>, href: string) {
   const hash = href.split("#")[1];
   if (!hash) return;
   event.preventDefault();
-  if (window.location.hash === `#${hash}`) {
-    window.dispatchEvent(new HashChangeEvent("hashchange"));
-    return;
-  }
-  window.location.hash = hash;
+  pushHash(hash);
 }
 
 function GalleryGrid({ items }: { items: GalleryItem[] }) {

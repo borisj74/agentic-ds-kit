@@ -8,7 +8,7 @@ import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
 import type { SideNavItemData } from "agentic-ds-kit";
-import { useLocationHash } from "@/lib/use-location-hash";
+import { pushHash, useLocationHash } from "@/lib/use-location-hash";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { ActivityPattern } from "../../packages/kit/patterns/ActivityPattern";
@@ -189,9 +189,7 @@ export function DashboardDemo() {
   const go = useCallback((id: string) => {
     const next = hashForPage(id);
     if (next === "dashboard") setDashboardPage(id);
-    if (window.location.hash.replace(/^#/, "") !== next) {
-      window.location.hash = next;
-    }
+    if (window.location.hash.replace(/^#/, "") !== next) pushHash(next);
   }, []);
 
   const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
