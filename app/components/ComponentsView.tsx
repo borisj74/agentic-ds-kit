@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLocationHash } from "@/lib/use-location-hash";
 import { AccordionDoc } from "./AccordionDoc";
 import { AlertDialogDoc } from "./AlertDialogDoc";
 import { AlertDoc } from "./AlertDoc";
@@ -77,11 +77,7 @@ import { TooltipDoc } from "./TooltipDoc";
 import { TreeViewDoc } from "./TreeViewDoc";
 import { UsageListDoc } from "./UsageListDoc";
 import { ComponentGallery } from "./ComponentGallery";
-
-function currentHash(): string {
-  if (typeof window === "undefined") return "gallery";
-  return window.location.hash.replace(/^#/, "").toLowerCase() || "gallery";
-}
+import playground from "../playground.module.css";
 
 const TITLES: Record<string, string> = {
   button: "Buttons",
@@ -238,19 +234,16 @@ function resolveHash(hash: string): string {
 }
 
 export function ComponentsView() {
-  const [hash, setHash] = useState("gallery");
+  const locationHash = useLocationHash();
+  // Until the hash is read the view would show the gallery: hide it, don't swap.
+  return (
+    <div className={locationHash === null ? playground.pending : undefined}>
+      <ComponentView hash={locationHash?.toLowerCase() || "gallery"} />
+    </div>
+  );
+}
 
-  useEffect(() => {
-    const sync = () => setHash(currentHash());
-    sync();
-    window.addEventListener("hashchange", sync);
-    window.addEventListener("popstate", sync);
-    return () => {
-      window.removeEventListener("hashchange", sync);
-      window.removeEventListener("popstate", sync);
-    };
-  }, []);
-
+function ComponentView({ hash }: { hash: string }) {
   const id = resolveHash(hash);
   if (id === "gallery") return <ComponentGallery />;
   const resolved = id in TITLES ? id : "gallery";

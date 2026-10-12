@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLocationHash } from "@/lib/use-location-hash";
 import { AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { SignInDemo } from "../_components/SignInDemo";
@@ -35,10 +35,6 @@ const IMPORT_LINE: Record<string, string> = {
   "app-shell": `import { AppShellPattern } from "agentic-ds-kit";`,
 };
 
-function readHash() {
-  return window.location.hash.replace(/^#/, "");
-}
-
 function usageFor(hash: string) {
   if (IMPORT_LINE[hash]) return { note: "Import it from the package.", code: IMPORT_LINE[hash] };
   const id = ADD_ID[hash] ?? "dashboard";
@@ -49,16 +45,12 @@ function usageFor(hash: string) {
 }
 
 export default function PatternsPage() {
-  const [hash, setHash] = useState("");
+  const locationHash = useLocationHash();
+  const hash = locationHash ?? "";
   const standalone = STANDALONE.has(hash) ? hash : null;
   const usage = usageFor(hash);
-
-  useEffect(() => {
-    const apply = () => setHash(readHash());
-    apply();
-    window.addEventListener("hashchange", apply);
-    return () => window.removeEventListener("hashchange", apply);
-  }, []);
+  // Until the hash is read, the usage line and demo would show the dashboard: hide, don't swap.
+  const pending = locationHash === null ? playground.pending : undefined;
 
   return (
     <div className={playground.page}>
@@ -69,12 +61,12 @@ export default function PatternsPage() {
           inventing layouts.
         </p>
 
-        <div className={styles.usage}>
+        <div className={pending ? `${styles.usage} ${pending}` : styles.usage}>
           <p className={playground.body}>{usage.note}</p>
           <CodeBlock code={usage.code} />
         </div>
 
-        <div className={styles.anchor}>
+        <div className={pending ? `${styles.anchor} ${pending}` : styles.anchor}>
           <div id="dashboard" />
           <div id="activity" />
           <div id="inbox" />

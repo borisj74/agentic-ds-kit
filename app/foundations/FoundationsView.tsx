@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type ReactElement } from "react";
+import type { ReactElement } from "react";
+import { useLocationHash } from "@/lib/use-location-hash";
 import { ColorFoundations } from "./ColorFoundations";
 import { TypographyFoundations } from "./TypographyFoundations";
 import { SpacingFoundations } from "./SpacingFoundations";
@@ -11,12 +12,8 @@ import { BorderFoundations } from "./BorderFoundations";
 import { ShadowFoundations } from "./ShadowFoundations";
 import { MotionFoundations } from "./MotionFoundations";
 import { OpacityFoundations } from "./OpacityFoundations";
+import playground from "../playground.module.css";
 import styles from "./foundations.module.css";
-
-function currentHash(): string {
-  if (typeof window === "undefined") return "color";
-  return window.location.hash.replace(/^#/, "").toLowerCase() || "color";
-}
 
 const TITLES: Record<string, string> = {
   color: "Color",
@@ -45,24 +42,16 @@ const VIEWS: Record<string, () => ReactElement> = {
 };
 
 export function FoundationsView() {
-  const [hash, setHash] = useState("color");
-
-  useEffect(() => {
-    const sync = () => setHash(currentHash());
-    sync();
-    window.addEventListener("hashchange", sync);
-    window.addEventListener("popstate", sync);
-    return () => {
-      window.removeEventListener("hashchange", sync);
-      window.removeEventListener("popstate", sync);
-    };
-  }, []);
+  const locationHash = useLocationHash();
+  const hash = locationHash?.toLowerCase() || "color";
+  // Until the hash is read the section would show Color: hide it, don't swap.
+  const pending = locationHash === null ? ` ${playground.pending}` : "";
 
   const title = TITLES[hash] ?? "Color";
   const View = VIEWS[hash] ?? ColorFoundations;
 
   return (
-    <section id={hash in TITLES ? hash : "color"} className={`${styles.section} ${styles.anchor}`}>
+    <section id={hash in TITLES ? hash : "color"} className={`${styles.section} ${styles.anchor}${pending}`}>
       <h2 className={styles.heading}>{title}</h2>
       <View />
     </section>

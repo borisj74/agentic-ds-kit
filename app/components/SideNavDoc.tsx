@@ -389,7 +389,7 @@ export function SideNavDoc() {
                   radius-surface-md. Item hover, active, and focus fills use
                   radius-control-md. When
                   AppHeader already provides brand, pass <code>showHeader={"{false}"}</code> and{" "}
-                  <code>radius="none"</code> so the column sits flush. Use AppNav for a docs
+                  <code>radius=&quot;none&quot;</code> so the column sits flush. Use AppNav for a docs
                   catalog. Use Drawer for a temporary overlay panel.
                 </p>
               </div>
@@ -430,7 +430,7 @@ export function SideNavDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  side="right". The consumer shell uses row-reverse. SideNav is a column and
+                  side=&quot;right&quot;. The consumer shell uses row-reverse. SideNav is a column and
                   does not wrap the page.
                 </p>
               </div>
@@ -449,7 +449,7 @@ export function SideNavDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  radius="none" for a square column in an app shell. Pair with showHeader false
+                  radius=&quot;none&quot; for a square column in an app shell. Pair with showHeader false
                   when AppHeader already shows brand.
                 </p>
               </div>
