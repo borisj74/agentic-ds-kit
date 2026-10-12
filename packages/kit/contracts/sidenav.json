@@ -122,13 +122,13 @@
         "export": "SideNavBrand",
         "element": "button.mark + p.title (direct children of SideNav.Header, no wrapper)",
         "props": "title (node), mark (letter or node; defaults to the first character of a string title), openLabel (default Open)",
-        "note": "The preset's brand. On the closed rail the title fades and the mark stays at the start edge, centred on the icon axis; clicking it reopens the rail (aria-label openLabel). While open the mark is disabled and aria-hidden. A SideNav.Toggle in the same header hides on the closed rail instead of moving, so the mark is the one reopen control. ref/className/rest go to the mark button. Reopening via the mark moves focus to the header's Toggle (else the first nav row)."
+        "note": "The preset's brand. On the closed rail the title fades and the mark stays at the start edge, centred on the icon axis; clicking it reopens the rail (aria-label openLabel). While open the mark is disabled and aria-hidden. A SideNav.Toggle in the same header hides on the closed rail instead of moving, so the mark is the one reopen control. ref/className/rest go to the mark button. Reopening via the mark moves focus to the header's Toggle (else the first nav row); closing with that Toggle moves focus to the mark."
       },
       "SideNav.Toggle": {
         "export": "SideNavToggle",
         "element": "kit Button (tertiary, sm)",
         "props": "closeLabel (default Close), openLabel (default Open)",
-        "note": "Closes the open rail; on the closed rail it moves to the start edge and reopens it. Beside a SideNav.Brand it hides on the closed rail instead (the mark reopens). ref/rest to the button. onClick runs first; preventDefault skips the toggle. Reopening keeps focus on it (now Close)."
+        "note": "Closes the open rail; on the closed rail it moves to the start edge and reopens it. Beside a SideNav.Brand it hides on the closed rail instead (the mark reopens). ref/rest to the button. onClick runs first; preventDefault skips the toggle. Reopening keeps focus on it (now Close); beside a SideNav.Brand, closing moves focus to the mark (Open)."
       },
       "SideNav.Slot": {
         "export": "SideNavSlot",
@@ -256,7 +256,9 @@
       "Slot content is inert on the closed rail so clipped controls are not focusable",
       "Closed rail: every Item names itself in a kit Tooltip (placed outside the rail edge)",
       "SideNav.Toggle stays visible and focusable on the closed rail and reopens it, unless a SideNav.Brand sits in the same header: then the Toggle is hidden there and the mark reopens",
-      "A user reopen (mark or Toggle, pointer or keyboard) moves focus to the visible Toggle (Close), else the first focusable nav row; programmatic open changes do not move focus. Custom reopen controls get the same with useSideNav().setOpen(true, { focus: true })",
+      "A user reopen (mark or Toggle, pointer or keyboard) moves focus to the visible Toggle (Close), else the first focusable nav row",
+      "A user close (Toggle, pointer or keyboard) keeps focus on a control that stays visible (the Toggle at the start edge); if the focused control hides on the closed rail (the Toggle beside a SideNav.Brand), focus moves to the mark (Open), else the closed-rail Toggle",
+      "Programmatic open changes (controlled open, setOpen without { focus: true }) never move focus; a user request a controlled parent ignores is dropped, so a later programmatic open does not move focus. Custom controls get the same with useSideNav().setOpen(next, { focus: true })",
       "Preset with a custom header slot keeps a Toggle, so a closed rail can always be reopened"
     ]
   },

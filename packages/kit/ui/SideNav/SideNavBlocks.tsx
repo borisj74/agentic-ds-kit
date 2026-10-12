@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -33,6 +34,34 @@ import styles from "./SideNav.module.css";
 
 const ICON_SIZE = 16;
 
+interface FocusRequest {
+  /** The open state the user asked for. */
+  open: boolean;
+  /** What had focus when they asked (the pressed control, or body after a pointer press in Safari). */
+  origin: Element | null;
+}
+
+/**
+ * Hidden on the closed rail by SideNav.module.css: inside an inert slot, a Toggle beside a
+ * SideNav.Brand, or header content other than the Toggle, mark and title. Mirrors the CSS
+ * rather than reading computed visibility, which flips only after the fade-out.
+ */
+function hiddenOnRail(element: Element): boolean {
+  if (element.closest("[inert]")) return true;
+  const header = element.closest(`.${styles.header}`);
+  if (!header) return false;
+  const child = Array.from(header.children).find((node) => node.contains(element));
+  if (!child) return false;
+  const hasToggle = header.querySelector(`:scope > .${styles.toggle}`) !== null;
+  const hasMark = header.querySelector(`:scope > .${styles.markButton}`) !== null;
+  if (child.classList.contains(styles.toggle)) return hasMark;
+  return (
+    hasToggle &&
+    !child.classList.contains(styles.markButton) &&
+    !child.classList.contains(styles.title)
+  );
+}
+
 /* ---------- Root ---------- */
 
 /** `<aside>` + panel. Owns open/closed state; every block below reads it from context. */
@@ -51,14 +80,22 @@ export function SideNavRoot({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const open = isControlled ? openProp : uncontrolledOpen;
   const rootRef = useRef<HTMLElement | null>(null);
-  const focusOnOpen = useRef(false);
+  const focusRequest = useRef<FocusRequest | null>(null);
   const label = rest["aria-label"];
 
   const context = useMemo<SideNavContextValue>(() => {
     function setOpen(next: boolean, options?: { focus?: boolean }) {
-      focusOnOpen.current = next && Boolean(options?.focus);
+      const request = options?.focus ? { open: next, origin: document.activeElement } : null;
+      focusRequest.current = request;
       if (!isControlled) setUncontrolledOpen(next);
       onOpenChange?.(next);
+      // A controlled parent may ignore the request; drop it so a later programmatic
+      // change doesn't move focus. A request that was applied is handled by then.
+      if (request) {
+        setTimeout(() => {
+          if (focusRequest.current === request) focusRequest.current = null;
+        });
+      }
     }
     return {
       open,
@@ -71,17 +108,32 @@ export function SideNavRoot({
     };
   }, [open, isControlled, onOpenChange, side, label]);
 
-  // A user reopen (mark or Toggle) moves focus into the opened rail: the Toggle ("Close")
-  // if there is one, else the first nav row. The mark that was pressed is disabled once open.
-  useEffect(() => {
-    if (!open || !focusOnOpen.current) return;
-    focusOnOpen.current = false;
+  // A user open or close (mark or Toggle) keeps keyboard focus in the rail. Layout effect, so
+  // it runs in the same commit, before setOpen's timeout drops an ignored request.
+  // Open: focus the Toggle ("Close") if there is one, else the first nav row; the mark that
+  // was pressed is disabled once open. Close: if the control that had focus is hidden on the
+  // closed rail (the Toggle beside a Brand), focus the mark ("Open"), else the visible Toggle.
+  useLayoutEffect(() => {
+    const request = focusRequest.current;
+    focusRequest.current = null;
     const root = rootRef.current;
-    if (!root) return;
+    if (!request || request.open !== open || !root) return;
+    if (open) {
+      const target =
+        root.querySelector<HTMLElement>(`.${styles.toggle} button:not(:disabled)`) ??
+        root.querySelector<HTMLElement>(
+          `.${styles.nav} :is(a[href], button:not(:disabled)):not([tabindex="-1"])`,
+        );
+      target?.focus();
+      return;
+    }
+    const origin = request.origin;
+    const lost = !origin || origin === document.body || !origin.isConnected;
+    if (!lost && (!root.contains(origin) || !hiddenOnRail(origin))) return;
     const target =
-      root.querySelector<HTMLElement>(`.${styles.toggle} button:not(:disabled)`) ??
-      root.querySelector<HTMLElement>(
-        `.${styles.nav} :is(a[href], button:not(:disabled)):not([tabindex="-1"])`,
+      root.querySelector<HTMLElement>(`.${styles.markButton}:not(:disabled)`) ??
+      Array.from(root.querySelectorAll<HTMLElement>(`.${styles.toggle} button:not(:disabled)`)).find(
+        (button) => !hiddenOnRail(button),
       );
     target?.focus();
   }, [open]);

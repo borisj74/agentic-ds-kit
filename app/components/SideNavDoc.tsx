@@ -495,7 +495,7 @@ export function SideNavDoc() {
                   open state. SideNav.Brand is the mark and title; with SideNav.Toggle beside it the
                   Toggle closes the rail and the mark stays on the closed rail to reopen it (without
                   a Brand, the Toggle itself moves to the start edge and reopens, so a header with
-                  only a switcher works too). Reopening by mark or Toggle moves focus to Close. Slot holds the workspace switcher. Section takes a label and Item rows;
+                  only a switcher works too). Closing moves focus to the mark (Open); reopening by mark or Toggle moves focus to Close. Slot holds the workspace switcher. Section takes a label and Item rows;
                   Item children make a disclosure. Slot pins content outside the scroll
                   (keepOnRail keeps pinned rows usable). On the closed rail every Item shows its
                   label in a kit Tooltip. In Server Components use the named exports
