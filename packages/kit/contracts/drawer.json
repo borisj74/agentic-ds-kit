@@ -100,6 +100,7 @@
       "Focus is trapped while open",
       "Escape closes",
       "Overlay click closes",
+      "Focus returns to the opener on close (Escape, Close or overlay click)",
       "Unique ids via useId"
     ]
   },

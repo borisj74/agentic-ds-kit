@@ -98,7 +98,9 @@ export function Drawer({
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
-      previousFocusRef.current?.focus();
+      // The opener may have unmounted while open; then focus stays where the browser puts it.
+      const previous = previousFocusRef.current;
+      if (previous?.isConnected) previous.focus();
     };
   }, [open, mounted]);
 
@@ -110,7 +112,10 @@ export function Drawer({
       className={styles.overlay}
       role="presentation"
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        if (event.target !== event.currentTarget) return;
+        // Keep the browser from moving focus to <body> after the cleanup restores it.
+        event.preventDefault();
+        onClose();
       }}
     >
       <div

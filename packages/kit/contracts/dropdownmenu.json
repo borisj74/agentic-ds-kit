@@ -209,7 +209,7 @@
       "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
       "Escape and outside click close; arrows move; Tab closes. Search Input is focused first when searchable",
       "Icon-only trigger needs ariaLabel",
-      "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens, ArrowLeft closes"
+      "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens. In a submenu, Escape or ArrowLeft closes only the submenu and focuses its parent item; Escape again closes the menu and focuses the trigger"
     ]
   },
   "doNot": [

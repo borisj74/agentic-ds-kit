@@ -406,11 +406,14 @@ export function DropdownMenu({
       }
       case "ArrowLeft":
         event.preventDefault();
+        event.stopPropagation();
         setOpenSubId(null);
         if (openSubId) queryItem(panelRef.current, openSubId)?.focus();
         break;
       case "Escape":
         event.preventDefault();
+        // Close only this submenu; the document Escape listener would close the whole menu.
+        event.stopPropagation();
         setOpenSubId(null);
         if (openSubId) queryItem(panelRef.current, openSubId)?.focus();
         break;
