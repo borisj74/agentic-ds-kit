@@ -73,6 +73,24 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Below --grid-breakpoint-md (media queries cannot read var()), where the
+   AppShell pattern also drops its SideNav: the rail stacks under the main
+   column instead of squeezing it, each row as tall as its content, and the
+   workspace scrolls. Rows are not split, so a rail Chat keeps its min height
+   and its composer stays reachable. Columns stay at one class (:where), so
+   an app rule on the workspace wins; overflow is two classes to beat
+   .layout-app > .layout-workspace. */
+@media (width < 64rem) {
+  .layout-workspace:where(:not(.layout-workspace--flush)) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: max-content;
+  }
+
+  .layout-workspace:not(.layout-workspace--flush) {
+    overflow: auto;
+  }
+}
+
 /* Main column with content straight inside: the first child (the only child
    when --flush) that is not a layout-content / layout-canvas / layout-workspace
    is padded and stacked like layout-content. :where() keeps this at one class,
