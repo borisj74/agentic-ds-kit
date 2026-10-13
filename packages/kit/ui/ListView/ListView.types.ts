@@ -5,6 +5,8 @@ import type { BadgeTone } from "../Badge/Badge.types";
 export type ListViewSize = "sm" | "md";
 export type ListViewSelection = "none" | "single" | "multiple";
 export type ListViewInteraction = "none" | "drill";
+/** Which lines clip to one line with an ellipsis instead of wrapping. */
+export type ListViewTruncate = "none" | "secondary" | "both";
 
 export interface ListViewAction {
   id: string;
@@ -64,5 +66,10 @@ export interface ListViewProps extends Omit<ComponentPropsWithoutRef<"div">, Lis
   groups?: ListViewGroup[];
   collapsibleGroups?: boolean;
   empty?: ListViewEmpty;
+  /**
+   * Clip long lines to one line with an ellipsis (e.g. emails in a narrow rail) instead of
+   * wrapping mid-word. The full text stays in the row's accessible name and the hover title. Default none.
+   */
+  truncate?: ListViewTruncate;
   ref?: Ref<HTMLDivElement>;
 }

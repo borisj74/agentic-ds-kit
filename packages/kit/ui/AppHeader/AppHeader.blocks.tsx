@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { Input } from "../Input";
+import { LucideByName } from "../Button/lucideName";
 import type {
   AppHeaderActionsProps,
   AppHeaderBrandProps,
@@ -38,7 +39,7 @@ export function AppHeaderRoot({
   );
 }
 
-/** Letter mark on the brand fill. Decorative: the header label names the product. */
+/** Letter (or icon) mark on the brand fill. Decorative: the header label names the product. */
 export function AppHeaderMark({ children, className, ref, ...rest }: AppHeaderMarkProps) {
   return (
     <span {...rest} ref={ref} className={cx(styles.mark, className)} aria-hidden>
@@ -51,13 +52,17 @@ export function AppHeaderMark({ children, className, ref, ...rest }: AppHeaderMa
  * Start column. The brand cell (mark or logo) is as wide as the closed SideNav rail so the
  * mark centers on the rail icons; it renders only when `mark` or `logo` is set.
  */
-export function AppHeaderBrand({ mark, logo, children, className, ref, ...rest }: AppHeaderBrandProps) {
-  const hasCell = mark !== undefined || logo !== undefined;
+export function AppHeaderBrand({ mark, markIcon, logo, children, className, ref, ...rest }: AppHeaderBrandProps) {
+  const hasCell = mark !== undefined || markIcon !== undefined || logo !== undefined;
   return (
     <div {...rest} ref={ref} className={cx(styles.start, className)}>
       {hasCell ? (
         <div className={styles.brand}>
-          {logo ? <div className={styles.logo}>{logo}</div> : <AppHeaderMark>{mark}</AppHeaderMark>}
+          {logo ? (
+            <div className={styles.logo}>{logo}</div>
+          ) : (
+            <AppHeaderMark>{markIcon ? <LucideByName name={markIcon} size={16} /> : mark}</AppHeaderMark>
+          )}
         </div>
       ) : null}
       {children}

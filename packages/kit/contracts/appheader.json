@@ -28,6 +28,11 @@
       "required": false,
       "note": "Brand letter. Defaults to the first character of title. Same idea as SideNav mark. Not a branded SVG."
     },
+    "markIcon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Icon mark instead of the letter, on the same brand fill and rail-axis cell: a Lucide name (e.g. Receipt), a Lucide component, or an element. Used when logo is omitted. Same prop on SideNav, so the two marks match. A real logo goes in logo."
+    },
     "logo": {
       "type": "slot",
       "required": false,
@@ -36,7 +41,7 @@
     "search": {
       "type": "boolean",
       "default": true,
-      "note": "Renders a centered kit Input. Hide only when the shell has no global search."
+      "note": "Renders a centered kit Input. Hide only when the shell has no global search. The center column is at least --appheader-search-min-width (12rem) and at most --appheader-search-max-width or 40% of the bar, and the actions keep their width, so search never runs into them; below 38rem it stacks under the bar."
     },
     "searchPlaceholder": {
       "type": "string",
@@ -142,6 +147,7 @@
         "element": "div",
         "props": {
           "mark": "Brand letter in the rail-width cell",
+          "markIcon": "Icon mark (Lucide name, component or element) on the brand fill; wins over mark",
           "logo": "ReactNode in the rail-width cell; replaces the letter. A narrow-screen menu trigger (e.g. app-shell's AppShellMenuButton) goes here when the header opens a nav Drawer.",
           "children": "After the brand cell, e.g. AppHeader.Title"
         },
@@ -237,7 +243,8 @@
     "--appheader-background": "Bar background (surface-card)",
     "--appheader-border-color": "Bottom border colour, or the full border with radius md (border-faint)",
     "--appheader-brand-width": "Column the default mark centers in (default: --sidenav-width-collapsed, then layout-sidebar-compact). Set --sidenav-width-collapsed on :root and the brand column follows; set this only to break the match",
-    "--appheader-search-max-width": "Max width of the center column (layout-rail)"
+    "--appheader-search-max-width": "Max width of the center column (layout-rail); the column also stays within 40% of the bar",
+    "--appheader-search-min-width": "Min width of the center column before the bar stacks (12rem, capped at the column)"
   },
   "tokens": [
     "surface.card",

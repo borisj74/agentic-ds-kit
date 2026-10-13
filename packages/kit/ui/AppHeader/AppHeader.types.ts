@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
 
 export type AppHeaderRadius = "md" | "none";
 
@@ -11,6 +12,8 @@ export interface AppHeaderProps extends Omit<ComponentPropsWithoutRef<"header">,
   title?: string;
   /** Brand letter. Defaults to the first character of title. Used when logo is omitted. */
   mark?: string;
+  /** Icon mark instead of the letter, on the same brand fill: a Lucide name (e.g. "Receipt"), component, or element. Used when logo is omitted. */
+  markIcon?: KitIcon;
   /** Custom mark or wordmark. Replaces the default letter mark. Pass the consumer’s logo here. */
   logo?: ReactNode;
   /** Show the centered kit Input. Default true. */
@@ -59,8 +62,10 @@ export interface AppHeaderRootProps extends Omit<ComponentPropsWithoutRef<"heade
 
 /** Start column: the brand cell (mark or logo, on the SideNav rail axis), then children (usually AppHeader.Title). */
 export interface AppHeaderBrandProps extends ComponentPropsWithoutRef<"div"> {
-  /** Brand letter in the rail-width cell. Ignored when logo is set. */
+  /** Brand letter in the rail-width cell. Ignored when logo or markIcon is set. */
   mark?: string;
+  /** Icon mark (Lucide name, component, or element) on the brand fill. Ignored when logo is set. */
+  markIcon?: KitIcon;
   /** Custom mark or wordmark in the rail-width cell. Replaces the letter mark. */
   logo?: ReactNode;
   /** After the brand cell: AppHeader.Title, a workspace switcher, a Badge. */

@@ -106,6 +106,12 @@
       "default": false,
       "note": "When true, group headers toggle their rows. Expanded by default."
     },
+    "truncate": {
+      "type": "enum",
+      "values": ["none", "secondary", "both"],
+      "default": "none",
+      "note": "Clip lines to one line with an ellipsis instead of wrapping (e.g. long emails in a narrow rail wrap mid-word otherwise). secondary clips the secondary line; both also the primary. The full text stays in the row's accessible name and the hover title."
+    },
     "empty": {
       "type": "object",
       "required": false,
@@ -147,7 +153,8 @@
       "interaction=drill makes the row body a button and exposes a trailing chevron; Enter opens, Space selects when selection is on",
       "Grouped rows sit in role=group labelled by the header; collapsible headers are buttons with aria-expanded",
       "When items is empty, kit Empty is rendered (title required) and the list keeps its accessible name",
-      "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order"
+      "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order",
+      "truncate clips visually only: the row's accessible name and the title attribute keep the full primary and secondary text"
     ]
   },
   "doNot": [

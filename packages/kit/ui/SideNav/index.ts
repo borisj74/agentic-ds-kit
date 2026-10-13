@@ -9,6 +9,7 @@ export {
   SideNavSection,
   SideNavItem,
   SideNavFooter,
+  SideNavAccount,
 } from "./SideNavBlocks";
 export { useSideNav } from "./SideNavContext";
 export type { SideNavContextValue } from "./SideNavContext";
@@ -28,4 +29,6 @@ export type {
   SideNavSectionProps,
   SideNavItemProps,
   SideNavFooterProps,
+  SideNavAccountProps,
+  SideNavAccountAction,
 } from "./SideNav.types";

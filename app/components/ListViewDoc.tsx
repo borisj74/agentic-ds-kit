@@ -57,6 +57,11 @@ const GROUPED: ListViewItem[] = [
   { id: "priya", primary: "Priya Shah", secondary: "Platform", name: "Priya Shah", group: "eng" },
 ];
 
+const LONG_EMAILS: ListViewItem[] = [
+  { id: "olivia", primary: "Olivia Rhye", secondary: "olivia.rhye@accounts.untitledui.com", name: "Olivia Rhye" },
+  { id: "phoenix", primary: "Phoenix Baker-Montgomery", secondary: "phoenix.baker-montgomery@untitledui.com", name: "Phoenix Baker" },
+];
+
 const OVERFLOW: ListViewItem[] = [
   {
     id: "maya",
@@ -220,6 +225,29 @@ export function ListViewDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>Two actions stay on the row. A third goes in kit DropdownMenu.</p>
               </div>
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Truncate</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewNarrow}>
+                  <ListView label="Account" items={LONG_EMAILS} truncate="secondary" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  In a narrow column, truncate=&quot;secondary&quot; keeps long emails on one line with an
+                  ellipsis instead of wrapping mid-word; &quot;both&quot; clips the primary line too. The full
+                  text stays in the row&apos;s accessible name and shows as the hover title.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ListView
+  label="Account"
+  truncate="secondary"
+  items={[{ id: "olivia", primary: "Olivia Rhye", secondary: "olivia.rhye@accounts.untitledui.com", name: "Olivia Rhye" }]}
+/>`}
+              />
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Size sm</h2>

@@ -7,5 +7,6 @@ export type {
   ListViewEmpty,
   ListViewSelection,
   ListViewInteraction,
+  ListViewTruncate,
   ListViewSize,
 } from "./ListView.types";

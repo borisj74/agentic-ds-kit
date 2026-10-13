@@ -1,7 +1,13 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
 
 export interface BreadcrumbItem {
+  /** Visible text, and the accessible name when `iconOnly` hides it. */
   label: string;
+  /** Lucide name (e.g. "House"), a Lucide component, or an element. Shown before the label. */
+  icon?: KitIcon;
+  /** Show only `icon` (e.g. a Home house). The label stays as the link's accessible name and hover title. */
+  iconOnly?: boolean;
   href?: string;
   /** In-app select. When set, the crumb is a button (or a link that does not navigate). */
   onClick?: () => void;

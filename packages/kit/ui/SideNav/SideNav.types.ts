@@ -49,6 +49,8 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   title: string;
   /** Brand letter; default first char of title. */
   mark?: string;
+  /** Icon mark instead of the letter: a Lucide name (e.g. "Receipt"), a Lucide component, or an element. */
+  markIcon?: KitIcon;
   /** Brand header and close. Default true. Set false when AppHeader already provides brand. */
   showHeader?: boolean;
   /** Rail corners. Default md. Use none when SideNav is flush in an app shell. */
@@ -62,6 +64,8 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   items?: SideNavItemData[];
   /** Footer rows (one or many items), or any ReactNode (e.g. an account card). */
   footer?: SideNavItemData | SideNavItemData[] | ReactNode;
+  /** Account block at the very bottom, below the footer rows: `SideNavAccount` props (avatar, name, secondary line, action). */
+  account?: SideNavAccountProps;
   /**
    * Slot: replaces the brand (mark + title) in the header. The Close button stays.
    * The mark is what reopens a closed rail, so with a custom header control `open` yourself.
@@ -180,6 +184,8 @@ export interface SideNavBrandProps extends Omit<ComponentPropsWithoutRef<"button
   title: ReactNode;
   /** Brand letter or your own node (logo). Defaults to the first character of a string `title`. */
   mark?: ReactNode;
+  /** Icon mark: a Lucide name (e.g. "Receipt"), a Lucide component, or an element, on the brand fill. Wins over `mark`. */
+  markIcon?: KitIcon;
   /** Accessible name of the mark on the closed rail, where it reopens the nav. Default "Open". */
   openLabel?: string;
   ref?: Ref<HTMLButtonElement>;
@@ -199,4 +205,33 @@ export interface SideNavToggleProps extends Omit<ComponentPropsWithoutRef<"butto
   /** Accessible name while closed. Default "Open". */
   openLabel?: string;
   ref?: Ref<HTMLButtonElement>;
+}
+
+/** Trailing control of `SideNavAccount`: a tertiary icon Button (e.g. Log out). */
+export interface SideNavAccountAction {
+  /** Accessible name and hover title, e.g. "Log out". */
+  label: string;
+  /** Lucide name, component, or element. Default "LogOut". */
+  icon?: KitIcon;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+/**
+ * `SideNav.Account` / `SideNavAccount`: the signed-in user, usually last in `SideNav.Footer`.
+ * Kit Avatar, name, optional secondary line (email), optional trailing action. Long text
+ * truncates; the full text stays readable (in the DOM and as the hover title). On the closed
+ * rail only the avatar shows (centered on the icon axis) with the name as its tooltip; the action
+ * returns when the rail opens. Attributes go to the root `<div>`.
+ */
+export interface SideNavAccountProps extends Omit<ComponentPropsWithoutRef<"div">, "children"> {
+  /** Person's name: primary line, avatar initials and alt text. */
+  name: string;
+  /** Second line, e.g. an email or role. */
+  secondary?: string;
+  /** Avatar photo URL. */
+  src?: string;
+  /** Avatar initials override (default from name). */
+  initials?: string;
+  action?: SideNavAccountAction;
+  ref?: Ref<HTMLDivElement>;
 }

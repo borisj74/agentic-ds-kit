@@ -4,4 +4,5 @@ export type {
   InsightCardTone,
   InsightCardSize,
   InsightCardAction,
+  InsightCardActionStyle,
 } from "./InsightCard.types";

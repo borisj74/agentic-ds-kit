@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
-import type { InsightCardProps, InsightCardTone } from "./InsightCard.types";
+import type { InsightCardAction, InsightCardProps, InsightCardTone } from "./InsightCard.types";
 import { cx } from "../shared/cx";
 import styles from "./InsightCard.module.css";
 
@@ -10,10 +10,12 @@ export type {
   InsightCardTone,
   InsightCardSize,
   InsightCardAction,
+  InsightCardActionStyle,
 } from "./InsightCard.types";
 
 const TONE_ICON: Record<InsightCardTone, string> = {
   opportunity: "Sparkles",
+  success: "CircleCheck",
   warning: "TriangleAlert",
   danger: "CircleX",
   info: "Info",
@@ -21,6 +23,28 @@ const TONE_ICON: Record<InsightCardTone, string> = {
 };
 
 const ICON_SIZE = { sm: 14, md: 16, lg: 18 } as const;
+
+/** Text-link action: a real link with `href`, otherwise a button that looks like one. */
+function ActionLink({ action, iconSize }: { action: InsightCardAction; iconSize: number }) {
+  const body = (
+    <>
+      <span className={styles.linkLabel}>{action.label}</span>
+      <LucideByName name="ArrowRight" size={iconSize} className={styles.linkIcon} />
+    </>
+  );
+  if (action.href) {
+    return (
+      <a className={styles.link} href={action.href} onClick={action.onClick}>
+        {body}
+      </a>
+    );
+  }
+  return (
+    <button type="button" className={styles.link} onClick={action.onClick}>
+      {body}
+    </button>
+  );
+}
 
 export function InsightCard({
   title,
@@ -32,6 +56,7 @@ export function InsightCard({
   source,
   primaryAction,
   secondaryAction,
+  actionStyle = "button",
   onDismiss,
   className,
   ref,
@@ -41,6 +66,7 @@ export function InsightCard({
   const descriptionId = useId();
   const showFooter = Boolean(primaryAction || secondaryAction || onDismiss);
   const buttonSize = size === "lg" ? "md" : "sm";
+  const asLink = (action: InsightCardAction) => actionStyle === "link" || Boolean(action.href);
 
   return (
     <article
@@ -73,14 +99,22 @@ export function InsightCard({
           {primaryAction || secondaryAction ? (
             <div className={styles.actions}>
               {primaryAction ? (
-                <Button variant="primary" size={buttonSize} onClick={primaryAction.onClick}>
-                  {primaryAction.label}
-                </Button>
+                asLink(primaryAction) ? (
+                  <ActionLink action={primaryAction} iconSize={ICON_SIZE[size]} />
+                ) : (
+                  <Button variant="primary" size={buttonSize} onClick={primaryAction.onClick}>
+                    {primaryAction.label}
+                  </Button>
+                )
               ) : null}
               {secondaryAction ? (
-                <Button variant="secondary" size={buttonSize} onClick={secondaryAction.onClick}>
-                  {secondaryAction.label}
-                </Button>
+                asLink(secondaryAction) ? (
+                  <ActionLink action={secondaryAction} iconSize={ICON_SIZE[size]} />
+                ) : (
+                  <Button variant="secondary" size={buttonSize} onClick={secondaryAction.onClick}>
+                    {secondaryAction.label}
+                  </Button>
+                )
               ) : null}
             </div>
           ) : null}

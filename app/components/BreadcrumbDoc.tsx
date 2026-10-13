@@ -17,6 +17,11 @@ const BASIC_ITEMS: BreadcrumbItem[] = [
   { label: "Breadcrumb" },
 ];
 
+const HOME_ICON_ITEMS: BreadcrumbItem[] = [
+  { label: "Home", href: "#", icon: "House", iconOnly: true },
+  { label: "Dashboard" },
+];
+
 const COLLAPSED_ITEMS: BreadcrumbItem[] = [
   { label: "Home", href: "#" },
   { label: "Dashboard", href: "#" },
@@ -159,6 +164,29 @@ export function BreadcrumbDoc() {
               </div>
               <CodeBlock
                 code={'<Breadcrumb separator="slash" items={[{ label: "Home", href: "#" }, { label: "Components", href: "#" }, { label: "Breadcrumb" }]} />'}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Home icon</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Breadcrumb items={HOME_ICON_ITEMS} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  icon adds a Lucide icon before a crumb; iconOnly shows just the icon, as for a Home
+                  house. label is still required: it is the link&apos;s accessible name and hover title.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Breadcrumb
+  items={[
+    { label: "Home", href: "/", icon: "House", iconOnly: true },
+    { label: "Dashboard" },
+  ]}
+/>`}
               />
             </section>
             <section className={styles.example}>

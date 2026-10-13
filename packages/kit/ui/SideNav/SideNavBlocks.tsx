@@ -13,13 +13,16 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { Avatar } from "../Avatar";
 import { Button } from "../Button";
 import { LucideByName, isKitIcon, type KitIcon } from "../Button/lucideName";
 import { Tooltip } from "../Tooltip";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
+import { useInDrawer } from "../shared/drawerContext";
 import { SideNavContext, useSideNav, type SideNavContextValue } from "./SideNavContext";
 import type {
+  SideNavAccountProps,
   SideNavBrandProps,
   SideNavFooterProps,
   SideNavHeaderProps,
@@ -62,6 +65,27 @@ function hiddenOnRail(element: Element): boolean {
   );
 }
 
+/**
+ * Closed rail: labels are clipped, so the kit Tooltip names the row. The rail clips
+ * overflow, so the bubble is fixed to the viewport just outside the rail's edge.
+ */
+function useRailTip(anchor: { current: HTMLElement | null }) {
+  const { side, rootRef } = useSideNav();
+  const [tipStyle, setTipStyle] = useState<CSSProperties | undefined>(undefined);
+  function placeTip() {
+    const root = rootRef.current?.getBoundingClientRect();
+    const row = anchor.current?.getBoundingClientRect();
+    if (!root || !row) return;
+    const top = row.top + row.height / 2;
+    setTipStyle(
+      side === "right"
+        ? { position: "fixed", top, left: "auto", right: `calc(${window.innerWidth - root.left}px + var(--space-inline-sm))` }
+        : { position: "fixed", top, left: `calc(${root.right}px + var(--space-inline-sm))` },
+    );
+  }
+  return { tipStyle, placeTip, placement: side === "right" ? ("left" as const) : ("right" as const) };
+}
+
 /* ---------- Root ---------- */
 
 /** `<aside>` + panel. Owns open/closed state; every block below reads it from context. */
@@ -78,7 +102,9 @@ export function SideNavRoot({
 }: SideNavRootProps) {
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  const open = isControlled ? openProp : uncontrolledOpen;
+  // Inside a kit Drawer the nav fills the Drawer and is always open (no rail to collapse to).
+  const inDrawer = useInDrawer();
+  const open = inDrawer || (isControlled ? openProp : uncontrolledOpen);
   const rootRef = useRef<HTMLElement | null>(null);
   const focusRequest = useRef<FocusRequest | null>(null);
   const label = rest["aria-label"];
@@ -143,7 +169,13 @@ export function SideNavRoot({
       <aside
         {...rest}
         ref={mergeRefs(rootRef, ref)}
-        className={cx(styles.root, radius === "none" && styles.radiusNone, !open && styles.rootClosed, className)}
+        className={cx(
+          styles.root,
+          radius === "none" && styles.radiusNone,
+          !open && styles.rootClosed,
+          inDrawer && styles.inDrawer,
+          className,
+        )}
         data-side={side}
       >
         <div className={styles.panel}>{children}</div>
@@ -172,6 +204,7 @@ export function SideNavHeader({ className, children, ref, ...rest }: SideNavHead
 export function SideNavBrand({
   title,
   mark,
+  markIcon,
   openLabel = "Open",
   onClick,
   className,
@@ -180,7 +213,13 @@ export function SideNavBrand({
 }: SideNavBrandProps) {
   const { open, setOpen } = useSideNav();
   const hasMark = mark !== undefined && mark !== null && mark !== false && mark !== "";
-  const markContent = hasMark ? mark : (typeof title === "string" && title.charAt(0)) || "·";
+  const markContent = markIcon ? (
+    <LucideByName name={markIcon} size={ICON_SIZE} />
+  ) : hasMark ? (
+    mark
+  ) : (
+    (typeof title === "string" && title.charAt(0)) || "·"
+  );
   return (
     <>
       <button
@@ -371,13 +410,13 @@ export function SideNavItemImpl({
   ref,
   ...rest
 }: ItemImplProps) {
-  const { rail, side, rootRef } = useSideNav();
+  const { rail } = useSideNav();
   const nested = Children.toArray(children).length > 0;
   const submenuId = useId();
   const [expanded, setExpanded] = useState(nested && defaultExpanded);
   const submenuOpen = expanded && !rail;
   const controlRef = useRef<HTMLElement | null>(null);
-  const [tipStyle, setTipStyle] = useState<CSSProperties | undefined>(undefined);
+  const { tipStyle, placeTip, placement } = useRailTip(controlRef);
 
   const className = cx(
     styles.item,
@@ -436,22 +475,8 @@ export function SideNavItemImpl({
     );
   }
 
-  // Closed rail: labels are clipped, so the kit Tooltip names the row. The rail clips
-  // overflow, so the bubble is fixed to the viewport just outside the rail's edge.
-  function placeTip() {
-    const root = rootRef.current?.getBoundingClientRect();
-    const row = controlRef.current?.getBoundingClientRect();
-    if (!root || !row) return;
-    const top = row.top + row.height / 2;
-    setTipStyle(
-      side === "right"
-        ? { position: "fixed", top, left: "auto", right: `calc(${window.innerWidth - root.left}px + var(--space-inline-sm))` }
-        : { position: "fixed", top, left: `calc(${root.right}px + var(--space-inline-sm))` },
-    );
-  }
-
   const row = rail ? (
-    <Tooltip content={label} placement={side === "right" ? "left" : "right"} style={tipStyle}>
+    <Tooltip content={label} placement={placement} style={tipStyle}>
       {control}
     </Tooltip>
   ) : (
@@ -481,3 +506,68 @@ export function SideNavItem(props: SideNavItemProps) {
   return <SideNavItemImpl {...props} />;
 }
 
+
+/* ---------- Account ---------- */
+
+/**
+ * The signed-in user: Avatar, name, secondary line, optional trailing action. On the closed
+ * rail only the avatar shows (on the icon axis), named by a tooltip; the action is inert there.
+ */
+export function SideNavAccount({
+  name,
+  secondary,
+  src,
+  initials,
+  action,
+  className,
+  ref,
+  ...rest
+}: SideNavAccountProps) {
+  const { rail } = useSideNav();
+  const avatarRef = useRef<HTMLSpanElement | null>(null);
+  const { tipStyle, placeTip, placement } = useRailTip(avatarRef);
+  // The visible name (kept in the tree on the rail) names the block, so the avatar is decorative.
+  const avatar = (
+    <span ref={avatarRef} className={styles.accountAvatar} aria-hidden>
+      <Avatar name={name} src={src} initials={initials} size="sm" />
+    </span>
+  );
+  return (
+    <div
+      {...rest}
+      ref={ref}
+      className={cx(styles.account, className)}
+      onPointerEnter={rail ? placeTip : undefined}
+    >
+      {rail ? (
+        <Tooltip content={name} placement={placement} style={tipStyle}>
+          {avatar}
+        </Tooltip>
+      ) : (
+        avatar
+      )}
+      <span className={styles.accountText}>
+        <span className={styles.accountName} title={name}>
+          {name}
+        </span>
+        {secondary ? (
+          <span className={styles.accountSecondary} title={secondary}>
+            {secondary}
+          </span>
+        ) : null}
+      </span>
+      {action ? (
+        <span className={styles.accountAction} {...(rail ? { inert: true } : {})}>
+          <Button
+            variant="tertiary"
+            size="sm"
+            iconStart={action.icon ?? "LogOut"}
+            ariaLabel={action.label}
+            title={action.label}
+            onClick={action.onClick}
+          />
+        </span>
+      ) : null}
+    </div>
+  );
+}

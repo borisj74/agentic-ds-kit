@@ -30,6 +30,21 @@ function visibleNodes(items: BreadcrumbItem[], maxItems?: number): VisibleNode[]
   return nodes;
 }
 
+/** Crumb content: optional icon, then the label (visually hidden when iconOnly). */
+function CrumbBody({ item }: { item: BreadcrumbItem }) {
+  const iconOnly = Boolean(item.iconOnly && item.icon);
+  return (
+    <>
+      {item.icon ? (
+        <span className={styles.icon} aria-hidden="true">
+          <LucideByName name={item.icon} size={16} />
+        </span>
+      ) : null}
+      <span className={iconOnly ? styles.srOnly : undefined}>{item.label}</span>
+    </>
+  );
+}
+
 export function Breadcrumb({ items, separator = "chevron", maxItems, className, ref, ...rest }: BreadcrumbProps) {
   const nodes = visibleNodes(items, maxItems);
   const lastIndex = items.length - 1;
@@ -60,20 +75,24 @@ export function Breadcrumb({ items, separator = "chevron", maxItems, className, 
           }
 
           const isCurrent = node.index === lastIndex;
+          const body = <CrumbBody item={node.item} />;
+          const title = node.item.iconOnly && node.item.icon ? node.item.label : undefined;
           const content = isCurrent ? (
-            <span className={styles.current} aria-current="page">
-              {node.item.label}
+            <span className={styles.current} aria-current="page" title={title}>
+              {body}
             </span>
           ) : node.item.onClick ? (
-            <button type="button" className={styles.link} onClick={node.item.onClick}>
-              {node.item.label}
+            <button type="button" className={styles.link} onClick={node.item.onClick} title={title}>
+              {body}
             </button>
           ) : node.item.href ? (
-            <a className={styles.link} href={node.item.href}>
-              {node.item.label}
+            <a className={styles.link} href={node.item.href} title={title}>
+              {body}
             </a>
           ) : (
-            <span className={styles.crumb}>{node.item.label}</span>
+            <span className={styles.crumb} title={title}>
+              {body}
+            </span>
           );
 
           return [

@@ -15,7 +15,15 @@
 
 .bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, var(--appheader-search-max-width, var(--layout-rail))) minmax(0, 1fr);
+  /* Search: at least --appheader-search-min-width, at most the max width or 40% of the bar,
+     so it gives way before it runs into the brand or the actions. Actions keep their width. */
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(
+      min(var(--appheader-search-min-width, 12rem), 100%),
+      min(var(--appheader-search-max-width, var(--layout-rail)), 40cqi)
+    )
+    minmax(max-content, 1fr);
   align-items: center;
   column-gap: var(--appheader-gap, var(--space-4));
   box-sizing: border-box;
@@ -35,6 +43,8 @@
   align-items: center;
   gap: var(--space-3);
   min-width: 0;
+  /* Stay inside the column so a long title ellipsizes instead of running under the search. */
+  max-width: 100%;
   justify-self: start;
 }
 

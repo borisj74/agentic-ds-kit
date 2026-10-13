@@ -3,6 +3,7 @@
 import { isValidElement, type ReactNode } from "react";
 import type { SideNavItemData, SideNavProps, SideNavRenderItem } from "./SideNav.types";
 import {
+  SideNavAccount,
   SideNavBrand,
   SideNavFooter,
   SideNavHeader,
@@ -19,6 +20,8 @@ import { useSideNav } from "./SideNavContext";
 import styles from "./SideNav.module.css";
 
 export type {
+  SideNavAccountAction,
+  SideNavAccountProps,
   SideNavGroup,
   SideNavItemData,
   SideNavProps,
@@ -90,6 +93,7 @@ function footerItems(footer: SideNavProps["footer"]): SideNavItemData[] | null {
 function SideNavPreset({
   title,
   mark,
+  markIcon,
   showHeader = true,
   radius = "md",
   open,
@@ -99,6 +103,7 @@ function SideNavPreset({
   groups,
   items = [],
   footer,
+  account,
   header,
   beforeGroups,
   afterGroups,
@@ -128,7 +133,7 @@ function SideNavPreset({
             </>
           ) : (
             <>
-              <SideNavBrand title={title} mark={mark || undefined} />
+              <SideNavBrand title={title} mark={mark || undefined} markIcon={markIcon} />
               <SideNavToggle />
             </>
           )}
@@ -153,9 +158,16 @@ function SideNavPreset({
 
       {afterGroups ? <SideNavSlot placement="after">{afterGroups}</SideNavSlot> : null}
 
-      {footer ? (
+      {footer || account ? (
         <SideNavFooter>
-          {footerRows ? <DataList items={footerRows} renderItem={renderItem} /> : (footer as ReactNode)}
+          {footer ? (
+            footerRows ? (
+              <DataList items={footerRows} renderItem={renderItem} />
+            ) : (
+              (footer as ReactNode)
+            )
+          ) : null}
+          {account ? <SideNavAccount {...account} /> : null}
         </SideNavFooter>
       ) : null}
     </SideNavRoot>
@@ -164,7 +176,7 @@ function SideNavPreset({
 
 /**
  * `<SideNav title groups … />` is the preset. Build your own with the blocks:
- * `SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`
+ * `SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`, `.Account`
  * (also exported by name: `SideNavRoot`, `SideNavHeader`, … — use those from Server Components).
  */
 export const SideNav = Object.assign(SideNavPreset, {
@@ -177,4 +189,5 @@ export const SideNav = Object.assign(SideNavPreset, {
   Section: SideNavSection,
   Item: SideNavItemBlock,
   Footer: SideNavFooter,
+  Account: SideNavAccount,
 });
