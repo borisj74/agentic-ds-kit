@@ -73,6 +73,37 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Main column with content straight inside: the first child (the only child
+   when --flush) that is not a layout-content / layout-canvas / layout-workspace
+   is padded and stacked like layout-content. :where() keeps this at one class,
+   so an app rule on the column can override it. The rail (second child) stays
+   flush: rail components such as Chat own their chrome. */
+.layout-workspace:where(:not(.layout-workspace--flush)) > :where(:first-child:not(.layout-content, .layout-canvas, .layout-workspace)),
+.layout-workspace--flush > :where(:only-child:not(.layout-content, .layout-canvas, .layout-workspace)) {
+  display: grid;
+  gap: var(--space-gap-lg);
+  align-content: start;
+  padding: var(--layout-margin-md);
+  overflow: auto;
+}
+
+/* --flush with several children straight inside (no role child): the
+   workspace is the column, so pad and stack it, as layout-canvas does. */
+.layout-workspace--flush:not(:has(> .layout-content, > .layout-canvas, > .layout-workspace, > :only-child)) {
+  grid-auto-rows: max-content;
+  gap: var(--space-gap-lg);
+  align-content: start;
+  padding: var(--layout-margin-md);
+  overflow: auto;
+}
+
+/* Parent gap owns the stack, as in layout-content. */
+.layout-workspace:where(:not(.layout-workspace--flush)) > :where(:first-child:not(.layout-content, .layout-canvas, .layout-workspace)) > section,
+.layout-workspace--flush > :where(:only-child:not(.layout-content, .layout-canvas, .layout-workspace)) > section,
+.layout-workspace--flush:not(:has(> .layout-content, > .layout-canvas, > .layout-workspace, > :only-child)) > section {
+  margin-bottom: 0;
+}
+
 .layout-content {
   display: grid;
   gap: var(--space-gap-lg);
