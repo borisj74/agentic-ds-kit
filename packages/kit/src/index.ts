@@ -83,5 +83,5 @@ export * from "../ui/TreeView";
 export * from "../ui/UsageList";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
-export type { ChartDatum, ChartSeries } from "../ui/shared/chartMath";
+export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";
 

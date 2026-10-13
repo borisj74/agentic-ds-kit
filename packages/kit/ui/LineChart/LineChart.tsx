@@ -4,6 +4,7 @@ import { useId, useMemo, useState, type PointerEvent as ReactPointerEvent } from
 import { ChartFrame } from "../shared/ChartFrame";
 import frameStyles from "../shared/ChartFrame.module.css";
 import {
+  axisLabels,
   CHART_MARGINS,
   formatAxisTick,
   formatValue,
@@ -13,6 +14,7 @@ import {
   seriesExtent,
   type ChartSeries,
 } from "../shared/chartMath";
+import { measureLabel } from "../shared/measureLabel";
 import { useChartSize } from "../shared/useChartSize";
 import type { LineChartProps } from "./LineChart.types";
 import styles from "./LineChart.module.css";
@@ -22,6 +24,7 @@ export type { LineChartProps, LineChartVariant } from "./LineChart.types";
 type Point = { x: number; y: number };
 
 type LineGeom = ChartSeries & {
+  seriesIndex: number;
   points: Point[];
   linePath: string;
   areaPath: string;
@@ -38,7 +41,7 @@ type TickMark = {
   gridY2: number;
 };
 
-type CategoryLabel = { label: string; x: number; y: number };
+type CategoryLabel = { index: number; label: string; x: number; y: number };
 
 type SampleHit = {
   index: number;
@@ -66,8 +69,8 @@ function ChartTable({ labels, series }: { labels: string[]; series: ChartSeries[
         <thead>
           <tr>
             <th scope="col">Label</th>
-            {series.map((entry) => (
-              <th key={entry.label} scope="col">
+            {series.map((entry, seriesIndex) => (
+              <th key={seriesIndex} scope="col">
                 {entry.label}
               </th>
             ))}
@@ -75,10 +78,10 @@ function ChartTable({ labels, series }: { labels: string[]; series: ChartSeries[
         </thead>
         <tbody>
           {labels.map((label, index) => (
-            <tr key={label}>
+            <tr key={index}>
               <th scope="row">{label}</th>
-              {series.map((entry) => (
-                <td key={entry.label}>{formatValue(entry.data[index] ?? 0)}</td>
+              {series.map((entry, seriesIndex) => (
+                <td key={seriesIndex}>{formatValue(entry.data[index] ?? 0)}</td>
               ))}
             </tr>
           ))}
@@ -95,22 +98,23 @@ function Legend({
   onClear,
 }: {
   series: ChartSeries[];
-  active: string | null;
-  onActivate: (label: string) => void;
+  active: number | null;
+  onActivate: (seriesIndex: number) => void;
   onClear: () => void;
 }) {
   return (
     <ul className={`${frameStyles.legend} ${frameStyles.legendInteractive}`}>
-      {series.map((entry) => {
-        const dimmed = Boolean(active) && active !== entry.label;
+      {series.map((entry, seriesIndex) => {
+        if (!entry.label.trim()) return null;
+        const dimmed = active !== null && active !== seriesIndex;
         return (
-          <li key={entry.label}>
+          <li key={seriesIndex}>
             <button
               type="button"
               className={`${frameStyles.legendItem} ${frameStyles.legendButton}${dimmed ? ` ${frameStyles.legendItemDimmed}` : ""}`}
-              onMouseEnter={() => onActivate(entry.label)}
+              onMouseEnter={() => onActivate(seriesIndex)}
               onMouseLeave={onClear}
-              onFocus={() => onActivate(entry.label)}
+              onFocus={() => onActivate(seriesIndex)}
               onBlur={onClear}
             >
               <span
@@ -153,12 +157,14 @@ export function LineChart({
   includeZero = false,
   emptyLabel = "No data for this range",
   isLoading = false,
+  tickInterval,
+  formatLabel,
   className,
   ref: rootRef,
   ...rest
 }: LineChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const [highlighted, setHighlighted] = useState<number | null>(null);
   const { ref, width } = useChartSize(height);
   const gridMaskId = `linechart-grid-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
@@ -170,8 +176,7 @@ export function LineChart({
   const hasValues = series.some((entry) => entry.data.some((value) => Number.isFinite(value)));
   const isEmpty = !labels.length || !series.length || !hasValues;
   const isArea = variant === "area";
-  const labelledSeries = series.filter((entry) => entry.label.trim().length > 0);
-  const showLegend = labelledSeries.length >= 2;
+  const showLegend = series.filter((entry) => entry.label.trim().length > 0).length >= 2;
 
   const layout = useMemo(() => {
     if (isEmpty || width <= 0) return EMPTY_LAYOUT;
@@ -186,7 +191,7 @@ export function LineChart({
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
 
-    const lines: LineGeom[] = series.map((entry) => {
+    const lines: LineGeom[] = series.map((entry, seriesIndex) => {
       const points = labels.map((_, index) => ({
         x: xScale(index),
         y: yScale(entry.data[index] ?? 0),
@@ -195,10 +200,16 @@ export function LineChart({
       const areaPath = isArea
         ? `${linePath} L ${points[points.length - 1]?.x ?? plotRight} ${plotBottom} L ${points[0]?.x ?? plotLeft} ${plotBottom} Z`
         : "";
-      return { ...entry, points, linePath, areaPath };
+      return { ...entry, seriesIndex, points, linePath, areaPath };
     });
 
-    const categoryLabels: CategoryLabel[] = labels.map((label, index) => ({
+    const categoryLabels: CategoryLabel[] = axisLabels(labels, {
+      spacing: labels.length > 1 ? xScale(1) - xScale(0) : plotRight - plotLeft,
+      tickInterval,
+      formatLabel,
+      measure: measureLabel,
+    }).map(({ index, label }) => ({
+      index,
       label,
       x: xScale(index),
       y: plotBottom + 18,
@@ -223,10 +234,10 @@ export function LineChart({
     });
 
     return { lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom };
-  }, [height, includeZero, isArea, isEmpty, labels, series, width]);
+  }, [formatLabel, height, includeZero, isArea, isEmpty, labels, series, tickInterval, width]);
 
-  const visibleLines = highlighted
-    ? layout.lines.filter((line) => line.label === highlighted)
+  const visibleLines = highlighted !== null
+    ? layout.lines.filter((line) => line.seriesIndex === highlighted)
     : layout.lines;
   const activeSample = activeIndex !== null ? (layout.samples[activeIndex] ?? null) : null;
   const flipTooltip = Boolean(activeSample && width > 0 && activeSample.x > width * 0.6);
@@ -250,7 +261,7 @@ export function LineChart({
       description={description}
       legend={showLegend ? (
         <Legend
-          series={labelledSeries}
+          series={series}
           active={highlighted}
           onActivate={setHighlighted}
           onClear={() => setHighlighted(null)}
@@ -275,7 +286,7 @@ export function LineChart({
                   fill="white"
                 />
                 {layout.lines.map((line) =>
-                  line.areaPath ? <path key={`grid-mask-${line.label}`} d={line.areaPath} fill="black" /> : null,
+                  line.areaPath ? <path key={`grid-mask-${line.seriesIndex}`} d={line.areaPath} fill="black" /> : null,
                 )}
               </mask>
             </defs>
@@ -314,10 +325,10 @@ export function LineChart({
             </>
           ) : null}
           {layout.lines.map((line) => {
-            const dimmed = Boolean(highlighted) && highlighted !== line.label;
+            const dimmed = highlighted !== null && highlighted !== line.seriesIndex;
             return (
               <g
-                key={line.label}
+                key={line.seriesIndex}
                 className={`${styles.series}${dimmed ? ` ${styles.seriesDimmed}` : ""}`}
               >
                 {isArea && line.areaPath ? (
@@ -342,7 +353,7 @@ export function LineChart({
                 if (!point) return null;
                 return (
                   <circle
-                    key={`dot-${line.label}`}
+                    key={`dot-${line.seriesIndex}`}
                     className={styles.dot}
                     cx={point.x}
                     cy={point.y}
@@ -354,7 +365,7 @@ export function LineChart({
             : null}
           {layout.categoryLabels.map((entry) => (
             <text
-              key={entry.label}
+              key={entry.index}
               x={entry.x}
               y={entry.y}
               className={styles.categoryLabel}
@@ -389,7 +400,7 @@ export function LineChart({
           ) : null}
           {layout.samples.map((sample) => (
             <rect
-              key={`hit-${sample.label}-${sample.index}`}
+              key={`hit-${sample.index}`}
               className={styles.hit}
               x={sample.hitX}
               y={layout.plotTop}
@@ -414,7 +425,7 @@ export function LineChart({
           >
             <p className={frameStyles.tooltipTitle}>{activeSample.label}</p>
             {visibleLines.map((line) => (
-              <div key={line.label} className={frameStyles.tooltipRow}>
+              <div key={line.seriesIndex} className={frameStyles.tooltipRow}>
                 <span className={frameStyles.tooltipKey} style={{ background: line.color }} aria-hidden />
                 <span className={frameStyles.tooltipShare}>{line.label}</span>
                 <span className={frameStyles.tooltipValue}>{formatValue(line.data[activeSample.index] ?? 0)}</span>

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ChartFrame } from "../shared/ChartFrame";
 import frameStyles from "../shared/ChartFrame.module.css";
 import {
+  axisLabels,
   CHART_MARGINS,
   colorAt,
   formatAxisTick,
@@ -14,6 +15,7 @@ import {
   seriesExtent,
   type ChartSeries,
 } from "../shared/chartMath";
+import { measureLabel } from "../shared/measureLabel";
 import { useChartSize } from "../shared/useChartSize";
 import type { BarChartProps } from "./BarChart.types";
 import styles from "./BarChart.module.css";
@@ -21,9 +23,14 @@ import styles from "./BarChart.module.css";
 export type { BarChartProps, BarChartOrientation } from "./BarChart.types";
 
 const DEFAULT_MAX_BAR_WIDTH = 32;
+/** Dense layout (many categories): thinner padding and gaps before bars may shrink below 8px. */
+const DENSE_BAND_PAD = 0.15;
+const DENSE_BAR_GAP = 2;
+const DENSE_MIN_BAR_WIDTH = 6;
 
 type BarGeom = {
   key: string;
+  seriesIndex: number;
   category: string;
   series: string;
   color: string;
@@ -47,7 +54,7 @@ type TickMark = {
   gridY2: number;
 };
 
-type CategoryLabel = { label: string; x: number; y: number };
+type CategoryLabel = { index: number; label: string; x: number; y: number };
 
 const EMPTY_LAYOUT = {
   bars: [] as BarGeom[],
@@ -58,6 +65,8 @@ const EMPTY_LAYOUT = {
   plotRight: 0,
   plotTop: 0,
   plotBottom: 0,
+  contentWidth: 0,
+  scrolls: false,
 };
 
 function ChartTable({ categories, series }: { categories: string[]; series: ChartSeries[] }) {
@@ -67,8 +76,8 @@ function ChartTable({ categories, series }: { categories: string[]; series: Char
         <thead>
           <tr>
             <th scope="col">Category</th>
-            {series.map((entry) => (
-              <th key={entry.label} scope="col">
+            {series.map((entry, seriesIndex) => (
+              <th key={seriesIndex} scope="col">
                 {entry.label}
               </th>
             ))}
@@ -76,10 +85,10 @@ function ChartTable({ categories, series }: { categories: string[]; series: Char
         </thead>
         <tbody>
           {categories.map((category, index) => (
-            <tr key={category}>
+            <tr key={index}>
               <th scope="row">{category}</th>
-              {series.map((entry) => (
-                <td key={entry.label}>{formatValue(entry.data[index] ?? 0)}</td>
+              {series.map((entry, seriesIndex) => (
+                <td key={seriesIndex}>{formatValue(entry.data[index] ?? 0)}</td>
               ))}
             </tr>
           ))}
@@ -96,22 +105,23 @@ function Legend({
   onClear,
 }: {
   series: ChartSeries[];
-  active: string | null;
-  onActivate: (label: string) => void;
+  active: number | null;
+  onActivate: (seriesIndex: number) => void;
   onClear: () => void;
 }) {
   return (
     <ul className={`${frameStyles.legend} ${frameStyles.legendInteractive}`}>
-      {series.map((entry) => {
-        const dimmed = Boolean(active) && active !== entry.label;
+      {series.map((entry, seriesIndex) => {
+        if (!entry.label.trim()) return null;
+        const dimmed = active !== null && active !== seriesIndex;
         return (
-          <li key={entry.label}>
+          <li key={seriesIndex}>
             <button
               type="button"
               className={`${frameStyles.legendItem} ${frameStyles.legendButton}${dimmed ? ` ${frameStyles.legendItemDimmed}` : ""}`}
-              onMouseEnter={() => onActivate(entry.label)}
+              onMouseEnter={() => onActivate(seriesIndex)}
               onMouseLeave={onClear}
-              onFocus={() => onActivate(entry.label)}
+              onFocus={() => onActivate(seriesIndex)}
               onBlur={onClear}
             >
               <span
@@ -140,12 +150,15 @@ export function BarChart({
   showTable = true,
   emptyLabel = "No data for this range",
   isLoading = false,
+  tickInterval,
+  formatLabel,
   className,
   ref: rootRef,
   ...rest
 }: BarChartProps) {
   const [activeBar, setActiveBar] = useState<string | null>(null);
-  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const [highlighted, setHighlighted] = useState<number | null>(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const { ref, width } = useChartSize(height);
 
   const { categories, series } = useMemo(
@@ -157,16 +170,34 @@ export function BarChart({
   const isEmpty = !categories.length || !series.length || !hasValues;
   const isVertical = orientation === "vertical";
   const isSingleSeries = series.length === 1;
-  const labelledSeries = series.filter((entry) => entry.label.trim().length > 0);
-  const showLegend = labelledSeries.length >= 2;
+  const showLegend = series.filter((entry) => entry.label.trim().length > 0).length >= 2;
 
   const layout = useMemo(() => {
     if (isEmpty || width <= 0) return EMPTY_LAYOUT;
 
-    const plotLeft = CHART_MARGINS.left;
-    const plotRight = width - CHART_MARGINS.right;
+    const groupCount = categories.length;
+    const seriesCount = series.length;
     const plotTop = CHART_MARGINS.top;
     const plotBottom = height - CHART_MARGINS.bottom;
+    const naturalSpan = isVertical
+      ? width - CHART_MARGINS.left - CHART_MARGINS.right
+      : plotBottom - plotTop;
+    const naturalGroup = naturalSpan / Math.max(groupCount, 1);
+    const fitsRegular =
+      (naturalGroup * (1 - 0.48) - (seriesCount > 1 ? 4 : 0) * Math.max(seriesCount - 1, 0)) / seriesCount >= 8;
+    const denseGap = seriesCount > 1 ? DENSE_BAR_GAP : 0;
+    const denseMinGroup =
+      (seriesCount * DENSE_MIN_BAR_WIDTH + denseGap * Math.max(seriesCount - 1, 0)) / (1 - DENSE_BAND_PAD * 2);
+    // Vertical charts that cannot fit even dense bars keep a minimum group width and scroll sideways,
+    // with the value axis pinned outside the scroller.
+    const scrolls = isVertical && !fitsRegular && naturalGroup < denseMinGroup;
+    // Scrolled content gets a small inset on both ends so edge labels are not clipped.
+    const contentWidth = scrolls
+      ? groupCount * denseMinGroup + CHART_MARGINS.right * 2
+      : width;
+
+    const plotLeft = scrolls ? CHART_MARGINS.right : CHART_MARGINS.left;
+    const plotRight = contentWidth - CHART_MARGINS.right;
 
     const [rawMin, rawMax] = seriesExtent(series, { includeZero: true });
     const { ticks, min, max } = niceTicks(rawMin, rawMax, 5);
@@ -175,16 +206,14 @@ export function BarChart({
       isVertical ? [plotBottom, plotTop] : [plotLeft, plotRight],
     );
 
-    const groupCount = categories.length;
-    const seriesCount = series.length;
     const plotSpan = isVertical ? plotRight - plotLeft : plotBottom - plotTop;
     const groupSize = plotSpan / Math.max(groupCount, 1);
-    const bandPad = groupSize * 0.24;
-    const barGap = seriesCount > 1 ? 4 : 0;
-    const inner = Math.max(groupSize - bandPad * 2, 8);
+    const bandPad = groupSize * (fitsRegular ? 0.24 : DENSE_BAND_PAD);
+    const barGap = seriesCount > 1 ? (fitsRegular ? 4 : DENSE_BAR_GAP) : 0;
+    const inner = fitsRegular ? Math.max(groupSize - bandPad * 2, 8) : groupSize - bandPad * 2;
     const barWidth = Math.min(
       DEFAULT_MAX_BAR_WIDTH,
-      Math.max(8, (inner - barGap * Math.max(seriesCount - 1, 0)) / seriesCount),
+      Math.max(fitsRegular ? 8 : 1, (inner - barGap * Math.max(seriesCount - 1, 0)) / seriesCount),
     );
     const clusterWidth = seriesCount * barWidth + Math.max(seriesCount - 1, 0) * barGap;
 
@@ -206,7 +235,8 @@ export function BarChart({
         const barW = isVertical ? barWidth : Math.abs(end - origin);
         const barH = isVertical ? Math.abs(end - origin) : barWidth;
         return {
-          key: `${category}-${entry.label}`,
+          key: `${categoryIndex}-${seriesIndex}`,
+          seriesIndex,
           category,
           series: entry.label,
           color,
@@ -224,15 +254,22 @@ export function BarChart({
     const tickMarks: TickMark[] = ticks.map((tick) => ({
       value: tick,
       label: formatAxisTick(tick),
-      x: isVertical ? plotLeft - 8 : valueScale(tick),
+      x: isVertical ? CHART_MARGINS.left - 8 : valueScale(tick),
       y: isVertical ? valueScale(tick) : plotBottom + 18,
-      gridX1: isVertical ? plotLeft : valueScale(tick),
+      gridX1: isVertical ? (scrolls ? 0 : plotLeft) : valueScale(tick),
       gridX2: isVertical ? plotRight : valueScale(tick),
       gridY1: isVertical ? valueScale(tick) : plotTop,
       gridY2: isVertical ? valueScale(tick) : plotBottom,
     }));
 
-    const categoryLabels: CategoryLabel[] = categories.map((label, index) => ({
+    const categoryLabels: CategoryLabel[] = axisLabels(categories, {
+      spacing: groupSize,
+      stacked: !isVertical,
+      tickInterval,
+      formatLabel,
+      measure: measureLabel,
+    }).map(({ index, label }) => ({
+      index,
       label,
       x: isVertical ? plotLeft + index * groupSize + groupSize / 2 : plotLeft - 8,
       y: isVertical ? plotBottom + 18 : plotTop + index * groupSize + groupSize / 2,
@@ -247,17 +284,118 @@ export function BarChart({
       plotRight,
       plotTop,
       plotBottom,
+      contentWidth,
+      scrolls,
     };
-  }, [categories, data, height, isEmpty, isSingleSeries, isVertical, series, width]);
+  }, [categories, data, formatLabel, height, isEmpty, isSingleSeries, isVertical, series, tickInterval, width]);
 
   const active = layout.bars.find((bar) => bar.key === activeBar) ?? null;
-  const flipTooltip = Boolean(active && width > 0 && active.cx > width * 0.6);
+  const offsetX = layout.scrolls ? CHART_MARGINS.left - scrollLeft : 0;
+  const activeX = active ? active.cx + offsetX : 0;
+  const flipTooltip = Boolean(active && width > 0 && activeX > width * 0.6);
 
   const isDimmed = (bar: BarGeom) => {
-    if (highlighted) return bar.series !== highlighted;
+    if (highlighted !== null) return bar.seriesIndex !== highlighted;
     if (activeBar) return bar.key !== activeBar;
     return false;
   };
+
+  const tickLabels = layout.ticks.map((tick) => (
+    <text
+      key={`tick-${tick.value}`}
+      x={tick.x}
+      y={tick.y}
+      className={styles.tickLabel}
+      textAnchor={isVertical ? "end" : "middle"}
+      dominantBaseline={isVertical ? "middle" : "hanging"}
+    >
+      {tick.label}
+    </text>
+  ));
+
+  const plot = (
+    <svg
+      className={styles.chart}
+      width={layout.scrolls ? layout.contentWidth : width || "100%"}
+      height={height}
+      style={layout.scrolls ? { width: layout.contentWidth } : undefined}
+      role="img"
+      aria-label={title}
+    >
+      {showGrid
+        ? layout.ticks.map((tick) => {
+            const horizontal = tick.gridY1 === tick.gridY2;
+            const x1 = horizontal ? tick.gridX1 : Math.round(tick.gridX1) + 0.5;
+            const x2 = horizontal ? tick.gridX2 : Math.round(tick.gridX2) + 0.5;
+            const y1 = horizontal ? Math.round(tick.gridY1) + 0.5 : tick.gridY1;
+            const y2 = horizontal ? Math.round(tick.gridY2) + 0.5 : tick.gridY2;
+            return (
+              <line
+                key={tick.value}
+                x1={x1}
+                x2={x2}
+                y1={y1}
+                y2={y2}
+                className={styles.grid}
+                vectorEffect="non-scaling-stroke"
+              />
+            );
+          })
+        : null}
+      {width > 0 && !showGrid ? (
+        <>
+          {layout.scrolls ? null : (
+            <line
+              className={styles.axis}
+              x1={layout.plotLeft}
+              x2={layout.plotLeft}
+              y1={layout.plotTop}
+              y2={layout.plotBottom}
+            />
+          )}
+          <line
+            className={styles.axis}
+            x1={layout.scrolls ? 0 : layout.plotLeft}
+            x2={layout.plotRight}
+            y1={layout.plotBottom}
+            y2={layout.plotBottom}
+          />
+        </>
+      ) : null}
+      {layout.bars.map((bar) => (
+        <rect
+          key={bar.key}
+          className={`${styles.bar}${isDimmed(bar) ? ` ${styles.barDimmed}` : ""}`}
+          x={bar.x}
+          y={bar.y}
+          width={bar.width}
+          height={bar.height}
+          fill={bar.color}
+          rx={2}
+          tabIndex={0}
+          role="button"
+          aria-label={`${bar.category} ${bar.series}: ${formatValue(bar.value)}`}
+          onMouseEnter={() => setActiveBar(bar.key)}
+          onMouseLeave={() => setActiveBar(null)}
+          onFocus={() => setActiveBar(bar.key)}
+          onBlur={() => setActiveBar(null)}
+        />
+      ))}
+      {layout.categoryLabels.map((entry) => (
+        <text
+          key={entry.index}
+          x={entry.x}
+          y={entry.y}
+          className={styles.categoryLabel}
+          textAnchor={isVertical ? "middle" : "end"}
+          dominantBaseline={isVertical ? "hanging" : "middle"}
+        >
+          {entry.label}
+        </text>
+      ))}
+      {layout.scrolls ? null : tickLabels}
+    </svg>
+  );
 
   return (
     <ChartFrame
@@ -267,7 +405,7 @@ export function BarChart({
       description={description}
       legend={showLegend ? (
         <Legend
-          series={labelledSeries}
+          series={series}
           active={highlighted}
           onActivate={setHighlighted}
           onClear={() => setHighlighted(null)}
@@ -280,93 +418,37 @@ export function BarChart({
       className={className}
     >
       <div ref={ref} className={styles.plot}>
-        <svg className={styles.chart} width={width || "100%"} height={height} role="img" aria-label={title}>
-          {showGrid
-            ? layout.ticks.map((tick) => {
-                const horizontal = tick.gridY1 === tick.gridY2;
-                const x1 = horizontal ? tick.gridX1 : Math.round(tick.gridX1) + 0.5;
-                const x2 = horizontal ? tick.gridX2 : Math.round(tick.gridX2) + 0.5;
-                const y1 = horizontal ? Math.round(tick.gridY1) + 0.5 : tick.gridY1;
-                const y2 = horizontal ? Math.round(tick.gridY2) + 0.5 : tick.gridY2;
-                return (
-                  <line
-                    key={tick.value}
-                    x1={x1}
-                    x2={x2}
-                    y1={y1}
-                    y2={y2}
-                    className={styles.grid}
-                    vectorEffect="non-scaling-stroke"
-                  />
-                );
-              })
-            : null}
-          {width > 0 && !showGrid ? (
-            <>
-              <line
-                className={styles.axis}
-                x1={layout.plotLeft}
-                x2={layout.plotLeft}
-                y1={layout.plotTop}
-                y2={layout.plotBottom}
-              />
-              <line
-                className={styles.axis}
-                x1={layout.plotLeft}
-                x2={layout.plotRight}
-                y1={layout.plotBottom}
-                y2={layout.plotBottom}
-              />
-            </>
-          ) : null}
-          {layout.bars.map((bar) => (
-            <rect
-              key={bar.key}
-              className={`${styles.bar}${isDimmed(bar) ? ` ${styles.barDimmed}` : ""}`}
-              x={bar.x}
-              y={bar.y}
-              width={bar.width}
-              height={bar.height}
-              fill={bar.color}
-              rx={2}
+        {layout.scrolls ? (
+          <div className={styles.scrollLayout}>
+            <svg className={styles.valueAxis} width={CHART_MARGINS.left} height={height} aria-hidden>
+              {tickLabels}
+              {!showGrid ? (
+                <line
+                  className={styles.axis}
+                  x1={CHART_MARGINS.left - 1}
+                  x2={CHART_MARGINS.left - 1}
+                  y1={layout.plotTop}
+                  y2={layout.plotBottom}
+                />
+              ) : null}
+            </svg>
+            <div
+              className={styles.scroller}
               tabIndex={0}
-              role="button"
-              aria-label={`${bar.category} ${bar.series}: ${formatValue(bar.value)}`}
-              onMouseEnter={() => setActiveBar(bar.key)}
-              onMouseLeave={() => setActiveBar(null)}
-              onFocus={() => setActiveBar(bar.key)}
-              onBlur={() => setActiveBar(null)}
-            />
-          ))}
-          {layout.categoryLabels.map((entry) => (
-            <text
-              key={entry.label}
-              x={entry.x}
-              y={entry.y}
-              className={styles.categoryLabel}
-              textAnchor={isVertical ? "middle" : "end"}
-              dominantBaseline={isVertical ? "hanging" : "middle"}
+              role="region"
+              aria-label={`${title ?? "Bar chart"}, scrolls horizontally`}
+              onScroll={(event) => setScrollLeft(event.currentTarget.scrollLeft)}
             >
-              {entry.label}
-            </text>
-          ))}
-          {layout.ticks.map((tick) => (
-            <text
-              key={`tick-${tick.value}`}
-              x={tick.x}
-              y={tick.y}
-              className={styles.tickLabel}
-              textAnchor={isVertical ? "end" : "middle"}
-              dominantBaseline={isVertical ? "middle" : "hanging"}
-            >
-              {tick.label}
-            </text>
-          ))}
-        </svg>
+              {plot}
+            </div>
+          </div>
+        ) : (
+          plot
+        )}
         {active ? (
           <div
             className={`${frameStyles.tooltip}${flipTooltip ? ` ${frameStyles.tooltipFlip}` : ""}`}
-            style={{ left: active.cx, top: active.cy }}
+            style={{ left: activeX, top: active.cy }}
             role="status"
             aria-live="polite"
           >

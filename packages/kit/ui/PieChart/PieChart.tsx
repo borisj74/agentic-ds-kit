@@ -37,8 +37,8 @@ function ChartTable({ segments, total }: { segments: PreparedSegment[]; total: n
           </tr>
         </thead>
         <tbody>
-          {segments.map((segment) => (
-            <tr key={segment.label}>
+          {segments.map((segment, index) => (
+            <tr key={index}>
               <th scope="row">{segment.label}</th>
               <td>{formatValue(segment.value)}</td>
               <td>{`${Math.round(segment.share * 100)}%`}</td>
@@ -63,26 +63,26 @@ function Legend({
   onClear,
 }: {
   segments: PreparedSegment[];
-  active: string | null;
+  active: number | null;
   orientation: "vertical" | "horizontal";
-  onActivate: (label: string) => void;
+  onActivate: (index: number) => void;
   onClear: () => void;
 }) {
   return (
     <ul
       className={`${frameStyles.legend} ${frameStyles.legendInteractive}${orientation === "vertical" ? ` ${frameStyles.legendVertical}` : ""}`}
     >
-      {segments.map((segment) => {
-        const dimmed = Boolean(active) && active !== segment.label;
+      {segments.map((segment, index) => {
+        const dimmed = active !== null && active !== index;
         const percent = `${Math.round(segment.share * 100)}%`;
         return (
-          <li key={segment.label}>
+          <li key={index}>
             <button
               type="button"
               className={`${frameStyles.legendItem} ${frameStyles.legendButton}${dimmed ? ` ${frameStyles.legendItemDimmed}` : ""}`}
-              onMouseEnter={() => onActivate(segment.label)}
+              onMouseEnter={() => onActivate(index)}
               onMouseLeave={onClear}
-              onFocus={() => onActivate(segment.label)}
+              onFocus={() => onActivate(index)}
               onBlur={onClear}
             >
               <span
@@ -121,7 +121,7 @@ export function PieChart({
   ref: rootRef,
   ...rest
 }: PieChartProps) {
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<number | null>(null);
   const rawId = useId();
   const glowId = `pie-glow-${rawId.replace(/:/g, "")}`;
   const isDonut = variant === "donut";
@@ -170,7 +170,7 @@ export function PieChart({
     return { cx, cy, slices };
   }, [isDonut, isEmpty, segments, size]);
 
-  const activeSlice = geometry.slices.find((slice) => slice.label === active) ?? null;
+  const activeSlice = active !== null ? (geometry.slices[active] ?? null) : null;
   const compactTotal = formatValue(total);
   const valueSize = size * 0.14;
   const labelSize = size * 0.07;
@@ -199,12 +199,12 @@ export function PieChart({
             <feGaussianBlur stdDeviation="2.2" />
           </filter>
         </defs>
-        {geometry.slices.map((slice) => {
-          const isActive = active === slice.label;
-          const isDimmed = Boolean(active) && !isActive;
+        {geometry.slices.map((slice, index) => {
+          const isActive = active === index;
+          const isDimmed = active !== null && !isActive;
           return (
             <g
-              key={slice.label}
+              key={index}
               className={`${styles.slice}${isActive ? ` ${styles.sliceActive}` : ""}${isDimmed ? ` ${styles.sliceDimmed}` : ""}`}
             >
               <path
@@ -238,18 +238,18 @@ export function PieChart({
             </tspan>
           </text>
         ) : null}
-        {geometry.slices.map((slice) => (
+        {geometry.slices.map((slice, index) => (
           <path
-            key={`hit-${slice.label}`}
+            key={`hit-${index}`}
             className={styles.hit}
             d={slice.path}
             fill="transparent"
             tabIndex={0}
             role="button"
             aria-label={`${slice.label}: ${formatValue(slice.value)}, ${slice.percent} percent`}
-            onMouseEnter={() => setActive(slice.label)}
+            onMouseEnter={() => setActive(index)}
             onMouseLeave={() => setActive(null)}
-            onFocus={() => setActive(slice.label)}
+            onFocus={() => setActive(index)}
             onBlur={() => setActive(null)}
           />
         ))}

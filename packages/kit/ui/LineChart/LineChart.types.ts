@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
-import type { ChartDatum, ChartSeries } from "../shared/chartMath";
+import type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../shared/chartMath";
 
 export type LineChartVariant = "line" | "area";
 
@@ -18,6 +18,10 @@ export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">,
   includeZero?: boolean;
   emptyLabel?: string;
   isLoading?: boolean;
+  /** Draw every Nth axis label (1 = all). With neither this nor `formatLabel`, labels thin out automatically only when they would overlap. */
+  tickInterval?: number;
+  /** Text drawn for each axis label; return "" to hide one (turns off automatic thinning). The data table and accessible names keep the raw label. */
+  formatLabel?: AxisLabelFormatter;
   className?: string;
   ref?: Ref<HTMLElement>;
 }
