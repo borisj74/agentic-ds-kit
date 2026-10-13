@@ -57,6 +57,8 @@ Importing from `agentic-ds-kit` loads semantic tokens (`--text-primary`, `--spac
 
 By default `layout-canvas` is the page frame: put a `layout-header` (title row) and a `layout-content` (padded, scrolling stack) inside it. If you put content straight into the canvas instead (`<main className="layout-canvas"><PageHeader title="…" /><Card>…</Card></main>`), the canvas pads and stacks it itself. Layout is yours; these are defaults, not rules.
 
+`layout-workspace` works the same way: by default its first child is the main column (a `layout-content` or `layout-canvas`) and its second is the rail. Put content straight into the main column (`<main><PageHeader title="…" /><Card>…</Card></main>`) and the workspace pads and stacks it; the rail stays flush, so rail components like Chat keep their own edges.
+
 **3. Use components**
 
 ```tsx
