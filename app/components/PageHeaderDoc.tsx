@@ -64,7 +64,7 @@ export function PageHeaderDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>PageHeader</h1>
         <p className={styles.lede}>
-          Page title block. Optional Breadcrumb trail above. Actions are kit Buttons. One piece. Not
+          Page title block. Optional Breadcrumb trail above. Actions take kit Buttons or other controls, such as a search Input; one primary at most. One piece. Not
           a Breadcrumb cousin.
         </p>
       </header>
