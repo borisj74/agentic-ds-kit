@@ -1,0 +1,52 @@
+/* Shorter browser frames: three layouts stack on one page. */
+.frame {
+  height: 24rem;
+  min-height: 0;
+}
+
+/* Fills the frame below the fake browser bar. */
+.fill {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Holds SideNav in the layout-app first column at full height. */
+.rail {
+  display: flex;
+  min-height: 0;
+}
+
+/* Fills the Drawer body so the SideNav footer sits at the bottom. */
+.drawerNav {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+/* The Menu Button only shows on small screens; the brand mark only on wide ones. */
+.narrowOnly {
+  display: none;
+}
+
+/* Below --grid-breakpoint-md (64rem; media queries cannot read var()): no rail, the
+   nav moves into a left Drawer behind the Menu Button. */
+@media (width < 64rem) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail,
+  .wideOnly {
+    display: none;
+  }
+
+  .narrowOnly {
+    display: contents;
+  }
+}
+
+.menuRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

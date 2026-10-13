@@ -279,9 +279,10 @@ export function AppHeaderDoc() {
                 <p className={styles.usageBody}>
                   start, center and end each replace one region: brand, search, actions. Unset
                   slots keep their default. center stacks under the bar in narrow containers, like
-                  search. Compose kit components in slots only. In AppShellPattern, start also
-                  replaces the Menu Button the shell puts in the brand cell on narrow screens, so
-                  a header that sets start must place AppShellPattern.MenuButton inside it.
+                  search. Compose kit components in slots only. In the app-shell example (npx
+                  agentic-ds-kit add app-shell), start also replaces the Menu Button the shell puts
+                  in the brand cell on narrow screens, so a header that sets start must place
+                  AppShellMenuButton inside it.
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
@@ -311,8 +312,9 @@ export function AppHeaderDoc() {
                   Brand is the start column (rail-width mark cell, then children); Search, Center
                   or Spacer fill the center; Actions is the labelled end group. Leave the center
                   out and the bar drops to two columns. To start from the preset&apos;s source, run
-                  npx agentic-ds-kit add app-header. In AppShellPattern, put
-                  AppShellPattern.MenuButton in Brand&apos;s logo.
+                  npx agentic-ds-kit add app-header. When the header opens a nav Drawer on small
+                  screens, put the Menu Button in Brand&apos;s logo (app-shell&apos;s
+                  AppShellMenuButton does this).
                 </p>
               </div>
               <CodeBlock code={BLOCKS_CODE} />

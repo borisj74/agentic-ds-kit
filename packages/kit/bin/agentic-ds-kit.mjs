@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * agentic-ds-kit add <name>: copy a pattern's (or a chrome recipe's) source into your app
- * so you own it. Reads patterns-src/ (built from ui/patterns/ and recipes/ at publish
+ * so you own it. Reads patterns-src/ (built from patterns/ and recipes/ at publish
  * time). No dependencies.
  */
 import { existsSync } from "node:fs";
@@ -15,8 +15,9 @@ const srcRoot = join(pkgRoot, "patterns-src");
 
 const HELP = `Usage: npx agentic-ds-kit add <name> [options]
 
-Copy a kit pattern, or a chrome recipe (a component preset rebuilt from its
-building blocks), into your app so you can edit it.
+Copy a pattern (an example screen or layout built from kit components), or a
+chrome recipe (a component preset rebuilt from its building blocks), into your
+app so you can edit it. Patterns are starting points; change or ignore them.
 
 Options:
   --list         List patterns and recipes you can add
@@ -29,6 +30,7 @@ Options:
 Examples:
   npx agentic-ds-kit add --list
   npx agentic-ds-kit add dashboard
+  npx agentic-ds-kit add app-shell
   npx agentic-ds-kit add app-header
   npx agentic-ds-kit add inbox --dir app/inbox/_pattern`;
 
@@ -61,7 +63,7 @@ const kindOf = (entry) => entry.kind ?? "pattern";
 function printList(manifest) {
   const width = Math.max(...manifest.map((p) => p.id.length));
   const sections = [
-    ["Patterns you can add:", "pattern"],
+    ["Patterns (examples to start from):", "pattern"],
     ["Recipes (chrome presets built from blocks):", "recipe"],
   ];
   for (const [heading, kind] of sections) {
@@ -145,9 +147,14 @@ const spec =
   tsconfig.includes('"@/*"') && !rel.startsWith("..") && rel.startsWith(aliasBase)
     ? `@/${rel.slice(aliasBase.length)}`
     : rel;
+const contracts = pattern.files.filter((f) => f.endsWith(".contract.json")).join(", ");
+const rules =
+  kindOf(pattern) === "pattern"
+    ? "agents follow its `must` lines (kit look and accessibility); its `defaults` are\nsuggestions you can change"
+    : "agents keep the kit rules (tokens, one primary Button, kit components only)";
 console.log(`
 Use it:
   import { ${pattern.name} } from "${spec}";
 
-You own these files now; edit them freely. Keep ${pattern.files.filter((f) => f.endsWith(".contract.json")).join(", ")} next to
-them so agents keep the kit rules (tokens, one primary Button, kit components only).`);
+You own these files now; edit them freely. Keep ${contracts} next to
+them so ${rules}.`);

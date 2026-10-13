@@ -77,7 +77,7 @@
     "start": {
       "type": "slot",
       "required": false,
-      "note": "Replaces the start region (default: brand mark or logo, then title). title still names the header landmark. In AppShellPattern with a props header, start also replaces the Menu Button the shell injects as logo: put AppShellPattern.MenuButton inside your start."
+      "note": "Replaces the start region (default: brand mark or logo, then title). title still names the header landmark. If you host it in the app-shell example (add app-shell) with a props header, start also replaces the Menu Button the shell injects as logo: put AppShellMenuButton inside your start."
     },
     "center": {
       "type": "slot",
@@ -119,7 +119,7 @@
     "nesting": [
       "AppHeader.Root holds, in order: one AppHeader.Brand (start), at most one of AppHeader.Search / AppHeader.Center / AppHeader.Spacer (center), one AppHeader.Actions (end)",
       "AppHeader.Brand children follow the brand cell: AppHeader.Title, then optional kit components (Badge, Select, DropdownMenu)",
-      "AppHeader.Mark goes in a logo slot (Brand logo, AppShellPattern.MenuButton children); Brand renders it itself from mark",
+      "AppHeader.Mark goes in a logo slot (Brand logo, or the children of a narrow-screen menu trigger such as app-shell's AppShellMenuButton); Brand renders it itself from mark",
       "Without a center block the bar uses two columns (start, end), as with search={false}"
     ],
     "blocks": {
@@ -142,7 +142,7 @@
         "element": "div",
         "props": {
           "mark": "Brand letter in the rail-width cell",
-          "logo": "ReactNode in the rail-width cell; replaces the letter. AppShellPattern.MenuButton goes here in a built shell header.",
+          "logo": "ReactNode in the rail-width cell; replaces the letter. A narrow-screen menu trigger (e.g. app-shell's AppShellMenuButton) goes here when the header opens a nav Drawer.",
           "children": "After the brand cell, e.g. AppHeader.Title"
         },
         "passthrough": {

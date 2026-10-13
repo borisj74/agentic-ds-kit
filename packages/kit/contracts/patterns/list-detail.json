@@ -1,19 +1,31 @@
 {
   "id": "list-detail",
   "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
   "add": "npx agentic-ds-kit add list-detail",
   "import": "import { ListDetailPattern } from \"@/components/patterns/list-detail\";",
-  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/list-detail/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/list-detail/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
   "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
-  "contains": ["pageheader", "appnav", "table", "section", "badge"],
-  "doNot": [
-    "Do not import ListDetailPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add list-detail)",
-    "Do not restyle AppNav or Table",
-    "Do not replace Table with custom list markup",
-    "Do not add a local sidebar — product chrome is SideNav under AppHeader; in-page files stay AppNav",
-    "Do not use Tabs instead of AppNav for route-level sections",
-    "Do not invent a padded app shell or a narrow-screen menu. Render this pattern as the children of AppShellPattern (app-shell): AppHeader over SideNav when wide, Menu Button + left Drawer below 64rem."
+  "contains": [
+    "pageheader",
+    "appnav",
+    "table",
+    "section",
+    "badge"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens",
+    "Route-level sections are links (AppNav), not Tabs; Tabs are for panels inside one view"
+  ],
+  "defaults": [
+    "In-page list of files is AppNav; your product nav (if any) is a separate choice",
+    "Sections: PageHeader, AppNav list beside a Table, detail Section"
   ],
   "snippet": "<ListDetailPattern />"
 }

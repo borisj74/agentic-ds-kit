@@ -55,17 +55,17 @@ Run `npm run dev` and confirm the button is the kit primary (filled, kit radius/
 
 Importing from `agentic-ds-kit` loads semantic tokens (`--text-primary`, `--space-4`, …) and pattern layout roles (`layout-canvas`, `layout-header`, `layout-content`). You do **not** add `transpilePackages: ["agentic-ds-kit"]` in `next.config`. That was required for 0.1.0 only.
 
-**3. Use components and patterns**
+**3. Use components**
 
 ```tsx
-import { Button, Scoreboard, AppShellPattern } from "agentic-ds-kit";
+import { AppHeader, Button, Scoreboard, SideNav } from "agentic-ds-kit";
 ```
 
-Agents (and you) should read `node_modules/agentic-ds-kit/contracts/index.json`, then the matching contract JSON, then import that piece. Do not invent a local cousin. Of the patterns, only `AppShellPattern` and `SignInPattern` are imports; content patterns are copied in (next step).
+Agents (and you) should read `node_modules/agentic-ds-kit/contracts/index.json`, then the matching contract JSON, then import that piece. Do not invent a local cousin. Compose components into any layout you like: top bar only, side nav only, both, or neither. Keep page content in `<main>` and the nav reachable on small screens (for example in a kit `Drawer`).
 
 **Copy a pattern into your app**
 
-Content patterns (activity, assistant-workspace, dashboard, empty-first-run, inbox, invite-members, list-detail, settings-form) are not exported from the package since 0.3.0. Copy one's source into your app and edit it (sections, copy, real data):
+Patterns are examples, not rules: start from one, borrow from it, or ignore it. The package exports components only (since 0.4.0); copy a pattern's source into your app and edit it (layout, sections, copy, real data):
 
 ```bash
 npx agentic-ds-kit add --list
@@ -78,7 +78,7 @@ This writes `components/patterns/dashboard/` (or `src/components/patterns/dashbo
 import { DashboardPattern } from "@/components/patterns/dashboard";
 ```
 
-You own the copied files. Keep the contract JSON beside them so agents keep the kit rules (semantic tokens, one primary Button, kit components only). The CSS modules use semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
+You own the copied files. Keep the contract JSON beside them: agents follow its `must` lines (kit components, semantic tokens, one primary Button, landmarks) and treat its `defaults` as suggestions you can change. The CSS modules use semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
 
 | Option | What it does |
 | --- | --- |
@@ -184,6 +184,28 @@ npm view agentic-ds-kit version
 # expect 0.3.5 or higher
 ```
 
+### Upgrade to 0.4.0
+
+0.4.0 is breaking: the package exports components only. `AppShellPattern` (with `AppShellMenuButton`, `useAppShell`, and their types) and `SignInPattern` (and its types) are no longer imports. Pick one:
+
+- **Keep them as they were:** copy the source in and change the import.
+
+  ```bash
+  npx agentic-ds-kit add app-shell
+  npx agentic-ds-kit add sign-in
+  ```
+
+  ```tsx
+  import { AppShellPattern, AppShellMenuButton, useAppShell } from "@/components/patterns/app-shell";
+  import { SignInPattern } from "@/components/patterns/sign-in";
+  ```
+
+- **Compose your own layout:** `AppHeader`, `SideNav`, and `Drawer` are kit components. Top bar only, side nav only, or both are all fine; keep content in `<main>` and the nav reachable on small screens (for example a Menu Button that opens `SideNav` in a left `Drawer`). The docs `/patterns#layouts` section shows three small compositions.
+
+If you copied `add app-header` / `add side-nav` before 0.4.0, re-run them with `--force`: ShellHeader and ShellNav no longer import the app shell. They work alone; to host them in your app-shell copy, pass `header={<ShellHeader menuButton={AppShellMenuButton} />}` and `nav={(placement) => <ShellNav placement={placement} />}` from a client component.
+
+Pattern contracts replaced `doNot` with `must` (kit look and accessibility) and `defaults` (suggestions), and gained `role: "example"`. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules/agentic-ds-kit/`.
+
 ### Get later kit versions
 
 npm does **not** push updates into an already-installed app. The app’s lockfile pins the version from the last install.
@@ -194,7 +216,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.3.5"`, `npm update agentic-ds-kit` also works. A `^0.2.x` range will not pick up 0.3: run `npm install agentic-ds-kit@latest`. 0.3.0 removed the content-pattern imports (Activity, AssistantWorkspace, Dashboard, EmptyFirstRun, Inbox, InviteMembers, ListDetail, SettingsForm); copy them in with `npx agentic-ds-kit add <id>` and import from your own folder. AppShellPattern and SignInPattern are still imports. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.3.5"`, `npm update agentic-ds-kit` also works. An older range (`^0.2.x`, `^0.3.x`) will not pick up a newer minor: run `npm install agentic-ds-kit@latest`. 0.3.0 removed the content-pattern imports (Activity, AssistantWorkspace, Dashboard, EmptyFirstRun, Inbox, InviteMembers, ListDetail, SettingsForm); 0.4.0 removed AppShellPattern and SignInPattern too (see [Upgrade to 0.4.0](#upgrade-to-040)). Copy patterns in with `npx agentic-ds-kit add <id>` and import from your own folder. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -208,7 +230,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
 - [ ] Optional: load IBM Plex Sans/Mono (`next/font`, variables `--font-ibm-plex-sans` / `--font-ibm-plex-mono`) or override `--font-sans`; the kit ships no font files
 - [ ] Optional: copy `AGENTS.md`, `CLAUDE.md`, and the prototype skill for agents
-- [ ] `npx agentic-ds-kit add <pattern>` for each content pattern you use (they are not package imports)
+- [ ] Optional: `npx agentic-ds-kit add <pattern>` for each pattern you want to start from (patterns are not package imports)
 
 ### If something looks wrong
 
@@ -322,10 +344,11 @@ The rule is short on purpose:
 
 1. Read `contracts/index.json`, then only the matching contract file(s).
 2. If a contract exists, import the kit component from `agentic-ds-kit`. Never invent a local cousin.
-3. If a pattern in `contracts/patterns/` matches the screen: content patterns are copy-in (`npx agentic-ds-kit add <id>`, then edit the copy); AppShellPattern and SignInPattern import from `agentic-ds-kit`.
-4. If something is missing from the index, stop and ask — do not add a one-off.
-5. Semantic tokens only. No hex in components. No primitive `--color-*` ramps in component CSS.
-6. One `variant="primary"` Button per view.
+3. Compose components freely; layout is the user's choice. Patterns in `contracts/patterns/` are examples to start from or ignore (`npx agentic-ds-kit add <id>` copies one). In a pattern contract, follow `must`; `defaults` are suggestions.
+4. Layout accessibility: content in `<main>`, chrome in `header` / `nav` landmarks, navigation reachable on small screens.
+5. If a component is missing from the index, stop and ask — do not add a one-off.
+6. Semantic tokens only. No hex in components. No primitive `--color-*` ramps in component CSS.
+7. One `variant="primary"` Button per view.
 
 **Eval prompts** (also in the README) are the smoke test that a coworker’s agent is actually using the kit.
 
@@ -373,7 +396,7 @@ Three groups in `contracts/index.json`:
 | `component` | One UI piece and its props | `packages/kit/contracts/carousel.json` → `packages/kit/ui/Carousel/` |
 | `pattern` | A screen that only composes components | `packages/kit/contracts/patterns/activity.json` → `packages/kit/patterns/ActivityPattern/` (copy-in) |
 
-A **component** contract has `props`, `doNot`, tokens, a11y. A **pattern** contract has `contains` (which components) and `doNot` (what not to invent). Patterns are contracts. They are not a field inside Button.
+A **component** contract has `props`, `doNot`, tokens, a11y. A **pattern** contract has `role: "example"`, `contains` (which components), `must` (kit look and accessibility rules a copy keeps) and `defaults` (the example's suggested composition, each line changeable). Patterns are examples, not a field inside Button.
 
 If the index has no match, the agent must ask. That is the product, not a gap in the docs.
 
@@ -395,8 +418,8 @@ Stop if you were about to add a one-off in `app/` instead of a contract.
 Only when the screen is a repeated composition of existing components.
 
 1. Add an entry to `packages/kit/contracts/index.json` (`group`: `pattern`).
-2. Add `packages/kit/contracts/patterns/{id}.json` with `contains` and `doNot`.
-3. Implement a content pattern in `packages/kit/patterns/{Name}Pattern/` from kit components only (imports `../../ui/X`), with demo data in a sibling `{id}-data.ts`. Set `"delivery": "copy-in"` and `"add"` in its index entry and contract. Do not re-export it: `npm run build` copies it into `patterns-src/` for `npx agentic-ds-kit add`. Chrome patterns that must stay imports live in `packages/kit/ui/patterns/` and are re-exported from `packages/kit/src/index.ts`.
+2. Add `packages/kit/contracts/patterns/{id}.json` with `role: "example"`, `contains`, `must`, and `defaults`.
+3. Implement the pattern in `packages/kit/patterns/{Name}Pattern/` from kit components only (imports `../../ui/X`), with demo data in a sibling `{id}-data.ts`. Set `"delivery": "copy-in"` and `"add"` in its index entry and contract. Do not re-export it (the package exports components only): `npm run build` copies it into `patterns-src/` for `npx agentic-ds-kit add`.
 4. Render it in the docs app by relative import from `packages/kit/patterns/`, not from `agentic-ds-kit`.
 5. Wire playground nav (`lib/playground-nav.ts`) and Agentix (`app/_components/DashboardDemo.tsx`) if it is a product screen.
 6. Mention it in `packages/kit/skills/prototype-from-kit/SKILL.md` (and the Cursor/Claude copies).

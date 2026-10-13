@@ -1,13 +1,13 @@
 "use client";
 
 import { useId, useState, type FormEvent, type ReactNode } from "react";
-import { Alert } from "../../Alert";
-import { Button, type KitIcon } from "../../Button";
-import { Card } from "../../Card";
-import { Checkbox } from "../../Checkbox";
-import { Divider } from "../../Divider";
-import { Field } from "../../Field";
-import { Input } from "../../Input";
+import { Alert } from "../../ui/Alert";
+import { Button, type KitIcon } from "../../ui/Button";
+import { Card } from "../../ui/Card";
+import { Checkbox } from "../../ui/Checkbox";
+import { Divider } from "../../ui/Divider";
+import { Field } from "../../ui/Field";
+import { Input } from "../../ui/Input";
 import styles from "./SignInPattern.module.css";
 
 export type SignInMode = "sign-in" | "sign-up";

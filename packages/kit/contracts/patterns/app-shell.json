@@ -1,7 +1,13 @@
 {
   "id": "app-shell",
   "status": "stable",
-  "intent": "Product chrome at every width. Wide (>= --grid-breakpoint-md, 64rem): AppHeader over SideNav + content (layout-shell / layout-app, radius none, no gap, SideNav showHeader false). Narrow: SideNav hidden; a Menu Button at the start of AppHeader opens the same nav in a left Drawer.",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add app-shell",
+  "import": "import { AppShellPattern } from \"@/components/patterns/app-shell\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/app-shell/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap); narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
   "contains": [
     "appheader",
     "sidenav",
@@ -15,9 +21,9 @@
       "note": "AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from blocks). Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
     },
     "nav": {
-      "type": "object | slot",
+      "type": "object | slot | function",
       "required": true,
-      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer)."
+      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
     },
     "navLabel": {
       "type": "string",
@@ -38,8 +44,8 @@
   "customChrome": {
     "note": "header and nav accept nodes built from kit blocks. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
     "exports": {
-      "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
-      "useAppShell()": "Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null }. Null outside AppShellPattern. Client components only."
+      "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Exported from your app-shell copy. Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
+      "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null }. Null outside AppShellPattern. Client components only."
     },
     "rules": [
       "A built header must contain AppShellPattern.MenuButton; without it the shell warns and narrow screens cannot reach the nav",
@@ -52,7 +58,7 @@
     ],
     "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
     "navSnippet": "function MyNav({ page, go }) {\n  const inDrawer = useAppShell()?.navPlacement === \"drawer\";\n  return (\n    <SideNavRoot aria-label=\"Acme\" radius={inDrawer ? \"md\" : \"none\"} open>\n      <SideNavNav>\n        <SideNavSection label=\"Work\">\n          <SideNavItem label=\"Home\" icon=\"House\" active={page === \"home\"} onClick={() => go(\"home\")} />\n        </SideNavSection>\n      </SideNavNav>\n    </SideNavRoot>\n  );\n}",
-    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader blocks + AppShellPattern.MenuButton) and ShellNav (SideNavRoot / Nav / Section / Item / Footer blocks), built for this slot."
+    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader blocks) and ShellNav (SideNavRoot / Nav / Section / Item / Footer blocks). Both import only kit components and work without app-shell. To host them here (in a client component): header={<ShellHeader menuButton={AppShellMenuButton} />} nav={(placement) => <ShellNav placement={placement} />}."
   },
   "responsive": {
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; the CSS module repeats 64rem only for the first paint before hydration.",
@@ -74,17 +80,21 @@
       "With a built header, AppShellPattern.MenuButton is the only Drawer trigger; it carries the same label and focus return as the injected one"
     ]
   },
-  "doNot": [
-    "Do not invent MobileNav, HamburgerMenu, BottomNav, TabBar, or a bottom tab bar",
-    "Do not make SideNav itself an overlay (position:fixed, its own scrim, focus trap); on narrow screens it renders inside kit Drawer",
-    "Do not add a local scrim, sheet, or fixed aside; kit Drawer is the only overlay",
-    "Do not put the menu trigger outside AppHeader or in a local header cousin; it lives at the start of AppHeader",
-    "Do not keep a fixed SideNav or a collapsed rail below the breakpoint",
-    "Do not read var() inside a media query; use 64rem with a comment naming --grid-breakpoint-md, or matchMedia reading the token",
-    "Do not put a primary Button in the shell; pages own theirs",
-    "Do not invent a padded app shell. Product chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, showHeader false). No gap between header and nav.",
-    "Do not use raw hex",
-    "Do not build your own Menu Button or Drawer toggle for a custom header; place AppShellPattern.MenuButton"
+  "must": [
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view; the shell has none, pages own theirs",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens",
+    "Overlays are kit Drawer or Modal (focus trap, Escape, scrim, focus return built in); no local scrim, sheet, or fixed overlay, and SideNav itself is never an overlay",
+    "Breakpoints follow --grid-breakpoint-md: matchMedia reads the token; media queries cannot read var(), so CSS repeats 64rem with a comment naming the token",
+    "A custom header places AppShellMenuButton (accessible name and focus return built in); without it narrow screens cannot reach the nav"
+  ],
+  "defaults": [
+    "Narrow screens: the nav moves into a left kit Drawer behind a Menu Button; another pattern is fine as long as the nav stays reachable",
+    "The Menu Button sits at the start of AppHeader, in the brand cell on the rail axis",
+    "Below the breakpoint there is no fixed SideNav or collapsed rail; the Drawer holds the nav",
+    "Chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, no header), no gap",
+    "One layout option among many: top bar only, side nav only, both, or neither are all fine"
   ],
   "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
 }

@@ -1,19 +1,76 @@
 {
   "id": "sign-in",
   "status": "stable",
-  "intent": "Standalone sign-in / sign-up page: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
-  "contains": ["card", "field", "input", "checkbox", "button", "divider", "alert"],
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add sign-in",
+  "import": "import { SignInPattern } from \"@/components/patterns/sign-in\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/sign-in/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "Sign-in / sign-up page example: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
+  "contains": [
+    "card",
+    "field",
+    "input",
+    "checkbox",
+    "button",
+    "divider",
+    "alert"
+  ],
   "props": {
-    "mode": { "type": "enum", "values": ["sign-in", "sign-up"], "default": "sign-in", "note": "sign-up adds a Name field, drops Remember me and Forgot password, and swaps the copy." },
-    "productName": { "type": "string", "required": false },
-    "logo": { "type": "slot", "required": false, "note": "App mark above the card." },
-    "providers": { "type": "array", "required": false, "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is any Lucide name or a Lucide component (same as Button iconStart). Omit for email only." },
-    "onSubmit": { "type": "function", "required": false, "note": "(values: { email, password, name?, remember? }) => void. Called only after required and email-format checks pass." },
-    "onProvider": { "type": "function", "required": false, "note": "(id: string) => void" },
-    "onForgotPassword": { "type": "function", "required": false, "note": "Shows 'Forgot password?' (tertiary sm) in sign-in mode." },
-    "onSwitchMode": { "type": "function", "required": false, "note": "(next: mode) => void. Shows the footer switch link." },
-    "error": { "type": "string", "required": false, "note": "Server failure. Danger Alert above the form." },
-    "loading": { "type": "boolean", "default": false, "note": "Primary disabled with a busy label; SSO disabled; form aria-busy." }
+    "mode": {
+      "type": "enum",
+      "values": [
+        "sign-in",
+        "sign-up"
+      ],
+      "default": "sign-in",
+      "note": "sign-up adds a Name field, drops Remember me and Forgot password, and swaps the copy."
+    },
+    "productName": {
+      "type": "string",
+      "required": false
+    },
+    "logo": {
+      "type": "slot",
+      "required": false,
+      "note": "App mark above the card."
+    },
+    "providers": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is any Lucide name or a Lucide component (same as Button iconStart). Omit for email only."
+    },
+    "onSubmit": {
+      "type": "function",
+      "required": false,
+      "note": "(values: { email, password, name?, remember? }) => void. Called only after required and email-format checks pass."
+    },
+    "onProvider": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void"
+    },
+    "onForgotPassword": {
+      "type": "function",
+      "required": false,
+      "note": "Shows 'Forgot password?' (tertiary sm) in sign-in mode."
+    },
+    "onSwitchMode": {
+      "type": "function",
+      "required": false,
+      "note": "(next: mode) => void. Shows the footer switch link."
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "Server failure. Danger Alert above the form."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Primary disabled with a busy label; SSO disabled; form aria-busy."
+    }
   },
   "a11y": {
     "requirements": [
@@ -23,14 +80,19 @@
       "The form is noValidate so browser bubbles never replace Field errors"
     ]
   },
-  "doNot": [
-    "Do not put this inside the app shell (no AppHeader, no SideNav); it is a full page on surface.page",
-    "Do not add more than one primary Button; SSO is secondary, forgot and switch are tertiary",
-    "Do not skip Field wrappers on email, password, or name",
-    "Do not invent a local divider or 'or' rule; use Divider label=\"or\"",
-    "Do not use Card footer actions for submit; the primary lives inside the form",
-    "Do not call an auth API or store credentials in the pattern; pass callbacks",
-    "Do not use raw hex or brand-coloured SSO buttons"
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view (submit); SSO buttons are secondary, forgot and switch are tertiary",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Wrap every labeled input in Field (label, hint, and error wiring)",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens",
+    "Submit is a type=submit Button inside the form (Enter submits), not a Card footer action"
+  ],
+  "defaults": [
+    "A full page on surface.page with no app chrome (no AppHeader or SideNav); put it in your own layout if you prefer",
+    "Presentational: pass callbacks (onSubmit, onProvider, …); wire your own auth, never store credentials in the component",
+    "Centred Card with Field-wrapped email and password, optional Divider label=\"or\" and SSO buttons"
   ],
   "snippet": "<SignInPattern productName=\"Agentix\" providers={[{ id: \"google\", label: \"Continue with Google\" }]} onSubmit={(values) => signIn(values)} onProvider={(id) => sso(id)} onForgotPassword={() => {}} onSwitchMode={setMode} />"
 }

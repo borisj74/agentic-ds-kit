@@ -12,12 +12,12 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { AppHeader } from "../../AppHeader";
-import type { AppHeaderProps } from "../../AppHeader";
-import { Button } from "../../Button";
-import { Drawer } from "../../Drawer";
-import { SideNav } from "../../SideNav";
-import type { SideNavProps } from "../../SideNav";
+import { AppHeader } from "../../ui/AppHeader";
+import type { AppHeaderProps } from "../../ui/AppHeader";
+import { Button } from "../../ui/Button";
+import { Drawer } from "../../ui/Drawer";
+import { SideNav } from "../../ui/SideNav";
+import type { SideNavProps } from "../../ui/SideNav";
 import styles from "./AppShellPattern.module.css";
 
 /** AppHeader props. The shell owns `radius` (always none). */
@@ -34,11 +34,12 @@ export interface AppShellPatternProps {
    */
   header: AppShellHeader | ReactNode;
   /**
-   * SideNav props, or a nav you built (a `SideNav`, later SideNav blocks). A built nav
+   * SideNav props, or a nav you built (a `SideNav`, or SideNav blocks). A built nav
    * renders in the rail when wide and inside the left Drawer when narrow; read
-   * `useAppShell().navPlacement` to adapt it (e.g. always expanded in the Drawer).
+   * `useAppShell().navPlacement` to adapt it (e.g. always expanded in the Drawer), or pass
+   * a function that gets the placement: `(placement) => <ShellNav placement={placement} />`.
    */
-  nav: AppShellNav | ReactNode;
+  nav: AppShellNav | ReactNode | ((placement: AppShellNavPlacement) => ReactNode);
   /** Drawer title on narrow screens. Default: `nav.title`, or "Navigation" for a built nav. */
   navLabel?: string;
   /** Page content: usually a `layout-canvas` or `layout-workspace`, or another pattern. */
@@ -154,9 +155,10 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
   }));
   const wasOpen = useRef(false);
   const headerProps = isPropsObject<AppShellHeader>(header) ? header : null;
-  const navProps = isPropsObject<AppShellNav>(nav) ? nav : null;
+  const navProps = typeof nav !== "function" && isPropsObject<AppShellNav>(nav) ? nav : null;
   const headerNode = headerProps ? null : (header as ReactNode);
-  const navNode = navProps ? null : (nav as ReactNode);
+  const navNode = (placement: AppShellNavPlacement): ReactNode =>
+    typeof nav === "function" ? nav(placement) : (nav as ReactNode);
 
   // Widening past the breakpoint closes the Drawer (adjusted during render, not in an effect).
   const [wasNarrow, setWasNarrow] = useState(narrow);
@@ -215,7 +217,7 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
             {narrow ? null : (
               <div className={styles.rail}>
                 <AppShellContext.Provider value={{ ...shell, navPlacement: "rail" }}>
-                  {navProps ? <SideNav {...navProps} showHeader={false} radius="none" /> : navNode}
+                  {navProps ? <SideNav {...navProps} showHeader={false} radius="none" /> : navNode("rail")}
                 </AppShellContext.Provider>
               </div>
             )}
@@ -234,7 +236,7 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
                   {navProps ? (
                     <SideNav {...navProps} open showHeader={false} radius="md" onOpenChange={undefined} />
                   ) : (
-                    navNode
+                    navNode("drawer")
                   )}
                 </AppShellContext.Provider>
               </div>

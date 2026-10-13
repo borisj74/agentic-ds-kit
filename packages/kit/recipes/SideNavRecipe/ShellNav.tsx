@@ -12,7 +12,6 @@ import {
   SideNavSlot,
   SideNavToggle,
 } from "../../ui/SideNav";
-import { useAppShell } from "../../ui/patterns/AppShellPattern";
 
 export interface ShellNavProps {
   /** Product name: the nav landmark label and the brand header when used on its own. */
@@ -25,18 +24,30 @@ export interface ShellNavProps {
   onNavigate?: (id: string) => void;
   /** Pinned above the rows, e.g. a workspace switcher. Hidden on the closed rail. */
   beforeGroups?: ReactNode;
+  /**
+   * Where a host layout renders it. Omit it for a standalone rail with its own brand header
+   * and Toggle. "rail": flush in a layout column under a header that has the brand (no header,
+   * radius none). "drawer": inside a Drawer (no header, always expanded). The app-shell example
+   * passes it: `nav={(placement) => <ShellNav placement={placement} />}`.
+   */
+  placement?: "rail" | "drawer";
 }
 
 /**
- * SideNav for your app, built from the SideNav blocks so you can rearrange it. On its own
- * it is a closeable rail with a brand header (SideNavBrand: its mark reopens the closed rail)
- * and a Toggle. As
- * `<AppShellPattern nav={<ShellNav />} …>` it drops the header (AppHeader has the brand),
- * sits flush in the rail when wide, and is forced open inside the Drawer.
+ * SideNav for your app, built from the SideNav blocks so you can rearrange it. It imports
+ * only kit components. On its own it is a closeable rail with a brand header (SideNavBrand:
+ * its mark reopens the closed rail) and a Toggle. With `placement` it drops the header (the
+ * host's AppHeader has the brand), sits flush in a rail, or is forced open inside a Drawer.
  */
-export function ShellNav({ title = "Acme", mark, current = "overview", onNavigate, beforeGroups }: ShellNavProps) {
-  const shell = useAppShell();
-  const inDrawer = shell?.navPlacement === "drawer";
+export function ShellNav({
+  title = "Acme",
+  mark,
+  current = "overview",
+  onNavigate,
+  beforeGroups,
+  placement,
+}: ShellNavProps) {
+  const inDrawer = placement === "drawer";
   const [open, setOpen] = useState(true);
 
   // Per-row state: active row and, with onNavigate, an in-app pick instead of the link.
@@ -48,11 +59,11 @@ export function ShellNav({ title = "Acme", mark, current = "overview", onNavigat
   return (
     <SideNavRoot
       aria-label={title}
-      radius={shell && !inDrawer ? "none" : "md"}
+      radius={placement === "rail" ? "none" : "md"}
       open={inDrawer || open}
       onOpenChange={inDrawer ? undefined : setOpen}
     >
-      {shell ? null : (
+      {placement ? null : (
         <SideNavHeader>
           <SideNavBrand title={title} mark={mark} />
           <SideNavToggle />

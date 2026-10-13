@@ -1,10 +1,10 @@
 /**
  * Copies pattern sources into patterns-src/<id>/ for `agentic-ds-kit add`:
- * - patterns/<Name>Pattern/: content patterns (dashboard, inbox, …). Copy-in only; not in dist.
- * - ui/patterns/<Name>Pattern/: chrome patterns (AppShellPattern, SignInPattern), also exported.
+ * - patterns/<Name>Pattern/: every pattern (app-shell, sign-in, dashboard, inbox, …). Copy-in
+ *   examples only; not in dist.
  * - the RECIPES below (component presets rebuilt from their blocks, in recipes/).
- * Kit-relative imports (`../../Button`, `../../ui/shared/chartMath`, `../../ui/AppHeader`)
- * become one import from "agentic-ds-kit", so the copied files compile inside a user's app.
+ * Kit-relative imports (`../../ui/Button`, `../../ui/shared/chartMath`) become one import from
+ * "agentic-ds-kit", so the copied files compile inside a user's app.
  * Writes patterns-src/index.json: id, kind (pattern | recipe), export name, intent, files.
  */
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -34,33 +34,27 @@ const RECIPES = [
     dir: "AppHeaderRecipe",
     name: "ShellHeader",
     contracts: ["appheader"],
-    intent: "AppHeader preset built from AppHeader.Root / Brand / Title / Search / Actions, with the AppShell Menu Button.",
+    intent: "AppHeader preset built from AppHeader.Root / Brand / Title / Search / Actions. Standalone; pass menuButton to host it in app-shell.",
   },
   {
     id: "side-nav",
     dir: "SideNavRecipe",
     name: "ShellNav",
     contracts: ["sidenav"],
-    intent: "SideNav built from SideNavRoot / Header / Brand / Toggle / Nav / Section / Item / Footer: standalone rail, or flush in AppShellPattern's rail and forced open in its Drawer.",
+    intent: "SideNav built from SideNavRoot / Header / Brand / Toggle / Nav / Section / Item / Footer. Standalone closeable rail; pass placement to host it in app-shell's rail or Drawer.",
   },
 ];
 
 const KIT_IMPORT = /^import\s+(type\s+)?\{([^}]*)\}\s+from\s+"(\.\.\/[^"]+)";\n/gm;
-/** Chrome pattern files sit in ui/patterns/<Name>/; content patterns and recipes in patterns/ and recipes/ (beside ui/). */
-const PATTERN_SPEC = /^\.\.\/\.\.\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/;
-const RECIPE_SPEC = /^\.\.\/\.\.\/ui\/(?:[A-Z][A-Za-z]*|patterns\/[A-Z][A-Za-z]*Pattern|shared\/[A-Za-z]+)$/;
-/** Pattern folders and the import specs their files use (content patterns sit beside ui/, like recipes). */
-const PATTERN_SOURCES = [
-  { folder: "patterns", spec: RECIPE_SPEC },
-  { folder: "ui/patterns", spec: PATTERN_SPEC },
-];
+/** Patterns and recipes sit in patterns/ and recipes/ (beside ui/) and import `../../ui/<Name>`. */
+const KIT_SPEC = /^\.\.\/\.\.\/ui\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/;
 
-function rewriteImports(source, file, specOk = PATTERN_SPEC) {
+function rewriteImports(source, file) {
   const values = [];
   const types = [];
   let firstAt = -1;
   const stripped = source.replace(KIT_IMPORT, (_match, typeOnly, names, spec, offset) => {
-    if (!specOk.test(spec)) {
+    if (!KIT_SPEC.test(spec)) {
       throw new Error(`${file}: cannot map import "${spec}" to agentic-ds-kit`);
     }
     for (const raw of names.split(",")) {
@@ -68,7 +62,7 @@ function rewriteImports(source, file, specOk = PATTERN_SPEC) {
       if (!name) continue;
       const isType = Boolean(typeOnly) || name.startsWith("type ");
       const bare = name.replace(/^type\s+/, "");
-      if (/^\.\.\/\.\.\/(?:ui\/)?shared\//.test(spec) && !new RegExp(`\\b${bare}\\b`).test(publicBarrel)) {
+      if (/^\.\.\/\.\.\/ui\/shared\//.test(spec) && !new RegExp(`\\b${bare}\\b`).test(publicBarrel)) {
         throw new Error(`${file}: ${bare} from "${spec}" is not exported by src/index.ts`);
       }
       (isType ? types : values).push(bare);
@@ -95,16 +89,13 @@ await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
 const manifest = [];
-const dirs = [];
-for (const { folder, spec } of PATTERN_SOURCES) {
-  for (const ent of await readdir(join(root, folder), { withFileTypes: true })) {
-    if (!ent.isDirectory() || !ent.name.endsWith("Pattern")) continue;
-    dirs.push({ dirName: ent.name, patternsDir: join(root, folder), spec });
-  }
-}
-dirs.sort((a, b) => a.dirName.localeCompare(b.dirName));
+const patternsDir = join(root, "patterns");
+const dirs = (await readdir(patternsDir, { withFileTypes: true }))
+  .filter((ent) => ent.isDirectory() && ent.name.endsWith("Pattern"))
+  .map((ent) => ent.name)
+  .sort();
 
-for (const { dirName, patternsDir, spec } of dirs) {
+for (const dirName of dirs) {
   const id = toId(dirName);
   const entry = contractIndex.find((c) => c.group === "pattern" && c.id === id);
   if (!entry) throw new Error(`${dirName}: no pattern contract with id "${id}" in contracts/index.json`);
@@ -116,7 +107,7 @@ for (const { dirName, patternsDir, spec } of dirs) {
     const from = join(patternsDir, dirName, file);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const source = await readFile(from, "utf8");
-      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`, spec));
+      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`));
     } else {
       await cp(from, join(target, file));
     }
@@ -137,7 +128,7 @@ for (const recipe of RECIPES) {
     const from = join(source, file);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const text = await readFile(from, "utf8");
-      await writeFile(join(target, file), rewriteImports(text, `recipes/${recipe.dir}/${file}`, RECIPE_SPEC));
+      await writeFile(join(target, file), rewriteImports(text, `recipes/${recipe.dir}/${file}`));
     } else {
       await cp(from, join(target, file));
     }

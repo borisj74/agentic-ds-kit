@@ -1,18 +1,30 @@
 {
   "id": "dashboard",
   "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
   "add": "npx agentic-ds-kit add dashboard",
   "import": "import { DashboardPattern } from \"@/components/patterns/dashboard\";",
-  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/dashboard/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/dashboard/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
   "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
-  "contains": ["pageheader", "scoreboard", "linechart", "section", "datatable"],
-  "doNot": [
-    "Do not import DashboardPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add dashboard)",
-    "Do not restyle kit components inside the pattern",
-    "Do not define a local dashboard layout component",
-    "Do not invent a local table, filter bar, or chart wrapper",
-    "Do not invent a padded app shell or a narrow-screen menu. Render this pattern as the children of AppShellPattern (app-shell): AppHeader over SideNav when wide, Menu Button + left Drawer below 64rem."
+  "contains": [
+    "pageheader",
+    "scoreboard",
+    "linechart",
+    "section",
+    "datatable"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+  ],
+  "defaults": [
+    "Layout uses the kit layout classes (layout-canvas, layout-header, layout-content); any arrangement of the sections works",
+    "Sections: PageHeader, Scoreboard KPI strip, LineChart in a Section, task DataTable in a Section; reorder, swap, or drop any of them"
   ],
   "snippet": "<DashboardPattern />"
 }
