@@ -33,7 +33,7 @@
     "children": {
       "type": "slot",
       "required": true,
-      "note": "Page content: a layout-canvas or layout-workspace, or another pattern. Pages own their one primary Button."
+      "note": "Page content: a layout-canvas or layout-workspace, or another pattern. Pages own their one primary Button. A layout-canvas defaults to layout-header (title row) + layout-content (padded, scrolling stack) inside; content put straight into the canvas is padded and stacked by the canvas."
     },
     "className": {
       "type": "string",
