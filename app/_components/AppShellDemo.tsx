@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   AppHeader,
-  AppShellPattern,
   Avatar,
   Badge,
   Button,
@@ -15,9 +14,9 @@ import {
   SideNavRoot,
   SideNavSection,
   SideNavSlot,
-  useAppShell,
 } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
+import { AppShellPattern, useAppShell } from "../../packages/kit/patterns/AppShellPattern";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItemData[] = [

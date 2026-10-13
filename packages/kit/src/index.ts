@@ -1,4 +1,7 @@
-/** Public kit API. Import components, AppShellPattern and SignInPattern from `agentic-ds-kit`. */
+/**
+ * Public kit API: components only. Patterns (app-shell, sign-in, dashboard, inbox, …) are
+ * copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
+ */
 
 import "./tokens";
 import "./layout";
@@ -81,11 +84,4 @@ export * from "../ui/UsageList";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { ChartDatum, ChartSeries } from "../ui/shared/chartMath";
-
-/**
- * Chrome patterns stay imports. Content patterns (dashboard, inbox, …) are copy-in only:
- * `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
- */
-export * from "../ui/patterns/AppShellPattern";
-export * from "../ui/patterns/SignInPattern";
 

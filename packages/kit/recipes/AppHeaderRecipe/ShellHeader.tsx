@@ -1,9 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { AppHeader } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
-import { AppShellMenuButton } from "../../ui/patterns/AppShellPattern";
 
 export interface ShellHeaderProps {
   /** Product name: the title and the header landmark label. */
@@ -16,12 +15,18 @@ export interface ShellHeaderProps {
   onQueryChange?: (value: string) => void;
   /** Trailing kit Buttons / Avatar. At most one primary. */
   actions?: ReactNode;
+  /**
+   * Wraps the brand mark, e.g. `AppShellMenuButton` from your `add app-shell` copy: it shows
+   * the brand when wide and the Menu Button that opens the nav Drawer when narrow.
+   * Omit it and the header stands alone.
+   */
+  menuButton?: ComponentType<{ children?: ReactNode }>;
 }
 
 /**
- * The AppHeader preset, rebuilt from its blocks so you can rearrange it.
- * Works on its own or as `<AppShellPattern header={<ShellHeader />} …>`: inside the
- * shell, narrow screens swap the mark for the Menu Button that opens the nav Drawer.
+ * The AppHeader preset, rebuilt from its blocks so you can rearrange it. It imports only
+ * kit components, so it works on its own (a top bar over your page) or inside the
+ * app-shell example: `<AppShellPattern header={<ShellHeader menuButton={AppShellMenuButton} />} …>`.
  */
 export function ShellHeader({
   title = "Acme",
@@ -30,12 +35,13 @@ export function ShellHeader({
   query,
   onQueryChange,
   actions = <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
+  menuButton: MenuButton,
 }: ShellHeaderProps) {
   const brand = logo ?? <AppHeader.Mark>{mark ?? title.charAt(0)}</AppHeader.Mark>;
 
   return (
     <AppHeader.Root ariaLabel={title}>
-      <AppHeader.Brand logo={<AppShellMenuButton>{brand}</AppShellMenuButton>}>
+      <AppHeader.Brand logo={MenuButton ? <MenuButton>{brand}</MenuButton> : brand}>
         <AppHeader.Title>{title}</AppHeader.Title>
       </AppHeader.Brand>
       <AppHeader.Search placeholder="Search" shortcut="⌘K" value={query} onSearch={onQueryChange} />

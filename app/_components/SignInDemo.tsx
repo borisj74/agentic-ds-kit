@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { SignInPattern, Tabs } from "agentic-ds-kit";
-import type { SignInMode } from "agentic-ds-kit";
+import { Tabs } from "agentic-ds-kit";
+import { SignInPattern, type SignInMode } from "../../packages/kit/patterns/SignInPattern";
 import styles from "../playground.module.css";
 
 const PROVIDERS = [

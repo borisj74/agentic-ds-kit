@@ -1,20 +1,38 @@
 {
   "id": "invite-members",
   "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
   "add": "npx agentic-ds-kit add invite-members",
   "import": "import { InviteMembersPattern } from \"@/components/patterns/invite-members\";",
-  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/invite-members/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/invite-members/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
   "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
-  "contains": ["pageheader", "empty", "avatargroup", "modal", "fieldset", "field", "input", "radiogroup", "button", "buttongroup", "toast"],
-  "doNot": [
-    "Do not import InviteMembersPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add invite-members)",
-    "Do not invent a local dialog, invite form, or member stack",
-    "Do not use AlertDialog for a dismissible invite",
-    "Do not skip Field wrappers on labeled inputs",
-    "Do not wrap RadioGroup in Field — it has its own legend",
-    "Do not add more than one primary Button",
-    "Do not invent a padded app shell or a narrow-screen menu. Render this pattern as the children of AppShellPattern (app-shell): AppHeader over SideNav when wide, Menu Button + left Drawer below 64rem."
+  "contains": [
+    "pageheader",
+    "empty",
+    "avatargroup",
+    "modal",
+    "fieldset",
+    "field",
+    "input",
+    "radiogroup",
+    "button",
+    "buttongroup",
+    "toast"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Wrap every labeled input in Field (label, hint, and error wiring)",
+    "RadioGroup brings its own legend; do not wrap it in Field",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+  ],
+  "defaults": [
+    "Invite opens in a dismissible Modal; AlertDialog is for confirmations that need an answer",
+    "Sections: PageHeader, empty team state with AvatarGroup, invite Modal with a FieldSet and role RadioGroup"
   ],
   "snippet": "<InviteMembersPattern />"
 }

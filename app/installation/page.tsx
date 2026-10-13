@@ -13,7 +13,7 @@ export default function Page() {
   return <Button variant="primary">Save</Button>;
 }`;
 
-const USAGE = `import { Button, Scoreboard, AppShellPattern } from "agentic-ds-kit";`;
+const USAGE = `import { AppHeader, Button, Scoreboard, SideNav } from "agentic-ds-kit";`;
 
 const ADD_PATTERN = `npx agentic-ds-kit add --list
 npx agentic-ds-kit add dashboard`;
@@ -70,22 +70,22 @@ export default function InstallationPage() {
         </Section>
 
         <Section
-          title="Components and patterns"
-          description="Read contracts/index.json in the package, then import the matching piece."
+          title="Components"
+          description="Read contracts/index.json in the package, then import the matching component."
         >
           <div className={playground.stack}>
             <CodeBlock code={USAGE} />
             <p className={playground.body}>
-              AppShellPattern and SignInPattern are the only pattern imports. Content patterns (dashboard,
-              activity, inbox, settings-form, list-detail, invite-members, assistant-workspace,
-              empty-first-run) are copy-in: see the next section.
+              The package exports components only. Compose them into any layout: top bar only, side
+              nav only, both, or neither. Keep page content in a main landmark and the nav reachable
+              on small screens. Patterns are examples you can copy in: see the next section.
             </p>
           </div>
         </Section>
 
         <Section
           title="Copy a pattern into your app"
-          description="Content patterns are not exported from the package. Copy one's source in and own its sections, copy, and data."
+          description="Patterns are examples, not package exports. Copy one's source in to start from it, then own its layout, sections, copy, and data."
         >
           <div className={playground.stack}>
             <CodeBlock code={ADD_PATTERN} />
@@ -97,14 +97,16 @@ export default function InstallationPage() {
             <CodeBlock code={USE_COPY} />
             <p className={playground.body}>
               Use --dir to pick another folder and --force to overwrite. Keep the contract JSON next
-              to the files so agents keep the kit rules. If the copy renders unstyled, import
+              to the files: agents follow its must lines (kit look and accessibility) and treat its
+              defaults as suggestions. If the copy renders unstyled, import
               agentic-ds-kit/tokens.css and agentic-ds-kit/layout.css in the root layout. Upgrading the
               kit does not change copied files.
             </p>
             <p className={playground.body}>
               The same command copies chrome recipes: add app-header and add side-nav write
               ShellHeader and ShellNav (the AppHeader and SideNav presets rebuilt from their building
-              blocks) to components/chrome/, ready to pass to AppShellPattern as header and nav.
+              blocks) to components/chrome/. They work on their own; add app-shell copies the
+              layout that can host them.
             </p>
           </div>
         </Section>

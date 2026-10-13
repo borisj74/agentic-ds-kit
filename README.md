@@ -1,6 +1,6 @@
 # Agentic DS Kit
 
-A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
+A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and example screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
 
 **Code is the contract.** Agents read the catalog and import from the package. They do not invent local cousins.
 
@@ -40,7 +40,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 
 ### Patterns (10)
 
-Content patterns are copy-in: `npx agentic-ds-kit add <id>` writes the source into your app (not exported from the package). `sign-in` and `app-shell` are imports (`SignInPattern`, `AppShellPattern`).
+Patterns are examples of what you can build from the components, not rules: start from one, borrow from it, or ignore it. Layout (top bar, side nav, both, neither) is your choice. None are exported from the package; `npx agentic-ds-kit add <id>` copies one's source into your app. Each contract lists `must` (kit look and accessibility) and `defaults` (suggestions you can change).
 
 - `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
 - `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
@@ -50,8 +50,8 @@ Content patterns are copy-in: `npx agentic-ds-kit add <id>` writes the source in
 - `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
 - `activity` — PageHeader + Scoreboard + task cards or list + tabbed DataTable feed
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
-- `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons (no app shell)
-- `app-shell` — AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
+- `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons
+- `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 
 ### Playground
 Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundations, Components, Patterns). Hash links scroll to sections on each page. The playground opens on Patterns.
@@ -112,7 +112,7 @@ Expected: agent reads `packages/kit/contracts/index.json`, opens `scoreboard.jso
 
 Expected: agent refuses the one-off, cites the contract `doNot` rules, and uses the kit `Scoreboard` component instead.
 
-**C — Should use patterns**
+**C — Should use patterns as a starting point**
 
 > Add a settings page.
 

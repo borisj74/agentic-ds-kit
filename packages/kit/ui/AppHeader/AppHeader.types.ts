@@ -68,7 +68,7 @@ export interface AppHeaderBrandProps extends ComponentPropsWithoutRef<"div"> {
   ref?: Ref<HTMLDivElement>;
 }
 
-/** Letter mark: brand fill, aria-hidden. Use inside logo slots (e.g. as the wide-screen fallback of AppShellPattern.MenuButton). */
+/** Letter mark: brand fill, aria-hidden. Use inside logo slots (e.g. as the wide-screen children of a narrow-screen menu trigger). */
 export interface AppHeaderMarkProps extends ComponentPropsWithoutRef<"span"> {
   children?: ReactNode;
   ref?: Ref<HTMLSpanElement>;

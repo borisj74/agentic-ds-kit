@@ -3,15 +3,16 @@
 import { useLocationHash } from "@/lib/use-location-hash";
 import { AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
+import { LayoutsDemo } from "../_components/LayoutsDemo";
 import { SignInDemo } from "../_components/SignInDemo";
 import { CodeBlock } from "../components/CodeBlock";
 import styles from "./patterns.module.css";
 import playground from "../playground.module.css";
 
-/** Patterns that render on their own, outside the DashboardDemo app shell. */
-const STANDALONE = new Set(["sign-in", "app-shell"]);
+/** Sections that render on their own, outside the DashboardDemo app shell. */
+const STANDALONE = new Set(["sign-in", "app-shell", "layouts"]);
 
-/** Page hash → copy-in id for `npx agentic-ds-kit add`. Content patterns are not package exports. */
+/** Page hash → copy-in id for `npx agentic-ds-kit add`. No pattern is a package export. */
 const ADD_ID: Record<string, string> = {
   dashboard: "dashboard",
   activity: "activity",
@@ -27,16 +28,17 @@ const ADD_ID: Record<string, string> = {
   insights: "assistant-workspace",
   empty: "empty-first-run",
   research: "empty-first-run",
-};
-
-/** Chrome patterns stay imports from the package. */
-const IMPORT_LINE: Record<string, string> = {
-  "sign-in": `import { SignInPattern } from "agentic-ds-kit";`,
-  "app-shell": `import { AppShellPattern } from "agentic-ds-kit";`,
+  "sign-in": "sign-in",
+  "app-shell": "app-shell",
 };
 
 function usageFor(hash: string) {
-  if (IMPORT_LINE[hash]) return { note: "Import it from the package.", code: IMPORT_LINE[hash] };
+  if (hash === "layouts") {
+    return {
+      note: "No pattern needed: compose kit components. These need only the package.",
+      code: `import { AppHeader, Button, Drawer, PageHeader, SideNav } from "agentic-ds-kit";`,
+    };
+  }
   const id = ADD_ID[hash] ?? "dashboard";
   return {
     note: "Copy it into your app, then edit the data file and sections.",
@@ -57,8 +59,9 @@ export default function PatternsPage() {
       <div className={playground.opsShell}>
         <h1 className={playground.pageTitle}>Patterns</h1>
         <p className={playground.pageLead}>
-          Code is the contract. Agents install the kit, then compose these screens instead of
-          inventing layouts.
+          Examples of what you can build from kit components. Copy one in to start from it, borrow
+          from it, or ignore it: layout is your choice. Each contract lists what a copy must keep
+          (kit look and accessibility) and its defaults, which you can change.
         </p>
 
         <div className={pending ? `${styles.usage} ${pending}` : styles.usage}>
@@ -77,16 +80,19 @@ export default function PatternsPage() {
           <div id="empty" />
           <div id="sign-in" />
           <div id="app-shell" />
+          <div id="layouts" />
           {standalone === "sign-in" ? (
             <SignInDemo />
+          ) : standalone === "layouts" ? (
+            <LayoutsDemo titleClassName={styles.variantTitle} />
           ) : standalone === "app-shell" ? (
             <>
               <AppShellDemo />
               <h2 className={styles.variantTitle}>Custom chrome</h2>
               <p className={playground.body}>
-                header and nav also take nodes built from the kit blocks. The header places
-                AppShellPattern.MenuButton in its brand cell; the nav reads useAppShell() to stay
-                expanded in the Drawer.
+                One layout option among many. header and nav also take nodes built from the kit
+                blocks. The header places AppShellMenuButton in its brand cell; the nav reads
+                useAppShell() to stay expanded in the Drawer.
               </p>
               <div className={styles.variantFrame}>
                 <AppShellCustomDemo />

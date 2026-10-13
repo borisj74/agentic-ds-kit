@@ -1,7 +1,7 @@
 {
   "id": "sidenav",
   "status": "stable",
-  "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
+  "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
   "useWhen": [
     "Product app chrome",
     "Persistent nav with icons"
@@ -271,8 +271,8 @@
     "Do not use Drawer for persistent app chrome",
     "Do not use AppNav as closeable product chrome",
     "Do not leave a gap between AppHeader and SideNav \u2014 radius none, showHeader false, layout-app with no gap",
-    "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; for narrow screens use AppShellPattern, which renders SideNav inside kit Drawer",
-    "Do not hand-roll a narrow-screen menu (hamburger, bottom tab bar, collapsed rail); use AppShellPattern (app-shell)",
+    "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; on narrow screens render it inside kit Drawer",
+    "Keep the nav reachable on narrow screens: a kit Button that opens it in kit Drawer (as app-shell does), not a hand-rolled overlay or menu",
     "Do not use the shadcn sidebar package",
     "Do not use raw hex",
     "Do not set component variables to raw hex or primitive --color-* ramps \u2014 use semantic tokens",

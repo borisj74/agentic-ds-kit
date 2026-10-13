@@ -442,7 +442,7 @@
   },
   {
     "id": "sidenav",
-    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: below 64rem AppShellPattern (app-shell) puts it inside kit Drawer.",
+    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
     "group": "component",
     "path": "contracts/sidenav.json",
     "status": "stable"
@@ -533,7 +533,7 @@
   },
   {
     "id": "dashboard",
-    "intent": "Dashboard blueprint: PageHeader, Scoreboard, LineChart, Section, DataTable.",
+    "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable",
@@ -542,7 +542,7 @@
   },
   {
     "id": "settings-form",
-    "intent": "Settings blueprint: PageHeader, Fields, and save actions.",
+    "intent": "Settings example: PageHeader, Fields, and save actions.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
@@ -551,7 +551,7 @@
   },
   {
     "id": "list-detail",
-    "intent": "List-detail blueprint: AppNav, Table, and detail Section.",
+    "intent": "List-detail example: AppNav, Table, and detail Section.",
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
     "status": "stable",
@@ -587,7 +587,7 @@
   },
   {
     "id": "activity",
-    "intent": "Activity blueprint: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
+    "intent": "Activity example: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
     "group": "pattern",
     "path": "contracts/patterns/activity.json",
     "status": "stable",
@@ -596,23 +596,25 @@
   },
   {
     "id": "app-shell",
-    "intent": "Responsive product chrome: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer.",
+    "intent": "Layout example (one option of many): AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer.",
     "group": "pattern",
     "path": "contracts/patterns/app-shell.json",
     "status": "stable",
-    "delivery": "import"
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add app-shell"
   },
   {
     "id": "sign-in",
-    "intent": "Sign-in / sign-up page outside the app shell: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
+    "intent": "Sign-in / sign-up page example: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
     "group": "pattern",
     "path": "contracts/patterns/sign-in.json",
     "status": "stable",
-    "delivery": "import"
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add sign-in"
   },
   {
     "id": "inbox",
-    "intent": "Inbox blueprint: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
+    "intent": "Inbox example: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
     "group": "pattern",
     "path": "contracts/patterns/inbox.json",
     "status": "stable",

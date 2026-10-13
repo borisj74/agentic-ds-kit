@@ -1,21 +1,35 @@
 {
   "id": "empty-first-run",
   "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
   "add": "npx agentic-ds-kit add empty-first-run",
   "import": "import { EmptyFirstRunPattern } from \"@/components/patterns/empty-first-run\";",
-  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/empty-first-run/) with this contract beside it. You own the copy: replace the demo data in the *-data.ts file(s) and keep the kit rules below.",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/empty-first-run/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
   "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
-  "contains": ["pageheader", "empty", "modal", "field", "input", "button", "buttongroup", "toast"],
-  "doNot": [
-    "Do not import EmptyFirstRunPattern from agentic-ds-kit; it is copy-in only (npx agentic-ds-kit add empty-first-run)",
-    "Do not invent a local empty stack, illustration, or create dialog",
-    "Do not use AlertDialog for a dismissible first create",
-    "Do not skip Field wrappers on labeled inputs",
-    "Do not wrap a single Field in FieldSet",
-    "Do not add more than one primary Button",
-    "Do not put a primary on PageHeader while Empty already has one",
-    "Do not invent a padded app shell or a narrow-screen menu. Render this pattern as the children of AppShellPattern (app-shell): AppHeader over SideNav when wide, Menu Button + left Drawer below 64rem."
+  "contains": [
+    "pageheader",
+    "empty",
+    "modal",
+    "field",
+    "input",
+    "button",
+    "buttongroup",
+    "toast"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one variant=\"primary\" Button per view: while Empty has the primary, PageHeader has none",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Wrap every labeled input in Field (label, hint, and error wiring)",
+    "FieldSet groups two or more related fields (legend); a single Field stands alone",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+  ],
+  "defaults": [
+    "First create opens in a dismissible Modal; AlertDialog is for confirmations that need an answer",
+    "Sections: PageHeader, outlined Empty with one primary that opens the create Modal, Toast on create"
   ],
   "snippet": "<EmptyFirstRunPattern />"
 }
