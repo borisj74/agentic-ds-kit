@@ -10,7 +10,7 @@ type GridTab = "primitives" | "semantics";
 const PATTERNS = [
   { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav." },
   { name: "App", className: ".layout-app", copy: "SideNav column + fluid canvas. Lives under layout-shell." },
-  { name: "Canvas", className: ".layout-canvas", copy: "White surface-card column: page header over a fill-height body. Lives inside the app shell." },
+  { name: "Canvas", className: ".layout-canvas", copy: "White surface-card page frame. Default: layout-header (title row) over layout-content (padded, scrolling stack). Put content straight in and the canvas pads and stacks it." },
   { name: "Workspace", className: ".layout-workspace", copy: "Primary content + optional context rail (assistant, inspector, detail)." },
   { name: "Content", className: ".layout-content", copy: "Scrollable dashboard body. Stacks sections with space-gap-lg and page inset." },
   { name: "Metrics", className: ".layout-metrics", copy: "KPI / summary card strip. Use --fixed-3 or --fixed-4 when the count is known." },

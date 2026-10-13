@@ -204,7 +204,11 @@ export function LayoutsDemo({ titleClassName }: { titleClassName?: string }) {
     <>
       <h2 className={titleClassName}>Top bar only</h2>
       <div className={styles.stack}>
-        <p className={styles.body}>AppHeader over the page. No side nav.</p>
+        <p className={styles.body}>
+          AppHeader over the page. No side nav. The page is a layout-canvas: by default a
+          layout-header and a layout-content go inside, or put content straight in and the canvas
+          pads and stacks it.
+        </p>
         <TopBarOnly />
         <CodeBlock code={TOP_BAR_CODE} />
       </div>

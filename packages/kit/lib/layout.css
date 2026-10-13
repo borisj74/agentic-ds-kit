@@ -158,6 +158,23 @@
   width: 100%;
 }
 
+/* Canvas with content straight inside (no layout-header / layout-content /
+   layout-workspace child): pad and stack it like layout-content. A canvas
+   that uses the role children is untouched. Also covers --sticky-header. */
+.layout-canvas:not(:has(> .layout-header, > .layout-content, > .layout-workspace)) {
+  grid-template-rows: none;
+  grid-auto-rows: max-content;
+  gap: var(--space-gap-lg);
+  align-content: start;
+  padding: var(--layout-margin-md);
+  overflow: auto;
+}
+
+/* Parent gap owns the stack, as in layout-content. */
+.layout-canvas:not(:has(> .layout-header, > .layout-content, > .layout-workspace)) > section {
+  margin-bottom: 0;
+}
+
 .layout-split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

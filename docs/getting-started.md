@@ -55,6 +55,8 @@ Run `npm run dev` and confirm the button is the kit primary (filled, kit radius/
 
 Importing from `agentic-ds-kit` loads semantic tokens (`--text-primary`, `--space-4`, …) and pattern layout roles (`layout-canvas`, `layout-header`, `layout-content`). You do **not** add `transpilePackages: ["agentic-ds-kit"]` in `next.config`. That was required for 0.1.0 only.
 
+By default `layout-canvas` is the page frame: put a `layout-header` (title row) and a `layout-content` (padded, scrolling stack) inside it. If you put content straight into the canvas instead (`<main className="layout-canvas"><PageHeader title="…" /><Card>…</Card></main>`), the canvas pads and stacks it itself. Layout is yours; these are defaults, not rules.
+
 **3. Use components**
 
 ```tsx
