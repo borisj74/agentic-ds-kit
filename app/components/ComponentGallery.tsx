@@ -47,6 +47,8 @@ function FitPreview({ children }: { children: ReactNode }) {
 }
 
 function openComponent(event: MouseEvent<HTMLAnchorElement>, href: string) {
+  if (event.defaultPrevented || event.button !== 0) return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const hash = href.split("#")[1];
   if (!hash) return;
   event.preventDefault();
