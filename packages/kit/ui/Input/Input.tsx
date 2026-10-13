@@ -1,3 +1,5 @@
+"use client";
+
 import { LucideByName } from "../Button/lucideName";
 import type { InputProps } from "./Input.types";
 import { cx } from "../shared/cx";

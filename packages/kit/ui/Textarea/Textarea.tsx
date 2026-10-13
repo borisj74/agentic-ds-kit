@@ -1,3 +1,5 @@
+"use client";
+
 import type { TextareaProps } from "./Textarea.types";
 import { cx } from "../shared/cx";
 import styles from "./Textarea.module.css";
