@@ -21,6 +21,16 @@ function replyFor(message: string): string {
   return `Got it — “${message}”. I can go deeper on owners or next steps.`;
 }
 
+/*
+ * Stacked = below --grid-breakpoint-md, where layout-workspace puts the rail under
+ * the content (lib/layout.css). matchMedia reads the token at runtime; 64rem is the
+ * fallback (media queries in CSS cannot read var()).
+ */
+function railIsStacked(): boolean {
+  const value = getComputedStyle(document.documentElement).getPropertyValue("--grid-breakpoint-md").trim();
+  return window.matchMedia(`(width < ${value || "64rem"})`).matches;
+}
+
 export interface AssistantWorkspacePatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
 }
@@ -30,12 +40,33 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
   const [messages, setMessages] = useState<ChatMessage[]>(STARTER);
   const [thinking, setThinking] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const railRef = useRef<HTMLElement>(null);
+  const revealRail = useRef(false);
 
   useEffect(() => {
     return () => {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current);
     };
   }, []);
+
+  // After Ask on a card, a stacked rail sits below the cards: bring it into view and
+  // move focus to it so the reply (announced by Chat's live log) is where the user is.
+  // Runs after the commit that adds the message, so a rail that Ask just reopened is mounted.
+  useEffect(() => {
+    if (!revealRail.current) return;
+    revealRail.current = false;
+    const rail = railRef.current;
+    if (!rail) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    rail.scrollIntoView({ block: "start", behavior: reduce ? "instant" : "smooth" });
+    rail.focus({ preventScroll: true });
+  }, [messages]);
+
+  function askFromCard(prompt: string) {
+    if (thinking) return;
+    revealRail.current = railIsStacked();
+    ask(prompt);
+  }
 
   function ask(prompt: string) {
     const next = prompt.trim();
@@ -82,7 +113,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
                   source={insight.source}
                   secondaryAction={{
                     label: "Ask",
-                    onClick: () => ask(insight.prompt),
+                    onClick: () => askFromCard(insight.prompt),
                   }}
                 />
               ))}
@@ -91,7 +122,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
         </div>
       </div>
       {railOpen ? (
-        <aside className={styles.rail}>
+        <aside ref={railRef} className={styles.rail} tabIndex={-1}>
           <Chat
             title="Assistant"
             status="Sprint 24"

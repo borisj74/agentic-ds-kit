@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { AppHeader } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
@@ -11,6 +10,7 @@ import type { SideNavItemData } from "agentic-ds-kit";
 import { pushHash, useLocationHash } from "@/lib/use-location-hash";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
+import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
 import { ActivityPattern } from "../../packages/kit/patterns/ActivityPattern";
 import { AssistantWorkspacePattern } from "../../packages/kit/patterns/AssistantWorkspacePattern";
 import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
@@ -193,8 +193,8 @@ export function DashboardDemo() {
   }, []);
 
   const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
+  const navFooter = useMemo(() => bindItems(NAV_FOOTER, page, go), [page, go]);
   const footer = useMemo(() => {
-    const navFooter = bindItems(NAV_FOOTER, page, go);
     const toggleLabel = sidebarOpen ? "Close sidebar" : "Open sidebar";
     const toggleIcon = sidebarOpen ? "PanelLeftClose" : "PanelLeftOpen";
     const toggle: SideNavItemData = {
@@ -205,7 +205,7 @@ export function DashboardDemo() {
       onClick: () => setSidebarOpen((current) => !current),
     };
     return [...navFooter, toggle];
-  }, [page, go, sidebarOpen]);
+  }, [navFooter, sidebarOpen]);
 
   const allItems = [...NAV_ITEMS, ...NAV_FOOTER];
   const current = findItem(allItems, page);
@@ -229,55 +229,64 @@ export function DashboardDemo() {
         </div>
         <div className={styles.urlBar}>{path}</div>
       </div>
-      <div className={hash === null ? `layout-shell ${styles.pending}` : "layout-shell"}>
-        <AppHeader
-          title="Agentix"
-          mark="A"
-          searchPlaceholder="Search"
-          searchShortcut="⌘K"
-          searchValue={query}
-          onSearch={setQuery}
-          actions={
+      {/* Below 64rem the shell swaps the SideNav for a Menu Button and left Drawer, as a real app would. */}
+      <AppShellPattern
+        className={hash === null ? styles.pending : undefined}
+        navLabel="Agentix"
+        header={{
+          title: "Agentix",
+          mark: "A",
+          searchPlaceholder: "Search",
+          searchShortcut: "⌘K",
+          searchValue: query,
+          onSearch: setQuery,
+          actions: (
             <>
               <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
               <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
             </>
-          }
-        />
-        <div className="layout-app">
-          <SideNav
-            title="Agentix"
-            mark="A"
-            showHeader={false}
-            radius="none"
-            open={sidebarOpen}
-            onOpenChange={setSidebarOpen}
-            items={items}
-            footer={footer}
-          />
-          {page === "overview" ? (
-            <DashboardPattern breadcrumbs={trail} />
-          ) : page === "activity" ? (
-            <ActivityPattern breadcrumbs={trail} />
-          ) : page === "inbox" ? (
-            <InboxPattern breadcrumbs={trail} />
-          ) : page === "settings" ? (
-            <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
-          ) : page === "invite" ? (
-            <InviteMembersPattern breadcrumbs={trail} />
-          ) : page === "insights" ? (
-            <AssistantWorkspacePattern breadcrumbs={trail} />
-          ) : page === "research" ? (
-            <EmptyFirstRunPattern breadcrumbs={trail} />
-          ) : isListDetailPage(page) ? (
-            <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
-          ) : current ? (
-            <PlaceholderPage item={current} breadcrumbs={trail} />
+          ),
+        }}
+        nav={(placement) =>
+          placement === "rail" ? (
+            <SideNav
+              title="Agentix"
+              mark="A"
+              showHeader={false}
+              radius="none"
+              open={sidebarOpen}
+              onOpenChange={setSidebarOpen}
+              items={items}
+              footer={footer}
+            />
           ) : (
-            <DashboardPattern breadcrumbs={trail} />
-          )}
-        </div>
-      </div>
+            // In the Drawer the nav is always expanded, so it drops the collapse toggle.
+            <SideNav title="Agentix" mark="A" showHeader={false} radius="md" open items={items} footer={navFooter} />
+          )
+        }
+      >
+        {page === "overview" ? (
+          <DashboardPattern breadcrumbs={trail} />
+        ) : page === "activity" ? (
+          <ActivityPattern breadcrumbs={trail} />
+        ) : page === "inbox" ? (
+          <InboxPattern breadcrumbs={trail} />
+        ) : page === "settings" ? (
+          <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
+        ) : page === "invite" ? (
+          <InviteMembersPattern breadcrumbs={trail} />
+        ) : page === "insights" ? (
+          <AssistantWorkspacePattern breadcrumbs={trail} />
+        ) : page === "research" ? (
+          <EmptyFirstRunPattern breadcrumbs={trail} />
+        ) : isListDetailPage(page) ? (
+          <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
+        ) : current ? (
+          <PlaceholderPage item={current} breadcrumbs={trail} />
+        ) : (
+          <DashboardPattern breadcrumbs={trail} />
+        )}
+      </AppShellPattern>
     </div>
   );
 }
