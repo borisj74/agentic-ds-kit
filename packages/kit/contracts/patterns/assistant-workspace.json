@@ -26,7 +26,8 @@
     "Chat sits inline in a rail beside the content, not in a Modal",
     "layout-workspace holds the Chat rail",
     "layout-split lays the InsightCards out in two columns",
-    "Chat uses radius none in the rail"
+    "Chat uses radius none in the rail",
+    "Below 64rem (--grid-breakpoint-md) the rail stacks under the content (layout-workspace default) and the InsightCards go to one column"
   ],
   "snippet": "<AssistantWorkspacePattern />"
 }
