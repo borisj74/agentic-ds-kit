@@ -4,7 +4,8 @@
   "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
   "useWhen": [
     "Product page title with optional Breadcrumb trail and actions",
-    "Placing primary/secondary Buttons aligned to the page title"
+    "Placing primary/secondary Buttons aligned to the page title",
+    "Page title with a search Input and one primary Button on the right"
   ],
   "doNotUseWhen": [
     "In-card titles — use Section",
@@ -17,6 +18,9 @@
     "breadcrumb",
     "button"
   ],
+  "layout": {
+    "note": "Inside layout-header, PageHeader (its root is a header) is a flex item with basis 20rem that takes the free space, so siblings such as a Menu Button or a toolbar sit on the same row and wrap below it only when the row is narrower than 20rem plus their width. Alone it fills the row. Override the flex with className if you want something else."
+  },
   "props": {
     "title": {
       "type": "string",
@@ -33,11 +37,8 @@
     },
     "actions": {
       "type": "slot",
-      "allowedContracts": [
-        "button"
-      ],
       "required": false,
-      "note": "kit Buttons. At most one primary."
+      "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
     },
     "breadcrumbs": {
       "type": "array",
@@ -101,7 +102,7 @@
     "Do not invent BreadcrumbItem or BreadcrumbLink cousins — compose kit Breadcrumb",
     "Do not restyle Breadcrumb internals from PageHeader",
     "Do not use raw hex",
-    "Do not put more than one primary Button in actions"
+    "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)"
   ],
   "snippet": "<PageHeader title=\"Aurora\" subtitle=\"Campaign settings and collaborators.\" breadcrumbs={[{ label: \"Home\", href: \"#\" }, { label: \"Projects\", href: \"#\" }, { label: \"Aurora\" }]} actions={<><Button variant=\"secondary\">Edit</Button><Button>Save</Button></>} />"
 }

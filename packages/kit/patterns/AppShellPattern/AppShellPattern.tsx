@@ -31,8 +31,17 @@ export interface AppShellPatternProps {
    * AppHeader props (the shell injects the narrow-screen Menu Button), or a header you
    * built from `AppHeader.Root` and its blocks. A built header places
    * `AppShellPattern.MenuButton` itself, usually as the `AppHeader.Brand` logo.
+   * Optional: with no header there is no top bar when wide (SideNav shows its own brand
+   * header) and `narrowHeader` is the top bar below the breakpoint.
    */
-  header: AppShellHeader | ReactNode;
+  header?: AppShellHeader | ReactNode;
+  /**
+   * Header-less shells only: the top bar below the breakpoint, where the nav moves into
+   * the Drawer and needs a Menu Button. AppHeader props (the shell injects the Menu
+   * Button) or a built header that places `AppShellPattern.MenuButton`. Default: AppHeader
+   * titled `navLabel` or `nav.title`, with the Menu Button and no search. Ignored when `header` is set.
+   */
+  narrowHeader?: AppShellHeader | ReactNode;
   /**
    * SideNav props, or a nav you built (a `SideNav`, or SideNav blocks). A built nav
    * renders in the rail when wide and inside the left Drawer when narrow; read
@@ -44,7 +53,7 @@ export interface AppShellPatternProps {
   navLabel?: string;
   /** Page content: usually a `layout-canvas` or `layout-workspace`, or another pattern. */
   children: ReactNode;
-  /** Extra class on the `layout-shell` root, e.g. to give it the viewport height. */
+  /** Extra class on the `layout-shell` root, e.g. `layout-shell--viewport` to fill the viewport height. */
   className?: string;
 }
 
@@ -59,6 +68,8 @@ export interface AppShellContextValue {
   closeNav: () => void;
   /** Where the calling component renders: in the wide rail, in the narrow Drawer, or neither (null). */
   navPlacement: AppShellNavPlacement | null;
+  /** A top bar shows: `header`, or `narrowHeader` below the breakpoint. False when wide with no header, so a built nav shows its own brand. */
+  hasHeader: boolean;
 }
 
 interface MenuSlot {
@@ -138,8 +149,10 @@ function isPropsObject<T extends object>(value: T | ReactNode): value is T {
  * (layout-shell / layout-app, radius none, no gap). Narrow: no SideNav; a Menu
  * Button at the start of AppHeader opens the same nav in a left Drawer.
  * `header` and `nav` take preset props or nodes built from the kit blocks.
+ * Without `header`: wide is SideNav + content only (the nav carries the brand);
+ * narrow shows `narrowHeader`, a minimal top bar holding the Menu Button.
  */
-function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }: AppShellPatternProps) {
+function AppShellPatternRoot({ header, narrowHeader, nav, navLabel, children, className = "" }: AppShellPatternProps) {
   const narrow = useNarrow();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
@@ -154,9 +167,14 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
     },
   }));
   const wasOpen = useRef(false);
-  const headerProps = isPropsObject<AppShellHeader>(header) ? header : null;
   const navProps = typeof nav !== "function" && isPropsObject<AppShellNav>(nav) ? nav : null;
-  const headerNode = headerProps ? null : (header as ReactNode);
+  // No header: no top bar when wide. Below the breakpoint the nav still needs a Menu
+  // Button, so narrowHeader (default: a minimal AppHeader titled like the nav) shows.
+  const activeHeader: AppShellHeader | ReactNode =
+    header != null ? header : narrow ? (narrowHeader ?? { title: navLabel ?? navProps?.title, search: false }) : null;
+  const hasHeader = activeHeader != null;
+  const headerProps = isPropsObject<AppShellHeader>(activeHeader) ? activeHeader : null;
+  const headerNode = headerProps ? null : (activeHeader as ReactNode);
   const navNode = (placement: AppShellNavPlacement): ReactNode =>
     typeof nav === "function" ? nav(placement) : (nav as ReactNode);
 
@@ -198,6 +216,7 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
     openNav: () => setMenuOpen(true),
     closeNav: () => setMenuOpen(false),
     navPlacement: null,
+    hasHeader,
   };
 
   return (
@@ -217,7 +236,7 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
             {narrow ? null : (
               <div className="app-shell-pattern__rail">
                 <AppShellContext.Provider value={{ ...shell, navPlacement: "rail" }}>
-                  {navProps ? <SideNav {...navProps} showHeader={false} radius="none" /> : navNode("rail")}
+                  {navProps ? <SideNav {...navProps} showHeader={!hasHeader} radius="none" /> : navNode("rail")}
                 </AppShellContext.Provider>
               </div>
             )}

@@ -24,6 +24,20 @@
   overflow: hidden;
 }
 
+/* No top bar (layout-app is the first child, e.g. side nav only when wide): one
+   row, so layout-app fills the shell instead of landing in the auto header row. */
+.layout-shell:where(:has(> .layout-app:first-child)) {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* Shell as tall as the viewport, so layout-app fills it and the page scrolls
+   inside layout-content / layout-canvas. dvh follows mobile browser bars; vh is
+   the fallback. Zero the body margin (a CSS reset does) or the page scrolls. */
+.layout-shell--viewport {
+  height: 100vh;
+  height: 100dvh;
+}
+
 .layout-app {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -189,6 +203,14 @@
   padding-inline: var(--layout-margin-md);
 }
 
+/* A PageHeader (or any <header>) takes the free space beside its siblings, e.g. a
+   search Input, and wraps above them only below 20rem plus their width. Alone it
+   fills the row as before. :where() keeps this at one class, so an app class wins. */
+.layout-header > :where(header) {
+  flex: 1 1 20rem;
+  min-width: 0;
+}
+
 /* Canvas is the scrollport. Header and content flow together. */
 .layout-canvas--sticky-header {
   overflow: auto;
@@ -257,6 +279,30 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--layout-gutter-md);
   align-items: start;
+}
+
+/* Splits stack as the content column narrows, like layout-metrics--fixed-*.
+   38rem is where the 1fr column of a 2:1 split reaches --layout-metrics-min
+   (12rem, plus gutter-md 1rem); container queries cannot use calc(var()).
+   Only inside a layout-content (the named container): elsewhere no container
+   matches, so splits keep their columns at every width. */
+@container layout-content (max-width: 38rem) {
+  .layout-split,
+  .layout-split--primary,
+  .layout-split--secondary,
+  .layout-split--thirds {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layout-split--quarters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container layout-content (max-width: 25rem) {
+  .layout-split--quarters {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .layout-container-sm,

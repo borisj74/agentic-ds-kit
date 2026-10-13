@@ -59,6 +59,12 @@ By default `layout-canvas` is the page frame: put a `layout-header` (title row) 
 
 `layout-workspace` works the same way: by default its first child is the main column (a `layout-content` or `layout-canvas`) and its second is the rail. Put content straight into the main column (`<main><PageHeader title="…" /><Card>…</Card></main>`) and the workspace pads and stacks it; the rail stays flush, so rail components like Chat keep their own edges. Below 64rem (`--grid-breakpoint-md`) the rail stacks under the main column by default and the workspace scrolls; override `grid-template-columns` on your workspace, or move the rail into a Drawer, if you want something else.
 
+A few more defaults, all overridable with your own CSS:
+
+- `layout-split`, `--primary`, `--secondary`, and `--thirds` stack to one column when their `layout-content` is 38rem wide or less; `--quarters` goes to two columns there and one at 25rem, like `layout-metrics--fixed-4`. The rule is a container query on `layout-content`, so a split outside one keeps its columns at every width (add your own media query if you need it).
+- `layout-shell` with no top bar (`layout-app` as its first child) is a single row, so `layout-app` fills it. Add `layout-shell--viewport` to make the shell exactly as tall as the viewport (`100dvh`); the page then scrolls inside the canvas. Zero the body margin (a CSS reset does it).
+- A `PageHeader` inside `layout-header` takes the free space beside its siblings (a Menu Button, a search `Input`), and wraps above them only when the row gets narrow. Its `actions` take any node: Buttons, a search `Input`, a `Select`, with at most one primary Button.
+
 **3. Use components**
 
 ```tsx
@@ -85,6 +91,8 @@ import { DashboardPattern } from "@/components/patterns/dashboard";
 You own the copied files. Keep the contract JSON beside them: agents follow its `must` lines (kit components, semantic tokens, one primary Button, landmarks) and treat its `defaults` as suggestions you can change. The copied CSS uses semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
 
 Copied patterns use plain CSS, not CSS Modules: each `.tsx` imports its `.css` file for side effects, and every class carries the pattern's prefix (`app-shell-pattern__rail`, `sign-in-pattern__form`) so names stay unique in your global styles. That is on purpose. create-next-app 16.4 writes a Turbopack rule to `next.config.ts` that sends every `*.css` file through `@tailwindcss/turbopack` with `as: "*.css"`, which turns a `*.module.css` into plain CSS with no class map, so `styles.rail` is `undefined` and the styles silently do nothing. Plain prefixed CSS renders the same with or without that rule. Keep it that way when you edit a copy, or narrow the rule if you want CSS Modules in your own code.
+
+The `app-shell` copy's `header` is optional: leave it out for side nav only when wide (the SideNav shows its brand) and a minimal top bar that holds the Menu Button only below 64rem (`narrowHeader` changes it). Add `className="layout-shell--viewport"` when the shell is the whole page.
 
 | Option | What it does |
 | --- | --- |

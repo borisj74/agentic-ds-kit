@@ -8,13 +8,13 @@ import styles from "./GridFoundations.module.css";
 type GridTab = "primitives" | "semantics";
 
 const PATTERNS = [
-  { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav." },
+  { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav. With no top bar (layout-app first) it is one row. Add layout-shell--viewport to fill the viewport (100dvh)." },
   { name: "App", className: ".layout-app", copy: "SideNav column + fluid canvas. Lives under layout-shell." },
   { name: "Canvas", className: ".layout-canvas", copy: "White surface-card page frame. Default: layout-header (title row) over layout-content (padded, scrolling stack). Put content straight in and the canvas pads and stacks it." },
   { name: "Workspace", className: ".layout-workspace", copy: "Primary content + optional context rail (assistant, inspector, detail). Default: first child is the main column (layout-content or layout-canvas), second the rail. Put content straight into the main column and it is padded and stacked; the rail stays flush." },
   { name: "Content", className: ".layout-content", copy: "Scrollable dashboard body. Stacks sections with space-gap-lg and page inset." },
   { name: "Metrics", className: ".layout-metrics", copy: "KPI / summary card strip. Use --fixed-3 or --fixed-4 when the count is known." },
-  { name: "Header", className: ".layout-header", copy: "Title cluster + actions row for the canvas top bar." },
+  { name: "Header", className: ".layout-header", copy: "Title cluster + actions row for the canvas top bar. A PageHeader takes the free space beside its siblings." },
 ] as const;
 
 const SHELL = [
@@ -207,9 +207,10 @@ export function GridFoundations() {
             </div>
             <p className={styles.note}>
               Panels inside <code>.layout-content</code>. Primary is the default table + activity
-              layout.
+              layout. By default they stack when the content column is 38rem or narrower (quarters go
+              2-up, then 1-up at 25rem); outside a layout-content they keep their columns.
             </p>
-            <div className={styles.demoStack}>
+            <div className={`${styles.demoStack} ${styles.demoSplits}`}>
               <div className={styles.demoRow}>
                 <code className={styles.demoLabel}>.layout-split--primary</code>
                 <div className={`layout-split--primary ${styles.demoSplit}`}>

@@ -167,6 +167,13 @@
   gap: var(--space-4);
 }
 
+/* The split demos sit in a layout-content container, as in an app, so they stack
+   when it is narrow (lib/layout.css container queries). */
+.demoSplits {
+  container-type: inline-size;
+  container-name: layout-content;
+}
+
 .demoRow {
   display: grid;
   gap: var(--space-2);
