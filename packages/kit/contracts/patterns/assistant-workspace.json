@@ -27,7 +27,8 @@
     "layout-workspace holds the Chat rail",
     "layout-split lays the InsightCards out in two columns",
     "Chat uses radius none in the rail",
-    "Below 64rem (--grid-breakpoint-md) the rail stacks under the content (layout-workspace default) and the InsightCards go to one column"
+    "Below 64rem (--grid-breakpoint-md) the rail stacks under the content (layout-workspace default) and the InsightCards go to one column",
+    "Below 64rem, Ask on an InsightCard scrolls the stacked rail into view (instantly under prefers-reduced-motion) and moves focus to it; wider, the rail is already beside the cards and focus stays on the card"
   ],
   "snippet": "<AssistantWorkspacePattern />"
 }
