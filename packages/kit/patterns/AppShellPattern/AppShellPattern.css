@@ -1,5 +1,8 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The app-shell-pattern__ prefix keeps names unique. */
+
 /* Holds SideNav in the layout-app first column; stretches it to full height. */
-.rail {
+.app-shell-pattern__rail {
   display: flex;
   min-height: 0;
 }
@@ -7,23 +10,23 @@
 /* Below --grid-breakpoint-md (media queries cannot read var()). Only covers the
    first paint before hydration; after it, the component drops the rail. */
 @media (width < 64rem) {
-  .app {
+  .app-shell-pattern__app {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .rail {
+  .app-shell-pattern__rail {
     display: none;
   }
 }
 
 /* Fills the Drawer body so the SideNav footer sits at the bottom, as on the rail. */
-.drawerNav {
+.app-shell-pattern__drawer-nav {
   display: flex;
   height: 100%;
   min-height: 0;
 }
 
 /* Wraps the Menu Button so the shell can return focus to it. */
-.menu {
+.app-shell-pattern__menu {
   display: contents;
 }

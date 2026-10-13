@@ -1,15 +1,18 @@
-.shell {
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The assistant-workspace-pattern__ prefix keeps names unique. */
+
+.assistant-workspace-pattern__shell {
   flex: 1;
   min-width: 0;
   min-height: 0;
 }
 
-.insights {
+.assistant-workspace-pattern__insights {
   min-width: 0;
   min-height: 0;
 }
 
-.rail {
+.assistant-workspace-pattern__rail {
   min-width: 0;
   min-height: 0;
   display: grid;
@@ -17,11 +20,11 @@
 
 /* Ask on a card moves focus to the rail when it is stacked under the content.
    Inset ring: the rail is flush with the workspace edges. */
-.rail:focus {
+.assistant-workspace-pattern__rail:focus {
   outline: none;
 }
 
-.rail:focus-visible {
+.assistant-workspace-pattern__rail:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: calc(-1 * var(--border-focus-width));
 }
@@ -30,7 +33,7 @@
    (lib/layout.css); one card column keeps the narrow column readable. Two
    classes so it beats .layout-split whatever the stylesheet order. */
 @media (width < 64rem) {
-  .insights:global(.layout-split) {
+  .assistant-workspace-pattern__insights.layout-split {
     grid-template-columns: minmax(0, 1fr);
   }
 }

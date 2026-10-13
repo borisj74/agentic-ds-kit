@@ -14,7 +14,7 @@ import { Tabs } from "../../ui/Tabs";
 import { Toast } from "../../ui/Toast";
 import { filterMessages, INBOX, type InboxMessage } from "./inbox-data";
 import { InboxReplyDrawer } from "./InboxReplyDrawer";
-import styles from "./InboxPattern.module.css";
+import "./InboxPattern.css";
 
 const COLUMNS = [
   { key: "from", header: "From", emphasis: true },
@@ -161,12 +161,12 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
           }
         >
           {selected ? (
-            <div className={styles.detail}>
-              <div className={styles.meta}>
+            <div className="inbox-pattern__detail">
+              <div className="inbox-pattern__meta">
                 <Cell type="avatar" size="md" name={selected.from} src={selected.fromSrc} label={selected.from} />
                 <Badge tone={selected.kindTone}>{selected.kind}</Badge>
               </div>
-              <p className={styles.body}>{selected.body}</p>
+              <p className="inbox-pattern__body">{selected.body}</p>
             </div>
           ) : (
             <Empty

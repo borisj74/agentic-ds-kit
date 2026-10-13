@@ -61,7 +61,7 @@
     "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader blocks) and ShellNav (SideNavRoot / Nav / Section / Item / Footer blocks). Both import only kit components and work without app-shell. To host them here (in a client component): header={<ShellHeader menuButton={AppShellMenuButton} />} nav={(placement) => <ShellNav placement={placement} />}."
   },
   "responsive": {
-    "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; the CSS module repeats 64rem only for the first paint before hydration.",
+    "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; AppShellPattern.css repeats 64rem only for the first paint before hydration.",
     "narrow": [
       "No SideNav in the layout; content takes the full width",
       "Menu Button (tertiary sm, lucide Menu, ariaLabel \"Open navigation\") sits in AppHeader's start column",

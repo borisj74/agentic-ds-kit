@@ -1,20 +1,23 @@
-.stack {
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The activity-task-drawer__ prefix keeps names unique. */
+
+.activity-task-drawer__stack {
   display: grid;
   gap: var(--space-stack-lg);
 }
 
-.row {
+.activity-task-drawer__row {
   display: flex;
   align-items: center;
   gap: var(--space-inline-md);
 }
 
-.meta {
+.activity-task-drawer__meta {
   flex: 1;
   min-width: 0;
 }
 
-.label {
+.activity-task-drawer__label {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
@@ -22,7 +25,7 @@
   color: var(--text-secondary);
 }
 
-.value {
+.activity-task-drawer__value {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
@@ -30,7 +33,7 @@
   color: var(--text-primary);
 }
 
-.summary {
+.activity-task-drawer__summary {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body);

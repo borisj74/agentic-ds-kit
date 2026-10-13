@@ -140,6 +140,15 @@ const rel = relative(cwd, target).split("\\").join("/");
 const { version } = JSON.parse(await readFile(join(pkgRoot, "package.json"), "utf8"));
 console.log(`Added ${pattern.id} (agentic-ds-kit ${version}) to ${rel}/`);
 for (const file of pattern.files) console.log(`  ${rel}/${file}${clashes.includes(file) ? "  (overwritten)" : ""}`);
+// Copies from 0.4.5 and earlier have Foo.module.css; the new Foo.tsx imports Foo.css instead.
+const stale = pattern.files
+  .filter((f) => f.endsWith(".css"))
+  .map((f) => f.replace(/\.css$/, ".module.css"))
+  .filter((f) => existsSync(join(target, f)));
+if (stale.length) {
+  console.log(`\nNo longer imported (patterns now use plain CSS); delete them once any edits are moved over:`);
+  for (const file of stale) console.log(`  ${rel}/${file}`);
+}
 // create-next-app maps "@/*" to the app root (or src/); fall back to the folder path.
 const tsconfig = existsSync(join(cwd, "tsconfig.json")) ? await readFile(join(cwd, "tsconfig.json"), "utf8") : "";
 const aliasBase = usesSrc ? "src/" : "";

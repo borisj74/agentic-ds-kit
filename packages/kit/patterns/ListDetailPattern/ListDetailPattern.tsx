@@ -8,7 +8,7 @@ import type { PageHeaderProps } from "../../ui/PageHeader";
 import { Section } from "../../ui/Section";
 import { Table } from "../../ui/Table";
 import { PROJECTS, type ListDetailItem } from "./list-detail-data";
-import styles from "./ListDetailPattern.module.css";
+import "./ListDetailPattern.css";
 
 export interface ListDetailPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
@@ -80,16 +80,16 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
         />
       </div>
       <div className="layout-content">
-        <div className={styles.shell}>
+        <div className="list-detail-pattern__shell">
           <AppNav title="Files" items={navItems} />
-          <div className={styles.main}>
+          <div className="list-detail-pattern__main">
             <Section title="Projects" description="Select a file in the list to view details" size="sm">
               <Table columns={COLUMNS} rows={rows} caption="Sprint 24 projects" />
             </Section>
             <Section title={selected.name} description={`${selected.owner} · ${selected.updated}`} size="sm">
-              <div className={styles.detail}>
+              <div className="list-detail-pattern__detail">
                 <Badge tone={selected.statusTone}>{selected.status}</Badge>
-                <p className={styles.body}>{selected.body}</p>
+                <p className="list-detail-pattern__body">{selected.body}</p>
               </div>
             </Section>
           </div>
