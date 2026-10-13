@@ -1,10 +1,27 @@
 import { useId } from "react";
 import { Button } from "../Button";
-import type { CardProps } from "./Card.types";
+import type { CardAction, CardProps } from "./Card.types";
+import type { KitLinkComponent } from "../shared/link";
 import { cx } from "../shared/cx";
 import styles from "./Card.module.css";
 
 export type { CardProps, CardSize, CardAction, CardActionVariant } from "./Card.types";
+
+function HeaderAction({ action }: { action: CardAction }) {
+  if (action.href) {
+    const LinkTag: KitLinkComponent = action.linkAs ?? "a";
+    return (
+      <LinkTag href={action.href} className={styles.headerLink} onClick={action.onClick}>
+        {action.label}
+      </LinkTag>
+    );
+  }
+  return (
+    <Button variant={action.variant ?? "tertiary"} size="sm" onClick={action.onClick}>
+      {action.label}
+    </Button>
+  );
+}
 
 export function Card({
   title,
@@ -13,6 +30,7 @@ export function Card({
   size = "md",
   actions,
   headerAction,
+  flush = false,
   imageSrc,
   imageAlt,
   className,
@@ -26,7 +44,7 @@ export function Card({
     <article
       {...rest}
       ref={ref}
-      className={cx(styles.card, styles[size], className)}
+      className={cx(styles.card, styles[size], flush && styles.flush, className)}
       aria-labelledby={title ? titleId : undefined}
     >
       {imageSrc ? (
@@ -43,15 +61,7 @@ export function Card({
               ) : null}
               {description ? <p className={styles.description}>{description}</p> : null}
             </div>
-            {headerAction ? (
-              <Button
-                variant={headerAction.variant ?? "tertiary"}
-                size="sm"
-                onClick={headerAction.onClick}
-              >
-                {headerAction.label}
-              </Button>
-            ) : null}
+            {headerAction ? <HeaderAction action={headerAction} /> : null}
           </header>
         ) : null}
         <div className={styles.body}>{children}</div>

@@ -4,7 +4,8 @@
   "intent": "Framed dataset with search, filters, column settings, and a caption title.",
   "useWhen": [
     "Searchable datasets with filters or column settings",
-    "Selectable rows of structured data"
+    "Selectable rows of structured data",
+    "A sortable table inside a Card (Card flush; DataTable drops its frame)"
   ],
   "doNotUseWhen": [
     "A short static list \u2014 use Table",
@@ -15,6 +16,11 @@
     "caption": {
       "type": "string",
       "required": false
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Names the table and its scroll region when there is no caption, e.g. inside a titled flush Card"
     },
     "selectable": {
       "type": "boolean",
@@ -59,9 +65,13 @@
         "key": "string",
         "header": "string",
         "type": "text | number?",
-        "sortable": "boolean?"
+        "sortable": "boolean?",
+        "sortValue": "(row) => string | number | Date?",
+        "width": "string?",
+        "minWidth": "string?",
+        "wrap": "boolean?"
       },
-      "note": "type number right-aligns cell and header. sortable adds HeaderCell sort (asc, desc, then off). Local state only."
+      "note": "type number right-aligns cell and header. sortable adds HeaderCell sort (asc, desc, then off). Local state only. sortValue returns what to sort by (numbers and Dates compare numerically, strings locale-aware): use it for currency strings and formatted dates; without it, sort is unchanged. sortValue is a function, so build the columns in a client component (\"use client\"), not a Server Component. Keep the raw value on the row under a key that is not a column (rows render only column keys). width / minWidth are CSS lengths on th and td; minWidth replaces the default text-column minimum (layout.metricsMin). wrap lets that column's cells wrap and makes the table fit its container; it still scrolls when the columns cannot fit."
     },
     "rows": {
       "type": "array",
@@ -125,7 +135,9 @@
       "Narrow container keeps column min-width and scrolls horizontally; the scroller is a focusable region",
       "Narrow container: search full width when filters are present; filter buttons share the row width; Columns stays start-aligned; toolbar actions are not in a horizontal scroller",
       "The filter DropdownMenu trigger is the selected value; when any facet is set, Reset filters is a tertiary kit Button after the filter menus",
-      "When rows are selected, a selection row names the count, kit bulk action Buttons, and Clear selection"
+      "When rows are selected, a selection row names the count, kit bulk action Buttons, and Clear selection",
+      "Without caption, ariaLabel names the table and the scroll region",
+      "Link cells are real links (Cell type=link) and stay focusable inside rows"
     ]
   },
   "doNot": [
@@ -141,8 +153,9 @@
     "Do not invent FilterChip, a Tag-based filter summary, or a second filter summary — the dropdown trigger is the selected value; Reset filters and selection actions are kit Button",
     "Do not put a primary Button in bulkActions",
     "Do not invent a SortButton or use TanStack Table for sort",
-    "Do not squash columns to the container — overflow-x on the scroller",
-    "Do not put toolbar actions in a horizontal scroller — search full width, filter buttons fill the row, Columns stays start-aligned"
+    "Do not squash columns to the container — overflow-x on the scroller; to fit a narrow column, set minWidth and wrap on the columns that can wrap",
+    "Do not put toolbar actions in a horizontal scroller — search full width, filter buttons fill the row, Columns stays start-aligned",
+    "Do not sort currency or date strings lexically — give the column sortValue"
   ],
   "snippet": "<DataTable\n  caption=\"Team members\"\n  selectable\n  toolbar\n  searchPlaceholder=\"Search members...\"\n  filters={[\n    { key: \"status\", label: \"Status\" },\n    { key: \"role\", label: \"Role\" },\n  ]}\n  columnSettings\n  columns={[\n    { key: \"name\", header: \"Name\", sortable: true },\n    { key: \"role\", header: \"Role\", sortable: true },\n    { key: \"status\", header: \"Status\", sortable: true },\n    { key: \"projects\", header: \"Projects\", type: \"number\", sortable: true },\n  ]}\n  rows={rows}\n/>",
   "contains": [

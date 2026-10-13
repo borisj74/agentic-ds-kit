@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useId, type MouseEvent, type ReactNode } from "react";
 import { Avatar } from "../Avatar";
 import { AvatarGroup } from "../AvatarGroup";
 import { Badge } from "../Badge";
@@ -11,7 +11,7 @@ import { ButtonGroup } from "../ButtonGroup";
 import { Checkbox } from "../Checkbox";
 import { Select } from "../Select";
 import { LucideByName } from "../Button/lucideName";
-import type { CellProps, CellType } from "./Cell.types";
+import type { CellProps, CellType, KitLinkComponent } from "./Cell.types";
 import { cx } from "../shared/cx";
 import styles from "./Cell.module.css";
 
@@ -24,6 +24,7 @@ export type {
   CellBadgeItem,
   CellOption,
   CellAction,
+  KitLinkComponent,
 } from "./Cell.types";
 
 const ICON_PX = { sm: 14, md: 16 } as const;
@@ -77,6 +78,11 @@ function sideLabelText(
   return "";
 }
 
+/** A row click handler around the cell must not also fire when the link is followed. */
+function keepLinkClick(event: MouseEvent<HTMLAnchorElement>) {
+  event.stopPropagation();
+}
+
 function trendAria(direction: "Up" | "Down", value?: string | number): string {
   if (value === undefined || value === "") return direction;
   return `${direction} ${value}`;
@@ -102,6 +108,8 @@ export function Cell({
   defaultChecked,
   onCheckedChange,
   id,
+  href,
+  linkAs,
   className,
   ref,
   ...rest
@@ -126,6 +134,16 @@ export function Cell({
     } else if (type === "rating") {
       rootAria = `${toRating(value)} of ${STAR_COUNT}`;
     }
+  }
+
+  let link: ReactNode = null;
+  if (type === "link" && label && href) {
+    const LinkTag: KitLinkComponent = linkAs ?? "a";
+    link = (
+      <LinkTag href={href} className={cx(styles.label, styles.link)} onClick={keepLinkClick}>
+        {label}
+      </LinkTag>
+    );
   }
 
   let visual: ReactNode = null;
@@ -276,12 +294,13 @@ export function Cell({
   const avatarSupport = type === "avatar" && name && label && label !== name ? label : "";
   const showAvatarCopy = type === "avatar" && text && Boolean(personName);
   const showSideLabel =
+    !link &&
     text &&
     shown &&
     type !== "trendPositive" &&
     type !== "trendNegative" &&
     type !== "avatar";
-  const empty = !checkbox && !visual && !showSideLabel && !showAvatarCopy;
+  const empty = !checkbox && !visual && !link && !showSideLabel && !showAvatarCopy;
 
   const actionMenu = type === "actionMenu";
 
@@ -308,6 +327,8 @@ export function Cell({
           <span className={styles.label}>{personName}</span>
           {avatarSupport ? <span className={styles.support}>{avatarSupport}</span> : null}
         </span>
+      ) : link ? (
+        link
       ) : showSideLabel ? (
         <span className={styles.label}>{shown}</span>
       ) : null}

@@ -6,11 +6,21 @@ export type DataTableColumnType = "text" | "number";
 
 export type DataTableSort = "asc" | "desc";
 
+export type DataTableSortValue = string | number | Date;
+
 export interface DataTableColumn {
   key: string;
   header: string;
   type?: DataTableColumnType;
   sortable?: boolean;
+  /** Value to sort this column by, e.g. the number behind "$1,200.00" or the Date behind "Mar 4". */
+  sortValue?: (row: DataTableRow) => DataTableSortValue;
+  /** CSS width for the column, e.g. "8rem" or "20%". */
+  width?: string;
+  /** CSS min-width; replaces the default text-column minimum. */
+  minWidth?: string;
+  /** Let cell text wrap so the table fits its container instead of scrolling. */
+  wrap?: boolean;
 }
 
 export interface DataTableFilter {
@@ -38,6 +48,8 @@ type DataTableOwnedKeys = "children" | "data-size";
 /** `ref`, `className` and other attributes land on the root `<div>` (toolbar + table). */
 export interface DataTableProps extends Omit<ComponentPropsWithoutRef<"div">, DataTableOwnedKeys> {
   caption?: string;
+  /** Names the table when there is no caption, e.g. the title of the Card around it. */
+  ariaLabel?: string;
   selectable?: boolean;
   toolbar?: boolean;
   searchPlaceholder?: string;

@@ -1,7 +1,7 @@
 {
   "id": "cell",
   "status": "stable",
-  "intent": "Inline cell content for datasets: text, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
+  "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
   "useWhen": [
     "DataTable body cells",
     "Mixed visual and label content in a row"
@@ -26,6 +26,7 @@
       "type": "enum",
       "values": [
         "text",
+        "link",
         "avatar",
         "file",
         "payment",
@@ -142,6 +143,16 @@
       "required": false,
       "note": "checkbox id; useId if omitted"
     },
+    "href": {
+      "type": "string",
+      "required": false,
+      "note": "type=link destination; label is the link text. Without href or label it renders as text."
+    },
+    "linkAs": {
+      "type": "KitLinkComponent",
+      "required": false,
+      "note": "type=link: router link to render instead of <a>, e.g. Next.js Link. Receives href, className, onClick, children"
+    },
     "options": {
       "type": "array",
       "required": false,
@@ -179,7 +190,11 @@
     "fill.brand",
     "surface.muted",
     "space.2",
-    "radius.full"
+    "radius.full",
+    "link.default",
+    "link.hover",
+    "link.active",
+    "radius.controlSm"
   ],
   "a11y": {
     "element": "span",
@@ -193,7 +208,8 @@
       "type=progress composes kit Progress",
       "type=rating is role=img, '{n} of 5'",
       "type=actionIcons each icon-only Button needs ariaLabel",
-      "type=actionMenu ariaLabel is Row actions unless label is set"
+      "type=actionMenu ariaLabel is Row actions unless label is set",
+      "type=link is a real <a href> (or linkAs) named by label, keyboard-focusable; its click does not bubble to a row click handler"
     ]
   },
   "doNot": [
@@ -204,7 +220,8 @@
     "Do not render a separate Lucide icon beside it \u2014 pass a Lucide name or component to the icon props",
     "Do not invent a local progress bar \u2014 type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
     "Do not invent a local DropdownMenu \u2014 type=actionMenu composes kit DropdownMenu",
-    "Do not invent local Select, Button, or ButtonGroup \u2014 compose the kit pieces"
+    "Do not invent local Select, Button, or ButtonGroup — compose the kit pieces",
+    "Do not put a Button or onClick span in a cell for navigation — type=link"
   ],
   "snippet": "<Cell type=\"progress\" size=\"md\" value={64} />"
 }

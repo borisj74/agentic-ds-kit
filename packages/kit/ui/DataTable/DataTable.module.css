@@ -251,8 +251,8 @@
   border-bottom: var(--border-divider) solid var(--border-faint);
 }
 
-.th:not(.numeric):not(.checkCell):not(.actionCell),
-.td:not(.numeric):not(.checkCell):not(.actionCell):not(.emptyCell) {
+.th:not(.numeric):not(.checkCell):not(.actionCell):not(.wrap),
+.td:not(.numeric):not(.checkCell):not(.actionCell):not(.emptyCell):not(.wrap) {
   min-width: var(--layout-metrics-min);
   white-space: nowrap;
 }
@@ -262,6 +262,24 @@
   max-width: none;
   width: max-content;
   min-width: 100%;
+}
+
+/* Opt-in per column: the table fits its container and these cells wrap. */
+.fit {
+  width: 100%;
+}
+
+.th.wrap {
+  white-space: nowrap;
+}
+
+.td.wrap {
+  white-space: normal;
+}
+
+.td.wrap:not(.emptyCell) > * {
+  width: 100%;
+  min-width: 0;
 }
 
 .td:not(.emptyCell) :global(*) {

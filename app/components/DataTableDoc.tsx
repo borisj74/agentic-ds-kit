@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { TABLE_CARD_CODE, TableCardExample } from "./TableCardExample";
 
 const ACTION = {
   type: "actionMenu" as const,
@@ -315,6 +316,25 @@ export function DataTableDoc() {
                 </p>
               </div>
               <CodeBlock code={CELL_TYPES_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Table card</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <TableCardExample />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  A flush Card is the frame; the DataTable drops its own and takes ariaLabel instead of
+                  repeating the title as a caption. Invoice is a link cell. Amount and dates sort by
+                  sortValue, not their formatted text. minWidth and wrap fit six columns in the 2fr
+                  side of layout-split--primary.
+                </p>
+              </div>
+              <CodeBlock code={TABLE_CARD_CODE} />
             </section>
 
             <section className={styles.example}>

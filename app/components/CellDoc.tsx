@@ -123,6 +123,23 @@ export function CellDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Link</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                    <Cell type="link" size="md" label="INV-1042" href="#cell" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  A real link named by label. Pass linkAs (e.g. Next.js Link) for client routing. Its
+                  click does not reach a row click handler.
+                </p>
+              </div>
+              <CodeBlock code={'<Cell type="link" size="md" label="INV-1042" href="/invoices/INV-1042" linkAs={Link} />'} />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Avatar</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>

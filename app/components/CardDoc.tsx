@@ -8,6 +8,7 @@ import { Input } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { TABLE_CARD_CODE, TableCardExample } from "./TableCardExample";
 
 const SIZES: CardSize[] = ["sm", "md"];
 
@@ -236,6 +237,23 @@ export function CardDoc() {
               <CodeBlock
                 code={'<Card title="Feature" description="A framed summary with a full-bleed image." imageSrc="/feature.svg" imageAlt="Abstract feature illustration">\n  <p>Compose kit Field, Input, Button, or Badge in the body.</p>\n</Card>'}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Flush (table card)</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "100%" }}>
+                  <TableCardExample />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  flush runs the body edge to edge for a DataTable, which drops its own frame. A
+                  headerAction with href is a text link, like View all.
+                </p>
+              </div>
+              <CodeBlock code={TABLE_CARD_CODE} />
             </section>
 
             <section className={styles.example}>

@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { Button } from "../Button";
 import { Checkbox } from "../Checkbox";
 import { Cell } from "../Cell";
@@ -15,6 +23,7 @@ import type {
   DataTableFilter,
   DataTableProps,
   DataTableRow,
+  DataTableSortValue,
 } from "./DataTable.types";
 import { cx } from "../shared/cx";
 import styles from "./DataTable.module.css";
@@ -27,6 +36,7 @@ export type {
   DataTableBulkActionVariant,
   DataTableCell,
   DataTableRow,
+  DataTableSortValue,
 } from "./DataTable.types";
 
 const DEFAULT_SEARCH = "Search...";
@@ -56,6 +66,26 @@ function stringifyCell(value: DataTableCell | undefined): string {
     return cell.actions.map((item) => item.label || item.ariaLabel || "").join(" ");
   }
   return "";
+}
+
+function sortKeyOf(value: DataTableSortValue): number | string {
+  if (value instanceof Date) return value.getTime();
+  return value;
+}
+
+function compareSortValues(a: DataTableSortValue, b: DataTableSortValue): number {
+  const av = sortKeyOf(a);
+  const bv = sortKeyOf(b);
+  const aNum = typeof av === "number" && !Number.isNaN(av);
+  const bNum = typeof bv === "number" && !Number.isNaN(bv);
+  if (aNum && bNum) return (av as number) - (bv as number);
+  if (aNum !== bNum) return aNum ? -1 : 1;
+  return String(av).localeCompare(String(bv), undefined, { numeric: true, sensitivity: "base" });
+}
+
+function columnStyle(column: DataTableColumn): CSSProperties | undefined {
+  if (!column.width && !column.minWidth) return undefined;
+  return { width: column.width, minWidth: column.minWidth };
 }
 
 function rowId(row: DataTableRow, index: number): string {
@@ -111,6 +141,7 @@ function isActionColumn(column: DataTableColumn, rows: DataTableRow[]): boolean 
 
 export function DataTable({
   caption,
+  ariaLabel,
   selectable = false,
   toolbar = false,
   searchPlaceholder = DEFAULT_SEARCH,
@@ -172,6 +203,10 @@ export function DataTable({
     const column = columns.find((item) => item.key === sortKey);
     const numeric = column?.type === "number";
     const dir = sortDir === "asc" ? 1 : -1;
+    const sortValue = column?.sortValue;
+    if (sortValue) {
+      return [...filtered].sort((a, b) => compareSortValues(sortValue(a.row), sortValue(b.row)) * dir);
+    }
     return [...filtered].sort((a, b) => {
       const av = stringifyCell(a.row[sortKey]);
       const bv = stringifyCell(b.row[sortKey]);
@@ -284,13 +319,22 @@ export function DataTable({
   }
 
   function columnClass(column: DataTableColumn): string {
-    if (column.type === "number") return ` ${styles.numeric}`;
-    if (isActionColumn(column, rows)) return ` ${styles.actionCell}`;
-    return "";
+    const wrap = column.wrap ? ` ${styles.wrap}` : "";
+    if (column.type === "number") return ` ${styles.numeric}${wrap}`;
+    if (isActionColumn(column, rows)) return ` ${styles.actionCell}${wrap}`;
+    return wrap;
   }
 
+  const fitColumns = columns.some((column) => column.wrap);
+
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)} data-size={cellSize}>
+    <div
+      {...rest}
+      ref={ref}
+      className={cx(styles.root, className)}
+      data-size={cellSize}
+      data-kit-frame=""
+    >
       {toolbar ? (
         <div className={styles.toolbar}>
           <div className={styles.search}>
@@ -417,9 +461,12 @@ export function DataTable({
         tabIndex={0}
         role="region"
         aria-labelledby={captionId}
-        aria-label={captionId ? undefined : "Table"}
+        aria-label={captionId ? undefined : (ariaLabel ?? "Table")}
       >
-        <table className={styles.table}>
+        <table
+          className={cx(styles.table, fitColumns && styles.fit)}
+          aria-label={captionId ? undefined : ariaLabel}
+        >
           {caption ? (
             <caption id={captionId} className={styles.caption}>
               {caption}
@@ -444,6 +491,7 @@ export function DataTable({
                   key={column.key}
                   scope="col"
                   className={`${styles.th}${columnClass(column)}`}
+                  style={columnStyle(column)}
                   aria-sort={
                     column.sortable
                       ? sortKey === column.key
@@ -497,7 +545,11 @@ export function DataTable({
                       </td>
                     ) : null}
                     {visibleColumns.map((column) => (
-                      <td key={column.key} className={`${styles.td}${columnClass(column)}`}>
+                      <td
+                        key={column.key}
+                        className={`${styles.td}${columnClass(column)}`}
+                        style={columnStyle(column)}
+                      >
                         {renderCell(row[column.key], cellSize)}
                       </td>
                     ))}
