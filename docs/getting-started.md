@@ -76,13 +76,15 @@ npx agentic-ds-kit add --list
 npx agentic-ds-kit add dashboard
 ```
 
-This writes `components/patterns/dashboard/` (or `src/components/patterns/dashboard/` when the app uses `src/`): the pattern's `.tsx` files, a `dashboard-data.ts` with the demo data to replace, any `.module.css`, an `index.ts`, and `dashboard.contract.json`. Kit imports in the copy point at `agentic-ds-kit`, so it compiles with no edits. Then import your copy:
+This writes `components/patterns/dashboard/` (or `src/components/patterns/dashboard/` when the app uses `src/`): the pattern's `.tsx` files, a `dashboard-data.ts` with the demo data to replace, any `.css`, an `index.ts`, and `dashboard.contract.json`. Kit imports in the copy point at `agentic-ds-kit`, so it compiles with no edits. Then import your copy:
 
 ```tsx
 import { DashboardPattern } from "@/components/patterns/dashboard";
 ```
 
-You own the copied files. Keep the contract JSON beside them: agents follow its `must` lines (kit components, semantic tokens, one primary Button, landmarks) and treat its `defaults` as suggestions you can change. The CSS modules use semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
+You own the copied files. Keep the contract JSON beside them: agents follow its `must` lines (kit components, semantic tokens, one primary Button, landmarks) and treat its `defaults` as suggestions you can change. The copied CSS uses semantic tokens only and the markup uses kit layout classes. If the copy renders unstyled, add `agentic-ds-kit/tokens.css` and `agentic-ds-kit/layout.css` to the root layout (step 4).
+
+Copied patterns use plain CSS, not CSS Modules: each `.tsx` imports its `.css` file for side effects, and every class carries the pattern's prefix (`app-shell-pattern__rail`, `sign-in-pattern__form`) so names stay unique in your global styles. That is on purpose. create-next-app 16.4 writes a Turbopack rule to `next.config.ts` that sends every `*.css` file through `@tailwindcss/turbopack` with `as: "*.css"`, which turns a `*.module.css` into plain CSS with no class map, so `styles.rail` is `undefined` and the styles silently do nothing. Plain prefixed CSS renders the same with or without that rule. Keep it that way when you edit a copy, or narrow the rule if you want CSS Modules in your own code.
 
 | Option | What it does |
 | --- | --- |
@@ -90,7 +92,7 @@ You own the copied files. Keep the contract JSON beside them: agents follow its 
 | `--force` | Overwrite files that already exist (otherwise `add` stops and writes nothing) |
 | `--list` | Print every pattern name with its one-line intent |
 
-Upgrading the kit does not touch copied files. Re-run `add` with `--force` (into a clean branch) to pull a newer version of a pattern.
+Upgrading the kit does not touch copied files. Re-run `add` with `--force` (into a clean branch) to pull a newer version of a pattern. Copies from 0.4.5 or earlier have a `*.module.css` that rendered unstyled under that rule; `add --force` writes the plain `.css` and new `.tsx` and lists the old module file, which nothing imports any more, for you to delete.
 
 **4. Tokens in your own CSS**
 

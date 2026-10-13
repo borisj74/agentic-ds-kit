@@ -9,7 +9,7 @@ import { PageHeader } from "../../ui/PageHeader";
 import type { PageHeaderProps } from "../../ui/PageHeader";
 import { Section } from "../../ui/Section";
 import { INSIGHTS, STARTER } from "./assistant-workspace-data";
-import styles from "./AssistantWorkspacePattern.module.css";
+import "./AssistantWorkspacePattern.css";
 
 const SUGGESTIONS = INSIGHTS.map((insight) => insight.prompt);
 
@@ -84,7 +84,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
 
   return (
     <div
-      className={`${railOpen ? "layout-workspace" : "layout-workspace layout-workspace--flush"} ${styles.shell}`}
+      className={`${railOpen ? "layout-workspace" : "layout-workspace layout-workspace--flush"} assistant-workspace-pattern__shell`}
     >
       <div className="layout-canvas">
         <div className="layout-header">
@@ -103,7 +103,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
         </div>
         <div className="layout-content">
           <Section title="Recommended" description="Ask the assistant about a card, or send a prompt in the rail." size="sm">
-            <div className={`layout-split ${styles.insights}`}>
+            <div className="layout-split assistant-workspace-pattern__insights">
               {INSIGHTS.map((insight) => (
                 <InsightCard
                   key={insight.id}
@@ -122,7 +122,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
         </div>
       </div>
       {railOpen ? (
-        <aside ref={railRef} className={styles.rail} tabIndex={-1}>
+        <aside ref={railRef} className="assistant-workspace-pattern__rail" tabIndex={-1}>
           <Chat
             title="Assistant"
             status="Sprint 24"

@@ -11,7 +11,7 @@ import { Section } from "../../ui/Section";
 import { Select } from "../../ui/Select";
 import { Toast } from "../../ui/Toast";
 import { PROFILE, TIMEZONE_OPTIONS } from "./settings-form-data";
-import formStyles from "./SettingsFormPattern.module.css";
+import "./SettingsFormPattern.css";
 
 export interface SettingsFormPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
@@ -41,7 +41,7 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
       </div>
       <form className="layout-content" onSubmit={handleSubmit}>
         <Section title="Profile" description="Basic information visible to collaborators" size="sm">
-          <div className={formStyles.form}>
+          <div className="settings-form-pattern__form">
             <Field label="Display name" htmlFor={`${uid}-display-name`} hint="Shown on shared projects">
               <Input id={`${uid}-display-name`} defaultValue={PROFILE.displayName} />
             </Field>
@@ -58,12 +58,12 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
           </div>
         </Section>
         <Section title="Notifications" size="sm">
-          <div className={formStyles.form}>
+          <div className="settings-form-pattern__form">
             <Checkbox id={`${uid}-email-updates`} label="Email me weekly summaries" defaultChecked={PROFILE.weeklySummaries} />
             <Checkbox id={`${uid}-product-news`} label="Product news and tips" defaultChecked={PROFILE.productNews} />
           </div>
         </Section>
-        <div className={formStyles.actions}>
+        <div className="settings-form-pattern__actions">
           <Button variant="primary" size="md" type="submit">
             Save changes
           </Button>

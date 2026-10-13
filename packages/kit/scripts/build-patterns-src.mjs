@@ -85,6 +85,19 @@ function rewriteImports(source, file) {
   return stripped.slice(0, firstAt) + merged + stripped.slice(firstAt);
 }
 
+/**
+ * Copied CSS is compiled by the user's build. create-next-app ships a turbopack rule that
+ * re-types every `*.css` as plain CSS, so a CSS Module there has no class map and
+ * `styles.x` is undefined. Copy-in sources use plain CSS with prefixed class names instead.
+ */
+function assertNoCssModule(file, where) {
+  if (file.endsWith(".module.css")) {
+    throw new Error(
+      `${where}/${file}: copy-in sources cannot use CSS Modules. Use plain CSS with prefixed class names (e.g. .sign-in-pattern__form).`,
+    );
+  }
+}
+
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
@@ -105,6 +118,7 @@ for (const dirName of dirs) {
   const files = [];
   for (const file of (await readdir(join(patternsDir, dirName))).sort()) {
     const from = join(patternsDir, dirName, file);
+    assertNoCssModule(file, dirName);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const source = await readFile(from, "utf8");
       await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`));
@@ -126,6 +140,7 @@ for (const recipe of RECIPES) {
   const files = [];
   for (const file of (await readdir(source)).sort()) {
     const from = join(source, file);
+    assertNoCssModule(file, `recipes/${recipe.dir}`);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const text = await readFile(from, "utf8");
       await writeFile(join(target, file), rewriteImports(text, `recipes/${recipe.dir}/${file}`));

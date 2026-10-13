@@ -1,4 +1,7 @@
-.page {
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The sign-in-pattern__ prefix keeps names unique. */
+
+.sign-in-pattern__page {
   display: grid;
   place-items: center;
   box-sizing: border-box;
@@ -8,7 +11,7 @@
   background: var(--surface-page);
 }
 
-.stack {
+.sign-in-pattern__stack {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -16,14 +19,14 @@
   max-width: 26rem;
 }
 
-.brand {
+.sign-in-pattern__brand {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
 }
 
-.productName {
+.sign-in-pattern__product-name {
   margin: 0;
   font-family: var(--font-display);
   font-size: var(--type-size-body);
@@ -32,14 +35,14 @@
   color: var(--text-primary);
 }
 
-.form {
+.sign-in-pattern__form {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   min-width: 0;
 }
 
-.row {
+.sign-in-pattern__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -47,13 +50,13 @@
   gap: var(--space-2);
 }
 
-.providers {
+.sign-in-pattern__providers {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-.footer {
+.sign-in-pattern__footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

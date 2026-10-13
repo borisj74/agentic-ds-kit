@@ -1,0 +1,15 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The settings-form-pattern__ prefix keeps names unique. */
+
+.settings-form-pattern__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 28rem;
+}
+
+.settings-form-pattern__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

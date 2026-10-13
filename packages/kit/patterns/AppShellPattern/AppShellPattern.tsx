@@ -18,7 +18,7 @@ import { Button } from "../../ui/Button";
 import { Drawer } from "../../ui/Drawer";
 import { SideNav } from "../../ui/SideNav";
 import type { SideNavProps } from "../../ui/SideNav";
-import styles from "./AppShellPattern.module.css";
+import "./AppShellPattern.css";
 
 /** AppHeader props. The shell owns `radius` (always none). */
 export type AppShellHeader = Omit<AppHeaderProps, "radius">;
@@ -95,7 +95,7 @@ export function AppShellMenuButton({ children = null, ariaLabel = "Open navigati
 
   if (!shell?.narrow) return <>{children}</>;
   return (
-    <span ref={slot?.ref} className={styles.menu}>
+    <span ref={slot?.ref} className="app-shell-pattern__menu">
       <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel={ariaLabel} onClick={shell.openNav} />
     </span>
   );
@@ -103,7 +103,7 @@ export function AppShellMenuButton({ children = null, ariaLabel = "Open navigati
 
 /*
  * Narrow = below --grid-breakpoint-md. matchMedia reads the token at runtime so
- * the shell follows it; 64rem is only the fallback. The CSS module repeats 64rem
+ * the shell follows it; 64rem is only the fallback. The stylesheet repeats 64rem
  * for the pre-hydration render (media queries cannot read var()).
  */
 const BREAKPOINT_TOKEN = "--grid-breakpoint-md";
@@ -213,9 +213,9 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
           ) : (
             headerNode
           )}
-          <div className={`layout-app ${styles.app}`}>
+          <div className="layout-app app-shell-pattern__app">
             {narrow ? null : (
-              <div className={styles.rail}>
+              <div className="app-shell-pattern__rail">
                 <AppShellContext.Provider value={{ ...shell, navPlacement: "rail" }}>
                   {navProps ? <SideNav {...navProps} showHeader={false} radius="none" /> : navNode("rail")}
                 </AppShellContext.Provider>
@@ -231,7 +231,7 @@ function AppShellPatternRoot({ header, nav, navLabel, children, className = "" }
               size="sm"
               onClose={() => setMenuOpen(false)}
             >
-              <div className={styles.drawerNav} onClick={closeOnPick}>
+              <div className="app-shell-pattern__drawer-nav" onClick={closeOnPick}>
                 <AppShellContext.Provider value={{ ...shell, navPlacement: "drawer" }}>
                   {navProps ? (
                     <SideNav {...navProps} open showHeader={false} radius="md" onOpenChange={undefined} />

@@ -1,21 +1,24 @@
-.detail {
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The inbox-pattern__ prefix keeps names unique. */
+
+.inbox-pattern__detail {
   display: grid;
   gap: var(--space-stack-lg);
 }
 
-.meta {
+.inbox-pattern__meta {
   display: flex;
   align-items: center;
   gap: var(--space-inline-md);
   min-width: 0;
 }
 
-.meta > :first-child {
+.inbox-pattern__meta > :first-child {
   flex: 1;
   min-width: 0;
 }
 
-.body {
+.inbox-pattern__body {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body);

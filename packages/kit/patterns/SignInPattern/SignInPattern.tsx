@@ -8,7 +8,7 @@ import { Checkbox } from "../../ui/Checkbox";
 import { Divider } from "../../ui/Divider";
 import { Field } from "../../ui/Field";
 import { Input } from "../../ui/Input";
-import styles from "./SignInPattern.module.css";
+import "./SignInPattern.css";
 
 export type SignInMode = "sign-in" | "sign-up";
 
@@ -141,12 +141,12 @@ export function SignInPattern({
   const ssoList = providers ?? [];
 
   return (
-    <div className={styles.page}>
-      <div className={styles.stack}>
+    <div className="sign-in-pattern__page">
+      <div className="sign-in-pattern__stack">
         {logo || productName ? (
-          <div className={styles.brand}>
+          <div className="sign-in-pattern__brand">
             {logo}
-            {productName ? <p className={styles.productName}>{productName}</p> : null}
+            {productName ? <p className="sign-in-pattern__product-name">{productName}</p> : null}
           </div>
         ) : null}
 
@@ -154,7 +154,7 @@ export function SignInPattern({
           {error ? <Alert variant="danger">{error}</Alert> : null}
 
           <form
-            className={styles.form}
+            className="sign-in-pattern__form"
             onSubmit={handleSubmit}
             noValidate
             aria-busy={loading || undefined}
@@ -205,7 +205,7 @@ export function SignInPattern({
             </Field>
 
             {!signUp ? (
-              <div className={styles.row}>
+              <div className="sign-in-pattern__row">
                 <Checkbox
                   id={ids.remember}
                   name="remember"
@@ -229,7 +229,7 @@ export function SignInPattern({
           {ssoList.length > 0 ? (
             <>
               <Divider label="or" />
-              <div className={styles.providers}>
+              <div className="sign-in-pattern__providers">
                 {ssoList.map((provider) => (
                   <Button
                     key={provider.id}
@@ -248,7 +248,7 @@ export function SignInPattern({
         </Card>
 
         {onSwitchMode ? (
-          <p className={styles.footer}>
+          <p className="sign-in-pattern__footer">
             <span>{copy.switchPrompt}</span>
             <Button
               variant="tertiary"
