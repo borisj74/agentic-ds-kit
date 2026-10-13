@@ -173,6 +173,47 @@ export function linearScale(domain: [number, number], range: [number, number]) {
 
 export const CHART_MARGINS = { top: 12, right: 12, bottom: 36, left: 44 } as const;
 
+/** Fallback caption glyph advance (px) when text cannot be measured. */
+const LABEL_CHAR_WIDTH = 6.5;
+const LABEL_GAP = 2;
+const LABEL_LINE_HEIGHT = 16;
+
+export type AxisLabelFormatter = (category: string, index: number) => string;
+
+/** Painted width (px) of an axis label, or undefined when it cannot be measured. */
+export type TextMeasure = (text: string) => number | undefined;
+
+/**
+ * Which category labels to draw along an axis. Every label stays in the data table and the
+ * accessible names; this only thins what is painted. `tickInterval` or `formatLabel` puts the
+ * caller in control (every Nth label / labels returned as ""); with neither, the stride grows just
+ * enough that neighbouring labels stop overlapping (1 when they already fit).
+ */
+export function axisLabels(
+  categories: string[],
+  options: {
+    spacing: number;
+    stacked?: boolean;
+    tickInterval?: number;
+    formatLabel?: AxisLabelFormatter;
+    measure?: TextMeasure;
+  },
+): { index: number; label: string }[] {
+  const { spacing, stacked = false, tickInterval, formatLabel, measure } = options;
+  const labels = categories.map((category, index) => (formatLabel ? formatLabel(category, index) : category));
+  let stride = 1;
+  if (tickInterval !== undefined && Number.isFinite(tickInterval) && tickInterval >= 1) {
+    stride = Math.floor(tickInterval);
+  } else if (!formatLabel && spacing > 0) {
+    const needed = stacked
+      ? LABEL_LINE_HEIGHT
+      : Math.max(0, ...labels.map((label) => measure?.(label) ?? label.length * LABEL_CHAR_WIDTH)) +
+        LABEL_GAP;
+    stride = Math.max(1, Math.ceil(needed / spacing));
+  }
+  return labels.flatMap((label, index) => (index % stride === 0 && label ? [{ index, label }] : []));
+}
+
 export const TAU = Math.PI * 2;
 
 export function polarToCartesian(cx: number, cy: number, radius: number, angle: number) {

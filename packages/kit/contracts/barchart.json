@@ -29,7 +29,17 @@
     "showTable": { "type": "boolean", "default": true },
     "height": { "type": "number", "default": 240 },
     "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false }
+    "isLoading": { "type": "boolean", "default": false },
+    "tickInterval": {
+      "type": "number",
+      "required": false,
+      "note": "draw every Nth axis label; with neither tickInterval nor formatLabel, labels thin automatically only when they would overlap"
+    },
+    "formatLabel": {
+      "type": "function",
+      "required": false,
+      "note": "(category, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw category"
+    }
   },
   "passthrough": {
     "root": "figure",
@@ -51,7 +61,9 @@
       "Hover reads the category",
       "Legend highlight emphasises one series",
       "Bars expose category and value in accessible names",
-      "Table view keeps values readable"
+      "Table view keeps values readable",
+      "Repeated category labels each keep their own bar and table row",
+      "Too many categories for the width: the plot scrolls sideways in a focusable, named region with the value axis pinned"
     ]
   },
   "doNot": [

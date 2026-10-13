@@ -24,6 +24,20 @@ const QUARTER_SERIES = [
   { label: "Product B", data: [90, 110, 130, 140] },
 ];
 
+// 30 days from 24 Feb: day numbers 24 and 25 appear twice (Feb and Mar).
+const DAY_LABELS = Array.from({ length: 30 }, (_, index) => String(((index + 23) % 28) + 1));
+
+const CASH_SERIES = [
+  {
+    label: "Inflow",
+    data: DAY_LABELS.map((_, index) => 40 + ((index * 37) % 50) + (index % 7 === 0 ? 30 : 0)),
+  },
+  {
+    label: "Outflow",
+    data: DAY_LABELS.map((_, index) => 30 + ((index * 23 + 11) % 45)),
+  },
+];
+
 const TRAFFIC = [
   { label: "Organic", value: 4820 },
   { label: "Direct", value: 2410 },
@@ -179,6 +193,40 @@ export function BarChartDoc() {
     { label: 'Referral', value: 1290 },
     { label: 'Social', value: 860 },
   ]}
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Many categories</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <BarChart
+                    title="Cash flow, 30 days"
+                    description="Thousands, 24 Feb to 25 Mar"
+                    categories={DAY_LABELS}
+                    series={CASH_SERIES}
+                    tickInterval={5}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Repeated labels are fine: every bar keeps its own slot. tickInterval paints every
+                  Nth label; the table still lists every day. When bars would get too thin, the plot
+                  scrolls sideways with the value axis pinned.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<BarChart
+  title="Cash flow, 30 days"
+  categories={days} // '24', '25', … '25'
+  series={[
+    { label: 'Inflow', data: inflow },
+    { label: 'Outflow', data: outflow },
+  ]}
+  tickInterval={5}
 />`}
               />
             </section>

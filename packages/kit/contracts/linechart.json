@@ -26,7 +26,17 @@
     "includeZero": { "type": "boolean", "default": false },
     "height": { "type": "number", "default": 240 },
     "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false }
+    "isLoading": { "type": "boolean", "default": false },
+    "tickInterval": {
+      "type": "number",
+      "required": false,
+      "note": "draw every Nth axis label; with neither tickInterval nor formatLabel, labels thin automatically only when they would overlap"
+    },
+    "formatLabel": {
+      "type": "function",
+      "required": false,
+      "note": "(label, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw label"
+    }
   },
   "passthrough": {
     "root": "figure",

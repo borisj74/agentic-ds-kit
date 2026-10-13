@@ -54,3 +54,29 @@
     transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
   }
 }
+
+/* Dense vertical charts: value axis pinned, bars scroll sideways at a minimum group width. */
+.scrollLayout {
+  display: flex;
+  min-width: 0;
+}
+
+.valueAxis {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
+.scroller {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  border-radius: var(--radius-control-sm);
+}
+
+.scroller:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
