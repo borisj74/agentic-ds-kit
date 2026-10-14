@@ -56,7 +56,7 @@
         "md"
       ],
       "default": "md",
-      "note": "Passed to every Cell and HeaderCell. Inside a Card size sm + flush, the first and last columns take the card's 16px inset instead, so they line up with the card header."
+      "note": "Passed to every Cell and HeaderCell. Inside a flush Card, the first and last columns take the card's inline padding instead (any card size, any cellSize), so they line up with the card header."
     },
     "columns": {
       "type": "array",

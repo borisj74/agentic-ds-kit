@@ -254,8 +254,9 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  flush runs the body edge to edge for a DataTable, which drops its own frame. A
-                  headerAction with href is a text link, like View all.
+                  flush runs the body edge to edge for a DataTable, which drops its own frame. Its
+                  first and last columns take the card&apos;s inline padding at any size, whatever the
+                  table&apos;s cellSize. A headerAction with href is a text link, like View all.
                 </p>
               </div>
               <CodeBlock code={TABLE_CARD_CODE} />
@@ -295,8 +296,9 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  With size sm the DataTable&apos;s first and last columns take the card&apos;s 16px
-                  inset, so the title lines up with the first column and View all with the last.
+                  The DataTable&apos;s first and last columns take the card&apos;s inline padding at any
+                  size, whatever the table&apos;s cellSize, so the title lines up with the first column
+                  and View all with the last.
                 </p>
               </div>
               <CodeBlock code={SMALL_TABLE_CARD_CODE} />

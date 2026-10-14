@@ -144,8 +144,8 @@
   box-shadow: none;
 }
 
-/* sm drops the header inset to 16px; the framed child's edge cells follow it so
-   the title lines up with the first column and the header action with the last. */
-.sm.flush .body > [data-kit-frame] {
+/* The framed child's edge cells take the card's inset, at any size, so the title
+   lines up with the first column and the header action with the last. */
+.flush .body > [data-kit-frame] {
   --kit-frame-inset: var(--card-spacing);
 }

@@ -7,7 +7,7 @@
     "Feature summaries",
     "Grouped content that should sit on a card surface",
     "A table card: title + View all link over a DataTable (flush)",
-    "A compact table card: size sm + flush over a DataTable (columns line up with the header)"
+    "A compact table card: size sm + flush over a DataTable"
   ],
   "doNotUseWhen": [
     "Page-level grouping — use Section",
@@ -73,7 +73,7 @@
     "flush": {
       "type": "boolean",
       "default": false,
-      "note": "Body edge to edge with no padding; header and footer keep padding with a divider. A DataTable directly in the body drops its own frame (border, radius, shadow). With size sm its first and last columns take the card's 16px inset (space.4), so the title lines up with the first column and headerAction with the last; md keeps the table's own cell inset. Use for table cards; give the DataTable ariaLabel instead of a caption so the title is not repeated."
+      "note": "Body edge to edge with no padding; header and footer keep padding with a divider. A DataTable directly in the body drops its own frame (border, radius, shadow). Its first and last columns take the card's inline padding at any size (space.6 md, space.4 sm), whatever the table's cellSize, so the title lines up with the first column and headerAction with the last. Use for table cards; give the DataTable ariaLabel instead of a caption so the title is not repeated."
     },
     "actions": {
       "type": "array",
