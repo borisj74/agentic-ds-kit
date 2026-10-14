@@ -36,6 +36,11 @@
       "type": "function",
       "required": false,
       "note": "(label, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw label"
+    },
+    "animate": {
+      "type": "boolean",
+      "default": false,
+      "note": "Lines draw in left to right and area fills fade in after when the chart first appears. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion"
     }
   },
   "passthrough": {
@@ -57,7 +62,8 @@
       "Title on figure when provided",
       "Hover reads the sample",
       "Legend highlight emphasises one series",
-      "Table view keeps values readable"
+      "Table view keeps values readable",
+      "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance"
     ]
   },
   "doNot": [

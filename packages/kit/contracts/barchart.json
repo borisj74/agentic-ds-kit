@@ -39,6 +39,11 @@
       "type": "function",
       "required": false,
       "note": "(category, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw category"
+    },
+    "animate": {
+      "type": "boolean",
+      "default": false,
+      "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion"
     }
   },
   "passthrough": {
@@ -63,7 +68,8 @@
       "Bars expose category and value in accessible names",
       "Table view keeps values readable",
       "Repeated category labels each keep their own bar and table row",
-      "Too many categories for the width: the plot scrolls sideways in a focusable, named region with the value axis pinned"
+      "Too many categories for the width: the plot scrolls sideways in a focusable, named region with the value axis pinned",
+      "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance"
     ]
   },
   "doNot": [

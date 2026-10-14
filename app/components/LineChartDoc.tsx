@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LineChart } from "agentic-ds-kit";
 import type { LineChartVariant } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
+import { Button, Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -47,6 +47,7 @@ function masterCode(variant: LineChartVariant, showGrid: boolean) {
 
 export function LineChartDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
+  const [replay, setReplay] = useState(0);
   const [variant, setVariant] = useState<LineChartVariant>("area");
   const [showGrid, setShowGrid] = useState(true);
 
@@ -122,6 +123,40 @@ export function LineChartDoc() {
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Entrance animation</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    key={replay}
+                    title="Revenue, year over year"
+                    labels={YOY_LABELS}
+                    series={YOY_SERIES}
+                    animate
+                  />
+                </div>
+              </div>
+              <div>
+                <Button variant="secondary" size="sm" onClick={() => setReplay((count) => count + 1)}>
+                  Replay
+                </Button>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Lines draw in from left to right the first time they appear, and area fills fade in behind them. Off by default; with reduced motion the chart appears at once. Changing data later does not replay it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="Revenue, year over year"
+  labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+  series={series}
+  animate
+/>`}
+              />
+            </section>
+
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Multiple series</h2>
               <div className={styles.exampleCanvas}>

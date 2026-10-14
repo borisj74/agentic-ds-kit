@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BarChart } from "agentic-ds-kit";
 import type { BarChartOrientation } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
+import { Button, Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -65,6 +65,7 @@ function masterCode(orientation: BarChartOrientation, showGrid: boolean) {
 
 export function BarChartDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
+  const [replay, setReplay] = useState(0);
   const [orientation, setOrientation] = useState<BarChartOrientation>("vertical");
   const [showGrid, setShowGrid] = useState(true);
 
@@ -140,6 +141,40 @@ export function BarChartDoc() {
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Entrance animation</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <BarChart
+                    key={replay}
+                    title="Quarterly revenue"
+                    categories={QUARTER_LABELS}
+                    series={QUARTER_SERIES}
+                    animate
+                  />
+                </div>
+              </div>
+              <div>
+                <Button variant="secondary" size="sm" onClick={() => setReplay((count) => count + 1)}>
+                  Replay
+                </Button>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Bars grow from the zero line with a short stagger the first time they appear. Negative values grow downward and horizontal bars grow sideways. Off by default; with reduced motion the chart appears at once. Changing data later does not replay it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<BarChart
+  title="Quarterly revenue"
+  categories={['Q1', 'Q2', 'Q3', 'Q4']}
+  series={series}
+  animate
+/>`}
+              />
+            </section>
+
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Grouped series</h2>
               <div className={styles.exampleCanvas}>

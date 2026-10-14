@@ -1,0 +1,76 @@
+/*
+ * Opt-in chart entrance motion (`animate` prop on BarChart, LineChart, PieChart).
+ * Pure CSS: runs once when a mark first mounts, ends on the final state even without JS,
+ * and is skipped entirely under reduced motion. Per-mark `--chart-stagger` (0–1) spreads
+ * the start over a fraction of the duration so long charts never take longer overall.
+ */
+
+/* Bars grow out of the zero line. `transform-origin` (the baseline point) is set per bar. */
+.barGrowY,
+.barGrowX {
+  transform-box: view-box;
+  animation-duration: var(--motion-duration-600);
+  animation-timing-function: var(--motion-ease-out);
+  animation-delay: calc(var(--motion-duration-300) * var(--chart-stagger, 0));
+  animation-fill-mode: both;
+}
+
+.barGrowY {
+  animation-name: chart-grow-y;
+}
+
+.barGrowX {
+  animation-name: chart-grow-x;
+}
+
+@keyframes chart-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes chart-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/*
+ * Strokes draw along their length. Needs `pathLength={1}` on the element; the 1 + 2 pattern
+ * with a start offset just past 1 keeps round caps from leaving a dot before the draw starts.
+ */
+.draw {
+  stroke-dasharray: 1 2;
+  animation: chart-draw var(--motion-duration-600) var(--motion-ease-standard) both;
+  animation-delay: calc(var(--motion-duration-300) * var(--chart-stagger, 0));
+}
+
+@keyframes chart-draw {
+  from {
+    stroke-dashoffset: 1.01;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Secondary marks (area fills) fade in once the line is mostly drawn. */
+.fadeAfter {
+  animation: chart-fade var(--motion-duration-500) var(--motion-ease-out) both;
+  animation-delay: calc(var(--motion-duration-400) + var(--motion-duration-300) * var(--chart-stagger, 0));
+}
+
+@keyframes chart-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barGrowY,
+  .barGrowX,
+  .draw,
+  .fadeAfter {
+    animation: none;
+  }
+}

@@ -4,6 +4,7 @@ import { useId, useMemo, useState } from "react";
 import { ChartFrame } from "../shared/ChartFrame";
 import { cx } from "../shared/cx";
 import frameStyles from "../shared/ChartFrame.module.css";
+import motionStyles from "../shared/chartMotion.module.css";
 import {
   formatValue,
   pointOnCircle,
@@ -117,6 +118,7 @@ export function PieChart({
   showTable = true,
   emptyLabel = "No data for this range",
   isLoading = false,
+  animate = false,
   className,
   ref: rootRef,
   ...rest
@@ -124,6 +126,7 @@ export function PieChart({
   const [active, setActive] = useState<number | null>(null);
   const rawId = useId();
   const glowId = `pie-glow-${rawId.replace(/:/g, "")}`;
+  const sweepId = `pie-sweep-${rawId.replace(/:/g, "")}`;
   const isDonut = variant === "donut";
   const isSplit = layout === "split";
 
@@ -198,25 +201,44 @@ export function PieChart({
           <filter id={glowId} x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="2.2" />
           </filter>
-        </defs>
-        {geometry.slices.map((slice, index) => {
-          const isActive = active === index;
-          const isDimmed = active !== null && !isActive;
-          return (
-            <g
-              key={index}
-              className={`${styles.slice}${isActive ? ` ${styles.sliceActive}` : ""}${isDimmed ? ` ${styles.sliceDimmed}` : ""}`}
-            >
-              <path
-                className={styles.glow}
-                d={slice.path}
-                fill={slice.color}
-                filter={`url(#${glowId})`}
+          {animate ? (
+            // Entrance: one wide stroke drawn clockwise from 12 o'clock reveals the slices as a sweep.
+            // Pure CSS, so the final state shows without JS; reduced motion skips it.
+            <mask id={sweepId} maskUnits="userSpaceOnUse" x={-size} y={-size} width={size * 3} height={size * 3}>
+              <circle
+                className={motionStyles.draw}
+                cx={geometry.cx}
+                cy={geometry.cy}
+                r={size / 2}
+                fill="none"
+                stroke="white"
+                strokeWidth={size}
+                pathLength={1}
+                transform={`rotate(-90 ${geometry.cx} ${geometry.cy})`}
               />
-              <path className={styles.mark} d={slice.path} fill={slice.color} />
-            </g>
-          );
-        })}
+            </mask>
+          ) : null}
+        </defs>
+        <g mask={animate ? `url(#${sweepId})` : undefined}>
+          {geometry.slices.map((slice, index) => {
+            const isActive = active === index;
+            const isDimmed = active !== null && !isActive;
+            return (
+              <g
+                key={index}
+                className={`${styles.slice}${isActive ? ` ${styles.sliceActive}` : ""}${isDimmed ? ` ${styles.sliceDimmed}` : ""}`}
+              >
+                <path
+                  className={styles.glow}
+                  d={slice.path}
+                  fill={slice.color}
+                  filter={`url(#${glowId})`}
+                />
+                <path className={styles.mark} d={slice.path} fill={slice.color} />
+              </g>
+            );
+          })}
+        </g>
         {isDonut && showCenterTotal && !isEmpty ? (
           <text className={styles.center} textAnchor="middle">
             <tspan

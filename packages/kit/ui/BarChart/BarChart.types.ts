@@ -21,6 +21,8 @@ export interface BarChartProps extends Omit<ComponentPropsWithoutRef<"figure">, 
   tickInterval?: number;
   /** Text drawn for each axis label; return "" to hide one (turns off automatic thinning). The data table and accessible names keep the raw category. */
   formatLabel?: AxisLabelFormatter;
+  /** Bars grow from the zero line with a short stagger when they first appear. Off under reduced motion. Default false. */
+  animate?: boolean;
   className?: string;
   ref?: Ref<HTMLElement>;
 }

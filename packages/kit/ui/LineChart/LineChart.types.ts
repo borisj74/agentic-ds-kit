@@ -22,6 +22,8 @@ export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">,
   tickInterval?: number;
   /** Text drawn for each axis label; return "" to hide one (turns off automatic thinning). The data table and accessible names keep the raw label. */
   formatLabel?: AxisLabelFormatter;
+  /** Lines draw in and area fills fade in after when the chart first appears. Off under reduced motion. Default false. */
+  animate?: boolean;
   className?: string;
   ref?: Ref<HTMLElement>;
 }

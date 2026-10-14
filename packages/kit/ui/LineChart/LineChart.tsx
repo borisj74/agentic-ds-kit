@@ -1,8 +1,9 @@
 "use client";
 
-import { useId, useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useId, useMemo, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { ChartFrame } from "../shared/ChartFrame";
 import frameStyles from "../shared/ChartFrame.module.css";
+import motionStyles from "../shared/chartMotion.module.css";
 import {
   axisLabels,
   CHART_MARGINS,
@@ -159,6 +160,7 @@ export function LineChart({
   isLoading = false,
   tickInterval,
   formatLabel,
+  animate = false,
   className,
   ref: rootRef,
   ...rest
@@ -242,6 +244,11 @@ export function LineChart({
   const activeSample = activeIndex !== null ? (layout.samples[activeIndex] ?? null) : null;
   const flipTooltip = Boolean(activeSample && width > 0 && activeSample.x > width * 0.6);
 
+  // Entrance: lines draw in left to right (series slightly staggered), area fills fade in after.
+  const lastSeries = Math.max(layout.lines.length - 1, 1);
+  const seriesMotion = (seriesIndex: number): CSSProperties | undefined =>
+    animate ? ({ "--chart-stagger": seriesIndex / lastSeries } as CSSProperties) : undefined;
+
   const handlePlotPointer = (event: ReactPointerEvent<SVGRectElement>) => {
     if (!layout.samples.length) return;
     const rect = event.currentTarget.getBoundingClientRect();
@@ -286,7 +293,15 @@ export function LineChart({
                   fill="white"
                 />
                 {layout.lines.map((line) =>
-                  line.areaPath ? <path key={`grid-mask-${line.seriesIndex}`} d={line.areaPath} fill="black" /> : null,
+                  line.areaPath ? (
+                    <path
+                      key={`grid-mask-${line.seriesIndex}`}
+                      className={animate ? motionStyles.fadeAfter : undefined}
+                      style={seriesMotion(line.seriesIndex)}
+                      d={line.areaPath}
+                      fill="black"
+                    />
+                  ) : null,
                 )}
               </mask>
             </defs>
@@ -332,9 +347,20 @@ export function LineChart({
                 className={`${styles.series}${dimmed ? ` ${styles.seriesDimmed}` : ""}`}
               >
                 {isArea && line.areaPath ? (
-                  <path className={styles.area} d={line.areaPath} fill={line.color} />
+                  <path
+                    className={`${styles.area}${animate ? ` ${motionStyles.fadeAfter}` : ""}`}
+                    style={seriesMotion(line.seriesIndex)}
+                    d={line.areaPath}
+                    fill={line.color}
+                  />
                 ) : null}
-                <path className={styles.line} d={line.linePath} stroke={line.color} />
+                <path
+                  className={`${styles.line}${animate ? ` ${motionStyles.draw}` : ""}`}
+                  style={seriesMotion(line.seriesIndex)}
+                  d={line.linePath}
+                  stroke={line.color}
+                  pathLength={animate ? 1 : undefined}
+                />
               </g>
             );
           })}
