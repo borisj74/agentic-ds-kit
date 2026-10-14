@@ -13,8 +13,6 @@
 
 .sm {
   --card-spacing: var(--space-4);
-  max-width: 24rem;
-  margin-inline: auto;
 }
 
 .image {
