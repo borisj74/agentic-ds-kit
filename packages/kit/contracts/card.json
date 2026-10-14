@@ -5,7 +5,8 @@
   "useWhen": [
     "Login or settings tiles",
     "Feature summaries",
-    "Grouped content that should sit on a card surface"
+    "Grouped content that should sit on a card surface",
+    "A table card: title + View all link over a DataTable (flush)"
   ],
   "doNotUseWhen": [
     "Page-level grouping — use Section",
@@ -38,7 +39,7 @@
     "headerAction": {
       "type": "object",
       "required": false,
-      "note": "Header kit Button (shadcn CardAction). One max. Tertiary or secondary, not a second primary.",
+      "note": "Header kit Button (shadcn CardAction). One max. Tertiary or secondary, not a second primary. With href it is a text link instead (e.g. View all).",
       "label": {
         "type": "string",
         "required": true
@@ -56,7 +57,22 @@
       "onClick": {
         "type": "function",
         "required": false
+      },
+      "href": {
+        "type": "string",
+        "required": false,
+        "note": "Renders a kit-styled text link (<a>) instead of a Button"
+      },
+      "linkAs": {
+        "type": "KitLinkComponent",
+        "required": false,
+        "note": "With href: router link to render instead of <a>, e.g. Next.js Link. Receives href, className, onClick, children"
       }
+    },
+    "flush": {
+      "type": "boolean",
+      "default": false,
+      "note": "Body edge to edge with no padding; header and footer keep padding with a divider. A DataTable directly in the body drops its own frame (border, radius, shadow). Use for table cards; give the DataTable ariaLabel instead of a caption so the title is not repeated."
     },
     "actions": {
       "type": "array",
@@ -108,13 +124,19 @@
     "text.secondary",
     "space.6",
     "space.4",
-    "space.2"
+    "space.2",
+    "border.divider",
+    "link.default",
+    "link.hover",
+    "link.active",
+    "radius.controlSm"
   ],
   "a11y": {
     "element": "article",
     "requirements": [
       "title is heading when set (use useId)",
-      "aria-labelledby when title exists"
+      "aria-labelledby when title exists",
+      "headerAction with href is a real link (<a> or linkAs) named by its label"
     ]
   },
   "doNot": [
@@ -124,7 +146,9 @@
     "Do not use Card for page grouping — that is unframed Section",
     "Footer actions must be kit Buttons",
     "Do not invent CardHeader components",
-    "headerAction is tertiary/secondary, not a second primary"
+    "headerAction is tertiary/secondary, not a second primary",
+    "Do not nest a framed DataTable in a padded Card — set flush",
+    "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel"
   ],
   "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", variant: \"tertiary\" }} actions={[{ label: \"Login\", variant: \"primary\" }, { label: \"Login with Google\", variant: \"secondary\" }]}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field></Card>"
 }

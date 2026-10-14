@@ -7,4 +7,5 @@ export type {
   DataTableBulkActionVariant,
   DataTableCell,
   DataTableRow,
+  DataTableSortValue,
 } from "./DataTable.types";

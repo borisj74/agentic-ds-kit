@@ -8,4 +8,5 @@ export type {
   CellBadgeItem,
   CellOption,
   CellAction,
+  KitLinkComponent,
 } from "./Cell.types";

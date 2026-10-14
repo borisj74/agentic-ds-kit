@@ -93,3 +93,53 @@
 .footer button {
   width: 100%;
 }
+
+.headerLink {
+  flex-shrink: 0;
+  border-radius: var(--radius-control-sm);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  color: var(--link-default);
+  text-decoration: underline;
+}
+
+.headerLink:hover {
+  color: var(--link-hover);
+}
+
+.headerLink:active {
+  color: var(--link-active);
+}
+
+.headerLink:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+/* Flush: header and footer keep their padding; the body runs edge to edge. */
+.flush .content {
+  gap: 0;
+  padding: 0;
+}
+
+.flush .header,
+.flush .footer {
+  padding: var(--card-spacing);
+}
+
+.flush .header + .body {
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+.flush .footer {
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+/* A framed kit child (DataTable) drops its own frame; the Card is the frame. */
+.flush .body > [data-kit-frame] {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}

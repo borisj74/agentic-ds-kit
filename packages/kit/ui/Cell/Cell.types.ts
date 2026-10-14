@@ -2,9 +2,13 @@ import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 import type { ButtonVariant } from "../Button/Button.types";
+import type { KitLinkComponent } from "../shared/link";
+
+export type { KitLinkComponent } from "../shared/link";
 
 export type CellType =
   | "text"
+  | "link"
   | "avatar"
   | "file"
   | "payment"
@@ -70,6 +74,10 @@ export interface CellProps extends Omit<ComponentPropsWithoutRef<"span">, CellOw
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   id?: string;
+  /** type=link: destination. The link text is `label`. */
+  href?: string;
+  /** type=link: router link to render instead of `<a>`, e.g. Next.js `Link`. */
+  linkAs?: KitLinkComponent;
   ref?: Ref<HTMLSpanElement>;
 }
 
