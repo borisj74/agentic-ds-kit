@@ -15,11 +15,11 @@ export interface DataTableColumn {
   sortable?: boolean;
   /** Value to sort this column by, e.g. the number behind "$1,200.00" or the Date behind "Mar 4". */
   sortValue?: (row: DataTableRow) => DataTableSortValue;
-  /** CSS width for the column, e.g. "8rem" or "20%". */
+  /** CSS width for the column, e.g. "8rem" or "20%". Drops the default text-column minimum; the column never gets narrower than its content. */
   width?: string;
   /** CSS min-width; replaces the default text-column minimum. */
   minWidth?: string;
-  /** Let cell text wrap so the table fits its container instead of scrolling. */
+  /** Let cell text and the header label wrap so the table fits its container instead of scrolling. */
   wrap?: boolean;
 }
 

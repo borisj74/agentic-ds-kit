@@ -20,6 +20,8 @@ export interface HeaderCellProps extends Omit<ComponentPropsWithoutRef<"span">, 
   sortable?: boolean;
   sort?: HeaderCellSort;
   onSort?: () => void;
+  /** Let the label wrap onto more lines (DataTable sets it for `wrap` columns). The sort icon stays with the last word. */
+  wrap?: boolean;
   id?: string;
   ref?: Ref<HTMLSpanElement>;
 }

@@ -258,7 +258,7 @@
 }
 
 .td:not(.emptyCell) > *,
-.th:not(.checkCell):not(.numeric):not(.actionCell) > * {
+.th:not(.checkCell):not(.numeric):not(.actionCell):not(.wrap) > * {
   max-width: none;
   width: max-content;
   min-width: 100%;
@@ -269,12 +269,14 @@
   width: 100%;
 }
 
-.th.wrap {
-  white-space: nowrap;
-}
-
+.th.wrap,
 .td.wrap {
   white-space: normal;
+}
+
+.th.wrap > * {
+  width: 100%;
+  min-width: 0;
 }
 
 .td.wrap:not(.emptyCell) > * {

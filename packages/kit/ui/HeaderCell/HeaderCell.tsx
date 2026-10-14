@@ -26,6 +26,7 @@ export function HeaderCell({
   sortable = false,
   sort,
   onSort,
+  wrap = false,
   id,
   className,
   ref,
@@ -42,12 +43,28 @@ export function HeaderCell({
         ? `Clear sort on ${label ?? "column"}`
         : `Sort ${label ?? "column"} ascending`;
   const checkboxOnly = checkbox && !label;
+  const sortIcon = (
+    <LucideByName
+      name={icon}
+      size={14}
+      className={sort ? styles.sortIconActive : styles.sortIcon}
+    />
+  );
+  // When wrapping, the last word and the sort icon share a line so the icon never sits alone.
+  const lastBreak = wrap && label ? label.trimEnd().lastIndexOf(" ") + 1 : 0;
 
   return (
     <span
       {...rest}
       ref={ref}
-      className={cx(styles.cell, styles[size], styles[align], checkboxOnly && styles.checkboxOnly, className)}
+      className={cx(
+        styles.cell,
+        styles[size],
+        styles[align],
+        checkboxOnly && styles.checkboxOnly,
+        wrap && styles.wrap,
+        className,
+      )}
     >
       {checkbox ? (
         <Checkbox
@@ -62,12 +79,20 @@ export function HeaderCell({
       ) : null}
       {sortable && !checkbox ? (
         <button type="button" className={styles.sort} onClick={onSort} aria-label={sortLabel}>
-          {label ? <span className={styles.label}>{label}</span> : null}
-          <LucideByName
-            name={icon}
-            size={14}
-            className={sort ? styles.sortIconActive : styles.sortIcon}
-          />
+          {wrap ? (
+            <span className={styles.label}>
+              {label ? label.slice(0, lastBreak) : null}
+              <span className={styles.tail}>
+                {label ? label.slice(lastBreak) : null}
+                {sortIcon}
+              </span>
+            </span>
+          ) : (
+            <>
+              {label ? <span className={styles.label}>{label}</span> : null}
+              {sortIcon}
+            </>
+          )}
         </button>
       ) : label ? (
         <span className={styles.label}>{label}</span>
