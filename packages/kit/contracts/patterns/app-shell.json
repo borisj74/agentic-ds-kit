@@ -28,7 +28,7 @@
     "nav": {
       "type": "object | slot | function",
       "required": true,
-      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail, md and always expanded in the Drawer). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
+      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
     },
     "navLabel": {
       "type": "string",

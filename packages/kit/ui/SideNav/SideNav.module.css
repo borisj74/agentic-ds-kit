@@ -466,7 +466,91 @@
   border-top: var(--border-divider) solid var(--border-subtle);
 }
 
+/* SideNav.Account: avatar on the rail icon axis (sm Avatar = the closed-rail chip), then
+   name + secondary line, then the action. Text truncates; title and the DOM keep it whole. */
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-md);
+  min-width: 0;
+}
+
+* + .account {
+  margin-block-start: var(--space-stack-sm);
+}
+
+.accountAvatar {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.accountText {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-sans);
+  line-height: var(--type-line-body);
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.accountName,
+.accountSecondary {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountName {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}
+
+.accountSecondary {
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  color: var(--text-secondary);
+}
+
+.accountAction {
+  display: flex;
+  flex-shrink: 0;
+  transition: opacity var(--motion-overlay-duration) var(--motion-overlay-easing);
+}
+
+.rootClosed .accountText,
+.rootClosed .accountAction {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Inside a kit Drawer: fill the Drawer body (no rail width, edge border, or own card frame);
+   rows line up with the Drawer title, the groups scroll and the footer stays at the bottom. The nav is always open there, so the Toggle hides. */
+.inDrawer {
+  flex: 1 1 auto;
+  width: auto;
+  height: 100%;
+  margin-inline: calc(-1 * var(--space-inset-sm));
+  border: 0;
+}
+
+.inDrawer .panel {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  border: 0;
+  border-radius: var(--radius-0);
+  background: transparent;
+}
+
+.inDrawer .toggle {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .accountText,
+  .accountAction,
   .root,
   .title,
   .label,

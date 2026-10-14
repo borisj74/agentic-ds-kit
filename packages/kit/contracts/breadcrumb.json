@@ -29,6 +29,16 @@
           "type": "function",
           "required": false,
           "note": "In-app select. When set, the crumb is a button. Last item is still the current page and is never a control."
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "Lucide name (e.g. House), Lucide component, or element, before the label. aria-hidden."
+        },
+        "iconOnly": {
+          "type": "boolean",
+          "required": false,
+          "note": "Show only icon (e.g. a Home house). label stays as visually hidden text (the link's accessible name) and the hover title. Needs icon."
         }
       },
       "note": "Last item is the current page (no href used even if passed). Need at least 2 items."
@@ -59,6 +69,7 @@
     "text.secondary",
     "text.muted",
     "icon.muted",
+    "space.1",
     "border.focus",
     "type.size.body-sm"
   ],
@@ -69,13 +80,15 @@
       "ordered list",
       "current page has aria-current=\"page\" and is not a link",
       "separators aria-hidden",
-      "collapsed ellipsis is aria-hidden and not interactive"
+      "collapsed ellipsis is aria-hidden and not interactive",
+      "icon is aria-hidden; an iconOnly crumb keeps its label as visually hidden text and title, so the link is named"
     ]
   },
   "doNot": [
     "Do not invent local Breadcrumb, BreadcrumbItem, or BreadcrumbLink",
     "Do not use raw hex",
     "Do not turn the current page into a link",
+    "Do not put an unlabelled icon crumb (a bare house link) — use icon + iconOnly with label",
     "Do not put a dropdown on the ellipsis (no DropdownMenu in the kit)"
   ],
   "snippet": "<Breadcrumb items={[{ label: \"Home\", href: \"/\" }, { label: \"Components\", href: \"/components\" }, { label: \"Breadcrumb\" }]} />"

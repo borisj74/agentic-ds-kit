@@ -136,6 +136,12 @@
   min-width: 0;
 }
 
+/* A sidebar-wide column, for examples about narrow space (truncation). */
+.previewNarrow {
+  width: min(100%, var(--layout-sidebar));
+  min-width: 0;
+}
+
 .previewSurface {
   width: 100%;
   max-width: 25rem;

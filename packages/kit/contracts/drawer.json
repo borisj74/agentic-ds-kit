@@ -60,7 +60,7 @@
     "children": {
       "type": "slot",
       "required": true,
-      "note": "Body"
+      "note": "Body. Kit blocks that know the Drawer adapt: SideNav fills the body (no rail width, border or card frame) and stays open."
     },
     "footer": {
       "type": "slot",

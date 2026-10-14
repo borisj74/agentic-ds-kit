@@ -32,6 +32,7 @@ export type {
 function AppHeaderPreset({
   title,
   mark,
+  markIcon,
   logo,
   search = true,
   searchPlaceholder = "Search",
@@ -79,7 +80,7 @@ function AppHeaderPreset({
       {start !== undefined ? (
         <AppHeaderBrand>{start}</AppHeaderBrand>
       ) : (
-        <AppHeaderBrand mark={markLetter} logo={logo}>
+        <AppHeaderBrand mark={markLetter} markIcon={markIcon} logo={logo}>
           {title ? <AppHeaderTitle>{title}</AppHeaderTitle> : null}
         </AppHeaderBrand>
       )}

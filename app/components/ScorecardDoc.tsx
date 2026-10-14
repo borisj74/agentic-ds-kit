@@ -213,6 +213,31 @@ export function ScorecardDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Delta tone</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Scorecard label="Overdue" value="$12.4k" delta="3 urgent" deltaTone="warning" hint="due this week" />
+                  <Scorecard label="Disputes" value="2" delta="+1" trend="up" deltaTone="danger" hint="vs last week" />
+                  <Scorecard label="Collected" value="$84.1k" delta="+6.2%" trend="up" hint="vs last month" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  deltaTone colors the delta when trend color would mislead: an amber count of urgent
+                  items, or a rise that is bad news. The card keeps the same height as its neighbours,
+                  unlike a badge. With trend neutral the delta shows the tone&apos;s status icon. The
+                  delta text carries the meaning; color only supports it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Scorecard label="Overdue" value="$12.4k" delta="3 urgent" deltaTone="warning" hint="due this week" />
+<Scorecard label="Disputes" value="2" delta="+1" trend="up" deltaTone="danger" hint="vs last week" />
+<Scorecard label="Collected" value="$84.1k" delta="+6.2%" trend="up" hint="vs last month" />`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Interactive</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>

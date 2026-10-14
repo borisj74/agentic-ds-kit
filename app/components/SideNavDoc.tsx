@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Alert, Avatar, Button, DropdownMenu, Select, SideNav, Tooltip } from "agentic-ds-kit";
+import { Alert, Avatar, Button, Drawer, DropdownMenu, Select, SideNav, Tooltip } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItemData, SideNavRadius, SideNavSide } from "agentic-ds-kit";
 import contract from "agentic-ds-kit/contracts/sidenav.json";
 import { CodeBlock } from "./CodeBlock";
@@ -139,6 +139,59 @@ function SlotsBar() {
         )
       }
     />
+  );
+}
+
+const ACCOUNT_CODE = `<SideNav
+  title="nVoice"
+  markIcon="Receipt"
+  groups={groups}
+  footer={[{ id: "settings", label: "Settings", href: "/settings", icon: "Settings" }]}
+  account={{
+    name: "Olivia Rhye",
+    secondary: "olivia.rhye@accounts.untitledui.com",
+    action: { label: "Log out", icon: "LogOut", onClick: logOut },
+  }}
+/>`;
+
+function AccountBar({ defaultOpen }: { defaultOpen?: boolean }) {
+  return (
+    <SideNav
+      title="nVoice"
+      markIcon="Receipt"
+      defaultOpen={defaultOpen}
+      groups={GROUPS.slice(0, 1)}
+      footer={[{ id: "settings", label: "Settings", href: H, icon: "Settings" }]}
+      account={{
+        name: "Olivia Rhye",
+        secondary: "olivia.rhye@accounts.untitledui.com",
+        action: { label: "Log out", icon: "LogOut", onClick: () => {} },
+      }}
+    />
+  );
+}
+
+const DRAWER_CODE = `<Drawer open={open} title="Navigation" side="left" size="sm" onClose={() => setOpen(false)}>
+  <SideNav title="Agentix" showHeader={false} groups={groups} footer={footer} account={account} />
+</Drawer>`;
+
+function DrawerDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={demo.main}>
+      <Button variant="secondary" iconStart="Menu" onClick={() => setOpen(true)}>
+        Open navigation
+      </Button>
+      <Drawer open={open} title="Navigation" side="left" size="sm" onClose={() => setOpen(false)}>
+        <SideNav
+          title="Agentix"
+          showHeader={false}
+          groups={GROUPS}
+          footer={FOOTER}
+          account={{ name: "Maya Chen", secondary: "maya.chen@agentix.example", action: { label: "Log out", onClick: () => setOpen(false) } }}
+        />
+      </Drawer>
+    </div>
   );
 }
 
@@ -477,6 +530,53 @@ export function SideNavDoc() {
                 </p>
               </div>
               <CodeBlock code={SLOTS_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Account and icon mark</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.fill}>
+                  <Shell side="left">
+                    <AccountBar />
+                  </Shell>
+                </div>
+              </div>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.fill}>
+                  <Shell side="left">
+                    <AccountBar defaultOpen={false} />
+                  </Shell>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  account puts the signed-in user last in the footer: kit Avatar, name, a secondary
+                  line such as the email, and an optional action (a tertiary icon Button, default
+                  icon LogOut, named by its label). Long text truncates; the full text stays in the
+                  page for screen readers and shows as the hover title. On the closed rail only the
+                  avatar shows, on the icon axis, with the name as its tooltip; the action comes back
+                  when the rail opens. markIcon puts a Lucide icon on the brand fill instead of the
+                  letter. With blocks: SideNav.Account in SideNav.Footer, and SideNav.Brand markIcon.
+                </p>
+              </div>
+              <CodeBlock code={ACCOUNT_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>In a Drawer</h2>
+              <div className={styles.exampleCanvas}>
+                <DrawerDemo />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Inside a kit Drawer, SideNav fills the Drawer: no rail width, edge border, or card
+                  frame, and it is always open (the Toggle hides). Rows line up with the Drawer
+                  title. The app-shell pattern does this below the breakpoint.
+                </p>
+              </div>
+              <CodeBlock code={DRAWER_CODE} />
             </section>
 
             <section className={styles.example}>

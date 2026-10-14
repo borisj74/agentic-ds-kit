@@ -103,6 +103,10 @@
   color: var(--text-danger);
 }
 
+.warning {
+  color: var(--text-warning);
+}
+
 .flat,
 .neutral {
   color: var(--text-secondary);

@@ -17,6 +17,7 @@ export type {
   ListViewEmpty,
   ListViewGroup,
   ListViewInteraction,
+  ListViewTruncate,
   ListViewItem,
   ListViewProps,
   ListViewSelection,
@@ -72,11 +73,14 @@ export function ListView({
   groups,
   collapsibleGroups = false,
   empty,
+  truncate = "none",
   className,
   ref,
   ...rest
 }: ListViewProps) {
   const uid = useId();
+  const truncatePrimary = truncate === "both";
+  const truncateSecondary = truncate === "secondary" || truncate === "both";
   const itemRefs = useRef(new Map<string, HTMLElement>());
   const selectedControlled = selectedProp !== undefined;
   const [selectedUncontrolled, setSelectedUncontrolled] = useState<string[]>(defaultSelected ?? []);
@@ -283,8 +287,20 @@ export function ListView({
   function renderCopy(item: ListViewItem): ReactNode {
     return (
       <span className={styles.copy}>
-        <span className={styles.primary}>{item.primary}</span>
-        {item.secondary ? <span className={styles.secondary}>{item.secondary}</span> : null}
+        <span
+          className={cx(styles.primary, truncatePrimary && styles.truncate)}
+          title={truncatePrimary ? item.primary : undefined}
+        >
+          {item.primary}
+        </span>
+        {item.secondary ? (
+          <span
+            className={cx(styles.secondary, truncateSecondary && styles.truncate)}
+            title={truncateSecondary ? item.secondary : undefined}
+          >
+            {item.secondary}
+          </span>
+        ) : null}
       </span>
     );
   }

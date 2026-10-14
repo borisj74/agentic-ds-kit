@@ -174,6 +174,24 @@ export function AppHeaderDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Icon mark</h2>
+              <div className={demo.exampleCanvas}>
+                <div className={demo.bar}>
+                  <AppHeader title="nVoice" markIcon="Receipt" searchPlaceholder="Search" actions={<DemoActions />} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  markIcon puts a Lucide icon (name, component, or element) on the brand fill instead
+                  of the letter. Same cell, same rail axis. SideNav takes the same prop, so the two
+                  marks match. For a real logo use logo.
+                </p>
+              </div>
+              <CodeBlock code={'<AppHeader title="nVoice" markIcon="Receipt" actions={<>…</>} />'} />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>With Avatar</h2>
               <div className={demo.exampleCanvas}>
                 <div className={demo.bar}>

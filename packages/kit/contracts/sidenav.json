@@ -24,6 +24,11 @@
       "required": false,
       "note": "Brand letter. Defaults to the first character of title"
     },
+    "markIcon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Icon mark instead of the letter, on the same brand fill: a Lucide name (e.g. Receipt), a Lucide component, or an element. Wins over mark. AppHeader takes the same prop."
+    },
     "showHeader": {
       "type": "boolean",
       "default": true,
@@ -74,7 +79,13 @@
     "footer": {
       "type": "slot",
       "required": false,
-      "note": "SideNavItemData, SideNavItemData[] (e.g. Settings), or any ReactNode such as an account card."
+      "note": "SideNavItemData, SideNavItemData[] (e.g. Settings), or any ReactNode. For the signed-in user use account, not a hand-built card."
+    },
+    "account": {
+      "type": "object",
+      "required": false,
+      "shape": "{ name: string, secondary?: string, src?: string, initials?: string, action?: { label: string, icon?: KitIcon (default LogOut), onClick? } }",
+      "note": "SideNav.Account props. Renders last in the footer, below the footer rows: kit Avatar (sm), name, secondary line (e.g. email), optional trailing tertiary icon Button named by action.label (e.g. Log out). Long text truncates with the full text in the DOM and the hover title."
     },
     "header": {
       "type": "slot",
@@ -121,7 +132,7 @@
       "SideNav.Brand": {
         "export": "SideNavBrand",
         "element": "button.mark + p.title (direct children of SideNav.Header, no wrapper)",
-        "props": "title (node), mark (letter or node; defaults to the first character of a string title), openLabel (default Open)",
+        "props": "title (node), mark (letter or node; defaults to the first character of a string title), markIcon (Lucide name, component or element on the brand fill; wins over mark), openLabel (default Open)",
         "note": "The preset's brand. On the closed rail the title fades and the mark stays at the start edge, centred on the icon axis; clicking it reopens the rail (aria-label openLabel). While open the mark is disabled and aria-hidden. A SideNav.Toggle in the same header hides on the closed rail instead of moving, so the mark is the one reopen control. ref/className/rest go to the mark button. Reopening via the mark moves focus to the header's Toggle (else the first nav row); closing with that Toggle moves focus to the mark."
       },
       "SideNav.Toggle": {
@@ -156,7 +167,13 @@
       "SideNav.Footer": {
         "export": "SideNavFooter",
         "element": "div",
-        "note": "Bottom bar: a SideNav.Section of rows or any node (account card)."
+        "note": "Bottom bar: a SideNav.Section of rows, then SideNav.Account, or any node."
+      },
+      "SideNav.Account": {
+        "export": "SideNavAccount",
+        "element": "div: Avatar + name/secondary + action Button",
+        "props": "name, secondary?, src?, initials?, action? { label, icon? (default LogOut), onClick? }",
+        "note": "The signed-in user, last in SideNav.Footer. Kit Avatar sm sits on the rail icon axis; name and secondary truncate (title holds the full text); the avatar is aria-hidden because the visible name names the block. Closed rail: only the avatar shows, with the name in a kit Tooltip; the text stays in the DOM and the action is inert until the rail opens. ref/className/rest on the div."
       }
     },
     "nesting": {
@@ -186,6 +203,7 @@
       ],
       "SideNav.Footer": [
         "SideNav.Section",
+        "SideNav.Account",
         "any node"
       ]
     },
@@ -259,7 +277,9 @@
       "A user reopen (mark or Toggle, pointer or keyboard) moves focus to the visible Toggle (Close), else the first focusable nav row",
       "A user close (Toggle, pointer or keyboard) keeps focus on a control that stays visible (the Toggle at the start edge); if the focused control hides on the closed rail (the Toggle beside a SideNav.Brand), focus moves to the mark (Open), else the closed-rail Toggle",
       "Programmatic open changes (controlled open, setOpen without { focus: true }) never move focus; a user request a controlled parent ignores is dropped, so a later programmatic open does not move focus. Custom controls get the same with useSideNav().setOpen(next, { focus: true })",
-      "Preset with a custom header slot keeps a Toggle, so a closed rail can always be reopened"
+      "Preset with a custom header slot keeps a Toggle, so a closed rail can always be reopened",
+    "SideNav.Account: long name and secondary truncate but stay whole in the DOM (and the title attribute); the avatar is aria-hidden; the action is an icon Button named by its label; on the closed rail the name is a kit Tooltip on the avatar and the action is inert",
+    "Inside a kit Drawer, SideNav fills the Drawer body (no rail width, trailing border or card frame) and is always open, so there is no rail to collapse and the Toggle hides"
     ]
   },
   "doNot": [
@@ -276,6 +296,7 @@
     "Do not use the shadcn sidebar package",
     "Do not use raw hex",
     "Do not set component variables to raw hex or primitive --color-* ramps \u2014 use semantic tokens",
+    "Do not hand-build an account card (Avatar + text + Button, or a one-item ListView) in the footer \u2014 use account / SideNav.Account",
     "Do not borrow AppHeader.Mark / AppHeader.Title for a SideNav brand \u2014 use SideNav.Brand, which keeps the mark on the closed rail and reopens it"
   ],
   "snippet": "<SideNav title=\"Agentix\" mark=\"A\" open={open} onOpenChange={setOpen} groups={groups} footer={[{ id: \"invite\", label: \"Invite members\", icon: \"CirclePlus\" }, { id: \"settings\", label: \"Settings\", icon: \"Settings\" }]} />"

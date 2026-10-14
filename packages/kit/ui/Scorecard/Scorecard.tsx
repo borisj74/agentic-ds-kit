@@ -3,11 +3,11 @@
 import { useId, type Ref } from "react";
 import { Badge } from "../Badge";
 import { LucideByName } from "../Button/lucideName";
-import type { ScorecardProps, ScorecardTrend } from "./Scorecard.types";
+import type { ScorecardDeltaTone, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
 import { cx } from "../shared/cx";
 import styles from "./Scorecard.module.css";
 
-export type { ScorecardProps, ScorecardTrend, ScorecardSize } from "./Scorecard.types";
+export type { ScorecardProps, ScorecardTrend, ScorecardSize, ScorecardDeltaTone } from "./Scorecard.types";
 
 const TREND_ICON: Record<ScorecardTrend, string> = {
   up: "TrendingUp",
@@ -23,11 +23,27 @@ const TREND_CLASS: Record<ScorecardTrend, string> = {
   neutral: styles.neutral,
 };
 
+const DELTA_TONE_CLASS: Record<ScorecardDeltaTone, string> = {
+  success: styles.up,
+  warning: styles.warning,
+  danger: styles.down,
+  neutral: styles.neutral,
+};
+
+/** Trend `neutral` has no direction, so a toned delta shows the tone's status icon instead of the dash. */
+const DELTA_TONE_ICON: Record<ScorecardDeltaTone, string> = {
+  success: "CircleCheck",
+  warning: "TriangleAlert",
+  danger: "CircleX",
+  neutral: "Minus",
+};
+
 export function Scorecard({
   label,
   value,
   delta,
   trend = "neutral",
+  deltaTone,
   hint,
   size = "md",
   badge,
@@ -41,6 +57,8 @@ export function Scorecard({
   const labelId = useId();
   const valueId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
+  const deltaClass = deltaTone ? DELTA_TONE_CLASS[deltaTone] : TREND_CLASS[trend];
+  const deltaIcon = deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
   const className = cx(styles.card, styles[size], fill && styles.fill, onClick && styles.interactive, userClassName);
 
   const body = (
@@ -67,8 +85,8 @@ export function Scorecard({
       {delta || hint ? (
         <span className={styles.footer}>
           {delta ? (
-            <span className={`${styles.delta} ${TREND_CLASS[trend]}`}>
-              <LucideByName name={TREND_ICON[trend]} size={15} className={styles.icon} />
+            <span className={`${styles.delta} ${deltaClass}`}>
+              <LucideByName name={deltaIcon} size={15} className={styles.icon} />
               {delta}
             </span>
           ) : null}

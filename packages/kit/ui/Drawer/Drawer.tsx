@@ -8,6 +8,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import type { DrawerProps } from "./Drawer.types";
 import styles from "./Drawer.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { DrawerBodyContext } from "../shared/drawerContext";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
 
@@ -139,7 +140,9 @@ export function Drawer({
             </button>
           ) : null}
         </header>
-        <div className={styles.body}>{children}</div>
+        <div className={styles.body}>
+          <DrawerBodyContext.Provider value>{children}</DrawerBodyContext.Provider>
+        </div>
         {footer ? <div className={styles.footer}>{footer}</div> : null}
       </div>
     </div>,

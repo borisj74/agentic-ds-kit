@@ -35,6 +35,17 @@
       ],
       "default": "neutral"
     },
+    "deltaTone": {
+      "type": "enum",
+      "values": [
+        "success",
+        "warning",
+        "danger",
+        "neutral"
+      ],
+      "required": false,
+      "note": "Override the delta color (default from trend: up success, down danger). warning (text-warning) for an amber count such as '3 urgent' without a badge that makes the card taller than its neighbours. The icon follows trend; with trend neutral the tone's status icon replaces the dash (TriangleAlert, CircleX, CircleCheck)."
+    },
     "hint": {
       "type": "string",
       "required": false,
@@ -95,6 +106,7 @@
     "text.muted",
     "text.success",
     "text.danger",
+    "text.warning",
     "type.size.caption",
     "type.size.heading",
     "type.size.title",
@@ -113,6 +125,7 @@
       "aria-labelledby when both exist",
       "trend icon is aria-hidden",
       "delta text is the visible change",
+      "deltaTone is color only; the delta text carries the meaning",
       "root is a button when onClick is set"
     ]
   },

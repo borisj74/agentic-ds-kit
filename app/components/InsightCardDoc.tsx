@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { InsightCard } from "agentic-ds-kit";
-import type { InsightCardSize, InsightCardTone } from "agentic-ds-kit";
+import type { InsightCardAction, InsightCardActionStyle, InsightCardSize, InsightCardTone } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIZES: InsightCardSize[] = ["sm", "md", "lg"];
-const TONES: InsightCardTone[] = ["opportunity", "warning", "danger", "info", "neutral"];
+const TONES: InsightCardTone[] = ["opportunity", "success", "warning", "danger", "info", "neutral"];
 
 const MASTER_TITLE = "Rebook no-shows automatically";
 const MASTER_DESCRIPTION = "Fill empty slots from the waitlist when clients cancel.";
@@ -50,6 +50,9 @@ const VARIANT_DOCS: {
     dismiss?: boolean;
     primary?: string;
     secondary?: string;
+    eyebrow?: string;
+    actionStyle?: InsightCardActionStyle;
+    primaryAction?: InsightCardAction;
   };
 }[] = [
   {
@@ -68,6 +71,49 @@ const VARIANT_DOCS: {
       tone: "opportunity",
       primary: "Review",
       secondary: "Not now",
+    },
+  },
+  {
+    title: "Success",
+    about: "Use Success for good news that is done: a payment received, a sync that finished.",
+    code: `<InsightCard
+  title="Payment received"
+  description="Acme Corp paid INV-1042 in full."
+  eyebrow="Received"
+  tone="success"
+  primaryAction={{ label: "View invoice", href: "/invoices/1042" }}
+/>`,
+    card: {
+      title: "Payment received",
+      description: "Acme Corp paid INV-1042 in full.",
+      eyebrow: "Received",
+      tone: "success",
+      primaryAction: { label: "View invoice", href: "#" },
+    },
+  },
+  {
+    title: "Link actions",
+    about:
+      'An action with href is a real link, shown as a text link with an arrow, not a Button. actionStyle="link" shows onClick actions the same way. Alert tiles stay light and leave the view\'s one primary Button free.',
+    code: `<InsightCard
+  title="Invoice INV-1038 is 12 days overdue"
+  description="Acme Corp · $4,250.00"
+  eyebrow="Overdue"
+  tone="danger"
+  size="sm"
+  actionStyle="link"
+  primaryAction={{ label: "Send reminder", onClick: () => {} }}
+  secondaryAction={{ label: "View invoice", href: "/invoices/1038" }}
+/>`,
+    card: {
+      title: "Invoice INV-1038 is 12 days overdue",
+      description: "Acme Corp · $4,250.00",
+      eyebrow: "Overdue",
+      tone: "danger",
+      size: "sm",
+      actionStyle: "link",
+      primary: "Send reminder",
+      secondary: "View invoice",
     },
   },
   {
@@ -197,7 +243,7 @@ export function InsightCardDoc() {
           </h2>
           <p className={styles.masterSummary}>
             Toggle size, tone, description, confidence, source, and dismiss. Actions are kit
-            Buttons. Dismiss is not.
+            Buttons, or text links with actionStyle=&quot;link&quot; or an href. Dismiss is not.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -287,11 +333,18 @@ export function InsightCardDoc() {
                     size={doc.card.size}
                     confidence={doc.card.confidence}
                     source={doc.card.source}
+                    eyebrow={doc.card.eyebrow}
+                    actionStyle={doc.card.actionStyle}
                     primaryAction={
-                      doc.card.primary ? { label: doc.card.primary, onClick: () => {} } : undefined
+                      doc.card.primaryAction ??
+                      (doc.card.primary ? { label: doc.card.primary, onClick: () => {} } : undefined)
                     }
                     secondaryAction={
-                      doc.card.secondary ? { label: doc.card.secondary, onClick: () => {} } : undefined
+                      doc.card.secondary
+                        ? doc.card.actionStyle === "link"
+                          ? { label: doc.card.secondary, href: "#" }
+                          : { label: doc.card.secondary, onClick: () => {} }
+                        : undefined
                     }
                     onDismiss={doc.card.dismiss ? () => {} : undefined}
                   />

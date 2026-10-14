@@ -1,10 +1,14 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
-export type InsightCardTone = "opportunity" | "warning" | "danger" | "info" | "neutral";
+export type InsightCardTone = "opportunity" | "success" | "warning" | "danger" | "info" | "neutral";
 export type InsightCardSize = "sm" | "md" | "lg";
+/** How the actions render: kit Buttons (default) or text links with a trailing arrow. */
+export type InsightCardActionStyle = "button" | "link";
 
 export interface InsightCardAction {
   label: string;
+  /** Navigates: the action is a real link (`<a>`), always shown as a text link, never a Button. */
+  href?: string;
   onClick?: () => void;
 }
 
@@ -22,6 +26,8 @@ export interface InsightCardProps extends Omit<ComponentPropsWithoutRef<"article
   source?: string;
   primaryAction?: InsightCardAction;
   secondaryAction?: InsightCardAction;
+  /** `link`: actions render as text links ("View invoice →"), so the view's one primary Button stays free. Default button. */
+  actionStyle?: InsightCardActionStyle;
   onDismiss?: () => void;
   ref?: Ref<HTMLElement>;
 }

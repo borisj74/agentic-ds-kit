@@ -29,12 +29,14 @@
       "type": "enum",
       "values": [
         "opportunity",
+        "success",
         "warning",
         "danger",
         "info",
         "neutral"
       ],
-      "default": "opportunity"
+      "default": "opportunity",
+      "note": "Colors the tone icon. success (CircleCheck, icon-success) for good news that is done, e.g. a payment received."
     },
     "size": {
       "type": "enum",
@@ -58,10 +60,15 @@
     "primaryAction": {
       "type": "object",
       "required": false,
-      "note": "kit Button primary. One primary per view.",
+      "note": "kit Button primary (one primary per view), or a text link when it has href or actionStyle is link.",
       "label": {
         "type": "string",
         "required": true
+      },
+      "href": {
+        "type": "string",
+        "required": false,
+        "note": "Navigates: renders a real <a> text link with a trailing arrow, never a Button."
       },
       "onClick": {
         "type": "function",
@@ -71,15 +78,29 @@
     "secondaryAction": {
       "type": "object",
       "required": false,
-      "note": "kit Button secondary",
+      "note": "kit Button secondary, or a text link when it has href or actionStyle is link.",
       "label": {
         "type": "string",
         "required": true
+      },
+      "href": {
+        "type": "string",
+        "required": false,
+        "note": "Navigates: renders a real <a> text link with a trailing arrow, never a Button."
       },
       "onClick": {
         "type": "function",
         "required": false
       }
+    },
+    "actionStyle": {
+      "type": "enum",
+      "values": [
+        "button",
+        "link"
+      ],
+      "default": "button",
+      "note": "link: actions render as text links (\"View invoice →\"): <a> with href, otherwise a button styled as a link. For alert tiles, and when the view's one primary Button is used elsewhere."
     },
     "onDismiss": {
       "type": "function",
@@ -104,6 +125,7 @@
     "text.muted",
     "icon.brand",
     "icon.secondary",
+    "icon.success",
     "icon.warning",
     "icon.danger",
     "icon.info",
@@ -113,6 +135,9 @@
     "type.size.heading",
     "type.size.bodySm",
     "type.size.caption",
+    "link.default",
+    "link.hover",
+    "link.active",
     "border.focus"
   ],
   "a11y": {
@@ -122,14 +147,16 @@
       "aria-labelledby",
       "aria-describedby when description",
       "tone icon aria-hidden",
-      "Dismiss is a button"
+      "Dismiss is a button",
+      "An action with href is a real link (<a>); link-style onClick actions are buttons; the trailing arrow is aria-hidden"
     ]
   },
   "doNot": [
     "Do not invent local InsightCard, Insight, or RecommendationCard",
     "Do not use raw hex",
     "Do not put a metric as the title (that is Scorecard)",
-    "Actions must be kit Buttons",
+    "Actions are kit Buttons or the kit text link (href / actionStyle link); do not pass your own links or buttons",
+    "Do not make a navigating action a Button — give it href",
     "One primary per view (the primaryAction is the one)"
   ],
   "snippet": "<InsightCard title=\"Rebook no-shows automatically\" description=\"Fill empty slots from the waitlist when clients cancel.\" tone=\"opportunity\" primaryAction={{ label: \"Review\" }} />"

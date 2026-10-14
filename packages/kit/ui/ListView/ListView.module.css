@@ -189,6 +189,15 @@ button.body:focus {
   color: var(--text-secondary);
 }
 
+/* truncate: one line with an ellipsis; the full text is in the row's accessible name and title. */
+.primary.truncate,
+.secondary.truncate {
+  overflow: hidden;
+  overflow-wrap: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .row[data-disabled] .primary,
 .row[data-disabled] .secondary {
   color: var(--text-disabled);
