@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { ChartFrame } from "../shared/ChartFrame";
 import frameStyles from "../shared/ChartFrame.module.css";
+import motionStyles from "../shared/chartMotion.module.css";
 import {
   axisLabels,
   CHART_MARGINS,
@@ -30,6 +31,7 @@ const DENSE_MIN_BAR_WIDTH = 6;
 
 type BarGeom = {
   key: string;
+  categoryIndex: number;
   seriesIndex: number;
   category: string;
   series: string;
@@ -152,6 +154,7 @@ export function BarChart({
   isLoading = false,
   tickInterval,
   formatLabel,
+  animate = false,
   className,
   ref: rootRef,
   ...rest
@@ -236,6 +239,7 @@ export function BarChart({
         const barH = isVertical ? Math.abs(end - origin) : barWidth;
         return {
           key: `${categoryIndex}-${seriesIndex}`,
+          categoryIndex,
           seriesIndex,
           category,
           series: entry.label,
@@ -299,6 +303,17 @@ export function BarChart({
     if (activeBar) return bar.key !== activeBar;
     return false;
   };
+
+  // Entrance: each bar scales out of the zero line (works for negative values), staggered by category.
+  const growClass = isVertical ? motionStyles.barGrowY : motionStyles.barGrowX;
+  const lastCategory = Math.max(categories.length - 1, 1);
+  const barMotion = (bar: BarGeom): CSSProperties | undefined =>
+    animate
+      ? ({
+          transformOrigin: isVertical ? `${bar.x}px ${layout.baseline}px` : `${layout.baseline}px ${bar.y}px`,
+          "--chart-stagger": bar.categoryIndex / lastCategory,
+        } as CSSProperties)
+      : undefined;
 
   const tickLabels = layout.ticks.map((tick) => (
     <text
@@ -365,7 +380,8 @@ export function BarChart({
       {layout.bars.map((bar) => (
         <rect
           key={bar.key}
-          className={`${styles.bar}${isDimmed(bar) ? ` ${styles.barDimmed}` : ""}`}
+          className={`${styles.bar}${isDimmed(bar) ? ` ${styles.barDimmed}` : ""}${animate ? ` ${growClass}` : ""}`}
+          style={barMotion(bar)}
           x={bar.x}
           y={bar.y}
           width={bar.width}

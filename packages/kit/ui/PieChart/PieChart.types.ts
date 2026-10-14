@@ -21,6 +21,8 @@ export interface PieChartProps extends Omit<ComponentPropsWithoutRef<"figure">, 
   showTable?: boolean;
   emptyLabel?: string;
   isLoading?: boolean;
+  /** Slices sweep in clockwise from 12 o'clock when the chart first appears. Off under reduced motion. Default false. */
+  animate?: boolean;
   className?: string;
   ref?: Ref<HTMLElement>;
 }

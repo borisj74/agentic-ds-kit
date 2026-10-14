@@ -37,7 +37,12 @@
     "otherLabel": { "type": "string", "default": "Other" },
     "centerLabel": { "type": "string", "default": "Total" },
     "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false }
+    "isLoading": { "type": "boolean", "default": false },
+    "animate": {
+      "type": "boolean",
+      "default": false,
+      "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion; the final state shows without JS"
+    }
   },
   "passthrough": {
     "root": "figure",
@@ -67,7 +72,8 @@
       "Title exposed on the figure when provided",
       "Slices expose name, value, and percent on the hit target",
       "Legend highlight matches slice hover; tooltip is supplementary",
-      "Table toggle keeps values readable in table view"
+      "Table toggle keeps values readable in table view",
+      "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance"
     ]
   },
   "doNot": [
