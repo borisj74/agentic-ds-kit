@@ -18,7 +18,9 @@
 }
 
 .content {
-  flex: 1;
+  /* Grows a million times faster than actions: on a shared line the title takes the free
+     space and the actions get under a layout pixel of it. */
+  flex: 1000000 1 0%;
   min-width: 0;
 }
 
@@ -60,6 +62,14 @@
 /* A kit Input (e.g. search) in actions: its root is width 100%, which would push
    the Buttons onto their own line. Size it to the field instead. */
 .actions > :has(> input) {
+  flex: 1 1 auto;
   width: auto;
   min-width: 0;
+}
+
+/* With a field in actions, the actions grow too: beside the title they gain a negligible
+   share of the free space; wrapped onto their own line they fill it and the field fills
+   what the Buttons leave. */
+.actions:has(> :has(> input)) {
+  flex-grow: 1;
 }
