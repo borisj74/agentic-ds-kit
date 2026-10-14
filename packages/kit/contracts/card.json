@@ -35,7 +35,8 @@
         "sm",
         "md"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "sm = compact padding (space.4) and a body-sized title; md = space.6 and a heading title. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
     },
     "headerAction": {
       "type": "object",

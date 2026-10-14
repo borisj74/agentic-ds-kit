@@ -278,7 +278,7 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  size sm uses tighter spacing and a body-sized title. Default is md.
+                  size sm uses tighter spacing and a body-sized title. Default is md. Size never sets width: the card fills its container, so wrap it in the layout for a narrow tile.
                 </p>
               </div>
               <CodeBlock
