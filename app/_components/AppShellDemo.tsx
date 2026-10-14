@@ -9,6 +9,8 @@ import {
   Empty,
   PageHeader,
   Select,
+  SideNavBrand,
+  SideNavHeader,
   SideNavItem,
   SideNavNav,
   SideNavRoot,
@@ -16,7 +18,7 @@ import {
   SideNavSlot,
 } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
-import { AppShellPattern, useAppShell } from "../../packages/kit/patterns/AppShellPattern";
+import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItemData[] = [
@@ -197,6 +199,83 @@ export function AppShellCustomDemo() {
             <Empty
               title={`${current.label} goes here`}
               description="Below 64rem the Menu Button in the brand cell opens this nav in the left Drawer."
+              icon={current.icon}
+              outlined
+            />
+          </div>
+        </div>
+      </AppShellPattern>
+    </div>
+  );
+}
+
+/**
+ * Header-less nav built from blocks, taking its placement from the shell's nav function.
+ * With no top bar it shows its own brand in the wide rail; in the Drawer it drops the header.
+ */
+function BrandedNav({ placement, page, onPick }: { placement: AppShellNavPlacement; page: string; onPick: (id: string) => void }) {
+  const shell = useAppShell();
+  const inDrawer = placement === "drawer";
+  const showBrand = !inDrawer && !shell?.hasHeader;
+
+  return (
+    <SideNavRoot aria-label="Agentix" radius={inDrawer ? "md" : "none"} open>
+      {showBrand ? (
+        <SideNavHeader>
+          <SideNavBrand title="Agentix" markIcon="Sparkles" />
+        </SideNavHeader>
+      ) : null}
+      <SideNavNav>
+        {CUSTOM_GROUPS.map((group) => (
+          <SideNavSection key={group.label} label={group.label}>
+            {group.items.map((item) => (
+              <SideNavItem
+                key={item.id}
+                label={item.label}
+                icon={item.icon}
+                badge={item.badge}
+                active={item.id === page}
+                onClick={() => onPick(item.id)}
+              />
+            ))}
+          </SideNavSection>
+        ))}
+      </SideNavNav>
+    </SideNavRoot>
+  );
+}
+
+/**
+ * No header and a built nav (a function of placement). The shell cannot read a mark from a
+ * built nav, so `markIcon` on the shell gives the default narrow top bar its brand.
+ */
+export function AppShellBuiltNavDemo() {
+  const [page, setPage] = useState("home");
+  const current = CUSTOM_ITEMS.find((item) => item.id === page) ?? CUSTOM_ITEMS[0];
+
+  return (
+    <div className={styles.browser}>
+      <div className={styles.browserChrome} aria-hidden="true">
+        <div className={styles.traffic}>
+          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
+          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
+        </div>
+        <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
+      </div>
+      <AppShellPattern
+        navLabel="Agentix"
+        markIcon="Sparkles"
+        nav={(placement) => <BrandedNav placement={placement} page={page} onPick={setPage} />}
+      >
+        <div className="layout-canvas layout-canvas--sticky-header">
+          <div className="layout-header">
+            <PageHeader title={current.label} subtitle="No header: the nav carries the brand when wide, markIcon brands the narrow top bar." />
+          </div>
+          <div className="layout-content">
+            <Empty
+              title={`${current.label} goes here`}
+              description="Below 64rem the default narrow top bar shows the Menu Button, the Sparkles mark, and Agentix."
               icon={current.icon}
               outlined
             />
