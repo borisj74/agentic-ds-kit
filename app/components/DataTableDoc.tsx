@@ -330,7 +330,7 @@ export function DataTableDoc() {
                 <p className={styles.usageBody}>
                   A flush Card is the frame; the DataTable drops its own and takes ariaLabel instead of
                   repeating the title as a caption. Invoice is a link cell. Amount and dates sort by
-                  sortValue, not their formatted text. minWidth and wrap fit six columns in the 2fr
+                  sortValue, not their formatted text. width and wrap (no minWidth) fit six columns in the 2fr
                   side of layout-split--primary.
                 </p>
               </div>

@@ -71,7 +71,7 @@
         "minWidth": "string?",
         "wrap": "boolean?"
       },
-      "note": "type number right-aligns cell and header. sortable adds HeaderCell sort (asc, desc, then off). Local state only. sortValue returns what to sort by (numbers and Dates compare numerically, strings locale-aware): use it for currency strings and formatted dates; without it, sort is unchanged. sortValue is a function, so build the columns in a client component (\"use client\"), not a Server Component. Keep the raw value on the row under a key that is not a column (rows render only column keys). width / minWidth are CSS lengths on th and td; minWidth replaces the default text-column minimum (layout.metricsMin). wrap lets that column's cells wrap and makes the table fit its container; it still scrolls when the columns cannot fit."
+      "note": "type number right-aligns cell and header. sortable adds HeaderCell sort (asc, desc, then off). Local state only. sortValue returns what to sort by (numbers and Dates compare numerically, strings locale-aware): use it for currency strings and formatted dates; without it, sort is unchanged. sortValue is a function, so build the columns in a client component (\"use client\"), not a Server Component. Keep the raw value on the row under a key that is not a column (rows render only column keys). width / minWidth are CSS lengths on th and td. Text columns without either keep the default minimum (layout.metricsMin). width alone drops that minimum: the column takes the width but never gets narrower than its content (header label + sort icon, or the widest cell). minWidth replaces the minimum explicitly. wrap lets that column's cells and header label wrap (the sort icon stays with the last word) and makes the table fit its container; it still scrolls when the columns cannot fit. To fit a narrow container, give the short columns (ids, dates, badges) a width and set wrap on a text column; minWidth is not needed."
     },
     "rows": {
       "type": "array",
@@ -153,7 +153,7 @@
     "Do not invent FilterChip, a Tag-based filter summary, or a second filter summary — the dropdown trigger is the selected value; Reset filters and selection actions are kit Button",
     "Do not put a primary Button in bulkActions",
     "Do not invent a SortButton or use TanStack Table for sort",
-    "Do not squash columns to the container — overflow-x on the scroller; to fit a narrow column, set minWidth and wrap on the columns that can wrap",
+    "Do not squash columns to the container — overflow-x on the scroller; to fit a narrow container, set width on the short columns and wrap on the columns that can wrap",
     "Do not put toolbar actions in a horizontal scroller — search full width, filter buttons fill the row, Columns stays start-aligned",
     "Do not sort currency or date strings lexically — give the column sortValue"
   ],

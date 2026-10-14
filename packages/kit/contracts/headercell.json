@@ -77,6 +77,11 @@
       "type": "function",
       "required": false,
       "note": "() => void. DataTable cycles asc, desc, off."
+    },
+    "wrap": {
+      "type": "boolean",
+      "default": false,
+      "note": "Label wraps onto more lines; the sort icon stays on the line of the last word. DataTable sets it for columns with wrap. Without it the label stays on one line."
     }
   },
   "passthrough": {
@@ -101,7 +106,8 @@
     "requirements": [
       "Lives inside th scope=col",
       "Checkbox unlabeled needs aria-label Select all {label} or Select all rows",
-      "When sortable, button with aria-label Sort {label} ascending/descending/Clear sort"
+      "When sortable, button with aria-label Sort {label} ascending/descending/Clear sort",
+      "When wrap, the whole wrapped label stays inside the sort button (one hit area, one focus ring)"
     ]
   },
   "doNot": [

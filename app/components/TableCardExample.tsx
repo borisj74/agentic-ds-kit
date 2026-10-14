@@ -36,9 +36,9 @@ const ROW_ACTIONS = {
 };
 
 const COLUMNS: DataTableColumn[] = [
-  { key: "invoice", header: "Invoice", sortable: true, minWidth: "0" },
+  { key: "invoice", header: "Invoice", sortable: true, width: "6rem" },
   { key: "client", header: "Client", sortable: true, wrap: true },
-  { key: "due", header: "Due", sortable: true, minWidth: "0", sortValue: (row) => new Date(String(row.dueOn)) },
+  { key: "due", header: "Due", sortable: true, width: "5rem", sortValue: (row) => new Date(String(row.dueOn)) },
   {
     key: "amount",
     header: "Amount",
@@ -46,7 +46,7 @@ const COLUMNS: DataTableColumn[] = [
     sortable: true,
     sortValue: (row) => Number(row.amountValue),
   },
-  { key: "status", header: "Status", sortable: true, minWidth: "0" },
+  { key: "status", header: "Status", sortable: true, width: "6rem" },
   { key: "actions", header: "Actions" },
 ];
 
@@ -76,13 +76,13 @@ export const TABLE_CARD_CODE = `<div className="layout-split--primary">
       ariaLabel="Recent invoices"
       cellSize="sm"
       columns={[
-        { key: "invoice", header: "Invoice", sortable: true, minWidth: "0" },
+        { key: "invoice", header: "Invoice", sortable: true, width: "6rem" },
         { key: "client", header: "Client", sortable: true, wrap: true },
-        { key: "due", header: "Due", sortable: true, minWidth: "0",
+        { key: "due", header: "Due", sortable: true, width: "5rem",
           sortValue: (row) => new Date(row.dueOn) },
         { key: "amount", header: "Amount", type: "number", sortable: true,
           sortValue: (row) => row.amountValue },
-        { key: "status", header: "Status", sortable: true, minWidth: "0" },
+        { key: "status", header: "Status", sortable: true, width: "6rem" },
         { key: "actions", header: "Actions" },
       ]}
       rows={invoices.map((invoice) => ({

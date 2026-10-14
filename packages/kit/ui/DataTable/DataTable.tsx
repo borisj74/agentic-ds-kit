@@ -85,7 +85,8 @@ function compareSortValues(a: DataTableSortValue, b: DataTableSortValue): number
 
 function columnStyle(column: DataTableColumn): CSSProperties | undefined {
   if (!column.width && !column.minWidth) return undefined;
-  return { width: column.width, minWidth: column.minWidth };
+  // A width alone drops the default text-column minimum, so the column sizes to its content.
+  return { width: column.width, minWidth: column.minWidth ?? (column.width ? 0 : undefined) };
 }
 
 function rowId(row: DataTableRow, index: number): string {
@@ -513,6 +514,7 @@ export function DataTable({
                           : "start"
                     }
                     sortable={column.sortable}
+                    wrap={column.wrap}
                     sort={sortKey === column.key ? sortDir : undefined}
                     onSort={() => toggleSort(column.key)}
                   />

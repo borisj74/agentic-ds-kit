@@ -83,3 +83,39 @@
   flex-shrink: 0;
   color: var(--icon-primary);
 }
+
+/* Wrapping label: text flows in lines; the sort icon is inline after the last word. */
+.wrap {
+  white-space: normal;
+}
+
+.wrap .label {
+  overflow-wrap: break-word;
+}
+
+/* The button's line box matches the label so the header keeps its single-line height. */
+.wrap .sort {
+  display: block;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+}
+
+.wrap.start .sort {
+  text-align: start;
+}
+
+.wrap.end .sort {
+  text-align: end;
+}
+
+.wrap.center .sort {
+  text-align: center;
+}
+
+/* Last word + sort icon: one unbreakable inline box, icon centered as in a single-line header. */
+.tail {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
