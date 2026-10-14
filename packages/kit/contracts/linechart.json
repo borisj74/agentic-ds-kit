@@ -40,7 +40,7 @@
     "animate": {
       "type": "boolean",
       "default": false,
-      "note": "Lines draw in left to right and area fills fade in after when the chart first appears. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion"
+      "note": "Lines draw in left to right and area fills fade in after when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
     }
   },
   "passthrough": {

@@ -144,7 +144,7 @@ export function LineChartDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Lines draw in from left to right the first time they appear, and area fills fade in behind them. Off by default; with reduced motion the chart appears at once. Changing data later does not replay it.
+                  Lines draw in from left to right the first time they appear, and area fills fade in behind them. Off by default; with reduced motion the chart appears at once. Changing data on a mounted chart does not replay it. To replay, for example one chart per Tabs panel or a range switcher, give the chart a <code>key</code> that changes with the data.
                 </p>
               </div>
               <CodeBlock
@@ -152,6 +152,15 @@ export function LineChartDoc() {
   title="Revenue, year over year"
   labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
   series={series}
+  animate
+/>`}
+              />
+              <CodeBlock
+                code={`<LineChart
+  key={range}
+  title="Revenue"
+  labels={labelsByRange[range]}
+  series={seriesByRange[range]}
   animate
 />`}
               />

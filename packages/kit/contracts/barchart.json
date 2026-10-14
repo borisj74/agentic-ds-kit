@@ -43,7 +43,7 @@
     "animate": {
       "type": "boolean",
       "default": false,
-      "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion"
+      "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
     }
   },
   "passthrough": {

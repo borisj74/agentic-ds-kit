@@ -162,7 +162,7 @@ export function BarChartDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Bars grow from the zero line with a short stagger the first time they appear. Negative values grow downward and horizontal bars grow sideways. Off by default; with reduced motion the chart appears at once. Changing data later does not replay it.
+                  Bars grow from the zero line with a short stagger the first time they appear. Negative values grow downward and horizontal bars grow sideways. Off by default; with reduced motion the chart appears at once. Changing data on a mounted chart does not replay it. To replay, for example one chart per Tabs panel or a range switcher, give the chart a <code>key</code> that changes with the data.
                 </p>
               </div>
               <CodeBlock
@@ -170,6 +170,15 @@ export function BarChartDoc() {
   title="Quarterly revenue"
   categories={['Q1', 'Q2', 'Q3', 'Q4']}
   series={series}
+  animate
+/>`}
+              />
+              <CodeBlock
+                code={`<BarChart
+  key={range}
+  title="Revenue"
+  categories={categoriesByRange[range]}
+  series={seriesByRange[range]}
   animate
 />`}
               />
