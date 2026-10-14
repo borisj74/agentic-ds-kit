@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocationHash } from "@/lib/use-location-hash";
-import { AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
+import { AppShellBuiltNavDemo, AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
 import { SignInDemo } from "../_components/SignInDemo";
@@ -96,6 +96,15 @@ export default function PatternsPage() {
               </p>
               <div className={styles.variantFrame}>
                 <AppShellCustomDemo />
+              </div>
+              <h2 className={styles.variantTitle}>Built nav, no header</h2>
+              <p className={playground.body}>
+                No header and a nav passed as a function of placement. The shell cannot read a
+                mark from a built nav, so markIcon on the shell brands the default narrow top bar:
+                Menu Button, mark, and title.
+              </p>
+              <div className={styles.variantFrame}>
+                <AppShellBuiltNavDemo />
               </div>
             </>
           ) : (

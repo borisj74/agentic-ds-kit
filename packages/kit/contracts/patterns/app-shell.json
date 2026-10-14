@@ -23,7 +23,7 @@
     "narrowHeader": {
       "type": "object | slot",
       "required": false,
-      "note": "Header-less shells only (ignored when header is set): the top bar shown below the breakpoint, where the nav lives in the Drawer. AppHeader props (the shell injects the Menu Button in the logo slot, radius none) or a built header that places AppShellPattern.MenuButton. Default: AppHeader titled navLabel or nav.title with the Menu Button in the brand cell, then the nav's markIcon or mark (when a SideNav props nav sets one) beside the title, and no search, so the brand shows on narrow screens too. The nav's default letter mark is not repeated: set mark or markIcon to show it."
+      "note": "Header-less shells only (ignored when header is set): the top bar shown below the breakpoint, where the nav lives in the Drawer. AppHeader props (the shell injects the Menu Button in the logo slot, radius none) or a built header that places AppShellPattern.MenuButton. Default: AppHeader titled navLabel or nav.title with the Menu Button in the brand cell, then markIcon or mark beside the title (the shell's own mark / markIcon props, else a SideNav props nav's when it sets one), and no search, so the brand shows on narrow screens too. The nav's default letter mark is not repeated: set mark or markIcon to show it."
     },
     "nav": {
       "type": "object | slot | function",
@@ -34,6 +34,16 @@
       "type": "string",
       "required": false,
       "note": "Drawer title on narrow screens. Default nav.title, or Navigation for a built nav."
+    },
+    "mark": {
+      "type": "string | node",
+      "required": false,
+      "note": "Brand letter or node for the default narrowHeader, beside the title. Set it (or markIcon) when nav is a built node or a function: the shell cannot read a mark from those, so without it the narrow top bar shows the Menu Button and title only. When neither mark nor markIcon is set here, a SideNav props nav lends its own. Ignored by a custom narrowHeader, when header is set, and when wide (a built nav shows its own brand)."
+    },
+    "markIcon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Icon mark for the default narrowHeader: a Lucide name (e.g. \"Receipt\"), a Lucide component, or an element. Wins over mark. Same fallback and scope as mark."
     },
     "children": {
       "type": "slot",
@@ -69,7 +79,7 @@
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; AppShellPattern.css repeats 64rem only for the first paint before hydration.",
     "narrow": [
       "No SideNav in the layout; content takes the full width",
-      "With no header, narrowHeader (default a minimal AppHeader titled like the nav, with the nav's mark or markIcon when set) appears only here, to hold the Menu Button",
+      "With no header, narrowHeader (default a minimal AppHeader titled like the nav, with the shell's mark or markIcon, else a props nav's, when set) appears only here, to hold the Menu Button",
       "Menu Button (tertiary sm, lucide Menu, ariaLabel \"Open navigation\") sits in AppHeader's start column",
       "Left Drawer size sm holds SideNav showHeader false, always expanded",
       "Picking a leaf, Escape, or a scrim click closes the Drawer; focus returns to the Menu Button",
@@ -105,5 +115,6 @@
     "One layout option among many: top bar only, side nav only, both, or neither are all fine"
   ],
   "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", markIcon: \"Receipt\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
+  "builtNavSnippet": "<AppShellPattern className=\"layout-shell--viewport\" navLabel=\"Acme\" markIcon=\"Receipt\" nav={(placement) => <ShellNav placement={placement} />}><main className=\"layout-canvas\">…</main></AppShellPattern>",
   "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
 }

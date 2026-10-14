@@ -39,10 +39,19 @@ export interface AppShellPatternProps {
    * Header-less shells only: the top bar below the breakpoint, where the nav moves into
    * the Drawer and needs a Menu Button. AppHeader props (the shell injects the Menu
    * Button) or a built header that places `AppShellPattern.MenuButton`. Default: AppHeader
-   * titled `navLabel` or `nav.title`, with the Menu Button, then the nav's `markIcon` or `mark`
-   * (when set) beside the title, and no search. Ignored when `header` is set.
+   * titled `navLabel` or `nav.title`, with the Menu Button, then `markIcon` or `mark` (the
+   * shell's, else the nav's when set) beside the title, and no search. Ignored when `header` is set.
    */
   narrowHeader?: AppShellHeader | ReactNode;
+  /**
+   * Brand letter or node for the default `narrowHeader`. Set it (or `markIcon`) when `nav`
+   * is a built node or a function, so the narrow top bar still shows the brand; a props nav
+   * lends its own `mark` / `markIcon` when neither is set here. Not used when wide (a built
+   * nav shows its own brand) or by a custom `narrowHeader`.
+   */
+  mark?: AppShellNav["mark"];
+  /** Icon mark for the default `narrowHeader` (a Lucide name, component, or element). Wins over `mark`. Same fallback as `mark`. */
+  markIcon?: AppShellNav["markIcon"];
   /**
    * SideNav props, or a nav you built (a `SideNav`, or SideNav blocks). A built nav
    * renders in the rail when wide and inside the left Drawer when narrow; read
@@ -147,7 +156,7 @@ function isPropsObject<T extends object>(value: T | ReactNode): value is T {
 
 /**
  * The default narrowHeader: AppHeader with the Menu Button in the brand cell (on the rail
- * axis, like a header shell), then the nav's mark or markIcon, if it sets one, and title.
+ * axis, like a header shell), then the shell's or the nav's mark or markIcon, if set, and title.
  * Same bar as the AppHeader preset with `search: false`; the mark gets its own brand
  * block sized to the mark so it sits beside the title, not in a second rail-wide cell.
  */
@@ -177,7 +186,16 @@ function DefaultNarrowHeader({ title, mark, markIcon }: Pick<AppShellNav, "mark"
  * Without `header`: wide is SideNav + content only (the nav carries the brand);
  * narrow shows `narrowHeader`, a minimal top bar holding the Menu Button.
  */
-function AppShellPatternRoot({ header, narrowHeader, nav, navLabel, children, className = "" }: AppShellPatternProps) {
+function AppShellPatternRoot({
+  header,
+  narrowHeader,
+  nav,
+  navLabel,
+  mark,
+  markIcon,
+  children,
+  className = "",
+}: AppShellPatternProps) {
   const narrow = useNarrow();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
@@ -193,6 +211,8 @@ function AppShellPatternRoot({ header, narrowHeader, nav, navLabel, children, cl
   }));
   const wasOpen = useRef(false);
   const navProps = typeof nav !== "function" && isPropsObject<AppShellNav>(nav) ? nav : null;
+  // The shell's own mark wins; otherwise a props nav lends its mark to the narrow top bar.
+  const brand = mark || markIcon ? { mark, markIcon } : { mark: navProps?.mark, markIcon: navProps?.markIcon };
   // No header: no top bar when wide. Below the breakpoint the nav still needs a Menu
   // Button, so narrowHeader (default: a minimal AppHeader titled like the nav) shows.
   const activeHeader: AppShellHeader | ReactNode =
@@ -200,7 +220,7 @@ function AppShellPatternRoot({ header, narrowHeader, nav, navLabel, children, cl
       ? header
       : narrow
         ? (narrowHeader ?? (
-            <DefaultNarrowHeader title={navLabel ?? navProps?.title} mark={navProps?.mark} markIcon={navProps?.markIcon} />
+            <DefaultNarrowHeader title={navLabel ?? navProps?.title} mark={brand.mark} markIcon={brand.markIcon} />
           ))
         : null;
   const hasHeader = activeHeader != null;
