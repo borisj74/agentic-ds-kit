@@ -187,13 +187,21 @@ export function PieChartDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Slices sweep in clockwise from 12 o&rsquo;clock the first time they appear. Off by default; with reduced motion the chart appears at once. Changing data later does not replay it.
+                  Slices sweep in clockwise from 12 o&rsquo;clock the first time they appear. Off by default; with reduced motion the chart appears at once. Changing data on a mounted chart does not replay it. To replay, for example one chart per Tabs panel or a range switcher, give the chart a <code>key</code> that changes with the data.
                 </p>
               </div>
               <CodeBlock
                 code={`<PieChart
   title="Properties by status"
   data={statuses}
+  animate
+/>`}
+              />
+              <CodeBlock
+                code={`<PieChart
+  key={range}
+  title="Properties by status"
+  data={statusesByRange[range]}
   animate
 />`}
               />

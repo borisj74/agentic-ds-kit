@@ -41,7 +41,7 @@
     "animate": {
       "type": "boolean",
       "default": false,
-      "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs once on mount; data changes do not replay it. Off under prefers-reduced-motion; the final state shows without JS"
+      "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion; the final state shows without JS"
     }
   },
   "passthrough": {
