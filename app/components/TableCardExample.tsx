@@ -122,3 +122,44 @@ export function TableCardExample() {
     </div>
   );
 }
+
+const SMALL_COLUMNS: DataTableColumn[] = [
+  { key: "invoice", header: "Invoice", width: "6rem" },
+  { key: "client", header: "Client", wrap: true },
+  { key: "amount", header: "Amount", type: "number" },
+];
+
+export const SMALL_TABLE_CARD_CODE = `<Card
+  title="Recent invoices"
+  size="sm"
+  flush
+  headerAction={{ label: "View all", href: "/invoices" }}
+>
+  <DataTable
+    ariaLabel="Recent invoices"
+    columns={[
+      { key: "invoice", header: "Invoice", width: "6rem" },
+      { key: "client", header: "Client", wrap: true },
+      { key: "amount", header: "Amount", type: "number" },
+    ]}
+    rows={invoices.map((invoice) => ({
+      id: invoice.id,
+      invoice: { type: "link", label: invoice.id, href: \`/invoices/\${invoice.id}\`, linkAs: Link },
+      client: invoice.client,
+      amount: formatMoney(invoice.amount),
+    }))}
+  />
+</Card>`;
+
+export function SmallTableCardExample() {
+  return (
+    <Card
+      title="Recent invoices"
+      size="sm"
+      flush
+      headerAction={{ label: "View all", href: "#datatable" }}
+    >
+      <DataTable ariaLabel="Recent invoices (small card)" columns={SMALL_COLUMNS} rows={ROWS.slice(0, 3)} />
+    </Card>
+  );
+}

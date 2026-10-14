@@ -8,6 +8,12 @@
   box-shadow: var(--shadow-sm);
   container-type: inline-size;
   container-name: datatable;
+  /* Edge cell inline inset. A flush Card sets --kit-frame-inset to line up with its header. */
+  --datatable-inset: var(--kit-frame-inset, var(--space-6));
+}
+
+.root[data-size="sm"] {
+  --datatable-inset: var(--kit-frame-inset, var(--space-4));
 }
 
 .toolbar {
@@ -241,6 +247,11 @@
   text-align: left;
 }
 
+/* Stops a nested table inheriting the outer Card's inset. */
+.table {
+  --kit-frame-inset: initial;
+}
+
 .th,
 .td {
   padding: 0;
@@ -323,6 +334,21 @@
 
 .root[data-size="md"] .checkCell {
   padding-inline: var(--space-6);
+}
+
+/* First and last columns take the table's edge inset (today's cell padding unless a flush Card sets it). */
+.checkCell:first-child {
+  padding-inline-start: var(--datatable-inset);
+}
+
+.th:first-child:not(.checkCell) > *,
+.td:first-child:not(.checkCell):not(.emptyCell) > * {
+  padding-inline-start: var(--datatable-inset);
+}
+
+.th:last-child:not(.checkCell) > *,
+.td:last-child:not(.checkCell):not(.emptyCell) > * {
+  padding-inline-end: var(--datatable-inset);
 }
 
 .checkCell :global(label) {
