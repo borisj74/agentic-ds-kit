@@ -30,3 +30,9 @@
 .app-shell-pattern__menu {
   display: contents;
 }
+
+/* Default narrowHeader: the nav's mark beside the title, after the Menu Button. Its brand
+   cell hugs the mark instead of taking a second rail-wide column. */
+.app-shell-pattern__narrow-brand {
+  --appheader-brand-width: auto;
+}

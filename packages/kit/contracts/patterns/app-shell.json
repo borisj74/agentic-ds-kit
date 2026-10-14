@@ -23,12 +23,12 @@
     "narrowHeader": {
       "type": "object | slot",
       "required": false,
-      "note": "Header-less shells only (ignored when header is set): the top bar shown below the breakpoint, where the nav lives in the Drawer. AppHeader props (the shell injects the Menu Button in the logo slot, radius none) or a built header that places AppShellPattern.MenuButton. Default: AppHeader titled navLabel or nav.title with the Menu Button and no search (search: false)."
+      "note": "Header-less shells only (ignored when header is set): the top bar shown below the breakpoint, where the nav lives in the Drawer. AppHeader props (the shell injects the Menu Button in the logo slot, radius none) or a built header that places AppShellPattern.MenuButton. Default: AppHeader titled navLabel or nav.title with the Menu Button in the brand cell, then the nav's markIcon or mark (when a SideNav props nav sets one) beside the title, and no search, so the brand shows on narrow screens too. The nav's default letter mark is not repeated: set mark or markIcon to show it."
     },
     "nav": {
       "type": "object | slot | function",
       "required": true,
-      "note": "SideNav props except showHeader, radius, and side: title, mark, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
+      "note": "SideNav props except showHeader, radius, and side: title, mark or markIcon, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
     },
     "navLabel": {
       "type": "string",
@@ -69,7 +69,7 @@
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; AppShellPattern.css repeats 64rem only for the first paint before hydration.",
     "narrow": [
       "No SideNav in the layout; content takes the full width",
-      "With no header, narrowHeader (default a minimal AppHeader titled like the nav) appears only here, to hold the Menu Button",
+      "With no header, narrowHeader (default a minimal AppHeader titled like the nav, with the nav's mark or markIcon when set) appears only here, to hold the Menu Button",
       "Menu Button (tertiary sm, lucide Menu, ariaLabel \"Open navigation\") sits in AppHeader's start column",
       "Left Drawer size sm holds SideNav showHeader false, always expanded",
       "Picking a leaf, Escape, or a scrim click closes the Drawer; focus returns to the Menu Button",
@@ -104,6 +104,6 @@
     "layout-shell--viewport on className when the shell is the whole page",
     "One layout option among many: top bar only, side nav only, both, or neither are all fine"
   ],
-  "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", mark: \"A\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
+  "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", markIcon: \"Receipt\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
   "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
 }
