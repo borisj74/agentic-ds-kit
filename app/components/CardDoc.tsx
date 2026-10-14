@@ -8,7 +8,12 @@ import { Input } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
-import { TABLE_CARD_CODE, TableCardExample } from "./TableCardExample";
+import {
+  SMALL_TABLE_CARD_CODE,
+  SmallTableCardExample,
+  TABLE_CARD_CODE,
+  TableCardExample,
+} from "./TableCardExample";
 
 const SIZES: CardSize[] = ["sm", "md"];
 
@@ -249,8 +254,9 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  flush runs the body edge to edge for a DataTable, which drops its own frame. A
-                  headerAction with href is a text link, like View all.
+                  flush runs the body edge to edge for a DataTable, which drops its own frame. Its
+                  first and last columns take the card&apos;s inline padding at any size, whatever the
+                  table&apos;s cellSize. A headerAction with href is a text link, like View all.
                 </p>
               </div>
               <CodeBlock code={TABLE_CARD_CODE} />
@@ -278,6 +284,24 @@ export function CardDoc() {
               <CodeBlock
                 code={'<Card title="Compact tile" description="sm tightens padding and the title." size="sm">\n  <p>Use sm when a denser framed tile fits the layout.</p>\n</Card>'}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Small flush (table card)</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <SmallTableCardExample />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  The DataTable&apos;s first and last columns take the card&apos;s inline padding at any
+                  size, whatever the table&apos;s cellSize, so the title lines up with the first column
+                  and View all with the last.
+                </p>
+              </div>
+              <CodeBlock code={SMALL_TABLE_CARD_CODE} />
             </section>
           </div>
         )}
