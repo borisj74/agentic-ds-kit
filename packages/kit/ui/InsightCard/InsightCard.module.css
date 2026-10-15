@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: var(--insight-gap);
   width: min(100%, var(--insight-width));
+  box-sizing: border-box;
   min-width: 0;
   padding: var(--insight-padding);
   background-color: var(--surface-card);
