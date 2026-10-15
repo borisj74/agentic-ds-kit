@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { after, describe, test } from "node:test";
@@ -54,7 +54,7 @@ describe("questions: schema", () => {
     for (const o of buildQuestions().options) {
       assert.deepEqual(Object.keys(o), ["id", "label", "description", "contracts", "kind", "ask"]);
       assert.ok(o.label && o.description, o.id);
-      assert.match(o.ask, /^Does the request need .+\?$/);
+      assert.match(o.ask, /^Would .+ show part of what the request asks to see\?$/);
       assert.ok(["component", "pattern"].includes(o.kind));
       assert.ok(o.contracts.length >= 1);
     }
@@ -86,8 +86,31 @@ describe("questions: schema", () => {
   test("--use-when / --not-when counts", () => {
     const zero = buildQuestions({ only: ["barchart"], useWhen: 0, notWhen: 0 }).options[0];
     assert.equal(zero.description, "Compare magnitudes across categories with vertical or horizontal bars.");
-    const one = buildQuestions({ only: ["barchart"], useWhen: 1, notWhen: 1 }).options[0];
+    const one = buildQuestions({ only: ["barchart", "piechart"], useWhen: 1, notWhen: 1 }).options[0];
     assert.match(one.description, /Use when: Ranking values at a glance\. Not for: Part-to-whole share — use PieChart\.$/);
+  });
+
+  test("Not for lines that point only outside the option set are skipped", () => {
+    const alone = buildQuestions({ only: ["barchart"] }).options[0];
+    assert.equal(
+      alone.description,
+      "Compare magnitudes across categories with vertical or horizontal bars. Use when: Ranking values at a glance; Grouped comparisons with categories plus series.",
+    );
+    const withPie = buildQuestions({ only: ["barchart", "piechart"] }).options.find((o) => o.id === "barchart");
+    assert.match(withPie.description, /Not for: Part-to-whole share — use PieChart\.$/);
+    // A composite's contracts count as part of the set.
+    const overlay = { composites: [{ label: "Trend", contracts: ["linechart"], sentence: "x" }] };
+    const withLine = buildQuestions({ only: ["barchart"], overlay }).options.find((o) => o.id === "barchart");
+    assert.match(withLine.description, /Not for: Change over time — use LineChart\.$/);
+  });
+
+  test("--ask-style strict and part", () => {
+    const strict = buildQuestions({ only: ["barchart"], askStyle: "strict" }).options[0];
+    assert.equal(strict.ask, "Does the request need BarChart (compare magnitudes across categories with vertical or horizontal bars)?");
+    const part = buildQuestions({ only: ["barchart"] }).options[0];
+    assert.equal(part.ask, "Would BarChart (compare magnitudes across categories with vertical or horizontal bars) show part of what the request asks to see?");
+    const none = buildQuestions({ only: ["card"], none: true, askStyle: "strict" }).options.at(-1);
+    assert.equal(none.ask, "Does the request need something none of the other options covers?");
   });
 
   test("enums list every enum prop of the rendered contracts", () => {
@@ -106,6 +129,19 @@ describe("questions: schema", () => {
     assert.equal(enums.length, expected);
     const narrow = buildQuestions({ only: ["card"] }).enums;
     assert.ok(narrow.length && narrow.every((e) => e.component === "card"));
+  });
+
+  test("--enums own (default), all, none", () => {
+    const overlay = { composites: [{ label: "Table card", contracts: ["card", "datatable"], sentence: "x", base: "datatable" }] };
+    const own = buildQuestions({ only: ["barchart", "dashboard"], overlay }).enums;
+    // Own contracts only: barchart, the composite's base (datatable); not card, not the dashboard's parts.
+    assert.deepEqual([...new Set(own.map((e) => e.component))], ["barchart", "datatable"]);
+    const all = buildQuestions({ only: ["barchart", "dashboard"], overlay, enums: "all" }).enums;
+    assert.ok(all.some((e) => e.component === "card"));
+    assert.ok(all.length > own.length);
+    assert.deepEqual(buildQuestions({ only: ["barchart"], enums: "none" }).enums, []);
+    const noBase = { composites: [{ label: "Form", contracts: ["button", "select"], sentence: "x" }] };
+    assert.deepEqual(buildQuestions({ only: ["card"], overlay: noBase }).enums.filter((e) => e.component !== "card"), []);
   });
 
   test("--group and --only filter", () => {
@@ -154,6 +190,33 @@ describe("questions: determinism", () => {
   });
 });
 
+describe("questions: --out", () => {
+  test("creates missing parent folders", () => {
+    const r = run("--only", "card", "--out", "new/deep/q.json");
+    assert.equal(r.status, 0, r.stderr);
+    assert.deepEqual(JSON.parse(readFileSync(join(tmp, "new/deep/q.json"), "utf8")), buildQuestions({ only: ["card"] }));
+  });
+
+  test("a write error is one line, exit 1, no stack trace", () => {
+    writeFileSync(join(tmp, "afile"), "x");
+    const notDir = run("--only", "card", "--out", "afile/q.json");
+    assert.equal(notDir.status, 1);
+    assert.equal(notDir.stderr.trim().split("\n").length, 1, notDir.stderr);
+    assert.match(notDir.stderr, /^agentic-ds-kit: could not write afile\/q\.json: a file is in the way .+ \(E[A-Z]+\)\.$/m);
+    mkdirSync(join(tmp, "locked"));
+    chmodSync(join(tmp, "locked"), 0o500);
+    try {
+      const denied = run("--only", "card", "--out", "locked/q.json");
+      if (process.getuid?.() !== 0) {
+        assert.equal(denied.status, 1);
+        assert.equal(denied.stderr.trim().split("\n").length, 1, denied.stderr);
+      }
+    } finally {
+      chmodSync(join(tmp, "locked"), 0o700);
+    }
+  });
+});
+
 describe("questions: overlay", () => {
   test("composites, renames, extra sentences and drops merge", () => {
     const { options } = buildQuestions({ overlay: composite });
@@ -161,12 +224,37 @@ describe("questions: overlay", () => {
     assert.equal(card.kind, "composite");
     assert.deepEqual(card.contracts, ["card", "datatable"]);
     assert.match(card.description, /Rows of records in a flush Card\. Use when:/);
-    assert.equal(card.ask, "Does the request need Table card (rows of records in a flush Card)?");
+    assert.equal(card.ask, "Would Table card (rows of records in a flush Card) show part of what the request asks to see?");
     const bar = options.find((o) => o.id === "barchart");
     assert.equal(bar.label, "Bar chart");
     assert.match(bar.description, /horizontal bars\. Shown as monthly totals\. Use when:/);
+    assert.equal(bar.ask, "Would Bar chart (shown as monthly totals) show part of what the request asks to see?");
     assert.ok(!options.some((o) => o.id === "spinner"));
     assert.equal(options.length, 85);
+  });
+
+  test("only allowlist keeps composites; --only wins over it", () => {
+    const overlay = { ...composite, only: ["barchart", "linechart", "spinner"] };
+    assert.deepEqual(buildQuestions({ overlay }).options.map((o) => o.id), ["barchart", "linechart", "table-card"]);
+    assert.deepEqual(buildQuestions({ overlay, only: ["tabs"] }).options.map((o) => o.id), ["table-card", "tabs"]);
+    const r = run("--overlay", overlayFile("only.json", overlay), "--only", "card");
+    assert.deepEqual(JSON.parse(r.stdout).options.map((o) => o.id), ["card", "table-card"]);
+  });
+
+  test("description replaces the generated text; sentence appends after it", () => {
+    const overlay = {
+      options: {
+        scoreboard: { label: "Studio KPIs", description: "This week's headline studio numbers side by side" },
+        barchart: { description: "Fill rate by class type", sentence: "In Tempo it covers the last 4 weeks" },
+      },
+    };
+    const { options } = buildQuestions({ overlay, only: ["scoreboard", "barchart"] });
+    const kpis = options.find((o) => o.id === "scoreboard");
+    assert.equal(kpis.description, "This week's headline studio numbers side by side.");
+    assert.equal(kpis.ask, "Would Studio KPIs (this week's headline studio numbers side by side) show part of what the request asks to see?");
+    const bar = options.find((o) => o.id === "barchart");
+    assert.equal(bar.description, "Fill rate by class type. In Tempo it covers the last 4 weeks.");
+    assert.equal(bar.ask, "Would BarChart (in Tempo it covers the last 4 weeks) show part of what the request asks to see?");
   });
 
   test("composite without base uses its sentence", () => {
@@ -187,6 +275,9 @@ describe("questions: errors exit non-zero", () => {
     ["bad shape: unknown key", { rename: {} }, /unknown key "rename"/],
     ["bad shape: composite missing sentence", { composites: [{ label: "X", contracts: ["card"] }] }, /sentence must be a non-empty string/],
     ["bad shape: composites not array", { composites: {} }, /composites must be an array/],
+    ["unknown only id", { only: ["card", "nope"] }, /overlay\.only: unknown contract id "nope"/],
+    ["bad shape: only not array", { only: "card" }, /only must be a non-empty array/],
+    ["bad shape: empty description", { options: { card: { description: " " } } }, /card\.description must be a non-empty string/],
   ];
   for (const [name, overlay, message] of cases) {
     test(name, () => {
@@ -218,6 +309,8 @@ describe("questions: errors exit non-zero", () => {
     assert.match(group.stderr, /--group must be component or pattern/);
     assert.match(run("--only", "card,nope").stderr, /--only: unknown contract id "nope"/);
     assert.match(run("--use-when", "x").stderr, /--use-when must be a whole number/);
+    assert.match(run("--ask-style", "loose").stderr, /--ask-style must be part or strict/);
+    assert.match(run("--enums", "some").stderr, /--enums must be own, all or none/);
     assert.equal(run("--bogus").status, 1);
   });
 
