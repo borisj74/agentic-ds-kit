@@ -1,6 +1,7 @@
 .control {
   display: block;
   width: 100%;
+  box-sizing: border-box;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);

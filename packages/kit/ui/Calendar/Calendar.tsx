@@ -67,10 +67,12 @@ export function Calendar({
   weekStart = "sunday",
   startHour = 7,
   readOnly = false,
+  headingLevel = 2,
   className,
   ref,
   ...rest
 }: CalendarProps) {
+  const TitleTag = headingLevel === 3 ? "h3" : headingLevel === 4 ? "h4" : "h2";
   const titleId = useId();
   const formId = useId();
   const now = useNow();
@@ -248,9 +250,9 @@ export function Calendar({
     >
       <div className={styles.header}>
         <div className={styles.titleRow}>
-          <h2 id={titleId} className={styles.title} aria-live="polite">
+          <TitleTag id={titleId} className={styles.title} aria-live="polite">
             {title}
-          </h2>
+          </TitleTag>
           <Tooltip content="Choose month">
           <DropdownMenu
             ariaLabel="Choose month"

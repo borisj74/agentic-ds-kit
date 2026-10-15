@@ -42,5 +42,6 @@ export interface CalendarProps extends Omit<ComponentPropsWithoutRef<"div">, Cal
   weekStart?: CalendarWeekStart;
   startHour?: number;
   readOnly?: boolean;
+  headingLevel?: 2 | 3 | 4;
   ref?: Ref<HTMLDivElement>;
 }
