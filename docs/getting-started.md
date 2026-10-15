@@ -17,7 +17,7 @@ The **kit** is the npm package `agentic-ds-kit`. The Next app in this GitHub rep
 
 Optional: [Cursor](https://cursor.com) or Claude Code so agent rules load from files instead of chat paste.
 
-Confirm the registry version. Current latest is **0.8.0**. Skip **0.2.0** — it ships CSS that Next re-scopes and kit UI looks unstyled:
+Confirm the registry version. Current latest is **0.9.0**. Skip **0.2.0** — it ships CSS that Next re-scopes and kit UI looks unstyled:
 
 ```bash
 npm view agentic-ds-kit version
@@ -191,11 +191,11 @@ Then:
 2. You can remove a standalone `import "agentic-ds-kit/tokens.css"` if a kit import is already on the tree.
 3. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules/agentic-ds-kit/` if those files changed.
 
-**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.8.0 or later**.
+**Do not install 0.2.0.** That release still used `*.module.css` filenames; Next hashed classes twice and kit UI rendered as unstyled HTML. Use **0.9.0 or later**.
 
 ```bash
 npm view agentic-ds-kit version
-# expect 0.8.0 or higher
+# expect 0.9.0 or higher
 ```
 
 ### Upgrade to 0.4.0
@@ -230,7 +230,7 @@ To pick up a newly published kit:
 npm install agentic-ds-kit@latest
 ```
 
-If `package.json` already has `"agentic-ds-kit": "^0.8.0"`, `npm update agentic-ds-kit` also works. An older range (`^0.2.x` through `^0.7.x`) will not pick up a newer minor: run `npm install agentic-ds-kit@latest`. 0.5.0 only adds props (Card `flush`, Cell `type="link"`, DataTable column `sortValue` / `width` / `wrap`, InsightCard `success` and link actions, Scorecard `deltaTone`, SideNav `account`, and more); nothing is removed. 0.6.0 adds an opt-in `animate` prop on BarChart, LineChart and PieChart, and a flush Card now lines up a framed table's first and last columns with its header at every size (a compact table in a medium flush Card gets 24px side padding instead of 16px). 0.7.0: Card `size="sm"` no longer caps width at 24rem; it only tightens padding and type, so a small card fills its container (wrap it in your layout to keep a narrow tile). AppShellPattern takes `mark` / `markIcon` for its default narrow top bar; re-copy with `npx agentic-ds-kit add app-shell --force` to get it. 0.7.1: Card no longer clips overlays (DatePicker, Select, DropdownMenu panels open past its edge). 0.8.0 adds `npx agentic-ds-kit questions`, which turns the contracts into a neutral option list for a decision model or LLM (see [questions](questions.md)); nothing else changes. 0.3.0 removed the content-pattern imports (Activity, AssistantWorkspace, Dashboard, EmptyFirstRun, Inbox, InviteMembers, ListDetail, SettingsForm); 0.4.0 removed AppShellPattern and SignInPattern too (see [Upgrade to 0.4.0](#upgrade-to-040)). Copy patterns in with `npx agentic-ds-kit add <id>` and import from your own folder. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
+If `package.json` already has `"agentic-ds-kit": "^0.9.0"`, `npm update agentic-ds-kit` also works. An older range (`^0.2.x` through `^0.8.x`) will not pick up a newer minor: run `npm install agentic-ds-kit@latest`. 0.5.0 only adds props (Card `flush`, Cell `type="link"`, DataTable column `sortValue` / `width` / `wrap`, InsightCard `success` and link actions, Scorecard `deltaTone`, SideNav `account`, and more); nothing is removed. 0.6.0 adds an opt-in `animate` prop on BarChart, LineChart and PieChart, and a flush Card now lines up a framed table's first and last columns with its header at every size (a compact table in a medium flush Card gets 24px side padding instead of 16px). 0.7.0: Card `size="sm"` no longer caps width at 24rem; it only tightens padding and type, so a small card fills its container (wrap it in your layout to keep a narrow tile). AppShellPattern takes `mark` / `markIcon` for its default narrow top bar; re-copy with `npx agentic-ds-kit add app-shell --force` to get it. 0.7.1: Card no longer clips overlays (DatePicker, Select, DropdownMenu panels open past its edge). 0.8.0 adds `npx agentic-ds-kit questions`, which turns the contracts into a neutral option list for a decision model or LLM (see [questions](questions.md)); nothing else changes. 0.9.0: `questions` gains an overlay `only` list, `--ask-style`, replaceable descriptions and `--enums all|own|none`; the default is now `own` (each option's own contract), so add `--enums all` for 0.8.0's full list. Kit elements that set a fill width with padding or border now use `box-sizing: border-box`, so they no longer overflow in apps without a global reset (no change in apps that have one). Calendar takes `headingLevel`. 0.3.0 removed the content-pattern imports (Activity, AssistantWorkspace, Dashboard, EmptyFirstRun, Inbox, InviteMembers, ListDetail, SettingsForm); 0.4.0 removed AppShellPattern and SignInPattern too (see [Upgrade to 0.4.0](#upgrade-to-040)). Copy patterns in with `npx agentic-ds-kit add <id>` and import from your own folder. Re-copy `AGENTS.md` / `CLAUDE.md` / the skill from `node_modules` if those files changed.
 
 There is no auto-update. Dependabot or Renovate can open a PR when a new version ships; that is the usual way to stay current without remembering.
 
@@ -238,7 +238,7 @@ There is no auto-update. Dependabot or Renovate can open a PR when a new version
 
 - [ ] `npm install agentic-ds-kit` in the Next app (not in `$HOME`)
 - [ ] React 19 already in the app
-- [ ] No `transpilePackages` for this package (0.8.0+)
+- [ ] No `transpilePackages` for this package (0.9.0+)
 - [ ] `import { Button } from "agentic-ds-kit"` looks like a kit button, not a default browser button
 - [ ] Optional: `import "agentic-ds-kit/tokens.css"` if your CSS uses kit variables with no kit component imported
 - [ ] Optional: `import "agentic-ds-kit/layout.css"` if your markup uses `layout-canvas` (and related) with no kit component imported
