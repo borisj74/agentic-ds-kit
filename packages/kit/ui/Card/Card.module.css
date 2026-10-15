@@ -4,7 +4,9 @@
   flex-direction: column;
   width: 100%;
   min-width: 0;
-  overflow: hidden;
+  /* No overflow clip: DatePicker, Select, and DropdownMenu panels open past the
+     card's edge. Pieces that touch the rounded corners round themselves. */
+  --card-inner-radius: calc(var(--radius-surface-md) - 1px);
   background-color: var(--surface-card);
   border: 1px solid var(--border-faint);
   border-radius: var(--radius-surface-md);
@@ -20,8 +22,8 @@
   width: 100%;
   height: 10rem;
   object-fit: cover;
-  border-top-left-radius: var(--radius-surface-md);
-  border-top-right-radius: var(--radius-surface-md);
+  border-top-left-radius: var(--card-inner-radius);
+  border-top-right-radius: var(--card-inner-radius);
 }
 
 .sm .image {
@@ -140,6 +142,18 @@
   border: 0;
   border-radius: 0;
   box-shadow: none;
+}
+
+/* With no card clip, a framed child that meets the card's top or bottom edge
+   takes the inner radius there so its header and row fills stay inside the corners. */
+.flush > .content:first-child > .body:first-child > [data-kit-frame] {
+  border-top-left-radius: var(--card-inner-radius);
+  border-top-right-radius: var(--card-inner-radius);
+}
+
+.flush .body:last-child > [data-kit-frame] {
+  border-bottom-left-radius: var(--card-inner-radius);
+  border-bottom-right-radius: var(--card-inner-radius);
 }
 
 /* The framed child's edge cells take the card's inset, at any size, so the title

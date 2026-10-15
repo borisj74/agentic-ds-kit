@@ -44,6 +44,9 @@
      other clipped panels when the field sits in a trailing column. */
   right: 0;
   left: auto;
+  /* At least as wide as the trigger; the month grid stretches to fill. */
+  display: grid;
+  min-width: 100%;
 }
 
 .srOnly {

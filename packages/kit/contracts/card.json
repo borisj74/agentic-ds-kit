@@ -27,7 +27,7 @@
     "children": {
       "type": "slot",
       "required": true,
-      "note": "Body. Compose kit Field/Input/Button/Badge/etc, never a local cousin"
+      "note": "Body. Compose kit Field/Input/Button/Badge/etc, never a local cousin. The card does not clip content, so DatePicker, Select, and DropdownMenu overlays open past its edge."
     },
     "size": {
       "type": "enum",
@@ -103,7 +103,8 @@
     },
     "imageSrc": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "Full-bleed image above the content; its top corners take the card radius"
     },
     "imageAlt": {
       "type": "string",
