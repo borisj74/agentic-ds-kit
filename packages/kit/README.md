@@ -37,6 +37,8 @@ The copy imports kit components from `agentic-ds-kit`, keeps its demo data in a 
 
 Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Copy `AGENTS.md` (and `CLAUDE.md`) from this package into your app so Cursor and Claude Code follow the kit.
 
+If your app lets a decision model or LLM pick which kit view to render, `npx agentic-ds-kit questions` builds the option list (labels, descriptions, enum props) from the contracts. No network, no model calls: [docs/questions.md](https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md).
+
 ## Tokens
 
 `lib/tokens.css` is generated from `tokens/tokens.json`:

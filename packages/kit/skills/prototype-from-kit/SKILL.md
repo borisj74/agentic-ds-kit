@@ -35,3 +35,4 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 - If you start from the `app-shell` copy with custom chrome: a built header places `AppShellMenuButton` (usually as `AppHeader.Brand`'s `logo`); a built nav reads `useAppShell().navPlacement` or takes the placement from `nav={(placement) => …}`.
 - Metric rows use `<Scoreboard items={...} />`, not flex layouts with borders.
 - Labeled inputs sit in `Field`; dismissible forms open in Modal or Drawer (AlertDialog is for confirmations that need an answer).
+- **Model picks the view:** if the app asks a decision model or LLM which kit view to render, generate the options from the contracts with `npx agentic-ds-kit questions` (`--help`; https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md). Keep thresholds and product wording in app code or the overlay.
