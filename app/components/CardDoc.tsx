@@ -5,6 +5,8 @@ import { Card } from "agentic-ds-kit";
 import type { CardSize } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
+import { DatePicker } from "agentic-ds-kit";
+import { Textarea } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -219,6 +221,39 @@ export function CardDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>With a date field</h2>
+              <div className={styles.exampleCanvas} style={{ overflow: "visible" }}>
+                <div className={styles.previewFill}>
+                  <Card title="Request time off" description="Pick the days you will be away.">
+                    <Field label="Dates" htmlFor="card-variant-time-off-dates">
+                      <DatePicker id="card-variant-time-off-dates" mode="range" />
+                    </Field>
+                    <Field label="Note" htmlFor="card-variant-time-off-note">
+                      <Textarea id="card-variant-time-off-note" rows={2} />
+                    </Field>
+                  </Card>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Card does not clip its content, so a DatePicker, Select, or DropdownMenu overlay
+                  opens past the card&apos;s bottom edge.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Card title="Request time off" description="Pick the days you will be away.">
+  <Field label="Dates" htmlFor="dates">
+    <DatePicker id="dates" mode="range" />
+  </Field>
+  <Field label="Note" htmlFor="note">
+    <Textarea id="note" rows={2} />
+  </Field>
+</Card>`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>With image</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
@@ -235,7 +270,7 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  imageAlt is required when imageSrc is set. The image is full bleed and clipped to
+                  imageAlt is required when imageSrc is set. The image is full bleed and its top corners take
                   the card radius.
                 </p>
               </div>

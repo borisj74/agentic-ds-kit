@@ -108,7 +108,7 @@
       "Overlay is role=dialog aria-modal labelled Choose date (or Choose dates in range) and contains DatePicker’s own month grid",
       "Range: first click sets start, second click sets end and closes. Escape discards an in-progress range",
       "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger",
-      "Month-grid overlay anchors to the end of the trigger so it fits in drawers without horizontal scroll",
+      "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll",
       "Must have associated label via Field or a visible label pointing at id",
       "error described by Field via describedBy"
     ]
