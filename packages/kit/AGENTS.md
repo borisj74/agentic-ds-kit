@@ -7,5 +7,6 @@ Layout accessibility: page content in `<main>`, chrome in `header` / `nav` landm
 If a component is missing from the index, stop and ask — do not add a one-off.
 Never put hex in components; use semantic tokens from `agentic-ds-kit/tokens.css` (not primitive `--color-*` ramps).
 One `variant="primary"` Button per view.
+To let a model pick which kit view to render, generate the option list with `npx agentic-ds-kit questions` (https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md); do not hand-write one.
 
 Copy this file to your app root as `AGENTS.md` (and `CLAUDE.md` with `@AGENTS.md`) so Cursor and Claude Code load it.

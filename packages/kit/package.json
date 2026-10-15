@@ -55,7 +55,8 @@
     "build:patterns-src": "node scripts/build-patterns-src.mjs",
     "build": "npm run generate:tokens && vite build && npm run build:patterns-src",
     "version": "node ../../scripts/sync-kit-version-docs.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "node --test test/questions.test.mjs"
   },
   "peerDependencies": {
     "next": ">=14",

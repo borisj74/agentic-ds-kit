@@ -3,12 +3,15 @@
  * agentic-ds-kit add <name>: copy a pattern's (or a chrome recipe's) source into your app
  * so you own it. Reads patterns-src/ (built from patterns/ and recipes/ at publish
  * time). No dependencies.
+ *
+ * agentic-ds-kit questions: contracts → neutral option list (see ./questions.mjs).
  */
 import { existsSync } from "node:fs";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { runQuestions } from "./questions.mjs";
 
 const pkgRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const srcRoot = join(pkgRoot, "patterns-src");
@@ -32,7 +35,11 @@ Examples:
   npx agentic-ds-kit add dashboard
   npx agentic-ds-kit add app-shell
   npx agentic-ds-kit add app-header
-  npx agentic-ds-kit add inbox --dir app/inbox/_pattern`;
+  npx agentic-ds-kit add inbox --dir app/inbox/_pattern
+
+Other commands:
+  questions      Build a closed option list from the contracts for a decision
+                 model or LLM. Run: npx agentic-ds-kit questions --help`;
 
 function fail(message) {
   console.error(`agentic-ds-kit: ${message}`);
@@ -75,6 +82,8 @@ function printList(manifest) {
   }
   console.log("npx agentic-ds-kit add <name>");
 }
+
+if (process.argv[2] === "questions") process.exit(runQuestions(process.argv.slice(3)));
 
 let parsed;
 try {
