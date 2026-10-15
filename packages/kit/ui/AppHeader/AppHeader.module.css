@@ -3,6 +3,7 @@
 
 .header {
   width: 100%;
+  box-sizing: border-box;
   min-width: 0;
   flex-shrink: 0;
   border-bottom: var(--border-divider) solid var(--appheader-border-color, var(--border-faint));
@@ -102,6 +103,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  box-sizing: border-box;
   min-width: 0;
 }
 

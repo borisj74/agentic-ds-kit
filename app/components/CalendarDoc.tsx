@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar } from "agentic-ds-kit";
+import { Calendar, Section } from "agentic-ds-kit";
 import type { CalendarEvent, CalendarSource } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -221,6 +221,34 @@ export function CalendarDoc() {
               </div>
               <CodeBlock
                 code={'<Calendar label="Holidays" calendars={calendars} defaultEvents={events} weekStart="monday" readOnly />'}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Inside a Section</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={FILL}>
+                  <Section title="Team schedule">
+                    <Calendar
+                      label="Team schedule"
+                      calendars={CALENDARS}
+                      defaultEvents={EVENTS}
+                      defaultDate={ANCHOR}
+                      headingLevel={3}
+                    />
+                  </Section>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  The range title is an h2 by default. Under a Section (an h2) or another heading,
+                  pass headingLevel 3 or 4 so the outline stays in order. Looks the same at every
+                  level.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Section title="Team schedule">\n  <Calendar label="Team schedule" calendars={calendars} defaultEvents={events} headingLevel={3} />\n</Section>'}
               />
             </section>
           </div>

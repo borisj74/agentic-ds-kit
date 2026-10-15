@@ -267,6 +267,7 @@
   align-items: center;
   gap: var(--space-inline-md);
   width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: var(--sidenav-item-padding, var(--space-inset-sm));
   appearance: none;

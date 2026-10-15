@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
   background-color: var(--surface-card);
@@ -86,6 +87,7 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: var(--space-2);
   border: 0;

@@ -98,6 +98,12 @@
       "type": "boolean",
       "default": false,
       "note": "Hides New event and turns off creating, editing, and deleting. Events can still be clicked through onEventClick."
+    },
+    "headingLevel": {
+      "type": "enum",
+      "values": [2, 3, 4],
+      "default": 2,
+      "note": "Heading level of the visible range title (month, week, or day). Use 3 or 4 when the Calendar sits under a page or Section heading."
     }
   },
   "passthrough": {

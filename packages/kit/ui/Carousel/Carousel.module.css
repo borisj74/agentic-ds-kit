@@ -47,6 +47,7 @@
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 100%;
+  box-sizing: border-box;
   padding-inline-start: var(--space-4);
 }
 

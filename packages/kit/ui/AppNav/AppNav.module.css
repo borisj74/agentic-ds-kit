@@ -3,6 +3,7 @@
 
 .nav {
   width: var(--appnav-width, calc(var(--layout-sidebar) + var(--space-2) * 2));
+  box-sizing: border-box;
   flex-shrink: 0;
   padding: var(--appnav-padding, var(--space-4));
   background-color: var(--appnav-background, var(--surface-card));
