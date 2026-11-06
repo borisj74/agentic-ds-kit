@@ -28,7 +28,8 @@
 }
 
 .docShell {
-  max-width: calc(var(--grid-width-lg) - var(--space-8));
+  width: 100%;
+  max-width: none;
 }
 
 .opsShell {

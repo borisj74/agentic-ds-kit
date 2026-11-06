@@ -1,30 +1,19 @@
-.canvas {
-  display: flex;
-  align-items: stretch;
-  min-height: 20rem;
-  min-width: 0;
-  overflow: hidden;
-  padding: var(--space-6);
-  background: var(--surface-muted);
-}
-
+.canvas,
 .exampleCanvas {
   display: flex;
-  align-items: stretch;
-  min-height: 16rem;
+  align-items: flex-start;
+  justify-content: center;
   min-width: 0;
   width: 100%;
-  max-width: 100%;
-  overflow: hidden;
   padding: var(--space-6);
-  border-radius: var(--radius-surface-md);
-  background: var(--surface-muted);
+  background: transparent;
 }
 
 .nav {
   width: 15rem;
+  flex: 0 0 auto;
   min-width: 0;
-  background: var(--surface-card);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-md);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
