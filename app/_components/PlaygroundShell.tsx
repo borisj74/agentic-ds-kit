@@ -9,7 +9,7 @@ import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
 import { CustomizePanel } from "./CustomizePanel";
 import { useCustomizeOpen } from "./useCustomizeOpen";
-import styles from "./PlaygroundShell.module.css";
+import styles from "./ShellFrame.module.css";
 
 const COMPACT_NAV = "(max-width: 767px)";
 
@@ -162,7 +162,9 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
         </aside>
         {customize.docked ? (
           <aside id="customize-panel" className={styles.customize} aria-label="Customize">
-            <CustomizePanel variant="dock" onCollapse={customize.close} />
+            <div className={styles.customizeCard}>
+              <CustomizePanel variant="dock" onCollapse={customize.close} />
+            </div>
           </aside>
         ) : null}
         <main className={styles.main}>{children}</main>

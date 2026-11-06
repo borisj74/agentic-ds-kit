@@ -80,11 +80,20 @@
 .customize {
   box-sizing: border-box;
   position: sticky;
-  top: calc(var(--playground-topbar-height) + var(--space-4));
+  top: var(--playground-topbar-height);
   align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--playground-topbar-height));
+  padding: var(--space-4);
+  background-color: var(--bg-canvas);
+}
+
+.customizeCard {
+  box-sizing: border-box;
+  flex: 1 1 auto;
   width: 16.25rem;
-  height: calc(100vh - var(--playground-topbar-height) - var(--space-4) * 2);
-  margin-inline-end: var(--space-4);
+  min-height: 0;
   overflow-y: auto;
   padding: var(--space-4);
   background-color: var(--surface-card);
