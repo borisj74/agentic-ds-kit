@@ -24,7 +24,8 @@
   padding: var(--space-4);
   overflow-x: auto;
   border-radius: var(--radius-surface-md);
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  border: var(--border-width-thin) solid var(--border-faint);
 }
 
 .shell {

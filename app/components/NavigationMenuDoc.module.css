@@ -2,8 +2,9 @@
   min-height: 22rem;
   min-width: 0;
   padding: var(--space-4);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
 }
 
 .canvas {
@@ -25,8 +26,9 @@
   max-width: 100%;
   padding: var(--space-6);
   overflow-x: auto;
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
 }
 
 .bar {

@@ -25,7 +25,7 @@
         "href": "string",
         "label": "string",
         "active": "boolean",
-        "items": "optional array of leaf links (one subgroup level)"
+        "items": "optional array of leaf links (one subgroup level). A subgroup collapses on its own and opens when a child is active."
       },
       "required": false,
       "note": "Flat list for simple shells. Ignored when groups is provided."
@@ -79,6 +79,7 @@
     "requirements": [
       "nav has aria-label",
       "Group labels are disclosure buttons with aria-expanded",
+      "Subgroup labels are disclosure buttons with aria-expanded",
       "Closed group lists are aria-hidden and inert",
       "Active leaf uses aria-current=page",
       "All leaves are keyboard-focusable links",

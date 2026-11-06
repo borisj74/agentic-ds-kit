@@ -112,7 +112,8 @@
   overflow: hidden;
   pointer-events: none;
   user-select: none;
-  background-color: var(--surface-muted);
+  background-color: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
 }
 

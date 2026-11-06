@@ -32,6 +32,7 @@ import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
+import { FieldSetDoc } from "./FieldSetDoc";
 import { FileUploadDoc } from "./FileUploadDoc";
 import { FilterButtonDoc } from "./FilterButtonDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
@@ -170,7 +171,6 @@ export function ComponentDoc({ slug }: { slug: string }) {
 function resolveHash(hash: string): string {
   const aliases: Record<string, string> = {
     dialog: "modal",
-    fieldset: "field",
     sidebar: "sidenav",
     outsidebar: "sidenav",
     navmenu: "navigationmenu",
@@ -295,6 +295,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "dropdownmenu") return <DropdownMenuDoc />;
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
+  if (resolved === "fieldset") return <FieldSetDoc />;
   if (resolved === "filterbutton") return <FilterButtonDoc />;
   if (resolved === "fileupload") return <FileUploadDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;

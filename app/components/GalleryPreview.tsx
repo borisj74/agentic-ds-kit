@@ -115,16 +115,16 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "appheader":
       return (
-        <AppHeader
-          className={previewStyles.appHeader}
-          title="Acme"
-          mark="A"
-          radius="md"
-          searchPlaceholder="Search"
-          actions={
-            <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
-          }
-        />
+        <Stage variant="wide">
+          <AppHeader
+            title="Acme"
+            mark="A"
+            search={false}
+            actions={
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+            }
+          />
+        </Stage>
       );
     case "appnav":
       return (
@@ -217,7 +217,11 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "checkbox":
-      return <Checkbox id="gallery-checkbox" label="Remind me" defaultChecked />;
+      return (
+        <Stage variant="wide">
+          <Checkbox id="gallery-checkbox" label="Email me updates" defaultChecked />
+        </Stage>
+      );
     case "codesnippet":
       return (
         <Stage variant="wide">
@@ -324,7 +328,11 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "datepicker":
-      return <DatePicker id="gallery-date" size="sm" placeholder="Pick date" />;
+      return (
+        <Stage variant="wide">
+          <DatePicker id="gallery-date" size="sm" placeholder="Sep 20, 2026" />
+        </Stage>
+      );
     case "divider":
       return (
         <Stage variant="wide">
@@ -376,7 +384,7 @@ export function GalleryPreview({ id }: { id: string }) {
     case "input":
       return (
         <Stage variant="wide">
-          <Input id="gallery-input" placeholder="Search…" />
+          <Input id="gallery-input" placeholder="Search invoices" defaultValue="Northwind" iconStart="Search" />
         </Stage>
       );
     case "inputotp":
@@ -495,12 +503,18 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "select":
       return (
-        <Select
-          id="gallery-select"
-          size="sm"
-          placeholder="Choose"
-          options={[{ value: "one", label: "One" }]}
-        />
+        <Stage variant="wide">
+          <Select
+            id="gallery-select"
+            size="sm"
+            placeholder="Choose a plan"
+            defaultValue="team"
+            options={[
+              { value: "team", label: "Team" },
+              { value: "enterprise", label: "Enterprise" },
+            ]}
+          />
+        </Stage>
       );
     case "shimmertext":
       return <ShimmerText size="sm">Thinking</ShimmerText>;

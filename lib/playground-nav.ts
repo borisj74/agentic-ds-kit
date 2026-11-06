@@ -1,4 +1,4 @@
-import type { AppNavGroup } from "agentic-ds-kit";
+import type { AppNavGroup, AppNavItem } from "agentic-ds-kit";
 
 export const COMPONENT_ITEMS = [
   "accordion",
@@ -119,6 +119,177 @@ export function componentLabel(id: string): string {
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
+/** Docs sidebar groups. Charts are their own group, not a nest under Cell. */
+export const COMPONENT_GROUPS = [
+  {
+    label: "Forms",
+    ids: [
+      "button",
+      "buttongroup",
+      "checkbox",
+      "colorpicker",
+      "datepicker",
+      "field",
+      "fieldset",
+      "fileupload",
+      "filterbutton",
+      "input",
+      "inputotp",
+      "radiogroup",
+      "select",
+      "slider",
+      "switch",
+      "textarea",
+    ],
+  },
+  {
+    label: "Data",
+    ids: [
+      "accordion",
+      "avatar",
+      "avatargroup",
+      "calendar",
+      "card",
+      "carousel",
+      "cell",
+      "codesnippet",
+      "collapsible",
+      "conveyor",
+      "datagrid",
+      "datatable",
+      "divider",
+      "headercell",
+      "listview",
+      "meter",
+      "scorecard",
+      "scoreboard",
+      "section",
+      "table",
+      "timeline",
+      "treeview",
+      "usagelist",
+    ],
+  },
+  {
+    label: "Overlays",
+    ids: ["alertdialog", "command", "drawer", "dropdownmenu", "helppopover", "modal", "modalcard"],
+  },
+  {
+    label: "Navigation",
+    ids: [
+      "appheader",
+      "appnav",
+      "breadcrumb",
+      "linklist",
+      "navigationmenu",
+      "pageheader",
+      "pagination",
+      "sidenav",
+      "tabs",
+    ],
+  },
+  {
+    label: "Feedback",
+    ids: [
+      "alert",
+      "badge",
+      "count",
+      "empty",
+      "progress",
+      "progresssteps",
+      "skeleton",
+      "spinner",
+      "tag",
+      "toast",
+      "tooltip",
+    ],
+  },
+  {
+    label: "Charts",
+    ids: ["barchart", "linechart", "piechart"],
+  },
+  {
+    label: "Agent",
+    ids: ["chat", "insightcard", "loadinganimation", "numbertransition", "shimmertext", "thinkinganimation"],
+  },
+] as const;
+
+export const PATTERN_ITEMS = [
+  { slug: "dashboard", label: "Dashboard" },
+  { slug: "settings", label: "Settings" },
+  { slug: "list-detail", label: "List detail" },
+  { slug: "empty", label: "Empty" },
+  { slug: "sign-in", label: "Sign in" },
+  { slug: "app-shell", label: "App shell" },
+  { slug: "layouts", label: "Layouts" },
+] as const;
+
+export type PatternSlug = (typeof PATTERN_ITEMS)[number]["slug"];
+
+const PATTERN_HASH_ALIASES: Record<string, PatternSlug> = {
+  research: "empty",
+  projects: "list-detail",
+  "launch-brief": "list-detail",
+  "qa-checklist": "list-detail",
+  "release-notes": "list-detail",
+  "support-macros": "list-detail",
+  activity: "dashboard",
+  inbox: "dashboard",
+  invite: "dashboard",
+  delivery: "dashboard",
+  insights: "dashboard",
+};
+
+export function isPatternSlug(value: string): value is PatternSlug {
+  return PATTERN_ITEMS.some((item) => item.slug === value);
+}
+
+/** Old `/patterns#…` links land on the matching route. Unknown hashes open Dashboard. */
+export function patternSlugFromHash(hash: string): PatternSlug {
+  const key = hash.replace(/^#/, "").toLowerCase();
+  if (isPatternSlug(key)) return key;
+  return PATTERN_HASH_ALIASES[key] ?? "dashboard";
+}
+
+export interface ComponentNavLink {
+  id: string;
+  href: string;
+  label: string;
+}
+
+export function componentNavLinks(): ComponentNavLink[] {
+  return COMPONENT_GROUPS.flatMap((group) =>
+    group.ids.map((id) => ({
+      id,
+      href: `/components/${id}`,
+      label: componentLabel(id),
+    })),
+  );
+}
+
+export function componentNeighbors(id: string): {
+  prev: ComponentNavLink | null;
+  next: ComponentNavLink | null;
+} {
+  const links = componentNavLinks();
+  const index = links.findIndex((link) => link.id === id);
+  if (index < 0) return { prev: null, next: null };
+  return {
+    prev: index > 0 ? links[index - 1] : null,
+    next: index < links.length - 1 ? links[index + 1] : null,
+  };
+}
+
+function componentLeaves(ids: readonly string[], pathname: string) {
+  return ids
+    .map((id) => ({
+      href: `/components/${id}`,
+      label: componentLabel(id),
+      active: pathname === `/components/${id}`,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
+}
+
 export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNavGroup[] {
   const h = hash.replace(/^#/, "").toLowerCase();
   const isActive = (href: string) => {
@@ -179,56 +350,53 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       items: [
         {
           href: "/components",
-          label: "Gallery",
+          label: "Overview",
           active: pathname === "/components" && !h,
         },
-        ...COMPONENT_ITEMS.flatMap((id) => {
-          const item = {
-            href: `/components/${id}`,
-            label: componentLabel(id),
-            active: pathname === `/components/${id}`,
-          };
-          if (id !== "cell") return [item];
-          return [
-            item,
-            {
-              href: "/components/barchart",
-              label: "Chart",
-              items: [
-                {
-                  href: "/components/barchart",
-                  label: "Bar",
-                  active: pathname === "/components/barchart",
-                },
-                {
-                  href: "/components/linechart",
-                  label: "Line",
-                  active: pathname === "/components/linechart",
-                },
-                {
-                  href: "/components/piechart",
-                  label: "Pie",
-                  active: pathname === "/components/piechart",
-                },
-              ],
-            },
-          ];
-        }),
+        ...COMPONENT_GROUPS.map((group) => ({
+          href: "/components",
+          label: group.label,
+          items: componentLeaves(group.ids, pathname),
+        })),
       ],
     },
     {
       label: "Patterns",
-      items: [
-        leaf("/patterns#dashboard", "Dashboard"),
-        leaf("/patterns#settings", "Settings"),
-        leaf("/patterns#list-detail", "List detail"),
-        leaf("/patterns#empty", "Empty"),
-        leaf("/patterns#sign-in", "Sign in"),
-        leaf("/patterns#app-shell", "App shell"),
-        leaf("/patterns#layouts", "Layouts"),
-      ],
+      items: PATTERN_ITEMS.map((item) => leaf(`/patterns/${item.slug}`, item.label)),
     },
   ];
+}
+
+function itemMatches(item: AppNavItem, query: string): boolean {
+  const href = item.href.toLowerCase();
+  const label = item.label.toLowerCase();
+  return label.includes(query) || href.includes(query);
+}
+
+/** Keep groups that match the query, and the leaves inside them that match. */
+export function filterPlaygroundNavGroups(groups: AppNavGroup[], query: string): AppNavGroup[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return groups;
+
+  return groups.flatMap((group) => {
+    if (group.label.toLowerCase().includes(normalized)) return [group];
+    const items = group.items.flatMap((item) => {
+      if (item.items && item.items.length > 0) {
+        if (itemMatches(item, normalized)) return [item];
+        const children = item.items.filter((child) => itemMatches(child, normalized));
+        return children.length > 0 ? [{ ...item, items: children }] : [];
+      }
+      return itemMatches(item, normalized) ? [item] : [];
+    });
+    return items.length > 0 ? [{ ...group, items }] : [];
+  });
+}
+
+/** Search results skip the accordion so every match is visible. */
+export function flattenPlaygroundNav(groups: AppNavGroup[]): AppNavItem[] {
+  return groups.flatMap((group) =>
+    group.items.flatMap((item) => (item.items && item.items.length > 0 ? item.items : [item])),
+  );
 }
 
 export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
@@ -242,8 +410,8 @@ export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
   {
     label: "Patterns",
     items: [
-      { href: "/patterns#dashboard", label: "Dashboard", active: true },
-      { href: "/patterns#settings", label: "Settings", active: false },
+      { href: "/patterns/dashboard", label: "Dashboard", active: true },
+      { href: "/patterns/settings", label: "Settings", active: false },
     ],
   },
 ];

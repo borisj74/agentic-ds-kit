@@ -167,3 +167,57 @@ export function guidanceFor(id: string): { dos: string[]; donts: string[] } | nu
   if (dos.length === 0 && donts.length === 0) return null;
   return { dos, donts };
 }
+
+export interface ContractPropRow {
+  name: string;
+  type: string;
+  required: "Yes" | "No";
+  defaultValue: string;
+  notes: string;
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+function formatDefault(value: unknown): string {
+  if (value === undefined) return "—";
+  if (typeof value === "string") return value.length === 0 ? '""' : value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (value === null) return "null";
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return "—";
+  }
+}
+
+/** Compact rows from a component contract's `props` object. */
+export function propsFor(id: string): ContractPropRow[] {
+  const contract = contracts[id] as { props?: unknown } | undefined;
+  const props = asRecord(contract?.props);
+  if (!props) return [];
+
+  return Object.entries(props).flatMap(([name, spec]) => {
+    const record = asRecord(spec);
+    if (!record || typeof record.type !== "string") return [];
+    const values = Array.isArray(record.values)
+      ? record.values.filter((item): item is string => typeof item === "string")
+      : [];
+    const joined = values.join(" | ");
+    const type = joined.length > 0 && joined.length <= 42 ? joined : record.type;
+    const note = typeof record.note === "string" ? record.note : "";
+    const valuesNote = joined.length > 42 ? joined : "";
+    const notes = [note, valuesNote].filter(Boolean).join(" ");
+    return [
+      {
+        name,
+        type,
+        required: record.required === true ? "Yes" : "No",
+        defaultValue: formatDefault(record.default),
+        notes,
+      },
+    ];
+  });
+}
