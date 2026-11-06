@@ -6,36 +6,18 @@ import type { FieldLabelPosition } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import type { InputSize } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
+import { InputMatrix } from "./InputMatrix";
+import { RealisticFields, realisticFieldsCode } from "./RealisticFields";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import matrix from "./VariantMatrix.module.css";
+import shortcut from "./RealisticFields.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
 const SIZES: InputSize[] = ["sm", "md", "lg"];
 const LABEL_POSITIONS: FieldLabelPosition[] = ["top", "start"];
 
-function masterCode(
-  size: InputSize,
-  disabled: boolean,
-  error: boolean,
-  labelPosition: FieldLabelPosition,
-) {
-  const fieldOpen =
-    labelPosition === "start"
-      ? '<Field label="Email" htmlFor="email" labelPosition="start">'
-      : '<Field label="Email" htmlFor="email">';
-  const lines = [
-    fieldOpen,
-    "  <Input",
-    '    id="email"',
-    '    type="email"',
-    `    size="${size}"`,
-  ];
-  if (disabled) lines.push("    disabled");
-  if (error) lines.push("    error");
-  lines.push('    placeholder="you@example.com"', "  />", "</Field>");
-  return lines.join("\n");
-}
 
 export function InputDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
@@ -59,13 +41,25 @@ export function InputDoc() {
         </p>
       </header>
 
+      <section className={matrix.block} aria-labelledby="input-matrix">
+        <div>
+          <h2 id="input-matrix" className={styles.masterTitle}>
+            All variants
+          </h2>
+          <p className={styles.masterSummary}>
+            Every size at rest, in error, and disabled, plus the same fields on a grey surface.
+          </p>
+        </div>
+        <InputMatrix />
+      </section>
+
       <section className={styles.master} aria-labelledby="input-master">
         <div className={styles.masterHeader}>
           <h2 id="input-master" className={styles.masterTitle}>
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle size, label position, and state. Prefix text and icons live in Variants.
+            Email with an icon and hint, a password error, and search with a shortcut chip. Size, label position, and state apply across them.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -74,24 +68,14 @@ export function InputDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewRow} style={{ width: labelPosition === "start" ? "28rem" : "20rem" }}>
-                  <Field
-                    label="Email"
-                    htmlFor="input-master"
-                    error={fieldError}
-                    labelPosition={labelPosition}
-                  >
-                    <Input
-                      id="input-master"
-                      type="email"
-                      size={size}
-                      disabled={disabled}
-                      error={error}
-                      demo={demo}
-                      placeholder="you@example.com"
-                    />
-                  </Field>
-                </div>
+                <RealisticFields
+                  idPrefix="input-master"
+                  size={size}
+                  labelPosition={labelPosition}
+                  disabled={disabled}
+                  demo={demo}
+                  emailError={fieldError}
+                />
               </div>
               <aside className={styles.panel} aria-label="Controls">
                 <div className={styles.panelGroup}>
@@ -160,26 +144,44 @@ export function InputDoc() {
                   slots inside the control, not the Field label.
                 </p>
               </div>
-              <CodeBlock code={masterCode(size, disabled, error, labelPosition)} />
+              <CodeBlock code={realisticFieldsCode(size, labelPosition, disabled, fieldError)} />
             </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Plain</h2>
+              <h2 className={styles.exampleTitle}>Email</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow} style={{ width: "20rem" }}>
-                  <Field label="Email" htmlFor="input-plain">
-                    <Input id="input-plain" type="email" placeholder="you@example.com" />
+                <div className={styles.previewFill} style={{ maxWidth: "22rem" }}>
+                  <Field label="Email" htmlFor="input-email" hint="We'll send receipts to this address.">
+                    <Input id="input-email" type="email" iconStart="Mail" placeholder="ada@example.com" />
                   </Field>
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Field label on top. No start slot.</p>
+                <p className={styles.usageBody}>iconStart names the field. hint sits under the control.</p>
               </div>
               <CodeBlock
-                code={'<Field label="Email" htmlFor="email"><Input id="email" type="email" placeholder="you@example.com" /></Field>'}
+                code={'<Field label="Email" htmlFor="email" hint="We\'ll send receipts to this address."><Input id="email" type="email" iconStart="Mail" placeholder="ada@example.com" /></Field>'}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Password</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "22rem" }}>
+                  <Field label="Password" htmlFor="input-password" error="Use at least 8 characters.">
+                    <Input id="input-password" type="password" defaultValue="short" />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>error on Field is the message and the control border.</p>
+              </div>
+              <CodeBlock
+                code={'<Field label="Password" htmlFor="password" error="Use at least 8 characters."><Input id="password" type="password" defaultValue="short" /></Field>'}
               />
             </section>
 
@@ -187,8 +189,13 @@ export function InputDoc() {
               <h2 className={styles.exampleTitle}>Label start</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow} style={{ width: "28rem" }}>
-                  <Field label="Email" htmlFor="input-label-start" labelPosition="start">
-                    <Input id="input-label-start" type="email" placeholder="you@example.com" />
+                  <Field
+                    label="Email"
+                    htmlFor="input-label-start"
+                    labelPosition="start"
+                    hint="We'll send receipts to this address."
+                  >
+                    <Input id="input-label-start" type="email" iconStart="Mail" placeholder="ada@example.com" />
                   </Field>
                 </div>
               </div>
@@ -200,7 +207,7 @@ export function InputDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={'<Field label="Email" htmlFor="email" labelPosition="start"><Input id="email" type="email" /></Field>'}
+                code={'<Field label="Email" htmlFor="email" labelPosition="start" hint="We\'ll send receipts to this address."><Input id="email" type="email" iconStart="Mail" placeholder="ada@example.com" /></Field>'}
               />
             </section>
 
@@ -229,16 +236,25 @@ export function InputDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow} style={{ width: "20rem" }}>
                   <Field label="Search" htmlFor="input-icon">
-                    <Input id="input-icon" iconStart="Search" placeholder="Search" />
+                    <Input
+                      id="input-icon"
+                      type="search"
+                      className={shortcut.shortcut}
+                      iconStart="Search"
+                      end="⌘K"
+                      placeholder="Invoices, customers, tasks"
+                    />
                   </Field>
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Lucide name on iconStart, same catalog as Button.</p>
+                <p className={styles.usageBody}>
+                  iconStart is the magnifying glass. end is the decorative ⌘K chip, not a keybinding.
+                </p>
               </div>
               <CodeBlock
-                code={'<Field label="Search" htmlFor="search"><Input id="search" iconStart="Search" placeholder="Search" /></Field>'}
+                code={'<Field label="Search" htmlFor="search"><Input id="search" type="search" iconStart="Search" end="⌘K" placeholder="Invoices, customers, tasks" /></Field>'}
               />
             </section>
 

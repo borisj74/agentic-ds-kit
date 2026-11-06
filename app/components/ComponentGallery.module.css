@@ -105,16 +105,17 @@
 .preview {
   box-sizing: border-box;
   width: auto;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 2 / 1;
   min-height: 0;
-  margin: var(--space-3);
+  margin: var(--space-2);
   margin-bottom: 0;
   overflow: hidden;
   pointer-events: none;
   user-select: none;
-  background-color: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .previewFrame {

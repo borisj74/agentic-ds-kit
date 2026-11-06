@@ -6,8 +6,10 @@ import type { ButtonAppearance, ButtonMode, ButtonSize } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
+import { ButtonMatrix } from "../_components/ButtonMatrix";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import matrix from "./VariantMatrix.module.css";
 
 const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 const APPEARANCES: ButtonAppearance[] = ["solid", "outline", "soft", "ghost"];
@@ -71,6 +73,18 @@ export function ButtonDoc() {
           needs aria-label.
         </p>
       </header>
+
+      <section className={matrix.block} aria-labelledby="button-matrix">
+        <div>
+          <h2 id="button-matrix" className={styles.masterTitle}>
+            All variants
+          </h2>
+          <p className={styles.masterSummary}>
+            Every appearance, mode, and size. Disabled, and the same neutral row on a grey surface.
+          </p>
+        </div>
+        <ButtonMatrix />
+      </section>
 
       <section className={styles.master} aria-labelledby="button-master">
         <div className={styles.masterHeader}>

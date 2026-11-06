@@ -75,9 +75,9 @@ function Body({ page }: { page: string }) {
   );
 }
 
-function Frame({ url, children }: { url: string; children: ReactNode }) {
+function Frame({ url, children, tall = false }: { url: string; children: ReactNode; tall?: boolean }) {
   return (
-    <div className={`${styles.browser} ${layout.frame}`}>
+    <div className={`${styles.browser} ${tall ? layout.preview : layout.frame}`}>
       <div className={styles.browserChrome} aria-hidden="true">
         <div className={styles.traffic}>
           <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
@@ -154,12 +154,12 @@ function SideNavOnly() {
   );
 }
 
-function Both() {
+function Both({ tall = false }: { tall?: boolean }) {
   const [open, setOpen] = useState(false);
   const { page, items, footer } = useNav(() => setOpen(false));
 
   return (
-    <Frame url={`app.acme.dev/${page}`}>
+    <Frame url={`app.acme.dev/${page}`} tall={tall}>
       <div className={`layout-shell ${layout.fill}`}>
         <AppHeader
           title="Acme"
@@ -193,6 +193,11 @@ function Both() {
       </Drawer>
     </Frame>
   );
+}
+
+/** Cropped frame for the patterns index. The full page still stacks all three layouts. */
+export function LayoutsPreview() {
+  return <Both tall />;
 }
 
 /**

@@ -38,6 +38,7 @@ import { DatePicker } from "agentic-ds-kit";
 import { DateRangePicker } from "agentic-ds-kit";
 import { DateTimePicker } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
+import { DropdownMenu } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { FieldSet } from "agentic-ds-kit";
@@ -134,9 +135,13 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "alertdialog":
       return (
-        <Button size="sm" appearance="solid" mode="danger">
-          Delete
-        </Button>
+        <Stage variant="wide">
+          <Card size="sm" title="Delete project?" description="Invoices in this project are removed too.">
+            <Button size="sm" appearance="solid" mode="danger">
+              Delete
+            </Button>
+          </Card>
+        </Stage>
       );
     case "appheader":
       return (
@@ -158,7 +163,13 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "avatar":
-      return <Avatar name="Maya Chen" size="sm" />;
+      return (
+        <div className={previewStyles.chipRow}>
+          <Avatar name="Maya Chen" size="sm" />
+          <Avatar name="Jordan Lee" size="md" />
+          <Avatar name="Alex Rivera" size="lg" />
+        </div>
+      );
     case "avatargroup":
       return (
         <AvatarGroup
@@ -168,7 +179,14 @@ export function GalleryPreview({ id }: { id: string }) {
         />
       );
     case "badge":
-      return <Badge tone="info">Ready</Badge>;
+      return (
+        <div className={previewStyles.chipRow}>
+          <Badge tone="success">Active</Badge>
+          <Badge tone="warning">Pending</Badge>
+          <Badge tone="danger">Failed</Badge>
+          <Badge tone="neutral">Draft</Badge>
+        </div>
+      );
     case "barchart":
       return (
         <Stage variant="wide">
@@ -183,9 +201,15 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "button":
       return (
-        <Button size="sm" appearance="outline" mode="neutral">
-          Button
-        </Button>
+        <div className={previewStyles.chipRow}>
+          <Button size="sm" appearance="solid" mode="primary">
+            Save
+          </Button>
+          <Button size="sm" appearance="outline" mode="neutral">
+            Cancel
+          </Button>
+          <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel="Edit" />
+        </div>
       );
     case "buttongroup":
       return (
@@ -234,7 +258,13 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "cell":
-      return <Cell type="badge" label="In review" tone="warning" />;
+      return (
+        <div className={previewStyles.stack}>
+          <Cell type="avatar" size="sm" label="Maya Chen" name="Maya Chen" />
+          <Cell type="badge" size="sm" label="Active" tone="success" />
+          <Cell type="text" size="sm" label="INV-1042" />
+        </div>
+      );
     case "chat":
       return (
         <Stage variant="panel">
@@ -291,9 +321,13 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "contextmenu":
       return (
-        <ContextMenu items={[{ id: "rename", label: "Rename" }, { id: "delete", label: "Delete", danger: true }]}>
-          <p>Right-click</p>
-        </ContextMenu>
+        <Stage variant="wide">
+          <ContextMenu items={[{ id: "rename", label: "Rename" }, { id: "delete", label: "Delete", danger: true }]}>
+            <Card size="sm" title="Launch brief" description="Right-click for rename or delete.">
+              <Badge tone="neutral">Draft</Badge>
+            </Card>
+          </ContextMenu>
+        </Stage>
       );
     case "conveyor":
       return (
@@ -310,7 +344,12 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "count":
-      return <Count count={3} label="unread" />;
+      return (
+        <div className={previewStyles.chipRow}>
+          <Count count={3} label="unread" />
+          <Count count={12} label="tasks" />
+        </div>
+      );
     case "fileupload":
       return (
         <Stage variant="wide">
@@ -337,7 +376,16 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "filterbutton":
-      return <FilterButton size="sm" count={2}>Status</FilterButton>;
+      return (
+        <div className={previewStyles.chipRow}>
+          <FilterButton size="sm" count={2}>
+            Status
+          </FilterButton>
+          <FilterButton size="sm" value="Maya Chen">
+            Owner
+          </FilterButton>
+        </div>
+      );
     case "linklist":
       return (
         <Stage variant="wide">
@@ -418,15 +466,32 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "drawer":
       return (
-        <Button size="sm" appearance="outline" mode="neutral">
-          Open
-        </Button>
+        <Stage variant="wide">
+          <Card size="sm" title="Invoice 1842" description="Opens from the edge of the page.">
+            <Button size="sm" appearance="outline" mode="neutral">
+              Open
+            </Button>
+          </Card>
+        </Stage>
       );
     case "dropdownmenu":
       return (
-        <Button size="sm" appearance="outline" mode="neutral">
-          Menu
-        </Button>
+        <Stage variant="wide">
+          <DropdownMenu
+            size="sm"
+            appearance="outline"
+            mode="neutral"
+            trigger="Actions"
+            groups={[
+              {
+                items: [
+                  { id: "rename", label: "Rename" },
+                  { id: "delete", label: "Delete", danger: true },
+                ],
+              },
+            ]}
+          />
+        </Stage>
       );
     case "empty":
       return (
@@ -451,7 +516,13 @@ export function GalleryPreview({ id }: { id: string }) {
         </Stage>
       );
     case "headercell":
-      return <HeaderCell label="Owner" size="sm" sortable />;
+      return (
+        <div className={previewStyles.chipRow}>
+          <HeaderCell label="Owner" size="sm" sortable sort="asc" />
+          <HeaderCell label="Status" size="sm" sortable />
+          <HeaderCell label="Updated" size="sm" />
+        </div>
+      );
     case "helppopover":
       return (
         <HelpPopover content="We use this date on the PDF.">
@@ -549,9 +620,13 @@ export function GalleryPreview({ id }: { id: string }) {
       return <PieChart data={CHART} size={96} showTable={false} />;
     case "popover":
       return (
-        <Popover label="Share" trigger={<Button size="sm" appearance="outline" mode="neutral">Share</Button>}>
-          Copy the link.
-        </Popover>
+        <Stage variant="wide">
+          <Card size="sm" title="Share" description="Send this view to the team.">
+            <Popover label="Share" trigger={<Button size="sm" appearance="outline" mode="neutral">Share</Button>}>
+              Copy the link.
+            </Popover>
+          </Card>
+        </Stage>
       );
     case "progress":
       return <Progress value={64} size="md" shape="circle" showValue ariaLabel="Progress" />;
@@ -649,7 +724,12 @@ export function GalleryPreview({ id }: { id: string }) {
     case "spinner":
       return <Spinner size="sm" label="Loading" />;
     case "switch":
-      return <Switch id="gallery-switch" size="lg" ariaLabel="Alerts" defaultChecked />;
+      return (
+        <div className={previewStyles.stack}>
+          <Switch id="gallery-switch" size="md" label="Alerts" defaultChecked />
+          <Switch id="gallery-switch-digest" size="md" label="Weekly digest" />
+        </div>
+      );
     case "table":
       return (
         <Stage variant="table">

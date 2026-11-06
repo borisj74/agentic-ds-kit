@@ -9,6 +9,7 @@ import { Input } from "agentic-ds-kit";
 import { Select } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
+import { RealisticFields, realisticFieldsCode } from "./RealisticFields";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import local from "./FieldDoc.module.css";
@@ -138,25 +139,18 @@ export function FieldDoc() {
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Input</h2>
+              <h2 className={styles.exampleTitle}>Email, password, search</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
-                  <Field
-                    label="Username"
-                    htmlFor="field-username"
-                    hint="Choose a unique username for your account."
-                  >
-                    <Input id="field-username" placeholder="evilrabbit" />
-                  </Field>
-                </div>
+                <RealisticFields idPrefix="field-examples" />
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>hint is the helper. Not a FieldDescription cousin.</p>
+                <p className={styles.usageBody}>
+                  Email carries iconStart and a hint. Password carries the error. Search carries iconStart and a
+                  decorative ⌘K chip in the end slot.
+                </p>
               </div>
-              <CodeBlock
-                code={'<Field label="Username" htmlFor="username" hint="Choose a unique username."><Input id="username" /></Field>'}
-              />
+              <CodeBlock code={realisticFieldsCode("md", "top", false)} />
             </section>
 
             <section className={styles.example}>

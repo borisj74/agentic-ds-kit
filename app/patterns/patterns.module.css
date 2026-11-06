@@ -1,3 +1,105 @@
+.index {
+  container-type: inline-size;
+  container-name: patterns;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@container patterns (min-width: 40rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+}
+
+@container patterns (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cardLink {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  color: inherit;
+}
+
+.cardHit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.cardLink > :global(article) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.cardLink > :global(article) > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+.cardLink > :global(article) > div > header {
+  order: 2;
+  flex: 0 0 auto;
+  min-height: 4.5rem;
+  padding: var(--space-4);
+}
+
+.cardLink > :global(article) > div > :last-child {
+  display: flex;
+  flex-direction: column;
+  order: 1;
+  min-width: 0;
+}
+
+.cardLink > :global(article) h2 {
+  overflow: hidden;
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardLink > :global(article) > div > header p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  margin: var(--space-2);
+  margin-bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
 .preview {
   padding: var(--space-6);
   background-color: var(--surface-card);

@@ -397,7 +397,10 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Patterns",
-      items: PATTERN_ITEMS.map((item) => leaf(`/patterns/${item.slug}`, item.label)),
+      items: [
+        leaf("/patterns", "Overview"),
+        ...PATTERN_ITEMS.map((item) => leaf(`/patterns/${item.slug}`, item.label)),
+      ],
     },
   ];
 }

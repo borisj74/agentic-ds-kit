@@ -10,7 +10,7 @@ import playground from "../playground.module.css";
 import styles from "./ComponentGallery.module.css";
 
 const SCENE_WIDTH = 288;
-const SCENE_HEIGHT = 192;
+const SCENE_HEIGHT = 144;
 
 function FitPreview({ children }: { children: ReactNode }) {
   const frameRef = useRef<HTMLDivElement>(null);

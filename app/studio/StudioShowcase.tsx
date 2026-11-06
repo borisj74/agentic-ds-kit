@@ -8,7 +8,7 @@ const BADGE_APPEARANCES: BadgeAppearance[] = ["soft", "tint", "solid", "outline"
 export function StudioShowcase() {
   return (
     <div className={styles.showcase}>
-      <Section title="Button" description="Appearance × mode, sizes, and disabled." size="sm">
+      <Section title="Button" description="Appearance × mode × size, disabled, and on a grey surface." size="sm">
         <ButtonMatrix />
       </Section>
       <Section title="Badge" description="Appearances on the primary tone." size="sm">
