@@ -5,7 +5,7 @@
 The command only reads the contracts installed with the package. It makes no network or model calls and needs no keys.
 
 ```bash
-npx agentic-ds-kit questions --pretty                       # all 85 options to stdout
+npx agentic-ds-kit questions --pretty                       # all 86 options to stdout
 npx agentic-ds-kit questions --group pattern                # patterns only
 npx agentic-ds-kit questions --only barchart,linechart,piechart
 npx agentic-ds-kit questions --overlay questions.overlay.json --none --out lib/questions.json

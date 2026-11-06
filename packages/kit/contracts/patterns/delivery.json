@@ -1,0 +1,31 @@
+{
+  "id": "delivery",
+  "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add delivery",
+  "import": "import { DeliveryPattern } from \"@/components/patterns/delivery\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/delivery/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "Delivery example: PageHeader, Scoreboard stat cards, Timeline, and a flush Card members DataTable.",
+  "contains": [
+    "pageheader",
+    "scoreboard",
+    "section",
+    "timeline",
+    "card",
+    "datatable"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+  ],
+  "defaults": [
+    "Stat strip is a Scoreboard; members sit in a flush Card + DataTable; sequence is kit Timeline",
+    "Layout uses layout-canvas / layout-header / layout-content; reorder or drop any section"
+  ],
+  "snippet": "<DeliveryPattern />"
+}

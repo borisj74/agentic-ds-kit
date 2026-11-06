@@ -109,6 +109,13 @@ const DARK_HTML = `<html lang="en" data-theme="dark">`;
 
 const BRAND_HTML = `<html lang="en" data-color="violet">`;
 
+const FONT_HTML = `<html lang="en" data-font="inter">`;
+
+const FONT = `--font-heading: var(--font-display);
+--font-body: var(--font-sans);
+--font-mono: var(--font-mono);
+--type-weight-heading: 600;`;
+
 const OVERRIDE = `:root {
   --action-primary: var(--color-violet-600);
   --action-primary-hover: var(--color-violet-700);
@@ -139,8 +146,8 @@ export default function ThemingPage() {
         <h1 className={playground.pageTitle}>Theming</h1>
         <p className={playground.pageLead}>
           Semantic CSS variables. Override those tokens to change the look of the kit without
-          rewriting component classes. Use the playground header to preview dark mode and brand
-          hues.
+          rewriting component classes. Use the playground header for font, heading weight, dark
+          mode, and brand shortcuts — or open Studio for live primary, radius, and shadow.
         </p>
 
         <Section
@@ -214,8 +221,23 @@ export default function ThemingPage() {
           <div className={playground.stack}>
             <CodeBlock code={BRAND_HTML} />
             <p className={playground.body}>
-              Valid values: blue, violet, teal. Leave data-color unset for ink. Dark + brand is
-              [data-theme=&quot;dark&quot;][data-color=&quot;blue&quot;].
+              Shortcuts: ink (unset), blue, violet, teal. Custom writes data-color=&quot;custom&quot; and
+              generates primary / hover / active / subtle / focus from any hex. Dark + brand stays
+              a light pair when the picked hex is dark. Studio is the live editor.
+            </p>
+          </div>
+        </Section>
+
+        <Section
+          title="Font trio"
+          description="Semantic heading, body, and mono. Playground data-font loads Inter, Geist, IBM Plex, or system. Heading weight is 400|500|600|700."
+        >
+          <div className={playground.stack}>
+            <CodeBlock code={FONT_HTML} />
+            <CodeBlock code={FONT} />
+            <p className={playground.body}>
+              Components use the trio, not per-component font cousins. IBM Plex is the default
+              (no data-font). Copy prompt for AI includes the active font, weight, theme, and color.
             </p>
           </div>
         </Section>
@@ -227,8 +249,9 @@ export default function ThemingPage() {
           <div className={playground.stack}>
             <CodeBlock code={RADIUS} />
             <p className={playground.body}>
-              Controls use --radius-control-*. Cards and dialogs use --radius-surface-*. Badges
-              use --radius-pill. There is no single --radius token.
+              One --radius-base drives xs…3xl (3, 5, 6, 8, 10, 13, 19). Controls use
+              --radius-control-*. Cards and dialogs use --radius-surface-*. Badges use
+              --radius-pill. Components never read the base directly.
             </p>
           </div>
         </Section>

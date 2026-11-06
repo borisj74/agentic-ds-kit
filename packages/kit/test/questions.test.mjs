@@ -60,7 +60,7 @@ describe("questions: schema", () => {
     }
   });
 
-  test("75 component options and 10 pattern options by default", () => {
+  test("75 component options and 11 pattern options by default", () => {
     const { options } = buildQuestions();
     assert.equal(componentIds.length, 75);
     assert.deepEqual(options.filter((o) => o.kind === "component").map((o) => o.id).sort(), [...componentIds].sort());
@@ -230,7 +230,7 @@ describe("questions: overlay", () => {
     assert.match(bar.description, /horizontal bars\. Shown as monthly totals\. Use when:/);
     assert.equal(bar.ask, "Would Bar chart (shown as monthly totals) show part of what the request asks to see?");
     assert.ok(!options.some((o) => o.id === "spinner"));
-    assert.equal(options.length, 85);
+    assert.equal(options.length, componentIds.length + patternIds.length);
   });
 
   test("only allowlist keeps composites; --only wins over it", () => {
@@ -289,14 +289,15 @@ describe("questions: errors exit non-zero", () => {
   }
 
   test("more than 255 options", () => {
-    const composites = Array.from({ length: MAX_OPTIONS - 85 + 1 }, (_, i) => ({
+    const base = componentIds.length + patternIds.length;
+    const composites = Array.from({ length: MAX_OPTIONS - base + 1 }, (_, i) => ({
       label: `Composite ${String(i).padStart(3, "0")}`,
       contracts: ["card"],
       sentence: "x",
     }));
     const r = run("--overlay", overlayFile("many.json", { composites }));
     assert.equal(r.status, 1);
-    assert.match(r.stderr, /256 options is more than 255/);
+    assert.match(r.stderr, new RegExp(`${MAX_OPTIONS + 1} options is more than ${MAX_OPTIONS}`));
     composites.pop();
     assert.equal(run("--overlay", overlayFile("max.json", { composites })).status, 0);
   });

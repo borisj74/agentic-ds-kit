@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Geist, Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, Inter } from "next/font/google";
 import { PlaygroundShell } from "./_components/PlaygroundShell";
 import { PLAYGROUND_THEME_INIT_SCRIPT } from "@/lib/playground-theme";
 import "./globals.css";
@@ -16,6 +16,21 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Agentic DS Kit — Boris Jovanovic",
   description: "Code is the contract. Installable kit of JSON contracts, tokens, and React patterns for agents.",
@@ -29,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plexSans.variable} ${plexMono.variable}`}
+      className={`${plexSans.variable} ${plexMono.variable} ${inter.variable} ${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

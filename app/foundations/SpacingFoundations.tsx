@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { FoundationTabList } from "./FoundationTabList";
+import { TokenUsage, tokenUsageTitle } from "./TokenUsage";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./SpacingFoundations.module.css";
 
@@ -48,7 +49,7 @@ function CopyCode({ value }: { value: string }) {
   }, [copied]);
 
   return (
-    <button type="button" className={styles.token} onClick={onCopy} title={`Copy ${value}`}>
+    <button type="button" className={styles.token} onClick={onCopy} title={tokenUsageTitle(value.startsWith("--") ? value : `--${value}`)}>
       {copied ? "Copied ✓" : value}
     </button>
   );
@@ -78,7 +79,10 @@ export function SpacingFoundations() {
                   const token = `space-${family.prefix}-${step}`;
                   return (
                     <div key={token} className={styles.row}>
-                      <CopyCode value={token} />
+                      <div>
+                        <CopyCode value={`--${token}`} />
+                        <TokenUsage token={`--${token}`} compact />
+                      </div>
                       <div className={styles.track}>
                         <div className={styles.bar} style={{ width: `var(--${token})` }} />
                       </div>
@@ -100,7 +104,10 @@ export function SpacingFoundations() {
               const token = `space-${step.name}`;
               return (
                 <div key={token} className={`${styles.row} ${styles.rowPrimitive}`}>
-                  <CopyCode value={token} />
+                  <div>
+                    <CopyCode value={`--${token}`} />
+                    <TokenUsage token={`--${token}`} compact />
+                  </div>
                   <span className={styles.px}>{step.px}</span>
                   <div className={styles.track}>
                     <div className={styles.bar} style={{ width: `var(--${token})` }} />

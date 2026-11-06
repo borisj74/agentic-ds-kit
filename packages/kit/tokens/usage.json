@@ -1,0 +1,296 @@
+{
+  "families": {
+    "--color-": {
+      "note": "Primitive ramp. Foundations reference only.",
+      "useWhen": "Looking up a source hue in the kit palette",
+      "doNot": "raw ramps — avoid in components; bind to semantic roles"
+    },
+    "--bg-": {
+      "note": "Surface ladder from canvas to floating.",
+      "useWhen": "Painting page, wells, cards, fields, or inverse chrome",
+      "doNot": "Do not invent a local fill; pick the matching bg role"
+    },
+    "--text-": {
+      "note": "Foreground ladder.",
+      "useWhen": "Copy, labels, and inverse text",
+      "doNot": "Do not use primitive color ramps for type"
+    },
+    "--line-": {
+      "note": "Hairlines and focus.",
+      "useWhen": "Borders, dividers, and the focus line",
+      "doNot": "Do not mix border-* cousins for the same edge if a line role exists"
+    },
+    "--primary-": {
+      "note": "Brand action fill and subtle well.",
+      "useWhen": "Solid-primary actions and selected wells",
+      "doNot": "Do not hardcode a brand hex in components"
+    },
+    "--danger-": {
+      "note": "Danger state: fg · base · line · subtle.",
+      "useWhen": "Destructive actions and error wells",
+      "doNot": "Do not use caution/warning tokens for errors"
+    },
+    "--caution-": {
+      "note": "Caution/warning state.",
+      "useWhen": "Warnings that are not errors",
+      "doNot": "Do not use danger for non-destructive warnings"
+    },
+    "--success-": {
+      "note": "Success state.",
+      "useWhen": "Completed or healthy status",
+      "doNot": "Do not use success as a brand fill"
+    },
+    "--info-": {
+      "note": "Info state.",
+      "useWhen": "Neutral informational status",
+      "doNot": "Do not use info as the page primary"
+    },
+    "--highlight-": {
+      "note": "Gold marker, not a warning.",
+      "useWhen": "Callouts that are neither success nor caution",
+      "doNot": "Do not use highlight as warning"
+    },
+    "--font-": {
+      "note": "Semantic font trio.",
+      "useWhen": "Heading, body, or mono type",
+      "doNot": "Do not invent per-component font cousins"
+    },
+    "--type-size-": {
+      "note": "Type size ladder.",
+      "useWhen": "Matching a heading, ui, body, or overline role",
+      "doNot": "Do not use rem/px literals in components"
+    },
+    "--type-line-": {
+      "note": "Line-height paired with the size ladder.",
+      "useWhen": "The matching role's line height",
+      "doNot": "Do not invent a custom line-height"
+    },
+    "--type-weight-": {
+      "note": "Role weights. Heading is live-tunable 400–700.",
+      "useWhen": "Body, label, heading, title, metric, caption, overline, code",
+      "doNot": "Do not hardcode font-weight numbers in components"
+    },
+    "--type-family-": {
+      "note": "Aliases of the font trio.",
+      "useWhen": "Prefer --font-heading / --font-body / --font-mono",
+      "doNot": "Do not add a fourth family"
+    },
+    "--space-": {
+      "note": "4px scale and inset/stack/inline/gap/section roles.",
+      "useWhen": "Padding, gaps, and section rhythm",
+      "doNot": "Do not use magic pixel spacing in components"
+    },
+    "--radius-": {
+      "note": "Radius from --radius-base (Cards curve).",
+      "useWhen": "control/surface/media/pill roles",
+      "doNot": "Do not set a one-off border-radius"
+    },
+    "--shadow-": {
+      "note": "Elevation: xs inputs, sm cards, md popovers, lg dialogs.",
+      "useWhen": "The matching elevation role",
+      "doNot": "Do not invent a local box-shadow"
+    },
+    "--border-": {
+      "note": "Border width and color roles.",
+      "useWhen": "Control, surface, divider, or focus width",
+      "doNot": "Do not use raw px borders"
+    },
+    "--motion-": {
+      "note": "Duration and easing roles.",
+      "useWhen": "Interaction, overlay, and modal motion",
+      "doNot": "Do not invent timing functions in components"
+    },
+    "--opacity-": {
+      "note": "Disabled, muted, hover, scrim.",
+      "useWhen": "Dimmed or overlay states",
+      "doNot": "Do not use ad-hoc opacity values"
+    },
+    "--grid-": {
+      "note": "Grid columns, gutters, margins, breakpoints.",
+      "useWhen": "Page grid and container widths",
+      "doNot": "Section does not own page padding — use layout classes"
+    },
+    "--layout-": {
+      "note": "Shell, canvas, content, rail, drawer widths.",
+      "useWhen": "App chrome and content inset (margin-md / gutter-lg 24px)",
+      "doNot": "Do not let Section own page padding"
+    },
+    "--icon-": {
+      "note": "Icon color roles.",
+      "useWhen": "Lucide icons in kit components",
+      "doNot": "Do not hand-roll SVG cousins"
+    },
+    "--status-": {
+      "note": "Legacy status aliases of danger/caution/success/info.",
+      "useWhen": "Existing call sites still compiling",
+      "doNot": "Prefer --danger-* / --caution-* / --success-* / --info-* in new work"
+    },
+    "--action-": {
+      "note": "Legacy action aliases of primary and secondary fills.",
+      "useWhen": "Existing call sites still compiling",
+      "doNot": "Prefer --primary-* and Button appearance × mode in new work"
+    },
+    "--surface-": {
+      "note": "Legacy surface aliases of the bg ladder.",
+      "useWhen": "Existing call sites still compiling",
+      "doNot": "Prefer --bg-canvas / --bg-surface / --bg-floating in new work"
+    },
+    "--fill-": {
+      "note": "Fill aliases for charts and wells.",
+      "useWhen": "Chart series and status wells",
+      "doNot": "Do not use fill as a Button background"
+    },
+    "--brand-": {
+      "note": "Brand aliases of primary.",
+      "useWhen": "Existing brand token call sites",
+      "doNot": "Prefer --primary-* in new work"
+    },
+    "--link-": {
+      "note": "Link color roles.",
+      "useWhen": "Inline and header text links",
+      "doNot": "Do not style kit Buttons as links"
+    },
+    "--z-": {
+      "note": "Stacking: overlay, modal, toast, tooltip.",
+      "useWhen": "Kit overlays",
+      "doNot": "Do not invent a local stacking context for dialogs"
+    }
+  },
+  "tokens": {
+    "--bg-canvas": {
+      "note": "Page canvas behind surfaces.",
+      "useWhen": "App and playground background",
+      "doNot": "Do not fill cards, dialogs, or inputs with canvas"
+    },
+    "--bg-subtle": {
+      "note": "Quiet well.",
+      "useWhen": "Code wells, hover, soft fills",
+      "doNot": "Do not use subtle as the page background"
+    },
+    "--bg-tray": {
+      "note": "Segmented track and chip tray.",
+      "useWhen": "Tabs segmented, grouped controls",
+      "doNot": "Do not use tray as a card face"
+    },
+    "--bg-surface": {
+      "note": "Raised white surface.",
+      "useWhen": "Cards, tables, header bars",
+      "doNot": "Do not use surface for the page canvas"
+    },
+    "--bg-raised": {
+      "note": "Same white as surface; semantic step for stacked sheets.",
+      "useWhen": "A surface sitting on canvas",
+      "doNot": "Do not invent a third white"
+    },
+    "--bg-floating": {
+      "note": "Dialogs, drawers, popovers.",
+      "useWhen": "ModalCard, Drawer, menus",
+      "doNot": "Do not use floating for inline cards"
+    },
+    "--bg-field": {
+      "note": "Text fields.",
+      "useWhen": "Input, Textarea, Select trigger",
+      "doNot": "Do not use field as a page fill"
+    },
+    "--bg-control": {
+      "note": "Resting outline/solid-neutral controls.",
+      "useWhen": "Outline buttons and resting chips",
+      "doNot": "Do not use control as a layout background"
+    },
+    "--text-fg": {
+      "note": "Default copy.",
+      "useWhen": "Body and titles",
+      "doNot": "Do not use muted for primary copy"
+    },
+    "--text-fg-muted": {
+      "note": "Secondary copy.",
+      "useWhen": "Descriptions, hints, timestamps",
+      "doNot": "Do not use muted for headings"
+    },
+    "--text-fg-subtle": {
+      "note": "Tertiary copy.",
+      "useWhen": "Placeholders and overlines",
+      "doNot": "Do not use subtle as body text"
+    },
+    "--text-fg-disabled": {
+      "note": "Disabled copy.",
+      "useWhen": "Unavailable labels",
+      "doNot": "Do not rely on color alone; disable the control"
+    },
+    "--text-fg-inverse": {
+      "note": "Copy on inverse or solid-primary.",
+      "useWhen": "Solid primary buttons, inverse bars",
+      "doNot": "Do not use inverse on canvas"
+    },
+    "--line": {
+      "note": "Default hairline.",
+      "useWhen": "Card and control borders",
+      "doNot": "Do not use focus line as a resting border"
+    },
+    "--line-focus": {
+      "note": "Focus outline color.",
+      "useWhen": "Keyboard focus rings",
+      "doNot": "Do not remove the focus ring"
+    },
+    "--primary-base": {
+      "note": "Brand fill. Light default #000; dark #F2F2F2.",
+      "useWhen": "Solid-primary Button and selected states",
+      "doNot": "Do not put more than one solid-primary CTA in a view"
+    },
+    "--font-heading": {
+      "note": "Alias of --font-display. Live playground switcher.",
+      "useWhen": "Titles and page headings",
+      "doNot": "Do not set a component-local heading font"
+    },
+    "--font-body": {
+      "note": "Alias of --font-sans. Live playground switcher.",
+      "useWhen": "UI and body copy",
+      "doNot": "Do not set a component-local body font"
+    },
+    "--font-mono": {
+      "note": "Code and tokens.",
+      "useWhen": "CodeSnippet, token names",
+      "doNot": "Do not use mono for body copy"
+    },
+    "--type-weight-heading": {
+      "note": "Heading weight. Playground 400|500|600|700.",
+      "useWhen": "heading-1…5 and section titles",
+      "doNot": "Do not hardcode a heading weight in a component"
+    },
+    "--radius-base": {
+      "note": "One number drives xs…3xl (3,5,6,8,10,13,19).",
+      "useWhen": "Theming corner scale",
+      "doNot": "Components use control/surface/media/pill, not the base"
+    },
+    "--shadow-sm": {
+      "note": "Card shadow. Playground-editable.",
+      "useWhen": "Cards and scorecards",
+      "doNot": "Do not invent a local card shadow"
+    },
+    "--shadow-xs": {
+      "note": "Resting inputs and outline controls.",
+      "useWhen": "Fields and outline buttons",
+      "doNot": "Do not use xs on dialogs"
+    },
+    "--shadow-md": {
+      "note": "Popovers and toasts.",
+      "useWhen": "DropdownMenu, Toast, DatePicker",
+      "doNot": "Do not use md on inline cards"
+    },
+    "--shadow-lg": {
+      "note": "Dialogs and sheets.",
+      "useWhen": "Modal, Drawer, AlertDialog",
+      "doNot": "Do not use lg on inputs"
+    },
+    "--layout-margin-md": {
+      "note": "Content inset 24px.",
+      "useWhen": "Page content edge",
+      "doNot": "Section does not own page padding"
+    },
+    "--layout-gutter-lg": {
+      "note": "Section gap 24px.",
+      "useWhen": "Space between sections",
+      "doNot": "Section does not own page padding"
+    }
+  }
+}

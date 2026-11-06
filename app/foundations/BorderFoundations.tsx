@@ -5,6 +5,7 @@ import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./EffectFoundations.module.css";
 import { CopyToken } from "./CopyToken";
+import { TokenUsage } from "./TokenUsage";
 
 type Tab = "primitives" | "semantics";
 
@@ -52,7 +53,10 @@ export function BorderFoundations() {
               <div className={styles.list}>
                 {family.tokens.map((token) => (
                   <div key={token.name} className={styles.row}>
-                    <CopyToken value={`--${token.name}`} />
+                    <div>
+                      <CopyToken value={`--${token.name}`} />
+                      <TokenUsage token={`--${token.name}`} compact />
+                    </div>
                     <span className={styles.note}>{token.note}</span>
                     <div className={styles.swatchBorder} style={{ borderWidth: `var(--${token.name})` }} />
                   </div>
@@ -70,7 +74,10 @@ export function BorderFoundations() {
           <div className={styles.list}>
             {SCALE.map((step) => (
               <div key={step.name} className={styles.row}>
-                <CopyToken value={`--border-${step.name}`} />
+                <div>
+                  <CopyToken value={`--border-${step.name}`} />
+                  <TokenUsage token={`--border-${step.name}`} compact />
+                </div>
                 <span className={styles.note}>{step.px}</span>
                 <div className={styles.swatchBorder} style={{ borderWidth: `var(--border-${step.name})` }} />
               </div>

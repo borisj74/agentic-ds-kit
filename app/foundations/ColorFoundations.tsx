@@ -9,6 +9,7 @@ import {
   rgbStringToHex,
 } from "./color-utils";
 import { FoundationTabList } from "./FoundationTabList";
+import { TokenUsage, tokenUsageTitle } from "./TokenUsage";
 import styles from "./ColorFoundations.module.css";
 
 type ColorTab = "primitives" | "semantics";
@@ -370,6 +371,7 @@ function PrimitiveChip({ id, hue, step, single, copiedId, onCopy }: PrimitiveChi
       className={`${styles.chip} ${styles[`chipText${tone === "light" ? "Light" : "Dark"}`]} ${single ? styles.chipSingle : ""}`}
       style={{ backgroundColor: `var(${cssVar})` }}
       onClick={() => onCopy(hex, id)}
+      title={tokenUsageTitle(cssVar)}
       aria-label={`Copy ${hex}`}
     >
       <span className={styles.chipStep}>{label}</span>
@@ -408,7 +410,7 @@ function TokenChip({
     <button
       type="button"
       className={styles.tokenChip}
-      title={`Copy ${cssVar}`}
+      title={tokenUsageTitle(cssVar)}
       onClick={() => onCopy(cssVar, cssVar)}
     >
       <span
@@ -456,6 +458,7 @@ export function ColorFoundations() {
             Fixed palette ramps from <code>tokens/tokens.json</code>. Click a chip to copy its hex.
             Components map these through semantic roles — never use primitives directly.
           </p>
+          <TokenUsage token="--color-neutral-500" />
           {PRIMITIVE_RAMPS.map((ramp) => (
             <div key={ramp.hue} className={styles.hueSection}>
               <div className={styles.hueHeader}>
@@ -493,6 +496,7 @@ export function ColorFoundations() {
                 <h3 className={styles.hueTitle}>{family.title}</h3>
                 <code className={styles.huePattern}>{family.pattern}</code>
               </div>
+              <TokenUsage token={(family.tokens ?? family.subgroups?.[0]?.tokens ?? [])[0]?.var ?? "--bg-canvas"} compact />
               {family.subgroups ? (
                 family.subgroups.map((subgroup) => (
                   <div key={subgroup.title} className={styles.subgroup}>

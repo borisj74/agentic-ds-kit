@@ -168,6 +168,8 @@ export function Slider({
               role="slider"
               className={styles.thumb}
               tabIndex={disabled ? -1 : 0}
+              aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
+              aria-labelledby={typeof rest["aria-labelledby"] === "string" ? rest["aria-labelledby"] : undefined}
               aria-valuemin={min}
               aria-valuemax={max}
               aria-valuenow={thumbValue}

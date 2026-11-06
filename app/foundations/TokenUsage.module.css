@@ -1,0 +1,17 @@
+.note {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+}
+
+.lead {
+  color: var(--text-fg);
+}
+
+.meta {
+  color: var(--text-fg-subtle);
+}

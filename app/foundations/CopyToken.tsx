@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { tokenUsageTitle } from "./TokenUsage";
 import styles from "./EffectFoundations.module.css";
 
 export function CopyToken({ value }: { value: string }) {
@@ -20,8 +21,10 @@ export function CopyToken({ value }: { value: string }) {
     return () => window.clearTimeout(t);
   }, [copied]);
 
+  const token = value.startsWith("--") ? value : `--${value}`;
+
   return (
-    <button type="button" className={styles.token} onClick={onCopy} title={`Copy ${value}`}>
+    <button type="button" className={styles.token} onClick={onCopy} title={tokenUsageTitle(token)}>
       {copied ? "Copied ✓" : value}
     </button>
   );

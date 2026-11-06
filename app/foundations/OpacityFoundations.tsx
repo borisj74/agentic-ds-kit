@@ -5,6 +5,7 @@ import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./EffectFoundations.module.css";
 import { CopyToken } from "./CopyToken";
+import { TokenUsage } from "./TokenUsage";
 
 type Tab = "primitives" | "semantics";
 
@@ -43,7 +44,10 @@ export function OpacityFoundations() {
               <div className={styles.listOpacity}>
                 {family.tokens.map((token) => (
                   <div key={token.name} className={styles.rowOpacity}>
-                    <CopyToken value={`--${token.name}`} />
+                    <div>
+                      <CopyToken value={`--${token.name}`} />
+                      <TokenUsage token={`--${token.name}`} compact />
+                    </div>
                     <span className={styles.note}>{token.note}</span>
                     <div className={styles.opacityTrack}>
                       <div className={styles.opacityFill} style={{ opacity: `var(--${token.name})` }} />
@@ -63,7 +67,10 @@ export function OpacityFoundations() {
           <div className={styles.listOpacity}>
             {SCALE.map((step) => (
               <div key={step.name} className={styles.rowOpacity}>
-                <CopyToken value={`--opacity-${step.name}`} />
+                <div>
+                  <CopyToken value={`--opacity-${step.name}`} />
+                  <TokenUsage token={`--opacity-${step.name}`} compact />
+                </div>
                 <span className={styles.note}>{step.note}</span>
                 <div className={styles.opacityTrack}>
                   <div className={styles.opacityFill} style={{ opacity: `var(--opacity-${step.name})` }} />

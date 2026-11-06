@@ -22,7 +22,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 10 patterns).
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (70 components, 11 patterns).
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -38,7 +38,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 
-### Patterns (10)
+### Patterns (11)
 
 Patterns are examples of what you can build from the components, not rules: start from one, borrow from it, or ignore it. Layout (top bar, side nav, both, neither) is your choice. None are exported from the package; `npx agentic-ds-kit add <id>` copies one's source into your app. Each contract lists `must` (kit look and accessibility) and `defaults` (suggestions you can change).
 
@@ -50,6 +50,7 @@ Patterns are examples of what you can build from the components, not rules: star
 - `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
 - `activity` — PageHeader + Scoreboard + task cards or list + tabbed DataTable feed
 - `inbox` — PageHeader + Scoreboard + tabbed Table + detail Section + reply Drawer
+- `delivery` — PageHeader + Scoreboard stat cards + Timeline + flush Card members DataTable
 - `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons
 - `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 
@@ -59,10 +60,11 @@ Persistent left sidebar via kit **AppNav** (grouped: Getting started, Foundation
 ### Playground routes
 - `/` — Redirects to Patterns
 - `/installation` — Install the package
-- `/theming` — Semantic tokens, dark mode, brand color
+- `/theming` — Semantic tokens, dark mode, brand color, fonts
+- `/studio` — Live font, weight, primary, radius, shadow, and theme
 - `/foundations` — Token scales
 - `/components` — Component gallery (`#gallery`) and per-component docs
-- `/patterns` — Live pattern screens (`#dashboard`)
+- `/patterns` — Live pattern screens (`#dashboard`, `#delivery`)
 
 ### Agent files
 - `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups
