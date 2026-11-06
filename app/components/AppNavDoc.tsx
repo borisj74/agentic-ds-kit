@@ -11,7 +11,7 @@ import demo from "./AppNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const CODE = `<AppNav title="Agentic DS Kit" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />`;
+const CODE = `<AppNav title="Vida" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />`;
 
 const FLAT_ITEMS = [
   { href: "/patterns/list-detail", label: "Launch brief", active: true },
@@ -62,7 +62,7 @@ export function AppNavDoc() {
             <div className={styles.layout}>
               <div className={demo.canvas}>
                 <div className={demo.nav}>
-                  <AppNav title="Agentic DS Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
+                  <AppNav title="Vida" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@ export function AppNavDoc() {
               <h2 className={styles.exampleTitle}>Grouped catalog</h2>
               <div className={demo.exampleCanvas}>
                 <div className={demo.nav}>
-                  <AppNav title="Agentic DS Kit" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
+                  <AppNav title="Vida" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
                 </div>
               </div>
               <div>

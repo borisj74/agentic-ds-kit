@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Section } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { CodeBlock } from "../components/CodeBlock";
@@ -42,6 +43,10 @@ cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .cursor/skills
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills/prototype-from-kit/`;
 
 const UPGRADE = `npm install agentic-ds-kit@latest`;
+
+export const metadata: Metadata = {
+  title: "Installation",
+};
 
 export default function InstallationPage() {
   return (

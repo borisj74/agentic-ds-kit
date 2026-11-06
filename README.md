@@ -1,4 +1,6 @@
-# Agentic DS Kit
+# Vida
+
+The Agentic DS Kit, named after my grandmother. Install: npm i agentic-ds-kit
 
 A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and example screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
 

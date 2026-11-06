@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Section, Table } from "agentic-ds-kit";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
@@ -136,6 +137,10 @@ const RADIUS = `--radius-control-sm: var(--radius-50);
 --radius-surface-md: var(--radius-100);
 --radius-surface-lg: var(--radius-200);
 --radius-pill: var(--radius-full);`;
+
+export const metadata: Metadata = {
+  title: "Theming",
+};
 
 export default function ThemingPage() {
   return (

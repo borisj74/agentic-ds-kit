@@ -1,9 +1,20 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isPatternSlug, PATTERN_ITEMS } from "@/lib/playground-nav";
 import { PatternsView } from "../PatternsView";
 
 export function generateStaticParams() {
   return PATTERN_ITEMS.map((item) => ({ slug: item.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const label = PATTERN_ITEMS.find((item) => item.slug === slug)?.label;
+  return { title: label ?? "Pattern" };
 }
 
 export default async function PatternPage({

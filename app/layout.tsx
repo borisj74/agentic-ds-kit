@@ -31,9 +31,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "Code is the contract. Vida is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
+
 export const metadata: Metadata = {
-  title: "Agentic DS Kit — Boris Jovanovic",
-  description: "Code is the contract. Installable kit of JSON contracts, tokens, and React patterns for agents.",
+  title: {
+    default: "Vida — Agentic DS Kit",
+    template: "%s · Vida",
+  },
+  description,
+  applicationName: "Vida — Agentic DS Kit",
+  openGraph: {
+    type: "website",
+    siteName: "Vida — Agentic DS Kit",
+    description,
+  },
+  twitter: {
+    card: "summary",
+    description,
+  },
 };
 
 export default function RootLayout({

@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { FoundationsView } from "./FoundationsView";
 import playground from "../playground.module.css";
+
+export const metadata: Metadata = {
+  title: "Foundations",
+};
 
 export default function FoundationsPage() {
   return (

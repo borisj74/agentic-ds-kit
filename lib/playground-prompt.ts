@@ -67,7 +67,7 @@ export function buildAiPrompt(): string {
       : null;
 
   const lines: string[] = [
-    `# Agentic DS Kit prompt`,
+    `# Vida prompt`,
     ``,
     `Use agentic-ds-kit. Code is the contract. Import from the package. Do not invent local cousins.`,
     ``,
