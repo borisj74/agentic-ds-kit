@@ -5,6 +5,7 @@ import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./EffectFoundations.module.css";
 import { CopyToken } from "./CopyToken";
+import { TokenUsage } from "./TokenUsage";
 
 type Tab = "primitives" | "semantics";
 
@@ -49,7 +50,10 @@ export function ShadowFoundations() {
               <div className={styles.list}>
                 {family.tokens.map((token) => (
                   <div key={token.name} className={`${styles.row} ${styles.rowShadow}`}>
-                    <CopyToken value={`--${token.name}`} />
+                    <div>
+                      <CopyToken value={`--${token.name}`} />
+                      <TokenUsage token={`--${token.name}`} compact />
+                    </div>
                     <span className={styles.note}>{token.note}</span>
                     <div className={styles.swatchWide} style={{ boxShadow: `var(--${token.name})` }} />
                   </div>
@@ -67,7 +71,10 @@ export function ShadowFoundations() {
           <div className={styles.list}>
             {SCALE.map((step) => (
               <div key={step.name} className={`${styles.row} ${styles.rowShadow}`}>
-                <CopyToken value={`--shadow-${step.name}`} />
+                <div>
+                  <CopyToken value={`--shadow-${step.name}`} />
+                  <TokenUsage token={`--shadow-${step.name}`} compact />
+                </div>
                 <span className={styles.note}>{step.note}</span>
                 <div className={styles.swatchWide} style={{ boxShadow: `var(--shadow-${step.name})` }} />
               </div>

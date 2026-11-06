@@ -16,6 +16,7 @@ import { AssistantWorkspacePattern } from "../../packages/kit/patterns/Assistant
 import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
 import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
 import { InboxPattern } from "../../packages/kit/patterns/InboxPattern";
+import { DeliveryPattern } from "../../packages/kit/patterns/DeliveryPattern";
 import { InviteMembersPattern } from "../../packages/kit/patterns/InviteMembersPattern";
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
@@ -28,6 +29,7 @@ const NAV_ITEMS: SideNavItemData[] = [
   { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
   { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
   { id: "insights", label: "Insights", icon: "Sparkles" },
+  { id: "delivery", label: "Delivery", icon: "Package" },
   { id: "resources", label: "Resources", icon: "Layers" },
   { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
   { id: "tag-at-risk", label: "At risk", icon: "Info", badge: "5" },
@@ -148,6 +150,7 @@ function isListDetailPage(id: string) {
 function hashForPage(id: string) {
   if (id === "settings") return "settings";
   if (id === "invite") return "invite";
+  if (id === "delivery") return "delivery";
   if (id === "insights") return "insights";
   if (id === "activity") return "activity";
   if (id === "inbox") return "inbox";
@@ -166,6 +169,7 @@ function selectedProjectId(page: string) {
 function pageForHash(hash: string): string | null {
   if (hash === "settings") return "settings";
   if (hash === "invite") return "invite";
+  if (hash === "delivery") return "delivery";
   if (hash === "insights") return "insights";
   if (hash === "activity") return "activity";
   if (hash === "inbox") return "inbox";
@@ -275,6 +279,8 @@ export function DashboardDemo() {
           <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
         ) : page === "invite" ? (
           <InviteMembersPattern breadcrumbs={trail} />
+        ) : page === "delivery" ? (
+          <DeliveryPattern breadcrumbs={trail} />
         ) : page === "insights" ? (
           <AssistantWorkspacePattern breadcrumbs={trail} />
         ) : page === "research" ? (

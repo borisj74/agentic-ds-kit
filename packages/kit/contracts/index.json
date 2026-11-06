@@ -620,5 +620,14 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add inbox"
+  },
+  {
+    "id": "delivery",
+    "intent": "Delivery example: PageHeader, Scoreboard stat cards, Timeline, and a flush Card members DataTable.",
+    "group": "pattern",
+    "path": "contracts/patterns/delivery.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add delivery"
   }
 ]

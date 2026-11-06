@@ -12,9 +12,10 @@
   z-index: 10;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-3);
-  height: var(--playground-topbar-height);
-  padding-inline: var(--layout-margin-md);
+  min-height: var(--playground-topbar-height);
+  padding: var(--space-2) var(--layout-margin-md);
   background-color: var(--bg-surface);
   border-bottom: var(--border-width-thin) solid var(--line);
 }
@@ -32,8 +33,13 @@
   margin-inline-start: auto;
 }
 
-.colorSelect {
+.colorSelect,
+.fontSelect {
   width: 8.5rem;
+}
+
+.weightSelect {
+  width: 5.5rem;
 }
 
 .brand {
@@ -45,7 +51,7 @@
 
 .productName {
   color: var(--text-primary);
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-size: var(--type-size-body);
   font-weight: var(--type-weight-title);
   line-height: var(--type-line-heading);
@@ -102,8 +108,13 @@
     display: none;
   }
 
-  .colorSelect {
+  .colorSelect,
+  .fontSelect {
     width: 7.25rem;
+  }
+
+  .weightSelect {
+    width: 4.75rem;
   }
 
   .sidebar {

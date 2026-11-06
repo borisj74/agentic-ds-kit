@@ -2,27 +2,28 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { FoundationTabList } from "./FoundationTabList";
+import { TokenUsage, tokenUsageTitle } from "./TokenUsage";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./TypographyFoundations.module.css";
 
 type TypeTab = "primitives" | "semantics";
 
 const ROLES = [
-  { id: "type.heading-1", size: "--type-size-heading-1", weight: "--type-weight-title", line: "--type-line-heading-1", sample: "Design with intent" },
-  { id: "type.heading-2", size: "--type-size-heading-2", weight: "--type-weight-title", line: "--type-line-heading-2", sample: "Design with intent" },
-  { id: "type.heading-3", size: "--type-size-heading-3", weight: "--type-weight-heading", line: "--type-line-heading-3", sample: "Design with intent" },
-  { id: "type.heading-4", size: "--type-size-heading-4", weight: "--type-weight-heading", line: "--type-line-heading-4", sample: "Design with intent" },
-  { id: "type.heading-5", size: "--type-size-heading-5", weight: "--type-weight-heading", line: "--type-line-heading-5", sample: "Design with intent" },
-  { id: "type.ui-xl", size: "--type-size-ui-xl", weight: "--type-weight-heading", line: "--type-line-ui-xl", sample: "Workspace settings" },
-  { id: "type.ui-lg", size: "--type-size-ui-lg", weight: "--type-weight-label", line: "--type-line-ui-lg", sample: "Workspace settings" },
-  { id: "type.ui-md", size: "--type-size-ui-md", weight: "--type-weight-label", line: "--type-line-ui-md", sample: "Workspace settings" },
-  { id: "type.ui-sm", size: "--type-size-ui-sm", weight: "--type-weight-label", line: "--type-line-ui-sm", sample: "Workspace settings" },
-  { id: "type.ui-xs", size: "--type-size-ui-xs", weight: "--type-weight-label", line: "--type-line-ui-xs", sample: "Workspace settings" },
-  { id: "type.body-lg", size: "--type-size-body-lg", weight: "--type-weight-body", line: "--type-line-body-lg", sample: "Calm surfaces and precise type let the content lead.", block: true },
-  { id: "type.body-md", size: "--type-size-body-md", weight: "--type-weight-body", line: "--type-line-body-md", sample: "Calm surfaces and precise type let the content lead.", block: true },
-  { id: "type.body-sm", size: "--type-size-body-sm", weight: "--type-weight-body", line: "--type-line-body-sm", sample: "Calm surfaces and precise type let the content lead.", block: true },
-  { id: "type.body-xs", size: "--type-size-body-xs", weight: "--type-weight-body", line: "--type-line-body-xs", sample: "Calm surfaces and precise type let the content lead.", block: true },
-  { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", sample: "Eyebrows / group labels" },
+  { id: "type.heading-1", size: "--type-size-heading-1", weight: "--type-weight-title", line: "--type-line-heading-1", family: "--font-heading", sample: "Design with intent" },
+  { id: "type.heading-2", size: "--type-size-heading-2", weight: "--type-weight-title", line: "--type-line-heading-2", family: "--font-heading", sample: "Design with intent" },
+  { id: "type.heading-3", size: "--type-size-heading-3", weight: "--type-weight-heading", line: "--type-line-heading-3", family: "--font-heading", sample: "Design with intent" },
+  { id: "type.heading-4", size: "--type-size-heading-4", weight: "--type-weight-heading", line: "--type-line-heading-4", family: "--font-heading", sample: "Design with intent" },
+  { id: "type.heading-5", size: "--type-size-heading-5", weight: "--type-weight-heading", line: "--type-line-heading-5", family: "--font-heading", sample: "Design with intent" },
+  { id: "type.ui-xl", size: "--type-size-ui-xl", weight: "--type-weight-heading", line: "--type-line-ui-xl", family: "--font-body", sample: "Workspace settings" },
+  { id: "type.ui-lg", size: "--type-size-ui-lg", weight: "--type-weight-label", line: "--type-line-ui-lg", family: "--font-body", sample: "Workspace settings" },
+  { id: "type.ui-md", size: "--type-size-ui-md", weight: "--type-weight-label", line: "--type-line-ui-md", family: "--font-body", sample: "Workspace settings" },
+  { id: "type.ui-sm", size: "--type-size-ui-sm", weight: "--type-weight-label", line: "--type-line-ui-sm", family: "--font-body", sample: "Workspace settings" },
+  { id: "type.ui-xs", size: "--type-size-ui-xs", weight: "--type-weight-label", line: "--type-line-ui-xs", family: "--font-body", sample: "Workspace settings" },
+  { id: "type.body-lg", size: "--type-size-body-lg", weight: "--type-weight-body", line: "--type-line-body-lg", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-md", size: "--type-size-body-md", weight: "--type-weight-body", line: "--type-line-body-md", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-sm", size: "--type-size-body-sm", weight: "--type-weight-body", line: "--type-line-body-sm", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-xs", size: "--type-size-body-xs", weight: "--type-weight-body", line: "--type-line-body-xs", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", family: "--font-body", sample: "Eyebrows / group labels" },
 ] as const;
 
 const SIZE_STEPS = [
@@ -71,7 +72,7 @@ function CopyCode({ value }: { value: string }) {
   }, [copied]);
 
   return (
-    <button type="button" className={styles.token} onClick={onCopy} title={`Copy ${value}`}>
+    <button type="button" className={styles.token} onClick={onCopy} title={tokenUsageTitle(value.startsWith("--") ? value : `--${value}`)}>
       {copied ? "Copied ✓" : value}
     </button>
   );
@@ -97,11 +98,14 @@ export function TypographyFoundations() {
           <div className={styles.list}>
             {ROLES.map((role) => (
               <div key={role.id} className={`${styles.row} ${"block" in role && role.block ? styles.rowBlock : ""}`}>
-                <CopyCode value={role.id} />
+                <div>
+                  <CopyCode value={role.size} />
+                  <TokenUsage token={role.size} compact />
+                </div>
                 <p
                   className={styles.specimen}
                   style={{
-                    fontFamily: "family" in role && role.family ? `var(${role.family})` : "var(--font-sans)",
+                    fontFamily: `var(${role.family})`,
                     fontSize: `var(${role.size})`,
                     fontWeight: `var(${role.weight})`,
                     lineHeight: `var(${role.line})`,
@@ -119,17 +123,26 @@ export function TypographyFoundations() {
         <div className={styles.sections}>
           <section className={styles.scale}>
             <div className={colorStyles.hueHeader}>
-              <h3 className={colorStyles.hueTitle}>Family</h3>
-              <code className={colorStyles.huePattern}>font-sans · font-mono</code>
-            </div>
-            <div className={styles.familyPanel}>
-              <p className={styles.pangram} style={{ fontFamily: "var(--font-sans)" }}>
-                IBM Plex Sans. The quick brown fox jumps over the lazy dog
-              </p>
-              <p className={styles.pangramMono} style={{ fontFamily: "var(--font-mono)" }}>
-                IBM Plex Mono. The quick brown fox jumps over the lazy dog 0123456789
-              </p>
-            </div>
+            <h3 className={colorStyles.hueTitle}>Family</h3>
+            <code className={colorStyles.huePattern}>heading · body · mono</code>
+          </div>
+          <div className={styles.familyPanel}>
+            <CopyCode value="--font-heading" />
+            <TokenUsage token="--font-heading" />
+            <p className={styles.pangram} style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--type-weight-heading)" }}>
+              Heading. The quick brown fox jumps over the lazy dog
+            </p>
+            <CopyCode value="--font-body" />
+            <TokenUsage token="--font-body" />
+            <p className={styles.pangram} style={{ fontFamily: "var(--font-body)" }}>
+              Body. The quick brown fox jumps over the lazy dog
+            </p>
+            <CopyCode value="--font-mono" />
+            <TokenUsage token="--font-mono" />
+            <p className={styles.pangramMono} style={{ fontFamily: "var(--font-mono)" }}>
+              Mono. The quick brown fox jumps over the lazy dog 0123456789
+            </p>
+          </div>
           </section>
 
           <section className={styles.scale}>

@@ -156,6 +156,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       items: [
         leaf("/installation", "Installation"),
         leaf("/theming", "Theming"),
+        leaf("/studio", "Studio"),
       ],
     },
     {
@@ -204,6 +205,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
         leaf("/patterns#settings", "Settings"),
         leaf("/patterns#list-detail", "List detail"),
         leaf("/patterns#invite", "Invite"),
+        leaf("/patterns#delivery", "Delivery"),
         leaf("/patterns#insights", "Assistant"),
         leaf("/patterns#empty", "Empty"),
         leaf("/patterns#sign-in", "Sign in"),

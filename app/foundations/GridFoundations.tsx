@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { FoundationTabList } from "./FoundationTabList";
+import { TokenUsage, tokenUsageTitle } from "./TokenUsage";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./GridFoundations.module.css";
 
@@ -109,7 +110,7 @@ function CopyCode({ value }: { value: string }) {
   }, [copied]);
 
   return (
-    <button type="button" className={styles.token} onClick={onCopy} title={`Copy ${value}`}>
+    <button type="button" className={styles.token} onClick={onCopy} title={tokenUsageTitle(value.startsWith("--") ? value : `--${value}`)}>
       {copied ? "Copied ✓" : value}
     </button>
   );
@@ -261,7 +262,10 @@ export function GridFoundations() {
                 const token = `layout-gutter-${step}`;
                 return (
                   <div key={token} className={styles.row}>
-                    <CopyCode value={token} />
+                    <div>
+                      <CopyCode value={`--${token}`} />
+                      <TokenUsage token={`--${token}`} compact />
+                    </div>
                     <div className={styles.track}>
                       <div className={styles.bar} style={{ width: `var(--${token})` }} />
                     </div>
@@ -281,7 +285,10 @@ export function GridFoundations() {
                 const token = `layout-margin-${step}`;
                 return (
                   <div key={token} className={styles.row}>
-                    <CopyCode value={token} />
+                    <div>
+                      <CopyCode value={`--${token}`} />
+                      <TokenUsage token={`--${token}`} compact />
+                    </div>
                     <div className={styles.track}>
                       <div className={styles.bar} style={{ width: `var(--${token})` }} />
                     </div>
@@ -323,7 +330,10 @@ export function GridFoundations() {
               <div className={styles.list}>
                 {family.tokens.map((token) => (
                   <div key={token.name} className={styles.rowNote}>
-                    <CopyCode value={`--${token.name}`} />
+                    <div>
+                      <CopyCode value={`--${token.name}`} />
+                      <TokenUsage token={`--${token.name}`} compact />
+                    </div>
                     <span className={styles.px}>{token.note}</span>
                   </div>
                 ))}

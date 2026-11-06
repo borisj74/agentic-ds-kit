@@ -400,8 +400,10 @@
   --font-sans: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
   --font-display: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono, "IBM Plex Mono"), ui-monospace, monospace;
-  --type-family-body: var(--font-sans);
-  --type-family-heading: var(--font-display);
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-display);
+  --type-family-body: var(--font-body);
+  --type-family-heading: var(--font-heading);
   --type-family-code: var(--font-mono);
 
   /* Type ladders — heading / ui / body / overline (size / line) */

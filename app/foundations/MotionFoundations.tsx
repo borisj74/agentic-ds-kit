@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { FoundationTabList } from "./FoundationTabList";
+import { TokenUsage } from "./TokenUsage";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./MotionFoundations.module.css";
 
@@ -191,6 +192,7 @@ export function MotionFoundations() {
           {SEMANTICS.map((family) => (
             <section key={family.title} className={styles.scale}>
               <h3 className={styles.title}>{family.title}</h3>
+              <TokenUsage token={family.demos[0].duration.replace(/^var\(/, "").replace(/\)$/, "")} />
               <div className={styles.gallery}>
                 {family.demos.map((demo) => (
                   <MotionCard
@@ -210,6 +212,7 @@ export function MotionFoundations() {
         <div className={styles.sections}>
           <section className={styles.scale}>
             <h3 className={styles.title}>Duration</h3>
+            <TokenUsage token="--motion-duration-100" />
             <div className={styles.gallery}>
               {DURATIONS.map((step) => (
                 <MotionCard
@@ -226,6 +229,7 @@ export function MotionFoundations() {
           </section>
           <section className={styles.scale}>
             <h3 className={styles.title}>Easing</h3>
+            <TokenUsage token="--motion-ease-out" />
             <div className={styles.gallery}>
               {EASES.map((step) => (
                 <MotionCard

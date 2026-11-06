@@ -5,6 +5,7 @@ import { FoundationTabList } from "./FoundationTabList";
 import colorStyles from "./ColorFoundations.module.css";
 import styles from "./EffectFoundations.module.css";
 import { CopyToken } from "./CopyToken";
+import { TokenUsage } from "./TokenUsage";
 
 type Tab = "primitives" | "semantics";
 
@@ -52,7 +53,10 @@ export function RadiusFoundations() {
                   const token = tokenName(family.prefix, step);
                   return (
                     <div key={token} className={`${styles.row} ${styles.rowRadiusSemantic}`}>
-                      <CopyToken value={`--${token}`} />
+                      <div>
+                        <CopyToken value={`--${token}`} />
+                        <TokenUsage token={`--${token}`} compact />
+                      </div>
                       <div className={styles.swatch} style={{ borderRadius: `var(--${token})` }} />
                     </div>
                   );
@@ -70,7 +74,10 @@ export function RadiusFoundations() {
           <div className={styles.list}>
             {SCALE.map((step) => (
               <div key={step.name} className={`${styles.row} ${styles.rowRadius}`}>
-                <CopyToken value={`--radius-${step.name}`} />
+                <div>
+                  <CopyToken value={`--radius-${step.name}`} />
+                  <TokenUsage token={`--radius-${step.name}`} compact />
+                </div>
                 <span className={styles.note}>{step.px}</span>
                 <div className={styles.swatch} style={{ borderRadius: `var(--radius-${step.name})` }} />
               </div>

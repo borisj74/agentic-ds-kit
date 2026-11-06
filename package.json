@@ -7,8 +7,9 @@
   ],
   "scripts": {
     "generate:tokens": "npm run generate:tokens -w agentic-ds-kit",
+    "catalog": "node scripts/build-playground-catalog.mjs",
     "dev": "next dev -H 127.0.0.1 -p 43123",
-    "build": "npm run build -w agentic-ds-kit && next build",
+    "build": "node scripts/build-playground-catalog.mjs && npm run build -w agentic-ds-kit && next build",
     "start": "next start -H 127.0.0.1 -p 43123",
     "lint": "eslint",
     "test": "npm test -w agentic-ds-kit",

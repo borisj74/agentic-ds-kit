@@ -4,14 +4,23 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav, Button, Select } from "agentic-ds-kit";
 import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
+import { copyAiPrompt } from "@/lib/playground-prompt";
 import { useLocationHash } from "@/lib/use-location-hash";
 import {
   PLAYGROUND_COLOR_THEMES,
+  PLAYGROUND_FONTS,
+  PLAYGROUND_HEADING_WEIGHTS,
   applyPlaygroundColorTheme,
+  applyPlaygroundFont,
+  applyPlaygroundHeadingWeight,
   applyPlaygroundTheme,
   readPlaygroundColorTheme,
+  readPlaygroundFont,
+  readPlaygroundHeadingWeight,
   readPlaygroundTheme,
   type PlaygroundColorTheme,
+  type PlaygroundFont,
+  type PlaygroundHeadingWeight,
   type PlaygroundTheme,
 } from "@/lib/playground-theme";
 import styles from "./PlaygroundShell.module.css";
@@ -28,12 +37,11 @@ function readCompact() {
   return window.matchMedia(COMPACT_NAV).matches;
 }
 
-/** Theme lives on <html> (set before paint by the init script); re-read when it changes. */
 function subscribeRootTheme(onChange: () => void) {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ["data-theme", "data-color"],
+    attributeFilter: ["data-theme", "data-color", "data-font", "style"],
   });
   return () => observer.disconnect();
 }
@@ -41,6 +49,8 @@ function subscribeRootTheme(onChange: () => void) {
 const readServerFalse = () => false;
 const readServerTheme = (): PlaygroundTheme => "light";
 const readServerColorTheme = (): PlaygroundColorTheme => "ink";
+const readServerFont = (): PlaygroundFont => "ibm-plex";
+const readServerWeight = (): PlaygroundHeadingWeight => "600";
 
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -51,10 +61,16 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     readPlaygroundColorTheme,
     readServerColorTheme,
   );
+  const font = useSyncExternalStore(subscribeRootTheme, readPlaygroundFont, readServerFont);
+  const headingWeight = useSyncExternalStore(
+    subscribeRootTheme,
+    readPlaygroundHeadingWeight,
+    readServerWeight,
+  );
   const compact = useSyncExternalStore(subscribeCompact, readCompact, readServerFalse);
-  // The overlay nav belongs to the route it was opened on: navigating closes it.
   const route = `${pathname}#${hash}`;
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const navOpen = navOpenOn === route;
 
   useEffect(() => {
@@ -86,8 +102,29 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
 
   const handleColorTheme = (value: string | string[]) => {
     if (typeof value !== "string") return;
-    if (value !== "ink" && value !== "blue" && value !== "violet" && value !== "teal") return;
+    if (value !== "ink" && value !== "blue" && value !== "violet" && value !== "teal" && value !== "custom") {
+      return;
+    }
     applyPlaygroundColorTheme(value);
+  };
+
+  const handleFont = (value: string | string[]) => {
+    if (typeof value !== "string") return;
+    if (value !== "ibm-plex" && value !== "inter" && value !== "geist" && value !== "system") return;
+    applyPlaygroundFont(value);
+  };
+
+  const handleWeight = (value: string | string[]) => {
+    if (typeof value !== "string") return;
+    if (value !== "400" && value !== "500" && value !== "600" && value !== "700") return;
+    applyPlaygroundHeadingWeight(value);
+  };
+
+  const handleCopyPrompt = async () => {
+    const ok = await copyAiPrompt();
+    if (!ok) return;
+    setCopiedPrompt(true);
+    window.setTimeout(() => setCopiedPrompt(false), 1600);
   };
 
   return (
@@ -96,7 +133,8 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
         <div className={styles.menu}>
           <Button
             size="sm"
-            appearance="ghost" mode="neutral"
+            appearance="ghost"
+            mode="neutral"
             iconStart={overlayNav ? "X" : "Menu"}
             ariaLabel={overlayNav ? "Close navigation" : "Open navigation"}
             onClick={() => setNavOpenOn(navOpen ? null : route)}
@@ -107,6 +145,26 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           <span className={styles.tagline}>Code is the contract</span>
         </div>
         <div className={styles.tools}>
+          <div className={styles.fontSelect}>
+            <Select
+              id="playground-font"
+              size="sm"
+              ariaLabel="Font"
+              value={font}
+              onChange={handleFont}
+              options={PLAYGROUND_FONTS}
+            />
+          </div>
+          <div className={styles.weightSelect}>
+            <Select
+              id="playground-heading-weight"
+              size="sm"
+              ariaLabel="Heading weight"
+              value={headingWeight}
+              onChange={handleWeight}
+              options={PLAYGROUND_HEADING_WEIGHTS}
+            />
+          </div>
           <div className={styles.colorSelect}>
             <Select
               id="playground-color-theme"
@@ -119,7 +177,20 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           </div>
           <Button
             size="sm"
-            appearance="outline" mode="neutral"
+            appearance="outline"
+            mode="neutral"
+            iconStart="Copy"
+            ariaLabel="Copy prompt for AI"
+            onClick={() => {
+              void handleCopyPrompt();
+            }}
+          >
+            {compact ? undefined : copiedPrompt ? "Copied" : "Copy prompt for AI"}
+          </Button>
+          <Button
+            size="sm"
+            appearance="outline"
+            mode="neutral"
             iconStart={isDark ? "Sun" : "Moon"}
             ariaLabel={isDark ? "Switch to light theme" : "Switch to dark theme"}
             onClick={handleThemeToggle}

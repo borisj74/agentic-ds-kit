@@ -25,6 +25,7 @@ const ADD_ID: Record<string, string> = {
   "support-macros": "list-detail",
   projects: "list-detail",
   invite: "invite-members",
+  delivery: "delivery",
   insights: "assistant-workspace",
   empty: "empty-first-run",
   research: "empty-first-run",
@@ -76,6 +77,7 @@ export default function PatternsPage() {
           <div id="settings" />
           <div id="list-detail" />
           <div id="invite" />
+          <div id="delivery" />
           <div id="insights" />
           <div id="empty" />
           <div id="sign-in" />
