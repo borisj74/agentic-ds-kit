@@ -110,5 +110,5 @@
     "Do not add snap points or swipe",
     "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Overlay click and Escape still close."
   ],
-  "snippet": "<Drawer open={open} title=\"Pick a delivery time\" description=\"We'll prepare your order as soon as possible.\" side=\"bottom\" showClose={false} onClose={close} footer={<><Button variant=\"primary\" size=\"lg\" shape=\"pill\" block>Confirm Delivery Time</Button><Button variant=\"secondary\" size=\"lg\" shape=\"pill\" block onClick={close}>Cancel</Button></>}><RadioGroup name=\"delivery-time\" legend=\"Delivery time\" hideLegend layout=\"card\" defaultValue=\"standard\" options={slots} /></Drawer>"
+  "snippet": "<Drawer open={open} title=\"Pick a delivery time\" description=\"We'll prepare your order as soon as possible.\" side=\"bottom\" showClose={false} onClose={close} footer={<><Button appearance=\"solid\" mode=\"primary\" size=\"lg\" shape=\"pill\" block>Confirm Delivery Time</Button><Button appearance=\"outline\" mode=\"neutral\" size=\"lg\" shape=\"pill\" block onClick={close}>Cancel</Button></>}><RadioGroup name=\"delivery-time\" legend=\"Delivery time\" hideLegend layout=\"card\" defaultValue=\"standard\" options={slots} /></Drawer>"
 }

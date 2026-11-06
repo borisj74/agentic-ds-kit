@@ -6,10 +6,10 @@
   min-width: 0;
   padding: var(--space-inset-lg);
   overflow: auto;
-  background-color: var(--surface-page);
+  background-color: var(--bg-floating);
   border: none;
-  border-radius: var(--radius-control-lg);
-  box-shadow: var(--shadow-modal);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-lg);
   outline: none;
 }
 

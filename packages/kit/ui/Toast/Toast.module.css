@@ -23,7 +23,7 @@
   border: var(--border-100) solid var(--border-faint);
   border-radius: var(--radius-control-sm);
   background: var(--surface-card);
-  box-shadow: var(--shadow-raised-depth);
+  box-shadow: var(--shadow-md);
   color: var(--text-primary);
   font-family: var(--font-sans);
   outline: none;

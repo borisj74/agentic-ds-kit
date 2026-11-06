@@ -1,38 +1,40 @@
 {
   "id": "button",
   "status": "stable",
-  "intent": "Clickable action control with a fixed set of sizes and visual variants.",
+  "intent": "Clickable action control with appearance × mode (plus an optional flat set) and a fixed set of sizes.",
   "useWhen": [
     "Submitting a form or triggering a primary workflow action",
-    "Offering a secondary or tertiary action alongside content",
+    "Offering a quieter action alongside content (outline, soft, or ghost)",
     "Destructive actions that need explicit danger styling",
     "Toolbar or compact actions with a Lucide icon and a visible label",
     "Icon-only actions when space is tight and ariaLabel names the action"
   ],
   "doNotUseWhen": [
-    "Navigation that should be a link \u2014 use an anchor styled elsewhere",
-    "Icon-only without aria-label \u2014 icon-only must set ariaLabel",
-    "More than one primary button in the same view"
+    "Navigation that should be a link — use an anchor styled elsewhere",
+    "Icon-only without aria-label — icon-only must set ariaLabel",
+    "More than one solid-primary button in the same view"
   ],
   "props": {
     "size": {
       "type": "enum",
-      "values": [
-        "lg",
-        "md",
-        "sm"
-      ],
-      "default": "md"
+      "values": ["lg", "md", "sm"],
+      "default": "md",
+      "note": "Kit sizes. md aligns to Cards medium, sm to small, lg to a larger control."
     },
-    "variant": {
+    "appearance": {
       "type": "enum",
-      "values": [
-        "primary",
-        "secondary",
-        "tertiary",
-        "danger"
-      ],
+      "values": ["solid", "outline", "soft", "ghost"],
+      "default": "solid"
+    },
+    "mode": {
+      "type": "enum",
+      "values": ["primary", "neutral", "danger"],
       "default": "primary"
+    },
+    "flat": {
+      "type": "boolean",
+      "default": false,
+      "note": "Flat set: no elevation. Combine with solid, outline, or soft (ghost is coerced to soft)."
     },
     "disabled": {
       "type": "boolean",
@@ -64,19 +66,12 @@
     },
     "type": {
       "type": "enum",
-      "values": [
-        "button",
-        "submit",
-        "reset"
-      ],
+      "values": ["button", "submit", "reset"],
       "default": "button"
     },
     "shape": {
       "type": "enum",
-      "values": [
-        "default",
-        "pill"
-      ],
+      "values": ["default", "pill"],
       "default": "default",
       "note": "pill uses radius-pill. Drawer footers use pill."
     },
@@ -93,23 +88,28 @@
     "rest": "button"
   },
   "tokens": [
-    "text.inverse",
-    "text.primary",
-    "text.secondary",
-    "surface.card",
-    "surface.muted",
-    "border.faint",
-    "action.primary",
-    "action.primaryHover",
-    "action.danger",
-    "action.dangerHover",
-    "icon.default",
+    "bg.control",
+    "bg.controlHover",
+    "bg.subtle",
+    "bg.tray",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgInverse",
+    "line.default",
+    "primary.base",
+    "primary.hover",
+    "primary.active",
+    "primary.subtle",
+    "danger.fg",
+    "danger.base",
+    "danger.line",
+    "danger.subtle",
+    "shadow.xs",
+    "radius.controlMd",
     "radius.pill",
-    "type.weight.heading",
-    "type.line.heading",
-    "type.size.body",
-    "type.size.bodySm",
-    "type.size.caption"
+    "type.size.uiSm",
+    "type.size.uiMd",
+    "type.size.uiXs"
   ],
   "a11y": {
     "element": "button",
@@ -121,11 +121,11 @@
     ]
   },
   "doNot": [
-    "Do not invent local Button variants outside the enum",
+    "Do not invent local Button appearances or modes outside the enums",
     "Do not use raw hex colors in styles",
-    "Do not place more than one variant=primary Button in a single view",
-    "Do not pass custom SVG markup as icons \u2014 use a Lucide name or Lucide component on iconStart/iconEnd",
+    "Do not place more than one appearance=solid mode=primary Button in a single view",
+    "Do not pass custom SVG markup as icons — use a Lucide name or Lucide component on iconStart/iconEnd",
     "Do not ship icon-only without ariaLabel"
   ],
-  "snippet": "<Button variant=\"primary\" size=\"md\">Save changes</Button>\n<Button variant=\"secondary\" iconStart=\"Plus\">Add</Button>"
+  "snippet": "<Button appearance=\"solid\" mode=\"primary\" size=\"md\">Save changes</Button>\n<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Plus\">Add</Button>"
 }

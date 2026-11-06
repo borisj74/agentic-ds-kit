@@ -9,14 +9,14 @@ import { CopyToken } from "./CopyToken";
 type Tab = "primitives" | "semantics";
 
 const SCALE = [
-  { name: "0", px: "0" },
-  { name: "50", px: "2px" },
-  { name: "100", px: "4px" },
-  { name: "200", px: "8px" },
-  { name: "300", px: "12px" },
-  { name: "400", px: "16px" },
-  { name: "500", px: "20px" },
-  { name: "600", px: "24px" },
+  { name: "base", px: "8px" },
+  { name: "xs", px: "3px" },
+  { name: "sm", px: "5px" },
+  { name: "md", px: "6px" },
+  { name: "lg", px: "8px" },
+  { name: "xl", px: "10px" },
+  { name: "2xl", px: "13px" },
+  { name: "3xl", px: "19px" },
   { name: "full", px: "9999px" },
 ] as const;
 
@@ -65,7 +65,7 @@ export function RadiusFoundations() {
         <section className={styles.scale}>
           <header className={styles.header}>
             <h3 className={styles.title}>Scale</h3>
-            <code className={styles.pattern}>radius-0 → radius-full</code>
+            <code className={styles.pattern}>radius-base → radius-full</code>
           </header>
           <div className={styles.list}>
             {SCALE.map((step) => (

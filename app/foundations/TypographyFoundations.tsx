@@ -8,81 +8,21 @@ import styles from "./TypographyFoundations.module.css";
 type TypeTab = "primitives" | "semantics";
 
 const ROLES = [
-  {
-    id: "type.display",
-    size: "--type-size-display",
-    weight: "--type-weight-title",
-    line: "--type-line-heading",
-    sample: "Agentic DS Kit",
-  },
-  {
-    id: "type.title",
-    size: "--type-size-title",
-    weight: "--type-weight-title",
-    line: "--type-line-heading",
-    sample: "Design system foundations",
-  },
-  {
-    id: "type.heading",
-    size: "--type-size-heading",
-    weight: "--type-weight-heading",
-    line: "--type-line-heading",
-    sample: "Typography semantics",
-  },
-  {
-    id: "type.body",
-    size: "--type-size-body",
-    weight: "--type-weight-body",
-    line: "--type-line-body",
-    sample: "Body text carries the bulk of product copy. Keep size and leading on the semantic tokens.",
-    block: true,
-  },
-  {
-    id: "type.bodySm",
-    size: "--type-size-body-sm",
-    weight: "--type-weight-body",
-    line: "--type-line-body",
-    sample: "Supporting copy for denser UI, tables, and helper text.",
-    block: true,
-  },
-  {
-    id: "type.label",
-    size: "--type-size-label",
-    weight: "--type-weight-label",
-    line: "--type-line-body",
-    sample: "Form label",
-  },
-  {
-    id: "type.metric",
-    size: "--type-size-metric",
-    weight: "--type-weight-metric",
-    line: "--type-line-heading",
-    sample: "$5,144,707.08",
-    tabular: true,
-  },
-  {
-    id: "type.caption",
-    size: "--type-size-caption",
-    weight: "--type-weight-caption",
-    line: "--type-line-body",
-    sample: "Caption or metadata under a control",
-  },
-  {
-    id: "type.overline",
-    size: "--type-size-overline",
-    weight: "--type-weight-overline",
-    line: "--type-line-heading",
-    tracking: "--type-tracking-overline",
-    sample: "Section meta",
-  },
-  {
-    id: "type.code",
-    size: "--type-size-code",
-    weight: "--type-weight-code",
-    line: "--type-line-body",
-    family: "--font-mono",
-    sample: "kit list typography",
-  },
+  { id: "type.heading-1", size: "--type-size-heading-1", weight: "--type-weight-title", line: "--type-line-heading-1", sample: "Design with intent" },
+  { id: "type.heading-2", size: "--type-size-heading-2", weight: "--type-weight-title", line: "--type-line-heading-2", sample: "Design with intent" },
+  { id: "type.heading-3", size: "--type-size-heading-3", weight: "--type-weight-heading", line: "--type-line-heading-3", sample: "Design with intent" },
+  { id: "type.heading-4", size: "--type-size-heading-4", weight: "--type-weight-heading", line: "--type-line-heading-4", sample: "Design with intent" },
+  { id: "type.heading-5", size: "--type-size-heading-5", weight: "--type-weight-heading", line: "--type-line-heading-5", sample: "Design with intent" },
+  { id: "type.ui-xl", size: "--type-size-ui-xl", weight: "--type-weight-heading", line: "--type-line-ui-xl", sample: "Workspace settings" },
+  { id: "type.ui-lg", size: "--type-size-ui-lg", weight: "--type-weight-label", line: "--type-line-ui-lg", sample: "Workspace settings" },
+  { id: "type.ui-md", size: "--type-size-ui-md", weight: "--type-weight-label", line: "--type-line-ui-md", sample: "Workspace settings" },
+  { id: "type.ui-sm", size: "--type-size-ui-sm", weight: "--type-weight-label", line: "--type-line-ui-sm", sample: "Workspace settings" },
+  { id: "type.ui-xs", size: "--type-size-ui-xs", weight: "--type-weight-label", line: "--type-line-ui-xs", sample: "Workspace settings" },
+  { id: "type.body-lg", size: "--type-size-body-lg", weight: "--type-weight-body", line: "--type-line-body-lg", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-md", size: "--type-size-body-md", weight: "--type-weight-body", line: "--type-line-body-md", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-sm", size: "--type-size-body-sm", weight: "--type-weight-body", line: "--type-line-body-sm", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.body-xs", size: "--type-size-body-xs", weight: "--type-weight-body", line: "--type-line-body-xs", sample: "Calm surfaces and precise type let the content lead.", block: true },
+  { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", sample: "Eyebrows / group labels" },
 ] as const;
 
 const SIZE_STEPS = [
@@ -152,7 +92,7 @@ export function TypographyFoundations() {
         <section className={styles.scale}>
           <div className={colorStyles.hueHeader}>
             <h3 className={colorStyles.hueTitle}>Roles</h3>
-            <code className={colorStyles.huePattern}>type.display → type.code</code>
+            <code className={colorStyles.huePattern}>heading-1 → overline-xs</code>
           </div>
           <div className={styles.list}>
             {ROLES.map((role) => (

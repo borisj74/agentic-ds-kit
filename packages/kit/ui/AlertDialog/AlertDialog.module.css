@@ -17,7 +17,7 @@
   background-color: var(--surface-elevated);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   animation: dialogEnter var(--motion-modal-duration) var(--motion-modal-easing);
 }
 

@@ -31,7 +31,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
 - Layout is the user's choice: top bar only (AppHeader + main), side nav only (SideNav + main), both, or neither. Keep these accessibility rules whatever the layout:
   - Use landmarks: page content in `<main>`; AppHeader is a `header`, SideNav's rows sit in a `nav`.
   - Navigation stays reachable on small screens, e.g. a kit Button that opens the nav in kit Drawer. Never a hand-rolled overlay, scrim, or fixed sidebar.
-  - One `variant="primary"` Button per view.
+  - One `appearance="solid"` `mode="primary"` Button per view.
 - If you start from the `app-shell` copy with custom chrome: a built header places `AppShellMenuButton` (usually as `AppHeader.Brand`'s `logo`); a built nav reads `useAppShell().navPlacement` or takes the placement from `nav={(placement) => …}`.
 - Metric rows use `<Scoreboard items={...} />`, not flex layouts with borders.
 - Labeled inputs sit in `Field`; dismissible forms open in Modal or Drawer (AlertDialog is for confirmations that need an answer).

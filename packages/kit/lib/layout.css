@@ -7,7 +7,7 @@
 :where(body) {
   font-family: var(--font-sans);
   color: var(--text-primary);
-  background-color: var(--surface-page);
+  background-color: var(--bg-canvas);
 }
 
 /* Product chrome: AppHeader full-bleed, then SideNav + page. No gap. */
@@ -16,7 +16,7 @@
   grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
-  background: var(--surface-muted);
+  background: var(--bg-canvas);
 }
 
 .layout-shell > .layout-app {
@@ -66,7 +66,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--surface-card);
+  background: var(--bg-canvas);
 }
 
 .layout-workspace {
@@ -75,7 +75,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--surface-card);
+  background: var(--bg-canvas);
 }
 
 .layout-workspace > * {

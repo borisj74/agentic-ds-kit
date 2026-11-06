@@ -235,7 +235,7 @@ export function ListView({
           <DropdownMenu
             iconStart="Ellipsis"
             ariaLabel={`Actions for ${item.primary}`}
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             align="end"
             disabled={item.disabled}
@@ -262,7 +262,7 @@ export function ListView({
             <Button
               key={action.id}
               size="sm"
-              variant={action.danger ? "danger" : "tertiary"}
+              appearance={action.danger ? "solid" : "ghost"} mode={action.danger ? "danger" : "neutral"}
               iconStart={action.icon}
               ariaLabel={action.label}
               disabled={item.disabled || action.disabled}
@@ -272,7 +272,7 @@ export function ListView({
             <Button
               key={action.id}
               size="sm"
-              variant={action.danger ? "danger" : "tertiary"}
+              appearance={action.danger ? "solid" : "ghost"} mode={action.danger ? "danger" : "neutral"}
               disabled={item.disabled || action.disabled}
               onClick={() => onAction?.(item.id, action.id)}
             >

@@ -14,7 +14,7 @@ export interface DividerProps extends Omit<ComponentPropsWithoutRef<"div">, Divi
   label?: string;
   /** Where the label and action sit on the line. Horizontal only. */
   align?: DividerAlign;
-  /** Inline control on the line, e.g. a kit Button variant="tertiary" size="sm". Horizontal only. */
+  /** Inline control on the line, e.g. a kit Button appearance="ghost" mode="neutral" size="sm". Horizontal only. */
   action?: ReactNode;
   tone?: DividerTone;
   ref?: Ref<HTMLElement>;

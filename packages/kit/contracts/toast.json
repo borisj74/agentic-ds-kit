@@ -114,7 +114,7 @@
     "Do not use Alert for toast feedback — Alert stays on the page",
     "Do not pass action as a ReactNode slot — use actionLabel",
     "Do not put more than one action in a toast",
-    "Do not use variant=primary inside the toast",
+    "Do not use appearance=solid mode=primary inside the toast",
     "Do not use status=default, size, onOpenChange, density, HelpPopover, or Icon",
     "Do not make duration shorter than people need to read it and reach the action",
     "Do not use raw hex",

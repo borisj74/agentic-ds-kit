@@ -1,10 +1,11 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { AvatarGroup } from "../../ui/AvatarGroup";
 import { Button } from "../../ui/Button";
 import { ButtonGroup } from "../../ui/ButtonGroup";
-import { Empty } from "../../ui/Empty";
+import { Card } from "../../ui/Card";
+import { DataTable } from "../../ui/DataTable";
+import type { DataTableColumn, DataTableRow } from "../../ui/DataTable";
 import { Field } from "../../ui/Field";
 import { FieldSet } from "../../ui/FieldSet";
 import { Input } from "../../ui/Input";
@@ -12,6 +13,7 @@ import { Modal } from "../../ui/Modal";
 import { PageHeader } from "../../ui/PageHeader";
 import type { PageHeaderProps } from "../../ui/PageHeader";
 import { RadioGroup } from "../../ui/RadioGroup";
+import { Section } from "../../ui/Section";
 import { Toast } from "../../ui/Toast";
 import { ROLE_OPTIONS, TEAM } from "./invite-members-data";
 
@@ -19,6 +21,30 @@ export interface InviteMembersPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
   onInvite?: (payload: { email: string; role: string }) => void;
 }
+
+const MEMBER_COLUMNS: DataTableColumn[] = [
+  { key: "member", header: "Member" },
+  { key: "role", header: "Role" },
+  { key: "status", header: "Status" },
+];
+
+function statusTone(status: string): "success" | "info" | "neutral" {
+  if (status === "Active") return "success";
+  if (status === "Invited") return "info";
+  return "neutral";
+}
+
+const MEMBER_ROWS: DataTableRow[] = TEAM.map((person, index) => ({
+  id: String(index),
+  member: {
+    type: "avatar",
+    name: person.name,
+    initials: person.initials,
+    label: person.email,
+  },
+  role: person.role,
+  status: { type: "badge", label: person.status, tone: statusTone(person.status) },
+}));
 
 export function InviteMembersPattern({ breadcrumbs, onInvite }: InviteMembersPatternProps) {
   const uid = useId();
@@ -62,23 +88,27 @@ export function InviteMembersPattern({ breadcrumbs, onInvite }: InviteMembersPat
     <div className="layout-canvas layout-canvas--sticky-header">
       <div className="layout-header">
         <PageHeader
-          title="Invite members"
-          subtitle="Add people to this workspace so review comments have owners."
+          title="Team members"
+          subtitle="Manage who has access to this workspace."
           breadcrumbs={breadcrumbs}
-        />
-      </div>
-      <div className="layout-content">
-        <Empty
-          title="No pending invites"
-          description="Maya, Noah, and Iris are in this workspace. Three seats are open for design and QA."
-          media={<AvatarGroup ariaLabel="Current members" items={TEAM} max={3} />}
-          outlined
           actions={
-            <Button variant={open ? "secondary" : "primary"} size="md" onClick={() => setOpen(true)}>
-              Invite members
+            <Button
+              appearance={open ? "outline" : "solid"}
+              mode={open ? "neutral" : "primary"}
+              size="md"
+              onClick={() => setOpen(true)}
+            >
+              Invite
             </Button>
           }
         />
+      </div>
+      <div className="layout-content">
+        <Section title="Members" size="sm">
+          <Card flush>
+            <DataTable ariaLabel="Workspace members" columns={MEMBER_COLUMNS} rows={MEMBER_ROWS} cellSize="md" />
+          </Card>
+        </Section>
       </div>
       <Modal
         open={open}
@@ -88,17 +118,17 @@ export function InviteMembersPattern({ breadcrumbs, onInvite }: InviteMembersPat
         onClose={close}
         footer={
           <ButtonGroup ariaLabel="Invite actions">
-            <Button variant="secondary" size="md" onClick={close}>
+            <Button appearance="outline" mode="neutral" size="md" onClick={close}>
               Cancel
             </Button>
-            <Button variant="primary" size="md" onClick={send}>
+            <Button appearance="solid" mode="primary" size="md" onClick={send}>
               Send invite
             </Button>
           </ButtonGroup>
         }
       >
         <form onSubmit={handleSubmit}>
-          <FieldSet legend="New member" description="They get access to Sprint 24 projects.">
+          <FieldSet legend="New member" description="They get access to this workspace.">
             <Field label="Email" htmlFor={emailId} hint="Work email they already use" error={emailError}>
               <Input
                 id={emailId}

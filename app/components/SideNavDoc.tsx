@@ -89,7 +89,7 @@ const SLOTS_CODE = `<SideNav
   header={
     <Select id="workspace" size="sm" ariaLabel="Workspace" defaultValue="agentix" options={workspaces} />
   }
-  beforeGroups={<Button variant="secondary" size="sm" iconStart="Plus">New project</Button>}
+  beforeGroups={<Button appearance="outline" mode="neutral" size="sm" iconStart="Plus">New project</Button>}
   afterGroups={<Alert variant="info" title="Trial">5 days left.</Alert>}
   footer={
     <div className="account">
@@ -114,7 +114,7 @@ function SlotsBar() {
       groups={GROUPS.slice(0, 1)}
       header={<Select id="sidenav-workspace" size="sm" ariaLabel="Workspace" defaultValue="agentix" options={WORKSPACES} />}
       beforeGroups={
-        <Button variant="secondary" size="sm" iconStart="Plus">
+        <Button appearance="outline" mode="neutral" size="sm" iconStart="Plus">
           New project
         </Button>
       }
@@ -179,7 +179,7 @@ function DrawerDemo() {
   const [open, setOpen] = useState(false);
   return (
     <div className={demo.main}>
-      <Button variant="secondary" iconStart="Menu" onClick={() => setOpen(true)}>
+      <Button appearance="outline" mode="neutral" iconStart="Menu" onClick={() => setOpen(true)}>
         Open navigation
       </Button>
       <Drawer open={open} title="Navigation" side="left" size="sm" onClose={() => setOpen(false)}>

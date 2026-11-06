@@ -4,7 +4,6 @@ export type {
   DataTableColumn,
   DataTableFilter,
   DataTableBulkAction,
-  DataTableBulkActionVariant,
   DataTableCell,
   DataTableRow,
   DataTableSortValue,

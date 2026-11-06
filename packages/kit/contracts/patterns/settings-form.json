@@ -21,7 +21,7 @@
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-    "At most one variant=\"primary\" Button per view",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view",
     "Do not restyle kit components; change them through their props, slots, and tokens",
     "Wrap every labeled input in Field (label, hint, and error wiring)",
     "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"

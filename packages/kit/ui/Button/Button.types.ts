@@ -2,7 +2,8 @@ import type { KitIcon } from "./lucideName";
 import type { ComponentPropsWithoutRef, DragEventHandler, MouseEventHandler, Ref } from "react";
 
 export type ButtonSize = "sm" | "md" | "lg";
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
+export type ButtonAppearance = "solid" | "outline" | "soft" | "ghost";
+export type ButtonMode = "primary" | "neutral" | "danger";
 export type ButtonType = "button" | "submit" | "reset";
 export type ButtonShape = "default" | "pill";
 
@@ -11,7 +12,10 @@ type ButtonOwnedKeys = "children" | "type" | "aria-label" | "aria-disabled" | "o
 
 interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwnedKeys> {
   size?: ButtonSize;
-  variant?: ButtonVariant;
+  appearance?: ButtonAppearance;
+  mode?: ButtonMode;
+  /** Flat set: no elevation. Ghost is not used — coerced to soft. */
+  flat?: boolean;
   shape?: ButtonShape;
   block?: boolean;
   disabled?: boolean;

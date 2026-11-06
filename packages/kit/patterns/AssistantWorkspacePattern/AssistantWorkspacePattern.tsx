@@ -94,7 +94,7 @@ export function AssistantWorkspacePattern({ breadcrumbs }: AssistantWorkspacePat
             breadcrumbs={breadcrumbs}
             actions={
               railOpen ? undefined : (
-                <Button variant="primary" size="md" iconStart="Sparkles" onClick={() => setRailOpen(true)}>
+                <Button appearance="solid" mode="primary" size="md" iconStart="Sparkles" onClick={() => setRailOpen(true)}>
                   Ask assistant
                 </Button>
               )

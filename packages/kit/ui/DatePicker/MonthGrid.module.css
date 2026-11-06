@@ -9,7 +9,7 @@
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   background: var(--surface-card);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   font-family: var(--font-sans);
   color: var(--text-primary);
 }

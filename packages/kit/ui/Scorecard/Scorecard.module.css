@@ -6,9 +6,10 @@
   min-width: 0;
   margin: 0;
   padding: var(--space-inset-md);
-  border: var(--border-highlight) solid var(--border-faint);
+  border: var(--border-highlight) solid var(--line);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-card);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
   text-align: start;
 }
@@ -58,9 +59,9 @@
 
 .value {
   color: var(--text-primary);
-  font-size: var(--type-size-title);
+  font-size: var(--type-size-ui-xl);
   font-weight: var(--type-weight-metric);
-  line-height: var(--type-line-heading);
+  line-height: var(--type-line-ui-xl);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 }

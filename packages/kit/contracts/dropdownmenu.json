@@ -48,15 +48,15 @@
       "required": false,
       "note": "required when trigger is omitted"
     },
-    "variant": {
+    "appearance": {
       "type": "enum",
-      "values": [
-        "primary",
-        "secondary",
-        "tertiary",
-        "danger"
-      ],
-      "default": "secondary"
+      "values": ["solid", "outline", "soft", "ghost"],
+      "default": "outline"
+    },
+    "mode": {
+      "type": "enum",
+      "values": ["primary", "neutral", "danger"],
+      "default": "neutral"
     },
     "size": {
       "type": "enum",

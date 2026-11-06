@@ -109,7 +109,7 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "alertdialog":
       return (
-        <Button size="sm" variant="danger">
+        <Button size="sm" appearance="solid" mode="danger">
           Delete
         </Button>
       );
@@ -122,7 +122,7 @@ export function GalleryPreview({ id }: { id: string }) {
           radius="md"
           searchPlaceholder="Search"
           actions={
-            <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+            <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
           }
         />
       );
@@ -158,17 +158,17 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "button":
       return (
-        <Button size="sm" variant="secondary">
+        <Button size="sm" appearance="outline" mode="neutral">
           Button
         </Button>
       );
     case "buttongroup":
       return (
         <ButtonGroup ariaLabel="View">
-          <Button size="sm" variant="secondary">
+          <Button size="sm" appearance="outline" mode="neutral">
             List
           </Button>
-          <Button size="sm" variant="tertiary">
+          <Button size="sm" appearance="ghost" mode="neutral">
             Board
           </Button>
         </ButtonGroup>
@@ -333,13 +333,13 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "drawer":
       return (
-        <Button size="sm" variant="secondary">
+        <Button size="sm" appearance="outline" mode="neutral">
           Open
         </Button>
       );
     case "dropdownmenu":
       return (
-        <Button size="sm" variant="secondary">
+        <Button size="sm" appearance="outline" mode="neutral">
           Menu
         </Button>
       );
@@ -370,7 +370,7 @@ export function GalleryPreview({ id }: { id: string }) {
     case "helppopover":
       return (
         <HelpPopover content="We use this date on the PDF.">
-          <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+          <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
         </HelpPopover>
       );
     case "input":

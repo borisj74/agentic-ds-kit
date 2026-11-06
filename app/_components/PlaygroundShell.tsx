@@ -96,7 +96,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
         <div className={styles.menu}>
           <Button
             size="sm"
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             iconStart={overlayNav ? "X" : "Menu"}
             ariaLabel={overlayNav ? "Close navigation" : "Open navigation"}
             onClick={() => setNavOpenOn(navOpen ? null : route)}
@@ -119,7 +119,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           </div>
           <Button
             size="sm"
-            variant="secondary"
+            appearance="outline" mode="neutral"
             iconStart={isDark ? "Sun" : "Moon"}
             ariaLabel={isDark ? "Switch to light theme" : "Switch to dark theme"}
             onClick={handleThemeToggle}

@@ -51,7 +51,7 @@ function ActionsMenu() {
     <DropdownMenu
       iconStart="MoreHorizontal"
       ariaLabel="Open menu"
-      variant="tertiary"
+      appearance="ghost" mode="neutral"
       size="sm"
       align="end"
       groups={ACTION_GROUPS}
@@ -185,7 +185,7 @@ export function TableDoc() {
         <DropdownMenu
           iconStart="MoreHorizontal"
           ariaLabel="Open menu"
-          variant="tertiary"
+          appearance="ghost" mode="neutral"
           size="sm"
           align="end"
           groups={[{ items: [{ id: "view", label: "View" }, { id: "copy", label: "Copy" }, { id: "delete", label: "Delete" }] }]}

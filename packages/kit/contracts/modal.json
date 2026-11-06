@@ -103,5 +103,5 @@
     "Do not use AlertDialog for dismissible work",
     "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Scrim click and Escape still close."
   ],
-  "snippet": "<Modal open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" onClose={close} footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button variant=\"secondary\" onClick={close}>Cancel</Button><Button variant=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Modal>"
+  "snippet": "<Modal open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" onClose={close} footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button appearance=\"outline\" mode=\"neutral\" onClick={close}>Cancel</Button><Button appearance=\"solid\" mode=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Modal>"
 }

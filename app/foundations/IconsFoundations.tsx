@@ -249,7 +249,7 @@ export function IconsFoundations() {
           <div className={styles.demos}>
             {KIT_DEMOS.map(({ label, icon, code, note }) => (
               <div key={code} className={styles.demo}>
-                <Button variant="secondary" size="sm" iconStart={icon}>
+                <Button appearance="outline" mode="neutral" size="sm" iconStart={icon}>
                   {label}
                 </Button>
                 <code className={styles.demoCode}>{code}</code>

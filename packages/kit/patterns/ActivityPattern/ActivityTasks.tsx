@@ -72,10 +72,10 @@ export function TaskList({
         due: task.due,
         actions: (
           <ButtonGroup ariaLabel={`${task.title} actions`}>
-            <Button variant="secondary" size="sm" onClick={() => onOpen(task.id)}>
+            <Button appearance="outline" mode="neutral" size="sm" onClick={() => onOpen(task.id)}>
               View task
             </Button>
-            <Button variant="tertiary" size="sm" onClick={() => onDismiss(task.id)}>
+            <Button appearance="ghost" mode="neutral" size="sm" onClick={() => onDismiss(task.id)}>
               Dismiss
             </Button>
           </ButtonGroup>

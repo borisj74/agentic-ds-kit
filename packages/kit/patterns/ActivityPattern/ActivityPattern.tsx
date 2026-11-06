@@ -58,14 +58,14 @@ export function ActivityPattern({ breadcrumbs }: ActivityPatternProps) {
             tasks.length > 0 ? (
               <ButtonGroup ariaLabel="Task layout">
                 <Button
-                  variant={taskView === "cards" ? "secondary" : "tertiary"}
+                  appearance={taskView === "cards" ? "outline" : "ghost"} mode="neutral"
                   size="sm"
                   onClick={() => setTaskView("cards")}
                 >
                   Cards
                 </Button>
                 <Button
-                  variant={taskView === "list" ? "secondary" : "tertiary"}
+                  appearance={taskView === "list" ? "outline" : "ghost"} mode="neutral"
                   size="sm"
                   onClick={() => setTaskView("list")}
                 >

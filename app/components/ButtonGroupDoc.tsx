@@ -15,9 +15,9 @@ function periodCode(size: ButtonSize, disabled: boolean) {
   const disabledAttr = disabled ? " disabled" : "";
   return [
     '<ButtonGroup ariaLabel="Plan period">',
-    `  <Button variant="secondary" size="${size}"${disabledAttr}>Day</Button>`,
-    `  <Button variant="secondary" size="${size}"${disabledAttr}>Week</Button>`,
-    `  <Button variant="secondary" size="${size}"${disabledAttr}>Month</Button>`,
+    `  <Button appearance="outline" mode="neutral" size="${size}"${disabledAttr}>Day</Button>`,
+    `  <Button appearance="outline" mode="neutral" size="${size}"${disabledAttr}>Week</Button>`,
+    `  <Button appearance="outline" mode="neutral" size="${size}"${disabledAttr}>Month</Button>`,
     "</ButtonGroup>",
   ].join("\n");
 }
@@ -51,13 +51,13 @@ export function ButtonGroupDoc() {
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
                   <ButtonGroup ariaLabel="Plan period">
-                    <Button variant="secondary" size={size} disabled={disabled}>
+                    <Button appearance="outline" mode="neutral" size={size} disabled={disabled}>
                       Day
                     </Button>
-                    <Button variant="secondary" size={size} disabled={disabled}>
+                    <Button appearance="outline" mode="neutral" size={size} disabled={disabled}>
                       Week
                     </Button>
-                    <Button variant="secondary" size={size} disabled={disabled}>
+                    <Button appearance="outline" mode="neutral" size={size} disabled={disabled}>
                       Month
                     </Button>
                   </ButtonGroup>
@@ -104,13 +104,13 @@ export function ButtonGroupDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
                   <ButtonGroup ariaLabel="Plan period">
-                    <Button variant="secondary" size="md">
+                    <Button appearance="outline" mode="neutral" size="md">
                       Day
                     </Button>
-                    <Button variant="secondary" size="md">
+                    <Button appearance="outline" mode="neutral" size="md">
                       Week
                     </Button>
-                    <Button variant="secondary" size="md">
+                    <Button appearance="outline" mode="neutral" size="md">
                       Month
                     </Button>
                   </ButtonGroup>
@@ -125,9 +125,9 @@ export function ButtonGroupDoc() {
               <CodeBlock
                 code={[
                   '<ButtonGroup ariaLabel="Plan period">',
-                  '  <Button variant="secondary" size="md">Day</Button>',
-                  '  <Button variant="secondary" size="md">Week</Button>',
-                  '  <Button variant="secondary" size="md">Month</Button>',
+                  '  <Button appearance="outline" mode="neutral" size="md">Day</Button>',
+                  '  <Button appearance="outline" mode="neutral" size="md">Week</Button>',
+                  '  <Button appearance="outline" mode="neutral" size="md">Month</Button>',
                   "</ButtonGroup>",
                 ].join("\n")}
               />
@@ -138,10 +138,10 @@ export function ButtonGroupDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
                   <ButtonGroup ariaLabel="Save changes">
-                    <Button variant="secondary" size="md">
+                    <Button appearance="outline" mode="neutral" size="md">
                       Cancel
                     </Button>
-                    <Button variant="primary" size="md">
+                    <Button appearance="solid" mode="primary" size="md">
                       Save
                     </Button>
                   </ButtonGroup>
@@ -156,8 +156,8 @@ export function ButtonGroupDoc() {
               <CodeBlock
                 code={[
                   '<ButtonGroup ariaLabel="Save changes">',
-                  '  <Button variant="secondary" size="md">Cancel</Button>',
-                  '  <Button variant="primary" size="md">Save</Button>',
+                  '  <Button appearance="outline" mode="neutral" size="md">Cancel</Button>',
+                  '  <Button appearance="solid" mode="primary" size="md">Save</Button>',
                   "</ButtonGroup>",
                 ].join("\n")}
               />
@@ -168,9 +168,9 @@ export function ButtonGroupDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
                   <ButtonGroup ariaLabel="Text alignment">
-                    <Button variant="secondary" size="md" iconStart="AlignLeft" ariaLabel="Align left" />
-                    <Button variant="secondary" size="md" iconStart="AlignCenter" ariaLabel="Align center" />
-                    <Button variant="secondary" size="md" iconStart="AlignRight" ariaLabel="Align right" />
+                    <Button appearance="outline" mode="neutral" size="md" iconStart="AlignLeft" ariaLabel="Align left" />
+                    <Button appearance="outline" mode="neutral" size="md" iconStart="AlignCenter" ariaLabel="Align center" />
+                    <Button appearance="outline" mode="neutral" size="md" iconStart="AlignRight" ariaLabel="Align right" />
                   </ButtonGroup>
                 </div>
               </div>
@@ -183,9 +183,9 @@ export function ButtonGroupDoc() {
               <CodeBlock
                 code={[
                   '<ButtonGroup ariaLabel="Text alignment">',
-                  '  <Button variant="secondary" size="md" iconStart="AlignLeft" ariaLabel="Align left" />',
-                  '  <Button variant="secondary" size="md" iconStart="AlignCenter" ariaLabel="Align center" />',
-                  '  <Button variant="secondary" size="md" iconStart="AlignRight" ariaLabel="Align right" />',
+                  '  <Button appearance="outline" mode="neutral" size="md" iconStart="AlignLeft" ariaLabel="Align left" />',
+                  '  <Button appearance="outline" mode="neutral" size="md" iconStart="AlignCenter" ariaLabel="Align center" />',
+                  '  <Button appearance="outline" mode="neutral" size="md" iconStart="AlignRight" ariaLabel="Align right" />',
                   "</ButtonGroup>",
                 ].join("\n")}
               />

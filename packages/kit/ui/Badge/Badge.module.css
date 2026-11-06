@@ -2,67 +2,183 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  border-radius: var(--radius-control-lg);
-  border: 1px solid transparent;
+  border-radius: var(--radius-control-md);
+  border: var(--border-control) solid transparent;
   font-family: var(--font-sans);
   font-weight: var(--type-weight-label);
+  font-size: var(--type-size-overline-xs);
+  line-height: var(--type-line-overline-xs);
   white-space: nowrap;
-  line-height: var(--type-line-heading);
 }
 
 .sm {
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--type-size-caption);
+  padding: 0 var(--space-2);
+  min-height: var(--space-5);
 }
 
 .md {
   padding: var(--space-1) var(--space-2);
-  font-size: var(--type-size-label);
 }
 
 .lg {
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--type-size-body-sm);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--type-size-ui-xs);
+  line-height: var(--type-line-ui-xs);
 }
 
-.neutral {
-  background-color: var(--surface-muted);
-  color: var(--text-secondary);
-  border-color: var(--border-faint);
+/* Soft: muted wash */
+.soft.neutral {
+  background-color: var(--bg-subtle);
+  color: var(--text-fg-muted);
 }
 
-.brand {
-  background-color: color-mix(in srgb, var(--action-primary) 12%, var(--surface-card));
-  color: var(--action-primary);
-  border-color: color-mix(in srgb, var(--action-primary) 35%, var(--surface-card));
+.soft.primary {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
 }
 
-.success {
-  background-color: var(--status-success-subtle);
-  color: var(--status-success);
-  border-color: var(--status-success-border);
+.soft.success {
+  background-color: var(--success-subtle);
+  color: var(--success-fg);
 }
 
-.warning {
-  background-color: var(--status-warning-subtle);
-  color: var(--status-warning);
-  border-color: var(--status-warning-border);
+.soft.warning {
+  background-color: var(--caution-subtle);
+  color: var(--caution-fg);
 }
 
-.danger {
-  background-color: var(--status-danger-subtle);
-  color: var(--status-danger);
-  border-color: var(--status-danger-border);
+.soft.danger {
+  background-color: var(--danger-subtle);
+  color: var(--danger-fg);
 }
 
-.info {
-  background-color: var(--status-info-subtle);
-  color: var(--status-info);
-  border-color: var(--status-info-border);
+.soft.info {
+  background-color: var(--info-subtle);
+  color: var(--info-fg);
+}
+
+.soft.highlight {
+  background-color: var(--highlight-subtle);
+  color: var(--highlight-fg);
+}
+
+/* Tint: stronger wash */
+.tint.neutral {
+  background-color: var(--bg-tray);
+  color: var(--text-fg);
+}
+
+.tint.primary {
+  background-color: var(--primary-subtle-strong);
+  color: var(--primary);
+}
+
+.tint.success {
+  background-color: var(--success-line);
+  color: var(--success-fg);
+}
+
+.tint.warning {
+  background-color: var(--caution-line);
+  color: var(--caution-fg);
+}
+
+.tint.danger {
+  background-color: var(--danger-line);
+  color: var(--danger-fg);
+}
+
+.tint.info {
+  background-color: var(--info-line);
+  color: var(--info-fg);
+}
+
+.tint.highlight {
+  background-color: var(--highlight-line);
+  color: var(--highlight-fg);
+}
+
+/* Solid: filled */
+.solid.neutral {
+  background-color: var(--text-fg);
+  color: var(--text-fg-inverse);
+}
+
+.solid.primary {
+  background-color: var(--primary);
+  color: var(--text-fg-inverse);
+}
+
+.solid.success {
+  background-color: var(--success-base);
+  color: var(--text-fg-inverse);
+}
+
+.solid.warning {
+  background-color: var(--caution-base);
+  color: var(--text-fg-inverse);
+}
+
+.solid.danger {
+  background-color: var(--danger-base);
+  color: var(--text-fg-inverse);
+}
+
+.solid.info {
+  background-color: var(--info-base);
+  color: var(--text-fg-inverse);
+}
+
+.solid.highlight {
+  background-color: var(--highlight-base);
+  color: var(--text-fg-inverse);
+}
+
+/* Outline: hairline */
+.outline.neutral {
+  background-color: var(--bg-control);
+  color: var(--text-fg-muted);
+  border-color: var(--line);
+}
+
+.outline.primary {
+  background-color: var(--bg-control);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.outline.success {
+  background-color: var(--bg-control);
+  color: var(--success-fg);
+  border-color: var(--success-line);
+}
+
+.outline.warning {
+  background-color: var(--bg-control);
+  color: var(--caution-fg);
+  border-color: var(--caution-line);
+}
+
+.outline.danger {
+  background-color: var(--bg-control);
+  color: var(--danger-fg);
+  border-color: var(--danger-line);
+}
+
+.outline.info {
+  background-color: var(--bg-control);
+  color: var(--info-fg);
+  border-color: var(--info-line);
+}
+
+.outline.highlight {
+  background-color: var(--bg-control);
+  color: var(--highlight-fg);
+  border-color: var(--highlight-line);
 }
 
 .disabled {
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
   pointer-events: none;
   cursor: not-allowed;
 }
@@ -74,7 +190,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-control-lg);
+  border-radius: var(--radius-control-md);
   background: transparent;
   color: inherit;
   cursor: pointer;

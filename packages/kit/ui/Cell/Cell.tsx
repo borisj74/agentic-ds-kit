@@ -227,7 +227,7 @@ export function Cell({
               <Button
                 key={`${item.label || "action"}-${index}`}
                 size={buttonSize}
-                variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
+                appearance={item.appearance ?? (index === 0 ? "outline" : "ghost")} mode={item.mode ?? "neutral"}
                 iconStart={item.icon}
                 ariaLabel={item.ariaLabel}
                 onClick={item.onClick}
@@ -238,7 +238,7 @@ export function Cell({
               <Button
                 key={`${item.label || "action"}-${index}`}
                 size={buttonSize}
-                variant={item.variant ?? (index === 0 ? "secondary" : "tertiary")}
+                appearance={item.appearance ?? (index === 0 ? "outline" : "ghost")} mode={item.mode ?? "neutral"}
                 iconStart={item.icon}
                 ariaLabel={item.ariaLabel || "Action"}
                 onClick={item.onClick}
@@ -257,7 +257,7 @@ export function Cell({
             <Button
               key={`${item.label || "icon"}-${index}`}
               size={buttonSize}
-              variant={item.variant ?? "tertiary"}
+              appearance={item.appearance ?? "ghost"} mode={item.mode ?? "neutral"}
               iconStart={item.icon}
               ariaLabel={item.ariaLabel || item.label || "Action"}
               onClick={item.onClick}
@@ -271,13 +271,13 @@ export function Cell({
       id: item.label || item.ariaLabel || (typeof item.icon === "string" ? item.icon : "") || `action-${index}`,
       label: item.label || item.ariaLabel || "Action",
       icon: item.icon,
-      danger: item.variant === "danger",
+      danger: item.mode === "danger",
     }));
     visual = (
       <DropdownMenu
         iconStart={icon || "Ellipsis"}
         ariaLabel={label || "Row actions"}
-        variant="tertiary"
+        appearance="ghost" mode="neutral"
         size={buttonSize}
         align="end"
         groups={[{ items: menuItems }]}

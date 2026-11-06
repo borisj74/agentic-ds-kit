@@ -137,7 +137,7 @@ export function LineChartDoc() {
                 </div>
               </div>
               <div>
-                <Button variant="secondary" size="sm" onClick={() => setReplay((count) => count + 1)}>
+                <Button appearance="outline" mode="neutral" size="sm" onClick={() => setReplay((count) => count + 1)}>
                   Replay
                 </Button>
               </div>

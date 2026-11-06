@@ -42,7 +42,7 @@
     "action": {
       "type": "slot",
       "required": false,
-      "note": "One inline control, normally kit Button variant=\"tertiary\" size=\"sm\". Horizontal only."
+      "note": "One inline control, normally kit Button appearance=\"ghost\" mode=\"neutral\" size=\"sm\". Horizontal only."
     },
     "tone": {
       "type": "enum",

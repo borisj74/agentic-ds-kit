@@ -433,7 +433,7 @@ export function DataGrid({
                           placement="left"
                         >
                           <Button
-                            variant="tertiary"
+                            appearance="ghost" mode="neutral"
                             size="sm"
                             iconStart="Trash2"
                             ariaLabel={`Remove row ${n}`}
@@ -451,7 +451,7 @@ export function DataGrid({
       </div>
       {canAddRows ? (
         <div ref={addRef} className={styles.add}>
-          <Button variant="tertiary" size="sm" iconStart="Plus" onClick={addRow}>
+          <Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus" onClick={addRow}>
             Add row
           </Button>
         </div>

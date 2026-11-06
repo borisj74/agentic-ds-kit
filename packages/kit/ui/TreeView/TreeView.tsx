@@ -618,7 +618,7 @@ export function TreeView({
                 <DropdownMenu
                   iconStart="GripVertical"
                   ariaLabel={`Move ${item.label}`}
-                  variant="tertiary"
+                  appearance="ghost" mode="neutral"
                   size={size}
                   align="end"
                   disabled={item.disabled}

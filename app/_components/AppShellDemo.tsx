@@ -62,7 +62,7 @@ export function AppShellDemo() {
           searchShortcut: "⌘K",
           searchValue: query,
           onSearch: setQuery,
-          actions: <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
+          actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
         }}
         nav={{
           title: "Agentix",
@@ -184,7 +184,7 @@ export function AppShellCustomDemo() {
             </AppHeader.Brand>
             <AppHeader.Search placeholder="Search runs" shortcut="⌘K" value={query} onSearch={setQuery} />
             <AppHeader.Actions>
-              <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
               <Avatar name="Maya Chen" size="sm" />
             </AppHeader.Actions>
           </AppHeader.Root>

@@ -10,7 +10,7 @@ const INSTALL = `npm install agentic-ds-kit@latest`;
 const SMOKE = `import { Button } from "agentic-ds-kit";
 
 export default function Page() {
-  return <Button variant="primary">Save</Button>;
+  return <Button appearance="solid" mode="primary">Save</Button>;
 }`;
 
 const USAGE = `import { AppHeader, Button, Scoreboard, SideNav } from "agentic-ds-kit";`;

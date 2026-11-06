@@ -30,7 +30,7 @@ const YEARS = [
 const MASTER_CODE = `<Card
   title="Payment Method"
   description="All transactions are secure and encrypted"
-  actions={[{ label: "Submit" }, { label: "Cancel", variant: "secondary" }]}
+  actions={[{ label: "Submit" }, { label: "Cancel", appearance: "outline", mode: "neutral" }]}
 >
   <Field label="Name on Card" htmlFor="name">
     <Input id="name" placeholder="Evil Rabbit" />
@@ -77,7 +77,7 @@ export function FieldDoc() {
                     description="All transactions are secure and encrypted"
                     actions={[
                       { label: "Submit" },
-                      { label: "Cancel", variant: "secondary" },
+                      { label: "Cancel", appearance: "outline", mode: "neutral" },
                     ]}
                   >
                     <Field label="Name on Card" htmlFor="field-name">

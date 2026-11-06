@@ -21,7 +21,7 @@
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-    "At most one variant=\"primary\" Button per view: while Empty has the primary, PageHeader has none",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view: while Empty has the primary, PageHeader has none",
     "Do not restyle kit components; change them through their props, slots, and tokens",
     "Wrap every labeled input in Field (label, hint, and error wiring)",
     "FieldSet groups two or more related fields (legend); a single Field stands alone",

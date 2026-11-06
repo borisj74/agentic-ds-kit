@@ -3,7 +3,7 @@
  * Generates lib/tokens.css from tokens/tokens.json.
  * Primitives are fixed. Appearance remaps under [data-theme="dark"].
  * Brand remaps under [data-color="blue"], [data-color="violet"], and [data-color="teal"].
- * Default brand (no data-color) is ink — the warm neutral ramp.
+ * Default brand (no data-color) is ink — the Cards-aligned black primary.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -63,7 +63,7 @@ function primitiveColorVars() {
   const colors = tokens.primitive.color;
   for (const [hue, ramp] of Object.entries(colors)) {
     if (typeof ramp === "string") {
-      lines.push(`  --color-${hue}: ${ramp};`);
+      lines.push(`  --color-${kebab(hue)}: ${ramp};`);
     } else {
       for (const [step, hex] of Object.entries(ramp)) {
         lines.push(`  --color-${hue}-${step}: ${hex};`);
@@ -161,35 +161,44 @@ function gridVars() {
 
 
 function radiusVars() {
-  const r = tokens.primitive.radius;
-  const lines = ["  /* Radius scale */"];
-  for (const [step, value] of Object.entries(r)) {
-    lines.push(`  --radius-${step}: ${value};`);
-  }
-  lines.push(
-    "  --radius-sm: var(--radius-50);",
-    "  --radius-md: var(--radius-100);",
-    "  --radius-lg: var(--radius-200);",
+  return [
+    "  /* Radius from one base (Cards curve: xs 3, sm 5, md 6, lg 8, xl 10, 2xl 13, 3xl 19) */",
+    "  --radius-base: 8px;",
+    "  --radius-xs: calc(var(--radius-base) * 3 / 8);",
+    "  --radius-sm: calc(var(--radius-base) * 5 / 8);",
+    "  --radius-md: calc(var(--radius-base) * 6 / 8);",
+    "  --radius-lg: var(--radius-base);",
+    "  --radius-xl: calc(var(--radius-base) * 10 / 8);",
+    "  --radius-2xl: calc(var(--radius-base) * 13 / 8);",
+    "  --radius-3xl: calc(var(--radius-base) * 19 / 8);",
+    "  --radius-full: 9999px;",
+    "  --radius-0: 0;",
+    "  --radius-50: var(--radius-xs);",
+    "  --radius-100: var(--radius-sm);",
+    "  --radius-200: var(--radius-lg);",
+    "  --radius-300: var(--radius-xl);",
+    "  --radius-400: var(--radius-2xl);",
+    "  --radius-500: var(--radius-3xl);",
+    "  --radius-600: var(--radius-3xl);",
     "",
     "  /* Control - buttons, inputs, selects */",
-    "  --radius-control-sm: var(--radius-50);",
-    "  --radius-control-md: var(--radius-100);",
-    "  --radius-control-lg: var(--radius-200);",
+    "  --radius-control-sm: var(--radius-xs);",
+    "  --radius-control-md: var(--radius-md);",
+    "  --radius-control-lg: var(--radius-lg);",
     "",
     "  /* Surface - cards, panels, dialogs */",
-    "  --radius-surface-sm: var(--radius-100);",
-    "  --radius-surface-md: var(--radius-100);",
-    "  --radius-surface-lg: var(--radius-200);",
+    "  --radius-surface-sm: var(--radius-lg);",
+    "  --radius-surface-md: var(--radius-xl);",
+    "  --radius-surface-lg: var(--radius-2xl);",
     "",
     "  /* Media - images, video, avatars */",
-    "  --radius-media-sm: var(--radius-100);",
-    "  --radius-media-md: var(--radius-100);",
-    "  --radius-media-lg: var(--radius-200);",
+    "  --radius-media-sm: var(--radius-md);",
+    "  --radius-media-md: var(--radius-lg);",
+    "  --radius-media-lg: var(--radius-xl);",
     "",
     "  /* Pill - chips, badges, tags */",
     "  --radius-pill: var(--radius-full);",
-  );
-  return lines;
+  ];
 }
 
 function effectVars() {
@@ -208,29 +217,30 @@ function effectVars() {
     "  --border-divider-strong: var(--border-200);",
     "  --border-focus-width: var(--border-200);",
     "",
+    "  /* Cards elevation: xs inputs, sm cards, md popovers/toasts, lg dialogs/sheets */",
     "  --shadow-0: none;",
-    "  --shadow-100: 0 4px 14px 2px rgb(0 0 0 / 0.008), 0 12px 40px 4px rgb(0 0 0 / 0.012);",
-    "  --shadow-150: 0 8px 24px 4px rgb(0 0 0 / 0.008), 0 24px 64px 8px rgb(0 0 0 / 0.014);",
-    "  --shadow-200: 0 8px 22px 4px rgb(0 0 0 / 0.01), 0 20px 56px 8px rgb(0 0 0 / 0.016);",
-    "  --shadow-250: 0 10px 28px 6px rgb(0 0 0 / 0.01), 0 28px 72px 10px rgb(0 0 0 / 0.018);",
-    "  --shadow-300: 0 12px 32px 6px rgb(0 0 0 / 0.012), 0 28px 68px 10px rgb(0 0 0 / 0.02);",
-    "  --shadow-400: 0 16px 40px 8px rgb(0 0 0 / 0.012), 0 36px 80px 12px rgb(0 0 0 / 0.022);",
-    "  --shadow-500: 0 20px 48px 10px rgb(0 0 0 / 0.014), 0 44px 96px 14px rgb(0 0 0 / 0.025);",
-    "  --shadow-600: 0 28px 64px 12px rgb(0 0 0 / 0.016), 0 52px 112px 16px rgb(0 0 0 / 0.03);",
-    "  --shadow-inset-top-light: inset 0 1px 0 rgb(255 255 255 / 0.72);",
-    "  --shadow-inset-start-light: inset 1px 0 0 rgb(255 255 255 / 0.28);",
-    "  --shadow-inset-end-light: inset -1px 0 0 rgb(255 255 255 / 0.1);",
-    "  --shadow-inset-bottom-light: inset 0 -1px 0 rgb(0 0 0 / 0.035);",
-    "  --shadow-raised-xs: var(--shadow-150);",
-    "  --shadow-raised-sm: var(--shadow-200);",
-    "  --shadow-raised-md: var(--shadow-300);",
-    "  --shadow-raised-lg: var(--shadow-400);",
-    "  --shadow-raised-soft: var(--shadow-250);",
-    "  --shadow-raised-depth: var(--shadow-raised-soft), var(--shadow-inset-top-light), var(--shadow-inset-start-light), var(--shadow-inset-end-light), var(--shadow-inset-bottom-light);",
-    "  --shadow-overlay-sm: var(--shadow-300);",
-    "  --shadow-overlay-md: var(--shadow-400);",
-    "  --shadow-overlay-lg: var(--shadow-500);",
-    "  --shadow-modal: var(--shadow-600);",
+    "  --shadow-100: var(--shadow-xs);",
+    "  --shadow-150: var(--shadow-xs);",
+    "  --shadow-200: var(--shadow-sm);",
+    "  --shadow-250: var(--shadow-sm);",
+    "  --shadow-300: var(--shadow-md);",
+    "  --shadow-400: var(--shadow-md);",
+    "  --shadow-500: var(--shadow-lg);",
+    "  --shadow-600: var(--shadow-lg);",
+    "  --shadow-inset-top-light: inset 0 0 0 transparent;",
+    "  --shadow-inset-start-light: inset 0 0 0 transparent;",
+    "  --shadow-inset-end-light: inset 0 0 0 transparent;",
+    "  --shadow-inset-bottom-light: inset 0 0 0 transparent;",
+    "  --shadow-raised-xs: var(--shadow-xs);",
+    "  --shadow-raised-sm: var(--shadow-sm);",
+    "  --shadow-raised-md: var(--shadow-md);",
+    "  --shadow-raised-lg: var(--shadow-lg);",
+    "  --shadow-raised-soft: var(--shadow-sm);",
+    "  --shadow-raised-depth: var(--shadow-sm);",
+    "  --shadow-overlay-sm: var(--shadow-md);",
+    "  --shadow-overlay-md: var(--shadow-md);",
+    "  --shadow-overlay-lg: var(--shadow-lg);",
+    "  --shadow-modal: var(--shadow-lg);",
     "",
     "  --motion-duration-0: 0ms;",
     "  --motion-duration-100: 120ms;",
@@ -280,6 +290,50 @@ function effectVars() {
   ];
 }
 
+function typeLadderVars() {
+  const ladder = tokens.semantic.type.ladder ?? {};
+  const lines = ["  /* Type ladders — heading / ui / body / overline (size / line) */"];
+  const emit = (cssName, key) => {
+    const step = ladder[key];
+    if (!step) return;
+    lines.push(`  --type-size-${cssName}: ${step.size};`);
+    lines.push(`  --type-line-${cssName}: ${step.line};`);
+  };
+  emit("heading-1", "heading1");
+  emit("heading-2", "heading2");
+  emit("heading-3", "heading3");
+  emit("heading-4", "heading4");
+  emit("heading-5", "heading5");
+  emit("ui-xl", "uiXl");
+  emit("ui-lg", "uiLg");
+  emit("ui-md", "uiMd");
+  emit("ui-sm", "uiSm");
+  emit("ui-xs", "uiXs");
+  emit("body-lg", "bodyLg");
+  emit("body-md", "bodyMd");
+  emit("body-sm", "bodySm");
+  emit("body-xs", "bodyXs");
+  emit("overline-xs", "overlineXs");
+  lines.push(
+    "  /* Legacy type role aliases */",
+    "  --type-size-display: var(--type-size-heading-3);",
+    "  --type-size-title: var(--type-size-heading-4);",
+    "  --type-size-heading: var(--type-size-heading-5);",
+    "  --type-size-metric: var(--type-size-ui-xl);",
+    "  --type-size-body: var(--type-size-body-md);",
+    "  --type-size-label: var(--type-size-ui-sm);",
+    "  --type-size-caption: var(--type-size-body-xs);",
+    "  --type-size-overline: var(--type-size-overline-xs);",
+    "  --type-size-code: var(--type-size-ui-sm);",
+  );
+  return lines;
+}
+
+function aliasVars() {
+  const aliases = tokens.semantic.aliases ?? {};
+  return Object.entries(aliases).map(([name, value]) => `  --${kebab(name)}: ${value};`);
+}
+
 function staticVars() {
   const p = tokens.primitive;
   return [
@@ -305,16 +359,7 @@ function staticVars() {
     `  --type-family-heading: var(--font-display);`,
     `  --type-family-code: var(--font-mono);`,
     "",
-    `  --type-size-body: ${p.fontSize.base};`,
-    `  --type-size-body-sm: ${p.fontSize.sm};`,
-    `  --type-size-label: ${p.fontSize.sm};`,
-    `  --type-size-heading: ${p.fontSize.lg};`,
-    `  --type-size-title: ${p.fontSize["2xl"]};`,
-    `  --type-size-display: ${p.fontSize["3xl"]};`,
-    `  --type-size-metric: ${p.fontSize["3xl"]};`,
-    `  --type-size-caption: ${p.fontSize.xs};`,
-    `  --type-size-overline: ${p.fontSize.xs};`,
-    `  --type-size-code: ${p.fontSize.sm};`,
+    ...typeLadderVars(),
     "",
     `  --type-weight-body: ${p.fontWeight.normal};`,
     `  --type-weight-label: ${p.fontWeight.medium};`,
@@ -325,8 +370,8 @@ function staticVars() {
     `  --type-weight-overline: ${p.fontWeight.medium};`,
     `  --type-weight-code: ${p.fontWeight.normal};`,
     "",
-    `  --type-line-body: ${p.lineHeight.normal};`,
-    `  --type-line-heading: ${p.lineHeight.tight};`,
+    `  --type-line-body: var(--type-line-body-md);`,
+    `  --type-line-heading: var(--type-line-heading-5);`,
     `  --type-tracking-overline: ${p.letterSpacing.wide};`,
     "",
     `  --z-overlay: 40;`,
@@ -347,6 +392,7 @@ ${primitiveColorVars().join("\n")}
 
   /* Semantic colors — light (default) */
 ${resolveThemeVars("light").join("\n")}
+${aliasVars().join("\n")}
 
 ${staticVars().join("\n")}
 }

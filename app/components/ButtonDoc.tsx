@@ -2,59 +2,42 @@
 
 import { useState } from "react";
 import { Button } from "agentic-ds-kit";
-import type { ButtonSize, ButtonVariant } from "agentic-ds-kit";
+import type { ButtonAppearance, ButtonMode, ButtonSize } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 
 const SIZES: ButtonSize[] = ["sm", "md", "lg"];
-const VARIANTS: ButtonVariant[] = ["primary", "secondary", "tertiary", "danger"];
+const APPEARANCES: ButtonAppearance[] = ["solid", "outline", "soft", "ghost"];
+const MODES: ButtonMode[] = ["primary", "neutral", "danger"];
 const ICON_MODES = ["none", "start", "end", "both", "only"] as const;
 
 type IconMode = (typeof ICON_MODES)[number];
 
-const MASTER_LABEL: Record<ButtonVariant, string> = {
+const MODE_LABEL: Record<ButtonMode, string> = {
   primary: "Continue",
-  secondary: "Cancel",
-  tertiary: "Learn more",
+  neutral: "Cancel",
   danger: "Delete",
 };
 
-const VARIANT_DOCS: {
-  variant: ButtonVariant;
-  title: string;
-  about: string;
-  labels: Record<ButtonSize, string>;
-}[] = [
-  {
-    variant: "primary",
-    title: "Primary",
-    about: "Use one Primary button per view. Show lg, md, and sm when hierarchy or density changes.",
-    labels: { sm: "Save", md: "Continue", lg: "Get started" },
-  },
-  {
-    variant: "secondary",
-    title: "Secondary",
-    about: "Use Secondary for cancel, back, or alternate paths that should stay quieter than Primary.",
-    labels: { sm: "Back", md: "Cancel", lg: "View details" },
-  },
-  {
-    variant: "tertiary",
-    title: "Tertiary",
-    about: "Use Tertiary for quiet actions in toolbars, empty states, or denser UI where a filled button would feel heavy.",
-    labels: { sm: "Edit", md: "Learn more", lg: "See all options" },
-  },
-  {
-    variant: "danger",
-    title: "Danger",
-    about: "Use Danger only for irreversible or harmful actions like delete. Confirm before committing when the cost of a mistake is high.",
-    labels: { sm: "Remove", md: "Delete", lg: "Delete account" },
-  },
-];
-
-function masterCode(variant: ButtonVariant, size: ButtonSize, disabled: boolean, label: string, icon: IconMode) {
-  const lines = ["<Button", `  variant="${variant}"`, `  size="${size}"`, disabled ? "  disabled" : null];
+function masterCode(
+  appearance: ButtonAppearance,
+  mode: ButtonMode,
+  size: ButtonSize,
+  flat: boolean,
+  disabled: boolean,
+  label: string,
+  icon: IconMode,
+) {
+  const lines = [
+    "<Button",
+    `  appearance="${appearance}"`,
+    `  mode="${mode}"`,
+    `  size="${size}"`,
+    flat ? "  flat" : null,
+    disabled ? "  disabled" : null,
+  ];
   if (icon === "start" || icon === "both" || icon === "only") lines.push('  iconStart="Plus"');
   if (icon === "end" || icon === "both") lines.push('  iconEnd="ArrowRight"');
   if (icon === "only") {
@@ -68,10 +51,12 @@ function masterCode(variant: ButtonVariant, size: ButtonSize, disabled: boolean,
 export function ButtonDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [size, setSize] = useState<ButtonSize>("md");
-  const [variant, setVariant] = useState<ButtonVariant>("primary");
+  const [appearance, setAppearance] = useState<ButtonAppearance>("solid");
+  const [mode, setMode] = useState<ButtonMode>("primary");
+  const [flat, setFlat] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [icon, setIcon] = useState<IconMode>("none");
-  const label = MASTER_LABEL[variant];
+  const label = MODE_LABEL[mode];
   const start = icon === "start" || icon === "both" || icon === "only" ? "Plus" : undefined;
   const end = icon === "end" || icon === "both" ? "ArrowRight" : undefined;
 
@@ -80,8 +65,9 @@ export function ButtonDoc() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Buttons</h1>
         <p className={styles.lede}>
-          Action hierarchy across primary, secondary, tertiary, and danger — each in lg, md, and sm. Lucide
-          icon slots via iconStart and iconEnd. Icon-only needs aria-label.
+          Appearance × mode: solid, outline, soft, ghost across primary, neutral, and danger. Optional flat set
+          drops elevation. One solid-primary CTA per view. Lucide icon slots via iconStart and iconEnd. Icon-only
+          needs aria-label.
         </p>
       </header>
 
@@ -90,7 +76,9 @@ export function ButtonDoc() {
           <h2 id="button-master" className={styles.masterTitle}>
             Master
           </h2>
-          <p className={styles.masterSummary}>Toggle size, variant, icon, and disabled to preview every Button combination.</p>
+          <p className={styles.masterSummary}>
+            Toggle appearance, mode, size, flat, icon, and disabled to preview every Button combination.
+          </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
@@ -100,9 +88,25 @@ export function ButtonDoc() {
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
                   {icon === "only" ? (
-                    <Button variant={variant} size={size} disabled={disabled} iconStart="Plus" ariaLabel={label} />
+                    <Button
+                      appearance={appearance}
+                      mode={mode}
+                      flat={flat}
+                      size={size}
+                      disabled={disabled}
+                      iconStart="Plus"
+                      ariaLabel={label}
+                    />
                   ) : (
-                    <Button variant={variant} size={size} disabled={disabled} iconStart={start} iconEnd={end}>
+                    <Button
+                      appearance={appearance}
+                      mode={mode}
+                      flat={flat}
+                      size={size}
+                      disabled={disabled}
+                      iconStart={start}
+                      iconEnd={end}
+                    >
                       {label}
                     </Button>
                   )}
@@ -126,16 +130,33 @@ export function ButtonDoc() {
                   </div>
                 </div>
                 <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Variant">
-                    {VARIANTS.map((option) => (
+                  <span className={styles.panelLabel}>Appearance</span>
+                  <div className={styles.radioList} role="radiogroup" aria-label="Appearance">
+                    {APPEARANCES.map((option) => (
                       <label key={option} className={styles.radio}>
                         <input
                           type="radio"
-                          name="button-variant"
+                          name="button-appearance"
                           value={option}
-                          checked={variant === option}
-                          onChange={() => setVariant(option)}
+                          checked={appearance === option}
+                          onChange={() => setAppearance(option)}
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.panelGroup}>
+                  <span className={styles.panelLabel}>Mode</span>
+                  <div className={styles.radioList} role="radiogroup" aria-label="Mode">
+                    {MODES.map((option) => (
+                      <label key={option} className={styles.radio}>
+                        <input
+                          type="radio"
+                          name="button-mode"
+                          value={option}
+                          checked={mode === option}
+                          onChange={() => setMode(option)}
                         />
                         {option}
                       </label>
@@ -161,6 +182,7 @@ export function ButtonDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
+                  <Switch label="Flat" size="sm" checked={flat} onChange={setFlat} />
                   <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
@@ -169,60 +191,102 @@ export function ButtonDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use one Primary per view. Secondary for quieter paths, Tertiary for low-emphasis actions, and Danger only for irreversible work.
-                  Pass Lucide export names on iconStart and iconEnd. Icon-only omits children and must set ariaLabel. Related sibling actions go in ButtonGroup.
+                  One appearance=&quot;solid&quot; mode=&quot;primary&quot; Button per view. Neutral outline for cancel and
+                  alternate paths, ghost for toolbars, danger only for irreversible work. Flat drops the resting
+                  shadow so a white control still reads on a white card. Pass Lucide export names on iconStart and
+                  iconEnd. Icon-only omits children and must set ariaLabel.
                 </p>
               </div>
-              <CodeBlock code={masterCode(variant, size, disabled, label, icon)} />
+              <CodeBlock code={masterCode(appearance, mode, size, flat, disabled, label, icon)} />
             </div>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
-            {VARIANT_DOCS.map((doc) => (
-              <section key={doc.variant} className={styles.example}>
-                <h2 className={styles.exampleTitle}>{doc.title}</h2>
+            {MODES.map((rowMode) => (
+              <section key={rowMode} className={styles.example}>
+                <h2 className={styles.exampleTitle}>{rowMode}</h2>
                 <div className={styles.exampleCanvas}>
                   <div className={styles.previewRow}>
-                    {SIZES.map((step) => (
-                      <Button key={step} variant={doc.variant} size={step}>
-                        {doc.labels[step]}
+                    {APPEARANCES.map((rowAppearance) => (
+                      <Button key={rowAppearance} appearance={rowAppearance} mode={rowMode} size="md">
+                        {rowAppearance}
                       </Button>
                     ))}
                   </div>
                 </div>
                 <div>
                   <h3 className={styles.usageTitle}>Usage</h3>
-                  <p className={styles.usageBody}>{doc.about}</p>
+                  <p className={styles.usageBody}>
+                    {rowMode === "primary"
+                      ? "Solid primary is the view CTA. Outline, soft, and ghost primary stay on-theme without competing."
+                      : rowMode === "neutral"
+                        ? "White outline/solid keeps an edge on the grey canvas and on white cards. Ghost is the quiet toolbar look."
+                        : "Danger is for irreversible actions only. Prefer outline or ghost until the user confirms."}
+                  </p>
                 </div>
                 <CodeBlock
-                  code={SIZES.map((step) => `<Button variant="${doc.variant}" size="${step}">${doc.labels[step]}</Button>`).join("\n")}
+                  code={APPEARANCES.map(
+                    (rowAppearance) =>
+                      `<Button appearance="${rowAppearance}" mode="${rowMode}">${rowAppearance}</Button>`,
+                  ).join("\n")}
                 />
               </section>
             ))}
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Icons</h2>
+              <h2 className={styles.exampleTitle}>Flat</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Button variant="secondary" iconStart="Plus">
-                    Add
-                  </Button>
-                  <Button variant="secondary" iconEnd="ArrowRight">
-                    Continue
-                  </Button>
-                  <Button variant="secondary" iconStart="Plus" ariaLabel="Add" />
+                  {MODES.map((rowMode) =>
+                    (["solid", "outline", "soft"] as const).map((rowAppearance) => (
+                      <Button
+                        key={`${rowMode}-${rowAppearance}`}
+                        appearance={rowAppearance}
+                        mode={rowMode}
+                        flat
+                        size="md"
+                      >
+                        {rowAppearance}
+                      </Button>
+                    )),
+                  )}
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Lucide export names on iconStart/iconEnd. Icon-only needs ariaLabel. Related sibling actions go in ButtonGroup.
+                  Flat × solid, outline, or soft — no elevation. Ghost is coerced to soft. Use on already-raised or
+                  inverse surfaces.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Button appearance="outline" mode="neutral" flat>Cancel</Button>'}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Icons</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Button appearance="outline" mode="neutral" iconStart="Plus">
+                    Add
+                  </Button>
+                  <Button appearance="outline" mode="neutral" iconEnd="ArrowRight">
+                    Continue
+                  </Button>
+                  <Button appearance="outline" mode="neutral" iconStart="Plus" ariaLabel="Add" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Lucide export names on iconStart/iconEnd. Icon-only needs ariaLabel. Related sibling actions go in
+                  ButtonGroup.
                 </p>
               </div>
               <CodeBlock
                 code={[
-                  '<Button variant="secondary" iconStart="Plus">Add</Button>',
-                  '<Button variant="secondary" iconEnd="ArrowRight">Continue</Button>',
-                  '<Button variant="secondary" iconStart="Plus" ariaLabel="Add" />',
+                  '<Button appearance="outline" mode="neutral" iconStart="Plus">Add</Button>',
+                  '<Button appearance="outline" mode="neutral" iconEnd="ArrowRight">Continue</Button>',
+                  '<Button appearance="outline" mode="neutral" iconStart="Plus" ariaLabel="Add" />',
                 ].join("\n")}
               />
             </section>

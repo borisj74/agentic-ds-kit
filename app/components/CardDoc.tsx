@@ -36,10 +36,10 @@ function masterCode(size: CardSize): string {
     '  title="Login to your account"',
     '  description="Enter your email below to login to your account."',
     `  size="${size}"`,
-    '  headerAction={{ label: "Sign Up", variant: "tertiary" }}',
+    '  headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}',
     "  actions={[",
-    '    { label: "Login", variant: "primary" },',
-    '    { label: "Login with Google", variant: "secondary" },',
+    '    { label: "Login", appearance: "solid", mode: "primary" },',
+    '    { label: "Login with Google", appearance: "outline", mode: "neutral" },',
     "  ]}",
     ">",
     '  <Field label="Name" htmlFor="card-login-name">',
@@ -89,10 +89,10 @@ export function CardDoc() {
                     title="Login to your account"
                     description="Enter your email below to login to your account."
                     size={size}
-                    headerAction={{ label: "Sign Up", variant: "tertiary" }}
+                    headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
                     actions={[
-                      { label: "Login", variant: "primary" },
-                      { label: "Login with Google", variant: "secondary" },
+                      { label: "Login", appearance: "solid", mode: "primary" },
+                      { label: "Login with Google", appearance: "outline", mode: "neutral" },
                     ]}
                   >
                     <Field label="Name" htmlFor="card-login-name">
@@ -169,10 +169,10 @@ export function CardDoc() {
                   <Card
                     title="Login to your account"
                     description="Enter your email below to login to your account."
-                    headerAction={{ label: "Sign Up", variant: "tertiary" }}
+                    headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
                     actions={[
-                      { label: "Login", variant: "primary" },
-                      { label: "Login with Google", variant: "secondary" },
+                      { label: "Login", appearance: "solid", mode: "primary" },
+                      { label: "Login with Google", appearance: "outline", mode: "neutral" },
                     ]}
                   >
                     <Field label="Name" htmlFor="card-variant-login-name">
@@ -201,8 +201,8 @@ export function CardDoc() {
                 code={`<Card
   title="Login to your account"
   description="Enter your email below to login to your account."
-  headerAction={{ label: "Sign Up", variant: "tertiary" }}
-  actions={[{ label: "Login", variant: "primary" }, { label: "Login with Google", variant: "secondary" }]}
+  headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
+  actions={[{ label: "Login", appearance: "solid", mode: "primary" }, { label: "Login with Google", appearance: "outline", mode: "neutral" }]}
 >
   <Field label="Name" htmlFor="name">
     <Input id="name" type="text" placeholder="Boris Jovanovic" />

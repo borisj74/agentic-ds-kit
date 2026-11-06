@@ -58,7 +58,7 @@ function masterCode(
   lines.push(`  size="${size}"`);
   if (collapsible) lines.push("  collapsible");
   if (showActions) {
-    lines.push(`  actions={<Button variant="secondary" size="${buttonSize}">View all</Button>}`);
+    lines.push(`  actions={<Button appearance="outline" mode="neutral" size="${buttonSize}">View all</Button>}`);
   }
   lines.push(">");
   lines.push("  <Table columns={columns} rows={rows} />");
@@ -107,7 +107,7 @@ export function SectionDoc() {
                   collapsible={collapsible}
                   actions={
                     showActions ? (
-                      <Button variant="secondary" size={buttonSize}>
+                      <Button appearance="outline" mode="neutral" size={buttonSize}>
                         View all
                       </Button>
                     ) : undefined
@@ -183,7 +183,7 @@ export function SectionDoc() {
                   title="Recent activity"
                   description="Latest project updates"
                   actions={
-                    <Button variant="secondary" size="sm">
+                    <Button appearance="outline" mode="neutral" size="sm">
                       View all
                     </Button>
                   }

@@ -46,9 +46,9 @@
   "doNot": [
     "Do not invent a local button group / segmented control",
     "Do not mix sizes inside one group",
-    "Do not put more than one variant=primary Button in a group (or the view)",
+    "Do not put more than one appearance=solid mode=primary Button in a group (or the view)",
     "Do not wrap Input, Select, or anything except kit Button",
     "Do not use raw hex"
   ],
-  "snippet": "<ButtonGroup ariaLabel=\"Plan period\"><Button variant=\"secondary\" size=\"md\">Day</Button><Button variant=\"secondary\" size=\"md\">Week</Button><Button variant=\"secondary\" size=\"md\">Month</Button></ButtonGroup>"
+  "snippet": "<ButtonGroup ariaLabel=\"Plan period\"><Button appearance=\"outline\" mode=\"neutral\" size=\"md\">Day</Button><Button appearance=\"outline\" mode=\"neutral\" size=\"md\">Week</Button><Button appearance=\"outline\" mode=\"neutral\" size=\"md\">Month</Button></ButtonGroup>"
 }

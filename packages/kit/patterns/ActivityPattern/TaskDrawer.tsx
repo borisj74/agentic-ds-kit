@@ -27,11 +27,11 @@ export function TaskDrawer({
         task ? (
           <>
             {unassigned ? (
-              <Button variant="primary" block onClick={onClose}>
+              <Button appearance="solid" mode="primary" block onClick={onClose}>
                 Assign owner
               </Button>
             ) : null}
-            <Button variant="secondary" block onClick={onClose}>
+            <Button appearance="outline" mode="neutral" block onClick={onClose}>
               Close
             </Button>
           </>

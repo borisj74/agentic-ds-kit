@@ -31,7 +31,7 @@ const SIDE_NAV_CODE = `<div className="layout-app">
   <main className="layout-canvas">
     <div className="layout-header">
       {/* Shown below 64rem */}
-      <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
       <PageHeader title="Overview" />
     </div>
     <div className="layout-content">…</div>
@@ -114,7 +114,7 @@ function TopBarOnly() {
           title="Acme"
           mark="A"
           radius="none"
-          actions={<Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />}
+          actions={<Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />}
         />
         <div className="layout-canvas">
           <Content title="Top bar only" page="overview" />
@@ -138,7 +138,7 @@ function SideNavOnly() {
         <div className="layout-canvas">
           <div className={`layout-header ${layout.menuRow}`}>
             <span className={layout.narrowOnly}>
-              <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
             </span>
             <PageHeader title="Side nav only" subtitle="In your app this column is <main>." />
           </div>
@@ -170,11 +170,11 @@ function Both() {
                 <AppHeader.Mark>A</AppHeader.Mark>
               </span>
               <span className={layout.narrowOnly}>
-                <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
+                <Button appearance="ghost" mode="neutral" size="sm" iconStart="Menu" ariaLabel="Open navigation" onClick={() => setOpen(true)} />
               </span>
             </>
           }
-          actions={<Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />}
+          actions={<Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />}
         />
         <div className={`layout-app ${layout.app}`}>
           <div className={layout.rail}>

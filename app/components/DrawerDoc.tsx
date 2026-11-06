@@ -61,8 +61,8 @@ function masterCode(side: DrawerSide, size: DrawerSize, showDescription: boolean
     "  onClose={close}",
     "  footer={",
     "    <>",
-    '      <Button variant="primary" size="lg" shape="pill" block>Confirm Delivery Time</Button>',
-    '      <Button variant="secondary" size="lg" shape="pill" block onClick={close}>Cancel</Button>',
+    '      <Button appearance="solid" mode="primary" size="lg" shape="pill" block>Confirm Delivery Time</Button>',
+    '      <Button appearance="outline" mode="neutral" size="lg" shape="pill" block onClick={close}>Cancel</Button>',
     "    </>",
     "  }",
     ">",
@@ -82,10 +82,10 @@ function masterCode(side: DrawerSide, size: DrawerSize, showDescription: boolean
 function DeliveryFooter({ onClose }: { onClose: () => void }) {
   return (
     <>
-      <Button variant="primary" size="lg" shape="pill" block onClick={onClose}>
+      <Button appearance="solid" mode="primary" size="lg" shape="pill" block onClick={onClose}>
         Confirm Delivery Time
       </Button>
-      <Button variant="secondary" size="lg" shape="pill" block onClick={onClose}>
+      <Button appearance="outline" mode="neutral" size="lg" shape="pill" block onClick={onClose}>
         Cancel
       </Button>
     </>
@@ -116,10 +116,10 @@ function Actions({
 }) {
   return (
     <ButtonGroup ariaLabel={ariaLabel}>
-      <Button variant="secondary" onClick={onClose}>
+      <Button appearance="outline" mode="neutral" onClick={onClose}>
         Cancel
       </Button>
-      <Button variant="primary" onClick={onClose}>
+      <Button appearance="solid" mode="primary" onClick={onClose}>
         Save
       </Button>
     </ButtonGroup>
@@ -198,7 +198,7 @@ export function DrawerDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
-                  <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+                  <Button appearance="solid" mode="primary" size="md" onClick={() => setOpen(true)}>
                     Pick a delivery time
                   </Button>
                 </div>
@@ -370,7 +370,7 @@ export function DrawerDoc() {
             <Variant
               title="With footer"
               usage="Title, description, and footer actions. Overlay click and Escape still close."
-              code={`<Drawer\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Drawer actions">\n      <Button variant="secondary" onClick={close}>Cancel</Button>\n      <Button variant="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Drawer>`}
+              code={`<Drawer\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Drawer actions">\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Drawer>`}
               onOpen={() => setVariantOpen("footer")}
             >
               <Drawer
@@ -425,7 +425,7 @@ function Variant({
       <h2 className={styles.exampleTitle}>{title}</h2>
       <div className={styles.exampleCanvas}>
         <div className={styles.previewRow}>
-          <Button variant="primary" size="md" onClick={onOpen}>
+          <Button appearance="solid" mode="primary" size="md" onClick={onOpen}>
             Open drawer
           </Button>
         </div>

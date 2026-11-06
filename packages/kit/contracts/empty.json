@@ -81,5 +81,5 @@
     "Do not use raw hex",
     "Do not use glass, color-mix, or backdrop-blur"
   ],
-  "snippet": "<Empty title=\"No projects yet\" description=\"You haven't created any projects yet.\" icon=\"Folder\" actions={<><Button>Create</Button><Button variant=\"secondary\">Import</Button></>} />"
+  "snippet": "<Empty title=\"No projects yet\" description=\"You haven't created any projects yet.\" icon=\"Folder\" actions={<><Button>Create</Button><Button appearance=\"outline\" mode=\"neutral\">Import</Button></>} />"
 }

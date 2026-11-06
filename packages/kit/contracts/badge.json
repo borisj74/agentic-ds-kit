@@ -18,25 +18,20 @@
       "type": "string",
       "required": true
     },
+    "appearance": {
+      "type": "enum",
+      "values": ["soft", "tint", "solid", "outline"],
+      "default": "soft"
+    },
     "tone": {
       "type": "enum",
-      "values": [
-        "neutral",
-        "brand",
-        "success",
-        "warning",
-        "danger",
-        "info"
-      ],
-      "default": "neutral"
+      "values": ["neutral", "primary", "brand", "success", "warning", "danger", "info", "highlight"],
+      "default": "neutral",
+      "note": "brand is an alias of primary. highlight is a gold marker, not a warning."
     },
     "size": {
       "type": "enum",
-      "values": [
-        "sm",
-        "md",
-        "lg"
-      ],
+      "values": ["sm", "md", "lg"],
       "default": "md"
     },
     "removable": {
@@ -60,25 +55,36 @@
     "rest": "span"
   },
   "tokens": [
-    "surface.muted",
-    "surface.card",
-    "text.secondary",
-    "border.faint",
-    "border.focus",
-    "action.primary",
-    "status.success",
-    "status.successSubtle",
-    "status.successBorder",
-    "status.warning",
-    "status.warningSubtle",
-    "status.warningBorder",
-    "status.danger",
-    "status.dangerSubtle",
-    "status.dangerBorder",
-    "status.info",
-    "status.infoSubtle",
-    "status.infoBorder",
-    "radius.controlLg"
+    "bg.subtle",
+    "bg.tray",
+    "bg.control",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgInverse",
+    "line.default",
+    "primary.base",
+    "primary.subtle",
+    "success.fg",
+    "success.base",
+    "success.line",
+    "success.subtle",
+    "caution.fg",
+    "caution.base",
+    "caution.line",
+    "caution.subtle",
+    "danger.fg",
+    "danger.base",
+    "danger.line",
+    "danger.subtle",
+    "info.fg",
+    "info.base",
+    "info.line",
+    "info.subtle",
+    "highlight.fg",
+    "highlight.base",
+    "highlight.line",
+    "highlight.subtle",
+    "radius.controlMd"
   ],
   "a11y": {
     "element": "span",
@@ -95,5 +101,5 @@
     "Do not use raw hex",
     "Do not use Badge as a button except the remove control"
   ],
-  "snippet": "<Badge tone=\"info\" size=\"md\">In progress</Badge>"
+  "snippet": "<Badge appearance=\"soft\" tone=\"success\" size=\"md\">Active</Badge>"
 }

@@ -33,7 +33,6 @@ export type {
   DataTableColumn,
   DataTableFilter,
   DataTableBulkAction,
-  DataTableBulkActionVariant,
   DataTableCell,
   DataTableRow,
   DataTableSortValue,
@@ -314,9 +313,17 @@ export function DataTable({
     action.onClick(selectedVisible);
   }
 
-  function bulkVariant(action: DataTableBulkAction): "secondary" | "tertiary" | "danger" {
-    if (action.variant === "tertiary" || action.variant === "danger") return action.variant;
-    return "secondary";
+  function bulkLook(action: DataTableBulkAction): {
+    appearance: "solid" | "outline" | "soft" | "ghost";
+    mode: "primary" | "neutral" | "danger";
+  } {
+    if (action.mode === "danger" || action.appearance === "solid") {
+      return { appearance: action.appearance ?? "solid", mode: action.mode ?? "danger" };
+    }
+    return {
+      appearance: action.appearance ?? "outline",
+      mode: action.mode ?? "neutral",
+    };
   }
 
   function columnClass(column: DataTableColumn): string {
@@ -368,7 +375,7 @@ export function DataTable({
                       <div key={filter.key} className={styles.filter}>
                         <DropdownMenu
                           trigger={value || allLabel}
-                          variant="secondary"
+                          appearance="outline" mode="neutral"
                           size="md"
                           iconEnd="ChevronDown"
                           ariaLabel={filter.label}
@@ -387,7 +394,7 @@ export function DataTable({
               ) : null}
               {activeFilters.length > 0 ? (
                 <div className={styles.reset}>
-                  <Button size="md" variant="tertiary" onClick={resetFilters}>
+                  <Button size="md" appearance="ghost" mode="neutral" onClick={resetFilters}>
                     Reset filters
                   </Button>
                 </div>
@@ -395,7 +402,7 @@ export function DataTable({
               {columnSettings ? (
                 <div ref={columnsWrapRef} className={styles.columns}>
                   <Button
-                    variant="secondary"
+                    appearance="outline" mode="neutral"
                     size="md"
                     iconStart="Settings"
                     onClick={() => setMenuOpen((open) => !open)}
@@ -437,14 +444,15 @@ export function DataTable({
               <Button
                 key={action.id}
                 size="sm"
-                variant={bulkVariant(action)}
+                appearance={bulkLook(action).appearance}
+                mode={bulkLook(action).mode}
                 iconStart={action.iconStart}
                 onClick={() => runBulkAction(action)}
               >
                 {action.label}
               </Button>
             ))}
-            <Button size="sm" variant="tertiary" onClick={clearSelection}>
+            <Button size="sm" appearance="ghost" mode="neutral" onClick={clearSelection}>
               Clear selection
             </Button>
           </div>

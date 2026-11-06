@@ -53,7 +53,8 @@ export function DropdownMenu({
   error = false,
   describedBy,
   ariaLabel,
-  variant = "secondary",
+  appearance = "outline",
+  mode = "neutral",
   size = "md",
   align = "start",
   columns = 1,
@@ -685,7 +686,8 @@ export function DropdownMenu({
           {...passthrough}
           ref={setTriggerRef}
           id={id}
-          variant={variant}
+          appearance={appearance}
+          mode={mode}
           size={size}
           iconStart={iconStart}
           iconEnd={iconEnd}
@@ -704,7 +706,8 @@ export function DropdownMenu({
           {...passthrough}
           ref={setTriggerRef}
           id={id}
-          variant={variant}
+          appearance={appearance}
+          mode={mode}
           size={size}
           iconStart={iconStart}
           iconEnd={iconEnd}

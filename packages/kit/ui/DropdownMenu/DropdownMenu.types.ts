@@ -1,6 +1,6 @@
 import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, DragEventHandler, Ref } from "react";
-import type { ButtonSize, ButtonVariant } from "../Button/Button.types";
+import type { ButtonAppearance, ButtonMode, ButtonSize } from "../Button/Button.types";
 
 export type DropdownMenuAlign = "start" | "end";
 export type DropdownMenuTriggerStyle = "button" | "field" | "nav";
@@ -62,7 +62,8 @@ export interface DropdownMenuProps extends Omit<ComponentPropsWithoutRef<"button
   error?: boolean;
   describedBy?: string;
   ariaLabel?: string;
-  variant?: ButtonVariant;
+  appearance?: ButtonAppearance;
+  mode?: ButtonMode;
   size?: ButtonSize;
   align?: DropdownMenuAlign;
   columns?: 1 | 2;
