@@ -47,7 +47,7 @@ In any client or server page that can render a client child:
 import { Button } from "agentic-ds-kit";
 
 export default function Page() {
-  return <Button variant="primary">Save</Button>;
+  return <Button appearance="solid" mode="primary">Save</Button>;
 }
 ```
 
@@ -362,7 +362,7 @@ The rule is short on purpose:
 4. Layout accessibility: content in `<main>`, chrome in `header` / `nav` landmarks, navigation reachable on small screens.
 5. If a component is missing from the index, stop and ask — do not add a one-off.
 6. Semantic tokens only. No hex in components. No primitive `--color-*` ramps in component CSS.
-7. One `variant="primary"` Button per view.
+7. One `appearance="solid"` `mode="primary"` Button per view.
 
 **Eval prompts** (also in the README) are the smoke test that a coworker’s agent is actually using the kit.
 

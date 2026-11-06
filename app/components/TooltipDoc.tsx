@@ -12,7 +12,7 @@ const PLACEMENTS: TooltipPlacement[] = ["top", "bottom", "left", "right"];
 
 function masterCode(placement: TooltipPlacement) {
   return `<Tooltip content="Export includes all projects" placement="${placement}">
-  <Button variant="secondary" size="sm">Export</Button>
+  <Button appearance="outline" mode="neutral" size="sm">Export</Button>
 </Tooltip>`;
 }
 
@@ -46,7 +46,7 @@ export function TooltipDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <Tooltip content="Export includes all projects" placement={placement}>
-                  <Button variant="secondary" size="sm">
+                  <Button appearance="outline" mode="neutral" size="sm">
                     Export
                   </Button>
                 </Tooltip>
@@ -87,7 +87,7 @@ export function TooltipDoc() {
               <h2 className={styles.exampleTitle}>Icon trigger</h2>
               <div className={styles.exampleCanvas}>
                 <Tooltip content="More options">
-                  <Button variant="tertiary" size="sm" iconStart="MoreHorizontal" ariaLabel="More options" />
+                  <Button appearance="ghost" mode="neutral" size="sm" iconStart="MoreHorizontal" ariaLabel="More options" />
                 </Tooltip>
               </div>
               <div>
@@ -99,7 +99,7 @@ export function TooltipDoc() {
               </div>
               <CodeBlock
                 code={`<Tooltip content="More options">
-  <Button variant="tertiary" size="sm" iconStart="MoreHorizontal" ariaLabel="More options" />
+  <Button appearance="ghost" mode="neutral" size="sm" iconStart="MoreHorizontal" ariaLabel="More options" />
 </Tooltip>`}
               />
             </section>

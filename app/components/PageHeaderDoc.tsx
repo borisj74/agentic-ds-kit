@@ -44,7 +44,7 @@ function masterCode(showBreadcrumb: boolean, showActions: boolean): string {
     lines.push(
       "  actions={",
       "    <>",
-      '      <Button variant="secondary">Edit</Button>',
+      '      <Button appearance="outline" mode="neutral">Edit</Button>',
       "      <Button>Save</Button>",
       "    </>",
       "  }",
@@ -92,7 +92,7 @@ export function PageHeaderDoc() {
                     actions={
                       showActions ? (
                         <>
-                          <Button variant="secondary">Edit</Button>
+                          <Button appearance="outline" mode="neutral">Edit</Button>
                           <Button>Save</Button>
                         </>
                       ) : undefined

@@ -1,7 +1,7 @@
 import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
-import type { ButtonVariant } from "../Button/Button.types";
+import type { ButtonAppearance, ButtonMode } from "../Button/Button.types";
 import type { KitLinkComponent } from "../shared/link";
 
 export type { KitLinkComponent } from "../shared/link";
@@ -46,7 +46,8 @@ export interface CellAction {
   label?: string;
   icon?: KitIcon;
   ariaLabel?: string;
-  variant?: ButtonVariant;
+  appearance?: ButtonAppearance;
+  mode?: ButtonMode;
   onClick?: () => void;
 }
 

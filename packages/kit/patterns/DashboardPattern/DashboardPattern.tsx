@@ -51,14 +51,14 @@ export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProp
               {
                 id: "export",
                 label: "Export",
-                variant: "secondary",
+                appearance: "outline", mode: "neutral",
                 iconStart: "Download",
                 onClick: () => undefined,
               },
               {
                 id: "delete",
                 label: "Delete",
-                variant: "danger",
+                appearance: "solid", mode: "danger",
                 iconStart: "Trash2",
                 onClick: (ids) => {
                   setTaskRows((current) => current.filter((row) => !ids.includes(String(row.id))));

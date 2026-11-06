@@ -1,13 +1,13 @@
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
-import type { ButtonVariant } from "../Button";
+import type { ButtonAppearance, ButtonMode } from "../Button";
 import type { KitLinkComponent } from "../shared/link";
 
 export type CardSize = "sm" | "md";
-export type CardActionVariant = ButtonVariant;
 
 export interface CardAction {
   label: string;
-  variant?: CardActionVariant;
+  appearance?: ButtonAppearance;
+  mode?: ButtonMode;
   onClick?: () => void;
   /** headerAction only: render a text link (e.g. "View all") instead of a Button. */
   href?: string;

@@ -86,5 +86,5 @@
     "Do not use raw hex",
     "Do not close itself — compose Modal for an overlay"
   ],
-  "snippet": "<Button variant=\"secondary\" iconStart=\"Search\" onClick={open} />\n<Modal open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Modal>"
+  "snippet": "<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Search\" onClick={open} />\n<Modal open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Modal>"
 }

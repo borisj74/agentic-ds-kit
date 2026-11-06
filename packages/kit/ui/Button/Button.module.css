@@ -5,11 +5,19 @@
   gap: var(--space-2);
   border-radius: var(--radius-control-md);
   font-family: var(--font-sans);
-  font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-heading);
+  font-weight: var(--type-weight-label);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
   cursor: pointer;
-  border: 1px solid transparent;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  border: var(--border-control) solid transparent;
+  background-color: transparent;
+  color: var(--text-fg);
+  box-shadow: none;
+  transition:
+    background-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    border-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    box-shadow var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
 .button:focus-visible {
@@ -18,61 +26,158 @@
 }
 
 .button:disabled {
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
 
 .lg {
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--type-size-body);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
 }
 
 .md {
   padding: var(--space-2) var(--space-4);
-  font-size: var(--type-size-body-sm);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
 }
 
 .sm {
   padding: var(--space-1) var(--space-3);
-  font-size: var(--type-size-caption);
+  font-size: var(--type-size-ui-xs);
+  line-height: var(--type-line-ui-xs);
 }
 
-.primary {
-  background-color: var(--action-primary);
-  color: var(--text-inverse);
+/* Solid × mode */
+.solid.primary {
+  background-color: var(--primary);
+  color: var(--text-fg-inverse);
+  box-shadow: var(--shadow-xs);
 }
 
-.primary:hover:not(:disabled) {
-  background-color: var(--action-primary-hover);
+.solid.primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
 }
 
-.secondary {
-  background-color: var(--surface-card);
-  color: var(--text-primary);
-  border-color: var(--border-faint);
+.solid.primary:active:not(:disabled) {
+  background-color: var(--primary-active);
 }
 
-.secondary:hover:not(:disabled) {
-  background-color: var(--surface-muted);
+.solid.neutral {
+  background-color: var(--bg-control);
+  color: var(--text-fg);
+  border-color: var(--line);
+  box-shadow: var(--shadow-xs);
 }
 
-.tertiary {
-  background-color: transparent;
-  color: var(--text-secondary);
+.solid.neutral:hover:not(:disabled) {
+  background-color: var(--bg-control-hover);
 }
 
-.tertiary:hover:not(:disabled) {
-  background-color: var(--surface-muted);
-  color: var(--text-primary);
+.solid.danger {
+  background-color: var(--danger-base);
+  color: var(--text-fg-inverse);
+  box-shadow: var(--shadow-xs);
 }
 
-.danger {
-  background-color: var(--action-danger);
-  color: var(--text-inverse);
-}
-
-.danger:hover:not(:disabled) {
+.solid.danger:hover:not(:disabled) {
   background-color: var(--action-danger-hover);
+}
+
+.solid.danger:active:not(:disabled) {
+  background-color: var(--action-danger-pressed);
+}
+
+/* Outline × mode */
+.outline.primary {
+  background-color: var(--bg-control);
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.outline.primary:hover:not(:disabled) {
+  background-color: var(--primary-subtle);
+}
+
+.outline.neutral {
+  background-color: var(--bg-control);
+  color: var(--text-fg);
+  border-color: var(--line);
+  box-shadow: var(--shadow-xs);
+}
+
+.outline.neutral:hover:not(:disabled) {
+  background-color: var(--bg-control-hover);
+}
+
+.outline.danger {
+  background-color: var(--bg-control);
+  color: var(--danger-fg);
+  border-color: var(--danger-line);
+  box-shadow: var(--shadow-xs);
+}
+
+.outline.danger:hover:not(:disabled) {
+  background-color: var(--danger-subtle);
+}
+
+/* Soft × mode */
+.soft.primary {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.soft.primary:hover:not(:disabled) {
+  background-color: var(--primary-subtle-strong);
+}
+
+.soft.neutral {
+  background-color: var(--bg-subtle);
+  color: var(--text-fg);
+}
+
+.soft.neutral:hover:not(:disabled) {
+  background-color: var(--bg-tray);
+}
+
+.soft.danger {
+  background-color: var(--danger-subtle);
+  color: var(--danger-fg);
+}
+
+.soft.danger:hover:not(:disabled) {
+  background-color: var(--danger-line);
+}
+
+/* Ghost × mode */
+.ghost.primary {
+  color: var(--primary);
+}
+
+.ghost.primary:hover:not(:disabled) {
+  background-color: var(--primary-subtle);
+}
+
+.ghost.neutral {
+  color: var(--text-fg-muted);
+}
+
+.ghost.neutral:hover:not(:disabled) {
+  background-color: var(--bg-subtle);
+  color: var(--text-fg);
+}
+
+.ghost.danger {
+  color: var(--danger-fg);
+}
+
+.ghost.danger:hover:not(:disabled) {
+  background-color: var(--danger-subtle);
+}
+
+.flat {
+  box-shadow: none;
 }
 
 .icon {

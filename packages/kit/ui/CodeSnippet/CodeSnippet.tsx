@@ -93,7 +93,7 @@ export function CodeSnippet({
 
   const copyButton = copyable ? (
     <Button
-      variant={hasHeader ? "tertiary" : "secondary"}
+      appearance={hasHeader ? "ghost" : "outline"} mode="neutral"
       size="sm"
       iconStart={copied ? "Check" : "Copy"}
       onClick={onCopy}

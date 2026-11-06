@@ -94,11 +94,12 @@
       "itemShape": {
         "id": "string",
         "label": "string",
-        "variant": "secondary | tertiary | danger?",
+        "appearance": "outline | ghost | solid?",
+        "mode": "neutral | danger?",
         "iconStart": "KitIcon?",
         "onClick": "(ids: string[]) => void"
       },
-      "note": "Shown when selectable and at least one row is checked. kit Buttons. Never primary."
+      "note": "Shown when selectable and at least one row is checked. kit Buttons. Never solid-primary."
     }
   },
   "passthrough": {

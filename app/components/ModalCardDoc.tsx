@@ -26,8 +26,8 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
   lines.push(
     "  footer={",
     '    <ButtonGroup ariaLabel="Modal actions">',
-    '      <Button variant="secondary">Cancel</Button>',
-    '      <Button variant="primary">Save</Button>',
+    '      <Button appearance="outline" mode="neutral">Cancel</Button>',
+    '      <Button appearance="solid" mode="primary">Save</Button>',
     "    </ButtonGroup>",
     "  }",
     ">",
@@ -40,8 +40,8 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
 function Footer() {
   return (
     <ButtonGroup ariaLabel="Modal actions">
-      <Button variant="secondary">Cancel</Button>
-      <Button variant="primary">Save</Button>
+      <Button appearance="outline" mode="neutral">Cancel</Button>
+      <Button appearance="solid" mode="primary">Save</Button>
     </ButtonGroup>
   );
 }
@@ -189,7 +189,7 @@ export function ModalCardDoc() {
                 <p className={styles.usageBody}>Footer is kit Buttons in a ButtonGroup. No divider.</p>
               </div>
               <CodeBlock
-                code={`<ModalCard\n  title="Edit profile"\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button variant="secondary">Cancel</Button>\n      <Button variant="primary">Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</ModalCard>`}
+                code={`<ModalCard\n  title="Edit profile"\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button appearance="outline" mode="neutral">Cancel</Button>\n      <Button appearance="solid" mode="primary">Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</ModalCard>`}
               />
             </section>
 

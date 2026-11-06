@@ -30,7 +30,7 @@ const PRIMITIVE_RAMPS: {
   steps: readonly string[];
   single?: boolean;
 }[] = [
-  { hue: "neutral", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
+  { hue: "neutral", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const },
   { hue: "blue", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "violet", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "teal", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
@@ -39,11 +39,119 @@ const PRIMITIVE_RAMPS: {
   { hue: "amber", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "white", steps: ["white"], single: true },
   { hue: "black", steps: ["black"], single: true },
+  { hue: "ink", steps: ["ink"], single: true },
+  { hue: "fog", steps: ["fog"], single: true },
+  { hue: "cloud", steps: ["cloud"], single: true },
 ];
 
 const SEMANTIC_FAMILIES: SemanticFamily[] = [
   {
-    title: "Text",
+    title: "Background",
+    pattern: "bg-*",
+    tokens: [
+      { name: "bg.canvas", var: "--bg-canvas" },
+      { name: "bg.subtle", var: "--bg-subtle" },
+      { name: "bg.tray", var: "--bg-tray" },
+      { name: "bg.surface", var: "--bg-surface" },
+      { name: "bg.raised", var: "--bg-raised" },
+      { name: "bg.floating", var: "--bg-floating" },
+      { name: "bg.field", var: "--bg-field" },
+      { name: "bg.control", var: "--bg-control" },
+      { name: "bg.control-hover", var: "--bg-control-hover" },
+      { name: "bg.track", var: "--bg-track" },
+      { name: "bg.track-strong", var: "--bg-track-strong" },
+      { name: "bg.inverse", var: "--bg-inverse" },
+      { name: "bg.inverse-hover", var: "--bg-inverse-hover" },
+    ],
+  },
+  {
+    title: "Foreground",
+    pattern: "text-fg-*",
+    tokens: [
+      { name: "text.fg", var: "--text-fg" },
+      { name: "text.fg-muted", var: "--text-fg-muted" },
+      { name: "text.fg-subtle", var: "--text-fg-subtle" },
+      { name: "text.fg-disabled", var: "--text-fg-disabled" },
+      { name: "text.fg-inverse", var: "--text-fg-inverse" },
+    ],
+  },
+  {
+    title: "Line",
+    pattern: "line-*",
+    tokens: [
+      { name: "line", var: "--line" },
+      { name: "line.default", var: "--line-default" },
+      { name: "line.strong", var: "--line-strong" },
+      { name: "line.focus", var: "--line-focus" },
+      { name: "line.inverse", var: "--line-inverse" },
+    ],
+  },
+  {
+    title: "Primary",
+    pattern: "primary-*",
+    tokens: [
+      { name: "primary", var: "--primary" },
+      { name: "primary.base", var: "--primary-base" },
+      { name: "primary.hover", var: "--primary-hover" },
+      { name: "primary.active", var: "--primary-active" },
+      { name: "primary.subtle", var: "--primary-subtle" },
+      { name: "primary.subtle-strong", var: "--primary-subtle-strong" },
+      { name: "primary.subtle-stronger", var: "--primary-subtle-stronger" },
+    ],
+  },
+  {
+    title: "State",
+    pattern: "{state}-fg · base · line · subtle",
+    subgroups: [
+      {
+        title: "Danger",
+        tokens: [
+          { name: "danger.fg", var: "--danger-fg" },
+          { name: "danger.base", var: "--danger-base" },
+          { name: "danger.line", var: "--danger-line" },
+          { name: "danger.subtle", var: "--danger-subtle" },
+        ],
+      },
+      {
+        title: "Caution",
+        tokens: [
+          { name: "caution.fg", var: "--caution-fg" },
+          { name: "caution.base", var: "--caution-base" },
+          { name: "caution.line", var: "--caution-line" },
+          { name: "caution.subtle", var: "--caution-subtle" },
+        ],
+      },
+      {
+        title: "Success",
+        tokens: [
+          { name: "success.fg", var: "--success-fg" },
+          { name: "success.base", var: "--success-base" },
+          { name: "success.line", var: "--success-line" },
+          { name: "success.subtle", var: "--success-subtle" },
+        ],
+      },
+      {
+        title: "Info",
+        tokens: [
+          { name: "info.fg", var: "--info-fg" },
+          { name: "info.base", var: "--info-base" },
+          { name: "info.line", var: "--info-line" },
+          { name: "info.subtle", var: "--info-subtle" },
+        ],
+      },
+      {
+        title: "Highlight",
+        tokens: [
+          { name: "highlight.fg", var: "--highlight-fg" },
+          { name: "highlight.base", var: "--highlight-base" },
+          { name: "highlight.line", var: "--highlight-line" },
+          { name: "highlight.subtle", var: "--highlight-subtle" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Text (aliases)",
     pattern: "text-*",
     tokens: [
       { name: "text.primary", var: "--text-primary" },

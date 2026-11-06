@@ -24,7 +24,7 @@ export function CalendarsDrawer({
   onToggle: (id: string, shown: boolean) => void;
 }) {
   return (
-    <Drawer open={open} title="Calendars" onClose={onClose} footer={<Button variant="secondary" onClick={onClose}>Done</Button>}>
+    <Drawer open={open} title="Calendars" onClose={onClose} footer={<Button appearance="outline" mode="neutral" onClick={onClose}>Done</Button>}>
       <ul className={styles.sources}>
         {calendars.map((calendar, index) => {
           const tone = calendar.tone ?? TONES[index % TONES.length];
@@ -91,14 +91,14 @@ export function EventDrawer({
       onClose={onClose}
       footer={
         <>
-          <Button variant="primary" onClick={onSave}>
+          <Button appearance="solid" mode="primary" onClick={onSave}>
             Save
           </Button>
-          <Button variant="secondary" onClick={onClose}>
+          <Button appearance="outline" mode="neutral" onClick={onClose}>
             Cancel
           </Button>
           {isEdit ? (
-            <Button variant="danger" onClick={onRemove}>
+            <Button appearance="solid" mode="danger" onClick={onRemove}>
               Delete
             </Button>
           ) : null}

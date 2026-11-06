@@ -6,11 +6,12 @@
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-body);
-  color: var(--text-primary);
-  background-color: var(--surface-card);
-  border: var(--border-width-thin) solid var(--border-faint);
+  color: var(--text-fg);
+  background-color: var(--bg-field);
+  border: var(--border-width-thin) solid var(--line);
   border-radius: var(--radius-control-md);
-  transition: border-color var(--motion-fast) ease, outline-color var(--motion-fast) ease;
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--motion-fast) ease, outline-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
 }
 
 .control:focus {

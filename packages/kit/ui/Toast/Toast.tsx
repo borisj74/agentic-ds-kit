@@ -126,13 +126,13 @@ function ToastCard({
           ) : null}
           {actionLabel ? (
             <div className={styles.action}>
-              <Button variant="tertiary" size="sm" onClick={handleAction}>
+              <Button appearance="ghost" mode="neutral" size="sm" onClick={handleAction}>
                 {actionLabel}
               </Button>
             </div>
           ) : null}
         </div>
-        <Button variant="tertiary" size="sm" iconStart="X" ariaLabel="Dismiss" onClick={onClose} />
+        <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel="Dismiss" onClick={onClose} />
       </div>
     </div>
   );

@@ -236,7 +236,7 @@ export function Calendar({
 
   const iconButton = (name: string, icon: string, onClick: () => void) => (
     <Tooltip content={name}>
-      <Button variant="tertiary" size="sm" iconStart={icon} ariaLabel={name} onClick={onClick} />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart={icon} ariaLabel={name} onClick={onClick} />
     </Tooltip>
   );
 
@@ -257,7 +257,7 @@ export function Calendar({
           <DropdownMenu
             ariaLabel="Choose month"
             trigger=""
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconEnd="ChevronDown"
             groups={[
@@ -281,11 +281,11 @@ export function Calendar({
             {readOnly ? null : iconButton("New event", "Plus", () => openCreate(focus))}
             {iconButton(`Previous ${unit}`, "ChevronLeft", () => step(-1))}
             {iconButton(`Next ${unit}`, "ChevronRight", () => step(1))}
-            <Button variant="secondary" size="sm" onClick={() => today && setDate(today)}>
+            <Button appearance="outline" mode="neutral" size="sm" onClick={() => today && setDate(today)}>
               Today
             </Button>
             {calendars.length > 0 ? (
-              <Button variant="secondary" size="sm" onClick={() => setPanel("calendars")}>
+              <Button appearance="outline" mode="neutral" size="sm" onClick={() => setPanel("calendars")}>
                 Calendars
               </Button>
             ) : null}

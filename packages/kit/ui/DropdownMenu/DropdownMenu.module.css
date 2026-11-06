@@ -16,7 +16,7 @@
   background-color: var(--surface-card);
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .panelColumns {

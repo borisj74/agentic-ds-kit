@@ -1,16 +1,25 @@
-import type { ButtonProps } from "./Button.types";
+import type { ButtonAppearance, ButtonProps } from "./Button.types";
 import { LucideByName } from "./lucideName";
 import { cx } from "../shared/cx";
 import styles from "./Button.module.css";
 
-export type { ButtonProps, ButtonSize, ButtonVariant, ButtonType, ButtonShape } from "./Button.types";
+export type {
+  ButtonProps,
+  ButtonSize,
+  ButtonAppearance,
+  ButtonMode,
+  ButtonType,
+  ButtonShape,
+} from "./Button.types";
 
 const ICON_SIZE = { sm: 14, md: 16, lg: 18 } as const;
 
 export function Button({
   children,
   size = "md",
-  variant = "primary",
+  appearance = "solid",
+  mode = "primary",
+  flat = false,
   shape = "default",
   block = false,
   disabled = false,
@@ -29,6 +38,7 @@ export function Button({
   const hasLabel = Boolean(children && children.trim());
   const iconOnly = !hasLabel && Boolean(iconStart || iconEnd);
   const iconPx = ICON_SIZE[size];
+  const resolvedAppearance: ButtonAppearance = flat && appearance === "ghost" ? "soft" : appearance;
 
   return (
     <button
@@ -45,7 +55,9 @@ export function Button({
       className={cx(
         styles.button,
         styles[size],
-        styles[variant],
+        styles[resolvedAppearance],
+        styles[mode],
+        flat && styles.flat,
         shape === "pill" && styles.pill,
         block && styles.block,
         iconOnly && styles.iconOnly,

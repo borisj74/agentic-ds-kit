@@ -92,7 +92,7 @@ export function Conveyor({
       {shown ? (
         <div className={styles.end}>
           <Button
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconStart={backIcon}
             ariaLabel={`Scroll ${spoken} ${backSaid}`}
@@ -114,7 +114,7 @@ export function Conveyor({
       {shown ? (
         <div className={`${styles.end} ${styles.last}`}>
           <Button
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconStart={forwardIcon}
             ariaLabel={`Scroll ${spoken} ${forwardSaid}`}

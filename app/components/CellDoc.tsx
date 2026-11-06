@@ -336,7 +336,7 @@ export function CellDoc() {
                     size="md"
                     actions={[
                       { label: "Edit" },
-                      { label: "Delete", variant: "danger" },
+                      { label: "Delete", appearance: "solid", mode: "danger" },
                     ]}
                   />
                 </div>
@@ -346,7 +346,7 @@ export function CellDoc() {
                 <p className={styles.usageBody}>Kit ButtonGroup of kit Buttons. Cap at 3.</p>
               </div>
               <CodeBlock
-                code={'<Cell type="actions" actions={[{ label: "Edit" }, { label: "Delete", variant: "danger" }]} />'}
+                code={'<Cell type="actions" actions={[{ label: "Edit" }, { label: "Delete", appearance: "solid", mode: "danger" }]} />'}
               />
             </section>
 
@@ -359,7 +359,7 @@ export function CellDoc() {
                     size="md"
                     actions={[
                       { icon: "Pencil", ariaLabel: "Edit" },
-                      { icon: "Trash2", ariaLabel: "Delete", variant: "danger" },
+                      { icon: "Trash2", ariaLabel: "Delete", appearance: "solid", mode: "danger" },
                     ]}
                   />
                 </div>
@@ -384,7 +384,7 @@ export function CellDoc() {
                     actions={[
                       { label: "Edit", icon: "Pencil" },
                       { label: "Make a copy", icon: "Copy" },
-                      { label: "Delete", icon: "Trash2", variant: "danger" },
+                      { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" },
                     ]}
                   />
                 </div>
@@ -396,7 +396,7 @@ export function CellDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={'<Cell type="actionMenu" label="Row actions" actions={[{ label: "Edit", icon: "Pencil" }, { label: "Delete", icon: "Trash2", variant: "danger" }]} />'}
+                code={'<Cell type="actionMenu" label="Row actions" actions={[{ label: "Edit", icon: "Pencil" }, { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" }]} />'}
               />
             </section>
           </div>

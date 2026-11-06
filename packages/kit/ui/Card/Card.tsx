@@ -5,7 +5,7 @@ import type { KitLinkComponent } from "../shared/link";
 import { cx } from "../shared/cx";
 import styles from "./Card.module.css";
 
-export type { CardProps, CardSize, CardAction, CardActionVariant } from "./Card.types";
+export type { CardProps, CardSize, CardAction } from "./Card.types";
 
 function HeaderAction({ action }: { action: CardAction }) {
   if (action.href) {
@@ -17,7 +17,7 @@ function HeaderAction({ action }: { action: CardAction }) {
     );
   }
   return (
-    <Button variant={action.variant ?? "tertiary"} size="sm" onClick={action.onClick}>
+    <Button appearance={action.appearance ?? "ghost"} mode={action.mode ?? "neutral"} size="sm" onClick={action.onClick}>
       {action.label}
     </Button>
   );
@@ -70,7 +70,8 @@ export function Card({
             {footerActions.map((action) => (
               <Button
                 key={action.label}
-                variant={action.variant}
+                appearance={action.appearance ?? "outline"}
+                mode={action.mode ?? "neutral"}
                 size="md"
                 onClick={action.onClick}
               >

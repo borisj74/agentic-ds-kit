@@ -241,7 +241,7 @@ export function MonthGrid({
     >
       <div className={styles.header}>
         <Button
-          variant="tertiary"
+          appearance="ghost" mode="neutral"
           size="sm"
           iconStart="ChevronLeft"
           ariaLabel="Previous month"
@@ -252,7 +252,7 @@ export function MonthGrid({
           {monthLabel}
         </div>
         <Button
-          variant="tertiary"
+          appearance="ghost" mode="neutral"
           size="sm"
           iconStart="ChevronRight"
           ariaLabel="Next month"

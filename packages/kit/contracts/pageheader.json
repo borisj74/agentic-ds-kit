@@ -104,5 +104,5 @@
     "Do not use raw hex",
     "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)"
   ],
-  "snippet": "<PageHeader title=\"Aurora\" subtitle=\"Campaign settings and collaborators.\" breadcrumbs={[{ label: \"Home\", href: \"#\" }, { label: \"Projects\", href: \"#\" }, { label: \"Aurora\" }]} actions={<><Button variant=\"secondary\">Edit</Button><Button>Save</Button></>} />"
+  "snippet": "<PageHeader title=\"Aurora\" subtitle=\"Campaign settings and collaborators.\" breadcrumbs={[{ label: \"Home\", href: \"#\" }, { label: \"Projects\", href: \"#\" }, { label: \"Aurora\" }]} actions={<><Button appearance=\"outline\" mode=\"neutral\">Edit</Button><Button>Save</Button></>} />"
 }

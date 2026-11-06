@@ -169,7 +169,8 @@
         "label": "string?",
         "icon": "KitIcon?",
         "ariaLabel": "string?",
-        "variant": "ButtonVariant?"
+        "appearance": "ButtonAppearance?",
+        "mode": "ButtonMode?"
       },
       "note": "type=actions (labeled Buttons in ButtonGroup, cap 3), actionIcons (icon-only Buttons, each ariaLabel), actionMenu composes kit DropdownMenu from actions."
     }

@@ -270,7 +270,7 @@ export function SideNavToggle({
         {...rest}
         ref={ref}
         className={className}
-        variant="tertiary"
+        appearance="ghost" mode="neutral"
         size="sm"
         iconStart={icon}
         ariaLabel={open ? closeLabel : openLabel}
@@ -559,7 +559,7 @@ export function SideNavAccount({
       {action ? (
         <span className={styles.accountAction} {...(rail ? { inert: true } : {})}>
           <Button
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconStart={action.icon ?? "LogOut"}
             ariaLabel={action.label}

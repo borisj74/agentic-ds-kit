@@ -222,7 +222,7 @@ export function InputOTPDoc() {
                   >
                     <InputOTP id="otp-form" value={formValue} onChange={setFormValue} />
                   </Field>
-                  <Button variant="primary" disabled={formValue.length !== 6}>
+                  <Button appearance="solid" mode="primary" disabled={formValue.length !== 6}>
                     Verify
                   </Button>
                 </div>
@@ -234,7 +234,7 @@ export function InputOTPDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={'<Field label="Verification code" htmlFor="otp"><InputOTP id="otp" /></Field>\n<Button variant="primary">Verify</Button>'}
+                code={'<Field label="Verification code" htmlFor="otp"><InputOTP id="otp" /></Field>\n<Button appearance="solid" mode="primary">Verify</Button>'}
               />
             </section>
           </div>

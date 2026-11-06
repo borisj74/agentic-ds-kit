@@ -48,7 +48,7 @@ const DISABLED_GROUPS: CommandGroup[] = [
 ];
 
 const MASTER_CODE = `<>
-  <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
+  <Button appearance="outline" mode="neutral" iconStart="Search" onClick={() => setOpen(true)}>
     Open command
   </Button>
   <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
@@ -137,7 +137,7 @@ export function CommandDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
+                <Button appearance="outline" mode="neutral" iconStart="Search" onClick={() => setOpen(true)}>
                   Open command
                 </Button>
                 <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
@@ -226,7 +226,7 @@ export function CommandDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>In Modal</h2>
               <div className={styles.exampleCanvas}>
-                <Button variant="secondary" iconStart="Search" onClick={() => setOpen(true)}>
+                <Button appearance="outline" mode="neutral" iconStart="Search" onClick={() => setOpen(true)}>
                   Open command
                 </Button>
                 <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>

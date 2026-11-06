@@ -78,7 +78,7 @@ export function Chat({
             <DropdownMenu
               ariaLabel={menuLabel}
               iconStart="MoreHorizontal"
-              variant="tertiary"
+              appearance="ghost" mode="neutral"
               size="sm"
               align="end"
               groups={[
@@ -97,7 +97,7 @@ export function Chat({
             />
           ) : null}
           {onClose ? (
-            <Button type="button" variant="tertiary" size="sm" iconStart="X" ariaLabel={closeLabel} onClick={onClose} />
+            <Button type="button" appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={closeLabel} onClick={onClose} />
           ) : null}
         </div>
       </header>
@@ -140,7 +140,7 @@ export function Chat({
             <Button
               key={suggestion}
               type="button"
-              variant="tertiary"
+              appearance="ghost" mode="neutral"
               size="sm"
               disabled={disabled}
               onClick={() => sendMessage(suggestion)}
@@ -168,7 +168,7 @@ export function Chat({
         />
         <Button
           type="submit"
-          variant="primary"
+          appearance="solid" mode="primary"
           size="md"
           ariaLabel="Send"
           disabled={disabled || !draft.trim()}

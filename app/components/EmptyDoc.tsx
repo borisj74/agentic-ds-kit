@@ -21,7 +21,7 @@ function masterCode() {
   actions={
     <>
       <Button>Create</Button>
-      <Button variant="secondary">Import</Button>
+      <Button appearance="outline" mode="neutral">Import</Button>
     </>
   }
 />`;
@@ -62,7 +62,7 @@ export function EmptyDoc() {
                   actions={
                     <>
                       <Button>Create</Button>
-                      <Button variant="secondary">Import</Button>
+                      <Button appearance="outline" mode="neutral">Import</Button>
                     </>
                   }
                 />

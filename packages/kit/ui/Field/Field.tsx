@@ -49,7 +49,7 @@ export function Field({
         <div className={styles.labelRow}>
           {labelNode}
           <HelpPopover title={label} content={help} placement="right">
-            <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+            <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
           </HelpPopover>
         </div>
       ) : (

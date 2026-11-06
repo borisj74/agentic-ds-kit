@@ -70,5 +70,5 @@
     "Do not use raw hex",
     "Do not hide required form labels in tooltips"
   ],
-  "snippet": "<Tooltip content=\"Export includes all projects\"><Button variant=\"secondary\" size=\"sm\">Export</Button></Tooltip>"
+  "snippet": "<Tooltip content=\"Export includes all projects\"><Button appearance=\"outline\" mode=\"neutral\" size=\"sm\">Export</Button></Tooltip>"
 }

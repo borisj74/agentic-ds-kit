@@ -15,7 +15,7 @@ const ACTION = {
   actions: [
     { label: "Edit", icon: "Pencil" },
     { label: "Make a copy", icon: "Copy" },
-    { label: "Delete", icon: "Trash2", variant: "danger" as const },
+    { label: "Delete", icon: "Trash2", appearance: "solid" as const, mode: "danger" as const },
   ],
 };
 
@@ -109,13 +109,13 @@ const INTERACTIVE_ROWS: DataTableRow[] = [
     rating: { type: "rating", value: 4 },
     actions: {
       type: "actions",
-      actions: [{ label: "Edit" }, { label: "Delete", variant: "danger" }],
+      actions: [{ label: "Edit" }, { label: "Delete", appearance: "solid", mode: "danger" }],
     },
     icons: {
       type: "actionIcons",
       actions: [
         { icon: "Pencil", ariaLabel: "Edit" },
-        { icon: "Trash2", ariaLabel: "Delete", variant: "danger" },
+        { icon: "Trash2", ariaLabel: "Delete", appearance: "solid", mode: "danger" },
       ],
     },
     menu: {
@@ -124,7 +124,7 @@ const INTERACTIVE_ROWS: DataTableRow[] = [
       actions: [
         { label: "Edit", icon: "Pencil" },
         { label: "Make a copy", icon: "Copy" },
-        { label: "Delete", icon: "Trash2", variant: "danger" },
+        { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" },
       ],
     },
   },
@@ -157,8 +157,8 @@ const TOOLBAR_CODE = `<DataTable
   ]}
   columnSettings
   bulkActions={[
-    { id: "export", label: "Export", variant: "secondary", iconStart: "Download", onClick: onExport },
-    { id: "delete", label: "Delete", variant: "danger", iconStart: "Trash2", onClick: onDelete },
+    { id: "export", label: "Export", appearance: "outline", mode: "neutral", iconStart: "Download", onClick: onExport },
+    { id: "delete", label: "Delete", appearance: "solid", mode: "danger", iconStart: "Trash2", onClick: onDelete },
   ]}
   columns={[
     { key: "name", header: "Name" },
@@ -179,7 +179,7 @@ const TOOLBAR_CODE = `<DataTable
         actions: [
           { label: "Edit", icon: "Pencil" },
           { label: "Make a copy", icon: "Copy" },
-          { label: "Delete", icon: "Trash2", variant: "danger" },
+          { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" },
         ],
       },
     },
@@ -221,14 +221,14 @@ export function DataTableDoc() {
         {
           id: "export",
           label: "Export",
-          variant: "secondary",
+          appearance: "outline", mode: "neutral",
           iconStart: "Download",
           onClick: () => undefined,
         },
         {
           id: "delete",
           label: "Delete",
-          variant: "danger",
+          appearance: "solid", mode: "danger",
           iconStart: "Trash2",
           onClick: (ids) => {
             setRows((current) => current.filter((row) => !ids.includes(String(row.id))));

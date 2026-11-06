@@ -242,8 +242,8 @@ export function DashboardDemo() {
           onSearch: setQuery,
           actions: (
             <>
-              <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
-              <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
             </>
           ),
         }}

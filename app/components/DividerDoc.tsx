@@ -13,7 +13,7 @@ const ORIENTATIONS: DividerOrientation[] = ["horizontal", "vertical"];
 const TONES: DividerTone[] = ["faint", "default"];
 const ALIGNS: DividerAlign[] = ["start", "center", "end"];
 
-const actionCode = '<Button variant="tertiary" size="sm" iconStart="Plus">Add item</Button>';
+const actionCode = '<Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus">Add item</Button>';
 
 const verticalRow = {
   display: "flex",
@@ -85,7 +85,7 @@ export function DividerDoc() {
                       label={withLabel ? "or" : undefined}
                       action={
                         withAction ? (
-                          <Button variant="tertiary" size="sm" iconStart="Plus">
+                          <Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus">
                             Add item
                           </Button>
                         ) : undefined
@@ -226,7 +226,7 @@ export function DividerDoc() {
                 <div className={styles.previewFill}>
                   <Divider
                     action={
-                      <Button variant="tertiary" size="sm" iconStart="Plus">
+                      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus">
                         Add item
                       </Button>
                     }

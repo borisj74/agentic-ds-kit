@@ -17,7 +17,7 @@ const HELP =
 
 function masterCode(placement: HelpPopoverPlacement) {
   return `<HelpPopover title="Invoice date" content="${HELP}" placement="${placement}">
-  <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+  <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
 </HelpPopover>`;
 }
 
@@ -51,7 +51,7 @@ export function HelpPopoverDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <HelpPopover title="Invoice date" content={HELP} placement={placement}>
-                  <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+                  <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
                 </HelpPopover>
               </div>
               <aside className={styles.panel} aria-label="Controls">
@@ -90,7 +90,7 @@ export function HelpPopoverDoc() {
               <h2 className={styles.exampleTitle}>Body only</h2>
               <div className={styles.exampleCanvas}>
                 <HelpPopover content="Turn this on to email a receipt after each payment.">
-                  <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+                  <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
                 </HelpPopover>
               </div>
               <div>
@@ -99,7 +99,7 @@ export function HelpPopoverDoc() {
               </div>
               <CodeBlock
                 code={`<HelpPopover content="Turn this on to email a receipt after each payment.">
-  <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+  <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
 </HelpPopover>`}
               />
             </section>

@@ -9,32 +9,26 @@ import { CopyToken } from "./CopyToken";
 type Tab = "primitives" | "semantics";
 
 const SCALE = [
-  { name: "0", note: "none" },
-  { name: "100", note: "xs" },
-  { name: "150", note: "soft-xs" },
-  { name: "200", note: "sm" },
-  { name: "250", note: "soft" },
-  { name: "300", note: "md" },
-  { name: "400", note: "lg" },
-  { name: "500", note: "xl" },
-  { name: "600", note: "2xl" },
+  { name: "xs", note: "resting inputs" },
+  { name: "sm", note: "cards" },
+  { name: "md", note: "popovers, toasts" },
+  { name: "lg", note: "dialogs, sheets" },
 ] as const;
 
 const ROLES = [
   { title: "Raised", code: "shadow-raised-*", tokens: [
-    { name: "shadow-raised-sm", note: "sm" },
-    { name: "shadow-raised-md", note: "md" },
-    { name: "shadow-raised-lg", note: "lg" },
-    { name: "shadow-raised-soft", note: "soft" },
-    { name: "shadow-raised-depth", note: "glass rim; drop only in dark" },
+    { name: "shadow-raised-xs", note: "inputs" },
+    { name: "shadow-raised-sm", note: "cards" },
+    { name: "shadow-raised-md", note: "popovers" },
+    { name: "shadow-raised-lg", note: "dialogs" },
   ]},
   { title: "Overlay", code: "shadow-overlay-*", tokens: [
-    { name: "shadow-overlay-sm", note: "sm" },
+    { name: "shadow-overlay-sm", note: "sm → md" },
     { name: "shadow-overlay-md", note: "md" },
     { name: "shadow-overlay-lg", note: "lg" },
   ]},
   { title: "Modal", code: "shadow-modal", tokens: [
-    { name: "shadow-modal", note: "modal" },
+    { name: "shadow-modal", note: "lg" },
   ]},
 ] as const;
 
@@ -68,7 +62,7 @@ export function ShadowFoundations() {
         <section className={styles.scale}>
           <header className={styles.header}>
             <h3 className={styles.title}>Scale</h3>
-            <code className={styles.pattern}>shadow-0 → shadow-600</code>
+            <code className={styles.pattern}>shadow-xs → shadow-lg</code>
           </header>
           <div className={styles.list}>
             {SCALE.map((step) => (

@@ -81,14 +81,14 @@
   gap: var(--space-inline-2xs);
   padding: var(--space-inset-2xs);
   border-radius: var(--radius-control-md);
-  background: var(--surface-muted);
-  box-shadow: inset 0 0 0 var(--border-100) var(--border-faint);
+  background: var(--bg-tray);
+  box-shadow: none;
 }
 
 .segmented .indicator {
   border-radius: var(--radius-control-sm);
-  background: var(--surface-card);
-  box-shadow: var(--shadow-raised-sm);
+  background: var(--bg-control);
+  box-shadow: var(--shadow-xs);
 }
 
 .segmented .trigger {

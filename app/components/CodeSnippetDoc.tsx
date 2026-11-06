@@ -13,7 +13,7 @@ const SAMPLE = `import { Button, Card } from "agentic-ds-kit";
 export function Welcome({ name }: { name: string }) {
   return (
     <Card title={\`Welcome back, \${name}\`} description="Pick up where you left off, or start a new project from one of the templates below.">
-      <Button variant="primary">New project</Button>
+      <Button appearance="solid" mode="primary">New project</Button>
     </Card>
   );
 }`;

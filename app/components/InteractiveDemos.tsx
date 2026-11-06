@@ -16,7 +16,7 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
   if (mode === "tooltip") {
     return (
       <Tooltip content="Exports all projects as CSV">
-        <Button variant="secondary" size="sm">
+        <Button appearance="outline" mode="neutral" size="sm">
           Hover me
         </Button>
       </Tooltip>
@@ -37,7 +37,7 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
   if (mode === "modal") {
     return (
       <>
-        <Button variant="tertiary" size="sm" onClick={() => setOpen(true)}>
+        <Button appearance="ghost" mode="neutral" size="sm" onClick={() => setOpen(true)}>
           Open modal
         </Button>
         <Modal open={open} title="Confirm export" onClose={() => setOpen(false)}>
@@ -50,7 +50,7 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
   return (
     <>
       <Tooltip content="Exports all projects as CSV">
-        <Button variant="secondary" size="sm">
+        <Button appearance="outline" mode="neutral" size="sm">
           Hover me
         </Button>
       </Tooltip>
@@ -60,7 +60,7 @@ export function InteractiveDemos({ mode = "all" }: InteractiveDemosProps) {
           { id: "billing", label: "Billing", content: "Billing settings panel content." },
         ]}
       />
-      <Button variant="tertiary" size="sm" onClick={() => setOpen(true)}>
+      <Button appearance="ghost" mode="neutral" size="sm" onClick={() => setOpen(true)}>
         Open modal
       </Button>
       <Modal open={open} title="Confirm export" onClose={() => setOpen(false)}>

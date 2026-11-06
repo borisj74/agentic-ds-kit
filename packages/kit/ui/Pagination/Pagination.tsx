@@ -77,7 +77,7 @@ export function Pagination({
         showLabels ? (
           <Button
             size={size}
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             iconStart="ChevronLeft"
             disabled={current <= 1}
             onClick={() => go(current - 1)}
@@ -87,7 +87,7 @@ export function Pagination({
         ) : (
           <Button
             size={size}
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             iconStart="ChevronLeft"
             ariaLabel="Previous"
             disabled={current <= 1}
@@ -115,7 +115,7 @@ export function Pagination({
               >
                 <Button
                   size={size}
-                  variant={isCurrent ? "secondary" : "tertiary"}
+                  appearance={isCurrent ? "outline" : "ghost"} mode="neutral"
                   onClick={() => go(node.page)}
                 >
                   {String(node.page)}
@@ -129,7 +129,7 @@ export function Pagination({
         showLabels ? (
           <Button
             size={size}
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             iconEnd="ChevronRight"
             disabled={current >= count}
             onClick={() => go(current + 1)}
@@ -139,7 +139,7 @@ export function Pagination({
         ) : (
           <Button
             size={size}
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             iconStart="ChevronRight"
             ariaLabel="Next"
             disabled={current >= count}

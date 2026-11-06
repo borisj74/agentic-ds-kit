@@ -214,14 +214,14 @@ export function SignInPattern({
                   onChange={setRemember}
                 />
                 {onForgotPassword ? (
-                  <Button variant="tertiary" size="sm" onClick={onForgotPassword}>
+                  <Button appearance="ghost" mode="neutral" size="sm" onClick={onForgotPassword}>
                     Forgot password?
                   </Button>
                 ) : null}
               </div>
             ) : null}
 
-            <Button variant="primary" type="submit" block disabled={loading}>
+            <Button appearance="solid" mode="primary" type="submit" block disabled={loading}>
               {loading ? copy.busy : copy.submit}
             </Button>
           </form>
@@ -233,7 +233,7 @@ export function SignInPattern({
                 {ssoList.map((provider) => (
                   <Button
                     key={provider.id}
-                    variant="secondary"
+                    appearance="outline" mode="neutral"
                     block
                     iconStart={provider.icon}
                     disabled={loading}
@@ -251,7 +251,7 @@ export function SignInPattern({
           <p className="sign-in-pattern__footer">
             <span>{copy.switchPrompt}</span>
             <Button
-              variant="tertiary"
+              appearance="ghost" mode="neutral"
               size="sm"
               onClick={() => onSwitchMode(signUp ? "sign-in" : "sign-up")}
             >

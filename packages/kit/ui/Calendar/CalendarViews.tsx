@@ -283,7 +283,7 @@ function ListView(props: CalendarViewsProps & { weekDays: Date[] }) {
           icon="CalendarDays"
           actions={
             props.readOnly ? undefined : (
-              <Button variant="secondary" size="sm" onClick={() => props.openCreate(props.focus)}>
+              <Button appearance="outline" mode="neutral" size="sm" onClick={() => props.openCreate(props.focus)}>
                 New event
               </Button>
             )

@@ -1,17 +1,22 @@
 "use client";
 
 import { X } from "lucide-react";
-import type { BadgeProps } from "./Badge.types";
+import type { BadgeProps, BadgeTone } from "./Badge.types";
 import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
 
-export type { BadgeProps, BadgeTone, BadgeSize } from "./Badge.types";
+export type { BadgeProps, BadgeTone, BadgeAppearance, BadgeSize } from "./Badge.types";
 
 const ICON_SIZE = { sm: 12, md: 14, lg: 16 } as const;
+
+function resolvedTone(tone: BadgeTone): Exclude<BadgeTone, "brand"> {
+  return tone === "brand" ? "primary" : tone;
+}
 
 export function Badge({
   children,
   tone = "neutral",
+  appearance = "soft",
   size = "md",
   removable = false,
   disabled = false,
@@ -21,12 +26,20 @@ export function Badge({
   ...rest
 }: BadgeProps) {
   const iconPx = ICON_SIZE[size];
+  const toneClass = resolvedTone(tone);
 
   return (
     <span
       {...rest}
       ref={ref}
-      className={cx(styles.badge, styles[tone], styles[size], disabled && styles.disabled, className)}
+      className={cx(
+        styles.badge,
+        styles[appearance],
+        styles[toneClass],
+        styles[size],
+        disabled && styles.disabled,
+        className,
+      )}
       aria-disabled={disabled || undefined}
     >
       {children}

@@ -1,3 +1,4 @@
+import type { ButtonAppearance, ButtonMode } from "../Button/Button.types";
 import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { CellSize, CellValue } from "../Cell/Cell.types";
@@ -28,12 +29,11 @@ export interface DataTableFilter {
   label: string;
 }
 
-export type DataTableBulkActionVariant = "secondary" | "tertiary" | "danger";
-
 export interface DataTableBulkAction {
   id: string;
   label: string;
-  variant?: DataTableBulkActionVariant;
+  appearance?: ButtonAppearance;
+  mode?: ButtonMode;
   iconStart?: KitIcon;
   onClick: (ids: string[]) => void;
 }

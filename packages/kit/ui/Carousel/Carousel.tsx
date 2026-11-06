@@ -150,7 +150,7 @@ export function Carousel({
           <>
             <div className={styles.prev}>
               <Button
-                variant="secondary"
+                appearance="outline" mode="neutral"
                 size="sm"
                 iconStart={prevIcon}
                 ariaLabel="Previous slide"
@@ -160,7 +160,7 @@ export function Carousel({
             </div>
             <div className={styles.next}>
               <Button
-                variant="secondary"
+                appearance="outline" mode="neutral"
                 size="sm"
                 iconStart={nextIcon}
                 ariaLabel="Next slide"

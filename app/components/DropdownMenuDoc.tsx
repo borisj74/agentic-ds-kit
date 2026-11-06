@@ -133,7 +133,7 @@ const DESTRUCTIVE_CODE = `<DropdownMenu
 const ICON_ONLY_CODE = `<DropdownMenu
   iconStart="Ellipsis"
   ariaLabel="Row actions"
-  variant="tertiary"
+  appearance="ghost" mode="neutral"
   align="end"
   groups={[{ items: [{ id: "edit", label: "Edit" }] }]}
 />`;
@@ -267,7 +267,7 @@ export function DropdownMenuDoc() {
                   <DropdownMenu
                     iconStart="Ellipsis"
                     ariaLabel="Row actions"
-                    variant="tertiary"
+                    appearance="ghost" mode="neutral"
                     align="end"
                     groups={DESTRUCTIVE_GROUPS}
                   />

@@ -27,19 +27,19 @@
 .eyebrow {
   margin: 0 0 var(--space-2);
   font-family: var(--font-sans);
-  font-size: var(--type-size-label);
-  font-weight: var(--type-weight-label);
-  letter-spacing: 0.08em;
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-fg-muted);
 }
 
 .title {
   margin: 0 0 var(--space-2);
   font-family: var(--font-display);
-  font-size: var(--type-size-title);
-  font-weight: var(--type-weight-title);
-  line-height: var(--type-line-heading);
+  font-size: var(--type-size-heading-5);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading-5);
   color: var(--text-primary);
 }
 

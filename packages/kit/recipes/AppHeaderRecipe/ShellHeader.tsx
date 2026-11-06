@@ -34,7 +34,7 @@ export function ShellHeader({
   logo,
   query,
   onQueryChange,
-  actions = <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
+  actions = <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
   menuButton: MenuButton,
 }: ShellHeaderProps) {
   const brand = logo ?? <AppHeader.Mark>{mark ?? title.charAt(0)}</AppHeader.Mark>;

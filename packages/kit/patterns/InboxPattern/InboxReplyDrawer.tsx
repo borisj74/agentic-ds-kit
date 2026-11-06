@@ -58,10 +58,10 @@ export function InboxReplyDrawer({
       footer={
         message ? (
           <>
-            <Button variant="primary" block onClick={send}>
+            <Button appearance="solid" mode="primary" block onClick={send}>
               Send reply
             </Button>
-            <Button variant="secondary" block onClick={close}>
+            <Button appearance="outline" mode="neutral" block onClick={close}>
               Cancel
             </Button>
           </>

@@ -233,7 +233,7 @@
         "note": "End column. role=group with its label only when it has children."
       }
     },
-    "snippet": "<AppHeader.Root ariaLabel=\"Acme\">\n  <AppHeader.Brand mark=\"A\">\n    <AppHeader.Title>Acme</AppHeader.Title>\n    <Badge tone=\"info\" size=\"sm\">Beta</Badge>\n  </AppHeader.Brand>\n  <AppHeader.Search placeholder=\"Search\" shortcut=\"⌘K\" onSearch={setQuery} />\n  <AppHeader.Actions>\n    <Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" />\n  </AppHeader.Actions>\n</AppHeader.Root>",
+    "snippet": "<AppHeader.Root ariaLabel=\"Acme\">\n  <AppHeader.Brand mark=\"A\">\n    <AppHeader.Title>Acme</AppHeader.Title>\n    <Badge tone=\"info\" size=\"sm\">Beta</Badge>\n  </AppHeader.Brand>\n  <AppHeader.Search placeholder=\"Search\" shortcut=\"⌘K\" onSearch={setQuery} />\n  <AppHeader.Actions>\n    <Button appearance=\"ghost\" mode=\"neutral\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" />\n  </AppHeader.Actions>\n</AppHeader.Root>",
     "copyIn": "npx agentic-ds-kit add app-header copies ShellHeader (the preset built from these blocks) into components/chrome/app-header/."
   },
   "cssVars": {
@@ -301,5 +301,5 @@
     "Do not put blocks outside AppHeader.Root, or more than one center block in one Root",
     "Do not use h1–h6 for AppHeader.Title"
   ],
-  "snippet": "<AppHeader title=\"Acme\" mark=\"A\" searchPlaceholder=\"Search\" searchShortcut=\"⌘K\" onSearch={setQuery} actions={<><Button variant=\"tertiary\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /></>} />"
+  "snippet": "<AppHeader title=\"Acme\" mark=\"A\" searchPlaceholder=\"Search\" searchShortcut=\"⌘K\" onSearch={setQuery} actions={<><Button appearance=\"ghost\" mode=\"neutral\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /></>} />"
 }

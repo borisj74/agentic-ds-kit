@@ -25,8 +25,8 @@ function masterCode(showSearch: boolean, showActions: boolean, shortcut: boolean
     lines.push(
       "  actions={",
       "    <>",
-      '      <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />',
-      '      <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />',
+      '      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />',
+      '      <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />',
       "    </>",
       "  }",
     );
@@ -40,9 +40,9 @@ const SLOTS_CODE = `<AppHeader
   mark="A"
   center={
     <ButtonGroup ariaLabel="View">
-      <Button variant="secondary" size="sm">Board</Button>
-      <Button variant="secondary" size="sm">List</Button>
-      <Button variant="secondary" size="sm">Timeline</Button>
+      <Button appearance="outline" mode="neutral" size="sm">Board</Button>
+      <Button appearance="outline" mode="neutral" size="sm">List</Button>
+      <Button appearance="outline" mode="neutral" size="sm">Timeline</Button>
     </ButtonGroup>
   }
   end={
@@ -60,7 +60,7 @@ const BLOCKS_CODE = `<AppHeader.Root ariaLabel="Acme">
   </AppHeader.Brand>
   <AppHeader.Search placeholder="Search docs" shortcut="⌘K" onSearch={setQuery} />
   <AppHeader.Actions>
-    <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+    <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
     <Avatar name="Maya Chen" size="sm" />
   </AppHeader.Actions>
 </AppHeader.Root>`;
@@ -68,8 +68,8 @@ const BLOCKS_CODE = `<AppHeader.Root ariaLabel="Acme">
 function DemoActions() {
   return (
     <>
-      <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
-      <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
     </>
   );
 }
@@ -220,7 +220,7 @@ export function AppHeaderDoc() {
   mark="A"
   actions={
     <>
-      <Button variant="tertiary" size="sm" iconStart="Bell" ariaLabel="Notifications" />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />
       <Avatar name="Maya Chen" size="sm" />
     </>
   }
@@ -278,9 +278,9 @@ export function AppHeaderDoc() {
                     mark="A"
                     center={
                       <ButtonGroup ariaLabel="View">
-                        <Button variant="secondary" size="sm">Board</Button>
-                        <Button variant="secondary" size="sm">List</Button>
-                        <Button variant="secondary" size="sm">Timeline</Button>
+                        <Button appearance="outline" mode="neutral" size="sm">Board</Button>
+                        <Button appearance="outline" mode="neutral" size="sm">List</Button>
+                        <Button appearance="outline" mode="neutral" size="sm">Timeline</Button>
                       </ButtonGroup>
                     }
                     end={
@@ -317,7 +317,7 @@ export function AppHeaderDoc() {
                     </AppHeader.Brand>
                     <AppHeader.Search placeholder="Search docs" shortcut="⌘K" onSearch={setQuery} />
                     <AppHeader.Actions>
-                      <Button variant="tertiary" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+                      <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
                       <Avatar name="Maya Chen" size="sm" />
                     </AppHeader.Actions>
                   </AppHeader.Root>

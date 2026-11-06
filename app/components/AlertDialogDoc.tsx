@@ -88,7 +88,7 @@ export function AlertDialogDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
-                  <Button variant="primary" size="md" onClick={() => setOpen(true)}>
+                  <Button appearance="solid" mode="primary" size="md" onClick={() => setOpen(true)}>
                     Show dialog
                   </Button>
                 </div>
@@ -148,7 +148,8 @@ export function AlertDialogDoc() {
                 <div className={styles.exampleCanvas}>
                   <div className={styles.previewRow}>
                     <Button
-                      variant={option === "danger" ? "danger" : "primary"}
+                      appearance="solid"
+                      mode={option === "danger" ? "danger" : "primary"}
                       size="md"
                       onClick={() => setVariantOpen(option)}
                     >

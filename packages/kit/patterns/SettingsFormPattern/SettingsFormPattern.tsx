@@ -64,10 +64,10 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
           </div>
         </Section>
         <div className="settings-form-pattern__actions">
-          <Button variant="primary" size="md" type="submit">
+          <Button appearance="solid" mode="primary" size="md" type="submit">
             Save changes
           </Button>
-          <Button variant="secondary" size="md" type="button" onClick={onCancel}>
+          <Button appearance="outline" mode="neutral" size="md" type="button" onClick={onCancel}>
             Cancel
           </Button>
         </div>

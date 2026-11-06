@@ -119,10 +119,10 @@ export function AlertDialog({
         </p>
         <div className={styles.footer}>
           <ButtonGroup ariaLabel="Dialog actions">
-            <Button variant="secondary" size="md" onClick={onCancel}>
+            <Button appearance="outline" mode="neutral" size="md" onClick={onCancel}>
               {cancelLabel}
             </Button>
-            <Button variant={actionVariant} size="md" onClick={onAction}>
+            <Button appearance="solid" mode={actionVariant} size="md" onClick={onAction}>
               {actionLabel}
             </Button>
           </ButtonGroup>

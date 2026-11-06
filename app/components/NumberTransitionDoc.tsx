@@ -68,10 +68,10 @@ export function NumberTransitionDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>Value</span>
-                  <Button variant="secondary" size="sm" onClick={() => setValue((v) => v + 137)}>
+                  <Button appearance="outline" mode="neutral" size="sm" onClick={() => setValue((v) => v + 137)}>
                     Increase
                   </Button>
-                  <Button variant="tertiary" size="sm" onClick={() => setValue((v) => Math.max(0, v - 89))}>
+                  <Button appearance="ghost" mode="neutral" size="sm" onClick={() => setValue((v) => Math.max(0, v - 89))}>
                     Decrease
                   </Button>
                 </div>

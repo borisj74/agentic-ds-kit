@@ -77,7 +77,7 @@
       "nav with aria-label=\"Pagination\"",
       "Previous disabled on page 1",
       "Next disabled on last page",
-      "current page uses kit Button variant=secondary and aria-current=page",
+      "current page uses kit Button appearance=outline mode=neutral and aria-current=page",
       "ellipsis is a span with Lucide Ellipsis, aria-hidden, not a Button",
       "icon-only Previous/Next set ariaLabel"
     ]

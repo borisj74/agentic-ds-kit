@@ -54,7 +54,7 @@
     "children": {
       "type": "slot",
       "required": true,
-      "note": "One focusable trigger. Gets aria-describedby. Typical: kit Button variant=tertiary size=sm iconStart=CircleHelp ariaLabel=Help. Field help composes this."
+      "note": "One focusable trigger. Gets aria-describedby. Typical: kit Button appearance=ghost mode=neutral size=sm iconStart=CircleHelp ariaLabel=Help. Field help composes this."
     }
   },
   "passthrough": {
@@ -91,9 +91,9 @@
     "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
     "Do not put links, buttons, or forms in the panel",
     "Do not add size, Density, or lg",
-    "Do not use variant=primary on the trigger",
+    "Do not use appearance=solid mode=primary on the trigger",
     "Do not add an Icon component or Material Symbols — Lucide via Button/lucideName only",
     "Do not use raw hex"
   ],
-  "snippet": "<HelpPopover title=\"Invoice date\" content=\"We use this date on the PDF. It does not change when payment is recorded.\">\n  <Button variant=\"tertiary\" size=\"sm\" iconStart=\"CircleHelp\" ariaLabel=\"Help\" />\n</HelpPopover>"
+  "snippet": "<HelpPopover title=\"Invoice date\" content=\"We use this date on the PDF. It does not change when payment is recorded.\">\n  <Button appearance=\"ghost\" mode=\"neutral\" size=\"sm\" iconStart=\"CircleHelp\" ariaLabel=\"Help\" />\n</HelpPopover>"
 }

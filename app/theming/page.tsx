@@ -10,29 +10,29 @@ const TOKEN_COLUMNS = [
 
 const SURFACE_ROWS = [
   {
-    token: "--surface-page / --text-primary",
-    controls: "Default app background and body text.",
+    token: "--bg-canvas / --text-fg",
+    controls: "Default app background and body text. --surface-page and --text-primary alias these.",
     usedBy: "Page shell, body, default copy.",
   },
   {
-    token: "--surface-card",
-    controls: "Elevated surfaces.",
+    token: "--bg-surface / --bg-raised / --bg-floating",
+    controls: "White raised surfaces.",
     usedBy: "Card, Table, Modal, Drawer.",
   },
   {
-    token: "--surface-muted",
-    controls: "Subtle wells and supporting regions.",
-    usedBy: "Sidebars, code wells, secondary panels.",
+    token: "--bg-subtle / --bg-tray",
+    controls: "Subtle wells and segmented tracks.",
+    usedBy: "Sidebars, code wells, Tabs segmented.",
+  },
+  {
+    token: "--bg-field / --bg-control",
+    controls: "Inputs and resting controls.",
+    usedBy: "Input, Select, outline Buttons.",
   },
   {
     token: "--surface-overlay",
     controls: "Scrim behind overlays.",
     usedBy: "Modal, Drawer, AlertDialog.",
-  },
-  {
-    token: "--surface-brand / --brand-on-brand",
-    controls: "Brand fill and text on that fill.",
-    usedBy: "Primary Button, selected marks.",
   },
 ];
 
@@ -40,7 +40,7 @@ const ACTION_ROWS = [
   {
     token: "--action-primary / --action-on-primary",
     controls: "High-emphasis actions.",
-    usedBy: "Button variant primary.",
+    usedBy: "Button appearance solid mode primary.",
   },
   {
     token: "--action-primary-hover / --action-primary-pressed",

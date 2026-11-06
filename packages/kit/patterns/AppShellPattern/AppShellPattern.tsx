@@ -117,7 +117,7 @@ export function AppShellMenuButton({ children = null, ariaLabel = "Open navigati
   if (!shell?.narrow) return <>{children}</>;
   return (
     <span ref={slot?.ref} className="app-shell-pattern__menu">
-      <Button variant="tertiary" size="sm" iconStart="Menu" ariaLabel={ariaLabel} onClick={shell.openNav} />
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Menu" ariaLabel={ariaLabel} onClick={shell.openNav} />
     </span>
   );
 }

@@ -6,5 +6,5 @@ Compose components freely; layout (top bar, side nav, both, neither) is the user
 Layout accessibility: page content in `<main>`, chrome in `header` / `nav` landmarks (AppHeader, SideNav), and navigation reachable on small screens (e.g. kit Drawer).
 If a component is missing from the index, stop and ask — do not add a one-off.
 Never put hex in components; use semantic tokens from `agentic-ds-kit/tokens.css` (not primitive `--color-*` ramps).
-One `variant="primary"` Button per view.
+One `appearance="solid"` `mode="primary"` Button per view.
 To let a model pick which kit view to render, generate the option list with `npx agentic-ds-kit questions` (`docs/questions.md`); do not hand-write one.

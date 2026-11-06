@@ -21,7 +21,7 @@
   background-color: var(--surface-elevated);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   animation-duration: var(--motion-modal-duration);
   animation-timing-function: var(--motion-modal-easing);
   animation-fill-mode: both;

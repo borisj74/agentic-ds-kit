@@ -74,7 +74,7 @@
     "Do not invent ScrollArea, Overflow, Marquee, or a local scroller",
     "Do not use embla or Carousel internals",
     "Do not add loop, showIndex, or slidesPerView",
-    "Do not use variant=primary on the arrows — tertiary icon-only only",
+    "Do not use appearance=solid mode=primary on the arrows — ghost icon-only only",
     "Do not use raw hex"
   ],
   "snippet": "<Conveyor label=\"Key metrics\">\n  <Scoreboard scroll={false} items={[{ label: 'Revenue', value: '$48.2k' }, { label: 'Churn', value: '1.2%' }, { label: 'Users', value: '12.4k' }, { label: 'NPS', value: '64' }, { label: 'Tickets', value: '38' }]} />\n</Conveyor>"

@@ -41,19 +41,19 @@
     "headerAction": {
       "type": "object",
       "required": false,
-      "note": "Header kit Button (shadcn CardAction). One max. Tertiary or secondary, not a second primary. With href it is a text link instead (e.g. View all).",
+      "note": "Header kit Button (shadcn CardAction). One max. Ghost or outline, not a second solid-primary. With href it is a text link instead (e.g. View all).",
       "label": {
         "type": "string",
         "required": true
       },
-      "variant": {
+      "appearance": {
         "type": "enum",
-        "values": [
-          "primary",
-          "secondary",
-          "tertiary",
-          "danger"
-        ],
+        "values": ["solid", "outline", "soft", "ghost"],
+        "required": false
+      },
+      "mode": {
+        "type": "enum",
+        "values": ["primary", "neutral", "danger"],
         "required": false
       },
       "onClick": {
@@ -79,20 +79,20 @@
     "actions": {
       "type": "array",
       "required": false,
-      "note": "Footer kit Buttons, max 2, still one primary per view",
+      "note": "Footer kit Buttons, max 2, still one solid-primary per view",
       "items": {
         "label": {
           "type": "string",
           "required": true
         },
-        "variant": {
+        "appearance": {
           "type": "enum",
-          "values": [
-            "primary",
-            "secondary",
-            "tertiary",
-            "danger"
-          ],
+          "values": ["solid", "outline", "soft", "ghost"],
+          "required": false
+        },
+        "mode": {
+          "type": "enum",
+          "values": ["primary", "neutral", "danger"],
           "required": false
         },
         "onClick": {
@@ -149,9 +149,9 @@
     "Do not use Card for page grouping — that is unframed Section",
     "Footer actions must be kit Buttons",
     "Do not invent CardHeader components",
-    "headerAction is tertiary/secondary, not a second primary",
+    "headerAction is ghost/outline, not a second solid-primary",
     "Do not nest a framed DataTable in a padded Card — set flush",
     "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel"
   ],
-  "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", variant: \"tertiary\" }} actions={[{ label: \"Login\", variant: \"primary\" }, { label: \"Login with Google\", variant: \"secondary\" }]}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field></Card>"
+  "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", appearance: \"ghost\", mode: \"neutral\" }} actions={[{ label: \"Login\", appearance: \"solid\", mode: \"primary\" }, { label: \"Login with Google\", appearance: \"outline\", mode: \"neutral\" }]}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field></Card>"
 }

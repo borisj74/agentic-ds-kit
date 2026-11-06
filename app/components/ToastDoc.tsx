@@ -117,7 +117,7 @@ export function ToastDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <div className={styles.previewRow}>
-                  <Button variant="secondary" size="md" onClick={() => setMasterOpen(true)}>
+                  <Button appearance="outline" mode="neutral" size="md" onClick={() => setMasterOpen(true)}>
                     {`Show ${status} toast`}
                   </Button>
                 </div>
@@ -163,7 +163,7 @@ export function ToastDoc() {
                 <div className={styles.exampleCanvas}>
                   <div className={styles.previewRow}>
                     <Button
-                      variant="secondary"
+                      appearance="outline" mode="neutral"
                       size="md"
                       onClick={() => setVariantOpen((prev) => ({ ...prev, [option]: true }))}
                     >
@@ -184,7 +184,7 @@ export function ToastDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
                   <Button
-                    variant="secondary"
+                    appearance="outline" mode="neutral"
                     size="md"
                     onClick={() => setVariantOpen((prev) => ({ ...prev, stays: true }))}
                   >
@@ -246,7 +246,7 @@ export function ToastGalleryTile() {
 
   return (
     <>
-      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
+      <Button appearance="outline" mode="neutral" size="sm" onClick={() => setOpen(true)}>
         Show toast
       </Button>
       <Toast

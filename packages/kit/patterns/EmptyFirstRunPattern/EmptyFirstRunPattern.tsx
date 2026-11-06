@@ -66,7 +66,7 @@ export function EmptyFirstRunPattern({ breadcrumbs, onCreate }: EmptyFirstRunPat
           icon="User"
           outlined
           actions={
-            <Button variant={open ? "secondary" : "primary"} size="md" onClick={() => setOpen(true)}>
+            <Button appearance={open ? "outline" : "solid"} mode={open ? "neutral" : "primary"} size="md" onClick={() => setOpen(true)}>
               New study
             </Button>
           }
@@ -80,10 +80,10 @@ export function EmptyFirstRunPattern({ breadcrumbs, onCreate }: EmptyFirstRunPat
         onClose={close}
         footer={
           <ButtonGroup ariaLabel="Study actions">
-            <Button variant="secondary" size="md" onClick={close}>
+            <Button appearance="outline" mode="neutral" size="md" onClick={close}>
               Cancel
             </Button>
-            <Button variant="primary" size="md" onClick={create}>
+            <Button appearance="solid" mode="primary" size="md" onClick={create}>
               Create study
             </Button>
           </ButtonGroup>

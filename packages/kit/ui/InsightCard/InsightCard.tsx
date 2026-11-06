@@ -102,7 +102,7 @@ export function InsightCard({
                 asLink(primaryAction) ? (
                   <ActionLink action={primaryAction} iconSize={ICON_SIZE[size]} />
                 ) : (
-                  <Button variant="primary" size={buttonSize} onClick={primaryAction.onClick}>
+                  <Button appearance="solid" mode="primary" size={buttonSize} onClick={primaryAction.onClick}>
                     {primaryAction.label}
                   </Button>
                 )
@@ -111,7 +111,7 @@ export function InsightCard({
                 asLink(secondaryAction) ? (
                   <ActionLink action={secondaryAction} iconSize={ICON_SIZE[size]} />
                 ) : (
-                  <Button variant="secondary" size={buttonSize} onClick={secondaryAction.onClick}>
+                  <Button appearance="outline" mode="neutral" size={buttonSize} onClick={secondaryAction.onClick}>
                     {secondaryAction.label}
                   </Button>
                 )

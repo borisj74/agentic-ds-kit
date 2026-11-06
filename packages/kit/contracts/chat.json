@@ -131,7 +131,7 @@
     "Do not use Modal for an inline assistant panel",
     "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
     "Do not use raw hex",
-    "Do not use Florence, BillingPlatform, or copilot wording in copy"
+    "Do not use product-specific, billing-platform, or copilot wording in copy"
   ],
   "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />"
 }

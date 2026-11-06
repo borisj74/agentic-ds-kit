@@ -87,7 +87,7 @@ function FileRow({
       <div className={styles.actions}>
         {file.status === "error" && onRetry ? (
           <Button
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconStart="RotateCcw"
             ariaLabel={`Retry ${file.name}`}
@@ -97,7 +97,7 @@ function FileRow({
         ) : null}
         {onRemove ? (
           <Button
-            variant="tertiary"
+            appearance="ghost" mode="neutral"
             size="sm"
             iconStart={file.status === "uploading" ? "X" : "Trash2"}
             ariaLabel={`Remove ${file.name}`}

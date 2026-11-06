@@ -43,7 +43,7 @@ function InboxTable({
         kind: <Badge tone={item.kindTone} size="sm">{item.kind}</Badge>,
         when: item.when,
         open: (
-          <Button variant="tertiary" size="sm" onClick={() => onOpen(item.id)}>
+          <Button appearance="ghost" mode="neutral" size="sm" onClick={() => onOpen(item.id)}>
             Open
           </Button>
         ),
@@ -146,11 +146,11 @@ export function InboxPattern({ breadcrumbs }: InboxPatternProps) {
           actions={
             selected ? (
               <>
-                <Button variant="secondary" size="sm" onClick={() => archive(selected.id)}>
+                <Button appearance="outline" mode="neutral" size="sm" onClick={() => archive(selected.id)}>
                   Archive
                 </Button>
                 <Button
-                  variant={drawerOpen ? "secondary" : "primary"}
+                  appearance={drawerOpen ? "outline" : "solid"} mode={drawerOpen ? "neutral" : "primary"}
                   size="sm"
                   onClick={() => openMessage(selected.id)}
                 >
