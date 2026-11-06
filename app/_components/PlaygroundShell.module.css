@@ -111,7 +111,6 @@
 }
 
 .sidebar a[aria-current="page"] {
-  border-radius: var(--radius-full);
   background-color: var(--action-primary);
   color: var(--action-on-primary);
   font-weight: var(--type-weight-heading);

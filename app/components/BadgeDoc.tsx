@@ -6,10 +6,8 @@ import type { BadgeAppearance, BadgeSize, BadgeTone } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
-import { BadgeMatrix } from "./BadgeMatrix";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
-import matrix from "./VariantMatrix.module.css";
 
 const SIZES: BadgeSize[] = ["sm", "md", "lg"];
 const APPEARANCES: BadgeAppearance[] = ["soft", "tint", "solid", "outline"];
@@ -61,18 +59,6 @@ export function BadgeDoc() {
           Appearance × tone: soft, tint, solid, outline across status colors. Not Avatar. Not a button.
         </p>
       </header>
-
-      <section className={matrix.block} aria-labelledby="badge-matrix">
-        <div>
-          <h2 id="badge-matrix" className={styles.masterTitle}>
-            All variants
-          </h2>
-          <p className={styles.masterSummary}>
-            Status presets, then every appearance, tone, and size. Disabled, and a primary row on a grey surface.
-          </p>
-        </div>
-        <BadgeMatrix />
-      </section>
 
       <section className={styles.master} aria-labelledby="badge-master">
         <div className={styles.masterHeader}>

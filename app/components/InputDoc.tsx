@@ -6,11 +6,9 @@ import type { FieldLabelPosition } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import type { InputSize } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
-import { InputMatrix } from "./InputMatrix";
 import { RealisticFields, realisticFieldsCode } from "./RealisticFields";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
-import matrix from "./VariantMatrix.module.css";
 import shortcut from "./RealisticFields.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
@@ -40,18 +38,6 @@ export function InputDoc() {
           iconStart are prefix slots inside the control. No InputGroup cousin.
         </p>
       </header>
-
-      <section className={matrix.block} aria-labelledby="input-matrix">
-        <div>
-          <h2 id="input-matrix" className={styles.masterTitle}>
-            All variants
-          </h2>
-          <p className={styles.masterSummary}>
-            Every size at rest, in error, and disabled, plus the same fields on a grey surface.
-          </p>
-        </div>
-        <InputMatrix />
-      </section>
 
       <section className={styles.master} aria-labelledby="input-master">
         <div className={styles.masterHeader}>
