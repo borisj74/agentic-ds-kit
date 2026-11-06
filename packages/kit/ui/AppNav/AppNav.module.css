@@ -97,6 +97,9 @@
 .accordionInner {
   overflow: hidden;
   min-height: 0;
+  /* The collapse clip would cut the focus outline, which sits outside the link. */
+  padding-inline: calc(var(--border-focus-width) + var(--space-inset-2xs));
+  margin-inline: calc(-1 * (var(--border-focus-width) + var(--space-inset-2xs)));
 }
 
 @media (prefers-reduced-motion: reduce) {
