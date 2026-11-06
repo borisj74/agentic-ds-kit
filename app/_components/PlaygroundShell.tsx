@@ -173,9 +173,11 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
               id="docs-nav-filter"
               type="search"
               size="sm"
-              placeholder="Filter"
+              placeholder="Search"
               iconStart="Search"
-              ariaLabel="Filter navigation"
+              end="⌘K"
+              ariaLabel="Search"
+              aria-keyshortcuts="Meta+K Control+K"
               value={navQuery}
               onChange={setNavQuery}
             />

@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Button, Command, Modal } from "agentic-ds-kit";
+import { Command, Modal } from "agentic-ds-kit";
 import type { CommandGroup } from "agentic-ds-kit";
 import { playgroundCommandSections } from "@/lib/playground-nav";
 import { pushHash } from "@/lib/use-location-hash";
-import styles from "./PlaygroundShell.module.css";
 
 const SECTIONS = playgroundCommandSections();
 
@@ -77,29 +76,13 @@ export function PlaygroundCommand() {
   };
 
   return (
-    <>
-      <Button
-        size="sm"
-        appearance="outline"
-        mode="neutral"
-        iconStart="Search"
-        block
-        className={styles.commandTrigger}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        aria-keyshortcuts="Meta+K Control+K"
-        onClick={() => setOpen(true)}
-      >
-        Search ⌘K
-      </Button>
-      <Modal ref={dialogRef} open={open} title="Search" size="md" onClose={() => setOpen(false)}>
-        <Command
-          groups={GROUPS}
-          label="Search documentation"
-          placeholder="Components, patterns, foundations"
-          onSelect={go}
-        />
-      </Modal>
-    </>
+    <Modal ref={dialogRef} open={open} title="Search" size="md" onClose={() => setOpen(false)}>
+      <Command
+        groups={GROUPS}
+        label="Search documentation"
+        placeholder="Components, patterns, foundations"
+        onSelect={go}
+      />
+    </Modal>
   );
 }
