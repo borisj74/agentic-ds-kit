@@ -50,7 +50,7 @@ Patterns are examples of what you can build from the components, not rules: star
 - `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 
 ### Playground
-Persistent left sidebar via kit **AppNav**. Component links are grouped (Forms, Data, Overlays, Navigation, Feedback, Charts, Agent). Pattern pages are routes under `/patterns/[slug]`. Foundation sections still use hash links.
+Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started, Foundations, Components, and Patterns. Components holds Overview, then collapsible Forms, Data, Overlays, Navigation, Feedback, Charts, and Agent. Pattern pages are routes under `/patterns/[slug]`. Foundation sections still use hash links.
 
 ### Playground routes
 - `/` — Redirects to `/patterns/dashboard`

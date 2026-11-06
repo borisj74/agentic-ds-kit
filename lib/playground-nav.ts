@@ -350,15 +350,16 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       items: [
         {
           href: "/components",
-          label: "Gallery",
+          label: "Overview",
           active: pathname === "/components" && !h,
         },
+        ...COMPONENT_GROUPS.map((group) => ({
+          href: "/components",
+          label: group.label,
+          items: componentLeaves(group.ids, pathname),
+        })),
       ],
     },
-    ...COMPONENT_GROUPS.map((group) => ({
-      label: group.label,
-      items: componentLeaves(group.ids, pathname),
-    })),
     {
       label: "Patterns",
       items: PATTERN_ITEMS.map((item) => leaf(`/patterns/${item.slug}`, item.label)),

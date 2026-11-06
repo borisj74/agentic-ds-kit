@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { AppNavGroup, AppNavItem, AppNavLeaf, AppNavProps } from "./AppNav.types";
@@ -57,20 +57,53 @@ function NavLink({ href, label, active, nested }: AppNavLeaf & { nested?: boolea
   );
 }
 
+function Subgroup({ item }: { item: AppNavItem }) {
+  const children = item.items ?? [];
+  const childActive = children.some((child) => child.active);
+  const [open, setOpen] = useState(childActive);
+  const [prevChildActive, setPrevChildActive] = useState(childActive);
+  const panelId = `${useId()}-sub`;
+
+  if (prevChildActive !== childActive) {
+    setPrevChildActive(childActive);
+    if (childActive) setOpen(true);
+  }
+
+  return (
+    <li className={`${styles.item} ${open ? styles.isOpen : ""}`}>
+      <button
+        type="button"
+        className={`${styles.groupToggle} ${styles.subgroupToggle} ${open ? styles.groupToggleOpen : ""}`}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span className={styles.subgroupLabel}>{item.label}</span>
+        <ChevronRight
+          className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
+          size={14}
+          strokeWidth={2}
+          aria-hidden
+        />
+      </button>
+      <div className={styles.accordion} id={panelId} aria-hidden={!open} inert={open ? undefined : true}>
+        <div className={styles.accordionInner}>
+          <ul className={styles.subList}>
+            {children.map((child, index) => (
+              <li key={navKey(child, index)}>
+                <NavLink {...child} nested />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </li>
+  );
+}
+
 function NavItem({ item }: { item: AppNavItem }) {
   if (item.items && item.items.length > 0) {
-    return (
-      <li className={styles.item}>
-        <span className={styles.subgroupLabel}>{item.label}</span>
-        <ul className={styles.subList}>
-          {item.items.map((child, index) => (
-            <li key={navKey(child, index)}>
-              <NavLink {...child} nested />
-            </li>
-          ))}
-        </ul>
-      </li>
-    );
+    return <Subgroup item={item} />;
   }
 
   return (
