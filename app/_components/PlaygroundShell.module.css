@@ -85,9 +85,12 @@
   width: 16.25rem;
   height: calc(100vh - var(--playground-topbar-height));
   overflow: auto;
-  padding: var(--space-4);
-  border-right: var(--border-width-thin) solid var(--border-faint);
-  background-color: var(--bg-surface);
+  /* Side inset matches the nav card. Top inset lives on the header so it can
+     include both the sidebar gutter and the card padding. */
+  padding: 0 var(--space-4) var(--space-4);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
 }
 
 :global(html[data-customize="closed"]) .customize {
