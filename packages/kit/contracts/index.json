@@ -42,6 +42,20 @@
     "status": "stable"
   },
   {
+    "id": "numberinput",
+    "intent": "A number the person can type, step, and read in their locale, with optional min and max.",
+    "group": "component",
+    "path": "contracts/numberinput.json",
+    "status": "stable"
+  },
+  {
+    "id": "currencyinput",
+    "intent": "A money amount with a currency symbol, locale formatting, min, max, and step.",
+    "group": "component",
+    "path": "contracts/currencyinput.json",
+    "status": "stable"
+  },
+  {
     "id": "inputotp",
     "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
     "group": "component",
@@ -98,10 +112,31 @@
     "status": "stable"
   },
   {
+    "id": "timepicker",
+    "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
+    "group": "component",
+    "path": "contracts/timepicker.json",
+    "status": "stable"
+  },
+  {
     "id": "select",
     "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
     "group": "component",
     "path": "contracts/select.json",
+    "status": "stable"
+  },
+  {
+    "id": "combobox",
+    "intent": "Type to filter one value, including a list the parent loads asynchronously.",
+    "group": "component",
+    "path": "contracts/combobox.json",
+    "status": "stable"
+  },
+  {
+    "id": "multiselect",
+    "intent": "Choose several values. Selected values stay in the field as removable tags, and typing filters the list.",
+    "group": "component",
+    "path": "contracts/multiselect.json",
     "status": "stable"
   },
   {
@@ -161,6 +196,13 @@
     "status": "stable"
   },
   {
+    "id": "contextmenu",
+    "intent": "Actions for one target, opened with a right-click or Shift+F10.",
+    "group": "component",
+    "path": "contracts/contextmenu.json",
+    "status": "stable"
+  },
+  {
     "id": "datagrid",
     "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
     "group": "component",
@@ -179,6 +221,20 @@
     "intent": "Form field that opens a month grid to pick one date or a date range.",
     "group": "component",
     "path": "contracts/datepicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "daterangepicker",
+    "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+    "group": "component",
+    "path": "contracts/daterangepicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "datetimepicker",
+    "intent": "Pick a calendar date and a time in one field.",
+    "group": "component",
+    "path": "contracts/datetimepicker.json",
     "status": "stable"
   },
   {
@@ -224,6 +280,13 @@
     "status": "stable"
   },
   {
+    "id": "popover",
+    "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
+    "group": "component",
+    "path": "contracts/popover.json",
+    "status": "stable"
+  },
+  {
     "id": "card",
     "intent": "Framed tile with optional header, body, and footer actions.",
     "group": "component",
@@ -266,6 +329,13 @@
     "status": "stable"
   },
   {
+    "id": "resizable",
+    "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
+    "group": "component",
+    "path": "contracts/resizable.json",
+    "status": "stable"
+  },
+  {
     "id": "field",
     "intent": "One labeled control with optional hint and error. Label on top or start (left).",
     "group": "component",
@@ -294,10 +364,24 @@
     "status": "stable"
   },
   {
+    "id": "filterbar",
+    "intent": "A row of filter chips with add, clear all, and an overflow menu when the row is too long.",
+    "group": "component",
+    "path": "contracts/filterbar.json",
+    "status": "stable"
+  },
+  {
     "id": "tag",
     "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
     "group": "component",
     "path": "contracts/tag.json",
+    "status": "stable"
+  },
+  {
+    "id": "taginput",
+    "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+    "group": "component",
+    "path": "contracts/taginput.json",
     "status": "stable"
   },
   {
@@ -438,6 +522,13 @@
     "intent": "Vertical sidebar navigation with active item state.",
     "group": "component",
     "path": "contracts/appnav.json",
+    "status": "stable"
+  },
+  {
+    "id": "anchornav",
+    "intent": "A list of the sections on one long page. It jumps to a section and shows the one the page is at.",
+    "group": "component",
+    "path": "contracts/anchornav.json",
     "status": "stable"
   },
   {

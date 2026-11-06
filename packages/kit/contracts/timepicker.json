@@ -1,0 +1,44 @@
+{
+  "id": "timepicker",
+  "status": "stable",
+  "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
+  "useWhen": [
+    "A time in a form, without a date",
+    "Arrow keys should move the hour or the minute"
+  ],
+  "doNotUseWhen": [
+    "A date and a time together — use DateTimePicker",
+    "A date only — use DatePicker"
+  ],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "value": { "type": "string", "required": false, "note": "Controlled HH:mm in 24-hour form." },
+    "defaultValue": { "type": "string", "required": false },
+    "onValueChange": { "type": "function", "required": false, "note": "(value: string) => void" },
+    "hourCycle": { "type": "enum", "values": ["12", "24"], "default": "12" },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "name": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false },
+    "ariaLabel": { "type": "string", "required": false }
+  },
+  "passthrough": { "root": "div", "ref": "none", "className": "root", "rest": "none" },
+  "tokens": ["text.primary", "text.secondary", "text.muted", "surface.muted", "border.focus", "status.danger"],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "The field is a group. Hour and minute are spinbuttons",
+      "ArrowUp and ArrowDown change the focused part",
+      "In 12-hour mode, a button switches AM and PM and is labelled Period",
+      "The submitted value is HH:mm",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not use input type=time",
+    "Do not store 12-hour text — the value is HH:mm",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Start time\" htmlFor=\"start\"><TimePicker id=\"start\" hourCycle=\"12\" /></Field>"
+}

@@ -86,7 +86,7 @@
     ]
   },
   "doNot": [
-    "Do not invent local Popover, HoverCard, InfoTip, ContextInfo, or a one-off ?",
+    "A panel with actions or arbitrary content — use Popover. Do not invent HoverCard, InfoTip, or a one-off ?",
     "Do not use Tooltip for a sentence or two",
     "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
     "Do not put links, buttons, or forms in the panel",

@@ -1,0 +1,64 @@
+{
+  "id": "multiselect",
+  "status": "stable",
+  "intent": "Choose several values. Selected values stay in the field as removable tags, and typing filters the list.",
+  "useWhen": [
+    "Several values from a list, shown as tags in the field",
+    "The list is long enough that the person filters it while choosing"
+  ],
+  "doNotUseWhen": [
+    "One value — use Select or Combobox",
+    "A short list in a menu — use Select multiple",
+    "Tags the person types — use TagInput"
+  ],
+  "contains": ["tag", "badge"],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "options": {
+      "type": "array",
+      "itemShape": { "value": "string", "label": "string", "disabled": "boolean?" },
+      "required": true
+    },
+    "value": { "type": "string[]", "required": false },
+    "defaultValue": { "type": "string[]", "required": false },
+    "onChange": { "type": "function", "required": false, "note": "(value: string[]) => void" },
+    "placeholder": { "type": "string", "default": "Select" },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "maxVisible": { "type": "number", "required": false, "note": "Extra selections collapse into a kit Badge +N." },
+    "name": { "type": "string", "required": false, "note": "Hidden input joins values with commas." },
+    "ariaLabel": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false },
+    "emptyLabel": { "type": "string", "default": "No results" }
+  },
+  "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "text.disabled",
+    "icon.primary",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "status.danger"
+  ],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "The filter input is role=combobox. The popup is role=listbox aria-multiselectable=true",
+      "Each option is role=option with aria-selected. Enter toggles the active option. The list stays open",
+      "Backspace on an empty query removes the last tag. Each tag remove button removes that value",
+      "Escape closes and returns focus to the input",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local chip list — selected values are kit Tag",
+    "Do not invent an overflow chip — the overflow count is kit Badge",
+    "Do not use Select valueDisplay=tags when the filter must live in the field",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Teams\" htmlFor=\"teams\"><MultiSelect id=\"teams\" placeholder=\"Select teams\" options={teams} /></Field>"
+}

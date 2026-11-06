@@ -3,6 +3,7 @@
 import { useLocationHash } from "@/lib/use-location-hash";
 import { AccordionDoc } from "./AccordionDoc";
 import { AlertDialogDoc } from "./AlertDialogDoc";
+import { AnchorNavDoc } from "./AnchorNavDoc";
 import { AlertDoc } from "./AlertDoc";
 import { AppHeaderDoc } from "./AppHeaderDoc";
 import { AppNavDoc } from "./AppNavDoc";
@@ -21,12 +22,16 @@ import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
 import { CodeSnippetDoc } from "./CodeSnippetDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
+import { ComboboxDoc } from "./ComboboxDoc";
 import { ColorPickerDoc } from "./ColorPickerDoc";
 import { CommandDoc } from "./CommandDoc";
+import { ContextMenuDoc } from "./ContextMenuDoc";
 import { ConveyorDoc } from "./ConveyorDoc";
 import { DataGridDoc } from "./DataGridDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
+import { DateRangePickerDoc } from "./DateRangePickerDoc";
+import { DateTimePickerDoc } from "./DateTimePickerDoc";
 import { DividerDoc } from "./DividerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
@@ -34,6 +39,7 @@ import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
 import { FieldSetDoc } from "./FieldSetDoc";
 import { FileUploadDoc } from "./FileUploadDoc";
+import { FilterBarDoc } from "./FilterBarDoc";
 import { FilterButtonDoc } from "./FilterButtonDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { HelpPopoverDoc } from "./HelpPopoverDoc";
@@ -46,17 +52,22 @@ import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
 import { MeterDoc } from "./MeterDoc";
 import { CountDoc } from "./CountDoc";
+import { CurrencyInputDoc } from "./CurrencyInputDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
+import { MultiSelectDoc } from "./MultiSelectDoc";
 import { NavigationMenuDoc } from "./NavigationMenuDoc";
+import { NumberInputDoc } from "./NumberInputDoc";
 import { NumberTransitionDoc } from "./NumberTransitionDoc";
 import { OtherComponent } from "./OtherComponents";
 import { PageHeaderDoc } from "./PageHeaderDoc";
 import { PaginationDoc } from "./PaginationDoc";
 import { PieChartDoc } from "./PieChartDoc";
+import { PopoverDoc } from "./PopoverDoc";
 import { ProgressDoc } from "./ProgressDoc";
 import { ProgressStepsDoc } from "./ProgressStepsDoc";
 import { RadioGroupDoc } from "./RadioGroupDoc";
+import { ResizableDoc } from "./ResizableDoc";
 import { ScoreboardDoc } from "./ScoreboardDoc";
 import { SectionDoc } from "./SectionDoc";
 import { ScorecardDoc } from "./ScorecardDoc";
@@ -70,7 +81,9 @@ import { SwitchDoc } from "./SwitchDoc";
 import { TableDoc } from "./TableDoc";
 import { TabsDoc } from "./TabsDoc";
 import { TagDoc } from "./TagDoc";
+import { TagInputDoc } from "./TagInputDoc";
 import { TextareaDoc } from "./TextareaDoc";
+import { TimePickerDoc } from "./TimePickerDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
 import { ToastDoc } from "./ToastDoc";
@@ -94,24 +107,32 @@ const TITLES: Record<string, string> = {
   inputotp: "InputOTP",
   insightcard: "InsightCard",
   textarea: "Textarea",
+  timepicker: "TimePicker",
   select: "Select",
   switch: "Switch",
   checkbox: "Checkbox",
   codesnippet: "CodeSnippet",
   collapsible: "Collapsible",
+  combobox: "Combobox",
   colorpicker: "ColorPicker",
   command: "Command",
+  contextmenu: "ContextMenu",
   conveyor: "Conveyor",
   count: "Count",
+  currencyinput: "CurrencyInput",
   datagrid: "DataGrid",
   datatable: "DataTable",
   datepicker: "DatePicker",
+  daterangepicker: "DateRangePicker",
+  datetimepicker: "DateTimePicker",
   divider: "Divider",
   headercell: "HeaderCell",
   helppopover: "HelpPopover",
   radiogroup: "RadioGroup",
+  resizable: "Resizable",
   field: "Field",
   fieldset: "FieldSet",
+  filterbar: "FilterBar",
   filterbutton: "FilterButton",
   fileupload: "FileUpload",
   badge: "Badge",
@@ -120,7 +141,9 @@ const TITLES: Record<string, string> = {
   tooltip: "Tooltip",
   tabs: "Tabs",
   tag: "Tag",
+  taginput: "TagInput",
   modal: "Modal",
+  multiselect: "MultiSelect",
   modalcard: "ModalCard",
   navigationmenu: "NavigationMenu",
   sidenav: "SideNav",
@@ -130,11 +153,13 @@ const TITLES: Record<string, string> = {
   pageheader: "PageHeader",
   pagination: "Pagination",
   piechart: "Pie",
+  popover: "Popover",
   linechart: "Line",
   linklist: "LinkList",
   listview: "ListView",
   loadinganimation: "LoadingAnimation",
   meter: "Meter",
+  numberinput: "NumberInput",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
   skeleton: "Skeleton",
@@ -150,6 +175,7 @@ const TITLES: Record<string, string> = {
   section: "Section",
   table: "Table",
   accordion: "Accordion",
+  anchornav: "AnchorNav",
   alert: "Alert",
   alertdialog: "AlertDialog",
   appheader: "AppHeader",
@@ -267,6 +293,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "accordion") return <AccordionDoc />;
   if (resolved === "alert") return <AlertDoc />;
   if (resolved === "alertdialog") return <AlertDialogDoc />;
+  if (resolved === "anchornav") return <AnchorNavDoc />;
   if (resolved === "appheader") return <AppHeaderDoc />;
   if (resolved === "appnav") return <AppNavDoc />;
   if (resolved === "avatar") return <AvatarDoc />;
@@ -279,15 +306,21 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "checkbox") return <CheckboxDoc />;
   if (resolved === "codesnippet") return <CodeSnippetDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
+  if (resolved === "combobox") return <ComboboxDoc />;
   if (resolved === "colorpicker") return <ColorPickerDoc />;
   if (resolved === "command") return <CommandDoc />;
+  if (resolved === "contextmenu") return <ContextMenuDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
   if (resolved === "count") return <CountDoc />;
+  if (resolved === "currencyinput") return <CurrencyInputDoc />;
   if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
+  if (resolved === "daterangepicker") return <DateRangePickerDoc />;
+  if (resolved === "datetimepicker") return <DateTimePickerDoc />;
   if (resolved === "divider") return <DividerDoc />;
   if (resolved === "modal") return <ModalDoc />;
+  if (resolved === "multiselect") return <MultiSelectDoc />;
   if (resolved === "modalcard") return <ModalCardDoc />;
   if (resolved === "navigationmenu") return <NavigationMenuDoc />;
   if (resolved === "sidenav") return <SideNavDoc />;
@@ -296,6 +329,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "fieldset") return <FieldSetDoc />;
+  if (resolved === "filterbar") return <FilterBarDoc />;
   if (resolved === "filterbutton") return <FilterButtonDoc />;
   if (resolved === "fileupload") return <FileUploadDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
@@ -308,13 +342,16 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "listview") return <ListViewDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
   if (resolved === "meter") return <MeterDoc />;
+  if (resolved === "numberinput") return <NumberInputDoc />;
   if (resolved === "numbertransition") return <NumberTransitionDoc />;
   if (resolved === "pageheader") return <PageHeaderDoc />;
   if (resolved === "pagination") return <PaginationDoc />;
   if (resolved === "piechart") return <PieChartDoc />;
+  if (resolved === "popover") return <PopoverDoc />;
   if (resolved === "progress") return <ProgressDoc />;
   if (resolved === "progresssteps") return <ProgressStepsDoc />;
   if (resolved === "radiogroup") return <RadioGroupDoc />;
+  if (resolved === "resizable") return <ResizableDoc />;
   if (resolved === "scorecard") return <ScorecardDoc />;
   if (resolved === "scoreboard") return <ScoreboardDoc />;
   if (resolved === "section") return <SectionDoc />;
@@ -327,7 +364,9 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "table") return <TableDoc />;
   if (resolved === "tabs") return <TabsDoc />;
   if (resolved === "tag") return <TagDoc />;
+  if (resolved === "taginput") return <TagInputDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
+  if (resolved === "timepicker") return <TimePickerDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
   if (resolved === "timeline") return <TimelineDoc />;
   if (resolved === "toast") return <ToastDoc />;

@@ -144,7 +144,7 @@
   "doNot": [
     "Do not use a native select for filters \u2014 use kit DropdownMenu",
     "Do not wrap search in Field \u2014 DataTable owns its input",
-    "Do not invent FilterBar, ColumnPicker, Pagination, or a second Table",
+    "A row of filter chips is FilterBar. Do not invent ColumnPicker, Pagination, or a second Table",
     "Editable in-place rows \u2014 use DataGrid",
     "Do not invent a local Cell, DataTableCell, HeaderCell, Tag, Trend, FileIcon, or PaymentMethod \u2014 use Cell and HeaderCell (kit Tag is fine for user labels)",
     "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",

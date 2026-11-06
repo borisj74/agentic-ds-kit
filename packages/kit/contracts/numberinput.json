@@ -1,0 +1,51 @@
+{
+  "id": "numberinput",
+  "status": "stable",
+  "intent": "A number the person can type, step, and read in their locale, with optional min and max.",
+  "useWhen": [
+    "A quantity, percentage, or other number in a form",
+    "The value should format with the locale's grouping and decimal mark",
+    "Arrow keys or stepper buttons should move by a step"
+  ],
+  "doNotUseWhen": [
+    "Money — use CurrencyInput",
+    "A rough amount on a track — use Slider",
+    "Free text — use Input"
+  ],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md" },
+    "value": { "type": "number | null", "required": false, "note": "Controlled. null is empty." },
+    "defaultValue": { "type": "number | null", "required": false },
+    "onChange": { "type": "function", "required": false, "note": "(value: number | null) => void" },
+    "min": { "type": "number", "required": false },
+    "max": { "type": "number", "required": false },
+    "step": { "type": "number", "default": 1 },
+    "locale": { "type": "string", "required": false, "note": "BCP 47. Default is the runtime locale." },
+    "placeholder": { "type": "string", "required": false },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "name": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false },
+    "ariaLabel": { "type": "string", "required": false },
+    "steppers": { "type": "boolean", "default": true, "note": "Decrease and increase buttons." }
+  },
+  "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
+  "tokens": ["text.primary", "text.muted", "surface.muted", "border.faint", "border.focus", "status.danger"],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Input is role=spinbutton with aria-valuenow, aria-valuemin, aria-valuemax, and aria-valuetext",
+      "ArrowUp and ArrowDown move by step and clamp to min and max",
+      "Blur clamps a typed value to min and max",
+      "Stepper buttons are labelled Decrease value and Increase value",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not use input type=number when the locale format matters",
+    "Do not put a currency symbol on NumberInput — use CurrencyInput",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Quantity\" htmlFor=\"qty\"><NumberInput id=\"qty\" min={1} max={99} step={1} /></Field>"
+}

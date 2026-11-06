@@ -100,7 +100,8 @@ export function DatePickerDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Use DatePicker in a form. Use Calendar for a schedule of events. Value is
-                  YYYY-MM-DD. Do not invent Popover, DateRangePicker, or a native date input.
+                  YYYY-MM-DD. Do not invent Popover or a native date input. Named presets are
+                  DateRangePicker.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, disabled, value)} />
@@ -139,7 +140,8 @@ export function DatePickerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  mode=&quot;range&quot; on one DatePicker. Not two fields and not DateRangePicker. Value is
+                  mode=&quot;range&quot; on one DatePicker. Not two fields. Named presets such as This
+                  month are DateRangePicker. Value is
                   {" { start, end }"} as YYYY-MM-DD.
                 </p>
               </div>

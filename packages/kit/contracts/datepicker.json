@@ -9,6 +9,7 @@
   ],
   "doNotUseWhen": [
     "A schedule of events — use Calendar",
+    "A range with named presets such as This month — use DateRangePicker",
     "Time-only — ask first"
   ],
   "props": {
@@ -24,7 +25,7 @@
         "range"
       ],
       "default": "single",
-      "note": "single is one YYYY-MM-DD. range is { start, end? }. Not DateRangePicker."
+      "note": "single is one YYYY-MM-DD. range is { start, end? }. Named presets are DateRangePicker."
     },
     "value": {
       "type": "string | { start: string, end?: string }",
@@ -114,7 +115,8 @@
     ]
   },
   "doNot": [
-    "Do not invent a local calendar, Popover, DatePickerDialog, DateRangePicker, PeriodPicker, DualCalendar, or native input type=date",
+    "Do not wrap DatePicker in Popover. The field owns its overlay. Do not invent a local calendar, DatePickerDialog, PeriodPicker, DualCalendar, or native input type=date",
+    "Named presets such as This month or Last 30 days — use DateRangePicker",
     "Do not use two DatePickers for start and end — use mode=range",
     "Do not use the event Calendar as a date field",
     "Do not add built-in label, hint, error text, help, or hideLabel — wrap with Field",

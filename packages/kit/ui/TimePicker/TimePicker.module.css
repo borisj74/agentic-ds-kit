@@ -1,0 +1,52 @@
+.shell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  width: auto;
+}
+
+.shell:focus-within {
+  border-color: var(--border-focus);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.shell[data-error]:focus-within {
+  border-color: var(--status-danger);
+  outline-color: var(--status-danger);
+}
+
+.shell[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--surface-muted);
+}
+
+.segment,
+.period {
+  width: var(--space-8);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: center;
+}
+
+.period {
+  width: auto;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.segment:focus,
+.period:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+  border-radius: var(--radius-control-sm);
+}
+
+.colon {
+  color: var(--text-muted);
+}

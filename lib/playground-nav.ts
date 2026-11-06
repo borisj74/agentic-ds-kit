@@ -4,6 +4,7 @@ export const COMPONENT_ITEMS = [
   "accordion",
   "alert",
   "alertdialog",
+  "anchornav",
   "appheader",
   "appnav",
   "avatar",
@@ -21,18 +22,24 @@ export const COMPONENT_ITEMS = [
   "codesnippet",
   "collapsible",
   "colorpicker",
+  "combobox",
   "command",
+  "contextmenu",
   "conveyor",
   "count",
+  "currencyinput",
   "datagrid",
   "datatable",
   "datepicker",
+  "daterangepicker",
+  "datetimepicker",
   "divider",
   "drawer",
   "dropdownmenu",
   "empty",
   "field",
   "fieldset",
+  "filterbar",
   "filterbutton",
   "fileupload",
   "headercell",
@@ -46,13 +53,17 @@ export const COMPONENT_ITEMS = [
   "meter",
   "modal",
   "modalcard",
+  "multiselect",
   "navigationmenu",
+  "numberinput",
   "numbertransition",
   "pageheader",
   "pagination",
+  "popover",
   "progress",
   "progresssteps",
   "radiogroup",
+  "resizable",
   "scorecard",
   "scoreboard",
   "section",
@@ -66,7 +77,9 @@ export const COMPONENT_ITEMS = [
   "table",
   "tabs",
   "tag",
+  "taginput",
   "textarea",
+  "timepicker",
   "thinkinganimation",
   "timeline",
   "toast",
@@ -76,6 +89,7 @@ export const COMPONENT_ITEMS = [
 ] as const;
 
 export function componentLabel(id: string): string {
+  if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
   if (id === "pageheader") return "PageHeader";
@@ -89,11 +103,17 @@ export function componentLabel(id: string): string {
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
   if (id === "helppopover") return "HelpPopover";
+  if (id === "combobox") return "Combobox";
+  if (id === "contextmenu") return "ContextMenu";
+  if (id === "currencyinput") return "CurrencyInput";
+  if (id === "datetimepicker") return "DateTimePicker";
   if (id === "datepicker") return "DatePicker";
+  if (id === "daterangepicker") return "DateRangePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "linechart") return "Line";
   if (id === "listview") return "ListView";
   if (id === "modalcard") return "ModalCard";
+  if (id === "multiselect") return "MultiSelect";
   if (id === "navigationmenu") return "NavigationMenu";
   if (id === "piechart") return "Pie";
   if (id === "progresssteps") return "ProgressSteps";
@@ -105,10 +125,12 @@ export function componentLabel(id: string): string {
   if (id === "fieldset") return "FieldSet";
   if (id === "filterbutton") return "FilterButton";
   if (id === "fileupload") return "FileUpload";
+  if (id === "filterbar") return "FilterBar";
   if (id === "codesnippet") return "CodeSnippet";
   if (id === "colorpicker") return "ColorPicker";
   if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
+  if (id === "numberinput") return "NumberInput";
   if (id === "numbertransition") return "NumberTransition";
   if (id === "shimmertext") return "ShimmerText";
   if (id === "thinkinganimation") return "ThinkingAnimation";
@@ -116,6 +138,8 @@ export function componentLabel(id: string): string {
   if (id === "toast") return "Toast";
   if (id === "treeview") return "TreeView";
   if (id === "usagelist") return "UsageList";
+  if (id === "taginput") return "TagInput";
+  if (id === "timepicker") return "TimePicker";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
@@ -128,18 +152,27 @@ export const COMPONENT_GROUPS = [
       "buttongroup",
       "checkbox",
       "colorpicker",
+      "combobox",
+      "currencyinput",
       "datepicker",
+      "daterangepicker",
+      "datetimepicker",
       "field",
       "fieldset",
       "fileupload",
+      "filterbar",
       "filterbutton",
       "input",
       "inputotp",
+      "multiselect",
+      "numberinput",
       "radiogroup",
       "select",
+      "taginput",
       "slider",
       "switch",
       "textarea",
+      "timepicker",
     ],
   },
   {
@@ -164,6 +197,7 @@ export const COMPONENT_GROUPS = [
       "scorecard",
       "scoreboard",
       "section",
+      "resizable",
       "table",
       "timeline",
       "treeview",
@@ -172,11 +206,12 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Overlays",
-    ids: ["alertdialog", "command", "drawer", "dropdownmenu", "helppopover", "modal", "modalcard"],
+    ids: ["alertdialog", "command", "contextmenu", "drawer", "dropdownmenu", "helppopover", "modal", "modalcard", "popover"],
   },
   {
     label: "Navigation",
     ids: [
+      "anchornav",
       "appheader",
       "appnav",
       "breadcrumb",

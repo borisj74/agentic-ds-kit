@@ -1,0 +1,95 @@
+.rail {
+  display: block;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  text-decoration: none;
+  box-shadow: inset var(--border-width-medium) 0 0 transparent;
+}
+
+.link:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-muted);
+}
+
+.link:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.link[aria-current="location"] {
+  color: var(--text-primary);
+  font-weight: var(--type-weight-heading);
+  box-shadow: inset var(--border-width-medium) 0 0 var(--text-primary);
+}
+
+.caret {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--space-4);
+  color: var(--icon-primary);
+}
+
+.menuRoot {
+  position: relative;
+  display: inline-flex;
+}
+
+.menuTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-body);
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+}
+
+.menuTrigger:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.menuLabel {
+  min-width: 0;
+}
+
+.menu {
+  position: absolute;
+  z-index: var(--z-overlay);
+  top: calc(100% + var(--space-1));
+  left: 0;
+  min-width: 100%;
+  padding: var(--space-1);
+  background-color: var(--surface-card);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  box-shadow: var(--shadow-md);
+}

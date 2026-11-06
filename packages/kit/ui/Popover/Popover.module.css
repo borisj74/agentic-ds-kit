@@ -1,0 +1,28 @@
+.root {
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+}
+
+.panel {
+  position: fixed;
+  z-index: var(--z-overlay);
+  min-width: calc(var(--space-16) * 3);
+  max-width: calc(var(--space-16) * 5);
+  padding: var(--space-3);
+  background-color: var(--surface-card);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+}
+
+.panel:focus {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}

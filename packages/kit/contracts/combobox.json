@@ -1,0 +1,74 @@
+{
+  "id": "combobox",
+  "status": "stable",
+  "intent": "Type to filter one value, including a list the parent loads asynchronously.",
+  "useWhen": [
+    "A long list the person searches by typing",
+    "Options that arrive after a query (async)",
+    "One value, with keyboard navigation through the suggestions"
+  ],
+  "doNotUseWhen": [
+    "A short fixed list in a field menu — use Select",
+    "Several values — use MultiSelect",
+    "Tags the person types — use TagInput",
+    "A command palette — use Command"
+  ],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "options": {
+      "type": "array",
+      "itemShape": { "value": "string", "label": "string", "disabled": "boolean?" },
+      "required": true
+    },
+    "placeholder": { "type": "string", "default": "Search" },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "value": { "type": "string", "required": false, "note": "Controlled. Empty string is nothing selected." },
+    "defaultValue": { "type": "string", "required": false },
+    "onChange": { "type": "function", "required": false, "note": "(value: string) => void" },
+    "onQueryChange": {
+      "type": "function",
+      "required": false,
+      "note": "When set, options are not filtered locally. Parent replaces options as the query changes."
+    },
+    "loading": { "type": "boolean", "default": false },
+    "emptyLabel": { "type": "string", "default": "No results" },
+    "allowCustomValue": {
+      "type": "boolean",
+      "default": false,
+      "note": "Enter commits the typed text when nothing is highlighted."
+    },
+    "name": { "type": "string", "required": false },
+    "ariaLabel": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false }
+  },
+  "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "text.disabled",
+    "icon.muted",
+    "icon.primary",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "status.danger"
+  ],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Input is role=combobox, aria-autocomplete=list, aria-expanded, aria-controls, aria-activedescendant",
+      "Suggestions are role=listbox and each row is role=option with aria-selected",
+      "Arrow keys, Home, and End move the active option. Enter selects it. Escape closes and returns focus to the input",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not use a native select or datalist",
+    "Do not invent ComboboxInput, ComboboxList, or ComboboxItem",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"City\" htmlFor=\"city\"><Combobox id=\"city\" placeholder=\"Search cities\" options={cities} onQueryChange={loadCities} /></Field>"
+}

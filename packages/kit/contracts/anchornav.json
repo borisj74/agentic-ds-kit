@@ -1,0 +1,61 @@
+{
+  "id": "anchornav",
+  "status": "stable",
+  "intent": "A list of the sections on one long page. It jumps to a section and shows the one the page is at.",
+  "useWhen": [
+    "A long page split into named sections, like settings or a long record",
+    "A reading page where people need to see where they are and jump"
+  ],
+  "doNotUseWhen": [
+    "App navigation — use AppNav",
+    "Switching views on one screen — use Tabs",
+    "Steps in a flow — use ProgressSteps"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "itemShape": { "id": "string", "label": "string" },
+      "required": true,
+      "note": "Each id is the id of that section on the page."
+    },
+    "variant": {
+      "type": "enum",
+      "values": ["rail", "menu"],
+      "default": "rail",
+      "note": "rail is the list. menu is the same list in a popover for narrow screens."
+    },
+    "spy": { "type": "boolean", "default": true, "note": "Follow the section in view." },
+    "offset": { "type": "number", "default": 0, "note": "Pixels to keep clear of a sticky header when jumping." },
+    "ariaLabel": { "type": "string", "default": "On this page" },
+    "menuLabel": { "type": "string", "default": "On this page", "note": "Menu trigger label before a section is current." }
+  },
+  "passthrough": { "root": "nav or div", "ref": "none", "className": "root", "rest": "none" },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "icon.primary",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus"
+  ],
+  "a11y": {
+    "element": "nav",
+    "requirements": [
+      "Rail is a nav landmark. Each row is a link to the section id",
+      "The current section has aria-current=location, a caret, and a strong line",
+      "Clicking a row scrolls to the section and moves focus to it",
+      "Arrow keys, Home, and End move between rows",
+      "Menu variant: the trigger is a button with aria-expanded. Escape closes and returns focus to the trigger",
+      "Do not point a row at a section that is not on the page"
+    ]
+  },
+  "doNot": [
+    "Do not use AnchorNav for app navigation — use AppNav",
+    "Do not use it to switch views — use Tabs",
+    "Do not use it for steps in a flow — use ProgressSteps",
+    "Do not point a row at a section that is not on the page",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AnchorNav variant=\"rail\" items={[{ id: \"details\", label: \"Details\" }, { id: \"billing\", label: \"Billing\" }]} />"
+}

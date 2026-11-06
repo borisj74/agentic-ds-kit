@@ -1,0 +1,52 @@
+.stage {
+  display: grid;
+  grid-template-columns: calc(var(--space-16) * 2 + var(--space-8)) minmax(0, 1fr);
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.stageMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.scroller {
+  max-height: calc(var(--space-16) * 4);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.section {
+  min-height: calc(var(--space-16) * 3);
+  padding: var(--space-4);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  background-color: var(--surface-card);
+}
+
+.section:focus {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-md);
+}
+
+.sectionBody {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+}

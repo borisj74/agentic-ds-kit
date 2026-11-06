@@ -2,6 +2,7 @@
 import contract_accordion from "../packages/kit/contracts/accordion.json";
 import contract_alert from "../packages/kit/contracts/alert.json";
 import contract_alertdialog from "../packages/kit/contracts/alertdialog.json";
+import contract_anchornav from "../packages/kit/contracts/anchornav.json";
 import contract_appheader from "../packages/kit/contracts/appheader.json";
 import contract_appnav from "../packages/kit/contracts/appnav.json";
 import contract_avatar from "../packages/kit/contracts/avatar.json";
@@ -20,12 +21,17 @@ import contract_checkbox from "../packages/kit/contracts/checkbox.json";
 import contract_codesnippet from "../packages/kit/contracts/codesnippet.json";
 import contract_collapsible from "../packages/kit/contracts/collapsible.json";
 import contract_colorpicker from "../packages/kit/contracts/colorpicker.json";
+import contract_combobox from "../packages/kit/contracts/combobox.json";
 import contract_command from "../packages/kit/contracts/command.json";
+import contract_contextmenu from "../packages/kit/contracts/contextmenu.json";
 import contract_conveyor from "../packages/kit/contracts/conveyor.json";
 import contract_count from "../packages/kit/contracts/count.json";
+import contract_currencyinput from "../packages/kit/contracts/currencyinput.json";
 import contract_datagrid from "../packages/kit/contracts/datagrid.json";
 import contract_datatable from "../packages/kit/contracts/datatable.json";
 import contract_datepicker from "../packages/kit/contracts/datepicker.json";
+import contract_daterangepicker from "../packages/kit/contracts/daterangepicker.json";
+import contract_datetimepicker from "../packages/kit/contracts/datetimepicker.json";
 import contract_divider from "../packages/kit/contracts/divider.json";
 import contract_drawer from "../packages/kit/contracts/drawer.json";
 import contract_dropdownmenu from "../packages/kit/contracts/dropdownmenu.json";
@@ -33,6 +39,7 @@ import contract_empty from "../packages/kit/contracts/empty.json";
 import contract_field from "../packages/kit/contracts/field.json";
 import contract_fieldset from "../packages/kit/contracts/fieldset.json";
 import contract_fileupload from "../packages/kit/contracts/fileupload.json";
+import contract_filterbar from "../packages/kit/contracts/filterbar.json";
 import contract_filterbutton from "../packages/kit/contracts/filterbutton.json";
 import contract_headercell from "../packages/kit/contracts/headercell.json";
 import contract_helppopover from "../packages/kit/contracts/helppopover.json";
@@ -46,14 +53,18 @@ import contract_loadinganimation from "../packages/kit/contracts/loadinganimatio
 import contract_meter from "../packages/kit/contracts/meter.json";
 import contract_modal from "../packages/kit/contracts/modal.json";
 import contract_modalcard from "../packages/kit/contracts/modalcard.json";
+import contract_multiselect from "../packages/kit/contracts/multiselect.json";
 import contract_navigationmenu from "../packages/kit/contracts/navigationmenu.json";
+import contract_numberinput from "../packages/kit/contracts/numberinput.json";
 import contract_numbertransition from "../packages/kit/contracts/numbertransition.json";
 import contract_pageheader from "../packages/kit/contracts/pageheader.json";
 import contract_pagination from "../packages/kit/contracts/pagination.json";
 import contract_piechart from "../packages/kit/contracts/piechart.json";
+import contract_popover from "../packages/kit/contracts/popover.json";
 import contract_progress from "../packages/kit/contracts/progress.json";
 import contract_progresssteps from "../packages/kit/contracts/progresssteps.json";
 import contract_radiogroup from "../packages/kit/contracts/radiogroup.json";
+import contract_resizable from "../packages/kit/contracts/resizable.json";
 import contract_scoreboard from "../packages/kit/contracts/scoreboard.json";
 import contract_scorecard from "../packages/kit/contracts/scorecard.json";
 import contract_section from "../packages/kit/contracts/section.json";
@@ -67,7 +78,9 @@ import contract_switch from "../packages/kit/contracts/switch.json";
 import contract_table from "../packages/kit/contracts/table.json";
 import contract_tabs from "../packages/kit/contracts/tabs.json";
 import contract_tag from "../packages/kit/contracts/tag.json";
+import contract_taginput from "../packages/kit/contracts/taginput.json";
 import contract_textarea from "../packages/kit/contracts/textarea.json";
+import contract_timepicker from "../packages/kit/contracts/timepicker.json";
 import contract_thinkinganimation from "../packages/kit/contracts/thinkinganimation.json";
 import contract_timeline from "../packages/kit/contracts/timeline.json";
 import contract_toast from "../packages/kit/contracts/toast.json";
@@ -85,6 +98,7 @@ const contracts: Record<string, ContractNotes> = {
   "accordion": contract_accordion,
   "alert": contract_alert,
   "alertdialog": contract_alertdialog,
+  "anchornav": contract_anchornav,
   "appheader": contract_appheader,
   "appnav": contract_appnav,
   "avatar": contract_avatar,
@@ -103,12 +117,17 @@ const contracts: Record<string, ContractNotes> = {
   "codesnippet": contract_codesnippet,
   "collapsible": contract_collapsible,
   "colorpicker": contract_colorpicker,
+  "combobox": contract_combobox,
   "command": contract_command,
+  "contextmenu": contract_contextmenu,
   "conveyor": contract_conveyor,
   "count": contract_count,
+  "currencyinput": contract_currencyinput,
   "datagrid": contract_datagrid,
   "datatable": contract_datatable,
   "datepicker": contract_datepicker,
+  "daterangepicker": contract_daterangepicker,
+  "datetimepicker": contract_datetimepicker,
   "divider": contract_divider,
   "drawer": contract_drawer,
   "dropdownmenu": contract_dropdownmenu,
@@ -116,6 +135,7 @@ const contracts: Record<string, ContractNotes> = {
   "field": contract_field,
   "fieldset": contract_fieldset,
   "fileupload": contract_fileupload,
+  "filterbar": contract_filterbar,
   "filterbutton": contract_filterbutton,
   "headercell": contract_headercell,
   "helppopover": contract_helppopover,
@@ -129,14 +149,18 @@ const contracts: Record<string, ContractNotes> = {
   "meter": contract_meter,
   "modal": contract_modal,
   "modalcard": contract_modalcard,
+  "multiselect": contract_multiselect,
   "navigationmenu": contract_navigationmenu,
+  "numberinput": contract_numberinput,
   "numbertransition": contract_numbertransition,
   "pageheader": contract_pageheader,
   "pagination": contract_pagination,
   "piechart": contract_piechart,
+  "popover": contract_popover,
   "progress": contract_progress,
   "progresssteps": contract_progresssteps,
   "radiogroup": contract_radiogroup,
+  "resizable": contract_resizable,
   "scoreboard": contract_scoreboard,
   "scorecard": contract_scorecard,
   "section": contract_section,
@@ -150,7 +174,9 @@ const contracts: Record<string, ContractNotes> = {
   "table": contract_table,
   "tabs": contract_tabs,
   "tag": contract_tag,
+  "taginput": contract_taginput,
   "textarea": contract_textarea,
+  "timepicker": contract_timepicker,
   "thinkinganimation": contract_thinkinganimation,
   "timeline": contract_timeline,
   "toast": contract_toast,

@@ -1,0 +1,42 @@
+{
+  "id": "contextmenu",
+  "status": "stable",
+  "intent": "Actions for one target, opened with a right-click or Shift+F10.",
+  "useWhen": [
+    "Actions that belong to a row, card, or canvas, not a visible button",
+    "The person already knows the target they are acting on"
+  ],
+  "doNotUseWhen": [
+    "Actions from a visible button — use DropdownMenu",
+    "Navigation — use AppNav or links",
+    "A single obvious action — use Button"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "Each item is { id, label, disabled?, danger?, shortcut? }."
+    },
+    "onSelect": { "type": "function", "required": false, "note": "(id: string) => void" },
+    "children": { "type": "slot", "required": true, "note": "The surface that opens the menu." },
+    "ariaLabel": { "type": "string", "default": "Actions" }
+  },
+  "passthrough": { "root": "div", "ref": "none", "className": "menu", "rest": "none" },
+  "tokens": ["text.primary", "text.muted", "text.disabled", "surface.card", "surface.muted", "border.faint", "status.danger"],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "Right-click or Shift+F10 opens the menu at the pointer or the target",
+      "Menu is role=menu. Each action is role=menuitem",
+      "Arrow keys, Home, and End move. Enter and Space choose. Escape closes",
+      "Disabled items are aria-disabled and are skipped",
+      "Choosing an item closes the menu"
+    ]
+  },
+  "doNot": [
+    "Do not use ContextMenu when the actions should be visible — use DropdownMenu or Button",
+    "Do not put navigation links in the menu",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ContextMenu items={[{ id: 'rename', label: 'Rename' }, { id: 'delete', label: 'Delete', danger: true }]} onSelect={run}>{children}</ContextMenu>"
+}

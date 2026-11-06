@@ -772,6 +772,197 @@
       }
     },
     {
+      "id": "numberinput",
+      "group": "component",
+      "intent": "A number the person can type, step, and read in their locale, with optional min and max.",
+      "useWhen": [
+        "A quantity, percentage, or other number in a form",
+        "The value should format with the locale's grouping and decimal mark",
+        "Arrow keys or stepper buttons should move by a step"
+      ],
+      "doNotUseWhen": [
+        "Money — use CurrencyInput",
+        "A rough amount on a track — use Slider",
+        "Free text — use Input"
+      ],
+      "doNot": [
+        "Do not use input type=number when the locale format matters",
+        "Do not put a currency symbol on NumberInput — use CurrencyInput",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm",
+            "lg"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "number | null",
+          "required": false,
+          "note": "Controlled. null is empty."
+        },
+        "defaultValue": {
+          "type": "number | null",
+          "required": false
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number | null) => void"
+        },
+        "min": {
+          "type": "number",
+          "required": false
+        },
+        "max": {
+          "type": "number",
+          "required": false
+        },
+        "step": {
+          "type": "number",
+          "default": 1
+        },
+        "locale": {
+          "type": "string",
+          "required": false,
+          "note": "BCP 47. Default is the runtime locale."
+        },
+        "placeholder": {
+          "type": "string",
+          "required": false
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        },
+        "steppers": {
+          "type": "boolean",
+          "default": true,
+          "note": "Decrease and increase buttons."
+        }
+      }
+    },
+    {
+      "id": "currencyinput",
+      "group": "component",
+      "intent": "A money amount with a currency symbol, locale formatting, min, max, and step.",
+      "useWhen": [
+        "A price, amount, or balance in a form",
+        "The symbol and grouping should follow a currency and locale"
+      ],
+      "doNotUseWhen": [
+        "A plain number — use NumberInput",
+        "A currency code the person picks from a list — pair Select with CurrencyInput, do not invent a combined control"
+      ],
+      "doNot": [
+        "Do not prefix an Input with a currency character",
+        "Do not use NumberInput for money",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "note": "ISO 4217 code."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm",
+            "lg"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "number | null",
+          "required": false,
+          "note": "Controlled. null is empty."
+        },
+        "defaultValue": {
+          "type": "number | null",
+          "required": false
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number | null) => void"
+        },
+        "min": {
+          "type": "number",
+          "required": false
+        },
+        "max": {
+          "type": "number",
+          "required": false
+        },
+        "step": {
+          "type": "number",
+          "default": 0.01
+        },
+        "locale": {
+          "type": "string",
+          "required": false
+        },
+        "placeholder": {
+          "type": "string",
+          "required": false
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        },
+        "steppers": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    {
       "id": "inputotp",
       "group": "component",
       "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
@@ -1423,6 +1614,80 @@
       }
     },
     {
+      "id": "timepicker",
+      "group": "component",
+      "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
+      "useWhen": [
+        "A time in a form, without a date",
+        "Arrow keys should move the hour or the minute"
+      ],
+      "doNotUseWhen": [
+        "A date and a time together — use DateTimePicker",
+        "A date only — use DatePicker"
+      ],
+      "doNot": [
+        "Do not use input type=time",
+        "Do not store 12-hour text — the value is HH:mm",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled HH:mm in 24-hour form."
+        },
+        "defaultValue": {
+          "type": "string",
+          "required": false
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: string) => void"
+        },
+        "hourCycle": {
+          "type": "enum",
+          "values": [
+            "12",
+            "24"
+          ],
+          "default": "12"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "select",
       "group": "component",
       "intent": "Choose one or several options from a list. Field trigger, kit DropdownMenu panel. Not a native select.",
@@ -1435,12 +1700,15 @@
       "doNotUseWhen": [
         "Command palettes — use Command",
         "Actions from a button — use DropdownMenu",
-        "Mutually exclusive choices with visible options — prefer RadioGroup"
+        "Mutually exclusive choices with visible options — prefer RadioGroup",
+        "Typed or async search — use Combobox",
+        "Removable tags with an inline filter — use MultiSelect",
+        "Tags the person types — use TagInput"
       ],
       "doNot": [
         "Do not use a native select",
         "Do not use kit Button as the Select trigger — Select uses DropdownMenu triggerStyle=field",
-        "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, MultiSelect, or Combobox",
+        "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, or SelectGroup",
         "Do not invent a local overflow chip — overflow count is kit Badge",
         "Do not render Tags inside the trigger button or add a local chip list — use valueDisplay=tags",
         "Do not use raw hex",
@@ -1474,7 +1742,7 @@
         "multiple": {
           "type": "boolean",
           "default": false,
-          "note": "Several values. Menu stays open. Checks each pick. Trigger lists labels. Not a MultiSelect cousin."
+          "note": "Several values. Menu stays open. Checks each pick. Trigger lists labels. A field of tags with an inline filter is MultiSelect."
         },
         "placeholder": {
           "type": "string",
@@ -1532,6 +1800,186 @@
           "type": "boolean",
           "default": false,
           "note": "Kit Input at the top of the panel. Filters option labels. For a long fixed list. Not Command."
+        }
+      }
+    },
+    {
+      "id": "combobox",
+      "group": "component",
+      "intent": "Type to filter one value, including a list the parent loads asynchronously.",
+      "useWhen": [
+        "A long list the person searches by typing",
+        "Options that arrive after a query (async)",
+        "One value, with keyboard navigation through the suggestions"
+      ],
+      "doNotUseWhen": [
+        "A short fixed list in a field menu — use Select",
+        "Several values — use MultiSelect",
+        "Tags the person types — use TagInput",
+        "A command palette — use Command"
+      ],
+      "doNot": [
+        "Do not use a native select or datalist",
+        "Do not invent ComboboxInput, ComboboxList, or ComboboxItem",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "options": {
+          "type": "array",
+          "required": true
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Search"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "value": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled. Empty string is nothing selected."
+        },
+        "defaultValue": {
+          "type": "string",
+          "required": false
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: string) => void"
+        },
+        "onQueryChange": {
+          "type": "function",
+          "required": false,
+          "note": "When set, options are not filtered locally. Parent replaces options as the query changes."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyLabel": {
+          "type": "string",
+          "default": "No results"
+        },
+        "allowCustomValue": {
+          "type": "boolean",
+          "default": false,
+          "note": "Enter commits the typed text when nothing is highlighted."
+        },
+        "name": {
+          "type": "string",
+          "required": false
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "multiselect",
+      "group": "component",
+      "intent": "Choose several values. Selected values stay in the field as removable tags, and typing filters the list.",
+      "useWhen": [
+        "Several values from a list, shown as tags in the field",
+        "The list is long enough that the person filters it while choosing"
+      ],
+      "doNotUseWhen": [
+        "One value — use Select or Combobox",
+        "A short list in a menu — use Select multiple",
+        "Tags the person types — use TagInput"
+      ],
+      "doNot": [
+        "Do not invent a local chip list — selected values are kit Tag",
+        "Do not invent an overflow chip — the overflow count is kit Badge",
+        "Do not use Select valueDisplay=tags when the filter must live in the field",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "options": {
+          "type": "array",
+          "required": true
+        },
+        "value": {
+          "type": "string[]",
+          "required": false
+        },
+        "defaultValue": {
+          "type": "string[]",
+          "required": false
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: string[]) => void"
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Select"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "maxVisible": {
+          "type": "number",
+          "required": false,
+          "note": "Extra selections collapse into a kit Badge +N."
+        },
+        "name": {
+          "type": "string",
+          "required": false,
+          "note": "Hidden input joins values with commas."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        },
+        "emptyLabel": {
+          "type": "string",
+          "default": "No results"
         }
       }
     },
@@ -2001,6 +2449,46 @@
       }
     },
     {
+      "id": "contextmenu",
+      "group": "component",
+      "intent": "Actions for one target, opened with a right-click or Shift+F10.",
+      "useWhen": [
+        "Actions that belong to a row, card, or canvas, not a visible button",
+        "The person already knows the target they are acting on"
+      ],
+      "doNotUseWhen": [
+        "Actions from a visible button — use DropdownMenu",
+        "Navigation — use AppNav or links",
+        "A single obvious action — use Button"
+      ],
+      "doNot": [
+        "Do not use ContextMenu when the actions should be visible — use DropdownMenu or Button",
+        "Do not put navigation links in the menu",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "Each item is { id, label, disabled?, danger?, shortcut? }."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id: string) => void"
+        },
+        "children": {
+          "type": "slot",
+          "required": true,
+          "note": "The surface that opens the menu."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "Actions"
+        }
+      }
+    },
+    {
       "id": "datagrid",
       "group": "component",
       "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
@@ -2104,7 +2592,7 @@
       "doNot": [
         "Do not use a native select for filters — use kit DropdownMenu",
         "Do not wrap search in Field — DataTable owns its input",
-        "Do not invent FilterBar, ColumnPicker, Pagination, or a second Table",
+        "A row of filter chips is FilterBar. Do not invent ColumnPicker, Pagination, or a second Table",
         "Editable in-place rows — use DataGrid",
         "Do not invent a local Cell, DataTableCell, HeaderCell, Tag, Trend, FileIcon, or PaymentMethod — use Cell and HeaderCell (kit Tag is fine for user labels)",
         "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
@@ -2197,10 +2685,12 @@
       ],
       "doNotUseWhen": [
         "A schedule of events — use Calendar",
+        "A range with named presets such as This month — use DateRangePicker",
         "Time-only — ask first"
       ],
       "doNot": [
-        "Do not invent a local calendar, Popover, DatePickerDialog, DateRangePicker, PeriodPicker, DualCalendar, or native input type=date",
+        "Do not wrap DatePicker in Popover. The field owns its overlay. Do not invent a local calendar, DatePickerDialog, PeriodPicker, DualCalendar, or native input type=date",
+        "Named presets such as This month or Last 30 days — use DateRangePicker",
         "Do not use two DatePickers for start and end — use mode=range",
         "Do not use the event Calendar as a date field",
         "Do not add built-in label, hint, error text, help, or hideLabel — wrap with Field",
@@ -2220,7 +2710,7 @@
             "range"
           ],
           "default": "single",
-          "note": "single is one YYYY-MM-DD. range is { start, end? }. Not DateRangePicker."
+          "note": "single is one YYYY-MM-DD. range is { start, end? }. Named presets are DateRangePicker."
         },
         "value": {
           "type": "string | { start: string, end?: string }",
@@ -2278,6 +2768,163 @@
           "type": "string",
           "required": false,
           "note": "Field wires hint and error ids onto the trigger"
+        }
+      }
+    },
+    {
+      "id": "daterangepicker",
+      "group": "component",
+      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+      "useWhen": [
+        "A report or filter period with presets like This month or Last 30 days",
+        "A start and end date in one field"
+      ],
+      "doNotUseWhen": [
+        "One date — use DatePicker",
+        "A range with no named presets — use DatePicker mode=range",
+        "A schedule of events — use Calendar"
+      ],
+      "doNot": [
+        "Do not wrap DateRangePicker in Popover. Do not invent a second calendar or a native input type=date",
+        "Do not use two DatePickers for start and end",
+        "Do not add time — ask first",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "{ start: string, end?: string }",
+          "required": false,
+          "note": "Controlled. YYYY-MM-DD."
+        },
+        "defaultValue": {
+          "type": "{ start: string, end?: string }",
+          "required": false
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(range: { start, end? }) => void"
+        },
+        "presets": {
+          "type": "array",
+          "required": false,
+          "note": "Replaces Today, Yesterday, Last 7 days, Last 30 days, This month, and Last month. Each item is { id, label, start, end }."
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Pick dates"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "minDate": {
+          "type": "string",
+          "required": false
+        },
+        "maxDate": {
+          "type": "string",
+          "required": false
+        },
+        "name": {
+          "type": "string",
+          "required": false,
+          "note": "Hidden input submits start/end, like 2026-10-01/2026-10-31"
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "datetimepicker",
+      "group": "component",
+      "intent": "Pick a calendar date and a time in one field.",
+      "useWhen": [
+        "An appointment, deadline, or schedule that needs both a day and a time"
+      ],
+      "doNotUseWhen": [
+        "A date only — use DatePicker",
+        "A time only — use TimePicker",
+        "A range of dates — use DateRangePicker"
+      ],
+      "doNot": [
+        "Do not use two fields when one DateTimePicker is the control",
+        "Do not invent a local calendar or a native datetime-local input",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "{ date?: string, time?: string }",
+          "required": false,
+          "note": "date is YYYY-MM-DD. time is HH:mm."
+        },
+        "defaultValue": {
+          "type": "{ date?: string, time?: string }",
+          "required": false
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: { date?, time? }) => void"
+        },
+        "hourCycle": {
+          "type": "enum",
+          "values": [
+            "12",
+            "24"
+          ],
+          "default": "12"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "name": {
+          "type": "string",
+          "required": false,
+          "note": "Hidden input submits date and time as YYYY-MM-DDTHH:mm."
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Pick a date and time"
         }
       }
     },
@@ -2770,7 +3417,7 @@
         "Always-visible helper under a control — use Field hint"
       ],
       "doNot": [
-        "Do not invent local Popover, HoverCard, InfoTip, ContextInfo, or a one-off ?",
+        "A panel with actions or arbitrary content — use Popover. Do not invent HoverCard, InfoTip, or a one-off ?",
         "Do not use Tooltip for a sentence or two",
         "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
         "Do not put links, buttons, or forms in the panel",
@@ -2819,6 +3466,67 @@
           "type": "slot",
           "required": true,
           "note": "One focusable trigger. Gets aria-describedby. Typical: kit Button appearance=ghost mode=neutral size=sm iconStart=CircleHelp ariaLabel=Help. Field help composes this."
+        }
+      }
+    },
+    {
+      "id": "popover",
+      "group": "component",
+      "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
+      "useWhen": [
+        "A small panel of content or actions anchored to a button",
+        "Something that should not take over the page the way a Modal does"
+      ],
+      "doNotUseWhen": [
+        "One or two sentences of help — use HelpPopover",
+        "A one-line name — use Tooltip",
+        "A menu of commands — use DropdownMenu",
+        "A blocking decision — use Modal"
+      ],
+      "doNot": [
+        "Do not use Popover for help text — use HelpPopover",
+        "Do not use Popover as a date or select menu — use DatePicker, DateRangePicker, or Select",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "trigger": {
+          "type": "element",
+          "required": true,
+          "note": "One focusable control. Click toggles the panel."
+        },
+        "children": {
+          "type": "slot",
+          "required": true,
+          "note": "Panel content."
+        },
+        "label": {
+          "type": "string",
+          "required": true,
+          "note": "Names the dialog."
+        },
+        "placement": {
+          "type": "enum",
+          "values": [
+            "bottom",
+            "top",
+            "left",
+            "right"
+          ],
+          "default": "bottom"
+        },
+        "open": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled visibility."
+        },
+        "defaultOpen": {
+          "type": "boolean",
+          "default": false
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": false,
+          "note": "(open: boolean) => void"
         }
       }
     },
@@ -3304,6 +4012,77 @@
       }
     },
     {
+      "id": "resizable",
+      "group": "component",
+      "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
+      "useWhen": [
+        "A list beside a detail, or a preview beside its controls",
+        "The person should choose how much room each side gets"
+      ],
+      "doNotUseWhen": [
+        "A fixed sidebar — use SideNav",
+        "A page split that should not move — use layout, not Resizable"
+      ],
+      "doNot": [
+        "Do not use Resizable for app navigation — use SideNav",
+        "Do not hide the separator",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "orientation": {
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal",
+          "note": "horizontal is left and right. vertical is top and bottom."
+        },
+        "size": {
+          "type": "number",
+          "required": false,
+          "note": "Controlled start-panel size, 0 to 100."
+        },
+        "defaultSize": {
+          "type": "number",
+          "default": 50
+        },
+        "min": {
+          "type": "number",
+          "default": 20
+        },
+        "max": {
+          "type": "number",
+          "default": 80
+        },
+        "onSizeChange": {
+          "type": "function",
+          "required": false,
+          "note": "(size: number) => void"
+        },
+        "start": {
+          "type": "slot",
+          "required": true
+        },
+        "end": {
+          "type": "slot",
+          "required": true
+        },
+        "startLabel": {
+          "type": "string",
+          "default": "Start panel"
+        },
+        "endLabel": {
+          "type": "string",
+          "default": "End panel"
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "Resize panels"
+        }
+      }
+    },
+    {
       "id": "field",
       "group": "component",
       "intent": "One labeled control with optional hint and error. Label on top or start (left).",
@@ -3560,6 +4339,77 @@
       }
     },
     {
+      "id": "filterbar",
+      "group": "component",
+      "intent": "A row of filter chips with add, clear all, and an overflow menu when the row is too long.",
+      "useWhen": [
+        "Several filters above a table or list",
+        "The person adds a filter, clears them all, or opens one chip"
+      ],
+      "doNotUseWhen": [
+        "One filter chip — use FilterButton",
+        "Search inside a table — use DataTable",
+        "Page actions — use Button"
+      ],
+      "doNot": [
+        "Do not invent a local chip — chips are FilterButton",
+        "Do not invent an overflow chip — overflow is kit DropdownMenu",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "filters": {
+          "type": "array",
+          "required": true,
+          "note": "Each item is { id, label, value?, count? }."
+        },
+        "openId": {
+          "type": "string",
+          "required": false,
+          "note": "Which chip's options are open."
+        },
+        "onFilterClick": {
+          "type": "function",
+          "required": false,
+          "note": "(id: string) => void"
+        },
+        "onClear": {
+          "type": "function",
+          "required": false,
+          "note": "Clear all. Shown when a filter has a value or count."
+        },
+        "onAdd": {
+          "type": "function",
+          "required": false,
+          "note": "Shows Add filter when set."
+        },
+        "addLabel": {
+          "type": "string",
+          "default": "Add filter"
+        },
+        "clearLabel": {
+          "type": "string",
+          "default": "Clear all"
+        },
+        "maxVisible": {
+          "type": "number",
+          "required": false,
+          "note": "Extra chips collapse into a +N menu."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "Filters"
+        }
+      }
+    },
+    {
       "id": "tag",
       "group": "component",
       "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
@@ -3657,6 +4507,87 @@
           "type": "string",
           "required": false,
           "note": "Checkbox id when selectable; generated when omitted"
+        }
+      }
+    },
+    {
+      "id": "taginput",
+      "group": "component",
+      "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+      "useWhen": [
+        "Free-form labels such as keywords the person creates",
+        "A short list of suggestions while they type, without a fixed option set"
+      ],
+      "doNotUseWhen": [
+        "Choosing from a fixed list — use MultiSelect",
+        "One value from a list — use Combobox or Select"
+      ],
+      "doNot": [
+        "Do not use TagInput to choose from a required option list — use MultiSelect",
+        "Do not invent a local chip — tags are kit Tag",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "md",
+            "sm"
+          ],
+          "default": "md"
+        },
+        "value": {
+          "type": "string[]",
+          "required": false
+        },
+        "defaultValue": {
+          "type": "string[]",
+          "required": false
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: string[]) => void"
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Add a tag"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "boolean",
+          "default": false
+        },
+        "suggestions": {
+          "type": "string[]",
+          "required": false,
+          "note": "Shown while typing. Picking one adds a tag."
+        },
+        "delimiters": {
+          "type": "string[]",
+          "default": [
+            ","
+          ],
+          "note": "Single-character keys that commit a tag, besides Enter."
+        },
+        "name": {
+          "type": "string",
+          "required": false
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": false
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false
         }
       }
     },
@@ -5093,6 +6024,62 @@
           "type": "array",
           "required": false,
           "note": "Grouped catalog nav. Takes precedence over items when present. Groups collapse; only one is open at a time. defaultOpen sets the initial group when no leaf is active."
+        }
+      }
+    },
+    {
+      "id": "anchornav",
+      "group": "component",
+      "intent": "A list of the sections on one long page. It jumps to a section and shows the one the page is at.",
+      "useWhen": [
+        "A long page split into named sections, like settings or a long record",
+        "A reading page where people need to see where they are and jump"
+      ],
+      "doNotUseWhen": [
+        "App navigation — use AppNav",
+        "Switching views on one screen — use Tabs",
+        "Steps in a flow — use ProgressSteps"
+      ],
+      "doNot": [
+        "Do not use AnchorNav for app navigation — use AppNav",
+        "Do not use it to switch views — use Tabs",
+        "Do not use it for steps in a flow — use ProgressSteps",
+        "Do not point a row at a section that is not on the page",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "Each id is the id of that section on the page."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "rail",
+            "menu"
+          ],
+          "default": "rail",
+          "note": "rail is the list. menu is the same list in a popover for narrow screens."
+        },
+        "spy": {
+          "type": "boolean",
+          "default": true,
+          "note": "Follow the section in view."
+        },
+        "offset": {
+          "type": "number",
+          "default": 0,
+          "note": "Pixels to keep clear of a sticky header when jumping."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "On this page"
+        },
+        "menuLabel": {
+          "type": "string",
+          "default": "On this page",
+          "note": "Menu trigger label before a section is current."
         }
       }
     },

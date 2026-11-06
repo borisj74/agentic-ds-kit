@@ -1,0 +1,56 @@
+{
+  "id": "taginput",
+  "status": "stable",
+  "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+  "useWhen": [
+    "Free-form labels such as keywords the person creates",
+    "A short list of suggestions while they type, without a fixed option set"
+  ],
+  "doNotUseWhen": [
+    "Choosing from a fixed list — use MultiSelect",
+    "One value from a list — use Combobox or Select"
+  ],
+  "contains": ["tag"],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "value": { "type": "string[]", "required": false },
+    "defaultValue": { "type": "string[]", "required": false },
+    "onChange": { "type": "function", "required": false, "note": "(value: string[]) => void" },
+    "placeholder": { "type": "string", "default": "Add a tag" },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "suggestions": { "type": "string[]", "required": false, "note": "Shown while typing. Picking one adds a tag." },
+    "delimiters": { "type": "string[]", "default": [","], "note": "Single-character keys that commit a tag, besides Enter." },
+    "name": { "type": "string", "required": false },
+    "ariaLabel": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false }
+  },
+  "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
+  "tokens": [
+    "text.primary",
+    "text.muted",
+    "surface.card",
+    "surface.muted",
+    "border.faint",
+    "border.focus",
+    "status.danger"
+  ],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Input is role=combobox when suggestions are open",
+      "Enter or a delimiter adds the typed text. Arrow keys move through suggestions",
+      "Backspace on an empty query removes the last tag",
+      "Duplicate tags, compared case-insensitively, are ignored",
+      "Escape closes suggestions. Each tag remove button removes that tag",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not use TagInput to choose from a required option list — use MultiSelect",
+    "Do not invent a local chip — tags are kit Tag",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Keywords\" htmlFor=\"keywords\"><TagInput id=\"keywords\" placeholder=\"Add a keyword\" suggestions={keywords} /></Field>"
+}
