@@ -11,25 +11,16 @@ import { pushHash, useLocationHash } from "@/lib/use-location-hash";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
-import { ActivityPattern } from "../../packages/kit/patterns/ActivityPattern";
-import { AssistantWorkspacePattern } from "../../packages/kit/patterns/AssistantWorkspacePattern";
 import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
 import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
-import { InboxPattern } from "../../packages/kit/patterns/InboxPattern";
-import { DeliveryPattern } from "../../packages/kit/patterns/DeliveryPattern";
-import { InviteMembersPattern } from "../../packages/kit/patterns/InviteMembersPattern";
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
 import styles from "../playground.module.css";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
-  { id: "activity", label: "Activity", icon: "ChartBar", badge: "6" },
-  { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
   { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
   { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
-  { id: "insights", label: "Insights", icon: "Sparkles" },
-  { id: "delivery", label: "Delivery", icon: "Package" },
   { id: "resources", label: "Resources", icon: "Layers" },
   { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
   { id: "tag-at-risk", label: "At risk", icon: "Info", badge: "5" },
@@ -37,7 +28,6 @@ const NAV_ITEMS: SideNavItemData[] = [
 ];
 
 const NAV_FOOTER: SideNavItemData[] = [
-  { id: "invite", label: "Invite members", icon: "CirclePlus" },
   { id: "settings", label: "Settings", icon: "Settings" },
 ];
 
@@ -149,11 +139,6 @@ function isListDetailPage(id: string) {
 
 function hashForPage(id: string) {
   if (id === "settings") return "settings";
-  if (id === "invite") return "invite";
-  if (id === "delivery") return "delivery";
-  if (id === "insights") return "insights";
-  if (id === "activity") return "activity";
-  if (id === "inbox") return "inbox";
   if (id === "research") return "empty";
   if (id === "projects" || id === "list-detail") return "list-detail";
   if (LIST_DETAIL_HASHES.has(id)) return id;
@@ -168,11 +153,6 @@ function selectedProjectId(page: string) {
 /** Page a pattern hash links to, or null for the dashboard (whose page lives in state). */
 function pageForHash(hash: string): string | null {
   if (hash === "settings") return "settings";
-  if (hash === "invite") return "invite";
-  if (hash === "delivery") return "delivery";
-  if (hash === "insights") return "insights";
-  if (hash === "activity") return "activity";
-  if (hash === "inbox") return "inbox";
   if (hash === "empty" || hash === "research") return "research";
   if (hash === "list-detail" || hash === "projects") return "projects";
   if (LIST_DETAIL_HASHES.has(hash)) return hash;
@@ -214,12 +194,7 @@ export function DashboardDemo() {
   const allItems = [...NAV_ITEMS, ...NAV_FOOTER];
   const current = findItem(allItems, page);
 
-  const path =
-    page === "overview"
-      ? "app.operations.dev/overview"
-      : page === "activity"
-        ? "app.operations.dev/activity"
-        : `app.operations.dev/${page}`;
+  const path = page === "overview" ? "app.operations.dev/overview" : `app.operations.dev/${page}`;
 
   const trail = breadcrumbsFor(page, go);
 
@@ -271,18 +246,8 @@ export function DashboardDemo() {
       >
         {page === "overview" ? (
           <DashboardPattern breadcrumbs={trail} />
-        ) : page === "activity" ? (
-          <ActivityPattern breadcrumbs={trail} />
-        ) : page === "inbox" ? (
-          <InboxPattern breadcrumbs={trail} />
         ) : page === "settings" ? (
           <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
-        ) : page === "invite" ? (
-          <InviteMembersPattern breadcrumbs={trail} />
-        ) : page === "delivery" ? (
-          <DeliveryPattern breadcrumbs={trail} />
-        ) : page === "insights" ? (
-          <AssistantWorkspacePattern breadcrumbs={trail} />
         ) : page === "research" ? (
           <EmptyFirstRunPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (

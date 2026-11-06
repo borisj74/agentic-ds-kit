@@ -60,7 +60,7 @@ describe("questions: schema", () => {
     }
   });
 
-  test("75 component options and 11 pattern options by default", () => {
+  test("75 component options and 6 pattern options by default", () => {
     const { options } = buildQuestions();
     assert.equal(componentIds.length, 75);
     assert.deepEqual(options.filter((o) => o.kind === "component").map((o) => o.id).sort(), [...componentIds].sort());
