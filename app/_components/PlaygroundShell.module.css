@@ -78,13 +78,18 @@
 }
 
 .customize {
+  box-sizing: border-box;
   position: sticky;
-  top: var(--playground-topbar-height);
+  top: calc(var(--playground-topbar-height) + var(--space-4));
   align-self: flex-start;
-  height: calc(100vh - var(--playground-topbar-height));
-  overflow: hidden;
+  width: 16.25rem;
+  height: calc(100vh - var(--playground-topbar-height) - var(--space-4) * 2);
+  margin-inline-end: var(--space-4);
+  overflow-y: auto;
   padding: var(--space-4);
-  background-color: var(--bg-canvas);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
 }
 
 :global(html[data-customize="closed"]) .customize {
