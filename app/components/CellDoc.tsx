@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: CellSize[] = ["sm", "md"];
 
@@ -95,7 +96,7 @@ export function CellDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -104,7 +105,7 @@ export function CellDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(size, showText, checkbox)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

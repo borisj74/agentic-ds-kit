@@ -7,6 +7,7 @@ import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: CheckboxSize[] = ["sm", "md", "lg"];
 const LABEL_MODES = ["labeled", "unlabeled"] as const;
@@ -130,7 +131,7 @@ export function CheckboxDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -139,7 +140,7 @@ export function CheckboxDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(size, checked, indeterminate, error, disabled, labeled)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

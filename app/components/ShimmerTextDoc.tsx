@@ -6,6 +6,7 @@ import type { ShimmerTextSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: ShimmerTextSize[] = ["sm", "md", "lg"];
 const SPEEDS = ["slow", "normal", "fast"] as const;
@@ -88,7 +89,7 @@ export function ShimmerTextDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -97,7 +98,7 @@ export function ShimmerTextDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(size, speed)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

@@ -7,6 +7,7 @@ import type { TreeViewItem, TreeViewSelection, TreeViewSize } from "agentic-ds-k
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: TreeViewSize[] = ["sm", "md"];
 const SELECTIONS: TreeViewSelection[] = ["none", "single", "multiple"];
@@ -212,7 +213,7 @@ export function TreeViewDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -224,7 +225,7 @@ export function TreeViewDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(size, selection, showIcons, showLines, reorderable)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

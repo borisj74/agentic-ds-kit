@@ -13,6 +13,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import local from "./FieldDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const MONTHS = [
   { value: "", label: "MM" },
@@ -123,7 +124,7 @@ export function FieldDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -132,7 +133,7 @@ export function FieldDoc() {
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

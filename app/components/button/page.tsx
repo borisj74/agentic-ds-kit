@@ -6,8 +6,8 @@ import styles from "./button.module.css";
 
 export default function ButtonComponentPage() {
   return (
-    <div className={playground.page}>
-      <div className={playground.wideShell}>
+    <div className={playground.docPage}>
+      <div className={playground.docShell}>
         <ButtonDoc />
         <div className={styles.matrix}>
           <Section title="Matrix" description="Appearance × mode, sizes, and disabled." size="sm">

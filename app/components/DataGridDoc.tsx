@@ -6,6 +6,7 @@ import type { DataGridColumn, DataGridRow } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const CONDITIONS: DataGridColumn[] = [
   { key: "field", header: "Field" },
@@ -147,7 +148,7 @@ export function DataGridDoc() {
                 </div>
               </div>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -156,7 +157,7 @@ export function DataGridDoc() {
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

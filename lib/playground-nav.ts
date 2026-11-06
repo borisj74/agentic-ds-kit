@@ -177,28 +177,39 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     {
       label: "Components",
       items: [
-        leaf("/components#gallery", "Gallery"),
+        {
+          href: "/components",
+          label: "Gallery",
+          active: pathname === "/components" && !h,
+        },
         ...COMPONENT_ITEMS.flatMap((id) => {
-          if (id === "button") {
-            return [
-              {
-                href: "/components/button",
-                label: "Button",
-                active: pathname === "/components/button" || (pathname === "/components" && h === "button"),
-              },
-            ];
-          }
-          const item = leaf(`/components#${id}`, componentLabel(id));
+          const item = {
+            href: `/components/${id}`,
+            label: componentLabel(id),
+            active: pathname === `/components/${id}`,
+          };
           if (id !== "cell") return [item];
           return [
             item,
             {
-              href: "/components#chart",
+              href: "/components/barchart",
               label: "Chart",
               items: [
-                leaf("/components#barchart", "Bar"),
-                leaf("/components#linechart", "Line"),
-                leaf("/components#piechart", "Pie"),
+                {
+                  href: "/components/barchart",
+                  label: "Bar",
+                  active: pathname === "/components/barchart",
+                },
+                {
+                  href: "/components/linechart",
+                  label: "Line",
+                  active: pathname === "/components/linechart",
+                },
+                {
+                  href: "/components/piechart",
+                  label: "Pie",
+                  active: pathname === "/components/piechart",
+                },
               ],
             },
           ];

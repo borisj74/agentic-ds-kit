@@ -6,6 +6,7 @@ import type { AlertVariant } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const VARIANTS: AlertVariant[] = ["info", "success", "warning", "danger"];
 
@@ -83,7 +84,7 @@ export function AlertDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -93,7 +94,7 @@ export function AlertDoc() {
               <CodeBlock
                 code={`<Alert variant="${variant}" title="${current.title}">\n  ${current.body}\n</Alert>`}
               />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

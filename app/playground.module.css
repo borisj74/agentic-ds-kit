@@ -21,6 +21,16 @@
   margin: 0 auto;
 }
 
+.docPage {
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-8);
+}
+
+.docShell {
+  max-width: calc(var(--grid-width-lg) - var(--space-8));
+}
+
 .opsShell {
   max-width: 90rem;
   margin: 0 auto;
@@ -149,6 +159,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .docPage {
+    padding: var(--space-6) var(--space-4);
+  }
 }
 
 @media (min-width: 1024px) {

@@ -7,6 +7,7 @@ import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 const APPEARANCES: ButtonAppearance[] = ["solid", "outline", "soft", "ghost"];
@@ -187,7 +188,7 @@ export function ButtonDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -198,7 +199,7 @@ export function ButtonDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(appearance, mode, size, flat, disabled, label, icon)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

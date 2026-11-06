@@ -8,6 +8,7 @@ import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { TABLE_CARD_CODE, TableCardExample } from "./TableCardExample";
+import { DocNotes } from "./DocNotes";
 
 const ACTION = {
   type: "actionMenu" as const,
@@ -269,7 +270,7 @@ export function DataTableDoc() {
                 </div>
               </div>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -277,7 +278,7 @@ export function DataTableDoc() {
                 </p>
               </div>
               <CodeBlock code={TOOLBAR_CODE} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

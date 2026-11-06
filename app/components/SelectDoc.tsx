@@ -7,6 +7,7 @@ import type { SelectSize, SelectValueDisplay } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: SelectSize[] = ["sm", "md"];
 const DISPLAYS: SelectValueDisplay[] = ["text", "tags"];
@@ -175,7 +176,7 @@ export function SelectDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -185,7 +186,7 @@ export function SelectDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(size, display)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

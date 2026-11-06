@@ -7,6 +7,7 @@ import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: TagSize[] = ["sm", "md", "lg"];
 const DOTS: TagDotTone[] = ["neutral", "success", "warning", "danger", "info"];
@@ -148,7 +149,7 @@ export function TagDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -161,7 +162,7 @@ export function TagDoc() {
                 <p className={styles.usageBody}>{BADGE_OR_TAG}</p>
               </div>
               <CodeBlock code={masterCode({ size, removable, selectable, withCount, leading, disabled })} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

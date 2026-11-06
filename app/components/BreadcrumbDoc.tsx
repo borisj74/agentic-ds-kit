@@ -8,6 +8,7 @@ import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SEPARATORS: BreadcrumbSeparator[] = ["chevron", "slash"];
 
@@ -118,7 +119,7 @@ export function BreadcrumbDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -128,7 +129,7 @@ export function BreadcrumbDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(separator, collapsed)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

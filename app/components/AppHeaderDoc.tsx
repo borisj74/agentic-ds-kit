@@ -13,6 +13,7 @@ import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./AppHeaderDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 function masterCode(showSearch: boolean, showActions: boolean, shortcut: boolean): string {
   const lines = ['<AppHeader', '  title="Acme"', '  mark="A"'];
@@ -128,7 +129,7 @@ export function AppHeaderDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -138,7 +139,7 @@ export function AppHeaderDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(showSearch, showActions, shortcut)} />
-            </div>
+            </DocNotes>
             <CssVarsTable cssVars={contract.cssVars} selector={'.myHeader { --appheader-height: var(--space-12); }'} />
           </div>
         ) : (

@@ -110,14 +110,13 @@
 }
 
 .layout {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 15.5rem;
-  gap: var(--space-4);
-  align-items: start;
-  min-height: 20rem;
-  padding: var(--space-4);
-  border-radius: var(--radius-surface-md);
-  background: var(--bg-canvas);
+  min-height: calc(var(--space-16) * 5 + var(--space-10));
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background: var(--bg-subtle);
 }
 
 .layout:not(:has(.panel)) {
@@ -125,10 +124,15 @@
 }
 
 .canvas {
+  grid-area: 1 / 1;
   display: grid;
   place-items: center;
-  min-height: 20rem;
+  min-height: calc(var(--space-16) * 5);
   padding: var(--space-6);
+}
+
+.layout:has(.panel) .canvas {
+  padding-right: calc(var(--layout-sidebar) + var(--space-6));
 }
 
 .previewFill {
@@ -168,25 +172,19 @@
 }
 
 .panel {
+  grid-area: 1 / 1;
+  justify-self: end;
+  align-self: start;
+  z-index: 1;
   display: grid;
   gap: var(--space-4);
-  width: 15.5rem;
+  width: var(--layout-sidebar);
   margin: 0;
-  padding: var(--space-6);
-  border: var(--border-surface) solid var(--border-faint);
+  padding: var(--space-4);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-card);
+  background: var(--bg-surface);
   box-shadow: var(--shadow-overlay-md);
-}
-
-@media (max-width: 52rem) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .panel {
-    width: auto;
-  }
 }
 
 .panelGroup {
@@ -256,18 +254,63 @@
 
 .docs {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
   min-width: 0;
   max-width: 100%;
+}
+
+.notesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.guidance {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.guideList {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guideItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.guideIcon {
+  flex-shrink: 0;
+  width: var(--space-4);
+  height: var(--space-4);
+  margin-top: var(--space-px);
+}
+
+.guideIconDo {
+  color: var(--success-fg);
+}
+
+.guideIconDont {
+  color: var(--danger-fg);
 }
 
 .usageTitle {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-overline);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  color: var(--text-secondary);
+  font-size: var(--type-size-body);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
 }
 
 .usageBody {
@@ -291,6 +334,10 @@
   gap: var(--space-4);
   min-width: 0;
   max-width: 100%;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background: var(--bg-surface);
 }
 
 .exampleTitle {
@@ -304,14 +351,15 @@
 .exampleCanvas {
   display: grid;
   place-items: center;
-  min-height: 10rem;
+  min-height: calc(var(--space-16) * 3);
   min-width: 0;
   width: 100%;
   max-width: 100%;
   padding: var(--space-6);
   overflow-x: auto;
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: var(--surface-muted);
+  background: var(--bg-subtle);
 }
 
 @media (max-width: 860px) {
@@ -320,14 +368,22 @@
     flex-direction: column;
   }
 
+  .notesGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .layout:has(.panel) .canvas {
+    padding-right: var(--space-6);
+  }
+
   .canvas {
+    grid-area: auto;
     padding-inline-end: var(--space-6);
   }
 
   .panel {
-    position: relative;
-    top: auto;
-    right: auto;
+    grid-area: auto;
+    justify-self: stretch;
     width: auto;
     margin: var(--space-3);
   }
