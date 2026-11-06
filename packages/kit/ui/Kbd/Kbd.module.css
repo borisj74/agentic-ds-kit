@@ -1,0 +1,22 @@
+.kbd {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-6);
+  height: var(--space-6);
+  margin: 0;
+  padding: 0 var(--space-inset-xs);
+  border: var(--border-width-thin) solid var(--border-strong);
+  border-bottom-width: var(--border-width-medium);
+  border-radius: var(--radius-control-sm);
+  background: var(--surface-muted);
+  box-shadow: var(--shadow-xs);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-code);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

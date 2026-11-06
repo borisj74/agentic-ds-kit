@@ -1,7 +1,6 @@
 import catalog from "./kit-prompt-catalog.json";
 import { generatePrimaryRamp } from "./primary-ramp";
 import {
-  PLAYGROUND_FONTS,
   PLAYGROUND_HEADING_WEIGHTS,
   readPlaygroundAppearance,
 } from "./playground-theme";
@@ -58,7 +57,6 @@ function computedTokens(): Record<string, string> {
 
 export function buildAiPrompt(): string {
   const appearance = readPlaygroundAppearance();
-  const fontLabel = PLAYGROUND_FONTS.find((f) => f.value === appearance.font)?.label ?? appearance.font;
   const weightLabel =
     PLAYGROUND_HEADING_WEIGHTS.find((w) => w.value === appearance.headingWeight)?.label ??
     appearance.headingWeight;
@@ -76,10 +74,14 @@ export function buildAiPrompt(): string {
     `## Active appearance`,
     `- theme: ${appearance.theme}`,
     `- color shortcut: ${appearance.color}${appearance.primaryHex ? ` (hex ${appearance.primaryHex})` : ""}`,
-    `- font trio: ${fontLabel} → --font-heading / --font-body / --font-mono`,
+    `- font interface: ${appearance.interfaceFont} → --font-sans / --font-body`,
+    `- font headings: ${appearance.headingFont} → --font-display / --font-heading`,
+    `- font mono: ${appearance.monoFont} → --font-mono`,
     `- heading weight: ${weightLabel} (--type-weight-heading)`,
+    `- neutrals: ${appearance.neutral} → --color-neutral-* and the surface, text, and line roles`,
+    `- spacing scale: ${appearance.spaceScale}% → --space-*`,
+    `- shadow intensity: ${appearance.shadowIntensity}% → --shadow-xs / --shadow-sm / --shadow-md / --shadow-lg`,
     `- radius-base: ${appearance.radiusBase}px`,
-    `- shadow-sm: ${appearance.shadowSm}`,
     ``,
     `## Active tokens`,
     ...Object.entries(tokens).map(([name, value]) => `- ${name}: ${value}`),

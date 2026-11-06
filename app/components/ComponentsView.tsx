@@ -46,6 +46,7 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { KbdDoc } from "./KbdDoc";
 import { LineChartDoc } from "./LineChartDoc";
 import { LinkListDoc } from "./LinkListDoc";
 import { ListViewDoc } from "./ListViewDoc";
@@ -70,6 +71,7 @@ import { RadioGroupDoc } from "./RadioGroupDoc";
 import { ResizableDoc } from "./ResizableDoc";
 import { ScoreboardDoc } from "./ScoreboardDoc";
 import { SectionDoc } from "./SectionDoc";
+import { SegmentedControlDoc } from "./SegmentedControlDoc";
 import { ScorecardDoc } from "./ScorecardDoc";
 import { SelectDoc } from "./SelectDoc";
 import { ShimmerTextDoc } from "./ShimmerTextDoc";
@@ -84,6 +86,7 @@ import { TagDoc } from "./TagDoc";
 import { TagInputDoc } from "./TagInputDoc";
 import { TextareaDoc } from "./TextareaDoc";
 import { TimePickerDoc } from "./TimePickerDoc";
+import { TileGroupDoc } from "./TileGroupDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
 import { ToastDoc } from "./ToastDoc";
@@ -106,8 +109,10 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  kbd: "Kbd",
   textarea: "Textarea",
   timepicker: "TimePicker",
+  tilegroup: "TileGroup",
   select: "Select",
   switch: "Switch",
   checkbox: "Checkbox",
@@ -173,6 +178,7 @@ const TITLES: Record<string, string> = {
   progress: "Progress",
   progresssteps: "ProgressSteps",
   section: "Section",
+  segmentedcontrol: "SegmentedControl",
   table: "Table",
   accordion: "Accordion",
   anchornav: "AnchorNav",
@@ -257,7 +263,14 @@ function resolveHash(hash: string): string {
     colourpicker: "colorpicker",
     "link-list": "linklist",
     quicklinks: "linklist",
-    skeleton: "skeleton",
+    shortcut: "kbd",
+    shortcuts: "kbd",
+    kbd: "kbd",
+    segmented: "segmentedcontrol",
+    "segmented-control": "segmentedcontrol",
+    tiles: "tilegroup",
+    "tile-group": "tilegroup",
+    plans: "tilegroup",
     placeholder: "skeleton",
     gauge: "meter",
     countbadge: "count",
@@ -337,6 +350,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "kbd") return <KbdDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
   if (resolved === "linklist") return <LinkListDoc />;
   if (resolved === "listview") return <ListViewDoc />;
@@ -355,6 +369,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "scorecard") return <ScorecardDoc />;
   if (resolved === "scoreboard") return <ScoreboardDoc />;
   if (resolved === "section") return <SectionDoc />;
+  if (resolved === "segmentedcontrol") return <SegmentedControlDoc />;
   if (resolved === "select") return <SelectDoc />;
   if (resolved === "shimmertext") return <ShimmerTextDoc />;
   if (resolved === "skeleton") return <SkeletonDoc />;
@@ -367,6 +382,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "taginput") return <TagInputDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
   if (resolved === "timepicker") return <TimePickerDoc />;
+  if (resolved === "tilegroup") return <TileGroupDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
   if (resolved === "timeline") return <TimelineDoc />;
   if (resolved === "toast") return <ToastDoc />;

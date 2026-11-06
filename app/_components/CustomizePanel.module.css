@@ -100,3 +100,66 @@
   line-height: var(--type-line-body);
   color: var(--text-muted);
 }
+
+.fontInterface,
+.fontHeading,
+.fontMono {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+}
+
+.fontInterface {
+  font-family: var(--font-body);
+  font-weight: var(--type-weight-body);
+}
+
+.fontHeading {
+  font-family: var(--font-heading);
+  font-weight: var(--type-weight-heading);
+}
+
+.fontMono {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-code);
+  font-size: var(--type-size-caption);
+}
+
+.swatches {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.swatch {
+  flex: 1 1 0;
+  height: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-xs);
+}
+
+.spaceBars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: var(--space-8);
+}
+
+.spaceBar {
+  width: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--text-muted);
+}
+
+.space1 { height: var(--space-1); }
+.space2 { height: var(--space-2); }
+.space4 { height: var(--space-4); }
+.space6 { height: var(--space-6); }
+.space8 { height: var(--space-8); }
+
+.shadowPreview {
+  height: var(--space-12);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-md);
+}

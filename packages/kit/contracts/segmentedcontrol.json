@@ -1,0 +1,105 @@
+{
+  "id": "segmentedcontrol",
+  "status": "stable",
+  "intent": "Choose one of a few visible options in a joined track. role=radiogroup, sm or md, icons optional.",
+  "useWhen": [
+    "Two to five mutually exclusive options that should stay visible, such as billing period or density",
+    "A compact switch where each option is a short label, with or without an icon"
+  ],
+  "doNotUseWhen": [
+    "Switching panels of content — use Tabs",
+    "Plans or options that need a description or price — use TileGroup",
+    "More than a handful of options — use Select",
+    "Independent booleans — use Checkbox"
+  ],
+  "props": {
+    "ariaLabel": {
+      "type": "string",
+      "required": true,
+      "note": "Names the radiogroup. There is no separate legend."
+    },
+    "items": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "value": "string",
+        "label": "string",
+        "icon": "KitIcon?",
+        "disabled": "boolean?"
+      }
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "controlled"
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "uncontrolled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void"
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Locks the whole group."
+    }
+  },
+  "passthrough": {
+    "root": "div[role=radiogroup]",
+    "ref": "div[role=radiogroup]",
+    "className": "root",
+    "rest": "div[role=radiogroup]"
+  },
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.disabled",
+    "bg.tray",
+    "bg.control",
+    "shadow.xs",
+    "radius.controlMd",
+    "radius.controlSm",
+    "focus.ring",
+    "border.focusWidth",
+    "opacity.disabled",
+    "font.sans",
+    "type.size.label",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.caption",
+    "space.inset.2xs",
+    "space.inset.xs",
+    "space.inset.sm",
+    "space.inset.md",
+    "space.inline.2xs",
+    "space.inline.xs"
+  ],
+  "a11y": {
+    "element": "div[role=radiogroup]",
+    "requirements": [
+      "role=radiogroup on the root and role=radio on each segment",
+      "aria-checked reflects the selected segment",
+      "Roving tabindex: one segment is tabbable",
+      "Arrow keys, Home, and End move selection and focus, skipping disabled segments",
+      "Disabled segments stay visible and are not selectable",
+      "focus-visible kit ring"
+    ]
+  },
+  "doNot": [
+    "Do not invent SegmentedControlItem as a separate component",
+    "Do not use Tabs variant=segmented when the choice is a form value",
+    "Do not use raw hex",
+    "Do not ship the group without ariaLabel"
+  ],
+  "snippet": "<SegmentedControl ariaLabel=\"Billing\" size=\"md\" defaultValue=\"month\" items={[{ value: 'month', label: 'Monthly' }, { value: 'year', label: 'Yearly', icon: 'CalendarDays' }]} />"
+}

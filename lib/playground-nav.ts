@@ -47,6 +47,7 @@ export const COMPONENT_ITEMS = [
   "input",
   "inputotp",
   "insightcard",
+  "kbd",
   "linklist",
   "listview",
   "loadinganimation",
@@ -67,6 +68,7 @@ export const COMPONENT_ITEMS = [
   "scorecard",
   "scoreboard",
   "section",
+  "segmentedcontrol",
   "select",
   "shimmertext",
   "slider",
@@ -80,6 +82,7 @@ export const COMPONENT_ITEMS = [
   "taginput",
   "textarea",
   "timepicker",
+  "tilegroup",
   "thinkinganimation",
   "timeline",
   "toast",
@@ -110,6 +113,9 @@ export function componentLabel(id: string): string {
   if (id === "datepicker") return "DatePicker";
   if (id === "daterangepicker") return "DateRangePicker";
   if (id === "insightcard") return "InsightCard";
+  if (id === "kbd") return "Kbd";
+  if (id === "segmentedcontrol") return "SegmentedControl";
+  if (id === "tilegroup") return "TileGroup";
   if (id === "linechart") return "Line";
   if (id === "listview") return "ListView";
   if (id === "modalcard") return "ModalCard";
@@ -168,10 +174,12 @@ export const COMPONENT_GROUPS = [
       "numberinput",
       "radiogroup",
       "select",
+      "segmentedcontrol",
       "taginput",
       "slider",
       "switch",
       "textarea",
+      "tilegroup",
       "timepicker",
     ],
   },
@@ -229,6 +237,7 @@ export const COMPONENT_GROUPS = [
       "alert",
       "badge",
       "count",
+      "kbd",
       "empty",
       "progress",
       "progresssteps",

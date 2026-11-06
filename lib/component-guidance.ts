@@ -46,6 +46,7 @@ import contract_helppopover from "../packages/kit/contracts/helppopover.json";
 import contract_input from "../packages/kit/contracts/input.json";
 import contract_inputotp from "../packages/kit/contracts/inputotp.json";
 import contract_insightcard from "../packages/kit/contracts/insightcard.json";
+import contract_kbd from "../packages/kit/contracts/kbd.json";
 import contract_linechart from "../packages/kit/contracts/linechart.json";
 import contract_linklist from "../packages/kit/contracts/linklist.json";
 import contract_listview from "../packages/kit/contracts/listview.json";
@@ -68,6 +69,7 @@ import contract_resizable from "../packages/kit/contracts/resizable.json";
 import contract_scoreboard from "../packages/kit/contracts/scoreboard.json";
 import contract_scorecard from "../packages/kit/contracts/scorecard.json";
 import contract_section from "../packages/kit/contracts/section.json";
+import contract_segmentedcontrol from "../packages/kit/contracts/segmentedcontrol.json";
 import contract_select from "../packages/kit/contracts/select.json";
 import contract_shimmertext from "../packages/kit/contracts/shimmertext.json";
 import contract_sidenav from "../packages/kit/contracts/sidenav.json";
@@ -81,6 +83,7 @@ import contract_tag from "../packages/kit/contracts/tag.json";
 import contract_taginput from "../packages/kit/contracts/taginput.json";
 import contract_textarea from "../packages/kit/contracts/textarea.json";
 import contract_timepicker from "../packages/kit/contracts/timepicker.json";
+import contract_tilegroup from "../packages/kit/contracts/tilegroup.json";
 import contract_thinkinganimation from "../packages/kit/contracts/thinkinganimation.json";
 import contract_timeline from "../packages/kit/contracts/timeline.json";
 import contract_toast from "../packages/kit/contracts/toast.json";
@@ -142,6 +145,7 @@ const contracts: Record<string, ContractNotes> = {
   "input": contract_input,
   "inputotp": contract_inputotp,
   "insightcard": contract_insightcard,
+  "kbd": contract_kbd,
   "linechart": contract_linechart,
   "linklist": contract_linklist,
   "listview": contract_listview,
@@ -164,6 +168,7 @@ const contracts: Record<string, ContractNotes> = {
   "scoreboard": contract_scoreboard,
   "scorecard": contract_scorecard,
   "section": contract_section,
+  "segmentedcontrol": contract_segmentedcontrol,
   "select": contract_select,
   "shimmertext": contract_shimmertext,
   "sidenav": contract_sidenav,
@@ -177,6 +182,7 @@ const contracts: Record<string, ContractNotes> = {
   "taginput": contract_taginput,
   "textarea": contract_textarea,
   "timepicker": contract_timepicker,
+  "tilegroup": contract_tilegroup,
   "thinkinganimation": contract_thinkinganimation,
   "timeline": contract_timeline,
   "toast": contract_toast,

@@ -109,11 +109,9 @@ const DARK_HTML = `<html lang="en" data-theme="dark">`;
 
 const BRAND_HTML = `<html lang="en" data-color="violet">`;
 
-const FONT_HTML = `<html lang="en" data-font="inter">`;
-
-const FONT = `--font-heading: var(--font-display);
---font-body: var(--font-sans);
---font-mono: var(--font-mono);
+const FONT = `--font-sans: var(--font-inter), system-ui, sans-serif;
+--font-display: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
+--font-mono: var(--font-geist-mono), ui-monospace, monospace;
 --type-weight-heading: 600;`;
 
 const OVERRIDE = `:root {
@@ -231,14 +229,14 @@ export default function ThemingPage() {
 
         <Section
           title="Font trio"
-          description="Semantic heading, body, and mono. Playground data-font loads Inter, Geist, IBM Plex, or system. Heading weight is 400|500|600|700."
+          description="Interface, headings, and mono are separate. The Customize panel writes --font-sans, --font-display, and --font-mono."
         >
           <div className={playground.stack}>
-            <CodeBlock code={FONT_HTML} />
             <CodeBlock code={FONT} />
             <p className={playground.body}>
-              Components use the trio, not per-component font cousins. IBM Plex is the default
-              (no data-font). Copy prompt for AI includes the active font, weight, theme, and color.
+              Components use the trio, not per-component font cousins. IBM Plex is the default.
+              Heading weight is still 400, 500, 600, or 700 on --type-weight-heading. Copy prompt
+              for AI includes each family, the neutral scale, spacing, and shadow intensity.
             </p>
           </div>
         </Section>

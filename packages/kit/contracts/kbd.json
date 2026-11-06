@@ -1,0 +1,55 @@
+{
+  "id": "kbd",
+  "status": "stable",
+  "intent": "A shortcut chip for one keyboard key. Place several in a row for a chord.",
+  "useWhen": [
+    "Showing a keyboard shortcut next to an action or command",
+    "A single key or a chord such as ⌘ K"
+  ],
+  "doNotUseWhen": [
+    "Status or category — use Badge",
+    "A control the person activates — use Button",
+    "A block of source code — use CodeSnippet"
+  ],
+  "props": {
+    "children": {
+      "type": "node",
+      "required": true,
+      "note": "The key label, such as ⌘ or K."
+    }
+  },
+  "passthrough": {
+    "root": "kbd",
+    "ref": "kbd",
+    "className": "root",
+    "rest": "kbd"
+  },
+  "tokens": [
+    "surface.muted",
+    "border.strong",
+    "border.width.thin",
+    "border.width.medium",
+    "shadow.xs",
+    "radius.controlSm",
+    "text.primary",
+    "font.mono",
+    "type.size.caption",
+    "type.weight.code",
+    "space.6",
+    "space.inset.xs"
+  ],
+  "a11y": {
+    "element": "kbd",
+    "requirements": [
+      "The element is a native kbd so the key name is exposed as keyboard input",
+      "Text content is the key label",
+      "A chord is several Kbd elements in reading order, not one chip with the whole chord"
+    ]
+  },
+  "doNot": [
+    "Do not invent KbdGroup",
+    "Do not use Badge or a styled span for keyboard keys",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Kbd>⌘</Kbd>\n<Kbd>K</Kbd>"
+}

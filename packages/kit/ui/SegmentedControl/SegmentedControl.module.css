@@ -1,0 +1,72 @@
+.root {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline-2xs);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-inset-2xs);
+  border-radius: var(--radius-control-md);
+  background: var(--bg-tray);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-inline-xs);
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-control-sm);
+  padding: var(--space-inset-sm) var(--space-inset-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing),
+    box-shadow var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.item:hover:not(:disabled):not([data-state="checked"]) {
+  color: var(--text-primary);
+}
+
+.item[data-state="checked"] {
+  background: var(--bg-control);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.item:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.item:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+.icon {
+  display: block;
+  flex: none;
+  color: currentColor;
+}
+
+.sm .item {
+  padding: var(--space-inset-xs) var(--space-inset-sm);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "id": "tilegroup",
+  "status": "stable",
+  "intent": "Selectable cards for a plan or option picker. Single or multi select, with title, description, and a price or meta slot.",
+  "useWhen": [
+    "Choosing a plan, tier, or option where title, description, and price should be compared",
+    "A short set of cards, one selected or several"
+  ],
+  "doNotUseWhen": [
+    "Short labels with no description — use SegmentedControl",
+    "A plain radio list — use RadioGroup",
+    "Independent settings that take effect immediately — use Switch",
+    "A framed content tile that is not a choice — use Card"
+  ],
+  "props": {
+    "ariaLabel": {
+      "type": "string",
+      "required": true,
+      "note": "Names the group."
+    },
+    "items": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "value": "string",
+        "title": "string",
+        "description": "string?",
+        "meta": "node?",
+        "disabled": "boolean?"
+      },
+      "note": "meta is the price or other short slot at the end of the title row."
+    },
+    "selection": {
+      "type": "enum",
+      "values": ["single", "multiple"],
+      "default": "single"
+    },
+    "value": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "controlled. string when selection is single, string[] when multiple."
+    },
+    "defaultValue": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "uncontrolled"
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void for single, (value: string[]) => void for multiple"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Locks the whole group. A disabled item stays visible and cannot be checked."
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "surface.card",
+    "surface.brandSubtle",
+    "border.faint",
+    "border.strong",
+    "border.brand",
+    "border.focusWidth",
+    "text.primary",
+    "text.secondary",
+    "text.disabled",
+    "action.primary",
+    "action.onPrimary",
+    "shadow.sm",
+    "shadow.xs",
+    "radius.surfaceMd",
+    "radius.controlSm",
+    "radius.pill",
+    "focus.ring",
+    "opacity.disabled",
+    "font.display",
+    "font.sans",
+    "type.size.body",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.weight.body",
+    "space.inset.lg",
+    "space.gap.sm",
+    "space.inline.sm",
+    "space.stack.xs"
+  ],
+  "a11y": {
+    "element": "div[role=radiogroup] or div[role=group]",
+    "requirements": [
+      "selection=single is a radiogroup of radio buttons; arrows move the checked tile",
+      "selection=multiple is a group of checkbox buttons; arrows move focus and Space toggles",
+      "aria-checked reflects checked tiles",
+      "Roving tabindex",
+      "Disabled tiles stay in the group and cannot be checked",
+      "focus-visible kit ring"
+    ]
+  },
+  "doNot": [
+    "Do not invent Tile, TileGroupItem, or PlanPicker cousins",
+    "Do not use RadioGroup layout=card when the option needs a price slot",
+    "Do not use raw hex",
+    "Do not ship the group without ariaLabel"
+  ],
+  "snippet": "<TileGroup ariaLabel=\"Plan\" defaultValue=\"pro\" items={[{ value: 'starter', title: 'Starter', description: 'For drafts', meta: '$12' }, { value: 'pro', title: 'Pro', description: 'For teams', meta: '$29' }]} />"
+}

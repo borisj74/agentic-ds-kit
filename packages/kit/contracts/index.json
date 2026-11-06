@@ -623,6 +623,27 @@
     "status": "stable"
   },
   {
+    "id": "segmentedcontrol",
+    "intent": "Choose one of a few visible options in a joined track. role=radiogroup, sm or md, icons optional.",
+    "group": "component",
+    "path": "contracts/segmentedcontrol.json",
+    "status": "stable"
+  },
+  {
+    "id": "tilegroup",
+    "intent": "Selectable cards for a plan or option picker. Single or multi select, with title, description, and a price or meta slot.",
+    "group": "component",
+    "path": "contracts/tilegroup.json",
+    "status": "stable"
+  },
+  {
+    "id": "kbd",
+    "intent": "A shortcut chip for one keyboard key. Place several in a row for a chord.",
+    "group": "component",
+    "path": "contracts/kbd.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

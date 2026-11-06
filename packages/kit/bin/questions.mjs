@@ -4,7 +4,7 @@
  * contracts. Apps feed it to whatever decision model or LLM they use. No network,
  * no model calls, no dependencies: Node built-ins only.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, writeSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -387,7 +387,9 @@ export function runQuestions(argv, { root = defaultRoot, cwd = process.cwd() } =
       }
       console.error(`agentic-ds-kit: wrote ${o.out} (${set.options.length} options, ${set.enums.length} enums)`);
     } else {
-      process.stdout.write(json);
+      // A blocking write keeps the JSON intact when the catalog is larger than
+      // the pipe buffer and the process exits immediately after.
+      writeSync(1, json);
     }
     return 0;
   } catch (error) {
