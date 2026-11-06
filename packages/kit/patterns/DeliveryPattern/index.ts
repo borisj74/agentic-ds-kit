@@ -1,1 +1,0 @@
-export { DeliveryPattern } from "./DeliveryPattern";

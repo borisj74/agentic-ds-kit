@@ -1,5 +1,5 @@
 /**
- * Public kit API: components only. Patterns (app-shell, sign-in, dashboard, inbox, …) are
+ * Public kit API: components only. Patterns (app-shell, sign-in, dashboard, list-detail, …) are
  * copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
  */
 

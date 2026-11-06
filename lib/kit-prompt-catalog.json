@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.9.0",
+  "version": "0.11.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -5934,32 +5934,6 @@
       ]
     },
     {
-      "id": "invite-members",
-      "group": "pattern",
-      "intent": "Invite overlay: empty team state, AvatarGroup, and a dismissible Modal with FieldSet.",
-      "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
-        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
-        "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Wrap every labeled input in Field (label, hint, and error wiring)",
-        "RadioGroup brings its own legend; do not wrap it in Field",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
-    },
-    {
-      "id": "assistant-workspace",
-      "group": "pattern",
-      "intent": "Workspace with two-column InsightCards and an inline Chat rail.",
-      "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
-        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view: with Chat open its Send is the primary, so InsightCards drop primaryAction",
-        "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
-    },
-    {
       "id": "empty-first-run",
       "group": "pattern",
       "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
@@ -5970,18 +5944,6 @@
         "Do not restyle kit components; change them through their props, slots, and tokens",
         "Wrap every labeled input in Field (label, hint, and error wiring)",
         "FieldSet groups two or more related fields (legend); a single Field stands alone",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
-    },
-    {
-      "id": "activity",
-      "group": "pattern",
-      "intent": "Activity example: PageHeader, Scoreboard, task cards or list, and a tabbed DataTable feed.",
-      "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
-        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
-        "Do not restyle kit components; change them through their props, slots, and tokens",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
       ]
     },
@@ -6109,31 +6071,6 @@
           "note": "Primary disabled with a busy label; SSO disabled; form aria-busy."
         }
       }
-    },
-    {
-      "id": "inbox",
-      "group": "pattern",
-      "intent": "Inbox example: PageHeader, Scoreboard, tabbed Table, detail Section, and a reply Drawer.",
-      "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
-        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
-        "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Wrap every labeled input in Field (label, hint, and error wiring)",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
-    },
-    {
-      "id": "delivery",
-      "group": "pattern",
-      "intent": "Delivery example: PageHeader, Scoreboard stat cards, Timeline, and a flush Card members DataTable.",
-      "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
-        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
-        "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
     }
   ]
 }

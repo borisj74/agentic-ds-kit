@@ -5,6 +5,12 @@ All notable changes to `agentic-ds-kit` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-11-06
+
+### Breaking: removed patterns
+
+- Inbox (`inbox`), Activity (`activity`), Invite (`invite-members`), Delivery (`delivery`), and Assistant (`assistant-workspace`). They were too app-specific.
+
 ## [0.10.0] - 2026-11-06
 
 Cards-inspired restyle of tokens, type, radius, and shadow, plus playground theming and a follow-up of live studio controls.

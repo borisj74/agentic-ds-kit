@@ -15,8 +15,6 @@ const STANDALONE = new Set(["sign-in", "app-shell", "layouts"]);
 /** Page hash → copy-in id for `npx agentic-ds-kit add`. No pattern is a package export. */
 const ADD_ID: Record<string, string> = {
   dashboard: "dashboard",
-  activity: "activity",
-  inbox: "inbox",
   settings: "settings-form",
   "list-detail": "list-detail",
   "launch-brief": "list-detail",
@@ -24,9 +22,6 @@ const ADD_ID: Record<string, string> = {
   "release-notes": "list-detail",
   "support-macros": "list-detail",
   projects: "list-detail",
-  invite: "invite-members",
-  delivery: "delivery",
-  insights: "assistant-workspace",
   empty: "empty-first-run",
   research: "empty-first-run",
   "sign-in": "sign-in",
@@ -72,13 +67,8 @@ export default function PatternsPage() {
 
         <div className={pending ? `${styles.anchor} ${pending}` : styles.anchor}>
           <div id="dashboard" />
-          <div id="activity" />
-          <div id="inbox" />
           <div id="settings" />
           <div id="list-detail" />
-          <div id="invite" />
-          <div id="delivery" />
-          <div id="insights" />
           <div id="empty" />
           <div id="sign-in" />
           <div id="app-shell" />

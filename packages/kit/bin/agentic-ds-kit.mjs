@@ -35,7 +35,7 @@ Examples:
   npx agentic-ds-kit add dashboard
   npx agentic-ds-kit add app-shell
   npx agentic-ds-kit add app-header
-  npx agentic-ds-kit add inbox --dir app/inbox/_pattern
+  npx agentic-ds-kit add list-detail --dir app/projects/_pattern
 
 Other commands:
   questions      Build a closed option list from the contracts for a decision

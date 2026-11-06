@@ -1,6 +1,6 @@
 /**
  * Copies pattern sources into patterns-src/<id>/ for `agentic-ds-kit add`:
- * - patterns/<Name>Pattern/: every pattern (app-shell, sign-in, dashboard, inbox, …). Copy-in
+ * - patterns/<Name>Pattern/: every pattern (app-shell, sign-in, dashboard, list-detail, …). Copy-in
  *   examples only; not in dist.
  * - the RECIPES below (component presets rebuilt from their blocks, in recipes/).
  * Kit-relative imports (`../../ui/Button`, `../../ui/shared/chartMath`) become one import from
@@ -16,7 +16,7 @@ const outDir = join(root, "patterns-src");
 const contractIndex = JSON.parse(await readFile(join(root, "contracts/index.json"), "utf8"));
 const publicBarrel = await readFile(join(root, "src/index.ts"), "utf8");
 
-/** `AssistantWorkspacePattern` → `assistant-workspace` */
+/** `SettingsFormPattern` → `settings-form` */
 function toId(dirName) {
   return dirName
     .replace(/Pattern$/, "")
