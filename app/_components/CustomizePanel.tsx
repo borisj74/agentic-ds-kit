@@ -78,7 +78,7 @@ export function CustomizePanel({
   );
 
   return (
-    <div className={styles.panel}>
+    <div className={`${styles.panel} ${variant === "dock" ? styles.dock : ""}`}>
       {variant === "dock" ? (
         <header className={styles.header}>
           <h2 className={styles.title}>Customize</h2>

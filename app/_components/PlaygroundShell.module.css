@@ -81,13 +81,10 @@
   position: sticky;
   top: var(--playground-topbar-height);
   align-self: flex-start;
-  flex: 0 0 16.25rem;
-  width: 16.25rem;
   height: calc(100vh - var(--playground-topbar-height));
-  overflow: auto;
+  overflow-y: auto;
   padding: var(--space-4);
-  border-right: var(--border-width-thin) solid var(--border-faint);
-  background-color: var(--bg-surface);
+  background-color: var(--bg-canvas);
 }
 
 :global(html[data-customize="closed"]) .customize {

@@ -5,6 +5,16 @@
   min-width: 0;
 }
 
+.dock {
+  box-sizing: border-box;
+  width: 16.25rem;
+  min-height: 100%;
+  padding: var(--space-4);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
 .header,
 .sheetHeader {
   display: flex;
