@@ -24,6 +24,7 @@ export const COMPONENT_ITEMS = [
   "colorpicker",
   "combobox",
   "command",
+  "contextmenu",
   "conveyor",
   "count",
   "currencyinput",
@@ -31,12 +32,14 @@ export const COMPONENT_ITEMS = [
   "datatable",
   "datepicker",
   "daterangepicker",
+  "datetimepicker",
   "divider",
   "drawer",
   "dropdownmenu",
   "empty",
   "field",
   "fieldset",
+  "filterbar",
   "filterbutton",
   "fileupload",
   "headercell",
@@ -56,9 +59,11 @@ export const COMPONENT_ITEMS = [
   "numbertransition",
   "pageheader",
   "pagination",
+  "popover",
   "progress",
   "progresssteps",
   "radiogroup",
+  "resizable",
   "scorecard",
   "scoreboard",
   "section",
@@ -74,6 +79,7 @@ export const COMPONENT_ITEMS = [
   "tag",
   "taginput",
   "textarea",
+  "timepicker",
   "thinkinganimation",
   "timeline",
   "toast",
@@ -98,7 +104,9 @@ export function componentLabel(id: string): string {
   if (id === "headercell") return "HeaderCell";
   if (id === "helppopover") return "HelpPopover";
   if (id === "combobox") return "Combobox";
+  if (id === "contextmenu") return "ContextMenu";
   if (id === "currencyinput") return "CurrencyInput";
+  if (id === "datetimepicker") return "DateTimePicker";
   if (id === "datepicker") return "DatePicker";
   if (id === "daterangepicker") return "DateRangePicker";
   if (id === "insightcard") return "InsightCard";
@@ -117,6 +125,7 @@ export function componentLabel(id: string): string {
   if (id === "fieldset") return "FieldSet";
   if (id === "filterbutton") return "FilterButton";
   if (id === "fileupload") return "FileUpload";
+  if (id === "filterbar") return "FilterBar";
   if (id === "codesnippet") return "CodeSnippet";
   if (id === "colorpicker") return "ColorPicker";
   if (id === "linklist") return "LinkList";
@@ -130,6 +139,7 @@ export function componentLabel(id: string): string {
   if (id === "treeview") return "TreeView";
   if (id === "usagelist") return "UsageList";
   if (id === "taginput") return "TagInput";
+  if (id === "timepicker") return "TimePicker";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
@@ -146,9 +156,11 @@ export const COMPONENT_GROUPS = [
       "currencyinput",
       "datepicker",
       "daterangepicker",
+      "datetimepicker",
       "field",
       "fieldset",
       "fileupload",
+      "filterbar",
       "filterbutton",
       "input",
       "inputotp",
@@ -160,6 +172,7 @@ export const COMPONENT_GROUPS = [
       "slider",
       "switch",
       "textarea",
+      "timepicker",
     ],
   },
   {
@@ -184,6 +197,7 @@ export const COMPONENT_GROUPS = [
       "scorecard",
       "scoreboard",
       "section",
+      "resizable",
       "table",
       "timeline",
       "treeview",
@@ -192,7 +206,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Overlays",
-    ids: ["alertdialog", "command", "drawer", "dropdownmenu", "helppopover", "modal", "modalcard"],
+    ids: ["alertdialog", "command", "contextmenu", "drawer", "dropdownmenu", "helppopover", "modal", "modalcard", "popover"],
   },
   {
     label: "Navigation",

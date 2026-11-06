@@ -25,11 +25,13 @@ import { CollapsibleDoc } from "./CollapsibleDoc";
 import { ComboboxDoc } from "./ComboboxDoc";
 import { ColorPickerDoc } from "./ColorPickerDoc";
 import { CommandDoc } from "./CommandDoc";
+import { ContextMenuDoc } from "./ContextMenuDoc";
 import { ConveyorDoc } from "./ConveyorDoc";
 import { DataGridDoc } from "./DataGridDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
 import { DateRangePickerDoc } from "./DateRangePickerDoc";
+import { DateTimePickerDoc } from "./DateTimePickerDoc";
 import { DividerDoc } from "./DividerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
@@ -37,6 +39,7 @@ import { EmptyDoc } from "./EmptyDoc";
 import { FieldDoc } from "./FieldDoc";
 import { FieldSetDoc } from "./FieldSetDoc";
 import { FileUploadDoc } from "./FileUploadDoc";
+import { FilterBarDoc } from "./FilterBarDoc";
 import { FilterButtonDoc } from "./FilterButtonDoc";
 import { HeaderCellDoc } from "./HeaderCellDoc";
 import { HelpPopoverDoc } from "./HelpPopoverDoc";
@@ -60,9 +63,11 @@ import { OtherComponent } from "./OtherComponents";
 import { PageHeaderDoc } from "./PageHeaderDoc";
 import { PaginationDoc } from "./PaginationDoc";
 import { PieChartDoc } from "./PieChartDoc";
+import { PopoverDoc } from "./PopoverDoc";
 import { ProgressDoc } from "./ProgressDoc";
 import { ProgressStepsDoc } from "./ProgressStepsDoc";
 import { RadioGroupDoc } from "./RadioGroupDoc";
+import { ResizableDoc } from "./ResizableDoc";
 import { ScoreboardDoc } from "./ScoreboardDoc";
 import { SectionDoc } from "./SectionDoc";
 import { ScorecardDoc } from "./ScorecardDoc";
@@ -78,6 +83,7 @@ import { TabsDoc } from "./TabsDoc";
 import { TagDoc } from "./TagDoc";
 import { TagInputDoc } from "./TagInputDoc";
 import { TextareaDoc } from "./TextareaDoc";
+import { TimePickerDoc } from "./TimePickerDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
 import { ToastDoc } from "./ToastDoc";
@@ -101,6 +107,7 @@ const TITLES: Record<string, string> = {
   inputotp: "InputOTP",
   insightcard: "InsightCard",
   textarea: "Textarea",
+  timepicker: "TimePicker",
   select: "Select",
   switch: "Switch",
   checkbox: "Checkbox",
@@ -109,6 +116,7 @@ const TITLES: Record<string, string> = {
   combobox: "Combobox",
   colorpicker: "ColorPicker",
   command: "Command",
+  contextmenu: "ContextMenu",
   conveyor: "Conveyor",
   count: "Count",
   currencyinput: "CurrencyInput",
@@ -116,12 +124,15 @@ const TITLES: Record<string, string> = {
   datatable: "DataTable",
   datepicker: "DatePicker",
   daterangepicker: "DateRangePicker",
+  datetimepicker: "DateTimePicker",
   divider: "Divider",
   headercell: "HeaderCell",
   helppopover: "HelpPopover",
   radiogroup: "RadioGroup",
+  resizable: "Resizable",
   field: "Field",
   fieldset: "FieldSet",
+  filterbar: "FilterBar",
   filterbutton: "FilterButton",
   fileupload: "FileUpload",
   badge: "Badge",
@@ -142,6 +153,7 @@ const TITLES: Record<string, string> = {
   pageheader: "PageHeader",
   pagination: "Pagination",
   piechart: "Pie",
+  popover: "Popover",
   linechart: "Line",
   linklist: "LinkList",
   listview: "ListView",
@@ -297,6 +309,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "combobox") return <ComboboxDoc />;
   if (resolved === "colorpicker") return <ColorPickerDoc />;
   if (resolved === "command") return <CommandDoc />;
+  if (resolved === "contextmenu") return <ContextMenuDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
   if (resolved === "count") return <CountDoc />;
   if (resolved === "currencyinput") return <CurrencyInputDoc />;
@@ -304,6 +317,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
   if (resolved === "daterangepicker") return <DateRangePickerDoc />;
+  if (resolved === "datetimepicker") return <DateTimePickerDoc />;
   if (resolved === "divider") return <DividerDoc />;
   if (resolved === "modal") return <ModalDoc />;
   if (resolved === "multiselect") return <MultiSelectDoc />;
@@ -315,6 +329,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "empty") return <EmptyDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "fieldset") return <FieldSetDoc />;
+  if (resolved === "filterbar") return <FilterBarDoc />;
   if (resolved === "filterbutton") return <FilterButtonDoc />;
   if (resolved === "fileupload") return <FileUploadDoc />;
   if (resolved === "headercell") return <HeaderCellDoc />;
@@ -332,9 +347,11 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "pageheader") return <PageHeaderDoc />;
   if (resolved === "pagination") return <PaginationDoc />;
   if (resolved === "piechart") return <PieChartDoc />;
+  if (resolved === "popover") return <PopoverDoc />;
   if (resolved === "progress") return <ProgressDoc />;
   if (resolved === "progresssteps") return <ProgressStepsDoc />;
   if (resolved === "radiogroup") return <RadioGroupDoc />;
+  if (resolved === "resizable") return <ResizableDoc />;
   if (resolved === "scorecard") return <ScorecardDoc />;
   if (resolved === "scoreboard") return <ScoreboardDoc />;
   if (resolved === "section") return <SectionDoc />;
@@ -349,6 +366,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "tag") return <TagDoc />;
   if (resolved === "taginput") return <TagInputDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
+  if (resolved === "timepicker") return <TimePickerDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
   if (resolved === "timeline") return <TimelineDoc />;
   if (resolved === "toast") return <ToastDoc />;

@@ -57,7 +57,7 @@
     ]
   },
   "doNot": [
-    "Do not invent a second calendar, Popover, or native input type=date",
+    "Do not wrap DateRangePicker in Popover. Do not invent a second calendar or a native input type=date",
     "Do not use two DatePickers for start and end",
     "Do not add time — ask first",
     "Do not use raw hex"

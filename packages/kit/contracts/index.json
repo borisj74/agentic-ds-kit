@@ -112,6 +112,13 @@
     "status": "stable"
   },
   {
+    "id": "timepicker",
+    "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
+    "group": "component",
+    "path": "contracts/timepicker.json",
+    "status": "stable"
+  },
+  {
     "id": "select",
     "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
     "group": "component",
@@ -189,6 +196,13 @@
     "status": "stable"
   },
   {
+    "id": "contextmenu",
+    "intent": "Actions for one target, opened with a right-click or Shift+F10.",
+    "group": "component",
+    "path": "contracts/contextmenu.json",
+    "status": "stable"
+  },
+  {
     "id": "datagrid",
     "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
     "group": "component",
@@ -214,6 +228,13 @@
     "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
     "group": "component",
     "path": "contracts/daterangepicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "datetimepicker",
+    "intent": "Pick a calendar date and a time in one field.",
+    "group": "component",
+    "path": "contracts/datetimepicker.json",
     "status": "stable"
   },
   {
@@ -259,6 +280,13 @@
     "status": "stable"
   },
   {
+    "id": "popover",
+    "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
+    "group": "component",
+    "path": "contracts/popover.json",
+    "status": "stable"
+  },
+  {
     "id": "card",
     "intent": "Framed tile with optional header, body, and footer actions.",
     "group": "component",
@@ -301,6 +329,13 @@
     "status": "stable"
   },
   {
+    "id": "resizable",
+    "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
+    "group": "component",
+    "path": "contracts/resizable.json",
+    "status": "stable"
+  },
+  {
     "id": "field",
     "intent": "One labeled control with optional hint and error. Label on top or start (left).",
     "group": "component",
@@ -326,6 +361,13 @@
     "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
     "group": "component",
     "path": "contracts/filterbutton.json",
+    "status": "stable"
+  },
+  {
+    "id": "filterbar",
+    "intent": "A row of filter chips with add, clear all, and an overflow menu when the row is too long.",
+    "group": "component",
+    "path": "contracts/filterbar.json",
     "status": "stable"
   },
   {

@@ -1,0 +1,48 @@
+{
+  "id": "resizable",
+  "status": "stable",
+  "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
+  "useWhen": [
+    "A list beside a detail, or a preview beside its controls",
+    "The person should choose how much room each side gets"
+  ],
+  "doNotUseWhen": [
+    "A fixed sidebar — use SideNav",
+    "A page split that should not move — use layout, not Resizable"
+  ],
+  "props": {
+    "orientation": {
+      "type": "enum",
+      "values": ["horizontal", "vertical"],
+      "default": "horizontal",
+      "note": "horizontal is left and right. vertical is top and bottom."
+    },
+    "size": { "type": "number", "required": false, "note": "Controlled start-panel size, 0 to 100." },
+    "defaultSize": { "type": "number", "default": 50 },
+    "min": { "type": "number", "default": 20 },
+    "max": { "type": "number", "default": 80 },
+    "onSizeChange": { "type": "function", "required": false, "note": "(size: number) => void" },
+    "start": { "type": "slot", "required": true },
+    "end": { "type": "slot", "required": true },
+    "startLabel": { "type": "string", "default": "Start panel" },
+    "endLabel": { "type": "string", "default": "End panel" },
+    "ariaLabel": { "type": "string", "default": "Resize panels" }
+  },
+  "passthrough": { "root": "div", "ref": "none", "className": "root", "rest": "none" },
+  "tokens": ["text.primary", "surface.card", "border.faint", "border.focus"],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "The separator is role=separator with aria-orientation, aria-valuenow, aria-valuemin, and aria-valuemax",
+      "Arrow keys resize. Shift steps by 10. Home and End go to min and max",
+      "The separator is in the tab order",
+      "Dragging the separator resizes the start panel"
+    ]
+  },
+  "doNot": [
+    "Do not use Resizable for app navigation — use SideNav",
+    "Do not hide the separator",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Resizable orientation=\"horizontal\" start={<p>List</p>} end={<p>Detail</p>} />"
+}

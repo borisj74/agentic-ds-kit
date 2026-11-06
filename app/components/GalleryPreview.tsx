@@ -22,10 +22,12 @@ import { Collapsible } from "agentic-ds-kit";
 import { Combobox } from "agentic-ds-kit";
 import { ColorPicker } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
+import { ContextMenu } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
 import { Count } from "agentic-ds-kit";
 import { CurrencyInput } from "agentic-ds-kit";
 import { FileUpload } from "agentic-ds-kit";
+import { FilterBar } from "agentic-ds-kit";
 import { FilterButton } from "agentic-ds-kit";
 import { LinkList } from "agentic-ds-kit";
 import { Meter } from "agentic-ds-kit";
@@ -34,6 +36,7 @@ import { DataGrid } from "agentic-ds-kit";
 import { DataTable } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
 import { DateRangePicker } from "agentic-ds-kit";
+import { DateTimePicker } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
@@ -56,7 +59,9 @@ import { Pagination } from "agentic-ds-kit";
 import { PieChart } from "agentic-ds-kit";
 import { Progress } from "agentic-ds-kit";
 import { ProgressSteps } from "agentic-ds-kit";
+import { Popover } from "agentic-ds-kit";
 import { RadioGroup } from "agentic-ds-kit";
+import { Resizable } from "agentic-ds-kit";
 import { Scoreboard } from "agentic-ds-kit";
 import { Scorecard } from "agentic-ds-kit";
 import { Section } from "agentic-ds-kit";
@@ -71,6 +76,7 @@ import { Tabs } from "agentic-ds-kit";
 import { Tag } from "agentic-ds-kit";
 import { TagInput } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
+import { TimePicker } from "agentic-ds-kit";
 import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
 import { Tooltip } from "agentic-ds-kit";
@@ -283,6 +289,12 @@ export function GalleryPreview({ id }: { id: string }) {
           />
         </Stage>
       );
+    case "contextmenu":
+      return (
+        <ContextMenu items={[{ id: "rename", label: "Rename" }, { id: "delete", label: "Delete", danger: true }]}>
+          <p>Right-click</p>
+        </ContextMenu>
+      );
     case "conveyor":
       return (
         <Stage variant="wide">
@@ -308,6 +320,19 @@ export function GalleryPreview({ id }: { id: string }) {
             files={[
               { id: "a", name: "invoice-q3.pdf", size: 1_240_000, progress: 64, status: "uploading" },
             ]}
+          />
+        </Stage>
+      );
+    case "filterbar":
+      return (
+        <Stage variant="wide">
+          <FilterBar
+            size="sm"
+            filters={[
+              { id: "status", label: "Status", value: "Pending" },
+              { id: "owner", label: "Owner" },
+            ]}
+            onClear={() => undefined}
           />
         </Stage>
       );
@@ -377,6 +402,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <DateRangePicker id="gallery-range" size="sm" />
+        </Stage>
+      );
+    case "datetimepicker":
+      return (
+        <Stage variant="wide">
+          <DateTimePicker id="gallery-datetime" size="sm" defaultValue={{ date: "2026-11-06", time: "09:30" }} />
         </Stage>
       );
     case "divider":
@@ -516,6 +547,12 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "piechart":
       return <PieChart data={CHART} size={96} showTable={false} />;
+    case "popover":
+      return (
+        <Popover label="Share" trigger={<Button size="sm" appearance="outline" mode="neutral">Share</Button>}>
+          Copy the link.
+        </Popover>
+      );
     case "progress":
       return <Progress value={64} size="md" shape="circle" showValue ariaLabel="Progress" />;
     case "progresssteps":
@@ -551,6 +588,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <Scoreboard aria-label="Metrics" items={[{ label: "Open", value: "4", size: "sm" }]} />
+        </Stage>
+      );
+    case "resizable":
+      return (
+        <Stage variant="wide">
+          <Resizable start={<p>List</p>} end={<p>Detail</p>} defaultSize={40} />
         </Stage>
       );
     case "scorecard":
@@ -667,6 +710,10 @@ export function GalleryPreview({ id }: { id: string }) {
             ]}
           />
         </Stage>
+      );
+    case "timepicker":
+      return (
+        <TimePicker id="gallery-time" size="sm" defaultValue="09:30" />
       );
     case "toast":
       return (

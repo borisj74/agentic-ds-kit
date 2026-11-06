@@ -9,12 +9,16 @@ export function useOverlayDismiss(
   open: boolean,
   rootRef: RefObject<HTMLElement | null>,
   onClose: (reason: OverlayDismissReason) => void,
+  /** A portaled panel that should not count as outside. */
+  panelRef?: RefObject<HTMLElement | null>,
 ) {
   useEffect(() => {
     if (!open) return undefined;
 
     function onPointerDown(event: PointerEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) onClose("outside");
+      const target = event.target as Node;
+      if (rootRef.current?.contains(target) || panelRef?.current?.contains(target)) return;
+      onClose("outside");
     }
 
     function onKeyDown(event: KeyboardEvent) {
@@ -29,5 +33,5 @@ export function useOverlayDismiss(
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onClose, rootRef]);
+  }, [open, onClose, rootRef, panelRef]);
 }
