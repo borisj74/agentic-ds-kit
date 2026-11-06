@@ -5,6 +5,7 @@ import { Accordion } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const FAQ_ITEMS = [
   { id: "hours", title: "Hours", content: "Weekdays 9–5. Closed on public holidays." },
@@ -54,7 +55,7 @@ export function AccordionDoc() {
                 </div>
               </div>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -62,7 +63,7 @@ export function AccordionDoc() {
                 </p>
               </div>
               <CodeBlock code={CODE} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

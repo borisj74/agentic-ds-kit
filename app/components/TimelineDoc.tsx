@@ -5,6 +5,7 @@ import { Timeline } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const ITEMS = [
   { status: "now" as const, phase: "Now", title: "Ship beta", body: "Final QA and release notes this week." },
@@ -54,7 +55,7 @@ export function TimelineDoc() {
                 </div>
               </div>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -63,7 +64,7 @@ export function TimelineDoc() {
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

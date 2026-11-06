@@ -2,27 +2,13 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav, Button, Select } from "agentic-ds-kit";
+import { AppNav, Button, Drawer } from "agentic-ds-kit";
 import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
 import { copyAiPrompt } from "@/lib/playground-prompt";
 import { useLocationHash } from "@/lib/use-location-hash";
-import {
-  PLAYGROUND_COLOR_THEMES,
-  PLAYGROUND_FONTS,
-  PLAYGROUND_HEADING_WEIGHTS,
-  applyPlaygroundColorTheme,
-  applyPlaygroundFont,
-  applyPlaygroundHeadingWeight,
-  applyPlaygroundTheme,
-  readPlaygroundColorTheme,
-  readPlaygroundFont,
-  readPlaygroundHeadingWeight,
-  readPlaygroundTheme,
-  type PlaygroundColorTheme,
-  type PlaygroundFont,
-  type PlaygroundHeadingWeight,
-  type PlaygroundTheme,
-} from "@/lib/playground-theme";
+import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
+import { CustomizePanel } from "./CustomizePanel";
+import { useCustomizeOpen } from "./useCustomizeOpen";
 import styles from "./PlaygroundShell.module.css";
 
 const COMPACT_NAV = "(max-width: 767px)";
@@ -41,33 +27,20 @@ function subscribeRootTheme(onChange: () => void) {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ["data-theme", "data-color", "data-font", "style"],
+    attributeFilter: ["data-theme"],
   });
   return () => observer.disconnect();
 }
 
 const readServerFalse = () => false;
 const readServerTheme = (): PlaygroundTheme => "light";
-const readServerColorTheme = (): PlaygroundColorTheme => "ink";
-const readServerFont = (): PlaygroundFont => "ibm-plex";
-const readServerWeight = (): PlaygroundHeadingWeight => "600";
 
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hash = useLocationHash() ?? "";
   const theme = useSyncExternalStore(subscribeRootTheme, readPlaygroundTheme, readServerTheme);
-  const colorTheme = useSyncExternalStore(
-    subscribeRootTheme,
-    readPlaygroundColorTheme,
-    readServerColorTheme,
-  );
-  const font = useSyncExternalStore(subscribeRootTheme, readPlaygroundFont, readServerFont);
-  const headingWeight = useSyncExternalStore(
-    subscribeRootTheme,
-    readPlaygroundHeadingWeight,
-    readServerWeight,
-  );
   const compact = useSyncExternalStore(subscribeCompact, readCompact, readServerFalse);
+  const customize = useCustomizeOpen(pathname);
   const route = `${pathname}#${hash}`;
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
@@ -96,28 +69,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const overlayNav = compact && navOpen;
 
   const handleThemeToggle = () => {
-    const next: PlaygroundTheme = isDark ? "light" : "dark";
-    applyPlaygroundTheme(next);
-  };
-
-  const handleColorTheme = (value: string | string[]) => {
-    if (typeof value !== "string") return;
-    if (value !== "ink" && value !== "blue" && value !== "violet" && value !== "teal" && value !== "custom") {
-      return;
-    }
-    applyPlaygroundColorTheme(value);
-  };
-
-  const handleFont = (value: string | string[]) => {
-    if (typeof value !== "string") return;
-    if (value !== "ibm-plex" && value !== "inter" && value !== "geist" && value !== "system") return;
-    applyPlaygroundFont(value);
-  };
-
-  const handleWeight = (value: string | string[]) => {
-    if (typeof value !== "string") return;
-    if (value !== "400" && value !== "500" && value !== "600" && value !== "700") return;
-    applyPlaygroundHeadingWeight(value);
+    applyPlaygroundTheme(isDark ? "light" : "dark");
   };
 
   const handleCopyPrompt = async () => {
@@ -125,6 +77,17 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     if (!ok) return;
     setCopiedPrompt(true);
     window.setTimeout(() => setCopiedPrompt(false), 1600);
+  };
+
+  const handleNavToggle = () => {
+    const next = !navOpen;
+    if (next && customize.sheet) customize.close();
+    setNavOpenOn(next ? route : null);
+  };
+
+  const handleCustomizeToggle = () => {
+    if (!customize.open) setNavOpenOn(null);
+    customize.toggle();
   };
 
   return (
@@ -137,7 +100,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
             mode="neutral"
             iconStart={overlayNav ? "X" : "Menu"}
             ariaLabel={overlayNav ? "Close navigation" : "Open navigation"}
-            onClick={() => setNavOpenOn(navOpen ? null : route)}
+            onClick={handleNavToggle}
           />
         </div>
         <div className={styles.brand}>
@@ -145,36 +108,18 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           <span className={styles.tagline}>Code is the contract</span>
         </div>
         <div className={styles.tools}>
-          <div className={styles.fontSelect}>
-            <Select
-              id="playground-font"
-              size="sm"
-              ariaLabel="Font"
-              value={font}
-              onChange={handleFont}
-              options={PLAYGROUND_FONTS}
-            />
-          </div>
-          <div className={styles.weightSelect}>
-            <Select
-              id="playground-heading-weight"
-              size="sm"
-              ariaLabel="Heading weight"
-              value={headingWeight}
-              onChange={handleWeight}
-              options={PLAYGROUND_HEADING_WEIGHTS}
-            />
-          </div>
-          <div className={styles.colorSelect}>
-            <Select
-              id="playground-color-theme"
-              size="sm"
-              ariaLabel="Color theme"
-              value={colorTheme}
-              onChange={handleColorTheme}
-              options={PLAYGROUND_COLOR_THEMES}
-            />
-          </div>
+          <Button
+            size="sm"
+            appearance="outline"
+            mode="neutral"
+            iconStart="SlidersHorizontal"
+            ariaLabel="Customize"
+            aria-expanded={customize.open}
+            aria-controls="customize-panel"
+            onClick={handleCustomizeToggle}
+          >
+            {compact ? undefined : "Customize"}
+          </Button>
           <Button
             size="sm"
             appearance="outline"
@@ -215,8 +160,24 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
         >
           <AppNav groups={groups} />
         </aside>
+        {customize.docked ? (
+          <aside id="customize-panel" className={styles.customize} aria-label="Customize">
+            <CustomizePanel variant="dock" onCollapse={customize.close} />
+          </aside>
+        ) : null}
         <main className={styles.main}>{children}</main>
       </div>
+      <Drawer
+        open={customize.sheet}
+        title="Customize"
+        side="left"
+        size="sm"
+        onClose={customize.close}
+      >
+        <div id="customize-panel">
+          <CustomizePanel variant="sheet" />
+        </div>
+      </Drawer>
     </div>
   );
 }

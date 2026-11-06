@@ -44,7 +44,7 @@ function filtersFor(id: string): GalleryItem["filters"] {
 function toItem(id: string): GalleryItem {
   return {
     id,
-    href: `/components#${id}`,
+    href: `/components/${id}`,
     label: componentLabel(id),
     description: intents.get(id) ?? "Kit component.",
     filters: filtersFor(id),

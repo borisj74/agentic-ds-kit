@@ -157,6 +157,16 @@ const TITLES: Record<string, string> = {
   avatargroup: "AvatarGroup",
 };
 
+export function componentSlugFromHash(hash: string): string | null {
+  const id = resolveHash(hash.toLowerCase());
+  if (id === "gallery" || !(id in TITLES)) return null;
+  return id;
+}
+
+export function ComponentDoc({ slug }: { slug: string }) {
+  return <ComponentView hash={resolveHash(slug.toLowerCase())} />;
+}
+
 function resolveHash(hash: string): string {
   const aliases: Record<string, string> = {
     dialog: "modal",

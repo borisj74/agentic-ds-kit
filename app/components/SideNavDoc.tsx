@@ -9,6 +9,7 @@ import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const H = "/components#sidenav";
 
@@ -433,7 +434,7 @@ export function SideNavDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -447,7 +448,7 @@ export function SideNavDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode()} />
-            </div>
+            </DocNotes>
             <CssVarsTable cssVars={contract.cssVars} selector={'.myNav { --sidenav-width: var(--layout-rail); }'} />
           </div>
         ) : (

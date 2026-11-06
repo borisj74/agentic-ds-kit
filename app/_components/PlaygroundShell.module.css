@@ -3,6 +3,10 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-surface);
+}
+
+:global(html[data-theme="dark"]) .frame {
   background-color: var(--bg-canvas);
 }
 
@@ -31,15 +35,6 @@
   gap: var(--space-2);
   flex-shrink: 0;
   margin-inline-start: auto;
-}
-
-.colorSelect,
-.fontSelect {
-  width: 8.5rem;
-}
-
-.weightSelect {
-  width: 5.5rem;
 }
 
 .brand {
@@ -79,11 +74,58 @@
   position: sticky;
   top: var(--playground-topbar-height);
   align-self: flex-start;
+  flex: 0 0 calc(16.25rem - var(--space-2));
+  width: calc(16.25rem - var(--space-2));
   height: calc(100vh - var(--playground-topbar-height));
-  overflow-y: auto;
+  overflow: hidden;
+  padding: var(--space-8) var(--space-2) var(--space-8) var(--space-4);
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.sidebar nav {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  width: 100%;
+  max-width: 100%;
   padding: var(--space-4);
-  border-right: var(--border-width-thin) solid var(--border-faint);
-  background-color: var(--bg-canvas);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+.sidebar a[aria-current="page"] {
+  border-radius: var(--radius-full);
+}
+
+.customize {
+  position: sticky;
+  top: var(--playground-topbar-height);
+  align-self: flex-start;
+  flex: 0 0 calc(16.25rem - var(--space-2));
+  width: calc(16.25rem - var(--space-2));
+  height: calc(100vh - var(--playground-topbar-height));
+  overflow: hidden;
+  padding: var(--space-8) var(--space-4) var(--space-8) var(--space-2);
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.customize > * {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-4);
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+:global(html[data-customize="closed"]) .customize {
+  display: none;
 }
 
 .scrim {
@@ -93,6 +135,12 @@
 .main {
   flex: 1;
   min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .customize {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -108,15 +156,6 @@
     display: none;
   }
 
-  .colorSelect,
-  .fontSelect {
-    width: 7.25rem;
-  }
-
-  .weightSelect {
-    width: 4.75rem;
-  }
-
   .sidebar {
     position: fixed;
     top: var(--playground-topbar-height);
@@ -124,15 +163,22 @@
     left: 0;
     /* Undo the desktop flex-start: on a fixed box it sizes to content and drops the scroll. */
     align-self: stretch;
+    flex: none;
     z-index: var(--z-overlay);
     width: max-content;
     max-width: min(20rem, 90vw);
     height: auto;
+    padding: var(--space-4);
     border-right: var(--border-width-thin) solid var(--border-faint);
     border-bottom: none;
+    background-color: var(--bg-surface);
     box-shadow: var(--shadow-md);
     transform: translateX(-100%);
     transition: transform var(--motion-overlay-duration) var(--motion-overlay-easing);
+  }
+
+  :global(html[data-theme="dark"]) .sidebar {
+    background-color: var(--bg-canvas);
   }
 
   .sidebarOpen {

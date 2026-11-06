@@ -9,6 +9,7 @@ import type { HelpPopoverPlacement } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const PLACEMENTS: HelpPopoverPlacement[] = ["top", "bottom", "left", "right"];
 
@@ -73,7 +74,7 @@ export function HelpPopoverDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -82,7 +83,7 @@ export function HelpPopoverDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(placement)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">

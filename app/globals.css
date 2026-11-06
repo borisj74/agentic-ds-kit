@@ -23,10 +23,14 @@ body {
 }
 
 body {
-  background-color: var(--bg-canvas);
+  background-color: var(--bg-surface);
   color: var(--text-fg);
   font-family: var(--font-body);
   line-height: 1.5;
+}
+
+html[data-theme="dark"] body {
+  background-color: var(--bg-canvas);
 }
 
 html[data-font="inter"] {

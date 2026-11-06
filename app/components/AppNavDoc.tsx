@@ -9,6 +9,7 @@ import { CssVarsTable } from "./CssVarsTable";
 import styles from "./ComponentDoc.module.css";
 import demo from "./AppNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const CODE = `<AppNav title="Agentic DS Kit" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />`;
 
@@ -65,7 +66,7 @@ export function AppNavDoc() {
                 </div>
               </div>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -74,7 +75,7 @@ export function AppNavDoc() {
                 </p>
               </div>
               <CodeBlock code={CODE} />
-            </div>
+            </DocNotes>
             <CssVarsTable cssVars={contract.cssVars} selector={'.myNav { --appnav-width: var(--layout-sidebar); }'} />
           </div>
         ) : (

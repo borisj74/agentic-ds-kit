@@ -7,6 +7,7 @@ import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
+import { DocNotes } from "./DocNotes";
 
 const SIZES: BadgeSize[] = ["sm", "md", "lg"];
 const APPEARANCES: BadgeAppearance[] = ["soft", "tint", "solid", "outline"];
@@ -145,7 +146,7 @@ export function BadgeDoc() {
                 </div>
               </aside>
             </div>
-            <div className={styles.docs}>
+            <DocNotes>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
@@ -162,7 +163,7 @@ export function BadgeDoc() {
                 </p>
               </div>
               <CodeBlock code={masterCode(appearance, tone, size, removable, disabled, label)} />
-            </div>
+            </DocNotes>
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
