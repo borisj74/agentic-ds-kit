@@ -12,6 +12,7 @@ import { copyAiPrompt } from "@/lib/playground-prompt";
 import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
 import { CustomizePanel } from "./CustomizePanel";
+import { PlaygroundCommand } from "./PlaygroundCommand";
 import { useCustomizeOpen } from "./useCustomizeOpen";
 import styles from "./PlaygroundShell.module.css";
 
@@ -167,6 +168,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           inert={compact && !navOpen ? true : undefined}
         >
           <div className={styles.sidebarSearch}>
+            <PlaygroundCommand />
             <Input
               id="docs-nav-filter"
               type="search"

@@ -249,6 +249,19 @@ export const COMPONENT_GROUPS = [
   },
 ] as const;
 
+export const FOUNDATION_ITEMS = [
+  { slug: "color", label: "Color" },
+  { slug: "typography", label: "Typography" },
+  { slug: "spacing", label: "Spacing" },
+  { slug: "icons", label: "Icons" },
+  { slug: "grid", label: "Grid systems" },
+  { slug: "radius", label: "Radius" },
+  { slug: "border", label: "Border" },
+  { slug: "shadow", label: "Shadow" },
+  { slug: "motion", label: "Motion" },
+  { slug: "opacity", label: "Opacity" },
+] as const;
+
 export const PATTERN_ITEMS = [
   { slug: "dashboard", label: "Dashboard" },
   { slug: "settings", label: "Settings" },
@@ -290,6 +303,47 @@ export interface ComponentNavLink {
   id: string;
   href: string;
   label: string;
+}
+
+export interface PlaygroundCommandLink {
+  id: string;
+  label: string;
+  href: string;
+}
+
+export interface PlaygroundCommandSection {
+  heading: "Foundations" | "Components" | "Patterns";
+  items: PlaygroundCommandLink[];
+}
+
+/** Pages the command palette can open: foundations, every component, every pattern. */
+export function playgroundCommandSections(): PlaygroundCommandSection[] {
+  return [
+    {
+      heading: "Foundations",
+      items: FOUNDATION_ITEMS.map((item) => ({
+        id: `foundation:${item.slug}`,
+        label: item.label,
+        href: `/foundations#${item.slug}`,
+      })),
+    },
+    {
+      heading: "Components",
+      items: componentNavLinks().map((link) => ({
+        id: `component:${link.id}`,
+        label: link.label,
+        href: link.href,
+      })),
+    },
+    {
+      heading: "Patterns",
+      items: PATTERN_ITEMS.map((item) => ({
+        id: `pattern:${item.slug}`,
+        label: item.label,
+        href: `/patterns/${item.slug}`,
+      })),
+    },
+  ];
 }
 
 export function componentNavLinks(): ComponentNavLink[] {
@@ -367,18 +421,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
     },
     {
       label: "Foundations",
-      items: [
-        leaf("/foundations#color", "Color"),
-        leaf("/foundations#typography", "Typography"),
-        leaf("/foundations#spacing", "Spacing"),
-        leaf("/foundations#icons", "Icons"),
-        leaf("/foundations#grid", "Grid systems"),
-        leaf("/foundations#radius", "Radius"),
-        leaf("/foundations#border", "Border"),
-        leaf("/foundations#shadow", "Shadow"),
-        leaf("/foundations#motion", "Motion"),
-        leaf("/foundations#opacity", "Opacity"),
-      ],
+      items: FOUNDATION_ITEMS.map((item) => leaf(`/foundations#${item.slug}`, item.label)),
     },
     {
       label: "Components",
