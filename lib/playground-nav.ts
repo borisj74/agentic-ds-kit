@@ -179,6 +179,15 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
       items: [
         leaf("/components#gallery", "Gallery"),
         ...COMPONENT_ITEMS.flatMap((id) => {
+          if (id === "button") {
+            return [
+              {
+                href: "/components/button",
+                label: "Button",
+                active: pathname === "/components/button" || (pathname === "/components" && h === "button"),
+              },
+            ];
+          }
           const item = leaf(`/components#${id}`, componentLabel(id));
           if (id !== "cell") return [item];
           return [

@@ -33,15 +33,6 @@
   margin-inline-start: auto;
 }
 
-.colorSelect,
-.fontSelect {
-  width: 8.5rem;
-}
-
-.weightSelect {
-  width: 5.5rem;
-}
-
 .brand {
   display: flex;
   align-items: baseline;
@@ -86,6 +77,23 @@
   background-color: var(--bg-canvas);
 }
 
+.customize {
+  position: sticky;
+  top: var(--playground-topbar-height);
+  align-self: flex-start;
+  flex: 0 0 16.25rem;
+  width: 16.25rem;
+  height: calc(100vh - var(--playground-topbar-height));
+  overflow: auto;
+  padding: var(--space-4);
+  border-right: var(--border-width-thin) solid var(--border-faint);
+  background-color: var(--bg-surface);
+}
+
+:global(html[data-customize="closed"]) .customize {
+  display: none;
+}
+
 .scrim {
   display: none;
 }
@@ -93,6 +101,12 @@
 .main {
   flex: 1;
   min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .customize {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -106,15 +120,6 @@
 
   .tagline {
     display: none;
-  }
-
-  .colorSelect,
-  .fontSelect {
-    width: 7.25rem;
-  }
-
-  .weightSelect {
-    width: 4.75rem;
   }
 
   .sidebar {

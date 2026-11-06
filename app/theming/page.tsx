@@ -146,8 +146,9 @@ export default function ThemingPage() {
         <h1 className={playground.pageTitle}>Theming</h1>
         <p className={playground.pageLead}>
           Semantic CSS variables. Override those tokens to change the look of the kit without
-          rewriting component classes. Use the playground header for font, heading weight, dark
-          mode, and brand shortcuts — or open Studio for live primary, radius, and shadow.
+          rewriting component classes. The Customize panel, on every playground page, edits font,
+          heading weight, mode, primary, radius, and shadow. The header keeps dark mode and the
+          AI prompt.
         </p>
 
         <Section
@@ -223,7 +224,7 @@ export default function ThemingPage() {
             <p className={playground.body}>
               Shortcuts: ink (unset), blue, violet, teal. Custom writes data-color=&quot;custom&quot; and
               generates primary / hover / active / subtle / focus from any hex. Dark + brand stays
-              a light pair when the picked hex is dark. Studio is the live editor.
+              a light pair when the picked hex is dark. The Customize panel is the live editor.
             </p>
           </div>
         </Section>
