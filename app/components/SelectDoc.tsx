@@ -180,9 +180,9 @@ export function SelectDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Wrap with Field. Use multiple for several values. searchable for a long fixed
-                  list. Command for a command palette. Do not invent SelectTrigger, SelectContent,
-                  or MultiSelect.
+                  Wrap with Field. Use multiple for several values in a menu. searchable for a
+                  long fixed list. Typed or async search is Combobox. Tags with an inline filter
+                  are MultiSelect. Do not invent SelectTrigger or SelectContent.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, display)} />
@@ -209,8 +209,8 @@ export function SelectDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  multiple keeps the menu open and checks each pick. Same Select, not a MultiSelect
-                  cousin. Trigger lists the labels.
+                  multiple keeps the menu open and checks each pick. Trigger lists the labels.
+                  MultiSelect is the field with removable tags and an inline filter.
                 </p>
               </div>
               <CodeBlock code={'<Select id="fruits" multiple placeholder="Select fruits" options={fruits} />'} />

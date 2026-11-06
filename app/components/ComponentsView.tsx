@@ -3,6 +3,7 @@
 import { useLocationHash } from "@/lib/use-location-hash";
 import { AccordionDoc } from "./AccordionDoc";
 import { AlertDialogDoc } from "./AlertDialogDoc";
+import { AnchorNavDoc } from "./AnchorNavDoc";
 import { AlertDoc } from "./AlertDoc";
 import { AppHeaderDoc } from "./AppHeaderDoc";
 import { AppNavDoc } from "./AppNavDoc";
@@ -21,12 +22,14 @@ import { ChatDoc } from "./ChatDoc";
 import { CheckboxDoc } from "./CheckboxDoc";
 import { CodeSnippetDoc } from "./CodeSnippetDoc";
 import { CollapsibleDoc } from "./CollapsibleDoc";
+import { ComboboxDoc } from "./ComboboxDoc";
 import { ColorPickerDoc } from "./ColorPickerDoc";
 import { CommandDoc } from "./CommandDoc";
 import { ConveyorDoc } from "./ConveyorDoc";
 import { DataGridDoc } from "./DataGridDoc";
 import { DataTableDoc } from "./DataTableDoc";
 import { DatePickerDoc } from "./DatePickerDoc";
+import { DateRangePickerDoc } from "./DateRangePickerDoc";
 import { DividerDoc } from "./DividerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
@@ -46,9 +49,12 @@ import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
 import { MeterDoc } from "./MeterDoc";
 import { CountDoc } from "./CountDoc";
+import { CurrencyInputDoc } from "./CurrencyInputDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
+import { MultiSelectDoc } from "./MultiSelectDoc";
 import { NavigationMenuDoc } from "./NavigationMenuDoc";
+import { NumberInputDoc } from "./NumberInputDoc";
 import { NumberTransitionDoc } from "./NumberTransitionDoc";
 import { OtherComponent } from "./OtherComponents";
 import { PageHeaderDoc } from "./PageHeaderDoc";
@@ -70,6 +76,7 @@ import { SwitchDoc } from "./SwitchDoc";
 import { TableDoc } from "./TableDoc";
 import { TabsDoc } from "./TabsDoc";
 import { TagDoc } from "./TagDoc";
+import { TagInputDoc } from "./TagInputDoc";
 import { TextareaDoc } from "./TextareaDoc";
 import { ThinkingAnimationDoc } from "./ThinkingAnimationDoc";
 import { TimelineDoc } from "./TimelineDoc";
@@ -99,13 +106,16 @@ const TITLES: Record<string, string> = {
   checkbox: "Checkbox",
   codesnippet: "CodeSnippet",
   collapsible: "Collapsible",
+  combobox: "Combobox",
   colorpicker: "ColorPicker",
   command: "Command",
   conveyor: "Conveyor",
   count: "Count",
+  currencyinput: "CurrencyInput",
   datagrid: "DataGrid",
   datatable: "DataTable",
   datepicker: "DatePicker",
+  daterangepicker: "DateRangePicker",
   divider: "Divider",
   headercell: "HeaderCell",
   helppopover: "HelpPopover",
@@ -120,7 +130,9 @@ const TITLES: Record<string, string> = {
   tooltip: "Tooltip",
   tabs: "Tabs",
   tag: "Tag",
+  taginput: "TagInput",
   modal: "Modal",
+  multiselect: "MultiSelect",
   modalcard: "ModalCard",
   navigationmenu: "NavigationMenu",
   sidenav: "SideNav",
@@ -135,6 +147,7 @@ const TITLES: Record<string, string> = {
   listview: "ListView",
   loadinganimation: "LoadingAnimation",
   meter: "Meter",
+  numberinput: "NumberInput",
   numbertransition: "NumberTransition",
   shimmertext: "ShimmerText",
   skeleton: "Skeleton",
@@ -150,6 +163,7 @@ const TITLES: Record<string, string> = {
   section: "Section",
   table: "Table",
   accordion: "Accordion",
+  anchornav: "AnchorNav",
   alert: "Alert",
   alertdialog: "AlertDialog",
   appheader: "AppHeader",
@@ -267,6 +281,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "accordion") return <AccordionDoc />;
   if (resolved === "alert") return <AlertDoc />;
   if (resolved === "alertdialog") return <AlertDialogDoc />;
+  if (resolved === "anchornav") return <AnchorNavDoc />;
   if (resolved === "appheader") return <AppHeaderDoc />;
   if (resolved === "appnav") return <AppNavDoc />;
   if (resolved === "avatar") return <AvatarDoc />;
@@ -279,15 +294,19 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "checkbox") return <CheckboxDoc />;
   if (resolved === "codesnippet") return <CodeSnippetDoc />;
   if (resolved === "collapsible") return <CollapsibleDoc />;
+  if (resolved === "combobox") return <ComboboxDoc />;
   if (resolved === "colorpicker") return <ColorPickerDoc />;
   if (resolved === "command") return <CommandDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
   if (resolved === "count") return <CountDoc />;
+  if (resolved === "currencyinput") return <CurrencyInputDoc />;
   if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;
   if (resolved === "datepicker") return <DatePickerDoc />;
+  if (resolved === "daterangepicker") return <DateRangePickerDoc />;
   if (resolved === "divider") return <DividerDoc />;
   if (resolved === "modal") return <ModalDoc />;
+  if (resolved === "multiselect") return <MultiSelectDoc />;
   if (resolved === "modalcard") return <ModalCardDoc />;
   if (resolved === "navigationmenu") return <NavigationMenuDoc />;
   if (resolved === "sidenav") return <SideNavDoc />;
@@ -308,6 +327,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "listview") return <ListViewDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;
   if (resolved === "meter") return <MeterDoc />;
+  if (resolved === "numberinput") return <NumberInputDoc />;
   if (resolved === "numbertransition") return <NumberTransitionDoc />;
   if (resolved === "pageheader") return <PageHeaderDoc />;
   if (resolved === "pagination") return <PaginationDoc />;
@@ -327,6 +347,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "table") return <TableDoc />;
   if (resolved === "tabs") return <TabsDoc />;
   if (resolved === "tag") return <TagDoc />;
+  if (resolved === "taginput") return <TagInputDoc />;
   if (resolved === "textarea") return <TextareaDoc />;
   if (resolved === "thinkinganimation") return <ThinkingAnimationDoc />;
   if (resolved === "timeline") return <TimelineDoc />;

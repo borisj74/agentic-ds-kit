@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { Alert } from "agentic-ds-kit";
+import { AnchorNav } from "agentic-ds-kit";
 import { AppHeader } from "agentic-ds-kit";
 import { AppNav } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
@@ -18,10 +19,12 @@ import { Chat } from "agentic-ds-kit";
 import { Checkbox } from "agentic-ds-kit";
 import { CodeSnippet } from "agentic-ds-kit";
 import { Collapsible } from "agentic-ds-kit";
+import { Combobox } from "agentic-ds-kit";
 import { ColorPicker } from "agentic-ds-kit";
 import { Command } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
 import { Count } from "agentic-ds-kit";
+import { CurrencyInput } from "agentic-ds-kit";
 import { FileUpload } from "agentic-ds-kit";
 import { FilterButton } from "agentic-ds-kit";
 import { LinkList } from "agentic-ds-kit";
@@ -30,6 +33,7 @@ import { Skeleton } from "agentic-ds-kit";
 import { DataGrid } from "agentic-ds-kit";
 import { DataTable } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
+import { DateRangePicker } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
@@ -43,7 +47,9 @@ import { LineChart } from "agentic-ds-kit";
 import { ListView } from "agentic-ds-kit";
 import { LoadingAnimation } from "agentic-ds-kit";
 import { ModalCard } from "agentic-ds-kit";
+import { MultiSelect } from "agentic-ds-kit";
 import { NavigationMenu } from "agentic-ds-kit";
+import { NumberInput } from "agentic-ds-kit";
 import { NumberTransition } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
 import { Pagination } from "agentic-ds-kit";
@@ -63,6 +69,7 @@ import { Switch } from "agentic-ds-kit";
 import { Table } from "agentic-ds-kit";
 import { Tabs } from "agentic-ds-kit";
 import { Tag } from "agentic-ds-kit";
+import { TagInput } from "agentic-ds-kit";
 import { Textarea } from "agentic-ds-kit";
 import { ThinkingAnimation } from "agentic-ds-kit";
 import { Timeline } from "agentic-ds-kit";
@@ -93,6 +100,18 @@ const noop = () => undefined;
 
 export function GalleryPreview({ id }: { id: string }) {
   switch (id) {
+    case "anchornav":
+      return (
+        <AnchorNav
+          spy={false}
+          ariaLabel="Record"
+          items={[
+            { id: "gallery-anchor-details", label: "Details" },
+            { id: "gallery-anchor-billing", label: "Billing" },
+            { id: "gallery-anchor-usage", label: "Usage" },
+          ]}
+        />
+      );
     case "accordion":
       return (
         <Stage variant="wide">
@@ -240,6 +259,21 @@ export function GalleryPreview({ id }: { id: string }) {
           Hidden notes
         </Collapsible>
       );
+    case "combobox":
+      return (
+        <Stage variant="wide">
+          <Combobox
+            id="gallery-combobox"
+            size="sm"
+            placeholder="Search"
+            options={[
+              { value: "berlin", label: "Berlin" },
+              { value: "lisbon", label: "Lisbon" },
+              { value: "oslo", label: "Oslo" },
+            ]}
+          />
+        </Stage>
+      );
     case "command":
       return (
         <Stage variant="wide">
@@ -303,6 +337,12 @@ export function GalleryPreview({ id }: { id: string }) {
           <Skeleton lines={3} size="sm" />
         </Stage>
       );
+    case "currencyinput":
+      return (
+        <Stage variant="wide">
+          <CurrencyInput id="gallery-currency" size="sm" defaultValue={1280} />
+        </Stage>
+      );
     case "datagrid":
       return (
         <Stage variant="table">
@@ -331,6 +371,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <DatePicker id="gallery-date" size="sm" placeholder="Sep 20, 2026" />
+        </Stage>
+      );
+    case "daterangepicker":
+      return (
+        <Stage variant="wide">
+          <DateRangePicker id="gallery-range" size="sm" />
         </Stage>
       );
     case "divider":
@@ -423,6 +469,20 @@ export function GalleryPreview({ id }: { id: string }) {
           <ModalCard size="sm" title="Rename" description="Update the task name." />
         </Stage>
       );
+    case "multiselect":
+      return (
+        <Stage variant="wide">
+          <MultiSelect
+            id="gallery-multi"
+            size="sm"
+            defaultValue={["design"]}
+            options={[
+              { value: "design", label: "Design" },
+              { value: "product", label: "Product" },
+            ]}
+          />
+        </Stage>
+      );
     case "navigationmenu":
       return (
         <Stage variant="wide">
@@ -432,6 +492,12 @@ export function GalleryPreview({ id }: { id: string }) {
               { id: "docs", label: "Docs", href: "#" },
             ]}
           />
+        </Stage>
+      );
+    case "numberinput":
+      return (
+        <Stage variant="wide">
+          <NumberInput id="gallery-number" size="sm" defaultValue={12} min={0} max={99} />
         </Stage>
       );
     case "numbertransition":
@@ -576,6 +642,12 @@ export function GalleryPreview({ id }: { id: string }) {
             Engineering
           </Tag>
         </div>
+      );
+    case "taginput":
+      return (
+        <Stage variant="wide">
+          <TagInput id="gallery-tags" size="sm" defaultValue={["billing", "priority"]} />
+        </Stage>
       );
     case "textarea":
       return (

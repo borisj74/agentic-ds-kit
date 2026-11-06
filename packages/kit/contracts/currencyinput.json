@@ -1,0 +1,49 @@
+{
+  "id": "currencyinput",
+  "status": "stable",
+  "intent": "A money amount with a currency symbol, locale formatting, min, max, and step.",
+  "useWhen": [
+    "A price, amount, or balance in a form",
+    "The symbol and grouping should follow a currency and locale"
+  ],
+  "doNotUseWhen": [
+    "A plain number — use NumberInput",
+    "A currency code the person picks from a list — pair Select with CurrencyInput, do not invent a combined control"
+  ],
+  "contains": ["numberinput"],
+  "props": {
+    "id": { "type": "string", "required": true },
+    "currency": { "type": "string", "default": "USD", "note": "ISO 4217 code." },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md" },
+    "value": { "type": "number | null", "required": false, "note": "Controlled. null is empty." },
+    "defaultValue": { "type": "number | null", "required": false },
+    "onChange": { "type": "function", "required": false, "note": "(value: number | null) => void" },
+    "min": { "type": "number", "required": false },
+    "max": { "type": "number", "required": false },
+    "step": { "type": "number", "default": 0.01 },
+    "locale": { "type": "string", "required": false },
+    "placeholder": { "type": "string", "required": false },
+    "disabled": { "type": "boolean", "default": false },
+    "error": { "type": "boolean", "default": false },
+    "name": { "type": "string", "required": false },
+    "describedBy": { "type": "string", "required": false },
+    "ariaLabel": { "type": "string", "required": false },
+    "steppers": { "type": "boolean", "default": true }
+  },
+  "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
+  "tokens": ["text.primary", "text.muted", "surface.muted", "border.faint", "border.focus", "status.danger"],
+  "a11y": {
+    "element": "input",
+    "requirements": [
+      "Same spinbutton behaviour as NumberInput",
+      "The currency symbol is decorative; aria-valuetext is the formatted number",
+      "Must have a Field label or ariaLabel"
+    ]
+  },
+  "doNot": [
+    "Do not prefix an Input with a currency character",
+    "Do not use NumberInput for money",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Field label=\"Amount\" htmlFor=\"amount\"><CurrencyInput id=\"amount\" currency=\"USD\" /></Field>"
+}

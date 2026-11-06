@@ -9,9 +9,12 @@
     "Short fixed lists such as month, year, timezone, or tags"
   ],
   "doNotUseWhen": [
-    "Command palettes \u2014 use Command",
-    "Actions from a button \u2014 use DropdownMenu",
-    "Mutually exclusive choices with visible options \u2014 prefer RadioGroup"
+    "Command palettes — use Command",
+    "Actions from a button — use DropdownMenu",
+    "Mutually exclusive choices with visible options — prefer RadioGroup",
+    "Typed or async search — use Combobox",
+    "Removable tags with an inline filter — use MultiSelect",
+    "Tags the person types — use TagInput"
   ],
   "contains": [
     "dropdownmenu",
@@ -49,7 +52,7 @@
     "multiple": {
       "type": "boolean",
       "default": false,
-      "note": "Several values. Menu stays open. Checks each pick. Trigger lists labels. Not a MultiSelect cousin."
+      "note": "Several values. Menu stays open. Checks each pick. Trigger lists labels. A field of tags with an inline filter is MultiSelect."
     },
     "placeholder": {
       "type": "string",
@@ -139,7 +142,7 @@
   "doNot": [
     "Do not use a native select",
     "Do not use kit Button as the Select trigger \u2014 Select uses DropdownMenu triggerStyle=field",
-    "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, MultiSelect, or Combobox",
+    "Do not invent SelectTrigger, SelectContent, SelectItem, SelectValue, or SelectGroup",
     "Do not invent a local overflow chip \u2014 overflow count is kit Badge",
     "Do not render Tags inside the trigger button or add a local chip list \u2014 use valueDisplay=tags",
     "Do not use raw hex",

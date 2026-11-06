@@ -1,0 +1,55 @@
+.shell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.shell:hover:not([data-disabled]) {
+  border-color: var(--border-strong);
+}
+
+.shell:focus-within {
+  border-color: var(--border-focus);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.shell[data-error]:focus-within {
+  border-color: var(--status-danger);
+  outline-color: var(--status-danger);
+}
+
+.shell[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--surface-muted);
+}
+
+.native {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.native:disabled {
+  cursor: not-allowed;
+}
+
+.affix {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.steppers {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: var(--space-1);
+}

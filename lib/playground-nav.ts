@@ -4,6 +4,7 @@ export const COMPONENT_ITEMS = [
   "accordion",
   "alert",
   "alertdialog",
+  "anchornav",
   "appheader",
   "appnav",
   "avatar",
@@ -21,12 +22,15 @@ export const COMPONENT_ITEMS = [
   "codesnippet",
   "collapsible",
   "colorpicker",
+  "combobox",
   "command",
   "conveyor",
   "count",
+  "currencyinput",
   "datagrid",
   "datatable",
   "datepicker",
+  "daterangepicker",
   "divider",
   "drawer",
   "dropdownmenu",
@@ -46,7 +50,9 @@ export const COMPONENT_ITEMS = [
   "meter",
   "modal",
   "modalcard",
+  "multiselect",
   "navigationmenu",
+  "numberinput",
   "numbertransition",
   "pageheader",
   "pagination",
@@ -66,6 +72,7 @@ export const COMPONENT_ITEMS = [
   "table",
   "tabs",
   "tag",
+  "taginput",
   "textarea",
   "thinkinganimation",
   "timeline",
@@ -76,6 +83,7 @@ export const COMPONENT_ITEMS = [
 ] as const;
 
 export function componentLabel(id: string): string {
+  if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
   if (id === "pageheader") return "PageHeader";
@@ -89,11 +97,15 @@ export function componentLabel(id: string): string {
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
   if (id === "helppopover") return "HelpPopover";
+  if (id === "combobox") return "Combobox";
+  if (id === "currencyinput") return "CurrencyInput";
   if (id === "datepicker") return "DatePicker";
+  if (id === "daterangepicker") return "DateRangePicker";
   if (id === "insightcard") return "InsightCard";
   if (id === "linechart") return "Line";
   if (id === "listview") return "ListView";
   if (id === "modalcard") return "ModalCard";
+  if (id === "multiselect") return "MultiSelect";
   if (id === "navigationmenu") return "NavigationMenu";
   if (id === "piechart") return "Pie";
   if (id === "progresssteps") return "ProgressSteps";
@@ -109,6 +121,7 @@ export function componentLabel(id: string): string {
   if (id === "colorpicker") return "ColorPicker";
   if (id === "linklist") return "LinkList";
   if (id === "loadinganimation") return "LoadingAnimation";
+  if (id === "numberinput") return "NumberInput";
   if (id === "numbertransition") return "NumberTransition";
   if (id === "shimmertext") return "ShimmerText";
   if (id === "thinkinganimation") return "ThinkingAnimation";
@@ -116,6 +129,7 @@ export function componentLabel(id: string): string {
   if (id === "toast") return "Toast";
   if (id === "treeview") return "TreeView";
   if (id === "usagelist") return "UsageList";
+  if (id === "taginput") return "TagInput";
   return id.charAt(0).toUpperCase() + id.slice(1);
 }
 
@@ -128,15 +142,21 @@ export const COMPONENT_GROUPS = [
       "buttongroup",
       "checkbox",
       "colorpicker",
+      "combobox",
+      "currencyinput",
       "datepicker",
+      "daterangepicker",
       "field",
       "fieldset",
       "fileupload",
       "filterbutton",
       "input",
       "inputotp",
+      "multiselect",
+      "numberinput",
       "radiogroup",
       "select",
+      "taginput",
       "slider",
       "switch",
       "textarea",
@@ -177,6 +197,7 @@ export const COMPONENT_GROUPS = [
   {
     label: "Navigation",
     ids: [
+      "anchornav",
       "appheader",
       "appnav",
       "breadcrumb",
