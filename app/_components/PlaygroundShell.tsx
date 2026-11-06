@@ -2,8 +2,12 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav, Button, Drawer } from "agentic-ds-kit";
-import { buildPlaygroundNavGroups } from "@/lib/playground-nav";
+import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
+import {
+  buildPlaygroundNavGroups,
+  filterPlaygroundNavGroups,
+  flattenPlaygroundNav,
+} from "@/lib/playground-nav";
 import { copyAiPrompt } from "@/lib/playground-prompt";
 import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
@@ -44,6 +48,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const route = `${pathname}#${hash}`;
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [navQuery, setNavQuery] = useState("");
   const navOpen = navOpenOn === route;
 
   useEffect(() => {
@@ -65,6 +70,9 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   }, [compact, navOpen]);
 
   const groups = buildPlaygroundNavGroups(pathname, hash);
+  const navQueryTrimmed = navQuery.trim();
+  const visibleGroups = filterPlaygroundNavGroups(groups, navQueryTrimmed);
+  const searching = navQueryTrimmed.length > 0;
   const isDark = theme === "dark";
   const overlayNav = compact && navOpen;
 
@@ -158,7 +166,30 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           className={`${styles.sidebar} ${overlayNav ? styles.sidebarOpen : ""}`}
           inert={compact && !navOpen ? true : undefined}
         >
-          <AppNav groups={groups} />
+          <div className={styles.sidebarSearch}>
+            <Input
+              id="docs-nav-filter"
+              type="search"
+              size="sm"
+              placeholder="Filter"
+              iconStart="Search"
+              ariaLabel="Filter navigation"
+              value={navQuery}
+              onChange={setNavQuery}
+            />
+          </div>
+          <div className={styles.sidebarScroll}>
+            {searching && visibleGroups.length === 0 ? (
+              <p className={styles.sidebarEmpty}>No matches</p>
+            ) : (
+              <AppNav
+                aria-label="Documentation"
+                {...(searching
+                  ? { items: flattenPlaygroundNav(visibleGroups) }
+                  : { groups: visibleGroups })}
+              />
+            )}
+          </div>
         </aside>
         {customize.docked ? (
           <aside id="customize-panel" className={styles.customize} aria-label="Customize">

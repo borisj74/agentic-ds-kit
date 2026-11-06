@@ -1,6 +1,7 @@
 import { Section } from "agentic-ds-kit";
 import playground from "../../playground.module.css";
 import { ButtonDoc } from "../ButtonDoc";
+import { DocPageExtras } from "../DocPageExtras";
 import { ButtonMatrix } from "../../_components/ButtonMatrix";
 import styles from "./button.module.css";
 
@@ -14,6 +15,7 @@ export default function ButtonComponentPage() {
             <ButtonMatrix />
           </Section>
         </div>
+        <DocPageExtras slug="button" />
       </div>
     </div>
   );

@@ -14,9 +14,9 @@ import { DocNotes } from "./DocNotes";
 const CODE = `<AppNav title="Agentic DS Kit" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />`;
 
 const FLAT_ITEMS = [
-  { href: "/patterns#list-detail", label: "Launch brief", active: true },
-  { href: "/patterns#qa-checklist", label: "QA checklist" },
-  { href: "/patterns#release-notes", label: "Release notes" },
+  { href: "/patterns/list-detail", label: "Launch brief", active: true },
+  { href: "/patterns/list-detail", label: "QA checklist" },
+  { href: "/patterns/list-detail", label: "Release notes" },
 ];
 
 const THEMED_STYLE = {
@@ -111,8 +111,8 @@ export function AppNavDoc() {
                 code={`<AppNav
   title="Sprint 24"
   items={[
-    { href: "/patterns#list-detail", label: "Launch brief", active: true },
-    { href: "/patterns#qa-checklist", label: "QA checklist" },
+    { href: "/patterns/list-detail", label: "Launch brief", active: true },
+    { href: "/patterns/list-detail", label: "QA checklist" },
   ]}
 />`}
               />

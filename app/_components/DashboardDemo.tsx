@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
 import type { SideNavItemData } from "agentic-ds-kit";
-import { pushHash, useLocationHash } from "@/lib/use-location-hash";
+import type { PatternSlug } from "@/lib/playground-nav";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
@@ -150,31 +151,51 @@ function selectedProjectId(page: string) {
   return page;
 }
 
-/** Page a pattern hash links to, or null for the dashboard (whose page lives in state). */
-function pageForHash(hash: string): string | null {
-  if (hash === "settings") return "settings";
-  if (hash === "empty" || hash === "research") return "research";
-  if (hash === "list-detail" || hash === "projects") return "projects";
-  if (LIST_DETAIL_HASHES.has(hash)) return hash;
-  return null;
-}
+type DashboardRoute = Extract<PatternSlug, "dashboard" | "settings" | "list-detail" | "empty">;
 
-export function DashboardDemo() {
-  // null until hydrated, so the server and the first client render agree on "overview".
-  const hash = useLocationHash();
-  const [dashboardPage, setDashboardPage] = useState("overview");
+export function DashboardDemo({
+  pattern,
+  view,
+}: {
+  pattern: DashboardRoute;
+  view?: string;
+}) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const hashPage = hash === null ? null : pageForHash(hash);
   const page =
-    hashPage ?? (hashForPage(dashboardPage) === "dashboard" ? dashboardPage : "overview");
+    pattern === "settings"
+      ? "settings"
+      : pattern === "empty"
+        ? "research"
+        : pattern === "list-detail"
+          ? "projects"
+          : view && hashForPage(view) === "dashboard"
+            ? view
+            : "overview";
 
-  const go = useCallback((id: string) => {
-    const next = hashForPage(id);
-    if (next === "dashboard") setDashboardPage(id);
-    if (window.location.hash.replace(/^#/, "") !== next) pushHash(next);
-  }, []);
+  const go = useCallback(
+    (id: string) => {
+      const next = hashForPage(id);
+      if (next === "dashboard") {
+        const href =
+          id === "overview" ? "/patterns/dashboard" : `/patterns/dashboard?view=${encodeURIComponent(id)}`;
+        router.push(href);
+        return;
+      }
+      if (next === "settings") {
+        router.push("/patterns/settings");
+        return;
+      }
+      if (next === "empty") {
+        router.push("/patterns/empty");
+        return;
+      }
+      router.push("/patterns/list-detail");
+    },
+    [router],
+  );
 
   const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
   const navFooter = useMemo(() => bindItems(NAV_FOOTER, page, go), [page, go]);
@@ -210,7 +231,6 @@ export function DashboardDemo() {
       </div>
       {/* Below 64rem the shell swaps the SideNav for a Menu Button and left Drawer, as a real app would. */}
       <AppShellPattern
-        className={hash === null ? styles.pending : undefined}
         navLabel="Agentix"
         header={{
           title: "Agentix",

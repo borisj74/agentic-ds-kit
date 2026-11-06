@@ -214,7 +214,7 @@ npm view agentic-ds-kit version
   import { SignInPattern } from "@/components/patterns/sign-in";
   ```
 
-- **Compose your own layout:** `AppHeader`, `SideNav`, and `Drawer` are kit components. Top bar only, side nav only, or both are all fine; keep content in `<main>` and the nav reachable on small screens (for example a Menu Button that opens `SideNav` in a left `Drawer`). The docs `/patterns#layouts` section shows three small compositions.
+- **Compose your own layout:** `AppHeader`, `SideNav`, and `Drawer` are kit components. Top bar only, side nav only, or both are all fine; keep content in `<main>` and the nav reachable on small screens (for example a Menu Button that opens `SideNav` in a left `Drawer`). The docs `/patterns/layouts` page shows three small compositions.
 
 If you copied `add app-header` / `add side-nav` before 0.4.0, re-run them with `--force`: ShellHeader and ShellNav no longer import the app shell. They work alone; to host them in your app-shell copy, pass `header={<ShellHeader menuButton={AppShellMenuButton} />}` and `nav={(placement) => <ShellNav placement={placement} />}` from a client component.
 

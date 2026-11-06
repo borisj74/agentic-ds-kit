@@ -1,9 +1,23 @@
 "use client";
 
 import { Children, type ReactNode } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { guidanceFor } from "@/lib/component-guidance";
+import { guidanceSegments } from "@/lib/guidance-links";
 import styles from "./ComponentDoc.module.css";
+
+function GuidanceText({ text }: { text: string }) {
+  return guidanceSegments(text).map((segment, index) =>
+    segment.href ? (
+      <Link key={`${segment.href}-${index}`} href={segment.href} className={styles.guideLink}>
+        {segment.text}
+      </Link>
+    ) : (
+      <span key={`${segment.text}-${index}`}>{segment.text}</span>
+    ),
+  );
+}
 
 function GuideIcon({ kind }: { kind: "do" | "dont" }) {
   const className = `${styles.guideIcon} ${kind === "do" ? styles.guideIconDo : styles.guideIconDont}`;
@@ -52,7 +66,9 @@ export function DocNotes({ children }: { children: ReactNode }) {
                   {guidance.dos.map((item) => (
                     <li key={item} className={styles.guideItem}>
                       <GuideIcon kind="do" />
-                      <span>{item}</span>
+                      <span>
+                        <GuidanceText text={item} />
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -65,7 +81,9 @@ export function DocNotes({ children }: { children: ReactNode }) {
                   {guidance.donts.map((item) => (
                     <li key={item} className={styles.guideItem}>
                       <GuideIcon kind="dont" />
-                      <span>{item}</span>
+                      <span>
+                        <GuidanceText text={item} />
+                      </span>
                     </li>
                   ))}
                 </ul>
