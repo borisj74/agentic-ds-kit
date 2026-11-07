@@ -32,18 +32,20 @@ const geistMono = Geist_Mono({
 });
 
 const description =
-  "Code is the contract. Vida is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
+  "Code is the contract. Nishtha is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
+
+const siteName = "Nishtha — Agentic DS Kit";
 
 export const metadata: Metadata = {
   title: {
-    default: "Vida — Agentic DS Kit",
-    template: "%s · Vida",
+    default: siteName,
+    template: "%s · Nishtha",
   },
   description,
-  applicationName: "Vida — Agentic DS Kit",
+  applicationName: siteName,
   openGraph: {
     type: "website",
-    siteName: "Vida — Agentic DS Kit",
+    siteName,
     description,
   },
   twitter: {

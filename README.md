@@ -1,6 +1,6 @@
-# Vida
+# Nishtha
 
-The Agentic DS Kit, named after my grandmother. Install: npm i agentic-ds-kit
+The Agentic DS Kit. Nishtha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
 A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and example screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
 
@@ -73,10 +73,9 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 
 ## Origin repository
 
-Clone from **GitHub**. Cursor Origin stays as a private mirror; people without Origin should not need it.
+GitHub is the public clone.
 
-- **GitHub (public):** `git clone git@github.com:borisj74/agentic-ds-kit.git`
-- **Cursor origin (private mirror):** `git clone https://origin.cursor.com/bojo74/agentic-ds-kit.git`
+- **GitHub:** `git clone git@github.com:borisj74/agentic-ds-kit.git`
 
 Install and Claude vs Cursor agent files are in [docs/getting-started.md](docs/getting-started.md).
 
