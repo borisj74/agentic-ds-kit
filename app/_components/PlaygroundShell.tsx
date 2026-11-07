@@ -113,7 +113,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           />
         </div>
         <div className={styles.brand}>
-          <span className={styles.productName}>Nishtha</span>
+          <span className={styles.productName}>Nistha</span>
           <span className={styles.tagline}>Agentic DS Kit</span>
         </div>
         <div className={styles.tools}>

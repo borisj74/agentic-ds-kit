@@ -32,14 +32,14 @@ const geistMono = Geist_Mono({
 });
 
 const description =
-  "Code is the contract. Nishtha is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
+  "Code is the contract. Nistha is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
 
-const siteName = "Nishtha — Agentic DS Kit";
+const siteName = "Nistha — Agentic DS Kit";
 
 export const metadata: Metadata = {
   title: {
     default: siteName,
-    template: "%s · Nishtha",
+    template: "%s · Nistha",
   },
   description,
   applicationName: siteName,

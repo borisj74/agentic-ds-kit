@@ -1,6 +1,6 @@
-# Nishtha
+# Nistha
 
-The Agentic DS Kit. Nishtha means steadfast, steady practice. Install: npm i agentic-ds-kit
+The Agentic DS Kit. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
 React components, JSON contracts, and tokens for agent-built UI. This is the **installable kit**, not the docs playground.
 

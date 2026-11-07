@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: {
     default: "Patterns",
-    template: "%s · Nishtha",
+    template: "%s · Nistha",
   },
 };
 

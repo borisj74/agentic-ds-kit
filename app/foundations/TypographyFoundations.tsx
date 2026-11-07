@@ -155,7 +155,7 @@ export function TypographyFoundations() {
                 <div key={step.name} className={styles.row}>
                   <CopyCode value={step.name} />
                   <p className={styles.specimen} style={{ fontSize: step.size }}>
-                    Nishtha
+                    Nistha
                   </p>
                 </div>
               ))}
@@ -172,7 +172,7 @@ export function TypographyFoundations() {
                 <div key={step.name} className={styles.row}>
                   <CopyCode value={step.label} />
                   <p className={styles.specimen} style={{ fontWeight: step.value }}>
-                    Nishtha
+                    Nistha
                   </p>
                 </div>
               ))}
