@@ -101,3 +101,5 @@ export * from "../ui/UsageList";
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";
 
+export { ICON_STROKE, ICON_STROKE_STRONG } from "../lib/icon";
+

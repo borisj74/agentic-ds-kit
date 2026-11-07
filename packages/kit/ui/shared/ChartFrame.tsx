@@ -1,6 +1,7 @@
 "use client";
 
 import { BarChart3, Table2 } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { useId, useState, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
 import { cx } from "./cx";
 import styles from "./ChartFrame.module.css";
@@ -75,7 +76,11 @@ export function ChartFrame({
                 aria-expanded={showTable}
                 aria-controls={panelId}
               >
-                {showTable ? <BarChart3 aria-hidden="true" size={14} /> : <Table2 aria-hidden="true" size={14} />}
+                {showTable ? (
+                  <BarChart3 aria-hidden="true" size={14} strokeWidth={ICON_STROKE} />
+                ) : (
+                  <Table2 aria-hidden="true" size={14} strokeWidth={ICON_STROKE} />
+                )}
                 <span>{showTable ? "Chart" : "Table"}</span>
               </button>
             </div>

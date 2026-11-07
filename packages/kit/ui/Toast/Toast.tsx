@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { useEffect, useId, useLayoutEffect, useRef, useState, type FocusEvent } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
@@ -113,7 +114,7 @@ function ToastCard({
       ) : null}
       <div className={styles.body}>
         <span className={styles.icon}>
-          <Icon aria-hidden="true" size={20} strokeWidth={2} />
+          <Icon aria-hidden="true" size={20} strokeWidth={ICON_STROKE} />
         </span>
         <div className={styles.content}>
           <p id={titleId} className={styles.title}>

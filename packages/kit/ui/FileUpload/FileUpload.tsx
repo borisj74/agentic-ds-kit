@@ -2,6 +2,7 @@
 
 import { useId, useRef, useState, type DragEvent } from "react";
 import { CircleAlert, CircleCheck, File as FileIcon, Upload } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { Progress } from "../Progress";
 import type { FileUploadItem, FileUploadProps } from "./FileUpload.types";
@@ -56,7 +57,7 @@ function FileRow({
   return (
     <li className={`${styles.row} ${file.status === "error" ? styles.rowError : ""}`}>
       <span className={styles.fileIcon} aria-hidden>
-        <FileIcon size={20} />
+        <FileIcon size={20} strokeWidth={ICON_STROKE} />
       </span>
       <div className={styles.body}>
         <div className={styles.meta}>
@@ -66,10 +67,10 @@ function FileRow({
           <span className={styles.detail}>
             {size ? <span>{size}</span> : null}
             {file.status === "done" ? (
-              <CircleCheck size={14} className={styles.done} aria-hidden />
+              <CircleCheck size={14} className={styles.done} strokeWidth={ICON_STROKE} aria-hidden />
             ) : null}
             {file.status === "error" ? (
-              <CircleAlert size={14} className={styles.failed} aria-hidden />
+              <CircleAlert size={14} className={styles.failed} strokeWidth={ICON_STROKE} aria-hidden />
             ) : null}
             <span
               className={file.status === "error" ? styles.errorText : undefined}
@@ -190,7 +191,7 @@ export function FileUpload({
         onDrop={onDrop}
       >
         <span className={styles.zoneIcon} aria-hidden>
-          <Upload size={20} />
+          <Upload size={20} strokeWidth={ICON_STROKE} />
         </span>
         <span className={styles.zoneText}>
           <span className={styles.zoneAction}>Click to upload</span> or drag and drop

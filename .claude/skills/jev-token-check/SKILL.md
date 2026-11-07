@@ -21,6 +21,7 @@ From repo root, list changed or target files, then flag lines matching roughly:
 - raw spacing like `padding: 13px` when a `var(--space-*)` exists
 - raw values in `grid-template-columns`, `gap`, or `max-width`: a `px`/`rem` length, or a hard-coded column count such as `repeat(12,`, when a `var(--grid-*)` exists (`--grid-columns`, `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`)
 - raw `px`/`rem` widths in `@media` queries (`min-width`, `max-width`, `width <`) instead of a `--grid-breakpoint-*` token
+- Lucide `strokeWidth` set to a number other than `ICON_STROKE` (1.5) or `ICON_STROKE_STRONG` (2). Do not flag chart, Progress, Meter, or PieChart strokes; those are data lines, not icons
 
 Do not flag `packages/kit/lib/layout.css` or `tokens.css`; those files define the classes and tokens. Media queries cannot read `var()`, so a raw width there is paired with a comment naming the token.
 
@@ -43,7 +44,7 @@ Call MCP tool `jev_triage` (Claude Code: `mcp__jev__jev_triage`, server in `.mcp
     {
       "id": "uses_only_tokens",
       "type": "check",
-      "question": "In this UI file, every color, type (font family/size/weight/line-height), spacing, and grid value is expressed via kit semantic CSS variables (e.g. var(--text-*), var(--surface-*), var(--type-*), var(--space-*), var(--grid-*)). There are no raw hex/rgb literals, no primitive --color-* ramps used as the styling API, and no raw px/rem in grid-template-columns, gap, max-width, or @media widths when a --grid-* token exists."
+      "question": "In this UI file, every color, type (font family/size/weight/line-height), spacing, and grid value is expressed via kit semantic CSS variables (e.g. var(--text-*), var(--surface-*), var(--type-*), var(--space-*), var(--grid-*)). There are no raw hex/rgb literals, no primitive --color-* ramps used as the styling API, and no raw px/rem in grid-template-columns, gap, max-width, or @media widths when a --grid-* token exists. Lucide icons use strokeWidth ICON_STROKE (1.5, var(--icon-stroke)) or ICON_STROKE_STRONG (2, var(--icon-stroke-strong)) for tiny marks. Chart, Progress, Meter, and PieChart strokes are data lines and are out of scope."
     },
     {
       "id": "token_correctness",

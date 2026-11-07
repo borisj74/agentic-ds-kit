@@ -2,6 +2,7 @@
 
 import { createElement, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { normalizeIconName } from "./iconName";
 
 type IconImports = Record<string, () => Promise<{ default: LucideIcon }>>;
@@ -79,5 +80,5 @@ export function LucideOnDemand({
       />
     );
   }
-  return createElement(icon, { size, strokeWidth: 2, "aria-hidden": true, className });
+  return createElement(icon, { size, strokeWidth: ICON_STROKE, "aria-hidden": true, className });
 }

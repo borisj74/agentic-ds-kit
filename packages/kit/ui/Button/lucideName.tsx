@@ -1,5 +1,6 @@
 import { createElement, isValidElement, type ComponentType, type ReactElement } from "react";
 import type { LucideIcon, LucideProps } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { normalizeIconName } from "./iconName";
 import { LucideOnDemand } from "./LucideOnDemand";
 import {
@@ -226,5 +227,5 @@ export function LucideByName({
   if (isValidElement(name)) return name;
   const Icon = typeof name === "string" ? CURATED.get(normalizeIconName(name)) : name;
   if (!Icon) return <LucideOnDemand name={name as string} size={size} className={className} />;
-  return createElement(Icon, { size, strokeWidth: 2, "aria-hidden": true, className });
+  return createElement(Icon, { size, strokeWidth: ICON_STROKE, "aria-hidden": true, className });
 }

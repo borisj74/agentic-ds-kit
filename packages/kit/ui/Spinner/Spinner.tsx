@@ -1,4 +1,5 @@
 import { Loader } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { SpinnerProps } from "./Spinner.types";
 import { cx } from "../shared/cx";
 import styles from "./Spinner.module.css";
@@ -15,7 +16,7 @@ export function Spinner({ size = "md", label, className, ref, ...rest }: Spinner
       aria-live="polite"
       aria-label={label ? undefined : "Loading"}
     >
-      <Loader className={styles.icon} strokeWidth={2} aria-hidden />
+      <Loader className={styles.icon} strokeWidth={ICON_STROKE} aria-hidden />
       {label ? <span className={styles.label}>{label}</span> : null}
     </span>
   );

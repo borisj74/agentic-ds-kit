@@ -324,3 +324,16 @@
 .layout-container-xl {
   width: min(100% - (var(--layout-margin-lg) * 2), var(--layout-container-xl));
 }
+
+/* Lucide icons. Presentation attributes lose to this, so consumers match the token.
+   .kit-icon-strong wins for tiny marks (Checkbox). Chart, Progress, Meter, and
+   PieChart strokes are data lines and are not .lucide icons. */
+.kit-icon,
+svg.lucide {
+  stroke-width: var(--icon-stroke);
+}
+
+.kit-icon-strong,
+svg.lucide.kit-icon-strong {
+  stroke-width: var(--icon-stroke-strong);
+}

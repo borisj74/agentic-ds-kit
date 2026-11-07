@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Check } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Tag } from "../Tag";
 import { cx } from "../shared/cx";
@@ -185,7 +186,7 @@ export function MultiSelect({
                   }}
                 >
                   <span className={styles.check} aria-hidden>
-                    {isSelected ? <Check size={14} /> : null}
+                    {isSelected ? <Check size={14} strokeWidth={ICON_STROKE} /> : null}
                   </span>
                   {option.label}
                 </li>

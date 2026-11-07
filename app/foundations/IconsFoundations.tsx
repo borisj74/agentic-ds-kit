@@ -81,8 +81,9 @@ import {
   ChartLine,
   Rocket,
 } from "lucide-react";
-import { Button, type KitIcon } from "agentic-ds-kit";
+import { Button, ICON_STROKE, ICON_STROKE_STRONG, type KitIcon } from "agentic-ds-kit";
 import colorStyles from "./ColorFoundations.module.css";
+import { CopyToken } from "./CopyToken";
 import styles from "./IconsFoundations.module.css";
 
 const ICONS = [
@@ -228,7 +229,7 @@ export function IconsFoundations() {
           <div className={styles.grid}>
             {ICONS.map(({ name, Icon }) => (
               <div key={name} className={styles.card}>
-                <Icon aria-hidden="true" />
+                <Icon aria-hidden="true" strokeWidth={ICON_STROKE} />
                 <CopyCode value={name} />
               </div>
             ))}
@@ -285,9 +286,37 @@ export function IconsFoundations() {
 
         <section className={styles.scale}>
           <div className={colorStyles.hueHeader}>
+            <h3 className={colorStyles.hueTitle}>Stroke</h3>
+            <code className={colorStyles.huePattern}>--icon-stroke</code>
+          </div>
+          <p className={styles.note}>
+            Lucide icons use stroke width 1.5. Don&apos;t set another stroke width. The kit sets{" "}
+            <code>strokeWidth</code> from <code>ICON_STROKE</code>, and <code>svg.lucide</code> uses the
+            same token so icons you pass in match.
+          </p>
+          <div className={styles.demos}>
+            <div className={styles.demo}>
+              <Search aria-hidden="true" strokeWidth={ICON_STROKE} />
+              <CopyToken value="--icon-stroke" />
+              <span className={styles.demoNote}>1.5. Every interface icon.</span>
+            </div>
+            <div className={styles.demo}>
+              <Check aria-hidden="true" className="kit-icon-strong" size={24} strokeWidth={ICON_STROKE_STRONG} />
+              <CopyToken value="--icon-stroke-strong" />
+              <span className={styles.demoNote}>2. Tiny marks, such as the Checkbox check at 12px.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.scale}>
+          <div className={colorStyles.hueHeader}>
             <h3 className={colorStyles.hueTitle}>Rules</h3>
           </div>
           <ul className={styles.rules}>
+            <li>
+              Lucide icons use stroke width 1.5 (<code>--icon-stroke</code>). Don&apos;t set other stroke
+              widths on icons. Tiny marks such as the Checkbox check use <code>--icon-stroke-strong</code> (2).
+            </li>
             <li>
               Use semantic colors such as <code>--icon-default</code> and <code>--icon-muted</code>.
               Status color goes on the icon only when the meaning is real.

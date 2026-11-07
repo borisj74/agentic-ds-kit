@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { cx } from "../shared/cx";
 import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import type { AnchorNavItem, AnchorNavProps } from "./AnchorNav.types";
@@ -108,7 +109,7 @@ function AnchorLinks({
               }}
             >
               <span className={styles.caret} aria-hidden>
-                {current ? <ChevronRight size={16} /> : null}
+                {current ? <ChevronRight size={16} strokeWidth={ICON_STROKE} /> : null}
               </span>
               {item.label}
             </a>
@@ -201,7 +202,7 @@ function AnchorMenu({
         onClick={() => setOpen((was) => !was)}
       >
         <span className={styles.menuLabel}>{current?.label ?? menuLabel}</span>
-        <ChevronDown size={16} aria-hidden />
+        <ChevronDown size={16} strokeWidth={ICON_STROKE} aria-hidden />
       </button>
       {open ? (
         <nav id={listId} className={styles.menu} aria-label={ariaLabel} onKeyDown={onListKeyDown}>

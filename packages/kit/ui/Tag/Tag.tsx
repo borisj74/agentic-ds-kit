@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import { X } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Avatar } from "../Avatar";
 import { Checkbox } from "../Checkbox";
 import { Count } from "../Count";
@@ -91,7 +92,7 @@ export function Tag({
             onRemove?.(event);
           }}
         >
-          <X size={iconPx} color="currentColor" aria-hidden />
+          <X size={iconPx} strokeWidth={ICON_STROKE} color="currentColor" aria-hidden />
         </button>
       ) : null}
     </span>

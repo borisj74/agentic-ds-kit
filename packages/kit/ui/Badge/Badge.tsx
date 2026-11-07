@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { BadgeProps, BadgeTone } from "./Badge.types";
 import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
@@ -54,7 +55,7 @@ export function Badge({
             onRemove?.();
           }}
         >
-          <X size={iconPx} color="currentColor" aria-hidden />
+          <X size={iconPx} strokeWidth={ICON_STROKE} color="currentColor" aria-hidden />
         </button>
       ) : null}
     </span>

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Minus } from "lucide-react";
+import { ICON_STROKE_STRONG } from "../../lib/icon";
 import type { CheckboxProps } from "./Checkbox.types";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
@@ -68,9 +69,9 @@ export function Checkbox({
       />
       <span className={styles.box} aria-hidden>
         {indeterminate ? (
-          <Minus className={styles.icon} size={iconPx} strokeWidth={2.5} color="currentColor" />
+          <Minus className={`${styles.icon} kit-icon-strong`} size={iconPx} strokeWidth={ICON_STROKE_STRONG} color="currentColor" />
         ) : isChecked ? (
-          <Check className={styles.icon} size={iconPx} strokeWidth={2.5} color="currentColor" />
+          <Check className={`${styles.icon} kit-icon-strong`} size={iconPx} strokeWidth={ICON_STROKE_STRONG} color="currentColor" />
         ) : null}
       </span>
       {label ? <span className={styles.text}>{label}</span> : null}

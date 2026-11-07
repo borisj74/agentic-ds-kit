@@ -198,9 +198,9 @@
           "doNot": "Do not let Section own page padding"
         },
         "--icon-": {
-          "note": "Icon color roles.",
+          "note": "Icon color roles and stroke width.",
           "useWhen": "Lucide icons in kit components",
-          "doNot": "Do not hand-roll SVG cousins"
+          "doNot": "Do not hand-roll SVG cousins or set a stroke width other than these tokens"
         },
         "--status-": {
           "note": "Legacy status aliases of danger/caution/success/info.",
@@ -239,6 +239,16 @@
         }
       },
       "tokens": {
+        "--icon-stroke": {
+          "note": "Standard Lucide stroke width, 1.5.",
+          "useWhen": "Every interface icon",
+          "doNot": "Do not set another stroke width on icons"
+        },
+        "--icon-stroke-strong": {
+          "note": "Heavier stroke, 2, where 1.5 looks too thin.",
+          "useWhen": "Tiny marks such as the Checkbox check and minus at 12px or smaller",
+          "doNot": "Do not use on regular icons, or on chart, Progress, Meter, or PieChart strokes"
+        },
         "--bg-canvas": {
           "note": "Page canvas behind surfaces.",
           "useWhen": "App and playground background",

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { filterOptions, firstEnabled, lastEnabled, nextEnabled } from "../shared/options";
@@ -170,7 +171,7 @@ export function Combobox({
           onMouseDown={(event) => event.preventDefault()}
           onClick={() => setOpen((was) => !was)}
         >
-          <ChevronsUpDown size={size === "sm" ? 14 : 16} aria-hidden />
+          <ChevronsUpDown size={size === "sm" ? 14 : 16} strokeWidth={ICON_STROKE} aria-hidden />
         </button>
       </div>
       {open ? (
@@ -201,7 +202,7 @@ export function Combobox({
                   }}
                 >
                   <span className={styles.check} aria-hidden>
-                    {isSelected ? <Check size={14} /> : null}
+                    {isSelected ? <Check size={14} strokeWidth={ICON_STROKE} /> : null}
                   </span>
                   {option.label}
                 </li>

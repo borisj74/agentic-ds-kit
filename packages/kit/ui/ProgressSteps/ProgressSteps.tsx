@@ -1,4 +1,5 @@
 import { Check, X } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { ProgressStepsItem, ProgressStepsProps, ProgressStepsStatus } from "./ProgressSteps.types";
 import { cx } from "../shared/cx";
 import styles from "./ProgressSteps.module.css";
@@ -70,9 +71,9 @@ export function ProgressSteps({
           const marker = (
             <span className={styles.marker}>
               {status === "complete" ? (
-                <Check size={iconPx} strokeWidth={2.5} color="currentColor" aria-hidden />
+                <Check size={iconPx} strokeWidth={ICON_STROKE} color="currentColor" aria-hidden />
               ) : status === "error" ? (
-                <X size={iconPx} strokeWidth={2.5} color="currentColor" aria-hidden />
+                <X size={iconPx} strokeWidth={ICON_STROKE} color="currentColor" aria-hidden />
               ) : (
                 <span className={styles.number}>{index + 1}</span>
               )}

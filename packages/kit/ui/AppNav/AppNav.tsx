@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { AppNavGroup, AppNavItem, AppNavLeaf, AppNavProps } from "./AppNav.types";
 import { cx } from "../shared/cx";
 import styles from "./AppNav.module.css";
@@ -82,7 +83,7 @@ function Subgroup({ item }: { item: AppNavItem }) {
         <ChevronRight
           className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
           size={14}
-          strokeWidth={2}
+          strokeWidth={ICON_STROKE}
           aria-hidden
         />
       </button>
@@ -135,7 +136,7 @@ function NavGroup({
         onClick={onToggle}
       >
         <span className={styles.groupLabel}>{group.label}</span>
-        <ChevronRight className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`} size={14} strokeWidth={2} aria-hidden />
+        <ChevronRight className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`} size={14} strokeWidth={ICON_STROKE} aria-hidden />
       </button>
       <div className={styles.accordion} id={groupId} aria-hidden={!open} inert={open ? undefined : true}>
         <div className={styles.accordionInner}>

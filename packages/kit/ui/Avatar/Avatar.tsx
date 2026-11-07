@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { User } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { AvatarProps } from "./Avatar.types";
 import { cx } from "../shared/cx";
 import styles from "./Avatar.module.css";
@@ -65,7 +66,7 @@ export function Avatar({ name, src, initials, size = "md", className, ref, ...re
       role="img"
       aria-label={name}
     >
-      {label ? label : <User className={styles.icon} aria-hidden />}
+      {label ? label : <User className={styles.icon} strokeWidth={ICON_STROKE} aria-hidden />}
     </span>
   );
 }

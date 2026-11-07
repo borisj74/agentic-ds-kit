@@ -329,6 +329,15 @@ function typeLadderVars() {
   return lines;
 }
 
+function iconStrokeVars() {
+  const stroke = tokens.semantic.iconStroke ?? {};
+  return [
+    "  /* Lucide icons. Data strokes (charts, Progress, Meter) stay their own widths. */",
+    `  --icon-stroke: ${stroke.default};`,
+    `  --icon-stroke-strong: ${stroke.strong};`,
+  ];
+}
+
 function aliasVars() {
   const aliases = tokens.semantic.aliases ?? {};
   return Object.entries(aliases).map(([name, value]) => `  --${kebab(name)}: ${value};`);
@@ -382,6 +391,8 @@ function staticVars() {
     `  --z-tooltip: 60;`,
     "",
     ...gridVars(),
+    "",
+    ...iconStrokeVars(),
   ];
 }
 

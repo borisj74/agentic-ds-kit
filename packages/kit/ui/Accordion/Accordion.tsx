@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { AccordionProps } from "./Accordion.types";
 import { cx } from "../shared/cx";
 import styles from "./Accordion.module.css";
@@ -31,7 +32,7 @@ export function Accordion({ items, defaultOpen, className, ref, ...rest }: Accor
               <ChevronDown
                 className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
                 size={16}
-                strokeWidth={2}
+                strokeWidth={ICON_STROKE}
                 aria-hidden
               />
             </button>

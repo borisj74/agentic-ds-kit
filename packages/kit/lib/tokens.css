@@ -505,6 +505,10 @@
   --layout-split-secondary: 4;
   --layout-split-half: 6;
   --layout-split-third: 4;
+
+  /* Lucide icons. Data strokes (charts, Progress, Meter) stay their own widths. */
+  --icon-stroke: 1.5;
+  --icon-stroke-strong: 2;
 }
 
 [data-theme="dark"] {

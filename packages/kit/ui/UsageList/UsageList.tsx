@@ -1,4 +1,5 @@
 import { CircleAlert, TriangleAlert } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Progress } from "../Progress";
 import type { UsageListItem, UsageListProps } from "./UsageList.types";
 import { cx } from "../shared/cx";
@@ -74,7 +75,7 @@ export function UsageList({ items, label = "Usage", className, ref, ...rest }: U
                   <Icon
                     className={level === "danger" ? styles.iconDanger : styles.iconWarning}
                     size={16}
-                    strokeWidth={2}
+                    strokeWidth={ICON_STROKE}
                     aria-hidden
                   />
                 ) : null}

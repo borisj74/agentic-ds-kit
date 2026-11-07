@@ -1,4 +1,5 @@
 import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { AlertProps, AlertVariant } from "./Alert.types";
 import { cx } from "../shared/cx";
 import styles from "./Alert.module.css";
@@ -18,7 +19,7 @@ export function Alert({ children, variant = "info", title, className, ref, ...re
 
   return (
     <div {...rest} ref={ref} className={cx(styles.alert, styles[variant], className)} role={role}>
-      <Icon className={styles.icon} size={18} strokeWidth={2} aria-hidden />
+      <Icon className={styles.icon} size={18} strokeWidth={ICON_STROKE} aria-hidden />
       <div className={styles.copy}>
         {title ? <p className={styles.title}>{title}</p> : null}
         <p className={styles.body}>{children}</p>

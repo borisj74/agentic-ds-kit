@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { ChevronsUpDown } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { CollapsibleProps } from "./Collapsible.types";
 import { cx } from "../shared/cx";
 import styles from "./Collapsible.module.css";
@@ -46,7 +47,7 @@ export function Collapsible({
           aria-label={`Toggle ${trigger}`}
           onClick={() => setOpen(!open)}
         >
-          <ChevronsUpDown size={16} strokeWidth={2} aria-hidden />
+          <ChevronsUpDown size={16} strokeWidth={ICON_STROKE} aria-hidden />
         </button>
       </div>
       <div
