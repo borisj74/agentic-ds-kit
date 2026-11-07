@@ -1,6 +1,6 @@
 ---
 name: jev-token-check
-description: Use when checking agentic-ds-kit components or a PR for proper color, type, and spacing tokens — run a deterministic scan then jev_triage.
+description: Use when checking agentic-ds-kit components or a PR for proper color, type, spacing, and grid tokens — run a deterministic scan then jev_triage.
 ---
 
 # Jev token check
@@ -19,6 +19,10 @@ From repo root, list changed or target files, then flag lines matching roughly:
 - `--color-neutral-`, `--color-blue-`, `--color-red-`, other primitive ramps in UI files (not in `lib/tokens.css`)
 - `font-size:` / `fontFamily` / `font-weight:` without `var(--type-` or `var(--font-`
 - raw spacing like `padding: 13px` when a `var(--space-*)` exists
+- raw values in `grid-template-columns`, `gap`, or `max-width`: a `px`/`rem` length, or a hard-coded column count such as `repeat(12,`, when a `var(--grid-*)` exists (`--grid-columns`, `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`)
+- raw `px`/`rem` widths in `@media` queries (`min-width`, `max-width`, `width <`) instead of a `--grid-breakpoint-*` token
+
+Do not flag `packages/kit/lib/layout.css` or `tokens.css`; those files define the classes and tokens. Media queries cannot read `var()`, so a raw width there is paired with a comment naming the token.
 
 Keep the suspect list short. If clean, skip Jev and report pass.
 
@@ -39,12 +43,12 @@ Call MCP tool `jev_triage` with one item per file (`path` relative to kit roots)
     {
       "id": "uses_only_tokens",
       "type": "check",
-      "question": "In this UI file, every color, type (font family/size/weight/line-height), and spacing value is expressed via kit semantic CSS variables (e.g. var(--text-*), var(--surface-*), var(--type-*), var(--space-*)). There are no raw hex/rgb literals and no primitive --color-* ramps used as the styling API."
+      "question": "In this UI file, every color, type (font family/size/weight/line-height), spacing, and grid value is expressed via kit semantic CSS variables (e.g. var(--text-*), var(--surface-*), var(--type-*), var(--space-*), var(--grid-*)). There are no raw hex/rgb literals, no primitive --color-* ramps used as the styling API, and no raw px/rem in grid-template-columns, gap, max-width, or @media widths when a --grid-* token exists."
     },
     {
       "id": "token_correctness",
       "type": "classify",
-      "question": "If tokens are used, are they the right semantic tokens for the role (text vs surface vs border vs action; body vs heading type; inset/stack/gap space)?",
+      "question": "If tokens are used, are they the right semantic tokens for the role (text vs surface vs border vs action; body vs heading type; inset/stack/gap space; grid columns, gutter, margin, width, breakpoint)?",
       "options": {
         "correct": "Semantic tokens match the role",
         "wrong_semantic": "Uses a token but the wrong one for the role",

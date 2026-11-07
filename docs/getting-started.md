@@ -156,7 +156,7 @@ cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .cursor/skills
 cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills/prototype-from-kit/
 ```
 
-Cursor also needs a short always-on rule. Add `.cursor/rules/kit.mdc` with the same six lines as `AGENTS.md` (or copy `AGENTS.md` contents into that file). Claude Code already loads `CLAUDE.md`, which is `@AGENTS.md`.
+Cursor also needs a short always-on rule. Add `.cursor/rules/kit.mdc` with the same rules as `AGENTS.md`, including the Page layout section (or copy `AGENTS.md` contents into that file). Claude Code already loads `CLAUDE.md`, which is `@AGENTS.md`.
 
 Confirm Claude: `/context` should list `AGENTS.md` / `CLAUDE.md`. The skill should show as `/prototype-from-kit`.
 
@@ -298,6 +298,26 @@ For another hue, reassign brand, action, and focus roles to primitive ramps afte
 
 Do not put hex in components. If a semantic role is missing from the kit, stop and ask — do not add a one-off. The playground page is `/theming`. Foundations is the visual scale.
 
+## Grid
+
+Build a page with the layout classes in [`packages/kit/lib/layout.css`](../packages/kit/lib/layout.css) (published as `agentic-ds-kit/layout.css`): `layout-shell`, `layout-app`, `layout-canvas`, `layout-header`, `layout-content`, `layout-workspace`, `layout-split` (`--primary`, `--secondary`, `--thirds`, `--quarters`) and `layout-metrics`.
+
+Column count, gutters, page margins, container widths and breakpoints are tokens in [`packages/kit/lib/tokens.css`](../packages/kit/lib/tokens.css) (published as `agentic-ds-kit/tokens.css`): `--grid-columns` (12), `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`, `--grid-breakpoint-*`.
+
+A custom 12-column grid uses those tokens:
+
+```css
+.custom-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  gap: var(--grid-gutter-md);
+  max-width: var(--grid-width-lg);
+  padding-inline: var(--grid-margin-md);
+}
+```
+
+If those classes and tokens cannot express the page, stop and propose a new layout class or token.
+
 ## Run the playground
 
 Clone the catalog if you want to click every component and pattern. This is not required to use the npm package.
@@ -363,6 +383,7 @@ The rule is short on purpose:
 5. If a component is missing from the index, stop and ask — do not add a one-off.
 6. Semantic tokens only. No hex in components. No primitive `--color-*` ramps in component CSS.
 7. One `appearance="solid"` `mode="primary"` Button per view.
+8. Page layout uses the kit's layout classes and `--grid-*` tokens. See [Grid](#grid).
 
 **Eval prompts** (also in the README) are the smoke test that a coworker’s agent is actually using the kit.
 

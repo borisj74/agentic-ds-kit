@@ -9,4 +9,11 @@ Never put hex in components; use semantic tokens from `agentic-ds-kit/tokens.css
 One `appearance="solid"` `mode="primary"` Button per view.
 To let a model pick which kit view to render, generate the option list with `npx agentic-ds-kit questions` (https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md); do not hand-write one.
 
+## Page layout
+
+Build pages with the kit's layout classes: `layout-shell`, `layout-app`, `layout-canvas`, `layout-header`, `layout-content`, `layout-workspace`, `layout-split` (`--primary`, `--secondary`, `--thirds`, `--quarters`) and `layout-metrics`.
+For any custom grid, use the `--grid-*` tokens: `--grid-columns` (12), `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`, `--grid-breakpoint-*`.
+Don't hard-code column counts, max-widths, gutters or breakpoint values; no raw px/rem in `grid-template-columns`, `gap` or `max-width` when a token exists.
+If a layout can't be done with these, stop and propose a new layout class or token instead of a one-off.
+
 Copy this file to your app root as `AGENTS.md` (and `CLAUDE.md` with `@AGENTS.md`) so Cursor and Claude Code load it.
