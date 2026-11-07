@@ -41,6 +41,31 @@ Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Copy `AGEN
 
 If your app lets a decision model or LLM pick which kit view to render, `npx agentic-ds-kit questions` builds the option list (labels, descriptions, enum props) from the contracts. No network, no model calls: [docs/questions.md](https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md).
 
+## MCP
+
+`npx agentic-ds-kit mcp` starts a read-only stdio server. Agents can list components, read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
+
+Cursor, `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "agentic-ds-kit": {
+      "command": "npx",
+      "args": ["-y", "agentic-ds-kit", "mcp"]
+    }
+  }
+}
+```
+
+Claude Code, from the app root:
+
+```bash
+claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
+```
+
+Setup and the tool list: [docs/getting-started.md](https://github.com/borisj74/agentic-ds-kit/blob/main/docs/getting-started.md#mcp).
+
 ## Tokens
 
 `lib/tokens.css` is generated from `tokens/tokens.json`:

@@ -5,6 +5,7 @@
  * time). No dependencies.
  *
  * agentic-ds-kit questions: contracts → neutral option list (see ./questions.mjs).
+ * agentic-ds-kit mcp: read-only stdio MCP server (see ./mcp.mjs).
  */
 import { existsSync } from "node:fs";
 import { copyFile, mkdir, readFile } from "node:fs/promises";
@@ -39,7 +40,9 @@ Examples:
 
 Other commands:
   questions      Build a closed option list from the contracts for a decision
-                 model or LLM. Run: npx agentic-ds-kit questions --help`;
+                 model or LLM. Run: npx agentic-ds-kit questions --help
+  mcp            Start a read-only stdio MCP server for this install.
+                 Run: npx agentic-ds-kit mcp`;
 
 function fail(message) {
   console.error(`agentic-ds-kit: ${message}`);
@@ -84,6 +87,10 @@ function printList(manifest) {
 }
 
 if (process.argv[2] === "questions") process.exit(runQuestions(process.argv.slice(3)));
+if (process.argv[2] === "mcp") {
+  const { runMcp } = await import("./mcp.mjs");
+  process.exit(await runMcp(process.argv.slice(3)));
+}
 
 let parsed;
 try {

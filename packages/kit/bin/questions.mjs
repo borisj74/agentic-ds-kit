@@ -81,7 +81,7 @@ const byText = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const byLabel = (a, b) => byText(a.label.toLowerCase(), b.label.toLowerCase()) || byText(a.label, b.label);
 
 /** The component name as written in code: the PascalCase tag in the snippet that spells the id. */
-function labelFor(entry, contract) {
+export function labelFor(entry, contract) {
   const bare = entry.id.replace(/-/g, "");
   for (const [, name] of (contract.snippet ?? "").matchAll(/\b([A-Z][A-Za-z0-9]*)\b/g)) {
     if (name.toLowerCase() === bare) return name;

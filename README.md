@@ -57,6 +57,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 ### Playground routes
 - `/` — Redirects to `/patterns/dashboard`
 - `/installation` — Install the package
+- `/mcp` — MCP server for agents
 - `/theming` — Semantic tokens, dark mode, brand color, fonts
 - `/studio` — Live font, weight, primary, radius, shadow, and theme
 - `/foundations` — Token scales
@@ -70,6 +71,43 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 - `.cursor/rules/kit.mdc` — same rules for Cursor
 - `.cursor/skills/prototype-from-kit/` and `.claude/skills/prototype-from-kit/` — compose-from-kit skill
 - `packages/kit/AGENTS.md` — copy this into consumer apps
+
+## MCP
+
+`npx agentic-ds-kit mcp` starts a read-only stdio server. It answers from the installed package (contracts, tokens, patterns, `AGENTS.md`, and the `questions` output), so the answers match the version you installed. Run it from the app root. Cursor and Claude Code both start `npx -y agentic-ds-kit mcp`.
+
+### Cursor
+
+`.cursor/mcp.json` in the app:
+
+```json
+{
+  "mcpServers": {
+    "agentic-ds-kit": {
+      "command": "npx",
+      "args": ["-y", "agentic-ds-kit", "mcp"]
+    }
+  }
+}
+```
+
+### Claude Code
+
+```bash
+claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
+```
+
+| Tool | What it returns |
+| --- | --- |
+| `list_components` | Name, category, one-line purpose |
+| `get_component` | Props, variants, must/doNot, tokens, import, usage example |
+| `search_components` | Match by name, purpose, or contract keywords |
+| `get_tokens` | Semantic color, type, space, radius, and grid, with value and usage notes |
+| `list_patterns` / `get_pattern` | Description and `npx agentic-ds-kit add <id>` |
+| `get_rules` | `AGENTS.md`, including the page-layout grid rule |
+| `questions` | The same JSON as `npx agentic-ds-kit questions` |
+
+Step-by-step: [docs/getting-started.md](docs/getting-started.md#mcp). The playground page is `/mcp`.
 
 ## Origin repository
 

@@ -1,7 +1,7 @@
 {
   "name": "agentic-ds-kit",
-  "version": "0.12.0",
-  "description": "Code-only agentic design system: contracts, tokens, and React components.",
+  "version": "0.13.0",
+  "description": "Code-only agentic design system: contracts, tokens, React components, and a local MCP server.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     "build": "npm run generate:tokens && vite build && npm run build:patterns-src",
     "version": "node ../../scripts/sync-kit-version-docs.mjs",
     "prepublishOnly": "npm run build",
-    "test": "node --test test/questions.test.mjs"
+    "test": "node --test test/questions.test.mjs test/mcp.test.mjs"
   },
   "peerDependencies": {
     "next": ">=14",
@@ -70,8 +70,10 @@
     }
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "embla-carousel-react": "^8.6.0",
-    "lucide-react": "^1.37.0"
+    "lucide-react": "^1.37.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^20",
