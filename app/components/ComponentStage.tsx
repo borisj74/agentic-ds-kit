@@ -103,10 +103,10 @@ export function ComponentStage({ id, variants }: { id: string; variants?: ReactN
 
   return (
     <section className={styles.stageWrap} aria-label="Preview">
-      {/* Same tab bar as the rest of the site: kit Tabs, line, md. */}
+      {/* Same tab bar as the rest of the site: kit Tabs, segmented, sm. */}
       <Tabs
-        variant="line"
-        size="md"
+        variant="segmented"
+        size="sm"
         ariaLabel="Preview, variants, code or contract"
         value={tab}
         onChange={(value) => setTab(value as StageTab)}

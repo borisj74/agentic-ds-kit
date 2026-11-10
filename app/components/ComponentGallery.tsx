@@ -139,7 +139,8 @@ export function ComponentGallery() {
         ) : null}
       </div>
       <Tabs
-        variant="line"
+        variant="segmented"
+        size="sm"
         value={filter}
         onChange={choose}
         ariaLabel="Component groups"

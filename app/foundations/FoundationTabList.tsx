@@ -17,8 +17,8 @@ export function FoundationTabList({
   return (
     <div className={styles.tabList}>
       <Tabs
-        size="md"
-        variant="line"
+        size="sm"
+        variant="segmented"
         value={value}
         onChange={(id) => onChange(id as FoundationTab)}
         ariaLabel={ariaLabel}
