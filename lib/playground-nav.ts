@@ -20,6 +20,7 @@ export const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
+  "billingschedule",
   "breadcrumb",
   "button",
   "buttongroup",
@@ -66,6 +67,8 @@ export const COMPONENT_ITEMS = [
   "inputotp",
   "insightcard",
   "integrationpicker",
+  "integrationsettings",
+  "invoicedocument",
   "kbd",
   "linklist",
   "listview",
@@ -107,6 +110,7 @@ export const COMPONENT_ITEMS = [
   "tabs",
   "tag",
   "taginput",
+  "taskboard",
   "textarea",
   "timepicker",
   "tilegroup",
@@ -152,6 +156,10 @@ export function componentLabel(id: string): string {
   if (id === "commentspanel") return "CommentsPanel";
   if (id === "integrationpicker") return "IntegrationPicker";
   if (id === "pricingplans") return "PricingPlans";
+  if (id === "billingschedule") return "BillingSchedule";
+  if (id === "invoicedocument") return "InvoiceDocument";
+  if (id === "integrationsettings") return "IntegrationSettings";
+  if (id === "taskboard") return "TaskBoard";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -217,7 +225,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "SaaS",
-    ids: ["changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "notificationstack", "pricingplans", "setupguide"],
+    ids: ["billingschedule", "changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "integrationsettings", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
   },
   {
     label: "Forms",

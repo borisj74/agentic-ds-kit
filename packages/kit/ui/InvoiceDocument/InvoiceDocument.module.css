@@ -1,0 +1,202 @@
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-5);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+  color: var(--text-fg);
+}
+
+/* Void: the lines and totals read as inactive and the total is struck through; the badge and footnote say why. */
+.voided .table,
+.voided .totals {
+  opacity: var(--opacity-muted);
+}
+
+.voided .grand dd {
+  text-decoration: line-through;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-size-ui-lg);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-lg);
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.from {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-12);
+  margin: 0;
+  padding: var(--space-4);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metaItem dt {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-overline);
+  line-height: var(--type-line-ui-xs);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
+  color: var(--text-fg-subtle);
+}
+
+.metaItem dd {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.table {
+  width: 100%;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--text-fg-subtle);
+}
+
+.strong {
+  font-weight: var(--type-weight-label);
+}
+
+.totals {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  gap: var(--space-2);
+  width: min(100%, calc(var(--space-16) * 4));
+  margin: 0;
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.totalRow dt {
+  color: var(--text-fg-muted);
+}
+
+.totalRow dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.grand dt {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-fg);
+}
+
+.grand dd {
+  font-size: var(--type-size-heading-5);
+  line-height: var(--type-line-heading-5);
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+}
+
+.footSuccess {
+  color: var(--status-success-text);
+}
+
+.footDanger {
+  color: var(--status-danger-text);
+}
+
+.footInfo {
+  color: var(--status-info-text);
+}
+
+.footMuted {
+  color: var(--text-fg-muted);
+}
+
+.errorHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.errorTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+}
+
+.loadingHead {
+  display: flex;
+  justify-content: space-between;
+}

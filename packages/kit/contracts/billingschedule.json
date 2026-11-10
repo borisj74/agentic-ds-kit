@@ -1,0 +1,134 @@
+{
+  "id": "billingschedule",
+  "status": "stable",
+  "intent": "Upcoming and past charges on a subscription, in order, with the status as a word. A next-charge summary (amount, date, card, Change card) and a banner with Update card when a payment failed. Composes kit Table, Badge, Button and Empty.",
+  "useWhen": [
+    "show a subscription's upcoming and past charges in billing settings",
+    "show only the next charge in a summary",
+    "flag a failed payment and ask for a new card"
+  ],
+  "doNotUseWhen": [
+    "one invoice with line items — InvoiceDocument",
+    "a general data table with sorting — DataTable",
+    "usage against a limit — UsageMeter"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "skeleton",
+    "table"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, date, label, amount, status: 'upcoming'|'invoiced'|'paid'|'failed'|'waived', note? }[]; date and amount pre-formatted."
+    },
+    "title": {
+      "type": "string",
+      "default": "Billing schedule"
+    },
+    "label": {
+      "type": "string",
+      "required": false
+    },
+    "nextId": {
+      "type": "string",
+      "required": false,
+      "note": "Tagged \"Next charge\" in the table."
+    },
+    "nextOnly": {
+      "type": "boolean",
+      "default": false,
+      "note": "Show the next-charge summary only."
+    },
+    "paymentMethod": {
+      "type": "string",
+      "required": false
+    },
+    "onChangeCard": {
+      "type": "function",
+      "required": false
+    },
+    "onUpdateCard": {
+      "type": "function",
+      "required": false,
+      "note": "Failed-payment banner action, the one solid primary."
+    },
+    "retryOn": {
+      "type": "string",
+      "required": false
+    },
+    "onDownloadAll": {
+      "type": "function",
+      "required": false
+    },
+    "onItemClick": {
+      "type": "function",
+      "required": false
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "No charges yet"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "type.size.heading5"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "the charges are a kit Table named by the title",
+      "status is a word in a kit Badge, not colour alone; the next charge says \"Next charge\"",
+      "the failed-payment banner is role=alert",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ChargesTable or PaymentHistory",
+    "Do not show real card or customer data in examples",
+    "Do not mark failed by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<BillingSchedule label=\"Pro plan · example data\" items={charges} nextId=\"dec\" onDownloadAll={download} onUpdateCard={updateCard} retryOn=\"04 Oct\" />"
+}

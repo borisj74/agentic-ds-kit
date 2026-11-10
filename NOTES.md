@@ -104,6 +104,56 @@ Keyboard and focus, batch 2 (Playwright at 1440):
 - IntegrationPicker: the search is a labelled searchbox; the category filter is a radio group (arrow keys); each Connect is described by its provider name.
 - PricingPlans: arrow keys switch Monthly and Yearly; each CTA is described by its plan name; the current plan's CTA is disabled.
 
+### Batch 3: what shipped
+
+Branch `feat/saas-patterns-3`, stacked on `feat/saas-patterns-2`. This completes p-4-0: all 12 SaaS artboards are now kit components.
+
+**Composition question:** Billing Schedule and Integration Settings are mostly kit parts. I asked Boris (via the planner) whether they should be components; no answer came before this batch, so they are built as components. Each contract says what it composes, the way UsageMeter does. If Boris prefers patterns (`contracts/patterns/`), both can move without touching the other ten.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| BillingSchedule | 01 Billing Schedule | **Table**, Badge, Button, Empty, Skeleton | upcoming + history with every status, next charge only (Change card), failed payment banner (Update card), empty, loading, error |
+| InvoiceDocument | 02 Invoice & Credit Note | Table, Badge, Button, Empty, Skeleton | draft (Issue invoice), issued and overdue (Record payment), paid, void, credit note naming the invoice it reduces, empty lines, loading, error |
+| IntegrationSettings | 09 Integration Settings | frames caller's **Select / Switch / Input**; Badge, Button, AlertDialog, Empty, Skeleton | connected, syncing, error (View errors), needs reauth (Reconnect, settings locked), saving, disconnect confirm (AlertDialog), not connected (Connect), loading, error |
+| TaskBoard | 12 Task Board | Badge, Avatar, Button, Empty, Skeleton | populated, card mid-move (keyboard and drag), empty column + overflow (+ N more), empty board, loading, error |
+
+Paper vs tokens, batch 3:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Billing Schedule next-charge row tinted blue | a "Next charge" Badge in the description cell; no row tint | Kit Table has no row highlight. A `highlightRow` prop on Table is a possible follow-up. |
+| Billing / Invoice table header mono caps | the kit Table header | Kit component. |
+| Invoice money as numbers + `currency` | pre-formatted strings (`"$782.40"`) | Locale and currency formatting stay with the app; the component never does money maths. |
+| Invoice void: the whole card faded | lines and totals at `--opacity-muted`, the total struck through, Download and Send disabled; the header, badge and footnote stay full contrast | So "Void" and the reason stay readable. |
+| Invoice title 18px | `--type-size-ui-lg` | Kit role. |
+| Integration Settings "built on Section + Fieldset + Field" | a native `fieldset` with a "Settings" legend; rows take the caller's kit controls (`settings[].control`) | The kit Field is a stacked label + control; these rows are label left, control right. The fieldset disables every control at once while saving or until reconnect. |
+| Integration Settings scope chips, mono caps | `code` chips, lowercase as the scopes are written | They are identifiers. |
+| Integration needs-reauth: Save disabled but solid | Reconnect is the solid primary; Save steps down to a disabled outline | One solid primary per view. |
+| Task Board tags, mono caps | kit Badge outline, sentence case | Same as other batches. |
+| Task Board "no due date" mono | "No due date"; dates read "Due 14 Nov" | Says what the date is. |
+| Task Board column "…" menu | not built | The contract has no column actions to put in it. |
+| Task Board moving card: source "moving out…" ghost + dashed "Drop here" slot | the card previews at its target spot, lifted (`--shadow-md`, slight rotate and scale), and a drag highlights the target column with a dashed `--primary` border | One element per card; no duplicate in the list. |
+| Task Board "card glides to its new place (200ms)" | the card fades and rises in where it lands (transform + opacity) | A real FLIP glide would need layout measurement; this stays on transform and opacity. |
+| Integration Settings width 770px | `width: min(100%, var(--layout-container-sm))` | Layout token. |
+
+Keyboard and focus, batch 3 (Playwright at 1440):
+- TaskBoard: Space picks up a card (aria-pressed); arrow keys move it across columns and positions; Space or Enter drops it and Escape cancels. Each step is announced in a live region, and focus stays on the card as it moves. Enter on a resting card opens it. Mouse drag works too (checked with a Playwright drag).
+- IntegrationSettings: ⌘/Ctrl+S saves and the fieldset disables while saving. Disconnect opens a danger AlertDialog with focus on Keep connected, and Escape returns focus to Disconnect. Each row label names its control.
+- BillingSchedule and InvoiceDocument: the only controls are Buttons. The failed-payment banner is role=alert.
+
+### Proposals and follow-ups (need Boris's OK)
+
+- No new tokens or colours in these three batches.
+- **Compact Empty** (a smaller title for cards). Used in 10 of the 12 SaaS cards, and in AgentInbox, InlineDiff and MemoryPanel.
+- **Table `highlightRow`** for the next charge.
+- **Move UsageMeter and TraceWaterfall onto `ui/shared/LoadError`** so every card shares one error row.
+
+### PR status
+
+- Batch 1: `feat/saas-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/129, base `main`. Open, not merged.
+- Batch 2: `feat/saas-patterns-2`, https://github.com/borisj74/agentic-ds-kit/pull/130, base `feat/saas-patterns-1`. Open, not merged.
+- Batch 3: `feat/saas-patterns-3`, base `feat/saas-patterns-2`. Open, not merged.
+
 ## 2026-11-10: component pages, previews and variants
 
 Site (branches `claude/k79-nistha-site-859cfe`, PR #119, and `feat/variants-tab-cleanup`):

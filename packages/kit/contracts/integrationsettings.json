@@ -1,0 +1,158 @@
+{
+  "id": "integrationsettings",
+  "status": "stable",
+  "intent": "Settings for one connected integration: status with a banner when syncing, failing or needing reauth, the sync settings (kit controls you pass in), granted scopes, Save changes, and Disconnect behind a danger AlertDialog. Frames kit Select, Switch and Input; uses Badge, Button, AlertDialog and Empty.",
+  "useWhen": [
+    "configure a connected integration in settings",
+    "show sync status, errors and expired access",
+    "disconnect an integration with a confirmation"
+  ],
+  "doNotUseWhen": [
+    "choosing which integration to connect — IntegrationPicker",
+    "a general settings form — the settings-form pattern",
+    "agent tool permissions — PermissionRequest"
+  ],
+  "contains": [
+    "alertdialog",
+    "badge",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "connected",
+        "syncing",
+        "error",
+        "needsReauth",
+        "disconnected"
+      ],
+      "required": true
+    },
+    "icon": {
+      "type": "KitIcon",
+      "default": "Plug"
+    },
+    "lastSync": {
+      "type": "string",
+      "required": false
+    },
+    "statusMessage": {
+      "type": "string",
+      "required": false
+    },
+    "settings": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, description?, control, controlId? }[]; control is a kit Select, Switch or Input with id={controlId}."
+    },
+    "scopes": {
+      "type": "string[]",
+      "required": false
+    },
+    "onSave": {
+      "type": "function",
+      "required": true,
+      "note": "Save changes, the one solid primary; ⌘/Ctrl+S."
+    },
+    "onCancel": {
+      "type": "function",
+      "required": false
+    },
+    "saving": {
+      "type": "boolean",
+      "default": false
+    },
+    "onSyncNow": {
+      "type": "function",
+      "required": false
+    },
+    "onViewErrors": {
+      "type": "function",
+      "required": false
+    },
+    "onReconnect": {
+      "type": "function",
+      "required": false,
+      "note": "Needs reauth: the solid primary; Save steps down to outline and the settings lock."
+    },
+    "onDisconnect": {
+      "type": "function",
+      "required": true,
+      "note": "After a danger AlertDialog."
+    },
+    "onConnect": {
+      "type": "function",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "radius.surfaceSm",
+    "status.infoSubtle",
+    "status.infoText",
+    "status.warningSubtle",
+    "status.warningText",
+    "type.size.overline",
+    "type.tracking.overline",
+    "layout.container.sm",
+    "opacity.muted"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 provider name",
+      "status is a word in a kit Badge; error and needs-reauth banners are role=alert, syncing is role=status",
+      "settings are a fieldset with a Settings legend; each label names its control by controlId",
+      "the fieldset is disabled while saving or until reconnect",
+      "⌘/Ctrl+S saves; Saving is announced",
+      "Disconnect opens a danger AlertDialog; Keep connected returns focus to Disconnect"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ConnectionSettings or IntegrationForm",
+    "Do not disconnect without the AlertDialog",
+    "Do not show two solid primaries; Reconnect takes over from Save",
+    "Do not use raw hex"
+  ],
+  "snippet": "<IntegrationSettings name=\"Northwind Ledger\" status=\"connected\" lastSync=\"Last sync 4 min ago · example provider\" settings={settings} scopes={[\"invoices:read\", \"payments:read\"]} onSave={save} onCancel={reset} onSyncNow={sync} onDisconnect={disconnect} />"
+}

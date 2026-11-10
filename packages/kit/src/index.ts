@@ -127,6 +127,10 @@ export * from "../ui/CommentThread";
 export * from "../ui/CommentsPanel";
 export * from "../ui/IntegrationPicker";
 export * from "../ui/PricingPlans";
+export * from "../ui/BillingSchedule";
+export * from "../ui/IntegrationSettings";
+export * from "../ui/InvoiceDocument";
+export * from "../ui/TaskBoard";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";

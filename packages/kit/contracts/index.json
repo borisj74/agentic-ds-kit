@@ -854,6 +854,34 @@
     "status": "stable"
   },
   {
+    "id": "billingschedule",
+    "intent": "Subscription charges in order with status words; next-charge summary and a failed-payment banner. Composes Table.",
+    "group": "component",
+    "path": "contracts/billingschedule.json",
+    "status": "stable"
+  },
+  {
+    "id": "invoicedocument",
+    "intent": "Invoice or credit note document view: status, bill-to, lines, totals and one line about payment.",
+    "group": "component",
+    "path": "contracts/invoicedocument.json",
+    "status": "stable"
+  },
+  {
+    "id": "integrationsettings",
+    "intent": "Settings for one connected integration: status, sync settings, scopes, Save and a confirmed Disconnect.",
+    "group": "component",
+    "path": "contracts/integrationsettings.json",
+    "status": "stable"
+  },
+  {
+    "id": "taskboard",
+    "intent": "Kanban board of columns and task cards; move by drag or keyboard (Space, arrows, Space).",
+    "group": "component",
+    "path": "contracts/taskboard.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

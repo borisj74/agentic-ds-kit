@@ -9730,6 +9730,413 @@
       }
     },
     {
+      "id": "billingschedule",
+      "group": "component",
+      "intent": "Upcoming and past charges on a subscription, in order, with the status as a word. A next-charge summary (amount, date, card, Change card) and a banner with Update card when a payment failed. Composes kit Table, Badge, Button and Empty.",
+      "useWhen": [
+        "show a subscription's upcoming and past charges in billing settings",
+        "show only the next charge in a summary",
+        "flag a failed payment and ask for a new card"
+      ],
+      "doNotUseWhen": [
+        "one invoice with line items — InvoiceDocument",
+        "a general data table with sorting — DataTable",
+        "usage against a limit — UsageMeter"
+      ],
+      "doNot": [
+        "Do not invent a local ChargesTable or PaymentHistory",
+        "Do not show real card or customer data in examples",
+        "Do not mark failed by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, date, label, amount, status: 'upcoming'|'invoiced'|'paid'|'failed'|'waived', note? }[]; date and amount pre-formatted."
+        },
+        "title": {
+          "type": "string",
+          "default": "Billing schedule"
+        },
+        "label": {
+          "type": "string",
+          "required": false
+        },
+        "nextId": {
+          "type": "string",
+          "required": false,
+          "note": "Tagged \"Next charge\" in the table."
+        },
+        "nextOnly": {
+          "type": "boolean",
+          "default": false,
+          "note": "Show the next-charge summary only."
+        },
+        "paymentMethod": {
+          "type": "string",
+          "required": false
+        },
+        "onChangeCard": {
+          "type": "function",
+          "required": false
+        },
+        "onUpdateCard": {
+          "type": "function",
+          "required": false,
+          "note": "Failed-payment banner action, the one solid primary."
+        },
+        "retryOn": {
+          "type": "string",
+          "required": false
+        },
+        "onDownloadAll": {
+          "type": "function",
+          "required": false
+        },
+        "onItemClick": {
+          "type": "function",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No charges yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "invoicedocument",
+      "group": "component",
+      "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
+      "useWhen": [
+        "show one invoice or credit note inside the product",
+        "issue, send or record payment on an invoice",
+        "show what a credit note reduces"
+      ],
+      "doNotUseWhen": [
+        "a list of charges over time — BillingSchedule",
+        "a generic data table — DataTable",
+        "printing or generating PDFs"
+      ],
+      "doNot": [
+        "Do not invent a local InvoiceView or CreditNoteCard",
+        "Do not show a credit note without the invoice it reduces",
+        "Do not show more than one solid primary",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "kind": {
+          "type": "enum",
+          "values": [
+            "invoice",
+            "creditNote"
+          ],
+          "default": "invoice"
+        },
+        "number": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "issued",
+            "paid",
+            "overdue",
+            "void"
+          ],
+          "default": "draft"
+        },
+        "from": {
+          "type": "string",
+          "required": false
+        },
+        "to": {
+          "type": "string",
+          "required": true
+        },
+        "issuedOn": {
+          "type": "string",
+          "required": true
+        },
+        "dueOn": {
+          "type": "string",
+          "required": false
+        },
+        "relatedInvoiceId": {
+          "type": "string",
+          "required": false,
+          "note": "Credit notes: the invoice it reduces."
+        },
+        "lines": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, description, quantity, unitPrice, amount }[]; money pre-formatted."
+        },
+        "subtotal": {
+          "type": "string",
+          "required": true
+        },
+        "taxLabel": {
+          "type": "string",
+          "default": "Tax"
+        },
+        "tax": {
+          "type": "string",
+          "required": false
+        },
+        "total": {
+          "type": "string",
+          "required": true
+        },
+        "footnote": {
+          "type": "string",
+          "required": false,
+          "note": "Paid on, overdue reminder, voided, or what the credit note reduces; icon and colour follow the status."
+        },
+        "onDownload": {
+          "type": "function",
+          "required": false
+        },
+        "onSend": {
+          "type": "function",
+          "required": false
+        },
+        "onIssue": {
+          "type": "function",
+          "required": false,
+          "note": "Draft: Issue invoice, the solid primary."
+        },
+        "onRecordPayment": {
+          "type": "function",
+          "required": false,
+          "note": "Issued or overdue: Record payment, the solid primary."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "integrationsettings",
+      "group": "component",
+      "intent": "Settings for one connected integration: status with a banner when syncing, failing or needing reauth, the sync settings (kit controls you pass in), granted scopes, Save changes, and Disconnect behind a danger AlertDialog. Frames kit Select, Switch and Input; uses Badge, Button, AlertDialog and Empty.",
+      "useWhen": [
+        "configure a connected integration in settings",
+        "show sync status, errors and expired access",
+        "disconnect an integration with a confirmation"
+      ],
+      "doNotUseWhen": [
+        "choosing which integration to connect — IntegrationPicker",
+        "a general settings form — the settings-form pattern",
+        "agent tool permissions — PermissionRequest"
+      ],
+      "doNot": [
+        "Do not invent a local ConnectionSettings or IntegrationForm",
+        "Do not disconnect without the AlertDialog",
+        "Do not show two solid primaries; Reconnect takes over from Save",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "connected",
+            "syncing",
+            "error",
+            "needsReauth",
+            "disconnected"
+          ],
+          "required": true
+        },
+        "icon": {
+          "type": "KitIcon",
+          "default": "Plug"
+        },
+        "lastSync": {
+          "type": "string",
+          "required": false
+        },
+        "statusMessage": {
+          "type": "string",
+          "required": false
+        },
+        "settings": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, description?, control, controlId? }[]; control is a kit Select, Switch or Input with id={controlId}."
+        },
+        "scopes": {
+          "type": "string[]",
+          "required": false
+        },
+        "onSave": {
+          "type": "function",
+          "required": true,
+          "note": "Save changes, the one solid primary; ⌘/Ctrl+S."
+        },
+        "onCancel": {
+          "type": "function",
+          "required": false
+        },
+        "saving": {
+          "type": "boolean",
+          "default": false
+        },
+        "onSyncNow": {
+          "type": "function",
+          "required": false
+        },
+        "onViewErrors": {
+          "type": "function",
+          "required": false
+        },
+        "onReconnect": {
+          "type": "function",
+          "required": false,
+          "note": "Needs reauth: the solid primary; Save steps down to outline and the settings lock."
+        },
+        "onDisconnect": {
+          "type": "function",
+          "required": true,
+          "note": "After a danger AlertDialog."
+        },
+        "onConnect": {
+          "type": "function",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "taskboard",
+      "group": "component",
+      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+      "useWhen": [
+        "a small board of tasks by status inside a product",
+        "let people move cards between columns with mouse or keyboard",
+        "show an overflowing column with + N more"
+      ],
+      "doNotUseWhen": [
+        "a list with filters and sorting — DataTable",
+        "an agent plan — AgentPlan",
+        "a timeline of events — Timeline"
+      ],
+      "doNot": [
+        "Do not invent a local Kanban or BoardColumn",
+        "Do not make moves drag-only; keep the keyboard path",
+        "Do not encode status by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "columns": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, cardIds }[]"
+        },
+        "cards": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, tags?, assignee?: { name, initials?, avatarSrc? }, dueOn? }[]"
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "note": {
+          "type": "string",
+          "required": false
+        },
+        "onMove": {
+          "type": "function",
+          "required": true,
+          "note": "(cardId, toColumnId, index) => void"
+        },
+        "onAdd": {
+          "type": "function",
+          "required": false
+        },
+        "onCardClick": {
+          "type": "function",
+          "required": false,
+          "note": "Click or Enter on a card."
+        },
+        "onNewTask": {
+          "type": "function",
+          "required": false
+        },
+        "onFilter": {
+          "type": "function",
+          "required": false
+        },
+        "maxCardsPerColumn": {
+          "type": "number",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No tasks on this board"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
