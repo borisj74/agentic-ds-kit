@@ -1,0 +1,131 @@
+{
+  "id": "permissionrequest",
+  "status": "stable",
+  "intent": "An agent asks for standing access to a capability (files, email, repo, billing), scope by scope, with why and expiry. Grant / Deny, then one line.",
+  "useWhen": [
+    "an agent needs access that lasts beyond one action",
+    "several scopes with read / write / admin levels",
+    "the grant can fail and needs Retry"
+  ],
+  "doNotUseWhen": [
+    "one command or edit — ApprovalCard",
+    "a settings toggle the person flips themselves — Switch",
+    "a must-choose interruption for the whole page — AlertDialog"
+  ],
+  "contains": [
+    "alert",
+    "badge",
+    "button"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "default": "Permission request"
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "scopes": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, expiry?, icon? }[]"
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "granting",
+        "error",
+        "granted",
+        "denied",
+        "expired"
+      ],
+      "default": "pending",
+      "note": "granted / denied / expired render one line."
+    },
+    "warning": {
+      "type": "string",
+      "required": false,
+      "note": "Standing-access warning, a kit Alert (warning)."
+    },
+    "errorMessage": {
+      "type": "string",
+      "default": "Couldn't save the grant."
+    },
+    "requestedAt": {
+      "type": "string",
+      "required": false,
+      "note": "Footer note, e.g. \"requested 14:02\"."
+    },
+    "resolvedNote": {
+      "type": "string",
+      "required": false,
+      "note": "Resolved row detail, e.g. \"until 17 Nov\"."
+    },
+    "onGrant": {
+      "type": "function",
+      "required": false,
+      "note": "Grant, the one solid primary. ⌘/Ctrl+Enter inside the card."
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false,
+      "note": "Deny, outline. Escape inside the card."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Error row Retry. Falls back to onGrant."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "status.dangerSubtle",
+    "status.dangerBorder",
+    "status.dangerText",
+    "status.successText",
+    "opacity.muted",
+    "link.default"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "scopes are a list; access is text in a Badge",
+      "Escape denies, ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts",
+      "granting sets aria-busy and announces in a status region",
+      "the error is role=alert with a Retry button",
+      "resolved row is named \"Granted: <title>\"",
+      "motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local PermissionCard, AccessRequest, or ScopePicker",
+    "Do not hide expiry or the standing-access warning for write or admin",
+    "Grant is the one solid primary; Deny is outline",
+    "Do not use raw hex"
+  ],
+  "snippet": "<PermissionRequest description=\"Research agent wants standing access.\" scopes={[{ id: \"docs\", resource: \"~/acme/ledger/docs\", access: \"read\", reason: \"Summarise weekly doc changes.\", expiry: \"Expires in 7 days\" }]} onGrant={grant} onDeny={deny} />"
+}

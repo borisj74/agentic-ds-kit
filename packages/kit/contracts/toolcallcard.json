@@ -1,0 +1,151 @@
+{
+  "id": "toolcallcard",
+  "status": "stable",
+  "intent": "One agent tool call on one line: status, mono name, summary and a live timer. Opens to arguments and result; with calls it rolls several calls into one group row.",
+  "useWhen": [
+    "show each tool an agent calls in a chat or a run log",
+    "let people inspect a call's arguments and result",
+    "roll a burst of calls into one row (\"Ran 4 tools\")",
+    "a failed call with Retry"
+  ],
+  "doNotUseWhen": [
+    "a step list for a whole task — AgentTrail",
+    "a call that needs the person's OK first — ApprovalCard",
+    "plain code to copy — CodeSnippet"
+  ],
+  "contains": [
+    "badge",
+    "button"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": false,
+      "note": "Tool name in mono, e.g. \"search_files\". Required unless calls is set."
+    },
+    "summary": {
+      "type": "string",
+      "required": false,
+      "note": "One line: query, target or outcome. Truncates."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "running",
+        "done",
+        "error"
+      ],
+      "default": "done"
+    },
+    "duration": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"0.4s\"."
+    },
+    "startedAt": {
+      "type": "number",
+      "required": false,
+      "note": "Epoch ms. A running call ticks a live timer from it."
+    },
+    "args": {
+      "type": "unknown",
+      "required": false,
+      "note": "Object → pretty JSON; string → as is."
+    },
+    "result": {
+      "type": "string | string[]",
+      "required": false
+    },
+    "resultMeta": {
+      "type": "string",
+      "required": false,
+      "note": "Result header note, e.g. \"3 of 3\"."
+    },
+    "error": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "Error lines; an error card opens by default."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Shows Retry (outline) in the open panel."
+    },
+    "attempt": {
+      "type": "object",
+      "required": false,
+      "note": "{ n, max } → \"Attempt 1 of 3\"."
+    },
+    "calls": {
+      "type": "array",
+      "required": false,
+      "note": "Group mode: { id, name, summary?, status, duration? }[]. Header sums done / running / failed."
+    },
+    "groupTitle": {
+      "type": "string",
+      "required": false,
+      "note": "Default \"Ran N tools\"."
+    },
+    "expanded": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled open state."
+    },
+    "defaultExpanded": {
+      "type": "boolean",
+      "required": false
+    },
+    "onExpandedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(expanded) => void"
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "icon.success",
+    "icon.danger",
+    "icon.brand",
+    "status.dangerSubtle",
+    "status.dangerBorder",
+    "status.dangerText"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "the header is a button with aria-expanded and aria-controls when there is detail",
+      "status is named in text for screen readers; icons are aria-hidden",
+      "the live timer does not announce (aria-live off)",
+      "Retry is a kit Button",
+      "spinner and open motion use transform and opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ToolCall, ToolRow, or FunctionCallCard",
+    "Do not paraphrase arguments; show them",
+    "Do not put an approval in a tool call; use ApprovalCard",
+    "Do not use raw hex for status colors"
+  ],
+  "snippet": "<ToolCallCard name=\"search_files\" summary=\"3 matches in 2 files\" status=\"done\" duration=\"0.9s\" args={{ query: \"invoice total\", path: \"src/billing\" }} result={[\"invoice.ts:41 return subtotal * (1 + rate);\"]} />"
+}

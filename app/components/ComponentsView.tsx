@@ -50,6 +50,10 @@ import { AgentFleetDoc } from "./AgentFleetDoc";
 import { AgentPlanDoc } from "./AgentPlanDoc";
 import { AgentTrailDoc } from "./AgentTrailDoc";
 import { ApprovalCardDoc } from "./ApprovalCardDoc";
+import { ToolCallCardDoc } from "./ToolCallCardDoc";
+import { RunningNowDoc } from "./RunningNowDoc";
+import { PermissionRequestDoc } from "./PermissionRequestDoc";
+import { AgentMonitorDoc } from "./AgentMonitorDoc";
 import { KbdDoc } from "./KbdDoc";
 import { LineChartDoc } from "./LineChartDoc";
 import { LinkListDoc } from "./LinkListDoc";
@@ -117,6 +121,10 @@ const TITLES: Record<string, string> = {
   agentplan: "AgentPlan",
   agenttrail: "AgentTrail",
   approvalcard: "ApprovalCard",
+  toolcallcard: "ToolCallCard",
+  runningnow: "RunningNow",
+  permissionrequest: "PermissionRequest",
+  agentmonitor: "AgentMonitor",
   kbd: "Kbd",
   textarea: "Textarea",
   timepicker: "TimePicker",
@@ -362,6 +370,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "agentplan") return <AgentPlanDoc />;
   if (resolved === "agenttrail") return <AgentTrailDoc />;
   if (resolved === "approvalcard") return <ApprovalCardDoc />;
+  if (resolved === "toolcallcard") return <ToolCallCardDoc />;
+  if (resolved === "runningnow") return <RunningNowDoc />;
+  if (resolved === "permissionrequest") return <PermissionRequestDoc />;
+  if (resolved === "agentmonitor") return <AgentMonitorDoc />;
   if (resolved === "kbd") return <KbdDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
   if (resolved === "linklist") return <LinkListDoc />;

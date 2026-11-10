@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { AgentFleet } from "agentic-ds-kit";
+import { AgentMonitor } from "agentic-ds-kit";
 import { AgentPlan } from "agentic-ds-kit";
 import { AgentTrail } from "agentic-ds-kit";
 import { Alert } from "agentic-ds-kit";
@@ -8,6 +9,9 @@ import { AnchorNav } from "agentic-ds-kit";
 import { AppHeader } from "agentic-ds-kit";
 import { AppNav } from "agentic-ds-kit";
 import { ApprovalCard } from "agentic-ds-kit";
+import { PermissionRequest } from "agentic-ds-kit";
+import { RunningNow } from "agentic-ds-kit";
+import { ToolCallCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
 import { AvatarGroup } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
@@ -181,6 +185,51 @@ export function GalleryPreview({ id }: { id: string }) {
             resolvedAt="2s ago"
           />
           <ApprovalCard status="denied" title="Delete exports?" action={{ kind: "command", command: "rm -rf ./tmp" }} resolvedBy="you" />
+        </div>
+      );
+    case "agentmonitor":
+      return (
+        <Stage variant="wide">
+          <AgentMonitor
+            collapsed
+            name="Refactor billing"
+            elapsed="02:14"
+            cost="$0.42"
+            steps={[
+              { id: "a", tool: "search_files", status: "done" },
+              { id: "b", tool: "read_file", status: "done" },
+              { id: "c", tool: "edit_file", status: "running" },
+            ]}
+          />
+        </Stage>
+      );
+    case "permissionrequest":
+      return (
+        <Stage variant="wide">
+          <PermissionRequest
+            status="granted"
+            scopes={[{ id: "docs", resource: "~/acme/docs", access: "read" }]}
+            resolvedNote="until 17 Nov"
+          />
+        </Stage>
+      );
+    case "runningnow":
+      return (
+        <Stage variant="wide">
+          <RunningNow
+            layout="stack"
+            items={[
+              { id: "a", name: "Billing refactor", status: "running", elapsed: "02:14" },
+              { id: "b", name: "Migrate DB", activity: "waiting for OK", status: "waiting", elapsed: "00:31" },
+            ]}
+          />
+        </Stage>
+      );
+    case "toolcallcard":
+      return (
+        <div className={previewStyles.stack}>
+          <ToolCallCard name="read_file" summary="invoice.ts" duration="0.4s" />
+          <ToolCallCard name="search_files" summary="3 matches" status="running" duration="1.2s" />
         </div>
       );
     case "accordion":

@@ -13,6 +13,7 @@ export interface GalleryItem {
 
 const AGENT_IDS = new Set([
   "agentfleet",
+  "agentmonitor",
   "agentplan",
   "agenttrail",
   "approvalcard",
@@ -20,8 +21,11 @@ const AGENT_IDS = new Set([
   "insightcard",
   "loadinganimation",
   "numbertransition",
+  "permissionrequest",
+  "runningnow",
   "shimmertext",
   "thinkinganimation",
+  "toolcallcard",
 ]);
 
 const MOTION_IDS = new Set([

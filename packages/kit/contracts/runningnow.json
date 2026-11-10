@@ -1,0 +1,108 @@
+{
+  "id": "runningnow",
+  "status": "stable",
+  "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
+  "useWhen": [
+    "an at-a-glance list of running agents in app chrome",
+    "show which agent waits for the person or failed",
+    "link from a compact strip to each agent"
+  ],
+  "doNotUseWhen": [
+    "one agent in detail — AgentMonitor",
+    "agents with sub-agent progress and cost — AgentFleet",
+    "a notification feed — Toast"
+  ],
+  "contains": [
+    "skeleton"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, activity?, status: \"running\" | \"waiting\" | \"failed\", elapsed? }[]"
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "row",
+        "stack"
+      ],
+      "default": "row"
+    },
+    "maxVisible": {
+      "type": "number",
+      "required": false,
+      "note": "Default 3 (row) or 4 (stack); the rest is \"+N\" / \"View all\"."
+    },
+    "label": {
+      "type": "string",
+      "default": "Running now"
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Items become buttons."
+    },
+    "onShowAll": {
+      "type": "function",
+      "required": false,
+      "note": "The overflow control."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "emptyText": {
+      "type": "string",
+      "default": "Nothing running right now"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "type.size.overline",
+    "type.tracking.overline",
+    "icon.brand",
+    "status.warningText",
+    "status.dangerText",
+    "link.default",
+    "link.hover"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section named by its heading (label plus count)",
+      "items are a list; each names its status in text",
+      "with onSelect each item is a button",
+      "the +N overflow says how many more",
+      "aria-busy while loading",
+      "spinner and entry motion use transform and opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local RunningList, AgentStrip, or ActivityBar",
+    "Do not nest an AgentMonitor in the strip",
+    "Do not use raw hex for status colors"
+  ],
+  "snippet": "<RunningNow items={[{ id: \"billing\", name: \"Billing refactor\", activity: \"editing invoice.ts\", status: \"running\", elapsed: \"02:14\" }]} onSelect={openAgent} />"
+}
