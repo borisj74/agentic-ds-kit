@@ -40,8 +40,9 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
 - **Agent** — ApprovalCard, AgentTrail, AgentPlan, AgentFleet, ToolCallCard, PermissionRequest, RunningNow, AgentMonitor, AgentTree, AgentLanes, AgentInbox, DecisionCard, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall, UsageMeter
+- **SaaS** — SetupGuide, NotificationStack, ChangeSummary, ExperimentCard, CommentThread, CommentsPanel, IntegrationPicker, PricingPlans, InvoiceDocument, TaskBoard
 
-### Patterns (6)
+### Patterns (8)
 
 Patterns are examples of what you can build from the components, not rules: start from one, borrow from it, or ignore it. Layout (top bar, side nav, both, neither) is your choice. None are exported from the package; `npx agentic-ds-kit add <id>` copies one's source into your app. Each contract lists `must` (kit look and accessibility) and `defaults` (suggestions you can change).
 
@@ -51,6 +52,8 @@ Patterns are examples of what you can build from the components, not rules: star
 - `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
 - `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons
 - `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
+- `billing-schedule` — Section + next charge + failed-payment Alert + Table with status Badges
+- `integration-settings` — Section + status Badge + FieldSet of Fields (Select, Switch) + scope Tags + Save + Disconnect with AlertDialog
 
 ### Playground
 Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started, Foundations, Components, and Patterns. Components holds Overview, then collapsible Forms, Data, Overlays, Navigation, Feedback, Charts, and Agent. Pattern pages are routes under `/patterns/[slug]`. Foundation sections still use hash links.

@@ -119,6 +119,16 @@ export * from "../ui/TraceWaterfall";
 export * from "../ui/TreeView";
 export * from "../ui/UsageList";
 export * from "../ui/UsageMeter";
+export * from "../ui/ChangeSummary";
+export * from "../ui/ExperimentCard";
+export * from "../ui/NotificationStack";
+export * from "../ui/SetupGuide";
+export * from "../ui/CommentThread";
+export * from "../ui/CommentsPanel";
+export * from "../ui/IntegrationPicker";
+export * from "../ui/PricingPlans";
+export * from "../ui/InvoiceDocument";
+export * from "../ui/TaskBoard";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";

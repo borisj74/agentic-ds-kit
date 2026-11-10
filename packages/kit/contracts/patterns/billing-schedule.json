@@ -1,0 +1,38 @@
+{
+  "id": "billing-schedule",
+  "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add billing-schedule",
+  "import": "import { BillingSchedulePattern } from \"@/components/patterns/billing-schedule\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/billing-schedule/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+  "contains": [
+    "section",
+    "table",
+    "badge",
+    "alert",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Status is a word in a kit Badge (Upcoming, Paid, Failed…), never colour alone",
+    "Charges are a kit Table; do not build a local charges list",
+    "A failed payment is a kit Alert (danger) that says the date, the amount and what happens next",
+    "Money arrives pre-formatted from your app; label example data as example",
+    "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+  ],
+  "defaults": [
+    "Section title \"Billing schedule\" with Download all as a ghost Button in its actions",
+    "Next-charge summary above the table; nextOnly shows just the summary",
+    "Update card is the one solid primary when a payment failed; Change card is outline",
+    "Loading uses Skeleton lines; empty uses a kit Empty; a load error uses a danger Alert and Retry"
+  ],
+  "snippet": "<BillingSchedulePattern onDownloadAll={download} onChangeCard={changeCard} onUpdateCard={updateCard} />"
+}

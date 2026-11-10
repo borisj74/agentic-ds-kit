@@ -1,0 +1,172 @@
+{
+  "id": "invoicedocument",
+  "status": "stable",
+  "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
+  "useWhen": [
+    "show one invoice or credit note inside the product",
+    "issue, send or record payment on an invoice",
+    "show what a credit note reduces"
+  ],
+  "doNotUseWhen": [
+    "a list of charges over time — the billing-schedule pattern",
+    "a generic data table — DataTable",
+    "printing or generating PDFs"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "skeleton",
+    "table"
+  ],
+  "props": {
+    "kind": {
+      "type": "enum",
+      "values": [
+        "invoice",
+        "creditNote"
+      ],
+      "default": "invoice"
+    },
+    "number": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "draft",
+        "issued",
+        "paid",
+        "overdue",
+        "void"
+      ],
+      "default": "draft"
+    },
+    "from": {
+      "type": "string",
+      "required": false
+    },
+    "to": {
+      "type": "string",
+      "required": true
+    },
+    "issuedOn": {
+      "type": "string",
+      "required": true
+    },
+    "dueOn": {
+      "type": "string",
+      "required": false
+    },
+    "relatedInvoiceId": {
+      "type": "string",
+      "required": false,
+      "note": "Credit notes: the invoice it reduces."
+    },
+    "lines": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, description, quantity, unitPrice, amount }[]; money pre-formatted."
+    },
+    "subtotal": {
+      "type": "string",
+      "required": true
+    },
+    "taxLabel": {
+      "type": "string",
+      "default": "Tax"
+    },
+    "tax": {
+      "type": "string",
+      "required": false
+    },
+    "total": {
+      "type": "string",
+      "required": true
+    },
+    "footnote": {
+      "type": "string",
+      "required": false,
+      "note": "Paid on, overdue reminder, voided, or what the credit note reduces; icon and colour follow the status."
+    },
+    "onDownload": {
+      "type": "function",
+      "required": false
+    },
+    "onSend": {
+      "type": "function",
+      "required": false
+    },
+    "onIssue": {
+      "type": "function",
+      "required": false,
+      "note": "Draft: Issue invoice, the solid primary."
+    },
+    "onRecordPayment": {
+      "type": "function",
+      "required": false,
+      "note": "Issued or overdue: Record payment, the solid primary."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "type.size.uiLg",
+    "type.size.heading5",
+    "type.size.overline",
+    "status.successText",
+    "status.infoText",
+    "opacity.muted"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "article aria-labelledby the h3 (\"Invoice INV-…\")",
+      "status is a word in a kit Badge",
+      "bill-to, dates and totals are description lists",
+      "lines are a kit Table",
+      "the footnote states paid, overdue or voided in words",
+      "void dims the lines and strikes through the total; the badge and footnote say Void"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local InvoiceView or CreditNoteCard",
+    "Do not show a credit note without the invoice it reduces",
+    "Do not show more than one solid primary",
+    "Do not use raw hex"
+  ],
+  "snippet": "<InvoiceDocument number=\"INV-2026-0117\" status=\"issued\" from=\"Northwind Ledger Ltd · example issuer\" to=\"Acme Co · 12 Example St\" issuedOn=\"01 Nov 2026\" dueOn=\"15 Nov 2026\" lines={lines} subtotal=\"$652.00\" taxLabel=\"Tax 20%\" tax=\"$130.40\" total=\"$782.40\" onDownload={download} onSend={send} onRecordPayment={record} />"
+}

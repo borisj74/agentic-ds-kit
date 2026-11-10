@@ -2,6 +2,163 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-10: SaaS patterns (feat/saas-patterns-1, -2, -3)
+
+Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-4-0 "Nistha SaaS Patterns". These parts feed the p-6-0 Settings and Onboarding screens, which are not built here.
+
+### Inventory and batch plan
+
+| # | Paper artboard | In the kit already? | Kit id | Batch |
+| --- | --- | --- | --- | --- |
+| 01 | Billing Schedule | No. Mostly Table + Badge + Alert, plus a next-charge box. **Boris: pattern, not a component** | pattern `billing-schedule` | 3 |
+| 02 | Invoice & Credit Note | No | `invoicedocument` | 3 |
+| 03 | Change Summary | No (Scorecard / Scoreboard show one KPI each, not before → after per metric) | `changesummary` | 1 |
+| 04 | Experiment Card | No | `experimentcard` | 1 |
+| 05 | Comment Thread | No (Chat is the assistant conversation) | `commentthread` | 2 |
+| 06 | Comments Panel | No; hosts Comment Thread on a kit Drawer | `commentspanel` | 2 |
+| 07 | Notification Stack | No (Toast is instant feedback, AgentInbox is agent work) | `notificationstack` | 1 |
+| 08 | Integration Picker | No | `integrationpicker` | 2 |
+| 09 | Integration Settings | No. A settings form of Field + Select + Switch + chips + Alert + AlertDialog. **Boris: pattern, not a component** | pattern `integration-settings` | 3 |
+| 10 | Setup Guide | No (ProgressSteps is a linear wizard) | `setupguide` | 1 |
+| 11 | Pricing Plans | No | `pricingplans` | 2 |
+| 12 | Task Board | No | `taskboard` | 3 |
+
+- **Skipped because Nistha already has them:** none on p-4-0. Usage Meter, the other Settings piece, shipped from p-3-0 in #126; Meter, UsageList, Alert and Toast are reused inside these components, not rebuilt.
+- **Batches:** 1 = Setup Guide, Notification Stack, Change Summary, Experiment Card (self-contained, first for Onboarding and Notifications). 2 = Comment Thread, Comments Panel (hosts the thread, so same batch), Integration Picker, Pricing Plans. 3 = Billing Schedule, Invoice & Credit Note, Integration Settings, Task Board. Billing Schedule and Integration Settings ship there as copy-in patterns (Boris's call).
+- **Nav:** a new **SaaS** group in `lib/playground-nav.ts`, after AI. The gallery filter for them is "base" (not "agent").
+
+### Shared pieces
+
+- `ui/shared/LoadError.tsx` (internal, not exported): the "Couldn't load … · Retry" row every SaaS card uses (role=alert, danger-subtle, outline Retry). UsageMeter and TraceWaterfall each have their own copy; they could move to it later.
+- Same card shell as the agent components: `--bg-surface`, `--line-default`, `--radius-surface-lg`, `--shadow-sm`, padding `--space-4`, and a rem custom width (`--setup-width` etc.) like InsightCard's `--insight-width`.
+
+### Batch 1: what shipped
+
+Branch `feat/saas-patterns-1`, from `main` (0.14.0 + the agent components).
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| SetupGuide | 10 Setup Guide | Progress, Badge, Button, Empty, Skeleton | mid-setup, mixed done and skipped (Undo), all done (Complete + Go to dashboard), empty, loading, error |
+| NotificationStack | 07 Notification Stack | Popover, Button, Badge, Empty, Skeleton | open with unread, all read, empty, loading, error, closed trigger with and without a count; `inline` renders the panel on a page |
+| ChangeSummary | 03 Change Summary | Empty, Skeleton | mixed, all up, all down with per-row sentiment, no change, loading, empty, error |
+| ExperimentCard | 04 Experiment Card | Badge, Button, AlertDialog, Skeleton | running (Leading), concluded with winner (Ship winner → AlertDialog), inconclusive (Extend), stopped, draft A/B/n, loading, error; Stop confirms with a danger AlertDialog |
+
+Paper vs tokens, batch 1:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Card radius 19px, shadow `0 1px 2px` | `--radius-surface-lg`, `--shadow-sm` | Same as the agent components. |
+| Status pills, mono caps (RUNNING, WINNER, 2 UNREAD, COMPLETE) | kit Badge `size="sm"`, sentence case | Badge is the kit pill. |
+| Setup Guide "built on DrawCheck" (check draws itself, 300ms) | the check scales and fades in (`--motion-duration-300`, spring-soft) | There is no DrawCheck in the kit, and a drawn stroke animates `stroke-dashoffset`, not transform or opacity. |
+| Setup Guide progress bar 6px | kit Progress `size="sm"` with label and value | Kit component. |
+| Setup Guide row title 13px | `--type-size-body-sm` (14px) | No 13px step. |
+| Notification bell count chip | a small primary chip beside a kit Button (`Bell`), keyed so it pops on change | Count is the kit count, but it has no overlay placement; the chip is aria-hidden and the Button carries "Notifications, 2 unread". |
+| Notification "Count rolls when it changes" (NumberTransition) | the chip pops on transform + opacity | NumberTransition is too big for a 16px chip. |
+| Notification panel 340px | `--notifications-width: 21.25rem`; the Popover's padding and max-width are overridden for this panel only | Popover's default panel is 320px max with padding. |
+| Change Summary "Deltas may roll with NumberTransition" | static text | Deltas are pre-formatted strings (+9.8%, −5, 0 pts). |
+| Experiment confidence icon | Lucide `CircleHelp` | Closest. |
+| Empty-state titles 14px | kit Empty (its own heading size) | Same as AgentInbox, InlineDiff, MemoryPanel. A compact Empty size is a possible follow-up. |
+| Widths 370px | 24rem custom widths | Custom-width pattern, as in the agent batches. |
+
+Keyboard and focus, batch 1 (checked with a Playwright script at 1440):
+- SetupGuide: Continue and Start are Buttons described by their task label. When a task finishes and its button goes away, focus moves to the next task's action (or the guide). Undo is a text button.
+- NotificationStack: Enter on the bell opens the Popover with focus on Mark all read; Tab reaches the rows (buttons, "Unread: …"); opening one marks it read and the bell's name updates; Escape closes and focus returns to the bell.
+- ChangeSummary: no controls besides View full report; each row reads as one sentence.
+- ExperimentCard: Stop and Ship winner open a kit AlertDialog with focus on the safe action; Escape or Cancel closes and focus returns to the button.
+
+Screenshots at 1440, light and dark, next to the Paper exports: `saas-patterns/batch1/` in the planner's notes folder.
+
+### Batch 2: what shipped
+
+Branch `feat/saas-patterns-2`, stacked on `feat/saas-patterns-1`.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| CommentThread | 05 Comment Thread | Avatar, Textarea, Button, AlertDialog, Empty, Skeleton | populated with replies, composer with a draft, editing your own comment, delete confirm, sending, empty, loading, error |
+| CommentsPanel | 06 Comments Panel | Drawer, SegmentedControl, Badge, Button, Empty, Skeleton; hosts CommentThread | several threads (Open filter), one selected with Resolve, empty with a page composer, filtered to none (Resolved), loading, error, closed trigger with the open count; `inline` renders it in place |
+| IntegrationPicker | 08 Integration Picker | Input, SegmentedControl, Button, Badge, Empty, Skeleton | mixed catalogue (connected, available, coming soon), filtered with a connect in progress, search empty with Request, loading, error |
+| PricingPlans | 11 Pricing Plans | SegmentedControl, Badge, Button, NumberTransition, Skeleton | monthly with Pro recommended, yearly (prices roll), current plan, loading, error |
+
+Paper vs tokens, batch 2:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Comments Panel "built on FilterBar for Open / Resolved / All" | kit SegmentedControl with counts in the labels | FilterBar is a row of filter buttons with values; a single choice of three is a radio group, as in AgentInbox. |
+| Integration Picker category pills | kit SegmentedControl | Same reason: one category at a time. |
+| Comment composer: borderless textarea inside a bordered box with the toolbar | kit Textarea (its own border) with the toolbar under it | Kit control; no cousin textarea. The @ icon and ⌘⏎ are hints (aria-hidden). |
+| Comment composer focused ring (2px primary) | the kit Textarea focus ring | Kit control. |
+| Comment Save "⏎" chip | Button `shortcut="⏎"` | Batch-1 agent pattern. |
+| Comments Panel header "Comments [3] ×" | the kit Drawer title "Comments" with "2 open · 1 resolved" as its description; the inline form keeps the count badge and a close Button | Drawer titles are strings. |
+| Comments Panel trigger "Comments [2 OPEN]" | kit Button plus a Badge "2 open" that describes it | Button labels are strings. |
+| Integration logo tiles (provider marks) | Lucide icons in a bordered tile; providers are labelled examples | No brand marks in the kit. |
+| Integration "Connecting…" solid button with spinner | Button `iconStart="LoaderCircle"` rotating, plus a status message | Same as PermissionRequest's Granting…. |
+| Pricing card border 2px primary for recommended or current | 1px `--primary` border plus a 1px ring (box-shadow) | No 2px border token; same visual weight. |
+| Pricing price 28px | NumberTransition `size="lg"` (`--type-size-heading`) | Kit size step. |
+| Pricing title 18px | `--type-size-ui-lg` | Kit role. |
+| Grid columns (3 tiles / 3 cards) | `repeat(auto-fill, minmax(min(100%, calc(var(--space-16) × 3.5)), 1fr))` and `auto-fit` with 3.75 for plans; gaps `--grid-gutter-sm` / `-md` | No raw column count; widths from space tokens. |
+| Comment Thread width 370px | `--thread-width: 24rem` (card form only; untitled threads fill their parent) | Custom-width pattern. |
+
+Keyboard and focus, batch 2 (Playwright at 1440):
+- CommentThread: ⌘/Ctrl+Enter posts; Reply moves focus to the composer; Edit puts focus in the edit field, Enter saves, Escape cancels and returns focus to Edit; Delete opens an AlertDialog on Keep and Escape returns focus to Delete.
+- CommentsPanel: the trigger is described by "2 open"; Enter opens the Drawer (focus on Close); opening a thread puts focus on All threads, and going back focuses that thread again; Escape closes the Drawer and returns focus to the trigger.
+- IntegrationPicker: the search is a labelled searchbox; the category filter is a radio group (arrow keys); each Connect is described by its provider name.
+- PricingPlans: arrow keys switch Monthly and Yearly; each CTA is described by its plan name; the current plan's CTA is disabled.
+
+### Batch 3: what shipped
+
+Branch `feat/saas-patterns-3`, stacked on `feat/saas-patterns-2`. This completes p-4-0: ten artboards are kit components and two are copy-in patterns.
+
+**Decision (Boris, via the planner): pattern instead.** Billing Schedule and Integration Settings are mostly kit parts, so they ship as copy-in patterns, not components. Each is in `patterns/<Name>Pattern/` (TSX, prefixed plain CSS, a demo data file), with a pattern contract (`must` / `defaults`) in `contracts/patterns/`, and `npx agentic-ds-kit add billing-schedule` / `add integration-settings` installs it. They use only kit components; neither needed a new p-4-0 component. The site shows them under Patterns with a state switcher (`app/_components/SaasPatternDemo.tsx`). A first cut had both as components; this branch replaced them before merge.
+
+| Pattern | Paper artboard | Composed from | States shown |
+| --- | --- | --- | --- |
+| `billing-schedule` (BillingSchedulePattern) | 01 Billing Schedule | Section, Table, Badge, Alert, Button, Empty, Skeleton | history with every status and the next charge, failed payment (danger Alert + Update card), next charge only, empty, loading, error |
+| `integration-settings` (IntegrationSettingsPattern) | 09 Integration Settings | Section, Badge, Alert, FieldSet, Field, Select, Switch, Tag, Button, Card, AlertDialog, Empty, Skeleton | connected, syncing, error (View errors), needs reauth (Reconnect; FieldSet locked), saving, disconnect confirm, not connected (Connect), loading, error |
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| InvoiceDocument | 02 Invoice & Credit Note | Table, Badge, Button, Empty, Skeleton | draft (Issue invoice), issued and overdue (Record payment), paid, void, credit note naming the invoice it reduces, empty lines, loading, error |
+| TaskBoard | 12 Task Board | Badge, Avatar, Button, Empty, Skeleton | populated, card mid-move (keyboard and drag), empty column + overflow (+ N more), empty board, loading, error |
+
+Paper vs tokens, batch 3:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Billing Schedule next-charge row tinted blue | a "Next charge" Badge in the description cell; no row tint | Kit Table has no row highlight. A `highlightRow` prop on Table is a possible follow-up. |
+| Billing Schedule failed-payment banner with an inline Update card | kit Alert (danger) with Update card under it | Alert has no action slot. |
+| Billing / Invoice table header mono caps | the kit Table header | Kit component. |
+| Invoice money as numbers + `currency` | pre-formatted strings (`"$782.40"`) | Locale and currency formatting stay with the app; the component never does money maths. |
+| Invoice void: the whole card faded | lines and totals at `--opacity-muted`, the total struck through, Download and Send disabled; the header, badge and footnote stay full contrast | So "Void" and the reason stay readable. |
+| Invoice title 18px | `--type-size-ui-lg` | Kit role. |
+| Integration Settings "built on Section + Fieldset + Field" | kit Section, FieldSet ("Settings", disabled while saving or until reconnect) and Field `labelPosition="start"` | As designed. Field puts the hint under the control, not under the label as in Paper. |
+| Integration Settings scope chips, mono caps | kit Tag, lowercase as the scopes are written | Kit chip; they are identifiers. |
+| Integration Settings Disconnect box | kit Card `size="sm"` with a danger outline action | Kit surface; Card actions are full-width Buttons. |
+| Integration needs-reauth: Save disabled but solid | Reconnect is the solid primary; Save steps down to a disabled outline | One solid primary per view. |
+| Task Board tags, mono caps | kit Badge outline, sentence case | Same as other batches. |
+| Task Board "no due date" mono | "No due date"; dates read "Due 14 Nov" | Says what the date is. |
+| Task Board column "…" menu | not built | The contract has no column actions to put in it. |
+| Task Board moving card: source "moving out…" ghost + dashed "Drop here" slot | the card previews at its target spot, lifted (`--shadow-md`, slight rotate and scale), and a drag highlights the target column with a dashed `--primary` border | One element per card; no duplicate in the list. |
+| Task Board "card glides to its new place (200ms)" | the card fades and rises in where it lands (transform + opacity) | A real FLIP glide would need layout measurement; this stays on transform and opacity. |
+| Integration Settings width 770px | `width: min(100%, var(--layout-container-sm))` | Layout token. |
+
+Keyboard and focus, batch 3 (Playwright at 1440):
+- TaskBoard: Space picks up a card (aria-pressed); arrow keys move it across columns and positions; Space or Enter drops it and Escape cancels. Each step is announced in a live region, and focus stays on the card as it moves. Enter on a resting card opens it. Mouse drag works too (checked with a Playwright drag).
+- `integration-settings` pattern: ⌘/Ctrl+S saves and the FieldSet disables while saving. Disconnect opens a danger AlertDialog with focus on Keep connected, and Escape returns focus to Disconnect. Each Field label names its control.
+- `billing-schedule` pattern and InvoiceDocument: the only controls are Buttons. The failed payment is a kit Alert.
+
+### Proposals and follow-ups (need Boris's OK)
+
+- No new tokens or colours in these three batches.
+- **Compact Empty** (a smaller title for cards). Used in most of the SaaS cards, and in AgentInbox, InlineDiff and MemoryPanel.
+- **Table `highlightRow`** for the next charge.
+- **Move UsageMeter and TraceWaterfall onto `ui/shared/LoadError`** so every card shares one error row.
+
+### PR status
+
+- Batch 1: `feat/saas-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/129, base `main`. Open, not merged.
+- Batch 2: `feat/saas-patterns-2`, https://github.com/borisj74/agentic-ds-kit/pull/130, base `feat/saas-patterns-1`. Open, not merged.
+- Batch 3: `feat/saas-patterns-3`, https://github.com/borisj74/agentic-ds-kit/pull/131, base `feat/saas-patterns-2`. Open, not merged.
+
 ## 2026-11-10: component pages, previews and variants
 
 Site (branches `claude/k79-nistha-site-859cfe`, PR #119, and `feat/variants-tab-cleanup`):

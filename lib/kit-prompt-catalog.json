@@ -2825,7 +2825,7 @@
     {
       "id": "daterangepicker",
       "group": "component",
-      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
       "useWhen": [
         "A report or filter period with presets like This month or Last 30 days",
         "A start and end date in one field"
@@ -9022,6 +9022,924 @@
       }
     },
     {
+      "id": "setupguide",
+      "group": "component",
+      "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+      "useWhen": [
+        "onboard a new workspace with a short list of setup tasks",
+        "show how far setup is and what to do next",
+        "let people skip optional tasks and undo the skip"
+      ],
+      "doNotUseWhen": [
+        "a linear multi-page wizard — ProgressSteps",
+        "one value against a goal — Progress",
+        "an agent's plan of steps — AgentPlan"
+      ],
+      "doNot": [
+        "Do not invent a local Checklist, OnboardingCard or SetupSteps",
+        "Do not use ProgressSteps for a checklist people can do in any order",
+        "Do not show more than one solid primary; Continue stays outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "tasks": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped', actionLabel? }[]"
+        },
+        "onTaskAction": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Continue on the current task (outline), Start on todo tasks (ghost)."
+        },
+        "onUndoSkip": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. \"Skipped · Undo\"."
+        },
+        "onComplete": {
+          "type": "function",
+          "required": false,
+          "note": "Go to dashboard, the one solid primary once every task is done or skipped."
+        },
+        "completeLabel": {
+          "type": "string",
+          "default": "Go to dashboard"
+        },
+        "onDismiss": {
+          "type": "function",
+          "required": false
+        },
+        "skippedNote": {
+          "type": "string",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "Nothing to set up"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "emptyActionLabel": {
+          "type": "string",
+          "required": false
+        },
+        "onEmptyAction": {
+          "type": "function",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "notificationstack",
+      "group": "component",
+      "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
+      "useWhen": [
+        "show payments, sign-ins and billing updates people can read later",
+        "an app header needs a bell with an unread count",
+        "a settings or activity page shows the same list in place (inline)"
+      ],
+      "doNotUseWhen": [
+        "instant feedback for an action just taken — Toast",
+        "agent approvals and questions — AgentInbox",
+        "a page-level message — Alert"
+      ],
+      "doNot": [
+        "Do not invent a local NotificationBell or NotificationList",
+        "Do not restyle Toast as an inbox",
+        "Do not route agent approvals here — AgentInbox",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, body?, createdAt, read, tone?: 'neutral'|'success'|'info'|'warning'|'danger', icon? }[]"
+        },
+        "label": {
+          "type": "string",
+          "default": "Notifications"
+        },
+        "open": {
+          "type": "boolean",
+          "required": false
+        },
+        "defaultOpen": {
+          "type": "boolean",
+          "default": false
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": false
+        },
+        "inline": {
+          "type": "boolean",
+          "default": false,
+          "note": "Render the panel in place, with no bell or popover."
+        },
+        "onItemClick": {
+          "type": "function",
+          "required": false
+        },
+        "onMarkRead": {
+          "type": "function",
+          "required": false,
+          "note": "Called when an unread item is opened."
+        },
+        "onMarkAll": {
+          "type": "function",
+          "required": false
+        },
+        "onViewAll": {
+          "type": "function",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "You’re all caught up"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "changesummary",
+      "group": "component",
+      "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+      "useWhen": [
+        "summarise the changes between two periods on a dashboard or report",
+        "say whether each move is good or bad for the business",
+        "link to the full report"
+      ],
+      "doNotUseWhen": [
+        "one KPI with a trend — Scorecard",
+        "a row of KPI tiles — Scoreboard",
+        "a time series — LineChart"
+      ],
+      "doNot": [
+        "Do not invent a local DeltaList or MetricChanges",
+        "Do not colour by direction: sentiment is set per metric",
+        "Do not show arrows without the word",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "default": "What moved"
+        },
+        "period": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"Oct → Nov 2026\""
+        },
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral' }[] — values are pre-formatted strings."
+        },
+        "onViewAll": {
+          "type": "function",
+          "required": false
+        },
+        "viewAllLabel": {
+          "type": "string",
+          "default": "View full report"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "Nothing to compare yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "experimentcard",
+      "group": "component",
+      "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
+      "useWhen": [
+        "show a running or finished experiment in a product or growth view",
+        "let someone ship the winner or stop a test with a confirmation",
+        "show a draft A/B/n split before it starts"
+      ],
+      "doNotUseWhen": [
+        "a feature flag on or off — Switch",
+        "a single KPI — Scorecard",
+        "a recommendation to act on — InsightCard"
+      ],
+      "doNot": [
+        "Do not invent a local ABTestCard or VariantList",
+        "Do not ship or stop without the AlertDialog",
+        "Do not mark the winner by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "metricLabel": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "running",
+            "concluded",
+            "stopped"
+          ],
+          "required": true,
+          "note": "Concluded with no winner reads \"Inconclusive\"."
+        },
+        "variants": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, traffic, value?, isWinner?, isLeading? }[]; lettered A, B, C…"
+        },
+        "dates": {
+          "type": "string",
+          "required": false
+        },
+        "confidenceNote": {
+          "type": "string",
+          "required": false
+        },
+        "onView": {
+          "type": "function",
+          "required": false
+        },
+        "onShip": {
+          "type": "function",
+          "required": false,
+          "note": "(variantId) => void, after the AlertDialog. The one solid primary."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "After a danger AlertDialog."
+        },
+        "onStart": {
+          "type": "function",
+          "required": false
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false
+        },
+        "onExtend": {
+          "type": "function",
+          "required": false
+        },
+        "extendLabel": {
+          "type": "string",
+          "default": "Extend 7 days"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "commentthread",
+      "group": "component",
+      "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
+      "useWhen": [
+        "people discuss a record (invoice, document, task) with replies and @mentions",
+        "show the thread for one line or the whole page",
+        "inside CommentsPanel for the selected thread"
+      ],
+      "doNotUseWhen": [
+        "talking to an assistant — Chat",
+        "a list of threads on a page — CommentsPanel",
+        "an activity log — Timeline"
+      ],
+      "doNot": [
+        "Do not use Chat for people commenting on a record",
+        "Do not nest replies more than one level",
+        "Do not show more than one solid primary; Comment is it",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "note": "Shows the card header with the count. Omit inside CommentsPanel."
+        },
+        "comments": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, author: { id, name, initials?, avatarSrc? }, createdAt, body, edited?, parentId? }[]; replies nest one level."
+        },
+        "currentUserId": {
+          "type": "string",
+          "required": false,
+          "note": "Your comments get Edit and Delete."
+        },
+        "value": {
+          "type": "string",
+          "required": true
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": true
+        },
+        "onSubmit": {
+          "type": "function",
+          "required": true,
+          "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
+        },
+        "submitting": {
+          "type": "boolean",
+          "default": false
+        },
+        "onReply": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void; focus moves to the composer."
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false,
+          "note": "(id, body) => void. Enter saves, Escape cancels."
+        },
+        "onDelete": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void, after a danger AlertDialog."
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Reply or @mention…"
+        },
+        "label": {
+          "type": "string",
+          "default": "Comments"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No comments yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "commentspanel",
+      "group": "component",
+      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+      "useWhen": [
+        "a page (invoice, document) has several comment threads",
+        "people filter open and resolved threads and open one",
+        "a header needs a Comments button with the open count"
+      ],
+      "doNotUseWhen": [
+        "one conversation on its own — CommentThread",
+        "product notifications — NotificationStack",
+        "agent work — AgentInbox"
+      ],
+      "doNot": [
+        "Do not invent a local CommentsDrawer or ThreadList",
+        "Do not re-implement the thread: pass a CommentThread as children",
+        "Do not use Tabs for the Open / Resolved / All filter",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "threads": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, preview, count, resolved?, updatedAt }[]"
+        },
+        "open": {
+          "type": "boolean",
+          "required": true
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": true
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false
+        },
+        "onSelect": {
+          "type": "function",
+          "required": true,
+          "note": "(id | null) => void; null goes back to the list."
+        },
+        "onResolve": {
+          "type": "function",
+          "required": false
+        },
+        "filter": {
+          "type": "enum",
+          "values": [
+            "open",
+            "resolved",
+            "all"
+          ],
+          "default": "open"
+        },
+        "onFilterChange": {
+          "type": "function",
+          "required": false
+        },
+        "children": {
+          "type": "ReactNode",
+          "required": false,
+          "note": "The selected thread, usually a CommentThread without a title."
+        },
+        "composer": {
+          "type": "ReactNode",
+          "required": false,
+          "note": "Shown under the list, e.g. a page-level CommentThread."
+        },
+        "label": {
+          "type": "string",
+          "default": "Comments"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No comments yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "inline": {
+          "type": "boolean",
+          "default": false
+        },
+        "showTrigger": {
+          "type": "boolean",
+          "default": true
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "integrationpicker",
+      "group": "component",
+      "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+      "useWhen": [
+        "let people find and connect integrations in settings or onboarding",
+        "show which integrations are connected",
+        "list providers that are coming soon"
+      ],
+      "doNotUseWhen": [
+        "settings for one connected integration — the integration-settings pattern",
+        "choosing a plan — PricingPlans",
+        "a plain list of links — LinkList"
+      ],
+      "doNot": [
+        "Do not invent a local IntegrationGrid or AppDirectory",
+        "Do not use a real provider's logo or name without labelling it an example",
+        "Do not put more than one action on a tile",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon? }[]"
+        },
+        "title": {
+          "type": "string",
+          "default": "Integrations"
+        },
+        "note": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"example providers\""
+        },
+        "query": {
+          "type": "string",
+          "required": false
+        },
+        "onQueryChange": {
+          "type": "function",
+          "required": false
+        },
+        "category": {
+          "type": "string",
+          "default": "all"
+        },
+        "onCategoryChange": {
+          "type": "function",
+          "required": false
+        },
+        "categories": {
+          "type": "string[]",
+          "required": false
+        },
+        "onConnect": {
+          "type": "function",
+          "required": true
+        },
+        "onManage": {
+          "type": "function",
+          "required": false
+        },
+        "connectingId": {
+          "type": "string",
+          "required": false,
+          "note": "That tile shows Connecting… (solid primary)."
+        },
+        "onRequest": {
+          "type": "function",
+          "required": false,
+          "note": "Request an integration, when search finds nothing."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "pricingplans",
+      "group": "component",
+      "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+      "useWhen": [
+        "upgrade or change plan inside the product",
+        "compare a few plans side by side with their features",
+        "switch monthly and yearly prices"
+      ],
+      "doNotUseWhen": [
+        "usage against a plan limit — UsageMeter",
+        "picking options in a form — TileGroup",
+        "a public marketing pricing page"
+      ],
+      "doNot": [
+        "Do not invent a local PlanCard or PricingTable",
+        "Do not show more than one solid primary; current plan is never solid",
+        "Do not mark the recommended plan by border colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "plans": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]"
+        },
+        "interval": {
+          "type": "enum",
+          "values": [
+            "month",
+            "year"
+          ],
+          "required": true
+        },
+        "onIntervalChange": {
+          "type": "function",
+          "required": true
+        },
+        "onSelect": {
+          "type": "function",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "default": "Choose a plan"
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "savingsLabel": {
+          "type": "string",
+          "required": false
+        },
+        "footnote": {
+          "type": "string",
+          "required": false
+        },
+        "currency": {
+          "type": "string",
+          "default": "$"
+        },
+        "unitLabel": {
+          "type": "string",
+          "default": "/ seat / month"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "invoicedocument",
+      "group": "component",
+      "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
+      "useWhen": [
+        "show one invoice or credit note inside the product",
+        "issue, send or record payment on an invoice",
+        "show what a credit note reduces"
+      ],
+      "doNotUseWhen": [
+        "a list of charges over time — the billing-schedule pattern",
+        "a generic data table — DataTable",
+        "printing or generating PDFs"
+      ],
+      "doNot": [
+        "Do not invent a local InvoiceView or CreditNoteCard",
+        "Do not show a credit note without the invoice it reduces",
+        "Do not show more than one solid primary",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "kind": {
+          "type": "enum",
+          "values": [
+            "invoice",
+            "creditNote"
+          ],
+          "default": "invoice"
+        },
+        "number": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "issued",
+            "paid",
+            "overdue",
+            "void"
+          ],
+          "default": "draft"
+        },
+        "from": {
+          "type": "string",
+          "required": false
+        },
+        "to": {
+          "type": "string",
+          "required": true
+        },
+        "issuedOn": {
+          "type": "string",
+          "required": true
+        },
+        "dueOn": {
+          "type": "string",
+          "required": false
+        },
+        "relatedInvoiceId": {
+          "type": "string",
+          "required": false,
+          "note": "Credit notes: the invoice it reduces."
+        },
+        "lines": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, description, quantity, unitPrice, amount }[]; money pre-formatted."
+        },
+        "subtotal": {
+          "type": "string",
+          "required": true
+        },
+        "taxLabel": {
+          "type": "string",
+          "default": "Tax"
+        },
+        "tax": {
+          "type": "string",
+          "required": false
+        },
+        "total": {
+          "type": "string",
+          "required": true
+        },
+        "footnote": {
+          "type": "string",
+          "required": false,
+          "note": "Paid on, overdue reminder, voided, or what the credit note reduces; icon and colour follow the status."
+        },
+        "onDownload": {
+          "type": "function",
+          "required": false
+        },
+        "onSend": {
+          "type": "function",
+          "required": false
+        },
+        "onIssue": {
+          "type": "function",
+          "required": false,
+          "note": "Draft: Issue invoice, the solid primary."
+        },
+        "onRecordPayment": {
+          "type": "function",
+          "required": false,
+          "note": "Issued or overdue: Record payment, the solid primary."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "taskboard",
+      "group": "component",
+      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+      "useWhen": [
+        "a small board of tasks by status inside a product",
+        "let people move cards between columns with mouse or keyboard",
+        "show an overflowing column with + N more"
+      ],
+      "doNotUseWhen": [
+        "a list with filters and sorting — DataTable",
+        "an agent plan — AgentPlan",
+        "a timeline of events — Timeline"
+      ],
+      "doNot": [
+        "Do not invent a local Kanban or BoardColumn",
+        "Do not make moves drag-only; keep the keyboard path",
+        "Do not encode status by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "columns": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, cardIds }[]"
+        },
+        "cards": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, tags?, assignee?: { name, initials?, avatarSrc? }, dueOn? }[]"
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "note": {
+          "type": "string",
+          "required": false
+        },
+        "onMove": {
+          "type": "function",
+          "required": true,
+          "note": "(cardId, toColumnId, index) => void"
+        },
+        "onAdd": {
+          "type": "function",
+          "required": false
+        },
+        "onCardClick": {
+          "type": "function",
+          "required": false,
+          "note": "Click or Enter on a card."
+        },
+        "onNewTask": {
+          "type": "function",
+          "required": false
+        },
+        "onFilter": {
+          "type": "function",
+          "required": false
+        },
+        "maxCardsPerColumn": {
+          "type": "number",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No tasks on this board"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
@@ -9197,6 +10115,39 @@
           "note": "Primary disabled with a busy label; SSO disabled; form aria-busy."
         }
       }
+    },
+    {
+      "id": "billing-schedule",
+      "group": "pattern",
+      "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Status is a word in a kit Badge (Upcoming, Paid, Failed…), never colour alone",
+        "Charges are a kit Table; do not build a local charges list",
+        "A failed payment is a kit Alert (danger) that says the date, the amount and what happens next",
+        "Money arrives pre-formatted from your app; label example data as example",
+        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
+    },
+    {
+      "id": "integration-settings",
+      "group": "pattern",
+      "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Wrap every setting in Field (label, hint and control wiring); group them in a FieldSet",
+        "Disable the FieldSet while saving and while access needs reauth",
+        "Disconnect is a danger action and confirms with a kit AlertDialog; Cancel returns focus to Disconnect",
+        "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
+        "When access expires, Reconnect is the solid primary and Save steps down to outline",
+        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
     }
   ]
 }

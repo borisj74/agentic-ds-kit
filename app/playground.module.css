@@ -200,3 +200,9 @@
   min-height: 0;
   overflow: auto;
 }
+
+/* SaaS settings patterns: the block sits on the page with the content inset, like a settings screen. */
+.saasPage {
+  padding: var(--space-8);
+  overflow: auto;
+}

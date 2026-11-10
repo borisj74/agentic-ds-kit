@@ -1,0 +1,138 @@
+{
+  "id": "integrationpicker",
+  "status": "stable",
+  "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+  "useWhen": [
+    "let people find and connect integrations in settings or onboarding",
+    "show which integrations are connected",
+    "list providers that are coming soon"
+  ],
+  "doNotUseWhen": [
+    "settings for one connected integration — the integration-settings pattern",
+    "choosing a plan — PricingPlans",
+    "a plain list of links — LinkList"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "input",
+    "segmentedcontrol",
+    "skeleton"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon? }[]"
+    },
+    "title": {
+      "type": "string",
+      "default": "Integrations"
+    },
+    "note": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"example providers\""
+    },
+    "query": {
+      "type": "string",
+      "required": false
+    },
+    "onQueryChange": {
+      "type": "function",
+      "required": false
+    },
+    "category": {
+      "type": "string",
+      "default": "all"
+    },
+    "onCategoryChange": {
+      "type": "function",
+      "required": false
+    },
+    "categories": {
+      "type": "string[]",
+      "required": false
+    },
+    "onConnect": {
+      "type": "function",
+      "required": true
+    },
+    "onManage": {
+      "type": "function",
+      "required": false
+    },
+    "connectingId": {
+      "type": "string",
+      "required": false,
+      "note": "That tile shows Connecting… (solid primary)."
+    },
+    "onRequest": {
+      "type": "function",
+      "required": false,
+      "note": "Request an integration, when search finds nothing."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "radius.surfaceSm",
+    "status.success",
+    "status.successText",
+    "type.size.overline",
+    "type.tracking.overline",
+    "grid.gutter.sm",
+    "motion.duration200"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "search is a labelled kit Input; the category filter is a kit SegmentedControl radio group",
+      "each tile action is described by the provider name",
+      "Connected and Coming soon are words, not colour alone; coming soon has a disabled Connect",
+      "Connecting is announced in a status region",
+      "tiles fade and rise in when the filter changes, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local IntegrationGrid or AppDirectory",
+    "Do not use a real provider's logo or name without labelling it an example",
+    "Do not put more than one action on a tile",
+    "Do not use raw hex"
+  ],
+  "snippet": "<IntegrationPicker note=\"example providers\" items={integrations} onConnect={connect} onManage={manage} connectingId={connecting} onRequest={request} />"
+}

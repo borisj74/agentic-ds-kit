@@ -1,0 +1,138 @@
+{
+  "id": "taskboard",
+  "status": "stable",
+  "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+  "useWhen": [
+    "a small board of tasks by status inside a product",
+    "let people move cards between columns with mouse or keyboard",
+    "show an overflowing column with + N more"
+  ],
+  "doNotUseWhen": [
+    "a list with filters and sorting — DataTable",
+    "an agent plan — AgentPlan",
+    "a timeline of events — Timeline"
+  ],
+  "contains": [
+    "avatar",
+    "badge",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "columns": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, cardIds }[]"
+    },
+    "cards": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, tags?, assignee?: { name, initials?, avatarSrc? }, dueOn? }[]"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "note": {
+      "type": "string",
+      "required": false
+    },
+    "onMove": {
+      "type": "function",
+      "required": true,
+      "note": "(cardId, toColumnId, index) => void"
+    },
+    "onAdd": {
+      "type": "function",
+      "required": false
+    },
+    "onCardClick": {
+      "type": "function",
+      "required": false,
+      "note": "Click or Enter on a card."
+    },
+    "onNewTask": {
+      "type": "function",
+      "required": false
+    },
+    "onFilter": {
+      "type": "function",
+      "required": false
+    },
+    "maxCardsPerColumn": {
+      "type": "number",
+      "required": false
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "No tasks on this board"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "primary",
+    "primary.subtle",
+    "primary.fg",
+    "line.strong",
+    "shadow.xs",
+    "shadow.md",
+    "grid.gutter.sm",
+    "motion.duration200"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 board title; each column is a section named by its heading",
+      "cards are buttons in ordered lists, described by the move instructions",
+      "Space picks up (aria-pressed), arrows move, Space or Enter drops, Escape cancels; each step is announced in a live region",
+      "focus stays on the moved card",
+      "counts are text next to each column name",
+      "cards fade and rise in after a move and lift on transform; off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Kanban or BoardColumn",
+    "Do not make moves drag-only; keep the keyboard path",
+    "Do not encode status by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<TaskBoard title=\"Billing Q4\" note=\"example tasks\" columns={columns} cards={cards} onMove={move} onAdd={addCard} onCardClick={openCard} onNewTask={newTask} onFilter={filter} />"
+}

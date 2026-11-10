@@ -505,7 +505,7 @@
   },
   {
     "id": "section",
-    "intent": "Grouped page block with heading, optional description and actions. Unframed \u2014 Card owns the framed surface; layout-content owns page inset.",
+    "intent": "Grouped page block with heading, optional description and actions. Unframed — Card owns the framed surface; layout-content owns page inset.",
     "group": "component",
     "path": "contracts/section.json",
     "status": "stable"
@@ -798,6 +798,76 @@
     "status": "stable"
   },
   {
+    "id": "setupguide",
+    "intent": "First-run checklist: overall progress and one action per task; feeds onboarding screens.",
+    "group": "component",
+    "path": "contracts/setupguide.json",
+    "status": "stable"
+  },
+  {
+    "id": "notificationstack",
+    "intent": "In-app notification inbox: bell with unread count and a popover list; not a Toast.",
+    "group": "component",
+    "path": "contracts/notificationstack.json",
+    "status": "stable"
+  },
+  {
+    "id": "changesummary",
+    "intent": "\"What moved\" card: before → after and a delta per metric, with good or bad per metric.",
+    "group": "component",
+    "path": "contracts/changesummary.json",
+    "status": "stable"
+  },
+  {
+    "id": "experimentcard",
+    "intent": "A/B or A/B/n experiment card: status, traffic split, metric per variant and one decision.",
+    "group": "component",
+    "path": "contracts/experimentcard.json",
+    "status": "stable"
+  },
+  {
+    "id": "commentthread",
+    "intent": "One comment conversation on a document or record: comments, one level of replies, edit and a composer.",
+    "group": "component",
+    "path": "contracts/commentthread.json",
+    "status": "stable"
+  },
+  {
+    "id": "commentspanel",
+    "intent": "Side panel for a page's comment threads: Open / Resolved / All, previews and the selected thread.",
+    "group": "component",
+    "path": "contracts/commentspanel.json",
+    "status": "stable"
+  },
+  {
+    "id": "integrationpicker",
+    "intent": "Filterable catalogue of integrations: search, category filter and one Connect per tile.",
+    "group": "component",
+    "path": "contracts/integrationpicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "pricingplans",
+    "intent": "In-product plan comparison: Monthly / Yearly switch, price, features and one CTA per plan.",
+    "group": "component",
+    "path": "contracts/pricingplans.json",
+    "status": "stable"
+  },
+  {
+    "id": "invoicedocument",
+    "intent": "Invoice or credit note document view: status, bill-to, lines, totals and one line about payment.",
+    "group": "component",
+    "path": "contracts/invoicedocument.json",
+    "status": "stable"
+  },
+  {
+    "id": "taskboard",
+    "intent": "Kanban board of columns and task cards; move by drag or keyboard (Space, arrows, Space).",
+    "group": "component",
+    "path": "contracts/taskboard.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
@@ -850,5 +920,23 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add sign-in"
+  },
+  {
+    "id": "billing-schedule",
+    "intent": "Billing schedule example: Section, next charge, failed-payment Alert, and charges in a Table with status Badges.",
+    "group": "pattern",
+    "path": "contracts/patterns/billing-schedule.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add billing-schedule"
+  },
+  {
+    "id": "integration-settings",
+    "intent": "Integration settings example: Section with status Badge, FieldSet of Fields (Select, Switch), scope Tags, Save, and a confirmed Disconnect.",
+    "group": "pattern",
+    "path": "contracts/patterns/integration-settings.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add integration-settings"
   }
 ]

@@ -47,6 +47,16 @@ import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { UsageMeterDoc } from "./UsageMeterDoc";
+import { TaskBoardDoc } from "./TaskBoardDoc";
+import { InvoiceDocumentDoc } from "./InvoiceDocumentDoc";
+import { PricingPlansDoc } from "./PricingPlansDoc";
+import { IntegrationPickerDoc } from "./IntegrationPickerDoc";
+import { CommentsPanelDoc } from "./CommentsPanelDoc";
+import { CommentThreadDoc } from "./CommentThreadDoc";
+import { SetupGuideDoc } from "./SetupGuideDoc";
+import { NotificationStackDoc } from "./NotificationStackDoc";
+import { ExperimentCardDoc } from "./ExperimentCardDoc";
+import { ChangeSummaryDoc } from "./ChangeSummaryDoc";
 import { TraceWaterfallDoc } from "./TraceWaterfallDoc";
 import { MemoryPanelDoc } from "./MemoryPanelDoc";
 import { InlineDiffDoc } from "./InlineDiffDoc";
@@ -132,6 +142,16 @@ const TITLES: Record<string, string> = {
   inputotp: "InputOTP",
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
+  taskboard: "TaskBoard",
+  invoicedocument: "InvoiceDocument",
+  pricingplans: "PricingPlans",
+  integrationpicker: "IntegrationPicker",
+  commentspanel: "CommentsPanel",
+  commentthread: "CommentThread",
+  setupguide: "SetupGuide",
+  notificationstack: "NotificationStack",
+  experimentcard: "ExperimentCard",
+  changesummary: "ChangeSummary",
   tracewaterfall: "TraceWaterfall",
   memorypanel: "MemoryPanel",
   inlinediff: "InlineDiff",
@@ -395,6 +415,16 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "usagemeter") return <UsageMeterDoc />;
+  if (resolved === "taskboard") return <TaskBoardDoc />;
+  if (resolved === "invoicedocument") return <InvoiceDocumentDoc />;
+  if (resolved === "pricingplans") return <PricingPlansDoc />;
+  if (resolved === "integrationpicker") return <IntegrationPickerDoc />;
+  if (resolved === "commentspanel") return <CommentsPanelDoc />;
+  if (resolved === "commentthread") return <CommentThreadDoc />;
+  if (resolved === "setupguide") return <SetupGuideDoc />;
+  if (resolved === "notificationstack") return <NotificationStackDoc />;
+  if (resolved === "experimentcard") return <ExperimentCardDoc />;
+  if (resolved === "changesummary") return <ChangeSummaryDoc />;
   if (resolved === "tracewaterfall") return <TraceWaterfallDoc />;
   if (resolved === "memorypanel") return <MemoryPanelDoc />;
   if (resolved === "inlinediff") return <InlineDiffDoc />;

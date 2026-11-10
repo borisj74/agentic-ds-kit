@@ -112,6 +112,16 @@ import contract_tracewaterfall from "../packages/kit/contracts/tracewaterfall.js
 import contract_treeview from "../packages/kit/contracts/treeview.json";
 import contract_usagelist from "../packages/kit/contracts/usagelist.json";
 import contract_usagemeter from "../packages/kit/contracts/usagemeter.json";
+import contract_taskboard from "../packages/kit/contracts/taskboard.json";
+import contract_invoicedocument from "../packages/kit/contracts/invoicedocument.json";
+import contract_pricingplans from "../packages/kit/contracts/pricingplans.json";
+import contract_integrationpicker from "../packages/kit/contracts/integrationpicker.json";
+import contract_commentspanel from "../packages/kit/contracts/commentspanel.json";
+import contract_commentthread from "../packages/kit/contracts/commentthread.json";
+import contract_setupguide from "../packages/kit/contracts/setupguide.json";
+import contract_notificationstack from "../packages/kit/contracts/notificationstack.json";
+import contract_experimentcard from "../packages/kit/contracts/experimentcard.json";
+import contract_changesummary from "../packages/kit/contracts/changesummary.json";
 
 type ContractNotes = {
   useWhen?: string[];
@@ -233,6 +243,16 @@ const contracts: Record<string, ContractNotes> = {
   "treeview": contract_treeview,
   "usagelist": contract_usagelist,
   "usagemeter": contract_usagemeter,
+  "taskboard": contract_taskboard,
+  "invoicedocument": contract_invoicedocument,
+  "pricingplans": contract_pricingplans,
+  "integrationpicker": contract_integrationpicker,
+  "commentspanel": contract_commentspanel,
+  "commentthread": contract_commentthread,
+  "setupguide": contract_setupguide,
+  "notificationstack": contract_notificationstack,
+  "experimentcard": contract_experimentcard,
+  "changesummary": contract_changesummary,
 };
 
 export function guidanceFor(id: string): { dos: string[]; donts: string[] } | null {

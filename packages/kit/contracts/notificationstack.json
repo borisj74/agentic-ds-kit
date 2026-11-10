@@ -1,0 +1,137 @@
+{
+  "id": "notificationstack",
+  "status": "stable",
+  "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
+  "useWhen": [
+    "show payments, sign-ins and billing updates people can read later",
+    "an app header needs a bell with an unread count",
+    "a settings or activity page shows the same list in place (inline)"
+  ],
+  "doNotUseWhen": [
+    "instant feedback for an action just taken — Toast",
+    "agent approvals and questions — AgentInbox",
+    "a page-level message — Alert"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "popover",
+    "skeleton"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, body?, createdAt, read, tone?: 'neutral'|'success'|'info'|'warning'|'danger', icon? }[]"
+    },
+    "label": {
+      "type": "string",
+      "default": "Notifications"
+    },
+    "open": {
+      "type": "boolean",
+      "required": false
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "default": false
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false
+    },
+    "inline": {
+      "type": "boolean",
+      "default": false,
+      "note": "Render the panel in place, with no bell or popover."
+    },
+    "onItemClick": {
+      "type": "function",
+      "required": false
+    },
+    "onMarkRead": {
+      "type": "function",
+      "required": false,
+      "note": "Called when an unread item is opened."
+    },
+    "onMarkAll": {
+      "type": "function",
+      "required": false
+    },
+    "onViewAll": {
+      "type": "function",
+      "required": false
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "You’re all caught up"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "primary",
+    "primary.fg",
+    "action.onPrimary",
+    "bg.subtle",
+    "status.success",
+    "status.info",
+    "status.warning",
+    "status.danger",
+    "motion.duration200",
+    "radius.full"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "the bell is a kit Button named \"Notifications, 2 unread\"; the count chip is aria-hidden",
+      "the panel is the kit Popover dialog, named by label; Escape closes and returns focus to the bell",
+      "unread items say \"Unread:\" to screen readers, not just a dot",
+      "no count chip at zero",
+      "new items fade and drop in on transform and opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local NotificationBell or NotificationList",
+    "Do not restyle Toast as an inbox",
+    "Do not route agent approvals here — AgentInbox",
+    "Do not use raw hex"
+  ],
+  "snippet": "<NotificationStack items={notifications} onMarkRead={markRead} onMarkAll={markAll} onItemClick={open} onViewAll={viewAll} />"
+}

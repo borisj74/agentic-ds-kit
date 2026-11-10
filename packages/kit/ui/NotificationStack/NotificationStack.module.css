@@ -1,0 +1,302 @@
+/* Paper panel is 340px; same custom-width pattern as InsightCard (--insight-width). */
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.count {
+  position: absolute;
+  inset-block-start: calc(var(--space-1) * -1.5);
+  inset-inline-end: calc(var(--space-1) * -1.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-4);
+  height: var(--space-4);
+  padding-inline: var(--space-1);
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-label);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--action-on-primary);
+  background-color: var(--primary);
+  border: var(--border-width-thin) solid var(--bg-surface);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  animation: countIn var(--motion-duration-200) var(--motion-ease-spring-soft);
+}
+
+/* Beats the Popover's own padding and max-width (same element, higher specificity). */
+.popoverPanel.popoverPanel {
+  max-width: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.panel {
+  --notifications-width: 21.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--notifications-width));
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.inline {
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-block-end: var(--border-width-thin) solid var(--line-default);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+.textButton,
+.footerLink {
+  padding: 0;
+  font: inherit;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--primary-fg);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.textButton:disabled {
+  color: var(--text-fg-subtle);
+  cursor: default;
+}
+
+.footerLink {
+  color: var(--text-fg-muted);
+}
+
+.textButton:not(:disabled):hover,
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+.textButton:focus-visible,
+.footerLink:focus-visible,
+.rowButton:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--space-1) 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  animation: itemIn var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
+  font: inherit;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-surface-sm);
+}
+
+.rowButton {
+  cursor: pointer;
+  transition: background-color var(--motion-duration-150) var(--motion-ease-standard);
+}
+
+.rowButton:hover {
+  background-color: var(--bg-subtle);
+}
+
+.rowButton:focus-visible {
+  outline-offset: calc(var(--border-focus-width) * -1);
+}
+
+.dotSlot {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-2);
+  height: var(--type-line-ui-sm);
+}
+
+.dot {
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
+  border-radius: var(--radius-full);
+  background-color: var(--primary);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: var(--type-line-ui-sm);
+}
+
+.toneNeutral {
+  color: var(--text-fg-muted);
+}
+
+.toneSuccess {
+  color: var(--status-success);
+}
+
+.toneInfo {
+  color: var(--status-info);
+}
+
+.toneWarning {
+  color: var(--status-warning);
+}
+
+.toneDanger {
+  color: var(--status-danger);
+}
+
+.text {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.itemTitle {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.itemBody {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-subtle);
+}
+
+.footer {
+  padding: var(--space-3) var(--space-4);
+  border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+.error {
+  margin: var(--space-3);
+}
+
+.empty {
+  padding-block: var(--space-6);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.loadingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loadingText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--space-1) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* "Unread count rolls": the badge pops on change (keyed by count), transform + opacity only. */
+@keyframes countIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .count {
+    animation: none;
+  }
+
+  .rowButton {
+    transition: none;
+  }
+}

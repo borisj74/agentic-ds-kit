@@ -1,6 +1,16 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { UsageMeter } from "agentic-ds-kit";
+import { TaskBoard } from "agentic-ds-kit";
+import { InvoiceDocument } from "agentic-ds-kit";
+import { PricingPlans } from "agentic-ds-kit";
+import { IntegrationPicker } from "agentic-ds-kit";
+import { CommentsPanel } from "agentic-ds-kit";
+import { CommentThread } from "agentic-ds-kit";
+import { SetupGuide } from "agentic-ds-kit";
+import { NotificationStack } from "agentic-ds-kit";
+import { ExperimentCard } from "agentic-ds-kit";
+import { ChangeSummary } from "agentic-ds-kit";
 import { TraceWaterfall } from "agentic-ds-kit";
 import { MemoryPanel } from "agentic-ds-kit";
 import { InlineDiff } from "agentic-ds-kit";
@@ -352,6 +362,62 @@ export function GalleryPreview({ id }: { id: string }) {
               { id: "c", label: "Approval", kind: "approval", startMs: 6000, endMs: 20000 },
             ]}
           />
+        </Stage>
+      );
+    case "changesummary":
+      return (
+        <Stage variant="wide">
+          <ChangeSummary period="Oct → Nov" items={[{ id: "mrr", label: "MRR", before: "$48.2K", after: "$52.9K", delta: "+9.8%", direction: "up", sentiment: "good" }]} />
+        </Stage>
+      );
+    case "experimentcard":
+      return (
+        <Stage variant="wide">
+          <ExperimentCard name="Checkout copy" metricLabel="Conversion" status="running" variants={[{ id: "a", label: "v1", traffic: 50, value: "4.1%" }, { id: "b", label: "v2", traffic: 50, value: "4.6%", isLeading: true }]} />
+        </Stage>
+      );
+    case "notificationstack":
+      return (
+        <NotificationStack items={[{ id: "a", title: "Payment received", createdAt: "5m", read: false, tone: "success" }]} />
+      );
+    case "setupguide":
+      return (
+        <Stage variant="wide">
+          <SetupGuide title="Get ready" tasks={[{ id: "a", label: "Add company details", status: "done" }, { id: "b", label: "Import customers", status: "current" }]} />
+        </Stage>
+      );
+    case "commentthread":
+      return (
+        <Stage variant="wide">
+          <CommentThread title="Invoice" comments={[{ id: "a", author: { id: "p", name: "Priya Shah" }, createdAt: "2h", body: "Confirm the tax rate?" }]} value="" onValueChange={noop} onSubmit={noop} />
+        </Stage>
+      );
+    case "commentspanel":
+      return (
+        <CommentsPanel threads={[{ id: "a", title: "Tax rate", preview: "Marking ready.", count: 3, updatedAt: "45m" }]} open={false} onOpenChange={noop} onSelect={noop} />
+      );
+    case "integrationpicker":
+      return (
+        <Stage variant="wide">
+          <IntegrationPicker items={[{ id: "a", name: "Northwind Ledger", description: "Sync invoices", status: "connected" }]} onConnect={noop} />
+        </Stage>
+      );
+    case "pricingplans":
+      return (
+        <Stage variant="wide">
+          <PricingPlans interval="month" onIntervalChange={noop} onSelect={noop} plans={[{ id: "pro", name: "Pro", price: 29, features: ["Integrations"], recommended: true }]} />
+        </Stage>
+      );
+    case "invoicedocument":
+      return (
+        <Stage variant="wide">
+          <InvoiceDocument number="INV-0117" status="issued" to="Acme Co" issuedOn="01 Nov" lines={[{ id: "a", description: "Pro plan", quantity: 1, unitPrice: "$480", amount: "$480" }]} subtotal="$480" total="$480" />
+        </Stage>
+      );
+    case "taskboard":
+      return (
+        <Stage variant="wide">
+          <TaskBoard title="Board" columns={[{ id: "t", label: "Todo", cardIds: ["a"] }, { id: "d", label: "Done", cardIds: [] }]} cards={[{ id: "a", title: "Map tax codes" }]} onMove={noop} />
         </Stage>
       );
     case "usagemeter":
