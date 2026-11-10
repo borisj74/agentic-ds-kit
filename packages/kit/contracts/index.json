@@ -784,6 +784,20 @@
     "status": "stable"
   },
   {
+    "id": "tracewaterfall",
+    "intent": "Where a run's time and money went: model, tool and approval spans with totals and detail.",
+    "group": "component",
+    "path": "contracts/tracewaterfall.json",
+    "status": "stable"
+  },
+  {
+    "id": "usagemeter",
+    "intent": "Plan usage or credits against a limit; composes Meter, UsageList, LineChart and Alert.",
+    "group": "component",
+    "path": "contracts/usagemeter.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
+import { UsageMeter } from "agentic-ds-kit";
+import { TraceWaterfall } from "agentic-ds-kit";
 import { MemoryPanel } from "agentic-ds-kit";
 import { InlineDiff } from "agentic-ds-kit";
 import { MessageActions } from "agentic-ds-kit";
@@ -336,6 +338,26 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <MemoryPanel items={[{ id: "1", content: "Uses pnpm, not npm", source: "from repo scan", usedHere: true }]} />
+        </Stage>
+      );
+    case "tracewaterfall":
+      return (
+        <Stage variant="wide">
+          <TraceWaterfall
+            compact
+            title="Run trace"
+            spans={[
+              { id: "a", label: "Plan", kind: "model", startMs: 0, endMs: 4000, cost: 0.03 },
+              { id: "b", label: "read_file", kind: "tool", startMs: 4000, endMs: 6000 },
+              { id: "c", label: "Approval", kind: "approval", startMs: 6000, endMs: 20000 },
+            ]}
+          />
+        </Stage>
+      );
+    case "usagemeter":
+      return (
+        <Stage variant="wide">
+          <UsageMeter title="AI credits" used={6420} limit={10000} />
         </Stage>
       );
     case "accordion":

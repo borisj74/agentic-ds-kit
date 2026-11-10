@@ -1,0 +1,145 @@
+{
+  "id": "usagemeter",
+  "status": "stable",
+  "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
+  "useWhen": [
+    "show credits or plan usage for the current period",
+    "warn before a limit and offer the upgrade",
+    "break usage down by category and day"
+  ],
+  "doNotUseWhen": [
+    "one value without breakdown — Meter",
+    "several independent limits — UsageList",
+    "prompt context in a thread — ContextWindow"
+  ],
+  "contains": [
+    "alert",
+    "badge",
+    "button",
+    "linechart",
+    "meter",
+    "skeleton",
+    "usagelist"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "used": {
+      "type": "number",
+      "required": true
+    },
+    "limit": {
+      "type": "number",
+      "required": true
+    },
+    "unit": {
+      "type": "string",
+      "default": "credits"
+    },
+    "categories": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, label, value }[] listed with a kit UsageList against the limit."
+    },
+    "periodStart": {
+      "type": "string",
+      "required": false
+    },
+    "resetLabel": {
+      "type": "string",
+      "required": false
+    },
+    "daily": {
+      "type": "number[]",
+      "required": false,
+      "note": "Kit LineChart (area)."
+    },
+    "dailyLabels": {
+      "type": "string[]",
+      "required": false
+    },
+    "dailyCap": {
+      "type": "number",
+      "required": false,
+      "note": "Second LineChart series."
+    },
+    "warnAt": {
+      "type": "number",
+      "default": 0.9
+    },
+    "paceNote": {
+      "type": "string",
+      "required": false
+    },
+    "onUpgrade": {
+      "type": "function",
+      "required": false,
+      "note": "Upgrade plan, the one solid primary; shown near or over the limit."
+    },
+    "onViewUsage": {
+      "type": "function",
+      "required": false,
+      "note": "View usage (outline)."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "fill.brand",
+    "fill.warning",
+    "type.size.heading5"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "the total is a kit Meter with a full text label",
+      "categories are a kit UsageList",
+      "the daily line is a kit LineChart with its data table",
+      "near limit and limit reached are said in a Badge and a kit Alert, not colour alone",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local CreditMeter or BillingUsage",
+    "Do not reimplement Meter, UsageList or LineChart inside it",
+    "Do not show Upgrade as the primary when usage is normal",
+    "Do not use raw hex"
+  ],
+  "snippet": "<UsageMeter title=\"AI credits · Pro plan\" used={9240} limit={10000} categories={categories} periodStart=\"Nov 1\" resetLabel=\"resets Dec 1\" daily={daily} dailyCap={1000} onUpgrade={upgrade} onViewUsage={viewUsage} />"
+}

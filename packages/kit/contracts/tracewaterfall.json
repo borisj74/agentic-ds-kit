@@ -1,0 +1,134 @@
+{
+  "id": "tracewaterfall",
+  "status": "stable",
+  "intent": "Where a run's time and money went: a waterfall of model, tool and approval spans with totals and span detail; compact form for a header.",
+  "useWhen": [
+    "explain the time and cost of one agent run",
+    "find the slow or expensive span",
+    "show a run that is still going or failed"
+  ],
+  "doNotUseWhen": [
+    "compare categories — BarChart",
+    "plan or credit usage — UsageMeter",
+    "a step list with labels only — AgentTrail"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "numbertransition",
+    "skeleton"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "spans": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, detail? }[]; offsets from the run start; open spans draw dashed to now."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "running",
+        "complete",
+        "failed"
+      ],
+      "default": "complete"
+    },
+    "totalMs": {
+      "type": "number",
+      "required": false
+    },
+    "totalCost": {
+      "type": "number",
+      "required": false
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "Failed run: why, under the spans."
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false
+    },
+    "onSpanClick": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void. Rows become buttons that open the span detail."
+    },
+    "compact": {
+      "type": "boolean",
+      "default": false
+    },
+    "currency": {
+      "type": "string",
+      "default": "$"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "loadError": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "primary.base",
+    "status.success",
+    "status.warning",
+    "status.danger",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "action.selected",
+    "type.size.uiLg",
+    "motion.normal"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "each span is a button (or group) named with label, kind, duration, cost and failed",
+      "the open span has aria-expanded and controls a named detail region",
+      "totals use kit NumberTransition",
+      "bars and axis are aria-hidden; the legend names the kinds",
+      "bars grow on transform, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Waterfall, TraceChart, or SpanList",
+    "Do not use BarChart or Meter for a run trace",
+    "Do not encode failed or running by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<TraceWaterfall title=\"Run trace · Billing refactor\" spans={spans} selectedId={spanId} onSpanClick={setSpanId} />"
+}

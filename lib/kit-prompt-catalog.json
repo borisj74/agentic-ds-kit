@@ -8843,6 +8843,185 @@
       }
     },
     {
+      "id": "tracewaterfall",
+      "group": "component",
+      "intent": "Where a run's time and money went: a waterfall of model, tool and approval spans with totals and span detail; compact form for a header.",
+      "useWhen": [
+        "explain the time and cost of one agent run",
+        "find the slow or expensive span",
+        "show a run that is still going or failed"
+      ],
+      "doNotUseWhen": [
+        "compare categories — BarChart",
+        "plan or credit usage — UsageMeter",
+        "a step list with labels only — AgentTrail"
+      ],
+      "doNot": [
+        "Do not invent a local Waterfall, TraceChart, or SpanList",
+        "Do not use BarChart or Meter for a run trace",
+        "Do not encode failed or running by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "spans": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, detail? }[]; offsets from the run start; open spans draw dashed to now."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "running",
+            "complete",
+            "failed"
+          ],
+          "default": "complete"
+        },
+        "totalMs": {
+          "type": "number",
+          "required": false
+        },
+        "totalCost": {
+          "type": "number",
+          "required": false
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "Failed run: why, under the spans."
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false
+        },
+        "onSpanClick": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Rows become buttons that open the span detail."
+        },
+        "compact": {
+          "type": "boolean",
+          "default": false
+        },
+        "currency": {
+          "type": "string",
+          "default": "$"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "loadError": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "usagemeter",
+      "group": "component",
+      "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
+      "useWhen": [
+        "show credits or plan usage for the current period",
+        "warn before a limit and offer the upgrade",
+        "break usage down by category and day"
+      ],
+      "doNotUseWhen": [
+        "one value without breakdown — Meter",
+        "several independent limits — UsageList",
+        "prompt context in a thread — ContextWindow"
+      ],
+      "doNot": [
+        "Do not invent a local CreditMeter or BillingUsage",
+        "Do not reimplement Meter, UsageList or LineChart inside it",
+        "Do not show Upgrade as the primary when usage is normal",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "used": {
+          "type": "number",
+          "required": true
+        },
+        "limit": {
+          "type": "number",
+          "required": true
+        },
+        "unit": {
+          "type": "string",
+          "default": "credits"
+        },
+        "categories": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, label, value }[] listed with a kit UsageList against the limit."
+        },
+        "periodStart": {
+          "type": "string",
+          "required": false
+        },
+        "resetLabel": {
+          "type": "string",
+          "required": false
+        },
+        "daily": {
+          "type": "number[]",
+          "required": false,
+          "note": "Kit LineChart (area)."
+        },
+        "dailyLabels": {
+          "type": "string[]",
+          "required": false
+        },
+        "dailyCap": {
+          "type": "number",
+          "required": false,
+          "note": "Second LineChart series."
+        },
+        "warnAt": {
+          "type": "number",
+          "default": 0.9
+        },
+        "paceNote": {
+          "type": "string",
+          "required": false
+        },
+        "onUpgrade": {
+          "type": "function",
+          "required": false,
+          "note": "Upgrade plan, the one solid primary; shown near or over the limit."
+        },
+        "onViewUsage": {
+          "type": "function",
+          "required": false,
+          "note": "View usage (outline)."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
