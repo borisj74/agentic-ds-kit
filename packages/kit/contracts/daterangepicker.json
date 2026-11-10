@@ -1,7 +1,7 @@
 {
   "id": "daterangepicker",
   "status": "stable",
-  "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+  "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
   "useWhen": [
     "A report or filter period with presets like This month or Last 30 days",
     "A start and end date in one field"
@@ -51,7 +51,7 @@
     "requirements": [
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, and aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose dates and contains the month grid",
-      "A preset commits the range and closes. On the grid, the first click sets the start and the second sets the end",
+      "Presets sit on the start and two months side by side (one below 40rem). A preset, or a first and second day click, sets a pending range; Apply commits it and closes. Cancel, Escape, or a click outside leave the value as it was",
       "Escape closes and returns focus to the trigger. Tab stays inside the dialog",
       "Must have a Field label pointing at id"
     ]
