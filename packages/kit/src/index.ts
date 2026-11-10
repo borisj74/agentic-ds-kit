@@ -102,4 +102,6 @@ export * from "../ui/UsageList";
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";
 
 export { ICON_STROKE, ICON_STROKE_STRONG } from "../lib/icon";
+export { ThemeScopeProvider, useThemeScopeMarker } from "../ui/shared/themeScope";
+export type { ThemeScopeValue } from "../ui/shared/themeScope";
 

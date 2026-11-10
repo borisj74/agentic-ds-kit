@@ -511,6 +511,7 @@
   --icon-stroke-strong: 2;
 }
 
+:root[data-theme="dark"],
 [data-theme="dark"] {
   --text-fg: #F2F2F2;
   --text-fg-muted: #A3A3A3;
@@ -701,6 +702,7 @@
   --primary-subtle-stronger: #bfdbfe;
 }
 
+:root[data-theme="dark"][data-color="blue"],
 [data-theme="dark"][data-color="blue"] {
   --text-brand: #93c5fd;
   --text-info: #93c5fd;
@@ -782,6 +784,7 @@
   --primary-subtle-stronger: #ddd6fe;
 }
 
+:root[data-theme="dark"][data-color="violet"],
 [data-theme="dark"][data-color="violet"] {
   --text-brand: #c4b5fd;
   --text-info: #c4b5fd;
@@ -863,6 +866,7 @@
   --primary-subtle-stronger: #99f6e4;
 }
 
+:root[data-theme="dark"][data-color="teal"],
 [data-theme="dark"][data-color="teal"] {
   --text-brand: #5eead4;
   --text-info: #5eead4;

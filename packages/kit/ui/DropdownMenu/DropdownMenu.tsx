@@ -13,6 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { useThemeScopeMarker } from "../shared/themeScope";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Checkbox } from "../Checkbox";
@@ -93,6 +94,7 @@ export function DropdownMenu({
   const [coords, setCoords] = useState<CSSProperties | null>(null);
   const [subCoords, setSubCoords] = useState<CSSProperties | null>(null);
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
   const [query, setQuery] = useState("");
   const searchId = `${uid}-search`;
 
@@ -527,7 +529,9 @@ export function DropdownMenu({
             id={menuId}
             role="menu"
             aria-label={ariaLabel || trigger || "Menu"}
-            className={panelClass}
+            data-theme-scope={scope.id}
+            data-theme={scope.mode === "dark" ? "dark" : undefined}
+            className={[panelClass, scope.fontClassName].filter(Boolean).join(" ")}
             style={coords}
             onKeyDown={onMenuKeyDown}
           >
@@ -562,7 +566,9 @@ export function DropdownMenu({
             ref={subPanelRef}
             role="menu"
             aria-label={mainItems.find((item) => item.id === openSubId)?.label || "Submenu"}
-            className={styles.panel}
+            data-theme-scope={scope.id}
+            data-theme={scope.mode === "dark" ? "dark" : undefined}
+            className={[styles.panel, scope.fontClassName].filter(Boolean).join(" ")}
             style={subCoords}
             onKeyDown={onSubKeyDown}
             onMouseEnter={() => setOpenSubId(openSubId)}

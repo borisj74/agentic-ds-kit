@@ -59,6 +59,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 - `/installation` — Install the package
 - `/mcp` — MCP server for agents
 - `/theming` — Semantic tokens, dark mode, brand color, fonts
+- `/theme` — Visual token playground: ramp, live preview, and token export
 - `/studio` — Live font, weight, primary, radius, shadow, and theme
 - `/foundations` — Token scales
 - `/components` — Component gallery and per-component docs

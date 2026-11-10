@@ -7,6 +7,7 @@ import type { ModalProps } from "./Modal.types";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Modal.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
 
@@ -30,6 +31,7 @@ export function Modal({
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
 
   useLayoutEffect(() => {
     onCloseRef.current = onClose;
@@ -94,7 +96,11 @@ export function Modal({
   if (!contained && !mounted) return null;
 
   const node = (
-    <div className={`${styles.root} ${contained ? styles.contained : ""}`}>
+    <div
+      className={`${styles.root} ${contained ? styles.contained : ""} ${scope.fontClassName ?? ""}`.trim()}
+      data-theme-scope={scope.id}
+      data-theme={scope.mode === "dark" ? "dark" : undefined}
+    >
       <button type="button" className={styles.scrim} aria-label="Close dialog" onClick={onClose} />
       <ModalCard
         {...rest}

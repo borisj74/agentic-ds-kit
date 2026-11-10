@@ -9,6 +9,7 @@ import type { ToastProps, ToastStatus } from "./Toast.types";
 import { cx } from "../shared/cx";
 import styles from "./Toast.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 
 export type { ToastProps, ToastStatus } from "./Toast.types";
 
@@ -36,9 +37,20 @@ function getStack(): HTMLElement {
 
 export function Toast({ open, ...cardProps }: ToastProps) {
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
 
   if (!open || !mounted) return null;
-  return createPortal(<ToastCard {...cardProps} />, getStack());
+  return createPortal(
+    <div
+      data-theme-scope={scope.id}
+      data-theme={scope.mode === "dark" ? "dark" : undefined}
+      className={scope.fontClassName}
+      style={{ display: "contents" }}
+    >
+      <ToastCard {...cardProps} />
+    </div>,
+    getStack(),
+  );
 }
 
 function ToastCard({

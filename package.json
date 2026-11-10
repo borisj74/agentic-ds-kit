@@ -12,7 +12,7 @@
     "build": "node scripts/build-playground-catalog.mjs && npm run build -w agentic-ds-kit && next build",
     "start": "next start -H 127.0.0.1 -p 43123",
     "lint": "eslint",
-    "test": "npm test -w agentic-ds-kit",
+    "test": "npm test -w agentic-ds-kit && npx --yes tsx --test lib/theme-scope.test.ts",
     "sync:kit-docs": "node scripts/sync-kit-version-docs.mjs",
     "bump:kit": "npm version --no-git-tag-version -w agentic-ds-kit",
     "publish:kit": "npm run sync:kit-docs && npm publish -w agentic-ds-kit --access public"

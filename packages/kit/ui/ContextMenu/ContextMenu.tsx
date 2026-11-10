@@ -4,6 +4,7 @@ import { useCallback, useId, useLayoutEffect, useRef, useState, type KeyboardEve
 import { createPortal } from "react-dom";
 import { cx } from "../shared/cx";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 import type { ContextMenuItem, ContextMenuProps } from "./ContextMenu.types";
 import styles from "./ContextMenu.module.css";
 
@@ -21,6 +22,7 @@ function place(x: number, y: number, panel: HTMLElement): { top: number; left: n
 }
 
 export function ContextMenu({ items, onSelect, children, ariaLabel = "Actions", className }: ContextMenuProps) {
+  const scope = useThemeScopeMarker();
   const menuId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const mounted = useIsClient();
@@ -100,7 +102,9 @@ export function ContextMenu({ items, onSelect, children, ariaLabel = "Actions", 
             id={menuId}
             role="menu"
             aria-label={ariaLabel}
-            className={cx(styles.menu, className)}
+            data-theme-scope={scope.id}
+            data-theme={scope.mode === "dark" ? "dark" : undefined}
+            className={cx(styles.menu, className, scope.fontClassName)}
             onKeyDown={onMenuKey}
           >
             {items.map((item) => {

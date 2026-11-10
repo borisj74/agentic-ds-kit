@@ -16,6 +16,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./HelpPopover.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 
 export type { HelpPopoverProps, HelpPopoverPlacement } from "./HelpPopover.types";
 
@@ -152,6 +153,7 @@ export function HelpPopover({
   ...rest
 }: HelpPopoverProps) {
   const descriptionId = useId();
+  const scope = useThemeScopeMarker();
   const wrapperRef = useRef<HTMLSpanElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const setPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
@@ -308,7 +310,9 @@ export function HelpPopover({
         <div
           {...rest}
           ref={setPanelRef}
-          className={cx(styles.panel, styles[resolvedPlacement], coords && styles.open, className)}
+          data-theme-scope={scope.id}
+          data-theme={scope.mode === "dark" ? "dark" : undefined}
+          className={cx(styles.panel, styles[resolvedPlacement], coords && styles.open, className, scope.fontClassName)}
           style={coords ?? undefined}
           aria-hidden="true"
           onPointerEnter={() => {

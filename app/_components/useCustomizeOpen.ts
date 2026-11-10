@@ -53,23 +53,35 @@ function routeDefaultOpen(pathname: string) {
   return pathname === "/studio" || pathname.startsWith("/patterns");
 }
 
+function isThemePage(pathname: string) {
+  return pathname === "/theme";
+}
+
 /**
- * One open/closed preference for the Customize panel.
- * With no saved choice, the docked column is open on Studio and Patterns.
- * Below 1024px the column is an overlay and stays closed until opened.
+ * One open/closed preference for the Theme panel.
+ * The Theme page keeps that panel docked. With no saved choice, it is also open on Studio and Patterns.
+ * Below 1024px the column is an overlay and stays closed until opened, except on the Theme page.
  */
 export function useCustomizeOpen(pathname: string) {
   const narrow = useSyncExternalStore(subscribeNarrow, readNarrow, () => false);
   const pref = useSyncExternalStore(subscribePref, readPref, (): CustomizePref => null);
-  const docked = !narrow && (pref === "open" || (pref === null && routeDefaultOpen(pathname)));
-  const sheet = narrow && pref === "open";
+  const pinned = isThemePage(pathname);
+  const docked = !narrow && (pinned || pref === "open" || (pref === null && routeDefaultOpen(pathname)));
+  const sheet = narrow && (pinned || pref === "open");
   const open = docked || sheet;
 
   return {
     docked,
     sheet,
     open,
-    toggle: () => writePref(open ? "closed" : "open"),
-    close: () => writePref("closed"),
+    pinned,
+    toggle: () => {
+      if (pinned) return;
+      writePref(open ? "closed" : "open");
+    },
+    close: () => {
+      if (pinned) return;
+      writePref("closed");
+    },
   };
 }

@@ -133,8 +133,8 @@
   position: sticky;
   top: var(--playground-topbar-height);
   align-self: flex-start;
-  flex: 0 0 16rem;
-  width: 16rem;
+  flex: 0 0 300px;
+  width: 300px;
   height: calc(100vh - var(--playground-topbar-height));
   overflow: auto;
   padding: var(--space-4);
@@ -156,6 +156,10 @@
 
 :global(html[data-customize="closed"]) .customize {
   display: none;
+}
+
+:global(html[data-customize="closed"]) .customizePinned {
+  display: block;
 }
 
 .scrim {

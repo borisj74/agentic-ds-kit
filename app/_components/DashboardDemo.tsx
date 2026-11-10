@@ -17,6 +17,7 @@ import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunP
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
 import styles from "../playground.module.css";
+import { PreviewScope } from "./ThemeScope";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
@@ -230,6 +231,7 @@ export function DashboardDemo({
         <div className={styles.urlBar}>{path}</div>
       </div>
       {/* Below 64rem the shell swaps the SideNav for a Menu Button and left Drawer, as a real app would. */}
+      <PreviewScope className={styles.scopeFill}>
       <AppShellPattern
         navLabel="Agentix"
         header={{
@@ -278,6 +280,7 @@ export function DashboardDemo({
           <DashboardPattern breadcrumbs={trail} />
         )}
       </AppShellPattern>
+      </PreviewScope>
     </div>
   );
 }
