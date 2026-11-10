@@ -2,9 +2,7 @@ import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { UsageMeter } from "agentic-ds-kit";
 import { TaskBoard } from "agentic-ds-kit";
-import { IntegrationSettings } from "agentic-ds-kit";
 import { InvoiceDocument } from "agentic-ds-kit";
-import { BillingSchedule } from "agentic-ds-kit";
 import { PricingPlans } from "agentic-ds-kit";
 import { IntegrationPicker } from "agentic-ds-kit";
 import { CommentsPanel } from "agentic-ds-kit";
@@ -410,22 +408,10 @@ export function GalleryPreview({ id }: { id: string }) {
           <PricingPlans interval="month" onIntervalChange={noop} onSelect={noop} plans={[{ id: "pro", name: "Pro", price: 29, features: ["Integrations"], recommended: true }]} />
         </Stage>
       );
-    case "billingschedule":
-      return (
-        <Stage variant="wide">
-          <BillingSchedule items={[{ id: "a", date: "01 Dec", label: "Pro plan", amount: "$480.00", status: "upcoming" }]} nextId="a" />
-        </Stage>
-      );
     case "invoicedocument":
       return (
         <Stage variant="wide">
           <InvoiceDocument number="INV-0117" status="issued" to="Acme Co" issuedOn="01 Nov" lines={[{ id: "a", description: "Pro plan", quantity: 1, unitPrice: "$480", amount: "$480" }]} subtotal="$480" total="$480" />
-        </Stage>
-      );
-    case "integrationsettings":
-      return (
-        <Stage variant="wide">
-          <IntegrationSettings name="Northwind Ledger" status="disconnected" settings={[]} onSave={noop} onDisconnect={noop} />
         </Stage>
       );
     case "taskboard":

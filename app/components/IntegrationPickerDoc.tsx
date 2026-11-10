@@ -33,7 +33,7 @@ export function IntegrationPickerDoc() {
       lede="A filterable catalogue of integrations. Providers here are examples."
       summary="Search, pick a category, and Connect a tile: it shows Connecting…, then Connected with Manage."
       preview={<IntegrationPicker note="example providers" items={items} categories={CATEGORIES} onConnect={connect} onManage={noop} connectingId={connecting} onRequest={noop} />}
-      usage="One action per tile. Connected and Coming soon are words; coming soon keeps a disabled Connect. Search with no match offers Request an integration. Use IntegrationSettings for one connected integration."
+      usage="One action per tile. Connected and Coming soon are words; coming soon keeps a disabled Connect. Search with no match offers Request an integration. Use the integration-settings pattern for one connected integration."
       code={`<IntegrationPicker
   note="example providers"
   items={integrations}

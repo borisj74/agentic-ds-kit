@@ -127,8 +127,6 @@ export * from "../ui/CommentThread";
 export * from "../ui/CommentsPanel";
 export * from "../ui/IntegrationPicker";
 export * from "../ui/PricingPlans";
-export * from "../ui/BillingSchedule";
-export * from "../ui/IntegrationSettings";
 export * from "../ui/InvoiceDocument";
 export * from "../ui/TaskBoard";
 

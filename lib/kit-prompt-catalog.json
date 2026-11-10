@@ -9572,7 +9572,7 @@
         "list providers that are coming soon"
       ],
       "doNotUseWhen": [
-        "settings for one connected integration — IntegrationSettings",
+        "settings for one connected integration — the integration-settings pattern",
         "choosing a plan — PricingPlans",
         "a plain list of links — LinkList"
       ],
@@ -9730,97 +9730,6 @@
       }
     },
     {
-      "id": "billingschedule",
-      "group": "component",
-      "intent": "Upcoming and past charges on a subscription, in order, with the status as a word. A next-charge summary (amount, date, card, Change card) and a banner with Update card when a payment failed. Composes kit Table, Badge, Button and Empty.",
-      "useWhen": [
-        "show a subscription's upcoming and past charges in billing settings",
-        "show only the next charge in a summary",
-        "flag a failed payment and ask for a new card"
-      ],
-      "doNotUseWhen": [
-        "one invoice with line items — InvoiceDocument",
-        "a general data table with sorting — DataTable",
-        "usage against a limit — UsageMeter"
-      ],
-      "doNot": [
-        "Do not invent a local ChargesTable or PaymentHistory",
-        "Do not show real card or customer data in examples",
-        "Do not mark failed by colour alone",
-        "Do not use raw hex"
-      ],
-      "props": {
-        "items": {
-          "type": "array",
-          "required": true,
-          "note": "{ id, date, label, amount, status: 'upcoming'|'invoiced'|'paid'|'failed'|'waived', note? }[]; date and amount pre-formatted."
-        },
-        "title": {
-          "type": "string",
-          "default": "Billing schedule"
-        },
-        "label": {
-          "type": "string",
-          "required": false
-        },
-        "nextId": {
-          "type": "string",
-          "required": false,
-          "note": "Tagged \"Next charge\" in the table."
-        },
-        "nextOnly": {
-          "type": "boolean",
-          "default": false,
-          "note": "Show the next-charge summary only."
-        },
-        "paymentMethod": {
-          "type": "string",
-          "required": false
-        },
-        "onChangeCard": {
-          "type": "function",
-          "required": false
-        },
-        "onUpdateCard": {
-          "type": "function",
-          "required": false,
-          "note": "Failed-payment banner action, the one solid primary."
-        },
-        "retryOn": {
-          "type": "string",
-          "required": false
-        },
-        "onDownloadAll": {
-          "type": "function",
-          "required": false
-        },
-        "onItemClick": {
-          "type": "function",
-          "required": false
-        },
-        "emptyTitle": {
-          "type": "string",
-          "default": "No charges yet"
-        },
-        "emptyDescription": {
-          "type": "string",
-          "required": false
-        },
-        "loading": {
-          "type": "boolean",
-          "default": false
-        },
-        "error": {
-          "type": "string",
-          "required": false
-        },
-        "onRetry": {
-          "type": "function",
-          "required": false
-        }
-      }
-    },
-    {
       "id": "invoicedocument",
       "group": "component",
       "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
@@ -9830,7 +9739,7 @@
         "show what a credit note reduces"
       ],
       "doNotUseWhen": [
-        "a list of charges over time — BillingSchedule",
+        "a list of charges over time — the billing-schedule pattern",
         "a generic data table — DataTable",
         "printing or generating PDFs"
       ],
@@ -9928,112 +9837,6 @@
           "type": "function",
           "required": false,
           "note": "Issued or overdue: Record payment, the solid primary."
-        },
-        "loading": {
-          "type": "boolean",
-          "default": false
-        },
-        "error": {
-          "type": "string",
-          "required": false
-        },
-        "onRetry": {
-          "type": "function",
-          "required": false
-        }
-      }
-    },
-    {
-      "id": "integrationsettings",
-      "group": "component",
-      "intent": "Settings for one connected integration: status with a banner when syncing, failing or needing reauth, the sync settings (kit controls you pass in), granted scopes, Save changes, and Disconnect behind a danger AlertDialog. Frames kit Select, Switch and Input; uses Badge, Button, AlertDialog and Empty.",
-      "useWhen": [
-        "configure a connected integration in settings",
-        "show sync status, errors and expired access",
-        "disconnect an integration with a confirmation"
-      ],
-      "doNotUseWhen": [
-        "choosing which integration to connect — IntegrationPicker",
-        "a general settings form — the settings-form pattern",
-        "agent tool permissions — PermissionRequest"
-      ],
-      "doNot": [
-        "Do not invent a local ConnectionSettings or IntegrationForm",
-        "Do not disconnect without the AlertDialog",
-        "Do not show two solid primaries; Reconnect takes over from Save",
-        "Do not use raw hex"
-      ],
-      "props": {
-        "name": {
-          "type": "string",
-          "required": true
-        },
-        "status": {
-          "type": "enum",
-          "values": [
-            "connected",
-            "syncing",
-            "error",
-            "needsReauth",
-            "disconnected"
-          ],
-          "required": true
-        },
-        "icon": {
-          "type": "KitIcon",
-          "default": "Plug"
-        },
-        "lastSync": {
-          "type": "string",
-          "required": false
-        },
-        "statusMessage": {
-          "type": "string",
-          "required": false
-        },
-        "settings": {
-          "type": "array",
-          "required": true,
-          "note": "{ id, label, description?, control, controlId? }[]; control is a kit Select, Switch or Input with id={controlId}."
-        },
-        "scopes": {
-          "type": "string[]",
-          "required": false
-        },
-        "onSave": {
-          "type": "function",
-          "required": true,
-          "note": "Save changes, the one solid primary; ⌘/Ctrl+S."
-        },
-        "onCancel": {
-          "type": "function",
-          "required": false
-        },
-        "saving": {
-          "type": "boolean",
-          "default": false
-        },
-        "onSyncNow": {
-          "type": "function",
-          "required": false
-        },
-        "onViewErrors": {
-          "type": "function",
-          "required": false
-        },
-        "onReconnect": {
-          "type": "function",
-          "required": false,
-          "note": "Needs reauth: the solid primary; Save steps down to outline and the settings lock."
-        },
-        "onDisconnect": {
-          "type": "function",
-          "required": true,
-          "note": "After a danger AlertDialog."
-        },
-        "onConnect": {
-          "type": "function",
-          "required": false
         },
         "loading": {
           "type": "boolean",
@@ -10312,6 +10115,39 @@
           "note": "Primary disabled with a busy label; SSO disabled; form aria-busy."
         }
       }
+    },
+    {
+      "id": "billing-schedule",
+      "group": "pattern",
+      "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Status is a word in a kit Badge (Upcoming, Paid, Failed…), never colour alone",
+        "Charges are a kit Table; do not build a local charges list",
+        "A failed payment is a kit Alert (danger) that says the date, the amount and what happens next",
+        "Money arrives pre-formatted from your app; label example data as example",
+        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
+    },
+    {
+      "id": "integration-settings",
+      "group": "pattern",
+      "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Wrap every setting in Field (label, hint and control wiring); group them in a FieldSet",
+        "Disable the FieldSet while saving and while access needs reauth",
+        "Disconnect is a danger action and confirms with a kit AlertDialog; Cancel returns focus to Disconnect",
+        "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
+        "When access expires, Reconnect is the solid primary and Save steps down to outline",
+        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
     }
   ]
 }

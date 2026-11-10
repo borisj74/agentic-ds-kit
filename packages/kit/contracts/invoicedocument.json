@@ -8,7 +8,7 @@
     "show what a credit note reduces"
   ],
   "doNotUseWhen": [
-    "a list of charges over time — BillingSchedule",
+    "a list of charges over time — the billing-schedule pattern",
     "a generic data table — DataTable",
     "printing or generating PDFs"
   ],

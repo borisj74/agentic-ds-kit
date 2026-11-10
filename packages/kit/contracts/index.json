@@ -854,24 +854,10 @@
     "status": "stable"
   },
   {
-    "id": "billingschedule",
-    "intent": "Subscription charges in order with status words; next-charge summary and a failed-payment banner. Composes Table.",
-    "group": "component",
-    "path": "contracts/billingschedule.json",
-    "status": "stable"
-  },
-  {
     "id": "invoicedocument",
     "intent": "Invoice or credit note document view: status, bill-to, lines, totals and one line about payment.",
     "group": "component",
     "path": "contracts/invoicedocument.json",
-    "status": "stable"
-  },
-  {
-    "id": "integrationsettings",
-    "intent": "Settings for one connected integration: status, sync settings, scopes, Save and a confirmed Disconnect.",
-    "group": "component",
-    "path": "contracts/integrationsettings.json",
     "status": "stable"
   },
   {
@@ -934,5 +920,23 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add sign-in"
+  },
+  {
+    "id": "billing-schedule",
+    "intent": "Billing schedule example: Section, next charge, failed-payment Alert, and charges in a Table with status Badges.",
+    "group": "pattern",
+    "path": "contracts/patterns/billing-schedule.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add billing-schedule"
+  },
+  {
+    "id": "integration-settings",
+    "intent": "Integration settings example: Section with status Badge, FieldSet of Fields (Select, Switch), scope Tags, Save, and a confirmed Disconnect.",
+    "group": "pattern",
+    "path": "contracts/patterns/integration-settings.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add integration-settings"
   }
 ]

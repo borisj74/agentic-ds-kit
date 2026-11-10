@@ -8,7 +8,7 @@
     "list providers that are coming soon"
   ],
   "doNotUseWhen": [
-    "settings for one connected integration — IntegrationSettings",
+    "settings for one connected integration — the integration-settings pattern",
     "choosing a plan — PricingPlans",
     "a plain list of links — LinkList"
   ],

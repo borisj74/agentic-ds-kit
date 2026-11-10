@@ -48,9 +48,7 @@ import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { UsageMeterDoc } from "./UsageMeterDoc";
 import { TaskBoardDoc } from "./TaskBoardDoc";
-import { IntegrationSettingsDoc } from "./IntegrationSettingsDoc";
 import { InvoiceDocumentDoc } from "./InvoiceDocumentDoc";
-import { BillingScheduleDoc } from "./BillingScheduleDoc";
 import { PricingPlansDoc } from "./PricingPlansDoc";
 import { IntegrationPickerDoc } from "./IntegrationPickerDoc";
 import { CommentsPanelDoc } from "./CommentsPanelDoc";
@@ -145,9 +143,7 @@ const TITLES: Record<string, string> = {
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
   taskboard: "TaskBoard",
-  integrationsettings: "IntegrationSettings",
   invoicedocument: "InvoiceDocument",
-  billingschedule: "BillingSchedule",
   pricingplans: "PricingPlans",
   integrationpicker: "IntegrationPicker",
   commentspanel: "CommentsPanel",
@@ -420,9 +416,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "usagemeter") return <UsageMeterDoc />;
   if (resolved === "taskboard") return <TaskBoardDoc />;
-  if (resolved === "integrationsettings") return <IntegrationSettingsDoc />;
   if (resolved === "invoicedocument") return <InvoiceDocumentDoc />;
-  if (resolved === "billingschedule") return <BillingScheduleDoc />;
   if (resolved === "pricingplans") return <PricingPlansDoc />;
   if (resolved === "integrationpicker") return <IntegrationPickerDoc />;
   if (resolved === "commentspanel") return <CommentsPanelDoc />;

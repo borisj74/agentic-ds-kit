@@ -20,7 +20,6 @@ export const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
-  "billingschedule",
   "breadcrumb",
   "button",
   "buttongroup",
@@ -67,7 +66,6 @@ export const COMPONENT_ITEMS = [
   "inputotp",
   "insightcard",
   "integrationpicker",
-  "integrationsettings",
   "invoicedocument",
   "kbd",
   "linklist",
@@ -156,9 +154,7 @@ export function componentLabel(id: string): string {
   if (id === "commentspanel") return "CommentsPanel";
   if (id === "integrationpicker") return "IntegrationPicker";
   if (id === "pricingplans") return "PricingPlans";
-  if (id === "billingschedule") return "BillingSchedule";
   if (id === "invoicedocument") return "InvoiceDocument";
-  if (id === "integrationsettings") return "IntegrationSettings";
   if (id === "taskboard") return "TaskBoard";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
@@ -225,7 +221,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "SaaS",
-    ids: ["billingschedule", "changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "integrationsettings", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
+    ids: ["changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
   },
   {
     label: "Forms",
@@ -350,6 +346,8 @@ export const PATTERN_ITEMS = [
   { slug: "empty", label: "Empty" },
   { slug: "sign-in", label: "Sign in" },
   { slug: "app-shell", label: "App shell" },
+  { slug: "billing-schedule", label: "Billing schedule" },
+  { slug: "integration-settings", label: "Integration settings" },
   { slug: "layouts", label: "Layouts" },
 ] as const;
 
