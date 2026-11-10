@@ -44,7 +44,7 @@ Picks (from p-3-0, building on batch 1):
 
 #### Batch 2 changes to batch 1
 
-- ApprovalCard: when the card resolves while focus is inside it, focus moves to the one-line row. The shared hook `ui/shared/useResolvedFocus.ts` does the same for PermissionRequest. The same commit is also on `feat/agent-patterns-1`.
+- ApprovalCard: when the card resolves while focus is inside it, focus moves to the one-line row. The shared hook `ui/shared/useResolvedFocus.ts` does the same for PermissionRequest. That commit is on `feat/agent-patterns-1` too; batch 2 is rebased on it.
 
 ### Paper vs tokens (tokens win)
 
