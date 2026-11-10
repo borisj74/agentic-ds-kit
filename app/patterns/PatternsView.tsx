@@ -3,6 +3,7 @@
 import { AppShellBuiltNavDemo, AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
+import { SaasPatternDemo } from "../_components/SaasPatternDemo";
 import { SignInDemo } from "../_components/SignInDemo";
 import { CodeBlock } from "../components/CodeBlock";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
@@ -16,6 +17,8 @@ const ADD_ID: Record<string, string> = {
   empty: "empty-first-run",
   "sign-in": "sign-in",
   "app-shell": "app-shell",
+  "billing-schedule": "billing-schedule",
+  "integration-settings": "integration-settings",
 };
 
 function usageFor(slug: string) {
@@ -58,6 +61,8 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
         <div className={styles.anchor}>
           {slug === "sign-in" ? (
             <SignInDemo />
+          ) : slug === "billing-schedule" || slug === "integration-settings" ? (
+            <SaasPatternDemo pattern={slug} />
           ) : slug === "layouts" ? (
             <LayoutsDemo titleClassName={styles.variantTitle} />
           ) : slug === "app-shell" ? (

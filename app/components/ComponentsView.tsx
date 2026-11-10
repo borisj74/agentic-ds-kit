@@ -47,6 +47,8 @@ import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { UsageMeterDoc } from "./UsageMeterDoc";
+import { TaskBoardDoc } from "./TaskBoardDoc";
+import { InvoiceDocumentDoc } from "./InvoiceDocumentDoc";
 import { PricingPlansDoc } from "./PricingPlansDoc";
 import { IntegrationPickerDoc } from "./IntegrationPickerDoc";
 import { CommentsPanelDoc } from "./CommentsPanelDoc";
@@ -140,6 +142,8 @@ const TITLES: Record<string, string> = {
   inputotp: "InputOTP",
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
+  taskboard: "TaskBoard",
+  invoicedocument: "InvoiceDocument",
   pricingplans: "PricingPlans",
   integrationpicker: "IntegrationPicker",
   commentspanel: "CommentsPanel",
@@ -411,6 +415,8 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "usagemeter") return <UsageMeterDoc />;
+  if (resolved === "taskboard") return <TaskBoardDoc />;
+  if (resolved === "invoicedocument") return <InvoiceDocumentDoc />;
   if (resolved === "pricingplans") return <PricingPlansDoc />;
   if (resolved === "integrationpicker") return <IntegrationPickerDoc />;
   if (resolved === "commentspanel") return <CommentsPanelDoc />;

@@ -1,0 +1,63 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The integration-settings-pattern__ prefix keeps names unique. */
+
+.integration-settings-pattern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: var(--layout-container-sm);
+}
+
+.integration-settings-pattern__head-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.integration-settings-pattern__notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.integration-settings-pattern__notice > :first-child {
+  align-self: stretch;
+}
+
+.integration-settings-pattern__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.integration-settings-pattern__scopes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.integration-settings-pattern__caption {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.integration-settings-pattern__scope-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.integration-settings-pattern__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.integration-settings-pattern__loading {
+  padding-block: var(--space-2);
+}

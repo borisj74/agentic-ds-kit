@@ -854,6 +854,20 @@
     "status": "stable"
   },
   {
+    "id": "invoicedocument",
+    "intent": "Invoice or credit note document view: status, bill-to, lines, totals and one line about payment.",
+    "group": "component",
+    "path": "contracts/invoicedocument.json",
+    "status": "stable"
+  },
+  {
+    "id": "taskboard",
+    "intent": "Kanban board of columns and task cards; move by drag or keyboard (Space, arrows, Space).",
+    "group": "component",
+    "path": "contracts/taskboard.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
@@ -906,5 +920,23 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add sign-in"
+  },
+  {
+    "id": "billing-schedule",
+    "intent": "Billing schedule example: Section, next charge, failed-payment Alert, and charges in a Table with status Badges.",
+    "group": "pattern",
+    "path": "contracts/patterns/billing-schedule.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add billing-schedule"
+  },
+  {
+    "id": "integration-settings",
+    "intent": "Integration settings example: Section with status Badge, FieldSet of Fields (Select, Switch), scope Tags, Save, and a confirmed Disconnect.",
+    "group": "pattern",
+    "path": "contracts/patterns/integration-settings.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add integration-settings"
   }
 ]
