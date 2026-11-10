@@ -59,6 +59,8 @@ import { ExperimentCardDoc } from "./ExperimentCardDoc";
 import { BlurCrossfadeDoc } from "./BlurCrossfadeDoc";
 import { TextRevealDoc } from "./TextRevealDoc";
 import { TiltCardDoc } from "./TiltCardDoc";
+import { GridBackgroundDoc } from "./GridBackgroundDoc";
+import { GradientTextDoc } from "./GradientTextDoc";
 import { ChangeSummaryDoc } from "./ChangeSummaryDoc";
 import { TraceWaterfallDoc } from "./TraceWaterfallDoc";
 import { MemoryPanelDoc } from "./MemoryPanelDoc";
@@ -149,6 +151,8 @@ const TITLES: Record<string, string> = {
   blurcrossfade: "BlurCrossfade",
   textreveal: "TextReveal",
   tiltcard: "TiltCard",
+  gridbackground: "GridBackground",
+  gradienttext: "GradientText",
   invoicedocument: "InvoiceDocument",
   pricingplans: "PricingPlans",
   integrationpicker: "IntegrationPicker",
@@ -307,6 +311,8 @@ function resolveHash(hash: string): string {
     "blur-crossfade": "blurcrossfade",
     "text-reveal": "textreveal",
     "tilt-card": "tiltcard",
+    "grid-background": "gridbackground",
+    "gradient-text": "gradienttext",
     radio: "radiogroup",
     radios: "radiogroup",
     tab: "tabs",
@@ -437,6 +443,8 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "blurcrossfade") return <BlurCrossfadeDoc />;
   if (resolved === "textreveal") return <TextRevealDoc />;
   if (resolved === "tiltcard") return <TiltCardDoc />;
+  if (resolved === "gridbackground") return <GridBackgroundDoc />;
+  if (resolved === "gradienttext") return <GradientTextDoc />;
   if (resolved === "changesummary") return <ChangeSummaryDoc />;
   if (resolved === "tracewaterfall") return <TraceWaterfallDoc />;
   if (resolved === "memorypanel") return <MemoryPanelDoc />;

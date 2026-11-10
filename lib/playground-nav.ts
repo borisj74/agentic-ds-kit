@@ -60,6 +60,8 @@ export const COMPONENT_ITEMS = [
   "filterbar",
   "filterbutton",
   "fileupload",
+  "gradienttext",
+  "gridbackground",
   "headercell",
   "helppopover",
   "inlinediff",
@@ -162,6 +164,8 @@ export function componentLabel(id: string): string {
   if (id === "blurcrossfade") return "BlurCrossfade";
   if (id === "textreveal") return "TextReveal";
   if (id === "tiltcard") return "TiltCard";
+  if (id === "gridbackground") return "GridBackground";
+  if (id === "gradienttext") return "GradientText";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -231,7 +235,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Motion",
-    ids: ["blurcrossfade", "textreveal", "tiltcard"],
+    ids: ["blurcrossfade", "gradienttext", "gridbackground", "textreveal", "tiltcard"],
   },
   {
     label: "Forms",

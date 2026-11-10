@@ -889,6 +889,20 @@
     "status": "stable"
   },
   {
+    "id": "gridbackground",
+    "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only.",
+    "group": "component",
+    "path": "contracts/gridbackground.json",
+    "status": "stable"
+  },
+  {
+    "id": "gradienttext",
+    "intent": "A restrained, token-based gradient fill for one rare heading. Real text, no motion.",
+    "group": "component",
+    "path": "contracts/gradienttext.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

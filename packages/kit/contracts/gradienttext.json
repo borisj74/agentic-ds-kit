@@ -1,0 +1,81 @@
+{
+  "id": "gradienttext",
+  "status": "stable",
+  "intent": "A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image; no motion.",
+  "useWhen": [
+    "one hero or empty-state heading per view",
+    "a marketing or docs headline that needs a touch of brand"
+  ],
+  "doNotUseWhen": [
+    "body copy, labels, buttons or data",
+    "more than one heading per view",
+    "status or meaning — use Badge or status text"
+  ],
+  "props": {
+    "children": {
+      "type": "node",
+      "required": true
+    },
+    "as": {
+      "type": "enum",
+      "values": [
+        "h1",
+        "h2",
+        "h3",
+        "span"
+      ],
+      "default": "h2"
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "ink",
+        "brand"
+      ],
+      "default": "ink",
+      "note": "ink: text.fg → text.brand; brand: text.brand → primary.fg. Paper's overlay (brand → violet) waits for the violet role decision."
+    },
+    "inverse": {
+      "type": "boolean",
+      "default": false,
+      "note": "On surface.inverse: bg.canvas → info line."
+    }
+  },
+  "passthrough": {
+    "root": "as",
+    "ref": "as",
+    "className": "root",
+    "rest": "as"
+  },
+  "tokens": [
+    "text.fg",
+    "text.brand",
+    "primary.fg",
+    "bg.canvas",
+    "info.line",
+    "text.fgInverse",
+    "type.family.display",
+    "type.size.heading4",
+    "type.line.heading4",
+    "type.weight.title",
+    "type.tracking.title"
+  ],
+  "motion": {
+    "properties": [],
+    "note": "None. Paper's optional hue shift is not built (Boris)."
+  },
+  "a11y": {
+    "element": "as",
+    "requirements": [
+      "real text, selectable and read as written",
+      "both gradient ends keep ≥ 4.5:1 against their surface",
+      "solid text.fg (CanvasText) under forced colours; solid text.fg where background-clip: text is unsupported"
+    ]
+  },
+  "doNot": [
+    "Do not render it as an image",
+    "Do not add a colour ramp or hex stops",
+    "Do not animate it"
+  ],
+  "snippet": "<GradientText as=\"h1\">Ship agents people trust</GradientText>"
+}

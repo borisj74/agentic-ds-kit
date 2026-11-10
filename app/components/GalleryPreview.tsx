@@ -10,7 +10,7 @@ import { CommentThread } from "agentic-ds-kit";
 import { SetupGuide } from "agentic-ds-kit";
 import { NotificationStack } from "agentic-ds-kit";
 import { ExperimentCard } from "agentic-ds-kit";
-import { BlurCrossfade, TextReveal, TiltCard } from "agentic-ds-kit";
+import { BlurCrossfade, GradientText, GridBackground, TextReveal, TiltCard } from "agentic-ds-kit";
 import { ChangeSummary } from "agentic-ds-kit";
 import { TraceWaterfall } from "agentic-ds-kit";
 import { MemoryPanel } from "agentic-ds-kit";
@@ -425,6 +425,18 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <TextReveal as="p">Agents that ask before they act</TextReveal>
+        </Stage>
+      );
+    case "gridbackground":
+      return (
+        <GridBackground variant="dots">
+          <Tag dot="info">Agent Lanes</Tag>
+        </GridBackground>
+      );
+    case "gradienttext":
+      return (
+        <Stage variant="wide">
+          <GradientText as="span">Ship agents people trust</GradientText>
         </Stage>
       );
     case "tiltcard":

@@ -1,0 +1,66 @@
+/*
+ * Paper (p-5-0, 04): lines every 24px in line.default, dots every 16px in line.strong, a radial
+ * fade from full grid at the centre (30%) to none at 80%. Paper names a `grid.cell` token that
+ * does not exist; the cell is --space-6 / --space-4 for now (a cell token is proposed in NOTES.md).
+ * The fade is a mask, not an overlay in the surface colour, so it works on any surface.
+ */
+.root {
+  --grid-bg-line: var(--border-faint);
+  --grid-bg-dot: var(--border-strong);
+  --grid-bg-weight: var(--border-width-thin);
+  --grid-bg-fade: radial-gradient(circle farthest-corner at 50% 50%, black 30%, transparent 80%);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  mask-image: var(--grid-bg-fade);
+}
+
+.lines {
+  background-image:
+    linear-gradient(to right, var(--grid-bg-line) var(--grid-bg-weight), transparent var(--grid-bg-weight)),
+    linear-gradient(to bottom, var(--grid-bg-line) var(--grid-bg-weight), transparent var(--grid-bg-weight));
+  background-size: var(--space-6) var(--space-6);
+  background-position: center;
+}
+
+.dots {
+  background-image: radial-gradient(circle, var(--grid-bg-dot) var(--grid-bg-weight), transparent calc(var(--grid-bg-weight) * 1.5));
+  background-size: var(--space-4) var(--space-4);
+  background-position: center;
+}
+
+.content {
+  position: relative;
+  min-width: 0;
+}
+
+/* Paper 04 "On a dark surface": lines at 8% of the inverse line colour, edge to edge, no fade. */
+.inverse {
+  --grid-bg-line: var(--line-inverse);
+  --grid-bg-dot: var(--line-inverse);
+  background-color: var(--surface-inverse);
+}
+
+.inverse .grid {
+  opacity: var(--opacity-100);
+  mask-image: none;
+}
+
+@media (forced-colors: active) {
+  .grid {
+    display: none;
+  }
+}

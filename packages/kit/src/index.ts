@@ -132,6 +132,8 @@ export * from "../ui/TaskBoard";
 export * from "../ui/BlurCrossfade";
 export * from "../ui/TextReveal";
 export * from "../ui/TiltCard";
+export * from "../ui/GridBackground";
+export * from "../ui/GradientText";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";
