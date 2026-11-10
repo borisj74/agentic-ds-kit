@@ -42,12 +42,16 @@ export function TiltCardDoc() {
       summary="Move the pointer over the left card; the plain Card beside it is the comparison. Tab to Choose Pro for the keyboard state: a static lift, no tilt."
       preview={
         <div className={motion.cards}>
-          <TiltCard className={motion.plan} title="Pro plan" tilt={tilt === "on"}>
-            <Plan />
-          </TiltCard>
-          <Card className={motion.plan} title="Pro plan">
-            <Plan />
-          </Card>
+          <div className={motion.plan}>
+            <TiltCard title="Pro plan" tilt={tilt === "on"}>
+              <Plan />
+            </TiltCard>
+          </div>
+          <div className={motion.plan}>
+            <Card title="Pro plan">
+              <Plan />
+            </Card>
+          </div>
         </div>
       }
       controls={<DocOptions label="Tilt" options={["on", "off"] as const} value={tilt} onChange={setTilt} />}
@@ -63,12 +67,16 @@ export function TiltCardDoc() {
           code: `<TiltCard title="Pro plan" maxTilt={6}>…</TiltCard>`,
           render: (
             <div className={motion.cards}>
-              <TiltCard className={motion.plan} title="Pro plan">
-                <Plan action={false} />
-              </TiltCard>
-              <TiltCard className={motion.plan} title="Pro plan" style={TILTED} data-tilting="">
-                <Plan action={false} />
-              </TiltCard>
+              <div className={motion.plan}>
+                <TiltCard title="Pro plan">
+                  <Plan action={false} />
+                </TiltCard>
+              </div>
+              <div className={motion.plan}>
+                <TiltCard title="Pro plan" style={TILTED} data-tilting="">
+                  <Plan action={false} />
+                </TiltCard>
+              </div>
             </div>
           ),
         },
@@ -78,9 +86,11 @@ export function TiltCardDoc() {
           code: `<TiltCard title="Pro plan">…<Button>Choose Pro</Button></TiltCard>`,
           render: (
             <div className={motion.cards}>
-              <TiltCard className={motion.plan} title="Pro plan">
-                <Plan />
-              </TiltCard>
+              <div className={motion.plan}>
+                <TiltCard title="Pro plan">
+                  <Plan />
+                </TiltCard>
+              </div>
             </div>
           ),
         },
@@ -90,9 +100,11 @@ export function TiltCardDoc() {
           code: `<TiltCard title="Pro plan" disabled>…</TiltCard>`,
           render: (
             <div className={motion.cards}>
-              <TiltCard className={motion.plan} title="Pro plan" disabled>
-                <Plan action={false} />
-              </TiltCard>
+              <div className={motion.plan}>
+                <TiltCard title="Pro plan" disabled>
+                  <Plan action={false} />
+                </TiltCard>
+              </div>
             </div>
           ),
         },
@@ -102,9 +114,11 @@ export function TiltCardDoc() {
           code: `<TiltCard title="Pro plan" tilt={false}>…</TiltCard>`,
           render: (
             <div className={motion.cards}>
-              <TiltCard className={motion.plan} title="Pro plan" tilt={false}>
-                <Plan action={false} />
-              </TiltCard>
+              <div className={motion.plan}>
+                <TiltCard title="Pro plan" tilt={false}>
+                  <Plan action={false} />
+                </TiltCard>
+              </div>
             </div>
           ),
         },
