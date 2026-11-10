@@ -426,6 +426,7 @@ export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNav
         leaf("/installation", "Installation"),
         leaf("/mcp", "MCP"),
         leaf("/theming", "Theming"),
+        leaf("/theme", "Theme"),
         leaf("/studio", "Studio"),
       ],
     },

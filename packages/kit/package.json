@@ -49,6 +49,11 @@
     "./contracts/patterns/*.json": "./contracts/patterns/*.json",
     "./tokens/tokens.json": "./tokens/tokens.json",
     "./tokens/usage.json": "./tokens/usage.json",
+    "./color-ramp": {
+      "types": "./lib/color-ramp.d.ts",
+      "import": "./lib/color-ramp.mjs",
+      "default": "./lib/color-ramp.mjs"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -57,7 +62,7 @@
     "build": "npm run generate:tokens && vite build && npm run build:patterns-src",
     "version": "node ../../scripts/sync-kit-version-docs.mjs",
     "prepublishOnly": "npm run build",
-    "test": "node --test test/questions.test.mjs test/mcp.test.mjs"
+    "test": "node --test test/questions.test.mjs test/mcp.test.mjs test/color-ramp.test.mjs"
   },
   "peerDependencies": {
     "next": ">=14",

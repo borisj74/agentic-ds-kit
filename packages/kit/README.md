@@ -76,6 +76,8 @@ npm run generate:tokens -w agentic-ds-kit
 
 Components consume **semantic** variables (`--surface-page`, `--action-primary`, `--radius-control-md`). Primitive `--color-*` ramps are the source scale only.
 
+`agentic-ds-kit/color-ramp` exports `generateColorRamp(hex)`: an OKLCH ramp with steps 50–950. Step 500 stays within ΔE 3 of the input, and lightness falls from 50 to 950.
+
 ## Theming
 
 Override semantic tokens in your CSS after tokens load. Do not rewrite component classes.
