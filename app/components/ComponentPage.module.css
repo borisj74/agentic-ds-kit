@@ -1,0 +1,346 @@
+/* Direction A component page. Paper: content inset 24px top, 64px sides, 20px between blocks. */
+
+.page {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  min-width: 0;
+  padding: var(--space-6) var(--space-16) var(--space-16);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-heading);
+  font-size: var(--type-size-heading-4);
+  font-weight: var(--type-weight-title);
+  letter-spacing: var(--type-tracking-title);
+  line-height: var(--type-line-heading-4);
+}
+
+.lede {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chips > * {
+  font-family: var(--font-mono);
+}
+
+/* Stage */
+
+.stageWrap {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  padding-top: var(--space-2);
+}
+
+/* The Tabs panel sits under the tab list; the copy picker shares the tab row on wide screens. */
+.stageWrap > :first-child {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--space-16) * 5 + var(--space-5));
+  padding: var(--space-10) var(--space-6);
+  overflow: auto;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  /* Solid page ground (the canvas behind the content panel), no dot grid. */
+  background-color: var(--bg-canvas);
+}
+
+.stageInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.stageInner > * {
+  max-width: 100%;
+}
+
+/* Full-width parts (Scoreboard) take the stage width; thumbnails keep their size, centred. */
+.stageInner > section {
+  width: min(100%, var(--grid-width-sm));
+}
+
+.themeLabel {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  color: var(--text-fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.copy {
+  position: absolute;
+  top: var(--space-2);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.copyLabel {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.copyTargetsNarrow {
+  display: none;
+}
+
+/* When to use */
+
+.rules {
+  padding-top: var(--space-2);
+}
+
+.ruleTitle,
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  color: var(--text-fg);
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-lg);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
+  line-height: var(--type-line-ui-lg);
+}
+
+.ruleList {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.ruleList > li {
+  position: relative;
+  padding-left: var(--space-3);
+}
+
+.ruleList > li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+}
+
+/* What an agent reads */
+
+.agent {
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.agentHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+  background-color: var(--bg-subtle);
+}
+
+.overline {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+}
+
+.agentImport {
+  color: var(--primary-fg);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.agentRows {
+  margin: 0;
+}
+
+.agentRow {
+  display: grid;
+  grid-template-columns: calc(var(--space-16) + var(--space-2)) minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+}
+
+.agentLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-sm);
+}
+
+.labelMust {
+  color: var(--text-danger);
+}
+
+.labelDefaults {
+  color: var(--primary-fg);
+}
+
+.labelStops {
+  color: var(--text-fg-muted);
+}
+
+.agentValue {
+  margin: 0;
+}
+
+.agentValue .ruleList {
+  color: var(--text-fg);
+}
+
+.none {
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.agentNote {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.agentNote code {
+  font-family: var(--font-mono);
+}
+
+/* Variants tab: a grid of variant cards, no outer frame (each card has its own). */
+.variants {
+  min-width: 0;
+}
+
+.variantHost {
+  min-width: 0;
+}
+
+.variantChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.variantChip {
+  padding: var(--space-px) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-tray);
+  color: var(--text-fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 64rem is --grid-breakpoint-md: below it the copy picker drops under the stage. */
+@media (width < 64rem) {
+  .page {
+    padding: var(--space-4) var(--space-4) var(--space-12);
+  }
+
+  .copy {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .copyLabel {
+    grid-column: 1 / -1;
+  }
+
+  .copyTargetsWide {
+    display: none;
+  }
+
+  .copyTargetsNarrow {
+    display: block;
+  }
+
+  .copy :global(button) {
+    min-height: var(--space-10);
+  }
+
+  .stageWrap > :first-child [role="tablist"] {
+    display: flex;
+    width: 100%;
+  }
+
+  .stageWrap > :first-child [role="tab"] {
+    flex: 1 1 0;
+    justify-content: center;
+    min-height: var(--space-10);
+  }
+
+  .stage {
+    flex-direction: column;
+    gap: var(--space-3);
+    min-height: 0;
+    padding: var(--space-4) var(--space-3) var(--space-6);
+  }
+
+  .themeLabel {
+    position: static;
+    align-self: flex-start;
+  }
+}

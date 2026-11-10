@@ -97,12 +97,15 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+/* Primitive swatches keep their fill in both modes, so their labels can't follow the mode
+   either: the light-mode ink and white are pinned here. Text roles would flip in dark mode
+   and vanish on a light swatch. */
 .chipTextDark {
-  color: var(--text-primary);
+  color: var(--color-slate-900);
 }
 
 .chipTextLight {
-  color: var(--text-inverse);
+  color: var(--color-white);
 }
 
 .chipStep {

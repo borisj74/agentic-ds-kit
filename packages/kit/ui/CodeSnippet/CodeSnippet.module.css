@@ -19,19 +19,15 @@
   background: var(--surface-card);
 }
 
+/* With tabs: the same inset on top, bottom and the start, so the tab row sits evenly in the
+   header instead of hanging on its bottom border. */
 .withTabs {
-  align-items: flex-end;
-  padding-block: 0;
+  align-items: center;
+  padding: var(--space-inset-xs);
 }
 
-.withTabs .meta {
-  align-self: center;
-}
-
-/* The tab line sits on the header's bottom border. */
 .tabs {
   min-width: 0;
-  margin-bottom: calc(-1 * var(--border-divider));
 }
 
 .title {
