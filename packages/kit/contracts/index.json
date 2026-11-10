@@ -976,7 +976,7 @@
   },
   {
     "id": "settings",
-    "intent": "Settings area example: Profile, Billing, Team, Notifications and Security pages with their states; the sections live in its own SideNav column (Drawer below md) or in your app's SideNav (Stage look, layout-shell--inset).",
+    "intent": "Settings pages example, Stage look: Profile, Billing, Team, Notifications and Security with their states, on the inset panel of a layout-shell--inset shell whose SideNav lists the sections.",
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Breadcrumb } from "../../ui/Breadcrumb";
 import { Button } from "../../ui/Button";
-import { Drawer } from "../../ui/Drawer";
 import { PageHeader } from "../../ui/PageHeader";
-import { SideNavItem, SideNavNav, SideNavRoot, SideNavSection } from "../../ui/SideNav";
 import { BillingSettings, type BillingState } from "./BillingSettings";
 import { NotificationSettings } from "./NotificationSettings";
 import { ProfileSettings } from "./ProfileSettings";
@@ -17,17 +16,12 @@ export type { BillingState, TeamState, SettingsSection };
 
 export interface SettingsPatternProps {
   /**
-   * Where the section links live. "column" (default): the pattern's own settings nav beside the
-   * page, in a Drawer below md. "app": your app's SideNav lists them (build its rows from
-   * SETTINGS_SECTIONS, as in the Stage look); the page shows a Settings › section breadcrumb.
+   * Section to show. The section links live in your app's SideNav: build its rows from
+   * SETTINGS_SECTIONS under a Settings group and route the section from your URL.
    */
-  nav?: "column" | "app";
-  /** Extra PageHeader actions before the section's own, e.g. Help and the NotificationStack bell. */
-  headerActions?: ReactNode;
-  /** Current section (controlled). Pair it with onSectionChange, or route it from your URL. */
   section?: SettingsSection;
-  defaultSection?: SettingsSection;
-  onSectionChange?: (section: SettingsSection) => void;
+  /** Page-level actions on the breadcrumb row (top right), e.g. Help and the NotificationStack bell. */
+  headerActions?: ReactNode;
   /** Billing page state: ready, overdue (unpaid invoice), loading or error. */
   billing?: BillingState;
   /** Team page state: ready (members) or empty (just you). */
@@ -45,36 +39,15 @@ export interface SettingsPatternProps {
   onDeleteWorkspace?: () => void;
 }
 
-/*
- * Narrow = below --grid-breakpoint-md, read at runtime like the app-shell example, so the
- * settings nav moves into a kit Drawer at the same width as the app nav. 64rem is the fallback.
- */
-function narrowQuery(): string {
-  const value = getComputedStyle(document.documentElement).getPropertyValue("--grid-breakpoint-md").trim();
-  return `(width < ${value || "64rem"})`;
-}
-
-function subscribe(onChange: () => void) {
-  const query = window.matchMedia(narrowQuery());
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-function useNarrow(): boolean {
-  return useSyncExternalStore(subscribe, () => window.matchMedia(narrowQuery()).matches, () => false);
-}
-
 /**
- * Settings area example: a settings nav (Profile, Billing, Team, Notifications, Security) beside one
- * page per section. Below the md breakpoint the nav moves into a kit Drawer. Renders its own
- * `<nav>` and `<main>`; place it inside your app chrome (e.g. the app-shell example), not inside another main.
+ * Settings page example: one page per section (Profile, Billing, Team, Notifications, Security)
+ * under a Settings › section breadcrumb. Built for the Stage look: an app shell with
+ * layout-shell--inset, its SideNav on the canvas listing the sections, and this page on the
+ * inset panel. Renders its own `<main>`; don't wrap it in another main.
  */
 export function SettingsPattern({
-  nav: navPlacement = "column",
+  section = "billing",
   headerActions,
-  section: sectionProp,
-  defaultSection = "billing",
-  onSectionChange,
   billing = "ready",
   team = "ready",
   inviteOpen,
@@ -85,44 +58,14 @@ export function SettingsPattern({
   onRetryBilling,
   onDeleteWorkspace,
 }: SettingsPatternProps) {
-  const [ownSection, setOwnSection] = useState(defaultSection);
-  const section = sectionProp ?? ownSection;
-  const [navOpen, setNavOpen] = useState(false);
   const [ownInvite, setOwnInvite] = useState(false);
   const invite = inviteOpen ?? ownInvite;
-  const ownNav = navPlacement === "column";
-  const narrow = useNarrow() && ownNav;
   const meta = SECTIONS.find((item) => item.id === section) ?? SECTIONS[0];
-
-  function go(id: SettingsSection) {
-    setOwnSection(id);
-    onSectionChange?.(id);
-    setNavOpen(false);
-  }
 
   function setInvite(open: boolean) {
     setOwnInvite(open);
     onInviteOpenChange?.(open);
   }
-
-  // In the rail the nav carries a "Settings" label and a rule; in the Drawer the Drawer title says it.
-  const nav = (
-    <SideNavRoot aria-label="Settings" radius="none" open className={narrow ? undefined : "settings-pattern__nav"}>
-      <SideNavNav>
-        <SideNavSection label={narrow ? undefined : "Settings"}>
-          {SECTIONS.map((item) => (
-            <SideNavItem
-              key={item.id}
-              label={item.label}
-              icon={item.icon}
-              active={item.id === section}
-              onClick={() => go(item.id)}
-            />
-          ))}
-        </SideNavSection>
-      </SideNavNav>
-    </SideNavRoot>
-  );
 
   // One solid primary per view: Team's "Invite people" sits in the PageHeader unless the page is empty.
   const sectionAction: ReactNode =
@@ -131,58 +74,27 @@ export function SettingsPattern({
         Invite people
       </Button>
     ) : null;
-  const actions: ReactNode =
-    headerActions || sectionAction ? (
-      <>
-        {headerActions}
-        {sectionAction}
-      </>
-    ) : undefined;
 
   return (
-    <div
-      className={[
-        "layout-app settings-pattern",
-        ownNav ? "settings-pattern--column" : "settings-pattern--single",
-        narrow ? "settings-pattern--single" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {ownNav && !narrow ? nav : null}
-      <main className="layout-canvas layout-canvas--sticky-header settings-pattern__page" aria-label={`Settings: ${meta.label}`}>
-        {narrow ? (
-          <div className="settings-pattern__menu">
-            <Button appearance="outline" mode="neutral" size="sm" iconStart="Menu" onClick={() => setNavOpen(true)} aria-haspopup="dialog">
-              {`Settings · ${meta.label}`}
-            </Button>
-          </div>
-        ) : null}
-        <div className="layout-header">
-          <PageHeader
-            title={meta.label}
-            subtitle={meta.subtitle}
-            actions={actions}
-            breadcrumbs={ownNav ? undefined : [{ label: "Settings" }, { label: meta.label }]}
-          />
+    <main className="layout-canvas layout-canvas--sticky-header settings-pattern" aria-label={`Settings: ${meta.label}`}>
+      <div className="layout-header">
+        <div className="settings-pattern__top">
+          <Breadcrumb items={[{ label: "Settings" }, { label: meta.label }]} />
+          {headerActions ? <div className="settings-pattern__actions">{headerActions}</div> : null}
         </div>
-        {section === "profile" ? (
-          <ProfileSettings onSave={() => onSave?.("profile")} onCancel={() => onCancel?.("profile")} />
-        ) : section === "billing" ? (
-          <BillingSettings state={billing} onRetry={onRetryBilling} />
-        ) : section === "team" ? (
-          <TeamSettings state={team} inviteOpen={invite} onInviteOpenChange={setInvite} />
-        ) : section === "notifications" ? (
-          <NotificationSettings onSave={() => onSave?.("notifications")} onCancel={() => onCancel?.("notifications")} />
-        ) : (
-          <SecuritySettings twoFactor={twoFactor} onDeleteWorkspace={onDeleteWorkspace} />
-        )}
-      </main>
-      {narrow ? (
-        <Drawer open={navOpen} side="left" size="sm" title="Settings" onClose={() => setNavOpen(false)}>
-          {nav}
-        </Drawer>
-      ) : null}
-    </div>
+        <PageHeader title={meta.label} subtitle={meta.subtitle} actions={sectionAction ?? undefined} />
+      </div>
+      {section === "profile" ? (
+        <ProfileSettings onSave={() => onSave?.("profile")} onCancel={() => onCancel?.("profile")} />
+      ) : section === "billing" ? (
+        <BillingSettings state={billing} onRetry={onRetryBilling} />
+      ) : section === "team" ? (
+        <TeamSettings state={team} inviteOpen={invite} onInviteOpenChange={setInvite} />
+      ) : section === "notifications" ? (
+        <NotificationSettings onSave={() => onSave?.("notifications")} onCancel={() => onCancel?.("notifications")} />
+      ) : (
+        <SecuritySettings twoFactor={twoFactor} onDeleteWorkspace={onDeleteWorkspace} />
+      )}
+    </main>
   );
 }
