@@ -46,6 +46,10 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { AgentFleetDoc } from "./AgentFleetDoc";
+import { AgentPlanDoc } from "./AgentPlanDoc";
+import { AgentTrailDoc } from "./AgentTrailDoc";
+import { ApprovalCardDoc } from "./ApprovalCardDoc";
 import { KbdDoc } from "./KbdDoc";
 import { LineChartDoc } from "./LineChartDoc";
 import { LinkListDoc } from "./LinkListDoc";
@@ -109,6 +113,10 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  agentfleet: "AgentFleet",
+  agentplan: "AgentPlan",
+  agenttrail: "AgentTrail",
+  approvalcard: "ApprovalCard",
   kbd: "Kbd",
   textarea: "Textarea",
   timepicker: "TimePicker",
@@ -350,6 +358,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "agentfleet") return <AgentFleetDoc />;
+  if (resolved === "agentplan") return <AgentPlanDoc />;
+  if (resolved === "agenttrail") return <AgentTrailDoc />;
+  if (resolved === "approvalcard") return <ApprovalCardDoc />;
   if (resolved === "kbd") return <KbdDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
   if (resolved === "linklist") return <LinkListDoc />;

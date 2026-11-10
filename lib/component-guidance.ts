@@ -1,10 +1,14 @@
 // Derived from packages/kit/contracts/*.json. Do not hand-edit the map.
 import contract_accordion from "../packages/kit/contracts/accordion.json";
+import contract_agentfleet from "../packages/kit/contracts/agentfleet.json";
+import contract_agentplan from "../packages/kit/contracts/agentplan.json";
+import contract_agenttrail from "../packages/kit/contracts/agenttrail.json";
 import contract_alert from "../packages/kit/contracts/alert.json";
 import contract_alertdialog from "../packages/kit/contracts/alertdialog.json";
 import contract_anchornav from "../packages/kit/contracts/anchornav.json";
 import contract_appheader from "../packages/kit/contracts/appheader.json";
 import contract_appnav from "../packages/kit/contracts/appnav.json";
+import contract_approvalcard from "../packages/kit/contracts/approvalcard.json";
 import contract_avatar from "../packages/kit/contracts/avatar.json";
 import contract_avatargroup from "../packages/kit/contracts/avatargroup.json";
 import contract_badge from "../packages/kit/contracts/badge.json";
@@ -99,11 +103,15 @@ type ContractNotes = {
 
 const contracts: Record<string, ContractNotes> = {
   "accordion": contract_accordion,
+  "agentfleet": contract_agentfleet,
+  "agentplan": contract_agentplan,
+  "agenttrail": contract_agenttrail,
   "alert": contract_alert,
   "alertdialog": contract_alertdialog,
   "anchornav": contract_anchornav,
   "appheader": contract_appheader,
   "appnav": contract_appnav,
+  "approvalcard": contract_approvalcard,
   "avatar": contract_avatar,
   "avatargroup": contract_avatargroup,
   "badge": contract_badge,

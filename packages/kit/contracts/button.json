@@ -55,6 +55,11 @@
       "required": false,
       "note": "Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
     },
+    "shortcut": {
+      "type": "string",
+      "required": false,
+      "note": "Visual key hint after the label, e.g. \"⏎\", \"Esc\", \"⌘⏎\". aria-hidden: wire the key yourself and set aria-keyshortcuts. Ignored when icon-only."
+    },
     "ariaLabel": {
       "type": "string",
       "required": false,

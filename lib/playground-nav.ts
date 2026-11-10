@@ -2,11 +2,15 @@ import type { AppNavGroup, AppNavItem } from "agentic-ds-kit";
 
 export const COMPONENT_ITEMS = [
   "accordion",
+  "agentfleet",
+  "agentplan",
+  "agenttrail",
   "alert",
   "alertdialog",
   "anchornav",
   "appheader",
   "appnav",
+  "approvalcard",
   "avatar",
   "avatargroup",
   "badge",
@@ -92,6 +96,10 @@ export const COMPONENT_ITEMS = [
 ] as const;
 
 export function componentLabel(id: string): string {
+  if (id === "agentfleet") return "AgentFleet";
+  if (id === "agentplan") return "AgentPlan";
+  if (id === "agenttrail") return "AgentTrail";
+  if (id === "approvalcard") return "ApprovalCard";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -153,7 +161,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["chat", "insightcard", "loadinganimation", "numbertransition", "shimmertext", "thinkinganimation"],
+    ids: ["agentfleet", "agentplan", "agenttrail", "approvalcard", "chat", "insightcard", "loadinganimation", "numbertransition", "shimmertext", "thinkinganimation"],
   },
   {
     label: "Forms",

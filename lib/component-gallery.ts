@@ -30,6 +30,10 @@ function groupOf(id: string): string {
 }
 
 const AGENT_IDS = new Set([
+  "agentfleet",
+  "agentplan",
+  "agenttrail",
+  "approvalcard",
   "chat",
   "insightcard",
   "loadinganimation",

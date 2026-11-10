@@ -506,6 +506,11 @@
           "required": false,
           "note": "Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
         },
+        "shortcut": {
+          "type": "string",
+          "required": false,
+          "note": "Visual key hint after the label, e.g. \"⏎\", \"Esc\", \"⌘⏎\". aria-hidden: wire the key yourself and set aria-keyshortcuts. Ignored when icon-only."
+        },
         "ariaLabel": {
           "type": "string",
           "required": false,
@@ -7072,6 +7077,339 @@
           "type": "node",
           "required": true,
           "note": "The key label, such as ⌘ or K."
+        }
+      }
+    },
+    {
+      "id": "approvalcard",
+      "group": "component",
+      "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
+      "useWhen": [
+        "an agent needs a person's OK before a command, file edit, or other side effect",
+        "human-in-the-loop gates in a chat, trail, or inbox",
+        "a resolved decision should stay in the log as one line"
+      ],
+      "doNotUseWhen": [
+        "a generic yes/no that interrupts the page — AlertDialog",
+        "a recommendation the person may act on later — InsightCard",
+        "a plan of several steps to accept — AgentPlan",
+        "inline page status — Alert"
+      ],
+      "doNot": [
+        "Do not invent a local ApprovalCard, ConfirmCard, or PermissionCard",
+        "Do not paraphrase the action: show the exact command or diff",
+        "Approve is the view's one solid primary; Deny stays outline neutral",
+        "Do not use raw hex; risk colors come from status tokens",
+        "Do not hide the risk Badge for high-risk actions"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true,
+          "note": "The question, e.g. \"Run database migration?\""
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "risk": {
+          "type": "enum",
+          "values": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "default": "medium",
+          "note": "Colors the lead tile and the risk Badge. high uses a shield icon."
+        },
+        "action": {
+          "type": "object",
+          "required": true,
+          "note": "{ kind: \"command\", command, note?, target? } or { kind: \"diff\", file, lines: { type: \"context\" | \"add\" | \"remove\", text }[] }. Shown exactly as it will run."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "approved",
+            "denied",
+            "expired"
+          ],
+          "default": "pending",
+          "note": "Anything but pending renders the one-line resolved row."
+        },
+        "countdownSec": {
+          "type": "number",
+          "required": false,
+          "note": "Auto-deny countdown in seconds. At 0 the card calls onExpire, else onDeny. Pending only."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "Approve button and Enter while focus is inside the card (not on another control)."
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "Deny button and Escape while focus is inside the card."
+        },
+        "onExpire": {
+          "type": "function",
+          "required": false,
+          "note": "Countdown reached 0. Falls back to onDeny."
+        },
+        "resolvedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Resolved row, e.g. \"you\"."
+        },
+        "resolvedAt": {
+          "type": "string",
+          "required": false,
+          "note": "Resolved row, e.g. \"2s ago\"."
+        },
+        "approveLabel": {
+          "type": "string",
+          "default": "Approve"
+        },
+        "denyLabel": {
+          "type": "string",
+          "default": "Deny"
+        }
+      }
+    },
+    {
+      "id": "agenttrail",
+      "group": "component",
+      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
+      "useWhen": [
+        "show what an agent already did and is doing now",
+        "a run log next to a chat or an ApprovalCard",
+        "a step that waits for approval inside a longer task"
+      ],
+      "doNotUseWhen": [
+        "what the agent intends to do before it runs — AgentPlan",
+        "a project roadmap of now / next / later — Timeline",
+        "wizard steps a person fills in — ProgressSteps",
+        "many agents at once — AgentFleet"
+      ],
+      "doNot": [
+        "Do not invent a local AgentTrail, RunLog, or StepList",
+        "Do not use Timeline or ProgressSteps for an agent run",
+        "Do not use raw hex for status colors",
+        "Do not put actions in the trail; approvals go in ApprovalCard"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "steps": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, status: \"done\" | \"running\" | \"approval\" | \"pending\" | \"failed\", duration?, timer?, sublabel? }[]. duration for finished steps, timer for the running or approval step, sublabel for the tool call in mono."
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "Lucide icon before the title."
+        },
+        "tag": {
+          "type": "string",
+          "required": false,
+          "note": "Small neutral mono tag after the title, e.g. a branch."
+        },
+        "progress": {
+          "type": "object",
+          "required": false,
+          "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+        }
+      }
+    },
+    {
+      "id": "agentplan",
+      "group": "component",
+      "intent": "What an agent intends to do, before or during a run. People edit, accept, run, skip, stop, or retry steps.",
+      "useWhen": [
+        "an agent proposes several steps and the person should accept or edit them first",
+        "show which planned step runs now and which need approval",
+        "a compact one-line plan summary in a chat"
+      ],
+      "doNotUseWhen": [
+        "what already happened in a run — AgentTrail",
+        "a single action that needs an OK — ApprovalCard",
+        "wizard steps a person fills in — ProgressSteps",
+        "a to-do list without an agent — ListView"
+      ],
+      "doNot": [
+        "Do not invent a local AgentPlan, PlanCard, or StepEditor",
+        "Accept plan is the one solid primary; Run is outline",
+        "Do not show Edit / Remove once the plan is accepted",
+        "Do not use raw hex; approval uses caution tokens",
+        "Do not use AgentPlan for what already happened (AgentTrail)"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "steps": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, tool?, target?, note?, needsApproval?, error? }[]"
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "drafting",
+            "draft",
+            "accepted",
+            "running",
+            "complete",
+            "failed"
+          ],
+          "default": "draft",
+          "note": "drafting shows skeleton rows; draft with no steps shows Empty."
+        },
+        "currentStepId": {
+          "type": "string",
+          "required": false,
+          "note": "running: the step that runs now. failed: the step that stopped."
+        },
+        "summary": {
+          "type": "string",
+          "required": false,
+          "note": "Default derived: \"5 steps · 2 need approval\", \"5 steps · 2 done · 1 waiting\"."
+        },
+        "footerNote": {
+          "type": "string",
+          "required": false,
+          "note": "Mono note in the footer, e.g. \"accepted 14:02\" or \"3 of 5 · 1m 48s\"."
+        },
+        "waitingLabel": {
+          "type": "string",
+          "default": "Waiting for your OK"
+        },
+        "editable": {
+          "type": "boolean",
+          "default": true,
+          "note": "Draft only, and only with onChange: per-step Edit / Remove and Add step."
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(steps) => void. Called after Save step, Remove, and Add step."
+        },
+        "onAccept": {
+          "type": "function",
+          "required": false,
+          "note": "Draft footer: Accept plan, the view's one solid primary. ⌘/Ctrl+Enter inside the card."
+        },
+        "onRun": {
+          "type": "function",
+          "required": false,
+          "note": "Accepted footer: Run (outline). ⌘/Ctrl+Enter inside the card."
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false,
+          "note": "Accepted footer: back to draft."
+        },
+        "onSkipStep": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId) => void. Running and failed."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "Running footer."
+        },
+        "onRetryStep": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId) => void. Failed footer."
+        },
+        "onViewTrail": {
+          "type": "function",
+          "required": false,
+          "note": "Complete footer: open the run's AgentTrail."
+        },
+        "onDraft": {
+          "type": "function",
+          "required": false,
+          "note": "Empty state: Draft a plan."
+        },
+        "collapsed": {
+          "type": "boolean",
+          "default": false,
+          "note": "One-line summary row."
+        },
+        "onCollapsedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(collapsed) => void. Adds the show / hide chevron."
+        }
+      }
+    },
+    {
+      "id": "agentfleet",
+      "group": "component",
+      "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+      "useWhen": [
+        "monitor several running agents or orchestrators at once",
+        "show sub-agent progress, cost, and time per agent",
+        "point the person at a sub-agent that waits for their OK"
+      ],
+      "doNotUseWhen": [
+        "one agent's step-by-step run — AgentTrail",
+        "a single KPI — Scorecard",
+        "a plain table of jobs — DataTable"
+      ],
+      "doNot": [
+        "Do not invent a local AgentFleet, AgentGrid, or AgentCard",
+        "Do not color status without the text label",
+        "Do not use raw hex; waiting uses caution tokens",
+        "Do not nest interactive controls in the card besides Review"
+      ],
+      "props": {
+        "agents": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, status: \"idle\" | \"running\" | \"waiting\" | \"done\" | \"failed\", cost, elapsed?, meta?, subAgents: { id, name, status: \"queued\" | \"running\" | \"waiting\" | \"done\" | \"failed\", elapsed?, cost? }[] }[]"
+        },
+        "expandedId": {
+          "type": "string",
+          "required": false,
+          "note": "Open card. Others render compact beside it."
+        },
+        "onExpandedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Without it cards do not open."
+        },
+        "onReview": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId, subAgentId) => void. Review button for a waiting sub-agent."
+        },
+        "totals": {
+          "type": "string",
+          "required": false,
+          "note": "Fleet line under the cards. Default derived; \"\" hides it."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "onStart": {
+          "type": "function",
+          "required": false,
+          "note": "Empty fleet: Start an agent."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "Agent fleet"
         }
       }
     },

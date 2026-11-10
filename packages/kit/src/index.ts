@@ -7,11 +7,15 @@ import "./tokens";
 import "./layout";
 
 export * from "../ui/Accordion";
+export * from "../ui/AgentFleet";
+export * from "../ui/AgentPlan";
+export * from "../ui/AgentTrail";
 export * from "../ui/Alert";
 export * from "../ui/AlertDialog";
 export * from "../ui/AnchorNav";
 export * from "../ui/AppHeader";
 export * from "../ui/AppNav";
+export * from "../ui/ApprovalCard";
 export * from "../ui/Avatar";
 export * from "../ui/AvatarGroup";
 export * from "../ui/Badge";

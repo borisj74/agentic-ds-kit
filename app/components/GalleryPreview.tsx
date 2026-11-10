@@ -1,9 +1,13 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
+import { AgentFleet } from "agentic-ds-kit";
+import { AgentPlan } from "agentic-ds-kit";
+import { AgentTrail } from "agentic-ds-kit";
 import { Alert } from "agentic-ds-kit";
 import { AnchorNav } from "agentic-ds-kit";
 import { AppHeader } from "agentic-ds-kit";
 import { AppNav } from "agentic-ds-kit";
+import { ApprovalCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
 import { AvatarGroup } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
@@ -118,6 +122,66 @@ export function GalleryPreview({ id }: { id: string }) {
             { id: "gallery-anchor-usage", label: "Usage" },
           ]}
         />
+      );
+    case "agentfleet":
+      return (
+        <Stage variant="wide">
+          <AgentFleet
+            totals=""
+            agents={[
+              {
+                id: "billing",
+                name: "Billing refactor",
+                status: "running",
+                cost: "$1.28",
+                elapsed: "6m 40s",
+                subAgents: [
+                  { id: "a", name: "scan-codebase", status: "done" },
+                  { id: "b", name: "edit-invoice", status: "done" },
+                  { id: "c", name: "write-tests", status: "running" },
+                  { id: "d", name: "migrate-db", status: "queued" },
+                ],
+              },
+            ]}
+          />
+        </Stage>
+      );
+    case "agentplan":
+      return (
+        <Stage variant="wide">
+          <AgentPlan
+            collapsed
+            title="Fix invoice rounding"
+            summary="5 steps"
+            steps={[{ id: "1", label: "Read invoice module" }]}
+          />
+        </Stage>
+      );
+    case "agenttrail":
+      return (
+        <Stage variant="wide">
+          <AgentTrail
+            title="Rate limit"
+            steps={[
+              { id: "1", label: "Read auth module", status: "done", duration: "4.1s" },
+              { id: "2", label: "Draft patch", status: "running", timer: "0:18" },
+              { id: "3", label: "Run tests", status: "pending" },
+            ]}
+          />
+        </Stage>
+      );
+    case "approvalcard":
+      return (
+        <div className={previewStyles.stack}>
+          <ApprovalCard
+            status="approved"
+            title="Run migration?"
+            action={{ kind: "command", command: "npm run db:migrate" }}
+            resolvedBy="you"
+            resolvedAt="2s ago"
+          />
+          <ApprovalCard status="denied" title="Delete exports?" action={{ kind: "command", command: "rm -rf ./tmp" }} resolvedBy="you" />
+        </div>
       );
     case "accordion":
       return (
