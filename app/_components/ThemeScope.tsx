@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useId, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { ThemeScopeProvider } from "agentic-ds-kit";
 import { scopeCss, themeDeclarations, type ThemeState } from "@/lib/theme-playground";
 import { readPatternTheme, subscribeTheme } from "@/lib/theme-store";
@@ -23,6 +23,12 @@ export function ThemeScope({
   children: ReactNode;
 }) {
   const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+
+  // The head script hides previews while a saved theme is pending. Once the client has read the
+  // store, an unreadable or missing theme must not keep them hidden.
+  useEffect(() => {
+    if (!theme && !readPatternTheme()) document.documentElement.removeAttribute("data-preview-theme");
+  }, [theme]);
   const css = theme ? scopeCss(theme, id) : "";
   const style = theme
     ? (themeDeclarations(theme, theme.mode, "preview") as CSSProperties)
@@ -33,6 +39,7 @@ export function ThemeScope({
       <div
         data-theme-scope={id}
         data-theme={theme?.mode === "dark" ? "dark" : undefined}
+        data-theme-ready={theme ? "" : undefined}
         className={[className, fontClassName].filter(Boolean).join(" ")}
         style={style}
       >

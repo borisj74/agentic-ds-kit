@@ -1,0 +1,39 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--space-8);
+  color: var(--text-fg);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.logo:focus-visible {
+  outline: var(--border-focus-width) solid var(--line-focus);
+  outline-offset: var(--space-1);
+}
+
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-sm);
+  background-color: var(--primary-base);
+  color: var(--text-fg-inverse);
+}
+
+.tileGlyph {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+/* About 47px wide, as in Paper: the outline is the 16px bold wordmark. */
+.wordmark {
+  height: var(--type-size-ui-sm);
+  width: auto;
+  /* viewBox is 383.5 x 109: keep the ratio without a fixed width. */
+  aspect-ratio: 383.524 / 109.026;
+}
