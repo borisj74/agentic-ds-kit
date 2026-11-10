@@ -606,9 +606,9 @@
   position: relative;
 }
 
-/* Render areas in both tabs: page white with a hairline, so fills like the Avatar fallback
-   (slate-50, the same as --bg-canvas) stay visible. */
+/* Render areas in both tabs: the faintest grey, the page ground (--bg-canvas, slate-50).
+   Known clash: the kit Avatar fallback fill is the same slate-50, so its circle shows no edge. */
 .examplesHost .layout,
 .examplesHost .example > .exampleCanvas {
-  background: var(--bg-surface);
+  background: var(--bg-canvas);
 }
