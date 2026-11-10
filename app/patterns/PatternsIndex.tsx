@@ -4,43 +4,36 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Card } from "agentic-ds-kit";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
-import { AppShellDemo } from "../_components/AppShellDemo";
-import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsPreview } from "../_components/LayoutsDemo";
-import { SaasPatternDemo } from "../_components/SaasPatternDemo";
-import { OnboardingDemo, SettingsAreaDemo } from "../_components/ScreensPatternDemo";
-import { SignInDemo } from "../_components/SignInDemo";
+import { ScaledFrame, frameUrl } from "../_components/PatternPreview";
+import { usePatternTheme } from "../_components/ThemeScope";
+import { PATTERN_BLURBS, PATTERN_VIEWS, isScreenSlug } from "@/lib/pattern-screens";
 import playground from "../playground.module.css";
 import styles from "./patterns.module.css";
 
 const SCENE_WIDTH = 1200;
 const SCENE_HEIGHT = 760;
 
-const BLURB: Record<PatternSlug, string> = {
-  dashboard: "Overview with a KPI strip, chart, and task table.",
-  settings: "Grouped settings fields with save and cancel.",
-  "list-detail": "A list of records beside the one you selected.",
-  empty: "First-run empty state with one primary action.",
-  "sign-in": "Centered sign-in card with email, password, and SSO.",
-  "app-shell": "Header and side nav around the page, including a narrow drawer.",
-  layouts: "Top bar and side nav, composed from kit components.",
-  "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",
-  "integration-settings": "One integration's status, sync settings, scopes, and a confirmed disconnect.",
-  "settings-area": "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
-  onboarding: "Four guided setup steps with progress, a validation error and a submitting state.",
-};
 
-function PatternPreview({ slug }: { slug: PatternSlug }) {
-  if (slug === "sign-in") return <SignInDemo />;
-  if (slug === "billing-schedule" || slug === "integration-settings") return <SaasPatternDemo pattern={slug} />;
-  if (slug === "settings-area") return <SettingsAreaDemo />;
-  if (slug === "onboarding") return <OnboardingDemo />;
-  if (slug === "layouts") return <LayoutsPreview />;
-  if (slug === "app-shell") return <AppShellDemo />;
-  if (slug === "dashboard" || slug === "settings" || slug === "list-detail" || slug === "empty") {
-    return <DashboardDemo pattern={slug} />;
+/** Thumbnail: the pattern's frame scaled into the card (not focusable); Layouts renders in place. */
+function PatternThumb({ slug }: { slug: PatternSlug }) {
+  const theme = usePatternTheme();
+  if (!isScreenSlug(slug)) {
+    return (
+      <Thumb>
+        <LayoutsPreview />
+      </Thumb>
+    );
   }
-  return null;
+  return (
+    <div className={styles.thumbFrame} inert aria-hidden="true">
+      <ScaledFrame
+        src={frameUrl(slug, PATTERN_VIEWS[slug][0].id, theme?.mode ?? "light")}
+        title={`${slug} thumbnail`}
+        interactive={false}
+      />
+    </div>
+  );
 }
 
 function Thumb({ children }: { children: ReactNode }) {
@@ -85,10 +78,8 @@ export function PatternsIndex() {
       <div className={styles.grid}>
         {PATTERN_ITEMS.map((item) => (
           <div key={item.slug} className={styles.cardLink}>
-            <Card title={item.label} description={BLURB[item.slug]}>
-              <Thumb>
-                <PatternPreview slug={item.slug} />
-              </Thumb>
+            <Card title={item.label} description={PATTERN_BLURBS[item.slug]}>
+              <PatternThumb slug={item.slug} />
             </Card>
             <Link href={`/patterns/${item.slug}`} className={styles.cardHit} aria-label={`Open ${item.label}`} />
           </div>

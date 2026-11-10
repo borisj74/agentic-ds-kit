@@ -19,8 +19,6 @@ import {
 } from "agentic-ds-kit";
 import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
-import styles from "../playground.module.css";
-import { PreviewScope } from "./ThemeScope";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
@@ -36,7 +34,7 @@ const NAV_FOOTER: SideNavItemData[] = [{ id: "settings", label: "Settings", icon
  * Responsive app shell in the playground browser frame. Narrow the window
  * below 64rem to swap SideNav for the Menu button and left Drawer.
  */
-export function AppShellDemo() {
+function AppShellDefault() {
   const [page, setPage] = useState("overview");
   const [query, setQuery] = useState("");
   const [navOpen, setNavOpen] = useState(true);
@@ -46,17 +44,9 @@ export function AppShellDemo() {
   const current = [...NAV_ITEMS, ...NAV_FOOTER].find((item) => item.id === page) ?? NAV_ITEMS[0];
 
   return (
-    <div className={styles.browser}>
-      <div className={styles.browserChrome} aria-hidden="true">
-        <div className={styles.traffic}>
-          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
-        </div>
-        <div className={styles.urlBar}>{`app.operations.dev/${page}`}</div>
-      </div>
-      <PreviewScope className={styles.scopeFill}>
+    <>
       <AppShellPattern
+        className="layout-shell--viewport"
         header={{
           title: "Agentix",
           mark: "A",
@@ -89,8 +79,7 @@ export function AppShellDemo() {
           </div>
         </div>
       </AppShellPattern>
-      </PreviewScope>
-    </div>
+      </>
   );
 }
 
@@ -156,23 +145,15 @@ function CustomNav({ page, onPick }: { page: string; onPick: (id: string) => voi
  * The same shell with chrome built from blocks: AppHeader.Root with a Beta Badge
  * and Avatar, and a grouped nav from the SideNav blocks with a workspace Select.
  */
-export function AppShellCustomDemo() {
+function AppShellCustom() {
   const [page, setPage] = useState("home");
   const [query, setQuery] = useState("");
   const current = CUSTOM_ITEMS.find((item) => item.id === page) ?? CUSTOM_ITEMS[0];
 
   return (
-    <div className={styles.browser}>
-      <div className={styles.browserChrome} aria-hidden="true">
-        <div className={styles.traffic}>
-          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
-        </div>
-        <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
-      </div>
-      <PreviewScope className={styles.scopeFill}>
+    <>
       <AppShellPattern
+        className="layout-shell--viewport"
         navLabel="Agentix"
         header={
           <AppHeader.Root ariaLabel="Agentix">
@@ -209,8 +190,7 @@ export function AppShellCustomDemo() {
           </div>
         </div>
       </AppShellPattern>
-      </PreviewScope>
-    </div>
+      </>
   );
 }
 
@@ -254,22 +234,14 @@ function BrandedNav({ placement, page, onPick }: { placement: AppShellNavPlaceme
  * No header and a built nav (a function of placement). The shell cannot read a mark from a
  * built nav, so `markIcon` on the shell gives the default narrow top bar its brand.
  */
-export function AppShellBuiltNavDemo() {
+function AppShellBuiltNav() {
   const [page, setPage] = useState("home");
   const current = CUSTOM_ITEMS.find((item) => item.id === page) ?? CUSTOM_ITEMS[0];
 
   return (
-    <div className={styles.browser}>
-      <div className={styles.browserChrome} aria-hidden="true">
-        <div className={styles.traffic}>
-          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
-        </div>
-        <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
-      </div>
-      <PreviewScope className={styles.scopeFill}>
+    <>
       <AppShellPattern
+        className="layout-shell--viewport"
         navLabel="Agentix"
         markIcon="Sparkles"
         nav={(placement) => <BrandedNav placement={placement} page={page} onPick={setPage} />}
@@ -288,7 +260,13 @@ export function AppShellBuiltNavDemo() {
           </div>
         </div>
       </AppShellPattern>
-      </PreviewScope>
-    </div>
+      </>
   );
+}
+
+/** The app-shell example as a full screen. `view`: default (props), custom (built chrome) or built-nav (no header). */
+export function AppShellScreen({ view = "default" }: { view?: string }) {
+  if (view === "custom") return <AppShellCustom />;
+  if (view === "built-nav") return <AppShellBuiltNav />;
+  return <AppShellDefault />;
 }

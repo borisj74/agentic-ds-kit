@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
@@ -16,8 +15,6 @@ import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
 import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
-import styles from "../playground.module.css";
-import { PreviewScope } from "./ThemeScope";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
@@ -154,18 +151,21 @@ function selectedProjectId(page: string) {
 
 type DashboardRoute = Extract<PatternSlug, "dashboard" | "settings" | "list-detail" | "empty">;
 
-export function DashboardDemo({
+/**
+ * The content patterns (dashboard, settings-form, list-detail, empty-first-run) as one full
+ * screen inside the app-shell example. `pattern` picks the start page; the nav moves between
+ * them in place, as a real app would.
+ */
+export function DashboardScreen({
   pattern,
   view,
 }: {
   pattern: DashboardRoute;
   view?: string;
 }) {
-  const router = useRouter();
   const [query, setQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  const page =
+  const [page, setPage] = useState(
     pattern === "settings"
       ? "settings"
       : pattern === "empty"
@@ -174,29 +174,10 @@ export function DashboardDemo({
           ? "projects"
           : view && hashForPage(view) === "dashboard"
             ? view
-            : "overview";
-
-  const go = useCallback(
-    (id: string) => {
-      const next = hashForPage(id);
-      if (next === "dashboard") {
-        const href =
-          id === "overview" ? "/patterns/dashboard" : `/patterns/dashboard?view=${encodeURIComponent(id)}`;
-        router.push(href);
-        return;
-      }
-      if (next === "settings") {
-        router.push("/patterns/settings");
-        return;
-      }
-      if (next === "empty") {
-        router.push("/patterns/empty");
-        return;
-      }
-      router.push("/patterns/list-detail");
-    },
-    [router],
+            : "overview",
   );
+
+  const go = useCallback((id: string) => setPage(id), []);
 
   const items = useMemo(() => bindItems(NAV_ITEMS, page, go), [page, go]);
   const navFooter = useMemo(() => bindItems(NAV_FOOTER, page, go), [page, go]);
@@ -216,23 +197,12 @@ export function DashboardDemo({
   const allItems = [...NAV_ITEMS, ...NAV_FOOTER];
   const current = findItem(allItems, page);
 
-  const path = page === "overview" ? "app.operations.dev/overview" : `app.operations.dev/${page}`;
-
   const trail = breadcrumbsFor(page, go);
 
   return (
-    <div className={styles.browser}>
-      <div className={styles.browserChrome} aria-hidden="true">
-        <div className={styles.traffic}>
-          <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
-          <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
-        </div>
-        <div className={styles.urlBar}>{path}</div>
-      </div>
-      {/* Below 64rem the shell swaps the SideNav for a Menu Button and left Drawer, as a real app would. */}
-      <PreviewScope className={styles.scopeFill}>
+    <>
       <AppShellPattern
+        className="layout-shell--viewport"
         navLabel="Agentix"
         header={{
           title: "Agentix",
@@ -280,7 +250,6 @@ export function DashboardDemo({
           <DashboardPattern breadcrumbs={trail} />
         )}
       </AppShellPattern>
-      </PreviewScope>
-    </div>
+      </>
   );
 }

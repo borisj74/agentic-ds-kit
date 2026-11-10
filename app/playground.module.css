@@ -184,31 +184,87 @@
 }
 
 /* Sign-in pattern frame: no app shell, the page scrolls inside the browser. */
-.signInDemo {
+
+
+
+
+
+
+/* Pattern screens in their frame (/frame/patterns/…): the screen fills the viewport. */
+.frameScreen {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bg-canvas);
 }
 
-.signInDemo .browser {
-  align-self: stretch;
+.frameScreen > :global(.layout-shell) {
+  flex: 1 1 auto;
 }
 
-/* Screen picker above a screens demo (settings-area, onboarding): a Select, not a long Tabs row. */
-.screenPicker {
-  width: min(100%, var(--layout-sidebar));
-}
-
-
-.browserPage {
-  flex: 1;
-  min-height: 0;
+/* A pattern block (no shell of its own) on a page. */
+.screenPage {
+  flex: 1 1 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
   overflow: auto;
+  background: var(--bg-canvas);
 }
 
-/* SaaS settings patterns: the block sits on the page with the content inset, like a settings screen. */
-.saasPage {
-  padding: var(--space-8);
-  overflow: auto;
+.screenPagePadded {
+  padding: var(--layout-margin-lg);
+}
+
+/* Preview block on a pattern page: toolbar over a scaled iframe of the screen. */
+.previewBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block: var(--space-6) var(--space-10);
+}
+
+.previewToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.previewTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.previewState {
+  width: var(--layout-metrics-min);
+  max-width: 100%;
+}
+
+.frameHost {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  background: var(--bg-subtle);
+  overflow: hidden;
+}
+
+.frameBox {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  transform-origin: top left;
+  background: var(--bg-canvas);
 }

@@ -1,123 +1,162 @@
 "use client";
 
-import { AppShellBuiltNavDemo, AppShellCustomDemo, AppShellDemo } from "../_components/AppShellDemo";
-import { DashboardDemo } from "../_components/DashboardDemo";
+import Link from "next/link";
+import { Breadcrumb } from "agentic-ds-kit";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
-import { SaasPatternDemo } from "../_components/SaasPatternDemo";
-import { OnboardingDemo, SettingsAreaDemo } from "../_components/ScreensPatternDemo";
-import onboardingContract from "../../packages/kit/contracts/patterns/onboarding.json";
-import settingsContract from "../../packages/kit/contracts/patterns/settings.json";
-import { SignInDemo } from "../_components/SignInDemo";
+import { PatternPreview } from "../_components/PatternPreview";
 import { CodeBlock } from "../components/CodeBlock";
+import { PATTERN_BLURBS, isScreenSlug } from "@/lib/pattern-screens";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
+import appShell from "../../packages/kit/contracts/patterns/app-shell.json";
+import billingSchedule from "../../packages/kit/contracts/patterns/billing-schedule.json";
+import dashboard from "../../packages/kit/contracts/patterns/dashboard.json";
+import emptyFirstRun from "../../packages/kit/contracts/patterns/empty-first-run.json";
+import integrationSettings from "../../packages/kit/contracts/patterns/integration-settings.json";
+import listDetail from "../../packages/kit/contracts/patterns/list-detail.json";
+import onboarding from "../../packages/kit/contracts/patterns/onboarding.json";
+import settings from "../../packages/kit/contracts/patterns/settings.json";
+import settingsForm from "../../packages/kit/contracts/patterns/settings-form.json";
+import signIn from "../../packages/kit/contracts/patterns/sign-in.json";
 import styles from "./patterns.module.css";
 import playground from "../playground.module.css";
 
-const ADD_ID: Record<string, string> = {
-  dashboard: "dashboard",
-  settings: "settings-form",
-  "list-detail": "list-detail",
-  empty: "empty-first-run",
-  "sign-in": "sign-in",
-  "app-shell": "app-shell",
-  "billing-schedule": "billing-schedule",
-  "integration-settings": "integration-settings",
-  "settings-area": "settings",
-  onboarding: "onboarding",
-};
-
-/** Pattern pages that show their contract under the preview. */
-const CONTRACTS: Partial<Record<string, unknown>> = {
-  "settings-area": settingsContract,
-  onboarding: onboardingContract,
-};
-
-function usageFor(slug: string) {
-  if (slug === "layouts") {
-    return {
-      note: "No pattern needed: compose kit components. These need only the package.",
-      code: `import { AppHeader, Button, Drawer, PageHeader, SideNav } from "agentic-ds-kit";`,
-    };
-  }
-  const id = ADD_ID[slug] ?? "dashboard";
-  return {
-    note: "Copy it into your app, then edit the data file and sections.",
-    code: `npx agentic-ds-kit add ${id}`,
-  };
+interface PatternContract {
+  id: string;
+  add: string;
+  import?: string;
+  intent?: string;
+  copyNote?: string;
+  requires?: string[];
+  contains?: string[];
+  must?: string[];
+  defaults?: string[];
+  snippet?: string;
 }
 
-function isDashboardRoute(slug: PatternSlug): slug is "dashboard" | "settings" | "list-detail" | "empty" {
-  return slug === "dashboard" || slug === "settings" || slug === "list-detail" || slug === "empty";
+/** Docs slug → pattern contract (the `settings` slug predates the settings pattern, so it is settings-form). */
+const CONTRACTS: Record<Exclude<PatternSlug, "layouts">, PatternContract> = {
+  dashboard,
+  settings: settingsForm,
+  "list-detail": listDetail,
+  empty: emptyFirstRun,
+  "sign-in": signIn,
+  "app-shell": appShell,
+  "billing-schedule": billingSchedule,
+  "integration-settings": integrationSettings,
+  "settings-area": settings,
+  onboarding,
+};
+
+function List({ items }: { items?: string[] }) {
+  if (!items?.length) return null;
+  return (
+    <ul className={styles.list}>
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
 }
 
 export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string }) {
   const title = PATTERN_ITEMS.find((item) => item.slug === slug)?.label ?? "Patterns";
-  const usage = usageFor(slug);
+  const crumbs = [{ label: "Patterns", href: "/patterns" }, { label: title }];
+
+  if (!isScreenSlug(slug)) {
+    // Layouts is not a pattern: kit components composed in place, no add command.
+    return (
+      <div className={playground.page}>
+        <div className={styles.article}>
+          <Breadcrumb items={crumbs} />
+          <h1 className={playground.pageTitle}>{title}</h1>
+          <p className={playground.pageLead}>
+            Top bar and side nav composed from kit components. No pattern needed: these need only the package.
+          </p>
+          <CodeBlock code={`import { AppHeader, Button, Drawer, PageHeader, SideNav } from "agentic-ds-kit";`} />
+          <LayoutsDemo titleClassName={styles.sectionTitle} />
+        </div>
+      </div>
+    );
+  }
+
+  const contract = CONTRACTS[slug];
+  const usage = [contract.import, "", contract.snippet].filter((line) => line !== undefined).join("\n");
 
   return (
     <div className={playground.page}>
-      <div className={playground.opsShell}>
+      <article className={styles.article}>
+        <Breadcrumb items={crumbs} />
         <h1 className={playground.pageTitle}>{title}</h1>
-        <p className={playground.pageLead}>
-          Examples of what you can build from kit components. Copy one in to start from it, borrow
-          from it, or ignore it: layout is your choice. Each contract lists what a copy must keep
-          (kit look and accessibility) and its defaults, which you can change.
-        </p>
+        <p className={playground.pageLead}>{PATTERN_BLURBS[slug]}</p>
 
-        <div className={styles.usage}>
-          <p className={playground.body}>{usage.note}</p>
-          <CodeBlock code={usage.code} />
-        </div>
+        <PatternPreview
+          slug={slug}
+          title={title}
+          addCommand={contract.add}
+          usage={usage}
+          contract={JSON.stringify(contract, null, 2)}
+          initialView={view}
+        />
 
-        <div className={styles.anchor}>
-          {slug === "sign-in" ? (
-            <SignInDemo />
-          ) : slug === "billing-schedule" || slug === "integration-settings" ? (
-            <SaasPatternDemo pattern={slug} />
-          ) : slug === "onboarding" ? (
-            <OnboardingDemo view={view} />
-          ) : slug === "settings-area" ? (
-            <SettingsAreaDemo view={view} />
-          ) : slug === "layouts" ? (
-            <LayoutsDemo titleClassName={styles.variantTitle} />
-          ) : slug === "app-shell" ? (
-            <>
-              <AppShellDemo />
-              <h2 className={styles.variantTitle}>Custom chrome</h2>
-              <p className={playground.body}>
-                One layout option among many. header and nav also take nodes built from the kit
-                blocks. The header places AppShellMenuButton in its brand cell; the nav reads
-                useAppShell() to stay expanded in the Drawer.
-              </p>
-              <div className={styles.variantFrame}>
-                <AppShellCustomDemo />
-              </div>
-              <h2 className={styles.variantTitle}>Built nav, no header</h2>
-              <p className={playground.body}>
-                No header and a nav passed as a function of placement. The shell cannot read a
-                mark from a built nav, so markIcon on the shell brands the default narrow top bar:
-                Menu Button, mark, and title.
-              </p>
-              <div className={styles.variantFrame}>
-                <AppShellBuiltNavDemo />
-              </div>
-            </>
-          ) : isDashboardRoute(slug) ? (
-            <DashboardDemo pattern={slug} view={view} />
-          ) : null}
-        </div>
-
-        {CONTRACTS[slug] ? (
-          <>
-            <h2 className={styles.variantTitle}>Contract</h2>
+        <section className={styles.section} aria-labelledby={`${slug}-install`}>
+          <h2 id={`${slug}-install`} className={styles.sectionTitle}>
+            Install
+          </h2>
+          <p className={playground.body}>{contract.copyNote?.replace(/`/g, "")}</p>
+          <CodeBlock code={contract.add} />
+          {contract.requires?.length ? (
             <p className={playground.body}>
-              Copied beside the source as {`${ADD_ID[slug]}.contract.json`}. Keep the must lines; the defaults are
-              suggestions.
+              Also copies{" "}
+              {contract.requires.map((id, index) => (
+                <span key={id}>
+                  {index ? ", " : null}
+                  <code>{id}</code>
+                </span>
+              ))}{" "}
+              beside it, which this pattern builds on (kept if you already have it).
             </p>
-            <CodeBlock code={JSON.stringify(CONTRACTS[slug], null, 2)} />
-          </>
+          ) : null}
+        </section>
+
+        <section className={styles.section} aria-labelledby={`${slug}-usage`}>
+          <h2 id={`${slug}-usage`} className={styles.sectionTitle}>
+            Usage
+          </h2>
+          <CodeBlock code={usage} />
+        </section>
+
+        <section className={styles.section} aria-labelledby={`${slug}-must`}>
+          <h2 id={`${slug}-must`} className={styles.sectionTitle}>
+            What a copy keeps
+          </h2>
+          <p className={playground.body}>The contract&rsquo;s must lines: the kit look and accessibility. Ask before breaking one.</p>
+          <List items={contract.must} />
+        </section>
+
+        <section className={styles.section} aria-labelledby={`${slug}-defaults`}>
+          <h2 id={`${slug}-defaults`} className={styles.sectionTitle}>
+            Defaults you can change
+          </h2>
+          <List items={contract.defaults} />
+        </section>
+
+        {contract.contains?.length ? (
+          <section className={styles.section} aria-labelledby={`${slug}-built`}>
+            <h2 id={`${slug}-built`} className={styles.sectionTitle}>
+              Built from
+            </h2>
+            <ul className={styles.chips}>
+              {contract.contains.map((id) => (
+                <li key={id}>
+                  <Link href={`/components/${id}`} className={styles.chip}>
+                    {id}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         ) : null}
-      </div>
+      </article>
     </div>
   );
 }

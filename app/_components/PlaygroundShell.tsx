@@ -56,8 +56,14 @@ function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuer
   );
 }
 
+/** Pattern frames (/frame/…) are bare screens shown in an iframe: no docs chrome around them. */
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  if (pathname?.startsWith("/frame/")) return <>{children}</>;
+  return <DocsShell pathname={pathname}>{children}</DocsShell>;
+}
+
+function DocsShell({ children, pathname }: { children: React.ReactNode; pathname: string }) {
   const siteMode = useSyncExternalStore(subscribeRootTheme, readPlaygroundTheme, readServerTheme);
   const customize = useCustomizeOpen(pathname);
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);

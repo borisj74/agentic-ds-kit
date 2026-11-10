@@ -2,6 +2,17 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
+
+Boris asked for pattern pages that look like affectUI's screens catalogue (affectui.com/screens/app-shell-flat): breadcrumb, title and one line, a Preview / Code toolbar, the screen at full size scaled into a plain frame, then sections. His calls: all pattern pages, a scaled iframe, a new PR on top of #137.
+
+- **Frame route:** `/frame/patterns/<slug>?view=<state>&mode=light|dark` renders one pattern screen alone in the viewport. `PlaygroundShell` skips the docs chrome for `/frame/…`. The frame follows the saved Theme panel theme (and its changes, through the `storage` event) and takes light or dark from `mode`.
+- **Screens:** the demos lost their fake browser bar and pickers and became full screens (`DashboardScreen`, `SignInScreen`, `AppShellScreen`, `BillingScheduleScreen`, `IntegrationSettingsScreen`, `SettingsScreen`, `OnboardingScreen`). Their states are plain data in `lib/pattern-screens.ts` (`PATTERN_VIEWS`, `PATTERN_BLURBS`), shared by the frame route (a Server Component) and the client.
+- **Preview block** (`PatternPreview`): Preview / Code (kit SegmentedControl), a state Select, Light / Dark, Desktop (1440 × 900) / Mobile (390 × 844), Open full screen (the frame route in a new tab) and Copy add. The iframe renders at that size and scales to the column width, so breakpoints, Drawers and menus behave as in an app. Code shows Install, Usage and the contract in a kit CodeSnippet with tabs.
+- **Page sections** come from the contract: Install (copyNote, the add command, `requires`), Usage (import + snippet), What a copy keeps (`must`), Defaults you can change (`defaults`), Built from (`contains`, linked to component pages).
+- **Index:** thumbnails are the same frames, scaled and inert. Layouts stays an in-page demo (it isn't a pattern).
+- **Dev only:** Next's dev indicator shows inside each frame in `next dev`; production builds don't have it.
+
 ## 2026-11-10: Screens (feat/screens-patterns-1, -2)
 
 Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-6-0 "Nistha Screens": 70 artboards at 1440×900. They are two sets (Settings, Onboarding), each in light and dark, and each drawn twice: once with the AppHeader + SideNav chrome (first row) and once as a "Stage" (second row: no top bar, nav with brand and search, the page on an inset panel, the site's own look). **Only the Stage look is built** (Boris: "Let's just have a stage-side look. Remove the other."). Both are copy-in patterns, not components.
