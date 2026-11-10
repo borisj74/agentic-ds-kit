@@ -34,7 +34,7 @@ export type Density = "compact" | "default" | "comfy";
 export type NeutralChoice = PlaygroundNeutralScale | "tint";
 export type SansFont = "ibm-plex" | "inter" | "dm-sans" | "source-sans" | "outfit";
 export type DisplayFont = "ibm-plex" | "newsreader" | "fraunces" | "instrument-serif" | "outfit";
-export type PresetId = "ink" | "blue" | "violet" | "teal" | "rose" | "amber" | "indigo" | "forest" | "custom";
+export type PresetId = "nistha" | "ink" | "blue" | "violet" | "teal" | "rose" | "amber" | "indigo" | "forest" | "custom";
 export type HeadingWeight = "400" | "500" | "600" | "700";
 export type ShadowPreset = "none" | "flat" | "subtle" | "default" | "raised" | "dramatic";
 export type ShadowTint = "neutral" | "primary";
@@ -83,6 +83,7 @@ interface Preset {
 const SHADOW_DEFAULTS = { shadowIntensity: 100, shadowScale: 100, shadowTint: "neutral" as const, pill: false, headingWeight: "600" as const };
 
 export const PRESETS: readonly Preset[] = [
+  { id: "nistha", label: "Nistha", brand: "#2b2bf5", accent: "", neutral: "slate", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
   { id: "ink", label: "Ink", brand: "#000000", accent: "", neutral: "neutral", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
   { id: "blue", label: "Blue", brand: "#3b82f6", accent: "", neutral: "slate", step: "600", radius: 8, density: "default", shadowPreset: "default", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
   { id: "violet", label: "Violet", brand: "#8b5cf6", accent: "#0d9488", neutral: "zinc", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "ibm-plex", display: "newsreader", ...SHADOW_DEFAULTS },
@@ -174,7 +175,7 @@ export const DISPLAY_FONTS: { id: DisplayFont; label: string; preview: string; e
 const NEUTRAL_OPTIONS: NeutralChoice[] = ["neutral", "zinc", "slate", "stone", "gray", "tint"];
 const DENSITIES: Density[] = ["compact", "default", "comfy"];
 
-export const DEFAULT_THEME: ThemeState = presetState("ink", "light");
+export const DEFAULT_THEME: ThemeState = presetState("nistha", "light");
 
 export function presetState(id: Exclude<PresetId, "custom">, mode: ThemeMode): ThemeState {
   const preset = PRESETS.find((item) => item.id === id) ?? PRESETS[0];
@@ -227,8 +228,20 @@ function shippedRamp(name: "blue" | "violet" | "teal"): ColorRamp {
   return ramp;
 }
 
+const KIT_BRAND_HEX = normalizeHex((tokens.primitive.color as unknown as Record<string, Record<string, string>>).brand["500"]) ?? "#2b2bf5";
+
+/** Electric Blue: the kit's brand steps, blue for the washes, generated steps only where the kit has none. */
+function nisthaBrandRamp(): ColorRamp {
+  const color = tokens.primitive.color as unknown as Record<string, Record<string, string>>;
+  const ramp = generateColorRamp(KIT_BRAND_HEX);
+  for (const step of ["300", "500", "600", "700"] as const) ramp[step] = normalizeHex(color.brand[step]) ?? ramp[step];
+  for (const step of ["50", "100", "200", "800", "900"] as const) ramp[step] = normalizeHex(color.blue[step]) ?? ramp[step];
+  return ramp;
+}
+
 function brandRampFor(brand: string): ColorRamp {
   const hex = hexOf(brand, "#000000");
+  if (hex === KIT_BRAND_HEX) return nisthaBrandRamp();
   for (const name of ["blue", "violet", "teal"] as const) {
     const shipped = tokens.primitive.color[name] as Record<string, string>;
     if (normalizeHex(shipped["500"]) === hex) return shippedRamp(name);
@@ -306,6 +319,7 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
     "--primary-base": ref("brand", action),
     "--primary-hover": ref("brand", hover),
     "--primary-active": ref("brand", pressed),
+    "--primary-fg": ref("brand", text),
     "--primary-subtle": ref("brand", subtle),
     "--primary-subtle-strong": ref("brand", subtleStrong),
     "--primary-subtle-stronger": ref("brand", subtleStronger),
@@ -342,6 +356,7 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
       base: pointer(action),
       hover: pointer(hover),
       active: pointer(pressed),
+      fg: pointer(text),
       subtle: pointer(subtle),
       subtleStrong: pointer(subtleStrong),
       subtleStronger: pointer(subtleStronger),
@@ -662,6 +677,63 @@ function accentRoles(palette: ThemePalette, mode: ThemeMode): Record<string, str
   };
 }
 
+function kebabKey(key: string): string {
+  return key.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+}
+
+function kitValue(value: string): string {
+  const match = value.match(/^primitive\.color\.([a-z]+)(?:\.(\d+))?$/i);
+  if (!match) return value;
+  return match[2] ? `var(--color-${match[1]}-${match[2]})` : `var(--color-${kebabKey(match[1])})`;
+}
+
+/** True when brand and neutrals are the kit default (Electric Blue on Slate). */
+export function usesKitColors(state: ThemeState): boolean {
+  return normalizeHex(state.brand) === KIT_BRAND_HEX && state.neutral === "slate";
+}
+
+/** The kit's own surface, text, line, primary, and info roles, so the Nistha preview matches tokens.css exactly. */
+function kitColorRoles(mode: ThemeMode): Record<string, string> {
+  const theme = (tokens.semantic as unknown as Record<string, Record<string, Record<string, string>>>)[mode];
+  const out: Record<string, string> = {};
+  for (const family of ["bg", "line", "primary", "info"] as const) {
+    for (const [key, value] of Object.entries(theme[family])) out[`--${family}-${kebabKey(key)}`] = kitValue(value);
+  }
+  for (const key of ["fg", "fgMuted", "fgSubtle", "fgDisabled", "fgInverse"]) out[`--text-${kebabKey(key)}`] = kitValue(theme.text[key]);
+  const p = (name: string) => out[`--primary-${name}`];
+  return {
+    ...out,
+    "--action-primary": p("base"),
+    "--action-primary-hover": p("hover"),
+    "--action-primary-pressed": p("active"),
+    "--action-selected": p("subtle"),
+    "--action-selected-border": p("base"),
+    "--brand-primary": p("base"),
+    "--brand-primary-hover": p("hover"),
+    "--brand-primary-active": p("active"),
+    "--brand-subtle": p("subtle"),
+    "--focus-ring": out["--line-focus"],
+    "--border-focus": out["--line-focus"],
+    "--text-brand": p("base"),
+    "--icon-brand": p("base"),
+    "--fill-brand": p("base"),
+    "--fill-brand-subtle": p("subtle"),
+    "--surface-brand": p("base"),
+    "--surface-brand-subtle": p("subtle"),
+    "--border-brand": p("base"),
+    "--link-default": p("base"),
+    "--link-hover": p("hover"),
+    "--link-visited": p("base"),
+    "--link-active": p("active"),
+  };
+}
+
+/** Other presets keep the pre-Nistha info blue so only the brand they chose changes. */
+const LEGACY_INFO: Record<ThemeMode, Record<string, string>> = {
+  light: { "--info-fg": "var(--color-blue-800)", "--info-base": "var(--color-blue-600)", "--info-line": "var(--color-blue-200)", "--info-subtle": "var(--color-blue-50)" },
+  dark: { "--info-fg": "var(--color-blue-200)", "--info-base": "var(--color-blue-400)", "--info-line": "var(--color-blue-700)", "--info-subtle": "var(--color-blue-900)" },
+};
+
 export function themeDeclarations(state: ThemeState, mode: ThemeMode, which: "preview" | "export"): Record<string, string> {
   const palette = themePalette({ ...state, mode });
   const neutralMap = mode === "light" ? LIGHT_NEUTRAL : DARK_NEUTRAL;
@@ -680,6 +752,7 @@ export function themeDeclarations(state: ThemeState, mode: ThemeMode, which: "pr
     ...shared,
     ...neutral,
     ...brand,
+    ...(usesKitColors(state) ? kitColorRoles(mode) : LEGACY_INFO[mode]),
     ...accentRoles(palette, mode),
     ...shadowVars(state, mode),
     ...SHADOW_ALIASES,
@@ -724,7 +797,7 @@ export function exportCss(state: ThemeState): string {
   const lightSelector = named ? `[data-color="${state.preset}"]` : ":root";
   const darkSelector = named ? `[data-theme="dark"][data-color="${state.preset}"]` : '[data-theme="dark"]';
   const note = named
-    ? `/* ${labelFor(state)} overlay. Load after tokens.css. Omit data-color for the default ink ramp. */\n`
+    ? `/* ${labelFor(state)} overlay. Load after tokens.css. Omit data-color for the default Nistha look. */\n`
     : "/* Custom theme. Load after tokens.css. Light lives on :root; dark on [data-theme=\"dark\"]. */\n";
   return `${note}${block(lightSelector, light)}\n\n${block(darkSelector, dark)}\n`;
 }
@@ -862,6 +935,12 @@ function resolveColor(value: string, palette: ThemePalette): string {
   const accent = value.match(/^var\(--color-accent-(\d+)\)$/);
   if (accent && palette.accent) return palette.accent[accent[1] as RampStep];
   if (value === "var(--color-white)") return "#ffffff";
+  const kit = value.match(/^var\(--color-([a-z]+)-(\d+)\)$/);
+  if (kit) {
+    const ramp = (tokens.primitive.color as Record<string, unknown>)[kit[1]];
+    const hex = ramp && typeof ramp === "object" ? (ramp as Record<string, string>)[kit[2]] : undefined;
+    if (hex) return normalizeHex(hex) ?? hex;
+  }
   if (value.startsWith("#")) return value;
   return "#000000";
 }

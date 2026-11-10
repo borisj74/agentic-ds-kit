@@ -99,6 +99,7 @@
     "primary.base",
     "primary.hover",
     "primary.active",
+    "primary.fg",
     "primary.subtle",
     "danger.fg",
     "danger.base",

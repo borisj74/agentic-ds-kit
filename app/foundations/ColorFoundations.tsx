@@ -32,6 +32,8 @@ const PRIMITIVE_RAMPS: {
   single?: boolean;
 }[] = [
   { hue: "neutral", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const },
+  { hue: "slate", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"] as const },
+  { hue: "brand", steps: ["300", "500", "600", "700"] as const },
   { hue: "blue", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "violet", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
   { hue: "teal", steps: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"] as const },
@@ -95,6 +97,7 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
       { name: "primary.base", var: "--primary-base" },
       { name: "primary.hover", var: "--primary-hover" },
       { name: "primary.active", var: "--primary-active" },
+      { name: "primary.fg", var: "--primary-fg" },
       { name: "primary.subtle", var: "--primary-subtle" },
       { name: "primary.subtle-strong", var: "--primary-subtle-strong" },
       { name: "primary.subtle-stronger", var: "--primary-subtle-stronger" },

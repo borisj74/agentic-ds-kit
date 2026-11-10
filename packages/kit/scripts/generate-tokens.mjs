@@ -2,8 +2,9 @@
 /**
  * Generates lib/tokens.css from tokens/tokens.json.
  * Primitives are fixed. Appearance remaps under [data-theme="dark"].
- * Brand remaps under [data-color="blue"], [data-color="violet"], and [data-color="teal"].
- * Default brand (no data-color) is ink — the Cards-aligned black primary.
+ * Brand remaps under [data-color="ink"], [data-color="blue"], [data-color="violet"], and [data-color="teal"].
+ * Default brand (no data-color) is Nistha: Electric Blue (brand ramp) on Slate neutrals.
+ * [data-color="ink"] restores the earlier black primary on neutral greys.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";

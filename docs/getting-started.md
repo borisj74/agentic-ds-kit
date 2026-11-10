@@ -280,7 +280,7 @@ html[data-theme="dark"] {
 }
 ```
 
-Brand overlays: omit `data-color` for ink, or set `blue` / `violet` / `teal`.
+Brand overlays: omit `data-color` for the default Nistha look (Electric Blue on Slate), set `ink` for the black primary on neutral greys, or set `blue` / `violet` / `teal`.
 
 ```html
 <html lang="en" data-color="violet">

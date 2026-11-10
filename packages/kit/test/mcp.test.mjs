@@ -15,6 +15,10 @@ const button = JSON.parse(readFileSync(join(kitRoot, "contracts/button.json"), "
 const dashboard = JSON.parse(readFileSync(join(kitRoot, "contracts/patterns/dashboard.json"), "utf8"));
 const tokens = JSON.parse(readFileSync(join(kitRoot, "tokens/tokens.json"), "utf8"));
 const usage = JSON.parse(readFileSync(join(kitRoot, "tokens/usage.json"), "utf8"));
+const resolvePrimitive = (ref) =>
+  typeof ref === "string" && ref.startsWith("primitive.")
+    ? ref.slice("primitive.".length).split(".").reduce((node, key) => node?.[key], tokens.primitive)
+    : ref;
 const agents = readFileSync(join(kitRoot, "AGENTS.md"), "utf8");
 const { version } = JSON.parse(readFileSync(join(kitRoot, "package.json"), "utf8"));
 const componentIds = index.filter((entry) => entry.group === "component").map((entry) => entry.id);
@@ -177,8 +181,8 @@ describe("mcp server", { timeout: 20_000 }, () => {
     assert.ok(color.tokens.every((token) => token.group === "color"));
     assert.ok(color.tokens.length < all.tokens.length);
     const canvas = color.tokens.find((token) => token.name === "--bg-canvas");
-    assert.equal(canvas.value, tokens.semantic.light.bg.canvas);
-    assert.equal(canvas.dark, tokens.semantic.dark.bg.canvas);
+    assert.equal(canvas.value, resolvePrimitive(tokens.semantic.light.bg.canvas));
+    assert.equal(canvas.dark, resolvePrimitive(tokens.semantic.dark.bg.canvas));
     assert.equal(canvas.note, usage.tokens["--bg-canvas"].note);
     assert.equal(canvas.useWhen, usage.tokens["--bg-canvas"].useWhen);
     assert.equal(canvas.doNot, usage.tokens["--bg-canvas"].doNot);

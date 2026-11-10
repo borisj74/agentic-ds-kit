@@ -63,6 +63,7 @@
     "text.fgInverse",
     "line.default",
     "primary.base",
+    "primary.fg",
     "primary.subtle",
     "success.fg",
     "success.base",
