@@ -220,12 +220,12 @@ export default function ThemingPage() {
 
         <Section
           title="Brand color"
-          description="Ink (warm black) is the default. Blue, violet, and teal ship as data-color overlays."
+          description="Nistha (Electric Blue on Slate) is the default. Ink, blue, violet, and teal ship as data-color overlays."
         >
           <div className={playground.stack}>
             <CodeBlock code={BRAND_HTML} />
             <p className={playground.body}>
-              Shortcuts: ink (unset), blue, violet, teal. Custom writes data-color=&quot;custom&quot; and
+              Shortcuts: Nistha (unset), ink, blue, violet, teal. Custom writes data-color=&quot;custom&quot; and
               generates primary / hover / active / subtle / focus from any hex. Dark + brand stays
               a light pair when the picked hex is dark. The Theme page is the live editor.
             </p>

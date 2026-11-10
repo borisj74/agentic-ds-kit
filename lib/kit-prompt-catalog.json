@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -103,7 +103,7 @@
           "doNot": "Do not mix border-* cousins for the same edge if a line role exists"
         },
         "--primary-": {
-          "note": "Brand action fill and subtle well.",
+          "note": "Brand action fill, brand text (--primary-fg) and subtle well.",
           "useWhen": "Solid-primary actions and selected wells",
           "doNot": "Do not hardcode a brand hex in components"
         },
@@ -325,9 +325,14 @@
           "doNot": "Do not remove the focus ring"
         },
         "--primary-base": {
-          "note": "Brand fill. Light default #000; dark #F2F2F2.",
+          "note": "Brand fill. Light Electric Blue brand-500; dark brand-300. data-color=\"ink\" restores black.",
           "useWhen": "Solid-primary Button and selected states",
           "doNot": "Do not put more than one solid-primary CTA in a view"
+        },
+        "--primary-fg": {
+          "note": "Brand-coloured text and icons on surface or primary-subtle. Light brand-700; dark blue-200.",
+          "useWhen": "Brand labels, selected-item text, text on --primary-subtle wells",
+          "doNot": "Do not use --primary-base for small text on --primary-subtle; use --primary-fg"
         },
         "--font-heading": {
           "note": "Alias of --font-display. Live playground switcher.",
