@@ -46,6 +46,8 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { UsageMeterDoc } from "./UsageMeterDoc";
+import { TraceWaterfallDoc } from "./TraceWaterfallDoc";
 import { MemoryPanelDoc } from "./MemoryPanelDoc";
 import { InlineDiffDoc } from "./InlineDiffDoc";
 import { MessageActionsDoc } from "./MessageActionsDoc";
@@ -129,6 +131,8 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  usagemeter: "UsageMeter",
+  tracewaterfall: "TraceWaterfall",
   memorypanel: "MemoryPanel",
   inlinediff: "InlineDiff",
   messageactions: "MessageActions",
@@ -390,6 +394,8 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "usagemeter") return <UsageMeterDoc />;
+  if (resolved === "tracewaterfall") return <TraceWaterfallDoc />;
   if (resolved === "memorypanel") return <MemoryPanelDoc />;
   if (resolved === "inlinediff") return <InlineDiffDoc />;
   if (resolved === "messageactions") return <MessageActionsDoc />;

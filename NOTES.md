@@ -12,7 +12,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
   - **Batch 1** (`feat/agent-patterns-1`, from `main`): Approval Card, Agent Trail, Agent Plan, Agent Fleet from p-3-0.
   - **Batch 2** (`feat/agent-patterns-2`): the next four p-3-0 components that build on batch 1.
 - **Not in scope yet:** the p-6-0 screens (Settings set: Billing, Profile, Team, Notifications, Security with their states; Onboarding steps 01–04) and the p-4-0 pieces they use (Usage Meter, Billing Schedule, Invoice & Credit Note, Change Summary, Experiment Card, Comment Thread, Comments Panel, Notification Stack, Integration Picker, Integration Settings, Setup Guide, Pricing Plans, Task Board).
-- **Skipped because Nistha already has them:** nothing in batch 1. In batch 2, **Usage Meter** (04) is held back: kit Meter (stacked bar), UsageList (limits per row) and LineChart (the daily sparkline) already cover its parts. A UsageMeter would mostly compose them, so it waits for a decision on whether that composition earns its own contract. The closest kit pieces (Timeline, ProgressSteps, InsightCard, AlertDialog, Scorecard) do a different job, and each new contract says which to use instead.
+- **Skipped because Nistha already has them:** nothing in batch 1. In batch 2, **Usage Meter** (04) was held back (it shipped in batch 6, composed from the kit pieces): kit Meter (stacked bar), UsageList (limits per row) and LineChart (the daily sparkline) already cover its parts. A UsageMeter would mostly compose them, so it waits for a decision on whether that composition earns its own contract. The closest kit pieces (Timeline, ProgressSteps, InsightCard, AlertDialog, Scorecard) do a different job, and each new contract says which to use instead.
 
 ### Batch 1: what shipped
 
@@ -23,7 +23,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | AgentPlan | 11 Agent Plan | 01 draft (edit, remove, add), 02 editing a step, 03 accepted, 04 running with a step waiting, 05 complete, 06 failed, 07 drafting, 08 empty, 09 collapsed |
 | AgentFleet | 06 Agent Fleet | 01 overview, 02 focused (one open, others compact), 03 all idle + totals, 04 needs you + failed + totals, 05 loading, 06 empty |
 
-Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2, 103 after batch 3, 107 after batch 4 and 111 after batch 5).
+Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2, 103 after batch 3, 107 after batch 4, 111 after batch 5 and 113 after batch 6).
 
 #### Kit change outside the four
 
@@ -144,6 +144,35 @@ Keyboard and focus, batch 5:
 - InlineDiff: ⌘/Ctrl+Enter accepts and Escape rejects inside the card; once resolved, focus moves to the one-line row.
 - MemoryPanel: Forget opens the AlertDialog with focus on Keep; Escape returns focus to the Forget button. Edit puts focus in the textarea with the caret at the end; Enter saves.
 
+### Batch 6: what shipped
+
+Branch `feat/agent-patterns-6`, stacked on `feat/agent-patterns-5`. This completes p-3-0: all 22 agent artboards are now kit components.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| TraceWaterfall | 22 Cost Trace Waterfall | Badge, Button, Empty, NumberTransition, Skeleton | complete with a span selected, in progress (dashed to now), one failed span, compact bar (done and running), loading, error, empty |
+| UsageMeter | 04 Usage Meter | **Meter, UsageList, LineChart, Alert**, Badge, Button | normal, near limit with warning and Upgrade, limit reached, loading, error |
+
+UsageMeter composes the kit's Meter (total), UsageList (by category), LineChart (daily area with the cap as a second series) and Alert (near limit), as Boris asked, so none of them is re-implemented. That replaces the batch 2 decision to hold it back.
+
+Paper vs tokens, batch 6:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Trace kinds: model blue, tool teal, approval violet | `--primary`, `--status-success`, `--status-warning` (`--status-danger` for failed) | No teal or violet roles; same mapping as AgentFleet. |
+| Trace "in-progress span grows toward now" | solid bar plus a dashed extension to the end of the window | Static, so nothing animates width. |
+| Trace "totals tick with NumberTransition" | kit NumberTransition for total time and cost | As designed. |
+| Usage Meter stacked category bar | kit Meter for the total; categories as a kit UsageList | Composition rule; Meter has no segments. The UsageList is taller than Paper's two-column legend. |
+| Usage Meter sparkline with dashed daily cap | kit LineChart `variant="area"`, with the cap as a second series; the chart keeps its own title, table toggle and legend | Composition rule; LineChart has no dashed reference line. |
+| Usage Meter warning callout | kit Alert (warning or danger) with a title | Kit component. |
+| Usage Meter footer | View usage (outline) always; Upgrade plan (solid primary) only near or over the limit | Matches Paper: the normal state has no upgrade push. |
+| Usage Meter "accent: blue · violet · teal · neutral" per category | UsageList's own bar colour | UsageList has no per-item colour. |
+| Usage Meter width 400px | `--usage-width: 25rem` | Custom-width pattern; Jev marked it "review". |
+
+Keyboard and focus, batch 6:
+- TraceWaterfall: span rows are buttons with aria-expanded controlling the detail region; Close shuts it.
+- UsageMeter: the kit pieces bring their own semantics (Meter progressbar, UsageList, LineChart table toggle); Upgrade and View usage are Buttons.
+
 ### Paper vs tokens (tokens win)
 
 | Paper | Kit | Why |
@@ -197,7 +226,8 @@ Keyboard and focus, batch 5:
 ### PR status
 
 - Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
-- Batch 5: `feat/agent-patterns-5`, stacked on batch 4, PR base `feat/agent-patterns-4`. Open, not merged.
+- Batch 6: `feat/agent-patterns-6`, stacked on batch 5, PR base `feat/agent-patterns-5`. Open, not merged.
+- Batch 5: `feat/agent-patterns-5`, stacked on batch 4, https://github.com/borisj74/agentic-ds-kit/pull/125, PR base `feat/agent-patterns-4`. Open, not merged.
 - Batch 4: `feat/agent-patterns-4`, stacked on batch 3, https://github.com/borisj74/agentic-ds-kit/pull/124, PR base `feat/agent-patterns-3`. Open, not merged.
 - Batch 3: `feat/agent-patterns-3`, stacked on batch 2, https://github.com/borisj74/agentic-ds-kit/pull/123, PR base `feat/agent-patterns-2`. Open, not merged.
 - Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.

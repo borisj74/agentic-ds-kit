@@ -108,8 +108,10 @@ import contract_timeline from "../packages/kit/contracts/timeline.json";
 import contract_toast from "../packages/kit/contracts/toast.json";
 import contract_toolcallcard from "../packages/kit/contracts/toolcallcard.json";
 import contract_tooltip from "../packages/kit/contracts/tooltip.json";
+import contract_tracewaterfall from "../packages/kit/contracts/tracewaterfall.json";
 import contract_treeview from "../packages/kit/contracts/treeview.json";
 import contract_usagelist from "../packages/kit/contracts/usagelist.json";
+import contract_usagemeter from "../packages/kit/contracts/usagemeter.json";
 
 type ContractNotes = {
   useWhen?: string[];
@@ -227,8 +229,10 @@ const contracts: Record<string, ContractNotes> = {
   "toast": contract_toast,
   "toolcallcard": contract_toolcallcard,
   "tooltip": contract_tooltip,
+  "tracewaterfall": contract_tracewaterfall,
   "treeview": contract_treeview,
   "usagelist": contract_usagelist,
+  "usagemeter": contract_usagemeter,
 };
 
 export function guidanceFor(id: string): { dos: string[]; donts: string[] } | null {

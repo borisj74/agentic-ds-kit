@@ -107,8 +107,10 @@ export const COMPONENT_ITEMS = [
   "toast",
   "toolcallcard",
   "tooltip",
+  "tracewaterfall",
   "treeview",
   "usagelist",
+  "usagemeter",
 ] as const;
 
 export function componentLabel(id: string): string {
@@ -132,6 +134,8 @@ export function componentLabel(id: string): string {
   if (id === "messageactions") return "MessageActions";
   if (id === "inlinediff") return "InlineDiff";
   if (id === "memorypanel") return "MemoryPanel";
+  if (id === "tracewaterfall") return "TraceWaterfall";
+  if (id === "usagemeter") return "UsageMeter";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -294,7 +298,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Agent",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
 ] as const;
 

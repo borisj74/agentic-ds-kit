@@ -38,6 +38,8 @@ const AGENT_IDS = new Set([
   "shimmertext",
   "thinkinganimation",
   "toolcallcard",
+  "tracewaterfall",
+  "usagemeter",
 ]);
 
 const MOTION_IDS = new Set([

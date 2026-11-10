@@ -115,8 +115,10 @@ export * from "../ui/Timeline";
 export * from "../ui/Toast";
 export * from "../ui/ToolCallCard";
 export * from "../ui/Tooltip";
+export * from "../ui/TraceWaterfall";
 export * from "../ui/TreeView";
 export * from "../ui/UsageList";
+export * from "../ui/UsageMeter";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";
