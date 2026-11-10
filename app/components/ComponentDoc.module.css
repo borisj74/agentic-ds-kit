@@ -531,8 +531,8 @@
 /* Stage Variants tab (VariantGrid): variant sections only. The master demo lives in the stage's
    Preview tab, so the doc's Master header and preview panel are hidden, and DocTabList renders
    no tab bar. Each section reads name, description, prop chips, then the live render. */
-.examplesHost .masterHeader,
-.examplesHost [role="tabpanel"][aria-label="Preview"] {
+.variantsHost .masterHeader,
+.variantsHost [role="tabpanel"][aria-label="Preview"] {
   display: none;
 }
 
@@ -592,5 +592,23 @@
 
 .examplesHost .example > .exampleCanvas {
   order: 4;
-  background: var(--bg-canvas);
+}
+
+/* Stage Preview tab: only the doc's master render (canvas, and its controls panel if any). */
+.previewHost .masterHeader,
+.previewHost .docs,
+.previewHost .variants,
+.previewHost .example {
+  display: none;
+}
+
+.previewHost {
+  position: relative;
+}
+
+/* Render areas in both tabs: page white with a hairline, so fills like the Avatar fallback
+   (slate-50, the same as --bg-canvas) stay visible. */
+.examplesHost .layout,
+.examplesHost .example > .exampleCanvas {
+  background: var(--bg-surface);
 }

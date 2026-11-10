@@ -16,12 +16,12 @@ export function DocTabList({
 }) {
   const view = useDocView();
 
-  // Inside the stage's Variants tab: show the variants view, before paint, with no tab bar.
+  // Inside the stage's Preview or Variants tab: show that view, before paint, with no tab bar.
   useLayoutEffect(() => {
-    if (view === "variants" && value !== "variants") onChange("variants");
+    if (view !== "full" && value !== view) onChange(view);
   }, [view, value, onChange]);
 
-  if (view === "variants") return null;
+  if (view !== "full") return null;
 
   return (
     <div className={styles.tabListHost}>

@@ -2,14 +2,17 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
-/**
- * How a component doc renders. In "variants" mode (the stage's Variants tab) a doc shows only its
- * variant cards: DocTabList switches the doc to its variants view and renders no tab bar, so the
- * page never has nested tabs. The live demo lives in the stage's own Preview tab.
- */
-const DocViewContext = createContext<"full" | "variants">("full");
+export type DocViewMode = "full" | "preview" | "variants";
 
-export function DocViewProvider({ mode, children }: { mode: "full" | "variants"; children: ReactNode }) {
+/**
+ * How a component doc renders inside the stage. "preview" (the Preview tab) shows only the doc's
+ * master render; "variants" (the Variants tab) shows only its variant sections. In both, DocTabList
+ * switches the doc to that view and renders no tab bar, so the page never has nested tabs, and
+ * Preview and Variants show the component the same way.
+ */
+const DocViewContext = createContext<DocViewMode>("full");
+
+export function DocViewProvider({ mode, children }: { mode: DocViewMode; children: ReactNode }) {
   return <DocViewContext.Provider value={mode}>{children}</DocViewContext.Provider>;
 }
 

@@ -17,6 +17,7 @@ import { PRESETS, clampRadius, type ThemeState } from "@/lib/theme-playground";
 import { PreviewScope } from "../_components/ThemeScope";
 import { useCustomizeOpen } from "../_components/useCustomizeOpen";
 import { GalleryPreview } from "./GalleryPreview";
+import { DocViewProvider } from "./DocView";
 import { VariantGrid } from "./VariantGrid";
 import docStyles from "./ComponentDoc.module.css";
 import styles from "./ComponentPage.module.css";
@@ -96,9 +97,10 @@ function CopyPrompt({ id }: { id: string }) {
 
 /**
  * Preview / Variants / Code / Contract for one component, plus the Copy prompt picker.
- * `variants` is the component's own doc; the Variants tab shows only its variant cards (VariantGrid).
+ * `doc` is the component's own doc: Preview shows its master render, Variants its variant
+ * sections (VariantGrid), so both tabs show the component the same way.
  */
-export function ComponentStage({ id, variants }: { id: string; variants?: ReactNode }) {
+export function ComponentStage({ id, doc }: { id: string; doc?: ReactNode }) {
   const [tab, setTab] = useState<StageTab>("preview");
   const propsForChips = useMemo(() => variantProps(id), [id]);
   const snippet = contractSnippet(id);
@@ -117,24 +119,29 @@ export function ComponentStage({ id, variants }: { id: string; variants?: ReactN
           {
             id: "preview",
             label: "Preview",
-            content: (
-              // The whole stage is the preview scope, so its ground follows the preview theme too.
+            content: doc ? (
+              // The doc's own master render, the same view the Variants tab uses.
+              <PreviewScope className={`${docStyles.examplesHost} ${docStyles.previewHost}`}>
+                <StageThemeLabel />
+                <DocViewProvider mode="preview">{doc}</DocViewProvider>
+              </PreviewScope>
+            ) : (
               <PreviewScope className={styles.stage}>
                 <StageThemeLabel />
                 <div className={styles.stageInner}>
-                  <GalleryPreview id={id} size="stage" />
+                  <GalleryPreview id={id} />
                 </div>
               </PreviewScope>
             ),
           },
-          ...(variants
+          ...(doc
             ? [
                 {
                   id: "variants",
                   label: "Variants",
                   content: (
-                    <PreviewScope className={`${docStyles.examplesHost} ${styles.variants}`}>
-                      <VariantGrid props={propsForChips}>{variants}</VariantGrid>
+                    <PreviewScope className={`${docStyles.examplesHost} ${docStyles.variantsHost} ${styles.variants}`}>
+                      <VariantGrid props={propsForChips}>{doc}</VariantGrid>
                     </PreviewScope>
                   ),
                 },

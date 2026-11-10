@@ -92,7 +92,7 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
         </div>
       </header>
 
-      <ComponentStage id={id} variants={children} />
+      <ComponentStage id={id} doc={children} />
 
       {use.length > 0 || avoid.length > 0 ? (
         <div className={`layout-split ${styles.rules}`}>

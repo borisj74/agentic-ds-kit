@@ -54,12 +54,3 @@
   max-width: 100%;
 }
 
-/* Charts on a component page stage: full chart, not the card thumbnail. */
-.stageChart {
-  width: min(100%, var(--grid-width-sm));
-}
-
-/* Tables on the stage get the wider grid width so their columns read. */
-.stageTable {
-  width: min(100%, var(--grid-width-md));
-}
