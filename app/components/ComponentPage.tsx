@@ -9,9 +9,7 @@ import {
   contractUseWhen,
   importLine,
 } from "@/lib/component-contract";
-import { PreviewScope } from "../_components/ThemeScope";
 import { ComponentStage } from "./ComponentStage";
-import docStyles from "./ComponentDoc.module.css";
 import styles from "./ComponentPage.module.css";
 
 function RuleList({ items }: { items: string[] }) {
@@ -64,8 +62,8 @@ function AgentReadsBlock({ id }: { id: string }) {
 }
 
 /**
- * Direction A component page: header from the contract, a preview stage with Preview / Code /
- * Contract, When to use, What an agent reads, then the component's own examples.
+ * Direction A component page: header from the contract, a stage with Preview / Variants / Code /
+ * Contract (Variants holds the component's own doc examples), When to use, What an agent reads.
  */
 export function ComponentPage({ id, children, footer }: { id: string; children: ReactNode; footer?: ReactNode }) {
   const name = componentLabel(id);
@@ -94,7 +92,7 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
         </div>
       </header>
 
-      <ComponentStage id={id} />
+      <ComponentStage id={id} variants={children} />
 
       {use.length > 0 || avoid.length > 0 ? (
         <div className={`layout-split ${styles.rules}`}>
@@ -114,13 +112,6 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
       ) : null}
 
       <AgentReadsBlock id={id} />
-
-      <section className={styles.examples} aria-labelledby={`${id}-examples`}>
-        <h2 id={`${id}-examples`} className={styles.sectionTitle}>
-          Examples
-        </h2>
-        <PreviewScope className={docStyles.examplesHost}>{children}</PreviewScope>
-      </section>
 
       {footer}
     </div>

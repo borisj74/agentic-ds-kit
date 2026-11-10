@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Button, CodeSnippet, SegmentedControl, Select, Tabs } from "agentic-ds-kit";
 import {
@@ -16,9 +16,10 @@ import { PRESETS, clampRadius, type ThemeState } from "@/lib/theme-playground";
 import { PreviewScope } from "../_components/ThemeScope";
 import { useCustomizeOpen } from "../_components/useCustomizeOpen";
 import { GalleryPreview } from "./GalleryPreview";
+import docStyles from "./ComponentDoc.module.css";
 import styles from "./ComponentPage.module.css";
 
-type StageTab = "preview" | "code" | "contract";
+type StageTab = "preview" | "variants" | "code" | "contract";
 
 function themeLabel(theme: ThemeState): string {
   const preset = PRESETS.find((item) => item.id === theme.preset)?.label ?? "Custom";
@@ -91,8 +92,11 @@ function CopyPrompt({ id }: { id: string }) {
   );
 }
 
-/** Preview / Code / Contract for one component, plus the Copy prompt picker. */
-export function ComponentStage({ id }: { id: string }) {
+/**
+ * Preview / Variants / Code / Contract for one component, plus the Copy prompt picker.
+ * `variants` is the component's own doc (its master preview and variant examples).
+ */
+export function ComponentStage({ id, variants }: { id: string; variants?: ReactNode }) {
   const [tab, setTab] = useState<StageTab>("preview");
   const snippet = contractSnippet(id);
   const code = snippet ? `${importLine(id)}\n\n${snippet}` : importLine(id);
@@ -102,7 +106,7 @@ export function ComponentStage({ id }: { id: string }) {
       <Tabs
         variant="segmented"
         size="sm"
-        ariaLabel="Preview, code or contract"
+        ariaLabel="Preview, variants, code or contract"
         value={tab}
         onChange={(value) => setTab(value as StageTab)}
         items={[
@@ -119,6 +123,17 @@ export function ComponentStage({ id }: { id: string }) {
               </PreviewScope>
             ),
           },
+          ...(variants
+            ? [
+                {
+                  id: "variants",
+                  label: "Variants",
+                  content: (
+                    <PreviewScope className={`${docStyles.examplesHost} ${styles.variants}`}>{variants}</PreviewScope>
+                  ),
+                },
+              ]
+            : []),
           {
             id: "code",
             label: "Code",

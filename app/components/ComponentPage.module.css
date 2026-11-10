@@ -256,10 +256,13 @@
   font-family: var(--font-mono);
 }
 
-.examples {
+/* Variants tab: the component's own doc, framed like the stage. */
+.variants {
   min-width: 0;
-  padding-top: var(--space-6);
-  border-top: var(--border-width-thin) solid var(--line-default);
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  background-color: var(--bg-surface);
 }
 
 .srOnly {
