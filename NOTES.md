@@ -152,7 +152,7 @@ Keyboard and focus, batch 3 (Playwright at 1440):
 
 - Batch 1: `feat/saas-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/129, base `main`. Open, not merged.
 - Batch 2: `feat/saas-patterns-2`, https://github.com/borisj74/agentic-ds-kit/pull/130, base `feat/saas-patterns-1`. Open, not merged.
-- Batch 3: `feat/saas-patterns-3`, base `feat/saas-patterns-2`. Open, not merged.
+- Batch 3: `feat/saas-patterns-3`, https://github.com/borisj74/agentic-ds-kit/pull/131, base `feat/saas-patterns-2`. Open, not merged.
 
 ## 2026-11-10: component pages, previews and variants
 
