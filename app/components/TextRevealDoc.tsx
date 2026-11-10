@@ -12,7 +12,7 @@ function Still({ at, label, children }: { at: string; label: string; children: R
   return (
     <div className={motion.frame}>
       <p className={motion.frameLabel}>{label}</p>
-      <div className={`${motion.well} ${motion.textWell} ${motion.freeze}`} style={{ "--freeze-at": at } as CSSProperties}>
+      <div className={`${motion.plain} ${motion.freeze}`} style={{ "--freeze-at": at } as CSSProperties}>
         {children}
       </div>
     </div>
@@ -31,7 +31,7 @@ export function TextRevealDoc() {
       summary="Switch word or line and press Replay. The full sentence is always in the DOM; only the visible copy animates."
       preview={
         <div className={motion.stage}>
-          <div className={`${motion.well} ${motion.textWell}`}>
+          <div className={motion.bare}>
             <TextReveal by={by} replayKey={`${by}-${replay}`}>
               {by === "word" ? WORDS : LINES}
             </TextReveal>
@@ -88,7 +88,7 @@ export function TextRevealDoc() {
           about: "With prefers-reduced-motion the final text is there at once: no stagger, no rise. This is also what screen readers get, always.",
           code: `@media (prefers-reduced-motion: reduce) — handled inside the component`,
           render: (
-            <div className={`${motion.well} ${motion.textWell} ${motion.still}`}>
+            <div className={`${motion.plain} ${motion.still}`}>
               <TextReveal as="p">{WORDS}</TextReveal>
             </div>
           ),

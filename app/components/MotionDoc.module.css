@@ -20,6 +20,23 @@
   border-radius: var(--radius-surface-md);
 }
 
+/* Preview stage: the doc canvas is already the frame, so no second border here. */
+.bare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--space-16) * 2);
+}
+
+/* Variants text samples: straight on the example canvas, left-aligned, no second border. */
+.plain {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--space-16);
+}
+
 .textWell {
   justify-content: flex-start;
 }
@@ -151,6 +168,12 @@
 
 .gridWell > * {
   min-height: inherit;
+}
+
+/* Preview: the doc canvas is the frame, so the grid fills it with no second border. */
+.gridBare {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .inverseWell {
