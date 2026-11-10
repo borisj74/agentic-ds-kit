@@ -1,0 +1,47 @@
+/* Demo message frames for the MessageActions doc only. */
+.message,
+.user {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(100%, var(--layout-rail));
+  padding: var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  font-family: var(--font-sans);
+}
+
+.user {
+  align-items: flex-end;
+}
+
+.author {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-fg);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.bubble {
+  margin: 0;
+  padding: var(--space-3);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.end {
+  align-items: flex-end;
+}

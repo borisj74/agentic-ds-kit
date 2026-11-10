@@ -1,0 +1,156 @@
+{
+  "id": "inlinediff",
+  "status": "stable",
+  "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
+  "useWhen": [
+    "an agent proposes an edit to a file or a paragraph",
+    "accept or reject hunks before they land",
+    "show that a proposal went stale"
+  ],
+  "doNotUseWhen": [
+    "approving one command or whole action — ApprovalCard",
+    "read-only code — CodeSnippet",
+    "a review tool across many files — not in kit, ask"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "mode": {
+      "type": "enum",
+      "values": [
+        "unified",
+        "split",
+        "inline"
+      ],
+      "default": "unified"
+    },
+    "file": {
+      "type": "string",
+      "required": false
+    },
+    "hunkHeader": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"@@ -41,2 +41,3 @@ calcTotal\"."
+    },
+    "lines": {
+      "type": "array",
+      "required": false,
+      "note": "{ type: \"context\" | \"add\" | \"remove\", text, oldNo?, newNo? }[] for unified and split."
+    },
+    "segments": {
+      "type": "array",
+      "required": false,
+      "note": "{ type: \"same\" | \"add\" | \"remove\", text }[] for inline."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "accepted",
+        "rejected",
+        "stale",
+        "loading",
+        "error",
+        "empty"
+      ],
+      "default": "pending",
+      "note": "accepted and rejected render one line."
+    },
+    "hunkLabel": {
+      "type": "string",
+      "required": false
+    },
+    "staleReason": {
+      "type": "string",
+      "required": false
+    },
+    "errorMessage": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    },
+    "onAccept": {
+      "type": "function",
+      "required": false,
+      "note": "Accept, the one solid primary. ⌘/Ctrl+Enter in the card."
+    },
+    "onReject": {
+      "type": "function",
+      "required": false,
+      "note": "Reject (outline). Escape in the card."
+    },
+    "onAcceptAll": {
+      "type": "function",
+      "required": false,
+      "note": "Accept all (ghost)."
+    },
+    "resolvedSummary": {
+      "type": "string",
+      "required": false
+    },
+    "resolvedAt": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "status.successSubtle",
+    "status.successText",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "status.warningText",
+    "opacity.muted",
+    "type.size.overline"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "added and removed lines carry + / − marks and say Added / Removed to screen readers",
+      "inline edits use del and ins",
+      "Escape rejects and ⌘/Ctrl+Enter accepts while focus is in the card; buttons carry aria-keyshortcuts",
+      "stale disables the actions and says why",
+      "once resolved, focus moves to the one-line row"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local DiffView, PatchCard, or SuggestionCard",
+    "Never show a change by colour alone; keep the + / − marks",
+    "Accept is the one solid primary",
+    "Do not use raw hex"
+  ],
+  "snippet": "<InlineDiff title=\"Proposed edit · calcTotal\" file=\"src/billing/invoice.ts\" hunkHeader=\"@@ -41,2 +41,3 @@ calcTotal\" lines={lines} hunkLabel=\"1 of 2 hunks\" onAccept={accept} onReject={reject} onAcceptAll={acceptAll} />"
+}

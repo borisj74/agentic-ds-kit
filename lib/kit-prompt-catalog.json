@@ -8485,6 +8485,364 @@
       }
     },
     {
+      "id": "citedanswer",
+      "group": "component",
+      "intent": "An assistant reply with inline citation marks and a source list. Marks are real links; a missing source shows as a broken cite.",
+      "useWhen": [
+        "an assistant answer that cites documents, pages or files",
+        "let people jump from a mark to its source",
+        "flag a source that no longer exists"
+      ],
+      "doNotUseWhen": [
+        "the whole chat thread — Chat",
+        "a plain list of links — LinkList",
+        "a single recommendation card — InsightCard"
+      ],
+      "doNot": [
+        "Do not invent a local CitedMessage, SourcesList, or Footnotes",
+        "Do not render marks as plain text",
+        "Do not hide missing sources",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "content": {
+          "type": "string",
+          "required": true,
+          "note": "Marks like [1] become citation links."
+        },
+        "citations": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark."
+        },
+        "author": {
+          "type": "string",
+          "default": "Assistant"
+        },
+        "time": {
+          "type": "string",
+          "required": false
+        },
+        "openSources": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled; otherwise internal."
+        },
+        "onOpenSourcesChange": {
+          "type": "function",
+          "required": false,
+          "note": "(open) => void"
+        },
+        "onCitationClick": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. The list opens, the source highlights and takes focus."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "loadingText": {
+          "type": "string",
+          "default": "Reading sources…"
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "messageactions",
+      "group": "component",
+      "intent": "The compact action row on a chat message: copy, retry or edit, thumbs up / down with reasons, and a More menu. Icon Buttons with Tooltips.",
+      "useWhen": [
+        "actions under an assistant or user message",
+        "collect quick feedback on a reply",
+        "show actions only on hover or focus in a dense thread"
+      ],
+      "doNotUseWhen": [
+        "page or table toolbars — ButtonGroup",
+        "a menu on its own — DropdownMenu"
+      ],
+      "doNot": [
+        "Do not invent a local MessageToolbar or ChatActions",
+        "Do not use icon-only buttons without names",
+        "Do not put a solid primary Button in the row",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "label": {
+          "type": "string",
+          "default": "Message actions"
+        },
+        "onCopy": {
+          "type": "function",
+          "required": false
+        },
+        "copied": {
+          "type": "boolean",
+          "default": false,
+          "note": "Shows Copied in place of copy."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        },
+        "retrying": {
+          "type": "boolean",
+          "default": false
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false,
+          "note": "User messages."
+        },
+        "onFeedback": {
+          "type": "function",
+          "required": false,
+          "note": "(\"up\" | \"down\" | null) => void. Shows thumbs."
+        },
+        "feedback": {
+          "type": "enum",
+          "values": [
+            "up",
+            "down",
+            "null"
+          ],
+          "default": "null"
+        },
+        "thanksText": {
+          "type": "string",
+          "default": "Thanks, noted"
+        },
+        "reasons": {
+          "type": "string[]",
+          "required": false,
+          "note": "Chips after a thumbs down."
+        },
+        "onReason": {
+          "type": "function",
+          "required": false,
+          "note": "(reason) => void"
+        },
+        "moreItems": {
+          "type": "array",
+          "required": false,
+          "note": "kit DropdownMenu items."
+        },
+        "onAction": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "visible": {
+          "type": "enum",
+          "values": [
+            "always",
+            "hover"
+          ],
+          "default": "always",
+          "note": "hover: shown on hover or focus of the row or of an ancestor with data-message-actions-host."
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "note": "Message still streaming."
+        }
+      }
+    },
+    {
+      "id": "inlinediff",
+      "group": "component",
+      "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
+      "useWhen": [
+        "an agent proposes an edit to a file or a paragraph",
+        "accept or reject hunks before they land",
+        "show that a proposal went stale"
+      ],
+      "doNotUseWhen": [
+        "approving one command or whole action — ApprovalCard",
+        "read-only code — CodeSnippet",
+        "a review tool across many files — not in kit, ask"
+      ],
+      "doNot": [
+        "Do not invent a local DiffView, PatchCard, or SuggestionCard",
+        "Never show a change by colour alone; keep the + / − marks",
+        "Accept is the one solid primary",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "mode": {
+          "type": "enum",
+          "values": [
+            "unified",
+            "split",
+            "inline"
+          ],
+          "default": "unified"
+        },
+        "file": {
+          "type": "string",
+          "required": false
+        },
+        "hunkHeader": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"@@ -41,2 +41,3 @@ calcTotal\"."
+        },
+        "lines": {
+          "type": "array",
+          "required": false,
+          "note": "{ type: \"context\" | \"add\" | \"remove\", text, oldNo?, newNo? }[] for unified and split."
+        },
+        "segments": {
+          "type": "array",
+          "required": false,
+          "note": "{ type: \"same\" | \"add\" | \"remove\", text }[] for inline."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "accepted",
+            "rejected",
+            "stale",
+            "loading",
+            "error",
+            "empty"
+          ],
+          "default": "pending",
+          "note": "accepted and rejected render one line."
+        },
+        "hunkLabel": {
+          "type": "string",
+          "required": false
+        },
+        "staleReason": {
+          "type": "string",
+          "required": false
+        },
+        "errorMessage": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        },
+        "onAccept": {
+          "type": "function",
+          "required": false,
+          "note": "Accept, the one solid primary. ⌘/Ctrl+Enter in the card."
+        },
+        "onReject": {
+          "type": "function",
+          "required": false,
+          "note": "Reject (outline). Escape in the card."
+        },
+        "onAcceptAll": {
+          "type": "function",
+          "required": false,
+          "note": "Accept all (ghost)."
+        },
+        "resolvedSummary": {
+          "type": "string",
+          "required": false
+        },
+        "resolvedAt": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "memorypanel",
+      "group": "component",
+      "intent": "Facts an agent has stored: search, add, pin, edit or forget them (confirmed in an AlertDialog), and see which ones this thread used.",
+      "useWhen": [
+        "show and manage an agent's long-term memory",
+        "let people correct or remove what the agent remembers",
+        "show which memories informed the current thread"
+      ],
+      "doNotUseWhen": [
+        "a generic list of records — ListView",
+        "a settings form — Field / Switch",
+        "a context usage meter — ContextWindow"
+      ],
+      "doNot": [
+        "Do not invent a local MemoryList or FactsPanel",
+        "Do not delete a memory without the AlertDialog",
+        "Do not hide the privacy note",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, content, source?, age?, pinned?, usedHere? }[]. Pinned items group first."
+        },
+        "label": {
+          "type": "string",
+          "default": "Memory"
+        },
+        "query": {
+          "type": "string",
+          "required": false
+        },
+        "onQueryChange": {
+          "type": "function",
+          "required": false,
+          "note": "(query) => void. Shows the search Input."
+        },
+        "onAdd": {
+          "type": "function",
+          "required": false,
+          "note": "(content) => void. Add opens a form at the top."
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false,
+          "note": "(id, content) => void. Edit expands the row in place."
+        },
+        "onPin": {
+          "type": "function",
+          "required": false,
+          "note": "(id, pinned) => void"
+        },
+        "onDelete": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Called after the AlertDialog (Keep / Forget)."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        },
+        "privacyNote": {
+          "type": "string",
+          "required": false,
+          "note": "Always visible."
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

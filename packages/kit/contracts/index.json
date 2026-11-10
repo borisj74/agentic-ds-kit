@@ -756,6 +756,34 @@
     "status": "stable"
   },
   {
+    "id": "citedanswer",
+    "intent": "Assistant reply with inline citation marks and a source list; missing sources flagged.",
+    "group": "component",
+    "path": "contracts/citedanswer.json",
+    "status": "stable"
+  },
+  {
+    "id": "messageactions",
+    "intent": "Action row on a chat message: copy, retry or edit, feedback, More menu.",
+    "group": "component",
+    "path": "contracts/messageactions.json",
+    "status": "stable"
+  },
+  {
+    "id": "inlinediff",
+    "intent": "Proposed edits to accept or reject in place: unified, split or inline, with + / − marks.",
+    "group": "component",
+    "path": "contracts/inlinediff.json",
+    "status": "stable"
+  },
+  {
+    "id": "memorypanel",
+    "intent": "An agent's stored facts: search, add, pin, edit or forget, and which this thread used.",
+    "group": "component",
+    "path": "contracts/memorypanel.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

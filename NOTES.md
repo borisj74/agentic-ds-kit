@@ -64,7 +64,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | AgentPlan | 11 Agent Plan | 01 draft (edit, remove, add), 02 editing a step, 03 accepted, 04 running with a step waiting, 05 complete, 06 failed, 07 drafting, 08 empty, 09 collapsed |
 | AgentFleet | 06 Agent Fleet | 01 overview, 02 focused (one open, others compact), 03 all idle + totals, 04 needs you + failed + totals, 05 loading, 06 empty |
 
-Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2, 103 after batch 3 and 107 after batch 4).
+Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2, 103 after batch 3, 107 after batch 4 and 111 after batch 5).
 
 #### Kit change outside the four
 
@@ -154,6 +154,37 @@ Keyboard and focus, batch 4:
 - ModelPicker: Enter opens the menu, arrow keys move, Enter picks; the trigger updates.
 - ContextWindow: the stacked bar is a meter with a text value; Trim oldest is a Button.
 
+### Batch 5: what shipped
+
+Branch `feat/agent-patterns-5`, stacked on `feat/agent-patterns-4`. Grouping as planned.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| CitedAnswer | 16 Cited Answer | Button, ShimmerText, Skeleton | sources collapsed, sources expanded (a clicked mark highlights its source), one source, missing source (broken cite), loading, error |
+| MessageActions | 17 Message Actions | Button (icon), Tooltip, DropdownMenu | assistant default, user (copy, edit, more), copied, retrying, liked, disliked with reasons, More menu, disabled while streaming, visible on hover or focus |
+| InlineDiff | 18 Inline Diff | Badge, Button, Empty, Skeleton | unified, split, inline phrase, accepted, rejected, stale (file changed), loading, error, no changes |
+| MemoryPanel | 21 Memory Panel | Input, Textarea, Field, Button, Badge, AlertDialog, Empty | pinned and others, editing in place, forget confirm (AlertDialog), filtered to none, empty, loading, error |
+
+Paper vs tokens, batch 5:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| CitedAnswer "sources expand calmly (200ms height)" | the list fades and rises in | Height is not transform or opacity. |
+| CitedAnswer "highlight with a short fade (600ms)" | an overlay fading on opacity over `--motion-duration-600` (500ms) | Nearest motion token. |
+| InlineDiff badges, mono caps (PENDING, STALE…) | kit Badge, sentence case | Same as the other batches. |
+| InlineDiff vs ApprovalCard's diff preview | separate renderers; InlineDiff adds line numbers and split mode | ApprovalCard's preview is read-only. Sharing one diff renderer is a possible follow-up. |
+| MessageActions "Copied … back after 2s" | the parent controls `copied` (the doc demo resets it after 2s) | Timing belongs to the app. |
+| MessageActions shown on hover | `visible="hover"`, shown on hover or keyboard focus of the row or an ancestor with `data-message-actions-host`; always shown under reduced motion | CSS can't reach an arbitrary parent otherwise. |
+| MemoryPanel pinned icon | a highlighted Pin toggle (aria-pressed) | Same icon, state in colour plus aria. |
+| MemoryPanel brain icon | Lucide `Brain` | Closest Lucide icon. |
+| CitedAnswer and MemoryPanel widths 370px | 24rem custom widths | Custom-width pattern; Jev marked it "review" or "abstain". |
+
+Keyboard and focus, batch 5:
+- CitedAnswer: a mark is a link; Enter opens the sources and moves focus to that source.
+- MessageActions: role=toolbar; Copy swaps to Copied; thumbs are toggles; a thumbs down shows reasons; More is a DropdownMenu.
+- InlineDiff: ⌘/Ctrl+Enter accepts and Escape rejects inside the card; once resolved, focus moves to the one-line row.
+- MemoryPanel: Forget opens the AlertDialog with focus on Keep; Escape returns focus to the Forget button. Edit puts focus in the textarea with the caret at the end; Enter saves.
+
 ### Paper vs tokens (tokens win)
 
 | Paper | Kit | Why |
@@ -207,6 +238,7 @@ Keyboard and focus, batch 4:
 ### PR status
 
 - Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
-- Batch 4: `feat/agent-patterns-4`, stacked on batch 3, PR base `feat/agent-patterns-3`. Open, not merged.
+- Batch 5: `feat/agent-patterns-5`, stacked on batch 4, PR base `feat/agent-patterns-4`. Open, not merged.
+- Batch 4: `feat/agent-patterns-4`, stacked on batch 3, https://github.com/borisj74/agentic-ds-kit/pull/124, PR base `feat/agent-patterns-3`. Open, not merged.
 - Batch 3: `feat/agent-patterns-3`, stacked on batch 2, https://github.com/borisj74/agentic-ds-kit/pull/123, PR base `feat/agent-patterns-2`. Open, not merged.
 - Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.

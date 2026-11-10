@@ -1,0 +1,125 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.toolbar[aria-disabled="true"] {
+  opacity: var(--opacity-disabled);
+}
+
+.divider {
+  width: var(--border-width-thin);
+  height: var(--space-4);
+  margin-inline: var(--space-1);
+  background-color: var(--line-default);
+}
+
+.copied {
+  color: var(--status-success-text);
+}
+
+.on {
+  color: var(--primary-fg);
+}
+
+.spin svg {
+  animation: actions-spin 1s linear infinite;
+}
+
+.thanks {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+  animation: actions-fade var(--motion-duration-150) var(--motion-ease-out);
+}
+
+.reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reason {
+  height: var(--space-6);
+  margin: 0;
+  padding-inline: var(--space-3);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-pill);
+  color: var(--text-fg);
+  font: inherit;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  cursor: pointer;
+}
+
+.reason:hover {
+  border-color: var(--line-strong);
+}
+
+.reason:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+/* visible="hover": shown on hover or keyboard focus of the toolbar, or of a host marked data-message-actions-host. */
+.hover .toolbar {
+  opacity: 0;
+  transition: opacity var(--motion-duration-100) var(--motion-ease-out);
+}
+
+.hover:hover .toolbar,
+.hover:focus-within .toolbar,
+:global([data-message-actions-host]:hover) .hover .toolbar,
+:global([data-message-actions-host]:focus-within) .hover .toolbar {
+  opacity: 1;
+}
+
+@keyframes actions-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes actions-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover .toolbar {
+    opacity: 1;
+    transition: none;
+  }
+
+  .spin svg,
+  .thanks {
+    animation: none;
+  }
+}

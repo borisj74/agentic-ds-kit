@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
+import { MemoryPanel } from "agentic-ds-kit";
+import { InlineDiff } from "agentic-ds-kit";
+import { MessageActions } from "agentic-ds-kit";
+import { CitedAnswer } from "agentic-ds-kit";
 import { ContextWindow } from "agentic-ds-kit";
 import { ModelPicker } from "agentic-ds-kit";
 import { AgentSteering } from "agentic-ds-kit";
@@ -307,6 +311,33 @@ export function GalleryPreview({ id }: { id: string }) {
       );
     case "contextwindow":
       return <ContextWindow compact used={104000} limit={200000} />;
+    case "citedanswer":
+      return (
+        <Stage variant="wide">
+          <CitedAnswer content="Round half-even[1]." citations={[{ id: "1", title: "Rounding rules" }]} />
+        </Stage>
+      );
+    case "messageactions":
+      return <MessageActions onCopy={noop} onRetry={noop} onFeedback={noop} />;
+    case "inlinediff":
+      return (
+        <Stage variant="wide">
+          <InlineDiff
+            title="Proposed edit"
+            lines={[
+              { type: "remove", text: "return subtotal;", oldNo: 42 },
+              { type: "add", text: "return total;", newNo: 42 },
+            ]}
+            onAccept={noop}
+          />
+        </Stage>
+      );
+    case "memorypanel":
+      return (
+        <Stage variant="wide">
+          <MemoryPanel items={[{ id: "1", content: "Uses pnpm, not npm", source: "from repo scan", usedHere: true }]} />
+        </Stage>
+      );
     case "accordion":
       return (
         <Stage variant="wide">
