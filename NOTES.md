@@ -1,8 +1,12 @@
-# Agent patterns in Nistha: notes
+# Notes
+
+Decisions for the kit and the nistha website, newest first.
+
+## 2026-11-10: agent patterns (feat/agent-patterns-1 and -2)
 
 Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-3-0 "Nistha Agent Patterns".
 
-## Scope
+### Scope
 
 - The request named "the 4 from p-2-0", but the file has no p-2-0 page. Its pages are p-3-0 (Agent Patterns, 22 artboards), p-4-0 (SaaS Patterns), p-5-0 (Motion) and p-6-0 (Screens: full Settings and Onboarding screens, not components). Boris (via the planner) picked:
   - **Batch 1** (`feat/agent-patterns-1`, from `main`): Approval Card, Agent Trail, Agent Plan, Agent Fleet from p-3-0.
@@ -10,7 +14,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 - **Not in scope yet:** the p-6-0 screens (Settings set: Billing, Profile, Team, Notifications, Security with their states; Onboarding steps 01–04) and the p-4-0 pieces they use (Usage Meter, Billing Schedule, Invoice & Credit Note, Change Summary, Experiment Card, Comment Thread, Comments Panel, Notification Stack, Integration Picker, Integration Settings, Setup Guide, Pricing Plans, Task Board).
 - **Skipped because Nistha already has them:** nothing in batch 1. The closest kit pieces (Timeline, ProgressSteps, InsightCard, AlertDialog, Scorecard) do a different job, and each new contract says which to use instead.
 
-## Batch 1: what shipped
+### Batch 1: what shipped
 
 | Component | Paper artboard | States built |
 | --- | --- | --- |
@@ -21,11 +25,11 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 
 Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test now expects 95 components).
 
-### Kit change outside the four
+#### Kit change outside the four
 
 - **Button `shortcut` prop.** Paper puts key chips inside the buttons ("Deny Esc", "Approve ⏎", "Accept plan ⌘⏎"). Button only takes a string label, so I added an optional, decorative `shortcut` string. It is aria-hidden; callers wire the key and set `aria-keyshortcuts`. It is in `contracts/button.json`. This extends Button instead of making a local cousin.
 
-## Paper vs tokens (tokens win)
+### Paper vs tokens (tokens win)
 
 | Paper | Kit | Why |
 | --- | --- | --- |
@@ -41,7 +45,7 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 | Approval card 400px, plan 370px | `--approval-width: 25rem`, `--plan-width: 24rem` | Same custom-width pattern as InsightCard's `--insight-width`. Jev marked these "review"; no width token fits. |
 | Fleet "expanding card widens with a layout spring (320ms)" | opacity + scale fade on open; the width snaps | Motion stays on transform and opacity. |
 
-## Motion
+### Motion
 
 - ApprovalCard and resolved row: opacity + translateY in (180ms).
 - AgentTrail and AgentFleet running marker: transform rotate.
@@ -49,23 +53,23 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 - AgentFleet: the open card fades and scales in; tree rows stagger 30ms (opacity + translateX); bar segments fill on `transform: scaleX`.
 - Every animation and transition stops under `prefers-reduced-motion: reduce`.
 
-## Keyboard and focus (checked with a script at 1440)
+### Keyboard and focus (checked with a script at 1440)
 
 - ApprovalCard: Escape denies and Enter approves while focus is in the card; Enter on another control inside it is left alone.
 - AgentPlan: Edit opens the form with focus in Step. Enter saves, Escape cancels, and focus goes back to that step's Edit button. Add step focuses the new form; ⌘/Ctrl+Enter accepts a draft or runs an accepted plan.
 - AgentFleet: the agent name is the open button and covers the whole card. Opening moves focus to Collapse; Collapse returns focus to that agent's card.
 
-## Checks
+### Checks
 
 - `npm ci`, kit build, `tsc` (app and kit), `eslint` (no errors; the warnings were already there), `npm test` (kit 53/53, app 4/4).
 - Token scan: no hex, rgb or primitive `--color-*` in the new UI; every Lucide icon uses `ICON_STROKE`. Jev triage gave no `act` failures; its "review" notes are the custom widths above. I fixed a hard-coded `repeat(4, …)` and the fleet container width (now 40rem = `--grid-breakpoint-sm`).
 - Screenshots at 1440, light and dark, next to the Paper exports, are in the planner's notes folder under `agent-patterns/batch1/`.
 
-## Docs dependency
+### Docs dependency
 
-`main` doesn't have the K79 stage yet (PR #119, and #120 on top). The new doc pages use the same shape as every other doc (hero, Master with Preview / Variants, `.example` sections), so with #119 and #120 they get the Code and Contract tabs and the stacked Variants list. The Code tab reads from the contracts' `snippet` field and the Contract tab from the contract JSON.
+`main` doesn't have the K79 stage yet (PR #119, and #120 on top). The new doc pages use the same shape as every other doc (hero, Master with Preview / Variants, `.example` sections), so with #119 and #120 they get the Code and Contract tabs and the stacked Variants list. Checked by a trial merge of `feat/variants-tab-cleanup`: tsc passes, and the four pages render in the stage at 1440 in light and dark, with screenshots in `agent-patterns/batch1/with-k79-stage/`. Two expected conflicts: `NOTES.md` (both add it; keep both sections) and `lib/playground-nav.ts` (#120 renames the "Agent" group to "AI"; put the four new ids into "AI"). The Code tab reads from the contracts' `snippet` field and the Contract tab from the contract JSON.
 
-## PR status
+### PR status
 
 - Batch 1: `feat/agent-patterns-1`. PR opened, not merged.
 - Batch 2: `feat/agent-patterns-2`, not started.
