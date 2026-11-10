@@ -39,6 +39,7 @@ export function ThemeScope({
       <div
         data-theme-scope={id}
         data-theme={theme?.mode === "dark" ? "dark" : undefined}
+        data-preview-scope=""
         data-theme-ready={theme ? "" : undefined}
         className={[className, fontClassName].filter(Boolean).join(" ")}
         style={style}
