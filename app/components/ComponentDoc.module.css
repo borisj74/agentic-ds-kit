@@ -527,3 +527,63 @@
 .examplesHost .notesGrid {
   grid-template-columns: minmax(0, 1fr);
 }
+
+/* Stage Variants tab (VariantGrid): variant cards only. The master demo lives in the stage's
+   Preview tab, so the doc's Master header and preview panel are hidden, and DocTabList renders
+   no tab bar. Cards read name, description, prop chips, then the live render. */
+.examplesHost .masterHeader,
+.examplesHost [role="tabpanel"][aria-label="Preview"] {
+  display: none;
+}
+
+.examplesHost .master {
+  gap: 0;
+}
+
+.examplesHost .variants {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--grid-gutter-lg);
+}
+
+/* 64rem is --grid-breakpoint-md: two cards per row from there. */
+@media (width >= 64rem) {
+  .examplesHost .variants {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.examplesHost .example {
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.examplesHost .example > * {
+  order: 5;
+}
+
+.examplesHost .example > .exampleTitle {
+  order: 1;
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
+}
+
+.examplesHost .example > .usageBody,
+.examplesHost .example > :has(> .usageBody) {
+  order: 2;
+  margin: 0;
+}
+
+/* A "Usage" heading inside a card repeats the card name: the line under the name is enough. */
+.examplesHost .example > :has(> .usageBody) > .usageTitle {
+  display: none;
+}
+
+.examplesHost .example > [data-variant-chips] {
+  order: 3;
+}
+
+.examplesHost .example > .exampleCanvas {
+  order: 4;
+  background: var(--bg-canvas);
+}

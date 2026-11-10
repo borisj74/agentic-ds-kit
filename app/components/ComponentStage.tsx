@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Button, CodeSnippet, SegmentedControl, Select, Tabs } from "agentic-ds-kit";
 import {
@@ -9,6 +9,7 @@ import {
   contractJson,
   contractSnippet,
   importLine,
+  variantProps,
   type PromptTarget,
 } from "@/lib/component-contract";
 import { readPatternTheme, subscribeTheme } from "@/lib/theme-store";
@@ -16,6 +17,7 @@ import { PRESETS, clampRadius, type ThemeState } from "@/lib/theme-playground";
 import { PreviewScope } from "../_components/ThemeScope";
 import { useCustomizeOpen } from "../_components/useCustomizeOpen";
 import { GalleryPreview } from "./GalleryPreview";
+import { VariantGrid } from "./VariantGrid";
 import docStyles from "./ComponentDoc.module.css";
 import styles from "./ComponentPage.module.css";
 
@@ -94,10 +96,11 @@ function CopyPrompt({ id }: { id: string }) {
 
 /**
  * Preview / Variants / Code / Contract for one component, plus the Copy prompt picker.
- * `variants` is the component's own doc (its master preview and variant examples).
+ * `variants` is the component's own doc; the Variants tab shows only its variant cards (VariantGrid).
  */
 export function ComponentStage({ id, variants }: { id: string; variants?: ReactNode }) {
   const [tab, setTab] = useState<StageTab>("preview");
+  const propsForChips = useMemo(() => variantProps(id), [id]);
   const snippet = contractSnippet(id);
   const code = snippet ? `${importLine(id)}\n\n${snippet}` : importLine(id);
 
@@ -130,7 +133,9 @@ export function ComponentStage({ id, variants }: { id: string; variants?: ReactN
                   id: "variants",
                   label: "Variants",
                   content: (
-                    <PreviewScope className={`${docStyles.examplesHost} ${styles.variants}`}>{variants}</PreviewScope>
+                    <PreviewScope className={`${docStyles.examplesHost} ${styles.variants}`}>
+                      <VariantGrid props={propsForChips}>{variants}</VariantGrid>
+                    </PreviewScope>
                   ),
                 },
               ]
