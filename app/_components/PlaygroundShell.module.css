@@ -101,10 +101,15 @@
   font-weight: var(--type-weight-label);
 }
 
-/* Component groups read as overlines with their count, like the Paper side nav. */
+/* Component groups read as overlines with their count, indented under Components. */
 .navHost nav button[aria-expanded] {
-  margin-top: var(--space-3);
+  margin-left: var(--space-3);
+  width: calc(100% - var(--space-3));
   color: var(--text-fg-muted);
+}
+
+.navHost nav button[aria-expanded] + div a {
+  margin-left: var(--space-3);
 }
 
 .navHost nav button[aria-expanded] > span:first-child {

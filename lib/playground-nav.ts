@@ -403,22 +403,22 @@ function pageActive(pathname: string, match: readonly string[]): boolean {
 }
 
 /**
- * The site nav: the top-level pages, then every component group as a subgroup with its count.
+ * The site nav: the top-level pages, with every component group as a subgroup (with its count)
+ * directly under Components.
  * The group that holds the current component opens on its own (AppNav subgroup behaviour).
  */
 export function buildSiteNavItems(pathname: string): AppNavItem[] {
-  return [
-    ...SITE_PAGES.map((page) => ({
-      href: page.href,
-      label: page.label,
-      active: pageActive(pathname, page.match),
-    })),
-    ...COMPONENT_GROUPS.map((group) => ({
-      href: `/components?group=${encodeURIComponent(group.label)}`,
-      label: `${group.label} · ${group.ids.length}`,
-      items: componentLeaves(group.ids, pathname),
-    })),
-  ];
+  const groups: AppNavItem[] = COMPONENT_GROUPS.map((group) => ({
+    href: `/components?group=${encodeURIComponent(group.label)}`,
+    label: `${group.label} · ${group.ids.length}`,
+    items: componentLeaves(group.ids, pathname),
+  }));
+  // The groups sit right under Components, as its subtree (AppNav nests one level, so the
+  // shell indents them).
+  return SITE_PAGES.flatMap((page) => {
+    const item = { href: page.href, label: page.label, active: pageActive(pathname, page.match) };
+    return page.href === "/components" ? [item, ...groups] : [item];
+  });
 }
 
 /** Search keeps only matching links, flat, so every hit is visible. */
