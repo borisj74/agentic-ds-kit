@@ -40,9 +40,10 @@
 
 /* Stage (the Nistha site's chrome): the canvas is the frame, the side nav sits on it, and
    the page floats on an inset card panel. Put it on the shell; the page column is
-   layout-app's last child. The nav keeps the canvas (no panel of its own). */
+   layout-app's last child. The nav keeps the canvas (no panel of its own, no divider). */
 .layout-shell--inset {
   --sidenav-background: transparent;
+  --sidenav-divider: none;
   box-sizing: border-box;
   padding-block: var(--space-2);
   padding-inline-end: var(--space-2);
