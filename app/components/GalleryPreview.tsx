@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
+import { DecisionCard } from "agentic-ds-kit";
+import { AgentInbox } from "agentic-ds-kit";
+import { AgentLanes } from "agentic-ds-kit";
+import { AgentTree } from "agentic-ds-kit";
 import { AgentFleet } from "agentic-ds-kit";
 import { AgentMonitor } from "agentic-ds-kit";
 import { AgentPlan } from "agentic-ds-kit";
@@ -231,6 +235,52 @@ export function GalleryPreview({ id }: { id: string }) {
           <ToolCallCard name="read_file" summary="invoice.ts" duration="0.4s" />
           <ToolCallCard name="search_files" summary="3 matches" status="running" duration="1.2s" />
         </div>
+      );
+    case "agenttree":
+      return (
+        <Stage variant="wide">
+          <AgentTree
+            root={{
+              id: "r",
+              name: "Ship billing",
+              status: "running",
+              children: [
+                { id: "a", name: "scan", status: "done", cost: 0.14 },
+                { id: "b", name: "migrate", status: "waiting", cost: 0.12 },
+              ],
+            }}
+          />
+        </Stage>
+      );
+    case "agentlanes":
+      return (
+        <Stage variant="wide">
+          <AgentLanes
+            now={600000}
+            agents={[{ id: "a", name: "Coder" }, { id: "b", name: "Tester" }]}
+            tasks={[
+              { id: "1", agentId: "a", title: "edit", status: "done", start: 60000, end: 300000, handoffTo: "2" },
+              { id: "2", agentId: "b", title: "tests", status: "running", start: 320000 },
+            ]}
+          />
+        </Stage>
+      );
+    case "agentinbox":
+      return (
+        <Stage variant="wide">
+          <AgentInbox
+            items={[
+              { id: "1", agentName: "Migrate DB", type: "approval", preview: "Run migration on staging?", time: "2m" },
+              { id: "2", agentName: "Docs sweep", type: "recap", preview: "Draft ready", time: "1h", read: true },
+            ]}
+          />
+        </Stage>
+      );
+    case "decisioncard":
+      return (
+        <Stage variant="wide">
+          <DecisionCard title="Billing asks" question="Keep v1?" status="resolved" resolvedLabel="Keep v1 for 30 days" resolvedAt="14:03" />
+        </Stage>
       );
     case "accordion":
       return (

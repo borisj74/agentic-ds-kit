@@ -23,7 +23,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | AgentPlan | 11 Agent Plan | 01 draft (edit, remove, add), 02 editing a step, 03 accepted, 04 running with a step waiting, 05 complete, 06 failed, 07 drafting, 08 empty, 09 collapsed |
 | AgentFleet | 06 Agent Fleet | 01 overview, 02 focused (one open, others compact), 03 all idle + totals, 04 needs you + failed + totals, 05 loading, 06 empty |
 
-Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1 and 99 after batch 2).
+Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2 and 103 after batch 3).
 
 #### Kit change outside the four
 
@@ -40,11 +40,46 @@ Picks (from p-3-0, building on batch 1):
 | RunningNow | 12 Running Now | The compact counterpart of AgentFleet for app chrome; fills the gap between a Badge count and a full fleet | row with +N, waiting, stack with failed and View all, empty, idle note, loading |
 | AgentMonitor | 05 Agent Monitor | One agent in detail; composes ApprovalCard for the pending action, so batch 1 is reused, not copied | running with live clock and cost, step selected with detail, awaiting approval, collapsed with tools used, paused, complete, failed, loading, not started |
 
-**Not in batch 2:** Usage Meter (see Scope), and the other p-3-0 artboards: Agent Tree, Agent Lanes, Autonomy Dial, Agent Inbox, Decision Card, Agent Steering, Cited Answer, Message Actions, Inline Diff, Model Picker, Context Window, Memory Panel, Cost Trace Waterfall.
+**Not in batch 2:** Usage Meter (see Scope) and the rest of p-3-0. Boris later asked for all of them in batches 3–6: batch 3 Agent Tree, Agent Lanes, Agent Inbox, Decision Card; batch 4 Autonomy Dial, Agent Steering, Model Picker, Context Window; batch 5 Cited Answer, Message Actions, Inline Diff, Memory Panel; batch 6 Cost Trace Waterfall and Usage Meter (Usage Meter composes Meter, UsageList and LineChart).
 
 #### Batch 2 changes to batch 1
 
 - ApprovalCard: when the card resolves while focus is inside it, focus moves to the one-line row. The shared hook `ui/shared/useResolvedFocus.ts` does the same for PermissionRequest. That commit is on `feat/agent-patterns-1` too; batch 2 is rebased on it.
+
+### Batch 3: what shipped
+
+Branch `feat/agent-patterns-3`, stacked on `feat/agent-patterns-2`. Grouping kept as the planner set it: AgentInbox reuses ApprovalCard (batch 1) and the new DecisionCard, so DecisionCard ships in the same batch.
+
+| Component | Paper artboard | States built |
+| --- | --- | --- |
+| AgentTree | 07 Agent Tree | expanded with a failed and a waiting node, branch folded to one line ("N agents"), all complete, loading, empty |
+| AgentLanes | 08 Agent Lanes | live (blocks grow into now, handoffs), block opened with detail, Needs you with a decision on the block, zoomed to the last 3 minutes |
+| AgentInbox | 13 Agent Inbox | unread and read across every type with an approval selected, recap selected, filtered to none, empty, loading, error |
+| DecisionCard | 14 Decision Card | multiple choice, free text, selected but not confirmed, sending, error, resolved and skipped as one line |
+
+Paper vs tokens, batch 3:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Violet "waiting for you", "Needs you", approval chips | caution tokens | Same as batches 1 and 2, until Boris decides on `--attention-*`. |
+| DecisionCard radio on the left, 13px labels | kit RadioGroup `layout="card"` `size="sm"`; the radio sits at the end | RadioGroup is the kit control. Recommended is the RadioGroup badge (neutral). |
+| Agent Tree dotted guide lines per depth | indentation only | Keeps rows on one grid; status stays in its own column. |
+| Agent Tree "approve" mono chip | kit Button `soft`, `sm`, with `shortcut="⏎"` | Kit control. |
+| Agent Lanes "Last 10m" pill | a SegmentedControl when `onSpanChange` is set, plain text otherwise | Zoom needs a real control. |
+| Agent Lanes curved handoff lines | elbow lines (border plus radius) from the source lane to the target block | No SVG paths; easier to keep aligned with token spacing. |
+| Agent Lanes "window slides with the clock" | blocks reposition each second; no slide | Moving every block would animate `left` and `width`. |
+| Agent Lanes dark detail tooltip | `--bg-inverse` and `--text-fg-inverse` panel | Inverse surface role. |
+| Agent Inbox filter chips with counts | SegmentedControl items "All 5" … | Kit control (radio group). |
+| Agent Inbox approval detail and question | embedded kit ApprovalCard and DecisionCard | Reuse, no cousins. |
+| DecisionCard width 370px | `--decision-width: 24rem` | Custom-width pattern; Jev marked it "review". |
+| Inbox container width | `@container (max-width: 40rem)` with a comment naming `--grid-breakpoint-sm` | Container queries can't read `var()`; Jev flags it, the rule allows it. |
+
+Keyboard and focus, batch 3:
+- AgentTree: branch chevrons are disclosure buttons; folding shows "N agents".
+- AgentLanes: blocks are buttons. A Needs you block opens a decision with focus on Approve; Escape (or Reject or Close) closes it and returns focus to the block.
+- AgentInbox: rows are buttons with aria-current; the filter is a radio group; an approval reuses ApprovalCard's keys.
+- DecisionCard: options are radios; ⌘/Ctrl+Enter confirms; the card goes aria-busy while sending; once resolved, focus moves to the one-line row.
+- New shared doc frame `app/components/AgentDocFrame.tsx` (hero, Master, Variants) for batch 3 onward, so every agent doc has the same shape.
 
 ### Paper vs tokens (tokens win)
 
@@ -99,4 +134,5 @@ Picks (from p-3-0, building on batch 1):
 ### PR status
 
 - Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
+- Batch 3: `feat/agent-patterns-3`, stacked on batch 2, PR base `feat/agent-patterns-2`. Open, not merged.
 - Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.

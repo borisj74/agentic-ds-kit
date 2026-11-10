@@ -700,6 +700,34 @@
     "status": "stable"
   },
   {
+    "id": "agenttree",
+    "intent": "An orchestrator and its sub-agents as a tree; status, time and rolled-up cost per node.",
+    "group": "component",
+    "path": "contracts/agenttree.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentlanes",
+    "intent": "One lane per agent over a time window: blocks, handoffs, decisions on the block.",
+    "group": "component",
+    "path": "contracts/agentlanes.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentinbox",
+    "intent": "Queue of approvals, questions, failures and recaps from agents, with a detail pane.",
+    "group": "component",
+    "path": "contracts/agentinbox.json",
+    "status": "stable"
+  },
+  {
+    "id": "decisioncard",
+    "intent": "An agent asks the person to choose or answer mid-run; confirm or skip.",
+    "group": "component",
+    "path": "contracts/decisioncard.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

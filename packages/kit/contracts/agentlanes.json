@@ -1,0 +1,136 @@
+{
+  "id": "agentlanes",
+  "status": "stable",
+  "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+  "useWhen": [
+    "watch several agents work in parallel over the last minutes",
+    "see who handed work to whom",
+    "answer a waiting agent from its block"
+  ],
+  "doNotUseWhen": [
+    "a list of running agents for chrome — RunningNow",
+    "per-agent sub-agent summaries — AgentFleet",
+    "a calendar of events — Calendar"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "segmentedcontrol"
+  ],
+  "props": {
+    "agents": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, model?, icon? }[] — one lane each, in order."
+    },
+    "tasks": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, handoffTo?, ask?, summary?, icon? }[]. Times are epoch ms; open tasks grow to now."
+    },
+    "span": {
+      "type": "number",
+      "default": 600000,
+      "note": "Window in ms."
+    },
+    "now": {
+      "type": "number",
+      "required": false,
+      "note": "Controlled clock; else it ticks every second."
+    },
+    "title": {
+      "type": "string",
+      "default": "Agents"
+    },
+    "openTaskId": {
+      "type": "string",
+      "required": false,
+      "note": "Open block: a detail popover, or a decision for a waiting task."
+    },
+    "onOpenTaskChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void. Blocks become buttons; Escape closes."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId) => void"
+    },
+    "onReject": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId) => void"
+    },
+    "onOpen": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId) => void. Open in the detail."
+    },
+    "spans": {
+      "type": "number[]",
+      "required": false,
+      "note": "Zoom choices; default 3m and 10m."
+    },
+    "onSpanChange": {
+      "type": "function",
+      "required": false,
+      "note": "(span) => void. Shows a SegmentedControl."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "motion.fast",
+    "primary.base",
+    "primary.subtle",
+    "primary.fg",
+    "bg.inverse",
+    "text.fgInverse",
+    "status.info",
+    "status.warningSubtle",
+    "status.warningText",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "shadow.overlayMd",
+    "icon.brand"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "lanes are a list; each block is a button named with agent, task, status and duration",
+      "the open block's popover is a named dialog; Escape closes it",
+      "the decision popover focuses Approve; Reject and Approve show Esc and ⏎",
+      "axis and handoff lines are aria-hidden",
+      "the running shimmer and popover motion use transform and opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentLanes, Gantt, or AgentTimeline",
+    "Do not encode status by color only; blocks and lanes carry text",
+    "Do not use raw hex",
+    "Waiting uses caution tokens until an attention role exists"
+  ],
+  "snippet": "<AgentLanes agents={agents} tasks={tasks} now={now} openTaskId={openId} onOpenTaskChange={setOpenId} onApprove={approve} onReject={reject} />"
+}
