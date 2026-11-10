@@ -826,6 +826,34 @@
     "status": "stable"
   },
   {
+    "id": "commentthread",
+    "intent": "One comment conversation on a document or record: comments, one level of replies, edit and a composer.",
+    "group": "component",
+    "path": "contracts/commentthread.json",
+    "status": "stable"
+  },
+  {
+    "id": "commentspanel",
+    "intent": "Side panel for a page's comment threads: Open / Resolved / All, previews and the selected thread.",
+    "group": "component",
+    "path": "contracts/commentspanel.json",
+    "status": "stable"
+  },
+  {
+    "id": "integrationpicker",
+    "intent": "Filterable catalogue of integrations: search, category filter and one Connect per tile.",
+    "group": "component",
+    "path": "contracts/integrationpicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "pricingplans",
+    "intent": "In-product plan comparison: Monthly / Yearly switch, price, features and one CTA per plan.",
+    "group": "component",
+    "path": "contracts/pricingplans.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

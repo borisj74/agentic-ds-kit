@@ -36,6 +36,8 @@ export const COMPONENT_ITEMS = [
   "colorpicker",
   "combobox",
   "command",
+  "commentspanel",
+  "commentthread",
   "contextmenu",
   "contextwindow",
   "conveyor",
@@ -63,6 +65,7 @@ export const COMPONENT_ITEMS = [
   "input",
   "inputotp",
   "insightcard",
+  "integrationpicker",
   "kbd",
   "linklist",
   "listview",
@@ -82,6 +85,7 @@ export const COMPONENT_ITEMS = [
   "pagination",
   "permissionrequest",
   "popover",
+  "pricingplans",
   "progress",
   "progresssteps",
   "radiogroup",
@@ -144,6 +148,10 @@ export function componentLabel(id: string): string {
   if (id === "experimentcard") return "ExperimentCard";
   if (id === "notificationstack") return "NotificationStack";
   if (id === "setupguide") return "SetupGuide";
+  if (id === "commentthread") return "CommentThread";
+  if (id === "commentspanel") return "CommentsPanel";
+  if (id === "integrationpicker") return "IntegrationPicker";
+  if (id === "pricingplans") return "PricingPlans";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -209,7 +217,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "SaaS",
-    ids: ["changesummary", "experimentcard", "notificationstack", "setupguide"],
+    ids: ["changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "notificationstack", "pricingplans", "setupguide"],
   },
   {
     label: "Forms",

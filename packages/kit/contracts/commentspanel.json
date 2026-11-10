@@ -1,0 +1,151 @@
+{
+  "id": "commentspanel",
+  "status": "stable",
+  "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+  "useWhen": [
+    "a page (invoice, document) has several comment threads",
+    "people filter open and resolved threads and open one",
+    "a header needs a Comments button with the open count"
+  ],
+  "doNotUseWhen": [
+    "one conversation on its own — CommentThread",
+    "product notifications — NotificationStack",
+    "agent work — AgentInbox"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "commentthread",
+    "drawer",
+    "empty",
+    "segmentedcontrol",
+    "skeleton"
+  ],
+  "props": {
+    "threads": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, preview, count, resolved?, updatedAt }[]"
+    },
+    "open": {
+      "type": "boolean",
+      "required": true
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": true
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false
+    },
+    "onSelect": {
+      "type": "function",
+      "required": true,
+      "note": "(id | null) => void; null goes back to the list."
+    },
+    "onResolve": {
+      "type": "function",
+      "required": false
+    },
+    "filter": {
+      "type": "enum",
+      "values": [
+        "open",
+        "resolved",
+        "all"
+      ],
+      "default": "open"
+    },
+    "onFilterChange": {
+      "type": "function",
+      "required": false
+    },
+    "children": {
+      "type": "ReactNode",
+      "required": false,
+      "note": "The selected thread, usually a CommentThread without a title."
+    },
+    "composer": {
+      "type": "ReactNode",
+      "required": false,
+      "note": "Shown under the list, e.g. a page-level CommentThread."
+    },
+    "label": {
+      "type": "string",
+      "default": "Comments"
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "No comments yet"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "inline": {
+      "type": "boolean",
+      "default": false
+    },
+    "showTrigger": {
+      "type": "boolean",
+      "default": true
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "bg.subtle",
+    "shadow.md",
+    "motion.duration200"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "the trigger is a kit Button described by the open count Badge",
+      "the panel is the kit Drawer dialog (focus trap, Escape closes, focus returns to the trigger)",
+      "the filter is a kit SegmentedControl radio group",
+      "threads are buttons; resolved threads say so to screen readers",
+      "All threads returns focus to the thread that was opened",
+      "list and thread crossfade on opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local CommentsDrawer or ThreadList",
+    "Do not re-implement the thread: pass a CommentThread as children",
+    "Do not use Tabs for the Open / Resolved / All filter",
+    "Do not use raw hex"
+  ],
+  "snippet": "<CommentsPanel threads={threads} open={open} onOpenChange={setOpen} selectedId={selected} onSelect={setSelected} onResolve={resolve}>\n  <CommentThread comments={comments} value={draft} onValueChange={setDraft} onSubmit={post} />\n</CommentsPanel>"
+}
