@@ -71,6 +71,7 @@
 
 .lg .title {
   font-size: var(--type-size-heading);
+  letter-spacing: var(--type-tracking-heading);
 }
 
 .description {

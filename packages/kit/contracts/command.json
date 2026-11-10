@@ -66,7 +66,9 @@
     "text.secondary",
     "text.muted",
     "icon.muted",
-    "space.1"
+    "space.1",
+    "type.family.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "div",

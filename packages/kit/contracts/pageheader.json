@@ -87,7 +87,13 @@
     "type.size.title",
     "type.size.body",
     "space.3",
-    "space.4"
+    "space.4",
+    "type.weight.title",
+    "type.tracking.title",
+    "type.family.overline",
+    "type.size.overline",
+    "type.weight.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "header",

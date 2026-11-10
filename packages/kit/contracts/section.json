@@ -78,7 +78,9 @@
     "space.section.lg",
     "space.stack.sm",
     "space.stack.md",
-    "space.stack.lg"
+    "space.stack.lg",
+    "type.weight.heading",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "section",

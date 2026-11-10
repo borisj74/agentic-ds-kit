@@ -52,9 +52,12 @@
 .label {
   min-width: 0;
   color: var(--text-secondary);
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-caption);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
   line-height: var(--type-line-body);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
 }
 
 .value {

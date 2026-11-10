@@ -75,7 +75,8 @@
     "border.faint",
     "radius.control",
     "shadow.raisedSm",
-    "focus.ring"
+    "focus.ring",
+    "bg.tray"
   ],
   "a11y": {
     "element": "tablist",

@@ -23,7 +23,7 @@ const ROLES = [
   { id: "type.body-md", size: "--type-size-body-md", weight: "--type-weight-body", line: "--type-line-body-md", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
   { id: "type.body-sm", size: "--type-size-body-sm", weight: "--type-weight-body", line: "--type-line-body-sm", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
   { id: "type.body-xs", size: "--type-size-body-xs", weight: "--type-weight-body", line: "--type-line-body-xs", family: "--font-body", sample: "Calm surfaces and precise type let the content lead.", block: true },
-  { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", family: "--font-body", sample: "Eyebrows / group labels" },
+  { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", family: "--type-family-overline", sample: "EYEBROWS / TABLE HEADS" },
 ] as const;
 
 const SIZE_STEPS = [

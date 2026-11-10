@@ -38,18 +38,21 @@
   padding-inline: 0;
 }
 
+/* Table header label: overline type (Plex Mono, caps, wide tracking). */
 .label {
   min-width: 0;
-  font-family: var(--font-sans);
-  font-weight: var(--type-weight-label);
+  font-family: var(--type-family-overline);
+  font-weight: var(--type-weight-overline);
   line-height: var(--type-line-body);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
   color: var(--text-secondary);
   overflow-wrap: anywhere;
 }
 
 .sm .label,
 .md .label {
-  font-size: var(--type-size-caption);
+  font-size: var(--type-size-overline-xs);
 }
 
 .sort {
@@ -96,7 +99,7 @@
 /* The button's line box matches the label so the header keeps its single-line height. */
 .wrap .sort {
   display: block;
-  font-size: var(--type-size-caption);
+  font-size: var(--type-size-overline-xs);
   line-height: var(--type-line-body);
 }
 

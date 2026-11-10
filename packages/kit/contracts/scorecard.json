@@ -116,7 +116,11 @@
     "space.stack.sm",
     "space.inset.md",
     "motion.interaction",
-    "border.focus"
+    "border.focus",
+    "type.family.overline",
+    "type.size.overline",
+    "type.weight.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "article",

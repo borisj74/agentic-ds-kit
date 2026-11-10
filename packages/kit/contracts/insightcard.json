@@ -138,7 +138,8 @@
     "link.default",
     "link.hover",
     "link.active",
-    "border.focus"
+    "border.focus",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "article",

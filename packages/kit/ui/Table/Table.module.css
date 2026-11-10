@@ -88,7 +88,11 @@
   height: 2.5rem;
   padding-inline: var(--space-2);
   padding-block: 0;
-  font-weight: var(--type-weight-label);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
   color: var(--text-primary);
   background-color: var(--surface-card);
 }

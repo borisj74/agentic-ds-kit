@@ -132,7 +132,8 @@
     "link.default",
     "link.hover",
     "link.active",
-    "radius.controlSm"
+    "radius.controlSm",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "article",

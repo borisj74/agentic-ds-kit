@@ -121,7 +121,9 @@
     "text.secondary",
     "text.muted",
     "icon.muted",
-    "layout.metricsMin"
+    "layout.metricsMin",
+    "action.selected",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "table",

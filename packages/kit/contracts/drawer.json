@@ -90,7 +90,8 @@
     "surface.card",
     "layout.drawerSm",
     "layout.drawerMd",
-    "layout.drawerLg"
+    "layout.drawerLg",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "dialog",
