@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { Button, CodeSnippet, SegmentedControl, Select } from "agentic-ds-kit";
+import { Button, CodeSnippet, SegmentedControl } from "agentic-ds-kit";
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { usePatternTheme } from "./ThemeScope";
 import styles from "../playground.module.css";
@@ -70,9 +70,9 @@ export function ScaledFrame({
 }
 
 /**
- * Preview / Code for one pattern, like a screens catalogue: a toolbar (state, light or dark,
- * desktop or mobile, open full screen, copy the add command) over the screen in a scaled
- * iframe, or the install, usage and contract code.
+ * Preview / Code for one pattern, like a screens catalogue: a toolbar (light or dark, desktop
+ * or mobile, open full screen, copy the add command) over the screen in a scaled iframe, or
+ * the install, usage and contract code. The page's screens list picks the screen shown.
  */
 export function PatternPreview({
   slug,
@@ -80,18 +80,18 @@ export function PatternPreview({
   addCommand,
   usage,
   contract,
-  initialView,
+  view,
 }: {
   slug: ScreenSlug;
   title: string;
   addCommand: string;
   usage: string;
   contract: string;
-  initialView?: string;
+  /** The screen (state) shown; pick it from the screens list under the preview. */
+  view: string;
 }) {
   const views = PATTERN_VIEWS[slug];
   const [tab, setTab] = useState<"preview" | "code">("preview");
-  const [view, setView] = useState(views.some((item) => item.id === initialView) ? initialView! : views[0].id);
   const theme = usePatternTheme();
   const [mode, setMode] = useState<Mode | null>(null);
   const [device, setDevice] = useState<Device>("desktop");
@@ -124,16 +124,7 @@ export function PatternPreview({
             ]}
           />
           {tab === "preview" && views.length > 1 ? (
-            <div className={styles.previewState}>
-              <Select
-                id={`${slug}-preview-state`}
-                size="sm"
-                ariaLabel="State"
-                options={views.map((item) => ({ value: item.id, label: item.label }))}
-                value={view}
-                onChange={(value) => setView(String(value))}
-              />
-            </div>
+            <span className={styles.previewLabel}>{views.find((item) => item.id === view)?.label ?? view}</span>
           ) : null}
         </div>
         <div className={styles.previewTools}>

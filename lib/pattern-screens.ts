@@ -99,3 +99,17 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "settings-area": "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
   onboarding: "Four guided setup steps with progress, a validation error and a submitting state.",
 };
+
+/** Each screen pattern's add command (docs slug → pattern id: `settings` is settings-form, `settings-area` is settings). */
+export const PATTERN_ADD: Record<ScreenSlug, string> = {
+  dashboard: "npx agentic-ds-kit add dashboard",
+  settings: "npx agentic-ds-kit add settings-form",
+  "list-detail": "npx agentic-ds-kit add list-detail",
+  empty: "npx agentic-ds-kit add empty-first-run",
+  "sign-in": "npx agentic-ds-kit add sign-in",
+  "app-shell": "npx agentic-ds-kit add app-shell",
+  "billing-schedule": "npx agentic-ds-kit add billing-schedule",
+  "integration-settings": "npx agentic-ds-kit add integration-settings",
+  "settings-area": "npx agentic-ds-kit add settings",
+  onboarding: "npx agentic-ds-kit add onboarding",
+};

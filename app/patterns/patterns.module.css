@@ -82,15 +82,12 @@
 
 .thumb {
   position: relative;
-  aspect-ratio: 2 / 1;
-  margin: var(--space-2);
-  margin-bottom: 0;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   pointer-events: none;
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-sm);
-  box-shadow: var(--shadow-sm);
+  background-color: var(--bg-canvas);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
 }
 
 .scene {
@@ -201,4 +198,28 @@
 .thumbFrame > div {
   border: 0;
   border-radius: 0;
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.countBadge {
+  padding: 0 var(--space-2);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  color: var(--text-fg-muted);
+}
+
+/* Picking a screen scrolls the preview to the top, clear of the docs top bar. */
+.previewAnchor {
+  scroll-margin-top: var(--space-6);
 }

@@ -239,9 +239,11 @@
   gap: var(--space-2);
 }
 
-.previewState {
-  width: var(--layout-metrics-min);
-  max-width: 100%;
+/* The screen shown, beside Preview / Code. */
+.previewLabel {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
 }
 
 .frameHost {
@@ -267,4 +269,123 @@
   border: 0;
   transform-origin: top left;
   background: var(--bg-canvas);
+}
+
+/* Screens list (patterns index, a pattern's screens): live thumbnail, name, one line, copy. */
+.screenList {
+  container-type: inline-size;
+}
+
+.screenGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+/* Index: two big thumbnails a row. A pattern's own screens: three smaller ones. */
+@container (min-width: 40rem) {
+  .screenGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+
+@container (min-width: 56rem) {
+  .screenGridSmall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.screenCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+
+.screenCard:hover {
+  border-color: var(--line-strong);
+}
+
+.screenCard[data-selected] {
+  outline: var(--border-focus-width) solid var(--line-focus);
+  outline-offset: calc(var(--border-width-thin) * -1);
+}
+
+.screenCard:has(.screenHit:focus-visible) {
+  outline: var(--border-focus-width) solid var(--line-focus);
+  outline-offset: var(--space-px);
+}
+
+.screenThumb {
+  margin: var(--space-2);
+  margin-block-end: 0;
+  pointer-events: none;
+}
+
+.screenThumb > div {
+  border-radius: var(--radius-surface-md);
+}
+
+.screenMeta {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.screenText {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.screenTitle {
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screenDescription {
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The copy button sits above the card's full-size hit area. */
+.screenCopy {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+}
+
+.screenHit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.screenHit:focus-visible {
+  outline: none;
 }

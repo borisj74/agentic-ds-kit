@@ -1,11 +1,14 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { Breadcrumb } from "agentic-ds-kit";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
-import { PatternPreview } from "../_components/PatternPreview";
+import { PatternPreview, ScaledFrame, frameUrl } from "../_components/PatternPreview";
+import { ScreenCard } from "../_components/ScreenCard";
+import { usePatternTheme } from "../_components/ThemeScope";
 import { CodeBlock } from "../components/CodeBlock";
-import { PATTERN_BLURBS, isScreenSlug } from "@/lib/pattern-screens";
+import { PATTERN_BLURBS, PATTERN_VIEWS, isScreenSlug, type ScreenSlug } from "@/lib/pattern-screens";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
 import appShell from "../../packages/kit/contracts/patterns/app-shell.json";
 import billingSchedule from "../../packages/kit/contracts/patterns/billing-schedule.json";
@@ -79,6 +82,37 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
     );
   }
 
+  return <ScreenPatternView slug={slug} title={title} crumbs={crumbs} initialView={view} />;
+}
+
+/**
+ * A screen pattern's page: header, the preview of the chosen screen, its screens (each state as
+ * a thumbnail you pick), then install, usage and the contract's lines.
+ */
+function ScreenPatternView({
+  slug,
+  title,
+  crumbs,
+  initialView,
+}: {
+  slug: ScreenSlug;
+  title: string;
+  crumbs: { label: string; href?: string }[];
+  initialView?: string;
+}) {
+  const views = PATTERN_VIEWS[slug];
+  const [view, setView] = useState(views.some((item) => item.id === initialView) ? initialView! : views[0].id);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const theme = usePatternTheme();
+
+  function pick(id: string) {
+    setView(id);
+    // Keep the link shareable (?view=) without a navigation, and bring the preview into view.
+    const url = id === views[0].id ? window.location.pathname : `${window.location.pathname}?view=${encodeURIComponent(id)}`;
+    window.history.replaceState(null, "", url);
+    previewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   const contract = CONTRACTS[slug];
   const usage = [contract.import, "", contract.snippet].filter((line) => line !== undefined).join("\n");
 
@@ -89,14 +123,44 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
         <h1 className={playground.pageTitle}>{title}</h1>
         <p className={playground.pageLead}>{PATTERN_BLURBS[slug]}</p>
 
-        <PatternPreview
-          slug={slug}
-          title={title}
-          addCommand={contract.add}
-          usage={usage}
-          contract={JSON.stringify(contract, null, 2)}
-          initialView={view}
-        />
+        <div ref={previewRef} className={styles.previewAnchor}>
+          <PatternPreview
+            slug={slug}
+            title={title}
+            addCommand={contract.add}
+            usage={usage}
+            contract={JSON.stringify(contract, null, 2)}
+            view={view}
+          />
+        </div>
+
+        {views.length > 1 ? (
+          <section className={styles.section} aria-labelledby={`${slug}-screens`}>
+            <h2 id={`${slug}-screens`} className={styles.sectionTitle}>
+              Screens <span className={styles.countBadge}>{views.length}</span>
+            </h2>
+            <div className={playground.screenList}>
+              <div className={`${playground.screenGrid} ${playground.screenGridSmall}`}>
+                {views.map((item) => (
+                  <ScreenCard
+                    key={item.id}
+                    headingLevel={3}
+                    title={item.label}
+                    selected={item.id === view}
+                    onSelect={() => pick(item.id)}
+                    thumb={
+                      <ScaledFrame
+                        src={frameUrl(slug, item.id, theme?.mode ?? "light")}
+                        title={`${title}: ${item.label}`}
+                        interactive={false}
+                      />
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <section className={styles.section} aria-labelledby={`${slug}-install`}>
           <h2 id={`${slug}-install`} className={styles.sectionTitle}>
