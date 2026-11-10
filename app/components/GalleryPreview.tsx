@@ -10,6 +10,7 @@ import { CommentThread } from "agentic-ds-kit";
 import { SetupGuide } from "agentic-ds-kit";
 import { NotificationStack } from "agentic-ds-kit";
 import { ExperimentCard } from "agentic-ds-kit";
+import { BlurCrossfade, TextReveal, TiltCard } from "agentic-ds-kit";
 import { ChangeSummary } from "agentic-ds-kit";
 import { TraceWaterfall } from "agentic-ds-kit";
 import { MemoryPanel } from "agentic-ds-kit";
@@ -413,6 +414,24 @@ export function GalleryPreview({ id }: { id: string }) {
         <Stage variant="wide">
           <InvoiceDocument number="INV-0117" status="issued" to="Acme Co" issuedOn="01 Nov" lines={[{ id: "a", description: "Pro plan", quantity: 1, unitPrice: "$480", amount: "$480" }]} subtotal="$480" total="$480" />
         </Stage>
+      );
+    case "blurcrossfade":
+      return (
+        <BlurCrossfade contentKey="done">
+          <Tag dot="success">Done</Tag>
+        </BlurCrossfade>
+      );
+    case "textreveal":
+      return (
+        <Stage variant="wide">
+          <TextReveal as="p">Agents that ask before they act</TextReveal>
+        </Stage>
+      );
+    case "tiltcard":
+      return (
+        <TiltCard title="Pro plan" size="sm">
+          <Badge tone="primary" appearance="soft" size="sm">Recommended</Badge>
+        </TiltCard>
       );
     case "taskboard":
       return (

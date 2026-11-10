@@ -20,6 +20,7 @@ export const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
+  "blurcrossfade",
   "breadcrumb",
   "button",
   "buttongroup",
@@ -112,7 +113,9 @@ export const COMPONENT_ITEMS = [
   "textarea",
   "timepicker",
   "tilegroup",
+  "textreveal",
   "thinkinganimation",
+  "tiltcard",
   "timeline",
   "toast",
   "toolcallcard",
@@ -156,6 +159,9 @@ export function componentLabel(id: string): string {
   if (id === "pricingplans") return "PricingPlans";
   if (id === "invoicedocument") return "InvoiceDocument";
   if (id === "taskboard") return "TaskBoard";
+  if (id === "blurcrossfade") return "BlurCrossfade";
+  if (id === "textreveal") return "TextReveal";
+  if (id === "tiltcard") return "TiltCard";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -222,6 +228,10 @@ export const COMPONENT_GROUPS = [
   {
     label: "SaaS",
     ids: ["changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
+  },
+  {
+    label: "Motion",
+    ids: ["blurcrossfade", "textreveal", "tiltcard"],
   },
   {
     label: "Forms",

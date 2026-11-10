@@ -1,0 +1,82 @@
+{
+  "id": "tiltcard",
+  "status": "stable",
+  "intent": "A kit Card that tilts a few degrees toward the pointer with a soft highlight, for rare showcase spots (a pricing highlight, a docs gallery). Wraps Card; never the default Card.",
+  "useWhen": [
+    "one highlighted plan or feature in a showcase",
+    "a docs or marketing gallery tile"
+  ],
+  "doNotUseWhen": [
+    "dense data UI: tables, forms, agent monitors",
+    "every card in a grid; keep it to one or two",
+    "a normal content card — Card"
+  ],
+  "contains": [
+    "card"
+  ],
+  "inherits": {
+    "from": "card",
+    "note": "Takes every Card prop (title, description, children, size, actions, headerAction, flush, imageSrc, imageAlt) and passes it through."
+  },
+  "props": {
+    "tilt": {
+      "type": "boolean",
+      "default": true,
+      "note": "false keeps the hover lift only."
+    },
+    "maxTilt": {
+      "type": "number",
+      "default": 6,
+      "note": "Degrees at the card's edge, capped at 6."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Mutes the content, sets aria-disabled, no tilt or lift."
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "shadow.sm",
+    "shadow.md",
+    "radius.surfaceMd",
+    "text.fg",
+    "focus.ring",
+    "border.focusWidth",
+    "opacity.300",
+    "opacity.disabled",
+    "motion.duration100",
+    "motion.duration200",
+    "motion.duration400",
+    "motion.easeOut"
+  ],
+  "motion": {
+    "properties": [
+      "transform",
+      "opacity"
+    ],
+    "hover": "rotateX/rotateY ≤ maxTilt toward the pointer; a shadow.md layer fades in; a highlight follows the pointer",
+    "leave": "eases back to rest over motion.duration400",
+    "reducedMotion": "no rotate and no highlight; hover lifts the shadow only"
+  },
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "the tilt is pointer-only (mouse, pen); touch does nothing",
+      "keyboard focus inside shows a focus ring and a static lift, never a tilt",
+      "the highlight is aria-hidden",
+      "honours prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local HoverCard or 3D card",
+    "Do not tilt more than 6 degrees",
+    "Do not use raw hex"
+  ],
+  "snippet": "<TiltCard title=\"Pro plan\" description=\"$29 / mo\">…</TiltCard>"
+}

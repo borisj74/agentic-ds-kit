@@ -1,0 +1,79 @@
+{
+  "id": "blurcrossfade",
+  "status": "stable",
+  "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
+  "useWhen": [
+    "a status, value or thumbnail swaps in place and a hard cut would feel jumpy",
+    "announce the new value politely to screen readers while it swaps"
+  ],
+  "doNotUseWhen": [
+    "a changing number — NumberTransition",
+    "text still being generated — ShimmerText",
+    "showing and hiding a panel — Collapsible or Accordion",
+    "page or route transitions"
+  ],
+  "props": {
+    "children": {
+      "type": "node",
+      "required": true,
+      "note": "The current value. Any child: Badge, image, chart."
+    },
+    "contentKey": {
+      "type": "string|number",
+      "required": true,
+      "note": "Changing it triggers the swap. The outgoing layer shows the content as it was when that key arrived."
+    },
+    "duration": {
+      "type": "enum",
+      "values": [
+        "fast",
+        "normal"
+      ],
+      "default": "fast",
+      "note": "fast = motion.duration200 (Paper's motion.fast); normal = motion.duration300. No raw ms."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Sent to an aria-live=polite region when the content swaps, e.g. \"Status: Done\"."
+    }
+  },
+  "passthrough": {
+    "root": "span",
+    "ref": "span",
+    "className": "root",
+    "rest": "span"
+  },
+  "tokens": [
+    "motion.duration200",
+    "motion.duration300",
+    "motion.duration100",
+    "motion.easeOut",
+    "space.1"
+  ],
+  "motion": {
+    "properties": [
+      "opacity",
+      "filter"
+    ],
+    "enter": "opacity 0 → 1, blur 6px → 0",
+    "exit": "opacity 1 → 0, blur 0 → 6px, overlapped with the enter",
+    "exception": "filter: blur is the one approved exception to the kit's transform/opacity-only rule (Boris, 2026-11-10): max 6px, only on the two crossfade layers, never under reduced motion.",
+    "reducedMotion": "no blur: the old value goes at once; the new one fades in over motion.duration100"
+  },
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "the outgoing layer is aria-hidden and inert",
+      "label, when set, is announced through aria-live=polite",
+      "honours prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not copy its blur into other components; the filter exception is for BlurCrossfade only",
+    "Do not wrap long or interactive regions; it is for small values",
+    "Do not pass raw ms; pick a duration token",
+    "Do not use raw hex"
+  ],
+  "snippet": "<BlurCrossfade contentKey={status} label={`Status: ${status}`}><Badge tone={status === \"done\" ? \"success\" : \"info\"}>{status}</Badge></BlurCrossfade>"
+}

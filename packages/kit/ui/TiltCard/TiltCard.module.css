@@ -1,0 +1,104 @@
+/*
+ * Paper (p-5-0, 05): rotate ≤ 6° toward the pointer, highlight follows it, eases back to rest on
+ * leave (300ms → nearest token --motion-duration-400, 320ms). Hover lifts shadow.sm → shadow.md.
+ * Only transform and opacity animate: the lift is a shadow.md layer fading in, the highlight a
+ * layer that moves with transform. --tilt-perspective is geometry, not a design token.
+ */
+.root {
+  --tilt-rx: 0deg;
+  --tilt-ry: 0deg;
+  --tilt-x: 0.5;
+  --tilt-y: 0.5;
+  --tilt-perspective: 800px;
+  --tilt-duration: var(--motion-duration-400);
+  --tilt-easing: var(--motion-ease-out);
+  position: relative;
+  transform: perspective(var(--tilt-perspective)) rotateX(var(--tilt-rx)) rotateY(var(--tilt-ry));
+  transition: transform var(--tilt-duration) var(--tilt-easing);
+}
+
+/* While the pointer moves, follow it quickly; on leave, the slower return above applies. */
+.root[data-tilting] {
+  --tilt-duration: var(--motion-duration-100);
+}
+
+/* The lift: a shadow.md copy of the outline that fades in. */
+.root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-surface-md);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.root:not(.disabled):hover::after,
+.root:not(.disabled):has(:focus-visible)::after {
+  opacity: 1;
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-surface-md);
+  pointer-events: none;
+}
+
+/*
+ * A soft spot that follows the pointer. `screen` lifts only what's under it: on a light card the
+ * spot (text.fg, near black) changes nothing, matching Paper's light stills; on a dark card the
+ * spot (text.fg, near white) reads as the highlight Paper shows. No theme-specific colour needed.
+ */
+.glow {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle farthest-corner, var(--text-fg), transparent 55%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translate(calc((var(--tilt-x) - 0.5) * 100%), calc((var(--tilt-y) - 0.5) * 100%));
+  transition: opacity var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.root[data-tilting] .glow {
+  opacity: var(--opacity-300);
+}
+
+/* Keyboard focus inside: a static lift and a focus ring, never a tilt. */
+.root:has(:focus-visible) {
+  transform: none;
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.root:has(:focus-visible) .glow {
+  opacity: 0;
+}
+
+.disabled {
+  transform: none;
+}
+
+.disabled .body {
+  opacity: var(--opacity-disabled);
+}
+
+/* Paper: "no rotate; hover may lift shadow only". */
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transform: none;
+    transition: none;
+  }
+
+  .glow {
+    display: none;
+  }
+}

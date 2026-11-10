@@ -61,12 +61,15 @@ const AGENT_IDS = new Set([
 ]);
 
 const MOTION_IDS = new Set([
+  "blurcrossfade",
   "loadinganimation",
   "numbertransition",
   "shimmertext",
   "skeleton",
   "spinner",
+  "textreveal",
   "thinkinganimation",
+  "tiltcard",
 ]);
 
 const EXTRA_IDS = ["barchart", "linechart", "piechart"] as const;

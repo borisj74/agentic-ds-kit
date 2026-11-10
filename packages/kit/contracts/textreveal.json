@@ -1,0 +1,81 @@
+{
+  "id": "textreveal",
+  "status": "stable",
+  "intent": "A short heading that rises in by word or by line, for docs heroes and empty states. The full string is always in the DOM.",
+  "useWhen": [
+    "a docs or marketing hero heading",
+    "an empty-state title that should arrive gently"
+  ],
+  "doNotUseWhen": [
+    "body copy or long paragraphs",
+    "text still being generated — ShimmerText",
+    "page titles in product UI — PageHeader",
+    "repeated headings in lists or tables"
+  ],
+  "props": {
+    "children": {
+      "type": "string",
+      "required": true,
+      "note": "Plain text. With by=\"line\", separate lines with \\n."
+    },
+    "by": {
+      "type": "enum",
+      "values": ["word", "line"],
+      "default": "word"
+    },
+    "as": {
+      "type": "enum",
+      "values": ["h1", "h2", "h3", "p", "span"],
+      "default": "h2"
+    },
+    "replayKey": {
+      "type": "string|number",
+      "required": false,
+      "note": "Change it to play the reveal again."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "note": "Accessible text when it should differ from children."
+    }
+  },
+  "passthrough": {
+    "root": "as",
+    "ref": "as",
+    "className": "root",
+    "rest": "as"
+  },
+  "tokens": [
+    "text.fg",
+    "type.family.display",
+    "type.size.heading4",
+    "type.line.heading4",
+    "type.weight.title",
+    "type.tracking.title",
+    "space.2",
+    "space.3",
+    "motion.duration300",
+    "motion.duration100",
+    "motion.easeOut"
+  ],
+  "motion": {
+    "properties": ["opacity", "transform"],
+    "enter": "each unit opacity 0 → 1 and translateY space.2 (word) / space.3 (line) → 0, motion.duration300 ease-out",
+    "stagger": "40ms per word, 80ms per line, derived from motion.duration100 until a stagger token exists",
+    "reducedMotion": "final text at once, no stagger, no rise"
+  },
+  "a11y": {
+    "element": "as",
+    "requirements": [
+      "the full string is in a visually hidden span; the animated units are aria-hidden",
+      "honours prefers-reduced-motion",
+      "no bounce, no scale, plays once"
+    ]
+  },
+  "doNot": [
+    "Do not loop it",
+    "Do not use it for more than one heading per view",
+    "Do not use raw hex"
+  ],
+  "snippet": "<TextReveal as=\"h1\">Agents that ask before they act</TextReveal>"
+}

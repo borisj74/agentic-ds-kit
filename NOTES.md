@@ -2,6 +2,61 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-10: Motion (feat/motion-patterns-1, -2)
+
+Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-5-0 "Nistha Motion". Paper is static, so each moving state is a still with a timing label; the values below come from those labels and `get_jsx`.
+
+### Inventory and shape
+
+| # | Paper artboard | Shape | Why | Kit id | Batch |
+| --- | --- | --- | --- | --- | --- |
+| 01 | Blur Crossfade | (a) component | Paper gives it its own contract (`children`, `contentKey`, `duration`, `label`) and calls it "a primitive, not a Card"; it wraps any child, so it is a wrapper component, not a hook | `blurcrossfade` | 1 |
+| 02 | Text Reveal | (a) component | Own contract (`by`, `as`, `replayKey`, `label`); a heading element, not a style | `textreveal` | 1 |
+| 03 | Gradient Text | (a) component | Own contract (`tone`, `as`); not really motion (motion "none by default") | `gradienttext` | 2 |
+| 04 | Grid Background | (a) component | Own contract (`variant`, `children`, decorative layer) | `gridbackground` | 2 |
+| 05 | Tilt Card | (a) component | Own contract: wraps Card, adds `tilt` / `maxTilt`; Card's default motion is untouched | `tiltcard` | 1 |
+
+- **Skipped because the kit already has them:** none. p-5-0 doesn't redraw ShimmerText, ThinkingAnimation, LoadingAnimation, NumberTransition, Skeleton or Spinner.
+- **(b) motion primitive / (c) docs only:** none chosen. Wiring BlurCrossfade into existing status chips (RunningNow, AgentPlan, ToolCallCard) would change how those components animate by default, so it is a question for Boris, not built.
+- **Batches:** 1 = BlurCrossfade, TextReveal, TiltCard (the three that move). 2 = GridBackground, GradientText (decorative; both carry open token and colour questions).
+- **Nav:** a new **Motion** group in `lib/playground-nav.ts` after SaaS; the gallery tags them "motion".
+
+### Boris's calls (via the planner, 2026-11-10)
+
+- **BlurCrossfade blur: approved exception.** Paper animates `filter: blur(0 → 6px)` with opacity on both layers (no scale). `filter` breaks the transform/opacity-only rule; Boris approved it as **the one exception**: max 6px (`--blur-crossfade-blur`, 1.5 × `--space-1`), only on BlurCrossfade's two layers, never under reduced motion. The contract records it under `motion.exception`. Don't copy the blur into other components.
+- **Not wired into existing components.** BlurCrossfade is opt-in only; RunningNow, AgentPlan, ToolCallCard and AgentFleet keep their hard-cut status swaps. Places it could be wired in later: RunningNow's status chip, AgentPlan step status, ToolCallCard's state badge, AgentFleet row status, ExperimentCard status Badge.
+- **GradientText:** ink, brand and inverse only; the primary → violet `overlay` waits for the violet decision; no hue shift.
+
+### Timings: Paper → token
+
+| Where | Paper | Kit token | Note |
+| --- | --- | --- | --- |
+| BlurCrossfade total | motion.fast ≈ 200ms, ease-out | `--motion-duration-200` (180ms), `--motion-ease-out` | nearest; `duration="normal"` = `--motion-duration-300` (240ms) |
+| BlurCrossfade reduced motion | "instant or 100ms fade" | `--motion-duration-100` (120ms), linear, opacity only | old value removed at once |
+| BlurCrossfade frames | t ≈ 60ms out, t ≈ 140ms in | — | the kit's ease-out (`0.23, 1, 0.32, 1`) is front-loaded, so Paper's mid-frames are reached at ≈ 15ms / 45ms of 240ms; the docs freeze there and say so |
+| TextReveal unit | ease-out 240ms | `--motion-duration-300` (240ms), `--motion-ease-out` | exact |
+| TextReveal stagger | 40ms per word, 80ms per line ("motion.stagger") | none; derived `calc(--motion-duration-100 / 3)` and `× 2/3` | **propose** `--motion-stagger-sm: 40ms`, `--motion-stagger-md: 80ms` |
+| TextReveal rise | 10px (word), 12px (line) | `--space-2` (8px), `--space-3` (12px) | word rise 2px short of Paper |
+| TiltCard return | 300ms on leave | `--motion-duration-400` (320ms) | nearest |
+| TiltCard follow | — | `--motion-duration-100` while the pointer moves | not in Paper; keeps the tilt responsive |
+| TiltCard lift | shadow.sm → shadow.md | `--shadow-md` layer, opacity via `--motion-interaction-*` | box-shadow is not animated; a shadow.md layer fades in |
+| TiltCard highlight | white 35% → transparent 55% | `--text-fg` with `mix-blend-mode: screen`, layer opacity `--opacity-300` (0.32) | see below |
+
+### Decisions
+
+- **Transform/opacity only**, except BlurCrossfade's approved blur. No `box-shadow`, `background-position` or size is animated. TiltCard's lift fades in a `::after` carrying `--shadow-md`; the highlight is a layer moved with `transform`.
+- **TiltCard highlight without a theme check.** No semantic token is white in both themes (`--line-inverse` flips). The spot uses `--text-fg` with `mix-blend-mode: screen`: on a light card (dark text-fg) screen changes nothing, matching Paper's light stills; on a dark card (light text-fg) it shows the highlight Paper draws. If Boris wants a visible light-mode sheen, that needs a new token (e.g. `--sheen`).
+- **TiltCard focus.** Card is not focusable; "keyboard focus" means focus inside it (`:has(:focus-visible)`): focus ring on the card (`--border-focus-width`, `--focus-ring`), the shadow.md lift, rotation forced to none. Pointer tilt is mouse/pen only. `disabled` is new vs Paper's contract (Paper draws a disabled still): mutes content with `--opacity-disabled`, sets `aria-disabled`, no tilt or lift.
+- **TiltCard perspective** is a local `--tilt-perspective: 800px` (geometry, not a design token).
+- **TextReveal** keeps the full string in a visually hidden span; the animated units are `aria-hidden`. Lines come from `\n` in `children`. Size is `--type-size-heading-4` (32px / 40 / 700 / `--type-tracking-title`), as Paper draws it; `as` only changes the element.
+- **BlurCrossfade** stores the children as they were when a key arrived; that copy is the outgoing layer on the next swap. The outgoing layer is `aria-hidden` and `inert` and is removed on `animationend`.
+- **Docs.** Each page has a live preview with a Swap / Replay control and Variants with Paper's frames as paused stills (`MotionDoc.module.css` `.freeze` seeks every animation to `--freeze-at`). Doc-only.
+
+### Proposed tokens (not added)
+
+- `--motion-stagger-sm` (40ms) and `--motion-stagger-md` (80ms) for TextReveal and future list entrances.
+- A theme-constant highlight colour (`--sheen`) if TiltCard should show a highlight in light mode.
+
 ## 2026-11-10: SaaS patterns (feat/saas-patterns-1, -2, -3)
 
 Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-4-0 "Nistha SaaS Patterns". These parts feed the p-6-0 Settings and Onboarding screens, which are not built here.

@@ -1,0 +1,68 @@
+/*
+ * Paper (p-5-0, 02): each unit opacity 0 → 1 and rises into place, ease-out 240ms, staggered
+ * 40ms per word / 80ms per line. There is no stagger token yet, so the stagger is derived from
+ * --motion-duration-100 (120ms ÷ 3 = 40ms, × ⅔ = 80ms); `--motion-stagger-*` is proposed in NOTES.md.
+ * Rise: Paper draws 10px (words) and 12px (lines); nearest space tokens are --space-2 / --space-3.
+ */
+.root {
+  --text-reveal-duration: var(--motion-duration-300);
+  --text-reveal-easing: var(--motion-ease-out);
+  --text-reveal-stagger: calc(var(--motion-duration-100) / 3);
+  --text-reveal-rise: var(--space-2);
+  position: relative;
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-display);
+  font-size: var(--type-size-heading-4);
+  font-weight: var(--type-weight-title);
+  line-height: var(--type-line-heading-4);
+  letter-spacing: var(--type-tracking-title);
+  overflow-wrap: anywhere;
+}
+
+.line {
+  --text-reveal-stagger: calc(var(--motion-duration-100) * 2 / 3);
+  --text-reveal-rise: var(--space-3);
+}
+
+.units {
+  display: block;
+}
+
+.unit {
+  display: inline-block;
+  animation: text-reveal-in var(--text-reveal-duration) var(--text-reveal-easing) both;
+  animation-delay: calc(var(--text-reveal-stagger) * var(--text-reveal-index, 0));
+}
+
+.line .unit {
+  display: block;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes text-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--text-reveal-rise));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Paper: "final text at once" — no stagger, no rise. */
+@media (prefers-reduced-motion: reduce) {
+  .unit {
+    animation: none;
+  }
+}

@@ -56,6 +56,9 @@ import { CommentThreadDoc } from "./CommentThreadDoc";
 import { SetupGuideDoc } from "./SetupGuideDoc";
 import { NotificationStackDoc } from "./NotificationStackDoc";
 import { ExperimentCardDoc } from "./ExperimentCardDoc";
+import { BlurCrossfadeDoc } from "./BlurCrossfadeDoc";
+import { TextRevealDoc } from "./TextRevealDoc";
+import { TiltCardDoc } from "./TiltCardDoc";
 import { ChangeSummaryDoc } from "./ChangeSummaryDoc";
 import { TraceWaterfallDoc } from "./TraceWaterfallDoc";
 import { MemoryPanelDoc } from "./MemoryPanelDoc";
@@ -143,6 +146,9 @@ const TITLES: Record<string, string> = {
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
   taskboard: "TaskBoard",
+  blurcrossfade: "BlurCrossfade",
+  textreveal: "TextReveal",
+  tiltcard: "TiltCard",
   invoicedocument: "InvoiceDocument",
   pricingplans: "PricingPlans",
   integrationpicker: "IntegrationPicker",
@@ -297,6 +303,10 @@ function resolveHash(hash: string): string {
     masthead: "appheader",
     appbar: "appheader",
     "number-transition": "numbertransition",
+    crossfade: "blurcrossfade",
+    "blur-crossfade": "blurcrossfade",
+    "text-reveal": "textreveal",
+    "tilt-card": "tiltcard",
     radio: "radiogroup",
     radios: "radiogroup",
     tab: "tabs",
@@ -424,6 +434,9 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "setupguide") return <SetupGuideDoc />;
   if (resolved === "notificationstack") return <NotificationStackDoc />;
   if (resolved === "experimentcard") return <ExperimentCardDoc />;
+  if (resolved === "blurcrossfade") return <BlurCrossfadeDoc />;
+  if (resolved === "textreveal") return <TextRevealDoc />;
+  if (resolved === "tiltcard") return <TiltCardDoc />;
   if (resolved === "changesummary") return <ChangeSummaryDoc />;
   if (resolved === "tracewaterfall") return <TraceWaterfallDoc />;
   if (resolved === "memorypanel") return <MemoryPanelDoc />;

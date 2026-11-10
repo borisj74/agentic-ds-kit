@@ -129,6 +129,9 @@ export * from "../ui/IntegrationPicker";
 export * from "../ui/PricingPlans";
 export * from "../ui/InvoiceDocument";
 export * from "../ui/TaskBoard";
+export * from "../ui/BlurCrossfade";
+export * from "../ui/TextReveal";
+export * from "../ui/TiltCard";
 
 /** Chart data shapes, public so copied patterns (`agentic-ds-kit add`) can type their data. */
 export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/chartMath";

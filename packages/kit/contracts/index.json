@@ -868,6 +868,27 @@
     "status": "stable"
   },
   {
+    "id": "blurcrossfade",
+    "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for status and value swaps. A motion primitive, not a Card.",
+    "group": "component",
+    "path": "contracts/blurcrossfade.json",
+    "status": "stable"
+  },
+  {
+    "id": "textreveal",
+    "intent": "A short heading that rises in by word or by line, for docs heroes and empty states.",
+    "group": "component",
+    "path": "contracts/textreveal.json",
+    "status": "stable"
+  },
+  {
+    "id": "tiltcard",
+    "intent": "A kit Card that tilts a few degrees toward the pointer, for rare showcase spots. Never the default Card.",
+    "group": "component",
+    "path": "contracts/tiltcard.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
