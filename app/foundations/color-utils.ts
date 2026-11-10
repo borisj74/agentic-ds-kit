@@ -46,5 +46,10 @@ export function labelToneOnHex(hex: string): "light" | "dark" {
   };
 
   const luminance = 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
-  return luminance > 0.45 ? "dark" : "light";
+  // Pick whichever label colour reads better: white (L = 1) or the slate-900 ink the chip uses
+  // (L ≈ 0.0089). A fixed luminance cut-off put white on mid-tone 400/500 swatches at ~2.5:1.
+  const INK_LUMINANCE = 0.0089;
+  const onWhite = 1.05 / (luminance + 0.05);
+  const onInk = (luminance + 0.05) / (INK_LUMINANCE + 0.05);
+  return onInk >= onWhite ? "dark" : "light";
 }
