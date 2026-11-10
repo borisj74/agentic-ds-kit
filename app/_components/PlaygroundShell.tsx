@@ -136,12 +136,11 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
             appearance={customize.open ? "soft" : "outline"}
             mode={customize.open ? "primary" : "neutral"}
             iconStart="SlidersHorizontal"
+            ariaLabel="Theme"
             aria-expanded={customize.docked}
             aria-controls={customize.docked ? "customize-panel" : undefined}
             onClick={toggleThemePanel}
-          >
-            Theme
-          </Button>
+          />
           <div className={styles.modeGroup} role="group" aria-label="Site colour mode">
             <Button
               size="sm"
