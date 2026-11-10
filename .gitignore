@@ -44,3 +44,4 @@ next-env.d.ts
 
 # local preview config
 .claude/launch.json
+.cursor/mcp.json
