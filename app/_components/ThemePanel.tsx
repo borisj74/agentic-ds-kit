@@ -3,7 +3,8 @@
 import { useId, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Button, ColorPicker, SegmentedControl, Select, Slider } from "agentic-ds-kit";
 import { contrastRatio } from "agentic-ds-kit/color-ramp";
-import { ensureThemeSnapshot, publishTheme, resetTheme, subscribeTheme } from "@/lib/theme-store";
+import { ensureThemeSnapshot, publishTheme, readPatternTheme, resetTheme, subscribeTheme } from "@/lib/theme-store";
+import { readPlaygroundTheme } from "@/lib/playground-theme";
 import {
   DEFAULT_THEME,
   DISPLAY_FONTS,
@@ -88,6 +89,23 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+function subscribeSiteMode(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  return () => observer.disconnect();
+}
+
+/**
+ * With no saved theme, previews follow the site's Light/Dark, so the panel shows that mode too.
+ * Once something is saved, the saved mode wins.
+ */
+function usePanelTheme(): ThemeState {
+  const state = useSyncExternalStore(subscribeTheme, ensureThemeSnapshot, () => DEFAULT_THEME);
+  const saved = useSyncExternalStore(subscribeTheme, readPatternTheme, () => null);
+  const siteMode = useSyncExternalStore(subscribeSiteMode, readPlaygroundTheme, () => "light" as const);
+  return useMemo(() => (saved ? state : { ...state, mode: siteMode }), [saved, state, siteMode]);
+}
+
 export interface ThemePanelProps {
   /** Closes the panel. Omitted where the panel is pinned (the Theme page). */
   onClose?: () => void;
@@ -103,7 +121,7 @@ export interface ThemePanelProps {
  */
 export function ThemePanel({ onClose, showActions = true, showHeader = true }: ThemePanelProps) {
   const baseId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const state = useSyncExternalStore(subscribeTheme, ensureThemeSnapshot, () => DEFAULT_THEME);
+  const state = usePanelTheme();
   const palette = useMemo(() => themePalette(state), [state]);
   const primary = palette.brand[state.step];
   const ratio = contrastRatio("#ffffff", primary);
@@ -275,8 +293,8 @@ export function ThemePanel({ onClose, showActions = true, showHeader = true }: T
 
 /** Copy theme CSS (the one solid primary in the panel) and Copy as prompt. */
 export function ThemeActions({ state: given, compact = false }: { state?: ThemeState; compact?: boolean }) {
-  const stored = useSyncExternalStore(subscribeTheme, ensureThemeSnapshot, () => DEFAULT_THEME);
-  const state = given ?? stored;
+  const panel = usePanelTheme();
+  const state = given ?? panel;
   const [copied, setCopied] = useState<"css" | "prompt" | null>(null);
 
   async function run(kind: "css" | "prompt") {

@@ -72,14 +72,6 @@
   background-size: var(--space-5) var(--space-5);
 }
 
-.stageScope {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-}
-
 .stageInner {
   display: flex;
   align-items: center;
@@ -88,10 +80,13 @@
   min-width: 0;
 }
 
-/* Gallery thumbnails are sized for cards; on the stage they get the room to show themselves. */
 .stageInner > * {
-  width: 100%;
   max-width: 100%;
+}
+
+/* Full-width parts (Scoreboard) take the stage width; thumbnails keep their size, centred. */
+.stageInner > section {
+  width: 100%;
 }
 
 .themeLabel {

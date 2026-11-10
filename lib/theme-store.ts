@@ -1,5 +1,6 @@
 import {
   DEFAULT_THEME,
+  clearStoredTheme,
   readStoredTheme,
   themeFromSearch,
   themeToSearch,
@@ -12,6 +13,8 @@ const URL_THEME_PATH = "/theme";
 
 let themeSnapshot = DEFAULT_THEME;
 let themeLoaded = false;
+/** True when the snapshot came from the URL, storage or the panel; false for the plain default. */
+let themeSaved = false;
 /** The last query string read into the snapshot. A repeat read returns the same object. */
 let lastSearch: string | null = null;
 const themeListeners = new Set<() => void>();
@@ -23,7 +26,9 @@ function currentSearch(): string {
 function loadThemeSnapshot(): ThemeState {
   const loc = currentSearch();
   lastSearch = loc;
-  return themeFromSearch(new URLSearchParams(loc), "light") ?? readStoredTheme() ?? DEFAULT_THEME;
+  const found = themeFromSearch(new URLSearchParams(loc), "light") ?? readStoredTheme();
+  themeSaved = found !== null;
+  return found ?? DEFAULT_THEME;
 }
 
 /**
@@ -42,25 +47,27 @@ export function ensureThemeSnapshot(): ThemeState {
   if (loc === lastSearch) return themeSnapshot;
   lastSearch = loc;
   const fromUrl = themeFromSearch(new URLSearchParams(loc), "light");
-  if (fromUrl && loc !== themeToSearch(themeSnapshot)) themeSnapshot = fromUrl;
+  if (fromUrl && loc !== themeToSearch(themeSnapshot)) {
+    themeSnapshot = fromUrl;
+    themeSaved = true;
+  }
   return themeSnapshot;
 }
 
 /** Previews follow the saved theme on every page. With none saved, they stay on the kit defaults. */
 export function readPatternTheme(): ThemeState | null {
   if (typeof window === "undefined") return null;
-  if (themeLoaded) return themeSnapshot;
-  const stored = readStoredTheme();
-  if (!stored) return null;
-  themeSnapshot = stored;
-  themeLoaded = true;
-  lastSearch = currentSearch();
-  return themeSnapshot;
+  if (!themeLoaded) {
+    themeLoaded = true;
+    themeSnapshot = loadThemeSnapshot();
+  }
+  return themeSaved ? themeSnapshot : null;
 }
 
 export function publishTheme(next: ThemeState) {
   themeSnapshot = next;
   themeLoaded = true;
+  themeSaved = true;
   writeStoredTheme(next);
   if (window.location.pathname === URL_THEME_PATH) {
     const search = themeToSearch(next);
@@ -73,9 +80,18 @@ export function publishTheme(next: ThemeState) {
   themeListeners.forEach((listener) => listener());
 }
 
-/** Back to the kit default (Nistha, light). */
+/** Forget the saved theme: previews go back to the kit default and follow the site's mode. */
 export function resetTheme() {
-  publishTheme(DEFAULT_THEME);
+  themeSnapshot = DEFAULT_THEME;
+  themeLoaded = true;
+  themeSaved = false;
+  clearStoredTheme();
+  if (window.location.pathname === URL_THEME_PATH && window.location.search) {
+    lastSearch = "";
+    window.history.replaceState(null, "", window.location.pathname);
+  }
+  document.documentElement.removeAttribute("data-preview-theme");
+  themeListeners.forEach((listener) => listener());
 }
 
 export function subscribeTheme(onChange: () => void) {

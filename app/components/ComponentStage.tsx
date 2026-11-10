@@ -110,14 +110,13 @@ export function ComponentStage({ id }: { id: string }) {
             id: "preview",
             label: "Preview",
             content: (
-              <div className={styles.stage}>
+              // The whole stage is the preview scope, so its ground follows the preview theme too.
+              <PreviewScope className={styles.stage}>
                 <StageThemeLabel />
-                <PreviewScope className={styles.stageScope}>
-                  <div className={styles.stageInner}>
-                    <GalleryPreview id={id} size="stage" />
-                  </div>
-                </PreviewScope>
-              </div>
+                <div className={styles.stageInner}>
+                  <GalleryPreview id={id} size="stage" />
+                </div>
+              </PreviewScope>
             ),
           },
           {
