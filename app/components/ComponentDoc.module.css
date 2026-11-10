@@ -430,7 +430,7 @@
   letter-spacing: var(--type-tracking-overline);
   text-transform: uppercase;
   color: var(--text-secondary);
-  background: color-mix(in srgb, var(--action-primary) 4%, var(--bg-surface));
+  background: var(--bg-subtle);
 }
 
 .propsName,

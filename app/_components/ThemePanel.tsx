@@ -146,7 +146,7 @@ export function ThemePanel({ onClose, showActions = true, showHeader = true }: T
         </div>
       )}
 
-      <div className={styles.body}>
+      <div className={showHeader ? styles.body : `${styles.body} ${styles.bodyFlush}`}>
         <Group label="Start from">
           <SegmentedControl
             ariaLabel="Start from a preset"

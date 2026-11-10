@@ -136,6 +136,11 @@
   background-color: var(--bg-surface);
 }
 
+.themeColumn:focus-visible {
+  outline: var(--border-focus-width) solid var(--line-focus);
+  outline-offset: var(--space-px);
+}
+
 :global(html[data-customize="closed"]) .themeColumn {
   display: none;
 }

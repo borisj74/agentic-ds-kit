@@ -66,7 +66,20 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   // The drawer closes itself when the route changes: it is only open for the page it opened on.
   const navOpen = navOpenOn === pathname;
 
-  const themePanel = <ThemePanel onClose={customize.pinned ? undefined : customize.close} />;
+  // The docked panel sits before the Theme button in the tab order: move focus into it on open,
+  // and back to the button on close, so keyboard users don't lose their place.
+  function toggleThemePanel() {
+    const opening = !customize.docked;
+    customize.toggle();
+    if (opening) window.requestAnimationFrame(() => document.getElementById("customize-panel")?.focus());
+  }
+
+  function closeThemePanel() {
+    customize.close();
+    window.requestAnimationFrame(() => document.getElementById("theme-toggle")?.focus());
+  }
+
+  const themePanel = <ThemePanel onClose={customize.pinned ? undefined : closeThemePanel} />;
 
   return (
     <div className={styles.frame}>
@@ -110,7 +123,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {customize.docked ? (
-        <aside id="customize-panel" className={styles.themeColumn} aria-label="Theme">
+        <aside id="customize-panel" className={styles.themeColumn} aria-label="Theme" tabIndex={-1}>
           {themePanel}
         </aside>
       ) : null}
@@ -118,13 +131,14 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
       <div className={styles.panel}>
         <header className={styles.topbar}>
           <Button
+            id="theme-toggle"
             size="sm"
             appearance={customize.open ? "soft" : "outline"}
             mode={customize.open ? "primary" : "neutral"}
             iconStart="SlidersHorizontal"
             aria-expanded={customize.docked}
             aria-controls={customize.docked ? "customize-panel" : undefined}
-            onClick={customize.toggle}
+            onClick={toggleThemePanel}
           >
             Theme
           </Button>
