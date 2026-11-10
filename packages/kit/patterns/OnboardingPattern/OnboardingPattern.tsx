@@ -38,7 +38,7 @@ export type WorkspaceState = "idle" | "error" | "submitting";
 
 /*
  * Narrow = below --grid-breakpoint-md, read at runtime like the app-shell example. The Stage
- * layout needs a side column, so below it the header layout takes over. 64rem is the fallback.
+ * layout needs a side column, so below it a reduced AppHeader carries the steps. 64rem is the fallback.
  */
 function narrowQuery(): string {
   const value = getComputedStyle(document.documentElement).getPropertyValue("--grid-breakpoint-md").trim();
@@ -56,12 +56,6 @@ function useNarrow(): boolean {
 }
 
 export interface OnboardingPatternProps {
-  /**
-   * "stage" (default, the Nistha site's look): the steps in a side column on the canvas with
-   * vertical ProgressSteps, the step on an inset panel (layout-shell--inset). "header": a reduced
-   * AppHeader with horizontal ProgressSteps. Below --grid-breakpoint-md Stage uses the header layout.
-   */
-  layout?: "stage" | "header";
   /** Current step (controlled). Pair it with onStepChange, or route it from your URL. */
   step?: OnboardingStep;
   defaultStep?: OnboardingStep;
@@ -86,8 +80,9 @@ const ORDER: OnboardingStep[] = STEPS.map((step) => step.id);
 
 /**
  * Guided setup after sign-in: Welcome, Workspace, Connect or choose (with the kit SetupGuide),
- * Done. A reduced AppHeader carries ProgressSteps and Save and exit; Back (ghost) and the one
- * solid primary sit in a footer bar. Not sign-in and not empty-first-run.
+ * Done, in the Stage look: a steps column on the canvas (vertical ProgressSteps, Save and exit) and
+ * the step on a layout-shell--inset panel; below md a reduced AppHeader carries the steps. Back
+ * (ghost) and the one solid primary sit in a footer bar. Not sign-in and not empty-first-run.
  */
 export function OnboardingPattern({
   step: stepProp,
@@ -99,10 +94,9 @@ export function OnboardingPattern({
   onSaveAndExit,
   onFinish,
   viewport = true,
-  layout = "stage",
 }: OnboardingPatternProps) {
-  const narrow = useNarrow();
-  const stage = layout === "stage" && !narrow;
+  // Stage (the site's look). Below md there is no room for the steps column: a reduced AppHeader carries them.
+  const stage = !useNarrow();
   const uid = useId();
   const formId = `${uid}-step`;
   const [ownStep, setOwnStep] = useState(defaultStep);

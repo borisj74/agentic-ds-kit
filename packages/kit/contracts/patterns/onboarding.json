@@ -30,7 +30,7 @@
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
     "At most one appearance=\"solid\" mode=\"primary\" Button per step: Get started, Continue, or Go to dashboard",
     "Do not restyle kit components; change them through their props, slots, and tokens",
-    "Progress is a kit ProgressSteps: vertical in the Stage side column (SideNav blocks), or horizontal in a header landmark (AppHeader); the step content is in <main>, labelled with the step number and name",
+    "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav blocks), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
     "Back is a ghost Button; Skip for now is ghost; Save and exit stays reachable on every step before Done",
     "Wrap every labeled input in Field; a missing workspace name shows the Field error, sets the Input's error, and moves focus to it",
     "While the workspace is being created the fields, Back and the primary are disabled and a kit Spinner with a visible label (\"Creating workspace…\") says what is happening",
@@ -39,7 +39,7 @@
   ],
   "defaults": [
     "Four steps: Welcome, Workspace, Connect, Done; the Connect step is the kit SetupGuide, so what's left there carries over to the dashboard",
-    "layout=\"stage\" (default, Paper's second row and the Nistha site's look): a side column on the canvas with the brand, SET UP · 4 STEPS and vertical ProgressSteps, Save and exit at its foot, and the step on an inset card panel (layout-shell--inset) with Step N of 4 at the top; below --grid-breakpoint-md, and with layout=\"header\", a reduced AppHeader with horizontal ProgressSteps and Save and exit. No dense app nav in either",
+    "Stage look (Paper's second row, the Nistha site's look): a steps column on the canvas with the brand, SET UP · 4 STEPS and vertical ProgressSteps, Save and exit at its foot, and the step on an inset card panel (layout-shell--inset) with Step N of 4 at the top. Below --grid-breakpoint-md, where the column doesn't fit, a reduced AppHeader with horizontal ProgressSteps and Save and exit. No dense app nav",
     "The step column is layout-container-sm, centred on the page; the footer bar holds Back (start) and the primary (end), centred on Done",
     "Enter submits the step (⏎ on Continue); onCreateWorkspace may return a promise to hold the submitting state",
     "Done is a kit Empty with a check, Workspace created and N tasks left Badges, and Go to dashboard"
@@ -57,5 +57,5 @@
       "submitting (workspaceState=\"submitting\")"
     ]
   },
-  "snippet": "<OnboardingPattern layout=\"stage\" step={step} onStepChange={setStep} onCreateWorkspace={createWorkspace} onSaveAndExit={saveAndExit} onFinish={goToDashboard} />"
+  "snippet": "<OnboardingPattern step={step} onStepChange={setStep} onCreateWorkspace={createWorkspace} onSaveAndExit={saveAndExit} onFinish={goToDashboard} />"
 }

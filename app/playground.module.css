@@ -200,11 +200,6 @@
   width: min(100%, var(--layout-sidebar));
 }
 
-.screenPickers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-gap-sm);
-}
 
 .browserPage {
   flex: 1;

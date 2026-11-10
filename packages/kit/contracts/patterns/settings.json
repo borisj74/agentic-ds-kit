@@ -10,7 +10,7 @@
   ],
   "import": "import { SettingsPattern } from \"@/components/patterns/settings\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/settings/) with this contract beside it, and the billing-schedule example it uses into components/patterns/billing-schedule/ (kept if you already have it). You own the copies: replace the demo data, drop the sections you don't need, and keep the `must` lines.",
-  "intent": "Settings area: a settings nav (Profile, Billing, Team, Notifications, Security) beside one page per section, or the sections nested in your app's SideNav (the Stage look); Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
+  "intent": "Settings pages in the Stage look: Profile, Billing, Team, Notifications and Security, each under a Settings › section breadcrumb on the inset panel of a layout-shell--inset app shell whose SideNav lists the sections; with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
   "contains": [
     "sidenav",
     "drawer",
@@ -39,9 +39,9 @@
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
     "At most one appearance=\"solid\" mode=\"primary\" Button per view",
     "Do not restyle kit components; change them through their props, slots, and tokens",
-    "The section links are a nav landmark with the current section marked: the pattern's own settings nav (nav=\"column\", in a kit Drawer below --grid-breakpoint-md opened from a button above the PageHeader), or your app's SideNav (nav=\"app\") with the SETTINGS_SECTIONS rows under a Settings group",
-    "The pattern renders its own <main> for the page column; place it inside your app chrome (AppHeader / SideNav, e.g. the app-shell example), not inside another main",
-    "Page layout uses kit layout classes (layout-app, layout-canvas, layout-header, layout-content, layout-split*) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints",
+    "The section links are in your app's SideNav (a nav landmark) under a Settings group built from SETTINGS_SECTIONS, with the current section marked; below --grid-breakpoint-md they move into the app shell's kit Drawer with the rest of the nav",
+    "Stage look: the app shell uses layout-shell--inset (the SideNav on the canvas, this page on the inset card panel); the pattern renders its own <main>, so don't wrap it in another main",
+    "Page layout uses kit layout classes (layout-shell--inset, layout-canvas, layout-header, layout-content, layout-split*) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints",
     "Wrap every labeled input in Field; Switches in a table row get an accessible name that says the row and the channel",
     "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
     "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
@@ -50,9 +50,8 @@
     "Money arrives pre-formatted from your app; label example data as example"
   ],
   "defaults": [
-    "The Stage look (Paper's second row, the Nistha site's chrome): nav=\"app\" inside an app shell with layout-shell--inset, a built SideNav on the canvas (brand, search, app rows, SETTINGS · 5 with the sections, account) and the page on the inset panel with a Settings › section breadcrumb and headerActions (Help, the NotificationStack bell)",
-    "The header-bar look (Paper's first row): nav=\"column\" under an AppHeader + SideNav app shell; the page sits on the canvas tone",
-    "Billing is the first section shown; route sections from your URL with section / onSectionChange",
+    "The Stage shell (Paper's second row, the Nistha site's chrome): the app-shell example with className=\"layout-shell--inset\" and a built SideNav on the canvas (brand, search, app rows, SETTINGS · 5 with the sections, account) and the page on the inset panel with a Settings › section breadcrumb and headerActions (Help, the NotificationStack bell)",
+    "Billing is the default section; route section from your URL",
     "Profile and Notifications save from a footer bar (Cancel ghost, Save solid primary with ⌘S); other sections act per card",
     "Team's Invite people is the PageHeader primary; the empty Team page moves it into the kit Empty",
     "Invite people opens a right kit Drawer with Email addresses, Role and Message; Send invites is the Drawer's primary",
@@ -77,5 +76,5 @@
       "2FA off (twoFactor={false})"
     ]
   },
-  "snippet": "<SettingsPattern nav=\"app\" headerActions={<HelpAndBell />} section={section} onSectionChange={setSection} billing=\"ready\" onSave={save} onDeleteWorkspace={deleteWorkspace} />"
+  "snippet": "<AppShellPattern className=\"layout-shell--inset\" nav={<YourStageNav sections={SETTINGS_SECTIONS} current={section} />}><SettingsPattern section={section} headerActions={<HelpAndBell />} onSave={save} onDeleteWorkspace={deleteWorkspace} /></AppShellPattern>"
 }
