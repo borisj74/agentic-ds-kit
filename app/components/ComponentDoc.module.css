@@ -606,8 +606,13 @@
   position: relative;
 }
 
-/* Render areas keep the docs' own ground (5% primary on surface, as Scoreboard shows it): no
-   kit fill (canvas, subtle, tray) matches it, so nothing on it loses its edge. */
+/* Render areas in both stage tabs: the cool neutral page ground (--bg-canvas, slate-50), not
+   the 5% brand tint, which read as lilac. The Avatar fallback fill moves to --bg-tray in the kit
+   (branch claude/avatar-fallback-edge) so its circle keeps an edge on this ground. */
+.examplesHost .layout,
+.examplesHost .example > .exampleCanvas {
+  background: var(--bg-canvas);
+}
 
 /* Kit Cell and HeaderCell are transparent: in a preview they sit on a white row, as in a table. */
 .previewCell {
