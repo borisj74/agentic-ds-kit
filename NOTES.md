@@ -53,7 +53,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
   - **Batch 1** (`feat/agent-patterns-1`, from `main`): Approval Card, Agent Trail, Agent Plan, Agent Fleet from p-3-0.
   - **Batch 2** (`feat/agent-patterns-2`): the next four p-3-0 components that build on batch 1.
 - **Not in scope yet:** the p-6-0 screens (Settings set: Billing, Profile, Team, Notifications, Security with their states; Onboarding steps 01–04) and the p-4-0 pieces they use (Usage Meter, Billing Schedule, Invoice & Credit Note, Change Summary, Experiment Card, Comment Thread, Comments Panel, Notification Stack, Integration Picker, Integration Settings, Setup Guide, Pricing Plans, Task Board).
-- **Skipped because Nistha already has them:** nothing in batch 1. The closest kit pieces (Timeline, ProgressSteps, InsightCard, AlertDialog, Scorecard) do a different job, and each new contract says which to use instead.
+- **Skipped because Nistha already has them:** nothing in batch 1. In batch 2, **Usage Meter** (04) is held back: kit Meter (stacked bar), UsageList (limits per row) and LineChart (the daily sparkline) already cover its parts. A UsageMeter would mostly compose them, so it waits for a decision on whether that composition earns its own contract. The closest kit pieces (Timeline, ProgressSteps, InsightCard, AlertDialog, Scorecard) do a different job, and each new contract says which to use instead.
 
 ### Batch 1: what shipped
 
@@ -64,11 +64,28 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | AgentPlan | 11 Agent Plan | 01 draft (edit, remove, add), 02 editing a step, 03 accepted, 04 running with a step waiting, 05 complete, 06 failed, 07 drafting, 08 empty, 09 collapsed |
 | AgentFleet | 06 Agent Fleet | 01 overview, 02 focused (one open, others compact), 03 all idle + totals, 04 needs you + failed + totals, 05 loading, 06 empty |
 
-Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test now expects 95 components).
+Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1 and 99 after batch 2).
 
 #### Kit change outside the four
 
 - **Button `shortcut` prop.** Paper puts key chips inside the buttons ("Deny Esc", "Approve ⏎", "Accept plan ⌘⏎"). Button only takes a string label, so I added an optional, decorative `shortcut` string. It is aria-hidden; callers wire the key and set `aria-keyshortcuts`. It is in `contracts/button.json`. This extends Button instead of making a local cousin.
+
+### Batch 2: what shipped
+
+Picks (from p-3-0, building on batch 1):
+
+| Component | Paper artboard | Why this one | States built |
+| --- | --- | --- | --- |
+| ToolCallCard | 02 Tool Call Card | The unit under AgentTrail's sublabel and AgentPlan's tool column; nothing in the kit shows one call with arguments and result | running (live timer), done, expanded with arguments and result, error with retry and attempt, group of calls |
+| PermissionRequest | 09 Permission Request | ApprovalCard's sibling for standing access; reuses Badge, Alert and the Button `shortcut` | pending with scopes and a warning, granting, error with retry, resolved granted / denied / expired |
+| RunningNow | 12 Running Now | The compact counterpart of AgentFleet for app chrome; fills the gap between a Badge count and a full fleet | row with +N, waiting, stack with failed and View all, empty, idle note, loading |
+| AgentMonitor | 05 Agent Monitor | One agent in detail; composes ApprovalCard for the pending action, so batch 1 is reused, not copied | running with live clock and cost, step selected with detail, awaiting approval, collapsed with tools used, paused, complete, failed, loading, not started |
+
+**Not in batch 2:** Usage Meter (see Scope), and the other p-3-0 artboards: Agent Tree, Agent Lanes, Autonomy Dial, Agent Inbox, Decision Card, Agent Steering, Cited Answer, Message Actions, Inline Diff, Model Picker, Context Window, Memory Panel, Cost Trace Waterfall.
+
+#### Batch 2 changes to batch 1
+
+- ApprovalCard: when the card resolves while focus is inside it, focus moves to the one-line row. The shared hook `ui/shared/useResolvedFocus.ts` does the same for PermissionRequest. That commit is on `feat/agent-patterns-1` too; batch 2 is rebased on it.
 
 ### Paper vs tokens (tokens win)
 
@@ -85,6 +102,12 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 | Gaps 10px / 14px / 18px | nearest `--space-*` (8 / 12 / 16px) | No such space steps. |
 | Approval card 400px, plan 370px | `--approval-width: 25rem`, `--plan-width: 24rem` | Same custom-width pattern as InsightCard's `--insight-width`. Jev marked these "review"; no width token fits. |
 | Fleet "expanding card widens with a layout spring (320ms)" | opacity + scale fade on open; the width snaps | Motion stays on transform and opacity. |
+| Batch 2 raw `#FFFBEB` / `#FDE68A` / `#92400E` / `#D97706` (Permission warning and WRITE pill) | kit Alert `variant="warning"`, Badge `tone="warning"` | These Paper values were left unconverted; they are the caution role. |
+| Permission error row with an inline Retry | own row on `--status-danger-*` with a text button | Kit Alert has no action slot. |
+| Monitor "collapse morphs height" (280ms) and "new step grows from zero width" | collapse swaps instantly; new steps scale in on `transform: scaleX` | Height and width are not transform or opacity. |
+| ToolCallCard 440px, AgentMonitor 420px | `--toolcall-width: 27.5rem`, `--monitor-width: 26.25rem` | Same custom-width pattern as above; Jev "review". |
+| Monitor clock "rolls digit by digit" | plain tabular digits | Could reuse NumberTransition later; kept simple. |
+| Running Now overline 11px | `--type-size-overline` with `--type-tracking-overline` | Kit overline role. |
 
 ### Motion
 
@@ -99,6 +122,10 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 - ApprovalCard: Escape denies and Enter approves while focus is in the card; Enter on another control inside it is left alone. Once resolved, focus moves to the one-line row.
 - AgentPlan: Edit opens the form with focus in Step. Enter saves, Escape cancels, and focus goes back to that step's Edit button. Add step focuses the new form; ⌘/Ctrl+Enter accepts a draft or runs an accepted plan.
 - AgentFleet: the agent name is the open button and covers the whole card. Opening moves focus to Collapse; Collapse returns focus to that agent's card.
+- ToolCallCard: the header is a disclosure button (aria-expanded and aria-controls); Enter toggles it.
+- PermissionRequest: Escape denies and ⌘/Ctrl+Enter grants; while granting the card is aria-busy; once resolved, focus moves to the one-line row.
+- RunningNow: each item is a button, and +N says how many more.
+- AgentMonitor: strip steps are toggle buttons; Close in the detail returns focus to the step. The pending action is a kit ApprovalCard with Enter and Escape.
 
 ### Checks
 
@@ -112,5 +139,5 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 
 ### PR status
 
-- Batch 1: `feat/agent-patterns-1`. PR opened, not merged.
-- Batch 2: `feat/agent-patterns-2`, not started.
+- Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
+- Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.

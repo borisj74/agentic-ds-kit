@@ -7414,6 +7414,407 @@
       }
     },
     {
+      "id": "toolcallcard",
+      "group": "component",
+      "intent": "One agent tool call on one line: status, mono name, summary and a live timer. Opens to arguments and result; with calls it rolls several calls into one group row.",
+      "useWhen": [
+        "show each tool an agent calls in a chat or a run log",
+        "let people inspect a call's arguments and result",
+        "roll a burst of calls into one row (\"Ran 4 tools\")",
+        "a failed call with Retry"
+      ],
+      "doNotUseWhen": [
+        "a step list for a whole task — AgentTrail",
+        "a call that needs the person's OK first — ApprovalCard",
+        "plain code to copy — CodeSnippet"
+      ],
+      "doNot": [
+        "Do not invent a local ToolCall, ToolRow, or FunctionCallCard",
+        "Do not paraphrase arguments; show them",
+        "Do not put an approval in a tool call; use ApprovalCard",
+        "Do not use raw hex for status colors"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": false,
+          "note": "Tool name in mono, e.g. \"search_files\". Required unless calls is set."
+        },
+        "summary": {
+          "type": "string",
+          "required": false,
+          "note": "One line: query, target or outcome. Truncates."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "running",
+            "done",
+            "error"
+          ],
+          "default": "done"
+        },
+        "duration": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"0.4s\"."
+        },
+        "startedAt": {
+          "type": "number",
+          "required": false,
+          "note": "Epoch ms. A running call ticks a live timer from it."
+        },
+        "args": {
+          "type": "unknown",
+          "required": false,
+          "note": "Object → pretty JSON; string → as is."
+        },
+        "result": {
+          "type": "string | string[]",
+          "required": false
+        },
+        "resultMeta": {
+          "type": "string",
+          "required": false,
+          "note": "Result header note, e.g. \"3 of 3\"."
+        },
+        "error": {
+          "type": "string | string[]",
+          "required": false,
+          "note": "Error lines; an error card opens by default."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Shows Retry (outline) in the open panel."
+        },
+        "attempt": {
+          "type": "object",
+          "required": false,
+          "note": "{ n, max } → \"Attempt 1 of 3\"."
+        },
+        "calls": {
+          "type": "array",
+          "required": false,
+          "note": "Group mode: { id, name, summary?, status, duration? }[]. Header sums done / running / failed."
+        },
+        "groupTitle": {
+          "type": "string",
+          "required": false,
+          "note": "Default \"Ran N tools\"."
+        },
+        "expanded": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled open state."
+        },
+        "defaultExpanded": {
+          "type": "boolean",
+          "required": false
+        },
+        "onExpandedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(expanded) => void"
+        }
+      }
+    },
+    {
+      "id": "permissionrequest",
+      "group": "component",
+      "intent": "An agent asks for standing access to a capability (files, email, repo, billing), scope by scope, with why and expiry. Grant / Deny, then one line.",
+      "useWhen": [
+        "an agent needs access that lasts beyond one action",
+        "several scopes with read / write / admin levels",
+        "the grant can fail and needs Retry"
+      ],
+      "doNotUseWhen": [
+        "one command or edit — ApprovalCard",
+        "a settings toggle the person flips themselves — Switch",
+        "a must-choose interruption for the whole page — AlertDialog"
+      ],
+      "doNot": [
+        "Do not invent a local PermissionCard, AccessRequest, or ScopePicker",
+        "Do not hide expiry or the standing-access warning for write or admin",
+        "Grant is the one solid primary; Deny is outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "default": "Permission request"
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "scopes": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, expiry?, icon? }[]"
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "granting",
+            "error",
+            "granted",
+            "denied",
+            "expired"
+          ],
+          "default": "pending",
+          "note": "granted / denied / expired render one line."
+        },
+        "warning": {
+          "type": "string",
+          "required": false,
+          "note": "Standing-access warning, a kit Alert (warning)."
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "Couldn't save the grant."
+        },
+        "requestedAt": {
+          "type": "string",
+          "required": false,
+          "note": "Footer note, e.g. \"requested 14:02\"."
+        },
+        "resolvedNote": {
+          "type": "string",
+          "required": false,
+          "note": "Resolved row detail, e.g. \"until 17 Nov\"."
+        },
+        "onGrant": {
+          "type": "function",
+          "required": false,
+          "note": "Grant, the one solid primary. ⌘/Ctrl+Enter inside the card."
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "Deny, outline. Escape inside the card."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Error row Retry. Falls back to onGrant."
+        }
+      }
+    },
+    {
+      "id": "runningnow",
+      "group": "component",
+      "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
+      "useWhen": [
+        "an at-a-glance list of running agents in app chrome",
+        "show which agent waits for the person or failed",
+        "link from a compact strip to each agent"
+      ],
+      "doNotUseWhen": [
+        "one agent in detail — AgentMonitor",
+        "agents with sub-agent progress and cost — AgentFleet",
+        "a notification feed — Toast"
+      ],
+      "doNot": [
+        "Do not invent a local RunningList, AgentStrip, or ActivityBar",
+        "Do not nest an AgentMonitor in the strip",
+        "Do not use raw hex for status colors"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, activity?, status: \"running\" | \"waiting\" | \"failed\", elapsed? }[]"
+        },
+        "layout": {
+          "type": "enum",
+          "values": [
+            "row",
+            "stack"
+          ],
+          "default": "row"
+        },
+        "maxVisible": {
+          "type": "number",
+          "required": false,
+          "note": "Default 3 (row) or 4 (stack); the rest is \"+N\" / \"View all\"."
+        },
+        "label": {
+          "type": "string",
+          "default": "Running now"
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Items become buttons."
+        },
+        "onShowAll": {
+          "type": "function",
+          "required": false,
+          "note": "The overflow control."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "emptyText": {
+          "type": "string",
+          "default": "Nothing running right now"
+        }
+      }
+    },
+    {
+      "id": "agentmonitor",
+      "group": "component",
+      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
+      "useWhen": [
+        "watch one agent run in detail",
+        "inspect a step's duration, tokens and cost",
+        "approve the agent's next action in place",
+        "pause, resume, cancel or retry a run"
+      ],
+      "doNotUseWhen": [
+        "many agents at a glance — RunningNow",
+        "many agents with sub-agents — AgentFleet",
+        "a step-by-step log with labels — AgentTrail"
+      ],
+      "doNot": [
+        "Do not invent a local AgentMonitor, RunCard, or AgentStatusCard",
+        "Do not rebuild the approval UI; pass pendingAction",
+        "Only one solid primary: Approve, Resume or Start run, never two",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "meta": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"claude-code · acme-demo\"."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "idle",
+            "running",
+            "waiting",
+            "paused",
+            "done",
+            "failed"
+          ],
+          "default": "running",
+          "note": "idle shows Empty with Start run."
+        },
+        "headline": {
+          "type": "string",
+          "required": false,
+          "note": "Over the clock, e.g. \"Editing src/billing/invoice.ts\"."
+        },
+        "headlineNote": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"step 6\"."
+        },
+        "elapsed": {
+          "type": "string",
+          "required": false,
+          "note": "Run clock, e.g. \"02:14\"."
+        },
+        "cost": {
+          "type": "string",
+          "required": false
+        },
+        "steps": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, tool, status: \"done\" | \"running\" | \"waiting\" | \"failed\", icon?, target?, duration?, tokens?, cost?, started?, weight? }[]. weight sets the strip width."
+        },
+        "axis": {
+          "type": "string[]",
+          "required": false,
+          "note": "Labels under the strip, e.g. [\"0:00\", \"1:00\", \"2:14\"]."
+        },
+        "selectedStepId": {
+          "type": "string",
+          "required": false
+        },
+        "onSelectStep": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Strip steps become toggle buttons; the detail panel has Close."
+        },
+        "pendingAction": {
+          "type": "object",
+          "required": false,
+          "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "Failed detail line in mono."
+        },
+        "collapsed": {
+          "type": "boolean",
+          "default": false,
+          "note": "One row with clock, cost and the tools used."
+        },
+        "onCollapsedChange": {
+          "type": "function",
+          "required": false
+        },
+        "onStart": {
+          "type": "function",
+          "required": false,
+          "note": "Idle: Start run (solid primary)."
+        },
+        "onPause": {
+          "type": "function",
+          "required": false,
+          "note": "Running footer."
+        },
+        "onResume": {
+          "type": "function",
+          "required": false,
+          "note": "Paused: Resume (solid primary)."
+        },
+        "onCancel": {
+          "type": "function",
+          "required": false,
+          "note": "Paused: Cancel run (outline danger)."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Failed: Retry step."
+        },
+        "onViewDiff": {
+          "type": "function",
+          "required": false,
+          "note": "Done: View diff."
+        },
+        "onOpenTrail": {
+          "type": "function",
+          "required": false,
+          "note": "Done: Open trail. Failed: Open failed step."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

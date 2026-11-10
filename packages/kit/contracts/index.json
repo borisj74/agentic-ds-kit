@@ -672,6 +672,34 @@
     "status": "stable"
   },
   {
+    "id": "toolcallcard",
+    "intent": "One agent tool call on one line with a live timer; opens to arguments and result; groups several calls.",
+    "group": "component",
+    "path": "contracts/toolcallcard.json",
+    "status": "stable"
+  },
+  {
+    "id": "permissionrequest",
+    "intent": "An agent asks for standing access, scope by scope, with why and expiry; Grant / Deny.",
+    "group": "component",
+    "path": "contracts/permissionrequest.json",
+    "status": "stable"
+  },
+  {
+    "id": "runningnow",
+    "intent": "Compact strip of running agents for a header (row) or sidebar (stack).",
+    "group": "component",
+    "path": "contracts/runningnow.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentmonitor",
+    "intent": "One agent at work: live clock, cost, a time strip of steps, and the pending action to approve.",
+    "group": "component",
+    "path": "contracts/agentmonitor.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

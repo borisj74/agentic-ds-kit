@@ -1,0 +1,207 @@
+{
+  "id": "agentmonitor",
+  "status": "stable",
+  "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
+  "useWhen": [
+    "watch one agent run in detail",
+    "inspect a step's duration, tokens and cost",
+    "approve the agent's next action in place",
+    "pause, resume, cancel or retry a run"
+  ],
+  "doNotUseWhen": [
+    "many agents at a glance — RunningNow",
+    "many agents with sub-agents — AgentFleet",
+    "a step-by-step log with labels — AgentTrail"
+  ],
+  "contains": [
+    "approvalcard",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "meta": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"claude-code · acme-demo\"."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "idle",
+        "running",
+        "waiting",
+        "paused",
+        "done",
+        "failed"
+      ],
+      "default": "running",
+      "note": "idle shows Empty with Start run."
+    },
+    "headline": {
+      "type": "string",
+      "required": false,
+      "note": "Over the clock, e.g. \"Editing src/billing/invoice.ts\"."
+    },
+    "headlineNote": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"step 6\"."
+    },
+    "elapsed": {
+      "type": "string",
+      "required": false,
+      "note": "Run clock, e.g. \"02:14\"."
+    },
+    "cost": {
+      "type": "string",
+      "required": false
+    },
+    "steps": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, tool, status: \"done\" | \"running\" | \"waiting\" | \"failed\", icon?, target?, duration?, tokens?, cost?, started?, weight? }[]. weight sets the strip width."
+    },
+    "axis": {
+      "type": "string[]",
+      "required": false,
+      "note": "Labels under the strip, e.g. [\"0:00\", \"1:00\", \"2:14\"]."
+    },
+    "selectedStepId": {
+      "type": "string",
+      "required": false
+    },
+    "onSelectStep": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void. Strip steps become toggle buttons; the detail panel has Close."
+    },
+    "pendingAction": {
+      "type": "object",
+      "required": false,
+      "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "Failed detail line in mono."
+    },
+    "collapsed": {
+      "type": "boolean",
+      "default": false,
+      "note": "One row with clock, cost and the tools used."
+    },
+    "onCollapsedChange": {
+      "type": "function",
+      "required": false
+    },
+    "onStart": {
+      "type": "function",
+      "required": false,
+      "note": "Idle: Start run (solid primary)."
+    },
+    "onPause": {
+      "type": "function",
+      "required": false,
+      "note": "Running footer."
+    },
+    "onResume": {
+      "type": "function",
+      "required": false,
+      "note": "Paused: Resume (solid primary)."
+    },
+    "onCancel": {
+      "type": "function",
+      "required": false,
+      "note": "Paused: Cancel run (outline danger)."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Failed: Retry step."
+    },
+    "onViewDiff": {
+      "type": "function",
+      "required": false,
+      "note": "Done: View diff."
+    },
+    "onOpenTrail": {
+      "type": "function",
+      "required": false,
+      "note": "Done: Open trail. Failed: Open failed step."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "primary.base",
+    "primary.subtle",
+    "status.info",
+    "status.warning",
+    "status.warningText",
+    "status.success",
+    "status.danger",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "icon.brand",
+    "icon.success",
+    "type.size.title",
+    "type.size.uiLg",
+    "motion.normal"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 name",
+      "the clock is role=timer with aria-live off",
+      "strip steps are toggle buttons (aria-pressed) named with tool, status and duration",
+      "the detail panel is a named region with a Close button",
+      "pending action is a kit ApprovalCard (Enter / Escape)",
+      "collapse is a button with aria-expanded",
+      "motion is transform and opacity only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentMonitor, RunCard, or AgentStatusCard",
+    "Do not rebuild the approval UI; pass pendingAction",
+    "Only one solid primary: Approve, Resume or Start run, never two",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AgentMonitor name=\"Refactor billing service\" meta=\"claude-code · acme-demo\" status=\"running\" headline=\"Editing src/billing/invoice.ts\" headlineNote=\"step 6\" elapsed=\"02:14\" cost=\"$0.42\" steps={steps} axis={[\"0:00\", \"1:00\", \"2:14\"]} onSelectStep={setStepId} />"
+}

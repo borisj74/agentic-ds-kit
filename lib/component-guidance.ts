@@ -1,6 +1,7 @@
 // Derived from packages/kit/contracts/*.json. Do not hand-edit the map.
 import contract_accordion from "../packages/kit/contracts/accordion.json";
 import contract_agentfleet from "../packages/kit/contracts/agentfleet.json";
+import contract_agentmonitor from "../packages/kit/contracts/agentmonitor.json";
 import contract_agentplan from "../packages/kit/contracts/agentplan.json";
 import contract_agenttrail from "../packages/kit/contracts/agenttrail.json";
 import contract_alert from "../packages/kit/contracts/alert.json";
@@ -64,12 +65,14 @@ import contract_numberinput from "../packages/kit/contracts/numberinput.json";
 import contract_numbertransition from "../packages/kit/contracts/numbertransition.json";
 import contract_pageheader from "../packages/kit/contracts/pageheader.json";
 import contract_pagination from "../packages/kit/contracts/pagination.json";
+import contract_permissionrequest from "../packages/kit/contracts/permissionrequest.json";
 import contract_piechart from "../packages/kit/contracts/piechart.json";
 import contract_popover from "../packages/kit/contracts/popover.json";
 import contract_progress from "../packages/kit/contracts/progress.json";
 import contract_progresssteps from "../packages/kit/contracts/progresssteps.json";
 import contract_radiogroup from "../packages/kit/contracts/radiogroup.json";
 import contract_resizable from "../packages/kit/contracts/resizable.json";
+import contract_runningnow from "../packages/kit/contracts/runningnow.json";
 import contract_scoreboard from "../packages/kit/contracts/scoreboard.json";
 import contract_scorecard from "../packages/kit/contracts/scorecard.json";
 import contract_section from "../packages/kit/contracts/section.json";
@@ -91,6 +94,7 @@ import contract_tilegroup from "../packages/kit/contracts/tilegroup.json";
 import contract_thinkinganimation from "../packages/kit/contracts/thinkinganimation.json";
 import contract_timeline from "../packages/kit/contracts/timeline.json";
 import contract_toast from "../packages/kit/contracts/toast.json";
+import contract_toolcallcard from "../packages/kit/contracts/toolcallcard.json";
 import contract_tooltip from "../packages/kit/contracts/tooltip.json";
 import contract_treeview from "../packages/kit/contracts/treeview.json";
 import contract_usagelist from "../packages/kit/contracts/usagelist.json";
@@ -104,6 +108,7 @@ type ContractNotes = {
 const contracts: Record<string, ContractNotes> = {
   "accordion": contract_accordion,
   "agentfleet": contract_agentfleet,
+  "agentmonitor": contract_agentmonitor,
   "agentplan": contract_agentplan,
   "agenttrail": contract_agenttrail,
   "alert": contract_alert,
@@ -167,12 +172,14 @@ const contracts: Record<string, ContractNotes> = {
   "numbertransition": contract_numbertransition,
   "pageheader": contract_pageheader,
   "pagination": contract_pagination,
+  "permissionrequest": contract_permissionrequest,
   "piechart": contract_piechart,
   "popover": contract_popover,
   "progress": contract_progress,
   "progresssteps": contract_progresssteps,
   "radiogroup": contract_radiogroup,
   "resizable": contract_resizable,
+  "runningnow": contract_runningnow,
   "scoreboard": contract_scoreboard,
   "scorecard": contract_scorecard,
   "section": contract_section,
@@ -194,6 +201,7 @@ const contracts: Record<string, ContractNotes> = {
   "thinkinganimation": contract_thinkinganimation,
   "timeline": contract_timeline,
   "toast": contract_toast,
+  "toolcallcard": contract_toolcallcard,
   "tooltip": contract_tooltip,
   "treeview": contract_treeview,
   "usagelist": contract_usagelist,
