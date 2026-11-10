@@ -7,6 +7,8 @@ import motion from "./MotionDoc.module.css";
 
 type Status = "running" | "done";
 
+const AUTOPLAY_MS = 1600;
+
 function StatusChip({ status }: { status: Status }) {
   return status === "running" ? <Tag dot="info">Running</Tag> : <Tag dot="success">Done</Tag>;
 }
@@ -40,24 +42,53 @@ export function BlurCrossfadeDoc() {
   const [status, setStatus] = useState<Status>("running");
   const [duration, setDuration] = useState<"fast" | "normal">("fast");
   const [thumb, setThumb] = useState<"v1" | "v2">("v1");
+  const [playing, setPlaying] = useState(true);
   const next = status === "running" ? "done" : "running";
+
+  // Auto-play the swap so the preview is never static; skipped under reduced motion.
+  useEffect(() => {
+    if (!playing) return;
+    const timer = window.setInterval(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      setStatus((current) => (current === "running" ? "done" : "running"));
+    }, AUTOPLAY_MS);
+    return () => window.clearInterval(timer);
+  }, [playing]);
 
   return (
     <AgentDocFrame
       id="blurcrossfade"
       name="BlurCrossfade"
       lede="A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps. A motion primitive, not a Card."
-      summary="Press Swap to play it. The old value fades out while the new one fades in over it; the label is announced politely."
+      summary="It swaps Running ↔ Done on its own; pause it and swap by hand. The old value blurs out while the new one sharpens in over it."
       preview={
         <div className={motion.stage}>
-          <div className={motion.well}>
-            <BlurCrossfade contentKey={status} duration={duration} label={`Status: ${status === "running" ? "Running" : "Done"}`}>
+          <div className={motion.bare}>
+            {/* No live region while auto-playing: a polite announcement every 1.6s would be noise. */}
+            <BlurCrossfade
+              contentKey={status}
+              duration={duration}
+              label={playing ? undefined : `Status: ${status === "running" ? "Running" : "Done"}`}
+            >
               <StatusChip status={status} />
             </BlurCrossfade>
           </div>
-          <Button appearance="outline" mode="neutral" size="sm" onClick={() => setStatus(next)}>
-            {`Swap to ${next === "running" ? "Running" : "Done"}`}
-          </Button>
+          <div className={motion.row}>
+            <Button appearance="outline" mode="neutral" size="sm" onClick={() => setPlaying((value) => !value)}>
+              {playing ? "Pause" : "Play"}
+            </Button>
+            <Button
+              appearance="ghost"
+              mode="neutral"
+              size="sm"
+              onClick={() => {
+                setPlaying(false);
+                setStatus(next);
+              }}
+            >
+              {`Swap to ${next === "running" ? "Running" : "Done"}`}
+            </Button>
+          </div>
         </div>
       }
       controls={<DocOptions label="Duration" options={["fast", "normal"] as const} value={duration} onChange={setDuration} />}
