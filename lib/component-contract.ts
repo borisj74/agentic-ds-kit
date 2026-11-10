@@ -115,3 +115,65 @@ export function componentPrompt(id: string, target: PromptTarget): string {
   }
   return lines.join("\n");
 }
+
+export interface VariantProp {
+  name: string;
+  /** Enum values, when the prop is an enum. */
+  values: string[];
+  boolean: boolean;
+}
+
+/** Enum and boolean props from the contract: the props a variant card can differ by. */
+export function variantProps(id: string): VariantProp[] {
+  const props = record(contractFor(id)?.props) ?? {};
+  return Object.entries(props).flatMap(([name, spec]) => {
+    const r = record(spec);
+    if (!r) return [];
+    const values = strings(r.values);
+    const isBoolean = r.type === "boolean";
+    return values.length > 0 || isBoolean ? [{ name, values, boolean: isBoolean }] : [];
+  });
+}
+
+const VALUE_ALIASES: Record<string, string> = {
+  small: "sm",
+  medium: "md",
+  large: "lg",
+  "extra large": "xl",
+};
+
+function words(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/[\s-]+/)
+    .filter(Boolean);
+}
+
+/**
+ * The props a variant card shows as chips, read from its title against the contract:
+ * an enum value named in the title ("Outline" → appearance="outline", "Small" → size="sm"),
+ * or a boolean prop named in it ("Disabled" → disabled, "Loading" → isLoading).
+ * A title that names nothing in the contract gets no chips.
+ */
+export function variantChips(title: string, props: VariantProp[]): string[] {
+  const titleWords = words(title);
+  const joined = titleWords.join(" ");
+  const aliased = new Set([...titleWords, ...Object.entries(VALUE_ALIASES).flatMap(([from, to]) => (joined.includes(from) ? [to] : []))]);
+  const chips: string[] = [];
+  for (const prop of props) {
+    const value = prop.values.find((candidate) => {
+      const normal = words(candidate).join(" ");
+      return normal.length > 0 && (aliased.has(normal) || (normal.includes(" ") && joined.includes(normal)));
+    });
+    if (value !== undefined) {
+      chips.push(`${prop.name}="${value}"`);
+      continue;
+    }
+    if (prop.boolean) {
+      const bare = prop.name.replace(/^(is|has|show|can)(?=[A-Z])/, "").toLowerCase();
+      if (aliased.has(prop.name.toLowerCase()) || aliased.has(bare)) chips.push(prop.name);
+    }
+  }
+  return chips;
+}

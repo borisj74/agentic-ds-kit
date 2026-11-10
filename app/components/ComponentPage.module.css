@@ -255,13 +255,32 @@
   font-family: var(--font-mono);
 }
 
-/* Variants tab: the component's own doc, framed like the stage. */
+/* Variants tab: a grid of variant cards, no outer frame (each card has its own). */
 .variants {
   min-width: 0;
-  padding: var(--space-6);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
-  background-color: var(--bg-surface);
+}
+
+.variantHost {
+  min-width: 0;
+}
+
+.variantChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.variantChip {
+  padding: var(--space-px) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-tray);
+  color: var(--text-fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
 }
 
 .srOnly {
