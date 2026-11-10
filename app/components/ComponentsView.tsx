@@ -47,6 +47,10 @@ import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
 import { UsageMeterDoc } from "./UsageMeterDoc";
+import { PricingPlansDoc } from "./PricingPlansDoc";
+import { IntegrationPickerDoc } from "./IntegrationPickerDoc";
+import { CommentsPanelDoc } from "./CommentsPanelDoc";
+import { CommentThreadDoc } from "./CommentThreadDoc";
 import { SetupGuideDoc } from "./SetupGuideDoc";
 import { NotificationStackDoc } from "./NotificationStackDoc";
 import { ExperimentCardDoc } from "./ExperimentCardDoc";
@@ -136,6 +140,10 @@ const TITLES: Record<string, string> = {
   inputotp: "InputOTP",
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
+  pricingplans: "PricingPlans",
+  integrationpicker: "IntegrationPicker",
+  commentspanel: "CommentsPanel",
+  commentthread: "CommentThread",
   setupguide: "SetupGuide",
   notificationstack: "NotificationStack",
   experimentcard: "ExperimentCard",
@@ -403,6 +411,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "usagemeter") return <UsageMeterDoc />;
+  if (resolved === "pricingplans") return <PricingPlansDoc />;
+  if (resolved === "integrationpicker") return <IntegrationPickerDoc />;
+  if (resolved === "commentspanel") return <CommentsPanelDoc />;
+  if (resolved === "commentthread") return <CommentThreadDoc />;
   if (resolved === "setupguide") return <SetupGuideDoc />;
   if (resolved === "notificationstack") return <NotificationStackDoc />;
   if (resolved === "experimentcard") return <ExperimentCardDoc />;

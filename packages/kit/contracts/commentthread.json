@@ -1,0 +1,144 @@
+{
+  "id": "commentthread",
+  "status": "stable",
+  "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
+  "useWhen": [
+    "people discuss a record (invoice, document, task) with replies and @mentions",
+    "show the thread for one line or the whole page",
+    "inside CommentsPanel for the selected thread"
+  ],
+  "doNotUseWhen": [
+    "talking to an assistant — Chat",
+    "a list of threads on a page — CommentsPanel",
+    "an activity log — Timeline"
+  ],
+  "contains": [
+    "alertdialog",
+    "avatar",
+    "button",
+    "empty",
+    "skeleton",
+    "textarea"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Shows the card header with the count. Omit inside CommentsPanel."
+    },
+    "comments": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, author: { id, name, initials?, avatarSrc? }, createdAt, body, edited?, parentId? }[]; replies nest one level."
+    },
+    "currentUserId": {
+      "type": "string",
+      "required": false,
+      "note": "Your comments get Edit and Delete."
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": true
+    },
+    "onSubmit": {
+      "type": "function",
+      "required": true,
+      "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
+    },
+    "submitting": {
+      "type": "boolean",
+      "default": false
+    },
+    "onReply": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void; focus moves to the composer."
+    },
+    "onEdit": {
+      "type": "function",
+      "required": false,
+      "note": "(id, body) => void. Enter saves, Escape cancels."
+    },
+    "onDelete": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void, after a danger AlertDialog."
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "Reply or @mention…"
+    },
+    "label": {
+      "type": "string",
+      "default": "Comments"
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "No comments yet"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "motion.duration200",
+    "type.line.bodySm"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title (or aria-label when untitled)",
+      "comments and replies are nested lists",
+      "Reply buttons say whom they reply to",
+      "the composer and the edit field are labelled Textareas; ⌘/Ctrl+Enter posts, Enter saves an edit, Escape cancels and focus returns to Edit",
+      "Delete confirms with a kit AlertDialog",
+      "Sending is announced in a status region; aria-busy while sending or loading",
+      "new comments fade and rise in on transform and opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not use Chat for people commenting on a record",
+    "Do not nest replies more than one level",
+    "Do not show more than one solid primary; Comment is it",
+    "Do not use raw hex"
+  ],
+  "snippet": "<CommentThread title=\"Invoice INV-2026-0117\" comments={comments} currentUserId={me.id} value={draft} onValueChange={setDraft} onSubmit={post} onReply={reply} onEdit={edit} onDelete={remove} />"
+}

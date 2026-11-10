@@ -68,6 +68,42 @@ Keyboard and focus, batch 1 (checked with a Playwright script at 1440):
 
 Screenshots at 1440, light and dark, next to the Paper exports: `saas-patterns/batch1/` in the planner's notes folder.
 
+### Batch 2: what shipped
+
+Branch `feat/saas-patterns-2`, stacked on `feat/saas-patterns-1`.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| CommentThread | 05 Comment Thread | Avatar, Textarea, Button, AlertDialog, Empty, Skeleton | populated with replies, composer with a draft, editing your own comment, delete confirm, sending, empty, loading, error |
+| CommentsPanel | 06 Comments Panel | Drawer, SegmentedControl, Badge, Button, Empty, Skeleton; hosts CommentThread | several threads (Open filter), one selected with Resolve, empty with a page composer, filtered to none (Resolved), loading, error, closed trigger with the open count; `inline` renders it in place |
+| IntegrationPicker | 08 Integration Picker | Input, SegmentedControl, Button, Badge, Empty, Skeleton | mixed catalogue (connected, available, coming soon), filtered with a connect in progress, search empty with Request, loading, error |
+| PricingPlans | 11 Pricing Plans | SegmentedControl, Badge, Button, NumberTransition, Skeleton | monthly with Pro recommended, yearly (prices roll), current plan, loading, error |
+
+Paper vs tokens, batch 2:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Comments Panel "built on FilterBar for Open / Resolved / All" | kit SegmentedControl with counts in the labels | FilterBar is a row of filter buttons with values; a single choice of three is a radio group, as in AgentInbox. |
+| Integration Picker category pills | kit SegmentedControl | Same reason: one category at a time. |
+| Comment composer: borderless textarea inside a bordered box with the toolbar | kit Textarea (its own border) with the toolbar under it | Kit control; no cousin textarea. The @ icon and ⌘⏎ are hints (aria-hidden). |
+| Comment composer focused ring (2px primary) | the kit Textarea focus ring | Kit control. |
+| Comment Save "⏎" chip | Button `shortcut="⏎"` | Batch-1 agent pattern. |
+| Comments Panel header "Comments [3] ×" | the kit Drawer title "Comments" with "2 open · 1 resolved" as its description; the inline form keeps the count badge and a close Button | Drawer titles are strings. |
+| Comments Panel trigger "Comments [2 OPEN]" | kit Button plus a Badge "2 open" that describes it | Button labels are strings. |
+| Integration logo tiles (provider marks) | Lucide icons in a bordered tile; providers are labelled examples | No brand marks in the kit. |
+| Integration "Connecting…" solid button with spinner | Button `iconStart="LoaderCircle"` rotating, plus a status message | Same as PermissionRequest's Granting…. |
+| Pricing card border 2px primary for recommended or current | 1px `--primary` border plus a 1px ring (box-shadow) | No 2px border token; same visual weight. |
+| Pricing price 28px | NumberTransition `size="lg"` (`--type-size-heading`) | Kit size step. |
+| Pricing title 18px | `--type-size-ui-lg` | Kit role. |
+| Grid columns (3 tiles / 3 cards) | `repeat(auto-fill, minmax(min(100%, calc(var(--space-16) × 3.5)), 1fr))` and `auto-fit` with 3.75 for plans; gaps `--grid-gutter-sm` / `-md` | No raw column count; widths from space tokens. |
+| Comment Thread width 370px | `--thread-width: 24rem` (card form only; untitled threads fill their parent) | Custom-width pattern. |
+
+Keyboard and focus, batch 2 (Playwright at 1440):
+- CommentThread: ⌘/Ctrl+Enter posts; Reply moves focus to the composer; Edit puts focus in the edit field, Enter saves, Escape cancels and returns focus to Edit; Delete opens an AlertDialog on Keep and Escape returns focus to Delete.
+- CommentsPanel: the trigger is described by "2 open"; Enter opens the Drawer (focus on Close); opening a thread puts focus on All threads, and going back focuses that thread again; Escape closes the Drawer and returns focus to the trigger.
+- IntegrationPicker: the search is a labelled searchbox; the category filter is a radio group (arrow keys); each Connect is described by its provider name.
+- PricingPlans: arrow keys switch Monthly and Yearly; each CTA is described by its plan name; the current plan's CTA is disabled.
+
 ## 2026-11-10: component pages, previews and variants
 
 Site (branches `claude/k79-nistha-site-859cfe`, PR #119, and `feat/variants-tab-cleanup`):

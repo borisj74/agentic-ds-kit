@@ -9361,6 +9361,375 @@
       }
     },
     {
+      "id": "commentthread",
+      "group": "component",
+      "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
+      "useWhen": [
+        "people discuss a record (invoice, document, task) with replies and @mentions",
+        "show the thread for one line or the whole page",
+        "inside CommentsPanel for the selected thread"
+      ],
+      "doNotUseWhen": [
+        "talking to an assistant — Chat",
+        "a list of threads on a page — CommentsPanel",
+        "an activity log — Timeline"
+      ],
+      "doNot": [
+        "Do not use Chat for people commenting on a record",
+        "Do not nest replies more than one level",
+        "Do not show more than one solid primary; Comment is it",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "note": "Shows the card header with the count. Omit inside CommentsPanel."
+        },
+        "comments": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, author: { id, name, initials?, avatarSrc? }, createdAt, body, edited?, parentId? }[]; replies nest one level."
+        },
+        "currentUserId": {
+          "type": "string",
+          "required": false,
+          "note": "Your comments get Edit and Delete."
+        },
+        "value": {
+          "type": "string",
+          "required": true
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": true
+        },
+        "onSubmit": {
+          "type": "function",
+          "required": true,
+          "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
+        },
+        "submitting": {
+          "type": "boolean",
+          "default": false
+        },
+        "onReply": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void; focus moves to the composer."
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false,
+          "note": "(id, body) => void. Enter saves, Escape cancels."
+        },
+        "onDelete": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void, after a danger AlertDialog."
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Reply or @mention…"
+        },
+        "label": {
+          "type": "string",
+          "default": "Comments"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No comments yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "commentspanel",
+      "group": "component",
+      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+      "useWhen": [
+        "a page (invoice, document) has several comment threads",
+        "people filter open and resolved threads and open one",
+        "a header needs a Comments button with the open count"
+      ],
+      "doNotUseWhen": [
+        "one conversation on its own — CommentThread",
+        "product notifications — NotificationStack",
+        "agent work — AgentInbox"
+      ],
+      "doNot": [
+        "Do not invent a local CommentsDrawer or ThreadList",
+        "Do not re-implement the thread: pass a CommentThread as children",
+        "Do not use Tabs for the Open / Resolved / All filter",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "threads": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, preview, count, resolved?, updatedAt }[]"
+        },
+        "open": {
+          "type": "boolean",
+          "required": true
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": true
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false
+        },
+        "onSelect": {
+          "type": "function",
+          "required": true,
+          "note": "(id | null) => void; null goes back to the list."
+        },
+        "onResolve": {
+          "type": "function",
+          "required": false
+        },
+        "filter": {
+          "type": "enum",
+          "values": [
+            "open",
+            "resolved",
+            "all"
+          ],
+          "default": "open"
+        },
+        "onFilterChange": {
+          "type": "function",
+          "required": false
+        },
+        "children": {
+          "type": "ReactNode",
+          "required": false,
+          "note": "The selected thread, usually a CommentThread without a title."
+        },
+        "composer": {
+          "type": "ReactNode",
+          "required": false,
+          "note": "Shown under the list, e.g. a page-level CommentThread."
+        },
+        "label": {
+          "type": "string",
+          "default": "Comments"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "No comments yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "inline": {
+          "type": "boolean",
+          "default": false
+        },
+        "showTrigger": {
+          "type": "boolean",
+          "default": true
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "integrationpicker",
+      "group": "component",
+      "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+      "useWhen": [
+        "let people find and connect integrations in settings or onboarding",
+        "show which integrations are connected",
+        "list providers that are coming soon"
+      ],
+      "doNotUseWhen": [
+        "settings for one connected integration — IntegrationSettings",
+        "choosing a plan — PricingPlans",
+        "a plain list of links — LinkList"
+      ],
+      "doNot": [
+        "Do not invent a local IntegrationGrid or AppDirectory",
+        "Do not use a real provider's logo or name without labelling it an example",
+        "Do not put more than one action on a tile",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon? }[]"
+        },
+        "title": {
+          "type": "string",
+          "default": "Integrations"
+        },
+        "note": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"example providers\""
+        },
+        "query": {
+          "type": "string",
+          "required": false
+        },
+        "onQueryChange": {
+          "type": "function",
+          "required": false
+        },
+        "category": {
+          "type": "string",
+          "default": "all"
+        },
+        "onCategoryChange": {
+          "type": "function",
+          "required": false
+        },
+        "categories": {
+          "type": "string[]",
+          "required": false
+        },
+        "onConnect": {
+          "type": "function",
+          "required": true
+        },
+        "onManage": {
+          "type": "function",
+          "required": false
+        },
+        "connectingId": {
+          "type": "string",
+          "required": false,
+          "note": "That tile shows Connecting… (solid primary)."
+        },
+        "onRequest": {
+          "type": "function",
+          "required": false,
+          "note": "Request an integration, when search finds nothing."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "pricingplans",
+      "group": "component",
+      "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+      "useWhen": [
+        "upgrade or change plan inside the product",
+        "compare a few plans side by side with their features",
+        "switch monthly and yearly prices"
+      ],
+      "doNotUseWhen": [
+        "usage against a plan limit — UsageMeter",
+        "picking options in a form — TileGroup",
+        "a public marketing pricing page"
+      ],
+      "doNot": [
+        "Do not invent a local PlanCard or PricingTable",
+        "Do not show more than one solid primary; current plan is never solid",
+        "Do not mark the recommended plan by border colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "plans": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]"
+        },
+        "interval": {
+          "type": "enum",
+          "values": [
+            "month",
+            "year"
+          ],
+          "required": true
+        },
+        "onIntervalChange": {
+          "type": "function",
+          "required": true
+        },
+        "onSelect": {
+          "type": "function",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "default": "Choose a plan"
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "savingsLabel": {
+          "type": "string",
+          "required": false
+        },
+        "footnote": {
+          "type": "string",
+          "required": false
+        },
+        "currency": {
+          "type": "string",
+          "default": "$"
+        },
+        "unitLabel": {
+          "type": "string",
+          "default": "/ seat / month"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

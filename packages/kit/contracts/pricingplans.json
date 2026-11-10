@@ -1,0 +1,126 @@
+{
+  "id": "pricingplans",
+  "status": "stable",
+  "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+  "useWhen": [
+    "upgrade or change plan inside the product",
+    "compare a few plans side by side with their features",
+    "switch monthly and yearly prices"
+  ],
+  "doNotUseWhen": [
+    "usage against a plan limit — UsageMeter",
+    "picking options in a form — TileGroup",
+    "a public marketing pricing page"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "numbertransition",
+    "segmentedcontrol",
+    "skeleton"
+  ],
+  "props": {
+    "plans": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]"
+    },
+    "interval": {
+      "type": "enum",
+      "values": [
+        "month",
+        "year"
+      ],
+      "required": true
+    },
+    "onIntervalChange": {
+      "type": "function",
+      "required": true
+    },
+    "onSelect": {
+      "type": "function",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "default": "Choose a plan"
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "savingsLabel": {
+      "type": "string",
+      "required": false
+    },
+    "footnote": {
+      "type": "string",
+      "required": false
+    },
+    "currency": {
+      "type": "string",
+      "default": "$"
+    },
+    "unitLabel": {
+      "type": "string",
+      "default": "/ seat / month"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "primary",
+    "status.success",
+    "status.successText",
+    "type.size.uiLg",
+    "grid.gutter.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title; each plan name is an h4",
+      "the interval is a kit SegmentedControl radio group",
+      "Recommended and Current plan are Badge words, not colour alone",
+      "prices roll with NumberTransition and have a full spoken label",
+      "each CTA is described by its plan name; the current plan's CTA is disabled"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local PlanCard or PricingTable",
+    "Do not show more than one solid primary; current plan is never solid",
+    "Do not mark the recommended plan by border colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<PricingPlans plans={plans} interval={interval} onIntervalChange={setInterval} onSelect={choose} savingsLabel=\"Save 17% with yearly\" footnote=\"Prices exclude tax. Change or cancel any time.\" />"
+}

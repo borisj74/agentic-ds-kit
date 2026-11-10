@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { UsageMeter } from "agentic-ds-kit";
+import { PricingPlans } from "agentic-ds-kit";
+import { IntegrationPicker } from "agentic-ds-kit";
+import { CommentsPanel } from "agentic-ds-kit";
+import { CommentThread } from "agentic-ds-kit";
 import { SetupGuide } from "agentic-ds-kit";
 import { NotificationStack } from "agentic-ds-kit";
 import { ExperimentCard } from "agentic-ds-kit";
@@ -378,6 +382,28 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <SetupGuide title="Get ready" tasks={[{ id: "a", label: "Add company details", status: "done" }, { id: "b", label: "Import customers", status: "current" }]} />
+        </Stage>
+      );
+    case "commentthread":
+      return (
+        <Stage variant="wide">
+          <CommentThread title="Invoice" comments={[{ id: "a", author: { id: "p", name: "Priya Shah" }, createdAt: "2h", body: "Confirm the tax rate?" }]} value="" onValueChange={noop} onSubmit={noop} />
+        </Stage>
+      );
+    case "commentspanel":
+      return (
+        <CommentsPanel threads={[{ id: "a", title: "Tax rate", preview: "Marking ready.", count: 3, updatedAt: "45m" }]} open={false} onOpenChange={noop} onSelect={noop} />
+      );
+    case "integrationpicker":
+      return (
+        <Stage variant="wide">
+          <IntegrationPicker items={[{ id: "a", name: "Northwind Ledger", description: "Sync invoices", status: "connected" }]} onConnect={noop} />
+        </Stage>
+      );
+    case "pricingplans":
+      return (
+        <Stage variant="wide">
+          <PricingPlans interval="month" onIntervalChange={noop} onSelect={noop} plans={[{ id: "pro", name: "Pro", price: 29, features: ["Integrations"], recommended: true }]} />
         </Stage>
       );
     case "usagemeter":

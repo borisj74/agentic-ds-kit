@@ -1,0 +1,230 @@
+/* Paper panel is 370px; inline it uses the same custom-width pattern as InsightCard (--insight-width). */
+.root {
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.triggerBadge {
+  flex-shrink: 0;
+}
+
+.inline {
+  --comments-width: 24rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--comments-width));
+  min-width: 0;
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+.inlineHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-fg);
+  border-block-end: var(--border-width-thin) solid var(--line-default);
+}
+
+.inlineTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+.inlineBody {
+  padding: var(--space-4);
+}
+
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+}
+
+.listView,
+.emptyWrap,
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: viewIn var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thread {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  font: inherit;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-surface-md);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-150) var(--motion-ease-standard);
+}
+
+.thread:hover {
+  background-color: var(--bg-subtle);
+}
+
+.thread:focus-visible,
+.back:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(var(--border-focus-width) * -1);
+}
+
+.threadIcon {
+  flex-shrink: 0;
+  margin-block-start: var(--space-stack-2xs);
+  color: var(--text-fg-muted);
+}
+
+.threadText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.threadTitle {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.threadPreview {
+  overflow: hidden;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.threadCount {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.threadTime {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-subtle);
+}
+
+.detailBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  margin-inline-start: calc(var(--space-1) * -1);
+  font: inherit;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.back:hover {
+  color: var(--text-fg);
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.detailThread {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.loadingRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-inline: var(--space-3);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* "Thread list ↔ thread crossfade." */
+@keyframes viewIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listView,
+  .emptyWrap,
+  .detail {
+    animation: none;
+  }
+
+  .thread {
+    transition: none;
+  }
+}
