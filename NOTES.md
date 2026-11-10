@@ -99,4 +99,4 @@ Picks (from p-3-0, building on batch 1):
 ### PR status
 
 - Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
-- Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. PR opened, not merged.
+- Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.
