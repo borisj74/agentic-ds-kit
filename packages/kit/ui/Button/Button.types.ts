@@ -23,6 +23,11 @@ interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwne
   onClick?: MouseEventHandler<HTMLButtonElement>;
   iconStart?: KitIcon;
   iconEnd?: KitIcon;
+  /**
+   * Visual key hint after the label, e.g. "⏎", "Esc", "⌘⏎". Decorative (aria-hidden): the caller wires the
+   * key itself and can set `aria-keyshortcuts`. Ignored on icon-only buttons.
+   */
+  shortcut?: string;
   draggable?: boolean;
   onDragStart?: DragEventHandler<HTMLButtonElement>;
   onDragEnd?: DragEventHandler<HTMLButtonElement>;

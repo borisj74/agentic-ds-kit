@@ -1,0 +1,317 @@
+/* Paper frames are 400px; same custom-width pattern as InsightCard (--insight-width). */
+.card,
+.resolved {
+  --approval-width: 25rem;
+}
+
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(100%, var(--approval-width));
+  min-width: 0;
+  padding: var(--space-5);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+  animation: approval-in var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.card:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.lead {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-lg);
+}
+
+.lead-high {
+  background-color: var(--status-danger-subtle);
+  color: var(--status-danger-text);
+}
+
+.lead-medium {
+  background-color: var(--status-warning-subtle);
+  color: var(--status-warning-text);
+}
+
+.lead-low {
+  background-color: var(--primary-subtle);
+  color: var(--primary-fg);
+}
+
+.heading {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-px);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-md);
+  color: var(--text-fg);
+}
+
+.description {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.risk {
+  flex-shrink: 0;
+}
+
+/* Preview: the exact command or diff. */
+.preview {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.previewHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+}
+
+.previewIcon {
+  flex-shrink: 0;
+  color: var(--text-fg-muted);
+}
+
+.previewLabel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.previewTarget {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+  white-space: nowrap;
+}
+
+.code {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding-block: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  white-space: pre-wrap;
+}
+
+.line {
+  display: flex;
+  gap: var(--space-2);
+  padding-inline: var(--space-3);
+  color: var(--text-fg);
+}
+
+.gutter {
+  flex: 0 0 var(--space-3);
+  color: var(--text-fg-subtle);
+}
+
+.text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font: inherit;
+}
+
+.comment,
+.context {
+  color: var(--text-fg-muted);
+}
+
+.comment {
+  color: var(--text-fg-subtle);
+}
+
+.add {
+  background-color: var(--status-success-subtle);
+  color: var(--status-success-text);
+}
+
+.remove {
+  background-color: var(--status-danger-subtle);
+  color: var(--status-danger-text);
+}
+
+.add .gutter,
+.remove .gutter {
+  color: inherit;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.countdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.countdownText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.countdownIcon {
+  flex-shrink: 0;
+}
+
+.clock {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* Resolved: one line. */
+.resolved {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, var(--approval-width));
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  font-family: var(--font-sans);
+  animation: approval-in var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.resolvedIcon {
+  flex-shrink: 0;
+}
+
+.approved .resolvedIcon {
+  color: var(--icon-success);
+}
+
+.denied .resolvedIcon {
+  color: var(--icon-danger);
+}
+
+.expired {
+  background-color: transparent;
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
+
+.expired .resolvedIcon {
+  color: var(--text-fg-subtle);
+}
+
+.resolvedLabel {
+  flex-shrink: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.expired .resolvedLabel {
+  color: var(--text-fg-muted);
+}
+
+.resolvedSummary {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expired .resolvedSummary {
+  color: var(--text-fg-subtle);
+}
+
+.resolvedMeta {
+  flex-shrink: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+@keyframes approval-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .resolved {
+    animation: none;
+  }
+}

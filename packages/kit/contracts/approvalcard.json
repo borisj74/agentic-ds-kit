@@ -1,0 +1,155 @@
+{
+  "id": "approvalcard",
+  "status": "stable",
+  "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
+  "useWhen": [
+    "an agent needs a person's OK before a command, file edit, or other side effect",
+    "human-in-the-loop gates in a chat, trail, or inbox",
+    "a resolved decision should stay in the log as one line"
+  ],
+  "doNotUseWhen": [
+    "a generic yes/no that interrupts the page — AlertDialog",
+    "a recommendation the person may act on later — InsightCard",
+    "a plan of several steps to accept — AgentPlan",
+    "inline page status — Alert"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "progress"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "note": "The question, e.g. \"Run database migration?\""
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "risk": {
+      "type": "enum",
+      "values": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "note": "Colors the lead tile and the risk Badge. high uses a shield icon."
+    },
+    "action": {
+      "type": "object",
+      "required": true,
+      "note": "{ kind: \"command\", command, note?, target? } or { kind: \"diff\", file, lines: { type: \"context\" | \"add\" | \"remove\", text }[] }. Shown exactly as it will run."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "approved",
+        "denied",
+        "expired"
+      ],
+      "default": "pending",
+      "note": "Anything but pending renders the one-line resolved row."
+    },
+    "countdownSec": {
+      "type": "number",
+      "required": false,
+      "note": "Auto-deny countdown in seconds. At 0 the card calls onExpire, else onDeny. Pending only."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "Approve button and Enter while focus is inside the card (not on another control)."
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false,
+      "note": "Deny button and Escape while focus is inside the card."
+    },
+    "onExpire": {
+      "type": "function",
+      "required": false,
+      "note": "Countdown reached 0. Falls back to onDeny."
+    },
+    "resolvedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Resolved row, e.g. \"you\"."
+    },
+    "resolvedAt": {
+      "type": "string",
+      "required": false,
+      "note": "Resolved row, e.g. \"2s ago\"."
+    },
+    "approveLabel": {
+      "type": "string",
+      "default": "Approve"
+    },
+    "denyLabel": {
+      "type": "string",
+      "default": "Deny"
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "status.warningSubtle",
+    "status.warningText",
+    "status.successSubtle",
+    "status.successText",
+    "primary.subtle",
+    "primary.fg",
+    "icon.success",
+    "icon.danger",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.5",
+    "type.size.body",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.heading",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "title is h3, article aria-labelledby it",
+      "Enter approves and Escape denies while focus is inside the card; buttons carry aria-keyshortcuts",
+      "key chips are aria-hidden",
+      "diff lines announce Added / Removed",
+      "countdown is role=timer with aria-live off; the bar is a kit Progress with an accessible name",
+      "resolved row is an article named \"Approved: <title>\"",
+      "entry motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ApprovalCard, ConfirmCard, or PermissionCard",
+    "Do not paraphrase the action: show the exact command or diff",
+    "Approve is the view's one solid primary; Deny stays outline neutral",
+    "Do not use raw hex; risk colors come from status tokens",
+    "Do not hide the risk Badge for high-risk actions"
+  ],
+  "snippet": "<ApprovalCard title=\"Run database migration?\" description=\"Agent wants to run a command on staging.\" risk=\"high\" action={{ kind: \"command\", command: \"npm run db:migrate -- --env=staging\", target: \"acme-demo / staging\" }} countdownSec={60} onApprove={approve} onDeny={deny} />"
+}

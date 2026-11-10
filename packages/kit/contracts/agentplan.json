@@ -1,0 +1,190 @@
+{
+  "id": "agentplan",
+  "status": "stable",
+  "intent": "What an agent intends to do, before or during a run. People edit, accept, run, skip, stop, or retry steps.",
+  "useWhen": [
+    "an agent proposes several steps and the person should accept or edit them first",
+    "show which planned step runs now and which need approval",
+    "a compact one-line plan summary in a chat"
+  ],
+  "doNotUseWhen": [
+    "what already happened in a run — AgentTrail",
+    "a single action that needs an OK — ApprovalCard",
+    "wizard steps a person fills in — ProgressSteps",
+    "a to-do list without an agent — ListView"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "checkbox",
+    "empty",
+    "field",
+    "input",
+    "skeleton",
+    "spinner",
+    "textarea"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "steps": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, tool?, target?, note?, needsApproval?, error? }[]"
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "drafting",
+        "draft",
+        "accepted",
+        "running",
+        "complete",
+        "failed"
+      ],
+      "default": "draft",
+      "note": "drafting shows skeleton rows; draft with no steps shows Empty."
+    },
+    "currentStepId": {
+      "type": "string",
+      "required": false,
+      "note": "running: the step that runs now. failed: the step that stopped."
+    },
+    "summary": {
+      "type": "string",
+      "required": false,
+      "note": "Default derived: \"5 steps · 2 need approval\", \"5 steps · 2 done · 1 waiting\"."
+    },
+    "footerNote": {
+      "type": "string",
+      "required": false,
+      "note": "Mono note in the footer, e.g. \"accepted 14:02\" or \"3 of 5 · 1m 48s\"."
+    },
+    "waitingLabel": {
+      "type": "string",
+      "default": "Waiting for your OK"
+    },
+    "editable": {
+      "type": "boolean",
+      "default": true,
+      "note": "Draft only, and only with onChange: per-step Edit / Remove and Add step."
+    },
+    "onChange": {
+      "type": "function",
+      "required": false,
+      "note": "(steps) => void. Called after Save step, Remove, and Add step."
+    },
+    "onAccept": {
+      "type": "function",
+      "required": false,
+      "note": "Draft footer: Accept plan, the view's one solid primary. ⌘/Ctrl+Enter inside the card."
+    },
+    "onRun": {
+      "type": "function",
+      "required": false,
+      "note": "Accepted footer: Run (outline). ⌘/Ctrl+Enter inside the card."
+    },
+    "onEdit": {
+      "type": "function",
+      "required": false,
+      "note": "Accepted footer: back to draft."
+    },
+    "onSkipStep": {
+      "type": "function",
+      "required": false,
+      "note": "(stepId) => void. Running and failed."
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "Running footer."
+    },
+    "onRetryStep": {
+      "type": "function",
+      "required": false,
+      "note": "(stepId) => void. Failed footer."
+    },
+    "onViewTrail": {
+      "type": "function",
+      "required": false,
+      "note": "Complete footer: open the run's AgentTrail."
+    },
+    "onDraft": {
+      "type": "function",
+      "required": false,
+      "note": "Empty state: Draft a plan."
+    },
+    "collapsed": {
+      "type": "boolean",
+      "default": false,
+      "note": "One-line summary row."
+    },
+    "onCollapsedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(collapsed) => void. Adds the show / hide chevron."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "primary.base",
+    "primary.subtle",
+    "action.onPrimary",
+    "icon.success",
+    "icon.danger",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "status.warningText",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "radius.pill",
+    "shadow.sm",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.5",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.heading",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "steps are an ordered list; the current or failed step has aria-current=step",
+      "Edit and Remove are icon-only kit Buttons named with the step",
+      "the step form is a form named \"Edit step N\"; Escape cancels, Enter saves",
+      "⌘/Ctrl+Enter accepts a draft or runs an accepted plan while focus is in the card",
+      "the collapse chevron is a button with aria-expanded",
+      "aria-busy while drafting",
+      "row and marker motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentPlan, PlanCard, or StepEditor",
+    "Accept plan is the one solid primary; Run is outline",
+    "Do not show Edit / Remove once the plan is accepted",
+    "Do not use raw hex; approval uses caution tokens",
+    "Do not use AgentPlan for what already happened (AgentTrail)"
+  ],
+  "snippet": "<AgentPlan title=\"Fix invoice rounding\" status=\"draft\" steps={steps} onChange={setSteps} onAccept={accept} />"
+}

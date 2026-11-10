@@ -12,6 +12,10 @@ export interface GalleryItem {
 }
 
 const AGENT_IDS = new Set([
+  "agentfleet",
+  "agentplan",
+  "agenttrail",
+  "approvalcard",
   "chat",
   "insightcard",
   "loadinganimation",

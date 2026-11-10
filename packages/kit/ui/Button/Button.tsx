@@ -27,6 +27,7 @@ export function Button({
   onClick,
   iconStart,
   iconEnd,
+  shortcut,
   ariaLabel,
   draggable,
   onDragStart,
@@ -67,6 +68,11 @@ export function Button({
       <LucideByName name={iconStart} size={iconPx} className={styles.icon} />
       {hasLabel ? <span>{children}</span> : null}
       <LucideByName name={iconEnd} size={iconPx} className={styles.icon} />
+      {shortcut && hasLabel ? (
+        <kbd className={styles.shortcut} aria-hidden="true">
+          {shortcut}
+        </kbd>
+      ) : null}
     </button>
   );
 }

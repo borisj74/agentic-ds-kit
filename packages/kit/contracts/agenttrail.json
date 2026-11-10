@@ -1,0 +1,91 @@
+{
+  "id": "agenttrail",
+  "status": "stable",
+  "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
+  "useWhen": [
+    "show what an agent already did and is doing now",
+    "a run log next to a chat or an ApprovalCard",
+    "a step that waits for approval inside a longer task"
+  ],
+  "doNotUseWhen": [
+    "what the agent intends to do before it runs — AgentPlan",
+    "a project roadmap of now / next / later — Timeline",
+    "wizard steps a person fills in — ProgressSteps",
+    "many agents at once — AgentFleet"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "steps": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, status: \"done\" | \"running\" | \"approval\" | \"pending\" | \"failed\", duration?, timer?, sublabel? }[]. duration for finished steps, timer for the running or approval step, sublabel for the tool call in mono."
+    },
+    "icon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Lucide icon before the title."
+    },
+    "tag": {
+      "type": "string",
+      "required": false,
+      "note": "Small neutral mono tag after the title, e.g. a branch."
+    },
+    "progress": {
+      "type": "object",
+      "required": false,
+      "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "icon.success",
+    "icon.brand",
+    "icon.warning",
+    "icon.danger",
+    "status.dangerText",
+    "radius.surfaceLg",
+    "radius.pill",
+    "shadow.sm",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "steps are an ordered list",
+      "the running or approval step has aria-current=step",
+      "each step names its status for screen readers; icons are aria-hidden",
+      "counter reads \"Step 3 of 5\"",
+      "the running spinner rotates on transform only and stops under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentTrail, RunLog, or StepList",
+    "Do not use Timeline or ProgressSteps for an agent run",
+    "Do not use raw hex for status colors",
+    "Do not put actions in the trail; approvals go in ApprovalCard"
+  ],
+  "snippet": "<AgentTrail title=\"Implement login rate limit\" icon=\"GitPullRequest\" steps={[{ id: \"1\", label: \"Read auth module\", status: \"done\", duration: \"4.1s\" }, { id: \"2\", label: \"Awaiting approval\", status: \"approval\", timer: \"0:18\", sublabel: \"write_file src/middleware/auth.ts\" }, { id: \"3\", label: \"Run unit tests\", status: \"pending\" }]} />"
+}

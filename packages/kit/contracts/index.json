@@ -644,6 +644,34 @@
     "status": "stable"
   },
   {
+    "id": "approvalcard",
+    "intent": "The agent asks before it acts: risk, exact command or diff, keyboard-first Approve / Deny.",
+    "group": "component",
+    "path": "contracts/approvalcard.json",
+    "status": "stable"
+  },
+  {
+    "id": "agenttrail",
+    "intent": "Vertical step list for a running agent task: done, running or awaiting approval, pending.",
+    "group": "component",
+    "path": "contracts/agenttrail.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentplan",
+    "intent": "What an agent intends to do: edit, accept, run, skip, stop, or retry its steps.",
+    "group": "component",
+    "path": "contracts/agentplan.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentfleet",
+    "intent": "Several agents side by side with sub-agent progress, cost, and time; one opens into its sub-agent tree.",
+    "group": "component",
+    "path": "contracts/agentfleet.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

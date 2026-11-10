@@ -1,0 +1,125 @@
+{
+  "id": "agentfleet",
+  "status": "stable",
+  "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+  "useWhen": [
+    "monitor several running agents or orchestrators at once",
+    "show sub-agent progress, cost, and time per agent",
+    "point the person at a sub-agent that waits for their OK"
+  ],
+  "doNotUseWhen": [
+    "one agent's step-by-step run — AgentTrail",
+    "a single KPI — Scorecard",
+    "a plain table of jobs — DataTable"
+  ],
+  "contains": [
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "agents": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, status: \"idle\" | \"running\" | \"waiting\" | \"done\" | \"failed\", cost, elapsed?, meta?, subAgents: { id, name, status: \"queued\" | \"running\" | \"waiting\" | \"done\" | \"failed\", elapsed?, cost? }[] }[]"
+    },
+    "expandedId": {
+      "type": "string",
+      "required": false,
+      "note": "Open card. Others render compact beside it."
+    },
+    "onExpandedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void. Without it cards do not open."
+    },
+    "onReview": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId, subAgentId) => void. Review button for a waiting sub-agent."
+    },
+    "totals": {
+      "type": "string",
+      "required": false,
+      "note": "Fleet line under the cards. Default derived; \"\" hides it."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "onStart": {
+      "type": "function",
+      "required": false,
+      "note": "Empty fleet: Start an agent."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "default": "Agent fleet"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.tray",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "status.success",
+    "status.info",
+    "status.warning",
+    "status.warningSubtle",
+    "status.warningText",
+    "status.danger",
+    "status.dangerText",
+    "icon.success",
+    "icon.brand",
+    "icon.danger",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "radius.pill",
+    "shadow.sm",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.5",
+    "space.6",
+    "grid.gutter.md",
+    "layout.autoMin",
+    "layout.metricsMin",
+    "type.size.title",
+    "type.size.uiLg",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.family.mono",
+    "motion.normal"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "region named by ariaLabel",
+      "each card is an article named by its h3",
+      "the agent name is the open button (aria-expanded) and stretches over the card",
+      "collapse is a named button with aria-expanded=true",
+      "focus moves into the opened card and back to its card on close",
+      "status is text, not color alone; bars are aria-hidden next to a text legend",
+      "Review buttons name the sub-agent; an agent with status waiting shows the waiting sub-agent as a callout on its card",
+      "motion is transform and opacity only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentFleet, AgentGrid, or AgentCard",
+    "Do not color status without the text label",
+    "Do not use raw hex; waiting uses caution tokens",
+    "Do not nest interactive controls in the card besides Review"
+  ],
+  "snippet": "<AgentFleet agents={agents} expandedId={openId} onExpandedChange={setOpenId} onReview={(agentId, subId) => review(agentId, subId)} />"
+}

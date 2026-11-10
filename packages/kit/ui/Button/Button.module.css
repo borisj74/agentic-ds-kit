@@ -185,6 +185,23 @@
   flex: 0 0 auto;
 }
 
+/* shortcut: a small key chip after the label. Tinted from the label colour so it works on every appearance. */
+.shortcut {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding-inline: var(--space-inset-xs);
+  border-radius: var(--radius-control-sm);
+  background-color: color-mix(in srgb, currentColor 14%, transparent);
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  white-space: nowrap;
+}
+
 .iconOnly.lg {
   padding: var(--space-3);
 }
