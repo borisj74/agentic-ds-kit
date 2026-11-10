@@ -26,7 +26,8 @@
   font-weight: var(--type-weight-heading);
   line-height: 1;
   user-select: none;
-  background: var(--surface-muted);
+  /* bg-tray, like the Avatar fallback: surface-muted (slate-50) vanishes on canvas grounds. */
+  background: var(--bg-tray);
   color: var(--text-secondary);
 }
 
