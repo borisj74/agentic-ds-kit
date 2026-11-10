@@ -57,8 +57,9 @@
   transition: background-color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
+/* Done steps and the line between them use the primary colour, like the current step's ring. */
 .lineComplete {
-  background: var(--fill-strong);
+  background: var(--action-primary);
 }
 
 .horizontal .step:first-child .lineStart,
@@ -105,9 +106,9 @@
 }
 
 .complete .marker {
-  border: var(--border-width-medium) solid var(--fill-strong);
-  background: var(--fill-strong);
-  color: var(--icon-inverse);
+  border: var(--border-width-medium) solid var(--action-primary);
+  background: var(--action-primary);
+  color: var(--action-on-primary);
 }
 
 .current .marker {

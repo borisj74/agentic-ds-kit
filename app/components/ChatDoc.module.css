@@ -4,10 +4,11 @@
   block-size: 32rem;
 }
 
+/* Same height as the master frame: at 28rem the panel overflowed and the variant scrolled. */
 .exampleFrame {
   width: min(24rem, 100%);
-  min-block-size: 28rem;
-  block-size: 28rem;
+  min-block-size: 32rem;
+  block-size: 32rem;
 }
 
 .canvas {

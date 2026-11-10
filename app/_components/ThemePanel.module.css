@@ -1,0 +1,180 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+}
+
+.headText {
+  display: grid;
+  min-width: 0;
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-heading);
+  font-size: var(--type-size-body-md);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.sheetIntro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-4);
+}
+
+/* In the bottom sheet the Drawer body already pads its content. */
+.bodyFlush {
+  padding: var(--space-2) 0 0;
+}
+
+.group {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.groupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.overline {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+}
+
+/* Segmented tracks fill the panel width, like the Paper panel. */
+.group [role="radiogroup"] {
+  display: flex;
+  width: 100%;
+}
+
+.group [role="radiogroup"] > * {
+  flex: 1 1 0;
+  justify-content: center;
+  min-width: 0;
+}
+
+.swatch {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 var(--border-width-thin) var(--line-default);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--space-16) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rowLabel {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.readout {
+  color: var(--text-fg);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.pass,
+.fail {
+  margin: 0;
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+}
+
+.pass {
+  color: var(--text-success);
+}
+
+.fail {
+  color: var(--text-danger);
+}
+
+.actions {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-width-thin) solid var(--line-default);
+  background-color: var(--bg-subtle);
+}
+
+.actionStack {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.footnote {
+  margin: 0;
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -28,6 +28,13 @@ const HREF_BY_ID = new Map(
   SECTIONS.flatMap((section) => section.items.map((item) => [item.id, item.href] as const)),
 );
 
+const OPEN_EVENT = "playground-command-open";
+
+/** Opens the search palette from a button (the mobile header has no ⌘K). */
+export function openPlaygroundCommand() {
+  window.dispatchEvent(new Event(OPEN_EVENT));
+}
+
 export function PlaygroundCommand() {
   const router = useRouter();
   const pathname = usePathname();
@@ -42,8 +49,13 @@ export function PlaygroundCommand() {
       event.stopImmediatePropagation();
       setOpen((current) => !current);
     };
+    const onOpen = () => setOpen(true);
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener(OPEN_EVENT, onOpen);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener(OPEN_EVENT, onOpen);
+    };
   }, []);
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { Button } from "../Button";
 import { MonthGrid } from "../DatePicker/MonthGrid";
 import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
@@ -19,6 +20,28 @@ import styles from "./DateRangePicker.module.css";
 
 export type { DateRange, DateRangePreset, DateRangePickerProps, DateRangePickerSize } from "./DateRangePicker.types";
 export { defaultDateRangePresets } from "./dateRange";
+
+/** Below --grid-breakpoint-sm (40rem) the panel shows one month; media queries cannot read var(). */
+const NARROW = "(width < 40rem)";
+
+function subscribeNarrow(onChange: () => void) {
+  const media = window.matchMedia(NARROW);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function monthOf(iso?: string): string {
+  const match = iso ? /^(\d{4})-(\d{2})/.exec(iso) : null;
+  if (match) return `${match[1]}-${match[2]}-01`;
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+}
+
+function shiftMonth(month: string, delta: number): string {
+  const [year, mon] = month.split("-").map(Number);
+  const date = new Date(year, mon - 1 + delta, 1);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-01`;
+}
 
 const FOCUSABLE =
   "a, button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
@@ -54,14 +77,18 @@ export function DateRangePicker({
   const selected = isControlled ? value : uncontrolled;
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DateRange | null>(null);
-  const picking = draft ?? selected;
+  const [view, setView] = useState(() => monthOf(selected?.start));
+  const [hoverDate, setHoverDate] = useState<string | null>(null);
+  const narrow = useSyncExternalStore(subscribeNarrow, () => window.matchMedia(NARROW).matches, () => false);
   const matched = presetFor(resolvedPresets, selected);
   const display = matched?.label ?? formatRangeLabel(selected);
   const iconPx = size === "sm" ? 14 : 16;
 
+  // Closing without Apply (Cancel, Escape, a click outside) leaves the value as it was.
   const close = useCallback((reason: "escape" | "outside") => {
     setOpen(false);
     setDraft(null);
+    setHoverDate(null);
     if (reason === "escape") triggerRef.current?.focus();
   }, []);
 
@@ -95,28 +122,44 @@ export function DateRangePicker({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  function commit(range: DateRange) {
-    if (!isControlled) setUncontrolled(range);
-    onValueChange?.(range);
+  function apply() {
+    if (!draft?.start || !draft.end) return;
+    if (!isControlled) setUncontrolled(draft);
+    onValueChange?.(draft);
     setDraft(null);
+    setHoverDate(null);
     setOpen(false);
     triggerRef.current?.focus();
   }
 
+  // Picks stay pending until Apply: a day or a preset only changes the draft.
   function onDay(iso: string) {
-    const next = nextRange(picking, iso);
-    if (next.end) {
-      commit(next);
-      return;
-    }
-    setDraft(next);
+    setDraft(nextRange(draft ?? undefined, iso));
   }
 
-  const rangeStatus = !picking?.start
+  function onPreset(start: string, end: string) {
+    setDraft({ start, end });
+    setView(monthOf(start));
+  }
+
+  const rangeStatus = !draft?.start
     ? "Pick a start date"
-    : picking.end
-      ? `${formatRangeLabel(picking)}`
+    : draft.end
+      ? `${formatRangeLabel(draft)}`
       : "Pick an end date";
+  const draftPreset = presetFor(resolvedPresets, draft ?? undefined);
+  const gridProps = {
+    size: size === "sm" ? ("sm" as const) : ("md" as const),
+    start: draft?.start,
+    end: draft?.end,
+    onValueChange: onDay,
+    disabled,
+    minDate,
+    maxDate,
+    bare: true,
+    hoverDate,
+    onHoverDateChange: setHoverDate,
+  };
   const hidden = selected?.start ? (selected.end ? `${selected.start}/${selected.end}` : selected.start) : "";
 
   return (
@@ -141,6 +184,7 @@ export function DateRangePicker({
           if (open) close("escape");
           else {
             setDraft(selected ?? null);
+            setView(monthOf(selected?.start));
             setOpen(true);
           }
         }}
@@ -162,33 +206,45 @@ export function DateRangePicker({
           <span className={styles.srOnly} aria-live="polite">
             {rangeStatus}
           </span>
-          {resolvedPresets.length > 0 ? (
-            <div className={styles.presets} role="group" aria-label="Presets">
-              {resolvedPresets.map((preset) => {
-                const pressed = presetFor([preset], selected) !== undefined;
-                return (
+          <div className={styles.body}>
+            {resolvedPresets.length > 0 ? (
+              <div className={styles.presets} role="group" aria-label="Presets">
+                {resolvedPresets.map((preset) => (
                   <button
                     key={preset.id}
                     type="button"
                     className={styles.preset}
-                    aria-pressed={pressed}
-                    onClick={() => commit({ start: preset.start, end: preset.end })}
+                    aria-pressed={draftPreset?.id === preset.id}
+                    onClick={() => onPreset(preset.start, preset.end)}
                   >
                     {preset.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
+            ) : null}
+            <div className={styles.months}>
+              <MonthGrid {...gridProps} view={view} onViewChange={setView} nav={narrow ? "both" : "prev"} />
+              {narrow ? null : (
+                <MonthGrid
+                  {...gridProps}
+                  view={shiftMonth(view, 1)}
+                  onViewChange={(month) => setView(shiftMonth(month, -1))}
+                  nav="next"
+                />
+              )}
             </div>
-          ) : null}
-          <MonthGrid
-            size={size === "sm" ? "sm" : "md"}
-            start={picking?.start}
-            end={picking?.end}
-            onValueChange={onDay}
-            disabled={disabled}
-            minDate={minDate}
-            maxDate={maxDate}
-          />
+          </div>
+          <div className={styles.footer}>
+            <p className={styles.status}>{rangeStatus}</p>
+            <div className={styles.actions}>
+              <Button size="sm" appearance="outline" mode="neutral" onClick={() => close("escape")}>
+                Cancel
+              </Button>
+              <Button size="sm" appearance="solid" mode="primary" disabled={!draft?.end} onClick={apply}>
+                Apply
+              </Button>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

@@ -1,14 +1,32 @@
 import contracts from "agentic-ds-kit/contracts/index.json";
-import { COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
+import { COMPONENT_GROUPS, COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
 
-export type GalleryFilter = "all" | "agent" | "base" | "motion";
+/** "all" or a COMPONENT_GROUPS label. */
+export type GalleryFilter = string;
 
 export interface GalleryItem {
   id: string;
   href: string;
   label: string;
   description: string;
-  filters: Exclude<GalleryFilter, "all">[];
+  group: string;
+  filters: ("agent" | "base" | "motion")[];
+}
+
+/** Filter tabs: All, then each group, with counts taken from the catalog. */
+export function galleryGroups(): { id: GalleryFilter; label: string; count: number }[] {
+  return [
+    { id: "all", label: "All", count: GALLERY_ITEMS.length },
+    ...COMPONENT_GROUPS.map((group) => ({
+      id: group.label,
+      label: group.label,
+      count: GALLERY_ITEMS.filter((item) => item.group === group.label).length,
+    })),
+  ];
+}
+
+function groupOf(id: string): string {
+  return COMPONENT_GROUPS.find((group) => (group.ids as readonly string[]).includes(id))?.label ?? "Other";
 }
 
 const AGENT_IDS = new Set([
@@ -69,6 +87,7 @@ function toItem(id: string): GalleryItem {
     href: `/components/${id}`,
     label: componentLabel(id),
     description: intents.get(id) ?? "Kit component.",
+    group: groupOf(id),
     filters: filtersFor(id),
   };
 }
@@ -121,7 +140,7 @@ function matchesDescription(item: GalleryItem, query: string): boolean {
 }
 
 export function filterGalleryItems(filter: GalleryFilter, query = ""): GalleryItem[] {
-  const group = filter === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.filters.includes(filter));
+  const group = filter === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.group === filter);
   const normalized = query.trim();
   if (!normalized) return group;
 

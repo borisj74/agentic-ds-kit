@@ -60,7 +60,7 @@ export function CellDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell
                       type="text"
                       size={size}

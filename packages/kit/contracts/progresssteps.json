@@ -49,7 +49,8 @@
     "rest": "nav"
   },
   "tokens": [
-    "fill.strong",
+    "action.primary",
+    "action.onPrimary",
     "fill.brandSubtle",
     "fill.danger",
     "text.primary",
