@@ -47,7 +47,7 @@ function isDashboardRoute(slug: PatternSlug): slug is "dashboard" | "settings" |
   return slug === "dashboard" || slug === "settings" || slug === "list-detail" || slug === "empty";
 }
 
-export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string }) {
+export function PatternsView({ slug, view, look }: { slug: PatternSlug; view?: string; look?: string }) {
   const title = PATTERN_ITEMS.find((item) => item.slug === slug)?.label ?? "Patterns";
   const usage = usageFor(slug);
 
@@ -72,7 +72,7 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
           ) : slug === "billing-schedule" || slug === "integration-settings" ? (
             <SaasPatternDemo pattern={slug} />
           ) : slug === "settings-area" ? (
-            <SettingsAreaDemo view={view} />
+            <SettingsAreaDemo view={view} look={look} />
           ) : slug === "layouts" ? (
             <LayoutsDemo titleClassName={styles.variantTitle} />
           ) : slug === "app-shell" ? (

@@ -4,7 +4,7 @@ Decisions for the nistha website (the docs site in this repo), newest first.
 
 ## 2026-11-10: Screens (feat/screens-patterns-1, -2)
 
-Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-6-0 "Nistha Screens": 70 artboards at 1440×900. They are two sets (Settings, Onboarding), each in light and dark, and each drawn twice: once with the AppHeader + SideNav chrome and once as a "Stage" (no top bar, nav with brand and search, the page in an inset panel). Both are copy-in patterns, not components.
+Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-6-0 "Nistha Screens": 70 artboards at 1440×900. They are two sets (Settings, Onboarding), each in light and dark, and each drawn twice: once with the AppHeader + SideNav chrome (first row) and once as a "Stage" (second row: no top bar, nav with brand and search, the page on an inset panel, the site's own look). Stage is the default. Both are copy-in patterns, not components.
 
 ### Inventory
 
@@ -20,7 +20,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | Settings · Team · empty | `settings` (`team="empty"`) | Empty (outlined) with Invite people as the primary | PageHeader primary steps away so there is one. |
 | Settings · Notifications | `settings` (`notifications`) | Card, Table, Switch (accessible name per row and channel), Field + Select (digest), NotificationStack (the header bell), save bar | |
 | Settings · Security (+ 2FA off) | `settings` (`security`, `twoFactor`) | Card (headerAction), Field, Input (password), Badge (On / Off), Switch, Alert (warning), ListView (sessions, Sign out), Button (danger outline), AlertDialog | Paper puts the 2FA title, Badge and Switch in one header row; Card's header takes one action, so that row is in the body. |
-| Settings · * · Stage | not built | — | The Stage frames are a chrome choice (side nav with brand + search, settings nested under it, page on an inset panel). Layout is the user's choice and app-shell already shows "built nav, no header". The inset panel would need a new layout class (proposal: `layout-shell--inset`, framed page on `--surface-card` with `--radius-surface-lg`); not added without Boris's OK. |
+| Settings · * · Stage (second row) | `settings` with `nav="app"`, in an app shell with **`layout-shell--inset`** | built SideNav (Brand, Search Input in a Slot, app rows, a "Settings · 5" Section with the five sections, Account) on the canvas; page on the inset panel; PageHeader breadcrumbs (Settings › section) and `headerActions` (Help outline, NotificationStack bell) | **The default look**, per Boris (2026-11-10: "the second row … so it matches the site"). Needs the new kit layout modifier below. |
 | Onboarding · 01–04 (+ 02b error, 02c submitting) | `onboarding` (branch `-2`) | see that section | |
 
 **Skipped (already patterns):** the Billing schedule card (it *is* `billing-schedule`, extended rather than copied); integration settings (no Integrations section in Paper's settings nav). `settings-form` stays as it is: a single-page example. `settings` is the multi-page area; neither replaces the other.
@@ -30,6 +30,8 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 - **One `settings` pattern, not five.** The five pages share the nav, the narrow Drawer and the save bar, and an agent asked for "settings" wants the whole area. Each page is its own file (`BillingSettings.tsx`, `TeamSettings.tsx`, …), so dropping one is deleting a file and a nav row. Five separate patterns would each repeat the nav and shell.
 - **Patterns can now build on patterns.** Copy-in sources could only import `../../ui/*`. `settings` imports `../BillingSchedulePattern`; `build-patterns-src` rewrites that to `../billing-schedule`, records `requires: ["billing-schedule"]` in `patterns-src/index.json` (and checks it against the contract's `requires`), and `add settings` copies `billing-schedule` beside the target unless that folder exists (then it's kept and said so; `--force` doesn't touch it). Checked with default and `--dir` targets; the copies typecheck against the built kit. MCP `get_pattern` returns `requires`.
 - **`billing-schedule` extended:** `summary`, `limit` (default 3), `description`, `onViewAll`. Existing props and default rendering are unchanged. The docs demo has a Summary tab.
+- **Stage is the default look (Boris, mid-review: "for these screens the second row … so it matches the site").** Paper's second row is the docs site's own chrome (PlaygroundShell "Direction A: Stage"): the canvas is the frame, the nav sits on it, the page floats on a card panel. That had no kit layout class, so this adds **`layout-shell--inset`** to `lib/layout.css`: shell padding `--space-2` (no padding on the nav side), the page column (layout-app's last child) gets `--line-default` border, `--radius-surface-lg`, `--surface-card`, `--shadow-xs`; it sets SideNav's documented `--sidenav-background` to transparent so the nav shows the canvas. No new tokens. Documented on Foundations → Grid. The settings demo has a Chrome Select (Stage / Header bar, `?look=header`); the first row stays available as `nav="column"`.
+- **`nav="app"`:** the pattern drops its own column and Drawer; the app's SideNav lists the sections (`SETTINGS_SECTIONS` is exported for that), and below md they're in the app shell's Drawer with the rest of the nav. The page takes the host surface (the inset panel) instead of the canvas tone.
 - **Chrome stays outside.** The pattern renders the settings nav (SideNav blocks, a `nav` landmark labelled Settings, `aria-current` on the section) and its own `<main>` (labelled "Settings: <section>"). It sits inside the app's chrome; the docs demo wraps it in the `app-shell` example to match Paper. Below `--grid-breakpoint-md` (read at runtime like app-shell) the nav moves into a left kit Drawer opened from an outline "Settings · <section>" button above the PageHeader; picking a section closes the Drawer and focus returns to the button.
 - **One solid primary per view:** Billing → Upgrade (or Pay now when overdue); Profile / Notifications → Save; Team → Invite people (in the Empty when empty; Send invites inside the Drawer, a modal view); Security → none.
 - **Motion:** none beyond kit overlays (Drawer, AlertDialog, DropdownMenu), which already honour reduced motion. Paper's notes ask for nothing else.
@@ -42,7 +44,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 - A Table option for compact columns (no 12rem min), so a 4-column table fits a half-width card.
 - UsageList warn threshold as a prop (`warnAt`, as UsageMeter has).
 - Empty `tone="danger"` for load errors.
-- `layout-shell--inset` for Paper's Stage frames.
+- `layout-shell--inset` is new in this PR (see above): Boris to confirm the name and values.
 
 ## 2026-11-10: Motion (feat/motion-patterns-1, -2)
 

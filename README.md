@@ -55,7 +55,7 @@ Patterns are examples of what you can build from the components, not rules: star
 - `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 - `billing-schedule` — Section + next charge + failed-payment Alert + Table with status Badges
 - `integration-settings` — Section + status Badge + FieldSet of Fields (Select, Switch) + scope Tags + Save + Disconnect with AlertDialog
-- `settings` — settings nav (SideNav blocks, Drawer below md) + Profile, Billing, Team, Notifications and Security pages; Billing uses `billing-schedule` (add copies it beside)
+- `settings` — Profile, Billing, Team, Notifications and Security pages; sections in your app's SideNav (Stage look, `layout-shell--inset`) or the pattern's own nav column (Drawer below md); Billing uses `billing-schedule` (add copies it beside)
 
 ### Playground
 Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started, Foundations, Components, and Patterns. Components holds Overview, then collapsible Forms, Data, Overlays, Navigation, Feedback, Charts, and Agent. Pattern pages are routes under `/patterns/[slug]`. Foundation sections still use hash links.

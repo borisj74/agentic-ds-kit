@@ -38,6 +38,29 @@
   height: 100dvh;
 }
 
+/* Stage (the Nistha site's chrome): the canvas is the frame, the side nav sits on it, and
+   the page floats on an inset card panel. Put it on the shell; the page column is
+   layout-app's last child. The nav keeps the canvas (no panel of its own). */
+.layout-shell--inset {
+  --sidenav-background: transparent;
+  box-sizing: border-box;
+  padding-block: var(--space-2);
+  padding-inline-end: var(--space-2);
+}
+
+.layout-shell--inset > .layout-app > :last-child {
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* No side nav in the row (narrow, nav in a Drawer): inset the panel on both sides. */
+.layout-shell--inset > .layout-app > :only-child {
+  margin-inline-start: var(--space-2);
+}
+
 .layout-app {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);

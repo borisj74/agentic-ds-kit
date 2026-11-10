@@ -4,16 +4,18 @@
 .settings-pattern {
   flex: 1 1 auto;
   min-height: 0;
-  background: var(--bg-canvas);
 }
 
-/* The settings nav is a second SideNav column beside the page (layout-app's max-content column). */
+/* Own settings nav (Paper's first row): the page sits on the canvas tone. With nav="app" the page
+   takes its host's surface, e.g. the inset card panel of layout-shell--inset (the Stage row). */
+.settings-pattern--column,
+.settings-pattern--column /* The settings nav is a second SideNav column beside the page (layout-app's max-content column). */
 .settings-pattern__nav {
   border-inline-end: var(--border-width-thin) solid var(--line-default);
 }
 
-/* Below md the nav lives in the Drawer: the page is the only column, not layout-app's max-content one. */
-.settings-pattern--narrow {
+/* No nav column (below md, or nav="app"): the page is the only column, not layout-app's max-content one. */
+.settings-pattern--single {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -21,10 +23,6 @@
 .settings-pattern__menu {
   padding-block-start: var(--space-inset-md);
   padding-inline: var(--layout-margin-md);
-}
-
-.settings-pattern__page {
-  background: var(--bg-canvas);
 }
 
 /* Profile and Notifications: the form wraps the content and a save bar that sticks to the bottom of the page. */

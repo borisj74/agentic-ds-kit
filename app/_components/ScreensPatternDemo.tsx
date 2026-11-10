@@ -1,10 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Avatar, Badge, NotificationStack, Select } from "agentic-ds-kit";
-import type { SideNavItemData } from "agentic-ds-kit";
-import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
 import {
+  Avatar,
+  Badge,
+  Button,
+  Input,
+  NotificationStack,
+  Select,
+  SideNavAccount,
+  SideNavBrand,
+  SideNavHeader,
+  SideNavItem,
+  SideNavNav,
+  SideNavRoot,
+  SideNavSection,
+  SideNavSlot,
+} from "agentic-ds-kit";
+import type { SideNavItemData } from "agentic-ds-kit";
+import { AppShellPattern, useAppShell } from "../../packages/kit/patterns/AppShellPattern";
+import {
+  SETTINGS_SECTIONS,
   SettingsPattern,
   type BillingState,
   type SettingsSection,
@@ -46,6 +62,49 @@ const APP_NAV: SideNavItemData[] = [
   { id: "settings", label: "Settings", icon: "Settings", active: true },
 ];
 
+type Look = "stage" | "header";
+
+const LOOKS = [
+  { value: "stage", label: "Stage (site look)" },
+  { value: "header", label: "Header bar" },
+];
+
+/**
+ * Paper's second row ("Stage", the Nistha site's chrome): a built SideNav on the canvas with the
+ * brand, search, the app rows and the five settings sections nested under SETTINGS, plus the account.
+ * Forced open in the narrow Drawer.
+ */
+function StageNav({ section, onPick }: { section: SettingsSection; onPick: (section: SettingsSection) => void }) {
+  const shell = useAppShell();
+  const inDrawer = shell?.navPlacement === "drawer";
+  return (
+    <SideNavRoot aria-label="Northwind" radius={inDrawer ? "md" : "none"} open>
+      {inDrawer ? null : (
+        <SideNavHeader>
+          <SideNavBrand title="northwind" mark="n" />
+        </SideNavHeader>
+      )}
+      <SideNavSlot>
+        <Input id={inDrawer ? "stage-search-drawer" : "stage-search"} type="search" size="sm" iconStart="Search" placeholder="Search" ariaLabel="Search" end="⌘K" />
+      </SideNavSlot>
+      <SideNavNav>
+        <SideNavSection>
+          {APP_NAV.filter((item) => item.id !== "settings").map((item) => (
+            <SideNavItem key={item.id} label={item.label} icon={item.icon} href="#" />
+          ))}
+          <SideNavItem label="Settings" icon="Settings" href="#" />
+        </SideNavSection>
+        <SideNavSection label={`Settings · ${SETTINGS_SECTIONS.length}`}>
+          {SETTINGS_SECTIONS.map((item) => (
+            <SideNavItem key={item.id} label={item.label} active={item.id === section} onClick={() => onPick(item.id)} />
+          ))}
+        </SideNavSection>
+      </SideNavNav>
+      <SideNavAccount name="Priya Shah" secondary="Pro plan · 12 seats" initials="PS" />
+    </SideNavRoot>
+  );
+}
+
 const INBOX = [
   { id: "n1", title: "Payment received", body: "INV-2026-0121 · $1,240.00", createdAt: "2 h ago", read: false, tone: "success" as const },
   { id: "n2", title: "Approval needed", body: "Agent wants to send 4 reminders", createdAt: "5 h ago", read: false, tone: "info" as const },
@@ -54,10 +113,11 @@ const INBOX = [
 /**
  * The settings pattern inside the app-shell example, framed like the other pattern demos.
  * A Select picks one of Paper's screens (section + state); the pattern's own nav also switches sections.
- * `?view=<screen id>` opens a screen directly (e.g. billing-overdue).
+ * `?view=<screen id>` opens a screen directly (e.g. billing-overdue); `?look=header` shows Paper's first row.
  */
-export function SettingsAreaDemo({ view }: { view?: string }) {
+export function SettingsAreaDemo({ view, look: lookProp }: { view?: string; look?: string }) {
   const [screenId, setScreenId] = useState(SETTINGS_SCREENS.some((item) => item.id === view) ? view! : "billing");
+  const [look, setLook] = useState<Look>(lookProp === "header" ? "header" : "stage");
   const screen = SETTINGS_SCREENS.find((item) => item.id === screenId) ?? SETTINGS_SCREENS[0];
   const [query, setQuery] = useState("");
 
@@ -65,17 +125,52 @@ export function SettingsAreaDemo({ view }: { view?: string }) {
     setScreenId(SETTINGS_SCREENS.find((item) => item.section === section)?.id ?? "billing");
   }
 
+  const settings = (
+    <SettingsPattern
+      nav={look === "stage" ? "app" : "column"}
+      headerActions={
+        look === "stage" ? (
+          <>
+            <Button appearance="outline" mode="neutral" size="sm" iconStart="CircleHelp">
+              Help
+            </Button>
+            <NotificationStack items={INBOX} label="Notifications" />
+          </>
+        ) : undefined
+      }
+      section={screen.section}
+      onSectionChange={pickSection}
+      billing={screen.billing ?? "ready"}
+      team={screen.team ?? "ready"}
+      inviteOpen={screen.invite ?? false}
+      onInviteOpenChange={(open) => setScreenId(open ? "team-invite" : "team")}
+      twoFactor={screen.twoFactor ?? true}
+    />
+  );
+
   return (
     <div className={styles.signInDemo}>
-      <div className={styles.screenPicker}>
-        <Select
-          id="settings-area-screen"
-          size="sm"
-          ariaLabel="Settings screen"
-          options={SETTINGS_SCREENS.map((item) => ({ value: item.id, label: item.label }))}
-          value={screenId}
-          onChange={(value) => setScreenId(String(value))}
-        />
+      <div className={styles.screenPickers}>
+        <div className={styles.screenPicker}>
+          <Select
+            id="settings-area-screen"
+            size="sm"
+            ariaLabel="Settings screen"
+            options={SETTINGS_SCREENS.map((item) => ({ value: item.id, label: item.label }))}
+            value={screenId}
+            onChange={(value) => setScreenId(String(value))}
+          />
+        </div>
+        <div className={styles.screenPicker}>
+          <Select
+            id="settings-area-look"
+            size="sm"
+            ariaLabel="Chrome"
+            options={LOOKS}
+            value={look}
+            onChange={(value) => setLook(value === "header" ? "header" : "stage")}
+          />
+        </div>
       </div>
       <div className={styles.browser}>
         <div className={styles.browserChrome} aria-hidden="true">
@@ -87,36 +182,39 @@ export function SettingsAreaDemo({ view }: { view?: string }) {
           <div className={styles.urlBar}>{`app.northwind.example/settings/${screen.section}`}</div>
         </div>
         <PreviewScope className={styles.scopeFill}>
-          <AppShellPattern
-            header={{
-              title: "Northwind",
-              mark: "N",
-              searchPlaceholder: "Search or jump to…",
-              searchShortcut: "⌘K",
-              searchValue: query,
-              onSearch: setQuery,
-              actions: (
-                <>
-                  <Badge tone="neutral" appearance="outline" size="sm">
-                    Example
-                  </Badge>
-                  <NotificationStack items={INBOX} label="Notifications" />
-                  <Avatar name="Priya Shah" size="sm" />
-                </>
-              ),
-            }}
-            nav={{ title: "Northwind", mark: "N", items: APP_NAV }}
-          >
-            <SettingsPattern
-              section={screen.section}
-              onSectionChange={pickSection}
-              billing={screen.billing ?? "ready"}
-              team={screen.team ?? "ready"}
-              inviteOpen={screen.invite ?? false}
-              onInviteOpenChange={(open) => setScreenId(open ? "team-invite" : "team")}
-              twoFactor={screen.twoFactor ?? true}
-            />
-          </AppShellPattern>
+          {look === "stage" ? (
+            <AppShellPattern
+              className="layout-shell--inset"
+              mark="n"
+              navLabel="Northwind"
+              nav={<StageNav section={screen.section} onPick={pickSection} />}
+            >
+              {settings}
+            </AppShellPattern>
+          ) : (
+            <AppShellPattern
+              header={{
+                title: "Northwind",
+                mark: "N",
+                searchPlaceholder: "Search or jump to…",
+                searchShortcut: "⌘K",
+                searchValue: query,
+                onSearch: setQuery,
+                actions: (
+                  <>
+                    <Badge tone="neutral" appearance="outline" size="sm">
+                      Example
+                    </Badge>
+                    <NotificationStack items={INBOX} label="Notifications" />
+                    <Avatar name="Priya Shah" size="sm" />
+                  </>
+                ),
+              }}
+              nav={{ title: "Northwind", mark: "N", items: APP_NAV }}
+            >
+              {settings}
+            </AppShellPattern>
+          )}
         </PreviewScope>
       </div>
     </div>

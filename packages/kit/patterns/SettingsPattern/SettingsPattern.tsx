@@ -16,6 +16,14 @@ import "./SettingsPattern.css";
 export type { BillingState, TeamState, SettingsSection };
 
 export interface SettingsPatternProps {
+  /**
+   * Where the section links live. "column" (default): the pattern's own settings nav beside the
+   * page, in a Drawer below md. "app": your app's SideNav lists them (build its rows from
+   * SETTINGS_SECTIONS, as in the Stage look); the page shows a Settings › section breadcrumb.
+   */
+  nav?: "column" | "app";
+  /** Extra PageHeader actions before the section's own, e.g. Help and the NotificationStack bell. */
+  headerActions?: ReactNode;
   /** Current section (controlled). Pair it with onSectionChange, or route it from your URL. */
   section?: SettingsSection;
   defaultSection?: SettingsSection;
@@ -62,6 +70,8 @@ function useNarrow(): boolean {
  * `<nav>` and `<main>`; place it inside your app chrome (e.g. the app-shell example), not inside another main.
  */
 export function SettingsPattern({
+  nav: navPlacement = "column",
+  headerActions,
   section: sectionProp,
   defaultSection = "billing",
   onSectionChange,
@@ -80,7 +90,8 @@ export function SettingsPattern({
   const [navOpen, setNavOpen] = useState(false);
   const [ownInvite, setOwnInvite] = useState(false);
   const invite = inviteOpen ?? ownInvite;
-  const narrow = useNarrow();
+  const ownNav = navPlacement === "column";
+  const narrow = useNarrow() && ownNav;
   const meta = SECTIONS.find((item) => item.id === section) ?? SECTIONS[0];
 
   function go(id: SettingsSection) {
@@ -114,16 +125,31 @@ export function SettingsPattern({
   );
 
   // One solid primary per view: Team's "Invite people" sits in the PageHeader unless the page is empty.
-  const actions: ReactNode =
+  const sectionAction: ReactNode =
     section === "team" && team === "ready" ? (
       <Button iconStart="Plus" onClick={() => setInvite(true)}>
         Invite people
       </Button>
+    ) : null;
+  const actions: ReactNode =
+    headerActions || sectionAction ? (
+      <>
+        {headerActions}
+        {sectionAction}
+      </>
     ) : undefined;
 
   return (
-    <div className={narrow ? "layout-app settings-pattern settings-pattern--narrow" : "layout-app settings-pattern"}>
-      {narrow ? null : nav}
+    <div
+      className={[
+        "layout-app settings-pattern",
+        ownNav ? "settings-pattern--column" : "settings-pattern--single",
+        narrow ? "settings-pattern--single" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {ownNav && !narrow ? nav : null}
       <main className="layout-canvas layout-canvas--sticky-header settings-pattern__page" aria-label={`Settings: ${meta.label}`}>
         {narrow ? (
           <div className="settings-pattern__menu">
@@ -133,7 +159,12 @@ export function SettingsPattern({
           </div>
         ) : null}
         <div className="layout-header">
-          <PageHeader title={meta.label} subtitle={meta.subtitle} actions={actions} />
+          <PageHeader
+            title={meta.label}
+            subtitle={meta.subtitle}
+            actions={actions}
+            breadcrumbs={ownNav ? undefined : [{ label: "Settings" }, { label: meta.label }]}
+          />
         </div>
         {section === "profile" ? (
           <ProfileSettings onSave={() => onSave?.("profile")} onCancel={() => onCancel?.("profile")} />

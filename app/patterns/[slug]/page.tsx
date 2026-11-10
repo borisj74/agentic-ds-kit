@@ -22,11 +22,12 @@ export default async function PatternPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ view?: string | string[] }>;
+  searchParams: Promise<{ view?: string | string[]; look?: string | string[] }>;
 }) {
   const { slug } = await params;
   if (!isPatternSlug(slug)) notFound();
   const query = await searchParams;
   const view = Array.isArray(query.view) ? query.view[0] : query.view;
-  return <PatternsView slug={slug} view={view} />;
+  const look = Array.isArray(query.look) ? query.look[0] : query.look;
+  return <PatternsView slug={slug} view={view} look={look} />;
 }

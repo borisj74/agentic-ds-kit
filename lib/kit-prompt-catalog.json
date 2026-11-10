@@ -10380,13 +10380,13 @@
     {
       "id": "settings",
       "group": "pattern",
-      "intent": "Settings area: a settings nav (Profile, Billing, Team, Notifications, Security) beside one page per section, with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
+      "intent": "Settings area: a settings nav (Profile, Billing, Team, Notifications, Security) beside one page per section, or the sections nested in your app's SideNav (the Stage look); Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "The settings nav is a nav landmark (SideNav blocks) with the current section marked; below --grid-breakpoint-md it moves into a kit Drawer opened from a button in the page header",
+        "The section links are a nav landmark with the current section marked: the pattern's own settings nav (nav=\"column\", in a kit Drawer below --grid-breakpoint-md opened from a button above the PageHeader), or your app's SideNav (nav=\"app\") with the SETTINGS_SECTIONS rows under a Settings group",
         "The pattern renders its own <main> for the page column; place it inside your app chrome (AppHeader / SideNav, e.g. the app-shell example), not inside another main",
         "Page layout uses kit layout classes (layout-app, layout-canvas, layout-header, layout-content, layout-split*) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints",
         "Wrap every labeled input in Field; Switches in a table row get an accessible name that says the row and the channel",

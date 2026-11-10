@@ -976,7 +976,7 @@
   },
   {
     "id": "settings",
-    "intent": "Settings area example: a settings nav (Profile, Billing, Team, Notifications, Security) in a SideNav column, a Drawer below md, and one page per section with its states.",
+    "intent": "Settings area example: Profile, Billing, Team, Notifications and Security pages with their states; the sections live in its own SideNav column (Drawer below md) or in your app's SideNav (Stage look, layout-shell--inset).",
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",
