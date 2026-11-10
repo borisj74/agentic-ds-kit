@@ -261,3 +261,8 @@ export function propsFor(id: string): ContractPropRow[] {
     ];
   });
 }
+
+/** The raw contract JSON for a component id, or null when the kit has none. */
+export function contractFor(id: string): Record<string, unknown> | null {
+  return asRecord(contracts[id]);
+}

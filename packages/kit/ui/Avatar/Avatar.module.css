@@ -13,8 +13,11 @@
   user-select: none;
 }
 
+/* bg-tray, not surface-muted: muted is slate-50, the same as --bg-canvas and --bg-subtle, so on
+   a canvas or subtle ground the initials circle had no edge. Tray reads on white and on canvas,
+   in light and dark. */
 .fallback {
-  background: var(--surface-muted);
+  background: var(--bg-tray);
   color: var(--text-primary);
 }
 

@@ -1,216 +1,206 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
-import {
-  buildPlaygroundNavGroups,
-  filterPlaygroundNavGroups,
-  flattenPlaygroundNav,
-} from "@/lib/playground-nav";
-import { copyAiPrompt } from "@/lib/playground-prompt";
-import { useLocationHash } from "@/lib/use-location-hash";
+import kitPackage from "agentic-ds-kit/package.json";
+import { buildSiteNavItems, filterSiteNavItems } from "@/lib/playground-nav";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
-import { ThemeControls } from "../theme/ThemeControls";
-import { PlaygroundCommand } from "./PlaygroundCommand";
+import { NisthaLogo } from "./NisthaLogo";
+import { PlaygroundCommand, openPlaygroundCommand } from "./PlaygroundCommand";
+import { ThemeActions, ThemePanel } from "./ThemePanel";
 import { useCustomizeOpen } from "./useCustomizeOpen";
 import styles from "./PlaygroundShell.module.css";
 
-const COMPACT_NAV = "(max-width: 767px)";
-
-function subscribeCompact(onChange: () => void) {
-  const media = window.matchMedia(COMPACT_NAV);
-  media.addEventListener("change", onChange);
-  return () => media.removeEventListener("change", onChange);
-}
-
-function readCompact() {
-  return window.matchMedia(COMPACT_NAV).matches;
-}
+const GITHUB_URL = "https://github.com/borisj74/agentic-ds-kit";
 
 function subscribeRootTheme(onChange: () => void) {
   const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme"],
-  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   return () => observer.disconnect();
 }
 
-const readServerFalse = () => false;
 const readServerTheme = (): PlaygroundTheme => "light";
+
+function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuery: (value: string) => void; pathname: string; searchId: string }) {
+  const items = buildSiteNavItems(pathname);
+  const visible = filterSiteNavItems(items, query);
+  const searching = query.trim().length > 0;
+
+  return (
+    <>
+      <div className={styles.search} role="search">
+        <Input
+          id={searchId}
+          type="search"
+          size="sm"
+          placeholder="Search parts"
+          iconStart="Search"
+          end="⌘K"
+          ariaLabel="Search parts"
+          aria-keyshortcuts="Meta+K Control+K"
+          value={query}
+          onChange={onQuery}
+        />
+      </div>
+      <div className={styles.navHost}>
+        {searching && visible.length === 0 ? (
+          <p className={styles.navEmpty} role="status">
+            No matches
+          </p>
+        ) : (
+          <AppNav aria-label="Documentation" items={visible} />
+        )}
+      </div>
+    </>
+  );
+}
 
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hash = useLocationHash() ?? "";
-  const theme = useSyncExternalStore(subscribeRootTheme, readPlaygroundTheme, readServerTheme);
-  const compact = useSyncExternalStore(subscribeCompact, readCompact, readServerFalse);
+  const siteMode = useSyncExternalStore(subscribeRootTheme, readPlaygroundTheme, readServerTheme);
   const customize = useCustomizeOpen(pathname);
-  const route = `${pathname}#${hash}`;
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);
-  const [copiedPrompt, setCopiedPrompt] = useState(false);
-  const [navQuery, setNavQuery] = useState("");
-  const navOpen = navOpenOn === route;
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  // The drawer closes itself when the route changes: it is only open for the page it opened on.
+  const navOpen = navOpenOn === pathname;
 
-  useEffect(() => {
-    const media = window.matchMedia(COMPACT_NAV);
-    const onChange = () => {
-      if (!media.matches) setNavOpenOn(null);
-    };
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    if (!compact || !navOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setNavOpenOn(null);
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [compact, navOpen]);
-
-  const groups = buildPlaygroundNavGroups(pathname, hash);
-  const navQueryTrimmed = navQuery.trim();
-  const visibleGroups = filterPlaygroundNavGroups(groups, navQueryTrimmed);
-  const searching = navQueryTrimmed.length > 0;
-  const isDark = theme === "dark";
-  const overlayNav = compact && navOpen;
-
-  const handleThemeToggle = () => {
-    applyPlaygroundTheme(isDark ? "light" : "dark");
-  };
-
-  const handleCopyPrompt = async () => {
-    const ok = await copyAiPrompt();
-    if (!ok) return;
-    setCopiedPrompt(true);
-    window.setTimeout(() => setCopiedPrompt(false), 1600);
-  };
-
-  const handleNavToggle = () => {
-    const next = !navOpen;
-    if (next && customize.sheet) customize.close();
-    setNavOpenOn(next ? route : null);
-  };
-
-  const handleCustomizeToggle = () => {
-    if (!customize.open) setNavOpenOn(null);
+  // The docked panel sits before the Theme button in the tab order: move focus into it on open,
+  // and back to the button on close, so keyboard users don't lose their place.
+  function toggleThemePanel() {
+    const opening = !customize.docked;
     customize.toggle();
-  };
+    if (opening) window.requestAnimationFrame(() => document.getElementById("customize-panel")?.focus());
+  }
 
-  const themePanel = <ThemeControls onCollapse={customize.pinned ? undefined : customize.close} />;
+  function closeThemePanel() {
+    customize.close();
+    window.requestAnimationFrame(() => document.getElementById("theme-toggle")?.focus());
+  }
+
+  const themePanel = <ThemePanel onClose={customize.pinned ? undefined : closeThemePanel} />;
 
   return (
     <div className={styles.frame}>
-      <header className={styles.topbar}>
-        <div className={styles.menu}>
+      <a className={styles.skip} href="#main">
+        Skip to content
+      </a>
+
+      <header className={styles.mobileHeader}>
+        <NisthaLogo />
+        <div className={styles.mobileTools}>
+          <Button size="lg" appearance="ghost" mode="neutral" iconStart="Search" ariaLabel="Search" onClick={openPlaygroundCommand} />
           <Button
-            size="sm"
+            size="lg"
             appearance="ghost"
-            mode="neutral"
-            iconStart={overlayNav ? "X" : "Menu"}
-            ariaLabel={overlayNav ? "Close navigation" : "Open navigation"}
-            onClick={handleNavToggle}
-          />
-        </div>
-        <div className={styles.brand}>
-          <span className={styles.productName}>Nistha</span>
-          <span className={styles.tagline}>Agentic DS Kit</span>
-        </div>
-        <div className={styles.tools}>
-          <Button
-            size="sm"
-            appearance="outline"
             mode="neutral"
             iconStart="SlidersHorizontal"
             ariaLabel="Theme"
-            aria-expanded={customize.open}
-            aria-controls="customize-panel"
-            onClick={handleCustomizeToggle}
-          >
-            {compact ? undefined : "Theme"}
-          </Button>
+            aria-haspopup="dialog"
+            aria-expanded={sheetOpen}
+            onClick={() => setSheetOpen(true)}
+          />
           <Button
-            size="sm"
-            appearance="outline"
+            size="lg"
+            appearance="ghost"
             mode="neutral"
-            iconStart="Copy"
-            ariaLabel="Copy prompt for AI"
-            onClick={() => {
-              void handleCopyPrompt();
-            }}
-          >
-            {compact ? undefined : copiedPrompt ? "Copied" : "Copy prompt for AI"}
-          </Button>
-          <Button
-            size="sm"
-            appearance="outline"
-            mode="neutral"
-            iconStart={isDark ? "Sun" : "Moon"}
-            ariaLabel={isDark ? "Switch to light theme" : "Switch to dark theme"}
-            onClick={handleThemeToggle}
-          >
-            {compact ? undefined : isDark ? "Light" : "Dark"}
-          </Button>
+            iconStart="Menu"
+            ariaLabel="Open navigation"
+            aria-haspopup="dialog"
+            aria-expanded={navOpen}
+            onClick={() => setNavOpenOn(pathname)}
+          />
         </div>
       </header>
-      <div className={styles.shell}>
-        {overlayNav ? (
-          <button
-            type="button"
-            className={styles.scrim}
-            aria-label="Close navigation"
-            onClick={() => setNavOpenOn(null)}
+
+      <div className={styles.sidebar}>
+        <div className={styles.brandRow}>
+          <NisthaLogo />
+          <span className={styles.version}>{kitPackage.version}</span>
+        </div>
+        <SiteNav query={query} onQuery={setQuery} pathname={pathname} searchId="site-nav-search" />
+      </div>
+
+      {customize.docked ? (
+        <aside id="customize-panel" className={styles.themeColumn} aria-label="Theme" tabIndex={-1}>
+          {themePanel}
+        </aside>
+      ) : null}
+
+      <div className={styles.panel}>
+        <header className={styles.topbar}>
+          <Button
+            id="theme-toggle"
+            size="sm"
+            appearance={customize.open ? "soft" : "outline"}
+            mode={customize.open ? "primary" : "neutral"}
+            iconStart="SlidersHorizontal"
+            ariaLabel="Theme"
+            aria-expanded={customize.docked}
+            aria-controls={customize.docked ? "customize-panel" : undefined}
+            onClick={toggleThemePanel}
           />
-        ) : null}
-        <aside
-          id="playground-nav"
-          className={`${styles.sidebar} ${overlayNav ? styles.sidebarOpen : ""}`}
-          inert={compact && !navOpen ? true : undefined}
-        >
-          <div className={styles.sidebarSearch}>
-            <PlaygroundCommand />
-            <Input
-              id="docs-nav-filter"
-              type="search"
+          <div className={styles.modeGroup} role="group" aria-label="Site colour mode">
+            <Button
               size="sm"
-              placeholder="Search"
-              iconStart="Search"
-              end="⌘K"
-              ariaLabel="Search"
-              aria-keyshortcuts="Meta+K Control+K"
-              value={navQuery}
-              onChange={setNavQuery}
+              appearance={siteMode === "light" ? "soft" : "ghost"}
+              mode="neutral"
+              iconStart="Sun"
+              ariaLabel="Light"
+              aria-pressed={siteMode === "light"}
+              onClick={() => applyPlaygroundTheme("light")}
+            />
+            <Button
+              size="sm"
+              appearance={siteMode === "dark" ? "soft" : "ghost"}
+              mode="neutral"
+              iconStart="Moon"
+              ariaLabel="Dark"
+              aria-pressed={siteMode === "dark"}
+              onClick={() => applyPlaygroundTheme("dark")}
             />
           </div>
-          <div className={styles.sidebarScroll}>
-            {searching && visibleGroups.length === 0 ? (
-              <p className={styles.sidebarEmpty}>No matches</p>
-            ) : (
-              <AppNav
-                aria-label="Documentation"
-                {...(searching
-                  ? { items: flattenPlaygroundNav(visibleGroups) }
-                  : { groups: visibleGroups })}
-              />
-            )}
-          </div>
-        </aside>
-        {customize.docked ? (
-          <aside
-            id="customize-panel"
-            className={`${styles.customize} ${customize.pinned ? styles.customizePinned : ""}`}
-            aria-label="Theme"
-          >
-            {themePanel}
-          </aside>
-        ) : null}
-        <main className={styles.main}>{children}</main>
+          {/* The kit has no link Button, so the GitHub link is an anchor styled with tokens. */}
+          <a className={styles.github} href={GITHUB_URL} target="_blank" rel="noreferrer">
+            GitHub
+            <span aria-hidden="true">↗</span>
+            <span className={styles.srOnly}> (opens in a new tab)</span>
+          </a>
+        </header>
+        <main id="main" className={styles.main} tabIndex={-1}>
+          {children}
+        </main>
       </div>
-      <Drawer open={customize.sheet} title="Theme" side="left" size="sm" onClose={customize.close}>
-        {customize.sheet ? <div id="customize-panel">{themePanel}</div> : null}
+
+      <Drawer open={navOpen} title="Navigation" side="left" size="sm" onClose={() => setNavOpenOn(null)}>
+        {navOpen ? (
+          <div className={styles.drawerNav}>
+            <SiteNav query={query} onQuery={setQuery} pathname={pathname} searchId="drawer-nav-search" />
+            <div className={styles.drawerFooter}>
+              <span className={styles.version}>agentic-ds-kit {kitPackage.version}</span>
+              <a className={styles.github} href={GITHUB_URL} target="_blank" rel="noreferrer">
+                GitHub
+                <span aria-hidden="true">↗</span>
+                <span className={styles.srOnly}> (opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+        ) : null}
       </Drawer>
+
+      <Drawer
+        open={sheetOpen}
+        title="Theme"
+        side="bottom"
+        size="md"
+        onClose={() => setSheetOpen(false)}
+        footer={sheetOpen ? <ThemeActions compact /> : undefined}
+      >
+        {sheetOpen ? <ThemePanel showHeader={false} showActions={false} /> : null}
+      </Drawer>
+
+      <PlaygroundCommand />
     </div>
   );
 }

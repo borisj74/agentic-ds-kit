@@ -160,6 +160,10 @@ export function componentLabel(id: string): string {
 /** Docs sidebar groups. Charts are their own group, not a nest under Cell. */
 export const COMPONENT_GROUPS = [
   {
+    label: "AI",
+    ids: ["agentfleet", "agentplan", "agenttrail", "approvalcard", "chat", "insightcard", "loadinganimation", "numbertransition", "shimmertext", "thinkinganimation"],
+  },
+  {
     label: "Forms",
     ids: [
       "button",
@@ -192,7 +196,7 @@ export const COMPONENT_GROUPS = [
     ],
   },
   {
-    label: "Data",
+    label: "Data display",
     ids: [
       "accordion",
       "avatar",
@@ -259,10 +263,6 @@ export const COMPONENT_GROUPS = [
   {
     label: "Charts",
     ids: ["barchart", "linechart", "piechart"],
-  },
-  {
-    label: "Agent",
-    ids: ["agentfleet", "agentplan", "agenttrail", "approvalcard", "chat", "insightcard", "loadinganimation", "numbertransition", "shimmertext", "thinkinganimation"],
   },
 ] as const;
 
@@ -396,75 +396,50 @@ function componentLeaves(ids: readonly string[], pathname: string) {
     .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
 }
 
-export function buildPlaygroundNavGroups(pathname: string, hash: string): AppNavGroup[] {
-  const h = hash.replace(/^#/, "").toLowerCase();
-  const isActive = (href: string) => {
-    const [path, fragment] = href.split("#");
-    if (pathname !== path) return false;
-    if (fragment) {
-      const frag = fragment.toLowerCase();
-      if (!h && path === "/foundations" && frag === "color") return true;
-      if (!h && path === "/components" && frag === "gallery") return true;
-      if (!h && path === "/patterns" && frag === "dashboard") return true;
-      if (frag === "list-detail") {
-        return (
-          h === "list-detail" ||
-          h === "launch-brief" ||
-          h === "qa-checklist" ||
-          h === "release-notes" ||
-          h === "support-macros"
-        );
-      }
-      if (frag === "empty") return h === "empty" || h === "research";
-      return h === frag;
-    }
-    return !h;
-  };
+/** Top-level pages in the site nav, in order. */
+export const SITE_PAGES = [
+  { href: "/get-started", label: "Get started", match: ["/get-started", "/installation"] },
+  { href: "/mcp", label: "MCP server", match: ["/mcp"] },
+  { href: "/theming", label: "Theming", match: ["/theming", "/theme"] },
+  { href: "/foundations", label: "Foundations", match: ["/foundations"] },
+  { href: "/components", label: "Components", match: ["/components"] },
+  { href: "/patterns", label: "Patterns", match: ["/patterns", "/studio"] },
+] as const;
 
-  const leaf = (href: string, label: string) => ({
-    href,
-    label,
-    active: isActive(href),
+function pageActive(pathname: string, match: readonly string[]): boolean {
+  return match.some((path) => pathname === path || (path !== "/components" && pathname.startsWith(`${path}/`)));
+}
+
+/**
+ * The site nav: the top-level pages, with every component group as a subgroup (with its count)
+ * directly under Components.
+ * The group that holds the current component opens on its own (AppNav subgroup behaviour).
+ */
+export function buildSiteNavItems(pathname: string): AppNavItem[] {
+  const groups: AppNavItem[] = COMPONENT_GROUPS.map((group) => ({
+    href: `/components?group=${encodeURIComponent(group.label)}`,
+    label: `${group.label} · ${group.ids.length}`,
+    items: componentLeaves(group.ids, pathname),
+  }));
+  // The groups sit right under Components, as its subtree (AppNav nests one level, so the
+  // shell indents them).
+  return SITE_PAGES.flatMap((page) => {
+    const item = { href: page.href, label: page.label, active: pageActive(pathname, page.match) };
+    return page.href === "/components" ? [item, ...groups] : [item];
   });
+}
 
-  return [
-    {
-      label: "Getting started",
-      items: [
-        leaf("/installation", "Installation"),
-        leaf("/mcp", "MCP"),
-        leaf("/theming", "Theming"),
-        leaf("/theme", "Theme"),
-        leaf("/studio", "Studio"),
-      ],
-    },
-    {
-      label: "Foundations",
-      items: FOUNDATION_ITEMS.map((item) => leaf(`/foundations#${item.slug}`, item.label)),
-    },
-    {
-      label: "Components",
-      items: [
-        {
-          href: "/components",
-          label: "Overview",
-          active: pathname === "/components" && !h,
-        },
-        ...COMPONENT_GROUPS.map((group) => ({
-          href: "/components",
-          label: group.label,
-          items: componentLeaves(group.ids, pathname),
-        })),
-      ],
-    },
-    {
-      label: "Patterns",
-      items: [
-        leaf("/patterns", "Overview"),
-        ...PATTERN_ITEMS.map((item) => leaf(`/patterns/${item.slug}`, item.label)),
-      ],
-    },
-  ];
+/** Search keeps only matching links, flat, so every hit is visible. */
+export function filterSiteNavItems(items: AppNavItem[], query: string): AppNavItem[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return items;
+  return items.flatMap((item) =>
+    item.items && item.items.length > 0
+      ? item.items.filter((child) => itemMatches(child, normalized))
+      : itemMatches(item, normalized)
+        ? [item]
+        : [],
+  );
 }
 
 function itemMatches(item: AppNavItem, query: string): boolean {

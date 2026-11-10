@@ -60,7 +60,7 @@
     "rest": "div[role=group]"
   },
   "tokens": [
-    "surface.muted",
+    "bg.tray",
     "text.secondary",
     "surface.page",
     "radius.full",
