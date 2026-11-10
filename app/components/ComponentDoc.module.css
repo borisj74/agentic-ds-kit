@@ -606,9 +606,13 @@
   position: relative;
 }
 
-/* Render areas in both tabs: the faintest grey, the page ground (--bg-canvas, slate-50).
-   Known clash: the kit Avatar fallback fill is the same slate-50, so its circle shows no edge. */
-.examplesHost .layout,
-.examplesHost .example > .exampleCanvas {
-  background: var(--bg-canvas);
+/* Render areas keep the docs' own ground (5% primary on surface, as Scoreboard shows it): no
+   kit fill (canvas, subtle, tray) matches it, so nothing on it loses its edge. */
+
+/* Kit Cell and HeaderCell are transparent: in a preview they sit on a white row, as in a table. */
+.previewCell {
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  background: var(--surface-card);
 }
