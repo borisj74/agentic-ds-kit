@@ -55,7 +55,7 @@ Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), 
 
 ### Keyboard and focus (checked with a script at 1440)
 
-- ApprovalCard: Escape denies and Enter approves while focus is in the card; Enter on another control inside it is left alone.
+- ApprovalCard: Escape denies and Enter approves while focus is in the card; Enter on another control inside it is left alone. Once resolved, focus moves to the one-line row.
 - AgentPlan: Edit opens the form with focus in Step. Enter saves, Escape cancels, and focus goes back to that step's Edit button. Add step focuses the new form; ⌘/Ctrl+Enter accepts a draft or runs an accepted plan.
 - AgentFleet: the agent name is the open button and covers the whole card. Opening moves focus to Collapse; Collapse returns focus to that agent's card.
 
