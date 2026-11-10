@@ -1,0 +1,79 @@
+{
+  "id": "settings",
+  "status": "stable",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add settings",
+  "requires": [
+    "billing-schedule"
+  ],
+  "import": "import { SettingsPattern } from \"@/components/patterns/settings\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/settings/) with this contract beside it, and the billing-schedule example it uses into components/patterns/billing-schedule/ (kept if you already have it). You own the copies: replace the demo data, drop the sections you don't need, and keep the `must` lines.",
+  "intent": "Settings area: a settings nav (Profile, Billing, Team, Notifications, Security) beside one page per section, with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
+  "contains": [
+    "sidenav",
+    "drawer",
+    "pageheader",
+    "card",
+    "field",
+    "input",
+    "select",
+    "textarea",
+    "switch",
+    "button",
+    "avatar",
+    "badge",
+    "alert",
+    "alertdialog",
+    "table",
+    "dropdownmenu",
+    "listview",
+    "usagelist",
+    "notificationstack",
+    "empty",
+    "skeleton"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "The settings nav is a nav landmark (SideNav blocks) with the current section marked; below --grid-breakpoint-md it moves into a kit Drawer opened from a button in the page header",
+    "The pattern renders its own <main> for the page column; place it inside your app chrome (AppHeader / SideNav, e.g. the app-shell example), not inside another main",
+    "Page layout uses kit layout classes (layout-app, layout-canvas, layout-header, layout-content, layout-split*) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints",
+    "Wrap every labeled input in Field; Switches in a table row get an accessible name that says the row and the channel",
+    "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
+    "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
+    "An overdue invoice is a kit Alert (danger) that says the invoice, the amount and what happens next; Pay now is then the one solid primary and Upgrade steps away",
+    "Delete workspace is a danger action behind a kit AlertDialog; Cancel returns focus to it",
+    "Money arrives pre-formatted from your app; label example data as example"
+  ],
+  "defaults": [
+    "Billing is the first section shown; route sections from your URL with section / onSectionChange",
+    "Profile and Notifications save from a footer bar (Cancel ghost, Save solid primary with ⌘S); other sections act per card",
+    "Team's Invite people is the PageHeader primary; the empty Team page moves it into the kit Empty",
+    "Invite people opens a right kit Drawer with Email addresses, Role and Message; Send invites is the Drawer's primary",
+    "Billing loading shows Skeletons in the same Cards; a load error is an outlined kit Empty with Retry",
+    "Security has no solid primary: Update password and Set up are outline, Delete workspace is outline danger",
+    "No motion beyond kit overlays (Drawer, AlertDialog, DropdownMenu), which honour reduced motion"
+  ],
+  "states": {
+    "billing": [
+      "ready",
+      "overdue",
+      "loading",
+      "error"
+    ],
+    "team": [
+      "ready",
+      "empty",
+      "invite drawer (inviteOpen)"
+    ],
+    "security": [
+      "2FA on",
+      "2FA off (twoFactor={false})"
+    ]
+  },
+  "snippet": "<SettingsPattern section={section} onSectionChange={setSection} billing=\"ready\" onSave={save} onDeleteWorkspace={deleteWorkspace} />"
+}

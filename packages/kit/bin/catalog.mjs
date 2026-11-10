@@ -246,6 +246,7 @@ function load(root = packageRoot) {
         must: lines(contract.must),
         defaults: lines(contract.defaults),
         contains: lines(contract.contains),
+        requires: lines(contract.requires),
       };
     });
 

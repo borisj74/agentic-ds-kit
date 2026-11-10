@@ -19,6 +19,12 @@ const STATUS: Record<ChargeStatus, { tone: BadgeTone; label: string }> = {
   waived: { tone: "neutral", label: "Waived" },
 };
 
+/** Summary mode: two columns, so the table fits a half-width card (text columns keep a min width). */
+const SUMMARY_COLUMNS = [
+  { key: "charge", header: "Charge" },
+  { key: "amount", header: "Amount", align: "end" as const, numeric: true },
+];
+
 const COLUMNS = [
   { key: "date", header: "Date" },
   { key: "description", header: "Description" },
@@ -31,6 +37,17 @@ export interface BillingSchedulePatternProps {
   nextId?: string;
   /** Show only the next-charge summary, no table (a billing overview card). */
   nextOnly?: boolean;
+  /**
+   * Overview card for a Billing page: no next-charge strip, the first `limit` charges in two
+   * columns (charge with its date and status, amount) so it fits a half-width column, and View all.
+   */
+  summary?: boolean;
+  /** Charges shown in summary mode. Default 3. */
+  limit?: number;
+  /** Section description. Default: the plan label from the data file. */
+  description?: string;
+  /** "View all" (ghost) in the Section actions, to the full schedule. Wins over Download all. */
+  onViewAll?: () => void;
   paymentMethod?: string;
   loading?: boolean;
   error?: string;
@@ -49,6 +66,10 @@ export function BillingSchedulePattern({
   charges = CHARGES,
   nextId = NEXT_ID,
   nextOnly = false,
+  summary = false,
+  limit = 3,
+  description = PLAN_LABEL,
+  onViewAll,
   paymentMethod = PAYMENT_METHOD,
   loading = false,
   error,
@@ -60,15 +81,20 @@ export function BillingSchedulePattern({
   const next = charges.find((charge) => charge.id === nextId);
   const failed = charges.find((charge) => charge.status === "failed");
   const ready = !loading && !error && charges.length > 0;
+  const shown = summary ? charges.slice(0, limit) : charges;
 
   return (
     <Section
       title="Billing schedule"
-      description={PLAN_LABEL}
+      description={description}
       size="sm"
       aria-busy={loading || undefined}
       actions={
-        ready && !nextOnly && onDownloadAll ? (
+        ready && !nextOnly && onViewAll ? (
+          <Button size="sm" appearance="ghost" mode="neutral" iconEnd="ArrowRight" onClick={onViewAll}>
+            View all
+          </Button>
+        ) : ready && !nextOnly && onDownloadAll ? (
           <Button size="sm" appearance="ghost" mode="neutral" iconStart="Download" onClick={onDownloadAll}>
             Download all
           </Button>
@@ -95,7 +121,7 @@ export function BillingSchedulePattern({
           <Empty title="No charges yet" description="Your first charge appears here after the trial ends." icon="CalendarDays" />
         ) : (
           <>
-            {next ? (
+            {next && !summary ? (
               <div className="billing-schedule-pattern__next">
                 <div className="billing-schedule-pattern__next-amount">
                   <span className="billing-schedule-pattern__caption">Next charge</span>
@@ -130,17 +156,24 @@ export function BillingSchedulePattern({
               <Table
                 aria-label="Charges"
                 size="sm"
-                columns={COLUMNS}
-                rows={charges.map((charge) => ({
-                  date: <span className="billing-schedule-pattern__mono">{charge.date}</span>,
-                  description: <Description charge={charge} next={charge.id === nextId} />,
-                  status: (
-                    <Badge tone={STATUS[charge.status].tone} size="sm">
-                      {STATUS[charge.status].label}
-                    </Badge>
-                  ),
-                  amount: <span className="billing-schedule-pattern__mono">{charge.amount}</span>,
-                }))}
+                columns={summary ? SUMMARY_COLUMNS : COLUMNS}
+                rows={shown.map((charge) =>
+                  summary
+                    ? {
+                        charge: <SummaryCharge charge={charge} />,
+                        amount: <span className="billing-schedule-pattern__mono">{charge.amount}</span>,
+                      }
+                    : {
+                        date: <span className="billing-schedule-pattern__mono">{charge.date}</span>,
+                        description: <Description charge={charge} next={charge.id === nextId} />,
+                        status: (
+                          <Badge tone={STATUS[charge.status].tone} size="sm">
+                            {STATUS[charge.status].label}
+                          </Badge>
+                        ),
+                        amount: <span className="billing-schedule-pattern__mono">{charge.amount}</span>,
+                      },
+                )}
               />
             ) : null}
           </>
@@ -166,6 +199,20 @@ function Description({ charge, next }: { charge: Charge; next: boolean }) {
           {charge.note}
         </span>
       ) : null}
+    </span>
+  );
+}
+
+function SummaryCharge({ charge }: { charge: Charge }) {
+  return (
+    <span className="billing-schedule-pattern__description">
+      <span className="billing-schedule-pattern__line">
+        {charge.label}
+        <Badge tone={STATUS[charge.status].tone} size="sm">
+          {STATUS[charge.status].label}
+        </Badge>
+      </span>
+      <span className="billing-schedule-pattern__note billing-schedule-pattern__mono">{charge.date}</span>
     </span>
   );
 }

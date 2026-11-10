@@ -973,5 +973,14 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add integration-settings"
+  },
+  {
+    "id": "settings",
+    "intent": "Settings area example: a settings nav (Profile, Billing, Team, Notifications, Security) in a SideNav column, a Drawer below md, and one page per section with its states.",
+    "group": "pattern",
+    "path": "contracts/patterns/settings.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add settings"
   }
 ]

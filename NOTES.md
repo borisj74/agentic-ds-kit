@@ -2,6 +2,48 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-10: Screens (feat/screens-patterns-1, -2)
+
+Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-6-0 "Nistha Screens": 70 artboards at 1440×900. They are two sets (Settings, Onboarding), each in light and dark, and each drawn twice: once with the AppHeader + SideNav chrome and once as a "Stage" (no top bar, nav with brand and search, the page in an inset panel). Both are copy-in patterns, not components.
+
+### Inventory
+
+| Paper artboard group | Pattern id | Kit parts used | Gaps / notes |
+| --- | --- | --- | --- |
+| Settings · Billing (light, dark) | `settings` (section `billing`) | Card (headerAction), Button, UsageList, ListView (documents, Download action), **`billing-schedule` pattern in its new `summary` mode** | Kit Table gives text columns a 12rem min (`--layout-metrics-min`), so Paper's 4-column schedule (date, charge, status, amount) overflows a half-width card. `summary` uses two columns (charge with date + status Badge, amount). UsageList warns at 80%, so Seats (12/15) shows the warning that Paper doesn't. |
+| Settings · Billing · overdue | `settings` (`billing="overdue"`) | Alert (danger), Button (Update card outline, Pay now primary), UsageList note | Alert has no actions slot: the buttons sit under it, as in `billing-schedule`. Upgrade is hidden so Pay now is the one primary. |
+| Settings · Billing · loading | `settings` (`billing="loading"`) | Card, Skeleton | Same Cards with Skeleton lines (Paper draws empty card shells). |
+| Settings · Billing · error | `settings` (`billing="error"`) | Empty (outlined, CircleX), Button (Retry) | Paper's red icon: Empty's icon tile uses its own neutral tone; no danger-tone Empty. |
+| Settings · Profile | `settings` (`profile`) | Card, Avatar, Button, Field, Input, Select, sticky save bar (Button with ⌘S shortcut) | Paper caps the cards at ~720px; the copy fills the column (no max-width without a token; `layout-container-md` would centre it). |
+| Settings · Team | `settings` (`team`) | PageHeader actions (Invite people primary), Input (search), Card flush, Table, Avatar, Badge, Select (role), DropdownMenu (row actions) | Paper hides the "Actions" column header; kit Table always shows headers. |
+| Settings · Team · invite drawer | `settings` (`inviteOpen`) | Drawer (right), Field, Textarea, Select, Button (Send invites ⏎) | Kit Drawer motion (honours reduced motion). |
+| Settings · Team · empty | `settings` (`team="empty"`) | Empty (outlined) with Invite people as the primary | PageHeader primary steps away so there is one. |
+| Settings · Notifications | `settings` (`notifications`) | Card, Table, Switch (accessible name per row and channel), Field + Select (digest), NotificationStack (the header bell), save bar | |
+| Settings · Security (+ 2FA off) | `settings` (`security`, `twoFactor`) | Card (headerAction), Field, Input (password), Badge (On / Off), Switch, Alert (warning), ListView (sessions, Sign out), Button (danger outline), AlertDialog | Paper puts the 2FA title, Badge and Switch in one header row; Card's header takes one action, so that row is in the body. |
+| Settings · * · Stage | not built | — | The Stage frames are a chrome choice (side nav with brand + search, settings nested under it, page on an inset panel). Layout is the user's choice and app-shell already shows "built nav, no header". The inset panel would need a new layout class (proposal: `layout-shell--inset`, framed page on `--surface-card` with `--radius-surface-lg`); not added without Boris's OK. |
+| Onboarding · 01–04 (+ 02b error, 02c submitting) | `onboarding` (branch `-2`) | see that section | |
+
+**Skipped (already patterns):** the Billing schedule card (it *is* `billing-schedule`, extended rather than copied); integration settings (no Integrations section in Paper's settings nav). `settings-form` stays as it is: a single-page example. `settings` is the multi-page area; neither replaces the other.
+
+### Decisions
+
+- **One `settings` pattern, not five.** The five pages share the nav, the narrow Drawer and the save bar, and an agent asked for "settings" wants the whole area. Each page is its own file (`BillingSettings.tsx`, `TeamSettings.tsx`, …), so dropping one is deleting a file and a nav row. Five separate patterns would each repeat the nav and shell.
+- **Patterns can now build on patterns.** Copy-in sources could only import `../../ui/*`. `settings` imports `../BillingSchedulePattern`; `build-patterns-src` rewrites that to `../billing-schedule`, records `requires: ["billing-schedule"]` in `patterns-src/index.json` (and checks it against the contract's `requires`), and `add settings` copies `billing-schedule` beside the target unless that folder exists (then it's kept and said so; `--force` doesn't touch it). Checked with default and `--dir` targets; the copies typecheck against the built kit. MCP `get_pattern` returns `requires`.
+- **`billing-schedule` extended:** `summary`, `limit` (default 3), `description`, `onViewAll`. Existing props and default rendering are unchanged. The docs demo has a Summary tab.
+- **Chrome stays outside.** The pattern renders the settings nav (SideNav blocks, a `nav` landmark labelled Settings, `aria-current` on the section) and its own `<main>` (labelled "Settings: <section>"). It sits inside the app's chrome; the docs demo wraps it in the `app-shell` example to match Paper. Below `--grid-breakpoint-md` (read at runtime like app-shell) the nav moves into a left kit Drawer opened from an outline "Settings · <section>" button above the PageHeader; picking a section closes the Drawer and focus returns to the button.
+- **One solid primary per view:** Billing → Upgrade (or Pay now when overdue); Profile / Notifications → Save; Team → Invite people (in the Empty when empty; Send invites inside the Drawer, a modal view); Security → none.
+- **Motion:** none beyond kit overlays (Drawer, AlertDialog, DropdownMenu), which already honour reduced motion. Paper's notes ask for nothing else.
+- **Tokens:** no new tokens or colours. Every value is a role token or layout class. Paper and tokens agree on colour; the differences above are component behaviour (Table min widths, UsageList threshold, Empty icon tone).
+- **Docs:** new page `/patterns/settings-area` (slug `settings` was taken by settings-form). A Select picks one of Paper's 11 screens (`?view=` opens one directly); the page shows the add command and the contract.
+- **Docs fix:** pattern demos render kit *source*, a second module instance with its own theme-scope context, so their portalled Drawers / dialogs ignored a dark preview. `PreviewScope` now provides both contexts. The integration-settings AlertDialog and app-shell Drawer demos had the same cause, so they pick up the fix too.
+
+### Follow-ups for Boris
+
+- A Table option for compact columns (no 12rem min), so a 4-column table fits a half-width card.
+- UsageList warn threshold as a prop (`warnAt`, as UsageMeter has).
+- Empty `tone="danger"` for load errors.
+- `layout-shell--inset` for Paper's Stage frames.
+
 ## 2026-11-10: Motion (feat/motion-patterns-1, -2)
 
 Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-5-0 "Nistha Motion". Paper is static, so each moving state is a still with a timing label; the values below come from those labels and `get_jsx`.

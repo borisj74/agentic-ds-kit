@@ -4,6 +4,8 @@ import { AppShellBuiltNavDemo, AppShellCustomDemo, AppShellDemo } from "../_comp
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
 import { SaasPatternDemo } from "../_components/SaasPatternDemo";
+import { SettingsAreaDemo } from "../_components/ScreensPatternDemo";
+import settingsContract from "../../packages/kit/contracts/patterns/settings.json";
 import { SignInDemo } from "../_components/SignInDemo";
 import { CodeBlock } from "../components/CodeBlock";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
@@ -19,6 +21,12 @@ const ADD_ID: Record<string, string> = {
   "app-shell": "app-shell",
   "billing-schedule": "billing-schedule",
   "integration-settings": "integration-settings",
+  "settings-area": "settings",
+};
+
+/** Pattern pages that show their contract under the preview. */
+const CONTRACTS: Partial<Record<string, unknown>> = {
+  "settings-area": settingsContract,
 };
 
 function usageFor(slug: string) {
@@ -63,6 +71,8 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
             <SignInDemo />
           ) : slug === "billing-schedule" || slug === "integration-settings" ? (
             <SaasPatternDemo pattern={slug} />
+          ) : slug === "settings-area" ? (
+            <SettingsAreaDemo view={view} />
           ) : slug === "layouts" ? (
             <LayoutsDemo titleClassName={styles.variantTitle} />
           ) : slug === "app-shell" ? (
@@ -91,6 +101,17 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
             <DashboardDemo pattern={slug} view={view} />
           ) : null}
         </div>
+
+        {CONTRACTS[slug] ? (
+          <>
+            <h2 className={styles.variantTitle}>Contract</h2>
+            <p className={playground.body}>
+              Copied beside the source as {`${ADD_ID[slug]}.contract.json`}. Keep the must lines; the defaults are
+              suggestions.
+            </p>
+            <CodeBlock code={JSON.stringify(CONTRACTS[slug], null, 2)} />
+          </>
+        ) : null}
       </div>
     </div>
   );

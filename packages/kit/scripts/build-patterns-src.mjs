@@ -5,7 +5,9 @@
  * - the RECIPES below (component presets rebuilt from their blocks, in recipes/).
  * Kit-relative imports (`../../ui/Button`, `../../ui/shared/chartMath`) become one import from
  * "agentic-ds-kit", so the copied files compile inside a user's app.
- * Writes patterns-src/index.json: id, kind (pattern | recipe), export name, intent, files.
+ * A pattern may build on another pattern (`../BillingSchedulePattern`): that import becomes
+ * `../billing-schedule` and the id goes in `requires`; `add` copies required patterns beside it.
+ * Writes patterns-src/index.json: id, kind (pattern | recipe), export name, intent, files, requires.
  */
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
@@ -48,12 +50,20 @@ const RECIPES = [
 const KIT_IMPORT = /^import\s+(type\s+)?\{([^}]*)\}\s+from\s+"(\.\.\/[^"]+)";\n/gm;
 /** Patterns and recipes sit in patterns/ and recipes/ (beside ui/) and import `../../ui/<Name>`. */
 const KIT_SPEC = /^\.\.\/\.\.\/ui\/(?:[A-Z][A-Za-z]*|shared\/[A-Za-z]+)$/;
+/** A sibling pattern folder: `../BillingSchedulePattern` (patterns only, not recipes). */
+const PATTERN_SPEC = /^\.\.\/([A-Z][A-Za-z]*Pattern)$/;
 
-function rewriteImports(source, file) {
+function rewriteImports(source, file, requires) {
   const values = [];
   const types = [];
   let firstAt = -1;
-  const stripped = source.replace(KIT_IMPORT, (_match, typeOnly, names, spec, offset) => {
+  const stripped = source.replace(KIT_IMPORT, (match, typeOnly, names, spec, offset) => {
+    const sibling = requires && PATTERN_SPEC.exec(spec);
+    if (sibling) {
+      const dep = toId(sibling[1]);
+      requires.add(dep);
+      return match.replace(`"${spec}"`, `"../${dep}"`);
+    }
     if (!KIT_SPEC.test(spec)) {
       throw new Error(`${file}: cannot map import "${spec}" to agentic-ds-kit`);
     }
@@ -70,10 +80,10 @@ function rewriteImports(source, file) {
     if (firstAt === -1) firstAt = offset;
     return "";
   });
-  if (/from\s+"\.\.\//.test(stripped)) {
+  if (/from\s+"\.\.\/(?![a-z][a-z-]*")/.test(stripped) || (!requires && /from\s+"\.\.\//.test(stripped))) {
     throw new Error(`${file}: unmapped import outside the pattern folder`);
   }
-  if (firstAt === -1) return source;
+  if (firstAt === -1) return stripped;
   const specifiers = [
     ...[...new Set(values)].sort(),
     ...[...new Set(types)].filter((t) => !values.includes(t)).sort().map((t) => `type ${t}`),
@@ -116,12 +126,13 @@ for (const dirName of dirs) {
   const target = join(outDir, id);
   await mkdir(target, { recursive: true });
   const files = [];
+  const requires = new Set();
   for (const file of (await readdir(join(patternsDir, dirName))).sort()) {
     const from = join(patternsDir, dirName, file);
     assertNoCssModule(file, dirName);
     if (/\.(tsx?|jsx?)$/.test(file)) {
       const source = await readFile(from, "utf8");
-      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`));
+      await writeFile(join(target, file), rewriteImports(source, `${dirName}/${file}`, requires));
     } else {
       await cp(from, join(target, file));
     }
@@ -130,7 +141,13 @@ for (const dirName of dirs) {
   await cp(join(root, entry.path), join(target, `${id}.contract.json`));
   files.push(`${id}.contract.json`);
 
-  manifest.push({ id, kind: "pattern", name: dirName, intent: entry.intent, files });
+  const contract = JSON.parse(await readFile(join(root, entry.path), "utf8"));
+  const declared = [...(contract.requires ?? [])].sort().join(", ");
+  const used = [...requires].sort().join(", ");
+  if (declared !== used) {
+    throw new Error(`${dirName}: contract requires [${declared}] but the source imports [${used}]`);
+  }
+  manifest.push({ id, kind: "pattern", name: dirName, intent: entry.intent, files, ...(requires.size ? { requires: [...requires].sort() } : {}) });
 }
 
 for (const recipe of RECIPES) {
