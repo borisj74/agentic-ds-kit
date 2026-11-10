@@ -1,0 +1,69 @@
+{
+  "id": "gridbackground",
+  "status": "stable",
+  "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast.",
+  "useWhen": [
+    "behind a product demo, hero or empty state on a docs or marketing page",
+    "to frame one featured component in a showcase"
+  ],
+  "doNotUseWhen": [
+    "behind dense data UI, forms or long text",
+    "as a layout grid — use layout classes and --grid-* tokens",
+    "as a chart's gridlines — LineChart and BarChart draw their own"
+  ],
+  "props": {
+    "variant": {
+      "type": "enum",
+      "values": [
+        "lines",
+        "dots",
+        "none"
+      ],
+      "default": "lines",
+      "note": "lines every space.6 (24px) in border.faint; dots every space.4 (16px) in border.strong."
+    },
+    "inverse": {
+      "type": "boolean",
+      "default": false,
+      "note": "surface.inverse with the grid at opacity.100 of line.inverse, edge to edge, no fade."
+    },
+    "children": {
+      "type": "node",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "border.faint",
+    "border.strong",
+    "border.widthThin",
+    "space.6",
+    "space.4",
+    "surface.inverse",
+    "line.inverse",
+    "opacity.100"
+  ],
+  "motion": {
+    "properties": [],
+    "note": "Static. Paper's optional slow drift (≥ 40s per cell) is not built: it needs a duration far outside the motion tokens. Proposed in NOTES.md."
+  },
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "the grid layer is aria-hidden and has no pointer events",
+      "children are untouched and keep their contrast",
+      "the grid is hidden under forced colours"
+    ]
+  },
+  "doNot": [
+    "Do not put text directly on the grid without a surface behind it",
+    "Do not hard-code cell sizes or columns",
+    "Do not use raw hex"
+  ],
+  "snippet": "<GridBackground variant=\"dots\"><Card title=\"Agent Lanes\">…</Card></GridBackground>"
+}

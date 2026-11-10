@@ -62,6 +62,8 @@ const AGENT_IDS = new Set([
 
 const MOTION_IDS = new Set([
   "blurcrossfade",
+  "gradienttext",
+  "gridbackground",
   "loadinganimation",
   "numbertransition",
   "shimmertext",

@@ -1,0 +1,50 @@
+/*
+ * Paper (p-5-0, 03): a 90° oklab gradient clipped to the text, 34px / 700 / -0.02em. Size maps to
+ * --type-size-heading-4 (32px) with --type-line-heading-4. Stops:
+ *   ink     text.fg → primary.base   (--text-fg → --text-brand)
+ *   brand   primary.base → primary.fg (--text-brand → --primary-fg)
+ *   inverse bg.canvas → blue-200 on bg.inverse (--bg-canvas → --info-line)
+ * Paper's `overlay` (primary → violet) and the optional slow hue shift are not built (Boris).
+ */
+.root {
+  --gradient-text-from: var(--text-fg);
+  --gradient-text-to: var(--text-brand);
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-display);
+  font-size: var(--type-size-heading-4);
+  font-weight: var(--type-weight-title);
+  line-height: var(--type-line-heading-4);
+  letter-spacing: var(--type-tracking-title);
+  overflow-wrap: anywhere;
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .root {
+    background-image: linear-gradient(90deg in oklab, var(--gradient-text-from), var(--gradient-text-to));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+}
+
+.brand {
+  --gradient-text-from: var(--text-brand);
+  --gradient-text-to: var(--primary-fg);
+}
+
+.inverse {
+  --gradient-text-from: var(--bg-canvas);
+  --gradient-text-to: var(--info-line);
+  color: var(--text-fg-inverse);
+}
+
+/* Paper: "falls back to solid text.fg under forced-colors". */
+@media (forced-colors: active) {
+  .root {
+    background-image: none;
+    color: CanvasText;
+  }
+}

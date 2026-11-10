@@ -52,10 +52,33 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 - **BlurCrossfade** stores the children as they were when a key arrived; that copy is the outgoing layer on the next swap. The outgoing layer is `aria-hidden` and `inert` and is removed on `animationend`.
 - **Docs.** Each page has a live preview with a Swap / Replay control and Variants with Paper's frames as paused stills (`MotionDoc.module.css` `.freeze` seeks every animation to `--freeze-at`). Doc-only.
 
+### Batch 2: GridBackground, GradientText
+
+| Where | Paper | Kit | Note |
+| --- | --- | --- | --- |
+| Grid line cell | 24px "grid.cell token" | `--space-6` | no cell token exists; proposed below |
+| Grid dot pitch | 16px | `--space-4` | |
+| Grid line / dot colour | line.default / line.strong | `--border-faint` / `--border-strong`, `--border-width-thin` | |
+| Grid edge fade | overlay: transparent 30% → surface colour 80% | `mask-image` radial, opaque 30% → clear 80% | a mask fades to whatever is behind, so no surface prop is needed |
+| Grid on a dark surface | slate-950, lines at 8% white, no fade | `inverse`: `--surface-inverse`, `--line-inverse` at `--opacity-100` (0.08), no mask | follows the theme: in dark mode the inverse surface is light with dark lines; Paper keeps it dark in both |
+| Grid drift | optional, ≥ 40s per cell, off by default | **not built** | needs a duration far outside the motion scale; propose `--motion-duration-ambient` if Boris wants it |
+| GradientText size | 34px / 42 / 700 / -0.02em | `--type-size-heading-4` (32px) / `--type-line-heading-4` (40) / `--type-weight-title` / `--type-tracking-title` | nearest heading step |
+| GradientText ink | text.fg → primary.base | `--text-fg` → `--text-brand` | |
+| GradientText brand | primary.base → primary.fg | `--text-brand` → `--primary-fg` | |
+| GradientText on inverse | bg.canvas → blue-200 on bg.inverse | `inverse`: `--bg-canvas` → `--info-line` | a prop, since Paper draws it as "ink (on inverse)" |
+| GradientText overlay | primary.base → accent.violet | **held** | waits for the violet role decision (Boris) |
+| GradientText hue shift | optional, ≥ 12s | **not built** (Boris) | would animate filter or background-position |
+
+- GridBackground's grid layer is `aria-hidden`, has no pointer events, sits at `z-index: -1` inside an isolated root, and is hidden under forced colours. Nothing moves, so reduced motion changes nothing.
+- GradientText uses the gradient only inside `@supports (background-clip: text)`; without it, and under `forced-colors`, it is solid `--text-fg` / `CanvasText`. It is real text, so selection, copy and screen readers are unaffected.
+- The grid demos sit on `--surface-page`, matching Paper's wells (bg.subtle in light equals the page; the page colour in dark). On `--surface-muted` in dark mode, `--line-default` is almost the same colour as the surface, so the grid disappears.
+
 ### Proposed tokens (not added)
 
 - `--motion-stagger-sm` (40ms) and `--motion-stagger-md` (80ms) for TextReveal and future list entrances.
 - A theme-constant highlight colour (`--sheen`) if TiltCard should show a highlight in light mode.
+- `--grid-cell` (24px) and `--grid-dot-pitch` (16px) for GridBackground; today they are `--space-6` / `--space-4`.
+- `--motion-duration-ambient` (≥ 40s) only if the GridBackground drift is wanted.
 
 ## 2026-11-10: SaaS patterns (feat/saas-patterns-1, -2, -3)
 

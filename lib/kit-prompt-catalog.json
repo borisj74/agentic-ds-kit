@@ -10079,6 +10079,95 @@
       }
     },
     {
+      "id": "gridbackground",
+      "group": "component",
+      "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast.",
+      "useWhen": [
+        "behind a product demo, hero or empty state on a docs or marketing page",
+        "to frame one featured component in a showcase"
+      ],
+      "doNotUseWhen": [
+        "behind dense data UI, forms or long text",
+        "as a layout grid — use layout classes and --grid-* tokens",
+        "as a chart's gridlines — LineChart and BarChart draw their own"
+      ],
+      "doNot": [
+        "Do not put text directly on the grid without a surface behind it",
+        "Do not hard-code cell sizes or columns",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "variant": {
+          "type": "enum",
+          "values": [
+            "lines",
+            "dots",
+            "none"
+          ],
+          "default": "lines",
+          "note": "lines every space.6 (24px) in border.faint; dots every space.4 (16px) in border.strong."
+        },
+        "inverse": {
+          "type": "boolean",
+          "default": false,
+          "note": "surface.inverse with the grid at opacity.100 of line.inverse, edge to edge, no fade."
+        },
+        "children": {
+          "type": "node",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "gradienttext",
+      "group": "component",
+      "intent": "A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image; no motion.",
+      "useWhen": [
+        "one hero or empty-state heading per view",
+        "a marketing or docs headline that needs a touch of brand"
+      ],
+      "doNotUseWhen": [
+        "body copy, labels, buttons or data",
+        "more than one heading per view",
+        "status or meaning — use Badge or status text"
+      ],
+      "doNot": [
+        "Do not render it as an image",
+        "Do not add a colour ramp or hex stops",
+        "Do not animate it"
+      ],
+      "props": {
+        "children": {
+          "type": "node",
+          "required": true
+        },
+        "as": {
+          "type": "enum",
+          "values": [
+            "h1",
+            "h2",
+            "h3",
+            "span"
+          ],
+          "default": "h2"
+        },
+        "tone": {
+          "type": "enum",
+          "values": [
+            "ink",
+            "brand"
+          ],
+          "default": "ink",
+          "note": "ink: text.fg → text.brand; brand: text.brand → primary.fg. Paper's overlay (brand → violet) waits for the violet role decision."
+        },
+        "inverse": {
+          "type": "boolean",
+          "default": false,
+          "note": "On surface.inverse: bg.canvas → info line."
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

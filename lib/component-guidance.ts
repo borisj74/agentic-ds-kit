@@ -125,6 +125,8 @@ import contract_changesummary from "../packages/kit/contracts/changesummary.json
 import contract_blurcrossfade from "../packages/kit/contracts/blurcrossfade.json";
 import contract_textreveal from "../packages/kit/contracts/textreveal.json";
 import contract_tiltcard from "../packages/kit/contracts/tiltcard.json";
+import contract_gridbackground from "../packages/kit/contracts/gridbackground.json";
+import contract_gradienttext from "../packages/kit/contracts/gradienttext.json";
 
 type ContractNotes = {
   useWhen?: string[];
@@ -259,6 +261,8 @@ const contracts: Record<string, ContractNotes> = {
   "blurcrossfade": contract_blurcrossfade,
   "textreveal": contract_textreveal,
   "tiltcard": contract_tiltcard,
+  "gridbackground": contract_gridbackground,
+  "gradienttext": contract_gradienttext,
 };
 
 export function guidanceFor(id: string): { dos: string[]; donts: string[] } | null {
