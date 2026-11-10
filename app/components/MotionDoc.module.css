@@ -20,6 +20,15 @@
   border-radius: var(--radius-surface-md);
 }
 
+/* Preview stage: the doc canvas is already the frame, so no second border here. */
+.bare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--space-16) * 2);
+}
+
 .textWell {
   justify-content: flex-start;
 }

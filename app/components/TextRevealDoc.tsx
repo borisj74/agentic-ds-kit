@@ -31,7 +31,7 @@ export function TextRevealDoc() {
       summary="Switch word or line and press Replay. The full sentence is always in the DOM; only the visible copy animates."
       preview={
         <div className={motion.stage}>
-          <div className={`${motion.well} ${motion.textWell}`}>
+          <div className={motion.bare}>
             <TextReveal by={by} replayKey={`${by}-${replay}`}>
               {by === "word" ? WORDS : LINES}
             </TextReveal>
