@@ -1,0 +1,140 @@
+{
+  "id": "experimentcard",
+  "status": "stable",
+  "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
+  "useWhen": [
+    "show a running or finished experiment in a product or growth view",
+    "let someone ship the winner or stop a test with a confirmation",
+    "show a draft A/B/n split before it starts"
+  ],
+  "doNotUseWhen": [
+    "a feature flag on or off — Switch",
+    "a single KPI — Scorecard",
+    "a recommendation to act on — InsightCard"
+  ],
+  "contains": [
+    "alertdialog",
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "metricLabel": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "draft",
+        "running",
+        "concluded",
+        "stopped"
+      ],
+      "required": true,
+      "note": "Concluded with no winner reads \"Inconclusive\"."
+    },
+    "variants": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, traffic, value?, isWinner?, isLeading? }[]; lettered A, B, C…"
+    },
+    "dates": {
+      "type": "string",
+      "required": false
+    },
+    "confidenceNote": {
+      "type": "string",
+      "required": false
+    },
+    "onView": {
+      "type": "function",
+      "required": false
+    },
+    "onShip": {
+      "type": "function",
+      "required": false,
+      "note": "(variantId) => void, after the AlertDialog. The one solid primary."
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "After a danger AlertDialog."
+    },
+    "onStart": {
+      "type": "function",
+      "required": false
+    },
+    "onEdit": {
+      "type": "function",
+      "required": false
+    },
+    "onExtend": {
+      "type": "function",
+      "required": false
+    },
+    "extendLabel": {
+      "type": "string",
+      "default": "Extend 7 days"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "primary",
+    "primary.subtleStrong",
+    "motion.duration200"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "article aria-labelledby the h3 name",
+      "status, Winner and Leading are words in a kit Badge, not colour alone",
+      "variants are a list; each says \"Variant B:\" to screen readers; a missing value says \"no data yet\"",
+      "Ship and Stop open a kit AlertDialog; Cancel returns focus to the button that opened it",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ABTestCard or VariantList",
+    "Do not ship or stop without the AlertDialog",
+    "Do not mark the winner by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ExperimentCard name=\"Checkout button copy\" metricLabel=\"Conversion rate\" status=\"running\" dates=\"Started 02 Nov · ends 16 Nov\" variants={variants} confidenceNote=\"84% confidence · needs ~4 more days for 95%.\" onStop={stop} onView={view} />"
+}

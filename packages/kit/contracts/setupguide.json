@@ -1,0 +1,142 @@
+{
+  "id": "setupguide",
+  "status": "stable",
+  "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+  "useWhen": [
+    "onboard a new workspace with a short list of setup tasks",
+    "show how far setup is and what to do next",
+    "let people skip optional tasks and undo the skip"
+  ],
+  "doNotUseWhen": [
+    "a linear multi-page wizard — ProgressSteps",
+    "one value against a goal — Progress",
+    "an agent's plan of steps — AgentPlan"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "progress",
+    "skeleton"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "tasks": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped', actionLabel? }[]"
+    },
+    "onTaskAction": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Continue on the current task (outline), Start on todo tasks (ghost)."
+    },
+    "onUndoSkip": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. \"Skipped · Undo\"."
+    },
+    "onComplete": {
+      "type": "function",
+      "required": false,
+      "note": "Go to dashboard, the one solid primary once every task is done or skipped."
+    },
+    "completeLabel": {
+      "type": "string",
+      "default": "Go to dashboard"
+    },
+    "onDismiss": {
+      "type": "function",
+      "required": false
+    },
+    "skippedNote": {
+      "type": "string",
+      "required": false
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "Nothing to set up"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "emptyActionLabel": {
+      "type": "string",
+      "required": false
+    },
+    "onEmptyAction": {
+      "type": "function",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "primary",
+    "primary.subtleStrong",
+    "primary.fg",
+    "line.strong",
+    "status.success",
+    "status.successText",
+    "motion.duration300",
+    "motion.easeSpringSoft"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "tasks are an ordered list; the current task has aria-current=step",
+      "done and skipped are words next to the icon, not colour alone",
+      "each action button is described by its task label",
+      "overall progress is a kit Progress with a text label (\"2 of 5 done\")",
+      "the check scales and fades in (transform and opacity), off under prefers-reduced-motion",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Checklist, OnboardingCard or SetupSteps",
+    "Do not use ProgressSteps for a checklist people can do in any order",
+    "Do not show more than one solid primary; Continue stays outline",
+    "Do not use raw hex"
+  ],
+  "snippet": "<SetupGuide title=\"Get Northwind ready\" tasks={tasks} onTaskAction={openTask} onUndoSkip={undoSkip} onComplete={goToDashboard} onDismiss={dismiss} />"
+}

@@ -2,6 +2,72 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-10: SaaS patterns (feat/saas-patterns-1, -2, -3)
+
+Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page p-4-0 "Nistha SaaS Patterns". These parts feed the p-6-0 Settings and Onboarding screens, which are not built here.
+
+### Inventory and batch plan
+
+| # | Paper artboard | In the kit already? | Kit id | Batch |
+| --- | --- | --- | --- | --- |
+| 01 | Billing Schedule | No. Mostly Table + Badge + Alert, plus a next-charge box: asked Boris whether it earns a component | `billingschedule` | 3 |
+| 02 | Invoice & Credit Note | No | `invoicedocument` | 3 |
+| 03 | Change Summary | No (Scorecard / Scoreboard show one KPI each, not before → after per metric) | `changesummary` | 1 |
+| 04 | Experiment Card | No | `experimentcard` | 1 |
+| 05 | Comment Thread | No (Chat is the assistant conversation) | `commentthread` | 2 |
+| 06 | Comments Panel | No; hosts Comment Thread on a kit Drawer | `commentspanel` | 2 |
+| 07 | Notification Stack | No (Toast is instant feedback, AgentInbox is agent work) | `notificationstack` | 1 |
+| 08 | Integration Picker | No | `integrationpicker` | 2 |
+| 09 | Integration Settings | No. A settings form of Field + Select + Switch + chips + Alert + AlertDialog: asked Boris whether it earns a component | `integrationsettings` | 3 |
+| 10 | Setup Guide | No (ProgressSteps is a linear wizard) | `setupguide` | 1 |
+| 11 | Pricing Plans | No | `pricingplans` | 2 |
+| 12 | Task Board | No | `taskboard` | 3 |
+
+- **Skipped because Nistha already has them:** none on p-4-0. Usage Meter, the other Settings piece, shipped from p-3-0 in #126; Meter, UsageList, Alert and Toast are reused inside these components, not rebuilt.
+- **Batches:** 1 = Setup Guide, Notification Stack, Change Summary, Experiment Card (self-contained, first for Onboarding and Notifications). 2 = Comment Thread, Comments Panel (hosts the thread, so same batch), Integration Picker, Pricing Plans. 3 = Billing Schedule, Invoice & Credit Note, Integration Settings, Task Board; the two composition questions above are answered before it.
+- **Nav:** a new **SaaS** group in `lib/playground-nav.ts`, after AI. The gallery filter for them is "base" (not "agent").
+
+### Shared pieces
+
+- `ui/shared/LoadError.tsx` (internal, not exported): the "Couldn't load … · Retry" row every SaaS card uses (role=alert, danger-subtle, outline Retry). UsageMeter and TraceWaterfall each have their own copy; they could move to it later.
+- Same card shell as the agent components: `--bg-surface`, `--line-default`, `--radius-surface-lg`, `--shadow-sm`, padding `--space-4`, and a rem custom width (`--setup-width` etc.) like InsightCard's `--insight-width`.
+
+### Batch 1: what shipped
+
+Branch `feat/saas-patterns-1`, from `main` (0.14.0 + the agent components).
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| SetupGuide | 10 Setup Guide | Progress, Badge, Button, Empty, Skeleton | mid-setup, mixed done and skipped (Undo), all done (Complete + Go to dashboard), empty, loading, error |
+| NotificationStack | 07 Notification Stack | Popover, Button, Badge, Empty, Skeleton | open with unread, all read, empty, loading, error, closed trigger with and without a count; `inline` renders the panel on a page |
+| ChangeSummary | 03 Change Summary | Empty, Skeleton | mixed, all up, all down with per-row sentiment, no change, loading, empty, error |
+| ExperimentCard | 04 Experiment Card | Badge, Button, AlertDialog, Skeleton | running (Leading), concluded with winner (Ship winner → AlertDialog), inconclusive (Extend), stopped, draft A/B/n, loading, error; Stop confirms with a danger AlertDialog |
+
+Paper vs tokens, batch 1:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Card radius 19px, shadow `0 1px 2px` | `--radius-surface-lg`, `--shadow-sm` | Same as the agent components. |
+| Status pills, mono caps (RUNNING, WINNER, 2 UNREAD, COMPLETE) | kit Badge `size="sm"`, sentence case | Badge is the kit pill. |
+| Setup Guide "built on DrawCheck" (check draws itself, 300ms) | the check scales and fades in (`--motion-duration-300`, spring-soft) | There is no DrawCheck in the kit, and a drawn stroke animates `stroke-dashoffset`, not transform or opacity. |
+| Setup Guide progress bar 6px | kit Progress `size="sm"` with label and value | Kit component. |
+| Setup Guide row title 13px | `--type-size-body-sm` (14px) | No 13px step. |
+| Notification bell count chip | a small primary chip beside a kit Button (`Bell`), keyed so it pops on change | Count is the kit count, but it has no overlay placement; the chip is aria-hidden and the Button carries "Notifications, 2 unread". |
+| Notification "Count rolls when it changes" (NumberTransition) | the chip pops on transform + opacity | NumberTransition is too big for a 16px chip. |
+| Notification panel 340px | `--notifications-width: 21.25rem`; the Popover's padding and max-width are overridden for this panel only | Popover's default panel is 320px max with padding. |
+| Change Summary "Deltas may roll with NumberTransition" | static text | Deltas are pre-formatted strings (+9.8%, −5, 0 pts). |
+| Experiment confidence icon | Lucide `CircleHelp` | Closest. |
+| Empty-state titles 14px | kit Empty (its own heading size) | Same as AgentInbox, InlineDiff, MemoryPanel. A compact Empty size is a possible follow-up. |
+| Widths 370px | 24rem custom widths | Custom-width pattern, as in the agent batches. |
+
+Keyboard and focus, batch 1 (checked with a Playwright script at 1440):
+- SetupGuide: Continue and Start are Buttons described by their task label. When a task finishes and its button goes away, focus moves to the next task's action (or the guide). Undo is a text button.
+- NotificationStack: Enter on the bell opens the Popover with focus on Mark all read; Tab reaches the rows (buttons, "Unread: …"); opening one marks it read and the bell's name updates; Escape closes and focus returns to the bell.
+- ChangeSummary: no controls besides View full report; each row reads as one sentence.
+- ExperimentCard: Stop and Ship winner open a kit AlertDialog with focus on the safe action; Escape or Cancel closes and focus returns to the button.
+
+Screenshots at 1440, light and dark, next to the Paper exports: `saas-patterns/batch1/` in the planner's notes folder.
+
 ## 2026-11-10: component pages, previews and variants
 
 Site (branches `claude/k79-nistha-site-859cfe`, PR #119, and `feat/variants-tab-cleanup`):

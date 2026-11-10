@@ -1,0 +1,106 @@
+{
+  "id": "changesummary",
+  "status": "stable",
+  "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+  "useWhen": [
+    "summarise the changes between two periods on a dashboard or report",
+    "say whether each move is good or bad for the business",
+    "link to the full report"
+  ],
+  "doNotUseWhen": [
+    "one KPI with a trend — Scorecard",
+    "a row of KPI tiles — Scoreboard",
+    "a time series — LineChart"
+  ],
+  "contains": [
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "default": "What moved"
+    },
+    "period": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"Oct → Nov 2026\""
+    },
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral' }[] — values are pre-formatted strings."
+    },
+    "onViewAll": {
+      "type": "function",
+      "required": false
+    },
+    "viewAllLabel": {
+      "type": "string",
+      "default": "View full report"
+    },
+    "emptyTitle": {
+      "type": "string",
+      "default": "Nothing to compare yet"
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "primary.fg",
+    "bg.subtle",
+    "status.successSubtle",
+    "status.successText"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "each row reads as one sentence, e.g. \"MRR up +9.8%, good. $48.2K to $52.9K.\"; the visual row is aria-hidden",
+      "the word good, bad or neutral is visible next to the values, not colour alone",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local DeltaList or MetricChanges",
+    "Do not colour by direction: sentiment is set per metric",
+    "Do not show arrows without the word",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ChangeSummary period=\"Oct → Nov 2026\" items={changes} onViewAll={openReport} />"
+}
