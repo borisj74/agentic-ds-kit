@@ -58,3 +58,8 @@
 .stageChart {
   width: min(100%, var(--grid-width-sm));
 }
+
+/* Tables on the stage get the wider grid width so their columns read. */
+.stageTable {
+  width: min(100%, var(--grid-width-md));
+}

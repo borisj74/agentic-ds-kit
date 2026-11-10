@@ -76,7 +76,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(100%, var(--grid-width-sm));
+  width: 100%;
   min-width: 0;
 }
 
@@ -86,7 +86,7 @@
 
 /* Full-width parts (Scoreboard) take the stage width; thumbnails keep their size, centred. */
 .stageInner > section {
-  width: 100%;
+  width: min(100%, var(--grid-width-sm));
 }
 
 .themeLabel {

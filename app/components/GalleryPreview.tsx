@@ -159,6 +159,88 @@ export function GalleryPreview({ id, size = "card" }: { id: string; size?: "card
       </div>
     );
   }
+  if (size === "stage" && id === "datagrid") {
+    return (
+      <div className={previewStyles.stageTable}>
+        <DataGrid
+          label="Pricing conditions"
+          columns={[
+            { key: "field", header: "Field" },
+            {
+              key: "condition",
+              header: "Condition",
+              type: "select",
+              width: "12rem",
+              options: [
+                { value: "equals", label: "Equals" },
+                { value: "contains", label: "Contains" },
+                { value: "greater_than", label: "Greater than" },
+                { value: "is_any_of", label: "Is any of" },
+              ],
+            },
+            { key: "value", header: "Value", placeholder: "Enter a value" },
+          ]}
+          defaultRows={[
+            { id: "1", field: "Plan name", condition: "equals", value: "Enterprise" },
+            { id: "2", field: "Quantity", condition: "greater_than", value: "10" },
+            { id: "3", field: "Region", condition: "is_any_of", value: "EU, UK" },
+          ]}
+          canAddRows
+          canRemoveRows
+        />
+      </div>
+    );
+  }
+  if (size === "stage" && id === "datatable") {
+    return (
+      <div className={previewStyles.stageTable}>
+        <DataTable
+          caption="Team members"
+          selectable
+          toolbar
+          searchPlaceholder="Search members..."
+          filters={[
+            { key: "status", label: "Status" },
+            { key: "role", label: "Role" },
+          ]}
+          columns={[
+            { key: "name", header: "Name", sortable: true },
+            { key: "role", header: "Role", sortable: true },
+            { key: "status", header: "Status", sortable: true },
+            { key: "projects", header: "Projects", type: "number", sortable: true },
+          ]}
+          rows={[
+            { id: "1", name: "Maya Chen", role: "Designer", status: "Active", projects: 8 },
+            { id: "2", name: "Jordan Lee", role: "Engineer", status: "Active", projects: 6 },
+            { id: "3", name: "Alex Rivera", role: "PM", status: "Invited", projects: 3 },
+            { id: "4", name: "Sam Patel", role: "Engineer", status: "Away", projects: 5 },
+          ]}
+        />
+      </div>
+    );
+  }
+  if (size === "stage" && id === "table") {
+    return (
+      <div className={previewStyles.stageTable}>
+        <Table
+          caption="Recent invoices"
+          columns={[
+            { key: "invoice", header: "Invoice", emphasis: true },
+            { key: "status", header: "Status" },
+            { key: "method", header: "Method" },
+            { key: "amount", header: "Amount", numeric: true, align: "end" },
+          ]}
+          rows={[
+            { invoice: "INV001", status: "Paid", method: "Credit card", amount: "$250.00" },
+            { invoice: "INV002", status: "Pending", method: "Bank transfer", amount: "$150.00" },
+            { invoice: "INV003", status: "Unpaid", method: "PayPal", amount: "$350.00" },
+            { invoice: "INV004", status: "Paid", method: "Credit card", amount: "$450.00" },
+          ]}
+          footer={{ label: "Total", value: "$1,200.00" }}
+        />
+      </div>
+    );
+  }
   if (size === "stage" && id === "scoreboard") {
     return (
       <Scoreboard
