@@ -13,9 +13,9 @@ function Foreground() {
   );
 }
 
-function Demo({ variant, inverse = false }: { variant: GridBackgroundVariant; inverse?: boolean }) {
+function Demo({ variant, inverse = false, bare = false }: { variant: GridBackgroundVariant; inverse?: boolean; bare?: boolean }) {
   return (
-    <div className={motion.gridWell}>
+    <div className={`${motion.gridWell} ${bare ? motion.gridBare : ""}`}>
       <GridBackground variant={variant} inverse={inverse}>
         <Foreground />
       </GridBackground>
@@ -32,7 +32,7 @@ export function GridBackgroundDoc() {
       name="GridBackground"
       lede="A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast."
       summary="Switch lines, dots or none, and the inverse surface. The grid is aria-hidden and sits behind the content."
-      preview={<Demo variant={variant} inverse={surface === "inverse"} />}
+      preview={<Demo variant={variant} inverse={surface === "inverse"} bare />}
       controls={
         <>
           <DocOptions label="Variant" options={["lines", "dots", "none"] as const} value={variant} onChange={setVariant} />

@@ -16,7 +16,7 @@ export function GradientTextDoc() {
       lede="A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image. No motion."
       summary="Switch ink or brand. Both ends of the gradient keep 4.5:1 against the surface."
       preview={
-        <div className={`${motion.well} ${motion.textWell}`}>
+        <div className={motion.bare}>
           <GradientText tone={tone}>{COPY}</GradientText>
         </div>
       }

@@ -162,6 +162,12 @@
   min-height: inherit;
 }
 
+/* Preview: the doc canvas is the frame, so the grid fills it with no second border. */
+.gridBare {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 .inverseWell {
   display: flex;
   align-items: center;
