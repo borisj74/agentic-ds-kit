@@ -67,9 +67,8 @@
   overflow: auto;
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
-  background-color: var(--bg-surface);
-  background-image: radial-gradient(circle, var(--line-strong) var(--border-width-thin), transparent var(--border-width-thin));
-  background-size: var(--space-5) var(--space-5);
+  /* Solid page ground (the canvas behind the content panel), no dot grid. */
+  background-color: var(--bg-canvas);
 }
 
 .stageInner {
