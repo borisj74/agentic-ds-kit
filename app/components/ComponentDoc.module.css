@@ -516,3 +516,14 @@
   }
 }
 
+
+/* Inside the Stage template the page header, When to use and the agent block come from the
+   contract, so each doc's own hero and Do/Don't column would repeat them. */
+.examplesHost .hero,
+.examplesHost .guidance {
+  display: none;
+}
+
+.examplesHost .notesGrid {
+  grid-template-columns: minmax(0, 1fr);
+}

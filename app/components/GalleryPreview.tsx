@@ -105,7 +105,20 @@ const CHART = [
 
 const noop = () => undefined;
 
-export function GalleryPreview({ id }: { id: string }) {
+/** `stage` is the larger preview on a component page; `card` the gallery thumbnail. */
+export function GalleryPreview({ id, size = "card" }: { id: string; size?: "card" | "stage" }) {
+  if (size === "stage" && id === "scoreboard") {
+    return (
+      <Scoreboard
+        aria-label="This week"
+        items={[
+          { label: "Weekly users", value: "1.44k", delta: "+6.2%", trend: "up", hint: "vs last week" },
+          { label: "Open tasks", value: "4", hint: "+1 since Monday" },
+          { label: "Blocked", value: "1", hint: "Waiting on review" },
+        ]}
+      />
+    );
+  }
   switch (id) {
     case "anchornav":
       return (
