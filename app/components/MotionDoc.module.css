@@ -1,0 +1,139 @@
+/* Shared demo layout for the Motion docs (BlurCrossfade, TextReveal, TiltCard). */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.well {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--space-16) * 2);
+  padding: var(--space-6);
+  box-sizing: border-box;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+.textWell {
+  justify-content: flex-start;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-16) * 3)), 1fr));
+  gap: var(--grid-gutter-md);
+  width: 100%;
+}
+
+.frame {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.frameLabel {
+  margin: 0;
+  color: var(--text-fg-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--grid-gutter-lg);
+  width: 100%;
+}
+
+.plan {
+  width: min(100%, calc(var(--space-16) * 3));
+}
+
+.planBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.price {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-heading-5);
+  line-height: var(--type-line-heading-5);
+}
+
+.priceUnit {
+  color: var(--text-fg-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+}
+
+.caption {
+  margin: 0;
+  color: var(--text-fg-subtle);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.thumb {
+  display: flex;
+  align-items: flex-end;
+  width: calc(var(--space-16) + var(--space-8));
+  height: var(--space-16);
+  padding: var(--space-2);
+  box-sizing: border-box;
+  border-radius: var(--radius-surface-md);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-heading);
+}
+
+.thumbA {
+  background-color: var(--surface-inverse);
+  color: var(--text-fg-inverse);
+}
+
+.thumbB {
+  background-color: var(--action-primary);
+  color: var(--action-on-primary);
+}
+
+/*
+ * Doc-only stills: pause every animation inside and seek it to --freeze-at, so the Variants tab
+ * can show the Paper frames (t ≈ 60ms, 140ms …) next to the live preview.
+ */
+.freeze * {
+  animation-play-state: paused !important;
+  animation-delay: calc(-1 * var(--freeze-at, 0ms)) !important;
+}
+
+/* TextReveal keeps its per-unit stagger while frozen. */
+.freeze [style*="--text-reveal-index"] {
+  animation-delay: calc(var(--text-reveal-stagger) * var(--text-reveal-index) - var(--freeze-at, 0ms)) !important;
+}
+
+/* Doc-only: what reduced motion shows — no animation at all. */
+.still * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}

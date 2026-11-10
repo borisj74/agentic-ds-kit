@@ -1,0 +1,88 @@
+/*
+ * Both layers share one grid cell, so the swap never shifts layout: the cell is as big as the
+ * larger of the old and new child while both are on screen.
+ * Paper (p-5-0, 01): outgoing opacity 1 → 0 and blur 0 → 6px, incoming the reverse, overlapped.
+ * `filter: blur` is the one approved exception to the kit's transform/opacity-only rule (Boris,
+ * 2026-11-10). The blur is --blur-crossfade-blur, 6px (1.5 × --space-1; there is no blur token),
+ * only on these two small layers, and it is dropped under reduced motion. See NOTES.md.
+ */
+.root {
+  --blur-crossfade-duration: var(--motion-duration-200);
+  --blur-crossfade-easing: var(--motion-ease-out);
+  --blur-crossfade-blur: calc(var(--space-1) * 1.5);
+  display: inline-grid;
+  position: relative;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.normal {
+  --blur-crossfade-duration: var(--motion-duration-300);
+}
+
+.layer {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.leaving {
+  pointer-events: none;
+  animation: blur-crossfade-out var(--blur-crossfade-duration) var(--blur-crossfade-easing) both;
+}
+
+.entering {
+  animation: blur-crossfade-in var(--blur-crossfade-duration) var(--blur-crossfade-easing) both;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes blur-crossfade-out {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 0;
+    filter: blur(var(--blur-crossfade-blur));
+  }
+}
+
+@keyframes blur-crossfade-in {
+  from {
+    opacity: 0;
+    filter: blur(var(--blur-crossfade-blur));
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes blur-crossfade-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Paper: "no blur, instant or 100ms fade". The old value goes at once; the new one fades in, opacity only. */
+@media (prefers-reduced-motion: reduce) {
+  .leaving {
+    display: none;
+  }
+
+  .entering {
+    animation: blur-crossfade-fade var(--motion-duration-100) var(--motion-ease-linear) both;
+  }
+}

@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -9936,6 +9936,145 @@
         "onRetry": {
           "type": "function",
           "required": false
+        }
+      }
+    },
+    {
+      "id": "blurcrossfade",
+      "group": "component",
+      "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
+      "useWhen": [
+        "a status, value or thumbnail swaps in place and a hard cut would feel jumpy",
+        "announce the new value politely to screen readers while it swaps"
+      ],
+      "doNotUseWhen": [
+        "a changing number — NumberTransition",
+        "text still being generated — ShimmerText",
+        "showing and hiding a panel — Collapsible or Accordion",
+        "page or route transitions"
+      ],
+      "doNot": [
+        "Do not copy its blur into other components; the filter exception is for BlurCrossfade only",
+        "Do not wrap long or interactive regions; it is for small values",
+        "Do not pass raw ms; pick a duration token",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "children": {
+          "type": "node",
+          "required": true,
+          "note": "The current value. Any child: Badge, image, chart."
+        },
+        "contentKey": {
+          "type": "string|number",
+          "required": true,
+          "note": "Changing it triggers the swap. The outgoing layer shows the content as it was when that key arrived."
+        },
+        "duration": {
+          "type": "enum",
+          "values": [
+            "fast",
+            "normal"
+          ],
+          "default": "fast",
+          "note": "fast = motion.duration200 (Paper's motion.fast); normal = motion.duration300. No raw ms."
+        },
+        "label": {
+          "type": "string",
+          "required": false,
+          "note": "Sent to an aria-live=polite region when the content swaps, e.g. \"Status: Done\"."
+        }
+      }
+    },
+    {
+      "id": "textreveal",
+      "group": "component",
+      "intent": "A short heading that rises in by word or by line, for docs heroes and empty states. The full string is always in the DOM.",
+      "useWhen": [
+        "a docs or marketing hero heading",
+        "an empty-state title that should arrive gently"
+      ],
+      "doNotUseWhen": [
+        "body copy or long paragraphs",
+        "text still being generated — ShimmerText",
+        "page titles in product UI — PageHeader",
+        "repeated headings in lists or tables"
+      ],
+      "doNot": [
+        "Do not loop it",
+        "Do not use it for more than one heading per view",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "children": {
+          "type": "string",
+          "required": true,
+          "note": "Plain text. With by=\"line\", separate lines with \\n."
+        },
+        "by": {
+          "type": "enum",
+          "values": [
+            "word",
+            "line"
+          ],
+          "default": "word"
+        },
+        "as": {
+          "type": "enum",
+          "values": [
+            "h1",
+            "h2",
+            "h3",
+            "p",
+            "span"
+          ],
+          "default": "h2"
+        },
+        "replayKey": {
+          "type": "string|number",
+          "required": false,
+          "note": "Change it to play the reveal again."
+        },
+        "label": {
+          "type": "string",
+          "required": false,
+          "note": "Accessible text when it should differ from children."
+        }
+      }
+    },
+    {
+      "id": "tiltcard",
+      "group": "component",
+      "intent": "A kit Card that tilts a few degrees toward the pointer with a soft highlight, for rare showcase spots (a pricing highlight, a docs gallery). Wraps Card; never the default Card.",
+      "useWhen": [
+        "one highlighted plan or feature in a showcase",
+        "a docs or marketing gallery tile"
+      ],
+      "doNotUseWhen": [
+        "dense data UI: tables, forms, agent monitors",
+        "every card in a grid; keep it to one or two",
+        "a normal content card — Card"
+      ],
+      "doNot": [
+        "Do not invent a local HoverCard or 3D card",
+        "Do not tilt more than 6 degrees",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "tilt": {
+          "type": "boolean",
+          "default": true,
+          "note": "false keeps the hover lift only."
+        },
+        "maxTilt": {
+          "type": "number",
+          "default": 6,
+          "note": "Degrees at the card's edge, capped at 6."
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "note": "Mutes the content, sets aria-disabled, no tilt or lift."
         }
       }
     },

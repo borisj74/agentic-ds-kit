@@ -122,6 +122,9 @@ import contract_setupguide from "../packages/kit/contracts/setupguide.json";
 import contract_notificationstack from "../packages/kit/contracts/notificationstack.json";
 import contract_experimentcard from "../packages/kit/contracts/experimentcard.json";
 import contract_changesummary from "../packages/kit/contracts/changesummary.json";
+import contract_blurcrossfade from "../packages/kit/contracts/blurcrossfade.json";
+import contract_textreveal from "../packages/kit/contracts/textreveal.json";
+import contract_tiltcard from "../packages/kit/contracts/tiltcard.json";
 
 type ContractNotes = {
   useWhen?: string[];
@@ -253,6 +256,9 @@ const contracts: Record<string, ContractNotes> = {
   "notificationstack": contract_notificationstack,
   "experimentcard": contract_experimentcard,
   "changesummary": contract_changesummary,
+  "blurcrossfade": contract_blurcrossfade,
+  "textreveal": contract_textreveal,
+  "tiltcard": contract_tiltcard,
 };
 
 export function guidanceFor(id: string): { dos: string[]; donts: string[] } | null {
