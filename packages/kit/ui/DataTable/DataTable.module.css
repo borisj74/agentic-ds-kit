@@ -244,6 +244,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-heading);
   color: var(--text-primary);
   text-align: left;
@@ -358,9 +359,12 @@
   justify-content: center;
 }
 
-.tr:hover .td,
-.tr[data-selected] .td {
+.tr:hover .td {
   background-color: var(--surface-muted);
+}
+
+.tr[data-selected] .td {
+  background-color: var(--action-selected);
 }
 
 .tr:last-child .td {

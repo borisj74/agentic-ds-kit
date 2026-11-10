@@ -70,7 +70,8 @@
     "space.inline.sm",
     "type.size.body",
     "type.size.bodySm",
-    "type.size.heading"
+    "type.size.heading",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "group",

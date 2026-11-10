@@ -75,10 +75,11 @@
 
 .heading {
   padding: var(--space-2) var(--space-2) var(--space-1);
-  font-family: var(--font-sans);
+  font-family: var(--type-family-overline);
   font-size: var(--type-size-overline);
   font-weight: var(--type-weight-overline);
   letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
   color: var(--text-secondary);
 }
 

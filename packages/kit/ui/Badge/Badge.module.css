@@ -34,7 +34,7 @@
 
 .soft.primary {
   background-color: var(--primary-subtle);
-  color: var(--primary);
+  color: var(--primary-fg);
 }
 
 .soft.success {
@@ -70,7 +70,7 @@
 
 .tint.primary {
   background-color: var(--primary-subtle-strong);
-  color: var(--primary);
+  color: var(--primary-fg);
 }
 
 .tint.success {

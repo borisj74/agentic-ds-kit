@@ -421,6 +421,7 @@
   --type-family-body: var(--font-body);
   --type-family-heading: var(--font-heading);
   --type-family-code: var(--font-mono);
+  --type-family-overline: var(--font-mono);
 
   /* Type ladders — heading / ui / body / overline (size / line) */
   --type-size-heading-1: 56px;
@@ -475,7 +476,9 @@
 
   --type-line-body: var(--type-line-body-md);
   --type-line-heading: var(--type-line-heading-5);
-  --type-tracking-overline: 0.02em;
+  --type-tracking-title: -0.02em;
+  --type-tracking-heading: -0.01em;
+  --type-tracking-overline: 0.06em;
 
   --z-overlay: 40;
   --z-modal: 50;
@@ -596,7 +599,7 @@
   --action-secondary: var(--bg-subtle);
   --action-secondary-hover: var(--bg-tray);
   --action-secondary-pressed: var(--bg-track-strong);
-  --action-selected: var(--primary-subtle);
+  --action-selected: #1e293b;
   --action-selected-border: var(--primary-base);
   --focus-ring: var(--line-focus);
   --focus-ring-offset: var(--bg-canvas);
@@ -750,6 +753,7 @@
   --info-base: #60a5fa;
   --info-line: #1d4ed8;
   --info-subtle: #1e3a8a;
+  --action-selected: var(--primary-subtle);
 }
 
 [data-color="blue"] {

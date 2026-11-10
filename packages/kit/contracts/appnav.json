@@ -72,7 +72,9 @@
     "space.2",
     "space.3",
     "space.4",
-    "radius.controlMd"
+    "radius.controlMd",
+    "type.family.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "nav",

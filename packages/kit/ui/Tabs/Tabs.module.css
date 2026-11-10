@@ -96,6 +96,11 @@
   padding: var(--space-inset-sm) var(--space-inset-md);
 }
 
+/* On the tray, resting labels use muted text: subtle text on --bg-tray is below 4.5:1. */
+.segmented .trigger:not(:hover):not([data-state="active"]):not(:disabled) {
+  color: var(--text-secondary);
+}
+
 .line .list {
   gap: var(--space-inline-md);
   width: 100%;

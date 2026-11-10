@@ -198,7 +198,9 @@
     "type.size.caption",
     "type.weight.label",
     "radius.control.md",
-    "focus.ring"
+    "focus.ring",
+    "type.family.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "div",

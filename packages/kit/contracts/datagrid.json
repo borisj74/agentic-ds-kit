@@ -105,7 +105,9 @@
     "space.2",
     "space.4",
     "type.size.bodySm",
-    "motion.interaction"
+    "motion.interaction",
+    "type.family.overline",
+    "type.tracking.overline"
   ],
   "a11y": {
     "element": "table",

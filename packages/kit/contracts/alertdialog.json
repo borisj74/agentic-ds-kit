@@ -72,7 +72,8 @@
     "surface.elevated",
     "shadow.md",
     "border.faint",
-    "motion.overlay"
+    "motion.overlay",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "alertdialog",

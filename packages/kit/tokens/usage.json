@@ -71,7 +71,7 @@
       "doNot": "Do not hardcode font-weight numbers in components"
     },
     "--type-family-": {
-      "note": "Aliases of the font trio.",
+      "note": "Aliases of the font trio. --type-family-overline is Plex Mono (alias of --font-mono).",
       "useWhen": "Prefer --font-heading / --font-body / --font-mono",
       "doNot": "Do not add a fourth family"
     },
@@ -218,9 +218,9 @@
       "doNot": "Do not use muted for headings"
     },
     "--text-fg-subtle": {
-      "note": "Tertiary copy.",
-      "useWhen": "Placeholders and overlines",
-      "doNot": "Do not use subtle as body text"
+      "note": "Tertiary copy. Passes 4.5:1 on surface and canvas only.",
+      "useWhen": "Placeholders and tertiary meta on --bg-surface or --bg-canvas",
+      "doNot": "Do not use subtle as body text or on --bg-tray (4.34:1 light); use --text-fg-muted there"
     },
     "--text-fg-disabled": {
       "note": "Disabled copy.",
@@ -266,6 +266,36 @@
       "note": "Code and tokens.",
       "useWhen": "CodeSnippet, token names",
       "doNot": "Do not use mono for body copy"
+    },
+    "--type-weight-title": {
+      "note": "Page title weight (700). Pair with --type-tracking-title.",
+      "useWhen": "PageHeader title and other page-level titles",
+      "doNot": "Do not use title weight for section or card headings; use --type-weight-heading"
+    },
+    "--type-tracking-title": {
+      "note": "Page title letter-spacing (-0.02em).",
+      "useWhen": "Page titles set in --type-weight-title",
+      "doNot": "Do not apply negative tracking to body, label or caption text"
+    },
+    "--type-tracking-heading": {
+      "note": "Section heading letter-spacing (-0.01em).",
+      "useWhen": "Section, Card, dialog and drawer titles set in --type-weight-heading",
+      "doNot": "Do not use on text below --type-size-heading"
+    },
+    "--type-tracking-overline": {
+      "note": "Overline letter-spacing (+0.06em). Overline = --type-family-overline (Plex Mono), --type-weight-overline (500), --type-size-overline-xs, uppercase.",
+      "useWhen": "Overlines, eyebrows, group labels, table header cells, metric labels",
+      "doNot": "Do not use caps tracking on mixed-case text or body copy"
+    },
+    "--type-family-overline": {
+      "note": "Overline family: Plex Mono. Always uppercase with --type-tracking-overline.",
+      "useWhen": "Overlines, table header cells, metric labels",
+      "doNot": "Do not use for body copy or values; use --font-mono for code"
+    },
+    "--action-selected": {
+      "note": "Selected row or item fill. Light primary-subtle (blue-50); dark slate-800. Ink: primary-subtle.",
+      "useWhen": "Selected table rows, tree and list items",
+      "doNot": "Do not reuse the hover fill (--surface-muted) for selection"
     },
     "--type-weight-heading": {
       "note": "Heading weight. Playground 400|500|600|700.",
