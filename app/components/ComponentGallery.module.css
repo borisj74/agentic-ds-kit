@@ -1,14 +1,65 @@
-.gallery {
+.page {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  min-width: 0;
+  padding: var(--space-6) var(--space-16) var(--space-16);
   container-type: inline-size;
   container-name: gallery;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-heading);
+  font-size: var(--type-size-heading-4);
+  font-weight: var(--type-weight-title);
+  letter-spacing: var(--type-tracking-title);
+  line-height: var(--type-line-heading-4);
+}
+
+.lede {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+}
+
+.groupTag {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  z-index: 1;
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+}
+
+.previewScope {
+  width: 100%;
+  height: 100%;
+}
+
+@media (width < 64rem) {
+  .page {
+    padding: var(--space-4) var(--space-4) var(--space-12);
+  }
 }
 
 .search {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  max-width: 24rem;
-  margin-bottom: var(--space-6);
+  max-width: var(--layout-drawer-md);
 }
 
 .resultCount {
@@ -23,6 +74,9 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 @container gallery (min-width: 34rem) {
@@ -55,7 +109,16 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  border-radius: inherit;
+  border-radius: var(--radius-surface-md);
+}
+
+.cardHit:focus-visible {
+  outline: var(--border-focus-width) solid var(--line-focus);
+  outline-offset: var(--space-px);
+}
+
+.cardLink:hover > :global(article) {
+  border-color: var(--line-strong);
 }
 
 .cardLink > :global(article) {
@@ -103,7 +166,10 @@
 }
 
 .preview {
+  position: relative;
   box-sizing: border-box;
+  /* Room for the group tag so it never sits on the live preview. */
+  padding-top: var(--space-6);
   width: auto;
   aspect-ratio: 2 / 1;
   min-height: 0;
@@ -112,10 +178,8 @@
   overflow: hidden;
   pointer-events: none;
   user-select: none;
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--border-faint);
+  background-color: var(--bg-subtle);
   border-radius: var(--radius-surface-sm);
-  box-shadow: var(--shadow-sm);
 }
 
 .previewFrame {

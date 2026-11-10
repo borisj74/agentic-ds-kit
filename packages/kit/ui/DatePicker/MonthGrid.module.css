@@ -31,6 +31,25 @@
   padding: var(--space-6);
 }
 
+/* Inside another overlay (DateRangePicker): no card of its own. */
+.bare,
+.bare.sm,
+.bare.md,
+.bare.lg {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Keeps the heading centred when a grid shows only one arrow (Button sm icon-only size). */
+.navSpacer {
+  flex-shrink: 0;
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
 .calendar[data-disabled] {
   opacity: var(--opacity-disabled);
   pointer-events: none;
@@ -138,6 +157,17 @@
 .day[aria-disabled="true"] {
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
+}
+
+/* Two months side by side (bare): spill-over days from the neighbour month are tinted boxes and
+   never show the range or selection; the neighbour grid shows those days. */
+.bare .day[data-outside],
+.bare .day[data-outside][data-in-range],
+.bare .day[data-outside][data-selected] {
+  border-color: transparent;
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-weight: var(--type-weight-body);
 }
 
 .calendar[data-disabled] .day {

@@ -43,7 +43,7 @@
     "rest": "span"
   },
   "tokens": [
-    "surface.muted",
+    "bg.tray",
     "text.primary",
     "radius.full",
     "space.8",

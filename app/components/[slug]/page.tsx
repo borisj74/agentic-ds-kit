@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import playground from "../../playground.module.css";
 import { ComponentDoc } from "../ComponentsView";
+import { ComponentPage } from "../ComponentPage";
 import { DocPageExtras } from "../DocPageExtras";
 import { COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
 
@@ -20,16 +20,13 @@ export async function generateMetadata({
   return { title: SLUGS.has(slug) ? componentLabel(slug) : "Component" };
 }
 
-export default async function ComponentPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ComponentSlugPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!SLUGS.has(slug)) notFound();
 
   return (
-    <div className={playground.docPage}>
-      <div className={playground.docShell}>
-        <ComponentDoc slug={slug} />
-        <DocPageExtras slug={slug} />
-      </div>
-    </div>
+    <ComponentPage id={slug} footer={<DocPageExtras slug={slug} />}>
+      <ComponentDoc slug={slug} />
+    </ComponentPage>
   );
 }

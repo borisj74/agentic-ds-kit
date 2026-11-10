@@ -35,10 +35,12 @@ export function ContextMenuDoc() {
         </div>
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
-            <div className={styles.canvas}>
-              <ContextMenu items={ITEMS} onSelect={setLast}>
-                <p>Right-click this record. Last action: {last}.</p>
-              </ContextMenu>
+            <div className={styles.layout}>
+              <div className={styles.canvas}>
+                <ContextMenu items={ITEMS} onSelect={setLast}>
+                  <p>Right-click this record. Last action: {last}.</p>
+                </ContextMenu>
+              </div>
             </div>
             <DocNotes>
               <div>

@@ -1,6 +1,8 @@
 "use client";
 
+import { useLayoutEffect } from "react";
 import { Tabs } from "agentic-ds-kit";
+import { useDocView } from "./DocView";
 import styles from "./ComponentDoc.module.css";
 
 export function DocTabList({
@@ -12,11 +14,20 @@ export function DocTabList({
   onChange: (id: string) => void;
   ariaLabel?: string;
 }) {
+  const view = useDocView();
+
+  // Inside the stage's Preview or Variants tab: show that view, before paint, with no tab bar.
+  useLayoutEffect(() => {
+    if (view !== "full" && value !== view) onChange(view);
+  }, [view, value, onChange]);
+
+  if (view !== "full") return null;
+
   return (
     <div className={styles.tabListHost}>
       <Tabs
-        size="md"
-        variant="line"
+        size="sm"
+        variant="segmented"
         value={value}
         onChange={onChange}
         ariaLabel={ariaLabel}

@@ -1089,6 +1089,14 @@ export function writeStoredTheme(state: ThemeState): void {
   }
 }
 
+export function clearStoredTheme(): void {
+  try {
+    localStorage.removeItem(THEME_STORAGE_KEY);
+  } catch {
+    // Nothing saved, or storage is blocked.
+  }
+}
+
 export function syncPreset(state: ThemeState): ThemeState {
   const match = PRESETS.find(
     (preset) =>

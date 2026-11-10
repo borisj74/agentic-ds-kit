@@ -580,7 +580,12 @@ export function readPlaygroundAppearance() {
   };
 }
 
-export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark")root.setAttribute("data-theme","dark");}catch(e){}})();`;
+/**
+ * Runs before paint. Sets the chrome mode, the Theme panel state, and data-preview-theme when a
+ * preview theme is saved ("nistha-theme-playground", THEME_STORAGE_KEY in theme-playground.ts),
+ * so previews stay hidden until that theme is applied instead of flashing the default.
+ */
+export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark")root.setAttribute("data-theme","dark");if(localStorage.getItem("nistha-theme-playground"))root.setAttribute("data-preview-theme","stored");}catch(e){}})();`;
 
 
 export { COLOR_SHORTCUTS };
