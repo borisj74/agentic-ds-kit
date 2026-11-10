@@ -1,9 +1,12 @@
 // Derived from packages/kit/contracts/*.json. Do not hand-edit the map.
 import contract_accordion from "../packages/kit/contracts/accordion.json";
 import contract_agentfleet from "../packages/kit/contracts/agentfleet.json";
+import contract_agentinbox from "../packages/kit/contracts/agentinbox.json";
+import contract_agentlanes from "../packages/kit/contracts/agentlanes.json";
 import contract_agentmonitor from "../packages/kit/contracts/agentmonitor.json";
 import contract_agentplan from "../packages/kit/contracts/agentplan.json";
 import contract_agenttrail from "../packages/kit/contracts/agenttrail.json";
+import contract_agenttree from "../packages/kit/contracts/agenttree.json";
 import contract_alert from "../packages/kit/contracts/alert.json";
 import contract_alertdialog from "../packages/kit/contracts/alertdialog.json";
 import contract_anchornav from "../packages/kit/contracts/anchornav.json";
@@ -37,6 +40,7 @@ import contract_datatable from "../packages/kit/contracts/datatable.json";
 import contract_datepicker from "../packages/kit/contracts/datepicker.json";
 import contract_daterangepicker from "../packages/kit/contracts/daterangepicker.json";
 import contract_datetimepicker from "../packages/kit/contracts/datetimepicker.json";
+import contract_decisioncard from "../packages/kit/contracts/decisioncard.json";
 import contract_divider from "../packages/kit/contracts/divider.json";
 import contract_drawer from "../packages/kit/contracts/drawer.json";
 import contract_dropdownmenu from "../packages/kit/contracts/dropdownmenu.json";
@@ -108,9 +112,12 @@ type ContractNotes = {
 const contracts: Record<string, ContractNotes> = {
   "accordion": contract_accordion,
   "agentfleet": contract_agentfleet,
+  "agentinbox": contract_agentinbox,
+  "agentlanes": contract_agentlanes,
   "agentmonitor": contract_agentmonitor,
   "agentplan": contract_agentplan,
   "agenttrail": contract_agenttrail,
+  "agenttree": contract_agenttree,
   "alert": contract_alert,
   "alertdialog": contract_alertdialog,
   "anchornav": contract_anchornav,
@@ -144,6 +151,7 @@ const contracts: Record<string, ContractNotes> = {
   "datepicker": contract_datepicker,
   "daterangepicker": contract_daterangepicker,
   "datetimepicker": contract_datetimepicker,
+  "decisioncard": contract_decisioncard,
   "divider": contract_divider,
   "drawer": contract_drawer,
   "dropdownmenu": contract_dropdownmenu,

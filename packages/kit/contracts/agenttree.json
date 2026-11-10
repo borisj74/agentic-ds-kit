@@ -1,0 +1,110 @@
+{
+  "id": "agenttree",
+  "status": "stable",
+  "intent": "An orchestrator and its sub-agents as a tree. Every node shows status, time and cost; branch costs roll up (Σ). Fold branches; approve or retry in place.",
+  "useWhen": [
+    "show how an orchestrator split work into sub-agents",
+    "find which sub-agent waits or failed, and act on it",
+    "see cost roll up per branch"
+  ],
+  "doNotUseWhen": [
+    "agents side by side with a summary each — AgentFleet",
+    "one agent over time — AgentMonitor or AgentTrail",
+    "a file or category hierarchy — TreeView"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "root": {
+      "type": "object",
+      "required": false,
+      "note": "{ id, name, status: \"queued\" | \"running\" | \"waiting\" | \"done\" | \"failed\", elapsed?, cost?: number, note?, children? }. Missing root shows Empty."
+    },
+    "label": {
+      "type": "string",
+      "default": "Orchestrator"
+    },
+    "folded": {
+      "type": "string[]",
+      "required": false,
+      "note": "Folded branch ids; a folded branch shows \"N agents\"."
+    },
+    "onFoldedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(folded) => void. Adds the chevron disclosure on branches."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Waiting leaf: Approve."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Failed leaf: Retry."
+    },
+    "currency": {
+      "type": "string",
+      "default": "$"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "motion.fast",
+    "icon.success",
+    "icon.brand",
+    "icon.danger",
+    "status.warning",
+    "status.warningText",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "radius.pill"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "nested lists; branch chevrons are buttons with aria-expanded and aria-controls",
+      "status is text in its own column; icons are aria-hidden",
+      "Approve and Retry name the node",
+      "aria-busy while loading",
+      "fold and entry motion use opacity and transform, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentTree, SubAgentList, or OrchestratorTree",
+    "Do not use TreeView for agent runs",
+    "Do not color status without the text label",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AgentTree root={{ id: \"root\", name: \"Ship v2 billing\", status: \"running\", elapsed: \"8m 12s\", children: [{ id: \"r\", name: \"Research\", status: \"done\", children: [{ id: \"scan\", name: \"scan-codebase\", status: \"done\", elapsed: \"58s\", cost: 0.14 }] }] }} folded={folded} onFoldedChange={setFolded} onApprove={approve} onRetry={retry} />"
+}

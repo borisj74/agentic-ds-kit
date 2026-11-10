@@ -3,9 +3,12 @@ import type { AppNavGroup, AppNavItem } from "agentic-ds-kit";
 export const COMPONENT_ITEMS = [
   "accordion",
   "agentfleet",
+  "agentinbox",
+  "agentlanes",
   "agentmonitor",
   "agentplan",
   "agenttrail",
+  "agenttree",
   "alert",
   "alertdialog",
   "anchornav",
@@ -38,6 +41,7 @@ export const COMPONENT_ITEMS = [
   "datepicker",
   "daterangepicker",
   "datetimepicker",
+  "decisioncard",
   "divider",
   "drawer",
   "dropdownmenu",
@@ -108,6 +112,10 @@ export function componentLabel(id: string): string {
   if (id === "permissionrequest") return "PermissionRequest";
   if (id === "runningnow") return "RunningNow";
   if (id === "toolcallcard") return "ToolCallCard";
+  if (id === "agenttree") return "AgentTree";
+  if (id === "agentlanes") return "AgentLanes";
+  if (id === "agentinbox") return "AgentInbox";
+  if (id === "decisioncard") return "DecisionCard";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -169,7 +177,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentmonitor", "agentplan", "agenttrail", "approvalcard", "chat", "insightcard", "loadinganimation", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agenttrail", "agenttree", "approvalcard", "chat", "decisioncard", "insightcard", "loadinganimation", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard"],
   },
   {
     label: "Forms",

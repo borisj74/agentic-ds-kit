@@ -7815,6 +7815,357 @@
       }
     },
     {
+      "id": "agenttree",
+      "group": "component",
+      "intent": "An orchestrator and its sub-agents as a tree. Every node shows status, time and cost; branch costs roll up (Σ). Fold branches; approve or retry in place.",
+      "useWhen": [
+        "show how an orchestrator split work into sub-agents",
+        "find which sub-agent waits or failed, and act on it",
+        "see cost roll up per branch"
+      ],
+      "doNotUseWhen": [
+        "agents side by side with a summary each — AgentFleet",
+        "one agent over time — AgentMonitor or AgentTrail",
+        "a file or category hierarchy — TreeView"
+      ],
+      "doNot": [
+        "Do not invent a local AgentTree, SubAgentList, or OrchestratorTree",
+        "Do not use TreeView for agent runs",
+        "Do not color status without the text label",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "root": {
+          "type": "object",
+          "required": false,
+          "note": "{ id, name, status: \"queued\" | \"running\" | \"waiting\" | \"done\" | \"failed\", elapsed?, cost?: number, note?, children? }. Missing root shows Empty."
+        },
+        "label": {
+          "type": "string",
+          "default": "Orchestrator"
+        },
+        "folded": {
+          "type": "string[]",
+          "required": false,
+          "note": "Folded branch ids; a folded branch shows \"N agents\"."
+        },
+        "onFoldedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(folded) => void. Adds the chevron disclosure on branches."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Waiting leaf: Approve."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Failed leaf: Retry."
+        },
+        "currency": {
+          "type": "string",
+          "default": "$"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "id": "agentlanes",
+      "group": "component",
+      "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+      "useWhen": [
+        "watch several agents work in parallel over the last minutes",
+        "see who handed work to whom",
+        "answer a waiting agent from its block"
+      ],
+      "doNotUseWhen": [
+        "a list of running agents for chrome — RunningNow",
+        "per-agent sub-agent summaries — AgentFleet",
+        "a calendar of events — Calendar"
+      ],
+      "doNot": [
+        "Do not invent a local AgentLanes, Gantt, or AgentTimeline",
+        "Do not encode status by color only; blocks and lanes carry text",
+        "Do not use raw hex",
+        "Waiting uses caution tokens until an attention role exists"
+      ],
+      "props": {
+        "agents": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, model?, icon? }[] — one lane each, in order."
+        },
+        "tasks": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, handoffTo?, ask?, summary?, icon? }[]. Times are epoch ms; open tasks grow to now."
+        },
+        "span": {
+          "type": "number",
+          "default": 600000,
+          "note": "Window in ms."
+        },
+        "now": {
+          "type": "number",
+          "required": false,
+          "note": "Controlled clock; else it ticks every second."
+        },
+        "title": {
+          "type": "string",
+          "default": "Agents"
+        },
+        "openTaskId": {
+          "type": "string",
+          "required": false,
+          "note": "Open block: a detail popover, or a decision for a waiting task."
+        },
+        "onOpenTaskChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Blocks become buttons; Escape closes."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId) => void"
+        },
+        "onReject": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId) => void"
+        },
+        "onOpen": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId) => void. Open in the detail."
+        },
+        "spans": {
+          "type": "number[]",
+          "required": false,
+          "note": "Zoom choices; default 3m and 10m."
+        },
+        "onSpanChange": {
+          "type": "function",
+          "required": false,
+          "note": "(span) => void. Shows a SegmentedControl."
+        }
+      }
+    },
+    {
+      "id": "agentinbox",
+      "group": "component",
+      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
+      "useWhen": [
+        "collect every agent request in one place",
+        "act on approvals and questions without leaving the list",
+        "review failed runs and recaps"
+      ],
+      "doNotUseWhen": [
+        "product notifications — Toast or a notification list",
+        "one approval inline — ApprovalCard",
+        "a chat thread — Chat"
+      ],
+      "doNot": [
+        "Do not invent a local AgentInbox, RequestQueue, or Notification Stack for agent requests",
+        "Do not rebuild approval or question UI; items reuse ApprovalCard and DecisionCard",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, agentName, type: \"approval\" | \"question\" | \"failure\" | \"recap\", preview, time?, read?, approval?, question?, detail? }[]. approval renders a kit ApprovalCard, question a kit DecisionCard."
+        },
+        "title": {
+          "type": "string",
+          "default": "Agent inbox"
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "filter": {
+          "type": "enum",
+          "values": [
+            "all",
+            "approval",
+            "question",
+            "failure",
+            "recap"
+          ],
+          "default": "all"
+        },
+        "onFilterChange": {
+          "type": "function",
+          "required": false,
+          "note": "(filter) => void. Shows the SegmentedControl with counts."
+        },
+        "onMarkAllRead": {
+          "type": "function",
+          "required": false
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "onAnswer": {
+          "type": "function",
+          "required": false,
+          "note": "(id, value) => void"
+        },
+        "onRetryItem": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Failure detail: Retry run."
+        },
+        "onViewDiff": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Recap detail."
+        },
+        "onOpenTrail": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "renderDetail": {
+          "type": "function",
+          "required": false,
+          "note": "(item) => ReactNode replaces the default detail."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Load error Retry."
+        }
+      }
+    },
+    {
+      "id": "decisioncard",
+      "group": "component",
+      "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
+      "useWhen": [
+        "an agent needs the person to pick between options before it continues",
+        "a short free-text answer the agent waits for",
+        "the agent can fall back to a default when skipped"
+      ],
+      "doNotUseWhen": [
+        "one side effect to approve — ApprovalCard",
+        "standing access — PermissionRequest",
+        "a page-blocking yes/no — AlertDialog",
+        "a form the person fills on their own — Field / RadioGroup"
+      ],
+      "doNot": [
+        "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
+        "Do not preselect the recommended option; it is a badge, not a default",
+        "Confirm is the one solid primary; Skip is ghost",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true,
+          "note": "Who asks, e.g. \"Billing refactor asks\"."
+        },
+        "question": {
+          "type": "string",
+          "required": true
+        },
+        "meta": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"paused · 0:42\"."
+        },
+        "options": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, label, description?, recommended? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge."
+        },
+        "allowFreeText": {
+          "type": "boolean",
+          "default": false,
+          "note": "Free text when there are no options."
+        },
+        "freeTextLabel": {
+          "type": "string",
+          "default": "Your answer"
+        },
+        "freeTextHint": {
+          "type": "string",
+          "default": "One or two sentences is enough."
+        },
+        "value": {
+          "type": "string",
+          "required": false,
+          "note": "Option id or free-text answer. Confirm is disabled until set."
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value) => void"
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "sending",
+            "error",
+            "resolved",
+            "skipped"
+          ],
+          "default": "pending",
+          "note": "resolved and skipped render one line."
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "The answer was not sent."
+        },
+        "resolvedLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Line text; default the chosen option's label."
+        },
+        "resolvedAt": {
+          "type": "string",
+          "required": false
+        },
+        "onConfirm": {
+          "type": "function",
+          "required": false,
+          "note": "Confirm, the one solid primary. ⌘/Ctrl+Enter inside the card."
+        },
+        "onSkip": {
+          "type": "function",
+          "required": false,
+          "note": "Skip for now (ghost)."
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

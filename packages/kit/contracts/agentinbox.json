@@ -1,0 +1,163 @@
+{
+  "id": "agentinbox",
+  "status": "stable",
+  "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
+  "useWhen": [
+    "collect every agent request in one place",
+    "act on approvals and questions without leaving the list",
+    "review failed runs and recaps"
+  ],
+  "doNotUseWhen": [
+    "product notifications — Toast or a notification list",
+    "one approval inline — ApprovalCard",
+    "a chat thread — Chat"
+  ],
+  "contains": [
+    "approvalcard",
+    "badge",
+    "button",
+    "decisioncard",
+    "empty",
+    "segmentedcontrol",
+    "skeleton"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, agentName, type: \"approval\" | \"question\" | \"failure\" | \"recap\", preview, time?, read?, approval?, question?, detail? }[]. approval renders a kit ApprovalCard, question a kit DecisionCard."
+    },
+    "title": {
+      "type": "string",
+      "default": "Agent inbox"
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "filter": {
+      "type": "enum",
+      "values": [
+        "all",
+        "approval",
+        "question",
+        "failure",
+        "recap"
+      ],
+      "default": "all"
+    },
+    "onFilterChange": {
+      "type": "function",
+      "required": false,
+      "note": "(filter) => void. Shows the SegmentedControl with counts."
+    },
+    "onMarkAllRead": {
+      "type": "function",
+      "required": false
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "onAnswer": {
+      "type": "function",
+      "required": false,
+      "note": "(id, value) => void"
+    },
+    "onRetryItem": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Failure detail: Retry run."
+    },
+    "onViewDiff": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Recap detail."
+    },
+    "onOpenTrail": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "renderDetail": {
+      "type": "function",
+      "required": false,
+      "note": "(item) => ReactNode replaces the default detail."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Load error Retry."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "motion.fast",
+    "action.selected",
+    "primary.base",
+    "icon.success",
+    "icon.danger",
+    "status.warningText",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "grid.gutter.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "rows are buttons; the selected row has aria-current and controls the detail region",
+      "unread is said in text, not only the dot",
+      "the filter is a kit SegmentedControl (radio group)",
+      "the detail region is aria-live polite",
+      "load error is role=alert with Retry",
+      "row and detail motion is opacity and transform, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AgentInbox, RequestQueue, or Notification Stack for agent requests",
+    "Do not rebuild approval or question UI; items reuse ApprovalCard and DecisionCard",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AgentInbox items={items} selectedId={selected} onSelect={setSelected} filter={filter} onFilterChange={setFilter} onMarkAllRead={markAll} onApprove={approve} onDeny={deny} onAnswer={answer} />"
+}

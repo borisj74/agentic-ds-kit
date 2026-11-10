@@ -1,0 +1,151 @@
+{
+  "id": "decisioncard",
+  "status": "stable",
+  "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
+  "useWhen": [
+    "an agent needs the person to pick between options before it continues",
+    "a short free-text answer the agent waits for",
+    "the agent can fall back to a default when skipped"
+  ],
+  "doNotUseWhen": [
+    "one side effect to approve — ApprovalCard",
+    "standing access — PermissionRequest",
+    "a page-blocking yes/no — AlertDialog",
+    "a form the person fills on their own — Field / RadioGroup"
+  ],
+  "contains": [
+    "button",
+    "field",
+    "radiogroup",
+    "textarea"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "note": "Who asks, e.g. \"Billing refactor asks\"."
+    },
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "meta": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"paused · 0:42\"."
+    },
+    "options": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, label, description?, recommended? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge."
+    },
+    "allowFreeText": {
+      "type": "boolean",
+      "default": false,
+      "note": "Free text when there are no options."
+    },
+    "freeTextLabel": {
+      "type": "string",
+      "default": "Your answer"
+    },
+    "freeTextHint": {
+      "type": "string",
+      "default": "One or two sentences is enough."
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "Option id or free-text answer. Confirm is disabled until set."
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value) => void"
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "sending",
+        "error",
+        "resolved",
+        "skipped"
+      ],
+      "default": "pending",
+      "note": "resolved and skipped render one line."
+    },
+    "errorMessage": {
+      "type": "string",
+      "default": "The answer was not sent."
+    },
+    "resolvedLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Line text; default the chosen option's label."
+    },
+    "resolvedAt": {
+      "type": "string",
+      "required": false
+    },
+    "onConfirm": {
+      "type": "function",
+      "required": false,
+      "note": "Confirm, the one solid primary. ⌘/Ctrl+Enter inside the card."
+    },
+    "onSkip": {
+      "type": "function",
+      "required": false,
+      "note": "Skip for now (ghost)."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.weight.heading",
+    "type.family.mono",
+    "motion.fast",
+    "icon.brand",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "status.successText",
+    "opacity.muted"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 title",
+      "options are a kit RadioGroup named by the question",
+      "free text is a Field-wrapped Textarea with a hint",
+      "Confirm carries aria-keyshortcuts; ⌘/Ctrl+Enter confirms inside the card",
+      "sending sets aria-busy and announces in a status region",
+      "the error is role=alert",
+      "once resolved, focus moves to the one-line row",
+      "motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
+    "Do not preselect the recommended option; it is a badge, not a default",
+    "Confirm is the one solid primary; Skip is ghost",
+    "Do not use raw hex"
+  ],
+  "snippet": "<DecisionCard title=\"Billing refactor asks\" meta=\"paused · 0:42\" question=\"The v1 invoices endpoint has 3 callers. What should I do with it?\" options={[{ id: \"keep\", label: \"Keep v1 endpoint for 30 days\", description: \"Safer; clients migrate on their own time.\", recommended: true }, { id: \"remove\", label: \"Remove v1 now\" }]} value={value} onValueChange={setValue} onConfirm={send} onSkip={skip} />"
+}

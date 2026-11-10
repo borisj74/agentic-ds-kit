@@ -46,6 +46,10 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { DecisionCardDoc } from "./DecisionCardDoc";
+import { AgentInboxDoc } from "./AgentInboxDoc";
+import { AgentLanesDoc } from "./AgentLanesDoc";
+import { AgentTreeDoc } from "./AgentTreeDoc";
 import { AgentFleetDoc } from "./AgentFleetDoc";
 import { AgentPlanDoc } from "./AgentPlanDoc";
 import { AgentTrailDoc } from "./AgentTrailDoc";
@@ -117,6 +121,10 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  decisioncard: "DecisionCard",
+  agentinbox: "AgentInbox",
+  agentlanes: "AgentLanes",
+  agenttree: "AgentTree",
   agentfleet: "AgentFleet",
   agentplan: "AgentPlan",
   agenttrail: "AgentTrail",
@@ -366,6 +374,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "decisioncard") return <DecisionCardDoc />;
+  if (resolved === "agentinbox") return <AgentInboxDoc />;
+  if (resolved === "agentlanes") return <AgentLanesDoc />;
+  if (resolved === "agenttree") return <AgentTreeDoc />;
   if (resolved === "agentfleet") return <AgentFleetDoc />;
   if (resolved === "agentplan") return <AgentPlanDoc />;
   if (resolved === "agenttrail") return <AgentTrailDoc />;
