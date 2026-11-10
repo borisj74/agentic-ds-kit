@@ -13,6 +13,7 @@ import {
 import { createPortal } from "react-dom";
 import { cx } from "../shared/cx";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import { placePopover } from "./placePopover";
 import type { PopoverProps } from "./Popover.types";
@@ -37,6 +38,7 @@ export function Popover({
   const rootRef = useRef<HTMLSpanElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
   const isControlled = openProp !== undefined;
   const [uncontrolled, setUncontrolled] = useState(defaultOpen);
   const open = isControlled ? openProp : uncontrolled;
@@ -100,7 +102,9 @@ export function Popover({
             role="dialog"
             aria-label={label}
             tabIndex={-1}
-            className={cx(styles.panel, className)}
+            data-theme-scope={scope.id}
+            data-theme={scope.mode === "dark" ? "dark" : undefined}
+            className={cx(styles.panel, className, scope.fontClassName)}
           >
             {children}
           </div>,

@@ -13,7 +13,7 @@ export default function StudioPage() {
       <div className={playground.wideShell}>
         <PageHeader
           title="Studio"
-          subtitle="Live type, color, radius, shadow, and theme. The Customize panel drives every playground page."
+          subtitle="Live type, color, radius, shadow, and theme. The Theme panel and the Theme page share one preview."
         />
         <StudioShowcase />
       </div>

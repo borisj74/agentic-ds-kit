@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs } from "agentic-ds-kit";
 import { SignInPattern, type SignInMode } from "../../packages/kit/patterns/SignInPattern";
 import styles from "../playground.module.css";
+import { PreviewScope } from "./ThemeScope";
 
 const PROVIDERS = [
   { id: "google", label: "Continue with Google" },
@@ -40,6 +41,7 @@ export function SignInDemo() {
           </div>
           <div className={styles.urlBar}>{`app.operations.dev/${mode}`}</div>
         </div>
+        <PreviewScope className={styles.scopeFill}>
         <div className={styles.browserPage}>
           <SignInPattern
             mode={mode}
@@ -56,6 +58,7 @@ export function SignInDemo() {
             onSwitchMode={setMode}
           />
         </div>
+        </PreviewScope>
       </div>
     </div>
   );

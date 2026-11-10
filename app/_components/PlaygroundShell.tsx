@@ -11,7 +11,7 @@ import {
 import { copyAiPrompt } from "@/lib/playground-prompt";
 import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
-import { CustomizePanel } from "./CustomizePanel";
+import { ThemeControls } from "../theme/ThemeControls";
 import { PlaygroundCommand } from "./PlaygroundCommand";
 import { useCustomizeOpen } from "./useCustomizeOpen";
 import styles from "./PlaygroundShell.module.css";
@@ -122,12 +122,12 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
             appearance="outline"
             mode="neutral"
             iconStart="SlidersHorizontal"
-            ariaLabel="Customize"
+            ariaLabel="Theme"
             aria-expanded={customize.open}
             aria-controls="customize-panel"
             onClick={handleCustomizeToggle}
           >
-            {compact ? undefined : "Customize"}
+            {compact ? undefined : "Theme"}
           </Button>
           <Button
             size="sm"
@@ -196,21 +196,21 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
         {customize.docked ? (
-          <aside id="customize-panel" className={styles.customize} aria-label="Customize">
-            <CustomizePanel variant="dock" onCollapse={customize.close} />
+          <aside id="customize-panel" className={styles.customize} aria-label="Theme">
+            <ThemeControls onCollapse={customize.close} />
           </aside>
         ) : null}
         <main className={styles.main}>{children}</main>
       </div>
       <Drawer
         open={customize.sheet}
-        title="Customize"
+        title="Theme"
         side="left"
         size="sm"
         onClose={customize.close}
       >
         <div id="customize-panel">
-          <CustomizePanel variant="sheet" />
+          <ThemeControls />
         </div>
       </Drawer>
     </div>

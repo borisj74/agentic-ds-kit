@@ -9,6 +9,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
 
@@ -34,6 +35,7 @@ export function AlertDialog({
   const onCancelRef = useRef(onCancel);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
 
   useLayoutEffect(() => {
     onCancelRef.current = onCancel;
@@ -95,7 +97,9 @@ export function AlertDialog({
 
   return createPortal(
     <div
-      className={styles.overlay}
+      className={[styles.overlay, scope.fontClassName].filter(Boolean).join(" ")}
+      data-theme-scope={scope.id}
+      data-theme={scope.mode === "dark" ? "dark" : undefined}
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) event.preventDefault();

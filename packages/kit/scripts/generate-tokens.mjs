@@ -91,6 +91,7 @@ function colorThemeBlocks() {
     resolvePartialThemeVars(modes.light).join("\n"),
     `}`,
     ``,
+    `:root[data-theme="dark"][data-color="${name}"],`,
     `[data-theme="dark"][data-color="${name}"] {`,
     resolvePartialThemeVars(modes.dark).join("\n"),
     `}`,
@@ -410,6 +411,7 @@ ${aliasVars().join("\n")}
 ${staticVars().join("\n")}
 }
 
+:root[data-theme="dark"],
 [data-theme="dark"] {
 ${resolveThemeVars("dark").join("\n")}
   --shadow-inset-top-light: inset 0 0 0 transparent;

@@ -149,9 +149,9 @@ export default function ThemingPage() {
         <h1 className={playground.pageTitle}>Theming</h1>
         <p className={playground.pageLead}>
           Semantic CSS variables. Override those tokens to change the look of the kit without
-          rewriting component classes. The Customize panel, on every playground page, edits font,
-          heading weight, mode, primary, radius, and shadow. The header keeps dark mode and the
-          AI prompt.
+          rewriting component classes. The Theme panel and the Theme page share one set of controls
+          for type, heading weight, neutrals, primary, accent, radius, shadow, and mode. They
+          change the preview. The header keeps docs dark mode and the AI prompt.
         </p>
 
         <Section
@@ -227,14 +227,14 @@ export default function ThemingPage() {
             <p className={playground.body}>
               Shortcuts: ink (unset), blue, violet, teal. Custom writes data-color=&quot;custom&quot; and
               generates primary / hover / active / subtle / focus from any hex. Dark + brand stays
-              a light pair when the picked hex is dark. The Customize panel is the live editor.
+              a light pair when the picked hex is dark. The Theme page is the live editor.
             </p>
           </div>
         </Section>
 
         <Section
           title="Font trio"
-          description="Interface, headings, and mono are separate. The Customize panel writes --font-sans, --font-display, and --font-mono."
+          description="Interface, headings, and mono are separate. The Theme controls write --font-sans, --font-display, and heading weight inside the preview."
         >
           <div className={playground.stack}>
             <CodeBlock code={FONT} />

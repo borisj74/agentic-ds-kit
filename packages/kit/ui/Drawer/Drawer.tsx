@@ -8,6 +8,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import type { DrawerProps } from "./Drawer.types";
 import styles from "./Drawer.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useThemeScopeMarker } from "../shared/themeScope";
 import { DrawerBodyContext } from "../shared/drawerContext";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
@@ -41,6 +42,7 @@ export function Drawer({
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const mounted = useIsClient();
+  const scope = useThemeScopeMarker();
 
   useLayoutEffect(() => {
     onCloseRef.current = onClose;
@@ -104,7 +106,9 @@ export function Drawer({
 
   return createPortal(
     <div
-      className={styles.overlay}
+      className={[styles.overlay, scope.fontClassName].filter(Boolean).join(" ")}
+      data-theme-scope={scope.id}
+      data-theme={scope.mode === "dark" ? "dark" : undefined}
       role="presentation"
       onMouseDown={(event) => {
         if (event.target !== event.currentTarget) return;

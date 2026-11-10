@@ -35,8 +35,9 @@ export type NeutralChoice = PlaygroundNeutralScale | "tint";
 export type SansFont = "ibm-plex" | "inter" | "dm-sans" | "source-sans" | "outfit";
 export type DisplayFont = "ibm-plex" | "newsreader" | "fraunces" | "instrument-serif" | "outfit";
 export type PresetId = "ink" | "blue" | "violet" | "teal" | "rose" | "amber" | "indigo" | "forest" | "custom";
-export type RadiusStep = 0 | 1 | 2 | 3 | 4;
-export type ShadowStrength = 0 | 1 | 2 | 3;
+export type HeadingWeight = "400" | "500" | "600" | "700";
+export type ShadowPreset = "none" | "flat" | "subtle" | "default" | "raised" | "dramatic";
+export type ShadowTint = "neutral" | "primary";
 
 export interface ThemeState {
   preset: PresetId;
@@ -44,11 +45,19 @@ export interface ThemeState {
   accent: string;
   neutral: NeutralChoice;
   step: RampStep;
-  radius: RadiusStep;
+  /** Even pixel size from 0 to 48. */
+  radius: number;
+  pill: boolean;
   density: Density;
-  shadow: ShadowStrength;
+  shadowPreset: ShadowPreset;
+  /** 0–200. 100 is the preset's opacity. */
+  shadowIntensity: number;
+  /** 50–200. 100 is the preset's blur and offset. */
+  shadowScale: number;
+  shadowTint: ShadowTint;
   font: SansFont;
   display: DisplayFont;
+  headingWeight: HeadingWeight;
   mode: ThemeMode;
 }
 
@@ -59,25 +68,49 @@ interface Preset {
   accent: string;
   neutral: NeutralChoice;
   step: RampStep;
-  radius: RadiusStep;
+  radius: number;
+  pill: boolean;
   density: Density;
-  shadow: ShadowStrength;
+  shadowPreset: ShadowPreset;
+  shadowIntensity: number;
+  shadowScale: number;
+  shadowTint: ShadowTint;
   font: SansFont;
   display: DisplayFont;
+  headingWeight: HeadingWeight;
 }
 
+const SHADOW_DEFAULTS = { shadowIntensity: 100, shadowScale: 100, shadowTint: "neutral" as const, pill: false, headingWeight: "600" as const };
+
 export const PRESETS: readonly Preset[] = [
-  { id: "ink", label: "Ink", brand: "#000000", accent: "", neutral: "neutral", step: "500", radius: 2, density: "default", shadow: 1, font: "ibm-plex", display: "ibm-plex" },
-  { id: "blue", label: "Blue", brand: "#3b82f6", accent: "", neutral: "slate", step: "600", radius: 3, density: "default", shadow: 2, font: "ibm-plex", display: "ibm-plex" },
-  { id: "violet", label: "Violet", brand: "#8b5cf6", accent: "#0d9488", neutral: "zinc", step: "600", radius: 4, density: "comfy", shadow: 2, font: "ibm-plex", display: "newsreader" },
-  { id: "teal", label: "Teal", brand: "#14b8a6", accent: "", neutral: "stone", step: "600", radius: 3, density: "default", shadow: 1, font: "ibm-plex", display: "ibm-plex" },
-  { id: "rose", label: "Rose", brand: "#f43f5e", accent: "", neutral: "stone", step: "600", radius: 4, density: "comfy", shadow: 2, font: "dm-sans", display: "fraunces" },
-  { id: "amber", label: "Amber", brand: "#f59e0b", accent: "", neutral: "stone", step: "600", radius: 2, density: "default", shadow: 2, font: "source-sans", display: "newsreader" },
-  { id: "indigo", label: "Indigo", brand: "#6366f1", accent: "", neutral: "slate", step: "600", radius: 3, density: "compact", shadow: 1, font: "outfit", display: "outfit" },
-  { id: "forest", label: "Forest", brand: "#22c55e", accent: "#d97706", neutral: "neutral", step: "700", radius: 2, density: "default", shadow: 1, font: "source-sans", display: "instrument-serif" },
+  { id: "ink", label: "Ink", brand: "#000000", accent: "", neutral: "neutral", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
+  { id: "blue", label: "Blue", brand: "#3b82f6", accent: "", neutral: "slate", step: "600", radius: 8, density: "default", shadowPreset: "default", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
+  { id: "violet", label: "Violet", brand: "#8b5cf6", accent: "#0d9488", neutral: "zinc", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "ibm-plex", display: "newsreader", ...SHADOW_DEFAULTS },
+  { id: "teal", label: "Teal", brand: "#14b8a6", accent: "", neutral: "stone", step: "600", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
+  { id: "rose", label: "Rose", brand: "#f43f5e", accent: "", neutral: "stone", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "dm-sans", display: "fraunces", ...SHADOW_DEFAULTS },
+  { id: "amber", label: "Amber", brand: "#f59e0b", accent: "", neutral: "stone", step: "600", radius: 4, density: "default", shadowPreset: "default", font: "source-sans", display: "newsreader", ...SHADOW_DEFAULTS },
+  { id: "indigo", label: "Indigo", brand: "#6366f1", accent: "", neutral: "slate", step: "600", radius: 8, density: "compact", shadowPreset: "subtle", font: "outfit", display: "outfit", ...SHADOW_DEFAULTS },
+  { id: "forest", label: "Forest", brand: "#22c55e", accent: "#d97706", neutral: "neutral", step: "700", radius: 8, density: "default", shadowPreset: "subtle", font: "source-sans", display: "instrument-serif", ...SHADOW_DEFAULTS },
 ];
 
-const RADIUS_BASE_PX = [0, 4, 6, 8, 12] as const;
+export const RADIUS_PRESETS = [
+  { id: "sharp", label: "Sharp", px: 0, pill: false },
+  { id: "subtle", label: "Subtle", px: 4, pill: false },
+  { id: "default", label: "Default", px: 8, pill: false },
+  { id: "soft", label: "Soft", px: 16, pill: false },
+  { id: "round", label: "Round", px: 24, pill: false },
+  { id: "extra", label: "Extra", px: 32, pill: false },
+  { id: "pill", label: "Pill", px: 8, pill: true },
+] as const;
+
+export const SHADOW_PRESETS: { id: ShadowPreset; label: string }[] = [
+  { id: "none", label: "None" },
+  { id: "flat", label: "Flat" },
+  { id: "subtle", label: "Subtle" },
+  { id: "default", label: "Default" },
+  { id: "raised", label: "Raised" },
+  { id: "dramatic", label: "Dramatic" },
+];
 
 const SPACE_PX: Record<string, number> = {
   "--space-px": 2,
@@ -92,21 +125,35 @@ const SPACE_PX: Record<string, number> = {
   "--space-12": 48,
   "--space-16": 64,
 };
-const SHADOW_FACTOR = [0, 0.55, 1, 1.35] as const;
+const SHADOW_PRESET_ALPHA: Record<ShadowPreset, number> = {
+  none: 0,
+  flat: 0,
+  subtle: 0.55,
+  default: 1,
+  raised: 1.45,
+  dramatic: 2.1,
+};
 
-const SHADOW_LIGHT = {
-  xs: "0 0.5px 1px 0px rgb(0 0 0 / 0.088)",
-  sm: "0 1px 2px 0px rgb(0 0 0 / 0.1)",
-  md: "0 4px 8px 0px rgb(0 0 0 / 0.175)",
-  lg: "0 8px 16px 0px rgb(0 0 0 / 0.275)",
-} as const;
+interface ShadowSpec {
+  y: number;
+  blur: number;
+  alpha: number;
+}
 
-const SHADOW_DARK = {
-  xs: "0 0.5px 1px 0px rgb(0 0 0 / 0.28)",
-  sm: "0 1px 2px 0px rgb(0 0 0 / 0.32)",
-  md: "0 4px 8px 0px rgb(0 0 0 / 0.42)",
-  lg: "0 8px 16px 0px rgb(0 0 0 / 0.55)",
-} as const;
+const SHADOW_SPEC: Record<ThemeMode, Record<"xs" | "sm" | "md" | "lg", ShadowSpec>> = {
+  light: {
+    xs: { y: 0.5, blur: 1, alpha: 0.088 },
+    sm: { y: 1, blur: 2, alpha: 0.1 },
+    md: { y: 4, blur: 8, alpha: 0.175 },
+    lg: { y: 8, blur: 16, alpha: 0.275 },
+  },
+  dark: {
+    xs: { y: 0.5, blur: 1, alpha: 0.28 },
+    sm: { y: 1, blur: 2, alpha: 0.32 },
+    md: { y: 4, blur: 8, alpha: 0.42 },
+    lg: { y: 8, blur: 16, alpha: 0.55 },
+  },
+};
 
 export const SANS_FONTS: { id: SansFont; label: string; preview: string; exported: string }[] = [
   { id: "ibm-plex", label: "IBM Plex Sans", preview: 'var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif', exported: '"IBM Plex Sans", system-ui, sans-serif' },
@@ -138,10 +185,15 @@ export function presetState(id: Exclude<PresetId, "custom">, mode: ThemeMode): T
     neutral: preset.neutral,
     step: preset.step,
     radius: preset.radius,
+    pill: preset.pill,
     density: preset.density,
-    shadow: preset.shadow,
+    shadowPreset: preset.shadowPreset,
+    shadowIntensity: preset.shadowIntensity,
+    shadowScale: preset.shadowScale,
+    shadowTint: preset.shadowTint,
     font: preset.font,
     display: preset.display,
+    headingWeight: preset.headingWeight,
     mode,
   };
 }
@@ -427,22 +479,22 @@ const DENSITY_TOKEN: Record<Exclude<Density, "default">, Record<string, Record<s
   },
 };
 
-function scaleShadow(value: string, factor: number): string {
-  if (factor === 0) return "none";
-  if (factor === 1) return value;
-  const sized = value.replace(/(-?\d*\.?\d+)px/g, (_, raw: string) => {
-    const scaled = Number(raw) * (factor > 1 ? 1.2 : 0.85);
-    return `${Number(scaled.toFixed(2))}px`;
-  });
-  return sized.replace(/(\d*\.?\d+)(?=\))/g, (_, raw: string) =>
-    String(Math.min(0.9, Number((Number(raw) * factor).toFixed(3)))),
-  );
+export function clampRadius(value: number): number {
+  if (!Number.isFinite(value)) return 8;
+  return Math.min(48, Math.max(0, Math.round(value / 2) * 2));
 }
 
-function radiusVars(step: RadiusStep): Record<string, string> {
-  const base = RADIUS_BASE_PX[step];
+export function radiusReadout(basePx: number, pill: boolean) {
+  const base = clampRadius(basePx);
+  const px = (part: number) => Math.round((base * part) / 8);
+  return { xs: px(3), sm: px(5), md: px(6), lg: base, xl: px(10), card: px(10), pill };
+}
+
+function radiusVars(basePx: number, pill: boolean): Record<string, string> {
+  const base = clampRadius(basePx);
   const px = (part: number) => `${Math.round((base * part) / 8)}px`;
   const lg = `${base}px`;
+  const control = pill ? "9999px" : null;
   return {
     "--radius-base": lg,
     "--radius-xs": px(3),
@@ -452,16 +504,58 @@ function radiusVars(step: RadiusStep): Record<string, string> {
     "--radius-xl": px(10),
     "--radius-2xl": px(13),
     "--radius-3xl": px(19),
-    "--radius-control-sm": px(3),
-    "--radius-control-md": px(6),
-    "--radius-control-lg": lg,
+    "--radius-control-sm": control ?? px(3),
+    "--radius-control-md": control ?? px(6),
+    "--radius-control-lg": control ?? lg,
+    "--radius-pill": "9999px",
     "--radius-surface-sm": lg,
     "--radius-surface-md": px(10),
     "--radius-surface-lg": px(13),
     "--radius-media-sm": px(6),
     "--radius-media-md": lg,
     "--radius-media-lg": px(10),
+    "--radius-50": px(3),
+    "--radius-100": px(5),
+    "--radius-200": lg,
+    "--radius-300": px(10),
+    "--radius-400": px(13),
+    "--radius-500": px(19),
+    "--radius-600": px(19),
   };
+}
+
+/** Semantic radii and shadows are calc()/var() on :root, so a child --radius-base does not move them. Restate them on the scope. */
+const SHADOW_ALIASES: Record<string, string> = {
+  "--shadow-100": "var(--shadow-xs)",
+  "--shadow-150": "var(--shadow-xs)",
+  "--shadow-200": "var(--shadow-sm)",
+  "--shadow-250": "var(--shadow-sm)",
+  "--shadow-300": "var(--shadow-md)",
+  "--shadow-400": "var(--shadow-md)",
+  "--shadow-500": "var(--shadow-lg)",
+  "--shadow-600": "var(--shadow-lg)",
+  "--shadow-raised-xs": "var(--shadow-xs)",
+  "--shadow-raised-sm": "var(--shadow-sm)",
+  "--shadow-raised-md": "var(--shadow-md)",
+  "--shadow-raised-lg": "var(--shadow-lg)",
+  "--shadow-raised-soft": "var(--shadow-sm)",
+  "--shadow-raised-depth": "var(--shadow-sm)",
+  "--shadow-overlay-sm": "var(--shadow-md)",
+  "--shadow-overlay-md": "var(--shadow-md)",
+  "--shadow-overlay-lg": "var(--shadow-lg)",
+  "--shadow-modal": "var(--shadow-lg)",
+};
+
+function spaceRoleVars(): Record<string, string> {
+  const space = tokens.semantic.space as Record<string, Record<string, string>>;
+  const vars: Record<string, string> = {};
+  for (const [family, steps] of Object.entries(space)) {
+    for (const [step, ref] of Object.entries(steps)) {
+      const key = String(ref).replace("primitive.space.", "");
+      vars[`--space-${family}-${step}`] = `var(--space-${key})`;
+    }
+  }
+  return vars;
 }
 
 function spacePrimitives(density: Density): Record<string, string> {
@@ -490,14 +584,40 @@ function consumedAliases(decls: Record<string, string>): Record<string, string> 
   };
 }
 
-function shadowVars(mode: ThemeMode, strength: ShadowStrength): Record<string, string> {
-  const source = mode === "dark" ? SHADOW_DARK : SHADOW_LIGHT;
-  const factor = SHADOW_FACTOR[strength];
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+
+function shadowRgb(state: ThemeState, mode: ThemeMode): string {
+  if (state.shadowTint !== "primary") return "0 0 0";
+  const step = mode === "dark" ? shift(state.step, -2) : state.step;
+  const [r, g, b] = hexToRgb(themePalette(state).brand[step]);
+  return `${r} ${g} ${b}`;
+}
+
+export function shadowMap(state: ThemeState, mode: ThemeMode): Record<"xs" | "sm" | "md" | "lg", string> {
+  const specs = SHADOW_SPEC[mode];
+  const rgb = shadowRgb(state, mode);
+  const alphaFactor = SHADOW_PRESET_ALPHA[state.shadowPreset] * (state.shadowIntensity / 100);
+  const scale = state.shadowScale / 100;
+  const layer = (spec: ShadowSpec) => {
+    if (alphaFactor <= 0) return "none";
+    const y = Number((spec.y * scale).toFixed(2));
+    const blur = Number((spec.blur * scale).toFixed(2));
+    const alpha = Math.min(0.9, Number((spec.alpha * alphaFactor).toFixed(3)));
+    return `0 ${y}px ${blur}px 0px rgb(${rgb} / ${alpha})`;
+  };
+  return { xs: layer(specs.xs), sm: layer(specs.sm), md: layer(specs.md), lg: layer(specs.lg) };
+}
+
+function shadowVars(state: ThemeState, mode: ThemeMode): Record<string, string> {
+  const layers = shadowMap(state, mode);
   return {
-    "--shadow-xs": scaleShadow(source.xs, factor),
-    "--shadow-sm": scaleShadow(source.sm, factor),
-    "--shadow-md": scaleShadow(source.md, factor),
-    "--shadow-lg": scaleShadow(source.lg, factor),
+    "--shadow-xs": layers.xs,
+    "--shadow-sm": layers.sm,
+    "--shadow-md": layers.md,
+    "--shadow-lg": layers.lg,
   };
 }
 
@@ -513,6 +633,7 @@ function fontVars(state: ThemeState, which: "preview" | "export"): Record<string
     "--font-heading": "var(--font-display)",
     "--type-family-body": "var(--font-body)",
     "--type-family-heading": "var(--font-heading)",
+    "--type-weight-heading": state.headingWeight,
   };
 }
 
@@ -550,8 +671,9 @@ export function themeDeclarations(state: ThemeState, mode: ThemeMode, which: "pr
   const shared = {
     ...primitiveVars(palette),
     ...fontVars(state, which),
-    ...radiusVars(state.radius),
+    ...radiusVars(state.radius, state.pill),
     ...spacePrimitives(state.density),
+    ...spaceRoleVars(),
     ...(state.density === "default" ? {} : DENSITY_SPACE[state.density]),
   };
   const themed = {
@@ -559,7 +681,8 @@ export function themeDeclarations(state: ThemeState, mode: ThemeMode, which: "pr
     ...neutral,
     ...brand,
     ...accentRoles(palette, mode),
-    ...shadowVars(mode, state.shadow),
+    ...shadowVars(state, mode),
+    ...SHADOW_ALIASES,
   };
   return { ...themed, ...consumedAliases(themed) };
 }
@@ -571,17 +694,19 @@ function block(selector: string, declarations: Record<string, string>): string {
   return `${selector} {\n${body}\n}`;
 }
 
-/** Scoped to the preview root so the docs chrome keeps its own tokens. */
-export function previewCss(state: ThemeState): string {
+/** Live preview CSS. Selectors match the wrapper and any portal that copies data-theme-scope. */
+export function scopeCss(state: ThemeState, scopeId: string): string {
+  const scope = `[data-theme-scope="${scopeId}"]`;
   const light = themeDeclarations(state, "light", "preview");
-  const darkOnly = diffDeclarations(
-    themeDeclarations(state, "dark", "preview"),
-    light,
-  );
+  const darkOnly = diffDeclarations(themeDeclarations(state, "dark", "preview"), light);
   const accentRule = state.accent
-    ? "\n\n#theme-preview [data-accent-series] {\n  --fill-success: var(--fill-accent);\n}"
+    ? `\n\n${scope} [data-accent-series] {\n  --fill-success: var(--fill-accent);\n}`
     : "";
-  return `${block("#theme-preview", { "color-scheme": "light", ...light })}\n\n${block('html[data-theme="dark"] #theme-preview', { "color-scheme": "dark", ...darkOnly })}${accentRule}\n`;
+  return `${block(scope, { "color-scheme": "light", ...light })}\n\n${block(`${scope}[data-theme="dark"]`, { "color-scheme": "dark", ...darkOnly })}${accentRule}\n`;
+}
+
+export function scopeCssLeaksToPage(css: string): boolean {
+  return /(^|\n)\s*(:root|html|body)\b/.test(css);
 }
 
 function diffDeclarations(next: Record<string, string>, base: Record<string, string>): Record<string, string> {
@@ -636,13 +761,9 @@ export function exportTokens(state: ThemeState): string {
         ...(palette.accent ? { accent: palette.accent } : {}),
         neutral: palette.neutral,
       },
-      radius: { base: `${RADIUS_BASE_PX[state.radius]}px` },
-      shadow: Object.fromEntries(
-        (["xs", "sm", "md", "lg"] as const).map((key) => [key, scaleShadow(SHADOW_LIGHT[key], SHADOW_FACTOR[state.shadow])]),
-      ),
-      shadowDark: Object.fromEntries(
-        (["xs", "sm", "md", "lg"] as const).map((key) => [key, scaleShadow(SHADOW_DARK[key], SHADOW_FACTOR[state.shadow])]),
-      ),
+      radius: { base: `${clampRadius(state.radius)}px`, pill: state.pill ? "9999px" : "scale" },
+      shadow: shadowMap(state, "light"),
+      shadowDark: shadowMap(state, "dark"),
     },
     semantic: {
       colorThemes: {
@@ -659,6 +780,7 @@ export function exportTokens(state: ThemeState): string {
           body: "var(--font-sans)",
           heading: "var(--font-display)",
         },
+        weight: { heading: state.headingWeight },
       },
       ...(state.density === "default" ? {} : { space: DENSITY_TOKEN[state.density] }),
     },
@@ -676,7 +798,9 @@ export function exportDesign(state: ThemeState): string {
     default: "Default. Semantic spacing stays on the kit's primitive steps.",
     comfy: "Comfy. Inset, stack, gap, and section roles point at larger primitive steps.",
   }[state.density];
-  const shadowCopy = ["none", "soft", "default", "strong"][state.shadow];
+  const shadowLabel = SHADOW_PRESETS.find((item) => item.id === state.shadowPreset)?.label ?? "Default";
+  const readout = radiusReadout(state.radius, state.pill);
+  const lightShadow = shadowMap(state, "light");
   const darkStep = shift(state.step, -2);
   const failures = contrastReport(state).filter((pair) => !pair.pass);
   const contrastLine = failures.length
@@ -697,12 +821,13 @@ Theme for Nistha. Reassign semantic roles to primitive ramps. Do not put hex in 
 
 - Default: ${sans}.
 - Display: ${display}.
+- Heading weight: ${state.headingWeight}.
 - Mono stays IBM Plex Mono.
 - Load the Google font before the override if it is not already on the page.
 
 ## Radius
 
-Step ${state.radius}, \`--radius-base: ${RADIUS_BASE_PX[state.radius]}px\`. Control, surface, and media radii scale from that base.
+\`--radius-base: ${readout.lg}px\`. Derived: xs ${readout.xs}, sm ${readout.sm}, md ${readout.md}, lg ${readout.lg}, xl ${readout.xl}, card ${readout.card}. ${state.pill ? "Buttons and inputs use pill radius (9999px). Surfaces stay on the scale." : "Buttons and inputs follow the control radii."}
 
 ## Spacing
 
@@ -710,7 +835,7 @@ ${densityCopy}
 
 ## Shadows
 
-Strength ${state.shadow} (${shadowCopy}). \`--shadow-xs\` through \`--shadow-lg\` carry it; raised and overlay shadows follow those primitives.
+Preset ${shadowLabel}. Intensity ${state.shadowIntensity}. Blur and spread scale ${state.shadowScale}. Tint ${state.shadowTint}. \`--shadow-xs\` is \`${lightShadow.xs}\`. Raised, overlay, and modal aliases follow \`--shadow-xs\` through \`--shadow-lg\`. None and Flat set every shadow to none.
 
 ## Usage
 
@@ -793,7 +918,26 @@ function isMode(value: string | null): value is ThemeMode {
   return value === "light" || value === "dark";
 }
 
-const SEARCH_KEYS = ["preset", "brand", "accent", "neutral", "step", "radius", "density", "shadow", "font", "display", "mode"] as const;
+const SEARCH_KEYS = ["preset", "brand", "accent", "neutral", "step", "radius", "pill", "density", "shadow", "shade", "blur", "tint", "font", "display", "weight", "mode"] as const;
+
+const LEGACY_SHADOW: Record<string, ShadowPreset> = { "0": "none", "1": "subtle", "2": "default", "3": "raised" };
+
+function clampUnit(value: number, min: number, max: number, fallback: number): number {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(value)));
+}
+
+function isShadowPreset(value: string | null): value is ShadowPreset {
+  return SHADOW_PRESETS.some((item) => item.id === value);
+}
+
+function isTint(value: string | null): value is ShadowTint {
+  return value === "neutral" || value === "primary";
+}
+
+function isWeight(value: string | null): value is HeadingWeight {
+  return value === "400" || value === "500" || value === "600" || value === "700";
+}
 
 export function themeFromSearch(params: URLSearchParams, fallbackMode: ThemeMode): ThemeState | null {
   if (!SEARCH_KEYS.some((key) => params.has(key))) return null;
@@ -802,7 +946,9 @@ export function themeFromSearch(params: URLSearchParams, fallbackMode: ThemeMode
   const brand = normalizeHex(params.get("brand") ?? "");
   const accentParam = params.get("accent");
   const radius = Number(params.get("radius"));
-  const shadow = Number(params.get("shadow"));
+  const shadowParam = params.get("shadow");
+  const shade = Number(params.get("shade"));
+  const blur = Number(params.get("blur"));
   return {
     ...base,
     preset: preset === "custom" || (preset !== null && !isPresetId(preset)) ? "custom" : base.preset,
@@ -810,11 +956,16 @@ export function themeFromSearch(params: URLSearchParams, fallbackMode: ThemeMode
     accent: accentParam === null ? base.accent : accentParam === "" || accentParam === "none" ? "" : (normalizeHex(accentParam) ?? base.accent),
     neutral: isNeutral(params.get("neutral")) ? (params.get("neutral") as NeutralChoice) : base.neutral,
     step: isStep(params.get("step")) ? (params.get("step") as RampStep) : base.step,
-    radius: radius >= 0 && radius <= 4 ? (radius as RadiusStep) : base.radius,
+    radius: params.has("radius") ? clampRadius(radius) : base.radius,
+    pill: params.has("pill") ? params.get("pill") === "1" || params.get("pill") === "true" : base.pill,
     density: isDensity(params.get("density")) ? (params.get("density") as Density) : base.density,
-    shadow: shadow >= 0 && shadow <= 3 ? (shadow as ShadowStrength) : base.shadow,
+    shadowPreset: isShadowPreset(shadowParam) ? shadowParam : LEGACY_SHADOW[shadowParam ?? ""] ?? base.shadowPreset,
+    shadowIntensity: params.has("shade") ? clampUnit(shade, 0, 200, base.shadowIntensity) : base.shadowIntensity,
+    shadowScale: params.has("blur") ? clampUnit(blur, 50, 200, base.shadowScale) : base.shadowScale,
+    shadowTint: isTint(params.get("tint")) ? (params.get("tint") as ShadowTint) : base.shadowTint,
     font: isSans(params.get("font")) ? (params.get("font") as SansFont) : base.font,
     display: isDisplay(params.get("display")) ? (params.get("display") as DisplayFont) : base.display,
+    headingWeight: isWeight(params.get("weight")) ? (params.get("weight") as HeadingWeight) : base.headingWeight,
     mode: isMode(params.get("mode")) ? (params.get("mode") as ThemeMode) : base.mode,
   };
 }
@@ -826,11 +977,16 @@ export function themeToSearch(state: ThemeState): string {
   params.set("accent", state.accent ? state.accent.replace("#", "") : "none");
   params.set("neutral", state.neutral);
   params.set("step", state.step);
-  params.set("radius", String(state.radius));
+  params.set("radius", String(clampRadius(state.radius)));
+  params.set("pill", state.pill ? "1" : "0");
   params.set("density", state.density);
-  params.set("shadow", String(state.shadow));
+  params.set("shadow", state.shadowPreset);
+  params.set("shade", String(state.shadowIntensity));
+  params.set("blur", String(state.shadowScale));
+  params.set("tint", state.shadowTint);
   params.set("font", state.font);
   params.set("display", state.display);
+  params.set("weight", state.headingWeight);
   params.set("mode", state.mode);
   return params.toString();
 }
@@ -861,16 +1017,21 @@ export function syncPreset(state: ThemeState): ThemeState {
       (preset.accent ? normalizeHex(preset.accent) === normalizeHex(state.accent) : state.accent === "") &&
       preset.neutral === state.neutral &&
       preset.step === state.step &&
-      preset.radius === state.radius &&
+      preset.radius === clampRadius(state.radius) &&
+      preset.pill === state.pill &&
       preset.density === state.density &&
-      preset.shadow === state.shadow &&
+      preset.shadowPreset === state.shadowPreset &&
+      preset.shadowIntensity === state.shadowIntensity &&
+      preset.shadowScale === state.shadowScale &&
+      preset.shadowTint === state.shadowTint &&
       preset.font === state.font &&
-      preset.display === state.display,
+      preset.display === state.display &&
+      preset.headingWeight === state.headingWeight,
   );
   const preset = match?.id ?? "custom";
   return state.preset === preset ? state : { ...state, preset };
 }
 
-export function radiusLabel(step: RadiusStep): string {
-  return `${RADIUS_BASE_PX[step]}px`;
+export function radiusLabel(px: number): string {
+  return `${clampRadius(px)}px`;
 }

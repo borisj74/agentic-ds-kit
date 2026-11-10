@@ -20,6 +20,7 @@ import {
 import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 import styles from "../playground.module.css";
+import { PreviewScope } from "./ThemeScope";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
@@ -54,6 +55,7 @@ export function AppShellDemo() {
         </div>
         <div className={styles.urlBar}>{`app.operations.dev/${page}`}</div>
       </div>
+      <PreviewScope className={styles.scopeFill}>
       <AppShellPattern
         header={{
           title: "Agentix",
@@ -87,6 +89,7 @@ export function AppShellDemo() {
           </div>
         </div>
       </AppShellPattern>
+      </PreviewScope>
     </div>
   );
 }
@@ -168,6 +171,7 @@ export function AppShellCustomDemo() {
         </div>
         <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
       </div>
+      <PreviewScope className={styles.scopeFill}>
       <AppShellPattern
         navLabel="Agentix"
         header={
@@ -205,6 +209,7 @@ export function AppShellCustomDemo() {
           </div>
         </div>
       </AppShellPattern>
+      </PreviewScope>
     </div>
   );
 }
@@ -263,6 +268,7 @@ export function AppShellBuiltNavDemo() {
         </div>
         <div className={styles.urlBar}>{`app.agentix.dev/${page}`}</div>
       </div>
+      <PreviewScope className={styles.scopeFill}>
       <AppShellPattern
         navLabel="Agentix"
         markIcon="Sparkles"
@@ -282,6 +288,7 @@ export function AppShellBuiltNavDemo() {
           </div>
         </div>
       </AppShellPattern>
+      </PreviewScope>
     </div>
   );
 }

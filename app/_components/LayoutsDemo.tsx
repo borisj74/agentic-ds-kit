@@ -5,6 +5,7 @@ import { AppHeader, Button, Drawer, Empty, PageHeader, SideNav } from "agentic-d
 import type { SideNavItemData } from "agentic-ds-kit";
 import { CodeBlock } from "../components/CodeBlock";
 import styles from "../playground.module.css";
+import { PreviewScope } from "./ThemeScope";
 import layout from "./LayoutsDemo.module.css";
 
 const NAV_ITEMS: SideNavItemData[] = [
@@ -86,7 +87,7 @@ function Frame({ url, children, tall = false }: { url: string; children: ReactNo
         </div>
         <div className={styles.urlBar}>{url}</div>
       </div>
-      {children}
+      <PreviewScope className={styles.scopeFill}>{children}</PreviewScope>
     </div>
   );
 }
