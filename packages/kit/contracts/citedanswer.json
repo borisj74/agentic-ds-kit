@@ -1,0 +1,118 @@
+{
+  "id": "citedanswer",
+  "status": "stable",
+  "intent": "An assistant reply with inline citation marks and a source list. Marks are real links; a missing source shows as a broken cite.",
+  "useWhen": [
+    "an assistant answer that cites documents, pages or files",
+    "let people jump from a mark to its source",
+    "flag a source that no longer exists"
+  ],
+  "doNotUseWhen": [
+    "the whole chat thread — Chat",
+    "a plain list of links — LinkList",
+    "a single recommendation card — InsightCard"
+  ],
+  "contains": [
+    "button",
+    "shimmertext",
+    "skeleton"
+  ],
+  "props": {
+    "content": {
+      "type": "string",
+      "required": true,
+      "note": "Marks like [1] become citation links."
+    },
+    "citations": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark."
+    },
+    "author": {
+      "type": "string",
+      "default": "Assistant"
+    },
+    "time": {
+      "type": "string",
+      "required": false
+    },
+    "openSources": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled; otherwise internal."
+    },
+    "onOpenSourcesChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open) => void"
+    },
+    "onCitationClick": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. The list opens, the source highlights and takes focus."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "loadingText": {
+      "type": "string",
+      "default": "Reading sources…"
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "link.default",
+    "link.hover",
+    "primary.subtle",
+    "primary.fg",
+    "status.dangerSubtle",
+    "status.dangerText"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "marks are links named \"Source N: title\" and move focus to the source",
+      "the sources toggle is a button with aria-expanded and aria-controls",
+      "external source links say they open a new tab",
+      "a missing source is said in text, not colour alone",
+      "loading uses kit ShimmerText; error is role=alert",
+      "the highlight fades on opacity, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local CitedMessage, SourcesList, or Footnotes",
+    "Do not render marks as plain text",
+    "Do not hide missing sources",
+    "Do not use raw hex"
+  ],
+  "snippet": "<CitedAnswer time=\"14:02\" content=\"Store totals as integer cents[1]. Floats are not allowed for money[2].\" citations={[{ id: \"1\", title: \"Billing API · Rounding rules\", href: \"https://docs.example.com/billing/rounding\", origin: \"docs.example.com/billing/rounding\" }, { id: \"2\", title: \"RFC 017 · Money types\" }]} />"
+}

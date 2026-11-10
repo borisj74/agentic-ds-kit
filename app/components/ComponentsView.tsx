@@ -46,6 +46,10 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { MemoryPanelDoc } from "./MemoryPanelDoc";
+import { InlineDiffDoc } from "./InlineDiffDoc";
+import { MessageActionsDoc } from "./MessageActionsDoc";
+import { CitedAnswerDoc } from "./CitedAnswerDoc";
 import { ContextWindowDoc } from "./ContextWindowDoc";
 import { ModelPickerDoc } from "./ModelPickerDoc";
 import { AgentSteeringDoc } from "./AgentSteeringDoc";
@@ -125,6 +129,10 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  memorypanel: "MemoryPanel",
+  inlinediff: "InlineDiff",
+  messageactions: "MessageActions",
+  citedanswer: "CitedAnswer",
   contextwindow: "ContextWindow",
   modelpicker: "ModelPicker",
   agentsteering: "AgentSteering",
@@ -382,6 +390,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "memorypanel") return <MemoryPanelDoc />;
+  if (resolved === "inlinediff") return <InlineDiffDoc />;
+  if (resolved === "messageactions") return <MessageActionsDoc />;
+  if (resolved === "citedanswer") return <CitedAnswerDoc />;
   if (resolved === "contextwindow") return <ContextWindowDoc />;
   if (resolved === "modelpicker") return <ModelPickerDoc />;
   if (resolved === "agentsteering") return <AgentSteeringDoc />;

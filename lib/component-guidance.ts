@@ -28,6 +28,7 @@ import contract_carousel from "../packages/kit/contracts/carousel.json";
 import contract_cell from "../packages/kit/contracts/cell.json";
 import contract_chat from "../packages/kit/contracts/chat.json";
 import contract_checkbox from "../packages/kit/contracts/checkbox.json";
+import contract_citedanswer from "../packages/kit/contracts/citedanswer.json";
 import contract_codesnippet from "../packages/kit/contracts/codesnippet.json";
 import contract_collapsible from "../packages/kit/contracts/collapsible.json";
 import contract_colorpicker from "../packages/kit/contracts/colorpicker.json";
@@ -55,6 +56,7 @@ import contract_filterbar from "../packages/kit/contracts/filterbar.json";
 import contract_filterbutton from "../packages/kit/contracts/filterbutton.json";
 import contract_headercell from "../packages/kit/contracts/headercell.json";
 import contract_helppopover from "../packages/kit/contracts/helppopover.json";
+import contract_inlinediff from "../packages/kit/contracts/inlinediff.json";
 import contract_input from "../packages/kit/contracts/input.json";
 import contract_inputotp from "../packages/kit/contracts/inputotp.json";
 import contract_insightcard from "../packages/kit/contracts/insightcard.json";
@@ -63,6 +65,8 @@ import contract_linechart from "../packages/kit/contracts/linechart.json";
 import contract_linklist from "../packages/kit/contracts/linklist.json";
 import contract_listview from "../packages/kit/contracts/listview.json";
 import contract_loadinganimation from "../packages/kit/contracts/loadinganimation.json";
+import contract_memorypanel from "../packages/kit/contracts/memorypanel.json";
+import contract_messageactions from "../packages/kit/contracts/messageactions.json";
 import contract_meter from "../packages/kit/contracts/meter.json";
 import contract_modal from "../packages/kit/contracts/modal.json";
 import contract_modalcard from "../packages/kit/contracts/modalcard.json";
@@ -143,6 +147,7 @@ const contracts: Record<string, ContractNotes> = {
   "cell": contract_cell,
   "chat": contract_chat,
   "checkbox": contract_checkbox,
+  "citedanswer": contract_citedanswer,
   "codesnippet": contract_codesnippet,
   "collapsible": contract_collapsible,
   "colorpicker": contract_colorpicker,
@@ -170,6 +175,7 @@ const contracts: Record<string, ContractNotes> = {
   "filterbutton": contract_filterbutton,
   "headercell": contract_headercell,
   "helppopover": contract_helppopover,
+  "inlinediff": contract_inlinediff,
   "input": contract_input,
   "inputotp": contract_inputotp,
   "insightcard": contract_insightcard,
@@ -178,6 +184,8 @@ const contracts: Record<string, ContractNotes> = {
   "linklist": contract_linklist,
   "listview": contract_listview,
   "loadinganimation": contract_loadinganimation,
+  "memorypanel": contract_memorypanel,
+  "messageactions": contract_messageactions,
   "meter": contract_meter,
   "modal": contract_modal,
   "modalcard": contract_modalcard,

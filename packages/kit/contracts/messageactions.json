@@ -1,0 +1,137 @@
+{
+  "id": "messageactions",
+  "status": "stable",
+  "intent": "The compact action row on a chat message: copy, retry or edit, thumbs up / down with reasons, and a More menu. Icon Buttons with Tooltips.",
+  "useWhen": [
+    "actions under an assistant or user message",
+    "collect quick feedback on a reply",
+    "show actions only on hover or focus in a dense thread"
+  ],
+  "doNotUseWhen": [
+    "page or table toolbars — ButtonGroup",
+    "a menu on its own — DropdownMenu"
+  ],
+  "contains": [
+    "button",
+    "dropdownmenu",
+    "tooltip"
+  ],
+  "props": {
+    "label": {
+      "type": "string",
+      "default": "Message actions"
+    },
+    "onCopy": {
+      "type": "function",
+      "required": false
+    },
+    "copied": {
+      "type": "boolean",
+      "default": false,
+      "note": "Shows Copied in place of copy."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    },
+    "retrying": {
+      "type": "boolean",
+      "default": false
+    },
+    "onEdit": {
+      "type": "function",
+      "required": false,
+      "note": "User messages."
+    },
+    "onFeedback": {
+      "type": "function",
+      "required": false,
+      "note": "(\"up\" | \"down\" | null) => void. Shows thumbs."
+    },
+    "feedback": {
+      "type": "enum",
+      "values": [
+        "up",
+        "down",
+        "null"
+      ],
+      "default": "null"
+    },
+    "thanksText": {
+      "type": "string",
+      "default": "Thanks, noted"
+    },
+    "reasons": {
+      "type": "string[]",
+      "required": false,
+      "note": "Chips after a thumbs down."
+    },
+    "onReason": {
+      "type": "function",
+      "required": false,
+      "note": "(reason) => void"
+    },
+    "moreItems": {
+      "type": "array",
+      "required": false,
+      "note": "kit DropdownMenu items."
+    },
+    "onAction": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "visible": {
+      "type": "enum",
+      "values": [
+        "always",
+        "hover"
+      ],
+      "default": "always",
+      "note": "hover: shown on hover or focus of the row or of an ancestor with data-message-actions-host."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Message still streaming."
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "status.successText",
+    "primary.fg",
+    "radius.surfaceMd",
+    "radius.pill",
+    "type.size.caption",
+    "opacity.disabled",
+    "motion.fast"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "the buttons sit in role=toolbar named by label",
+      "every icon Button has an accessible name and a Tooltip",
+      "thumbs are toggle buttons with aria-pressed",
+      "thanks text is role=status",
+      "hover-only rows still show on keyboard focus and always show under prefers-reduced-motion",
+      "More is the kit DropdownMenu"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local MessageToolbar or ChatActions",
+    "Do not use icon-only buttons without names",
+    "Do not put a solid primary Button in the row",
+    "Do not use raw hex"
+  ],
+  "snippet": "<MessageActions onCopy={copy} onRetry={retry} onFeedback={setFeedback} feedback={feedback} moreItems={[{ id: \"pin\", label: \"Pin message\", icon: \"Pin\" }]} onAction={act} />"
+}

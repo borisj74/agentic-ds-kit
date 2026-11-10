@@ -1,0 +1,127 @@
+{
+  "id": "memorypanel",
+  "status": "stable",
+  "intent": "Facts an agent has stored: search, add, pin, edit or forget them (confirmed in an AlertDialog), and see which ones this thread used.",
+  "useWhen": [
+    "show and manage an agent's long-term memory",
+    "let people correct or remove what the agent remembers",
+    "show which memories informed the current thread"
+  ],
+  "doNotUseWhen": [
+    "a generic list of records — ListView",
+    "a settings form — Field / Switch",
+    "a context usage meter — ContextWindow"
+  ],
+  "contains": [
+    "alertdialog",
+    "badge",
+    "button",
+    "empty",
+    "field",
+    "input",
+    "skeleton",
+    "textarea"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, content, source?, age?, pinned?, usedHere? }[]. Pinned items group first."
+    },
+    "label": {
+      "type": "string",
+      "default": "Memory"
+    },
+    "query": {
+      "type": "string",
+      "required": false
+    },
+    "onQueryChange": {
+      "type": "function",
+      "required": false,
+      "note": "(query) => void. Shows the search Input."
+    },
+    "onAdd": {
+      "type": "function",
+      "required": false,
+      "note": "(content) => void. Add opens a form at the top."
+    },
+    "onEdit": {
+      "type": "function",
+      "required": false,
+      "note": "(id, content) => void. Edit expands the row in place."
+    },
+    "onPin": {
+      "type": "function",
+      "required": false,
+      "note": "(id, pinned) => void"
+    },
+    "onDelete": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Called after the AlertDialog (Keep / Forget)."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    },
+    "privacyNote": {
+      "type": "string",
+      "required": false,
+      "note": "Always visible."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "primary.fg",
+    "status.dangerSubtle",
+    "status.dangerText"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 label",
+      "search is a named Input",
+      "row actions are named icon Buttons; pin is a toggle with aria-pressed",
+      "actions show on hover and on keyboard focus",
+      "forget confirms in a kit AlertDialog",
+      "edit and add forms: Enter saves, Escape cancels",
+      "the privacy note is always visible"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local MemoryList or FactsPanel",
+    "Do not delete a memory without the AlertDialog",
+    "Do not hide the privacy note",
+    "Do not use raw hex"
+  ],
+  "snippet": "<MemoryPanel items={memories} query={query} onQueryChange={setQuery} onAdd={add} onEdit={edit} onPin={pin} onDelete={forget} />"
+}
