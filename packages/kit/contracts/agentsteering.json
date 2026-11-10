@@ -1,0 +1,161 @@
+{
+  "id": "agentsteering",
+  "status": "stable",
+  "intent": "Redirect, pause or stop an agent while it runs: a steer composer with quick steers, Pause / Resume and Stop with an optional AlertDialog confirm.",
+  "useWhen": [
+    "let the person redirect a running agent in a sentence",
+    "pause and resume a run, with a note",
+    "stop a run, confirming when work can't be undone"
+  ],
+  "doNotUseWhen": [
+    "the agent asks a question — DecisionCard",
+    "editing steps before the run — AgentPlan",
+    "a chat thread — Chat"
+  ],
+  "contains": [
+    "alertdialog",
+    "button",
+    "input",
+    "skeleton"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "meta": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"step 6 · editing invoice.ts\"."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "running",
+        "paused",
+        "stopped",
+        "done"
+      ],
+      "default": "running",
+      "note": "done disables steering; stopped shows the stopped line and Open trail."
+    },
+    "elapsed": {
+      "type": "string",
+      "required": false
+    },
+    "value": {
+      "type": "string",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value) => void. Quick steers fill the composer."
+    },
+    "onSteer": {
+      "type": "function",
+      "required": false,
+      "note": "(text) => void. The send button is the one solid primary; Enter sends."
+    },
+    "sending": {
+      "type": "boolean",
+      "default": false
+    },
+    "applied": {
+      "type": "string",
+      "required": false,
+      "note": "Success line after a steer, e.g. \"focus on refunds · 14:03\"."
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    },
+    "suggestions": {
+      "type": "string[]",
+      "required": false
+    },
+    "onPause": {
+      "type": "function",
+      "required": false
+    },
+    "onResume": {
+      "type": "function",
+      "required": false
+    },
+    "onStop": {
+      "type": "function",
+      "required": false
+    },
+    "stopConfirm": {
+      "type": "object",
+      "required": false,
+      "note": "{ title, description } opens a kit AlertDialog (Keep running / Stop run) before onStop."
+    },
+    "stoppedNote": {
+      "type": "string",
+      "required": false
+    },
+    "onOpenTrail": {
+      "type": "function",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "status.info",
+    "status.warning",
+    "status.danger",
+    "status.success",
+    "status.successSubtle",
+    "status.successText",
+    "status.dangerSubtle",
+    "status.dangerText",
+    "radius.pill"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the agent name",
+      "the composer is a form; the Input is named \"Steer <name>\"; the icon-only send Button is named",
+      "aria-busy while sending; the applied line is role=status; the error is role=alert",
+      "Stop is outline danger, never the primary; a destructive stop confirms in a kit AlertDialog",
+      "quick steers are buttons that fill the composer",
+      "motion is opacity and transform, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local SteerBox, AgentControls, or RunControls",
+    "Stop is never the solid primary Button",
+    "Do not stop without AlertDialog when work can't be undone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AgentSteering name=\"Billing refactor\" meta=\"step 6 · editing invoice.ts\" elapsed=\"02:14\" value={text} onValueChange={setText} onSteer={steer} suggestions={[\"Focus on refunds\", \"Skip the docs\"]} onPause={pause} onStop={stop} stopConfirm={{ title: \"Stop this run?\", description: \"2 files are half-edited.\" }} />"
+}

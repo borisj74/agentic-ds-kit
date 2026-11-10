@@ -46,6 +46,10 @@ import { HelpPopoverDoc } from "./HelpPopoverDoc";
 import { InputDoc } from "./InputDoc";
 import { InputOTPDoc } from "./InputOTPDoc";
 import { InsightCardDoc } from "./InsightCardDoc";
+import { ContextWindowDoc } from "./ContextWindowDoc";
+import { ModelPickerDoc } from "./ModelPickerDoc";
+import { AgentSteeringDoc } from "./AgentSteeringDoc";
+import { AutonomyDialDoc } from "./AutonomyDialDoc";
 import { DecisionCardDoc } from "./DecisionCardDoc";
 import { AgentInboxDoc } from "./AgentInboxDoc";
 import { AgentLanesDoc } from "./AgentLanesDoc";
@@ -121,6 +125,10 @@ const TITLES: Record<string, string> = {
   input: "Input",
   inputotp: "InputOTP",
   insightcard: "InsightCard",
+  contextwindow: "ContextWindow",
+  modelpicker: "ModelPicker",
+  agentsteering: "AgentSteering",
+  autonomydial: "AutonomyDial",
   decisioncard: "DecisionCard",
   agentinbox: "AgentInbox",
   agentlanes: "AgentLanes",
@@ -374,6 +382,10 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "input") return <InputDoc />;
   if (resolved === "inputotp") return <InputOTPDoc />;
   if (resolved === "insightcard") return <InsightCardDoc />;
+  if (resolved === "contextwindow") return <ContextWindowDoc />;
+  if (resolved === "modelpicker") return <ModelPickerDoc />;
+  if (resolved === "agentsteering") return <AgentSteeringDoc />;
+  if (resolved === "autonomydial") return <AutonomyDialDoc />;
   if (resolved === "decisioncard") return <DecisionCardDoc />;
   if (resolved === "agentinbox") return <AgentInboxDoc />;
   if (resolved === "agentlanes") return <AgentLanesDoc />;

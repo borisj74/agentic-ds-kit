@@ -1,0 +1,107 @@
+{
+  "id": "modelpicker",
+  "status": "stable",
+  "intent": "Choose which model an agent or chat uses: grouped by vendor, with context window and cost tier, recommended models, and disabled models that keep their reason. Built on kit DropdownMenu.",
+  "useWhen": [
+    "pick a model for an agent, chat or run",
+    "compare context window and cost at a glance",
+    "show models the plan does not include, with the reason"
+  ],
+  "doNotUseWhen": [
+    "a plain list of strings — Select",
+    "free search over many values — Combobox"
+  ],
+  "contains": [
+    "dropdownmenu"
+  ],
+  "props": {
+    "models": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[]"
+    },
+    "value": {
+      "type": "string",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "label": {
+      "type": "string",
+      "default": "Model"
+    },
+    "hideLabel": {
+      "type": "boolean",
+      "default": false
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "The last choice stays selected."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    },
+    "emptyText": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "status.dangerSubtle",
+    "status.dangerText"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "a visible label (or hideLabel) names the field trigger",
+      "the menu is the kit DropdownMenu: groups with headings, arrow keys, Escape",
+      "disabled models stay in the list with their reason and a lock",
+      "error is role=alert and described by the trigger",
+      "the spinner stops under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ModelSelect or ModelMenu",
+    "Do not hide unavailable models; disable them with a reason",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ModelPicker models={models} value={modelId} onValueChange={setModelId} />"
+}

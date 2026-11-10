@@ -5,6 +5,7 @@ import contract_agentinbox from "../packages/kit/contracts/agentinbox.json";
 import contract_agentlanes from "../packages/kit/contracts/agentlanes.json";
 import contract_agentmonitor from "../packages/kit/contracts/agentmonitor.json";
 import contract_agentplan from "../packages/kit/contracts/agentplan.json";
+import contract_agentsteering from "../packages/kit/contracts/agentsteering.json";
 import contract_agenttrail from "../packages/kit/contracts/agenttrail.json";
 import contract_agenttree from "../packages/kit/contracts/agenttree.json";
 import contract_alert from "../packages/kit/contracts/alert.json";
@@ -13,6 +14,7 @@ import contract_anchornav from "../packages/kit/contracts/anchornav.json";
 import contract_appheader from "../packages/kit/contracts/appheader.json";
 import contract_appnav from "../packages/kit/contracts/appnav.json";
 import contract_approvalcard from "../packages/kit/contracts/approvalcard.json";
+import contract_autonomydial from "../packages/kit/contracts/autonomydial.json";
 import contract_avatar from "../packages/kit/contracts/avatar.json";
 import contract_avatargroup from "../packages/kit/contracts/avatargroup.json";
 import contract_badge from "../packages/kit/contracts/badge.json";
@@ -32,6 +34,7 @@ import contract_colorpicker from "../packages/kit/contracts/colorpicker.json";
 import contract_combobox from "../packages/kit/contracts/combobox.json";
 import contract_command from "../packages/kit/contracts/command.json";
 import contract_contextmenu from "../packages/kit/contracts/contextmenu.json";
+import contract_contextwindow from "../packages/kit/contracts/contextwindow.json";
 import contract_conveyor from "../packages/kit/contracts/conveyor.json";
 import contract_count from "../packages/kit/contracts/count.json";
 import contract_currencyinput from "../packages/kit/contracts/currencyinput.json";
@@ -63,6 +66,7 @@ import contract_loadinganimation from "../packages/kit/contracts/loadinganimatio
 import contract_meter from "../packages/kit/contracts/meter.json";
 import contract_modal from "../packages/kit/contracts/modal.json";
 import contract_modalcard from "../packages/kit/contracts/modalcard.json";
+import contract_modelpicker from "../packages/kit/contracts/modelpicker.json";
 import contract_multiselect from "../packages/kit/contracts/multiselect.json";
 import contract_navigationmenu from "../packages/kit/contracts/navigationmenu.json";
 import contract_numberinput from "../packages/kit/contracts/numberinput.json";
@@ -116,6 +120,7 @@ const contracts: Record<string, ContractNotes> = {
   "agentlanes": contract_agentlanes,
   "agentmonitor": contract_agentmonitor,
   "agentplan": contract_agentplan,
+  "agentsteering": contract_agentsteering,
   "agenttrail": contract_agenttrail,
   "agenttree": contract_agenttree,
   "alert": contract_alert,
@@ -124,6 +129,7 @@ const contracts: Record<string, ContractNotes> = {
   "appheader": contract_appheader,
   "appnav": contract_appnav,
   "approvalcard": contract_approvalcard,
+  "autonomydial": contract_autonomydial,
   "avatar": contract_avatar,
   "avatargroup": contract_avatargroup,
   "badge": contract_badge,
@@ -143,6 +149,7 @@ const contracts: Record<string, ContractNotes> = {
   "combobox": contract_combobox,
   "command": contract_command,
   "contextmenu": contract_contextmenu,
+  "contextwindow": contract_contextwindow,
   "conveyor": contract_conveyor,
   "count": contract_count,
   "currencyinput": contract_currencyinput,
@@ -174,6 +181,7 @@ const contracts: Record<string, ContractNotes> = {
   "meter": contract_meter,
   "modal": contract_modal,
   "modalcard": contract_modalcard,
+  "modelpicker": contract_modelpicker,
   "multiselect": contract_multiselect,
   "navigationmenu": contract_navigationmenu,
   "numberinput": contract_numberinput,

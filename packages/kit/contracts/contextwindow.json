@@ -1,0 +1,116 @@
+{
+  "id": "contextwindow",
+  "status": "stable",
+  "intent": "How full the prompt context is and what uses the space, by segment, with a warning near the limit and Trim oldest. Compact form for a header.",
+  "useWhen": [
+    "show a thread's context usage next to a chat or agent",
+    "warn before old messages are trimmed",
+    "explain what fills the context"
+  ],
+  "doNotUseWhen": [
+    "plan or billing usage — UsageList or a usage meter",
+    "a generic progress value — Meter or Progress"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "meter",
+    "numbertransition",
+    "skeleton"
+  ],
+  "props": {
+    "used": {
+      "type": "number",
+      "required": true,
+      "note": "Tokens, not a percent."
+    },
+    "limit": {
+      "type": "number",
+      "required": false,
+      "note": "Without it: \"limit unknown\", no percentage."
+    },
+    "segments": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, label, tokens }[] in display order; up to five categorical fills from existing roles."
+    },
+    "warningAt": {
+      "type": "number",
+      "default": 0.8
+    },
+    "compact": {
+      "type": "boolean",
+      "default": false,
+      "note": "One line: kit Meter, used / limit, status icon."
+    },
+    "label": {
+      "type": "string",
+      "default": "Context window"
+    },
+    "onTrim": {
+      "type": "function",
+      "required": false,
+      "note": "Trim oldest (outline when near limit or full, ghost otherwise)."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "bg.tray",
+    "primary.base",
+    "status.success",
+    "highlight.base",
+    "status.warningText",
+    "status.dangerText",
+    "status.dangerSubtle",
+    "type.size.heading5"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the title (compact: aria-label)",
+      "the stacked bar is role=meter with min, max, now and a text value",
+      "near limit and full are text and an icon, not colour alone",
+      "the number uses kit NumberTransition",
+      "aria-busy while loading; the error is role=alert"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ContextMeter or TokenBar",
+    "Do not pass a percent as used",
+    "Do not signal near-limit by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ContextWindow used={104000} limit={200000} segments={[{ id: \"system\", label: \"System\", tokens: 6200 }, { id: \"messages\", label: \"Messages\", tokens: 58600 }]} onTrim={trim} />"
+}

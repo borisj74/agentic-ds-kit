@@ -7,6 +7,7 @@ export const COMPONENT_ITEMS = [
   "agentlanes",
   "agentmonitor",
   "agentplan",
+  "agentsteering",
   "agenttrail",
   "agenttree",
   "alert",
@@ -15,6 +16,7 @@ export const COMPONENT_ITEMS = [
   "appheader",
   "appnav",
   "approvalcard",
+  "autonomydial",
   "avatar",
   "avatargroup",
   "badge",
@@ -33,6 +35,7 @@ export const COMPONENT_ITEMS = [
   "combobox",
   "command",
   "contextmenu",
+  "contextwindow",
   "conveyor",
   "count",
   "currencyinput",
@@ -63,6 +66,7 @@ export const COMPONENT_ITEMS = [
   "meter",
   "modal",
   "modalcard",
+  "modelpicker",
   "multiselect",
   "navigationmenu",
   "numberinput",
@@ -116,6 +120,10 @@ export function componentLabel(id: string): string {
   if (id === "agentlanes") return "AgentLanes";
   if (id === "agentinbox") return "AgentInbox";
   if (id === "decisioncard") return "DecisionCard";
+  if (id === "autonomydial") return "AutonomyDial";
+  if (id === "agentsteering") return "AgentSteering";
+  if (id === "modelpicker") return "ModelPicker";
+  if (id === "contextwindow") return "ContextWindow";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -177,7 +185,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agenttrail", "agenttree", "approvalcard", "chat", "decisioncard", "insightcard", "loadinganimation", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "contextwindow", "decisioncard", "insightcard", "loadinganimation", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard"],
   },
   {
     label: "Forms",

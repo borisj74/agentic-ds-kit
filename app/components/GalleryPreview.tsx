@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
+import { ContextWindow } from "agentic-ds-kit";
+import { ModelPicker } from "agentic-ds-kit";
+import { AgentSteering } from "agentic-ds-kit";
+import { AutonomyDial } from "agentic-ds-kit";
 import { DecisionCard } from "agentic-ds-kit";
 import { AgentInbox } from "agentic-ds-kit";
 import { AgentLanes } from "agentic-ds-kit";
@@ -282,6 +286,27 @@ export function GalleryPreview({ id }: { id: string }) {
           <DecisionCard title="Billing asks" question="Keep v1?" status="resolved" resolvedLabel="Keep v1 for 30 days" resolvedAt="14:03" />
         </Stage>
       );
+    case "autonomydial":
+      return (
+        <Stage variant="wide">
+          <AutonomyDial value="risk" size="sm" />
+        </Stage>
+      );
+    case "agentsteering":
+      return (
+        <Stage variant="wide">
+          <AgentSteering name="Billing refactor" meta="step 6" elapsed="02:14" onSteer={noop} />
+        </Stage>
+      );
+    case "modelpicker":
+      return (
+        <ModelPicker
+          value="sonnet"
+          models={[{ id: "sonnet", name: "Claude Sonnet 5.5", costTier: "$$", tagline: "balanced" }]}
+        />
+      );
+    case "contextwindow":
+      return <ContextWindow compact used={104000} limit={200000} />;
     case "accordion":
       return (
         <Stage variant="wide">
