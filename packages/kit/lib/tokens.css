@@ -633,7 +633,7 @@
   --link-visited: var(--primary-base);
   --link-active: var(--primary-active);
   --bg-canvas: #020617;
-  --bg-subtle: #0f172a;
+  --bg-subtle: color-mix(in srgb, #1E293B 50%, #0F172A);
   --bg-tray: #1e293b;
   --bg-surface: #0f172a;
   --bg-raised: #1e293b;
