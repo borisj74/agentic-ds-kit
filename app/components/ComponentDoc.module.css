@@ -528,9 +528,9 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Stage Variants tab (VariantGrid): variant cards only. The master demo lives in the stage's
+/* Stage Variants tab (VariantGrid): variant sections only. The master demo lives in the stage's
    Preview tab, so the doc's Master header and preview panel are hidden, and DocTabList renders
-   no tab bar. Cards read name, description, prop chips, then the live render. */
+   no tab bar. Each section reads name, description, prop chips, then the live render. */
 .examplesHost .masterHeader,
 .examplesHost [role="tabpanel"][aria-label="Preview"] {
   display: none;
@@ -540,22 +540,29 @@
   gap: 0;
 }
 
+/* A plain stacked list: one section per variant, divided by rules. No cards. */
 .examplesHost .variants {
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--grid-gutter-lg);
-}
-
-/* 64rem is --grid-breakpoint-md: two cards per row from there. */
-@media (width >= 64rem) {
-  .examplesHost .variants {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  gap: 0;
 }
 
 .examplesHost .example {
   align-content: start;
   gap: var(--space-3);
-  padding: var(--space-5);
+  padding: var(--space-6) 0;
+  border: 0;
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+  border-radius: 0;
+  background: transparent;
+}
+
+.examplesHost .example:first-child {
+  padding-top: 0;
+}
+
+.examplesHost .example:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 .examplesHost .example > * {
