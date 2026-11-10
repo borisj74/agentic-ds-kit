@@ -115,6 +115,12 @@ export function MonthGrid({
   disabled = false,
   minDate,
   maxDate,
+  view: viewProp,
+  onViewChange,
+  nav = "both",
+  bare = false,
+  hoverDate,
+  onHoverDateChange,
 }: MonthGridProps) {
   const headingId = useId();
   const isControlled = value !== undefined;
@@ -123,19 +129,31 @@ export function MonthGrid({
   const selectedDate = parseISODate(selectedISO);
   const rangeMode = Boolean(start);
 
-  const [view, setView] = useState(() => monthFromISO(start ?? selectedISO ?? defaultValue));
+  const [uncontrolledView, setUncontrolledView] = useState(() => monthFromISO(start ?? selectedISO ?? defaultValue));
+  const viewControlled = viewProp !== undefined;
+  const view = viewControlled ? monthFromISO(viewProp) : uncontrolledView;
+  const setView = (next: Date) => {
+    if (viewControlled) {
+      if (toISODate(next) !== viewProp) onViewChange?.(toISODate(next));
+    } else setUncontrolledView(next);
+  };
   const [focusedISO, setFocusedISO] = useState(
     () => start ?? selectedISO ?? toISODate(new Date()),
   );
-  const [hoverISO, setHoverISO] = useState<string | null>(null);
+  const [uncontrolledHover, setUncontrolledHover] = useState<string | null>(null);
+  const hoverISO = hoverDate !== undefined ? hoverDate : uncontrolledHover;
+  const setHoverISO = (next: string | null) => {
+    if (onHoverDateChange) onHoverDateChange(next);
+    if (hoverDate === undefined) setUncontrolledHover(next);
+  };
   const [seenValue, setSeenValue] = useState(value);
 
   if (isControlled && value !== seenValue) {
     setSeenValue(value);
     const next = parseISODate(value);
     if (next) {
-      if (view.getFullYear() !== next.getFullYear() || view.getMonth() !== next.getMonth()) {
-        setView(startOfMonth(next));
+      if (!viewControlled && (view.getFullYear() !== next.getFullYear() || view.getMonth() !== next.getMonth())) {
+        setUncontrolledView(startOfMonth(next));
       }
       setFocusedISO(value);
     }
@@ -149,7 +167,8 @@ export function MonthGrid({
   const weeks = buildWeeks(view);
   const monthLabel = view.toLocaleString("en-US", { month: "long", year: "numeric" });
 
-  const previewISO = rangeMode && !end ? (hoverISO ?? focusedISO) : undefined;
+  // With a shared hover (two grids), the preview follows the pointer only, not this grid's focus.
+  const previewISO = rangeMode && !end ? (hoverISO ?? (hoverDate !== undefined ? undefined : focusedISO)) : undefined;
   const span =
     start && (end || (previewISO && previewISO !== start))
       ? orderedSpan(start, end ?? previewISO ?? start)
@@ -173,7 +192,8 @@ export function MonthGrid({
     const iso = toISODate(date);
     if (!rangeMode && !isControlled) setUncontrolledValue(iso);
     onValueChange?.(iso);
-    setView(startOfMonth(date));
+    // A parent that owns the view (two grids) keeps both months where they are on a pick.
+    if (!viewControlled) setView(startOfMonth(date));
     setFocusedISO(iso);
   }
 
@@ -236,29 +256,37 @@ export function MonthGrid({
 
   return (
     <div
-      className={`${styles.calendar} ${styles[size]}`}
+      className={`${styles.calendar} ${styles[size]} ${bare ? styles.bare : ""}`}
       data-disabled={disabled || undefined}
     >
       <div className={styles.header}>
-        <Button
-          appearance="ghost" mode="neutral"
-          size="sm"
-          iconStart="ChevronLeft"
-          ariaLabel="Previous month"
-          disabled={prevDisabled}
-          onClick={() => goMonth(-1)}
-        />
+        {nav === "next" ? (
+          <span className={styles.navSpacer} aria-hidden="true" />
+        ) : (
+          <Button
+            appearance="ghost" mode="neutral"
+            size="sm"
+            iconStart="ChevronLeft"
+            ariaLabel="Previous month"
+            disabled={prevDisabled}
+            onClick={() => goMonth(-1)}
+          />
+        )}
         <div className={styles.heading} id={headingId} role="heading" aria-level={2} aria-live="polite">
           {monthLabel}
         </div>
-        <Button
-          appearance="ghost" mode="neutral"
-          size="sm"
-          iconStart="ChevronRight"
-          ariaLabel="Next month"
-          disabled={nextDisabled}
-          onClick={() => goMonth(1)}
-        />
+        {nav === "prev" ? (
+          <span className={styles.navSpacer} aria-hidden="true" />
+        ) : (
+          <Button
+            appearance="ghost" mode="neutral"
+            size="sm"
+            iconStart="ChevronRight"
+            ariaLabel="Next month"
+            disabled={nextDisabled}
+            onClick={() => goMonth(1)}
+          />
+        )}
       </div>
       <div
         className={styles.grid}

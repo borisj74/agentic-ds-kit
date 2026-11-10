@@ -430,7 +430,7 @@
   letter-spacing: var(--type-tracking-overline);
   text-transform: uppercase;
   color: var(--text-secondary);
-  background: color-mix(in srgb, var(--action-primary) 4%, var(--bg-surface));
+  background: var(--bg-subtle);
 }
 
 .propsName,
@@ -516,3 +516,108 @@
   }
 }
 
+
+/* Inside the Stage template the page header, When to use and the agent block come from the
+   contract, so each doc's own hero and Do/Don't column would repeat them. */
+.examplesHost .hero,
+.examplesHost .guidance {
+  display: none;
+}
+
+.examplesHost .notesGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Stage Variants tab (VariantGrid): variant sections only. The master demo lives in the stage's
+   Preview tab, so the doc's Master header and preview panel are hidden, and DocTabList renders
+   no tab bar. Each section reads name, description, prop chips, then the live render. */
+.variantsHost .masterHeader,
+.variantsHost [role="tabpanel"][aria-label="Preview"] {
+  display: none;
+}
+
+.examplesHost .master {
+  gap: 0;
+}
+
+/* A plain stacked list: one section per variant, divided by rules. No cards. */
+.examplesHost .variants {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.examplesHost .example {
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-6) 0;
+  border: 0;
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+  border-radius: 0;
+  background: transparent;
+}
+
+.examplesHost .example:first-child {
+  padding-top: 0;
+}
+
+.examplesHost .example:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.examplesHost .example > * {
+  order: 5;
+}
+
+.examplesHost .example > .exampleTitle {
+  order: 1;
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
+}
+
+.examplesHost .example > .usageBody,
+.examplesHost .example > :has(> .usageBody) {
+  order: 2;
+  margin: 0;
+}
+
+/* A "Usage" heading inside a card repeats the card name: the line under the name is enough. */
+.examplesHost .example > :has(> .usageBody) > .usageTitle {
+  display: none;
+}
+
+.examplesHost .example > [data-variant-chips] {
+  order: 3;
+}
+
+.examplesHost .example > .exampleCanvas {
+  order: 4;
+}
+
+/* Stage Preview tab: only the doc's master render (canvas, and its controls panel if any). */
+.previewHost .masterHeader,
+.previewHost .docs,
+.previewHost .variants,
+.previewHost .example {
+  display: none;
+}
+
+.previewHost {
+  position: relative;
+}
+
+/* Render areas in both stage tabs: the cool neutral page ground (--bg-canvas, slate-50), not
+   the 5% brand tint, which read as lilac. The Avatar fallback fill moves to --bg-tray in the kit
+   (branch claude/avatar-fallback-edge) so its circle keeps an edge on this ground. */
+.examplesHost .layout,
+.examplesHost .example > .exampleCanvas {
+  background: var(--bg-canvas);
+}
+
+/* Kit Cell and HeaderCell are transparent: in a preview they sit on a white row, as in a table. */
+.previewCell {
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  background: var(--surface-card);
+}

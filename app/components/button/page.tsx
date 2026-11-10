@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import playground from "../../playground.module.css";
 import { ButtonDoc } from "../ButtonDoc";
+import { ComponentPage } from "../ComponentPage";
 import { DocPageExtras } from "../DocPageExtras";
 import { componentLabel } from "@/lib/playground-nav";
 
@@ -10,11 +10,8 @@ export const metadata: Metadata = {
 
 export default function ButtonComponentPage() {
   return (
-    <div className={playground.docPage}>
-      <div className={playground.docShell}>
-        <ButtonDoc />
-        <DocPageExtras slug="button" />
-      </div>
-    </div>
+    <ComponentPage id="button" footer={<DocPageExtras slug="button" />}>
+      <ButtonDoc />
+    </ComponentPage>
   );
 }

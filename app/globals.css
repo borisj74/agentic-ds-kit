@@ -55,3 +55,9 @@ html[data-font="system"] {
   --font-body: var(--font-sans);
   --font-heading: var(--font-display);
 }
+
+/* A saved preview theme is applied on the client. Until then, previews stay hidden (no flash).
+   Only the preview wrapper: kit overlays portalled out of a scope also carry data-theme-scope. */
+html[data-preview-theme="stored"] [data-preview-scope]:not([data-theme-ready]) {
+  visibility: hidden;
+}
