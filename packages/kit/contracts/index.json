@@ -728,6 +728,34 @@
     "status": "stable"
   },
   {
+    "id": "autonomydial",
+    "intent": "How far an agent may go without asking: readable stops on a SegmentedControl.",
+    "group": "component",
+    "path": "contracts/autonomydial.json",
+    "status": "stable"
+  },
+  {
+    "id": "agentsteering",
+    "intent": "Redirect, pause or stop a running agent; stop confirms in an AlertDialog.",
+    "group": "component",
+    "path": "contracts/agentsteering.json",
+    "status": "stable"
+  },
+  {
+    "id": "modelpicker",
+    "intent": "Choose a model: grouped by vendor with context window, cost tier and disabled reasons.",
+    "group": "component",
+    "path": "contracts/modelpicker.json",
+    "status": "stable"
+  },
+  {
+    "id": "contextwindow",
+    "intent": "How full the prompt context is, by segment, with a near-limit warning and Trim oldest.",
+    "group": "component",
+    "path": "contracts/contextwindow.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

@@ -8166,6 +8166,325 @@
       }
     },
     {
+      "id": "autonomydial",
+      "group": "component",
+      "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
+      "useWhen": [
+        "set an agent's autonomy level in settings or before a run",
+        "show a policy-locked autonomy level and why",
+        "save a new level with a visible saving state"
+      ],
+      "doNotUseWhen": [
+        "a numeric value on a range — Slider",
+        "on/off for one permission — Switch",
+        "approving one action — ApprovalCard"
+      ],
+      "doNot": [
+        "Do not invent a local AutonomyDial, AutonomySlider, or TrustLevel picker",
+        "Do not use a Slider for autonomy stops",
+        "Do not add a Save primary Button",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "label": {
+          "type": "string",
+          "default": "Autonomy"
+        },
+        "value": {
+          "type": "string",
+          "default": "risk"
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "options": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, label, description, icon? }[] from more oversight to more autonomy. Default ask · risk · tell · run (exported as AUTONOMY_STOPS)."
+        },
+        "defaultValue": {
+          "type": "string",
+          "default": "risk",
+          "note": "Marks that stop \"default\"."
+        },
+        "appliesTo": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"Research agent · acme/ledger\"."
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "disabledReason": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"Set by workspace policy\" with a lock."
+        },
+        "saving": {
+          "type": "boolean",
+          "default": false,
+          "note": "The selected stop's icon spins; the panel shows Saving…"
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      }
+    },
+    {
+      "id": "agentsteering",
+      "group": "component",
+      "intent": "Redirect, pause or stop an agent while it runs: a steer composer with quick steers, Pause / Resume and Stop with an optional AlertDialog confirm.",
+      "useWhen": [
+        "let the person redirect a running agent in a sentence",
+        "pause and resume a run, with a note",
+        "stop a run, confirming when work can't be undone"
+      ],
+      "doNotUseWhen": [
+        "the agent asks a question — DecisionCard",
+        "editing steps before the run — AgentPlan",
+        "a chat thread — Chat"
+      ],
+      "doNot": [
+        "Do not invent a local SteerBox, AgentControls, or RunControls",
+        "Stop is never the solid primary Button",
+        "Do not stop without AlertDialog when work can't be undone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "meta": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"step 6 · editing invoice.ts\"."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "running",
+            "paused",
+            "stopped",
+            "done"
+          ],
+          "default": "running",
+          "note": "done disables steering; stopped shows the stopped line and Open trail."
+        },
+        "elapsed": {
+          "type": "string",
+          "required": false
+        },
+        "value": {
+          "type": "string",
+          "required": false
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value) => void. Quick steers fill the composer."
+        },
+        "onSteer": {
+          "type": "function",
+          "required": false,
+          "note": "(text) => void. The send button is the one solid primary; Enter sends."
+        },
+        "sending": {
+          "type": "boolean",
+          "default": false
+        },
+        "applied": {
+          "type": "string",
+          "required": false,
+          "note": "Success line after a steer, e.g. \"focus on refunds · 14:03\"."
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        },
+        "suggestions": {
+          "type": "string[]",
+          "required": false
+        },
+        "onPause": {
+          "type": "function",
+          "required": false
+        },
+        "onResume": {
+          "type": "function",
+          "required": false
+        },
+        "onStop": {
+          "type": "function",
+          "required": false
+        },
+        "stopConfirm": {
+          "type": "object",
+          "required": false,
+          "note": "{ title, description } opens a kit AlertDialog (Keep running / Stop run) before onStop."
+        },
+        "stoppedNote": {
+          "type": "string",
+          "required": false
+        },
+        "onOpenTrail": {
+          "type": "function",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "id": "modelpicker",
+      "group": "component",
+      "intent": "Choose which model an agent or chat uses: grouped by vendor, with context window and cost tier, recommended models, and disabled models that keep their reason. Built on kit DropdownMenu.",
+      "useWhen": [
+        "pick a model for an agent, chat or run",
+        "compare context window and cost at a glance",
+        "show models the plan does not include, with the reason"
+      ],
+      "doNotUseWhen": [
+        "a plain list of strings — Select",
+        "free search over many values — Combobox"
+      ],
+      "doNot": [
+        "Do not invent a local ModelSelect or ModelMenu",
+        "Do not hide unavailable models; disable them with a reason",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "models": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[]"
+        },
+        "value": {
+          "type": "string",
+          "required": false
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void"
+        },
+        "label": {
+          "type": "string",
+          "default": "Model"
+        },
+        "hideLabel": {
+          "type": "boolean",
+          "default": false
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "The last choice stays selected."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        },
+        "emptyText": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "contextwindow",
+      "group": "component",
+      "intent": "How full the prompt context is and what uses the space, by segment, with a warning near the limit and Trim oldest. Compact form for a header.",
+      "useWhen": [
+        "show a thread's context usage next to a chat or agent",
+        "warn before old messages are trimmed",
+        "explain what fills the context"
+      ],
+      "doNotUseWhen": [
+        "plan or billing usage — UsageList or a usage meter",
+        "a generic progress value — Meter or Progress"
+      ],
+      "doNot": [
+        "Do not invent a local ContextMeter or TokenBar",
+        "Do not pass a percent as used",
+        "Do not signal near-limit by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "used": {
+          "type": "number",
+          "required": true,
+          "note": "Tokens, not a percent."
+        },
+        "limit": {
+          "type": "number",
+          "required": false,
+          "note": "Without it: \"limit unknown\", no percentage."
+        },
+        "segments": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, label, tokens }[] in display order; up to five categorical fills from existing roles."
+        },
+        "warningAt": {
+          "type": "number",
+          "default": 0.8
+        },
+        "compact": {
+          "type": "boolean",
+          "default": false,
+          "note": "One line: kit Meter, used / limit, status icon."
+        },
+        "label": {
+          "type": "string",
+          "default": "Context window"
+        },
+        "onTrim": {
+          "type": "function",
+          "required": false,
+          "note": "Trim oldest (outline when near limit or full, ghost otherwise)."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

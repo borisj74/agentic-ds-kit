@@ -23,7 +23,7 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | AgentPlan | 11 Agent Plan | 01 draft (edit, remove, add), 02 editing a step, 03 accepted, 04 running with a step waiting, 05 complete, 06 failed, 07 drafting, 08 empty, 09 collapsed |
 | AgentFleet | 06 Agent Fleet | 01 overview, 02 focused (one open, others compact), 03 all idle + totals, 04 needs you + failed + totals, 05 loading, 06 empty |
 
-Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2 and 103 after batch 3).
+Each component has a CSS module, Lucide icons at 16px with `ICON_STROKE` (1.5), a `contracts/<id>.json`, an index entry, the barrel export, a doc page (Preview with controls, Variants, plus Code / Contract from the contract once the K79 stage lands) and an "Agent" nav and gallery entry. The MCP lists them (the test expects 95 components after batch 1, 99 after batch 2, 103 after batch 3 and 107 after batch 4).
 
 #### Kit change outside the four
 
@@ -81,6 +81,38 @@ Keyboard and focus, batch 3:
 - DecisionCard: options are radios; ⌘/Ctrl+Enter confirms; the card goes aria-busy while sending; once resolved, focus moves to the one-line row.
 - New shared doc frame `app/components/AgentDocFrame.tsx` (hero, Master, Variants) for batch 3 onward, so every agent doc has the same shape.
 
+### Batch 4: what shipped
+
+Branch `feat/agent-patterns-4`, stacked on `feat/agent-patterns-3`. Grouping as planned; no dependencies across batches other than shared kit pieces.
+
+| Component | Paper artboard | Built on | States built |
+| --- | --- | --- | --- |
+| AutonomyDial | 10 Autonomy Dial | SegmentedControl, Badge | the four stops, default marked, disabled (locked by policy), saving |
+| AgentSteering | 15 Agent Steering | Input, Button, AlertDialog | running, submitting, applied, paused, stop confirm (AlertDialog), stopped, disabled (done), error, loading |
+| ModelPicker | 19 Model Picker | DropdownMenu (field trigger, groups) | closed md and sm, open grouped by vendor, selected, recommended and a disabled model with its reason, loading, error, empty |
+| ContextWindow | 20 Context Window | Meter (compact bar), NumberTransition, Badge | normal, near limit (≥ 80%), full, loading, error, limit unknown; compact and full forms |
+
+Paper vs tokens, batch 4:
+
+| Paper | Kit | Why |
+| --- | --- | --- |
+| Model Picker "built on Select with groups and descriptions" | kit DropdownMenu with `triggerStyle="field"` | Select has no groups, descriptions or disabled reasons; DropdownMenu has all three. |
+| Model Picker "Recommended" pill in the row | "Recommended · …" at the start of the item description | DropdownMenu items take strings only. Adding a badge slot to DropdownMenu is a possible follow-up. |
+| Model Picker context and cost columns | the item's right-hand `shortcut` text, "200K · $$$" | Same column, kit slot. |
+| Model Picker focus note "Northwind 405B: needs the Pro plan" | the reason stays in the disabled item's description | Always visible, no hover needed. |
+| Context Window "built on Meter" | Meter for the compact bar; the full card uses its own stacked bar (role=meter) | Kit Meter has one value, no segments. |
+| Context Window segment colours (grey, teal, violet, blue, light) | `--line-strong`, `--status-success`, `--highlight-base`, `--primary`, `--bg-tray` | No teal or violet roles; categorical fills reuse existing roles. A chart or categorical palette would be the proper home. |
+| Context Window "fill eases when used changes" | NumberTransition rolls the number; segment widths update instantly | Width is not transform or opacity. |
+| Agent Steering applied line "stays 4s" | stays until the parent clears `applied` | Timing belongs to the app. |
+| Autonomy Dial tick fill | dots fill and scale on transform | Motion rule. |
+| Steering and Context widths 370px | `--steering-width` and `--context-width` at 24rem | Custom-width pattern; Jev marked it "review". |
+
+Keyboard and focus, batch 4:
+- AutonomyDial: arrow keys move through the stops (SegmentedControl radio group); a change saves and announces in the panel.
+- AgentSteering: Enter sends; Stop opens the AlertDialog with focus on Keep running; Escape closes it and focus returns to Stop.
+- ModelPicker: Enter opens the menu, arrow keys move, Enter picks; the trigger updates.
+- ContextWindow: the stacked bar is a meter with a text value; Trim oldest is a Button.
+
 ### Paper vs tokens (tokens win)
 
 | Paper | Kit | Why |
@@ -134,5 +166,6 @@ Keyboard and focus, batch 3:
 ### PR status
 
 - Batch 1: `feat/agent-patterns-1`, https://github.com/borisj74/agentic-ds-kit/pull/121. Open, not merged.
-- Batch 3: `feat/agent-patterns-3`, stacked on batch 2, PR base `feat/agent-patterns-2`. Open, not merged.
+- Batch 4: `feat/agent-patterns-4`, stacked on batch 3, PR base `feat/agent-patterns-3`. Open, not merged.
+- Batch 3: `feat/agent-patterns-3`, stacked on batch 2, https://github.com/borisj74/agentic-ds-kit/pull/123, PR base `feat/agent-patterns-2`. Open, not merged.
 - Batch 2: `feat/agent-patterns-2`, branched from batch 1 because batch 1 is not merged. https://github.com/borisj74/agentic-ds-kit/pull/122, opened against `feat/agent-patterns-1` so the diff shows batch 2 only. Open, not merged.

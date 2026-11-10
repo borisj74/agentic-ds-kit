@@ -1,0 +1,115 @@
+{
+  "id": "autonomydial",
+  "status": "stable",
+  "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
+  "useWhen": [
+    "set an agent's autonomy level in settings or before a run",
+    "show a policy-locked autonomy level and why",
+    "save a new level with a visible saving state"
+  ],
+  "doNotUseWhen": [
+    "a numeric value on a range — Slider",
+    "on/off for one permission — Switch",
+    "approving one action — ApprovalCard"
+  ],
+  "contains": [
+    "badge",
+    "segmentedcontrol"
+  ],
+  "props": {
+    "label": {
+      "type": "string",
+      "default": "Autonomy"
+    },
+    "value": {
+      "type": "string",
+      "default": "risk"
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void"
+    },
+    "options": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, label, description, icon? }[] from more oversight to more autonomy. Default ask · risk · tell · run (exported as AUTONOMY_STOPS)."
+    },
+    "defaultValue": {
+      "type": "string",
+      "default": "risk",
+      "note": "Marks that stop \"default\"."
+    },
+    "appliesTo": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"Research agent · acme/ledger\"."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "disabledReason": {
+      "type": "string",
+      "required": false,
+      "note": "e.g. \"Set by workspace policy\" with a lock."
+    },
+    "saving": {
+      "type": "boolean",
+      "default": false,
+      "note": "The selected stop's icon spins; the panel shows Saving…"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "md"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "line.default",
+    "line.strong",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceLg",
+    "radius.surfaceMd",
+    "shadow.sm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "primary.base",
+    "type.size.overline",
+    "type.tracking.overline"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h3 label",
+      "the stops are a kit SegmentedControl (role=radiogroup, arrow keys) described by the panel",
+      "the panel is aria-live polite",
+      "tick dots and end labels are aria-hidden",
+      "no primary Button; the control saves on change",
+      "motion is opacity and transform, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local AutonomyDial, AutonomySlider, or TrustLevel picker",
+    "Do not use a Slider for autonomy stops",
+    "Do not add a Save primary Button",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AutonomyDial value={level} onValueChange={setLevel} appliesTo=\"Research agent · acme/ledger\" />"
+}

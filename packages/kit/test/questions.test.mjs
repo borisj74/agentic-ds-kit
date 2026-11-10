@@ -60,9 +60,9 @@ describe("questions: schema", () => {
     }
   });
 
-  test("103 component options and 6 pattern options by default", () => {
+  test("107 component options and 6 pattern options by default", () => {
     const { options } = buildQuestions();
-    assert.equal(componentIds.length, 103);
+    assert.equal(componentIds.length, 107);
     assert.deepEqual(options.filter((o) => o.kind === "component").map((o) => o.id).sort(), [...componentIds].sort());
     assert.deepEqual(options.filter((o) => o.kind === "pattern").map((o) => o.id).sort(), [...patternIds].sort());
   });
@@ -146,7 +146,7 @@ describe("questions: schema", () => {
 
   test("--group and --only filter", () => {
     assert.ok(buildQuestions({ group: "pattern" }).options.every((o) => o.kind === "pattern"));
-    assert.equal(buildQuestions({ group: "component" }).options.length, 103);
+    assert.equal(buildQuestions({ group: "component" }).options.length, 107);
     assert.deepEqual(buildQuestions({ only: ["tabs", "card"] }).options.map((o) => o.id), ["card", "tabs"]);
   });
 
