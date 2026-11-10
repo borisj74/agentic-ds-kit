@@ -107,6 +107,58 @@ const noop = () => undefined;
 
 /** `stage` is the larger preview on a component page; `card` the gallery thumbnail. */
 export function GalleryPreview({ id, size = "card" }: { id: string; size?: "card" | "stage" }) {
+  if (size === "stage" && id === "barchart") {
+    return (
+      <div className={previewStyles.stageChart}>
+        <BarChart
+          title="Revenue by region"
+          description="Last quarter, in thousands"
+          data={[
+            { label: "North", value: 2610 },
+            { label: "South", value: 2540 },
+            { label: "East", value: 2480 },
+            { label: "West", value: 2430 },
+          ]}
+        />
+      </div>
+    );
+  }
+  if (size === "stage" && id === "linechart") {
+    return (
+      <div className={previewStyles.stageChart}>
+        <LineChart
+          title="Weekly active users"
+          description="Last seven days"
+          variant="area"
+          data={[
+            { label: "Mon", value: 1240 },
+            { label: "Tue", value: 1380 },
+            { label: "Wed", value: 1310 },
+            { label: "Thu", value: 1460 },
+            { label: "Fri", value: 1520 },
+            { label: "Sat", value: 1190 },
+            { label: "Sun", value: 1440 },
+          ]}
+        />
+      </div>
+    );
+  }
+  if (size === "stage" && id === "piechart") {
+    return (
+      <div className={previewStyles.stageChart}>
+        <PieChart
+          title="Properties by status"
+          variant="donut"
+          data={[
+            { label: "Listed", value: 256 },
+            { label: "Under offer", value: 84 },
+            { label: "Sold", value: 132 },
+            { label: "Withdrawn", value: 28 },
+          ]}
+        />
+      </div>
+    );
+  }
   if (size === "stage" && id === "scoreboard") {
     return (
       <Scoreboard

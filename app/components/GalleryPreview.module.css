@@ -53,3 +53,8 @@
   width: 16rem;
   max-width: 100%;
 }
+
+/* Charts on a component page stage: full chart, not the card thumbnail. */
+.stageChart {
+  width: min(100%, var(--grid-width-sm));
+}
