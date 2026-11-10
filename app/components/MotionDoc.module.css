@@ -29,6 +29,14 @@
   min-height: calc(var(--space-16) * 2);
 }
 
+/* Variants text samples: straight on the example canvas, left-aligned, no second border. */
+.plain {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--space-16);
+}
+
 .textWell {
   justify-content: flex-start;
 }
