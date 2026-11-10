@@ -982,5 +982,14 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add settings"
+  },
+  {
+    "id": "onboarding",
+    "intent": "Onboarding example: reduced AppHeader with ProgressSteps, Welcome / Workspace / Connect (SetupGuide) / Done steps, Back and one primary in a footer bar, with validation error and submitting states.",
+    "group": "pattern",
+    "path": "contracts/patterns/onboarding.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add onboarding"
   }
 ]

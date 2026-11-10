@@ -1,0 +1,109 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The onboarding-pattern__ prefix keeps names unique. */
+
+.onboarding-pattern {
+  min-height: 0;
+}
+
+/* Header layout: the page is the shell's second row. */
+.onboarding-pattern__single {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* The step scrolls; the footer bar with Back and the primary stays under it. */
+.onboarding-pattern__main {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg-canvas);
+}
+
+/* Stage: the main is layout-shell--inset's card panel, with "Step N of 4" above the step. */
+.onboarding-pattern__main--stage {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--surface-card);
+}
+
+.onboarding-pattern__count {
+  margin: 0;
+  padding-block-start: var(--space-inset-md);
+  padding-inline: var(--layout-margin-md);
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.onboarding-pattern__overline {
+  margin: 0 0 var(--space-stack-xs);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+  color: var(--text-fg-muted);
+}
+
+/* Focus moves here on a step change (tabIndex -1); the step label is announced, no ring on a region. */
+.onboarding-pattern__main:focus {
+  outline: none;
+}
+
+.onboarding-pattern__content {
+  align-content: center;
+}
+
+.onboarding-pattern__column {
+  display: grid;
+  gap: var(--space-gap-lg);
+}
+
+.onboarding-pattern__fields {
+  display: grid;
+  gap: var(--space-gap-md);
+  min-width: 0;
+}
+
+.onboarding-pattern__badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-gap-sm);
+}
+
+.onboarding-pattern__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  padding-block: var(--space-inset-md);
+  padding-inline: var(--layout-margin-md);
+  background: var(--surface-card);
+  border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+.onboarding-pattern__footer-end {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-gap-sm);
+  margin-inline-start: auto;
+}
+
+.onboarding-pattern__footer--center {
+  justify-content: center;
+}
+
+.onboarding-pattern__footer--center > .onboarding-pattern__footer-end {
+  margin-inline-start: 0;
+}
+
+/* Stage: Save and exit sits at the bottom of the steps column. */
+.onboarding-pattern__exit {
+  margin-block-start: auto;
+}

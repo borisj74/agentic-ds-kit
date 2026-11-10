@@ -21,7 +21,13 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 | Settings · Notifications | `settings` (`notifications`) | Card, Table, Switch (accessible name per row and channel), Field + Select (digest), NotificationStack (the header bell), save bar | |
 | Settings · Security (+ 2FA off) | `settings` (`security`, `twoFactor`) | Card (headerAction), Field, Input (password), Badge (On / Off), Switch, Alert (warning), ListView (sessions, Sign out), Button (danger outline), AlertDialog | Paper puts the 2FA title, Badge and Switch in one header row; Card's header takes one action, so that row is in the body. |
 | Settings · * · Stage (second row) | `settings` with `nav="app"`, in an app shell with **`layout-shell--inset`** | built SideNav (Brand, Search Input in a Slot, app rows, a "Settings · 5" Section with the five sections, Account) on the canvas; page on the inset panel; PageHeader breadcrumbs (Settings › section) and `headerActions` (Help outline, NotificationStack bell) | **The default look**, per Boris (2026-11-10: "the second row … so it matches the site"). Needs the new kit layout modifier below. |
-| Onboarding · 01–04 (+ 02b error, 02c submitting) | `onboarding` (branch `-2`) | see that section | |
+| Onboarding · 01 Welcome | `onboarding` (`step="welcome"`) | AppHeader (`search={false}`, ProgressSteps in `center`, Save and exit ghost), PageHeader in BlurCrossfade, ListView (icon rows), footer bar (Get started primary) | Paper draws each row as its own bordered card; ListView rows are one list. |
+| Onboarding · 02 Workspace | `onboarding` (`workspace`) | Card, Field, Input, Select ×3 in `layout-split`, Back ghost, Continue (⏎) | |
+| Onboarding · 02b validation error | `onboarding` (`workspaceState="error"`, or an empty name) | Field `error`, Input `error`; focus moves to the name | |
+| Onboarding · 02c submitting | `onboarding` (`workspaceState="submitting"`, or while `onCreateWorkspace`'s promise is pending) | inputs, Back and Continue disabled; kit Spinner labelled "Creating workspace…" beside Continue | Paper puts the spinner inside the primary. The kit Button has no `loading` prop, and a Spinner in `iconStart` keeps its own colour on the disabled (48% opacity) primary, so it all but disappears. **Gap: Button `loading`.** |
+| Onboarding · 03 Connect or choose | `onboarding` (`connect`) | SetupGuide (task actions mark done; skip / undo), Skip for now ghost, Continue | SetupGuide caps itself at 24rem (`--setup-width`), so it doesn't fill the 560px column as in Paper. |
+| Onboarding · 04 Done | `onboarding` (`done`) | Empty (Check icon), Badge ×2, Go to dashboard centred | Paper's green check tile and "a check may draw (DrawCheck)": the kit has no DrawCheck and Empty's icon tile is neutral. **Gaps: DrawCheck motion, Empty success tone.** |
+| Onboarding · * · Stage (second row) | `onboarding` with `layout="stage"` (**default**) | SideNav blocks on the canvas (Brand, a Slot with the SET UP · 4 STEPS overline and vertical ProgressSteps, Footer with Save and exit), `layout-shell--inset` panel with "Step N of 4" | Paper's step list is pill rows; vertical ProgressSteps draws markers and a rail. Below md the Stage layout falls back to the header layout (Paper draws no narrow Stage). |
 
 **Skipped (already patterns):** the Billing schedule card (it *is* `billing-schedule`, extended rather than copied); integration settings (no Integrations section in Paper's settings nav). `settings-form` stays as it is: a single-page example. `settings` is the multi-page area; neither replaces the other.
 
@@ -39,12 +45,24 @@ Source: Paper file *Nistha Agent Patterns* (`01M6S6EXZCX07PR8P1YXPE8BQE`), page 
 - **Docs:** new page `/patterns/settings-area` (slug `settings` was taken by settings-form). A Select picks one of Paper's 11 screens (`?view=` opens one directly); the page shows the add command and the contract.
 - **Docs fix:** pattern demos render kit *source*, a second module instance with its own theme-scope context, so their portalled Drawers / dialogs ignored a dark preview. `PreviewScope` now provides both contexts. The integration-settings AlertDialog and app-shell Drawer demos had the same cause, so they pick up the fix too.
 
+### Onboarding decisions
+
+- **One `onboarding` pattern** with a `step` prop (controlled, or its own state) and `workspaceState` to force Paper's error / submitting frames; left out, it validates and waits on `onCreateWorkspace` itself.
+- **Chrome:** the pattern renders the whole page (it's a full-screen flow, no app nav). `layout="stage"` (default, Boris's call for the second row): `layout-shell--inset` with a SideNav-blocks steps column and the step on the inset panel. `layout="header"` (first row, and Stage below md): AppHeader (header landmark, ProgressSteps as the steps nav). Either way `<main>` is labelled "Setup, step N of 4: <step>". `viewport` (default true) adds `layout-shell--viewport`; the docs frame turns it off. The step column is `layout-container-sm`.
+- **Focus:** a step change moves focus to `<main>`, so keyboard users don't land on `body` when the content under them is replaced. An empty name moves focus to it with the Field error.
+- **Motion:** Paper asks for a 180 ms crossfade between steps. BlurCrossfade's contract says not to wrap long or interactive regions, so it wraps only the step heading (`fast`, and its live label announces the step). It honours reduced motion. The form and SetupGuide swap without motion.
+- **One primary per step:** Get started / Continue / Go to dashboard. Back and Skip for now are ghost.
+- **Docs:** `/patterns/onboarding`, with a screen Select for Paper's 6 frames (`?view=workspace-error` and so on), the add command and the contract. The demo's `onCreateWorkspace` waits 1.2 s so the submitting state shows when you click through.
+
 ### Follow-ups for Boris
 
 - A Table option for compact columns (no 12rem min), so a 4-column table fits a half-width card.
 - UsageList warn threshold as a prop (`warnAt`, as UsageMeter has).
 - Empty `tone="danger"` for load errors.
 - `layout-shell--inset` is new in this PR (see above): Boris to confirm the name and values.
+- Button `loading` (spinner in the label colour, busy primary kept at full colour).
+- Empty `tone="success"` (and the danger tone above), and a DrawCheck motion for done states.
+- SetupGuide width: let it fill its column (`--setup-width` is fixed at 24rem).
 
 ## 2026-11-10: Motion (feat/motion-patterns-1, -2)
 

@@ -10396,6 +10396,23 @@
         "Delete workspace is a danger action behind a kit AlertDialog; Cancel returns focus to it",
         "Money arrives pre-formatted from your app; label example data as example"
       ]
+    },
+    {
+      "id": "onboarding",
+      "group": "pattern",
+      "intent": "Guided setup after sign-in: Welcome, Workspace (validation error, submitting), Connect or choose with the SetupGuide, Done. Not sign-in and not empty-first-run.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per step: Get started, Continue, or Go to dashboard",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Progress is a kit ProgressSteps: vertical in the Stage side column (SideNav blocks), or horizontal in a header landmark (AppHeader); the step content is in <main>, labelled with the step number and name",
+        "Back is a ghost Button; Skip for now is ghost; Save and exit stays reachable on every step before Done",
+        "Wrap every labeled input in Field; a missing workspace name shows the Field error, sets the Input's error, and moves focus to it",
+        "While the workspace is being created the fields, Back and the primary are disabled and a kit Spinner with a visible label (\"Creating workspace…\") says what is happening",
+        "Motion only through kit components: BlurCrossfade on the step heading (it honours reduced motion); do not wrap the form or the SetupGuide in it",
+        "Page layout uses kit layout classes (layout-shell, layout-shell--inset, layout-app, layout-content, layout-container-sm, layout-split) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints"
+      ]
     }
   ]
 }

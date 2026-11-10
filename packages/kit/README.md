@@ -24,7 +24,7 @@ Importing from the package loads semantic tokens. If your own CSS uses those var
 import "agentic-ds-kit/tokens.css";
 ```
 
-The package exports components only. Patterns (app-shell, sign-in, dashboard, empty-first-run, list-detail, settings-form, billing-schedule, integration-settings, settings) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
+The package exports components only. Patterns (app-shell, sign-in, dashboard, empty-first-run, list-detail, settings-form, billing-schedule, integration-settings, settings, onboarding) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
 
 ```bash
 npx agentic-ds-kit add --list

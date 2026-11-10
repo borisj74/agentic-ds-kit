@@ -4,7 +4,8 @@ import { AppShellBuiltNavDemo, AppShellCustomDemo, AppShellDemo } from "../_comp
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
 import { SaasPatternDemo } from "../_components/SaasPatternDemo";
-import { SettingsAreaDemo } from "../_components/ScreensPatternDemo";
+import { OnboardingDemo, SettingsAreaDemo } from "../_components/ScreensPatternDemo";
+import onboardingContract from "../../packages/kit/contracts/patterns/onboarding.json";
 import settingsContract from "../../packages/kit/contracts/patterns/settings.json";
 import { SignInDemo } from "../_components/SignInDemo";
 import { CodeBlock } from "../components/CodeBlock";
@@ -22,11 +23,13 @@ const ADD_ID: Record<string, string> = {
   "billing-schedule": "billing-schedule",
   "integration-settings": "integration-settings",
   "settings-area": "settings",
+  onboarding: "onboarding",
 };
 
 /** Pattern pages that show their contract under the preview. */
 const CONTRACTS: Partial<Record<string, unknown>> = {
   "settings-area": settingsContract,
+  onboarding: onboardingContract,
 };
 
 function usageFor(slug: string) {
@@ -71,6 +74,8 @@ export function PatternsView({ slug, view, look }: { slug: PatternSlug; view?: s
             <SignInDemo />
           ) : slug === "billing-schedule" || slug === "integration-settings" ? (
             <SaasPatternDemo pattern={slug} />
+          ) : slug === "onboarding" ? (
+            <OnboardingDemo view={view} look={look} />
           ) : slug === "settings-area" ? (
             <SettingsAreaDemo view={view} look={look} />
           ) : slug === "layouts" ? (
