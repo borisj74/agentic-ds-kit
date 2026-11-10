@@ -29,7 +29,7 @@ export function GradientTextDoc() {
           about: "The default: text.fg → text.brand.",
           code: `<GradientText>Ship agents people trust</GradientText>`,
           render: (
-            <div className={`${motion.well} ${motion.textWell}`}>
+            <div className={motion.plain}>
               <GradientText as="span">{COPY}</GradientText>
             </div>
           ),
@@ -39,7 +39,7 @@ export function GradientTextDoc() {
           about: "text.brand → primary.fg.",
           code: `<GradientText tone="brand">Ship agents people trust</GradientText>`,
           render: (
-            <div className={`${motion.well} ${motion.textWell}`}>
+            <div className={motion.plain}>
               <GradientText as="span" tone="brand">
                 {COPY}
               </GradientText>
@@ -63,7 +63,7 @@ export function GradientTextDoc() {
           about: "Solid text.fg (CanvasText in forced colours). The text reads the same either way.",
           code: `@media (forced-colors: active) — handled inside the component`,
           render: (
-            <div className={`${motion.well} ${motion.textWell} ${motion.solid}`}>
+            <div className={`${motion.plain} ${motion.solid}`}>
               <GradientText as="span">{COPY}</GradientText>
             </div>
           ),
