@@ -7,6 +7,8 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Progress } from "../Progress";
 import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
+import { useResolvedFocus } from "../shared/useResolvedFocus";
 import type { ApprovalCardAction, ApprovalCardProps, ApprovalCardRisk } from "./ApprovalCard.types";
 import styles from "./ApprovalCard.module.css";
 
@@ -112,6 +114,7 @@ export function ApprovalCard({
 }: ApprovalCardProps) {
   const titleId = useId();
   const descriptionId = useId();
+  const focus = useResolvedFocus(status !== "pending");
   const [remaining, setRemaining] = useState(countdownSec);
   const [countdownFrom, setCountdownFrom] = useState(countdownSec);
   const expireRef = useRef(onExpire ?? onDeny);
@@ -152,7 +155,8 @@ export function ApprovalCard({
     return (
       <article
         {...rest}
-        ref={ref}
+        ref={mergeRefs(focus.rowRef, ref)}
+        tabIndex={-1}
         className={cx(styles.resolved, styles[status], className)}
         aria-label={`${label}: ${title}`}
       >
@@ -186,6 +190,8 @@ export function ApprovalCard({
       ref={ref}
       tabIndex={-1}
       className={cx(styles.card, className)}
+      onFocusCapture={focus.onFocusCapture}
+      onBlurCapture={focus.onBlurCapture}
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
       onKeyDown={handleKeyDown}
