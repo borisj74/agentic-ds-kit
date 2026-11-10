@@ -505,7 +505,7 @@
   },
   {
     "id": "section",
-    "intent": "Grouped page block with heading, optional description and actions. Unframed \u2014 Card owns the framed surface; layout-content owns page inset.",
+    "intent": "Grouped page block with heading, optional description and actions. Unframed — Card owns the framed surface; layout-content owns page inset.",
     "group": "component",
     "path": "contracts/section.json",
     "status": "stable"
@@ -795,6 +795,34 @@
     "intent": "Plan usage or credits against a limit; composes Meter, UsageList, LineChart and Alert.",
     "group": "component",
     "path": "contracts/usagemeter.json",
+    "status": "stable"
+  },
+  {
+    "id": "setupguide",
+    "intent": "First-run checklist: overall progress and one action per task; feeds onboarding screens.",
+    "group": "component",
+    "path": "contracts/setupguide.json",
+    "status": "stable"
+  },
+  {
+    "id": "notificationstack",
+    "intent": "In-app notification inbox: bell with unread count and a popover list; not a Toast.",
+    "group": "component",
+    "path": "contracts/notificationstack.json",
+    "status": "stable"
+  },
+  {
+    "id": "changesummary",
+    "intent": "\"What moved\" card: before → after and a delta per metric, with good or bad per metric.",
+    "group": "component",
+    "path": "contracts/changesummary.json",
+    "status": "stable"
+  },
+  {
+    "id": "experimentcard",
+    "intent": "A/B or A/B/n experiment card: status, traffic split, metric per variant and one decision.",
+    "group": "component",
+    "path": "contracts/experimentcard.json",
     "status": "stable"
   },
   {

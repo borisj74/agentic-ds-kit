@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import { Accordion } from "agentic-ds-kit";
 import { UsageMeter } from "agentic-ds-kit";
+import { SetupGuide } from "agentic-ds-kit";
+import { NotificationStack } from "agentic-ds-kit";
+import { ExperimentCard } from "agentic-ds-kit";
+import { ChangeSummary } from "agentic-ds-kit";
 import { TraceWaterfall } from "agentic-ds-kit";
 import { MemoryPanel } from "agentic-ds-kit";
 import { InlineDiff } from "agentic-ds-kit";
@@ -352,6 +356,28 @@ export function GalleryPreview({ id }: { id: string }) {
               { id: "c", label: "Approval", kind: "approval", startMs: 6000, endMs: 20000 },
             ]}
           />
+        </Stage>
+      );
+    case "changesummary":
+      return (
+        <Stage variant="wide">
+          <ChangeSummary period="Oct → Nov" items={[{ id: "mrr", label: "MRR", before: "$48.2K", after: "$52.9K", delta: "+9.8%", direction: "up", sentiment: "good" }]} />
+        </Stage>
+      );
+    case "experimentcard":
+      return (
+        <Stage variant="wide">
+          <ExperimentCard name="Checkout copy" metricLabel="Conversion" status="running" variants={[{ id: "a", label: "v1", traffic: 50, value: "4.1%" }, { id: "b", label: "v2", traffic: 50, value: "4.6%", isLeading: true }]} />
+        </Stage>
+      );
+    case "notificationstack":
+      return (
+        <NotificationStack items={[{ id: "a", title: "Payment received", createdAt: "5m", read: false, tone: "success" }]} />
+      );
+    case "setupguide":
+      return (
+        <Stage variant="wide">
+          <SetupGuide title="Get ready" tasks={[{ id: "a", label: "Add company details", status: "done" }, { id: "b", label: "Import customers", status: "current" }]} />
         </Stage>
       );
     case "usagemeter":

@@ -2825,7 +2825,7 @@
     {
       "id": "daterangepicker",
       "group": "component",
-      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
       "useWhen": [
         "A report or filter period with presets like This month or Last 30 days",
         "A start and end date in one field"
@@ -9006,6 +9006,345 @@
           "type": "function",
           "required": false,
           "note": "View usage (outline)."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "setupguide",
+      "group": "component",
+      "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+      "useWhen": [
+        "onboard a new workspace with a short list of setup tasks",
+        "show how far setup is and what to do next",
+        "let people skip optional tasks and undo the skip"
+      ],
+      "doNotUseWhen": [
+        "a linear multi-page wizard — ProgressSteps",
+        "one value against a goal — Progress",
+        "an agent's plan of steps — AgentPlan"
+      ],
+      "doNot": [
+        "Do not invent a local Checklist, OnboardingCard or SetupSteps",
+        "Do not use ProgressSteps for a checklist people can do in any order",
+        "Do not show more than one solid primary; Continue stays outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "tasks": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped', actionLabel? }[]"
+        },
+        "onTaskAction": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Continue on the current task (outline), Start on todo tasks (ghost)."
+        },
+        "onUndoSkip": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. \"Skipped · Undo\"."
+        },
+        "onComplete": {
+          "type": "function",
+          "required": false,
+          "note": "Go to dashboard, the one solid primary once every task is done or skipped."
+        },
+        "completeLabel": {
+          "type": "string",
+          "default": "Go to dashboard"
+        },
+        "onDismiss": {
+          "type": "function",
+          "required": false
+        },
+        "skippedNote": {
+          "type": "string",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "Nothing to set up"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "emptyActionLabel": {
+          "type": "string",
+          "required": false
+        },
+        "onEmptyAction": {
+          "type": "function",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "notificationstack",
+      "group": "component",
+      "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
+      "useWhen": [
+        "show payments, sign-ins and billing updates people can read later",
+        "an app header needs a bell with an unread count",
+        "a settings or activity page shows the same list in place (inline)"
+      ],
+      "doNotUseWhen": [
+        "instant feedback for an action just taken — Toast",
+        "agent approvals and questions — AgentInbox",
+        "a page-level message — Alert"
+      ],
+      "doNot": [
+        "Do not invent a local NotificationBell or NotificationList",
+        "Do not restyle Toast as an inbox",
+        "Do not route agent approvals here — AgentInbox",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, body?, createdAt, read, tone?: 'neutral'|'success'|'info'|'warning'|'danger', icon? }[]"
+        },
+        "label": {
+          "type": "string",
+          "default": "Notifications"
+        },
+        "open": {
+          "type": "boolean",
+          "required": false
+        },
+        "defaultOpen": {
+          "type": "boolean",
+          "default": false
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": false
+        },
+        "inline": {
+          "type": "boolean",
+          "default": false,
+          "note": "Render the panel in place, with no bell or popover."
+        },
+        "onItemClick": {
+          "type": "function",
+          "required": false
+        },
+        "onMarkRead": {
+          "type": "function",
+          "required": false,
+          "note": "Called when an unread item is opened."
+        },
+        "onMarkAll": {
+          "type": "function",
+          "required": false
+        },
+        "onViewAll": {
+          "type": "function",
+          "required": false
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "You’re all caught up"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "changesummary",
+      "group": "component",
+      "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+      "useWhen": [
+        "summarise the changes between two periods on a dashboard or report",
+        "say whether each move is good or bad for the business",
+        "link to the full report"
+      ],
+      "doNotUseWhen": [
+        "one KPI with a trend — Scorecard",
+        "a row of KPI tiles — Scoreboard",
+        "a time series — LineChart"
+      ],
+      "doNot": [
+        "Do not invent a local DeltaList or MetricChanges",
+        "Do not colour by direction: sentiment is set per metric",
+        "Do not show arrows without the word",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "default": "What moved"
+        },
+        "period": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"Oct → Nov 2026\""
+        },
+        "items": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral' }[] — values are pre-formatted strings."
+        },
+        "onViewAll": {
+          "type": "function",
+          "required": false
+        },
+        "viewAllLabel": {
+          "type": "string",
+          "default": "View full report"
+        },
+        "emptyTitle": {
+          "type": "string",
+          "default": "Nothing to compare yet"
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "experimentcard",
+      "group": "component",
+      "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
+      "useWhen": [
+        "show a running or finished experiment in a product or growth view",
+        "let someone ship the winner or stop a test with a confirmation",
+        "show a draft A/B/n split before it starts"
+      ],
+      "doNotUseWhen": [
+        "a feature flag on or off — Switch",
+        "a single KPI — Scorecard",
+        "a recommendation to act on — InsightCard"
+      ],
+      "doNot": [
+        "Do not invent a local ABTestCard or VariantList",
+        "Do not ship or stop without the AlertDialog",
+        "Do not mark the winner by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "metricLabel": {
+          "type": "string",
+          "required": true
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "running",
+            "concluded",
+            "stopped"
+          ],
+          "required": true,
+          "note": "Concluded with no winner reads \"Inconclusive\"."
+        },
+        "variants": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, traffic, value?, isWinner?, isLeading? }[]; lettered A, B, C…"
+        },
+        "dates": {
+          "type": "string",
+          "required": false
+        },
+        "confidenceNote": {
+          "type": "string",
+          "required": false
+        },
+        "onView": {
+          "type": "function",
+          "required": false
+        },
+        "onShip": {
+          "type": "function",
+          "required": false,
+          "note": "(variantId) => void, after the AlertDialog. The one solid primary."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "After a danger AlertDialog."
+        },
+        "onStart": {
+          "type": "function",
+          "required": false
+        },
+        "onEdit": {
+          "type": "function",
+          "required": false
+        },
+        "onExtend": {
+          "type": "function",
+          "required": false
+        },
+        "extendLabel": {
+          "type": "string",
+          "default": "Extend 7 days"
         },
         "loading": {
           "type": "boolean",

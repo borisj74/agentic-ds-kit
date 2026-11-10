@@ -1,0 +1,268 @@
+/* Paper frames are 370px; same custom-width pattern as InsightCard (--insight-width). */
+.card {
+  --setup-width: 24rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(100%, var(--setup-width));
+  min-width: 0;
+  padding: var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--space-6);
+}
+
+.headerIcon {
+  flex-shrink: 0;
+  color: var(--text-fg);
+}
+
+.title {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.description,
+.note {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.progress {
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-12);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-surface-md);
+}
+
+.rowCurrent {
+  background-color: var(--primary-subtle-strong);
+  animation: rowIn var(--motion-duration-200) var(--motion-ease-out);
+}
+
+.marker {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.ring {
+  box-sizing: border-box;
+  width: var(--space-5);
+  height: var(--space-5);
+  border: var(--border-width-medium) solid var(--line-strong);
+  border-radius: var(--radius-full);
+}
+
+.ringCurrent {
+  border-width: calc(var(--space-1) + 1px);
+  border-color: var(--primary);
+}
+
+.ringSkipped {
+  border-style: dashed;
+}
+
+.doneIcon {
+  color: var(--status-success);
+  animation: checkIn var(--motion-duration-300) var(--motion-ease-spring-soft);
+}
+
+.text {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.labelMuted {
+  color: var(--text-fg-muted);
+}
+
+.labelSkipped {
+  text-decoration: line-through;
+}
+
+.rowDescription {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.trail {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.doneWord,
+.skippedWord {
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+}
+
+.doneWord {
+  color: var(--status-success-text);
+}
+
+.skippedWord {
+  color: var(--text-fg-subtle);
+}
+
+.undo {
+  padding: 0;
+  font: inherit;
+  color: var(--primary-fg);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.undo:hover {
+  text-decoration: underline;
+}
+
+.undo:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2) var(--space-2);
+  text-align: center;
+}
+
+.completeIcon {
+  color: var(--status-success);
+  animation: checkIn var(--motion-duration-300) var(--motion-ease-spring-soft);
+}
+
+.completeTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.completeBody {
+  margin: 0 0 var(--space-2);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.loadingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loadingText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* "A check draws itself" (Paper DrawCheck 300ms): here the check scales and fades in, transform + opacity only. */
+@keyframes checkIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doneIcon,
+  .completeIcon,
+  .rowCurrent {
+    animation: none;
+  }
+}
+
+.card:focus {
+  outline: none;
+}
+
+.card:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}

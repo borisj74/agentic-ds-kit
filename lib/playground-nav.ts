@@ -27,6 +27,7 @@ export const COMPONENT_ITEMS = [
   "card",
   "carousel",
   "cell",
+  "changesummary",
   "chat",
   "checkbox",
   "citedanswer",
@@ -50,6 +51,7 @@ export const COMPONENT_ITEMS = [
   "drawer",
   "dropdownmenu",
   "empty",
+  "experimentcard",
   "field",
   "fieldset",
   "filterbar",
@@ -73,6 +75,7 @@ export const COMPONENT_ITEMS = [
   "modelpicker",
   "multiselect",
   "navigationmenu",
+  "notificationstack",
   "numberinput",
   "numbertransition",
   "pageheader",
@@ -89,6 +92,7 @@ export const COMPONENT_ITEMS = [
   "section",
   "segmentedcontrol",
   "select",
+  "setupguide",
   "shimmertext",
   "slider",
   "spinner",
@@ -136,6 +140,10 @@ export function componentLabel(id: string): string {
   if (id === "memorypanel") return "MemoryPanel";
   if (id === "tracewaterfall") return "TraceWaterfall";
   if (id === "usagemeter") return "UsageMeter";
+  if (id === "changesummary") return "ChangeSummary";
+  if (id === "experimentcard") return "ExperimentCard";
+  if (id === "notificationstack") return "NotificationStack";
+  if (id === "setupguide") return "SetupGuide";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
   if (id === "appheader") return "AppHeader";
@@ -198,6 +206,10 @@ export const COMPONENT_GROUPS = [
   {
     label: "AI",
     ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+  },
+  {
+    label: "SaaS",
+    ids: ["changesummary", "experimentcard", "notificationstack", "setupguide"],
   },
   {
     label: "Forms",
