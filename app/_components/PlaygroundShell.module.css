@@ -158,6 +158,10 @@
   display: none;
 }
 
+:global(html[data-customize="closed"]) .customizePinned {
+  display: block;
+}
+
 .scrim {
   display: none;
 }

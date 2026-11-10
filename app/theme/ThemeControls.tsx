@@ -108,7 +108,7 @@ export function ThemeControls({ onCollapse }: ThemeControlsProps) {
           ]}
         />
       </Section>
-      <Section title="Colour" size="sm" collapsible defaultOpen={false}>
+      <Section title="Colour" size="sm" collapsible defaultOpen>
         <div className={styles.stack}>
           <Field label="Preset" htmlFor={fieldId("preset")}>
             <Select

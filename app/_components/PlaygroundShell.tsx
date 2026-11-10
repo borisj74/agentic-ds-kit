@@ -99,6 +99,8 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
     customize.toggle();
   };
 
+  const themePanel = <ThemeControls onCollapse={customize.pinned ? undefined : customize.close} />;
+
   return (
     <div className={styles.frame}>
       <header className={styles.topbar}>
@@ -196,22 +198,18 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
         {customize.docked ? (
-          <aside id="customize-panel" className={styles.customize} aria-label="Theme">
-            <ThemeControls onCollapse={customize.close} />
+          <aside
+            id="customize-panel"
+            className={`${styles.customize} ${customize.pinned ? styles.customizePinned : ""}`}
+            aria-label="Theme"
+          >
+            {themePanel}
           </aside>
         ) : null}
         <main className={styles.main}>{children}</main>
       </div>
-      <Drawer
-        open={customize.sheet}
-        title="Theme"
-        side="left"
-        size="sm"
-        onClose={customize.close}
-      >
-        <div id="customize-panel">
-          <ThemeControls />
-        </div>
+      <Drawer open={customize.sheet} title="Theme" side="left" size="sm" onClose={customize.close}>
+        {customize.sheet ? <div id="customize-panel">{themePanel}</div> : null}
       </Drawer>
     </div>
   );

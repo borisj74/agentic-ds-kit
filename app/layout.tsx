@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, Inter } from "next/font/google";
+import { CURSOR_REF_GUARD_SCRIPT } from "./_components/cursor-ref-guard";
 import { PlaygroundShell } from "./_components/PlaygroundShell";
+import { ReleaseCursorRefGuard } from "./_components/ReleaseCursorRefGuard";
 import { PLAYGROUND_THEME_INIT_SCRIPT } from "@/lib/playground-theme";
 import "./globals.css";
 
@@ -66,9 +68,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: CURSOR_REF_GUARD_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: PLAYGROUND_THEME_INIT_SCRIPT }} />
       </head>
       <body>
+        <ReleaseCursorRefGuard />
         <PlaygroundShell>{children}</PlaygroundShell>
       </body>
     </html>

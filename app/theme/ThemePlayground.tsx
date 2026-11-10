@@ -12,7 +12,6 @@ import {
 } from "@/lib/theme-playground";
 import { ThemeScope } from "../_components/ThemeScope";
 import { ContrastList } from "./ContrastList";
-import { ThemeControls } from "./ThemeControls";
 import { ThemePatternPreview, type ThemePatternId } from "./ThemePatternPreview";
 import styles from "./theme.module.css";
 
@@ -47,15 +46,9 @@ export function ThemePlayground() {
     <div className={`layout-content ${styles.page}`}>
       <header className={styles.stack}>
         <h1 className={styles.title}>Theme</h1>
-        <p className={styles.lead}>
-          The same controls live in the header Theme panel. Changes stay inside the preview. The docs chrome keeps its own tokens.
-        </p>
+        <p className={styles.lead}>The Theme panel edits this preview. The docs chrome keeps its own tokens.</p>
       </header>
-      <div className={styles.workspace}>
-        <div className={styles.controlsColumn}>
-          <ThemeControls />
-        </div>
-        <div className={styles.previewColumn}>
+      <div className={styles.previewColumn}>
           <SegmentedControl
             ariaLabel="Preview pattern"
             size="sm"
@@ -63,11 +56,12 @@ export function ThemePlayground() {
             onChange={(value) => setPattern(value as ThemePatternId)}
             items={PATTERNS}
           />
-          <ThemeScope theme={state} className={styles.stage}>
-            <ThemePatternPreview pattern={pattern} />
-          </ThemeScope>
+          <div className={styles.stage}>
+            <ThemeScope theme={state} className={styles.scopeFill}>
+              <ThemePatternPreview pattern={pattern} />
+            </ThemeScope>
+          </div>
           <ContrastList pairs={pairs} />
-        </div>
       </div>
       <Section title="Export" description="Overrides only. Load them after tokens.css." size="sm">
         <div className={styles.stack}>

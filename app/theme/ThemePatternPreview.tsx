@@ -26,14 +26,18 @@ function ScaledFrame({ children }: { children: ReactNode }) {
   const designRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [height, setHeight] = useState(720);
+  const [designWidth, setDesignWidth] = useState(DESIGN_WIDTH);
 
   useEffect(() => {
     const slot = slotRef.current;
     const design = designRef.current;
     if (!slot || !design) return;
     const measure = () => {
-      const next = Math.min(1, slot.clientWidth / DESIGN_WIDTH);
+      const slotWidth = slot.clientWidth;
+      const next = Math.min(1, slotWidth / DESIGN_WIDTH);
+      const width = next < 1 ? DESIGN_WIDTH : Math.max(DESIGN_WIDTH, slotWidth);
       setScale(next);
+      setDesignWidth(width);
       setHeight(Math.ceil(design.scrollHeight * next));
     };
     const observer = new ResizeObserver(measure);
@@ -46,7 +50,11 @@ function ScaledFrame({ children }: { children: ReactNode }) {
   return (
     <div ref={slotRef} className={styles.slot}>
       <div className={styles.scaler} style={{ height }}>
-        <div ref={designRef} className={styles.design} style={{ width: DESIGN_WIDTH, transform: `scale(${scale})` }}>
+        <div
+          ref={designRef}
+          className={styles.design}
+          style={{ width: designWidth, transform: scale < 1 ? `scale(${scale})` : undefined }}
+        >
           {children}
         </div>
       </div>

@@ -13,23 +13,9 @@
 
 .lead {
   margin: var(--space-0);
-  max-width: var(--grid-width-sm);
   color: var(--text-secondary);
   font-size: var(--type-size-body);
   line-height: var(--type-line-body);
-}
-
-.workspace {
-  display: grid;
-  grid-template-columns: 320px minmax(720px, 1fr);
-  gap: var(--space-gap-lg);
-  align-items: start;
-  min-width: 0;
-}
-
-.controlsColumn {
-  width: 320px;
-  min-width: 320px;
 }
 
 .controls,
@@ -46,7 +32,8 @@
 }
 
 .previewColumn {
-  min-width: 720px;
+  min-width: 0;
+  width: 100%;
 }
 
 .panelHead {
@@ -85,16 +72,21 @@
 
 .stage {
   position: relative;
-  min-width: 720px;
+  width: 100%;
+  min-width: 0;
   overflow: hidden;
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
-  background: var(--bg-canvas);
+  background: var(--surface-card);
+}
+
+.scopeFill {
+  min-width: 0;
 }
 
 .slot {
   width: 100%;
-  min-width: 720px;
+  min-width: 0;
   overflow: hidden;
 }
 
