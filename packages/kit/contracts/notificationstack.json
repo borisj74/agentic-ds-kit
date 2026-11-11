@@ -122,7 +122,7 @@
     "requirements": [
       "the bell is a kit Button named \"Notifications, 2 unread\"; the count chip is aria-hidden",
       "the panel is the kit Popover dialog, named by label; Escape closes and returns focus to the bell",
-      "unread items say \"Unread:\" to screen readers, not just a dot",
+      "unread items say \"Unread:\" to screen readers, not just a bold title",
       "no count chip at zero",
       "new items fade and drop in on transform and opacity, off under prefers-reduced-motion"
     ]

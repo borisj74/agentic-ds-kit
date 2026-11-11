@@ -209,14 +209,11 @@ function Row({
   const tone = item.tone ?? "neutral";
   const content = (
     <>
-      <span className={styles.dotSlot} aria-hidden="true">
-        {!item.read ? <span className={styles.dot} /> : null}
-      </span>
       <span className={cx(styles.icon, TONE_CLASS[tone])} aria-hidden="true">
         <LucideByName name={item.icon ?? TONE_ICON[tone]} size={16} />
       </span>
       <span className={styles.text}>
-        <span className={styles.itemTitle}>
+        <span className={cx(styles.itemTitle, item.read && styles.itemTitleRead)}>
           {!item.read ? <span className={styles.srOnly}>Unread: </span> : null}
           {item.title}
         </span>

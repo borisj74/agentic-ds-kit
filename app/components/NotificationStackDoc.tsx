@@ -46,13 +46,13 @@ export function NotificationStackDoc() {
       variants={[
         {
           title: "Open — unread items",
-          about: "Unread items have a dot and say Unread to screen readers; the header shows the unread count and Mark all read.",
+          about: "Unread items have a bold title and say Unread to screen readers; the header shows the unread count and Mark all read.",
           code: `<NotificationStack inline items={notifications} onMarkAll={markAll} onViewAll={viewAll} />`,
           render: <NotificationStack inline items={ITEMS} onItemClick={noop} onMarkAll={noop} onViewAll={noop} />,
         },
         {
           title: "All read",
-          about: "No dots, no count; Mark all read is disabled.",
+          about: "No bold titles, no count; Mark all read is disabled.",
           code: `<NotificationStack inline items={readNotifications} onMarkAll={markAll} onViewAll={viewAll} />`,
           render: <NotificationStack inline items={READ} onItemClick={noop} onMarkAll={noop} onViewAll={noop} />,
         },
