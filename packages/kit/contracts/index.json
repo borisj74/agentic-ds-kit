@@ -973,5 +973,14 @@
     "status": "stable",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add integration-settings"
+  },
+  {
+    "id": "settings",
+    "intent": "Settings pages example, Stage look: Profile, Billing, Team, Notifications and Security with their states, on the inset panel of a layout-shell--inset shell whose SideNav lists the sections.",
+    "group": "pattern",
+    "path": "contracts/patterns/settings.json",
+    "status": "stable",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add settings"
   }
 ]

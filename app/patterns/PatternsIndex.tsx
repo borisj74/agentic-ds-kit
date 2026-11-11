@@ -8,6 +8,7 @@ import { AppShellDemo } from "../_components/AppShellDemo";
 import { DashboardDemo } from "../_components/DashboardDemo";
 import { LayoutsPreview } from "../_components/LayoutsDemo";
 import { SaasPatternDemo } from "../_components/SaasPatternDemo";
+import { SettingsAreaDemo } from "../_components/ScreensPatternDemo";
 import { SignInDemo } from "../_components/SignInDemo";
 import playground from "../playground.module.css";
 import styles from "./patterns.module.css";
@@ -25,11 +26,13 @@ const BLURB: Record<PatternSlug, string> = {
   layouts: "Top bar and side nav, composed from kit components.",
   "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",
   "integration-settings": "One integration's status, sync settings, scopes, and a confirmed disconnect.",
+  "settings-area": "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
 };
 
 function PatternPreview({ slug }: { slug: PatternSlug }) {
   if (slug === "sign-in") return <SignInDemo />;
   if (slug === "billing-schedule" || slug === "integration-settings") return <SaasPatternDemo pattern={slug} />;
+  if (slug === "settings-area") return <SettingsAreaDemo />;
   if (slug === "layouts") return <LayoutsPreview />;
   if (slug === "app-shell") return <AppShellDemo />;
   if (slug === "dashboard" || slug === "settings" || slug === "list-detail" || slug === "empty") {

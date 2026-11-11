@@ -7,7 +7,7 @@ import { IntegrationSettingsPattern } from "../../packages/kit/patterns/Integrat
 import styles from "../playground.module.css";
 import { PreviewScope } from "./ThemeScope";
 
-type BillingView = "history" | "next" | "empty" | "loading";
+type BillingView = "history" | "next" | "summary" | "empty" | "loading";
 type SettingsView = "connected" | "syncing" | "error" | "needsReauth" | "disconnected";
 
 const noop = () => {};
@@ -22,6 +22,7 @@ export function SaasPatternDemo({ pattern }: { pattern: "billing-schedule" | "in
   const billingTabs = [
     { id: "history", label: "History" },
     { id: "next", label: "Next charge" },
+    { id: "summary", label: "Summary" },
     { id: "empty", label: "Empty" },
     { id: "loading", label: "Loading" },
   ];
@@ -57,6 +58,8 @@ export function SaasPatternDemo({ pattern }: { pattern: "billing-schedule" | "in
               <BillingSchedulePattern
                 charges={billing === "empty" ? [] : undefined}
                 nextOnly={billing === "next"}
+                summary={billing === "summary"}
+                onViewAll={billing === "summary" ? noop : undefined}
                 loading={billing === "loading"}
                 onDownloadAll={noop}
                 onChangeCard={noop}

@@ -2,6 +2,9 @@
 
 import { useEffect, useId, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { ThemeScopeProvider } from "agentic-ds-kit";
+// Pattern demos render kit source (packages/kit/patterns → ../../ui), a second module instance with
+// its own scope context. Provide both, so their portals (Drawer, AlertDialog, menus) match the preview.
+import { ThemeScopeProvider as SourceThemeScopeProvider } from "../../packages/kit/ui/shared/themeScope";
 import { scopeCss, themeDeclarations, type ThemeState } from "@/lib/theme-playground";
 import { readPatternTheme, subscribeTheme } from "@/lib/theme-store";
 import { themeFontClassName } from "./theme-fonts";
@@ -36,17 +39,19 @@ export function ThemeScope({
 
   return (
     <ThemeScopeProvider value={{ id, mode: theme?.mode ?? "light", fontClassName }}>
-      <div
-        data-theme-scope={id}
-        data-theme={theme?.mode === "dark" ? "dark" : undefined}
-        data-preview-scope=""
-        data-theme-ready={theme ? "" : undefined}
-        className={[className, fontClassName].filter(Boolean).join(" ")}
-        style={style}
-      >
-        {css ? <style>{css}</style> : null}
-        {children}
-      </div>
+      <SourceThemeScopeProvider value={{ id, mode: theme?.mode ?? "light", fontClassName }}>
+        <div
+          data-theme-scope={id}
+          data-theme={theme?.mode === "dark" ? "dark" : undefined}
+          data-preview-scope=""
+          data-theme-ready={theme ? "" : undefined}
+          className={[className, fontClassName].filter(Boolean).join(" ")}
+          style={style}
+        >
+          {css ? <style>{css}</style> : null}
+          {children}
+        </div>
+      </SourceThemeScopeProvider>
     </ThemeScopeProvider>
   );
 }

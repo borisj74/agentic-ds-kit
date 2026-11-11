@@ -156,6 +156,29 @@ const rel = relative(cwd, target).split("\\").join("/");
 const { version } = JSON.parse(await readFile(join(pkgRoot, "package.json"), "utf8"));
 console.log(`Added ${pattern.id} (agentic-ds-kit ${version}) to ${rel}/`);
 for (const file of pattern.files) console.log(`  ${rel}/${file}${clashes.includes(file) ? "  (overwritten)" : ""}`);
+// A pattern that builds on others (manifest `requires`) imports them as `../<id>`: copy each
+// one beside the target unless that folder is already there (you own it; --force does not touch it).
+const added = new Set([pattern.id]);
+async function addRequired(entry) {
+  for (const depId of entry.requires ?? []) {
+    if (added.has(depId)) continue;
+    added.add(depId);
+    const dep = manifest.find((p) => p.id === depId);
+    if (!dep) fail(`${entry.id} requires "${depId}", which is missing from this install. Reinstall agentic-ds-kit.`);
+    const depTarget = join(dirname(target), depId);
+    const depRel = relative(cwd, depTarget).split("\\").join("/");
+    if (existsSync(depTarget)) {
+      console.log(`  ${depRel}/  (kept: ${entry.id} imports it as ../${depId})`);
+    } else {
+      await mkdir(depTarget, { recursive: true });
+      for (const file of dep.files) await copyFile(join(srcRoot, dep.id, file), join(depTarget, file));
+      console.log(`Added ${dep.id} to ${depRel}/ (${entry.id} imports it as ../${depId})`);
+      for (const file of dep.files) console.log(`  ${depRel}/${file}`);
+    }
+    await addRequired(dep);
+  }
+}
+await addRequired(pattern);
 // Copies from 0.4.5 and earlier have Foo.module.css; the new Foo.tsx imports Foo.css instead.
 const stale = pattern.files
   .filter((f) => f.endsWith(".css"))

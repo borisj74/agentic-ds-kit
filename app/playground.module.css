@@ -195,6 +195,12 @@
   align-self: stretch;
 }
 
+/* Screen picker above a screens demo (settings-area, onboarding): a Select, not a long Tabs row. */
+.screenPicker {
+  width: min(100%, var(--layout-sidebar));
+}
+
+
 .browserPage {
   flex: 1;
   min-height: 0;

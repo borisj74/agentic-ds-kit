@@ -9,7 +9,7 @@ import styles from "./GridFoundations.module.css";
 type GridTab = "primitives" | "semantics";
 
 const PATTERNS = [
-  { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav. With no top bar (layout-app first) it is one row. Add layout-shell--viewport to fill the viewport (100dvh)." },
+  { name: "Shell", className: ".layout-shell", copy: "AppHeader full-bleed over SideNav + page. No gap between header and nav. With no top bar (layout-app first) it is one row. Add layout-shell--viewport to fill the viewport (100dvh), and layout-shell--inset for the Stage look: the nav on the canvas, the page on an inset card panel (the settings and onboarding examples)." },
   { name: "App", className: ".layout-app", copy: "SideNav column + fluid canvas. Lives under layout-shell." },
   { name: "Canvas", className: ".layout-canvas", copy: "White surface-card page frame. Default: layout-header (title row) over layout-content (padded, scrolling stack). Put content straight in and the canvas pads and stacks it." },
   { name: "Workspace", className: ".layout-workspace", copy: "Primary content + optional context rail (assistant, inspector, detail). Default: first child is the main column (layout-content or layout-canvas), second the rail. Put content straight into the main column and it is padded and stacked; the rail stays flush." },

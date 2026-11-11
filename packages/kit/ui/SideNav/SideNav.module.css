@@ -21,8 +21,9 @@
 
 /* Trailing edge lives on the shell. The inner panel stays full sidebar
    width and is clipped when closed — a panel border would vanish. */
+/* --sidenav-divider: the rule beside a flush rail. layout-shell--inset sets none (nav on the canvas). */
 .radiusNone {
-  border-inline-end: var(--border-divider) solid var(--border-faint);
+  border-inline-end: var(--sidenav-divider, var(--border-divider) solid var(--border-faint));
 }
 
 .radiusNone .panel {

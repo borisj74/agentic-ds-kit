@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -10375,6 +10375,26 @@
         "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
         "When access expires, Reconnect is the solid primary and Save steps down to outline",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
+    },
+    {
+      "id": "settings",
+      "group": "pattern",
+      "intent": "Settings pages in the Stage look: Profile, Billing, Team, Notifications and Security, each under a Settings › section breadcrumb on the inset panel of a layout-shell--inset app shell whose SideNav lists the sections; with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "The section links are in your app's SideNav (a nav landmark) under a Settings group built from SETTINGS_SECTIONS, with the current section marked; below --grid-breakpoint-md they move into the app shell's kit Drawer with the rest of the nav",
+        "Stage look: the app shell uses layout-shell--inset (the SideNav on the canvas, this page on the inset card panel); the pattern renders its own <main>, so don't wrap it in another main",
+        "Page layout uses kit layout classes (layout-shell--inset, layout-canvas, layout-header, layout-content, layout-split*) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints",
+        "Wrap every labeled input in Field; Switches in a table row get an accessible name that says the row and the channel",
+        "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
+        "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
+        "An overdue invoice is a kit Alert (danger) that says the invoice, the amount and what happens next; Pay now is then the one solid primary and Upgrade steps away",
+        "Delete workspace is a danger action behind a kit AlertDialog; Cancel returns focus to it",
+        "Money arrives pre-formatted from your app; label example data as example"
       ]
     }
   ]

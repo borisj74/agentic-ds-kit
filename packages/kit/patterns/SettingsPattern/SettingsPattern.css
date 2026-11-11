@@ -1,0 +1,167 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The settings-pattern__ prefix keeps names unique. */
+
+/* The page is the inset card panel of layout-shell--inset (layout-app's last child). */
+.settings-pattern {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Breadcrumb and page-level actions (Help, bell) share the top row, as in Paper's Stage frames. */
+.settings-pattern > .layout-header > .settings-pattern__top {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-gap-sm);
+  min-width: 0;
+}
+
+/* Profile and Notifications: the form wraps the content and a save bar that sticks to the bottom of the page. */
+.settings-pattern__form {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+}
+
+.settings-pattern__savebar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-gap-sm);
+  padding-block: var(--space-inset-md);
+  padding-inline: var(--layout-margin-md);
+  background: var(--surface-card);
+  border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+.settings-pattern__stack,
+.settings-pattern__fields {
+  display: grid;
+  gap: var(--space-gap-md);
+  align-content: start;
+  min-width: 0;
+}
+
+.settings-pattern__notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-gap-sm);
+}
+
+.settings-pattern__notice > :first-child {
+  align-self: stretch;
+}
+
+.settings-pattern__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-gap-sm);
+}
+
+.settings-pattern__plan,
+.settings-pattern__row,
+.settings-pattern__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-gap-md);
+}
+
+.settings-pattern__row--center,
+.settings-pattern__toolbar {
+  align-items: center;
+}
+
+.settings-pattern__search {
+  flex: 0 1 var(--layout-sidebar);
+  min-width: 0;
+}
+
+.settings-pattern__figure-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+}
+
+.settings-pattern__figure-group--end {
+  align-items: flex-end;
+  margin-inline-start: auto;
+}
+
+.settings-pattern__figure {
+  font-size: var(--type-size-heading-3);
+  font-weight: var(--type-weight-metric);
+  line-height: var(--type-line-heading-3);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg);
+}
+
+/* Before __caption, so a mono caption keeps the caption colour. */
+.settings-pattern__mono {
+  color: var(--text-fg);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.settings-pattern__caption {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.settings-pattern__strong {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.settings-pattern__two-line {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.settings-pattern__line,
+.settings-pattern__member,
+.settings-pattern__photo,
+.settings-pattern__inbox {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  min-width: 0;
+}
+
+.settings-pattern__member {
+  flex-wrap: nowrap;
+}
+
+.settings-pattern__photo {
+  gap: var(--space-gap-md);
+}
+
+.settings-pattern__photo-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-stack-xs);
+}
+
+/* Email digest beside the inbox: the inbox row sits on the Select's line. */
+.settings-pattern__digest {
+  align-items: center;
+}
+
+.settings-pattern__digest > .settings-pattern__inbox {
+  justify-self: end;
+}
