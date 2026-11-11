@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { OnboardingPattern, type OnboardingStep, type WorkspaceState } from "../../packages/kit/patterns/OnboardingPattern";
 import {
   Button,
   Input,
@@ -171,6 +172,60 @@ export function SettingsAreaDemo({ view }: { view?: string }) {
           >
             {settings}
           </AppShellPattern>
+        </PreviewScope>
+      </div>
+    </div>
+  );
+}
+
+/** The screens on Paper p-6-0 (Onboarding): each step, plus the workspace step's error and submitting states. */
+const ONBOARDING_SCREENS: { id: string; label: string; step: OnboardingStep; workspace?: WorkspaceState }[] = [
+  { id: "welcome", label: "01 Welcome", step: "welcome" },
+  { id: "workspace", label: "02 Workspace", step: "workspace" },
+  { id: "workspace-error", label: "02b Workspace · validation error", step: "workspace", workspace: "error" },
+  { id: "workspace-submitting", label: "02c Workspace · submitting", step: "workspace", workspace: "submitting" },
+  { id: "connect", label: "03 Connect or choose", step: "connect" },
+  { id: "done", label: "04 Done", step: "done" },
+];
+
+/**
+ * The onboarding pattern in the browser frame. A Select picks one of Paper's screens; the
+ * pattern's own buttons also move between steps (creating the workspace waits a moment).
+ * `?view=<screen id>` opens a screen directly (e.g. workspace-error).
+ */
+export function OnboardingDemo({ view }: { view?: string }) {
+  const [screenId, setScreenId] = useState(ONBOARDING_SCREENS.some((item) => item.id === view) ? view! : "welcome");
+  const screen = ONBOARDING_SCREENS.find((item) => item.id === screenId) ?? ONBOARDING_SCREENS[0];
+
+  return (
+    <div className={styles.signInDemo}>
+      <div className={styles.screenPicker}>
+        <Select
+          id="onboarding-screen"
+          size="sm"
+          ariaLabel="Onboarding screen"
+          options={ONBOARDING_SCREENS.map((item) => ({ value: item.id, label: item.label }))}
+          value={screenId}
+          onChange={(value) => setScreenId(String(value))}
+        />
+      </div>
+      <div className={styles.browser}>
+        <div className={styles.browserChrome} aria-hidden="true">
+          <div className={styles.traffic}>
+            <span className={`${styles.trafficDot} ${styles.trafficClose}`} />
+            <span className={`${styles.trafficDot} ${styles.trafficMin}`} />
+            <span className={`${styles.trafficDot} ${styles.trafficMax}`} />
+          </div>
+          <div className={styles.urlBar}>{`app.northwind.example/setup/${screen.step}`}</div>
+        </div>
+        <PreviewScope className={styles.scopeFill}>
+          <OnboardingPattern
+            viewport={false}
+            step={screen.step}
+            onStepChange={(step) => setScreenId(step)}
+            workspaceState={screen.workspace}
+            onCreateWorkspace={() => new Promise((resolve) => setTimeout(resolve, 1200))}
+          />
         </PreviewScope>
       </div>
     </div>

@@ -363,6 +363,7 @@ export const PATTERN_ITEMS = [
   { slug: "billing-schedule", label: "Billing schedule" },
   { slug: "integration-settings", label: "Integration settings" },
   { slug: "settings-area", label: "Settings area" },
+  { slug: "onboarding", label: "Onboarding" },
   { slug: "layouts", label: "Layouts" },
 ] as const;
 
