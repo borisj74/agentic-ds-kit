@@ -131,6 +131,7 @@ export function PatternPreview({
           {tab === "preview" ? (
             <>
               <SegmentedControl
+                className={styles.iconSegments}
                 size="sm"
                 ariaLabel="Theme mode"
                 value={shownMode}
@@ -141,6 +142,7 @@ export function PatternPreview({
                 ]}
               />
               <SegmentedControl
+                className={styles.iconSegments}
                 size="sm"
                 ariaLabel="Width"
                 value={device}

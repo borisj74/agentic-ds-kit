@@ -260,6 +260,30 @@
   }
 }
 
+/* Icon-only segments (Light / Dark, Desktop / Mobile): each label stays in the DOM as the
+   segment's accessible name, visually hidden. */
+.iconSegments [role="radio"] {
+  justify-content: center;
+  min-inline-size: var(--space-8);
+  min-block-size: var(--space-8);
+}
+
+@media (width < 64rem) {
+  .iconSegments [role="radio"] {
+    min-inline-size: var(--space-10);
+    min-block-size: var(--space-10);
+  }
+}
+
+.iconSegments [role="radio"] > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* The screen shown, beside Preview / Code. */
 .previewLabel {
   font-size: var(--type-size-body-sm);
