@@ -160,20 +160,32 @@
   color: var(--text-fg-muted);
 }
 
+/* The detail fills the row so an embedded card's actions sit on the
+   list's last row. */
 .pane {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
 
 .paneInner {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   animation: inbox-fade var(--motion-duration-150) var(--motion-ease-out);
 }
 
 .embedded {
+  flex: 1 1 auto;
   width: 100%;
   padding: 0;
   border: 0;
   box-shadow: none;
   animation: none;
+}
+
+.embedded > :last-child {
+  margin-top: auto;
 }
 
 .hint {
