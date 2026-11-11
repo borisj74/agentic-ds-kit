@@ -82,15 +82,12 @@
 
 .thumb {
   position: relative;
-  aspect-ratio: 2 / 1;
-  margin: var(--space-2);
-  margin-bottom: 0;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   pointer-events: none;
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-sm);
-  box-shadow: var(--shadow-sm);
+  background-color: var(--bg-canvas);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
 }
 
 .scene {
@@ -131,4 +128,98 @@
 
 .variantFrame {
   margin-top: var(--space-6);
+}
+
+/* Pattern page: one readable column; the preview spans it. */
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--layout-container-xl);
+  margin-inline: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-end: var(--space-10);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-size-heading-5);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-heading-5);
+  color: var(--text-fg);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--layout-container-md);
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  color: var(--text-fg);
+  text-decoration: none;
+}
+
+.chip:hover {
+  background: var(--bg-subtle);
+}
+
+.thumbFrame {
+  display: block;
+}
+
+.thumbFrame > div {
+  border: 0;
+  border-radius: 0;
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.countBadge {
+  padding: 0 var(--space-2);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  color: var(--text-fg-muted);
+}
+
+/* Picking a screen scrolls the preview to the top, clear of the docs top bar. */
+.previewAnchor {
+  scroll-margin-top: var(--space-6);
 }
