@@ -2,7 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav, Button, Drawer, Input, Tooltip } from "agentic-ds-kit";
+import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { buildSiteNavItems, filterSiteNavItems } from "@/lib/playground-nav";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
@@ -144,19 +144,17 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
             <NisthaLogo />
             <span className={styles.version}>{kitPackage.version}</span>
           </div>
-          <Tooltip content="Hide sidebar" placement="right">
-            <Button
-              id="sidebar-close"
-              size="sm"
-              appearance="ghost"
-              mode="neutral"
-              iconStart="PanelLeftClose"
-              ariaLabel="Hide sidebar"
-              aria-controls="site-sidebar"
-              aria-expanded={sidebar.open}
-              onClick={hideSidebar}
-            />
-          </Tooltip>
+          <Button
+            id="sidebar-close"
+            size="sm"
+            appearance="ghost"
+            mode="neutral"
+            iconStart="PanelLeftClose"
+            ariaLabel="Hide sidebar"
+            aria-controls="site-sidebar"
+            aria-expanded={sidebar.open}
+            onClick={hideSidebar}
+          />
         </div>
         <SiteNav query={query} onQuery={setQuery} pathname={pathname} searchId="site-nav-search" />
       </div>
@@ -171,19 +169,17 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
         <header className={styles.topbar}>
           {/* Shown (by CSS, from html[data-sidebar]) only while the sidebar is hidden. */}
           <span className={styles.sidebarOpen}>
-            <Tooltip content="Show sidebar" placement="right">
-              <Button
-                id="sidebar-open"
-                size="sm"
-                appearance="ghost"
-                mode="neutral"
-                iconStart="PanelLeftOpen"
-                ariaLabel="Show sidebar"
-                aria-controls="site-sidebar"
-                aria-expanded={sidebar.open}
-                onClick={showSidebar}
-              />
-            </Tooltip>
+            <Button
+              id="sidebar-open"
+              size="sm"
+              appearance="ghost"
+              mode="neutral"
+              iconStart="PanelLeftOpen"
+              ariaLabel="Show sidebar"
+              aria-controls="site-sidebar"
+              aria-expanded={sidebar.open}
+              onClick={showSidebar}
+            />
           </span>
           <Button
             id="theme-toggle"
