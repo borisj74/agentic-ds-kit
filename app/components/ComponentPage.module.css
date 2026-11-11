@@ -112,14 +112,28 @@
   gap: var(--space-2);
 }
 
-.copyLabel {
-  color: var(--text-fg-muted);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
+.copyTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.copyTargetsNarrow {
-  display: none;
+/* Square logo buttons: 40px on wide screens, 44px touch targets below md. */
+.copyTool {
+  inline-size: var(--space-10);
+  block-size: var(--space-10);
+  padding: 0;
+}
+
+.copyToolText,
+.copyMain {
+  block-size: var(--space-10);
+}
+
+.copyDivider {
+  align-self: stretch;
+  margin-block: var(--space-2);
 }
 
 /* When to use */
@@ -298,27 +312,29 @@
     padding: var(--space-4) var(--space-4) var(--space-12);
   }
 
+  /* Logo row first, then Copy across the full width: the row plus Copy is wider than a 390 phone. */
   .copy {
     position: static;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
   }
 
-  .copyLabel {
-    grid-column: 1 / -1;
-  }
-
-  .copyTargetsWide {
+  .copyDivider {
     display: none;
   }
 
-  .copyTargetsNarrow {
-    display: block;
+  .copyMainWrap,
+  .copyMain {
+    inline-size: 100%;
   }
 
-  .copy :global(button) {
-    min-height: var(--space-10);
+  .copyTool {
+    inline-size: calc(var(--space-10) + var(--space-1));
+    block-size: calc(var(--space-10) + var(--space-1));
+  }
+
+  .copyToolText,
+  .copyMain {
+    block-size: calc(var(--space-10) + var(--space-1));
   }
 
   .stageWrap > :first-child [role="tablist"] {
