@@ -474,6 +474,15 @@ function componentLeaves(ids: readonly string[], pathname: string) {
     .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
 }
 
+/** Pattern pages A–Z, for the site nav under Patterns. */
+function patternLeaves(pathname: string): AppNavItem[] {
+  return PATTERN_ITEMS.map((item) => ({
+    href: `/patterns/${item.slug}`,
+    label: item.label,
+    active: pathname === `/patterns/${item.slug}`,
+  })).sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
+}
+
 /** Top-level pages in the site nav, in order. */
 export const SITE_PAGES = [
   { href: "/get-started", label: "Get started", match: ["/get-started", "/installation"] },
@@ -503,7 +512,10 @@ export function buildSiteNavItems(pathname: string): AppNavItem[] {
   // shell indents them).
   return SITE_PAGES.flatMap((page) => {
     const item = { href: page.href, label: page.label, active: pageActive(pathname, page.match) };
-    return page.href === "/components" ? [item, ...groups] : [item];
+    if (page.href === "/components") return [item, ...groups];
+    // Patterns list their pages by name, flat (no subgroups), right under Patterns.
+    if (page.href === "/patterns") return [{ ...item, active: pathname === "/patterns" || pathname === "/studio" }, ...patternLeaves(pathname)];
+    return [item];
   });
 }
 

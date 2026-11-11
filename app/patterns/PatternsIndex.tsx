@@ -60,7 +60,9 @@ export function PatternsIndex() {
   const theme = usePatternTheme();
   const mode = theme?.mode ?? "light";
 
-  const screens = PATTERN_ITEMS.flatMap((item): ScreenEntry[] => {
+  // By name, like the nav: A–Z.
+  const byName = [...PATTERN_ITEMS].sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
+  const screens = byName.flatMap((item): ScreenEntry[] => {
     const slug = item.slug;
     if (!isScreenSlug(slug)) {
       return [{ key: item.slug, title: item.label, description: PATTERN_BLURBS[item.slug], href: `/patterns/${item.slug}`, slug: null, view: null, copy: undefined }];

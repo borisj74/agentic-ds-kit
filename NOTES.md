@@ -13,6 +13,8 @@ Boris asked for pattern pages that look like affectUI's screens catalogue (affec
 - **Index = screens list** (Boris: "a list of patterns/screens as in affectui.com/screens"): every pattern state is its own card ("Settings area / Billing · overdue"), two a row, with a live thumbnail (the frame, scaled and inert), one line and a copy button for the add command; a card opens its pattern on that state. Layouts stays one card with its in-page demo (it isn't a pattern).
 - **No state dropdown** (Boris didn't like it): a pattern page lists its screens under the preview as thumbnails; picking one swaps the preview, scrolls to it and sets `?view=` without a navigation.
 - **Dev only:** Next's dev indicator shows inside each frame in `next dev`; production builds don't have it.
+- **Nav:** the site nav lists every pattern page by name (A–Z) right under Patterns, flat, indented like the component groups (Boris: "listed by name, like components … don't have to be in subsections"). The screens index is A–Z too.
+- **Theme panel closed by default** (Boris): it no longer docks open on Patterns and Studio with no saved choice; it opens only on the Theme page or when you open it (the choice is saved as before).
 
 ## 2026-11-10: Screens (feat/screens-patterns-1, -2)
 

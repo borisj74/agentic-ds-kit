@@ -112,6 +112,12 @@
   margin-left: var(--space-3);
 }
 
+/* Pattern pages sit flat under Patterns, indented like the component groups. */
+.navHost nav a[href^="/patterns/"] {
+  margin-left: var(--space-3);
+  width: calc(100% - var(--space-3));
+}
+
 .navHost nav button[aria-expanded] > span:first-child {
   font-family: var(--type-family-overline);
   font-size: var(--type-size-overline-xs);
