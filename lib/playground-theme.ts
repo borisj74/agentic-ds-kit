@@ -14,6 +14,8 @@ export const PLAYGROUND_NEUTRAL_KEY = "playground-neutral";
 export const PLAYGROUND_SPACE_SCALE_KEY = "playground-space-scale";
 export const PLAYGROUND_SHADOW_INTENSITY_KEY = "playground-shadow-intensity";
 export const PLAYGROUND_CUSTOMIZE_STORAGE_KEY = "playground-customize-open";
+/** "closed" hides the docs sidebar on wide screens (the head script applies it before paint). */
+export const PLAYGROUND_SIDEBAR_STORAGE_KEY = "playground-sidebar";
 
 export type PlaygroundTheme = "light" | "dark";
 export type PlaygroundColorTheme = "ink" | "blue" | "violet" | "teal" | "custom";
@@ -585,7 +587,7 @@ export function readPlaygroundAppearance() {
  * preview theme is saved ("nistha-theme-playground", THEME_STORAGE_KEY in theme-playground.ts),
  * so previews stay hidden until that theme is applied instead of flashing the default.
  */
-export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark")root.setAttribute("data-theme","dark");if(localStorage.getItem("nistha-theme-playground"))root.setAttribute("data-preview-theme","stored");}catch(e){}})();`;
+export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);if(localStorage.getItem("${PLAYGROUND_SIDEBAR_STORAGE_KEY}")==="closed")root.setAttribute("data-sidebar","closed");var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark")root.setAttribute("data-theme","dark");if(localStorage.getItem("nistha-theme-playground"))root.setAttribute("data-preview-theme","stored");}catch(e){}})();`;
 
 
 export { COLOR_SHORTCUTS };

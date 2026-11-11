@@ -2,7 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
+import { AppNav, Button, Drawer, Input, Tooltip } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { buildSiteNavItems, filterSiteNavItems } from "@/lib/playground-nav";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
@@ -10,6 +10,7 @@ import { NisthaLogo } from "./NisthaLogo";
 import { PlaygroundCommand, openPlaygroundCommand } from "./PlaygroundCommand";
 import { ThemeActions, ThemePanel } from "./ThemePanel";
 import { useCustomizeOpen } from "./useCustomizeOpen";
+import { useSidebarOpen } from "./useSidebarOpen";
 import styles from "./PlaygroundShell.module.css";
 
 const GITHUB_URL = "https://github.com/borisj74/agentic-ds-kit";
@@ -66,6 +67,7 @@ export function PlaygroundShell({ children }: { children: React.ReactNode }) {
 function DocsShell({ children, pathname }: { children: React.ReactNode; pathname: string }) {
   const siteMode = useSyncExternalStore(subscribeRootTheme, readPlaygroundTheme, readServerTheme);
   const customize = useCustomizeOpen(pathname);
+  const sidebar = useSidebarOpen();
   const [navOpenOn, setNavOpenOn] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -83,6 +85,22 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
   function closeThemePanel() {
     customize.close();
     window.requestAnimationFrame(() => document.getElementById("theme-toggle")?.focus());
+  }
+
+  // Hide and Show swap places (sidebar brand row ↔ topbar start): move focus to the one that
+  // appears, two frames on so it lands after the browser has dropped focus from the hidden one.
+  function focusAfterSwap(id: string) {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => document.getElementById(id)?.focus()));
+  }
+
+  function hideSidebar() {
+    sidebar.setOpen(false);
+    focusAfterSwap("sidebar-open");
+  }
+
+  function showSidebar() {
+    sidebar.setOpen(true);
+    focusAfterSwap("sidebar-close");
   }
 
   const themePanel = <ThemePanel onClose={customize.pinned ? undefined : closeThemePanel} />;
@@ -120,10 +138,25 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
         </div>
       </header>
 
-      <div className={styles.sidebar}>
+      <div id="site-sidebar" className={styles.sidebar}>
         <div className={styles.brandRow}>
-          <NisthaLogo />
-          <span className={styles.version}>{kitPackage.version}</span>
+          <div className={styles.brand}>
+            <NisthaLogo />
+            <span className={styles.version}>{kitPackage.version}</span>
+          </div>
+          <Tooltip content="Hide sidebar" placement="right">
+            <Button
+              id="sidebar-close"
+              size="sm"
+              appearance="ghost"
+              mode="neutral"
+              iconStart="PanelLeftClose"
+              ariaLabel="Hide sidebar"
+              aria-controls="site-sidebar"
+              aria-expanded={sidebar.open}
+              onClick={hideSidebar}
+            />
+          </Tooltip>
         </div>
         <SiteNav query={query} onQuery={setQuery} pathname={pathname} searchId="site-nav-search" />
       </div>
@@ -136,6 +169,22 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
 
       <div className={styles.panel}>
         <header className={styles.topbar}>
+          {/* Shown (by CSS, from html[data-sidebar]) only while the sidebar is hidden. */}
+          <span className={styles.sidebarOpen}>
+            <Tooltip content="Show sidebar" placement="right">
+              <Button
+                id="sidebar-open"
+                size="sm"
+                appearance="ghost"
+                mode="neutral"
+                iconStart="PanelLeftOpen"
+                ariaLabel="Show sidebar"
+                aria-controls="site-sidebar"
+                aria-expanded={sidebar.open}
+                onClick={showSidebar}
+              />
+            </Tooltip>
+          </span>
           <Button
             id="theme-toggle"
             size="sm"
