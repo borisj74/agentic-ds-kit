@@ -199,14 +199,11 @@ export function AgentInbox(props: AgentInboxProps) {
               <li key={item.id} className={styles.cell}>
                 <button
                   type="button"
-                  className={cx(styles.row, styles[item.type], isSelected && styles.selected)}
+                  className={cx(styles.row, styles[item.type], item.read && styles.read, isSelected && styles.selected)}
                   aria-current={isSelected ? "true" : undefined}
                   aria-controls={isSelected ? detailId : undefined}
                   onClick={() => onSelect?.(item.id)}
                 >
-                  <span className={styles.unreadSlot} aria-hidden="true">
-                    {!item.read ? <span className={styles.unread} /> : null}
-                  </span>
                   <Icon size={16} strokeWidth={ICON_STROKE} className={styles.typeIcon} aria-hidden="true" />
                   <span className={styles.rowText}>
                     <span className={styles.rowHead}>
