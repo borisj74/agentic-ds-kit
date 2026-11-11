@@ -59,7 +59,34 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  padding: var(--space-1) var(--space-1) 0;
+  padding: var(--space-1) 0 0 var(--space-1);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* Hidden sidebar (wide screens): the panel takes the width and Show sidebar starts the topbar. */
+:global(html[data-sidebar="closed"]) .sidebar {
+  display: none;
+}
+
+@media (width >= 64rem) {
+  :global(html[data-sidebar="closed"]) .frame {
+    padding-left: var(--stage-gap);
+  }
+}
+
+.sidebarOpen {
+  display: none;
+  margin-inline-end: auto;
+}
+
+:global(html[data-sidebar="closed"]) .sidebarOpen {
+  display: inline-flex;
 }
 
 .version {
