@@ -9,6 +9,7 @@ import { ScreenCard } from "../_components/ScreenCard";
 import { usePatternTheme } from "../_components/ThemeScope";
 import { CodeBlock } from "../components/CodeBlock";
 import { PATTERN_BLURBS, PATTERN_VIEWS, isScreenSlug, type ScreenSlug } from "@/lib/pattern-screens";
+import { patternPrompt } from "@/lib/pattern-prompt";
 import { PATTERN_ITEMS, type PatternSlug } from "@/lib/playground-nav";
 import appShell from "../../packages/kit/contracts/patterns/app-shell.json";
 import billingSchedule from "../../packages/kit/contracts/patterns/billing-schedule.json";
@@ -128,6 +129,8 @@ function ScreenPatternView({
             slug={slug}
             title={title}
             addCommand={contract.add}
+            prompt={patternPrompt(title, contract, "default")}
+            cursorPrompt={patternPrompt(title, contract, "cursor")}
             usage={usage}
             contract={JSON.stringify(contract, null, 2)}
             view={view}

@@ -115,57 +115,6 @@
   display: none;
 }
 
-.copy {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.copyTools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-/* Square logo buttons: 40px on wide screens, 44px touch targets below md. */
-.copyTool {
-  inline-size: var(--space-10);
-  block-size: var(--space-10);
-  padding: 0;
-}
-
-.copyToolText,
-.copyMain {
-  block-size: var(--space-10);
-}
-
-.copyDivider {
-  align-self: stretch;
-  margin-block: var(--space-2);
-}
-
-.copySplit {
-  display: flex;
-  align-items: stretch;
-}
-
-.copyMenu {
-  display: none;
-}
-
-/* The MCP row's mark in the mobile menu: a small mono wordmark in the 16px icon slot. */
-.mcpMark {
-  display: inline-grid;
-  place-items: center;
-  min-inline-size: var(--space-4);
-  color: var(--text-fg);
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-heading);
-  line-height: 1;
-}
-
 /* When to use */
 
 .rules {
@@ -327,15 +276,6 @@
   line-height: var(--type-line-body-xs);
 }
 
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* 64rem is --grid-breakpoint-md: below it the views turn into icon segments and share one row with
    the Copy split button, above the stage. */
 @media (width < 64rem) {
@@ -377,36 +317,6 @@
     white-space: nowrap;
   }
 
-  /* Below md the logo row folds into Copy's menu: one split button at the end of the bar. */
-  .copy {
-    justify-content: flex-end;
-  }
-
-  .copyTools {
-    display: none;
-  }
-
-  .copyMenu {
-    display: flex;
-  }
-
-  .copySplit .copyMain {
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-  }
-
-  .copyMenu > button {
-    inline-size: calc(var(--space-10) + var(--space-1));
-    block-size: calc(var(--space-10) + var(--space-1));
-    padding: 0;
-    border-start-start-radius: 0;
-    border-end-start-radius: 0;
-    box-shadow: inset var(--border-width-thin) 0 0 color-mix(in srgb, currentColor 30%, transparent);
-  }
-
-  .copyMain {
-    block-size: calc(var(--space-10) + var(--space-1));
-  }
 
   .stage {
     flex-direction: column;
