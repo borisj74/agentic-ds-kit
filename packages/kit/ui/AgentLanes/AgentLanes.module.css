@@ -150,9 +150,6 @@
   justify-content: center;
   width: var(--space-6);
   height: var(--space-6);
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-pill);
   color: var(--text-fg);
 }
 
