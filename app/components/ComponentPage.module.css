@@ -51,7 +51,7 @@
 }
 
 /* The Tabs panel sits under the tab list; the copy picker shares the tab row on wide screens. */
-.stageWrap > :first-child {
+.tabs {
   display: grid;
   gap: var(--space-3);
   min-width: 0;
@@ -103,10 +103,19 @@
   line-height: var(--type-line-body-xs);
 }
 
-.copy {
+/* Wide: the bar floats at the right end of the kit Tabs row (only Copy shows in it). */
+.stageBar {
   position: absolute;
   top: var(--space-2);
   right: 0;
+  z-index: 1;
+}
+
+.viewPicker {
+  display: none;
+}
+
+.copy {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -327,15 +336,49 @@
   white-space: nowrap;
 }
 
-/* 64rem is --grid-breakpoint-md: below it the copy picker drops under the stage. */
+/* 64rem is --grid-breakpoint-md: below it the views turn into icon segments and share one row with
+   the Copy split button, above the stage. */
 @media (width < 64rem) {
   .page {
     padding: var(--space-4) var(--space-4) var(--space-12);
   }
 
-  /* Below md the logo row folds into Copy's menu: one split button, end-aligned under the stage. */
-  .copy {
+  .stageBar {
     position: static;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  /* The kit Tabs list gives way to the icon SegmentedControl above; its panels stay. */
+  .tabs [role="tablist"] {
+    display: none;
+  }
+
+  .viewPicker {
+    display: block;
+    min-width: 0;
+  }
+
+  /* Icon-only segments: each label stays in the accessible name, visually hidden. */
+  .viewPicker [role="radio"] {
+    justify-content: center;
+    min-inline-size: calc(var(--space-10) + var(--space-1));
+    min-block-size: var(--space-10);
+  }
+
+  .viewPicker [role="radio"] > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Below md the logo row folds into Copy's menu: one split button at the end of the bar. */
+  .copy {
     justify-content: flex-end;
   }
 
@@ -363,17 +406,6 @@
 
   .copyMain {
     block-size: calc(var(--space-10) + var(--space-1));
-  }
-
-  .stageWrap > :first-child [role="tablist"] {
-    display: flex;
-    width: 100%;
-  }
-
-  .stageWrap > :first-child [role="tab"] {
-    flex: 1 1 0;
-    justify-content: center;
-    min-height: var(--space-10);
   }
 
   .stage {

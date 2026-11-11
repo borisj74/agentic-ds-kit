@@ -489,10 +489,20 @@
   border-radius: var(--radius-control-sm);
 }
 
+/* Wraps the master render in the Stage Preview tab. The toggle only shows on small screens. */
+.controlsHost {
+  position: relative;
+}
+
+.controlsToggle {
+  display: none;
+}
+
 @media (max-width: 860px) {
   .layout {
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
   .notesGrid {
@@ -516,6 +526,28 @@
     justify-self: stretch;
     width: auto;
     margin: var(--space-3);
+  }
+
+  /* In the Stage Preview tab the panel folds behind a toggle in the canvas corner; open, it sits
+     full width under the canvas. */
+  .controlsToggle {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: 3;
+    display: inline-flex;
+    inline-size: calc(var(--space-10) + var(--space-1));
+    block-size: calc(var(--space-10) + var(--space-1));
+    padding: 0;
+    justify-content: center;
+  }
+
+  .controlsHost .panel {
+    display: none;
+  }
+
+  .controlsHost[data-controls-open] .panel {
+    display: grid;
   }
 }
 
