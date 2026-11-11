@@ -175,3 +175,21 @@
   flex-shrink: 0;
   align-items: center;
 }
+
+/* Small screens: the 32px actions keep their look but get a 44px touch area (--space-10 + --space-1).
+   The gap keeps the two touch areas from overlapping. 40rem is --grid-breakpoint-sm. */
+@media (max-width: 40rem) {
+  .actions {
+    gap: var(--space-3);
+  }
+
+  .actions > * {
+    position: relative;
+  }
+
+  .actions > *::after {
+    position: absolute;
+    inset: calc((var(--space-8) - var(--space-10) - var(--space-1)) / 2);
+    content: "";
+  }
+}
