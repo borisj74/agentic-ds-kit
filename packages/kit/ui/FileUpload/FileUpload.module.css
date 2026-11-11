@@ -155,7 +155,7 @@
   gap: var(--space-inline-xs);
   color: var(--text-muted);
   font-size: var(--type-size-caption);
-  line-height: var(--type-line-body);
+  line-height: var(--type-line-ui-xs);
 }
 
 .done {
