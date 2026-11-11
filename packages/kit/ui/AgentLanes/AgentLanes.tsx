@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { ArrowRight, Sparkles, TriangleAlert, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
@@ -88,6 +88,30 @@ export function AgentLanes({
   }
 
   const rootRef = useRef<HTMLElement | null>(null);
+  const popRef = useRef<HTMLDivElement | null>(null);
+  // The popover opens under its lane; when it would run off the board's
+  // bottom and there is more room above, it opens above the lane instead.
+  const [popAbove, setPopAbove] = useState(false);
+  const openLane = open ? (laneIndex.get(open.agentId) ?? 0) : -1;
+  useLayoutEffect(() => {
+    const pop = popRef.current;
+    const board = pop?.parentElement;
+    const lane = board?.querySelectorAll<HTMLElement>(":scope > ol > li")[openLane];
+    if (!pop || !board || !lane) {
+      setPopAbove(false);
+      return;
+    }
+    // Focusing a button in the popover can scroll the clipped board; undo it
+    // before measuring.
+    board.scrollTop = 0;
+    const b = board.getBoundingClientRect();
+    const l = lane.getBoundingClientRect();
+    const below = b.bottom - l.bottom;
+    const above = l.top - b.top;
+    // Keep the board's own bottom padding clear so the popover never sits flush on its edge.
+    const pad = parseFloat(getComputedStyle(board).paddingBottom) || 0;
+    setPopAbove(pop.offsetHeight + pad > below && above > below);
+  }, [openTaskId, openLane, agents.length]);
 
   // Closing the popover puts focus back on its block.
   function close() {
@@ -251,7 +275,12 @@ export function AgentLanes({
 
         {open ? (
           <div
-            className={cx(styles.popover, open.status === "waiting" && styles.decision)}
+            className={cx(
+              styles.popover,
+              open.status === "waiting" && styles.decision,
+              popAbove && styles.above,
+            )}
+            ref={popRef}
             role="dialog"
             aria-label={open.status === "waiting" ? `${agents.find((a) => a.id === open.agentId)?.name ?? "Agent"} needs you` : open.title}
             style={{ ["--pop-lane" as string]: laneIndex.get(open.agentId) ?? 0 } as CSSProperties}

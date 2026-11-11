@@ -349,7 +349,7 @@
   bottom: auto;
 }
 
-/* Popover: detail or decision, under the open lane. */
+/* Popover: detail or decision, under the open lane (or above it, see .above). */
 .popover {
   position: absolute;
   z-index: 1;
@@ -366,6 +366,12 @@
   box-shadow: var(--shadow-overlay-md);
   color: var(--text-fg-inverse);
   animation: lanes-pop var(--motion-duration-150) var(--motion-ease-out);
+}
+
+/* Lower lanes open the popover above the lane so it stays on the board. */
+.above {
+  top: auto;
+  bottom: calc(var(--space-3) + (var(--lane-count) - var(--pop-lane)) * var(--lane-h));
 }
 
 .decision {
