@@ -115,9 +115,12 @@
   border-color: var(--status-danger-border);
 }
 
+/* As tall as the file name's line, so the icon centres on the name (and the 32px actions). */
 .fileIcon {
   display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  height: var(--type-line-heading);
   color: var(--icon-muted);
 }
 
