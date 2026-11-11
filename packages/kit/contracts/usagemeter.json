@@ -54,7 +54,7 @@
     "daily": {
       "type": "number[]",
       "required": false,
-      "note": "Kit LineChart (area)."
+      "note": "Kit LineChart (line), with the daily cap as a second line."
     },
     "dailyLabels": {
       "type": "string[]",
@@ -106,7 +106,6 @@
     "bg.surface",
     "bg.subtle",
     "line.default",
-    "line.strong",
     "text.fg",
     "text.fgMuted",
     "text.fgSubtle",

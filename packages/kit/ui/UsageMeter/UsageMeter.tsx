@@ -116,15 +116,15 @@ export function UsageMeter({
             <div className={styles.daily}>
               <LineChart
                 className={styles.chart}
-                variant="area"
-                height={96}
+                variant="line"
+                height={128}
                 showGrid={false}
                 includeZero
                 labels={labels}
                 tickInterval={Math.max(1, labels.length - 1)}
                 series={[
                   { label: "Daily usage", data: daily, color: state === "normal" ? "var(--fill-brand)" : "var(--fill-warning)" },
-                  ...(dailyCap ? [{ label: `Daily cap ${num(dailyCap)}`, data: daily.map(() => dailyCap), color: "var(--line-strong)" }] : []),
+                  ...(dailyCap ? [{ label: `Daily cap ${num(dailyCap)}`, data: daily.map(() => dailyCap), color: "var(--line-default)" }] : []),
                 ]}
                 title="Daily usage"
                 description={today !== undefined ? `today ${num(today)}` : undefined}
