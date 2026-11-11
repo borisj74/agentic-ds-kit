@@ -474,6 +474,19 @@ function componentLeaves(ids: readonly string[], pathname: string) {
     .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
 }
 
+/**
+ * Foundation sections in reading order, for the site nav under Foundations. They are hash
+ * sections of /foundations; `hash` is null until the client has read it, so none is active then.
+ */
+function foundationLeaves(pathname: string, hash: string | null): AppNavItem[] {
+  const current = pathname === "/foundations" && hash !== null ? hash.toLowerCase() || "color" : null;
+  return FOUNDATION_ITEMS.map((item) => ({
+    href: `/foundations#${item.slug}`,
+    label: item.label,
+    active: current === item.slug,
+  }));
+}
+
 /** Pattern pages A–Z, for the site nav under Patterns. */
 function patternLeaves(pathname: string): AppNavItem[] {
   return PATTERN_ITEMS.map((item) => ({
@@ -502,7 +515,7 @@ function pageActive(pathname: string, match: readonly string[]): boolean {
  * directly under Components.
  * The group that holds the current component opens on its own (AppNav subgroup behaviour).
  */
-export function buildSiteNavItems(pathname: string): AppNavItem[] {
+export function buildSiteNavItems(pathname: string, hash: string | null = null): AppNavItem[] {
   const groups: AppNavItem[] = COMPONENT_GROUPS.map((group) => ({
     href: `/components?group=${encodeURIComponent(group.label)}`,
     label: `${group.label} · ${group.ids.length}`,
@@ -513,6 +526,8 @@ export function buildSiteNavItems(pathname: string): AppNavItem[] {
   return SITE_PAGES.flatMap((page) => {
     const item = { href: page.href, label: page.label, active: pageActive(pathname, page.match) };
     if (page.href === "/components") return [item, ...groups];
+    // Foundation sections listed in order, right under Foundations; the open section is the active one.
+    if (page.href === "/foundations") return [{ ...item, active: false }, ...foundationLeaves(pathname, hash)];
     // Patterns list their pages by name, flat (no subgroups), right under Patterns.
     if (page.href === "/patterns") return [{ ...item, active: pathname === "/patterns" || pathname === "/studio" }, ...patternLeaves(pathname)];
     return [item];

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { buildSiteNavItems, filterSiteNavItems } from "@/lib/playground-nav";
+import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
 import { NisthaLogo } from "./NisthaLogo";
 import { PlaygroundCommand, openPlaygroundCommand } from "./PlaygroundCommand";
@@ -24,7 +25,8 @@ function subscribeRootTheme(onChange: () => void) {
 const readServerTheme = (): PlaygroundTheme => "light";
 
 function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuery: (value: string) => void; pathname: string; searchId: string }) {
-  const items = buildSiteNavItems(pathname);
+  const hash = useLocationHash();
+  const items = buildSiteNavItems(pathname, hash);
   const visible = filterSiteNavItems(items, query);
   const searching = query.trim().length > 0;
 
