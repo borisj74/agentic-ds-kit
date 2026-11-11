@@ -228,7 +228,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--space-3);
 }
 
@@ -237,6 +237,51 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+}
+
+/* Pattern toolbar: Show tools, view tools, then the copy-prompt bar. The view tools take the
+   free space so the bar stays at the end of the row. */
+.previewToolbar > .previewTools:nth-child(2) {
+  margin-inline-start: auto;
+}
+
+/* 64rem is --grid-breakpoint-md: the bar is a split button here, so it fits beside Preview / Code
+   and the view tools wrap to the next row. */
+@media (width < 64rem) {
+  .previewCopy {
+    order: 1;
+    margin-inline-start: auto;
+  }
+
+  .previewToolbar > .previewTools:nth-child(2) {
+    order: 2;
+    flex-basis: 100%;
+    margin-inline-start: 0;
+  }
+}
+
+/* Icon-only segments (Light / Dark, Desktop / Mobile): each label stays in the DOM as the
+   segment's accessible name, visually hidden. */
+.iconSegments [role="radio"] {
+  justify-content: center;
+  min-inline-size: var(--space-8);
+  min-block-size: var(--space-8);
+}
+
+@media (width < 64rem) {
+  .iconSegments [role="radio"] {
+    min-inline-size: var(--space-10);
+    min-block-size: var(--space-10);
+  }
+}
+
+.iconSegments [role="radio"] > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* The screen shown, beside Preview / Code. */

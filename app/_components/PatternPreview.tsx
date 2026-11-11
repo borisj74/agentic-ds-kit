@@ -1,9 +1,12 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Button, CodeSnippet, SegmentedControl } from "agentic-ds-kit";
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
+import { CopyPromptBar } from "./CopyPromptBar";
 import { usePatternTheme } from "./ThemeScope";
+import { useCustomizeOpen } from "./useCustomizeOpen";
 import styles from "../playground.module.css";
 
 /** The size each screen renders at before it is scaled into the frame. */
@@ -71,13 +74,15 @@ export function ScaledFrame({
 
 /**
  * Preview / Code for one pattern, like a screens catalogue: a toolbar (light or dark, desktop
- * or mobile, open full screen, copy the add command) over the screen in a scaled iframe, or
+ * or mobile, open full screen, copy the prompt or open it in an AI tool) over the screen in a scaled iframe, or
  * the install, usage and contract code. The page's screens list picks the screen shown.
  */
 export function PatternPreview({
   slug,
   title,
   addCommand,
+  prompt,
+  cursorPrompt,
   usage,
   contract,
   view,
@@ -85,6 +90,10 @@ export function PatternPreview({
   slug: ScreenSlug;
   title: string;
   addCommand: string;
+  /** Build-from-this-pattern prompt (lib/pattern-prompt): Copy, Claude, ChatGPT, v0. */
+  prompt: string;
+  /** Cursor's variant of the prompt. */
+  cursorPrompt: string;
   usage: string;
   contract: string;
   /** The screen (state) shown; pick it from the screens list under the preview. */
@@ -95,19 +104,10 @@ export function PatternPreview({
   const theme = usePatternTheme();
   const [mode, setMode] = useState<Mode | null>(null);
   const [device, setDevice] = useState<Device>("desktop");
-  const [copied, setCopied] = useState(false);
+  const pathname = usePathname();
+  const customize = useCustomizeOpen(pathname);
   const shownMode: Mode = mode ?? theme?.mode ?? "light";
   const src = frameUrl(slug, view, shownMode);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(addCommand);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
-    } catch {
-      setCopied(false);
-    }
-  }
 
   return (
     <section className={styles.previewBlock} aria-label={`${title} preview`}>
@@ -131,6 +131,7 @@ export function PatternPreview({
           {tab === "preview" ? (
             <>
               <SegmentedControl
+                className={styles.iconSegments}
                 size="sm"
                 ariaLabel="Theme mode"
                 value={shownMode}
@@ -141,6 +142,7 @@ export function PatternPreview({
                 ]}
               />
               <SegmentedControl
+                className={styles.iconSegments}
                 size="sm"
                 ariaLabel="Width"
                 value={device}
@@ -160,10 +162,16 @@ export function PatternPreview({
               />
             </>
           ) : null}
-          <Button appearance="solid" mode="primary" size="sm" iconStart={copied ? "Check" : "Copy"} onClick={copy}>
-            {copied ? "Copied" : "Copy add"}
-          </Button>
         </div>
+        {/* The bare add command stays on the Code tab's Install snippet. One solid primary per view:
+            while the docked Theme panel shows its own, Copy steps back. Below md the bar moves up
+            beside Preview / Code. */}
+        <CopyPromptBar
+          className={styles.previewCopy}
+          prompt={prompt}
+          cursorPrompt={cursorPrompt}
+          solid={!customize.docked}
+        />
       </div>
 
       {tab === "preview" ? (
