@@ -250,7 +250,8 @@ export function AgentLanes({
         {/* Handoff connectors: from the source lane down (or up) to the target block's start. */}
         <div className={styles.connectors} aria-hidden="true">
           {tasks
-            .filter((task) => task.handoffTo && byId.has(task.handoffTo) && visible(task))
+            // A target that began before the window has no visible start to point at.
+            .filter((task) => task.handoffTo && byId.has(task.handoffTo) && visible(task) && (byId.get(task.handoffTo)?.start ?? 0) > from)
             .map((task) => {
               const target = byId.get(task.handoffTo as string) as AgentLanesTask;
               const fromLane = laneIndex.get(task.agentId) ?? 0;
@@ -263,7 +264,9 @@ export function AgentLanes({
                   className={cx(styles.handoff, toLane < fromLane && styles.up, target.end === undefined && styles.handoffLive)}
                   style={
                     {
-                      insetInlineStart: `calc(${pct(target.start)}% - var(--space-4))`,
+                      // Drop just left of the target, but never past the source block's end.
+                      ["--handoff-x" as string]: `max(0px, min(calc(${pct(task.end ?? now)}% - var(--space-3)), calc(${pct(target.start)}% - var(--space-4))))`,
+                      ["--handoff-to" as string]: `${pct(target.start)}%`,
                       ["--from-lane" as string]: top,
                       ["--rows" as string]: rows,
                     } as CSSProperties

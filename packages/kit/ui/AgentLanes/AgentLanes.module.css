@@ -290,8 +290,9 @@
   --handoff-dot: calc(var(--space-1) + var(--border-width-thin));
   position: absolute;
   top: calc(var(--from-lane) * var(--lane-h) + var(--lane-h) / 2 + var(--space-3));
+  inset-inline-start: var(--handoff-x);
   box-sizing: border-box;
-  width: var(--space-3);
+  width: max(var(--space-2), calc(var(--handoff-to) - var(--space-1) - var(--handoff-x)));
   height: calc(var(--rows) * var(--lane-h) - var(--space-3));
   border-inline-start: var(--border-width-thin) solid currentColor;
   border-bottom: var(--border-width-thin) solid currentColor;
@@ -306,9 +307,9 @@
   border-radius: var(--radius-pill);
 }
 
-/* Ring on the source block's edge. */
+/* Ring just past the source block's edge; centred on it, the block would hide half. */
 .handoff::before {
-  top: calc(var(--space-1) / -2 - var(--border-width-thin));
+  top: 0;
   inset-inline-start: calc(var(--space-1) / -2 - var(--border-width-thin) * 1.5);
   width: var(--space-1);
   height: var(--space-1);
@@ -341,7 +342,7 @@
 
 .up::before {
   top: auto;
-  bottom: calc(var(--space-1) / -2 - var(--border-width-thin));
+  bottom: 0;
 }
 
 .up::after {
