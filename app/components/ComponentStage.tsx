@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useSyncExternalStore, type ReactElement, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Button, CodeSnippet, Divider, Tabs, Toast, Tooltip } from "agentic-ds-kit";
+import { Button, CodeSnippet, Divider, DropdownMenu, Tabs, Toast, Tooltip } from "agentic-ds-kit";
 import {
   componentPrompt,
   contractJson,
@@ -47,21 +47,33 @@ interface PromptTool {
   /** The tool's new-chat URL, and the query param it prefills from. */
   base: string;
   param: string;
-  mark: ReactElement;
+  /** The tool's mark, sized for a logo button (20) or a menu row (16). */
+  Mark: (props: { size?: number }) => ReactElement;
+  /** Row label in the mobile menu. */
+  menuLabel: string;
 }
 
 const PROMPT_TOOLS: PromptTool[] = [
-  { id: "claude", name: "Claude", target: "claude-code", base: "https://claude.ai/new", param: "q", mark: <ClaudeMark /> },
-  { id: "chatgpt", name: "ChatGPT", target: "claude-code", base: "https://chatgpt.com/", param: "q", mark: <ChatGptMark /> },
+  { id: "claude", name: "Claude", target: "claude-code", base: "https://claude.ai/new", param: "q", Mark: ClaudeMark, menuLabel: "Claude" },
+  {
+    id: "chatgpt",
+    name: "ChatGPT",
+    target: "claude-code",
+    base: "https://chatgpt.com/",
+    param: "q",
+    Mark: ChatGptMark,
+    menuLabel: "ChatGPT / Codex",
+  },
   {
     id: "cursor",
     name: "Cursor",
     target: "cursor",
     base: "https://cursor.com/link/prompt",
     param: "text",
-    mark: <CursorMark />,
+    Mark: CursorMark,
+    menuLabel: "Cursor",
   },
-  { id: "v0", name: "v0", target: "claude-code", base: "https://v0.app/chat", param: "q", mark: <V0Mark /> },
+  { id: "v0", name: "v0", target: "claude-code", base: "https://v0.app/chat", param: "q", Mark: V0Mark, menuLabel: "v0" },
 ];
 
 /** The URL a tool button opens: the prompt in the query, or the bare tool when that would run too long. */
@@ -119,8 +131,17 @@ function CopyPrompt({ id }: { id: string }) {
   // One solid primary per view: while the docked Theme panel shows its own, this one steps back.
   const solid = !customize.docked;
 
+  function onMenuSelect(itemId: string) {
+    const tool = PROMPT_TOOLS.find((item) => item.id === itemId);
+    if (tool) openIn(tool);
+  }
+
+  const appearance = solid ? "solid" : "outline";
+  const mode = solid ? "primary" : "neutral";
+
   return (
     <div className={styles.copy} role="group" aria-label="Copy prompt">
+      {/* Wide screens: a row of logo buttons. Below md they move into the Copy split button's menu. */}
       <div className={styles.copyTools}>
         {PROMPT_TOOLS.map((tool) => {
           const label = `Copy prompt and open in ${tool.name}`;
@@ -131,7 +152,7 @@ function CopyPrompt({ id }: { id: string }) {
                 appearance="outline"
                 mode="neutral"
                 className={styles.copyTool}
-                iconStart={tool.mark}
+                iconStart={<tool.Mark />}
                 ariaLabel={label}
                 onClick={() => openIn(tool)}
               />
@@ -150,20 +171,55 @@ function CopyPrompt({ id }: { id: string }) {
             MCP
           </Button>
         </Tooltip>
+        <Divider orientation="vertical" className={styles.copyDivider} />
       </div>
-      <Divider orientation="vertical" className={styles.copyDivider} />
-      <Tooltip content="Copy prompt" placement="bottom" className={styles.copyMainWrap}>
-        <Button
+      {/* One split control: Copy, and (below md) its menu of tools. Same appearance on both halves. */}
+      <div className={styles.copySplit}>
+        <Tooltip content="Copy prompt" placement="bottom">
+          <Button
+            size="md"
+            appearance={appearance}
+            mode={mode}
+            className={styles.copyMain}
+            iconStart={copied ? "Check" : "Copy"}
+            onClick={() => void copy()}
+          >
+            {copied ? "Copied" : "Copy"}
+          </Button>
+        </Tooltip>
+        <DropdownMenu
+          className={styles.copyMenu}
+          ariaLabel="Copy prompt and open in"
+          iconStart="ChevronDown"
+          appearance={appearance}
+          mode={mode}
           size="md"
-          appearance={solid ? "solid" : "outline"}
-          mode={solid ? "primary" : "neutral"}
-          className={styles.copyMain}
-          iconStart={copied ? "Check" : "Copy"}
-          onClick={() => void copy()}
-        >
-          {copied ? "Copied" : "Copy"}
-        </Button>
-      </Tooltip>
+          align="end"
+          onSelect={onMenuSelect}
+          groups={[
+            {
+              heading: "Copy prompt and open in",
+              items: [
+                ...PROMPT_TOOLS.map((tool) => ({
+                  id: tool.id,
+                  label: tool.menuLabel,
+                  icon: <tool.Mark size={16} />,
+                })),
+                {
+                  id: "mcp",
+                  label: "Connect the MCP server",
+                  icon: (
+                    <span className={styles.mcpMark} aria-hidden="true">
+                      MCP
+                    </span>
+                  ),
+                  href: "/mcp",
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
       <span className={styles.srOnly} role="status">
         {copied ? "Prompt copied to the clipboard" : ""}
       </span>

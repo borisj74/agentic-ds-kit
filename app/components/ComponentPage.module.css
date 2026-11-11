@@ -136,6 +136,27 @@
   margin-block: var(--space-2);
 }
 
+.copySplit {
+  display: flex;
+  align-items: stretch;
+}
+
+.copyMenu {
+  display: none;
+}
+
+/* The MCP row's mark in the mobile menu: a small mono wordmark in the 16px icon slot. */
+.mcpMark {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: var(--space-4);
+  color: var(--text-fg);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-heading);
+  line-height: 1;
+}
+
 /* When to use */
 
 .rules {
@@ -312,27 +333,34 @@
     padding: var(--space-4) var(--space-4) var(--space-12);
   }
 
-  /* Logo row first, then Copy across the full width: the row plus Copy is wider than a 390 phone. */
+  /* Below md the logo row folds into Copy's menu: one split button, end-aligned under the stage. */
   .copy {
     position: static;
-    display: grid;
+    justify-content: flex-end;
   }
 
-  .copyDivider {
+  .copyTools {
     display: none;
   }
 
-  .copyMainWrap,
-  .copyMain {
-    inline-size: 100%;
+  .copyMenu {
+    display: flex;
   }
 
-  .copyTool {
+  .copySplit .copyMain {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .copyMenu > button {
     inline-size: calc(var(--space-10) + var(--space-1));
     block-size: calc(var(--space-10) + var(--space-1));
+    padding: 0;
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    box-shadow: inset var(--border-width-thin) 0 0 color-mix(in srgb, currentColor 30%, transparent);
   }
 
-  .copyToolText,
   .copyMain {
     block-size: calc(var(--space-10) + var(--space-1));
   }

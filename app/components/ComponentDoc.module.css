@@ -505,11 +505,14 @@
 
   .canvas {
     grid-area: auto;
+    min-height: calc(var(--space-16) * 3);
     padding-inline-end: var(--space-6);
   }
 
+  /* .layout is a flex column here, so the panel stretches with align-self (justify-self does nothing). */
   .panel {
     grid-area: auto;
+    align-self: stretch;
     justify-self: stretch;
     width: auto;
     margin: var(--space-3);
