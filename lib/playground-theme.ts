@@ -277,10 +277,17 @@ export function readPlaygroundTheme(): PlaygroundTheme {
 }
 
 export function applyPlaygroundTheme(theme: PlaygroundTheme): void {
+  const root = document.documentElement;
   if (theme === "dark") {
-    document.documentElement.setAttribute("data-theme", "dark");
+    root.setAttribute("data-theme", "dark");
   } else {
-    document.documentElement.removeAttribute("data-theme");
+    root.removeAttribute("data-theme");
+  }
+  // A custom primary ramp is inline on the root and built for one mode; rebuild
+  // it, or dark keeps light subtle fills under dark-mode text (the nav's active
+  // item turned pale on pale).
+  if (root.getAttribute("data-color") === "custom") {
+    applyPrimaryRamp(readStoredPrimaryHex() ?? DEFAULT_PRIMARY_HEX, theme === "dark");
   }
   store(PLAYGROUND_THEME_STORAGE_KEY, theme);
 }
