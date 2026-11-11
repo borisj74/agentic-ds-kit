@@ -239,7 +239,7 @@ export function AgentLanes({
                   className={cx(styles.handoff, toLane < fromLane && styles.up, target.end === undefined && styles.handoffLive)}
                   style={
                     {
-                      insetInlineStart: `${Math.max(0, pct(target.start) - 1.5)}%`,
+                      insetInlineStart: `calc(${pct(target.start)}% - var(--space-4))`,
                       ["--from-lane" as string]: top,
                       ["--rows" as string]: rows,
                     } as CSSProperties
