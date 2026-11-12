@@ -31,11 +31,8 @@ export interface LogoStripProps extends Omit<ComponentPropsWithoutRef<"section">
   label?: string;
   /** Rows the logos are dealt into, round-robin. Neighbouring rows run in opposite directions. Default 3. */
   rows?: number;
-  /** Controlled pause. Without it the Pause / Play button keeps its own state. */
+  /** Holds the rows still, e.g. from the app's own control. Default false: they loop. */
   paused?: boolean;
-  /** Uncontrolled starting state. Default false (moving). */
-  defaultPaused?: boolean;
-  onPausedChange?: (paused: boolean) => void;
   /** "center" (default) or "start": heading alignment. */
   align?: "center" | "start";
   ref?: Ref<HTMLElement>;

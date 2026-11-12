@@ -1,6 +1,6 @@
 /* LogoStrip block: a heading over rows of logos that drift sideways, neighbouring rows in
-   opposite directions, with soft faded edges. Motion is transform only. It stops for Pause, on
-   hover and while a link inside has focus, and is off under reduced motion, where the rows wrap
+   opposite directions, with soft faded edges. Motion is transform only. It loops on its own, holds
+   on hover and while a link inside has focus, and is off under reduced motion, where the rows wrap
    and stand still. */
 .root {
   container: logostrip / inline-size;
@@ -135,15 +135,6 @@
   outline-offset: var(--space-inset-2xs);
 }
 
-.controls {
-  display: flex;
-  justify-content: center;
-}
-
-.start .controls {
-  justify-content: flex-start;
-}
-
 @keyframes logostrip-left {
   from {
     transform: translateX(0);
@@ -163,7 +154,7 @@
 }
 
 /* Reduced motion: nothing moves. The copies go, the rows wrap and centre, the edges stay sharp,
-   and the Pause button has nothing to do. */
+   and nothing moves. */
 @media (prefers-reduced-motion: reduce) {
   .row {
     overflow: visible;
@@ -183,8 +174,7 @@
     padding-inline-end: 0;
   }
 
-  .list[aria-hidden="true"],
-  .controls {
+  .list[aria-hidden="true"] {
     display: none;
   }
 }

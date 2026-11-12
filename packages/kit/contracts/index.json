@@ -915,12 +915,12 @@
   {
     "id": "logostrip",
     "kind": "block",
-    "intent": "Block: trusted-by wall. Rows of named logos drifting in opposite directions with soft edges, a Pause button, still under reduced motion.",
+    "intent": "Block: trusted-by wall. Rows of named logos looping in opposite directions with soft edges; still under reduced motion.",
     "group": "component",
     "path": "contracts/logostrip.json",
     "status": "stable",
     "category": "Social proof",
-    "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges and a pause."
+    "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges."
   },
   {
     "id": "plans",

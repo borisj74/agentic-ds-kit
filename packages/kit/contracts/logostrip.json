@@ -2,9 +2,9 @@
   "id": "logostrip",
   "kind": "block",
   "category": "Social proof",
-  "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges and a pause.",
+  "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges.",
   "status": "stable",
-  "intent": "Block: a social proof wall. A short heading over rows of customer logos that drift sideways, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Pause / Play stops the motion; hover and keyboard focus hold it; under reduced motion the rows stand still and wrap.",
+  "intent": "Block: a social proof wall. A short heading over rows of customer logos that loop sideways on their own, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Hover and keyboard focus hold the motion; under reduced motion the rows stand still and wrap.",
   "useWhen": [
     "a trusted-by row on a landing or pricing page",
     "a row of partner or integration marks under a hero",
@@ -15,9 +15,7 @@
     "picking an integration — IntegrationPicker",
     "paged slides — Carousel"
   ],
-  "contains": [
-    "button"
-  ],
+  "contains": [],
   "props": {
     "logos": {
       "type": "array",
@@ -46,18 +44,8 @@
     },
     "paused": {
       "type": "boolean",
-      "required": false,
-      "note": "Controlled pause."
-    },
-    "defaultPaused": {
-      "type": "boolean",
       "default": false,
-      "note": "Uncontrolled starting state."
-    },
-    "onPausedChange": {
-      "type": "function",
-      "required": false,
-      "note": "(paused) => void"
+      "note": "Holds the rows still, e.g. from the app's own control. The block has no button of its own."
     },
     "align": {
       "type": "enum",
@@ -66,7 +54,7 @@
         "start"
       ],
       "default": "center",
-      "note": "Heading and Pause button alignment."
+      "note": "Heading alignment."
     }
   },
   "passthrough": {
@@ -76,7 +64,7 @@
     "rest": "section"
   },
   "layout": [
-    "heading, then the rows, then a ghost Pause / Play button",
+    "heading, then the rows",
     "each row clips its logos and fades them out over the outer 15% at both ends (an alpha mask, so any background works in light and dark)",
     "a row holds its logos twice and moves the pair by half its width with transform, so the loop has no seam; a full loop takes about 4s per logo (at least 20s)",
     "under prefers-reduced-motion the copies and the button go, the rows wrap and centre, and nothing moves"
@@ -99,16 +87,15 @@
       "section aria-labelledby the h2 title; place it inside the page's <main>",
       "the rows sit in a group named with the count (Customer logos, 24); each row's first list is read, its copy is aria-hidden and inert",
       "every logo is named: img alt, role=img with aria-label for a node, or the name as text; href makes it a link with the kit focus ring",
-      "Pause / Play is a real button with aria-pressed (WCAG 2.2.2); hover and focus inside a row also hold it",
-      "motion is transform only and off under prefers-reduced-motion"
+      "motion is transform only and off under prefers-reduced-motion",
+      "hover and keyboard focus inside a row hold the motion; there is no pause button (Boris)"
     ]
   },
   "doNot": [
     "Do not build a local marquee or auto-scrolling logo row",
     "Do not ship a logo without a name, or with a name like logo-3",
     "Do not use real brands in samples; use neutral placeholder marks",
-    "Do not colour logos with raw hex; inline marks use currentColor",
-    "Do not remove the Pause button: moving content needs a way to stop it"
+    "Do not colour logos with raw hex; inline marks use currentColor"
   ],
   "snippet": "<LogoStrip title=\"Trusted by teams at\" logos={[{ name: 'Northpeak', src: '/logos/northpeak.svg' }, { name: 'Fieldstone', logo: <FieldstoneMark /> }]} />"
 }

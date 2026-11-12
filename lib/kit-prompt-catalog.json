@@ -10321,7 +10321,7 @@
     {
       "id": "logostrip",
       "group": "component",
-      "intent": "Block: a social proof wall. A short heading over rows of customer logos that drift sideways, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Pause / Play stops the motion; hover and keyboard focus hold it; under reduced motion the rows stand still and wrap.",
+      "intent": "Block: a social proof wall. A short heading over rows of customer logos that loop sideways on their own, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Hover and keyboard focus hold the motion; under reduced motion the rows stand still and wrap.",
       "useWhen": [
         "a trusted-by row on a landing or pricing page",
         "a row of partner or integration marks under a hero",
@@ -10336,8 +10336,7 @@
         "Do not build a local marquee or auto-scrolling logo row",
         "Do not ship a logo without a name, or with a name like logo-3",
         "Do not use real brands in samples; use neutral placeholder marks",
-        "Do not colour logos with raw hex; inline marks use currentColor",
-        "Do not remove the Pause button: moving content needs a way to stop it"
+        "Do not colour logos with raw hex; inline marks use currentColor"
       ],
       "props": {
         "logos": {
@@ -10367,18 +10366,8 @@
         },
         "paused": {
           "type": "boolean",
-          "required": false,
-          "note": "Controlled pause."
-        },
-        "defaultPaused": {
-          "type": "boolean",
           "default": false,
-          "note": "Uncontrolled starting state."
-        },
-        "onPausedChange": {
-          "type": "function",
-          "required": false,
-          "note": "(paused) => void"
+          "note": "Holds the rows still, e.g. from the app's own control. The block has no button of its own."
         },
         "align": {
           "type": "enum",
@@ -10387,7 +10376,7 @@
             "start"
           ],
           "default": "center",
-          "note": "Heading and Pause button alignment."
+          "note": "Heading alignment."
         }
       }
     },

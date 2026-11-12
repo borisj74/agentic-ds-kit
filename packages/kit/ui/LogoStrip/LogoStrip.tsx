@@ -1,7 +1,6 @@
 "use client";
 
-import { useId, useState, type CSSProperties } from "react";
-import { Button } from "../Button";
+import { useId, type CSSProperties } from "react";
 import { cx } from "../shared/cx";
 import { listLabel, rowDirection, rowDuration, stripLogos, stripRows } from "./logoStrip.logic";
 import type { LogoStripLogo, LogoStripProps } from "./LogoStrip.types";
@@ -44,8 +43,8 @@ function Logos({ items, copy }: { items: Item[]; copy?: boolean }) {
 
 /**
  * Block: a "trusted by" wall. A heading over rows of named logos that drift sideways, each row the
- * other way from the one above, with soft faded edges. Pause / Play stops them (and hover or
- * keyboard focus holds them); under reduced motion the rows stand still and wrap.
+ * other way from the one above, with soft faded edges. Hover or keyboard focus holds them; under
+ * reduced motion the rows stand still and wrap.
  */
 export function LogoStrip(props: LogoStripProps) {
   const {
@@ -54,24 +53,15 @@ export function LogoStrip(props: LogoStripProps) {
     description,
     label = "Customer logos",
     rows = 3,
-    paused: pausedProp,
-    defaultPaused = false,
-    onPausedChange,
+    paused = false,
     align = "center",
     className,
     ref,
     ...rest
   } = props;
   const titleId = useId();
-  const [innerPaused, setInnerPaused] = useState(defaultPaused);
-  const paused = pausedProp ?? innerPaused;
   const items = stripLogos(logos);
   const lines = stripRows(items, rows);
-
-  function toggle() {
-    if (pausedProp === undefined) setInnerPaused(!paused);
-    onPausedChange?.(!paused);
-  }
 
   return (
     <section
@@ -99,18 +89,6 @@ export function LogoStrip(props: LogoStripProps) {
             </div>
           </div>
         ))}
-      </div>
-      <div className={styles.controls}>
-        <Button
-          size="sm"
-          appearance="ghost"
-          mode="neutral"
-          iconStart={paused ? "Play" : "Pause"}
-          aria-pressed={paused}
-          onClick={toggle}
-        >
-          {paused ? "Play logos" : "Pause logos"}
-        </Button>
       </div>
     </section>
   );

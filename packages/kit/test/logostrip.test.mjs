@@ -1,7 +1,7 @@
 /**
  * LogoStrip block: logo keys, kinds, rows and directions (logic), and the SSR render (labelled
  * section, a named group of rows, each row read once with an inert copy, every logo named, links,
- * Pause / Play). Runs against the built kit (dist):
+ * no pause button). Runs against the built kit (dist):
  * build first (npm run build -w agentic-ds-kit). CSS imports are stubbed.
  */
 import assert from "node:assert/strict";
@@ -101,10 +101,9 @@ describe("LogoStrip render", () => {
     assert.match(html, /aria-label="Partner logos, 3"/);
   });
 
-  test("Pause / Play is a pressed-state button; paused starts still", () => {
-    const moving = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor() }));
-    assert.match(moving, /<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?Pause logos/);
-    const still = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor(), defaultPaused: true }));
-    assert.match(still, /<button[^>]*aria-pressed="true"[^>]*>[\s\S]*?Play logos/);
+  test("loops on its own: no pause button; paused holds it", () => {
+    const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor() }));
+    assert.doesNotMatch(html, /<button/);
+    assert.doesNotMatch(html, /Pause logos|Play logos/);
   });
 });
