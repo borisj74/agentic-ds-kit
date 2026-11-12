@@ -8,7 +8,7 @@
 }
 
 .wide {
-  width: 20rem;
+  width: var(--layout-drawer-sm);
   max-width: 100%;
   flex-shrink: 0;
 }
@@ -18,9 +18,10 @@
   max-width: 100%;
 }
 
+/* A 4:3 box from the drawer width, tall enough for Chat's header, thread and composer. */
 .panel {
-  width: 20rem;
-  height: 15rem;
+  width: var(--layout-drawer-sm);
+  height: calc(var(--layout-drawer-sm) * 3 / 4);
 }
 
 .panel > :global(section) {
