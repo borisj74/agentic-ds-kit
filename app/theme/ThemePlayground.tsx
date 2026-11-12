@@ -46,7 +46,7 @@ export function ThemePlayground() {
   return (
     <div className={`layout-content ${styles.page}`}>
       <header className={styles.stack}>
-        <h1 className={styles.title}>Theme</h1>
+        <h1 className={styles.title}>Theme builder</h1>
         <p className={styles.lead}>
           The Theme panel edits every preview on the site and keeps your choice as you move between pages. The site
           chrome stays nistha.

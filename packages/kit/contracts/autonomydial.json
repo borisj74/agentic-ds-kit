@@ -100,7 +100,7 @@
       "section aria-labelledby the h3 label",
       "the stops are a kit SegmentedControl (role=radiogroup, arrow keys) described by the panel",
       "the panel is aria-live polite",
-      "tick dots and end labels are aria-hidden",
+      "end labels are aria-hidden",
       "no primary Button; the control saves on change",
       "motion is opacity and transform, off under prefers-reduced-motion"
     ]

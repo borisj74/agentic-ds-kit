@@ -87,7 +87,7 @@ export function AgentLanesDoc() {
         },
         {
           title: "Block opened — what got done",
-          about: "openTaskId opens a dark detail under the lane with the summary lines and Open.",
+          about: "openTaskId opens a dark detail on the lane (below it, or above when the board has no room) with the summary lines and Open.",
           code: `<AgentLanes … openTaskId="tests" onOpen={openRun} />`,
           render: <AgentLanes className={agentDoc.full} agents={AGENTS} tasks={TASKS} now={NOW} openTaskId="tests" onOpenTaskChange={noop} onOpen={noop} />,
         },

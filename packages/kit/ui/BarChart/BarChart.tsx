@@ -230,8 +230,10 @@ export function BarChart({
         const start = clusterStart + seriesIndex * (barWidth + barGap);
         const end = valueScale(value);
         const origin = valueScale(0);
+        // One measure, one colour: single-series bars all take the first palette colour unless a
+        // datum sets its own. Several series still take one colour each.
         const color = isSingleSeries
-          ? colorAt(categoryIndex, data?.[categoryIndex]?.color)
+          ? colorAt(0, data?.[categoryIndex]?.color)
           : (entry.color ?? colorAt(seriesIndex));
         const x = isVertical ? start : Math.min(origin, end);
         const y = isVertical ? Math.min(origin, end) : start;

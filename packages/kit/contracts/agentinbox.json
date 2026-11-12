@@ -147,7 +147,7 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "rows are buttons; the selected row has aria-current and controls the detail region",
-      "unread is said in text, not only the dot",
+      "unread is said in text, not only the bold agent name",
       "the filter is a kit SegmentedControl (radio group)",
       "the detail region is aria-live polite",
       "load error is role=alert with Retry",

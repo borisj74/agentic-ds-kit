@@ -189,7 +189,9 @@ export function LineChart({
     const plotBottom = height - CHART_MARGINS.bottom;
 
     const [rawMin, rawMax] = seriesExtent(series, { includeZero });
-    const { ticks, min, max } = niceTicks(rawMin, rawMax, 5);
+    // About one value label per 28px of plot (2 to 5), so short charts don't stack labels.
+    const tickCount = Math.max(2, Math.min(5, Math.floor((plotBottom - plotTop) / 28) + 1));
+    const { ticks, min, max } = niceTicks(rawMin, rawMax, tickCount);
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
 

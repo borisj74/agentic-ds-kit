@@ -1,14 +1,24 @@
+/* Preview: the header on the stage itself (no inner frame), the Structure controls below it. */
+.stacked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-height: 0;
+}
+
+.stacked > aside {
+  grid-area: auto;
+  align-self: flex-end;
+}
+
 .canvas {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  min-height: 20rem;
   min-width: 0;
   overflow: hidden;
-  padding: var(--space-6);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
-  border: var(--border-width-thin) solid var(--border-faint);
+  padding: var(--space-10) var(--space-6);
 }
 
 .bar {
@@ -30,7 +40,7 @@
   overflow: hidden;
   padding: var(--space-6);
   border-radius: var(--radius-surface-md);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
   border: var(--border-width-thin) solid var(--border-faint);
 }
 

@@ -79,11 +79,16 @@
   border-color: var(--primary);
 }
 
+/* Variant letter as a small tinted tile, so A / B read as labels, not stray text. */
 .letter {
   display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
   justify-content: center;
   width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-tray);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-heading);

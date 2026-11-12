@@ -107,7 +107,7 @@ export function AgentInboxDoc() {
       variants={[
         {
           title: "Unread and read, every type — approval selected",
-          about: "Unread rows carry a dot and say unread in text. An approval opens a kit ApprovalCard.",
+          about: "Unread rows show the agent name in bold and say unread in text. An approval opens a kit ApprovalCard.",
           code: `<AgentInbox items={items} selectedId="migrate" onSelect={select} onFilterChange={setFilter} onMarkAllRead={markAll} onApprove={approve} onDeny={deny} />`,
           render: <AgentInbox className={agentDoc.full} items={ITEMS} selectedId="migrate" onSelect={noop} onFilterChange={noop} onMarkAllRead={noop} onApprove={noop} onDeny={noop} />,
         },

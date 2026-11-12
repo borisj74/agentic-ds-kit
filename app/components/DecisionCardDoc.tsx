@@ -16,9 +16,11 @@ const OPTIONS: DecisionOption[] = [
 const Q = "The v1 invoices endpoint has 3 callers. What should I do with it?";
 const BASE = { title: "Billing refactor asks", meta: "paused · 0:42", question: Q, options: OPTIONS };
 const noop = () => {};
+/** The recommended option, listed first, starts selected so Confirm is one step. */
+const DEFAULT_CHOICE = "keep";
 
 export function DecisionCardDoc() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(DEFAULT_CHOICE);
   const [status, setStatus] = useState<DecisionCardStatus>("pending");
   const [mode, setMode] = useState<"choices" | "free text">("choices");
 
@@ -50,18 +52,18 @@ export function DecisionCardDoc() {
             value={mode}
             onChange={(next) => {
               setMode(next);
-              setValue("");
+              setValue(next === "choices" ? DEFAULT_CHOICE : "");
               setStatus("pending");
             }}
           />
           <div className={styles.panelGroup}>
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => { setStatus("pending"); setValue(""); }}>
+            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => { setStatus("pending"); setValue(mode === "choices" ? DEFAULT_CHOICE : ""); }}>
               Reset
             </Button>
           </div>
         </>
       }
-      usage="DecisionCard pauses the agent for a choice. The recommended option is a quiet badge, never preselected. Confirm is the one solid primary; one action to approve is an ApprovalCard."
+      usage="DecisionCard pauses the agent for a choice. The recommended option comes first, starts selected, and keeps its quiet badge. Confirm is the one solid primary; one action to approve is an ApprovalCard."
       code={`<DecisionCard
   title="Billing refactor asks"
   meta="paused · 0:42"

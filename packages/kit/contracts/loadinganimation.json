@@ -29,7 +29,7 @@
     "className": "root",
     "rest": "span"
   },
-  "tokens": ["surface.muted", "text.primary", "border.faint"],
+  "tokens": ["surface.muted", "fill.brand", "border.faint"],
   "a11y": {
     "element": "span[role=status]",
     "requirements": ["role=status", "aria-label describes loading"]

@@ -74,7 +74,7 @@
   gap: var(--space-2);
   width: 100%;
   margin: 0;
-  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-1);
+  padding: var(--space-2) var(--space-3);
   border: 0;
   border-radius: var(--radius-surface-md);
   background: transparent;
@@ -96,22 +96,6 @@
 .selected,
 .selected:hover {
   background-color: var(--action-selected);
-}
-
-.unreadSlot {
-  display: inline-flex;
-  flex-shrink: 0;
-  justify-content: center;
-  width: var(--space-2);
-  padding-top: var(--space-1);
-}
-
-.unread {
-  width: var(--space-1);
-  height: var(--space-1);
-  border-radius: var(--radius-pill);
-  background-color: var(--primary);
-  transition: opacity var(--motion-duration-150) var(--motion-ease-out);
 }
 
 .typeIcon {
@@ -154,6 +138,11 @@
   color: var(--text-fg);
 }
 
+/* Unread rows keep the bold name; read rows drop to body weight. */
+.read .agent {
+  font-weight: var(--type-weight-body);
+}
+
 .type {
   color: var(--text-fg-subtle);
 }
@@ -171,20 +160,32 @@
   color: var(--text-fg-muted);
 }
 
+/* The detail fills the row so an embedded card's actions sit on the
+   list's last row. */
 .pane {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
 
 .paneInner {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   animation: inbox-fade var(--motion-duration-150) var(--motion-ease-out);
 }
 
 .embedded {
+  flex: 1 1 auto;
   width: 100%;
   padding: 0;
   border: 0;
   box-shadow: none;
   animation: none;
+}
+
+.embedded > :last-child {
+  margin-top: auto;
 }
 
 .hint {

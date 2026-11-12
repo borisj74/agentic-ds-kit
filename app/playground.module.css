@@ -5,6 +5,13 @@
   padding: var(--space-8) var(--space-10) var(--space-4);
 }
 
+/* Wide screens: more room either side of the docs content. 80rem is --grid-breakpoint-lg. */
+@media (min-width: 80rem) {
+  .page {
+    padding-inline: var(--space-16);
+  }
+}
+
 @media (max-width: 767px) {
   .page {
     padding: var(--space-6) var(--space-4);

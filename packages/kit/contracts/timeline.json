@@ -35,6 +35,7 @@
     "text.secondary",
     "text.muted",
     "border.faint",
+    "fill.brand",
     "border.strong",
     "border.subtle"
   ],

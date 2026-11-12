@@ -30,18 +30,12 @@
   line-height: var(--type-line-body-md);
 }
 
+/* The group as a kit Badge, top left on the preview (outside the scaled scene). */
 .groupTag {
   position: absolute;
-  top: var(--space-2);
-  right: var(--space-3);
+  top: var(--space-3);
+  left: var(--space-3);
   z-index: 1;
-  color: var(--text-fg-muted);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline-xs);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  line-height: var(--type-line-overline-xs);
-  text-transform: uppercase;
 }
 
 .previewScope {
@@ -89,12 +83,6 @@
 @container gallery (min-width: 52rem) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@container gallery (min-width: 64rem) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -168,10 +156,10 @@
 .preview {
   position: relative;
   box-sizing: border-box;
-  /* Room for the group tag so it never sits on the live preview. */
-  padding-top: var(--space-6);
+  /* Room for the group badge so it never sits on the live preview. */
+  padding: var(--space-10) var(--space-3) var(--space-3);
   width: auto;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 3 / 2;
   min-height: 0;
   margin: var(--space-2);
   margin-bottom: 0;
@@ -191,9 +179,13 @@
   overflow: hidden;
 }
 
+/* A preview too tall to fit even at the smallest scale starts at the top; the bottom is cut. */
+.previewTop {
+  align-items: flex-start;
+}
+
 .previewScale {
   position: relative;
-  overflow: hidden;
 }
 
 .previewScene {

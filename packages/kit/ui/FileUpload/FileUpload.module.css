@@ -115,9 +115,12 @@
   border-color: var(--status-danger-border);
 }
 
+/* As tall as the file name's line, so the icon centres on the name (and the 32px actions). */
 .fileIcon {
   display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  height: var(--type-line-heading);
   color: var(--icon-muted);
 }
 
@@ -152,7 +155,7 @@
   gap: var(--space-inline-xs);
   color: var(--text-muted);
   font-size: var(--type-size-caption);
-  line-height: var(--type-line-body);
+  line-height: var(--type-line-ui-xs);
 }
 
 .done {
@@ -171,4 +174,22 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
+}
+
+/* Small screens: the 32px actions keep their look but get a 44px touch area (--space-10 + --space-1).
+   The gap keeps the two touch areas from overlapping. 40rem is --grid-breakpoint-sm. */
+@media (max-width: 40rem) {
+  .actions {
+    gap: var(--space-3);
+  }
+
+  .actions > * {
+    position: relative;
+  }
+
+  .actions > *::after {
+    position: absolute;
+    inset: calc((var(--space-8) - var(--space-10) - var(--space-1)) / 2);
+    content: "";
+  }
 }

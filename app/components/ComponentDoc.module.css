@@ -125,7 +125,7 @@
   padding: var(--space-6);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
 }
 
 .layout:not(:has(.panel)) {
@@ -387,7 +387,8 @@
   overflow-x: auto;
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  /* Same cool neutral ground as every other render area (the old 5% brand tint read as lilac). */
+  background: var(--bg-canvas);
 }
 
 .propsSection {
@@ -650,7 +651,10 @@
 }
 
 /* Kit Cell and HeaderCell are transparent: in a preview they sit on a white row, as in a table. */
+/* A Cell / HeaderCell in a white table-row frame, one column wide, content left as in a table. */
 .previewCell {
+  justify-content: flex-start;
+  width: min(100%, var(--layout-drawer-sm));
   overflow: hidden;
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);

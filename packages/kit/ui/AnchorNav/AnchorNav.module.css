@@ -36,10 +36,15 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+/* The section in view: brand text, bar and caret. */
 .link[aria-current="location"] {
-  color: var(--text-primary);
+  color: var(--text-brand);
   font-weight: var(--type-weight-heading);
-  box-shadow: inset var(--border-width-medium) 0 0 var(--text-primary);
+  box-shadow: inset var(--border-width-medium) 0 0 var(--fill-brand);
+}
+
+.link[aria-current="location"] .caret {
+  color: currentColor;
 }
 
 .caret {

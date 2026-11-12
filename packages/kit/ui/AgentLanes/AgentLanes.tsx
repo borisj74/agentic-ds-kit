@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { ArrowRight, Sparkles, TriangleAlert, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
@@ -88,6 +88,30 @@ export function AgentLanes({
   }
 
   const rootRef = useRef<HTMLElement | null>(null);
+  const popRef = useRef<HTMLDivElement | null>(null);
+  // The popover opens under its lane; when it would run off the board's
+  // bottom and there is more room above, it opens above the lane instead.
+  const [popAbove, setPopAbove] = useState(false);
+  const openLane = open ? (laneIndex.get(open.agentId) ?? 0) : -1;
+  useLayoutEffect(() => {
+    const pop = popRef.current;
+    const board = pop?.parentElement;
+    const lane = board?.querySelectorAll<HTMLElement>(":scope > ol > li")[openLane];
+    if (!pop || !board || !lane) {
+      setPopAbove(false);
+      return;
+    }
+    // Focusing a button in the popover can scroll the clipped board; undo it
+    // before measuring.
+    board.scrollTop = 0;
+    const b = board.getBoundingClientRect();
+    const l = lane.getBoundingClientRect();
+    const below = b.bottom - l.bottom;
+    const above = l.top - b.top;
+    // Keep the board's own bottom padding clear so the popover never sits flush on its edge.
+    const pad = parseFloat(getComputedStyle(board).paddingBottom) || 0;
+    setPopAbove(pop.offsetHeight + pad > below && above > below);
+  }, [openTaskId, openLane, agents.length]);
 
   // Closing the popover puts focus back on its block.
   function close() {
@@ -226,7 +250,8 @@ export function AgentLanes({
         {/* Handoff connectors: from the source lane down (or up) to the target block's start. */}
         <div className={styles.connectors} aria-hidden="true">
           {tasks
-            .filter((task) => task.handoffTo && byId.has(task.handoffTo) && visible(task))
+            // A target that began before the window has no visible start to point at.
+            .filter((task) => task.handoffTo && byId.has(task.handoffTo) && visible(task) && (byId.get(task.handoffTo)?.start ?? 0) > from)
             .map((task) => {
               const target = byId.get(task.handoffTo as string) as AgentLanesTask;
               const fromLane = laneIndex.get(task.agentId) ?? 0;
@@ -239,7 +264,9 @@ export function AgentLanes({
                   className={cx(styles.handoff, toLane < fromLane && styles.up, target.end === undefined && styles.handoffLive)}
                   style={
                     {
-                      insetInlineStart: `${Math.max(0, pct(target.start) - 1.5)}%`,
+                      // Drop just left of the target, but never past the source block's end.
+                      ["--handoff-x" as string]: `max(0px, min(calc(${pct(task.end ?? now)}% - var(--space-3)), calc(${pct(target.start)}% - var(--space-4))))`,
+                      ["--handoff-to" as string]: `${pct(target.start)}%`,
                       ["--from-lane" as string]: top,
                       ["--rows" as string]: rows,
                     } as CSSProperties
@@ -251,7 +278,12 @@ export function AgentLanes({
 
         {open ? (
           <div
-            className={cx(styles.popover, open.status === "waiting" && styles.decision)}
+            className={cx(
+              styles.popover,
+              open.status === "waiting" && styles.decision,
+              popAbove && styles.above,
+            )}
+            ref={popRef}
             role="dialog"
             aria-label={open.status === "waiting" ? `${agents.find((a) => a.id === open.agentId)?.name ?? "Agent"} needs you` : open.title}
             style={{ ["--pop-lane" as string]: laneIndex.get(open.agentId) ?? 0 } as CSSProperties}

@@ -565,8 +565,8 @@ export function GalleryPreview({ id }: { id: string }) {
         <Stage variant="wide">
           <Calendar
             label="Team"
-            views={["month"]}
-            defaultView="month"
+            views={["list"]}
+            defaultView="list"
             defaultDate="2026-09-20"
             calendars={[{ id: "meetings", name: "Meetings", tone: "brand" }]}
             defaultEvents={[

@@ -105,7 +105,7 @@ export function AppHeaderDoc() {
 
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
-            <div className={styles.layout}>
+            <div className={`${styles.layout} ${demo.stacked}`}>
               <div className={demo.canvas}>
                 <div className={demo.bar}>
                   <AppHeader

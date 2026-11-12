@@ -33,6 +33,8 @@
   "tokens": [
     "text.primary",
     "text.secondary",
+    "text.brand",
+    "fill.brand",
     "icon.primary",
     "surface.card",
     "surface.muted",
