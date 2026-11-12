@@ -1,0 +1,109 @@
+/* UsageBilling block: kit components on kit layout classes. The block is its own container so
+   it stacks wherever it is placed, not only at a viewport width. */
+.root {
+  container: usagebilling / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.split {
+  min-width: 0;
+  align-items: start;
+}
+
+.split > * {
+  min-width: 0;
+}
+
+/* UsageMeter caps itself at --usage-width (25rem); in the block it fills its column. */
+.split > .meter {
+  --usage-width: 100%;
+}
+
+.plan {
+  display: grid;
+  gap: var(--space-stack-md);
+  margin: 0;
+}
+
+.plan dd {
+  margin: 0;
+}
+
+.price {
+  display: grid;
+  gap: var(--space-stack-xs);
+}
+
+.figure {
+  color: var(--text-fg);
+  font-size: var(--type-size-metric);
+  font-weight: var(--type-weight-metric);
+  line-height: var(--type-line-ui-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-inline-xs) var(--space-inline-sm);
+  padding-block-start: var(--space-stack-sm);
+  border-block-start: var(--border-highlight) solid var(--line);
+}
+
+.caption {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+}
+
+.value {
+  color: var(--text-fg);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The plan card stacks under the meter, and invoices under limits, below 64rem of block width
+   (--grid-breakpoint-md; container queries cannot read var()), as in AgentOverview. */
+@container usagebilling (max-width: 64rem) {
+  .root .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
