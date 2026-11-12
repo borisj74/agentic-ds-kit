@@ -36,6 +36,25 @@ A **block** is a kit component for a whole area of a screen, built only from oth
 - AgentLanes adaptive tick step (so long windows like "since your last visit" work) and the 390 axis overlap.
 - Blocks as their own `questions` kind?
 
+### AppDirectory (Integrations, `/blocks/app-directory`)
+
+- **Composed from:** FilterButton (a plain on/off "Connected" chip, `hasDropdown={false}`, `aria-pressed`), IntegrationPicker (search Input, category SegmentedControl, tiles), Drawer (detail), Badge (status in words), Button, Empty. IntegrationPicker already owns search and categories, so the block doesn't add a second search or a FilterBar; FilterBar's chips open option menus, which a yes/no filter doesn't need.
+- **Flow:** a tile's Connect or Manage opens the Drawer (about, publisher, "Once connected, it can …" permissions, connected note); the drawer's Connect (the one solid primary) calls `onConnect`, Disconnect (danger outline) calls `onDisconnect`. No confirm dialog on Disconnect: it is undone by connecting again, and an AlertDialog inside a Drawer stacks two modals.
+- **One primary:** while a drawer is open the block doesn't pass `connectingId` to the picker, so the tile behind the overlay doesn't show IntegrationPicker's solid "Connecting…" as well.
+- **Empty:** no apps → Empty (Request an integration when `onRequest`); Connected chip with nothing connected → Empty with Show all apps. Search misses use IntegrationPicker's own Empty.
+- **Kit gap (not fixed):** IntegrationPicker's contract says "Do not invent a local … AppDirectory". That line guards against local copies; this block is the kit's own. Boris may want that doNot reworded to point at this block.
+- **390:** tiles go one column, the category SegmentedControl wraps to two rows, the drawer is the kit Drawer's narrow sheet. No horizontal scroll.
+
+### WorkBoard (Productivity, `/blocks/work-board`)
+
+- **Composed from:** TaskBoard (columns, drag + keyboard moves), Drawer (size lg), Field + Select (Status = the task's column, Assignee with an Unassigned option), Avatar beside the assignee, Badge (tags), CommentThread (replies one level), Button.
+- **Data:** `columns` are TaskBoard columns (a task's column is its status), `tasks` carry description, tags, `assigneeId`, `dueOn` and `comments`, `people` resolves assignees and authors. Exported pure `moveWorkBoardTask(columns, id, to, index)` so apps (and the demo) can apply `onMove` in one line.
+- **Callbacks:** `onMove` from the board and from the drawer's Status (to the end of that column), `onUpdate(id, { assigneeId })`, `onComment(id, body, parentId?)`; `onEditComment` / `onDeleteComment` optional. Reply shows "Replying to …" with Cancel reply above the thread (CommentThread has no reply indicator of its own).
+- **Drawer fields stack** (no `layout-split`): the Drawer is portaled outside `layout-content`, so a split never stacks there and squeezed the assignee name at 390.
+- **CommentThread width:** it caps itself at `--thread-width: 24rem`; in the drawer the block sets `--thread-width: 100%` (the component's documented custom-width hook). Jev rated WorkBoard's CSS "uncertain" (deterministic scan clean); **Boris to confirm** this override is fine, or OK a `fill` option on CommentThread.
+- **One primary:** Comment in the open drawer; the board's buttons are outline / ghost.
+- **390:** TaskBoard scrolls its columns sideways inside its own card (its design); the page has no horizontal scroll.
+
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 
 Boris asked for pattern pages that look like affectUI's screens catalogue (affectui.com/screens/app-shell-flat): breadcrumb, title and one line, a Preview / Code toolbar, the screen at full size scaled into a plain frame, then sections. His calls: all pattern pages, a scaled iframe, a new PR on top of #137.
