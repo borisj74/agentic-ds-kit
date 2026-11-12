@@ -179,6 +179,6 @@
 }
 
 .active {
-  background-color: var(--appnav-item-active-background, color-mix(in srgb, var(--action-primary) 10%, var(--surface-card)));
+  background-color: var(--appnav-item-active-background, var(--surface-brand-subtle));
   color: var(--appnav-item-active-text, var(--action-primary));
 }
