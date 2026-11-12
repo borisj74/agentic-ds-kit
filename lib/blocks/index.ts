@@ -7,6 +7,8 @@ import { appDirectoryDoc } from "./app-directory";
 import { workBoardDoc } from "./work-board";
 import { kpiBoardDoc } from "./kpi-board";
 import { usageBillingDoc } from "./usage-billing";
+import { planReviewDoc } from "./plan-review";
+import { changeReviewDoc } from "./change-review";
 import type { BlockDoc } from "./types";
 
 export type { BlockContract, BlockDoc } from "./types";
@@ -15,7 +17,7 @@ export type { BlockContract, BlockDoc } from "./types";
  * Every block's docs, A–Z by label. A new block adds its own file here (contract, lead, usage),
  * a demo in app/_components/blocks/, and one line in each list.
  */
-export const BLOCK_DOCS: BlockDoc[] = [agentOverviewDoc, logoStripDoc, plansDoc, liveSessionDoc, runDetailDoc, appDirectoryDoc, workBoardDoc, kpiBoardDoc, usageBillingDoc].sort((a, b) => a.label.localeCompare(b.label, "en"));
+export const BLOCK_DOCS: BlockDoc[] = [agentOverviewDoc, logoStripDoc, plansDoc, liveSessionDoc, runDetailDoc, appDirectoryDoc, workBoardDoc, kpiBoardDoc, usageBillingDoc, planReviewDoc, changeReviewDoc].sort((a, b) => a.label.localeCompare(b.label, "en"));
 
 export function blockDoc(slug: string): BlockDoc | undefined {
   return BLOCK_DOCS.find((doc) => doc.slug === slug);

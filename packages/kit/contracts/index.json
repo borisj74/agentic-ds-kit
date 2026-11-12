@@ -993,6 +993,26 @@
     "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade."
   },
   {
+    "id": "planreview",
+    "kind": "block",
+    "intent": "Block: approve an agent's plan before it runs. AgentPlan steps, ChangeSummary of what it changes, AutonomyDial, and Approve / Request changes / Reject.",
+    "group": "component",
+    "path": "contracts/planreview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Approve an agent's plan before it runs: its steps, what it changes, and how much it may do alone."
+  },
+  {
+    "id": "changereview",
+    "kind": "block",
+    "intent": "Block: review an agent's change set. ChangeSummary, a ListView of changed files beside the selected file's InlineDiff and CommentThread; accept or reject per file, Accept all.",
+    "group": "component",
+    "path": "contracts/changereview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Review what an agent changed: file by file, with the diff, comments, and accept or reject."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",
