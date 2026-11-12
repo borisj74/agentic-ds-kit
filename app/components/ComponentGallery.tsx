@@ -10,7 +10,7 @@ import styles from "./ComponentGallery.module.css";
 
 const cx = (...names: Array<string | false | undefined>) => names.filter(Boolean).join(" ");
 
-const SCENE_WIDTH = 288;
+const SCENE_WIDTH = 352;
 const SCENE_HEIGHT = 144;
 const GROUPS = galleryGroups();
 const TOTAL = GROUPS[0].count;
