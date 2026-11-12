@@ -3,6 +3,7 @@ import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 import type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../shared/chartMath";
 
 export type LineChartVariant = "line" | "area";
+export type LineChartCurve = "smooth" | "linear";
 
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
@@ -12,6 +13,8 @@ export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">,
   title?: string;
   description?: string;
   variant?: LineChartVariant;
+  /** "smooth" (default) rounds the line through every point without overshooting it (monotone); "linear" draws straight segments. */
+  curve?: LineChartCurve;
   height?: number;
   showGrid?: boolean;
   showTable?: boolean;
