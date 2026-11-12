@@ -913,6 +913,26 @@
     "summary": "See what your agents did since you last looked, what is running, and what needs you."
   },
   {
+    "id": "logostrip",
+    "kind": "block",
+    "intent": "Block: trusted-by row. A heading over named customer logos on a kit Conveyor; moves only when the person moves it.",
+    "group": "component",
+    "path": "contracts/logostrip.json",
+    "status": "stable",
+    "category": "Social proof",
+    "summary": "A trusted-by row: a heading over named customer logos that people can move along."
+  },
+  {
+    "id": "plans",
+    "kind": "block",
+    "intent": "Block: pricing section. PricingPlans with its Monthly / Yearly switch, a feature comparison Table and an FAQ Accordion.",
+    "group": "component",
+    "path": "contracts/plans.json",
+    "status": "stable",
+    "category": "Pricing",
+    "summary": "A pricing section: plans with a monthly / yearly switch, a feature comparison and an FAQ."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

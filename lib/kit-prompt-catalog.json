@@ -9661,7 +9661,7 @@
       "doNotUseWhen": [
         "usage against a plan limit — UsageMeter",
         "picking options in a form — TileGroup",
-        "a public marketing pricing page"
+        "a whole public pricing section (plans, comparison, FAQ) — the Plans block"
       ],
       "doNot": [
         "Do not invent a local PlanCard or PricingTable",
@@ -10254,6 +10254,169 @@
         "title": {
           "type": "string",
           "default": "Agent overview"
+        }
+      }
+    },
+    {
+      "id": "logostrip",
+      "group": "component",
+      "intent": "Block: a social proof row. A short heading over a row of customer logos on a kit Conveyor. Each logo is named for screen readers. The row moves only when the person moves it (arrows, arrow keys, swipe); there is no autoplay to pause.",
+      "useWhen": [
+        "a trusted-by row on a landing or pricing page",
+        "a row of partner or integration marks under a hero",
+        "more logos than fit the width, moved along by the person"
+      ],
+      "doNotUseWhen": [
+        "quotes or case studies — a Card per testimonial",
+        "picking an integration — IntegrationPicker",
+        "paged slides — Carousel",
+        "a self-scrolling marquee — not in the kit (Conveyor has no loop or autoplay)"
+      ],
+      "doNot": [
+        "Do not build a local marquee or auto-scrolling logo row",
+        "Do not ship a logo without a name, or with a name like logo-3",
+        "Do not use real brands in samples; use neutral placeholder marks",
+        "Do not colour logos with raw hex; inline marks use currentColor",
+        "Do not nest the strip in another Conveyor"
+      ],
+      "props": {
+        "logos": {
+          "type": "array",
+          "required": true,
+          "note": "{ id?, name, src?, logo?, href? }[]. name is required: the image's alt or the node's accessible name. src for an image, logo for a node (an inline SVG in currentColor); with neither, the name shows as text."
+        },
+        "title": {
+          "type": "string",
+          "default": "Trusted by teams at",
+          "note": "Heading (h2)."
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "One line under the heading."
+        },
+        "label": {
+          "type": "string",
+          "default": "Customer logos",
+          "note": "Names the Conveyor group and its arrows (Scroll customer logos right); the list says the count."
+        },
+        "align": {
+          "type": "enum",
+          "values": [
+            "center",
+            "start"
+          ],
+          "default": "center",
+          "note": "Heading and row alignment while the row fits."
+        }
+      }
+    },
+    {
+      "id": "plans",
+      "group": "component",
+      "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price), a feature comparison Table across the plans, and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
+      "useWhen": [
+        "a public pricing page or the pricing section of a landing page",
+        "plans need a feature-by-feature comparison and common questions beside them",
+        "an upgrade screen that should answer billing questions in place"
+      ],
+      "doNotUseWhen": [
+        "only the plan cards, e.g. a small upgrade dialog — PricingPlans",
+        "usage against a plan limit — UsageMeter or UsageList",
+        "picking options in a form — TileGroup",
+        "invoices and the billing schedule — the billing-schedule pattern"
+      ],
+      "doNot": [
+        "Do not rebuild Plans from local plan cards or a pricing table; import the block",
+        "Do not show more than one solid primary; only the recommended plan's CTA is solid",
+        "Do not add a second Monthly / Yearly switch; the PricingPlans one drives the whole block",
+        "Do not mark included features by colour alone",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "plans": {
+          "type": "array",
+          "required": true,
+          "note": "PricingPlans plans: { id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
+        },
+        "interval": {
+          "type": "enum",
+          "values": [
+            "month",
+            "year"
+          ],
+          "required": false,
+          "note": "Controlled interval."
+        },
+        "defaultInterval": {
+          "type": "enum",
+          "values": [
+            "month",
+            "year"
+          ],
+          "default": "month",
+          "note": "Uncontrolled starting interval."
+        },
+        "onIntervalChange": {
+          "type": "function",
+          "required": false,
+          "note": "(interval) => void. The Monthly / Yearly switch changed."
+        },
+        "onChoosePlan": {
+          "type": "function",
+          "required": false,
+          "note": "(planId, interval) => void. A plan's CTA was pressed."
+        },
+        "comparison": {
+          "type": "array",
+          "required": false,
+          "note": "{ feature, values: Record<planId, boolean | string> }[]. true reads Included, false or missing Not included, a string as written. Omit to leave the comparison out."
+        },
+        "faqs": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, question, answer }[]. Shown as an Accordion when there are two or more."
+        },
+        "title": {
+          "type": "string",
+          "default": "Pricing",
+          "note": "Block heading (h2)."
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "One line under the heading."
+        },
+        "plansTitle": {
+          "type": "string",
+          "default": "Choose a plan",
+          "note": "PricingPlans heading (h3)."
+        },
+        "comparisonTitle": {
+          "type": "string",
+          "default": "Compare plans"
+        },
+        "faqTitle": {
+          "type": "string",
+          "default": "Questions"
+        },
+        "savingsLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Passed to PricingPlans, beside the switch."
+        },
+        "footnote": {
+          "type": "string",
+          "required": false,
+          "note": "Passed to PricingPlans, under the cards."
+        },
+        "currency": {
+          "type": "string",
+          "default": "$"
+        },
+        "unitLabel": {
+          "type": "string",
+          "default": "/ seat / month"
         }
       }
     },
