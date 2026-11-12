@@ -1,2 +1,2 @@
 export { Plans } from "./Plans";
-export type { PlansProps, PlansPlan, PlansInterval, PlansComparisonRow, PlansFaq } from "./Plans.types";
+export type { PlansProps, PlansPlan, PlansInterval, PlansFaq } from "./Plans.types";

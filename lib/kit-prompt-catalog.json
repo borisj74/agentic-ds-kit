@@ -9713,7 +9713,7 @@
       "doNotUseWhen": [
         "usage against a plan limit — UsageMeter",
         "picking options in a form — TileGroup",
-        "a whole public pricing section (plans, comparison, FAQ) — the Plans block"
+        "a whole public pricing section (plans and FAQ) — the Plans block"
       ],
       "doNot": [
         "Do not invent a local PlanCard or PricingTable",
@@ -10366,10 +10366,10 @@
     {
       "id": "plans",
       "group": "component",
-      "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price), a feature comparison Table across the plans, and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
+      "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price) and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
       "useWhen": [
         "a public pricing page or the pricing section of a landing page",
-        "plans need a feature-by-feature comparison and common questions beside them",
+        "plans need the common questions answered beside them",
         "an upgrade screen that should answer billing questions in place"
       ],
       "doNotUseWhen": [
@@ -10382,7 +10382,6 @@
         "Do not rebuild Plans from local plan cards or a pricing table; import the block",
         "Do not show more than one solid primary; only the recommended plan's CTA is solid",
         "Do not add a second Monthly / Yearly switch; the PricingPlans one drives the whole block",
-        "Do not mark included features by colour alone",
         "Do not use raw hex"
       ],
       "props": {
@@ -10419,11 +10418,6 @@
           "required": false,
           "note": "(planId, interval) => void. A plan's CTA was pressed."
         },
-        "comparison": {
-          "type": "array",
-          "required": false,
-          "note": "{ feature, values: Record<planId, boolean | string> }[]. true reads Included, false or missing Not included, a string as written. Omit to leave the comparison out."
-        },
         "faqs": {
           "type": "array",
           "required": false,
@@ -10443,10 +10437,6 @@
           "type": "string",
           "default": "Choose a plan",
           "note": "PricingPlans heading (h3)."
-        },
-        "comparisonTitle": {
-          "type": "string",
-          "default": "Compare plans"
         },
         "faqTitle": {
           "type": "string",

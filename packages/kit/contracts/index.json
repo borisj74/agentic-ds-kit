@@ -925,12 +925,12 @@
   {
     "id": "plans",
     "kind": "block",
-    "intent": "Block: pricing section. PricingPlans with its Monthly / Yearly switch, a feature comparison Table and an FAQ Accordion.",
+    "intent": "Block: pricing section. PricingPlans with its Monthly / Yearly switch and an FAQ Accordion.",
     "group": "component",
     "path": "contracts/plans.json",
     "status": "stable",
     "category": "Pricing",
-    "summary": "A pricing section: plans with a monthly / yearly switch, a feature comparison and an FAQ."
+    "summary": "A pricing section: plans with a monthly / yearly switch and the questions people ask before they buy."
   },
   {
     "id": "livesession",

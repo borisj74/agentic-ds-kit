@@ -1,6 +1,5 @@
-/* Plans block: PricingPlans, a comparison Table and an FAQ Accordion, stacked. The block is its
-   own container; its parts size themselves (PricingPlans' cards wrap, the Table scrolls in its
-   own focusable region), so nothing forces a page scroll at any width. */
+/* Plans block: PricingPlans and an FAQ Accordion, stacked. The block is its own container; its
+   parts size themselves (PricingPlans' cards wrap), so nothing forces a page scroll at any width. */
 .root {
   container: plans / inline-size;
   box-sizing: border-box;
@@ -51,25 +50,3 @@
   color: var(--text-fg);
 }
 
-.mark {
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-}
-
-.yes {
-  color: var(--icon-success);
-}
-
-.no {
-  color: var(--icon-muted);
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}

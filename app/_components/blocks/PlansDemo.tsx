@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Plans } from "agentic-ds-kit";
 import styles from "./BlockDemo.module.css";
-import { PLANS_COMPARISON, PLANS_FAQS, PLANS_SAMPLE } from "@/lib/blocks/plans.sample";
+import { PLANS_FAQS, PLANS_SAMPLE } from "@/lib/blocks/plans.sample";
 
 /** Plans with the sample workspace pricing. Choosing a plan says so in a live status line. */
 export function PlansDemo() {
@@ -14,7 +14,6 @@ export function PlansDemo() {
         title="Pricing"
         description="Start free with two agents. Upgrade when your team grows."
         plans={PLANS_SAMPLE}
-        comparison={PLANS_COMPARISON}
         faqs={PLANS_FAQS}
         savingsLabel="Save 20% with yearly"
         footnote="Prices exclude tax. Change or cancel any time."

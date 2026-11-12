@@ -1,4 +1,4 @@
-import type { PlansComparisonRow, PlansFaq, PlansPlan } from "agentic-ds-kit";
+import type { PlansFaq, PlansPlan } from "agentic-ds-kit";
 
 /** Sample plans for the Plans docs: an agent workspace priced per seat. */
 export const PLANS_SAMPLE: PlansPlan[] = [
@@ -29,17 +29,6 @@ export const PLANS_SAMPLE: PlansPlan[] = [
     features: ["Unlimited agents", "100,000 runs a month", "1-year run history", "SSO and SCIM", "Priority support"],
     ctaLabel: "Talk to sales",
   },
-];
-
-export const PLANS_COMPARISON: PlansComparisonRow[] = [
-  { feature: "Agents", values: { starter: "2", team: "10 per seat", scale: "Unlimited" } },
-  { feature: "Runs a month", values: { starter: "500", team: "10,000", scale: "100,000" } },
-  { feature: "Run history", values: { starter: "7 days", team: "90 days", scale: "1 year" } },
-  { feature: "Shared agent lanes", values: { starter: true, team: true, scale: true } },
-  { feature: "Approvals inbox", values: { starter: false, team: true, scale: true } },
-  { feature: "Audit log", values: { starter: false, team: true, scale: true } },
-  { feature: "SSO and SCIM", values: { starter: false, team: false, scale: true } },
-  { feature: "Support", values: { starter: "Community", team: "Email, 1 business day", scale: "Priority, 4 hours" } },
 ];
 
 export const PLANS_FAQS: PlansFaq[] = [

@@ -7,17 +7,16 @@ export const plansDoc: BlockDoc = {
   name: "Plans",
   contract,
   lead:
-    "A whole pricing section. Plan cards with one Monthly / Yearly switch, a feature-by-feature comparison and the questions people ask before they buy. The recommended plan's button is the one primary.",
+    "A whole pricing section. Plan cards with one Monthly / Yearly switch and the questions people ask before they buy. The recommended plan's button is the one primary.",
   usage: `import { Plans } from "agentic-ds-kit";
 
-export function Pricing({ plans, comparison, faqs }) {
+export function Pricing({ plans, faqs }) {
   return (
     <main className="layout-content">
       <Plans
         title="Pricing"
         description="Start free. Upgrade when your team grows."
         plans={plans}            // PricingPlans plans; mark one recommended
-        comparison={comparison}  // { feature, values: { [planId]: boolean | string } }[]
         faqs={faqs}              // { id, question, answer }[]
         savingsLabel="Save 20% with yearly"
         defaultInterval="month"  // or interval + onIntervalChange

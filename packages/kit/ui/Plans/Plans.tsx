@@ -1,32 +1,18 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Check, Minus } from "lucide-react";
-import { ICON_STROKE } from "../../lib/icon";
 import { Accordion } from "../Accordion";
 import { PricingPlans } from "../PricingPlans";
-import { Table } from "../Table";
 import { cx } from "../shared/cx";
-import { comparisonColumns, comparisonGrid, faqItems, plansHandlers, type PlansCell } from "./plans.logic";
+import { faqItems, plansHandlers } from "./plans.logic";
 import type { PlansInterval, PlansProps } from "./Plans.types";
 import styles from "./Plans.module.css";
 
-export type { PlansProps, PlansPlan, PlansInterval, PlansComparisonRow, PlansFaq } from "./Plans.types";
-
-function Cell({ cell }: { cell: PlansCell }) {
-  if (cell.kind === "text") return <>{cell.label}</>;
-  const Icon = cell.kind === "yes" ? Check : Minus;
-  return (
-    <span className={cx(styles.mark, cell.kind === "yes" ? styles.yes : styles.no)}>
-      <Icon size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-      <span className={styles.srOnly}>{cell.label}</span>
-    </span>
-  );
-}
+export type { PlansProps, PlansPlan, PlansInterval, PlansFaq } from "./Plans.types";
 
 /**
- * Block: a pricing section. Heading and lead, PricingPlans with its Monthly / Yearly switch, a
- * feature comparison Table and an FAQ Accordion. The recommended plan's CTA is the one solid primary.
+ * Block: a pricing section. Heading and lead, PricingPlans with its Monthly / Yearly switch and
+ * an FAQ Accordion. The recommended plan's CTA is the one solid primary.
  */
 export function Plans(props: PlansProps) {
   const {
@@ -35,12 +21,10 @@ export function Plans(props: PlansProps) {
     defaultInterval = "month",
     onIntervalChange,
     onChoosePlan,
-    comparison,
     faqs,
     title = "Pricing",
     description,
     plansTitle = "Choose a plan",
-    comparisonTitle = "Compare plans",
     faqTitle = "Questions",
     savingsLabel,
     footnote,
@@ -51,7 +35,6 @@ export function Plans(props: PlansProps) {
     ...rest
   } = props;
   const titleId = useId();
-  const compareId = useId();
   const faqId = useId();
   const [innerInterval, setInnerInterval] = useState<PlansInterval>(defaultInterval);
   const interval = intervalProp ?? innerInterval;
@@ -63,7 +46,6 @@ export function Plans(props: PlansProps) {
     onChoosePlan,
   });
 
-  const rows = comparison?.length ? comparisonGrid(plans, comparison) : [];
   const questions = faqItems(faqs);
 
   return (
@@ -86,21 +68,6 @@ export function Plans(props: PlansProps) {
         currency={currency}
         unitLabel={unitLabel}
       />
-
-      {rows.length ? (
-        <section className={styles.part} aria-labelledby={compareId}>
-          <h3 id={compareId} className={styles.subtitle}>
-            {comparisonTitle}
-          </h3>
-          <Table
-            columns={comparisonColumns(plans)}
-            rows={rows.map((row) => ({
-              feature: row.feature,
-              ...Object.fromEntries(row.cells.map(({ planId, cell }) => [planId, <Cell key={planId} cell={cell} />])),
-            }))}
-          />
-        </section>
-      ) : null}
 
       {questions.length ? (
         <section className={styles.part} aria-labelledby={faqId}>
