@@ -6,6 +6,8 @@ import { LiveSessionDemo } from "./LiveSessionDemo";
 import { RunDetailDemo } from "./RunDetailDemo";
 import { AppDirectoryDemo } from "./AppDirectoryDemo";
 import { WorkBoardDemo } from "./WorkBoardDemo";
+import { KpiBoardDemo } from "./KpiBoardDemo";
+import { UsageBillingDemo } from "./UsageBillingDemo";
 
 /** The live demo each block's preview frame renders, by docs slug. */
 export const BLOCK_DEMOS: Record<string, ComponentType> = {
@@ -16,4 +18,6 @@ export const BLOCK_DEMOS: Record<string, ComponentType> = {
   "run-detail": RunDetailDemo,
   "app-directory": AppDirectoryDemo,
   "work-board": WorkBoardDemo,
+  "kpi-board": KpiBoardDemo,
+  "usage-billing": UsageBillingDemo,
 };

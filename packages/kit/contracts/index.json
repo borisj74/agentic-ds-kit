@@ -973,6 +973,26 @@
     "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through."
   },
   {
+    "id": "kpiboard",
+    "kind": "block",
+    "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+    "group": "component",
+    "path": "contracts/kpiboard.json",
+    "status": "stable",
+    "category": "Analytics",
+    "summary": "Pick a KPI to chart it and list its top rows, with one range for all."
+  },
+  {
+    "id": "usagebilling",
+    "kind": "block",
+    "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+    "group": "component",
+    "path": "contracts/usagebilling.json",
+    "status": "stable",
+    "category": "Billing",
+    "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

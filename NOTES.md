@@ -85,6 +85,21 @@ At 390: everything stacks, no horizontal scroll; the chat sits first at 32rem, s
 - **CommentThread width:** it caps itself at `--thread-width: 24rem`; in the drawer the block sets `--thread-width: 100%` (the component's documented custom-width hook). Jev rated WorkBoard's CSS "uncertain" (deterministic scan clean); **Boris to confirm** this override is fine, or OK a `fill` option on CommentThread.
 - **One primary:** Comment in the open drawer; the board's buttons are outline / ghost.
 - **390:** TaskBoard scrolls its columns sideways inside its own card (its design); the page has no horizontal scroll.
+### KpiBoard (`kpi-board`, Analytics)
+- **Parts:** heading + range SegmentedControl ("Range"), Scoreboard of 3–4 Scorecards (the picker), LineChart (area) of the picked KPI beside a DataTable of its top rows (`layout-split--primary`, stacks below 64rem of block width like AgentOverview).
+- **Props:** `metrics` (`{ id, label, values: { [range]: { value, delta?, trend?, deltaTone? } }, columns, rowsTitle?, rankBy? }`), `series[metricId][range]`, `rows[metricId][range]`, `ranges`, `range` / `defaultRange` / `onRangeChange`, `selectedMetric` / `defaultSelectedMetric` / `onSelectedMetricChange`, `rowLimit` (5), `description`, `title`. Data is keyed by range so the uncontrolled range works without a fetch; values stay pre-formatted strings. `rankBy` sorts rows highest first (currency strings parse). Pure helpers in `kpiBoard.logic.ts`.
+- **Kit change (a11y, additive): Scorecard `selected`.** Scorecard had no selected state. With `onClick` and `selected` set, the button gets `aria-pressed`, a selected look (`--border-brand` edge on `--action-selected`, existing tokens) and its name includes the badge. KpiBoard puts an "In chart" Badge on the picked card, so it reads "Churn 3.9% In chart, pressed". Without `selected` nothing changes. Contract updated. Jev: correct (act).
+- **No solid primary** in the block; the page keeps its own.
+- **390:** no horizontal scroll. The four Scorecards stack one per row (tall, as in AgentOverview); the DataTable uses widths on short columns and `wrap` on names so it fits. The chart thins its axis labels.
+- **Jev:** "uncertain" on the stylesheet only for the `@container … (max-width: 64rem)` line (same as AgentOverview; container queries cannot read `var()`).
+### UsageBilling (`usage-billing`, Billing)
+- **Parts:** UsageMeter (main allowance) beside the plan Card (`layout-split--primary`); "Other limits" Card with UsageList beside "Recent invoices" Card with ListView (status Badge, Download action per row) (`layout-split`). Both rows stack below 64rem of block width.
+- **One primary:** Upgrade ("Upgrade to {plan.upgradeTo}") is a solid primary in the plan Card's actions, next to Manage payment (outline). The UsageMeter's own `onUpgrade` is never passed, so its "Upgrade plan" never shows when the meter warns. No Upgrade without `onUpgrade`.
+- **Props:** `plan`, `allowance` (UsageMeter props minus its actions), `limits`, `invoices` (`{ id, number, date, amount, status }`), `invoiceLimit` (4), `onUpgrade`, `onManagePayment`, `onDownloadInvoice(id)`, `onViewInvoices`, `onViewUsage`, `title`, `description`. Names carry counts: the list is "Recent invoices, 4 of 6"; each Download is "Download INV-…"; the limits card line says how many are near their limit (80%, UsageList's threshold).
+- **Why ListView, not InvoiceDocument:** InvoiceDocument is one whole invoice and brings its own solid primary (Record payment / Issue); a compact list of recent invoices fits the area and keeps Upgrade the only primary.
+- **UsageMeter width:** it caps itself at `--usage-width` (25rem, its own knob); the block sets it to 100% so the meter fills its column.
+- **Gap:** Card titles are always `h2`, so the cards' headings sit at the same level as the block's `h2` (UsageMeter uses `h3`). A Card heading-level prop would fix the outline.
+- **390:** no horizontal scroll; everything stacks in one column, plan facts wrap.
 
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 

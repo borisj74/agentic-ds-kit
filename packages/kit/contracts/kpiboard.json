@@ -1,0 +1,135 @@
+{
+  "id": "kpiboard",
+  "kind": "block",
+  "category": "Analytics",
+  "summary": "Pick a KPI to chart it and list its top rows, with one range for all.",
+  "status": "stable",
+  "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+  "useWhen": [
+    "the first row of an analytics or reporting dashboard",
+    "compare a few KPIs and drill into one without leaving the page",
+    "one range (7 / 30 / 90 days) should change cards, chart and table together"
+  ],
+  "doNotUseWhen": [
+    "only a strip of numbers: Scoreboard",
+    "one chart on its own: LineChart or BarChart",
+    "a full dataset to search and filter: DataTable",
+    "more than four KPIs: Scoreboard with Conveyor"
+  ],
+  "contains": [
+    "datatable",
+    "linechart",
+    "scoreboard",
+    "scorecard",
+    "segmentedcontrol"
+  ],
+  "props": {
+    "metrics": {
+      "type": "array",
+      "required": true,
+      "note": "3\u20134 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+    },
+    "series": {
+      "type": "object",
+      "required": true,
+      "note": "series[metricId][range]: ChartDatum[] ({ label, value }) for the LineChart."
+    },
+    "rows": {
+      "type": "object",
+      "required": true,
+      "note": "rows[metricId][range]: DataTableRow[] (each with id). Ranked by the metric's rankBy column, highest first, then cut to rowLimit."
+    },
+    "ranges": {
+      "type": "array",
+      "required": true,
+      "note": "{ value, label }[], two to four, e.g. 7d / 30d / 90d."
+    },
+    "range": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled range value."
+    },
+    "defaultRange": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled starting range. Default the first."
+    },
+    "onRangeChange": {
+      "type": "function",
+      "required": false,
+      "note": "(range) => void"
+    },
+    "selectedMetric": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled metric id for the chart and table."
+    },
+    "defaultSelectedMetric": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled starting metric. Default the first."
+    },
+    "onSelectedMetricChange": {
+      "type": "function",
+      "required": false,
+      "note": "(metricId) => void"
+    },
+    "rowLimit": {
+      "type": "number",
+      "default": 5,
+      "note": "How many top rows the table shows."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "Line under the heading."
+    },
+    "title": {
+      "type": "string",
+      "default": "Key metrics"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "top: heading beside the range SegmentedControl",
+    "then the Scoreboard of KPIs, one row",
+    "then the LineChart beside the DataTable, in layout-split--primary",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width the table stacks under the chart"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "grid.breakpoint.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the range is a kit SegmentedControl (radio group) named Range",
+      "each KPI is a Scorecard button with aria-pressed; the selected one shows an In chart badge and its name includes it",
+      "the chart title and the table caption name the metric and the range",
+      "the LineChart keeps its table view; the DataTable keeps its caption and scroll region",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild KpiBoard from a local dashboard; import the block",
+    "Do not add a second range control; the one range drives cards, chart and table",
+    "Do not put more than four KPIs in it",
+    "Do not use raw hex",
+    "No solid primary Button in the block; leave it to the page"
+  ],
+  "snippet": "<KpiBoard metrics={metrics} series={series} rows={rows} ranges={[{ value: \"7d\", label: \"7 days\" }, { value: \"30d\", label: \"30 days\" }, { value: \"90d\", label: \"90 days\" }]} defaultRange=\"30d\" />"
+}

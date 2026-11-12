@@ -49,6 +49,7 @@ export function Scorecard({
   badge,
   badgeTone = "neutral",
   onClick,
+  selected,
   fill = false,
   className: userClassName,
   ref,
@@ -56,10 +57,12 @@ export function Scorecard({
 }: ScorecardProps) {
   const labelId = useId();
   const valueId = useId();
+  const badgeId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
+  const toggle = onClick && selected !== undefined;
   const deltaClass = deltaTone ? DELTA_TONE_CLASS[deltaTone] : TREND_CLASS[trend];
   const deltaIcon = deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
-  const className = cx(styles.card, styles[size], fill && styles.fill, onClick && styles.interactive, userClassName);
+  const className = cx(styles.card, styles[size], fill && styles.fill, onClick && styles.interactive, toggle && selected && styles.selected, userClassName);
 
   const body = (
     <>
@@ -71,7 +74,7 @@ export function Scorecard({
             </span>
           ) : null}
           {badge ? (
-            <span className={styles.badgeSlot}>
+            <span id={badgeId} className={styles.badgeSlot}>
               <Badge size="sm" tone={badgeTone}>
                 {badge}
               </Badge>
@@ -104,7 +107,8 @@ export function Scorecard({
         type="button"
         className={className}
         onClick={onClick}
-        aria-labelledby={labelledBy}
+        aria-labelledby={toggle && badge ? `${labelledBy} ${badgeId}` : labelledBy}
+        aria-pressed={toggle ? selected : undefined}
       >
         {body}
       </button>
