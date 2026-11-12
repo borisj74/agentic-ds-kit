@@ -13,7 +13,7 @@ A **block** is a kit component for a whole area of a screen, built only from oth
 - **Kit change (a11y):** AgentInbox rows now also carry `aria-expanded` (true on the selected row) and always `aria-controls` the detail region (contract a11y updated). MissionHome toggles selection, so a row opens and closes its detail. Additive; `aria-current` stays.
 - **No new tokens, colours or motion.** Only role tokens and layout classes; the block has no motion of its own.
 - **Docs:** new **Blocks** group in the site nav (and command palette), page `/blocks/mission-home`: preview (scaled iframe of `/frame/blocks/mission-home`, light/dark, 1440/390, open full screen, Copy prompt bar with a block prompt from `lib/pattern-prompt.ts` `blockPrompt`), What a block is, When to use / not, Usage, Layout, Props (from the contract), Built from. Sample data (`lib/mission-home-sample.ts`) is relative to now and the demo's approve / reject / retry change it live.
-- **Frame theme fix (blocks only):** frames took the root `data-theme` from the docs site's saved light/dark, so a light preview on a dark site mixed tokens (dark badges and lane blocks). `BlockFrame` sets its document root to the preview mode. Pattern frames (`FrameScreen`) have the same mix: follow-up.
+- **Frame theme fix:** frames took the root `data-theme` from the docs site's saved light/dark, so a light preview on a dark site mixed tokens (dark badges and lane blocks). `BlockFrame` and the pattern frames' `FrameScreen` now set their document root to the preview mode. Checked both ways (site dark + preview light, site light + preview dark) on Settings area · Team.
 
 ### At 390px (known open items)
 
@@ -25,7 +25,6 @@ A **block** is a kit component for a whole area of a screen, built only from oth
 
 - Confirm the 64rem stack point (or a new breakpoint token / layout class near 54rem).
 - AgentLanes adaptive tick step (so long windows like "since your last visit" work) and the 390 axis overlap.
-- Same root `data-theme` fix for pattern frames.
 - Blocks as their own `questions` kind?
 
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
