@@ -33,17 +33,19 @@
   flex: 1;
   width: var(--border-width-thin);
   min-height: var(--space-6);
-  margin-block: var(--space-1);
+  /* Runs dot to dot, no gap. */
+  margin-block: 0;
   background: var(--border-faint);
 }
 
+/* The current step is the one brand mark; next and later stay grey. */
 .now .dot {
-  border-color: var(--text-primary);
-  background: var(--text-primary);
+  border-color: var(--fill-brand);
+  background: var(--fill-brand);
 }
 
 .now .line {
-  background: var(--text-primary);
+  background: var(--fill-brand);
 }
 
 .next .dot {
