@@ -225,8 +225,8 @@ export function BarChartDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Flat data is one series. Each bar takes its own hue from the palette so adjacent
-                  categories stay distinguishable.
+                  Flat data is one series, so every bar takes the one brand colour; the axis labels
+                  name the categories. Pass color on a datum to call one bar out.
                 </p>
               </div>
               <CodeBlock

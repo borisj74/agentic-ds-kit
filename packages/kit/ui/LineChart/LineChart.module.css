@@ -11,8 +11,9 @@
   overflow: visible;
 }
 
+/* Quiet guides: they sit behind the data, not over it. */
 .grid {
-  stroke: var(--border-strong);
+  stroke: var(--border-faint);
   stroke-width: 1;
   shape-rendering: crispEdges;
   pointer-events: none;
