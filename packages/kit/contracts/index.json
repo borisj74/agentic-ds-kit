@@ -915,12 +915,12 @@
   {
     "id": "logostrip",
     "kind": "block",
-    "intent": "Block: trusted-by row. A heading over named customer logos on a kit Conveyor; moves only when the person moves it.",
+    "intent": "Block: trusted-by wall. Rows of named logos drifting in opposite directions with soft edges, a Pause button, still under reduced motion.",
     "group": "component",
     "path": "contracts/logostrip.json",
     "status": "stable",
     "category": "Social proof",
-    "summary": "A trusted-by row: a heading over named customer logos that people can move along."
+    "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges and a pause."
   },
   {
     "id": "plans",

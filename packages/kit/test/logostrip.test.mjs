@@ -1,6 +1,7 @@
 /**
- * LogoStrip block: logo keys and kinds (logic), and the SSR render (labelled section, a named
- * list inside the Conveyor group, every logo named, links). Runs against the built kit (dist):
+ * LogoStrip block: logo keys, kinds, rows and directions (logic), and the SSR render (labelled
+ * section, a named group of rows, each row read once with an inert copy, every logo named, links,
+ * Pause / Play). Runs against the built kit (dist):
  * build first (npm run build -w agentic-ds-kit). CSS imports are stubbed.
  */
 import assert from "node:assert/strict";
@@ -49,27 +50,49 @@ describe("LogoStrip logic", () => {
     assert.deepEqual(items.map((i) => i.key), ["Same", "Same-1", "x"]);
   });
 
+  test("rows: dealt round-robin, never more rows than logos", () => {
+    assert.deepEqual(logic.stripRows([1, 2, 3, 4, 5, 6, 7], 3), [[1, 4, 7], [2, 5], [3, 6]]);
+    assert.deepEqual(logic.stripRows([1, 2], 5), [[1], [2]]);
+    assert.deepEqual(logic.stripRows([], 3), [[]]);
+    assert.deepEqual(logic.stripRows([1, 2, 3], 0), [[1, 2, 3]]);
+  });
+
+  test("neighbouring rows run in opposite directions; loops slow down with more logos", () => {
+    assert.deepEqual([0, 1, 2, 3].map(logic.rowDirection), ["left", "right", "left", "right"]);
+    assert.equal(logic.rowDuration(8), 32);
+    assert.equal(logic.rowDuration(2), 20);
+  });
+
   test("list label carries the count", () => {
     assert.equal(logic.listLabel("Customer logos", 8), "Customer logos, 8");
   });
 });
 
 describe("LogoStrip render", () => {
-  test("labelled section with h2 and a named list in the Conveyor group", () => {
+  const many = () => Array.from({ length: 9 }, (_, i) => ({ name: `Logo ${i + 1}` }));
+
+  test("labelled section with h2 and a named group of rows", () => {
     const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor(), description: "From startups to public companies." }));
     const id = html.match(/^<section[^>]*aria-labelledby="([^"]+)"/)[1];
     assert.match(html, new RegExp(`<h2 id="${id}"[^>]*>Trusted by teams at</h2>`));
-    assert.match(html, /role="group"[^>]*aria-label="Customer logos"/);
-    assert.match(html, /<ul[^>]*aria-label="Customer logos, 3"/);
+    assert.match(html, /role="group"[^>]*aria-label="Customer logos, 3"/);
     assert.match(html, /From startups to public companies\./);
   });
 
+  test("three rows by default, each read once: the copy is aria-hidden and inert", () => {
+    const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: many() }));
+    assert.equal((html.match(/<ul/g) ?? []).length, 6);
+    assert.equal((html.match(/<ul[^>]*aria-hidden="true"[^>]*inert=""/g) ?? []).length, 3);
+    assert.equal((html.match(/--logostrip-duration/g) ?? []).length, 3);
+    const two = renderToStaticMarkup(React.createElement(LogoStrip, { logos: many(), rows: 2 }));
+    assert.equal((two.match(/<ul/g) ?? []).length, 4);
+  });
+
   test("every logo has a name", () => {
-    const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor() }));
-    assert.match(html, /<img[^>]*src="\/logos\/northpeak.svg"[^>]*alt="Northpeak"|<img[^>]*alt="Northpeak"/);
+    const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor(), rows: 1 }));
+    assert.match(html, /<img[^>]*alt="Northpeak"/);
     assert.match(html, /role="img" aria-label="Fieldstone"/);
     assert.match(html, /<a[^>]*href="\/customers\/quarry"[^>]*>[\s\S]*?Quarry[\s\S]*?<\/a>/);
-    assert.equal((html.match(/<li/g) ?? []).length, 3);
   });
 
   test("custom title and label", () => {
@@ -78,8 +101,10 @@ describe("LogoStrip render", () => {
     assert.match(html, /aria-label="Partner logos, 3"/);
   });
 
-  test("nothing moves on its own: no autoplay or animation attributes", () => {
-    const html = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor() }));
-    assert.doesNotMatch(html, /aria-live|autoplay|animation/i);
+  test("Pause / Play is a pressed-state button; paused starts still", () => {
+    const moving = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor() }));
+    assert.match(moving, /<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?Pause logos/);
+    const still = renderToStaticMarkup(React.createElement(LogoStrip, { logos: logosFor(), defaultPaused: true }));
+    assert.match(still, /<button[^>]*aria-pressed="true"[^>]*>[\s\S]*?Play logos/);
   });
 });

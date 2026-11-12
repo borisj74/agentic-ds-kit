@@ -55,12 +55,20 @@ const SHAPES: Record<string, ReactNode> = {
   ),
 };
 
-const LOGOS: LogoStripLogo[] = Object.entries(SHAPES).map(([name, shape]) => ({
+/** 24 made-up names, each with one of the eight placeholder shapes. */
+const NAMES = [
+  "Northpeak", "Fieldstone", "Halden", "Brightwater", "Lumenfold", "Tidewell", "Corvane", "Quarrylane",
+  "Ashgrove", "Kestrel", "Marlow", "Ostberg", "Pinecrest", "Redfern", "Solvane", "Thornbury",
+  "Upland", "Vantor", "Westmere", "Yarrow", "Zennor", "Bellcove", "Cindral", "Dunmore",
+];
+const SHAPE_LIST = Object.values(SHAPES);
+
+const LOGOS: LogoStripLogo[] = NAMES.map((name, index) => ({
   name,
-  logo: <Mark name={name} shape={shape} />,
+  logo: <Mark name={name} shape={SHAPE_LIST[index % SHAPE_LIST.length]} />,
 }));
 
-/** LogoStrip with eight placeholder marks: they fit at 1440, and run past the edge at 390. */
+/** LogoStrip with 24 placeholder marks in three rows that drift in opposite directions. */
 export function LogoStripDemo() {
-  return <LogoStrip title="Trusted by teams at" description="Over 2,000 teams run their agents with us." logos={LOGOS} />;
+  return <LogoStrip title="Trusted by teams at" description="Over 2,000 teams run their agents with us." logos={LOGOS} rows={3} />;
 }

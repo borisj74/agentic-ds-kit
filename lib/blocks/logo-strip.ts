@@ -7,7 +7,7 @@ export const logoStripDoc: BlockDoc = {
   name: "LogoStrip",
   contract,
   lead:
-    "A trusted-by row. A short heading over customer logos, each named for screen readers. When the logos run past the edge, people move the row with its arrows, the arrow keys or a swipe; it never moves on its own.",
+    "A trusted-by wall. A short heading over rows of customer logos that drift sideways, each row the other way from the one above, fading out softly at both edges. Pause stops them, and hovering or tabbing to a logo holds them still. With reduced motion on, the rows stand still and wrap.",
   usage: `import { LogoStrip } from "agentic-ds-kit";
 
 export function Customers() {
@@ -15,6 +15,7 @@ export function Customers() {
     <main className="layout-content">
       <LogoStrip
         title="Trusted by teams at"
+        rows={3}                // dealt round-robin; rows alternate direction
         logos={[
           { name: "Northpeak", src: "/logos/northpeak.svg" },  // image: alt is the name
           { name: "Fieldstone", logo: <FieldstoneMark /> },    // node: named with role=img

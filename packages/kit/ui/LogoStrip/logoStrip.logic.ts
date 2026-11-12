@@ -18,3 +18,24 @@ export function stripLogos(logos: LogoStripLogo[]) {
 export function listLabel(label: string, count: number) {
   return `${label}, ${count}`;
 }
+
+/**
+ * Deal logos into rows, round-robin, so every row gets a mix. Never more rows than logos, and at
+ * least one. Each row keeps its logos in order.
+ */
+export function stripRows<T>(items: T[], rows: number): T[][] {
+  const count = Math.max(1, Math.min(Math.floor(rows) || 1, items.length || 1));
+  const out: T[][] = Array.from({ length: count }, () => []);
+  items.forEach((item, index) => out[index % count].push(item));
+  return out;
+}
+
+/** Odd rows run left, even rows run right, so neighbouring rows pass each other. */
+export function rowDirection(rowIndex: number): "left" | "right" {
+  return rowIndex % 2 === 0 ? "left" : "right";
+}
+
+/** A full loop's length in seconds: slower with more logos, so every row moves at about the same pace. */
+export function rowDuration(logoCount: number, secondsPerLogo = 4): number {
+  return Math.max(20, logoCount * secondsPerLogo);
+}

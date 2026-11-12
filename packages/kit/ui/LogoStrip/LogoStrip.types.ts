@@ -27,9 +27,16 @@ export interface LogoStripProps extends Omit<ComponentPropsWithoutRef<"section">
   title?: string;
   /** One line under the heading. */
   description?: string;
-  /** Names the scrolling run and its arrows ("Scroll customer logos right"). Default "Customer logos". */
+  /** Names the logo group; the count is added ("Customer logos, 24"). Default "Customer logos". */
   label?: string;
-  /** "center" (default) or "start": heading and row alignment when the row fits. */
+  /** Rows the logos are dealt into, round-robin. Neighbouring rows run in opposite directions. Default 3. */
+  rows?: number;
+  /** Controlled pause. Without it the Pause / Play button keeps its own state. */
+  paused?: boolean;
+  /** Uncontrolled starting state. Default false (moving). */
+  defaultPaused?: boolean;
+  onPausedChange?: (paused: boolean) => void;
+  /** "center" (default) or "start": heading alignment. */
   align?: "center" | "start";
   ref?: Ref<HTMLElement>;
 }

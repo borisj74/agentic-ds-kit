@@ -2,9 +2,9 @@
   "id": "logostrip",
   "kind": "block",
   "category": "Social proof",
-  "summary": "A trusted-by row: a heading over named customer logos that people can move along.",
+  "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges and a pause.",
   "status": "stable",
-  "intent": "Block: a social proof row. A short heading over a row of customer logos on a kit Conveyor. Each logo is named for screen readers. The row moves only when the person moves it (arrows, arrow keys, swipe); there is no autoplay to pause.",
+  "intent": "Block: a social proof wall. A short heading over rows of customer logos that drift sideways, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Pause / Play stops the motion; hover and keyboard focus hold it; under reduced motion the rows stand still and wrap.",
   "useWhen": [
     "a trusted-by row on a landing or pricing page",
     "a row of partner or integration marks under a hero",
@@ -13,11 +13,9 @@
   "doNotUseWhen": [
     "quotes or case studies — a Card per testimonial",
     "picking an integration — IntegrationPicker",
-    "paged slides — Carousel",
-    "a self-scrolling marquee — not in the kit (Conveyor has no loop or autoplay)"
+    "paged slides — Carousel"
   ],
   "contains": [
-    "conveyor",
     "button"
   ],
   "props": {
@@ -26,14 +24,50 @@
       "required": true,
       "note": "{ id?, name, src?, logo?, href? }[]. name is required: the image's alt or the node's accessible name. src for an image, logo for a node (an inline SVG in currentColor); with neither, the name shows as text."
     },
-    "title": { "type": "string", "default": "Trusted by teams at", "note": "Heading (h2)." },
-    "description": { "type": "string", "required": false, "note": "One line under the heading." },
+    "title": {
+      "type": "string",
+      "default": "Trusted by teams at",
+      "note": "Heading (h2)."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "One line under the heading."
+    },
     "label": {
       "type": "string",
       "default": "Customer logos",
-      "note": "Names the Conveyor group and its arrows (Scroll customer logos right); the list says the count."
+      "note": "Names the logo group; the count is added (Customer logos, 24)."
     },
-    "align": { "type": "enum", "values": ["center", "start"], "default": "center", "note": "Heading and row alignment while the row fits." }
+    "rows": {
+      "type": "number",
+      "default": 3,
+      "note": "Rows the logos are dealt into, round-robin; never more rows than logos. Neighbouring rows run in opposite directions."
+    },
+    "paused": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled pause."
+    },
+    "defaultPaused": {
+      "type": "boolean",
+      "default": false,
+      "note": "Uncontrolled starting state."
+    },
+    "onPausedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(paused) => void"
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "center",
+        "start"
+      ],
+      "default": "center",
+      "note": "Heading and Pause button alignment."
+    }
   },
   "passthrough": {
     "root": "section",
@@ -42,9 +76,10 @@
     "rest": "section"
   },
   "layout": [
-    "heading over one row of logos, all at the --space-8 height, --grid-gutter-xl apart",
-    "the row is as wide as its logos and centred while it fits; wider, the Conveyor shows arrows, and below --grid-breakpoint-sm of its own width it gives way to swipe",
-    "the block is its own inline-size container"
+    "heading, then the rows, then a ghost Pause / Play button",
+    "each row clips its logos and fades them out over the outer 15% at both ends (an alpha mask, so any background works in light and dark)",
+    "a row holds its logos twice and moves the pair by half its width with transform, so the loop has no seam; a full loop takes about 4s per logo (at least 20s)",
+    "under prefers-reduced-motion the copies and the button go, the rows wrap and centre, and nothing moves"
   ],
   "tokens": [
     "text.fgMuted",
@@ -62,11 +97,10 @@
     "element": "section",
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
-      "the logos are a list named with its count (Customer logos, 8) inside the Conveyor group",
-      "every logo has a name: img alt, or role=img with aria-label around a node",
-      "a logo with href is a link named by the logo, with the kit focus ring",
-      "the run is a focus stop; arrow keys and the Conveyor's ghost arrow buttons move it",
-      "nothing moves on its own, so there is nothing to pause (WCAG 2.2.2); smooth scrolling is off under prefers-reduced-motion"
+      "the rows sit in a group named with the count (Customer logos, 24); each row's first list is read, its copy is aria-hidden and inert",
+      "every logo is named: img alt, role=img with aria-label for a node, or the name as text; href makes it a link with the kit focus ring",
+      "Pause / Play is a real button with aria-pressed (WCAG 2.2.2); hover and focus inside a row also hold it",
+      "motion is transform only and off under prefers-reduced-motion"
     ]
   },
   "doNot": [
@@ -74,7 +108,7 @@
     "Do not ship a logo without a name, or with a name like logo-3",
     "Do not use real brands in samples; use neutral placeholder marks",
     "Do not colour logos with raw hex; inline marks use currentColor",
-    "Do not nest the strip in another Conveyor"
+    "Do not remove the Pause button: moving content needs a way to stop it"
   ],
   "snippet": "<LogoStrip title=\"Trusted by teams at\" logos={[{ name: 'Northpeak', src: '/logos/northpeak.svg' }, { name: 'Fieldstone', logo: <FieldstoneMark /> }]} />"
 }

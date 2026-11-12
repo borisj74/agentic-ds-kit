@@ -1,8 +1,10 @@
-/* LogoStrip block: a heading over a kit Conveyor. The block is its own container; the row is as
-   wide as its logos and centred while it fits, then the Conveyor takes over (arrows, then swipe
-   below --grid-breakpoint-sm of its own width). No motion of its own. */
+/* LogoStrip block: a heading over rows of logos that drift sideways, neighbouring rows in
+   opposite directions, with soft faded edges. Motion is transform only. It stops for Pause, on
+   hover and while a link inside has focus, and is off under reduced motion, where the rows wrap
+   and stand still. */
 .root {
   container: logostrip / inline-size;
+  --logostrip-fade: 15%;
   box-sizing: border-box;
   display: grid;
   gap: var(--space-4);
@@ -40,18 +42,51 @@
   color: var(--text-fg-subtle);
 }
 
+.wall {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* Soft edges: the row fades out at both ends (an alpha mask, not a colour, so it works on any
+   background in light and dark). */
+.row {
+  overflow: hidden;
+  min-width: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--logostrip-fade),
+    black calc(100% - var(--logostrip-fade)),
+    transparent
+  );
+}
+
+/* Two identical lists side by side; moving the pair by half its width loops without a seam. */
+.track {
+  display: flex;
+  width: max-content;
+  animation: logostrip-left var(--logostrip-duration, 40s) linear infinite;
+}
+
+.right .track {
+  animation-name: logostrip-right;
+}
+
+.paused .track,
+.row:hover .track,
+.row:focus-within .track {
+  animation-play-state: paused;
+}
+
 .list {
   display: flex;
   align-items: center;
   gap: var(--grid-gutter-xl);
-  width: max-content;
-  margin: 0 auto;
-  padding: var(--space-2) var(--space-1);
+  margin: 0;
+  padding: var(--space-2) 0;
+  padding-inline-end: var(--grid-gutter-xl);
   list-style: none;
-}
-
-.start .list {
-  margin-inline: 0;
 }
 
 .item {
@@ -98,4 +133,58 @@
 .link:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.start .controls {
+  justify-content: flex-start;
+}
+
+@keyframes logostrip-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes logostrip-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Reduced motion: nothing moves. The copies go, the rows wrap and centre, the edges stay sharp,
+   and the Pause button has nothing to do. */
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    overflow: visible;
+    mask-image: none;
+  }
+
+  .track {
+    width: auto;
+    animation: none;
+  }
+
+  .list {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-2);
+    width: 100%;
+    padding-inline-end: 0;
+  }
+
+  .list[aria-hidden="true"],
+  .controls {
+    display: none;
+  }
 }
