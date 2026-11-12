@@ -54,10 +54,8 @@
   },
   "tokens": [
     "fill.brand",
-    "fill.subtle",
-    "surface.card",
-    "border.faint",
-    "border.strong",
+    "line.strong",
+    "shadow.sm",
     "action.primary",
     "action.onPrimary",
     "focus.ring",
