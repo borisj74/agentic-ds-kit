@@ -7,7 +7,7 @@
   min-width: 0;
   overflow: hidden;
   padding: var(--space-6);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
   border: var(--border-width-thin) solid var(--border-faint);
 }
 
@@ -30,7 +30,7 @@
   overflow: hidden;
   padding: var(--space-6);
   border-radius: var(--radius-surface-md);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
   border: var(--border-width-thin) solid var(--border-faint);
 }
 

@@ -4,7 +4,7 @@
   padding: var(--space-4);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
 }
 
 .canvas {
@@ -28,7 +28,7 @@
   overflow-x: auto;
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  background: color-mix(in srgb, var(--action-primary) 5%, var(--bg-surface));
+  background: var(--bg-canvas);
 }
 
 .bar {
