@@ -2,6 +2,32 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-12: Blocks, first block MissionHome (feat/blocks-mission-home)
+
+A **block** is a kit component for a whole area of a screen, built only from other kit components and tokens. It is imported from `agentic-ds-kit` like any component (not copied in like a pattern) and sits inside the page's `<main>` with no chrome of its own.
+
+- **Catalog:** `contracts/missionhome.json` has `"kind": "block"`; its `index.json` entry stays `"group": "component"` and also carries `"kind": "block"`, so the site catalog, `questions` and every existing consumer keep working. MCP `list_components` / `get_component` now return `kind` (`"component"` or `"block"`); `category` is unchanged. `questions` options still say `kind: "component"` for it (the questions tests pin component/pattern kinds); say if blocks should get their own questions kind. The questions tests' hard-coded 128 is now 129.
+- **MissionHome** (`ui/MissionHome/`): summary (Scoreboard: Done / Needs you / Failed since `since`) beside a compact BarChart of work started per slice; AgentLanes beside AgentInbox; one SegmentedControl filter (All, Running, Needs you, Failed, counts in the labels) drives the activity bar, the lanes (only agents with matching work keep a lane; Empty when none) and the inbox (waiting + failed; Running → "All caught up"). Props: `agents`, `events`, `since`, `now`, `filter` / `defaultFilter` / `onFilterChange`, `onApprove`, `onReject`, `onRetry`, `title`. `events` are AgentLanes tasks plus `action?` / `risk?`: a waiting event with an action is an ApprovalCard approval in the inbox; without one it is an Approve / Reject DecisionCard question. Pure helpers in `missionHome.logic.ts`.
+- **Layout:** both rows are `layout-split--primary`. The block is its own inline-size container and stacks below **64rem** of block width (`--grid-breakpoint-md`, written as a value because container queries can't read `var()`, as in layout.css). The brief asked for ~860px: no breakpoint token sits there (sm 40rem, md 64rem) and below md the inbox column is narrower than its cards need. Jev rated this line "uncertain": **Boris to confirm** md, or OK a new breakpoint/layout class.
+- **Lanes window:** 10m / 30m choices, 30m default. AgentLanes ticks every 2 minutes at any span, so a since-last-visit window (2h) crowds its axis into a smear; longer windows need adaptive ticks in AgentLanes (follow-up).
+- **Kit change (a11y):** AgentInbox rows now also carry `aria-expanded` (true on the selected row) and always `aria-controls` the detail region (contract a11y updated). MissionHome toggles selection, so a row opens and closes its detail. Additive; `aria-current` stays.
+- **No new tokens, colours or motion.** Only role tokens and layout classes; the block has no motion of its own.
+- **Docs:** new **Blocks** group in the site nav (and command palette), page `/blocks/mission-home`: preview (scaled iframe of `/frame/blocks/mission-home`, light/dark, 1440/390, open full screen, Copy prompt bar with a block prompt from `lib/pattern-prompt.ts` `blockPrompt`), What a block is, When to use / not, Usage, Layout, Props (from the contract), Built from. Sample data (`lib/mission-home-sample.ts`) is relative to now and the demo's approve / reject / retry change it live.
+- **Frame theme fix (blocks only):** frames took the root `data-theme` from the docs site's saved light/dark, so a light preview on a dark site mixed tokens (dark badges and lane blocks). `BlockFrame` sets its document root to the preview mode. Pattern frames (`FrameScreen`) have the same mix: follow-up.
+
+### At 390px (known open items)
+
+- AgentLanes axis labels overlap at the 30m window (fixed 2m ticks, narrow board); "Last 10m" reads better. Lane blocks near "now" clip their labels.
+- AgentMonitor is not used in this block, so its step width / header wrap does not affect it.
+- The three Scorecards stack one per row (tall); fine, but a compact Scoreboard row option would help.
+
+### Follow-ups for Boris
+
+- Confirm the 64rem stack point (or a new breakpoint token / layout class near 54rem).
+- AgentLanes adaptive tick step (so long windows like "since your last visit" work) and the 390 axis overlap.
+- Same root `data-theme` fix for pattern frames.
+- Blocks as their own `questions` kind?
+
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 
 Boris asked for pattern pages that look like affectUI's screens catalogue (affectui.com/screens/app-shell-flat): breadcrumb, title and one line, a Preview / Code toolbar, the screen at full size scaled into a plain frame, then sections. His calls: all pattern pages, a scaled iframe, a new PR on top of #137.
