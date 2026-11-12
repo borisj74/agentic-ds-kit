@@ -8,6 +8,7 @@ import "./tokens";
 import "./layout";
 
 export * from "../ui/Accordion";
+export * from "../ui/ActivityFeed";
 export * from "../ui/AgentFleet";
 export * from "../ui/AgentInbox";
 export * from "../ui/AgentLanes";

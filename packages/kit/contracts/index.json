@@ -993,6 +993,16 @@
     "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade."
   },
   {
+    "id": "activityfeed",
+    "kind": "block",
+    "intent": "Block: what happened across a workspace. Events from people and agents grouped by day, Type and Person filters, Open / Reply per event, Load more.",
+    "group": "component",
+    "path": "contracts/activityfeed.json",
+    "status": "stable",
+    "category": "Productivity",
+    "summary": "See what people and agents did across the workspace, by day, filtered by type or person."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

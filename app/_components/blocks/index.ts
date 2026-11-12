@@ -8,6 +8,7 @@ import { AppDirectoryDemo } from "./AppDirectoryDemo";
 import { WorkBoardDemo } from "./WorkBoardDemo";
 import { KpiBoardDemo } from "./KpiBoardDemo";
 import { UsageBillingDemo } from "./UsageBillingDemo";
+import { ActivityFeedDemo } from "./ActivityFeedDemo";
 
 /** The live demo each block's preview frame renders, by docs slug. */
 export const BLOCK_DEMOS: Record<string, ComponentType> = {
@@ -20,4 +21,5 @@ export const BLOCK_DEMOS: Record<string, ComponentType> = {
   "work-board": WorkBoardDemo,
   "kpi-board": KpiBoardDemo,
   "usage-billing": UsageBillingDemo,
+  "activity-feed": ActivityFeedDemo,
 };
