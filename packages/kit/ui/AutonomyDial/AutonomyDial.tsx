@@ -70,16 +70,9 @@ export function AutonomyDial({
         }))}
       />
 
-      <div className={styles.scale} aria-hidden="true">
-        <ol className={styles.ticks} style={{ ["--stops" as string]: options.length }}>
-          {options.map((option, i) => (
-            <li key={option.id} className={cx(styles.tick, i <= index && styles.tickOn)} />
-          ))}
-        </ol>
-        <div className={styles.ends}>
-          <span>More oversight</span>
-          <span>More autonomy</span>
-        </div>
+      <div className={styles.ends} aria-hidden="true">
+        <span>More oversight</span>
+        <span>More autonomy</span>
       </div>
 
       {current ? (

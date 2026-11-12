@@ -64,7 +64,7 @@ export function AutonomyDialDoc() {
         },
         {
           title: "Stop 3 — Act and tell me",
-          about: "Tick dots fill up to the selected stop.",
+          about: "Acts, then reports what it did after each step.",
           code: `<AutonomyDial value="tell" appliesTo="…" />`,
           render: <AutonomyDial className={agentDoc.trail} value="tell" appliesTo={APPLIES} />,
         },

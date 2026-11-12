@@ -43,35 +43,7 @@
   width: 100%;
 }
 
-/* Tick dots under each stop, filled up to the selected one. */
-.scale {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.ticks {
-  display: grid;
-  grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tick {
-  justify-self: center;
-  width: var(--space-1);
-  height: var(--space-1);
-  border-radius: var(--radius-pill);
-  background-color: var(--line-strong);
-  transition: transform var(--motion-duration-200) var(--motion-ease-out);
-}
-
-.tickOn {
-  background-color: var(--primary);
-  transform: scale(1.5);
-}
-
+/* End labels under the control: which way the stops lean. */
 .ends {
   display: flex;
   justify-content: space-between;
@@ -158,9 +130,5 @@
   .panel,
   .spin {
     animation: none;
-  }
-
-  .tick {
-    transition: none;
   }
 }
