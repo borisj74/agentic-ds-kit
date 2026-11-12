@@ -913,6 +913,26 @@
     "summary": "See what your agents did since you last looked, what is running, and what needs you."
   },
   {
+    "id": "appdirectory",
+    "kind": "block",
+    "intent": "Block: browse, search and connect apps. Connected chip over the IntegrationPicker catalogue; a tile opens a Drawer with detail and Connect / Disconnect.",
+    "group": "component",
+    "path": "contracts/appdirectory.json",
+    "status": "stable",
+    "category": "Integrations",
+    "summary": "Browse, search and connect the apps your workspace works with."
+  },
+  {
+    "id": "workboard",
+    "kind": "block",
+    "intent": "Block: a task board with detail. TaskBoard columns; a card opens a Drawer with Status and Assignee Fields and its CommentThread.",
+    "group": "component",
+    "path": "contracts/workboard.json",
+    "status": "stable",
+    "category": "Productivity",
+    "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

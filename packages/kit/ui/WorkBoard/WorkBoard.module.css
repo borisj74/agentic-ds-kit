@@ -1,0 +1,106 @@
+/* WorkBoard block: kit components on kit tokens. The block is its own container so it reflows
+   wherever it is placed. TaskBoard scrolls its columns sideways inside itself when narrow. */
+.root {
+  container: workboard / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.root > * {
+  min-width: 0;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.description {
+  margin: 0;
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  color: var(--text-fg);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Stacked: the Drawer is portaled outside layout-content, so layout-split would keep two
+   columns even at 390 and squeeze the assignee's name. */
+.fields {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.fields > * {
+  min-width: 0;
+}
+
+.assignee {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.assigneeSelect {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.thread {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* CommentThread caps itself at --thread-width (24rem); in the drawer it takes the full body. */
+.thread > .comments {
+  --thread-width: 100%;
+}
+
+.replying {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}

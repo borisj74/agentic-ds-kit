@@ -1,0 +1,107 @@
+/* AppDirectory block: kit components on kit tokens. The block is its own container so it
+   reflows wherever it is placed, not only at a viewport width. */
+.root {
+  container: appdirectory / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead,
+.meta {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* Same tile as the IntegrationPicker logo, a size up. */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-10);
+  height: var(--space-10);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  background-color: var(--bg-subtle);
+  color: var(--text-fg);
+}
+
+.about {
+  margin: 0;
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  color: var(--text-fg);
+}
+
+.permissions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
