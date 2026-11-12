@@ -143,7 +143,7 @@
   },
   "doNot": [
     "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
-    "Do not preselect the recommended option; it is a badge, not a default",
+    "Do not start with nothing selected when an option is recommended; list it first and start value on it",
     "Confirm is the one solid primary; Skip is ghost",
     "Do not use raw hex"
   ],
