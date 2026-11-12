@@ -1,0 +1,22 @@
+/* Placeholder logo marks for the LogoStrip demo: a shape and a wordmark in currentColor. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 100%;
+}
+
+.shape {
+  flex: none;
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.word {
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-lg);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-lg);
+  letter-spacing: var(--type-tracking-heading);
+  white-space: nowrap;
+}

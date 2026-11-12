@@ -1,0 +1,80 @@
+{
+  "id": "logostrip",
+  "kind": "block",
+  "category": "Social proof",
+  "summary": "A trusted-by row: a heading over named customer logos that people can move along.",
+  "status": "stable",
+  "intent": "Block: a social proof row. A short heading over a row of customer logos on a kit Conveyor. Each logo is named for screen readers. The row moves only when the person moves it (arrows, arrow keys, swipe); there is no autoplay to pause.",
+  "useWhen": [
+    "a trusted-by row on a landing or pricing page",
+    "a row of partner or integration marks under a hero",
+    "more logos than fit the width, moved along by the person"
+  ],
+  "doNotUseWhen": [
+    "quotes or case studies — a Card per testimonial",
+    "picking an integration — IntegrationPicker",
+    "paged slides — Carousel",
+    "a self-scrolling marquee — not in the kit (Conveyor has no loop or autoplay)"
+  ],
+  "contains": [
+    "conveyor",
+    "button"
+  ],
+  "props": {
+    "logos": {
+      "type": "array",
+      "required": true,
+      "note": "{ id?, name, src?, logo?, href? }[]. name is required: the image's alt or the node's accessible name. src for an image, logo for a node (an inline SVG in currentColor); with neither, the name shows as text."
+    },
+    "title": { "type": "string", "default": "Trusted by teams at", "note": "Heading (h2)." },
+    "description": { "type": "string", "required": false, "note": "One line under the heading." },
+    "label": {
+      "type": "string",
+      "default": "Customer logos",
+      "note": "Names the Conveyor group and its arrows (Scroll customer logos right); the list says the count."
+    },
+    "align": { "type": "enum", "values": ["center", "start"], "default": "center", "note": "Heading and row alignment while the row fits." }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "heading over one row of logos, all at the --space-8 height, --grid-gutter-xl apart",
+    "the row is as wide as its logos and centred while it fits; wider, the Conveyor shows arrows, and below --grid-breakpoint-sm of its own width it gives way to swipe",
+    "the block is its own inline-size container"
+  ],
+  "tokens": [
+    "text.fgMuted",
+    "text.fgSubtle",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.size.uiLg",
+    "type.weight.heading",
+    "space.8",
+    "grid.gutter.xl",
+    "focus.ring",
+    "border.focusWidth"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the logos are a list named with its count (Customer logos, 8) inside the Conveyor group",
+      "every logo has a name: img alt, or role=img with aria-label around a node",
+      "a logo with href is a link named by the logo, with the kit focus ring",
+      "the run is a focus stop; arrow keys and the Conveyor's ghost arrow buttons move it",
+      "nothing moves on its own, so there is nothing to pause (WCAG 2.2.2); smooth scrolling is off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not build a local marquee or auto-scrolling logo row",
+    "Do not ship a logo without a name, or with a name like logo-3",
+    "Do not use real brands in samples; use neutral placeholder marks",
+    "Do not colour logos with raw hex; inline marks use currentColor",
+    "Do not nest the strip in another Conveyor"
+  ],
+  "snippet": "<LogoStrip title=\"Trusted by teams at\" logos={[{ name: 'Northpeak', src: '/logos/northpeak.svg' }, { name: 'Fieldstone', logo: <FieldstoneMark /> }]} />"
+}

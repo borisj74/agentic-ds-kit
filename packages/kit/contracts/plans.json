@@ -1,0 +1,121 @@
+{
+  "id": "plans",
+  "kind": "block",
+  "category": "Pricing",
+  "summary": "A pricing section: plans with a monthly / yearly switch, a feature comparison and an FAQ.",
+  "status": "stable",
+  "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price), a feature comparison Table across the plans, and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
+  "useWhen": [
+    "a public pricing page or the pricing section of a landing page",
+    "plans need a feature-by-feature comparison and common questions beside them",
+    "an upgrade screen that should answer billing questions in place"
+  ],
+  "doNotUseWhen": [
+    "only the plan cards, e.g. a small upgrade dialog — PricingPlans",
+    "usage against a plan limit — UsageMeter or UsageList",
+    "picking options in a form — TileGroup",
+    "invoices and the billing schedule — the billing-schedule pattern"
+  ],
+  "contains": [
+    "accordion",
+    "pricingplans",
+    "segmentedcontrol",
+    "table",
+    "badge",
+    "button",
+    "numbertransition"
+  ],
+  "props": {
+    "plans": {
+      "type": "array",
+      "required": true,
+      "note": "PricingPlans plans: { id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
+    },
+    "interval": {
+      "type": "enum",
+      "values": ["month", "year"],
+      "required": false,
+      "note": "Controlled interval."
+    },
+    "defaultInterval": {
+      "type": "enum",
+      "values": ["month", "year"],
+      "default": "month",
+      "note": "Uncontrolled starting interval."
+    },
+    "onIntervalChange": {
+      "type": "function",
+      "required": false,
+      "note": "(interval) => void. The Monthly / Yearly switch changed."
+    },
+    "onChoosePlan": {
+      "type": "function",
+      "required": false,
+      "note": "(planId, interval) => void. A plan's CTA was pressed."
+    },
+    "comparison": {
+      "type": "array",
+      "required": false,
+      "note": "{ feature, values: Record<planId, boolean | string> }[]. true reads Included, false or missing Not included, a string as written. Omit to leave the comparison out."
+    },
+    "faqs": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, question, answer }[]. Shown as an Accordion when there are two or more."
+    },
+    "title": { "type": "string", "default": "Pricing", "note": "Block heading (h2)." },
+    "description": { "type": "string", "required": false, "note": "One line under the heading." },
+    "plansTitle": { "type": "string", "default": "Choose a plan", "note": "PricingPlans heading (h3)." },
+    "comparisonTitle": { "type": "string", "default": "Compare plans" },
+    "faqTitle": { "type": "string", "default": "Questions" },
+    "savingsLabel": { "type": "string", "required": false, "note": "Passed to PricingPlans, beside the switch." },
+    "footnote": { "type": "string", "required": false, "note": "Passed to PricingPlans, under the cards." },
+    "currency": { "type": "string", "default": "$" },
+    "unitLabel": { "type": "string", "default": "/ seat / month" }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "one column: heading and lead, PricingPlans, the comparison, the FAQ",
+    "PricingPlans' cards wrap to one per row in a narrow block; the comparison Table keeps its column widths and scrolls inside its own focusable region",
+    "the block is its own inline-size container, so it works the same in a page column or full width"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "icon.success",
+    "icon.muted",
+    "type.size.uiXl",
+    "type.size.uiLg",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.lg",
+    "space.3"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "PricingPlans is a section under its h3, each plan name an h4; the comparison and the FAQ are sections labelled by their h3",
+      "the interval is the PricingPlans SegmentedControl radio group named Billing interval",
+      "comparison cells say Included or Not included in words for screen readers; the check and dash icons are hidden",
+      "the recommended plan's column header says (recommended) in words",
+      "FAQ headers are Accordion buttons with aria-expanded and aria-controls",
+      "no motion of its own; prices roll with NumberTransition, which honours reduced motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild Plans from local plan cards or a pricing table; import the block",
+    "Do not show more than one solid primary; only the recommended plan's CTA is solid",
+    "Do not add a second Monthly / Yearly switch; the PricingPlans one drives the whole block",
+    "Do not mark included features by colour alone",
+    "Do not use raw hex"
+  ],
+  "snippet": "<Plans title=\"Pricing\" description=\"Start free, upgrade when your team grows.\" plans={plans} comparison={comparison} faqs={faqs} savingsLabel=\"Save 20% with yearly\" onChoosePlan={(id, interval) => checkout(id, interval)} />"
+}
