@@ -129,7 +129,7 @@ export function FilterButtonDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Same secondary chrome when applied. Count shows how many, in ink.</p>
+                <p className={styles.usageBody}>Same secondary chrome when applied. Count shows how many, in the primary colour.</p>
               </div>
               <CodeBlock code={'<FilterButton count={1}>Status</FilterButton>\n<FilterButton count={3}>Owner</FilterButton>'} />
             </section>
