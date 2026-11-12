@@ -1,0 +1,225 @@
+/* ActivityFeed block: kit components on kit tokens. The block is its own container so the event
+   rows reflow wherever it is placed, not only at a viewport width. */
+.root {
+  container: activityfeed / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.root > * {
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.options {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.optionsTitle {
+  margin: 0 0 var(--space-1);
+  padding: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+}
+
+.days {
+  display: grid;
+  gap: var(--layout-gutter-sm);
+}
+
+.day {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* Same look as a ListView group header. */
+.dayTitle {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-block-start: var(--border-width-thin) solid var(--border-divider);
+}
+
+.event:first-child {
+  border-block-start: 0;
+}
+
+/* Focus lands on an event only from code (after Load more), so show it on :focus. */
+.event:focus {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--border-focus-width));
+}
+
+.eventBody {
+  display: flex;
+  align-items: start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.line {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.actor,
+.object {
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.detail {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: var(--space-1);
+}
+
+.skeletons {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3);
+  list-style: none;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: start;
+  gap: var(--space-3);
+}
+
+.skeletonCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Narrow: the actions move under the copy, lined up with the text past the Avatar.
+   40rem is --grid-breakpoint-sm (container queries cannot read var()). */
+@container activityfeed (max-width: 40rem) {
+  .event {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .actions {
+    justify-content: start;
+    padding-inline-start: calc(var(--space-8) + var(--space-3));
+  }
+}

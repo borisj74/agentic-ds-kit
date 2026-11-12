@@ -1,0 +1,151 @@
+{
+  "id": "activityfeed",
+  "kind": "block",
+  "category": "Productivity",
+  "summary": "See what people and agents did across the workspace, by day, filtered by type or person.",
+  "status": "stable",
+  "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
+  "useWhen": [
+    "a workspace or project activity page",
+    "catch up on what people and agents did since yesterday",
+    "jump from an event to the thing it happened to, or reply to a comment"
+  ],
+  "doNotUseWhen": [
+    "the steps of one agent run — AgentTrail or RunDetail",
+    "planned work in stages — Timeline",
+    "a queue of things waiting on you — AgentInbox",
+    "one record's discussion — CommentThread",
+    "toasts for what just happened — NotificationStack"
+  ],
+  "contains": [
+    "avatar",
+    "badge",
+    "button",
+    "checkbox",
+    "empty",
+    "filterbutton",
+    "popover",
+    "skeleton"
+  ],
+  "props": {
+    "events": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, type: \"comment\" | \"change\" | \"run\" | \"member\" | \"billing\", actor: { id, name, kind?: \"person\" | \"agent\", src?, initials? }, verb, object, at: epoch ms | ISO string, detail?, status?: { label, tone? }, canReply? }[]. Any order; shown newest first in day groups. verb is lower case (\"commented on\") so the line reads actor + verb + object."
+    },
+    "filters": {
+      "type": "object",
+      "required": false,
+      "note": "Controlled { types: type[], people: actorId[] }. Empty arrays mean no filter on that axis. Filtering is over the loaded events; an app that filters on the server keeps filters controlled and replaces events."
+    },
+    "defaultFilters": {
+      "type": "object",
+      "default": "{ types: [], people: [] }",
+      "note": "Uncontrolled starting filters."
+    },
+    "onFiltersChange": {
+      "type": "function",
+      "required": false,
+      "note": "(filters) => void"
+    },
+    "onOpen": {
+      "type": "function",
+      "required": false,
+      "note": "(eventId) => void. Each event gets an Open button (named Open + the object) when set."
+    },
+    "onReply": {
+      "type": "function",
+      "required": false,
+      "note": "(eventId) => void. Comment events get Reply (named Reply to + the actor) when set; canReply: false hides it on one event."
+    },
+    "onLoadMore": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Fetch the next page and append it to events."
+    },
+    "hasMore": {
+      "type": "boolean",
+      "default": false,
+      "note": "Load more shows when this is true and onLoadMore is set."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Skeleton rows: the whole feed with no events yet, else under the list. Load more reads Loading… and ignores clicks, keeping focus."
+    },
+    "now": {
+      "type": "number",
+      "required": false,
+      "note": "Epoch ms for Today / Yesterday. Default the time of first render."
+    },
+    "locale": {
+      "type": "string",
+      "default": "en-GB"
+    },
+    "timeZone": {
+      "type": "string",
+      "required": false,
+      "note": "IANA zone for day groups and times. Pass it when the server and the viewer may differ."
+    },
+    "title": {
+      "type": "string",
+      "default": "Activity"
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "Line under the title. Default: how many events show, and how many match the filters."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "head: h2 and count line, with the filter group (Type, Person, Clear filters) at the end; it wraps under the title when narrow",
+    "one section per day, labelled by its h3 (Today, Yesterday, Mon 9 Nov), over a card-surface ordered list of events",
+    "an event row is Avatar, the copy (verb line, optional detail, time with Badges) and its actions at the end",
+    "the block is its own inline-size container; below --grid-breakpoint-sm (40rem) of block width the actions move under the copy"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "text.secondary",
+    "surface.card",
+    "border.subtle",
+    "border.divider",
+    "radius.lg",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.heading",
+    "type.weight.label",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "grid.breakpoint.sm"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "each day is a section labelled by its h3, whose name carries the day's event count",
+      "each event is a list item that reads as one sentence: who (and that it is an agent), the verb, the object, any status, the detail, then the day and time; the visual row is hidden from screen readers so nothing is read twice",
+      "Open is named Open + the object and Reply is named Reply to + the actor, so a list of buttons is still clear",
+      "the filters are a group named Filter activity; Type and Person are kit FilterButtons that open a Popover dialog of kit Checkboxes in a fieldset; the chip's name carries the picked value or count",
+      "Load more is a real button described by the count line; while loading it stays focusable and says Loading…",
+      "what Load more brings in is announced in a polite status region (\"5 more events loaded, 2 match the filters.\"); filter changes are announced there too",
+      "when the last page arrives and Load more goes away, focus moves to the first new event that shows",
+      "no motion of its own; Skeleton's shimmer stops under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild ActivityFeed from a local list; import the block",
+    "Do not put a solid primary in the feed; Open and Reply are ghost, Load more is outline",
+    "Do not put a sentence in verb; verb is the phrase between the actor and the object",
+    "Do not use Badge for people; Avatar is the person or agent, the Agent Badge only says it is an agent",
+    "Do not use raw hex"
+  ],
+  "snippet": "<ActivityFeed events={events} onOpen={openEvent} onReply={replyTo} onLoadMore={loadNextPage} hasMore={hasMore} loading={loading} />"
+}

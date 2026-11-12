@@ -11061,6 +11061,100 @@
       }
     },
     {
+      "id": "activityfeed",
+      "group": "component",
+      "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
+      "useWhen": [
+        "a workspace or project activity page",
+        "catch up on what people and agents did since yesterday",
+        "jump from an event to the thing it happened to, or reply to a comment"
+      ],
+      "doNotUseWhen": [
+        "the steps of one agent run — AgentTrail or RunDetail",
+        "planned work in stages — Timeline",
+        "a queue of things waiting on you — AgentInbox",
+        "one record's discussion — CommentThread",
+        "toasts for what just happened — NotificationStack"
+      ],
+      "doNot": [
+        "Do not rebuild ActivityFeed from a local list; import the block",
+        "Do not put a solid primary in the feed; Open and Reply are ghost, Load more is outline",
+        "Do not put a sentence in verb; verb is the phrase between the actor and the object",
+        "Do not use Badge for people; Avatar is the person or agent, the Agent Badge only says it is an agent",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "events": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, type: \"comment\" | \"change\" | \"run\" | \"member\" | \"billing\", actor: { id, name, kind?: \"person\" | \"agent\", src?, initials? }, verb, object, at: epoch ms | ISO string, detail?, status?: { label, tone? }, canReply? }[]. Any order; shown newest first in day groups. verb is lower case (\"commented on\") so the line reads actor + verb + object."
+        },
+        "filters": {
+          "type": "object",
+          "required": false,
+          "note": "Controlled { types: type[], people: actorId[] }. Empty arrays mean no filter on that axis. Filtering is over the loaded events; an app that filters on the server keeps filters controlled and replaces events."
+        },
+        "defaultFilters": {
+          "type": "object",
+          "default": "{ types: [], people: [] }",
+          "note": "Uncontrolled starting filters."
+        },
+        "onFiltersChange": {
+          "type": "function",
+          "required": false,
+          "note": "(filters) => void"
+        },
+        "onOpen": {
+          "type": "function",
+          "required": false,
+          "note": "(eventId) => void. Each event gets an Open button (named Open + the object) when set."
+        },
+        "onReply": {
+          "type": "function",
+          "required": false,
+          "note": "(eventId) => void. Comment events get Reply (named Reply to + the actor) when set; canReply: false hides it on one event."
+        },
+        "onLoadMore": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Fetch the next page and append it to events."
+        },
+        "hasMore": {
+          "type": "boolean",
+          "default": false,
+          "note": "Load more shows when this is true and onLoadMore is set."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Skeleton rows: the whole feed with no events yet, else under the list. Load more reads Loading… and ignores clicks, keeping focus."
+        },
+        "now": {
+          "type": "number",
+          "required": false,
+          "note": "Epoch ms for Today / Yesterday. Default the time of first render."
+        },
+        "locale": {
+          "type": "string",
+          "default": "en-GB"
+        },
+        "timeZone": {
+          "type": "string",
+          "required": false,
+          "note": "IANA zone for day groups and times. Pass it when the server and the viewer may differ."
+        },
+        "title": {
+          "type": "string",
+          "default": "Activity"
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "Line under the title. Default: how many events show, and how many match the filters."
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
