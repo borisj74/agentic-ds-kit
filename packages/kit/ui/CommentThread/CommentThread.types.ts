@@ -34,6 +34,8 @@ export interface CommentThreadProps extends Omit<ComponentPropsWithoutRef<"secti
   onValueChange: (value: string) => void;
   /** Post the composer text. Comment is the solid primary; ⌘/Ctrl+Enter posts too. */
   onSubmit: () => void;
+  /** Comment button look. Default "solid"; "soft" when another solid primary shares the view. */
+  submitAppearance?: "solid" | "soft";
   /** Posting: the button reads "Sending…" and the composer is busy. */
   submitting?: boolean;
   /** Reply to a comment: focus moves to the composer. */

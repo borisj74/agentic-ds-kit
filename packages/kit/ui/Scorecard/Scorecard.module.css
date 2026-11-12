@@ -144,6 +144,13 @@
   transform: scale(0.98);
 }
 
+/* A toggle card that is on (selected with onClick): brand edge on the selected fill. */
+.selected,
+.selected:hover {
+  border-color: var(--border-brand);
+  background: var(--action-selected);
+}
+
 .interactive:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);

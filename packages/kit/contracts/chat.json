@@ -67,6 +67,15 @@
       "required": false,
       "note": "(message: string) => void"
     },
+    "sendAppearance": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "soft"
+      ],
+      "default": "solid",
+      "note": "soft when another solid primary shares the view (e.g. a waiting ApprovalCard)."
+    },
     "onClose": {
       "type": "function",
       "required": false

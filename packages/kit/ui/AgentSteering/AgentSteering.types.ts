@@ -19,6 +19,11 @@ export interface AgentSteeringProps extends Omit<ComponentPropsWithoutRef<"secti
   onValueChange?: (value: string) => void;
   /** Send the steer. The send button is the one solid primary; Enter sends. */
   onSteer?: (text: string) => void;
+  /**
+   * Send button look. Default "solid" (the view's one solid primary). Use "soft" when another
+   * solid primary shares the view, e.g. a Chat composer beside it.
+   */
+  sendAppearance?: "solid" | "soft";
   /** Steer in flight. */
   sending?: boolean;
   /** Confirmation after a steer landed, e.g. "focus on refunds · 14:03". */

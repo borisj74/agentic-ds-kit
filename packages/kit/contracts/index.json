@@ -903,6 +903,126 @@
     "status": "stable"
   },
   {
+    "id": "agentoverview",
+    "kind": "block",
+    "intent": "Block: home for a fleet of agents. Since-you-last-looked summary, every agent on one time axis, and an inbox of what waits on you, under one filter.",
+    "group": "component",
+    "path": "contracts/agentoverview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "See what your agents did since you last looked, what is running, and what needs you."
+  },
+  {
+    "id": "logostrip",
+    "kind": "block",
+    "intent": "Block: trusted-by wall. Rows of named logos looping in opposite directions with soft edges; still under reduced motion.",
+    "group": "component",
+    "path": "contracts/logostrip.json",
+    "status": "stable",
+    "category": "Social proof",
+    "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges."
+  },
+  {
+    "id": "plans",
+    "kind": "block",
+    "intent": "Block: pricing section. PricingPlans with its Monthly / Yearly switch and an FAQ Accordion.",
+    "group": "component",
+    "path": "contracts/plans.json",
+    "status": "stable",
+    "category": "Pricing",
+    "summary": "A pricing section: plans with a monthly / yearly switch and the questions people ask before they buy."
+  },
+  {
+    "id": "livesession",
+    "kind": "block",
+    "intent": "Block: work alongside running agents. Chat, who is working, one inline approval and steering for one agent.",
+    "group": "component",
+    "path": "contracts/livesession.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask."
+  },
+  {
+    "id": "rundetail",
+    "kind": "block",
+    "intent": "Block: one agent run in detail. Monitor, the selected step's tool call, who started whom and the step log, on one selected step.",
+    "group": "component",
+    "path": "contracts/rundetail.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call."
+  },
+  {
+    "id": "appdirectory",
+    "kind": "block",
+    "intent": "Block: browse, search and connect apps. Connected chip over the IntegrationPicker catalogue; a tile opens a Drawer with detail and Connect / Disconnect.",
+    "group": "component",
+    "path": "contracts/appdirectory.json",
+    "status": "stable",
+    "category": "Integrations",
+    "summary": "Browse, search and connect the apps your workspace works with."
+  },
+  {
+    "id": "workboard",
+    "kind": "block",
+    "intent": "Block: a task board with detail. TaskBoard columns; a card opens a Drawer with Status and Assignee Fields and its CommentThread.",
+    "group": "component",
+    "path": "contracts/workboard.json",
+    "status": "stable",
+    "category": "Productivity",
+    "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through."
+  },
+  {
+    "id": "kpiboard",
+    "kind": "block",
+    "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+    "group": "component",
+    "path": "contracts/kpiboard.json",
+    "status": "stable",
+    "category": "Analytics",
+    "summary": "Pick a KPI to chart it and list its top rows, with one range for all."
+  },
+  {
+    "id": "usagebilling",
+    "kind": "block",
+    "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+    "group": "component",
+    "path": "contracts/usagebilling.json",
+    "status": "stable",
+    "category": "Billing",
+    "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade."
+  },
+  {
+    "id": "activityfeed",
+    "kind": "block",
+    "intent": "Block: what happened across a workspace. Events from people and agents grouped by day, Type and Person filters, Open / Reply per event, Load more.",
+    "group": "component",
+    "path": "contracts/activityfeed.json",
+    "status": "stable",
+    "category": "Productivity",
+    "summary": "See what people and agents did across the workspace, by day, filtered by type or person."
+  },
+  {
+    "id": "planreview",
+    "kind": "block",
+    "intent": "Block: approve an agent's plan before it runs. AgentPlan steps, ChangeSummary of what it changes, AutonomyDial, and Approve / Request changes / Reject.",
+    "group": "component",
+    "path": "contracts/planreview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Approve an agent's plan before it runs: its steps, what it changes, and how much it may do alone."
+  },
+  {
+    "id": "changereview",
+    "kind": "block",
+    "intent": "Block: review an agent's change set. ChangeSummary, a ListView of changed files beside the selected file's InlineDiff and CommentThread; accept or reject per file, Accept all.",
+    "group": "component",
+    "path": "contracts/changereview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Review what an agent changed: file by file, with the diff, comments, and accept or reject."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

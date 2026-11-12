@@ -29,5 +29,9 @@ export interface AgentTrailProps extends Omit<ComponentPropsWithoutRef<"section"
   tag?: string;
   /** Override the "3/5" counter. Default: position of the first unfinished step over the step count. */
   progress?: { current: number; total: number };
+  /** Selected step. Shown with aria-pressed on its button. */
+  selectedStepId?: string | null;
+  /** Makes each step a button. Selecting the selected step again passes null. */
+  onSelectStep?: (id: string | null) => void;
   ref?: Ref<HTMLElement>;
 }

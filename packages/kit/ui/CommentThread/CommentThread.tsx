@@ -37,6 +37,7 @@ export function CommentThread({
   onValueChange,
   onSubmit,
   submitting = false,
+  submitAppearance = "solid",
   onReply,
   onEdit,
   onDelete,
@@ -253,6 +254,7 @@ export function CommentThread({
               </span>
               <Button
                 size="sm"
+                appearance={submitAppearance}
                 iconStart={submitting ? "LoaderCircle" : "Send"}
                 className={submitting ? styles.sending : undefined}
                 aria-keyshortcuts="Meta+Enter Control+Enter"

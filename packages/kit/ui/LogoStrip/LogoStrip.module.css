@@ -1,0 +1,180 @@
+/* LogoStrip block: a heading over rows of logos that drift sideways, neighbouring rows in
+   opposite directions, with soft faded edges. Motion is transform only. It loops on its own, holds
+   on hover and while a link inside has focus, and is off under reduced motion, where the rows wrap
+   and stand still. */
+.root {
+  container: logostrip / inline-size;
+  --logostrip-fade: 15%;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  font-family: var(--font-sans);
+  text-align: center;
+}
+
+.start {
+  text-align: start;
+}
+
+.root > * {
+  min-width: 0;
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.wall {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* Soft edges: the row fades out at both ends (an alpha mask, not a colour, so it works on any
+   background in light and dark). */
+.row {
+  overflow: hidden;
+  min-width: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--logostrip-fade),
+    black calc(100% - var(--logostrip-fade)),
+    transparent
+  );
+}
+
+/* Two identical lists side by side; moving the pair by half its width loops without a seam. */
+.track {
+  display: flex;
+  width: max-content;
+  animation: logostrip-left var(--logostrip-duration, 40s) linear infinite;
+}
+
+.right .track {
+  animation-name: logostrip-right;
+}
+
+.paused .track,
+.row:hover .track,
+.row:focus-within .track {
+  animation-play-state: paused;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--grid-gutter-xl);
+  margin: 0;
+  padding: var(--space-2) 0;
+  padding-inline-end: var(--grid-gutter-xl);
+  list-style: none;
+}
+
+.item {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: var(--space-8);
+}
+
+.image {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+
+.node {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  color: var(--text-fg-muted);
+}
+
+.node > svg {
+  height: 100%;
+  width: auto;
+}
+
+.text {
+  font-size: var(--type-size-ui-lg);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-lg);
+  color: var(--text-fg-muted);
+  white-space: nowrap;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-radius: var(--radius-control-sm);
+  color: inherit;
+}
+
+.link:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+@keyframes logostrip-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes logostrip-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Reduced motion: nothing moves. The copies go, the rows wrap and centre, the edges stay sharp,
+   and nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    overflow: visible;
+    mask-image: none;
+  }
+
+  .track {
+    width: auto;
+    animation: none;
+  }
+
+  .list {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-2);
+    width: 100%;
+    padding-inline-end: 0;
+  }
+
+  .list[aria-hidden="true"] {
+    display: none;
+  }
+}

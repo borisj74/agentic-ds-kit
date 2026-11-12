@@ -1,0 +1,130 @@
+/* ChangeReview block: kit components on kit layout classes. The block is its own container so
+   it stacks wherever it is placed, not only at a viewport width. */
+.root {
+  container: changereview / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading,
+.fileHeading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead,
+.meta,
+.keys,
+.replying {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.meta,
+.keys {
+  font-size: var(--type-size-caption);
+}
+
+.subtitle {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+/* The parts cap their own width (--change-width, --thread-width); in the block they fill
+   their area through those documented knobs. */
+.summary {
+  --change-width: 100%;
+}
+
+.thread {
+  --thread-width: 100%;
+}
+
+.columns {
+  min-width: 0;
+}
+
+.files,
+.detail,
+.comments {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.detail {
+  gap: var(--layout-gutter-sm);
+}
+
+.files > *,
+.detail > *,
+.comments > * {
+  min-width: 0;
+}
+
+.toolbar,
+.decide {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.toolbar {
+  justify-content: space-between;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.replying {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Below the stack point the file list sits over the file. 64rem is --grid-breakpoint-md
+   (container queries cannot read var()), as in AgentOverview. */
+@container changereview (max-width: 64rem) {
+  .root .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

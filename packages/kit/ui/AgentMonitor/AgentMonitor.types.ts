@@ -19,7 +19,10 @@ export interface AgentMonitorStep {
   cost?: string;
   /** When it started in the run, e.g. "0:21". */
   started?: string;
-  /** Relative width in the strip, e.g. its duration in seconds. Default 1. */
+  /**
+   * @deprecated Ignored: every step in the strip has the same width (Boris, 2026-11-12). Kept so
+   * existing data still type-checks; the step's time shows in its label and detail.
+   */
   weight?: number;
 }
 

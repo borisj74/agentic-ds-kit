@@ -1,0 +1,161 @@
+{
+  "id": "appdirectory",
+  "kind": "block",
+  "category": "Integrations",
+  "summary": "Browse, search and connect the apps your workspace works with.",
+  "status": "stable",
+  "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
+  "useWhen": [
+    "an Integrations or Apps area where people find, connect and disconnect apps",
+    "show which apps are connected and what each one can access",
+    "a connect flow that needs a detail step before the connection"
+  ],
+  "doNotUseWhen": [
+    "only the catalogue, connecting straight from the tile — IntegrationPicker",
+    "settings for one connected app — the integration-settings pattern",
+    "choosing a plan — PricingPlans"
+  ],
+  "contains": [
+    "badge",
+    "button",
+    "drawer",
+    "empty",
+    "filterbutton",
+    "integrationpicker"
+  ],
+  "props": {
+    "apps": {
+      "type": "array",
+      "required": true,
+      "note": "IntegrationPicker items plus drawer detail: { id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon?, publisher?, about?, permissions?: string[], connectedNote? }[]"
+    },
+    "title": {
+      "type": "string",
+      "default": "Apps"
+    },
+    "note": {
+      "type": "string",
+      "required": false,
+      "note": "Muted note on the catalogue, e.g. \"example providers\"."
+    },
+    "categories": {
+      "type": "string[]",
+      "required": false,
+      "note": "Category order for the filter. Default: in order of appearance."
+    },
+    "category": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled category: \"all\" or a name."
+    },
+    "onCategoryChange": {
+      "type": "function",
+      "required": false
+    },
+    "connectedOnly": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled Connected chip."
+    },
+    "defaultConnectedOnly": {
+      "type": "boolean",
+      "default": false
+    },
+    "onConnectedOnlyChange": {
+      "type": "function",
+      "required": false,
+      "note": "(connectedOnly) => void"
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled: the app whose drawer is open, or null."
+    },
+    "defaultSelectedId": {
+      "type": "string",
+      "required": false
+    },
+    "onSelectedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void"
+    },
+    "onConnect": {
+      "type": "function",
+      "required": true,
+      "note": "(id) => void. The drawer's Connect."
+    },
+    "onDisconnect": {
+      "type": "function",
+      "required": true,
+      "note": "(id) => void. A connected app's Disconnect."
+    },
+    "connectingId": {
+      "type": "string",
+      "required": false,
+      "note": "That app's Connect reads Connecting… and is announced."
+    },
+    "onRequest": {
+      "type": "function",
+      "required": false,
+      "note": "Request an integration, when search or the directory finds nothing."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "head: h2 title and the connected count, with the Connected FilterButton at the end; wraps on narrow blocks",
+    "body: IntegrationPicker, whose tiles fill the row at 14rem or more (one column at 390)",
+    "detail: a right Drawer (md); on narrow screens the kit Drawer's own sizing applies"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "bg.subtle",
+    "line.default",
+    "type.size.uiXl",
+    "type.size.bodyMd",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "radius.surface.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the Connected chip is a kit FilterButton toggle with aria-pressed, described by the connected count",
+      "search, category and tiles are IntegrationPicker's: a labelled Input, a SegmentedControl radio group, tile actions described by the app name",
+      "the detail is a kit Drawer (dialog, focus trap, Escape, focus returns to the tile action)",
+      "the drawer says the status in words (Badge), not colour alone; Connecting is announced in a status region",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild AppDirectory from a local grid of cards; import the block",
+    "Do not connect straight from a tile here; the tile opens the detail, the drawer connects",
+    "Do not use a real provider's logo or name without labelling it an example",
+    "Do not use raw hex",
+    "Only one solid primary in the view: Connect in the open drawer"
+  ],
+  "snippet": "<AppDirectory note=\"example providers\" apps={apps} onConnect={connect} onDisconnect={disconnect} connectingId={connecting} onRequest={request} />"
+}

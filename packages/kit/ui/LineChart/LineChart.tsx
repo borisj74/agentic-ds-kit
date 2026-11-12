@@ -20,7 +20,7 @@ import { useChartSize } from "../shared/useChartSize";
 import type { LineChartProps } from "./LineChart.types";
 import styles from "./LineChart.module.css";
 
-export type { LineChartProps, LineChartVariant } from "./LineChart.types";
+export type { LineChartProps, LineChartVariant, LineChartCurve } from "./LineChart.types";
 
 type Point = { x: number; y: number };
 
@@ -145,6 +145,55 @@ function nearestIndex(x: number, samples: SampleHit[]) {
   return best;
 }
 
+
+type PathPoint = { x: number; y: number };
+
+function linearPath(points: PathPoint[]): string {
+  return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
+}
+
+/**
+ * A smooth line through every point (monotone cubic, Fritsch–Carlson): rounded corners, and it
+ * never bends above a peak or below a dip, so the line still reads the real values.
+ */
+function smoothPath(points: PathPoint[]): string {
+  const n = points.length;
+  if (n < 3) return linearPath(points);
+  const dx: number[] = [];
+  const slope: number[] = [];
+  for (let i = 0; i < n - 1; i += 1) {
+    dx.push(points[i + 1].x - points[i].x);
+    slope.push(dx[i] === 0 ? 0 : (points[i + 1].y - points[i].y) / dx[i]);
+  }
+  const tangent: number[] = [slope[0]];
+  for (let i = 1; i < n - 1; i += 1) {
+    tangent.push(slope[i - 1] * slope[i] <= 0 ? 0 : (slope[i - 1] + slope[i]) / 2);
+  }
+  tangent.push(slope[n - 2]);
+  for (let i = 0; i < n - 1; i += 1) {
+    if (slope[i] === 0) {
+      tangent[i] = 0;
+      tangent[i + 1] = 0;
+      continue;
+    }
+    const a = tangent[i] / slope[i];
+    const b = tangent[i + 1] / slope[i];
+    const h = a * a + b * b;
+    if (h > 9) {
+      const t = 3 / Math.sqrt(h);
+      tangent[i] = t * a * slope[i];
+      tangent[i + 1] = t * b * slope[i];
+    }
+  }
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 0; i < n - 1; i += 1) {
+    const third = dx[i] / 3;
+    const p0 = points[i];
+    const p1 = points[i + 1];
+    d += ` C ${p0.x + third} ${p0.y + tangent[i] * third} ${p1.x - third} ${p1.y - tangent[i + 1] * third} ${p1.x} ${p1.y}`;
+  }
+  return d;
+}
 export function LineChart({
   data,
   labels: labelsProp,
@@ -152,6 +201,7 @@ export function LineChart({
   title,
   description,
   variant = "area",
+  curve = "smooth",
   height = 240,
   showGrid = true,
   showTable = true,
@@ -200,7 +250,7 @@ export function LineChart({
         x: xScale(index),
         y: yScale(entry.data[index] ?? 0),
       }));
-      const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
+      const linePath = curve === "linear" ? linearPath(points) : smoothPath(points);
       const areaPath = isArea
         ? `${linePath} L ${points[points.length - 1]?.x ?? plotRight} ${plotBottom} L ${points[0]?.x ?? plotLeft} ${plotBottom} Z`
         : "";
@@ -238,7 +288,7 @@ export function LineChart({
     });
 
     return { lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom };
-  }, [formatLabel, height, includeZero, isArea, isEmpty, labels, series, tickInterval, width]);
+  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, labels, series, tickInterval, width]);
 
   const visibleLines = highlighted !== null
     ? layout.lines.filter((line) => line.seriesIndex === highlighted)

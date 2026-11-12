@@ -47,7 +47,7 @@ const noop = () => {};
 const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactNode }[] = [
   {
     title: "Running — live clock and cost",
-    about: "The clock and the cost lead. Finished steps sit in an even strip (weight can size them by time); the running step spins.",
+    about: "The clock and the cost lead. Finished steps sit in an even strip, every step the same width; the running step spins.",
     code: `<AgentMonitor
   name="Refactor billing service"
   meta="claude-code · acme-demo"

@@ -398,6 +398,12 @@
   min-width: 0;
 }
 
+/* A category Badge (screen cards, block pages) keeps its own width in a flex or grid column. */
+.screenTag {
+  align-self: flex-start;
+  justify-self: start;
+}
+
 .screenTitle {
   margin: 0;
   overflow: hidden;

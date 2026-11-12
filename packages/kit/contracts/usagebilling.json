@@ -1,0 +1,131 @@
+{
+  "id": "usagebilling",
+  "kind": "block",
+  "category": "Billing",
+  "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade.",
+  "status": "stable",
+  "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+  "useWhen": [
+    "the billing or usage area of a SaaS settings page",
+    "show how close an account is to its limits next to the plan that sets them",
+    "download a recent invoice or change the payment method from one place"
+  ],
+  "doNotUseWhen": [
+    "one invoice in full: InvoiceDocument",
+    "only the allowance meter: UsageMeter",
+    "choosing between plans: PricingPlans",
+    "an overdue account that must pay now (Pay now is the primary, not Upgrade): compose Alert, Button and these parts on the page"
+  ],
+  "contains": [
+    "card",
+    "button",
+    "listview",
+    "badge",
+    "usagelist",
+    "usagemeter"
+  ],
+  "props": {
+    "plan": {
+      "type": "object",
+      "required": true,
+      "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\"."
+    },
+    "allowance": {
+      "type": "object",
+      "required": true,
+      "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote? }."
+    },
+    "limits": {
+      "type": "array",
+      "required": false,
+      "note": "UsageList items: { id, label, used, limit, unit?, note? }[]. The card line counts the ones at 80% or more."
+    },
+    "invoices": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, number, date, amount, status: \"paid\" | \"open\" | \"overdue\" | \"void\" }[], newest first."
+    },
+    "invoiceLimit": {
+      "type": "number",
+      "default": 4,
+      "note": "How many invoices to list."
+    },
+    "onUpgrade": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. The one solid primary, on the plan card. Without it there is no Upgrade."
+    },
+    "onManagePayment": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Outline button on the plan card."
+    },
+    "onDownloadInvoice": {
+      "type": "function",
+      "required": false,
+      "note": "(invoiceId) => void. Each invoice row's Download action."
+    },
+    "onViewInvoices": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. View all link on the invoices card."
+    },
+    "onViewUsage": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. The UsageMeter's View usage."
+    },
+    "title": {
+      "type": "string",
+      "default": "Usage & billing"
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "Line under the heading."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "top: the UsageMeter beside the plan Card, in layout-split--primary",
+    "then the other limits Card beside the recent invoices Card, in layout-split",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width each row stacks"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.metric",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.weight.metric",
+    "type.family.heading",
+    "line",
+    "layout.gutter.md",
+    "grid.breakpoint.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the plan facts are a description list (price, next charge, payment method)",
+      "Upgrade and Manage payment are kit Buttons; Upgrade is the only solid primary (the UsageMeter's own Upgrade is off)",
+      "the invoices list is named with its count (Recent invoices, 4 of 12); each Download action is named with the invoice number",
+      "invoice status is a kit Badge with text, not colour alone",
+      "no motion of its own"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild UsageBilling from local cards; import the block",
+    "Do not add a second solid primary; Upgrade on the plan card is the one",
+    "Do not pass onUpgrade to the UsageMeter inside it",
+    "Do not use raw hex"
+  ],
+  "snippet": "<UsageBilling plan={plan} allowance={credits} limits={limits} invoices={invoices} onUpgrade={upgrade} onManagePayment={openPortal} onDownloadInvoice={download} />"
+}

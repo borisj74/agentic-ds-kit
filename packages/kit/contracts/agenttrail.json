@@ -37,6 +37,16 @@
       "type": "object",
       "required": false,
       "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+    },
+    "selectedStepId": {
+      "type": "string",
+      "required": false,
+      "note": "Selected step id; its button shows the selected ring and aria-pressed."
+    },
+    "onSelectStep": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void. Makes each step a button; selecting the selected step again passes null."
     }
   },
   "passthrough": {
@@ -78,7 +88,8 @@
       "the running or approval step has aria-current=step",
       "each step names its status for screen readers; icons are aria-hidden",
       "counter reads \"Step 3 of 5\"",
-      "the running spinner rotates on transform only and stops under prefers-reduced-motion"
+      "the running spinner rotates on transform only and stops under prefers-reduced-motion",
+      "with onSelectStep, each step's label and sublabel are one button with aria-pressed"
     ]
   },
   "doNot": [

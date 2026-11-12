@@ -35,6 +35,11 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   onSend?: (message: string) => void;
+  /**
+   * Send button look. Default "solid" (the view's one solid primary). Use "soft" when another
+   * solid primary shares the view, e.g. an ApprovalCard waiting beside the chat.
+   */
+  sendAppearance?: "solid" | "soft";
   onClose?: () => void;
   closeLabel?: string;
   menuItems?: ChatMenuItem[];

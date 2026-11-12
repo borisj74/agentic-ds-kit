@@ -1,16 +1,19 @@
 /**
- * Public kit API: components only. Patterns (app-shell, sign-in, dashboard, list-detail, …) are
- * copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
+ * Public kit API: components only. Blocks (AgentOverview, …) are components too: larger
+ * compositions of kit components, imported the same way. Patterns (app-shell, sign-in, dashboard,
+ * list-detail, …) are copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
  */
 
 import "./tokens";
 import "./layout";
 
 export * from "../ui/Accordion";
+export * from "../ui/ActivityFeed";
 export * from "../ui/AgentFleet";
 export * from "../ui/AgentInbox";
 export * from "../ui/AgentLanes";
 export * from "../ui/AgentMonitor";
+export * from "../ui/AgentOverview";
 export * from "../ui/AgentPlan";
 export * from "../ui/AgentSteering";
 export * from "../ui/AgentTrail";
@@ -18,6 +21,7 @@ export * from "../ui/AgentTree";
 export * from "../ui/Alert";
 export * from "../ui/AlertDialog";
 export * from "../ui/AnchorNav";
+export * from "../ui/AppDirectory";
 export * from "../ui/AppHeader";
 export * from "../ui/AppNav";
 export * from "../ui/ApprovalCard";
@@ -68,10 +72,13 @@ export * from "../ui/Input";
 export * from "../ui/InputOTP";
 export * from "../ui/InsightCard";
 export * from "../ui/Kbd";
+export * from "../ui/KpiBoard";
 export * from "../ui/LineChart";
 export * from "../ui/LinkList";
 export * from "../ui/ListView";
+export * from "../ui/LiveSession";
 export * from "../ui/LoadingAnimation";
+export * from "../ui/LogoStrip";
 export * from "../ui/MemoryPanel";
 export * from "../ui/MessageActions";
 export * from "../ui/Meter";
@@ -86,11 +93,14 @@ export * from "../ui/PageHeader";
 export * from "../ui/Pagination";
 export * from "../ui/PermissionRequest";
 export * from "../ui/PieChart";
+export * from "../ui/PlanReview";
+export * from "../ui/Plans";
 export * from "../ui/Popover";
 export * from "../ui/Progress";
 export * from "../ui/ProgressSteps";
 export * from "../ui/RadioGroup";
 export * from "../ui/Resizable";
+export * from "../ui/RunDetail";
 export * from "../ui/RunningNow";
 export * from "../ui/Scoreboard";
 export * from "../ui/Scorecard";
@@ -117,8 +127,11 @@ export * from "../ui/ToolCallCard";
 export * from "../ui/Tooltip";
 export * from "../ui/TraceWaterfall";
 export * from "../ui/TreeView";
+export * from "../ui/UsageBilling";
 export * from "../ui/UsageList";
 export * from "../ui/UsageMeter";
+export * from "../ui/WorkBoard";
+export * from "../ui/ChangeReview";
 export * from "../ui/ChangeSummary";
 export * from "../ui/ExperimentCard";
 export * from "../ui/NotificationStack";

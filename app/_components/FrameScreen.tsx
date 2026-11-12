@@ -25,6 +25,12 @@ export function FrameScreen({ slug, view, mode }: { slug: ScreenSlug; view?: str
   const base = stored ?? DEFAULT_THEME;
   const theme: ThemeState = mode === "dark" || mode === "light" ? { ...base, mode } : base;
 
+  // The frame is its own document: its root takes the preview's mode, not the docs site's saved
+  // light / dark, so kit styles keyed on the root theme match the screen.
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme.mode);
+  }, [theme.mode]);
+
   return (
     <ThemeScope theme={theme} className={styles.frameScreen}>
       <PatternScreen slug={slug} view={view} />

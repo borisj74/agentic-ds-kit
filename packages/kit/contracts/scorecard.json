@@ -83,6 +83,11 @@
       "required": false,
       "note": "When set, the whole card is a button that opens a detail view"
     },
+    "selected": {
+      "type": "boolean",
+      "required": false,
+      "note": "With onClick: the card is a toggle in a picker (e.g. the metric a chart shows). Sets aria-pressed, draws the selected style (border.brand on action.selected), and adds the badge to the button's name. Leave undefined for a plain button."
+    },
     "fill": {
       "type": "boolean",
       "default": false,
@@ -130,7 +135,8 @@
       "trend icon is aria-hidden",
       "delta text is the visible change",
       "deltaTone is color only; the delta text carries the meaning",
-      "root is a button when onClick is set"
+      "root is a button when onClick is set",
+      "with onClick and selected set, the button has aria-pressed and its name includes the badge text"
     ]
   },
   "doNot": [

@@ -1,0 +1,103 @@
+/* AgentOverview block: kit components on kit layout classes. The block is its own container so
+   it stacks wherever it is placed, not only at a viewport width. */
+.root {
+  container: agentoverview / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.columns {
+  min-width: 0;
+}
+
+/* Each column stacks its parts with the block's own gap, so the lanes start right under the
+   summary cards and the inbox right under the activity chart. */
+.column {
+  display: grid;
+  align-content: start;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+}
+
+.column > * {
+  min-width: 0;
+}
+
+.summary {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.activity {
+  min-width: 0;
+}
+
+/* Below the stack point everything is one column. 64rem is --grid-breakpoint-md
+   (container queries cannot read var()). No breakpoint token sits nearer the ~860px the
+   brief asked for; below md the inbox column is under the width its cards need. */
+@container agentoverview (max-width: 64rem) {
+  /* One column in reading order: the columns step aside and their parts join the root grid. */
+  .root .columns,
+  .root .column {
+    display: contents;
+  }
+
+  .areaSummary {
+    order: 1;
+  }
+
+  .areaActivity {
+    order: 2;
+  }
+
+  .areaLanes {
+    order: 3;
+  }
+
+  .areaInbox {
+    order: 4;
+  }
+}

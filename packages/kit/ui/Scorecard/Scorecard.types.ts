@@ -9,7 +9,7 @@ export type ScorecardSize = "sm" | "md" | "lg";
 export type ScorecardDeltaTone = "success" | "warning" | "danger" | "neutral";
 
 /** Native article attributes the kit sets itself (or replaces with its own prop). */
-type ScorecardOwnedKeys = "children" | "onClick" | "aria-labelledby";
+type ScorecardOwnedKeys = "children" | "onClick" | "aria-labelledby" | "aria-pressed";
 
 /** `ref`, `className` and other native attributes land on the root: `<button>` when `onClick` is set, `<article>` otherwise. */
 export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">, ScorecardOwnedKeys> {
@@ -27,6 +27,12 @@ export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">
   badge?: string;
   badgeTone?: BadgeTone;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  /**
+   * With `onClick`: the card is a toggle in a picker (e.g. the metric a chart shows). Sets
+   * `aria-pressed`, draws the selected style, and adds the badge to the button's name, so a
+   * badge such as "In chart" on the selected card is read with it. Leave undefined otherwise.
+   */
+  selected?: boolean;
   fill?: boolean;
   ref?: Ref<HTMLElement>;
 }

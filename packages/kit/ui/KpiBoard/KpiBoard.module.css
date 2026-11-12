@@ -1,0 +1,57 @@
+/* KpiBoard block: kit components on kit layout classes. The block is its own container so it
+   stacks wherever it is placed, not only at a viewport width. */
+.root {
+  container: kpiboard / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.split {
+  min-width: 0;
+}
+
+.split > * {
+  min-width: 0;
+}
+
+/* The table stacks under the chart below 64rem of block width (--grid-breakpoint-md; container
+   queries cannot read var()), as in AgentOverview. */
+@container kpiboard (max-width: 64rem) {
+  .root .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

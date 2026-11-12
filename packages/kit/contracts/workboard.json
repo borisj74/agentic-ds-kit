@@ -1,0 +1,164 @@
+{
+  "id": "workboard",
+  "kind": "block",
+  "category": "Productivity",
+  "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through.",
+  "status": "stable",
+  "intent": "Block: a task board with detail. TaskBoard columns (drag or keyboard moves); a card opens a Drawer with the task, Status and Assignee Fields (Select, Avatar) and its CommentThread.",
+  "useWhen": [
+    "a team's tasks by status, with the detail one click away",
+    "change a task's status or assignee without leaving the board",
+    "discuss a task in place with replies"
+  ],
+  "doNotUseWhen": [
+    "only the board — TaskBoard",
+    "a list with filters and sorting — DataTable",
+    "an agent's plan — AgentPlan"
+  ],
+  "contains": [
+    "avatar",
+    "badge",
+    "button",
+    "commentthread",
+    "drawer",
+    "field",
+    "select",
+    "taskboard"
+  ],
+  "props": {
+    "columns": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, label, cardIds }[]. A task's column is its status; the last column counts as done in the head."
+    },
+    "tasks": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, description?, tags?, assigneeId?, dueOn?, comments?: CommentThread comments }[]"
+    },
+    "people": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, initials?, avatarSrc? }[]: assignees and comment authors."
+    },
+    "currentUserId": {
+      "type": "string",
+      "required": false,
+      "note": "Their comments get Edit and Delete."
+    },
+    "title": {
+      "type": "string",
+      "default": "Work board"
+    },
+    "boardTitle": {
+      "type": "string",
+      "required": false,
+      "note": "TaskBoard's name, e.g. \"Billing Q4\". Default: title."
+    },
+    "note": {
+      "type": "string",
+      "required": false
+    },
+    "openTaskId": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled: the task whose drawer is open, or null."
+    },
+    "defaultOpenTaskId": {
+      "type": "string",
+      "required": false
+    },
+    "onOpenTaskChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void"
+    },
+    "onMove": {
+      "type": "function",
+      "required": true,
+      "note": "(taskId, toColumnId, index) => void. From the board, or the drawer's Status (to the end of that column). moveWorkBoardTask(columns, …) returns the new columns."
+    },
+    "onUpdate": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId, { assigneeId: string | null }) => void. The drawer's Assignee."
+    },
+    "onComment": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId, body, parentId?) => void. Reply is offered when set."
+    },
+    "onEditComment": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId, commentId, body) => void"
+    },
+    "onDeleteComment": {
+      "type": "function",
+      "required": false,
+      "note": "(taskId, commentId) => void, after CommentThread's AlertDialog."
+    },
+    "onAdd": {
+      "type": "function",
+      "required": false,
+      "note": "(columnId) => void. Add card under a column."
+    },
+    "onNewTask": {
+      "type": "function",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "head: h2 title and the task count",
+    "body: TaskBoard; its columns are at least 14rem and scroll sideways inside the board when the block is narrow",
+    "detail: a right Drawer (lg): description, tags, Status and Assignee Fields stacked (the portaled Drawer is outside layout-content, so a split would not stack at 390), then the CommentThread"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.bodyMd",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the board is TaskBoard's: columns are sections with counts, cards are buttons, Space / arrows / Space moves by keyboard with announcements",
+      "a card opens a kit Drawer (dialog, focus trap, Escape, focus returns to the card)",
+      "Status and Assignee are kit Selects in labelled Fields; the assignee's Avatar is beside its name",
+      "the CommentThread is named after the task; Reply shows who you reply to with a Cancel reply button",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild WorkBoard from a local Kanban; import the block",
+    "Do not make moves drag-only; TaskBoard's keyboard path stays",
+    "Do not encode status by colour alone",
+    "Do not use raw hex",
+    "Only one solid primary in the view: Comment in the open drawer"
+  ],
+  "snippet": "<WorkBoard boardTitle=\"Billing Q4\" columns={columns} tasks={tasks} people={people} currentUserId={me.id} onMove={move} onUpdate={update} onComment={comment} />"
+}

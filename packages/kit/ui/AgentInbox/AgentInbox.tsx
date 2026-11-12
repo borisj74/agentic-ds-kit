@@ -201,7 +201,8 @@ export function AgentInbox(props: AgentInboxProps) {
                   type="button"
                   className={cx(styles.row, styles[item.type], item.read && styles.read, isSelected && styles.selected)}
                   aria-current={isSelected ? "true" : undefined}
-                  aria-controls={isSelected ? detailId : undefined}
+                  aria-expanded={isSelected}
+                  aria-controls={detailId}
                   onClick={() => onSelect?.(item.id)}
                 >
                   <Icon size={16} strokeWidth={ICON_STROKE} className={styles.typeIcon} aria-hidden="true" />

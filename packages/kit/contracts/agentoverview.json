@@ -1,0 +1,136 @@
+{
+  "id": "agentoverview",
+  "kind": "block",
+  "category": "Agents",
+  "summary": "See what your agents did since you last looked, what is running, and what needs you.",
+  "status": "stable",
+  "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+  "useWhen": [
+    "the first screen of an agent workspace",
+    "come back after a while and see what changed",
+    "approve, reject or retry agent work from one place"
+  ],
+  "doNotUseWhen": [
+    "one agent in detail — AgentMonitor",
+    "only the time axis — AgentLanes",
+    "only the request queue — AgentInbox",
+    "agents with sub-agents — AgentFleet"
+  ],
+  "contains": [
+    "agentlanes",
+    "agentinbox",
+    "barchart",
+    "empty",
+    "scoreboard",
+    "scorecard",
+    "segmentedcontrol"
+  ],
+  "props": {
+    "agents": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, model?, icon? }[]. Same shape as AgentLanes agents: one lane each."
+    },
+    "events": {
+      "type": "array",
+      "required": true,
+      "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Waiting and failed events since `since` fill the inbox."
+    },
+    "since": {
+      "type": "number",
+      "required": true,
+      "note": "Epoch ms of the last visit. The summary and the filter counts cover what was active after it."
+    },
+    "now": {
+      "type": "number",
+      "required": false,
+      "note": "Controlled clock; else it ticks every second."
+    },
+    "filter": {
+      "type": "enum",
+      "values": [
+        "all",
+        "running",
+        "needs-you",
+        "failed"
+      ],
+      "required": false,
+      "note": "Controlled filter for the activity bar, lanes and inbox."
+    },
+    "defaultFilter": {
+      "type": "enum",
+      "values": [
+        "all",
+        "running",
+        "needs-you",
+        "failed"
+      ],
+      "default": "all",
+      "note": "Uncontrolled starting filter."
+    },
+    "onFilterChange": {
+      "type": "function",
+      "required": false,
+      "note": "(filter) => void"
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "(eventId) => void. From the lane block's decision or the inbox card."
+    },
+    "onReject": {
+      "type": "function",
+      "required": false,
+      "note": "(eventId) => void"
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "(eventId) => void. A failed event's Retry run."
+    },
+    "title": {
+      "type": "string",
+      "default": "Agent overview"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "two columns in layout-split--primary, each a stack with the block gutter: the summary Scoreboard over AgentLanes, the activity BarChart over AgentInbox, so the lanes start right under the cards",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width it is one column in reading order: summary, activity, lanes, inbox"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "grid.breakpoint.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the filter is a kit SegmentedControl (radio group) named Show agents; each segment's name includes its count",
+      "the summary is a section labelled by its h3; the Scoreboard is labelled too",
+      "inbox rows are buttons with aria-expanded and aria-controls on the detail; selecting the open row again closes it",
+      "lane blocks and inbox actions are the AgentLanes and AgentInbox controls, keyboard reachable with the kit focus ring",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild AgentOverview from a local dashboard; import the block",
+    "Do not add a second filter to one area; the one filter drives all three",
+    "Do not use raw hex",
+    "Only one solid primary in the view: the approve in the open inbox card"
+  ],
+  "snippet": "<AgentOverview agents={agents} events={events} since={lastVisit} defaultFilter=\"all\" onApprove={approve} onReject={reject} onRetry={retry} />"
+}

@@ -27,8 +27,8 @@ command and query the installed kit. Answers are read from this install's
 contracts, tokens, patterns, and AGENTS.md. Nothing is fetched.
 
 Tools:
-  list_components       Name, category, and a one-line purpose
-  get_component         Props, variants, must/doNot, tokens, import, example
+  list_components       Name, category, kind (component or block), one-line purpose
+  get_component         Props, variants, must/doNot, tokens, import, example, kind
   search_components     Match name, purpose, or contract keywords
   get_tokens            Semantic color, type, space, radius, and grid
   list_patterns         Description and the add command
@@ -94,7 +94,7 @@ function createServer() {
     {
       title: "List components",
       description:
-        "List every UI component in this install. Each entry has the code name, the catalog group as category, and a one-line purpose from its contract. Use get_component for props and rules.",
+        "List every UI component in this install, blocks included. Each entry has the code name, the catalog group as category, kind (component, or block for a larger composition such as AgentOverview), and a one-line purpose from its contract. Use get_component for props and rules.",
     },
     () => listComponents(),
   );

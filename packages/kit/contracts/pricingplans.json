@@ -10,7 +10,7 @@
   "doNotUseWhen": [
     "usage against a plan limit — UsageMeter",
     "picking options in a form — TileGroup",
-    "a public marketing pricing page"
+    "a whole public pricing section (plans and FAQ) — the Plans block"
   ],
   "contains": [
     "badge",

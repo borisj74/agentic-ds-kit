@@ -11,22 +11,67 @@
     "Part-to-whole share — use PieChart"
   ],
   "props": {
-    "data": { "type": "array", "required": false },
-    "labels": { "type": "array", "required": false },
-    "series": { "type": "array", "required": false },
-    "title": { "type": "string", "required": false },
-    "description": { "type": "string", "required": false },
+    "data": {
+      "type": "array",
+      "required": false
+    },
+    "labels": {
+      "type": "array",
+      "required": false
+    },
+    "series": {
+      "type": "array",
+      "required": false
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
     "variant": {
       "type": "enum",
-      "values": ["line", "area"],
+      "values": [
+        "line",
+        "area"
+      ],
       "default": "area"
     },
-    "showGrid": { "type": "boolean", "default": true },
-    "showTable": { "type": "boolean", "default": true },
-    "includeZero": { "type": "boolean", "default": false },
-    "height": { "type": "number", "default": 240 },
-    "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false },
+    "curve": {
+      "type": "enum",
+      "values": [
+        "smooth",
+        "linear"
+      ],
+      "default": "smooth",
+      "note": "smooth rounds the line through every point (monotone: no overshoot above peaks or below dips); linear draws straight segments"
+    },
+    "showGrid": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTable": {
+      "type": "boolean",
+      "default": true
+    },
+    "includeZero": {
+      "type": "boolean",
+      "default": false
+    },
+    "height": {
+      "type": "number",
+      "default": 240
+    },
+    "emptyLabel": {
+      "type": "string",
+      "default": "No data for this range"
+    },
+    "isLoading": {
+      "type": "boolean",
+      "default": false
+    },
     "tickInterval": {
       "type": "number",
       "required": false,

@@ -71,7 +71,7 @@
     "Do not use Conveyor to page a table — use Pagination",
     "Do not put a second scrolling box inside it; pass scroll={false} on Scoreboard",
     "Do not nest two Conveyors",
-    "Do not invent ScrollArea, Overflow, Marquee, or a local scroller",
+    "Do not invent ScrollArea, Overflow, Marquee, or a local scroller (a moving logo wall is the LogoStrip block)",
     "Do not use embla or Carousel internals",
     "Do not add loop, showIndex, or slidesPerView",
     "Do not use appearance=solid mode=primary on the arrows — ghost icon-only only",

@@ -266,7 +266,7 @@ export function AgentMonitor({
               const isSelected = step.id === selectedStepId;
               const label = `Step ${index + 1}: ${step.tool}, ${step.status}${step.duration ? `, ${step.duration}` : ""}`;
               return (
-                <li key={step.id} className={styles.cell} style={{ flexGrow: step.weight ?? 1 }}>
+                <li key={step.id} className={styles.cell}>
                   {onSelectStep ? (
                     <button
                       type="button"

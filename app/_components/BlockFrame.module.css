@@ -1,0 +1,5 @@
+/* The block on a frame page: the frame's <main>, padded like layout-content. */
+.frameMain {
+  flex: 1 1 auto;
+  padding: var(--layout-margin-md);
+}

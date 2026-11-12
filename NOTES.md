@@ -2,6 +2,162 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-12: Blocks catalogue (feat/blocks-mission-home)
+
+Boris (after looking at affectUI's Blocks): blocks are several kit components composed into one area, and the section needs a catalogue, not one opaque name. Decisions:
+
+- **MissionHome → AgentOverview** (`ui/AgentOverview`, contract `agentoverview`, `/blocks/agent-overview`), before it ever shipped.
+- **Block contracts** carry `category` (e.g. "Agents") and a one-line `summary`, in the contract and its `index.json` entry. MCP `list_components` / `get_component` return them as `block: { category, summary }`.
+- **Blocks overview** (`/blocks`): every block as a card with its category Badge, a live thumbnail of the block at 1440, its name and summary. The nav lists Overview, then blocks A–Z; block pages show the category under the breadcrumb.
+- **One registry:** `lib/blocks/<slug>.ts` (contract, label, lead, usage) listed in `lib/blocks/index.ts`, and a demo in `app/_components/blocks/` listed in its `index.ts`. Nav, command palette, props tables, frames and the overview all read from those. The questions tests count blocks from the index (`kind: "block"`), so a new block doesn't touch them.
+- **Eight more blocks** (Boris: all nine): Run detail, Live session (Agents); KPI board (Analytics); Usage & billing (Billing); App directory (Integrations); Work board (Productivity); Plans (Pricing); Logo strip (Social proof). Built in their own sessions and PRs on top of this branch.
+
+
+### First block: AgentOverview (was MissionHome)
+
+A **block** is a kit component for a whole area of a screen, built only from other kit components and tokens. It is imported from `agentic-ds-kit` like any component (not copied in like a pattern) and sits inside the page's `<main>` with no chrome of its own.
+
+- **Catalog:** `contracts/agentoverview.json` has `"kind": "block"`; its `index.json` entry stays `"group": "component"` and also carries `"kind": "block"`, so the site catalog, `questions` and every existing consumer keep working. MCP `list_components` / `get_component` now return `kind` (`"component"` or `"block"`); `category` is unchanged. `questions` options still say `kind: "component"` for it (the questions tests pin component/pattern kinds); say if blocks should get their own questions kind. The questions tests' hard-coded 128 is now 129.
+- **AgentOverview** (`ui/AgentOverview/`): summary (Scoreboard: Done / Needs you / Failed since `since`) beside a compact BarChart of work started per slice; AgentLanes beside AgentInbox; one SegmentedControl filter (All, Running, Needs you, Failed, counts in the labels) drives the activity bar, the lanes (only agents with matching work keep a lane; Empty when none) and the inbox (waiting + failed; Running → "All caught up"). Props: `agents`, `events`, `since`, `now`, `filter` / `defaultFilter` / `onFilterChange`, `onApprove`, `onReject`, `onRetry`, `title`. `events` are AgentLanes tasks plus `action?` / `risk?`: a waiting event with an action is an ApprovalCard approval in the inbox; without one it is an Approve / Reject DecisionCard question. Pure helpers in `agentOverview.logic.ts`.
+- **Layout:** (revised after Boris saw an empty band under the summary cards) two stacked columns in `layout-split--primary`: summary over lanes, activity over inbox, each with the block gutter, so the lanes start right under the cards. Below the stack point the columns use `display: contents` and the parts take `order` (summary, activity, lanes, inbox). Before: two rows, where the short summary stretched to the chart's height. The block is its own inline-size container and stacks below **64rem** of block width (`--grid-breakpoint-md`, written as a value because container queries can't read `var()`, as in layout.css). The brief asked for ~860px: no breakpoint token sits there (sm 40rem, md 64rem) and below md the inbox column is narrower than its cards need. Jev rated this line "uncertain": **Boris to confirm** md, or OK a new breakpoint/layout class.
+- **Lanes window:** 10m / 30m choices, 30m default. AgentLanes ticks every 2 minutes at any span, so a since-last-visit window (2h) crowds its axis into a smear; longer windows need adaptive ticks in AgentLanes (follow-up).
+- **Kit change (a11y):** AgentInbox rows now also carry `aria-expanded` (true on the selected row) and always `aria-controls` the detail region (contract a11y updated). AgentOverview toggles selection, so a row opens and closes its detail. Additive; `aria-current` stays.
+- **No new tokens, colours or motion.** Only role tokens and layout classes; the block has no motion of its own.
+- **Docs:** new **Blocks** group in the site nav (and command palette), page `/blocks/agent-overview`: preview (scaled iframe of `/frame/blocks/agent-overview`, light/dark, 1440/390, open full screen, Copy prompt bar with a block prompt from `lib/pattern-prompt.ts` `blockPrompt`), What a block is, When to use / not, Usage, Layout, Props (from the contract), Built from. Sample data (`lib/agent-overview-sample.ts`) is relative to now and the demo's approve / reject / retry change it live.
+- **Frame theme fix:** frames took the root `data-theme` from the docs site's saved light/dark, so a light preview on a dark site mixed tokens (dark badges and lane blocks). `BlockFrame` and the pattern frames' `FrameScreen` now set their document root to the preview mode. Checked both ways (site dark + preview light, site light + preview dark) on Settings area · Team.
+
+### At 390px (known open items)
+
+- AgentLanes axis labels overlap at the 30m window (fixed 2m ticks, narrow board); "Last 10m" reads better. Lane blocks near "now" clip their labels.
+- AgentMonitor is not used in this block, so its step width / header wrap does not affect it.
+- The three Scorecards stack one per row (tall); fine, but a compact Scoreboard row option would help.
+
+### Follow-ups for Boris
+
+- Confirm the 64rem stack point (or a new breakpoint token / layout class near 54rem).
+- AgentLanes adaptive tick step (so long windows like "since your last visit" work) and the 390 axis overlap.
+- Blocks as their own `questions` kind?
+
+### Plans (`plans`, Pricing) and LogoStrip (`logo-strip`, Social proof)
+
+- **Plans** (`ui/Plans/`): h2 + lead, PricingPlans and an FAQ Accordion, stacked in one column. PricingPlans already has the Monthly / Yearly SegmentedControl, so that one switch drives the block (no second switch). Props: `plans`, `interval` / `defaultInterval` / `onIntervalChange`, `onChoosePlan(planId, interval)`, `faqs` (`{ id, question, answer }[]`, Accordion only with 2+, its `minItems`), titles, and PricingPlans' `savingsLabel` / `footnote` / `currency` / `unitLabel`. One solid primary: the recommended CTA (PricingPlans' rule; a test counts it).
+- **Comparison table removed** (Boris, 2026-11-12: "It doesn't look good"). The block had a feature-by-feature Table under the cards; it and its `comparison` / `comparisonTitle` props are gone. The plan cards' feature lists carry the differences.
+- **PricingPlans contract:** its `doNotUseWhen` said "a public marketing pricing page"; now it points a whole pricing section to the Plans block. Its intent still says "in-product … not a marketing page": **Boris to confirm** PricingPlans is OK inside a marketing block.
+- **Plans at 390:** cards stack one per row; no page scroll.
+- **Accordion ids** are `accordion-panel-<item id>`, not per instance: two Accordions with the same item ids on one page would collide. FAQ ids should be unique on the page (kit follow-up: `useId` in Accordion).
+- **LogoStrip** (`ui/LogoStrip/`), reworked on Boris's ask (2026-11-12: "more logos in a few rows … animate … each row a different direction … soft edges, almost like a gradient"): h2 (+ optional line) over `rows` (default 3) of logos dealt round-robin. Neighbouring rows drift in opposite directions; each row fades out over its outer 15% with an alpha mask (`mask-image`, `black` / `transparent` keywords, no colour). A row holds its list twice and moves the pair by half its width (transform only), so the loop has no seam; a loop takes about 4s per logo, at least 20s (inline `--logostrip-duration`, a component knob, not a token). Logos are `{ id?, name, src?, logo?, href? }`, each named (img alt, `role="img"` + `aria-label`, or text); `href` makes a link with the kit focus ring. The demo has 24 made-up names.
+- **No pause button** (Boris, 2026-11-12: removed). The rows loop on their own; hover and focus inside a row hold them, and a `paused` prop lets an app stop them from its own control. The copy list is `aria-hidden` and `inert`, so each logo is read and focused once. Under `prefers-reduced-motion` the copies go, the rows wrap and centre, and nothing moves. Note: WCAG 2.2.2 asks for a pause control on motion that lasts over 5 seconds; hover/focus and reduced motion cover part of that.
+- **Conveyor dropped from LogoStrip.** Conveyor's contract forbids a local Marquee; it now says a moving logo wall is the LogoStrip block. **Boris to confirm** this motion (a looping drift, transform only) is OK under the house rule.
+- No new tokens or colours; no hex. Motion: LogoStrip's drift only (see above).
+
+### Run detail (`RunDetail`, Agents)
+
+One agent run on one screen: AgentMonitor over the selected step's ToolCallCard, beside AgentTree over AgentTrail (`layout-split--primary`, stacks below 64rem of block width like AgentOverview). Props: `run` (what AgentMonitor shows, plus a trail `tag`), `steps` (AgentMonitor steps plus `agentId`, `label`, `timer`, `args`, `result`, `error`; status adds `pending` for planned steps: in the trail, not in the strip), `agents` (AgentTree root), `selectedStepId` / `defaultSelectedStepId` / `onSelectStep`, `onApprove`, `onDeny`, `onPause`, `onResume`, `onCancel`, `onRetry(stepId)`. Pure helpers in `runDetail.logic.ts`.
+
+- **One selection.** A step picked in the strip, the trail or the tree selects it everywhere: the strip and trail press it, the tree rings the agent that ran it, the ToolCallCard shows its call (Empty when none or when the step is only planned). A tree node selects that agent's open step, else its latest, else its first planned one.
+- **Kit change (needed for the sync):** AgentTrail `selectedStepId` / `onSelectStep` (each step becomes one button with `aria-pressed`) and AgentTree `selectedId` / `onSelect` (node names become buttons named "<name>, <status>" with `aria-pressed`; the row gets the selected ring). Both optional and additive; contracts updated.
+- **AgentMonitor behaviour to know:** while a step is selected, AgentMonitor swaps its clock and pending ApprovalCard for the step detail (its own behaviour). The approval comes back when the step is closed, and the waiting agent's Approve in the tree stays reachable meanwhile.
+- **Width:** AgentMonitor caps itself at 26.25rem; inside the block it fills its column (`width: 100%` on the block's class, no token involved).
+- **Callbacks:** Retry from the run (last failed step), the tree (that agent's last failed step) or the tool call (that step) all call `onRetry(stepId)`. Cancel shows only while paused (AgentMonitor shows it there).
+- **One solid primary:** the ApprovalCard's Approve while waiting, Resume while paused. The tree's Approve is soft neutral.
+
+At 390: AgentMonitor's step strip squeezes six steps into narrow cells (icons still fit; the wide edit step takes space from the rest) and the header wraps the run name to two lines beside the status chip; readable, not fixed here. **AgentTree** is the bigger 390 issue: its fixed status / time / cost columns leave the name about one character wide ("c", "e"); the accessible names are whole. Follow-up for AgentTree (a narrow layout that moves time and cost under the name).
+
+### Live session (`LiveSession`, Agents)
+
+Work alongside running agents: Chat on the left; on the right RunningNow (stack, "Working now"), the oldest open request as an inline ApprovalCard ("<agent> asks · N more waiting") and AgentSteering for one agent. Props: `messages`, `agents` (`{ id, name, status: running | waiting | paused | failed | done, activity?, meta?, elapsed?, suggestions?, applied? }`), `requests` (`{ id, agentId, title, description?, risk?, action }`, oldest first), `thinking`, `suggestions`, `selectedAgentId` / `defaultSelectedAgentId` / `onSelectAgent`, `onSend`, `onSteer(agentId, text)`, `onPause`, `onResume`, `onStop` (after the AgentSteering AlertDialog), `onApprove(requestId)`, `onDeny(requestId)`. Pure helpers in `liveSession.logic.ts`.
+
+- **One solid primary (kit change):** Chat's send, AgentSteering's send and ApprovalCard's Approve were all solid primary. Chat and AgentSteering get an optional `sendAppearance: "solid" | "soft"` (default solid, so nothing else changes). In the block the steer send is always soft, and the chat send goes soft while an approval shows, so the view has exactly one (tested).
+- **Working now** lists agents not done. Paused agents show as waiting ("paused by you"); an agent with an open request says "needs your OK". Picking a row moves steering to that agent (its draft clears). **Gap:** RunningNow has no selected state, so the picked row isn't marked; the steering card's heading names the agent.
+- **One approval at a time**, so Enter / Esc on the card are unambiguous; the rest are counted in its heading.
+- **Width:** ApprovalCard (25rem) and AgentSteering (24rem) cap themselves; in the block they fill the side column.
+- **Chat height:** Chat has a 32rem minimum and grows with its thread in the block (no height of its own). An app that wants a fixed-height session sets it on the block's root.
+
+At 390: everything stacks, no horizontal scroll; the chat sits first at 32rem, so Working now and the approval are below the fold. Consider putting the side column first on narrow screens (Boris to decide).
+
+### Follow-ups (Agents blocks)
+
+- AgentTree narrow layout (names collapse at 390 inside RunDetail).
+- RunningNow `selectedId` (mark the steered agent in LiveSession).
+- LiveSession order on narrow screens (approval above the chat?).
+- AgentMonitor / ApprovalCard / AgentSteering width caps are component vars that aren't documented as cssVars; the blocks override `width` instead.
+
+### AppDirectory (Integrations, `/blocks/app-directory`)
+
+- **Composed from:** FilterButton (a plain on/off "Connected" chip, `hasDropdown={false}`, `aria-pressed`), IntegrationPicker (search Input, category SegmentedControl, tiles), Drawer (detail), Badge (status in words), Button, Empty. IntegrationPicker already owns search and categories, so the block doesn't add a second search or a FilterBar; FilterBar's chips open option menus, which a yes/no filter doesn't need.
+- **Flow:** a tile's Connect or Manage opens the Drawer (about, publisher, "Once connected, it can …" permissions, connected note); the drawer's Connect (the one solid primary) calls `onConnect`, Disconnect (danger outline) calls `onDisconnect`. No confirm dialog on Disconnect: it is undone by connecting again, and an AlertDialog inside a Drawer stacks two modals.
+- **One primary:** while a drawer is open the block doesn't pass `connectingId` to the picker, so the tile behind the overlay doesn't show IntegrationPicker's solid "Connecting…" as well.
+- **Empty:** no apps → Empty (Request an integration when `onRequest`); Connected chip with nothing connected → Empty with Show all apps. Search misses use IntegrationPicker's own Empty.
+- **Kit gap (not fixed):** IntegrationPicker's contract says "Do not invent a local … AppDirectory". That line guards against local copies; this block is the kit's own. Boris may want that doNot reworded to point at this block.
+- **390:** tiles go one column, the category SegmentedControl wraps to two rows, the drawer is the kit Drawer's narrow sheet. No horizontal scroll.
+
+### WorkBoard (Productivity, `/blocks/work-board`)
+
+- **Composed from:** TaskBoard (columns, drag + keyboard moves), Drawer (size lg), Field + Select (Status = the task's column, Assignee with an Unassigned option), Avatar beside the assignee, Badge (tags), CommentThread (replies one level), Button.
+- **Data:** `columns` are TaskBoard columns (a task's column is its status), `tasks` carry description, tags, `assigneeId`, `dueOn` and `comments`, `people` resolves assignees and authors. Exported pure `moveWorkBoardTask(columns, id, to, index)` so apps (and the demo) can apply `onMove` in one line.
+- **Callbacks:** `onMove` from the board and from the drawer's Status (to the end of that column), `onUpdate(id, { assigneeId })`, `onComment(id, body, parentId?)`; `onEditComment` / `onDeleteComment` optional. Reply shows "Replying to …" with Cancel reply above the thread (CommentThread has no reply indicator of its own).
+- **Drawer fields stack** (no `layout-split`): the Drawer is portaled outside `layout-content`, so a split never stacks there and squeezed the assignee name at 390.
+- **CommentThread width:** it caps itself at `--thread-width: 24rem`; in the drawer the block sets `--thread-width: 100%` (the component's documented custom-width hook). Jev rated WorkBoard's CSS "uncertain" (deterministic scan clean); **Boris to confirm** this override is fine, or OK a `fill` option on CommentThread.
+- **One primary:** Comment in the open drawer; the board's buttons are outline / ghost.
+- **390:** TaskBoard scrolls its columns sideways inside its own card (its design); the page has no horizontal scroll.
+
+### KpiBoard (`kpi-board`, Analytics)
+
+- **Parts:** heading + range SegmentedControl ("Range"), Scoreboard of 3–4 Scorecards (the picker), LineChart (area) of the picked KPI beside a DataTable of its top rows (`layout-split--primary`, stacks below 64rem of block width like AgentOverview).
+- **Props:** `metrics` (`{ id, label, values: { [range]: { value, delta?, trend?, deltaTone? } }, columns, rowsTitle?, rankBy? }`), `series[metricId][range]`, `rows[metricId][range]`, `ranges`, `range` / `defaultRange` / `onRangeChange`, `selectedMetric` / `defaultSelectedMetric` / `onSelectedMetricChange`, `rowLimit` (5), `description`, `title`. Data is keyed by range so the uncontrolled range works without a fetch; values stay pre-formatted strings. `rankBy` sorts rows highest first (currency strings parse). Pure helpers in `kpiBoard.logic.ts`.
+- **Kit change (a11y, additive): Scorecard `selected`.** Scorecard had no selected state. With `onClick` and `selected` set, the button gets `aria-pressed`, a selected look (`--border-brand` edge on `--action-selected`, existing tokens) and its name includes the badge. KpiBoard puts an "In chart" Badge on the picked card, so it reads "Churn 3.9% In chart, pressed". Without `selected` nothing changes. Contract updated. Jev: correct (act).
+- **No solid primary** in the block; the page keeps its own.
+- **390:** no horizontal scroll. The four Scorecards stack one per row (tall, as in AgentOverview); the DataTable uses widths on short columns and `wrap` on names so it fits. The chart thins its axis labels.
+- **Jev:** "uncertain" on the stylesheet only for the `@container … (max-width: 64rem)` line (same as AgentOverview; container queries cannot read `var()`).
+
+### UsageBilling (`usage-billing`, Billing)
+
+- **Parts:** UsageMeter (main allowance) beside the plan Card (`layout-split--primary`); "Other limits" Card with UsageList beside "Recent invoices" Card with ListView (status Badge, Download action per row) (`layout-split`). Both rows stack below 64rem of block width.
+- **One primary:** Upgrade ("Upgrade to {plan.upgradeTo}") is a solid primary in the plan Card's actions, next to Manage payment (outline). The UsageMeter's own `onUpgrade` is never passed, so its "Upgrade plan" never shows when the meter warns. No Upgrade without `onUpgrade`.
+- **Props:** `plan`, `allowance` (UsageMeter props minus its actions), `limits`, `invoices` (`{ id, number, date, amount, status }`), `invoiceLimit` (4), `onUpgrade`, `onManagePayment`, `onDownloadInvoice(id)`, `onViewInvoices`, `onViewUsage`, `title`, `description`. Names carry counts: the list is "Recent invoices, 4 of 6"; each Download is "Download INV-…"; the limits card line says how many are near their limit (80%, UsageList's threshold).
+- **Why ListView, not InvoiceDocument:** InvoiceDocument is one whole invoice and brings its own solid primary (Record payment / Issue); a compact list of recent invoices fits the area and keeps Upgrade the only primary.
+- **UsageMeter width:** it caps itself at `--usage-width` (25rem, its own knob); the block sets it to 100% so the meter fills its column.
+- **Gap:** Card titles are always `h2`, so the cards' headings sit at the same level as the block's `h2` (UsageMeter uses `h3`). A Card heading-level prop would fix the outline.
+- **390:** no horizontal scroll; everything stacks in one column, plan facts wrap.
+
+### ActivityFeed (`activity-feed`, Productivity)
+
+- **Composed from:** Avatar (people and agents), Badge (event type, an Agent badge on agents, an optional outcome like Failed / Paid), Button (Open, Reply, Load more, Clear filters), FilterButton + Popover + Checkbox (Type and Person filters), Skeleton (loading), Empty (no events, no matches). No solid primary: Open and Reply are ghost, Load more is outline.
+- **Not Timeline, not ListView (kit gap):** the brief asked for a Timeline of events, but kit Timeline is string-only (`title` / `body` / `phase`, a now / next / later rail): no slot for an Avatar, Badges or actions, and ListView's contract says not to use Timeline for a record list. ListView fits a row (avatar, two lines, badge, two actions, day `groups`) but its trailing actions are taken out of the tab order (`bindInertControls`), so Open / Reply would not be keyboard reachable. So the block lays out its own `ol` per day from the kit parts above, styled like a ListView group (same group-header tokens) on a card surface, with no rail. **Boris:** either give Timeline a leading slot + actions, or make ListView row actions reachable (e.g. roving into the trail with Right arrow); then this block can switch.
+- **Filter options:** FilterBar only renders the chips (it has no options panel), so the block uses two FilterButtons as Popover triggers with a fieldset of Checkboxes (multi-select per axis) plus Clear filters, in a group named "Filter activity". FilterButton keeps `aria-haspopup="menu"` even though the panel is a Popover dialog (FilterButton sets it after the cloned props); harmless, but a `haspopup` prop on FilterButton would make it exact.
+- **One sentence per event:** each `li` carries a visually hidden sentence ("Relay, an agent, finished a run on Weekly churn report: Failed. Two sources timed out. Today at 12:25.") and the visual row is `aria-hidden`, so nothing reads twice. Open is named "Open {object}" and Reply "Reply to {actor}" through `aria-labelledby` (kit Button drops `ariaLabel` when it has children). Day h3s carry the count ("Today, 6 events").
+- **Load more:** a polite status region says what came in ("6 more events loaded, 1 matches the filters." / "… That's all the activity."); filter changes are announced there too. Load more stays focusable while loading (reads Loading…, `aria-busy`, ignores clicks) because a native `disabled` would drop focus. When the last page arrives and the button goes away, focus moves to the first new event that shows.
+- **Data:** filtering is over the loaded events; an app that filters on the server keeps `filters` controlled and swaps `events`. Day groups and times use `Intl` with optional `locale` (en-GB) and `timeZone`; the demo pins `now` and `timeZone: "UTC"` so server and browser agree on Today / Yesterday.
+- **Jev:** no new token needed; "uses only tokens" came back no at low confidence (abstain on correctness) for the stylesheet. The only literals are the kit's usual `srOnly` 1px and the `@container (max-width: 40rem)` line (= `--grid-breakpoint-sm`; container queries cannot read `var()`), the same pattern as AgentOverview and KpiBoard. **Boris to confirm.**
+- **390:** no horizontal scroll (scrollWidth 390). Below 40rem of block width Open / Reply move under the copy, lined up past the Avatar; the filters wrap under the title.
+
+### PlanReview (`plan-review`, Agents)
+
+- **Parts:** AgentPlan (draft, editable while pending) beside ChangeSummary over AutonomyDial (`layout-split--primary`, stacks below 64rem of block width), then a "Your decision" section: Reject (outline danger), Request changes (outline) and **Approve plan, the one solid primary**. AgentPlan never gets `onAccept` here, so its own Accept plan never shows (tested).
+- **Props:** `planTitle`, `steps` / `onStepsChange` (AgentPlan's own edit, remove and add step; read-only without it), `agent`, `target`, `changes` (ChangeSummary items), `autonomy` / `defaultAutonomy` / `onAutonomyChange` / `autonomyOptions`, `decision` (`pending | approved | changes-requested | rejected`) and `decisionNote`, `onApprove({ autonomy, steps })`, `onRequestChanges(note)`, `onReject`. Pure helpers in `planReview.logic.ts`.
+- **Approve says what it does:** the line beside the buttons (and Approve's description) counts the stops for your OK at the chosen autonomy: ask → every step, risk → the plan's `needsApproval` steps, tell / run → none.
+- **Request changes** opens a Field + Textarea in place ("What should change?"): focus moves in, Escape cancels and returns focus, ⌘/Ctrl+Enter or Send request (outline) sends. No modal.
+- **Decided:** anything but pending locks the plan (AgentPlan `accepted` when approved, else read-only draft) and the dial (disabled with a reason) and shows a kit Alert (success / info / danger).
+- **Gap:** AgentPlan has no reorder (only edit, remove, add). The brief said "reorderable if AgentPlan supports it"; it doesn't, so steps are not reorderable. A kit follow-up if wanted (TreeView's Alt+Arrow / Move menu is the model).
+- **Widths:** AgentPlan and ChangeSummary cap themselves; the block sets `--plan-width` / `--change-width` to 100%.
+- **390:** one column, buttons full width (stack below 40rem of block width, `--grid-breakpoint-sm`), Approve last. AutonomyDial's four stops wrap to two rows. No horizontal scroll.
+
+### ChangeReview (`change-review`, Agents)
+
+- **Parts:** header with Accept all (**the one solid primary**, "Accept all N files", disabled when every file has a verdict), ChangeSummary full width, then ListView of changed files beside the selected file (`layout-split--secondary`, stacks below 64rem): file name + "File i of N · +a −r · state", previous / next buttons, Reviewed Checkbox, Reject file / Accept file (outline toggle buttons with `aria-pressed`), InlineDiff, and a CommentThread for the file with a "Comment on" Select (whole file or one changed line).
+- **Why ListView, not TreeView:** TreeView labels are strings only and a folder tree hides the counts; ListView gives an icon (new / modified / deleted file), a secondary line and a badge. ListView names rows from primary + secondary only (not the badge), so the secondary line carries folder, +/− counts and the state in words ("Not reviewed", "Reviewed", "Accepted", "Rejected").
+- **Keyboard:** ListView's arrows / Enter, plus J / K (next / previous file) and R (toggle Reviewed) while focus is anywhere in the block and not in a text field (WCAG 2.1.4: single-key shortcuts only active with focus in the component). The keys line describes the block; buttons and the checkbox carry `aria-keyshortcuts`.
+- **InlineDiff:** no `onAccept` / `onReject` (its Accept is a solid primary); the block's own buttons decide. An accepted or rejected file shows InlineDiff's one-line resolved row; pressing the pressed button again undoes it in the demo (the app decides).
+- **Kit change (one solid primary):** CommentThread gets optional `submitAppearance: "solid" | "soft"` (default solid, nothing else changes), same as Chat's `sendAppearance`. In the block Comment is soft whenever Accept all shows (tested). Contract updated.
+- **Line comments:** CommentThread has no line anchor, so a line comment carries `line` in the block's data and reads "Line 18 · …" in the thread. Clicking a diff line to comment would need InlineDiff line actions (follow-up).
+- **Props:** `files` (`{ id, path, kind?, lines, hunkHeader?, additions?, deletions?, reviewed?, verdict? }`), `summary`, `comments` (`{ id, fileId, line?, author, createdAt, body, parentId? }`), `currentUserId`, `selectedFileId` / `defaultSelectedFileId` / `onSelectFile`, `onReviewedChange`, `onAccept`, `onReject`, `onAcceptAll`, `onComment(fileId, body, { line, parentId })`, `onEditComment`, `onDeleteComment`, `agent`. Pure helpers in `changeReview.logic.ts`.
+- **390:** list over file; InlineDiff scrolls long lines inside its own card; the file head's counts wrap. No horizontal page scroll.
+
+### Follow-ups (PlanReview, ChangeReview)
+
+- Jev on both stylesheets: tokens OK (0.77 / 0.80) but "needs new token" also yes; the only literals are the `@container` 64rem / 40rem lines (same open item as AgentOverview). **Boris to confirm.**
+- AgentPlan step reorder; InlineDiff per-line comment action; CommentThread reply indicator (the block shows "Replying to … · Cancel reply" above it, like WorkBoard).
+
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 
 Boris asked for pattern pages that look like affectUI's screens catalogue (affectui.com/screens/app-shell-flat): breadcrumb, title and one line, a Preview / Code toolbar, the screen at full size scaled into a plain frame, then sections. His calls: all pattern pages, a scaled iframe, a new PR on top of #137.

@@ -57,6 +57,15 @@
       "required": false,
       "note": "(text) => void. The send button is the one solid primary; Enter sends."
     },
+    "sendAppearance": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "soft"
+      ],
+      "default": "solid",
+      "note": "soft when another solid primary shares the view (e.g. a Chat composer)."
+    },
     "sending": {
       "type": "boolean",
       "default": false

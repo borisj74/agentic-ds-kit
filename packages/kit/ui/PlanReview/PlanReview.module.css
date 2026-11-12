@@ -1,0 +1,114 @@
+/* PlanReview block: kit components on kit layout classes. The block is its own container so
+   it stacks wherever it is placed, not only at a viewport width. */
+.root {
+  container: planreview / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead,
+.hint {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.columns {
+  min-width: 0;
+}
+
+/* The parts cap their own width (--plan-width, --change-width); in the block they fill
+   their column through those documented knobs. */
+.plan {
+  --plan-width: 100%;
+}
+
+.changes {
+  --change-width: 100%;
+}
+
+.side {
+  display: grid;
+  align-content: start;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+}
+
+.side > * {
+  min-width: 0;
+}
+
+.decision {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  padding-block-start: var(--layout-gutter-md);
+  border-block-start: var(--border-width-thin) solid var(--border-divider);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.note {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* Below the stack point the plan and the side column are one column. 64rem is
+   --grid-breakpoint-md (container queries cannot read var()), as in AgentOverview. */
+@container planreview (max-width: 64rem) {
+  .root .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* At phone widths the buttons take the full row, Approve last (nearest the thumb). */
+@container planreview (max-width: 40rem) {
+  .row,
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

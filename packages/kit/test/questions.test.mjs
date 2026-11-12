@@ -11,6 +11,8 @@ const kitRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const bin = join(kitRoot, "bin/agentic-ds-kit.mjs");
 const index = JSON.parse(readFileSync(join(kitRoot, "contracts/index.json"), "utf8"));
 const componentIds = index.filter((e) => e.group === "component").map((e) => e.id);
+// Blocks ("kind": "block") are components too; the pinned 128 counts the rest.
+const blockIds = index.filter((e) => e.kind === "block").map((e) => e.id);
 const patternIds = index.filter((e) => e.group === "pattern").map((e) => e.id);
 const { version } = JSON.parse(readFileSync(join(kitRoot, "package.json"), "utf8"));
 
@@ -60,9 +62,10 @@ describe("questions: schema", () => {
     }
   });
 
-  test("128 component options and 8 pattern options by default", () => {
+  test("128 component options plus one per block, and 8 pattern options by default", () => {
     const { options } = buildQuestions();
-    assert.equal(componentIds.length, 128);
+    assert.equal(componentIds.length - blockIds.length, 128);
+    assert.ok(blockIds.includes("agentoverview"));
     assert.deepEqual(options.filter((o) => o.kind === "component").map((o) => o.id).sort(), [...componentIds].sort());
     assert.deepEqual(options.filter((o) => o.kind === "pattern").map((o) => o.id).sort(), [...patternIds].sort());
   });
@@ -146,7 +149,7 @@ describe("questions: schema", () => {
 
   test("--group and --only filter", () => {
     assert.ok(buildQuestions({ group: "pattern" }).options.every((o) => o.kind === "pattern"));
-    assert.equal(buildQuestions({ group: "component" }).options.length, 128);
+    assert.equal(buildQuestions({ group: "component" }).options.length, componentIds.length);
     assert.deepEqual(buildQuestions({ only: ["tabs", "card"] }).options.map((o) => o.id), ["card", "tabs"]);
   });
 

@@ -278,9 +278,10 @@
   list-style: none;
 }
 
+/* Every step the same width: equal flex, whatever the data says (weight is ignored). */
 .cell {
   display: flex;
-  flex-basis: 0;
+  flex: 1 1 0;
   min-width: var(--space-8);
   transform-origin: left center;
   animation: monitor-step-in var(--motion-duration-300) var(--motion-ease-spring);

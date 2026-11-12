@@ -1,0 +1,101 @@
+{
+  "id": "logostrip",
+  "kind": "block",
+  "category": "Social proof",
+  "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges.",
+  "status": "stable",
+  "intent": "Block: a social proof wall. A short heading over rows of customer logos that loop sideways on their own, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Hover and keyboard focus hold the motion; under reduced motion the rows stand still and wrap.",
+  "useWhen": [
+    "a trusted-by row on a landing or pricing page",
+    "a row of partner or integration marks under a hero",
+    "more logos than fit the width, moved along by the person"
+  ],
+  "doNotUseWhen": [
+    "quotes or case studies — a Card per testimonial",
+    "picking an integration — IntegrationPicker",
+    "paged slides — Carousel"
+  ],
+  "contains": [],
+  "props": {
+    "logos": {
+      "type": "array",
+      "required": true,
+      "note": "{ id?, name, src?, logo?, href? }[]. name is required: the image's alt or the node's accessible name. src for an image, logo for a node (an inline SVG in currentColor); with neither, the name shows as text."
+    },
+    "title": {
+      "type": "string",
+      "default": "Trusted by teams at",
+      "note": "Heading (h2)."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "One line under the heading."
+    },
+    "label": {
+      "type": "string",
+      "default": "Customer logos",
+      "note": "Names the logo group; the count is added (Customer logos, 24)."
+    },
+    "rows": {
+      "type": "number",
+      "default": 3,
+      "note": "Rows the logos are dealt into, round-robin; never more rows than logos. Neighbouring rows run in opposite directions."
+    },
+    "paused": {
+      "type": "boolean",
+      "default": false,
+      "note": "Holds the rows still, e.g. from the app's own control. The block has no button of its own."
+    },
+    "align": {
+      "type": "enum",
+      "values": [
+        "center",
+        "start"
+      ],
+      "default": "center",
+      "note": "Heading alignment."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "heading, then the rows",
+    "each row clips its logos and fades them out over the outer 15% at both ends (an alpha mask, so any background works in light and dark)",
+    "a row holds its logos twice and moves the pair by half its width with transform, so the loop has no seam; a full loop takes about 4s per logo (at least 20s)",
+    "under prefers-reduced-motion the copies and the button go, the rows wrap and centre, and nothing moves"
+  ],
+  "tokens": [
+    "text.fgMuted",
+    "text.fgSubtle",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.size.uiLg",
+    "type.weight.heading",
+    "space.8",
+    "grid.gutter.xl",
+    "focus.ring",
+    "border.focusWidth"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the rows sit in a group named with the count (Customer logos, 24); each row's first list is read, its copy is aria-hidden and inert",
+      "every logo is named: img alt, role=img with aria-label for a node, or the name as text; href makes it a link with the kit focus ring",
+      "motion is transform only and off under prefers-reduced-motion",
+      "hover and keyboard focus inside a row hold the motion; there is no pause button (Boris)"
+    ]
+  },
+  "doNot": [
+    "Do not build a local marquee or auto-scrolling logo row",
+    "Do not ship a logo without a name, or with a name like logo-3",
+    "Do not use real brands in samples; use neutral placeholder marks",
+    "Do not colour logos with raw hex; inline marks use currentColor"
+  ],
+  "snippet": "<LogoStrip title=\"Trusted by teams at\" logos={[{ name: 'Northpeak', src: '/logos/northpeak.svg' }, { name: 'Fieldstone', logo: <FieldstoneMark /> }]} />"
+}

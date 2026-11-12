@@ -64,7 +64,7 @@
     "steps": {
       "type": "array",
       "required": false,
-      "note": "{ id, tool, status: \"done\" | \"running\" | \"waiting\" | \"failed\", icon?, target?, duration?, tokens?, cost?, started?, weight? }[]. weight sets the strip width."
+      "note": "{ id, tool, status: \"done\" | \"running\" | \"waiting\" | \"failed\", icon?, target?, duration?, tokens?, cost?, started?, weight? }[]. Every step in the strip has the same width; weight is ignored (deprecated)."
     },
     "axis": {
       "type": "string[]",
