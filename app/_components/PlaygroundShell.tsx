@@ -4,7 +4,7 @@ import { useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
-import { buildSiteNavItems, filterSiteNavItems } from "@/lib/playground-nav";
+import { buildSiteNavGroups, filterPlaygroundNavGroups, flattenPlaygroundNav } from "@/lib/playground-nav";
 import { useLocationHash } from "@/lib/use-location-hash";
 import { applyPlaygroundTheme, readPlaygroundTheme, type PlaygroundTheme } from "@/lib/playground-theme";
 import { NisthaLogo } from "./NisthaLogo";
@@ -26,9 +26,10 @@ const readServerTheme = (): PlaygroundTheme => "light";
 
 function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuery: (value: string) => void; pathname: string; searchId: string }) {
   const hash = useLocationHash();
-  const items = buildSiteNavItems(pathname, hash);
-  const visible = filterSiteNavItems(items, query);
+  const groups = buildSiteNavGroups(pathname, hash);
   const searching = query.trim().length > 0;
+  // Searching skips the accordion so every hit shows, flat.
+  const visible = searching ? flattenPlaygroundNav(filterPlaygroundNavGroups(groups, query)) : [];
 
   return (
     <>
@@ -52,7 +53,7 @@ function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuer
             No matches
           </p>
         ) : (
-          <AppNav aria-label="Documentation" items={visible} />
+          <AppNav aria-label="Documentation" {...(searching ? { items: visible } : { groups })} />
         )}
       </div>
     </>

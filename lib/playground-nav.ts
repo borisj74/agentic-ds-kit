@@ -496,55 +496,45 @@ function patternLeaves(pathname: string): AppNavItem[] {
   })).sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
 }
 
-/** Top-level pages in the site nav, in order. */
-export const SITE_PAGES = [
-  { href: "/get-started", label: "Get started", match: ["/get-started", "/installation"] },
-  { href: "/mcp", label: "MCP server", match: ["/mcp"] },
-  { href: "/theming", label: "Theming", match: ["/theming", "/theme"] },
-  { href: "/foundations", label: "Foundations", match: ["/foundations"] },
-  { href: "/components", label: "Components", match: ["/components"] },
-  { href: "/patterns", label: "Patterns", match: ["/patterns", "/studio"] },
+/** Docs pages in reading order, for the Docs group. */
+const DOC_PAGES = [
+  { href: "/get-started", label: "Get started" },
+  { href: "/installation", label: "Installation" },
+  { href: "/mcp", label: "MCP server" },
+  { href: "/theming", label: "Theming" },
+  { href: "/theme", label: "Theme" },
 ] as const;
 
-function pageActive(pathname: string, match: readonly string[]): boolean {
-  return match.some((path) => pathname === path || (path !== "/components" && pathname.startsWith(`${path}/`)));
-}
-
 /**
- * The site nav: the top-level pages, with every component group as a subgroup (with its count)
- * directly under Components.
- * The group that holds the current component opens on its own (AppNav subgroup behaviour).
+ * The site nav as four collapsible AppNav groups: Docs, Design system, Components and Patterns.
+ * The group holding the current page opens (AppNav opens a group with an active leaf); Components
+ * keeps its category subgroups, which open on their own when a component in them is active.
  */
-export function buildSiteNavItems(pathname: string, hash: string | null = null): AppNavItem[] {
-  const groups: AppNavItem[] = COMPONENT_GROUPS.map((group) => ({
-    href: `/components?group=${encodeURIComponent(group.label)}`,
-    label: `${group.label} · ${group.ids.length}`,
-    items: componentLeaves(group.ids, pathname),
+export function buildSiteNavGroups(pathname: string, hash: string | null = null): AppNavGroup[] {
+  const docs: AppNavItem[] = DOC_PAGES.map((page) => ({
+    href: page.href,
+    label: page.label,
+    active: pathname === page.href,
   }));
-  // The groups sit right under Components, as its subtree (AppNav nests one level, so the
-  // shell indents them).
-  return SITE_PAGES.flatMap((page) => {
-    const item = { href: page.href, label: page.label, active: pageActive(pathname, page.match) };
-    if (page.href === "/components") return [item, ...groups];
-    // Foundation sections listed in order, right under Foundations; the open section is the active one.
-    if (page.href === "/foundations") return [{ ...item, active: false }, ...foundationLeaves(pathname, hash)];
-    // Patterns list their pages by name, flat (no subgroups), right under Patterns.
-    if (page.href === "/patterns") return [{ ...item, active: pathname === "/patterns" || pathname === "/studio" }, ...patternLeaves(pathname)];
-    return [item];
-  });
-}
-
-/** Search keeps only matching links, flat, so every hit is visible. */
-export function filterSiteNavItems(items: AppNavItem[], query: string): AppNavItem[] {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return items;
-  return items.flatMap((item) =>
-    item.items && item.items.length > 0
-      ? item.items.filter((child) => itemMatches(child, normalized))
-      : itemMatches(item, normalized)
-        ? [item]
-        : [],
-  );
+  const components: AppNavItem[] = [
+    { href: "/components", label: "All components", active: pathname === "/components" },
+    ...COMPONENT_GROUPS.map((group) => ({
+      href: `/components?group=${encodeURIComponent(group.label)}`,
+      label: `${group.label} · ${group.ids.length}`,
+      items: componentLeaves(group.ids, pathname),
+    })),
+  ];
+  const patterns: AppNavItem[] = [
+    { href: "/patterns", label: "Overview", active: pathname === "/patterns" || pathname === "/studio" },
+    ...patternLeaves(pathname),
+  ];
+  return [
+    // /foundations opens Design system before its hash is read (no flash of Docs); else Docs.
+    { label: "Docs", items: docs, defaultOpen: pathname !== "/foundations" },
+    { label: "Design system", items: foundationLeaves(pathname, hash), defaultOpen: pathname === "/foundations" },
+    { label: "Components", items: components },
+    { label: "Patterns", items: patterns },
+  ];
 }
 
 function itemMatches(item: AppNavItem, query: string): boolean {
