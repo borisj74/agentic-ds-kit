@@ -672,6 +672,11 @@
           "required": false,
           "note": "When set, the whole card is a button that opens a detail view"
         },
+        "selected": {
+          "type": "boolean",
+          "required": false,
+          "note": "With onClick: the card is a toggle in a picker (e.g. the metric a chart shows). Sets aria-pressed, draws the selected style (border.brand on action.selected), and adds the badge to the button's name. Leave undefined for a plain button."
+        },
         "fill": {
           "type": "boolean",
           "default": false,
@@ -10254,6 +10259,178 @@
         "title": {
           "type": "string",
           "default": "Agent overview"
+        }
+      }
+    },
+    {
+      "id": "kpiboard",
+      "group": "component",
+      "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+      "useWhen": [
+        "the first row of an analytics or reporting dashboard",
+        "compare a few KPIs and drill into one without leaving the page",
+        "one range (7 / 30 / 90 days) should change cards, chart and table together"
+      ],
+      "doNotUseWhen": [
+        "only a strip of numbers: Scoreboard",
+        "one chart on its own: LineChart or BarChart",
+        "a full dataset to search and filter: DataTable",
+        "more than four KPIs: Scoreboard with Conveyor"
+      ],
+      "doNot": [
+        "Do not rebuild KpiBoard from a local dashboard; import the block",
+        "Do not add a second range control; the one range drives cards, chart and table",
+        "Do not put more than four KPIs in it",
+        "Do not use raw hex",
+        "No solid primary Button in the block; leave it to the page"
+      ],
+      "props": {
+        "metrics": {
+          "type": "array",
+          "required": true,
+          "note": "3–4 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+        },
+        "series": {
+          "type": "object",
+          "required": true,
+          "note": "series[metricId][range]: ChartDatum[] ({ label, value }) for the LineChart."
+        },
+        "rows": {
+          "type": "object",
+          "required": true,
+          "note": "rows[metricId][range]: DataTableRow[] (each with id). Ranked by the metric's rankBy column, highest first, then cut to rowLimit."
+        },
+        "ranges": {
+          "type": "array",
+          "required": true,
+          "note": "{ value, label }[], two to four, e.g. 7d / 30d / 90d."
+        },
+        "range": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled range value."
+        },
+        "defaultRange": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting range. Default the first."
+        },
+        "onRangeChange": {
+          "type": "function",
+          "required": false,
+          "note": "(range) => void"
+        },
+        "selectedMetric": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled metric id for the chart and table."
+        },
+        "defaultSelectedMetric": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting metric. Default the first."
+        },
+        "onSelectedMetricChange": {
+          "type": "function",
+          "required": false,
+          "note": "(metricId) => void"
+        },
+        "rowLimit": {
+          "type": "number",
+          "default": 5,
+          "note": "How many top rows the table shows."
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "Line under the heading."
+        },
+        "title": {
+          "type": "string",
+          "default": "Key metrics"
+        }
+      }
+    },
+    {
+      "id": "usagebilling",
+      "group": "component",
+      "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+      "useWhen": [
+        "the billing or usage area of a SaaS settings page",
+        "show how close an account is to its limits next to the plan that sets them",
+        "download a recent invoice or change the payment method from one place"
+      ],
+      "doNotUseWhen": [
+        "one invoice in full: InvoiceDocument",
+        "only the allowance meter: UsageMeter",
+        "choosing between plans: PricingPlans",
+        "an overdue account that must pay now (Pay now is the primary, not Upgrade): compose Alert, Button and these parts on the page"
+      ],
+      "doNot": [
+        "Do not rebuild UsageBilling from local cards; import the block",
+        "Do not add a second solid primary; Upgrade on the plan card is the one",
+        "Do not pass onUpgrade to the UsageMeter inside it",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "plan": {
+          "type": "object",
+          "required": true,
+          "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\"."
+        },
+        "allowance": {
+          "type": "object",
+          "required": true,
+          "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote? }."
+        },
+        "limits": {
+          "type": "array",
+          "required": false,
+          "note": "UsageList items: { id, label, used, limit, unit?, note? }[]. The card line counts the ones at 80% or more."
+        },
+        "invoices": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, number, date, amount, status: \"paid\" | \"open\" | \"overdue\" | \"void\" }[], newest first."
+        },
+        "invoiceLimit": {
+          "type": "number",
+          "default": 4,
+          "note": "How many invoices to list."
+        },
+        "onUpgrade": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The one solid primary, on the plan card. Without it there is no Upgrade."
+        },
+        "onManagePayment": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Outline button on the plan card."
+        },
+        "onDownloadInvoice": {
+          "type": "function",
+          "required": false,
+          "note": "(invoiceId) => void. Each invoice row's Download action."
+        },
+        "onViewInvoices": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. View all link on the invoices card."
+        },
+        "onViewUsage": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The UsageMeter's View usage."
+        },
+        "title": {
+          "type": "string",
+          "default": "Usage & billing"
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "Line under the heading."
         }
       }
     },
