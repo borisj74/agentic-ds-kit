@@ -106,7 +106,23 @@
   color: var(--text-fg);
 }
 
-.toggle:focus-visible {
+/* Selectable names (onSelect): a text button, same type as the plain name. */
+.select {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control-sm);
+  background: transparent;
+  text-align: start;
+  cursor: pointer;
+}
+
+.select:hover {
+  text-decoration: underline;
+}
+
+.toggle:focus-visible,
+.select:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
 }
@@ -272,4 +288,11 @@
   .running .icon {
     animation: none;
   }
+}
+
+/* After .flagged so the selected ring wins over the waiting dash. */
+.row.selected {
+  border-style: solid;
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 var(--border-width-thin) var(--primary);
 }

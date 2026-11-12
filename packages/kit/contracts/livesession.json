@@ -1,0 +1,151 @@
+{
+  "id": "livesession",
+  "kind": "block",
+  "category": "Agents",
+  "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask.",
+  "status": "stable",
+  "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+  "useWhen": [
+    "a workspace where people chat with agents as they work",
+    "redirect or pause an agent mid-run without leaving the conversation",
+    "approve an agent's action in the flow of the chat"
+  ],
+  "doNotUseWhen": [
+    "one run in detail — RunDetail",
+    "many agents since your last look — AgentOverview",
+    "only a chat — Chat",
+    "only steering — AgentSteering"
+  ],
+  "contains": [
+    "chat",
+    "runningnow",
+    "approvalcard",
+    "agentsteering"
+  ],
+  "props": {
+    "messages": {
+      "type": "array",
+      "required": true,
+      "note": "Chat messages: { id?, role: \"user\" | \"assistant\", content, timestamp? }[]."
+    },
+    "agents": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, name, status: \"running\" | \"waiting\" | \"paused\" | \"failed\" | \"done\", activity?, meta?, elapsed?, suggestions?, applied? }[]. Not-done agents are in Working now."
+    },
+    "requests": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, agentId, title, description?, risk?, action }[] oldest first. The first is an inline ApprovalCard; the rest are counted."
+    },
+    "thinking": {
+      "type": "boolean",
+      "default": false,
+      "note": "The chat shows the kit thinking state."
+    },
+    "suggestions": {
+      "type": "string[]",
+      "required": false,
+      "note": "Prompt chips over the chat composer."
+    },
+    "selectedAgentId": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled steered agent."
+    },
+    "defaultSelectedAgentId": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled starting agent. Default: the first agent still working."
+    },
+    "onSelectAgent": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void. A Working now row was picked; steering moves to it."
+    },
+    "onSend": {
+      "type": "function",
+      "required": false,
+      "note": "(text) => void. Chat message."
+    },
+    "onSteer": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId, text) => void"
+    },
+    "onPause": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void"
+    },
+    "onResume": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void"
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void. After a kit AlertDialog confirm."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "(requestId) => void"
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false,
+      "note": "(requestId) => void"
+    },
+    "chatTitle": {
+      "type": "string",
+      "default": "Conversation"
+    },
+    "title": {
+      "type": "string",
+      "default": "Live session"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "left: Chat; right: RunningNow (stack), the open ApprovalCard, AgentSteering for the steered agent; in layout-split--primary",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width the right column stacks under the chat"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.weight.body",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "grid.breakpoint.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "Working now rows are buttons naming the agent and its status; picking one moves steering to it",
+      "the open approval is a section labelled \"<agent> asks\", with how many more wait",
+      "the chat thread is a live log; the steer composer is named \"Steer <agent>\"",
+      "Stop confirms in a kit AlertDialog",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild LiveSession from local panels; import the block",
+    "Do not show every open request at once; one inline approval, the rest counted",
+    "Do not use raw hex",
+    "Only one solid primary in the view: the chat send, or the approval's approve while one waits (the chat send and the steer send go soft)"
+  ],
+  "snippet": "<LiveSession messages={messages} agents={agents} requests={requests} onSend={send} onSteer={steer} onApprove={approve} onDeny={deny} />"
+}

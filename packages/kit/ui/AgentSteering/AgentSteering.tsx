@@ -29,6 +29,7 @@ export function AgentSteering({
   value = "",
   onValueChange,
   onSteer,
+  sendAppearance = "solid",
   sending = false,
   applied,
   error,
@@ -153,6 +154,8 @@ export function AgentSteering({
         />
         <Button
           type="submit"
+          appearance={sendAppearance}
+          mode="primary"
           iconStart={sending ? "LoaderCircle" : "Send"}
           ariaLabel={sending ? "Sending steer" : "Send steer"}
           className={sending ? styles.spin : undefined}

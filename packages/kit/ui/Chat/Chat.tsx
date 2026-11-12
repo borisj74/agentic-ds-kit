@@ -24,6 +24,7 @@ export function Chat({
   defaultValue = "",
   onValueChange,
   onSend,
+  sendAppearance = "solid",
   onClose,
   closeLabel = "Close",
   menuItems = [],
@@ -168,7 +169,8 @@ export function Chat({
         />
         <Button
           type="submit"
-          appearance="solid" mode="primary"
+          appearance={sendAppearance}
+          mode="primary"
           size="md"
           ariaLabel="Send"
           disabled={disabled || !draft.trim()}

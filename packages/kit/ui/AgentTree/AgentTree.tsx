@@ -47,6 +47,8 @@ interface RowContext {
   toggle?: (id: string) => void;
   onApprove?: (id: string) => void;
   onRetry?: (id: string) => void;
+  selectedId?: string | null;
+  onSelect?: (id: string) => void;
   currency: string;
 }
 
@@ -67,6 +69,7 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
           styles[node.status],
           hasChildren && styles.branch,
           root && styles.root,
+          ctx.selectedId === node.id && styles.selected,
           (node.status === "waiting" || node.status === "failed") && !hasChildren && styles.flagged,
         )}
       >
@@ -86,7 +89,19 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
             ) : null}
           </span>
           <Icon size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
-          <span className={styles.name}>{node.name}</span>
+          {ctx.onSelect ? (
+            <button
+              type="button"
+              className={cx(styles.name, styles.select)}
+              aria-pressed={ctx.selectedId === node.id}
+              aria-label={`${node.name}, ${STATUS_TEXT[node.status]}`}
+              onClick={() => ctx.onSelect?.(node.id)}
+            >
+              {node.name}
+            </button>
+          ) : (
+            <span className={styles.name}>{node.name}</span>
+          )}
           {hasChildren && isFolded ? <span className={styles.foldedCount}>{count(node)} agents</span> : null}
         </div>
         <span className={styles.status}>{STATUS_TEXT[node.status]}</span>
@@ -131,6 +146,8 @@ export function AgentTree({
   onFoldedChange,
   onApprove,
   onRetry,
+  selectedId,
+  onSelect,
   currency = "$",
   loading = false,
   className,
@@ -146,6 +163,8 @@ export function AgentTree({
       : undefined,
     onApprove,
     onRetry,
+    selectedId,
+    onSelect,
     currency,
   };
 

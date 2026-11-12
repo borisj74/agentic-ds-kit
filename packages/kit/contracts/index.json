@@ -933,6 +933,26 @@
     "summary": "A pricing section: plans with a monthly / yearly switch, a feature comparison and an FAQ."
   },
   {
+    "id": "livesession",
+    "kind": "block",
+    "intent": "Block: work alongside running agents. Chat, who is working, one inline approval and steering for one agent.",
+    "group": "component",
+    "path": "contracts/livesession.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask."
+  },
+  {
+    "id": "rundetail",
+    "kind": "block",
+    "intent": "Block: one agent run in detail. Monitor, the selected step's tool call, who started whom and the step log, on one selected step.",
+    "group": "component",
+    "path": "contracts/rundetail.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call."
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

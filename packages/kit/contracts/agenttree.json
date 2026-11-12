@@ -38,6 +38,16 @@
       "required": false,
       "note": "(folded) => void. Adds the chevron disclosure on branches."
     },
+    "selectedId": {
+      "type": "string",
+      "required": false,
+      "note": "Selected node id; its row shows the selected ring and its name button aria-pressed."
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Makes each node name a button, e.g. to open that agent's step elsewhere."
+    },
     "onApprove": {
       "type": "function",
       "required": false,
@@ -97,7 +107,8 @@
       "status is text in its own column; icons are aria-hidden",
       "Approve and Retry name the node",
       "aria-busy while loading",
-      "fold and entry motion use opacity and transform, off under prefers-reduced-motion"
+      "fold and entry motion use opacity and transform, off under prefers-reduced-motion",
+      "with onSelect, node names are buttons named \"<name>, <status>\" with aria-pressed"
     ]
   },
   "doNot": [
