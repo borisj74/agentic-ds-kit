@@ -49,6 +49,15 @@
       "required": true,
       "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
     },
+    "submitAppearance": {
+      "type": "enum",
+      "values": [
+        "solid",
+        "soft"
+      ],
+      "default": "solid",
+      "note": "soft when another solid primary shares the view (e.g. ChangeReview's Accept all)."
+    },
     "submitting": {
       "type": "boolean",
       "default": false
@@ -137,7 +146,7 @@
   "doNot": [
     "Do not use Chat for people commenting on a record",
     "Do not nest replies more than one level",
-    "Do not show more than one solid primary; Comment is it",
+    "Do not show more than one solid primary; Comment is it unless submitAppearance is soft",
     "Do not use raw hex"
   ],
   "snippet": "<CommentThread title=\"Invoice INV-2026-0117\" comments={comments} currentUserId={me.id} value={draft} onValueChange={setDraft} onSubmit={post} onReply={reply} onEdit={edit} onDelete={remove} />"

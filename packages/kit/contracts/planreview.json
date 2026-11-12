@@ -1,0 +1,167 @@
+{
+  "id": "planreview",
+  "kind": "block",
+  "category": "Agents",
+  "summary": "Approve an agent's plan before it runs: its steps, what it changes, and how much it may do alone.",
+  "status": "stable",
+  "intent": "Block: the go / no-go on an agent's plan. The steps (AgentPlan, editable while pending), what the plan expects to change (ChangeSummary), how far the agent may go without asking (AutonomyDial), and one decision: Approve plan, Request changes with a note, or Reject.",
+  "useWhen": [
+    "an agent proposes a multi-step plan and a person must approve it before anything runs",
+    "set the agent's autonomy for this run at the moment of approval",
+    "send the plan back with a note instead of editing it yourself"
+  ],
+  "doNotUseWhen": [
+    "one action that needs an OK — ApprovalCard",
+    "the plan while it runs — AgentPlan or RunDetail",
+    "review what the agent already changed — ChangeReview",
+    "autonomy in settings, with no plan — AutonomyDial"
+  ],
+  "contains": [
+    "agentplan",
+    "alert",
+    "autonomydial",
+    "button",
+    "changesummary",
+    "field",
+    "textarea"
+  ],
+  "props": {
+    "planTitle": {
+      "type": "string",
+      "required": true,
+      "note": "AgentPlan card title, e.g. \"Add rate limiting to the public API\"."
+    },
+    "steps": {
+      "type": "array",
+      "required": true,
+      "note": "AgentPlan steps: { id, label, tool?, target?, note?, needsApproval? }[]."
+    },
+    "onStepsChange": {
+      "type": "function",
+      "required": false,
+      "note": "(steps) => void. AgentPlan's Save step, Remove and Add step while pending. Without it the steps are read-only."
+    },
+    "agent": {
+      "type": "string",
+      "required": false,
+      "note": "Who proposed it, e.g. \"Backend agent\". Lead line and AutonomyDial appliesTo."
+    },
+    "target": {
+      "type": "string",
+      "required": false,
+      "note": "What it acts on, e.g. \"acme/api\"."
+    },
+    "changes": {
+      "type": "array",
+      "required": false,
+      "note": "ChangeSummary items: { id, label, before, after, delta, direction, sentiment? }[]."
+    },
+    "changesTitle": {
+      "type": "string",
+      "default": "What the plan changes"
+    },
+    "changesPeriod": {
+      "type": "string",
+      "required": false,
+      "note": "ChangeSummary period line, e.g. \"Expected after the run\"."
+    },
+    "autonomy": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled AutonomyDial stop id."
+    },
+    "defaultAutonomy": {
+      "type": "string",
+      "default": "risk"
+    },
+    "onAutonomyChange": {
+      "type": "function",
+      "required": false,
+      "note": "(autonomy) => void"
+    },
+    "autonomyOptions": {
+      "type": "array",
+      "required": false,
+      "note": "AutonomyDial stops; default AUTONOMY_STOPS (ask · risk · tell · run)."
+    },
+    "decision": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "approved",
+        "changes-requested",
+        "rejected"
+      ],
+      "default": "pending",
+      "note": "Anything but pending locks the plan and the dial and shows the outcome as a kit Alert."
+    },
+    "decisionNote": {
+      "type": "string",
+      "required": false,
+      "note": "Line in the outcome Alert, e.g. \"by you · 14:02\"."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary."
+    },
+    "onRequestChanges": {
+      "type": "function",
+      "required": false,
+      "note": "(note) => void. Request changes opens a note field; Send request (or ⌘/Ctrl+Enter) sends it, Escape cancels."
+    },
+    "onReject": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Reject (outline danger)."
+    },
+    "title": {
+      "type": "string",
+      "default": "Plan review"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "the plan beside a stack of ChangeSummary over AutonomyDial in layout-split--primary; the decision row under both",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width it is one column, and below 40rem the decision buttons take the full row"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "border.divider",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "space.1",
+    "space.2",
+    "space.3",
+    "grid.breakpoint.md",
+    "grid.breakpoint.sm"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the decision is a section labelled by its h3 \"Your decision\"; Approve plan is described by the line that says how many stops wait for your OK at the chosen autonomy",
+      "the note is a kit Field + Textarea labelled \"What should change?\"; it takes focus when opened, Escape cancels and returns focus to Request changes, ⌘/Ctrl+Enter sends",
+      "the outcome is a kit Alert (status, or alert when rejected)",
+      "the steps, their Edit / Remove buttons and the autonomy radio group are AgentPlan's and AutonomyDial's own controls",
+      "no motion of its own"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild PlanReview from a local plan card and buttons; import the block",
+    "Only one solid primary: Approve plan. Do not pass AgentPlan its own onAccept here",
+    "Do not add a Save button to the AutonomyDial; Approve hands back the chosen stop",
+    "Do not use raw hex"
+  ],
+  "snippet": "<PlanReview planTitle=\"Add rate limiting to the public API\" agent=\"Backend agent\" target=\"acme/api\" steps={steps} onStepsChange={setSteps} changes={changes} onApprove={({ autonomy, steps }) => run(autonomy, steps)} onRequestChanges={sendBack} onReject={reject} />"
+}

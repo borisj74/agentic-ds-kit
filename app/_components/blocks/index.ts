@@ -9,6 +9,8 @@ import { WorkBoardDemo } from "./WorkBoardDemo";
 import { KpiBoardDemo } from "./KpiBoardDemo";
 import { UsageBillingDemo } from "./UsageBillingDemo";
 import { ActivityFeedDemo } from "./ActivityFeedDemo";
+import { PlanReviewDemo } from "./PlanReviewDemo";
+import { ChangeReviewDemo } from "./ChangeReviewDemo";
 
 /** The live demo each block's preview frame renders, by docs slug. */
 export const BLOCK_DEMOS: Record<string, ComponentType> = {
@@ -22,4 +24,6 @@ export const BLOCK_DEMOS: Record<string, ComponentType> = {
   "kpi-board": KpiBoardDemo,
   "usage-billing": UsageBillingDemo,
   "activity-feed": ActivityFeedDemo,
+  "plan-review": PlanReviewDemo,
+  "change-review": ChangeReviewDemo,
 };
