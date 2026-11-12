@@ -9420,7 +9420,7 @@
       "doNot": [
         "Do not use Chat for people commenting on a record",
         "Do not nest replies more than one level",
-        "Do not show more than one solid primary; Comment is it",
+        "Do not show more than one solid primary; Comment is it unless submitAppearance is soft",
         "Do not use raw hex"
       ],
       "props": {
@@ -9451,6 +9451,15 @@
           "type": "function",
           "required": true,
           "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
+        },
+        "submitAppearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "soft"
+          ],
+          "default": "solid",
+          "note": "soft when another solid primary shares the view (e.g. ChangeReview's Accept all)."
         },
         "submitting": {
           "type": "boolean",
@@ -11151,6 +11160,235 @@
           "type": "string",
           "required": false,
           "note": "Line under the title. Default: how many events show, and how many match the filters."
+        }
+      }
+    },
+    {
+      "id": "planreview",
+      "group": "component",
+      "intent": "Block: the go / no-go on an agent's plan. The steps (AgentPlan, editable while pending), what the plan expects to change (ChangeSummary), how far the agent may go without asking (AutonomyDial), and one decision: Approve plan, Request changes with a note, or Reject.",
+      "useWhen": [
+        "an agent proposes a multi-step plan and a person must approve it before anything runs",
+        "set the agent's autonomy for this run at the moment of approval",
+        "send the plan back with a note instead of editing it yourself"
+      ],
+      "doNotUseWhen": [
+        "one action that needs an OK — ApprovalCard",
+        "the plan while it runs — AgentPlan or RunDetail",
+        "review what the agent already changed — ChangeReview",
+        "autonomy in settings, with no plan — AutonomyDial"
+      ],
+      "doNot": [
+        "Do not rebuild PlanReview from a local plan card and buttons; import the block",
+        "Only one solid primary: Approve plan. Do not pass AgentPlan its own onAccept here",
+        "Do not add a Save button to the AutonomyDial; Approve hands back the chosen stop",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "planTitle": {
+          "type": "string",
+          "required": true,
+          "note": "AgentPlan card title, e.g. \"Add rate limiting to the public API\"."
+        },
+        "steps": {
+          "type": "array",
+          "required": true,
+          "note": "AgentPlan steps: { id, label, tool?, target?, note?, needsApproval? }[]."
+        },
+        "onStepsChange": {
+          "type": "function",
+          "required": false,
+          "note": "(steps) => void. AgentPlan's Save step, Remove and Add step while pending. Without it the steps are read-only."
+        },
+        "agent": {
+          "type": "string",
+          "required": false,
+          "note": "Who proposed it, e.g. \"Backend agent\". Lead line and AutonomyDial appliesTo."
+        },
+        "target": {
+          "type": "string",
+          "required": false,
+          "note": "What it acts on, e.g. \"acme/api\"."
+        },
+        "changes": {
+          "type": "array",
+          "required": false,
+          "note": "ChangeSummary items: { id, label, before, after, delta, direction, sentiment? }[]."
+        },
+        "changesTitle": {
+          "type": "string",
+          "default": "What the plan changes"
+        },
+        "changesPeriod": {
+          "type": "string",
+          "required": false,
+          "note": "ChangeSummary period line, e.g. \"Expected after the run\"."
+        },
+        "autonomy": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled AutonomyDial stop id."
+        },
+        "defaultAutonomy": {
+          "type": "string",
+          "default": "risk"
+        },
+        "onAutonomyChange": {
+          "type": "function",
+          "required": false,
+          "note": "(autonomy) => void"
+        },
+        "autonomyOptions": {
+          "type": "array",
+          "required": false,
+          "note": "AutonomyDial stops; default AUTONOMY_STOPS (ask · risk · tell · run)."
+        },
+        "decision": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "approved",
+            "changes-requested",
+            "rejected"
+          ],
+          "default": "pending",
+          "note": "Anything but pending locks the plan and the dial and shows the outcome as a kit Alert."
+        },
+        "decisionNote": {
+          "type": "string",
+          "required": false,
+          "note": "Line in the outcome Alert, e.g. \"by you · 14:02\"."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary."
+        },
+        "onRequestChanges": {
+          "type": "function",
+          "required": false,
+          "note": "(note) => void. Request changes opens a note field; Send request (or ⌘/Ctrl+Enter) sends it, Escape cancels."
+        },
+        "onReject": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Reject (outline danger)."
+        },
+        "title": {
+          "type": "string",
+          "default": "Plan review"
+        }
+      }
+    },
+    {
+      "id": "changereview",
+      "group": "component",
+      "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all is the one solid primary.",
+      "useWhen": [
+        "an agent finished a change and a person reviews it before it lands",
+        "accept some files and reject others",
+        "leave comments on a file or a line for the agent or a teammate"
+      ],
+      "doNotUseWhen": [
+        "one proposed edit in a chat — InlineDiff",
+        "approve a plan before anything changes — PlanReview",
+        "one command or edit that needs an OK — ApprovalCard",
+        "what happened during the run — RunDetail"
+      ],
+      "doNot": [
+        "Do not rebuild ChangeReview from a local file list and diff; import the block",
+        "Only one solid primary: Accept all. InlineDiff gets no onAccept and the thread's Comment is soft",
+        "Do not show a file's change by colour alone; keep InlineDiff's + / − marks and the counts in words",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "files": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, path, kind?: \"added\" | \"modified\" | \"deleted\", lines (InlineDiff lines), hunkHeader?, additions?, deletions?, reviewed?, verdict?: \"pending\" | \"accepted\" | \"rejected\" }[]. Counts default to the lines."
+        },
+        "summary": {
+          "type": "array",
+          "required": false,
+          "note": "ChangeSummary items: { id, label, before, after, delta, direction, sentiment? }[]."
+        },
+        "summaryTitle": {
+          "type": "string",
+          "default": "What this change does"
+        },
+        "summaryPeriod": {
+          "type": "string",
+          "required": false,
+          "note": "e.g. \"main → agent/rate-limit\"."
+        },
+        "comments": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, fileId, line?, author, createdAt, body, edited?, parentId? }[]. A line comment reads \"Line 18 · …\" in the thread."
+        },
+        "currentUserId": {
+          "type": "string",
+          "required": false,
+          "note": "Your comments get Edit and Delete."
+        },
+        "selectedFileId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled selected file."
+        },
+        "defaultSelectedFileId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting file; default the first."
+        },
+        "onSelectFile": {
+          "type": "function",
+          "required": false,
+          "note": "(fileId) => void. From the list, the previous / next buttons or J / K."
+        },
+        "onReviewedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(fileId, reviewed) => void. The Reviewed checkbox or R."
+        },
+        "onAccept": {
+          "type": "function",
+          "required": false,
+          "note": "(fileId) => void. Accept file (outline, pressed when accepted)."
+        },
+        "onReject": {
+          "type": "function",
+          "required": false,
+          "note": "(fileId) => void. Reject file (outline danger, pressed when rejected)."
+        },
+        "onAcceptAll": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Accept all N files: every file without a verdict. The one solid primary; disabled when none are left."
+        },
+        "onComment": {
+          "type": "function",
+          "required": false,
+          "note": "(fileId, body, { line?, parentId? }) => void. Without it the comments area is hidden."
+        },
+        "onEditComment": {
+          "type": "function",
+          "required": false,
+          "note": "(commentId, body) => void"
+        },
+        "onDeleteComment": {
+          "type": "function",
+          "required": false,
+          "note": "(commentId) => void, after CommentThread's AlertDialog."
+        },
+        "agent": {
+          "type": "string",
+          "required": false,
+          "note": "Who made the change. Lead line."
+        },
+        "title": {
+          "type": "string",
+          "default": "Change review"
         }
       }
     },

@@ -130,6 +130,33 @@ At 390: everything stacks, no horizontal scroll; the chat sits first at 32rem, s
 - **Jev:** no new token needed; "uses only tokens" came back no at low confidence (abstain on correctness) for the stylesheet. The only literals are the kit's usual `srOnly` 1px and the `@container (max-width: 40rem)` line (= `--grid-breakpoint-sm`; container queries cannot read `var()`), the same pattern as AgentOverview and KpiBoard. **Boris to confirm.**
 - **390:** no horizontal scroll (scrollWidth 390). Below 40rem of block width Open / Reply move under the copy, lined up past the Avatar; the filters wrap under the title.
 
+### PlanReview (`plan-review`, Agents)
+
+- **Parts:** AgentPlan (draft, editable while pending) beside ChangeSummary over AutonomyDial (`layout-split--primary`, stacks below 64rem of block width), then a "Your decision" section: Reject (outline danger), Request changes (outline) and **Approve plan, the one solid primary**. AgentPlan never gets `onAccept` here, so its own Accept plan never shows (tested).
+- **Props:** `planTitle`, `steps` / `onStepsChange` (AgentPlan's own edit, remove and add step; read-only without it), `agent`, `target`, `changes` (ChangeSummary items), `autonomy` / `defaultAutonomy` / `onAutonomyChange` / `autonomyOptions`, `decision` (`pending | approved | changes-requested | rejected`) and `decisionNote`, `onApprove({ autonomy, steps })`, `onRequestChanges(note)`, `onReject`. Pure helpers in `planReview.logic.ts`.
+- **Approve says what it does:** the line beside the buttons (and Approve's description) counts the stops for your OK at the chosen autonomy: ask → every step, risk → the plan's `needsApproval` steps, tell / run → none.
+- **Request changes** opens a Field + Textarea in place ("What should change?"): focus moves in, Escape cancels and returns focus, ⌘/Ctrl+Enter or Send request (outline) sends. No modal.
+- **Decided:** anything but pending locks the plan (AgentPlan `accepted` when approved, else read-only draft) and the dial (disabled with a reason) and shows a kit Alert (success / info / danger).
+- **Gap:** AgentPlan has no reorder (only edit, remove, add). The brief said "reorderable if AgentPlan supports it"; it doesn't, so steps are not reorderable. A kit follow-up if wanted (TreeView's Alt+Arrow / Move menu is the model).
+- **Widths:** AgentPlan and ChangeSummary cap themselves; the block sets `--plan-width` / `--change-width` to 100%.
+- **390:** one column, buttons full width (stack below 40rem of block width, `--grid-breakpoint-sm`), Approve last. AutonomyDial's four stops wrap to two rows. No horizontal scroll.
+
+### ChangeReview (`change-review`, Agents)
+
+- **Parts:** header with Accept all (**the one solid primary**, "Accept all N files", disabled when every file has a verdict), ChangeSummary full width, then ListView of changed files beside the selected file (`layout-split--secondary`, stacks below 64rem): file name + "File i of N · +a −r · state", previous / next buttons, Reviewed Checkbox, Reject file / Accept file (outline toggle buttons with `aria-pressed`), InlineDiff, and a CommentThread for the file with a "Comment on" Select (whole file or one changed line).
+- **Why ListView, not TreeView:** TreeView labels are strings only and a folder tree hides the counts; ListView gives an icon (new / modified / deleted file), a secondary line and a badge. ListView names rows from primary + secondary only (not the badge), so the secondary line carries folder, +/− counts and the state in words ("Not reviewed", "Reviewed", "Accepted", "Rejected").
+- **Keyboard:** ListView's arrows / Enter, plus J / K (next / previous file) and R (toggle Reviewed) while focus is anywhere in the block and not in a text field (WCAG 2.1.4: single-key shortcuts only active with focus in the component). The keys line describes the block; buttons and the checkbox carry `aria-keyshortcuts`.
+- **InlineDiff:** no `onAccept` / `onReject` (its Accept is a solid primary); the block's own buttons decide. An accepted or rejected file shows InlineDiff's one-line resolved row; pressing the pressed button again undoes it in the demo (the app decides).
+- **Kit change (one solid primary):** CommentThread gets optional `submitAppearance: "solid" | "soft"` (default solid, nothing else changes), same as Chat's `sendAppearance`. In the block Comment is soft whenever Accept all shows (tested). Contract updated.
+- **Line comments:** CommentThread has no line anchor, so a line comment carries `line` in the block's data and reads "Line 18 · …" in the thread. Clicking a diff line to comment would need InlineDiff line actions (follow-up).
+- **Props:** `files` (`{ id, path, kind?, lines, hunkHeader?, additions?, deletions?, reviewed?, verdict? }`), `summary`, `comments` (`{ id, fileId, line?, author, createdAt, body, parentId? }`), `currentUserId`, `selectedFileId` / `defaultSelectedFileId` / `onSelectFile`, `onReviewedChange`, `onAccept`, `onReject`, `onAcceptAll`, `onComment(fileId, body, { line, parentId })`, `onEditComment`, `onDeleteComment`, `agent`. Pure helpers in `changeReview.logic.ts`.
+- **390:** list over file; InlineDiff scrolls long lines inside its own card; the file head's counts wrap. No horizontal page scroll.
+
+### Follow-ups (PlanReview, ChangeReview)
+
+- Jev on both stylesheets: tokens OK (0.77 / 0.80) but "needs new token" also yes; the only literals are the `@container` 64rem / 40rem lines (same open item as AgentOverview). **Boris to confirm.**
+- AgentPlan step reorder; InlineDiff per-line comment action; CommentThread reply indicator (the block shows "Replying to … · Cancel reply" above it, like WorkBoard).
+
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 
 Boris asked for pattern pages that look like affectUI's screens catalogue (affectui.com/screens/app-shell-flat): breadcrumb, title and one line, a Preview / Code toolbar, the screen at full size scaled into a plain frame, then sections. His calls: all pattern pages, a scaled iframe, a new PR on top of #137.
