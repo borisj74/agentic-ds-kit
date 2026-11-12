@@ -113,61 +113,69 @@ export function AgentOverview(props: AgentOverviewProps) {
         />
       </header>
 
-      <section className={cx("layout-split--primary", styles.split)} aria-labelledby={summaryId}>
-        <div className={styles.summary}>
-          <h3 id={summaryId} className={styles.subtitle}>
-            Since you last looked
-          </h3>
-          <Scoreboard
-            aria-label="Since you last looked"
-            items={[
-              { label: "Done", value: String(summary.done), hint: sinceText, size: "sm" },
-              { label: "Needs you", value: String(summary.needsYou), hint: "waiting now", size: "sm" },
-              { label: "Failed", value: String(summary.failed), hint: sinceText, size: "sm" },
-            ]}
-          />
+      {/* Two columns, each a stack: summary over lanes, activity over inbox. Separate rows would
+          stretch the short summary to the chart's height and leave a band above the lanes. Below
+          the stack point the columns unfold into summary, activity, lanes, inbox. */}
+      <div className={cx("layout-split--primary", styles.columns)}>
+        <div className={styles.column}>
+          <section className={cx(styles.summary, styles.areaSummary)} aria-labelledby={summaryId}>
+            <h3 id={summaryId} className={styles.subtitle}>
+              Since you last looked
+            </h3>
+            <Scoreboard
+              aria-label="Since you last looked"
+              items={[
+                { label: "Done", value: String(summary.done), hint: sinceText, size: "sm" },
+                { label: "Needs you", value: String(summary.needsYou), hint: "waiting now", size: "sm" },
+                { label: "Failed", value: String(summary.failed), hint: sinceText, size: "sm" },
+              ]}
+            />
+          </section>
+          <div className={styles.areaLanes}>
+            {lanes.agents.length ? (
+              <AgentLanes
+                agents={lanes.agents}
+                tasks={lanes.tasks}
+                now={now}
+                span={span}
+                spans={LANE_SPANS}
+                onSpanChange={setPickedSpan}
+                openTaskId={openTaskId}
+                onOpenTaskChange={setOpenTaskId}
+                onApprove={(id) => {
+                  setOpenTaskId(null);
+                  onApprove?.(id);
+                }}
+                onReject={(id) => {
+                  setOpenTaskId(null);
+                  onReject?.(id);
+                }}
+              />
+            ) : (
+              <Empty outlined icon="Filter" {...LANES_EMPTY[filter]} />
+            )}
+          </div>
         </div>
-        <BarChart
-          className={styles.activity}
-          title={filter === "all" ? "Activity" : `Activity · ${FILTER_LABEL[filter]}`}
-          description={`Agent work started ${sinceText}`}
-          data={activity}
-          height={120}
-          showGrid={false}
-          emptyLabel="No activity in this range"
-        />
-      </section>
-
-      <div className={cx("layout-split--primary", styles.split)}>
-        {lanes.agents.length ? (
-          <AgentLanes
-            agents={lanes.agents}
-            tasks={lanes.tasks}
-            now={now}
-            span={span}
-            spans={LANE_SPANS}
-            onSpanChange={setPickedSpan}
-            openTaskId={openTaskId}
-            onOpenTaskChange={setOpenTaskId}
-            onApprove={(id) => {
-              setOpenTaskId(null);
-              onApprove?.(id);
-            }}
-            onReject={(id) => {
-              setOpenTaskId(null);
-              onReject?.(id);
-            }}
+        <div className={styles.column}>
+          <BarChart
+            className={cx(styles.activity, styles.areaActivity)}
+            title={filter === "all" ? "Activity" : `Activity · ${FILTER_LABEL[filter]}`}
+            description={`Agent work started ${sinceText}`}
+            data={activity}
+            height={120}
+            showGrid={false}
+            emptyLabel="No activity in this range"
           />
-        ) : (
-          <Empty outlined icon="Filter" {...LANES_EMPTY[filter]} />
-        )}
-        <AgentInbox
-          title="Needs you"
-          items={inbox}
-          selectedId={selectedId}
-          onSelect={(id) => setSelectedId((current) => (current === id ? null : id))}
-          {...handlers}
-        />
+          <div className={styles.areaInbox}>
+            <AgentInbox
+              title="Needs you"
+              items={inbox}
+              selectedId={selectedId}
+              onSelect={(id) => setSelectedId((current) => (current === id ? null : id))}
+              {...handlers}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -100,9 +100,8 @@
     "rest": "section"
   },
   "layout": [
-    "top: summary (Scoreboard of done, needs you, failed) beside a compact BarChart of activity, in layout-split--primary",
-    "middle and side: AgentLanes beside AgentInbox, in layout-split--primary",
-    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width the activity bar stacks under the summary and the inbox under the lanes"
+    "two columns in layout-split--primary, each a stack with the block gutter: the summary Scoreboard over AgentLanes, the activity BarChart over AgentInbox, so the lanes start right under the cards",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width it is one column in reading order: summary, activity, lanes, inbox"
   ],
   "tokens": [
     "text.fg",

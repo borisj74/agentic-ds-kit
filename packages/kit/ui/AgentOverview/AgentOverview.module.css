@@ -40,11 +40,20 @@
   color: var(--text-fg-muted);
 }
 
-.split {
+.columns {
   min-width: 0;
 }
 
-.split > * {
+/* Each column stacks its parts with the block's own gap, so the lanes start right under the
+   summary cards and the inbox right under the activity chart. */
+.column {
+  display: grid;
+  align-content: start;
+  gap: var(--layout-gutter-md);
+  min-width: 0;
+}
+
+.column > * {
   min-width: 0;
 }
 
@@ -66,11 +75,29 @@
   min-width: 0;
 }
 
-/* Inbox and activity stack under the lanes and the summary. 64rem is --grid-breakpoint-md
+/* Below the stack point everything is one column. 64rem is --grid-breakpoint-md
    (container queries cannot read var()). No breakpoint token sits nearer the ~860px the
    brief asked for; below md the inbox column is under the width its cards need. */
 @container agentoverview (max-width: 64rem) {
-  .root .split {
-    grid-template-columns: minmax(0, 1fr);
+  /* One column in reading order: the columns step aside and their parts join the root grid. */
+  .root .columns,
+  .root .column {
+    display: contents;
+  }
+
+  .areaSummary {
+    order: 1;
+  }
+
+  .areaActivity {
+    order: 2;
+  }
+
+  .areaLanes {
+    order: 3;
+  }
+
+  .areaInbox {
+    order: 4;
   }
 }
