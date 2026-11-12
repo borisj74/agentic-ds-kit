@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -10164,6 +10164,96 @@
           "type": "boolean",
           "default": false,
           "note": "On surface.inverse: bg.canvas → info line."
+        }
+      }
+    },
+    {
+      "id": "missionhome",
+      "group": "component",
+      "intent": "Block: a home screen for a fleet of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+      "useWhen": [
+        "the first screen of an agent workspace",
+        "come back after a while and see what changed",
+        "approve, reject or retry agent work from one place"
+      ],
+      "doNotUseWhen": [
+        "one agent in detail — AgentMonitor",
+        "only the time axis — AgentLanes",
+        "only the request queue — AgentInbox",
+        "agents with sub-agents — AgentFleet"
+      ],
+      "doNot": [
+        "Do not rebuild MissionHome from a local dashboard; import the block",
+        "Do not add a second filter to one area; the one filter drives all three",
+        "Do not use raw hex",
+        "Only one solid primary in the view: the approve in the open inbox card"
+      ],
+      "props": {
+        "agents": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, model?, icon? }[]. Same shape as AgentLanes agents: one lane each."
+        },
+        "events": {
+          "type": "array",
+          "required": true,
+          "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Waiting and failed events since `since` fill the inbox."
+        },
+        "since": {
+          "type": "number",
+          "required": true,
+          "note": "Epoch ms of the last visit. The summary and the filter counts cover what was active after it."
+        },
+        "now": {
+          "type": "number",
+          "required": false,
+          "note": "Controlled clock; else it ticks every second."
+        },
+        "filter": {
+          "type": "enum",
+          "values": [
+            "all",
+            "running",
+            "needs-you",
+            "failed"
+          ],
+          "required": false,
+          "note": "Controlled filter for the activity bar, lanes and inbox."
+        },
+        "defaultFilter": {
+          "type": "enum",
+          "values": [
+            "all",
+            "running",
+            "needs-you",
+            "failed"
+          ],
+          "default": "all",
+          "note": "Uncontrolled starting filter."
+        },
+        "onFilterChange": {
+          "type": "function",
+          "required": false,
+          "note": "(filter) => void"
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(eventId) => void. From the lane block's decision or the inbox card."
+        },
+        "onReject": {
+          "type": "function",
+          "required": false,
+          "note": "(eventId) => void"
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "(eventId) => void. A failed event's Retry run."
+        },
+        "title": {
+          "type": "string",
+          "default": "Mission home"
         }
       }
     },

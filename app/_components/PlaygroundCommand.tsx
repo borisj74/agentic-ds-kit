@@ -12,6 +12,7 @@ const SECTIONS = playgroundCommandSections();
 const SECTION_ICONS = {
   Foundations: "Layers",
   Components: "Package",
+  Blocks: "PanelsTopLeft",
   Patterns: "LayoutDashboard",
 } as const;
 

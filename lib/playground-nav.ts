@@ -369,6 +369,15 @@ export const PATTERN_ITEMS = [
 
 export type PatternSlug = (typeof PATTERN_ITEMS)[number]["slug"];
 
+/** Blocks: larger kit components for a whole area of a screen (contracts with "kind": "block"). */
+export const BLOCK_ITEMS = [{ slug: "mission-home", label: "Mission home", id: "missionhome" }] as const;
+
+export type BlockSlug = (typeof BLOCK_ITEMS)[number]["slug"];
+
+export function isBlockSlug(value: string): value is BlockSlug {
+  return BLOCK_ITEMS.some((item) => item.slug === value);
+}
+
 const PATTERN_HASH_ALIASES: Record<string, PatternSlug> = {
   research: "empty",
   projects: "list-detail",
@@ -407,11 +416,11 @@ export interface PlaygroundCommandLink {
 }
 
 export interface PlaygroundCommandSection {
-  heading: "Foundations" | "Components" | "Patterns";
+  heading: "Foundations" | "Components" | "Blocks" | "Patterns";
   items: PlaygroundCommandLink[];
 }
 
-/** Pages the command palette can open: foundations, every component, every pattern. */
+/** Pages the command palette can open: foundations, every component, every block, every pattern. */
 export function playgroundCommandSections(): PlaygroundCommandSection[] {
   return [
     {
@@ -428,6 +437,14 @@ export function playgroundCommandSections(): PlaygroundCommandSection[] {
         id: `component:${link.id}`,
         label: link.label,
         href: link.href,
+      })),
+    },
+    {
+      heading: "Blocks",
+      items: BLOCK_ITEMS.map((item) => ({
+        id: `block:${item.slug}`,
+        label: item.label,
+        href: `/blocks/${item.slug}`,
       })),
     },
     {
@@ -506,7 +523,7 @@ const DOC_PAGES = [
 ] as const;
 
 /**
- * The site nav as four collapsible AppNav groups: Docs, Design system, Components and Patterns.
+ * The site nav as five collapsible AppNav groups: Docs, Design system, Components, Blocks and Patterns.
  * The group holding the current page opens (AppNav opens a group with an active leaf); Components
  * keeps its category subgroups, which open on their own when a component in them is active.
  */
@@ -528,11 +545,17 @@ export function buildSiteNavGroups(pathname: string, hash: string | null = null)
     { href: "/patterns", label: "Overview", active: pathname === "/patterns" || pathname === "/studio" },
     ...patternLeaves(pathname),
   ];
+  const blocks: AppNavItem[] = BLOCK_ITEMS.map((item) => ({
+    href: `/blocks/${item.slug}`,
+    label: item.label,
+    active: pathname === `/blocks/${item.slug}`,
+  }));
   return [
     // /foundations opens Design system before its hash is read (no flash of Docs); else Docs.
     { label: "Docs", items: docs, defaultOpen: pathname !== "/foundations" },
     { label: "Design system", items: foundationLeaves(pathname, hash), defaultOpen: pathname === "/foundations" },
     { label: "Components", items: components },
+    { label: "Blocks", items: blocks },
     { label: "Patterns", items: patterns },
   ];
 }
