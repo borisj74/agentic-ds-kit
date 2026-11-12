@@ -27,6 +27,10 @@ export interface AgentTreeProps extends Omit<ComponentPropsWithoutRef<"section">
   /** Ids of folded branches. */
   folded?: string[];
   onFoldedChange?: (folded: string[]) => void;
+  /** Selected node (e.g. the agent whose step is open elsewhere). Shown with aria-pressed. */
+  selectedId?: string | null;
+  /** Makes each node name a button. Called with the node id. */
+  onSelect?: (id: string) => void;
   onApprove?: (id: string) => void;
   onRetry?: (id: string) => void;
   /** Currency symbol for costs. Default "$". */

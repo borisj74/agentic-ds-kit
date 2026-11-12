@@ -1,0 +1,132 @@
+{
+  "id": "rundetail",
+  "kind": "block",
+  "category": "Agents",
+  "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call.",
+  "status": "stable",
+  "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+  "useWhen": [
+    "open one run from a list or an overview",
+    "see why a step failed and retry it",
+    "approve the run's next action with the full step history in view",
+    "pause, resume or cancel a run"
+  ],
+  "doNotUseWhen": [
+    "many agents at a glance — AgentOverview",
+    "talk to agents while they work — LiveSession",
+    "only the live card — AgentMonitor",
+    "only the step log — AgentTrail"
+  ],
+  "contains": [
+    "agentmonitor",
+    "agenttrail",
+    "agenttree",
+    "toolcallcard",
+    "empty"
+  ],
+  "props": {
+    "run": {
+      "type": "object",
+      "required": true,
+      "note": "{ name, meta?, status: AgentMonitor status, headline?, headlineNote?, elapsed?, cost?, axis?, pendingAction?, error?, tag? }. What AgentMonitor shows on top; tag goes on the trail title."
+    },
+    "steps": {
+      "type": "array",
+      "required": true,
+      "note": "AgentMonitor steps plus { agentId, label?, timer?, args?, result?, resultMeta?, error? }; status adds \"pending\" (planned: in the trail, not in the strip)."
+    },
+    "agents": {
+      "type": "object",
+      "required": true,
+      "note": "AgentTree root: the orchestrator and its sub-agents. A step's agentId is a node id."
+    },
+    "selectedStepId": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled selected step; null for none."
+    },
+    "defaultSelectedStepId": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled starting step. Default none."
+    },
+    "onSelectStep": {
+      "type": "function",
+      "required": false,
+      "note": "(stepId | null) => void. From the strip, the trail or a tree node (that agent's open or latest step)."
+    },
+    "onApprove": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. The pending action: ApprovalCard or the waiting agent in the tree."
+    },
+    "onDeny": {
+      "type": "function",
+      "required": false,
+      "note": "() => void"
+    },
+    "onPause": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Running runs."
+    },
+    "onResume": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Paused runs."
+    },
+    "onCancel": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Paused runs: Cancel run."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "(stepId) => void. A failed step, from the run, the tree or the tool call."
+    },
+    "title": {
+      "type": "string",
+      "default": "Run detail"
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "left: AgentMonitor over the selected step's ToolCallCard (Empty when none); right: AgentTree over AgentTrail; in layout-split--primary",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width the right column stacks under the left"
+  ],
+  "tokens": [
+    "text.fg",
+    "text.fgMuted",
+    "type.size.uiXl",
+    "type.size.bodySm",
+    "type.weight.heading",
+    "type.tracking.heading",
+    "type.family.heading",
+    "layout.gutter.md",
+    "layout.gutter.sm",
+    "grid.breakpoint.md"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "strip steps, trail steps and tree names are buttons with aria-pressed on the selected one; selecting it again clears",
+      "the tool call is a section labelled by its h3, which names the selected step",
+      "the pending ApprovalCard, Pause, Resume, Cancel and Retry are kit Buttons, keyboard reachable with the kit focus ring",
+      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild RunDetail from local cards; import the block",
+    "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+    "Do not use raw hex",
+    "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused"
+  ],
+  "snippet": "<RunDetail run={run} steps={steps} agents={tree} onApprove={approve} onDeny={deny} onPause={pause} onResume={resume} onRetry={retry} onCancel={cancel} />"
+}

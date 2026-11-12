@@ -3934,6 +3934,15 @@
           "required": false,
           "note": "(message: string) => void"
         },
+        "sendAppearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "soft"
+          ],
+          "default": "solid",
+          "note": "soft when another solid primary shares the view (e.g. a waiting ApprovalCard)."
+        },
         "onClose": {
           "type": "function",
           "required": false
@@ -7223,6 +7232,16 @@
           "type": "object",
           "required": false,
           "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+        },
+        "selectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Selected step id; its button shows the selected ring and aria-pressed."
+        },
+        "onSelectStep": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Makes each step a button; selecting the selected step again passes null."
         }
       }
     },
@@ -7854,6 +7873,16 @@
           "required": false,
           "note": "(folded) => void. Adds the chevron disclosure on branches."
         },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "Selected node id; its row shows the selected ring and its name button aria-pressed."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Makes each node name a button, e.g. to open that agent's step elsewhere."
+        },
         "onApprove": {
           "type": "function",
           "required": false,
@@ -8296,6 +8325,15 @@
           "type": "function",
           "required": false,
           "note": "(text) => void. The send button is the one solid primary; Enter sends."
+        },
+        "sendAppearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "soft"
+          ],
+          "default": "solid",
+          "note": "soft when another solid primary shares the view (e.g. a Chat composer)."
         },
         "sending": {
           "type": "boolean",
@@ -10254,6 +10292,202 @@
         "title": {
           "type": "string",
           "default": "Agent overview"
+        }
+      }
+    },
+    {
+      "id": "livesession",
+      "group": "component",
+      "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+      "useWhen": [
+        "a workspace where people chat with agents as they work",
+        "redirect or pause an agent mid-run without leaving the conversation",
+        "approve an agent's action in the flow of the chat"
+      ],
+      "doNotUseWhen": [
+        "one run in detail — RunDetail",
+        "many agents since your last look — AgentOverview",
+        "only a chat — Chat",
+        "only steering — AgentSteering"
+      ],
+      "doNot": [
+        "Do not rebuild LiveSession from local panels; import the block",
+        "Do not show every open request at once; one inline approval, the rest counted",
+        "Do not use raw hex",
+        "Only one solid primary in the view: the chat send, or the approval's approve while one waits (the chat send and the steer send go soft)"
+      ],
+      "props": {
+        "messages": {
+          "type": "array",
+          "required": true,
+          "note": "Chat messages: { id?, role: \"user\" | \"assistant\", content, timestamp? }[]."
+        },
+        "agents": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, status: \"running\" | \"waiting\" | \"paused\" | \"failed\" | \"done\", activity?, meta?, elapsed?, suggestions?, applied? }[]. Not-done agents are in Working now."
+        },
+        "requests": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, agentId, title, description?, risk?, action }[] oldest first. The first is an inline ApprovalCard; the rest are counted."
+        },
+        "thinking": {
+          "type": "boolean",
+          "default": false,
+          "note": "The chat shows the kit thinking state."
+        },
+        "suggestions": {
+          "type": "string[]",
+          "required": false,
+          "note": "Prompt chips over the chat composer."
+        },
+        "selectedAgentId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled steered agent."
+        },
+        "defaultSelectedAgentId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting agent. Default: the first agent still working."
+        },
+        "onSelectAgent": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. A Working now row was picked; steering moves to it."
+        },
+        "onSend": {
+          "type": "function",
+          "required": false,
+          "note": "(text) => void. Chat message."
+        },
+        "onSteer": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId, text) => void"
+        },
+        "onPause": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void"
+        },
+        "onResume": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void"
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. After a kit AlertDialog confirm."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(requestId) => void"
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "(requestId) => void"
+        },
+        "chatTitle": {
+          "type": "string",
+          "default": "Conversation"
+        },
+        "title": {
+          "type": "string",
+          "default": "Live session"
+        }
+      }
+    },
+    {
+      "id": "rundetail",
+      "group": "component",
+      "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+      "useWhen": [
+        "open one run from a list or an overview",
+        "see why a step failed and retry it",
+        "approve the run's next action with the full step history in view",
+        "pause, resume or cancel a run"
+      ],
+      "doNotUseWhen": [
+        "many agents at a glance — AgentOverview",
+        "talk to agents while they work — LiveSession",
+        "only the live card — AgentMonitor",
+        "only the step log — AgentTrail"
+      ],
+      "doNot": [
+        "Do not rebuild RunDetail from local cards; import the block",
+        "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+        "Do not use raw hex",
+        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused"
+      ],
+      "props": {
+        "run": {
+          "type": "object",
+          "required": true,
+          "note": "{ name, meta?, status: AgentMonitor status, headline?, headlineNote?, elapsed?, cost?, axis?, pendingAction?, error?, tag? }. What AgentMonitor shows on top; tag goes on the trail title."
+        },
+        "steps": {
+          "type": "array",
+          "required": true,
+          "note": "AgentMonitor steps plus { agentId, label?, timer?, args?, result?, resultMeta?, error? }; status adds \"pending\" (planned: in the trail, not in the strip)."
+        },
+        "agents": {
+          "type": "object",
+          "required": true,
+          "note": "AgentTree root: the orchestrator and its sub-agents. A step's agentId is a node id."
+        },
+        "selectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled selected step; null for none."
+        },
+        "defaultSelectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting step. Default none."
+        },
+        "onSelectStep": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId | null) => void. From the strip, the trail or a tree node (that agent's open or latest step)."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The pending action: ApprovalCard or the waiting agent in the tree."
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "() => void"
+        },
+        "onPause": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Running runs."
+        },
+        "onResume": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Paused runs."
+        },
+        "onCancel": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Paused runs: Cancel run."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId) => void. A failed step, from the run, the tree or the tool call."
+        },
+        "title": {
+          "type": "string",
+          "default": "Run detail"
         }
       }
     },

@@ -38,7 +38,18 @@ function defaultProgress(steps: AgentTrailStep[]) {
 }
 
 /** A vertical step list for a running agent task: what already happened, what runs now, what is next. */
-export function AgentTrail({ title, steps, icon, tag, progress, className, ref, ...rest }: AgentTrailProps) {
+export function AgentTrail({
+  title,
+  steps,
+  icon,
+  tag,
+  progress,
+  selectedStepId,
+  onSelectStep,
+  className,
+  ref,
+  ...rest
+}: AgentTrailProps) {
   const titleId = useId();
   const counter = progress ?? defaultProgress(steps);
   const firstOpen = steps.findIndex((step) => step.status !== "done");
@@ -76,16 +87,36 @@ export function AgentTrail({ title, steps, icon, tag, progress, className, ref, 
                 </span>
                 {last ? null : <span className={cx(styles.line, lineDone && styles.lineDone)} />}
               </div>
-              <div className={cx(styles.body, last && styles.bodyLast)}>
-                <div className={styles.row}>
-                  <span className={styles.label}>
-                    {step.label}
-                    <span className={styles.srOnly}>, {STATUS_TEXT[step.status]}</span>
-                  </span>
-                  {value ? <span className={styles.meta}>{value}</span> : null}
+              {onSelectStep ? (
+                <div className={cx(styles.body, last && styles.bodyLast)}>
+                  <button
+                    type="button"
+                    className={cx(styles.select, step.id === selectedStepId && styles.selected)}
+                    aria-pressed={step.id === selectedStepId}
+                    onClick={() => onSelectStep(step.id === selectedStepId ? null : step.id)}
+                  >
+                    <span className={styles.row}>
+                      <span className={styles.label}>
+                        {step.label}
+                        <span className={styles.srOnly}>, {STATUS_TEXT[step.status]}</span>
+                      </span>
+                      {value ? <span className={styles.meta}>{value}</span> : null}
+                    </span>
+                    {step.sublabel ? <span className={cx(styles.sublabel, styles.sublabelBlock)}>{step.sublabel}</span> : null}
+                  </button>
                 </div>
-                {step.sublabel ? <p className={styles.sublabel}>{step.sublabel}</p> : null}
-              </div>
+              ) : (
+                <div className={cx(styles.body, last && styles.bodyLast)}>
+                  <div className={styles.row}>
+                    <span className={styles.label}>
+                      {step.label}
+                      <span className={styles.srOnly}>, {STATUS_TEXT[step.status]}</span>
+                    </span>
+                    {value ? <span className={styles.meta}>{value}</span> : null}
+                  </div>
+                  {step.sublabel ? <p className={styles.sublabel}>{step.sublabel}</p> : null}
+                </div>
+              )}
             </li>
           );
         })}
