@@ -112,7 +112,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Text</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="text" size="md" label="Maya Chen" />
                 </div>
               </div>
@@ -126,7 +126,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Link</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="link" size="md" label="INV-1042" href="#cell" />
                 </div>
               </div>
@@ -143,7 +143,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Avatar</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="avatar" size="md" label="Maya Chen" name="Maya Chen" src={FACES["Maya Chen"]} />
                 </div>
               </div>
@@ -159,7 +159,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>File</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="file" size="md" label="brief.pdf" />
                 </div>
               </div>
@@ -173,7 +173,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Payment</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="payment" size="md" label="Visa" />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Badge</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="badge" size="md" label="Active" tone="success" />
                 </div>
               </div>
@@ -201,7 +201,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Badges</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell
                       type="badges"
                       size="md"
@@ -226,7 +226,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Trend positive</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="trendPositive" size="md" value="12%" />
                 </div>
               </div>
@@ -242,7 +242,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Trend negative</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="trendNegative" size="md" value="4%" />
                 </div>
               </div>
@@ -256,7 +256,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Avatar group</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                     <Cell type="avatarGroup" size="md" people={[...PEOPLE]} />
                 </div>
               </div>
@@ -273,7 +273,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Select</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell
                     type="select"
                     size="md"
@@ -299,7 +299,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Progress</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell type="progress" size="md" value={64} />
                 </div>
               </div>
@@ -315,7 +315,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Rating</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell type="rating" size="md" value={4} />
                 </div>
               </div>
@@ -331,7 +331,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Action buttons</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell
                     type="actions"
                     size="md"
@@ -354,7 +354,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Action icons</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell
                     type="actionIcons"
                     size="md"
@@ -377,7 +377,7 @@ export function CellDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Action menu</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewRow}>
+                <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell
                     type="actionMenu"
                     size="md"

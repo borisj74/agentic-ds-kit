@@ -650,7 +650,10 @@
 }
 
 /* Kit Cell and HeaderCell are transparent: in a preview they sit on a white row, as in a table. */
+/* A Cell / HeaderCell in a white table-row frame, one column wide, content left as in a table. */
 .previewCell {
+  justify-content: flex-start;
+  width: min(100%, var(--layout-drawer-sm));
   overflow: hidden;
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
