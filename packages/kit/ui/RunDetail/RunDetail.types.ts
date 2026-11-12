@@ -7,7 +7,7 @@ export type RunDetailStepStatus = "done" | "running" | "waiting" | "failed" | "p
 
 /**
  * One step of the run. AgentMonitor step fields (tool, target, duration, tokens, cost, started,
- * weight, icon) plus who ran it and what the tool was called with.
+ * icon) plus who ran it and what the tool was called with.
  */
 export interface RunDetailStep extends Omit<AgentMonitorStep, "status"> {
   status: RunDetailStepStatus;

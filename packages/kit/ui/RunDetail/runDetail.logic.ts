@@ -25,7 +25,7 @@ const CALL_STATUS: Record<Exclude<RunDetailStepStatus, "pending">, ToolCallStatu
 export function monitorSteps(steps: RunDetailStep[]): AgentMonitorStep[] {
   return steps
     .filter((step) => step.status !== "pending")
-    .map(({ id, tool, status, icon, target, duration, tokens, cost, started, weight }) => ({
+    .map(({ id, tool, status, icon, target, duration, tokens, cost, started }) => ({
       id,
       tool,
       status: status as AgentMonitorStep["status"],
@@ -35,7 +35,6 @@ export function monitorSteps(steps: RunDetailStep[]): AgentMonitorStep[] {
       tokens,
       cost,
       started,
-      weight,
     }));
 }
 
