@@ -672,6 +672,11 @@
           "required": false,
           "note": "When set, the whole card is a button that opens a detail view"
         },
+        "selected": {
+          "type": "boolean",
+          "required": false,
+          "note": "With onClick: the card is a toggle in a picker (e.g. the metric a chart shows). Sets aria-pressed, draws the selected style (border.brand on action.selected), and adds the badge to the button's name. Leave undefined for a plain button."
+        },
         "fill": {
           "type": "boolean",
           "default": false,
@@ -3933,6 +3938,15 @@
           "type": "function",
           "required": false,
           "note": "(message: string) => void"
+        },
+        "sendAppearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "soft"
+          ],
+          "default": "solid",
+          "note": "soft when another solid primary shares the view (e.g. a waiting ApprovalCard)."
         },
         "onClose": {
           "type": "function",
@@ -7223,6 +7237,16 @@
           "type": "object",
           "required": false,
           "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+        },
+        "selectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Selected step id; its button shows the selected ring and aria-pressed."
+        },
+        "onSelectStep": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void. Makes each step a button; selecting the selected step again passes null."
         }
       }
     },
@@ -7854,6 +7878,16 @@
           "required": false,
           "note": "(folded) => void. Adds the chevron disclosure on branches."
         },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "Selected node id; its row shows the selected ring and its name button aria-pressed."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Makes each node name a button, e.g. to open that agent's step elsewhere."
+        },
         "onApprove": {
           "type": "function",
           "required": false,
@@ -8296,6 +8330,15 @@
           "type": "function",
           "required": false,
           "note": "(text) => void. The send button is the one solid primary; Enter sends."
+        },
+        "sendAppearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "soft"
+          ],
+          "default": "solid",
+          "note": "soft when another solid primary shares the view (e.g. a Chat composer)."
         },
         "sending": {
           "type": "boolean",
@@ -10417,6 +10460,603 @@
         "unitLabel": {
           "type": "string",
           "default": "/ seat / month"
+        }
+      }
+    },
+    {
+      "id": "livesession",
+      "group": "component",
+      "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+      "useWhen": [
+        "a workspace where people chat with agents as they work",
+        "redirect or pause an agent mid-run without leaving the conversation",
+        "approve an agent's action in the flow of the chat"
+      ],
+      "doNotUseWhen": [
+        "one run in detail — RunDetail",
+        "many agents since your last look — AgentOverview",
+        "only a chat — Chat",
+        "only steering — AgentSteering"
+      ],
+      "doNot": [
+        "Do not rebuild LiveSession from local panels; import the block",
+        "Do not show every open request at once; one inline approval, the rest counted",
+        "Do not use raw hex",
+        "Only one solid primary in the view: the chat send, or the approval's approve while one waits (the chat send and the steer send go soft)"
+      ],
+      "props": {
+        "messages": {
+          "type": "array",
+          "required": true,
+          "note": "Chat messages: { id?, role: \"user\" | \"assistant\", content, timestamp? }[]."
+        },
+        "agents": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, status: \"running\" | \"waiting\" | \"paused\" | \"failed\" | \"done\", activity?, meta?, elapsed?, suggestions?, applied? }[]. Not-done agents are in Working now."
+        },
+        "requests": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, agentId, title, description?, risk?, action }[] oldest first. The first is an inline ApprovalCard; the rest are counted."
+        },
+        "thinking": {
+          "type": "boolean",
+          "default": false,
+          "note": "The chat shows the kit thinking state."
+        },
+        "suggestions": {
+          "type": "string[]",
+          "required": false,
+          "note": "Prompt chips over the chat composer."
+        },
+        "selectedAgentId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled steered agent."
+        },
+        "defaultSelectedAgentId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting agent. Default: the first agent still working."
+        },
+        "onSelectAgent": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. A Working now row was picked; steering moves to it."
+        },
+        "onSend": {
+          "type": "function",
+          "required": false,
+          "note": "(text) => void. Chat message."
+        },
+        "onSteer": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId, text) => void"
+        },
+        "onPause": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void"
+        },
+        "onResume": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void"
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. After a kit AlertDialog confirm."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "(requestId) => void"
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "(requestId) => void"
+        },
+        "chatTitle": {
+          "type": "string",
+          "default": "Conversation"
+        },
+        "title": {
+          "type": "string",
+          "default": "Live session"
+        }
+      }
+    },
+    {
+      "id": "rundetail",
+      "group": "component",
+      "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+      "useWhen": [
+        "open one run from a list or an overview",
+        "see why a step failed and retry it",
+        "approve the run's next action with the full step history in view",
+        "pause, resume or cancel a run"
+      ],
+      "doNotUseWhen": [
+        "many agents at a glance — AgentOverview",
+        "talk to agents while they work — LiveSession",
+        "only the live card — AgentMonitor",
+        "only the step log — AgentTrail"
+      ],
+      "doNot": [
+        "Do not rebuild RunDetail from local cards; import the block",
+        "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+        "Do not use raw hex",
+        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused"
+      ],
+      "props": {
+        "run": {
+          "type": "object",
+          "required": true,
+          "note": "{ name, meta?, status: AgentMonitor status, headline?, headlineNote?, elapsed?, cost?, axis?, pendingAction?, error?, tag? }. What AgentMonitor shows on top; tag goes on the trail title."
+        },
+        "steps": {
+          "type": "array",
+          "required": true,
+          "note": "AgentMonitor steps plus { agentId, label?, timer?, args?, result?, resultMeta?, error? }; status adds \"pending\" (planned: in the trail, not in the strip)."
+        },
+        "agents": {
+          "type": "object",
+          "required": true,
+          "note": "AgentTree root: the orchestrator and its sub-agents. A step's agentId is a node id."
+        },
+        "selectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled selected step; null for none."
+        },
+        "defaultSelectedStepId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting step. Default none."
+        },
+        "onSelectStep": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId | null) => void. From the strip, the trail or a tree node (that agent's open or latest step)."
+        },
+        "onApprove": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The pending action: ApprovalCard or the waiting agent in the tree."
+        },
+        "onDeny": {
+          "type": "function",
+          "required": false,
+          "note": "() => void"
+        },
+        "onPause": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Running runs."
+        },
+        "onResume": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Paused runs."
+        },
+        "onCancel": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Paused runs: Cancel run."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "(stepId) => void. A failed step, from the run, the tree or the tool call."
+        },
+        "title": {
+          "type": "string",
+          "default": "Run detail"
+        }
+      }
+    },
+    {
+      "id": "appdirectory",
+      "group": "component",
+      "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
+      "useWhen": [
+        "an Integrations or Apps area where people find, connect and disconnect apps",
+        "show which apps are connected and what each one can access",
+        "a connect flow that needs a detail step before the connection"
+      ],
+      "doNotUseWhen": [
+        "only the catalogue, connecting straight from the tile — IntegrationPicker",
+        "settings for one connected app — the integration-settings pattern",
+        "choosing a plan — PricingPlans"
+      ],
+      "doNot": [
+        "Do not rebuild AppDirectory from a local grid of cards; import the block",
+        "Do not connect straight from a tile here; the tile opens the detail, the drawer connects",
+        "Do not use a real provider's logo or name without labelling it an example",
+        "Do not use raw hex",
+        "Only one solid primary in the view: Connect in the open drawer"
+      ],
+      "props": {
+        "apps": {
+          "type": "array",
+          "required": true,
+          "note": "IntegrationPicker items plus drawer detail: { id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon?, publisher?, about?, permissions?: string[], connectedNote? }[]"
+        },
+        "title": {
+          "type": "string",
+          "default": "Apps"
+        },
+        "note": {
+          "type": "string",
+          "required": false,
+          "note": "Muted note on the catalogue, e.g. \"example providers\"."
+        },
+        "categories": {
+          "type": "string[]",
+          "required": false,
+          "note": "Category order for the filter. Default: in order of appearance."
+        },
+        "category": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled category: \"all\" or a name."
+        },
+        "onCategoryChange": {
+          "type": "function",
+          "required": false
+        },
+        "connectedOnly": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled Connected chip."
+        },
+        "defaultConnectedOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "onConnectedOnlyChange": {
+          "type": "function",
+          "required": false,
+          "note": "(connectedOnly) => void"
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled: the app whose drawer is open, or null."
+        },
+        "defaultSelectedId": {
+          "type": "string",
+          "required": false
+        },
+        "onSelectedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void"
+        },
+        "onConnect": {
+          "type": "function",
+          "required": true,
+          "note": "(id) => void. The drawer's Connect."
+        },
+        "onDisconnect": {
+          "type": "function",
+          "required": true,
+          "note": "(id) => void. A connected app's Disconnect."
+        },
+        "connectingId": {
+          "type": "string",
+          "required": false,
+          "note": "That app's Connect reads Connecting… and is announced."
+        },
+        "onRequest": {
+          "type": "function",
+          "required": false,
+          "note": "Request an integration, when search or the directory finds nothing."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "workboard",
+      "group": "component",
+      "intent": "Block: a task board with detail. TaskBoard columns (drag or keyboard moves); a card opens a Drawer with the task, Status and Assignee Fields (Select, Avatar) and its CommentThread.",
+      "useWhen": [
+        "a team's tasks by status, with the detail one click away",
+        "change a task's status or assignee without leaving the board",
+        "discuss a task in place with replies"
+      ],
+      "doNotUseWhen": [
+        "only the board — TaskBoard",
+        "a list with filters and sorting — DataTable",
+        "an agent's plan — AgentPlan"
+      ],
+      "doNot": [
+        "Do not rebuild WorkBoard from a local Kanban; import the block",
+        "Do not make moves drag-only; TaskBoard's keyboard path stays",
+        "Do not encode status by colour alone",
+        "Do not use raw hex",
+        "Only one solid primary in the view: Comment in the open drawer"
+      ],
+      "props": {
+        "columns": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, label, cardIds }[]. A task's column is its status; the last column counts as done in the head."
+        },
+        "tasks": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, description?, tags?, assigneeId?, dueOn?, comments?: CommentThread comments }[]"
+        },
+        "people": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, initials?, avatarSrc? }[]: assignees and comment authors."
+        },
+        "currentUserId": {
+          "type": "string",
+          "required": false,
+          "note": "Their comments get Edit and Delete."
+        },
+        "title": {
+          "type": "string",
+          "default": "Work board"
+        },
+        "boardTitle": {
+          "type": "string",
+          "required": false,
+          "note": "TaskBoard's name, e.g. \"Billing Q4\". Default: title."
+        },
+        "note": {
+          "type": "string",
+          "required": false
+        },
+        "openTaskId": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled: the task whose drawer is open, or null."
+        },
+        "defaultOpenTaskId": {
+          "type": "string",
+          "required": false
+        },
+        "onOpenTaskChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void"
+        },
+        "onMove": {
+          "type": "function",
+          "required": true,
+          "note": "(taskId, toColumnId, index) => void. From the board, or the drawer's Status (to the end of that column). moveWorkBoardTask(columns, …) returns the new columns."
+        },
+        "onUpdate": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId, { assigneeId: string | null }) => void. The drawer's Assignee."
+        },
+        "onComment": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId, body, parentId?) => void. Reply is offered when set."
+        },
+        "onEditComment": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId, commentId, body) => void"
+        },
+        "onDeleteComment": {
+          "type": "function",
+          "required": false,
+          "note": "(taskId, commentId) => void, after CommentThread's AlertDialog."
+        },
+        "onAdd": {
+          "type": "function",
+          "required": false,
+          "note": "(columnId) => void. Add card under a column."
+        },
+        "onNewTask": {
+          "type": "function",
+          "required": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false
+        },
+        "error": {
+          "type": "string",
+          "required": false
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": "kpiboard",
+      "group": "component",
+      "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+      "useWhen": [
+        "the first row of an analytics or reporting dashboard",
+        "compare a few KPIs and drill into one without leaving the page",
+        "one range (7 / 30 / 90 days) should change cards, chart and table together"
+      ],
+      "doNotUseWhen": [
+        "only a strip of numbers: Scoreboard",
+        "one chart on its own: LineChart or BarChart",
+        "a full dataset to search and filter: DataTable",
+        "more than four KPIs: Scoreboard with Conveyor"
+      ],
+      "doNot": [
+        "Do not rebuild KpiBoard from a local dashboard; import the block",
+        "Do not add a second range control; the one range drives cards, chart and table",
+        "Do not put more than four KPIs in it",
+        "Do not use raw hex",
+        "No solid primary Button in the block; leave it to the page"
+      ],
+      "props": {
+        "metrics": {
+          "type": "array",
+          "required": true,
+          "note": "3–4 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+        },
+        "series": {
+          "type": "object",
+          "required": true,
+          "note": "series[metricId][range]: ChartDatum[] ({ label, value }) for the LineChart."
+        },
+        "rows": {
+          "type": "object",
+          "required": true,
+          "note": "rows[metricId][range]: DataTableRow[] (each with id). Ranked by the metric's rankBy column, highest first, then cut to rowLimit."
+        },
+        "ranges": {
+          "type": "array",
+          "required": true,
+          "note": "{ value, label }[], two to four, e.g. 7d / 30d / 90d."
+        },
+        "range": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled range value."
+        },
+        "defaultRange": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting range. Default the first."
+        },
+        "onRangeChange": {
+          "type": "function",
+          "required": false,
+          "note": "(range) => void"
+        },
+        "selectedMetric": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled metric id for the chart and table."
+        },
+        "defaultSelectedMetric": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled starting metric. Default the first."
+        },
+        "onSelectedMetricChange": {
+          "type": "function",
+          "required": false,
+          "note": "(metricId) => void"
+        },
+        "rowLimit": {
+          "type": "number",
+          "default": 5,
+          "note": "How many top rows the table shows."
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "Line under the heading."
+        },
+        "title": {
+          "type": "string",
+          "default": "Key metrics"
+        }
+      }
+    },
+    {
+      "id": "usagebilling",
+      "group": "component",
+      "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+      "useWhen": [
+        "the billing or usage area of a SaaS settings page",
+        "show how close an account is to its limits next to the plan that sets them",
+        "download a recent invoice or change the payment method from one place"
+      ],
+      "doNotUseWhen": [
+        "one invoice in full: InvoiceDocument",
+        "only the allowance meter: UsageMeter",
+        "choosing between plans: PricingPlans",
+        "an overdue account that must pay now (Pay now is the primary, not Upgrade): compose Alert, Button and these parts on the page"
+      ],
+      "doNot": [
+        "Do not rebuild UsageBilling from local cards; import the block",
+        "Do not add a second solid primary; Upgrade on the plan card is the one",
+        "Do not pass onUpgrade to the UsageMeter inside it",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "plan": {
+          "type": "object",
+          "required": true,
+          "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\"."
+        },
+        "allowance": {
+          "type": "object",
+          "required": true,
+          "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote? }."
+        },
+        "limits": {
+          "type": "array",
+          "required": false,
+          "note": "UsageList items: { id, label, used, limit, unit?, note? }[]. The card line counts the ones at 80% or more."
+        },
+        "invoices": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, number, date, amount, status: \"paid\" | \"open\" | \"overdue\" | \"void\" }[], newest first."
+        },
+        "invoiceLimit": {
+          "type": "number",
+          "default": 4,
+          "note": "How many invoices to list."
+        },
+        "onUpgrade": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The one solid primary, on the plan card. Without it there is no Upgrade."
+        },
+        "onManagePayment": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Outline button on the plan card."
+        },
+        "onDownloadInvoice": {
+          "type": "function",
+          "required": false,
+          "note": "(invoiceId) => void. Each invoice row's Download action."
+        },
+        "onViewInvoices": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. View all link on the invoices card."
+        },
+        "onViewUsage": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. The UsageMeter's View usage."
+        },
+        "title": {
+          "type": "string",
+          "default": "Usage & billing"
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "Line under the heading."
         }
       }
     },
