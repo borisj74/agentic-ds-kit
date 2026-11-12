@@ -1,4 +1,5 @@
 import type { AppNavGroup, AppNavItem } from "agentic-ds-kit";
+import { BLOCK_DOCS } from "./blocks";
 
 export const COMPONENT_ITEMS = [
   "accordion",
@@ -369,10 +370,10 @@ export const PATTERN_ITEMS = [
 
 export type PatternSlug = (typeof PATTERN_ITEMS)[number]["slug"];
 
-/** Blocks: larger kit components for a whole area of a screen (contracts with "kind": "block"). */
-export const BLOCK_ITEMS = [{ slug: "mission-home", label: "Mission home", id: "missionhome" }] as const;
+/** Blocks: larger kit components for a whole area of a screen (contracts with "kind": "block"). A–Z. */
+export const BLOCK_ITEMS = BLOCK_DOCS.map(({ slug, label, contract }) => ({ slug, label, id: contract.id, category: contract.category }));
 
-export type BlockSlug = (typeof BLOCK_ITEMS)[number]["slug"];
+export type BlockSlug = string;
 
 export function isBlockSlug(value: string): value is BlockSlug {
   return BLOCK_ITEMS.some((item) => item.slug === value);
@@ -545,11 +546,14 @@ export function buildSiteNavGroups(pathname: string, hash: string | null = null)
     { href: "/patterns", label: "Overview", active: pathname === "/patterns" || pathname === "/studio" },
     ...patternLeaves(pathname),
   ];
-  const blocks: AppNavItem[] = BLOCK_ITEMS.map((item) => ({
-    href: `/blocks/${item.slug}`,
-    label: item.label,
-    active: pathname === `/blocks/${item.slug}`,
-  }));
+  const blocks: AppNavItem[] = [
+    { href: "/blocks", label: "Overview", active: pathname === "/blocks" },
+    ...BLOCK_ITEMS.map((item) => ({
+      href: `/blocks/${item.slug}`,
+      label: item.label,
+      active: pathname === `/blocks/${item.slug}`,
+    })),
+  ];
   return [
     // /foundations opens Design system before its hash is read (no flash of Docs); else Docs.
     { label: "Docs", items: docs, defaultOpen: pathname !== "/foundations" },

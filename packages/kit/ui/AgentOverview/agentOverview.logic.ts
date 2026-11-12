@@ -1,22 +1,22 @@
 import type { AgentInboxItem } from "../AgentInbox/AgentInbox.types";
 import type { AgentLanesTaskStatus } from "../AgentLanes/AgentLanes.types";
-import type { MissionHomeAgent, MissionHomeEvent, MissionHomeFilter } from "./MissionHome.types";
+import type { AgentOverviewAgent, AgentOverviewEvent, AgentOverviewFilter } from "./AgentOverview.types";
 
-/** Pure helpers behind MissionHome: what each area shows for a filter. No React here. */
+/** Pure helpers behind AgentOverview: what each area shows for a filter. No React here. */
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 
-export const MISSION_HOME_FILTERS: MissionHomeFilter[] = ["all", "running", "needs-you", "failed"];
+export const AGENT_OVERVIEW_FILTERS: AgentOverviewFilter[] = ["all", "running", "needs-you", "failed"];
 
-export const FILTER_LABEL: Record<MissionHomeFilter, string> = {
+export const FILTER_LABEL: Record<AgentOverviewFilter, string> = {
   all: "All",
   running: "Running",
   "needs-you": "Needs you",
   failed: "Failed",
 };
 
-const FILTER_STATUS: Record<Exclude<MissionHomeFilter, "all">, AgentLanesTaskStatus> = {
+const FILTER_STATUS: Record<Exclude<AgentOverviewFilter, "all">, AgentLanesTaskStatus> = {
   running: "running",
   "needs-you": "waiting",
   failed: "failed",
@@ -27,12 +27,12 @@ export const DECISION_APPROVE = "approve";
 export const DECISION_REJECT = "reject";
 
 /** Does an event pass the filter? */
-export function matchesFilter(event: MissionHomeEvent, filter: MissionHomeFilter): boolean {
+export function matchesFilter(event: AgentOverviewEvent, filter: AgentOverviewFilter): boolean {
   return filter === "all" || event.status === FILTER_STATUS[filter];
 }
 
 /** Events that were active after `since`: open ones, or ones that ended after it. */
-export function eventsSince(events: MissionHomeEvent[], since: number, now: number): MissionHomeEvent[] {
+export function eventsSince(events: AgentOverviewEvent[], since: number, now: number): AgentOverviewEvent[] {
   return events.filter((event) => (event.end ?? now) >= since);
 }
 
@@ -46,7 +46,7 @@ export function formatAgo(ms: number): string {
 }
 
 /** Summary counts since the last visit. Needs you is what is waiting now. */
-export function summaryCounts(events: MissionHomeEvent[], since: number, now: number) {
+export function summaryCounts(events: AgentOverviewEvent[], since: number, now: number) {
   const recent = eventsSince(events, since, now);
   return {
     done: recent.filter((event) => event.status === "done").length,
@@ -56,7 +56,7 @@ export function summaryCounts(events: MissionHomeEvent[], since: number, now: nu
 }
 
 /** Counts shown in the filter's segment labels (and so in their accessible names). */
-export function filterCounts(events: MissionHomeEvent[], since: number, now: number): Record<MissionHomeFilter, number> {
+export function filterCounts(events: AgentOverviewEvent[], since: number, now: number): Record<AgentOverviewFilter, number> {
   const recent = eventsSince(events, since, now);
   return {
     all: recent.length,
@@ -68,10 +68,10 @@ export function filterCounts(events: MissionHomeEvent[], since: number, now: num
 
 /** Lanes area: under a filter, only agents with a matching event keep a lane. */
 export function lanesFor(
-  agents: MissionHomeAgent[],
-  events: MissionHomeEvent[],
-  filter: MissionHomeFilter,
-): { agents: MissionHomeAgent[]; tasks: MissionHomeEvent[] } {
+  agents: AgentOverviewAgent[],
+  events: AgentOverviewEvent[],
+  filter: AgentOverviewFilter,
+): { agents: AgentOverviewAgent[]; tasks: AgentOverviewEvent[] } {
   if (filter === "all") return { agents, tasks: events };
   const tasks = events.filter((event) => matchesFilter(event, filter));
   const busy = new Set(tasks.map((task) => task.agentId));
@@ -84,9 +84,9 @@ export function lanesFor(
  * question (DecisionCard). A failed event is a failure with its summary lines and Retry run.
  */
 export function inboxItemsFor(
-  agents: MissionHomeAgent[],
-  events: MissionHomeEvent[],
-  filter: MissionHomeFilter,
+  agents: AgentOverviewAgent[],
+  events: AgentOverviewEvent[],
+  filter: AgentOverviewFilter,
   since: number,
   now: number,
 ): AgentInboxItem[] {
@@ -139,8 +139,8 @@ export function inboxItemsFor(
 
 /** Activity bar: matching events per time slice from `since` to `now`, by when they started. */
 export function activityFor(
-  events: MissionHomeEvent[],
-  filter: MissionHomeFilter,
+  events: AgentOverviewEvent[],
+  filter: AgentOverviewFilter,
   since: number,
   now: number,
   slices = 12,

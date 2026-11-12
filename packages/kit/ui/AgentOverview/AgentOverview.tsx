@@ -10,7 +10,7 @@ import { SegmentedControl } from "../SegmentedControl";
 import { cx } from "../shared/cx";
 import {
   FILTER_LABEL,
-  MISSION_HOME_FILTERS,
+  AGENT_OVERVIEW_FILTERS,
   activityFor,
   filterCounts,
   formatAgo,
@@ -18,16 +18,16 @@ import {
   inboxItemsFor,
   lanesFor,
   summaryCounts,
-} from "./missionHome.logic";
-import type { MissionHomeFilter, MissionHomeProps } from "./MissionHome.types";
-import styles from "./MissionHome.module.css";
+} from "./agentOverview.logic";
+import type { AgentOverviewFilter, AgentOverviewProps } from "./AgentOverview.types";
+import styles from "./AgentOverview.module.css";
 
-export type { MissionHomeProps, MissionHomeAgent, MissionHomeEvent, MissionHomeFilter } from "./MissionHome.types";
+export type { AgentOverviewProps, AgentOverviewAgent, AgentOverviewEvent, AgentOverviewFilter } from "./AgentOverview.types";
 
 const MINUTE = 60_000;
 const LANE_SPANS = [10 * MINUTE, 30 * MINUTE];
 
-const LANES_EMPTY: Record<MissionHomeFilter, { title: string; description: string }> = {
+const LANES_EMPTY: Record<AgentOverviewFilter, { title: string; description: string }> = {
   all: { title: "No agents yet", description: "Each agent gets a lane here once it starts work." },
   running: { title: "No agents running", description: "Running agents show here on the shared time axis." },
   "needs-you": { title: "No agent is waiting on you", description: "Agents that need an approval or an answer show here." },
@@ -48,7 +48,7 @@ function useClock(controlled: number | undefined) {
  * Block: a home for a fleet of agents. A since-you-last-looked summary with an activity bar,
  * every agent on one time axis (AgentLanes), and what needs you (AgentInbox), under one filter.
  */
-export function MissionHome(props: MissionHomeProps) {
+export function AgentOverview(props: AgentOverviewProps) {
   const {
     agents,
     events,
@@ -60,7 +60,7 @@ export function MissionHome(props: MissionHomeProps) {
     onApprove,
     onReject,
     onRetry,
-    title = "Mission home",
+    title = "Agent overview",
     className,
     ref,
     ...rest
@@ -68,7 +68,7 @@ export function MissionHome(props: MissionHomeProps) {
   const titleId = useId();
   const summaryId = useId();
   const now = useClock(nowProp);
-  const [innerFilter, setInnerFilter] = useState<MissionHomeFilter>(defaultFilter);
+  const [innerFilter, setInnerFilter] = useState<AgentOverviewFilter>(defaultFilter);
   const filter = filterProp ?? innerFilter;
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -87,7 +87,7 @@ export function MissionHome(props: MissionHomeProps) {
   const ago = formatAgo(now - since);
   const sinceText = ago === "just now" ? "since just now" : `in the last ${ago}`;
 
-  function changeFilter(next: MissionHomeFilter) {
+  function changeFilter(next: AgentOverviewFilter) {
     if (filterProp === undefined) setInnerFilter(next);
     setOpenTaskId(null);
     onFilterChange?.(next);
@@ -108,8 +108,8 @@ export function MissionHome(props: MissionHomeProps) {
           size="sm"
           ariaLabel="Show agents"
           value={filter}
-          onChange={(value) => changeFilter(value as MissionHomeFilter)}
-          items={MISSION_HOME_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
+          onChange={(value) => changeFilter(value as AgentOverviewFilter)}
+          items={AGENT_OVERVIEW_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
         />
       </header>
 

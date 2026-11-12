@@ -224,6 +224,10 @@ function load(root = packageRoot) {
         name,
         category: entry.group,
         kind: contract.kind === "block" || entry.kind === "block" ? "block" : "component",
+        block:
+          contract.kind === "block" || entry.kind === "block"
+            ? { category: contract.category ?? entry.category ?? "", summary: oneLine(contract.summary ?? entry.summary) }
+            : undefined,
         purpose,
         props: contract.props ?? {},
         variants: variantsOf(contract.props),
@@ -264,13 +268,14 @@ function load(root = packageRoot) {
   return data;
 }
 
-/** kind is "block" for blocks (larger compositions such as MissionHome), else "component". */
+/** kind is "block" for blocks (larger compositions such as AgentOverview), else "component". Blocks add { category, summary }. */
 function summary(component) {
   return {
     id: component.id,
     name: component.name,
     category: component.category,
     kind: component.kind,
+    ...(component.block ? { block: component.block } : {}),
     purpose: component.purpose,
   };
 }
@@ -330,6 +335,7 @@ export function getComponent(name) {
       name: component.name,
       category: component.category,
       kind: component.kind,
+      ...(component.block ? { block: component.block } : {}),
       purpose: component.purpose,
       props: component.props,
       variants: component.variants,

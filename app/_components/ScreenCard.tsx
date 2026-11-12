@@ -2,16 +2,17 @@
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Button } from "agentic-ds-kit";
+import { Badge, Button } from "agentic-ds-kit";
 import styles from "../playground.module.css";
 
 /**
- * One screen in a screens list: a live thumbnail (inert), its name and one line, and a copy
+ * One screen in a screens list: a live thumbnail (inert), an optional category tag, its name and one line, and a copy
  * button for the add command. The whole card opens the screen (href) or picks it (onSelect).
  */
 export function ScreenCard({
   title,
   description,
+  tag,
   thumb,
   href,
   onSelect,
@@ -21,6 +22,8 @@ export function ScreenCard({
 }: {
   title: string;
   description?: string;
+  /** A short category label shown as a kit Badge over the thumbnail's caption, e.g. "Agents". */
+  tag?: string;
   thumb: ReactNode;
   href?: string;
   onSelect?: () => void;
@@ -49,6 +52,11 @@ export function ScreenCard({
       </div>
       <div className={styles.screenMeta}>
         <div className={styles.screenText}>
+          {tag ? (
+            <Badge size="sm" tone="neutral" className={styles.screenTag}>
+              {tag}
+            </Badge>
+          ) : null}
           <Heading className={styles.screenTitle}>{title}</Heading>
           {description ? <p className={styles.screenDescription}>{description}</p> : null}
         </div>

@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { DEFAULT_THEME, readStoredTheme, type ThemeState } from "@/lib/theme-playground";
-import { MissionHomeDemo } from "./MissionHomeDemo";
+import { BLOCK_DEMOS } from "./blocks";
 import { ThemeScope } from "./ThemeScope";
-import demo from "./MissionHomeDemo.module.css";
+import frame from "./BlockFrame.module.css";
 import styles from "../playground.module.css";
 
 /**
  * One block alone in the viewport, inside a <main>, for the block pages' iframe preview and
  * "Open full screen". Follows the saved theme; `mode` from the URL sets light or dark.
  */
-export function BlockFrame({ mode }: { mode?: string }) {
+export function BlockFrame({ slug, label, mode }: { slug: string; label: string; mode?: string }) {
+  const Demo = BLOCK_DEMOS[slug];
   const [stored, setStored] = useState<ThemeState | null>(null);
 
   useEffect(() => {
@@ -32,8 +33,8 @@ export function BlockFrame({ mode }: { mode?: string }) {
 
   return (
     <ThemeScope theme={theme} className={styles.frameScreen}>
-      <main className={demo.frameMain} aria-label="Mission home preview">
-        <MissionHomeDemo />
+      <main className={frame.frameMain} aria-label={`${label} preview`}>
+        {Demo ? <Demo /> : null}
       </main>
     </ThemeScope>
   );

@@ -1,9 +1,9 @@
-import type { MissionHomeAgent, MissionHomeEvent } from "agentic-ds-kit";
+import type { AgentOverviewAgent, AgentOverviewEvent } from "agentic-ds-kit";
 
 const MINUTE = 60_000;
 
-/** Sample fleet for the MissionHome docs: five agents over the last two hours. */
-export const MISSION_HOME_AGENTS: MissionHomeAgent[] = [
+/** Sample fleet for the AgentOverview docs: five agents over the last two hours. */
+export const AGENT_OVERVIEW_AGENTS: AgentOverviewAgent[] = [
   { id: "planner", name: "Planner", model: "Opus 5.5", icon: "ListTree" },
   { id: "billing", name: "Billing refactor", model: "Sonnet 5.5", icon: "Code" },
   { id: "tests", name: "Test runner", model: "Haiku 5.5", icon: "FlaskConical" },
@@ -17,7 +17,7 @@ export function sampleSince(now: number) {
 }
 
 /** Events relative to `now`, so the sample looks live whenever the page is opened. */
-export function missionHomeEvents(now: number): MissionHomeEvent[] {
+export function agentOverviewEvents(now: number): AgentOverviewEvent[] {
   const at = (minutesAgo: number) => now - minutesAgo * MINUTE;
   return [
     { id: "plan-1", agentId: "planner", title: "Split the invoicing epic", status: "done", start: at(112), end: at(96), handoffTo: "bill-1", summary: ["6 tasks", "2 for Billing refactor"] },

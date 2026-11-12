@@ -1,8 +1,10 @@
 {
-  "id": "missionhome",
+  "id": "agentoverview",
   "kind": "block",
+  "category": "Agents",
+  "summary": "See what your agents did since you last looked, what is running, and what needs you.",
   "status": "stable",
-  "intent": "Block: a home screen for a fleet of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+  "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
   "useWhen": [
     "the first screen of an agent workspace",
     "come back after a while and see what changed",
@@ -46,13 +48,23 @@
     },
     "filter": {
       "type": "enum",
-      "values": ["all", "running", "needs-you", "failed"],
+      "values": [
+        "all",
+        "running",
+        "needs-you",
+        "failed"
+      ],
       "required": false,
       "note": "Controlled filter for the activity bar, lanes and inbox."
     },
     "defaultFilter": {
       "type": "enum",
-      "values": ["all", "running", "needs-you", "failed"],
+      "values": [
+        "all",
+        "running",
+        "needs-you",
+        "failed"
+      ],
       "default": "all",
       "note": "Uncontrolled starting filter."
     },
@@ -78,7 +90,7 @@
     },
     "title": {
       "type": "string",
-      "default": "Mission home"
+      "default": "Agent overview"
     }
   },
   "passthrough": {
@@ -116,10 +128,10 @@
     ]
   },
   "doNot": [
-    "Do not rebuild MissionHome from a local dashboard; import the block",
+    "Do not rebuild AgentOverview from a local dashboard; import the block",
     "Do not add a second filter to one area; the one filter drives all three",
     "Do not use raw hex",
     "Only one solid primary in the view: the approve in the open inbox card"
   ],
-  "snippet": "<MissionHome agents={agents} events={events} since={lastVisit} defaultFilter=\"all\" onApprove={approve} onReject={reject} onRetry={retry} />"
+  "snippet": "<AgentOverview agents={agents} events={events} since={lastVisit} defaultFilter=\"all\" onApprove={approve} onReject={reject} onRetry={retry} />"
 }

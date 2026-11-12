@@ -1,5 +1,5 @@
 /**
- * MissionHome: the one filter drives all three areas (summary activity, lanes, inbox), and the
+ * AgentOverview: the one filter drives all three areas (summary activity, lanes, inbox), and the
  * approve / reject / retry callbacks reach the block's props. Runs against the built kit (dist):
  * build first (npm run build -w agentic-ds-kit). CSS imports are stubbed so the block renders
  * on the server with react-dom/server.
@@ -49,20 +49,20 @@ const events = [
 let logic;
 let React;
 let renderToStaticMarkup;
-let MissionHome;
+let AgentOverview;
 
 before(async () => {
-  logic = await import("../dist/ui/MissionHome/missionHome.logic.js");
+  logic = await import("../dist/ui/AgentOverview/agentOverview.logic.js");
   React = await import("react");
   ({ renderToStaticMarkup } = await import("react-dom/server"));
-  ({ MissionHome } = await import("../dist/ui/MissionHome/MissionHome.js"));
+  ({ AgentOverview } = await import("../dist/ui/AgentOverview/AgentOverview.js"));
 });
 
 function render(props) {
-  return renderToStaticMarkup(React.createElement(MissionHome, { agents, events, since: SINCE, now: NOW, ...props }));
+  return renderToStaticMarkup(React.createElement(AgentOverview, { agents, events, since: SINCE, now: NOW, ...props }));
 }
 
-describe("MissionHome filter", () => {
+describe("AgentOverview filter", () => {
   test("counts cover what was active since the last visit", () => {
     assert.deepEqual(logic.summaryCounts(events, SINCE, NOW), { done: 1, needsYou: 2, failed: 1 });
     assert.deepEqual(logic.filterCounts(events, SINCE, NOW), { all: 5, running: 1, "needs-you": 2, failed: 1 });
@@ -124,7 +124,7 @@ describe("MissionHome filter", () => {
   });
 });
 
-describe("MissionHome callbacks", () => {
+describe("AgentOverview callbacks", () => {
   test("approve, reject and retry reach the block's props", () => {
     const calls = [];
     const handlers = logic.inboxHandlers({
@@ -158,16 +158,18 @@ describe("MissionHome callbacks", () => {
   });
 });
 
-describe("MissionHome in the catalog (MCP)", () => {
+describe("AgentOverview in the catalog (MCP)", () => {
   test("list_components and get_component return it as a block", async () => {
     const { getComponent, listComponents } = await import("../bin/catalog.mjs");
-    const row = listComponents().components.find((item) => item.id === "missionhome");
-    assert.equal(row?.name, "MissionHome");
+    const row = listComponents().components.find((item) => item.id === "agentoverview");
+    assert.equal(row?.name, "AgentOverview");
     assert.equal(row.kind, "block");
+    assert.equal(row.block.category, "Agents");
+    assert.ok(row.block.summary.length > 0);
     assert.equal(listComponents().components.find((item) => item.id === "button").kind, "component");
-    const { component } = getComponent("MissionHome");
+    const { component } = getComponent("AgentOverview");
     assert.equal(component.kind, "block");
-    assert.equal(component.import, 'import { MissionHome } from "agentic-ds-kit";');
+    assert.equal(component.import, 'import { AgentOverview } from "agentic-ds-kit";');
     assert.deepEqual(component.variants.find((v) => v.prop === "filter").values, ["all", "running", "needs-you", "failed"]);
   });
 });

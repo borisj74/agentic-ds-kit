@@ -1,0 +1,10 @@
+/* Visually hidden, read by screen readers (same as the kit's srOnly). Block demos use it for
+   their live status line. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

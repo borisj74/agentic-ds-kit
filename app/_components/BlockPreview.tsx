@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button, CodeSnippet, SegmentedControl } from "agentic-ds-kit";
-import type { BlockSlug } from "@/lib/playground-nav";
 import { CopyPromptBar } from "./CopyPromptBar";
 import { ScaledFrame } from "./PatternPreview";
 import { usePatternTheme } from "./ThemeScope";
@@ -13,7 +12,7 @@ import styles from "../playground.module.css";
 type Mode = "light" | "dark";
 type Device = "desktop" | "mobile";
 
-export function blockFrameUrl(slug: BlockSlug, mode: Mode) {
+export function blockFrameUrl(slug: string, mode: Mode) {
   return `/frame/blocks/${slug}?mode=${mode}`;
 }
 
@@ -31,7 +30,7 @@ export function BlockPreview({
   prompt,
   cursorPrompt,
 }: {
-  slug: BlockSlug;
+  slug: string;
   title: string;
   importLine: string;
   usage: string;

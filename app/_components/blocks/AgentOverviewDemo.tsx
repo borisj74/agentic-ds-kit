@@ -1,26 +1,26 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { MissionHome, type MissionHomeEvent } from "agentic-ds-kit";
-import styles from "./MissionHomeDemo.module.css";
-import { MISSION_HOME_AGENTS, missionHomeEvents, sampleSince } from "@/lib/mission-home-sample";
+import { AgentOverview, type AgentOverviewEvent } from "agentic-ds-kit";
+import styles from "./BlockDemo.module.css";
+import { AGENT_OVERVIEW_AGENTS, agentOverviewEvents, sampleSince } from "@/lib/blocks/agent-overview.sample";
 
 const subscribeNothing = () => () => {};
 
 /**
- * MissionHome with the sample fleet. Approve finishes the work, Reject closes it, Retry starts
+ * AgentOverview with the sample fleet. Approve finishes the work, Reject closes it, Retry starts
  * the failed run again, so the summary, lanes and inbox move as you use it. The sample is
  * built on the client (its times are relative to now), so nothing renders on the server.
  */
-export function MissionHomeDemo() {
+export function AgentOverviewDemo() {
   const [start] = useState(() => Date.now());
-  const [events, setEvents] = useState<MissionHomeEvent[]>(() => missionHomeEvents(start));
+  const [events, setEvents] = useState<AgentOverviewEvent[]>(() => agentOverviewEvents(start));
   const [status, setStatus] = useState("");
   const mounted = useSyncExternalStore(subscribeNothing, () => true, () => false);
 
   if (!mounted) return null;
 
-  function update(id: string, change: (event: MissionHomeEvent) => MissionHomeEvent, message: string) {
+  function update(id: string, change: (event: AgentOverviewEvent) => AgentOverviewEvent, message: string) {
     setEvents((list) => list.map((event) => (event.id === id ? change(event) : event)));
     const title = events.find((event) => event.id === id)?.title ?? id;
     setStatus(`${message}: ${title}`);
@@ -28,8 +28,8 @@ export function MissionHomeDemo() {
 
   return (
     <>
-      <MissionHome
-        agents={MISSION_HOME_AGENTS}
+      <AgentOverview
+        agents={AGENT_OVERVIEW_AGENTS}
         events={events}
         since={sampleSince(start)}
         onApprove={(id) =>

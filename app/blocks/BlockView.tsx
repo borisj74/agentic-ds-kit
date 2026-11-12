@@ -1,60 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Breadcrumb } from "agentic-ds-kit";
+import { Badge, Breadcrumb } from "agentic-ds-kit";
 import { BlockPreview } from "../_components/BlockPreview";
 import { CodeBlock } from "../components/CodeBlock";
 import { DocPageExtras } from "../components/DocPageExtras";
 import { blockPrompt } from "@/lib/pattern-prompt";
-import { BLOCK_ITEMS, componentLabel, type BlockSlug } from "@/lib/playground-nav";
-import missionHome from "../../packages/kit/contracts/missionhome.json";
+import { blockDoc } from "@/lib/blocks";
+import { componentLabel } from "@/lib/playground-nav";
 import styles from "../patterns/patterns.module.css";
 import playground from "../playground.module.css";
-
-interface BlockContract {
-  id: string;
-  kind: string;
-  intent: string;
-  useWhen: string[];
-  doNotUseWhen: string[];
-  contains: string[];
-  layout?: string[];
-  doNot: string[];
-  snippet: string;
-}
-
-interface BlockDoc {
-  name: string;
-  contract: BlockContract;
-  lead: string;
-  usage: string;
-}
-
-const BLOCKS: Record<BlockSlug, BlockDoc> = {
-  "mission-home": {
-    name: "MissionHome",
-    contract: missionHome,
-    lead:
-      "The first screen of an agent workspace. It says what changed since your last visit, lays every agent on one time axis, and lists what waits on you. One filter drives all three.",
-    usage: `import { MissionHome } from "agentic-ds-kit";
-
-export function Home({ agents, events, lastVisit }) {
-  return (
-    <main className="layout-content">
-      <MissionHome
-        agents={agents}          // { id, name, model?, icon? }[]
-        events={events}          // AgentLanes tasks, plus action? and risk? for approvals
-        since={lastVisit}        // epoch ms
-        defaultFilter="all"      // or filter + onFilterChange
-        onApprove={(id) => approve(id)}
-        onReject={(id) => reject(id)}
-        onRetry={(id) => retry(id)}
-      />
-    </main>
-  );
-}`,
-  },
-};
 
 function List({ items }: { items?: string[] }) {
   if (!items?.length) return null;
@@ -68,15 +23,19 @@ function List({ items }: { items?: string[] }) {
 }
 
 /** A block's page: preview, when to use it, usage, props and what it is built from. */
-export function BlockView({ slug }: { slug: BlockSlug }) {
-  const title = BLOCK_ITEMS.find((item) => item.slug === slug)?.label ?? "Block";
-  const { name, contract, lead, usage } = BLOCKS[slug];
+export function BlockView({ slug }: { slug: string }) {
+  const doc = blockDoc(slug);
+  if (!doc) return null;
+  const { label: title, name, contract, lead, usage } = doc;
   const importLine = `import { ${name} } from "agentic-ds-kit";`;
 
   return (
     <div className={playground.page}>
       <article className={styles.article}>
-        <Breadcrumb items={[{ label: "Blocks" }, { label: title }]} />
+        <Breadcrumb items={[{ label: "Blocks", href: "/blocks" }, { label: title }]} />
+        <Badge size="sm" tone="neutral" className={playground.screenTag}>
+          {contract.category}
+        </Badge>
         <h1 className={playground.pageTitle}>{title}</h1>
         <p className={playground.pageLead}>{lead}</p>
 

@@ -1,7 +1,7 @@
 /**
- * Public kit API: components only.
- * Blocks (MissionHome) are components too: larger compositions of kit components, imported the same way. Patterns (app-shell, sign-in, dashboard, list-detail, …) are
- * copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
+ * Public kit API: components only. Blocks (AgentOverview, …) are components too: larger
+ * compositions of kit components, imported the same way. Patterns (app-shell, sign-in, dashboard,
+ * list-detail, …) are copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
  */
 
 import "./tokens";
@@ -12,6 +12,7 @@ export * from "../ui/AgentFleet";
 export * from "../ui/AgentInbox";
 export * from "../ui/AgentLanes";
 export * from "../ui/AgentMonitor";
+export * from "../ui/AgentOverview";
 export * from "../ui/AgentPlan";
 export * from "../ui/AgentSteering";
 export * from "../ui/AgentTrail";
@@ -76,7 +77,6 @@ export * from "../ui/LoadingAnimation";
 export * from "../ui/MemoryPanel";
 export * from "../ui/MessageActions";
 export * from "../ui/Meter";
-export * from "../ui/MissionHome";
 export * from "../ui/Modal";
 export * from "../ui/ModalCard";
 export * from "../ui/ModelPicker";

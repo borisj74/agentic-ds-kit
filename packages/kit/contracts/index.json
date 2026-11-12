@@ -903,12 +903,14 @@
     "status": "stable"
   },
   {
-    "id": "missionhome",
+    "id": "agentoverview",
     "kind": "block",
     "intent": "Block: home for a fleet of agents. Since-you-last-looked summary, every agent on one time axis, and an inbox of what waits on you, under one filter.",
     "group": "component",
-    "path": "contracts/missionhome.json",
-    "status": "stable"
+    "path": "contracts/agentoverview.json",
+    "status": "stable",
+    "category": "Agents",
+    "summary": "See what your agents did since you last looked, what is running, and what needs you."
   },
   {
     "id": "dashboard",

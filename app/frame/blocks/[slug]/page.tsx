@@ -21,5 +21,6 @@ export default async function BlockFramePage({
   if (!isBlockSlug(slug)) notFound();
   const query = await searchParams;
   const mode = Array.isArray(query.mode) ? query.mode[0] : query.mode;
-  return <BlockFrame mode={mode} />;
+  const label = BLOCK_ITEMS.find((item) => item.slug === slug)?.label ?? slug;
+  return <BlockFrame slug={slug} label={label} mode={mode} />;
 }

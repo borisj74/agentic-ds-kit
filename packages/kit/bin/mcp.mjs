@@ -94,7 +94,7 @@ function createServer() {
     {
       title: "List components",
       description:
-        "List every UI component in this install, blocks included. Each entry has the code name, the catalog group as category, kind (component, or block for a larger composition such as MissionHome), and a one-line purpose from its contract. Use get_component for props and rules.",
+        "List every UI component in this install, blocks included. Each entry has the code name, the catalog group as category, kind (component, or block for a larger composition such as AgentOverview), and a one-line purpose from its contract. Use get_component for props and rules.",
     },
     () => listComponents(),
   );

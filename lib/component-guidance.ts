@@ -1,10 +1,10 @@
 // Derived from packages/kit/contracts/*.json. Do not hand-edit the map.
+import { BLOCK_DOCS } from "./blocks";
 import contract_accordion from "../packages/kit/contracts/accordion.json";
 import contract_agentfleet from "../packages/kit/contracts/agentfleet.json";
 import contract_agentinbox from "../packages/kit/contracts/agentinbox.json";
 import contract_agentlanes from "../packages/kit/contracts/agentlanes.json";
 import contract_agentmonitor from "../packages/kit/contracts/agentmonitor.json";
-import contract_missionhome from "../packages/kit/contracts/missionhome.json";
 import contract_agentplan from "../packages/kit/contracts/agentplan.json";
 import contract_agentsteering from "../packages/kit/contracts/agentsteering.json";
 import contract_agenttrail from "../packages/kit/contracts/agenttrail.json";
@@ -141,7 +141,6 @@ const contracts: Record<string, ContractNotes> = {
   "agentinbox": contract_agentinbox,
   "agentlanes": contract_agentlanes,
   "agentmonitor": contract_agentmonitor,
-  "missionhome": contract_missionhome,
   "agentplan": contract_agentplan,
   "agentsteering": contract_agentsteering,
   "agenttrail": contract_agenttrail,
@@ -265,6 +264,8 @@ const contracts: Record<string, ContractNotes> = {
   "tiltcard": contract_tiltcard,
   "gridbackground": contract_gridbackground,
   "gradienttext": contract_gradienttext,
+  // Blocks bring their contracts from lib/blocks.
+  ...Object.fromEntries(BLOCK_DOCS.map((doc) => [doc.contract.id, doc.contract])),
 };
 
 export function guidanceFor(id: string): { dos: string[]; donts: string[] } | null {

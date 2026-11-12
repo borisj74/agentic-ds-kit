@@ -1,7 +1,7 @@
-/* MissionHome block: kit components on kit layout classes. The block is its own container so
+/* AgentOverview block: kit components on kit layout classes. The block is its own container so
    it stacks wherever it is placed, not only at a viewport width. */
 .root {
-  container: missionhome / inline-size;
+  container: agentoverview / inline-size;
   box-sizing: border-box;
   display: grid;
   gap: var(--layout-gutter-md);
@@ -69,7 +69,7 @@
 /* Inbox and activity stack under the lanes and the summary. 64rem is --grid-breakpoint-md
    (container queries cannot read var()). No breakpoint token sits nearer the ~860px the
    brief asked for; below md the inbox column is under the width its cards need. */
-@container missionhome (max-width: 64rem) {
+@container agentoverview (max-width: 64rem) {
   .root .split {
     grid-template-columns: minmax(0, 1fr);
   }

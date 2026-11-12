@@ -10168,9 +10168,9 @@
       }
     },
     {
-      "id": "missionhome",
+      "id": "agentoverview",
       "group": "component",
-      "intent": "Block: a home screen for a fleet of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+      "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
       "useWhen": [
         "the first screen of an agent workspace",
         "come back after a while and see what changed",
@@ -10183,7 +10183,7 @@
         "agents with sub-agents — AgentFleet"
       ],
       "doNot": [
-        "Do not rebuild MissionHome from a local dashboard; import the block",
+        "Do not rebuild AgentOverview from a local dashboard; import the block",
         "Do not add a second filter to one area; the one filter drives all three",
         "Do not use raw hex",
         "Only one solid primary in the view: the approve in the open inbox card"
@@ -10253,7 +10253,7 @@
         },
         "title": {
           "type": "string",
-          "default": "Mission home"
+          "default": "Agent overview"
         }
       }
     },
