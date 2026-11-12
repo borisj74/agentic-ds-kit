@@ -502,7 +502,7 @@ const DOC_PAGES = [
   { href: "/installation", label: "Installation" },
   { href: "/mcp", label: "MCP server" },
   { href: "/theming", label: "Theming" },
-  { href: "/theme", label: "Theme" },
+  { href: "/theme", label: "Theme builder" },
 ] as const;
 
 /**
