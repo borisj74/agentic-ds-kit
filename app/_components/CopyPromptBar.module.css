@@ -35,7 +35,9 @@
   align-items: stretch;
 }
 
-.copyMenu {
+/* Two classes: the kit DropdownMenu root sets its own display, and its stylesheet can load after
+   this one, so a single class here loses and the menu shows beside Copy on wide screens. */
+.copySplit .copyMenu {
   display: none;
 }
 
@@ -71,7 +73,7 @@
     display: none;
   }
 
-  .copyMenu {
+  .copySplit .copyMenu {
     display: flex;
   }
 
