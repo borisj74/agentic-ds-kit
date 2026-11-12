@@ -50,34 +50,41 @@ A **block** is a kit component for a whole area of a screen, built only from oth
 ### Run detail (`RunDetail`, Agents)
 
 One agent run on one screen: AgentMonitor over the selected step's ToolCallCard, beside AgentTree over AgentTrail (`layout-split--primary`, stacks below 64rem of block width like AgentOverview). Props: `run` (what AgentMonitor shows, plus a trail `tag`), `steps` (AgentMonitor steps plus `agentId`, `label`, `timer`, `args`, `result`, `error`; status adds `pending` for planned steps: in the trail, not in the strip), `agents` (AgentTree root), `selectedStepId` / `defaultSelectedStepId` / `onSelectStep`, `onApprove`, `onDeny`, `onPause`, `onResume`, `onCancel`, `onRetry(stepId)`. Pure helpers in `runDetail.logic.ts`.
-
 - **One selection.** A step picked in the strip, the trail or the tree selects it everywhere: the strip and trail press it, the tree rings the agent that ran it, the ToolCallCard shows its call (Empty when none or when the step is only planned). A tree node selects that agent's open step, else its latest, else its first planned one.
 - **Kit change (needed for the sync):** AgentTrail `selectedStepId` / `onSelectStep` (each step becomes one button with `aria-pressed`) and AgentTree `selectedId` / `onSelect` (node names become buttons named "<name>, <status>" with `aria-pressed`; the row gets the selected ring). Both optional and additive; contracts updated.
 - **AgentMonitor behaviour to know:** while a step is selected, AgentMonitor swaps its clock and pending ApprovalCard for the step detail (its own behaviour). The approval comes back when the step is closed, and the waiting agent's Approve in the tree stays reachable meanwhile.
 - **Width:** AgentMonitor caps itself at 26.25rem; inside the block it fills its column (`width: 100%` on the block's class, no token involved).
 - **Callbacks:** Retry from the run (last failed step), the tree (that agent's last failed step) or the tool call (that step) all call `onRetry(stepId)`. Cancel shows only while paused (AgentMonitor shows it there).
 - **One solid primary:** the ApprovalCard's Approve while waiting, Resume while paused. The tree's Approve is soft neutral.
-
 At 390: AgentMonitor's step strip squeezes six steps into narrow cells (icons still fit; the wide edit step takes space from the rest) and the header wraps the run name to two lines beside the status chip; readable, not fixed here. **AgentTree** is the bigger 390 issue: its fixed status / time / cost columns leave the name about one character wide ("c", "e"); the accessible names are whole. Follow-up for AgentTree (a narrow layout that moves time and cost under the name).
-
 ### Live session (`LiveSession`, Agents)
-
 Work alongside running agents: Chat on the left; on the right RunningNow (stack, "Working now"), the oldest open request as an inline ApprovalCard ("<agent> asks · N more waiting") and AgentSteering for one agent. Props: `messages`, `agents` (`{ id, name, status: running | waiting | paused | failed | done, activity?, meta?, elapsed?, suggestions?, applied? }`), `requests` (`{ id, agentId, title, description?, risk?, action }`, oldest first), `thinking`, `suggestions`, `selectedAgentId` / `defaultSelectedAgentId` / `onSelectAgent`, `onSend`, `onSteer(agentId, text)`, `onPause`, `onResume`, `onStop` (after the AgentSteering AlertDialog), `onApprove(requestId)`, `onDeny(requestId)`. Pure helpers in `liveSession.logic.ts`.
-
 - **One solid primary (kit change):** Chat's send, AgentSteering's send and ApprovalCard's Approve were all solid primary. Chat and AgentSteering get an optional `sendAppearance: "solid" | "soft"` (default solid, so nothing else changes). In the block the steer send is always soft, and the chat send goes soft while an approval shows, so the view has exactly one (tested).
 - **Working now** lists agents not done. Paused agents show as waiting ("paused by you"); an agent with an open request says "needs your OK". Picking a row moves steering to that agent (its draft clears). **Gap:** RunningNow has no selected state, so the picked row isn't marked; the steering card's heading names the agent.
 - **One approval at a time**, so Enter / Esc on the card are unambiguous; the rest are counted in its heading.
 - **Width:** ApprovalCard (25rem) and AgentSteering (24rem) cap themselves; in the block they fill the side column.
 - **Chat height:** Chat has a 32rem minimum and grows with its thread in the block (no height of its own). An app that wants a fixed-height session sets it on the block's root.
-
 At 390: everything stacks, no horizontal scroll; the chat sits first at 32rem, so Working now and the approval are below the fold. Consider putting the side column first on narrow screens (Boris to decide).
-
 ### Follow-ups (Agents blocks)
-
 - AgentTree narrow layout (names collapse at 390 inside RunDetail).
 - RunningNow `selectedId` (mark the steered agent in LiveSession).
 - LiveSession order on narrow screens (approval above the chat?).
 - AgentMonitor / ApprovalCard / AgentSteering width caps are component vars that aren't documented as cssVars; the blocks override `width` instead.
+### AppDirectory (Integrations, `/blocks/app-directory`)
+- **Composed from:** FilterButton (a plain on/off "Connected" chip, `hasDropdown={false}`, `aria-pressed`), IntegrationPicker (search Input, category SegmentedControl, tiles), Drawer (detail), Badge (status in words), Button, Empty. IntegrationPicker already owns search and categories, so the block doesn't add a second search or a FilterBar; FilterBar's chips open option menus, which a yes/no filter doesn't need.
+- **Flow:** a tile's Connect or Manage opens the Drawer (about, publisher, "Once connected, it can …" permissions, connected note); the drawer's Connect (the one solid primary) calls `onConnect`, Disconnect (danger outline) calls `onDisconnect`. No confirm dialog on Disconnect: it is undone by connecting again, and an AlertDialog inside a Drawer stacks two modals.
+- **One primary:** while a drawer is open the block doesn't pass `connectingId` to the picker, so the tile behind the overlay doesn't show IntegrationPicker's solid "Connecting…" as well.
+- **Empty:** no apps → Empty (Request an integration when `onRequest`); Connected chip with nothing connected → Empty with Show all apps. Search misses use IntegrationPicker's own Empty.
+- **Kit gap (not fixed):** IntegrationPicker's contract says "Do not invent a local … AppDirectory". That line guards against local copies; this block is the kit's own. Boris may want that doNot reworded to point at this block.
+- **390:** tiles go one column, the category SegmentedControl wraps to two rows, the drawer is the kit Drawer's narrow sheet. No horizontal scroll.
+### WorkBoard (Productivity, `/blocks/work-board`)
+- **Composed from:** TaskBoard (columns, drag + keyboard moves), Drawer (size lg), Field + Select (Status = the task's column, Assignee with an Unassigned option), Avatar beside the assignee, Badge (tags), CommentThread (replies one level), Button.
+- **Data:** `columns` are TaskBoard columns (a task's column is its status), `tasks` carry description, tags, `assigneeId`, `dueOn` and `comments`, `people` resolves assignees and authors. Exported pure `moveWorkBoardTask(columns, id, to, index)` so apps (and the demo) can apply `onMove` in one line.
+- **Callbacks:** `onMove` from the board and from the drawer's Status (to the end of that column), `onUpdate(id, { assigneeId })`, `onComment(id, body, parentId?)`; `onEditComment` / `onDeleteComment` optional. Reply shows "Replying to …" with Cancel reply above the thread (CommentThread has no reply indicator of its own).
+- **Drawer fields stack** (no `layout-split`): the Drawer is portaled outside `layout-content`, so a split never stacks there and squeezed the assignee name at 390.
+- **CommentThread width:** it caps itself at `--thread-width: 24rem`; in the drawer the block sets `--thread-width: 100%` (the component's documented custom-width hook). Jev rated WorkBoard's CSS "uncertain" (deterministic scan clean); **Boris to confirm** this override is fine, or OK a `fill` option on CommentThread.
+- **One primary:** Comment in the open drawer; the board's buttons are outline / ghost.
+- **390:** TaskBoard scrolls its columns sideways inside its own card (its design); the page has no horizontal scroll.
 
 ## 2026-11-10: Pattern pages as screens (feat/screens-patterns-3)
 
