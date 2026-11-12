@@ -1,5 +1,6 @@
 /**
- * Public kit API: components only. Patterns (app-shell, sign-in, dashboard, list-detail, …) are
+ * Public kit API: components only.
+ * Blocks (MissionHome) are components too: larger compositions of kit components, imported the same way. Patterns (app-shell, sign-in, dashboard, list-detail, …) are
  * copy-in examples: `npx agentic-ds-kit add <id>` (source in patterns/, not in dist).
  */
 
@@ -75,6 +76,7 @@ export * from "../ui/LoadingAnimation";
 export * from "../ui/MemoryPanel";
 export * from "../ui/MessageActions";
 export * from "../ui/Meter";
+export * from "../ui/MissionHome";
 export * from "../ui/Modal";
 export * from "../ui/ModalCard";
 export * from "../ui/ModelPicker";

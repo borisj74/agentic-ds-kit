@@ -223,6 +223,7 @@ function load(root = packageRoot) {
         id: entry.id,
         name,
         category: entry.group,
+        kind: contract.kind === "block" || entry.kind === "block" ? "block" : "component",
         purpose,
         props: contract.props ?? {},
         variants: variantsOf(contract.props),
@@ -263,11 +264,13 @@ function load(root = packageRoot) {
   return data;
 }
 
+/** kind is "block" for blocks (larger compositions such as MissionHome), else "component". */
 function summary(component) {
   return {
     id: component.id,
     name: component.name,
     category: component.category,
+    kind: component.kind,
     purpose: component.purpose,
   };
 }
@@ -326,6 +329,7 @@ export function getComponent(name) {
       id: component.id,
       name: component.name,
       category: component.category,
+      kind: component.kind,
       purpose: component.purpose,
       props: component.props,
       variants: component.variants,

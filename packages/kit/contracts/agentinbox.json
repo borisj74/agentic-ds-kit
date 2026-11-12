@@ -146,7 +146,7 @@
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
-      "rows are buttons; the selected row has aria-current and controls the detail region",
+      "rows are buttons with aria-expanded (true on the selected row) and aria-controls on the detail region; the selected row also has aria-current",
       "unread is said in text, not only the bold agent name",
       "the filter is a kit SegmentedControl (radio group)",
       "the detail region is aria-live polite",

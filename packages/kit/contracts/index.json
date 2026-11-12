@@ -903,6 +903,14 @@
     "status": "stable"
   },
   {
+    "id": "missionhome",
+    "kind": "block",
+    "intent": "Block: home for a fleet of agents. Since-you-last-looked summary, every agent on one time axis, and an inbox of what waits on you, under one filter.",
+    "group": "component",
+    "path": "contracts/missionhome.json",
+    "status": "stable"
+  },
+  {
     "id": "dashboard",
     "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
     "group": "pattern",

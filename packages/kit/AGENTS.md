@@ -3,6 +3,7 @@
 Before writing UI, read this package's `contracts/index.json`, then only the matching contract file(s).
 If a contract exists, import it from `agentic-ds-kit`. Never invent a local cousin.
 Compose components freely; layout (top bar, side nav, both, neither) is the user's choice. Patterns in `contracts/patterns/` are examples to start from or ignore: `npx agentic-ds-kit add <id>` copies one into the app. In a pattern contract, follow `must` and treat `defaults` as suggestions; ask before breaking a `must`.
+Blocks (`"kind": "block"` in `contracts/index.json` and the contract, e.g. MissionHome) are larger compositions of kit components for a whole area of a screen. Import them from `agentic-ds-kit` like any component; they are not copied in. Put a block inside the page's `<main>`; it brings no app chrome.
 Layout accessibility: page content in `<main>`, chrome in `header` / `nav` landmarks (AppHeader, SideNav), and navigation reachable on small screens (e.g. kit Drawer).
 If a component is missing from the index, stop and ask — do not add a one-off.
 Never put hex in components; use semantic tokens from `agentic-ds-kit/tokens.css` (not primitive `--color-*` ramps).
