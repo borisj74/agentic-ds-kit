@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-11-13
+
 ### Added
 
 - **Link**: text that navigates. `variant="inline"` (underlined, inherits the sentence's type) or `"standalone"` (on its own line, underlined on hover), `external` (new tab, `rel="noopener noreferrer"`, ExternalLink icon and a screen-reader "opens in a new tab"), and `linkAs` for router links. Contract, docs page and tests included; Button's contract now points navigation to Link
