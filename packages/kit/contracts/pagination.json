@@ -1,6 +1,7 @@
 {
   "id": "pagination",
   "status": "stable",
+  "level": "molecule",
   "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
   "useWhen": [
     "tables",

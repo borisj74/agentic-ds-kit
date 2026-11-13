@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -6146,8 +6146,8 @@
         "Do not put more than one primary Button in actions",
         "Do not use raw hex",
         "Do not set component variables to raw hex or primitive --color-* ramps — use semantic tokens",
-        "Do not hand-roll a header bar, brand cell, or search field around the blocks — compose AppHeader.Root and its blocks",
-        "Do not put blocks outside AppHeader.Root, or more than one center block in one Root",
+        "Do not hand-roll a header bar, brand cell, or search field around the compose parts — compose AppHeader.Root and its parts",
+        "Do not put compose parts outside AppHeader.Root, or more than one center part in one Root",
         "Do not use h1–h6 for AppHeader.Title"
       ],
       "props": {
@@ -6344,7 +6344,7 @@
     {
       "id": "sidenav",
       "group": "component",
-      "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
+      "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item compose parts. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
       "useWhen": [
         "Product app chrome",
         "Persistent nav with icons"
@@ -6449,7 +6449,7 @@
         "header": {
           "type": "slot",
           "required": false,
-          "note": "Replaces the brand (mark + title) in the header. The preset keeps a SideNav.Toggle beside it: Close while open; on the closed rail the slot fades and goes inert and the Toggle moves to the start edge to reopen the rail. For a mark inside a custom header, build it from blocks with SideNav.Brand. Ignored when showHeader is false."
+          "note": "Replaces the brand (mark + title) in the header. The preset keeps a SideNav.Toggle beside it: Close while open; on the closed rail the slot fades and goes inert and the Toggle moves to the start edge to reopen the rail. For a mark inside a custom header, build it from compose parts with SideNav.Brand. Ignored when showHeader is false."
         },
         "beforeGroups": {
           "type": "slot",
@@ -11657,7 +11657,7 @@
         "header": {
           "type": "object | slot",
           "required": false,
-          "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from blocks). Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
+          "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from compose parts). Or a header node built from AppHeader.Root and its compose parts: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
         },
         "narrowHeader": {
           "type": "object | slot",
@@ -11667,7 +11667,7 @@
         "nav": {
           "type": "object | slot | function",
           "required": true,
-          "note": "SideNav props except showHeader, radius, and side: title, mark or markIcon, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
+          "note": "SideNav props except showHeader, radius, and side: title, mark or markIcon, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other compose parts): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
         },
         "navLabel": {
           "type": "string",
@@ -11827,7 +11827,7 @@
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per step: Get started, Continue, or Go to dashboard",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav blocks), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
+        "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav compose parts), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
         "Back is a ghost Button; Skip for now is ghost; Save and exit stays reachable on every step before Done",
         "Wrap every labeled input in Field; a missing workspace name shows the Field error, sets the Input's error, and moves focus to it",
         "While the workspace is being created the fields, Back and the primary are disabled and a kit Spinner with a visible label (\"Creating workspace…\") says what is happening",

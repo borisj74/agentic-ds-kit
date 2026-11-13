@@ -1,6 +1,7 @@
 {
   "id": "collapsible",
   "status": "stable",
+  "level": "molecule",
   "intent": "Single show/hide panel with a title and a toggle.",
   "useWhen": [
     "One disclosure whose body composes kit pieces",

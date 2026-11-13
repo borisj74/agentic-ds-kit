@@ -1,6 +1,7 @@
 {
   "id": "changesummary",
   "status": "stable",
+  "level": "organism",
   "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
   "useWhen": [
     "summarise the changes between two periods on a dashboard or report",

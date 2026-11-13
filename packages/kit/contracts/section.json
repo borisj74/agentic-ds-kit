@@ -1,6 +1,7 @@
 {
   "id": "section",
   "status": "stable",
+  "level": "molecule",
   "intent": "Grouped page block with optional heading, description, and actions. Unframed: no fill, radius, border, shadow, or box padding \u2014 Card owns the framed surface; layout-content owns page inset. Pass collapsible for a chevron that toggles the body.",
   "useWhen": [
     "Separating metrics, tables, or form groups on a page",

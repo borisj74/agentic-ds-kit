@@ -1,6 +1,7 @@
 {
   "id": "taginput",
   "status": "stable",
+  "level": "molecule",
   "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
   "useWhen": [
     "Free-form labels such as keywords the person creates",

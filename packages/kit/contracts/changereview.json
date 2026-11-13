@@ -4,6 +4,7 @@
   "category": "Agents",
   "summary": "Review what an agent changed: file by file, with the diff, comments, and accept or reject.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all is the one solid primary.",
   "useWhen": [
     "an agent finished a change and a person reviews it before it lands",

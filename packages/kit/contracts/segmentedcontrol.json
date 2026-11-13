@@ -1,6 +1,7 @@
 {
   "id": "segmentedcontrol",
   "status": "stable",
+  "level": "molecule",
   "intent": "Choose one of a few visible options in a joined track. role=radiogroup, sm or md, icons optional.",
   "useWhen": [
     "Two to five mutually exclusive options that should stay visible, such as billing period or density",

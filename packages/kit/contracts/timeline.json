@@ -1,6 +1,7 @@
 {
   "id": "timeline",
   "status": "stable",
+  "level": "organism",
   "intent": "Vertical sequence of now, next, and later for ordered multi-stage work.",
   "useWhen": [
     "Roadmaps and phased delivery",

@@ -1,6 +1,7 @@
 {
   "id": "inlinediff",
   "status": "stable",
+  "level": "organism",
   "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
   "useWhen": [
     "an agent proposes an edit to a file or a paragraph",

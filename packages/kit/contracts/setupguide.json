@@ -1,6 +1,7 @@
 {
   "id": "setupguide",
   "status": "stable",
+  "level": "organism",
   "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
   "useWhen": [
     "onboard a new workspace with a short list of setup tasks",

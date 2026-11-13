@@ -1,6 +1,7 @@
 {
   "id": "listview",
   "status": "stable",
+  "level": "organism",
   "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
   "useWhen": [
     "People, files, or other records shown one per row",

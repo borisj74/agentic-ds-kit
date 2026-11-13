@@ -1,6 +1,7 @@
 {
   "id": "filterbar",
   "status": "stable",
+  "level": "molecule",
   "intent": "A row of filter chips with add, clear all, and an overflow menu when the row is too long.",
   "useWhen": [
     "Several filters above a table or list",

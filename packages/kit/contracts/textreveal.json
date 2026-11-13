@@ -1,6 +1,7 @@
 {
   "id": "textreveal",
   "status": "stable",
+  "level": "atom",
   "intent": "A short heading that rises in by word or by line, for docs heroes and empty states. The full string is always in the DOM.",
   "useWhen": [
     "a docs or marketing hero heading",

@@ -4,6 +4,7 @@
   "category": "Agents",
   "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
   "useWhen": [
     "a workspace where people chat with agents as they work",

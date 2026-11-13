@@ -1,6 +1,7 @@
 {
   "id": "chat",
   "status": "stable",
+  "level": "organism",
   "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
   "useWhen": [
     "An inline assistant beside a workspace",

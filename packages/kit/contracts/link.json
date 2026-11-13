@@ -1,6 +1,7 @@
 {
   "id": "link",
   "status": "stable",
+  "level": "atom",
   "intent": "Text that navigates to another page or place: inline inside a sentence, or standalone on its own line, with an external variant that opens a new tab.",
   "useWhen": [
     "Navigating to another page, section or site",

@@ -4,6 +4,7 @@
   "category": "Analytics",
   "summary": "Pick a KPI to chart it and list its top rows, with one range for all.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
   "useWhen": [
     "the first row of an analytics or reporting dashboard",

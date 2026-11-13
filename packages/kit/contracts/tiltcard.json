@@ -1,6 +1,7 @@
 {
   "id": "tiltcard",
   "status": "stable",
+  "level": "molecule",
   "intent": "A kit Card that tilts a few degrees toward the pointer with a soft highlight, for rare showcase spots (a pricing highlight, a docs gallery). Wraps Card; never the default Card.",
   "useWhen": [
     "one highlighted plan or feature in a showcase",

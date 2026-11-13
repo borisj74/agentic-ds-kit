@@ -1,6 +1,7 @@
 {
   "id": "agenttrail",
   "status": "stable",
+  "level": "organism",
   "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
   "useWhen": [
     "show what an agent already did and is doing now",

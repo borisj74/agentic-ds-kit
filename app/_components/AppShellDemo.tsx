@@ -109,7 +109,7 @@ const WORKSPACES = [
 ];
 
 /**
- * Built nav from the SideNav blocks (named exports, so a Server Component could render it too).
+ * Built nav from the SideNav compose parts (named exports, so a Server Component could render it too).
  * One nav adapts to where the shell renders it: flush in the rail, forced open in the Drawer.
  */
 function CustomNav({ page, onPick }: { page: string; onPick: (id: string) => void }) {
@@ -142,8 +142,8 @@ function CustomNav({ page, onPick }: { page: string; onPick: (id: string) => voi
 }
 
 /**
- * The same shell with chrome built from blocks: AppHeader.Root with a Beta Badge
- * and Avatar, and a grouped nav from the SideNav blocks with a workspace Select.
+ * The same shell with chrome built from compose parts: AppHeader.Root with a Beta Badge
+ * and Avatar, and a grouped nav from the SideNav compose parts with a workspace Select.
  */
 function AppShellCustom() {
   const [page, setPage] = useState("home");
@@ -178,7 +178,7 @@ function AppShellCustom() {
       >
         <div className="layout-canvas layout-canvas--sticky-header">
           <div className="layout-header">
-            <PageHeader title={current.label} subtitle="Header and nav built from blocks; the shell still owns layout and the Drawer." />
+            <PageHeader title={current.label} subtitle="Header and nav built from compose parts; the shell still owns layout and the Drawer." />
           </div>
           <div className="layout-content">
             <Empty
@@ -195,7 +195,7 @@ function AppShellCustom() {
 }
 
 /**
- * Header-less nav built from blocks, taking its placement from the shell's nav function.
+ * Header-less nav built from compose parts, taking its placement from the shell's nav function.
  * With no top bar it shows its own brand in the wide rail; in the Drawer it drops the header.
  */
 function BrandedNav({ placement, page, onPick }: { placement: AppShellNavPlacement; page: string; onPick: (id: string) => void }) {

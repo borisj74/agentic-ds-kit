@@ -1,6 +1,7 @@
 {
   "id": "daterangepicker",
   "status": "stable",
+  "level": "molecule",
   "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
   "useWhen": [
     "A report or filter period with presets like This month or Last 30 days",

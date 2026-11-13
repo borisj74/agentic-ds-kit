@@ -1,6 +1,7 @@
 {
   "id": "linklist",
   "status": "stable",
+  "level": "molecule",
   "intent": "A column of links, one a row with a chevron at the end, like an account's quick links.",
   "useWhen": [
     "Quick links in a record's side rail",

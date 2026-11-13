@@ -1,6 +1,7 @@
 {
   "id": "agentmonitor",
   "status": "stable",
+  "level": "organism",
   "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
   "useWhen": [
     "watch one agent run in detail",

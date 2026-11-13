@@ -1,6 +1,7 @@
 {
   "id": "skeleton",
   "status": "stable",
+  "level": "atom",
   "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
   "useWhen": [
     "Content with a known layout is loading: a card, a list, a table, a profile",

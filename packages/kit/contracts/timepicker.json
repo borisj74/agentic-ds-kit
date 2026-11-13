@@ -1,6 +1,7 @@
 {
   "id": "timepicker",
   "status": "stable",
+  "level": "molecule",
   "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
   "useWhen": [
     "A time in a form, without a date",

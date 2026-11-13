@@ -1,6 +1,7 @@
 {
   "id": "textarea",
   "status": "stable",
+  "level": "atom",
   "intent": "Multi-line text entry for notes and descriptions. Wrap with Field.",
   "useWhen": [
     "Paragraphs, notes, or descriptions",

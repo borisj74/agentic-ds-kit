@@ -30,7 +30,7 @@ export type {
   SideNavSide,
 } from "./SideNav.types";
 
-/** Preset row from data: the `SideNav.Item` block, with `renderItem` applied to its control. */
+/** Preset row from data: the `SideNav.Item` part, with `renderItem` applied to its control. */
 function DataItem({ item, renderItem }: { item: SideNavItemData; renderItem?: SideNavRenderItem }) {
   return (
     <SideNavItemImpl
@@ -87,7 +87,7 @@ function footerItems(footer: SideNavProps["footer"]): SideNavItemData[] | null {
 }
 
 /**
- * Preset: the data-driven SideNav, assembled from the building blocks
+ * Preset: the data-driven SideNav, assembled from the compose parts
  * (`SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`).
  */
 function SideNavPreset({
@@ -175,7 +175,7 @@ function SideNavPreset({
 }
 
 /**
- * `<SideNav title groups … />` is the preset. Build your own with the blocks:
+ * `<SideNav title groups … />` is the preset. Build your own with the compose parts:
  * `SideNav.Root`, `.Header`, `.Brand`, `.Toggle`, `.Slot`, `.Nav`, `.Section`, `.Item`, `.Footer`, `.Account`
  * (also exported by name: `SideNavRoot`, `SideNavHeader`, … — use those from Server Components).
  */

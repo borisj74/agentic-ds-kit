@@ -1,6 +1,7 @@
 {
   "id": "button",
   "status": "stable",
+  "level": "atom",
   "intent": "Clickable action control with appearance × mode (plus an optional flat set) and a fixed set of sizes.",
   "useWhen": [
     "Submitting a form or triggering a primary workflow action",

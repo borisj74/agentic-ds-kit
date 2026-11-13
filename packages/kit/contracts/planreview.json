@@ -4,6 +4,7 @@
   "category": "Agents",
   "summary": "Approve an agent's plan before it runs: its steps, what it changes, and how much it may do alone.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: the go / no-go on an agent's plan. The steps (AgentPlan, editable while pending), what the plan expects to change (ChangeSummary), how far the agent may go without asking (AutonomyDial), and one decision: Approve plan, Request changes with a note, or Reject.",
   "useWhen": [
     "an agent proposes a multi-step plan and a person must approve it before anything runs",

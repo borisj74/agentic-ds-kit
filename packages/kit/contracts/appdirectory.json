@@ -4,6 +4,7 @@
   "category": "Integrations",
   "summary": "Browse, search and connect the apps your workspace works with.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
   "useWhen": [
     "an Integrations or Apps area where people find, connect and disconnect apps",

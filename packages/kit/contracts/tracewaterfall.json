@@ -1,6 +1,7 @@
 {
   "id": "tracewaterfall",
   "status": "stable",
+  "level": "organism",
   "intent": "Where a run's time and money went: a waterfall of model, tool and approval spans with totals and span detail; compact form for a header.",
   "useWhen": [
     "explain the time and cost of one agent run",

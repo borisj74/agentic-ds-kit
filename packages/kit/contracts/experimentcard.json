@@ -1,6 +1,7 @@
 {
   "id": "experimentcard",
   "status": "stable",
+  "level": "organism",
   "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
   "useWhen": [
     "show a running or finished experiment in a product or growth view",

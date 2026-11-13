@@ -1,6 +1,7 @@
 {
   "id": "resizable",
   "status": "stable",
+  "level": "organism",
   "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
   "useWhen": [
     "A list beside a detail, or a preview beside its controls",

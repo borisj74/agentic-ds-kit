@@ -1,6 +1,7 @@
 {
   "id": "app-shell",
   "status": "stable",
+  "level": "template",
   "role": "example",
   "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
@@ -18,7 +19,7 @@
     "header": {
       "type": "object | slot",
       "required": false,
-      "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from blocks). Or a header node built from AppHeader.Root and its blocks: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
+      "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from compose parts). Or a header node built from AppHeader.Root and its compose parts: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
     },
     "narrowHeader": {
       "type": "object | slot",
@@ -28,7 +29,7 @@
     "nav": {
       "type": "object | slot | function",
       "required": true,
-      "note": "SideNav props except showHeader, radius, and side: title, mark or markIcon, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other blocks): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
+      "note": "SideNav props except showHeader, radius, and side: title, mark or markIcon, groups or items, footer, open / defaultOpen / onOpenChange for the wide rail. The Drawer shows the same data, always expanded, titled nav.title. Or a nav node you built (a SideNav preset, or SideNavRoot with SideNavNav / SideNavSection / SideNavItem and the other compose parts): the shell renders it in the rail when wide and inside the Drawer when narrow; it reads useAppShell().navPlacement to adapt (showHeader false; radius none in the rail; in the Drawer kit SideNav fills it with no rail width or frame and is always open on its own). Or a function (placement: rail | drawer) => node, so a nav that takes a placement prop (ShellNav from add side-nav) needs no hook."
     },
     "navLabel": {
       "type": "string",
@@ -57,7 +58,7 @@
     }
   },
   "customChrome": {
-    "note": "header and nav accept nodes built from kit blocks. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
+    "note": "header and nav accept nodes built from kit compose parts. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
     "exports": {
       "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Exported from your app-shell copy. Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
       "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader }. hasHeader is false when wide with no header: a built nav shows its own brand (SideNavHeader) then. Null outside AppShellPattern. Client components only."
@@ -65,7 +66,7 @@
     "rules": [
       "A built header must contain AppShellPattern.MenuButton; without it the shell warns and narrow screens cannot reach the nav",
       "Put the Menu Button in AppHeader.Brand's logo so it sits on the rail axis, as the preset does",
-      "A built nav is one landmark (SideNav preset or SideNavRoot + blocks); the same node moves between rail and Drawer, it is never rendered twice",
+      "A built nav is one landmark (SideNav preset or SideNavRoot + compose parts); the same node moves between rail and Drawer, it is never rendered twice",
       "Build the nav from the named block exports (SideNavRoot, SideNavSlot, SideNavNav, SideNavSection, SideNavItem, SideNavFooter): they work from Server Components, where SideNav.Root dot access does not",
       "In the shell, drop SideNavHeader and SideNavToggle when there is a top bar (AppHeader has the brand and the Menu Button); with no header, show the brand in the rail when useAppShell().hasHeader is false; in the Drawer force the nav open (open, or inDrawer || open) so it is never a closed rail",
       "A props header that sets start loses the injected Menu Button: place AppShellPattern.MenuButton inside your start",
@@ -73,7 +74,7 @@
     ],
     "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
     "navSnippet": "function MyNav({ page, go }) {\n  const inDrawer = useAppShell()?.navPlacement === \"drawer\";\n  return (\n    <SideNavRoot aria-label=\"Acme\" radius={inDrawer ? \"md\" : \"none\"} open>\n      <SideNavNav>\n        <SideNavSection label=\"Work\">\n          <SideNavItem label=\"Home\" icon=\"House\" active={page === \"home\"} onClick={() => go(\"home\")} />\n        </SideNavSection>\n      </SideNavNav>\n    </SideNavRoot>\n  );\n}",
-    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader blocks) and ShellNav (SideNavRoot / Nav / Section / Item / Footer blocks). Both import only kit components and work without app-shell. To host them here (in a client component): header={<ShellHeader menuButton={AppShellMenuButton} />} nav={(placement) => <ShellNav placement={placement} />}."
+    "copyIn": "npx agentic-ds-kit add app-header and add side-nav copy ShellHeader (AppHeader compose parts) and ShellNav (SideNavRoot / Nav / Section / Item / Footer compose parts). Both import only kit components and work without app-shell. To host them here (in a client component): header={<ShellHeader menuButton={AppShellMenuButton} />} nav={(placement) => <ShellNav placement={placement} />}."
   },
   "responsive": {
     "breakpoint": "--grid-breakpoint-md (64rem). matchMedia reads the token at runtime; AppShellPattern.css repeats 64rem only for the first paint before hydration.",

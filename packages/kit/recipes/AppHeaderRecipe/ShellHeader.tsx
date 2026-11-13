@@ -24,7 +24,7 @@ export interface ShellHeaderProps {
 }
 
 /**
- * The AppHeader preset, rebuilt from its blocks so you can rearrange it. It imports only
+ * The AppHeader preset, rebuilt from its compose parts so you can rearrange it. It imports only
  * kit components, so it works on its own (a top bar over your page) or inside the
  * app-shell example: `<AppShellPattern header={<ShellHeader menuButton={AppShellMenuButton} />} …>`.
  */

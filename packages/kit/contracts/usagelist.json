@@ -1,6 +1,7 @@
 {
   "id": "usagelist",
   "status": "stable",
+  "level": "organism",
   "intent": "A list of usage limits, one a row: the limit's name, how much is used of it, a bar, and a short note.",
   "useWhen": [
     "A plan, account, or billing page that shows usage against limits, like API calls, storage, and seats",

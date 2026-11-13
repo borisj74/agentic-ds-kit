@@ -11,6 +11,12 @@ Lucide icons use strokeWidth 1.5 (--icon-stroke). Don't set other stroke widths 
 One `appearance="solid"` `mode="primary"` Button per view.
 To let a model pick which kit view to render, generate the option list with `npx agentic-ds-kit questions` (`docs/questions.md`); do not hand-write one.
 
+## Build order
+
+Start from the biggest piece that fits, and only go smaller when nothing bigger fits: pattern (`template`), then `block`, `organism`, `molecule`, `atom`.
+Check `level` in `packages/kit/contracts/index.json` to see where a piece sits.
+Never rebuild a block or organism by hand from atoms when the kit has it. If nothing fits, stop and ask.
+
 ## Page layout
 
 Build pages with the kit's layout classes: `layout-shell`, `layout-app`, `layout-canvas`, `layout-header`, `layout-content`, `layout-workspace`, `layout-split` (`--primary`, `--secondary`, `--thirds`, `--quarters`) and `layout-metrics`.

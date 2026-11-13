@@ -1,6 +1,7 @@
 {
   "id": "treeview",
   "status": "stable",
+  "level": "organism",
   "intent": "Nested hierarchy people open and close level by level to browse, pick, or check items.",
   "useWhen": [
     "Teams, folders, or account trees the user walks level by level",

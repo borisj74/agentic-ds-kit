@@ -1,6 +1,7 @@
 {
   "id": "headercell",
   "status": "stable",
+  "level": "molecule",
   "intent": "Column header for DataTable: label, optional select-all checkbox, optional sort, sm or md.",
   "useWhen": [
     "DataTable column titles",

@@ -43,7 +43,7 @@ import { DashboardPattern } from "@/components/patterns/dashboard";
 
 The copy imports kit components from `agentic-ds-kit`, keeps its demo data in a `*-data.ts` file for you to replace, and ships its contract JSON beside it: follow its `must` lines (kit look and accessibility); its `defaults` are suggestions.
 
-Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Copy `AGENTS.md` (and `CLAUDE.md`) from this package into your app so Cursor and Claude Code follow the kit.
+Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Each contract has a `level` (`atom`, `molecule`, `organism`, `block`, or `template` for patterns) that says where it sits; reuse the biggest piece that fits. Copy `AGENTS.md` (and `CLAUDE.md`) from this package into your app so Cursor and Claude Code follow the kit.
 
 If your app lets a decision model or LLM pick which kit view to render, `npx agentic-ds-kit questions` builds the option list (labels, descriptions, enum props) from the contracts. No network, no model calls: [docs/questions.md](https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md).
 
@@ -67,7 +67,7 @@ Without the opt-in, a name outside the bundled set renders nothing and logs a wa
 
 ## MCP
 
-`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only, no extra dependencies). Agents can list components, read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
+`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only, no extra dependencies). Agents can list components (filter by `kind` or `level`), read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Component, block and pattern answers include `level`. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
 
 Cursor, `.cursor/mcp.json`:
 

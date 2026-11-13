@@ -1,6 +1,7 @@
 {
   "id": "table",
   "status": "stable",
+  "level": "organism",
   "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
   "useWhen": [
     "Listing invoices, products, or other short text rows",

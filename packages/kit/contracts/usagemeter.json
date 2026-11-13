@@ -1,6 +1,7 @@
 {
   "id": "usagemeter",
   "status": "stable",
+  "level": "organism",
   "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
   "useWhen": [
     "show credits or plan usage for the current period",

@@ -7,6 +7,7 @@ import { CodeBlock } from "../components/CodeBlock";
 import { DocPageExtras } from "../components/DocPageExtras";
 import { blockPrompt } from "@/lib/pattern-prompt";
 import { blockDoc } from "@/lib/blocks";
+import { levelLabel } from "@/lib/component-gallery";
 import { componentLabel } from "@/lib/playground-nav";
 import styles from "../patterns/patterns.module.css";
 import playground from "../playground.module.css";
@@ -33,9 +34,14 @@ export function BlockView({ slug }: { slug: string }) {
     <div className={playground.page}>
       <article className={styles.article}>
         <Breadcrumb items={[{ label: "Blocks", href: "/blocks" }, { label: title }]} />
-        <Badge size="sm" tone="neutral" className={playground.screenTag}>
-          {contract.category}
-        </Badge>
+        <div className={`${styles.chips} ${playground.screenTag}`}>
+          <Badge size="sm" tone="neutral">
+            {contract.category}
+          </Badge>
+          <Badge size="sm" tone="neutral" appearance="soft">
+            {levelLabel(contract.level)}
+          </Badge>
+        </div>
         <h1 className={playground.pageTitle}>{title}</h1>
         <p className={playground.pageLead}>{lead}</p>
 

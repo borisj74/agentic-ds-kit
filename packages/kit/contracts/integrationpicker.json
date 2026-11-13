@@ -1,6 +1,7 @@
 {
   "id": "integrationpicker",
   "status": "stable",
+  "level": "organism",
   "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
   "useWhen": [
     "let people find and connect integrations in settings or onboarding",

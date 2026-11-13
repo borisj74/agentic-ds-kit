@@ -1,6 +1,7 @@
 {
   "id": "tilegroup",
   "status": "stable",
+  "level": "organism",
   "intent": "Selectable cards for a plan or option picker. Single or multi select, with title, description, and a price or meta slot.",
   "useWhen": [
     "Choosing a plan, tier, or option where title, description, and price should be compared",

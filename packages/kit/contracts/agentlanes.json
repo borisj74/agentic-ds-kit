@@ -1,6 +1,7 @@
 {
   "id": "agentlanes",
   "status": "stable",
+  "level": "organism",
   "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
   "useWhen": [
     "watch several agents work in parallel over the last minutes",

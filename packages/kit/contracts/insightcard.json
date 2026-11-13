@@ -1,6 +1,7 @@
 {
   "id": "insightcard",
   "status": "stable",
+  "level": "organism",
   "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
   "useWhen": [
     "surface a recommendation, warning, or finding on a dashboard",

@@ -1,6 +1,7 @@
 {
   "id": "numberinput",
   "status": "stable",
+  "level": "molecule",
   "intent": "A number the person can type, step, and read in their locale, with optional min and max.",
   "useWhen": [
     "A quantity, percentage, or other number in a form",

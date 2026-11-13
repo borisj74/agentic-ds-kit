@@ -28,12 +28,19 @@ export function paginate(items, { offset = 0, limit } = {}) {
   };
 }
 
-/** list_components: summary rows by default; full keeps every field (category included). */
-export function shapeComponents(listed, { detail = "summary", kind, offset, limit } = {}) {
+/** list_components: summary rows by default; full keeps every field (category included). Filter by kind and/or level. */
+export function shapeComponents(listed, { detail = "summary", kind, level, offset, limit } = {}) {
   let rows = listed.components;
   if (kind) rows = rows.filter((row) => row.kind === kind);
+  if (level) rows = rows.filter((row) => row.level === level);
   if (detail !== "full") {
-    rows = rows.map(({ id, name, kind: rowKind, purpose }) => ({ id, name, kind: rowKind, purpose: shortPurpose(purpose) }));
+    rows = rows.map(({ id, name, kind: rowKind, level: rowLevel, purpose }) => ({
+      id,
+      name,
+      kind: rowKind,
+      level: rowLevel,
+      purpose: shortPurpose(purpose),
+    }));
   }
   const { items, page } = paginate(rows, { offset, limit });
   return { kit: listed.kit, detail: detail === "full" ? "full" : "summary", components: items, page };

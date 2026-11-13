@@ -524,7 +524,7 @@ export function SideNavDoc() {
                 <p className={styles.usageBody}>
                   header replaces the brand; a custom header keeps a Toggle, which closes the rail
                   and, on the closed rail, moves to the start edge to reopen it. For a mark inside
-                  your header, build it from blocks with SideNav.Brand. beforeGroups and afterGroups
+                  your header, build it from compose parts with SideNav.Brand. beforeGroups and afterGroups
                   pin above and below the scrolling groups. footer takes items or any node.
                   renderItem wraps one row: keep the node it gives you, it carries aria-current and
                   the disclosure state.
@@ -558,7 +558,7 @@ export function SideNavDoc() {
                   page for screen readers and shows as the hover title. On the closed rail only the
                   avatar shows, on the icon axis, with the name as its tooltip; the action comes back
                   when the rail opens. markIcon puts a Lucide icon on the brand fill instead of the
-                  letter. With blocks: SideNav.Account in SideNav.Footer, and SideNav.Brand markIcon.
+                  letter. With compose parts: SideNav.Account in SideNav.Footer, and SideNav.Brand markIcon.
                 </p>
               </div>
               <CodeBlock code={ACCOUNT_CODE} />
@@ -592,7 +592,7 @@ export function SideNavDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Assemble the blocks when the data props are not enough. SideNav.Root holds the
+                  Assemble the compose parts when the data props are not enough. SideNav.Root holds the
                   open state. SideNav.Brand is the mark and title; with SideNav.Toggle beside it the
                   Toggle closes the rail and the mark stays on the closed rail to reopen it (without
                   a Brand, the Toggle itself moves to the start edge and reopens, so a header with
@@ -600,7 +600,7 @@ export function SideNavDoc() {
                   Item children make a disclosure. Slot pins content outside the scroll
                   (keepOnRail keeps pinned rows usable). On the closed rail every Item shows its
                   label in a kit Tooltip. In Server Components use the named exports
-                  (SideNavRoot, SideNavBrand, SideNavItem, …). The preset SideNav is built from these blocks.
+                  (SideNavRoot, SideNavBrand, SideNavItem, …). The preset SideNav is built from these parts.
                 </p>
               </div>
               <CodeBlock code={COMPOSE_CODE} />

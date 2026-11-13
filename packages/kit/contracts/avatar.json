@@ -1,6 +1,7 @@
 {
   "id": "avatar",
   "status": "stable",
+  "level": "atom",
   "intent": "Face or initials for a person. Not a status chip and not a button.",
   "useWhen": [
     "user menus",

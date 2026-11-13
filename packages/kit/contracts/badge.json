@@ -1,6 +1,7 @@
 {
   "id": "badge",
   "status": "stable",
+  "level": "atom",
   "intent": "Compact read-only status or category pill set by the system.",
   "useWhen": [
     "Status badges on table rows or cards",

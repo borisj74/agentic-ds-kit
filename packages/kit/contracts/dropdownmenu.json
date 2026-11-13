@@ -1,6 +1,7 @@
 {
   "id": "dropdownmenu",
   "status": "stable",
+  "level": "molecule",
   "intent": "Actions or value menu from a button, field, or nav trigger.",
   "useWhen": [
     "A button that opens a short list of actions",

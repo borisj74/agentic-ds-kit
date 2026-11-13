@@ -1,6 +1,7 @@
 {
   "id": "kbd",
   "status": "stable",
+  "level": "atom",
   "intent": "A shortcut chip for one keyboard key. Place several in a row for a chord.",
   "useWhen": [
     "Showing a keyboard shortcut next to an action or command",

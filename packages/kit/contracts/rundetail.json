@@ -4,6 +4,7 @@
   "category": "Agents",
   "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
   "useWhen": [
     "open one run from a list or an overview",

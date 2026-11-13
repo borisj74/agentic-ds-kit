@@ -1,6 +1,7 @@
 {
   "id": "taskboard",
   "status": "stable",
+  "level": "organism",
   "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
   "useWhen": [
     "a small board of tasks by status inside a product",

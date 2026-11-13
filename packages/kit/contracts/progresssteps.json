@@ -1,6 +1,7 @@
 {
   "id": "progresssteps",
   "status": "stable",
+  "level": "molecule",
   "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
   "useWhen": [
     "Checkout, onboarding, or multi-step forms",

@@ -1,6 +1,7 @@
 {
   "id": "agentsteering",
   "status": "stable",
+  "level": "organism",
   "intent": "Redirect, pause or stop an agent while it runs: a steer composer with quick steers, Pause / Resume and Stop with an optional AlertDialog confirm.",
   "useWhen": [
     "let the person redirect a running agent in a sentence",

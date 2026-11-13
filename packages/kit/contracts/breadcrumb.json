@@ -1,6 +1,7 @@
 {
   "id": "breadcrumb",
   "status": "stable",
+  "level": "molecule",
   "intent": "Path to the current page as a hierarchy of links.",
   "useWhen": [
     "show where this page sits in the app",

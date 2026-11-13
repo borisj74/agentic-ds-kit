@@ -4,6 +4,7 @@
   "category": "Pricing",
   "summary": "A pricing section: plans with a monthly / yearly switch and the questions people ask before they buy.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price) and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
   "useWhen": [
     "a public pricing page or the pricing section of a landing page",

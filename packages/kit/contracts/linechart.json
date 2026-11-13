@@ -1,6 +1,7 @@
 {
   "id": "linechart",
   "status": "stable",
+  "level": "organism",
   "intent": "Change and progress over ordered samples as a line or area chart.",
   "useWhen": [
     "Following a trajectory across time or sequence",

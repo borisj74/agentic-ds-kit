@@ -1,6 +1,7 @@
 {
   "id": "checkbox",
   "status": "stable",
+  "level": "atom",
   "intent": "Multi-select or confirmation control. Optional visible label.",
   "useWhen": [
     "Independent booleans such as agree to terms or enable notifications",

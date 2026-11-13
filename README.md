@@ -90,7 +90,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 - `/patterns/dashboard` — Live pattern screens (`settings`, `list-detail`, `layouts`, and the rest)
 
 ### Agent files
-- `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups
+- `packages/kit/contracts/index.json` — catalog with `foundation`, `component`, `pattern` groups; each component and pattern row also has a `level` (`atom`, `molecule`, `organism`, `block`, `template`) copied from its contract
 - `AGENTS.md` — always-on kit rules (shared; this repo points at `packages/kit`)
 - `CLAUDE.md` — Claude Code loads this; it imports `AGENTS.md`
 - `.cursor/rules/kit.mdc` — same rules for Cursor
@@ -124,11 +124,11 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 
 | Tool | What it returns |
 | --- | --- |
-| `list_components` | Id, name, kind and a short purpose; `detail: "full"`, `kind`, `limit`/`offset` |
-| `get_component` | Props, variants, must/doNot, tokens, import, usage example |
-| `search_components` | Match by name, purpose, or contract keywords |
+| `list_components` | Id, name, kind, level and a short purpose; `detail: "full"`, `kind`, `level`, `limit`/`offset` |
+| `get_component` | Kind, level, props, variants, must/doNot, tokens, import, usage example |
+| `search_components` | Match by name, purpose, or contract keywords (rows include level) |
 | `get_tokens` | Semantic tokens with value (and dark); `detail: "full"` adds usage notes; `group`, `limit`/`offset` |
-| `list_patterns` / `get_pattern` | Description and `npx agentic-ds-kit add <id>` |
+| `list_patterns` / `get_pattern` | Level (`template`), description and `npx agentic-ds-kit add <id>` |
 | `get_rules` | `AGENTS.md`, including the page-layout grid rule |
 | `questions` | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"`, `limit`/`offset` |
 

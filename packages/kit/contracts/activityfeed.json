@@ -4,6 +4,7 @@
   "category": "Productivity",
   "summary": "See what people and agents did across the workspace, by day, filtered by type or person.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
   "useWhen": [
     "a workspace or project activity page",

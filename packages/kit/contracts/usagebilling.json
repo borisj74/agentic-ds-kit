@@ -4,6 +4,7 @@
   "category": "Billing",
   "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
   "useWhen": [
     "the billing or usage area of a SaaS settings page",

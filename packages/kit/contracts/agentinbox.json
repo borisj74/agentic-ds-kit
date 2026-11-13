@@ -1,6 +1,7 @@
 {
   "id": "agentinbox",
   "status": "stable",
+  "level": "organism",
   "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
   "useWhen": [
     "collect every agent request in one place",

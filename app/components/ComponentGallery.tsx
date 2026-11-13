@@ -2,8 +2,15 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Badge, Breadcrumb, Card, Empty, Input, Tabs } from "agentic-ds-kit";
-import { filterGalleryItems, galleryGroups, type GalleryFilter, type GalleryItem } from "@/lib/component-gallery";
+import { Badge, Breadcrumb, Card, Empty, Input, Link as KitLink, Select, Tabs } from "agentic-ds-kit";
+import {
+  GALLERY_LEVELS,
+  filterGalleryItems,
+  galleryGroups,
+  type GalleryFilter,
+  type GalleryItem,
+  type GalleryLevel,
+} from "@/lib/component-gallery";
 import { PreviewScope } from "../_components/ThemeScope";
 import { GalleryPreview } from "./GalleryPreview";
 import styles from "./ComponentGallery.module.css";
@@ -90,7 +97,23 @@ function GalleryGrid({ items }: { items: GalleryItem[] }) {
   );
 }
 
-function GalleryPanel({ items, query }: { items: GalleryItem[]; query: string }) {
+function GalleryPanel({ items, query, level }: { items: GalleryItem[]; query: string; level: GalleryLevel }) {
+  if (items.length === 0 && level === "block") {
+    // Blocks have their own gallery, so this one lists none.
+    return (
+      <div className={styles.search}>
+        <Empty
+          outlined
+          icon="LayoutGrid"
+          title="Blocks live in their own gallery"
+          description="A block is a larger composition for a whole area of a screen, such as AgentOverview."
+        />
+        <KitLink href="/blocks" variant="standalone">
+          Open the blocks gallery
+        </KitLink>
+      </div>
+    );
+  }
   if (items.length === 0) {
     const searching = query.trim().length > 0;
     return (
@@ -111,15 +134,34 @@ function readGroupParam(): GalleryFilter {
   return GROUPS.some((item) => item.id === group) ? (group as string) : "all";
 }
 
+function readLevelParam(): GalleryLevel {
+  if (typeof window === "undefined") return "all";
+  const level = new URLSearchParams(window.location.search).get("level");
+  return GALLERY_LEVELS.some((item) => item.value === level) ? (level as string) : "all";
+}
+
+/** Writes ?group= and ?level= (each left out when "all") without adding a history entry. */
+function writeParams(group: GalleryFilter, level: GalleryLevel) {
+  const params = new URLSearchParams();
+  if (group !== "all") params.set("group", group);
+  if (level !== "all") params.set("level", level);
+  const search = params.toString();
+  window.history.replaceState(null, "", search ? `${window.location.pathname}?${search}` : window.location.pathname);
+}
+
 export function ComponentGallery() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<GalleryFilter>("all");
+  const [level, setLevel] = useState<GalleryLevel>("all");
   const trimmed = query.trim();
-  const items = filterGalleryItems(filter, trimmed);
+  const items = filterGalleryItems(filter, trimmed, level);
 
-  // ?group=Forms (from the side nav or a breadcrumb) opens that tab.
+  // ?group=Forms (from the side nav or a breadcrumb) opens that tab; ?level=atom picks a level.
   useEffect(() => {
-    const sync = () => setFilter(readGroupParam());
+    const sync = () => {
+      setFilter(readGroupParam());
+      setLevel(readLevelParam());
+    };
     sync();
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
@@ -127,8 +169,13 @@ export function ComponentGallery() {
 
   function choose(id: string) {
     setFilter(id);
-    const url = id === "all" ? window.location.pathname : `${window.location.pathname}?group=${encodeURIComponent(id)}`;
-    window.history.replaceState(null, "", url);
+    writeParams(id, level);
+  }
+
+  function chooseLevel(value: string | string[]) {
+    const next = Array.isArray(value) ? (value[0] ?? "all") : value;
+    setLevel(next);
+    writeParams(filter, next);
   }
 
   return (
@@ -152,7 +199,15 @@ export function ComponentGallery() {
           value={query}
           onChange={setQuery}
         />
-        {trimmed ? (
+        <Select
+          id="gallery-level"
+          size="sm"
+          ariaLabel="Filter by level"
+          options={GALLERY_LEVELS}
+          value={level}
+          onChange={chooseLevel}
+        />
+        {trimmed || level !== "all" ? (
           <p className={styles.resultCount} aria-live="polite">
             {items.length === 1 ? "1 component" : `${items.length} components`}
           </p>
@@ -165,11 +220,11 @@ export function ComponentGallery() {
         onChange={choose}
         ariaLabel="Component groups"
         items={GROUPS.map((group) => {
-          const count = trimmed ? filterGalleryItems(group.id, trimmed).length : group.count;
+          const count = trimmed || level !== "all" ? filterGalleryItems(group.id, trimmed, level).length : group.count;
           return {
             id: group.id,
             label: `${group.label} ${count}`,
-            content: group.id === filter ? <GalleryPanel items={items} query={query} /> : null,
+            content: group.id === filter ? <GalleryPanel items={items} query={query} level={level} /> : null,
           };
         })}
       />

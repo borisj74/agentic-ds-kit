@@ -1,6 +1,7 @@
 {
   "id": "onboarding",
   "status": "stable",
+  "level": "template",
   "role": "example",
   "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",
@@ -30,7 +31,7 @@
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
     "At most one appearance=\"solid\" mode=\"primary\" Button per step: Get started, Continue, or Go to dashboard",
     "Do not restyle kit components; change them through their props, slots, and tokens",
-    "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav blocks), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
+    "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav compose parts), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
     "Back is a ghost Button; Skip for now is ghost; Save and exit stays reachable on every step before Done",
     "Wrap every labeled input in Field; a missing workspace name shows the Field error, sets the Input's error, and moves focus to it",
     "While the workspace is being created the fields, Back and the primary are disabled and a kit Spinner with a visible label (\"Creating workspace…\") says what is happening",

@@ -1,6 +1,7 @@
 {
   "id": "divider",
   "status": "stable",
+  "level": "atom",
   "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action on the line.",
   "useWhen": [
     "Separating groups of content inside one surface (form groups, menu-like stacks, card bodies)",

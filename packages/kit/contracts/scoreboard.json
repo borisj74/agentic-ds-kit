@@ -1,6 +1,7 @@
 {
   "id": "scoreboard",
   "status": "stable",
+  "level": "organism",
   "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
   "useWhen": [
     "Showing two or more KPIs side by side at the top of a dashboard",

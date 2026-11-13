@@ -1,6 +1,7 @@
 {
   "id": "radiogroup",
   "status": "stable",
+  "level": "molecule",
   "intent": "Choose exactly one option from a small visible set. Custom circle, not a native radio. One piece.",
   "useWhen": [
     "Two to six mutually exclusive options that should stay visible",

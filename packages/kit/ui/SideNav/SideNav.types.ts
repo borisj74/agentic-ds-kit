@@ -64,7 +64,7 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   items?: SideNavItemData[];
   /** Footer rows (one or many items), or any ReactNode (e.g. an account card). */
   footer?: SideNavItemData | SideNavItemData[] | ReactNode;
-  /** Account block at the very bottom, below the footer rows: `SideNavAccount` props (avatar, name, secondary line, action). */
+  /** Account part at the very bottom, below the footer rows: `SideNavAccount` props (avatar, name, secondary line, action). */
   account?: SideNavAccountProps;
   /**
    * Slot: replaces the brand (mark + title) in the header. The Close button stays.
@@ -80,12 +80,12 @@ export interface SideNavProps extends Omit<ComponentPropsWithoutRef<"aside">, Si
   ref?: Ref<HTMLElement>;
 }
 
-/* ---------- Building blocks (SideNav.Root, .Header, .Brand, .Nav, .Section, .Item, .Slot, .Footer, .Toggle) ---------- */
+/* ---------- Compose parts (SideNav.Root, .Header, .Brand, .Nav, .Section, .Item, .Slot, .Footer, .Toggle) ---------- */
 
 /** Native aside attributes the kit sets itself on `SideNav.Root`. */
 type SideNavRootOwnedKeys = "data-side";
 
-/** `SideNav.Root`: the `<aside>` and its panel. Holds open/closed state for every block inside. */
+/** `SideNav.Root`: the `<aside>` and its panel. Holds open/closed state for every part inside. */
 export interface SideNavRootProps extends Omit<ComponentPropsWithoutRef<"aside">, SideNavRootOwnedKeys> {
   open?: boolean;
   defaultOpen?: boolean;

@@ -1,6 +1,7 @@
 {
   "id": "alert",
   "status": "stable",
+  "level": "molecule",
   "intent": "Inline status banner that stays on the page.",
   "useWhen": [
     "Page or form feedback the user should still see after it appears",

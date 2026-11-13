@@ -16,6 +16,7 @@ import {
   packageRoot,
   searchComponents,
 } from "./catalog.mjs";
+import { COMPONENT_LEVELS } from "./levels.mjs";
 import { createServer as createRpcServer, serveStdio } from "./mcp-server.mjs";
 import { MAX_LIMIT, shapeComponents, shapeQuestions, shapeTokens } from "./mcp-shape.mjs";
 import { QuestionsError, buildQuestions } from "./questions.mjs";
@@ -27,14 +28,18 @@ command and query the installed kit. Answers are read from this install's
 contracts, tokens, patterns, and AGENTS.md. Nothing is fetched.
 
 Tools:
-  list_components       Name, kind (component or block), short purpose; detail, kind, limit, offset
-  get_component         Props, variants, must/doNot, tokens, import, example, kind
-  search_components     Match name, purpose, or contract keywords
+  list_components       Name, kind (component or block), level, short purpose; detail, kind,
+                        level, limit, offset
+  get_component         Props, variants, must/doNot, tokens, import, example, kind, level
+  search_components     Match name, purpose, or contract keywords; rows include level
   get_tokens            Semantic tokens by group; summary by default, detail full, limit, offset
-  list_patterns         Description and the add command
-  get_pattern           One pattern by id
+  list_patterns         Description, level (template) and the add command
+  get_pattern           One pattern by id, with level (template)
   get_rules             AGENTS.md, including the page-layout grid rule
   questions             Same JSON as npx agentic-ds-kit questions; detail summary, limit, offset
+
+Levels, smallest to biggest: ${COMPONENT_LEVELS.join(", ")}, template (patterns).
+Reuse the biggest piece that fits before building from smaller ones.
 
 Options:
   -h, --help            Show this help`;
@@ -84,10 +89,15 @@ function createServer() {
     {
       title: "List components",
       description:
-        "List every UI component in this install, blocks included. Default summary rows: id, code name, kind (component, or block for a larger composition such as AgentOverview) and the first sentence of its purpose. detail full adds the category and the whole purpose line. Filter with kind; page with limit and offset (page.next). Use get_component for props and rules.",
+        "List every UI component in this install, blocks included. Default summary rows: id, code name, kind (component, or block for a larger composition such as AgentOverview), level (atom, molecule, organism or block) and the first sentence of its purpose. detail full adds the category and the whole purpose line. Filter with kind and/or level; page with limit and offset (page.next). Reuse the biggest level that fits before building from smaller ones. Use get_component for props and rules.",
       inputSchema: objectSchema({
         detail: detail("summary"),
         kind: { type: "string", enum: ["component", "block"], description: "Only components or only blocks." },
+        level: {
+          type: "string",
+          enum: [...COMPONENT_LEVELS],
+          description: `Only one level: ${COMPONENT_LEVELS.join(", ")}. Patterns are level template; use list_patterns.`,
+        },
         limit,
         offset,
       }),
@@ -100,7 +110,7 @@ function createServer() {
     {
       title: "Get component",
       description:
-        "Get one component by code name or contract id (Button or button). Returns props, enum variants, must and doNot rules, the tokens the contract lists, an import line, and a usage example from the contract snippet.",
+        "Get one component by code name or contract id (Button or button). Returns its kind and level, props, enum variants, must and doNot rules, the tokens the contract lists, an import line, and a usage example from the contract snippet.",
       inputSchema: objectSchema(
         { name: { type: "string", description: "Component code name or contract id, such as Button or button." } },
         ["name"],
@@ -114,7 +124,7 @@ function createServer() {
     {
       title: "Search components",
       description:
-        "Find components whose name, purpose, or contract keywords match. Keywords are the contract useWhen, doNotUseWhen, and doNot lines. Every word must match. Case-insensitive.",
+        "Find components whose name, purpose, or contract keywords match. Keywords are the contract useWhen, doNotUseWhen, and doNot lines. Every word must match. Case-insensitive. Rows include kind and level.",
       inputSchema: objectSchema({ query: { type: "string", description: 'Words to match, such as "date" or "kpi".' } }, ["query"]),
     },
     ({ query }) => searchComponents(query),
@@ -136,7 +146,7 @@ function createServer() {
     {
       title: "List patterns",
       description:
-        "List copy-in screen patterns. Each entry has an id, a one-line description, and the npx agentic-ds-kit add command that copies it into an app.",
+        "List copy-in screen patterns. Each entry has an id, its level (always template, the biggest level), a one-line description, and the npx agentic-ds-kit add command that copies it into an app.",
     },
     () => listPatterns(),
   );
@@ -146,7 +156,7 @@ function createServer() {
     {
       title: "Get pattern",
       description:
-        "Get one pattern by id (dashboard or app-shell). Returns the description, the npx agentic-ds-kit add command, and the contract must and defaults.",
+        "Get one pattern by id (dashboard or app-shell). Returns its level (template), the description, the npx agentic-ds-kit add command, and the contract must and defaults.",
       inputSchema: objectSchema({ id: { type: "string", description: "Pattern id, such as dashboard or app-shell." } }, ["id"]),
     },
     ({ id }) => getPattern(id),

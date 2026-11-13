@@ -11,903 +11,1032 @@
     "intent": "Clickable action control with appearance × mode (plus an optional flat set) and a fixed set of sizes.",
     "group": "component",
     "path": "contracts/button.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "buttongroup",
     "intent": "Joined row of kit Buttons that share one size and act as one control cluster.",
     "group": "component",
     "path": "contracts/buttongroup.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "scorecard",
     "intent": "one KPI with label, value, optional delta/trend/hint/badge",
     "group": "component",
     "path": "contracts/scorecard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "scoreboard",
     "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
     "group": "component",
     "path": "contracts/scoreboard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "input",
     "intent": "Single-line text entry for forms and filters. Optional start and end slots sit inside the field.",
     "group": "component",
     "path": "contracts/input.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "numberinput",
     "intent": "A number the person can type, step, and read in their locale, with optional min and max.",
     "group": "component",
     "path": "contracts/numberinput.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "currencyinput",
     "intent": "A money amount with a currency symbol, locale formatting, min, max, and step.",
     "group": "component",
     "path": "contracts/currencyinput.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "inputotp",
     "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
     "group": "component",
     "path": "contracts/inputotp.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "insightcard",
     "intent": "A recommended insight or opportunity as a compact card, with tone and optional actions.",
     "group": "component",
     "path": "contracts/insightcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "linechart",
     "intent": "Change and progress over ordered samples as a line or area chart.",
     "group": "component",
     "path": "contracts/linechart.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "link",
     "intent": "Text that navigates to another page or place: inline inside a sentence, or standalone on its own line, with an external variant that opens a new tab.",
     "group": "component",
     "path": "contracts/link.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "linklist",
     "intent": "A column of links, one a row with a chevron at the end, like an account's quick links.",
     "group": "component",
     "path": "contracts/linklist.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "listview",
     "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
     "group": "component",
     "path": "contracts/listview.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "loadinganimation",
     "intent": "Square dot-grid loading indicator for compact waits.",
     "group": "component",
     "path": "contracts/loadinganimation.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "meter",
     "intent": "How far along or how full something is, from 0 to 100, as a bar, a ring, or a half ring, with optional red, amber, and green zones.",
     "group": "component",
     "path": "contracts/meter.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "textarea",
     "intent": "Multi-line text entry for notes and descriptions. Wrap with Field.",
     "group": "component",
     "path": "contracts/textarea.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "timepicker",
     "intent": "Pick a time of day as hour and minute, in 12-hour or 24-hour form.",
     "group": "component",
     "path": "contracts/timepicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "select",
     "intent": "Choose one or several options from a list. Field trigger, kit DropdownMenu panel. Not a native select.",
     "group": "component",
     "path": "contracts/select.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "combobox",
     "intent": "Type to filter one value, including a list the parent loads asynchronously.",
     "group": "component",
     "path": "contracts/combobox.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "multiselect",
     "intent": "Choose several values. Selected values stay in the field as removable tags, and typing filters the list.",
     "group": "component",
     "path": "contracts/multiselect.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "shimmertext",
     "intent": "Animated text for short indeterminate processing copy.",
     "group": "component",
     "path": "contracts/shimmertext.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "slider",
     "intent": "Pick a value or range along a track. One piece. Range is a two-value array, not a RangeSlider cousin.",
     "group": "component",
     "path": "contracts/slider.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "spinner",
     "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
     "group": "component",
     "path": "contracts/spinner.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "switch",
     "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
     "group": "component",
     "path": "contracts/switch.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "checkbox",
     "intent": "Multi-select or confirmation control. Optional visible label.",
     "group": "component",
     "path": "contracts/checkbox.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "collapsible",
     "intent": "Single show/hide panel with a title and a toggle.",
     "group": "component",
     "path": "contracts/collapsible.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "colorpicker",
     "intent": "Inline colour picker for theming and branding settings: saturation/brightness area, hue track, optional opacity track, hex Input, and optional preset swatches. One piece, no popover.",
     "group": "component",
     "path": "contracts/colorpicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "command",
     "intent": "Searchable command menu for quick actions.",
     "group": "component",
     "path": "contracts/command.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "contextmenu",
     "intent": "Actions for one target, opened with a right-click or Shift+F10.",
     "group": "component",
     "path": "contracts/contextmenu.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "datagrid",
     "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
     "group": "component",
     "path": "contracts/datagrid.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "datatable",
     "intent": "Framed dataset with search, filters, column settings, and a caption title.",
     "group": "component",
     "path": "contracts/datatable.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "datepicker",
     "intent": "Form field that opens a month grid to pick one date or a date range.",
     "group": "component",
     "path": "contracts/datepicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "daterangepicker",
     "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
     "group": "component",
     "path": "contracts/daterangepicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "datetimepicker",
     "intent": "Pick a calendar date and a time in one field.",
     "group": "component",
     "path": "contracts/datetimepicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "codesnippet",
     "intent": "Read-only block of code with a copy button, optional title, language label, tabs, and line numbers. No syntax highlighting.",
     "group": "component",
     "path": "contracts/codesnippet.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "divider",
     "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action on the line.",
     "group": "component",
     "path": "contracts/divider.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "calendar",
     "intent": "A full calendar of events by month, week, day, or list. Browse dates, filter calendars, add / edit / delete events.",
     "group": "component",
     "path": "contracts/calendar.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "cell",
     "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
     "group": "component",
     "path": "contracts/cell.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "headercell",
     "intent": "Column header for DataTable: label, optional select-all checkbox, optional sort, sm or md.",
     "group": "component",
     "path": "contracts/headercell.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "helppopover",
     "intent": "Small help panel: optional title plus one to three short sentences.",
     "group": "component",
     "path": "contracts/helppopover.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "popover",
     "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
     "group": "component",
     "path": "contracts/popover.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "card",
     "intent": "Framed tile with optional header, body, and footer actions.",
     "group": "component",
     "path": "contracts/card.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "carousel",
     "intent": "Paged track of slides with prev/next kit Buttons. One piece.",
     "group": "component",
     "path": "contracts/carousel.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "conveyor",
     "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
     "group": "component",
     "path": "contracts/conveyor.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "count",
     "intent": "Small number badge for counts, like unread items on a nav link or tab.",
     "group": "component",
     "path": "contracts/count.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "chat",
     "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
     "group": "component",
     "path": "contracts/chat.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "radiogroup",
     "intent": "Choose exactly one option from a small visible set. Custom circle, not a native radio. One piece.",
     "group": "component",
     "path": "contracts/radiogroup.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "resizable",
     "intent": "Two panels split by a separator you can drag or resize from the keyboard.",
     "group": "component",
     "path": "contracts/resizable.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "field",
     "intent": "One labeled control with optional hint and error. Label on top or start (left).",
     "group": "component",
     "path": "contracts/field.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "fileupload",
     "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
     "group": "component",
     "path": "contracts/fileupload.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "fieldset",
     "intent": "Semantic group of fields with a legend and optional description. This is the form group.",
     "group": "component",
     "path": "contracts/fieldset.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "filterbutton",
     "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
     "group": "component",
     "path": "contracts/filterbutton.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "filterbar",
     "intent": "A row of filter chips with add, clear all, and an overflow menu when the row is too long.",
     "group": "component",
     "path": "contracts/filterbar.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "tag",
     "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
     "group": "component",
     "path": "contracts/tag.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "taginput",
     "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
     "group": "component",
     "path": "contracts/taginput.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "badge",
     "intent": "Compact read-only status or category pill set by the system.",
     "group": "component",
     "path": "contracts/badge.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "barchart",
     "intent": "Compare magnitudes across categories with vertical or horizontal bars.",
     "group": "component",
     "path": "contracts/barchart.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "breadcrumb",
     "intent": "Path to the current page as a hierarchy of links.",
     "group": "component",
     "path": "contracts/breadcrumb.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "tooltip",
     "intent": "Brief supplementary text on hover or focus of a trigger element.",
     "group": "component",
     "path": "contracts/tooltip.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "tabs",
     "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
     "group": "component",
     "path": "contracts/tabs.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "modal",
     "intent": "Dismissible overlay for short tasks, forms, or extra detail. Composes ModalCard. Not a must-choose confirm.",
     "group": "component",
     "path": "contracts/modal.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "modalcard",
     "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
     "group": "component",
     "path": "contracts/modalcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "drawer",
     "intent": "Edge panel for secondary tasks. Floating sheet inset from the opening edge.",
     "group": "component",
     "path": "contracts/drawer.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "dropdownmenu",
     "intent": "Actions or value menu from a button, field, or nav trigger.",
     "group": "component",
     "path": "contracts/dropdownmenu.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "empty",
     "intent": "Placeholder when a list, page, or region has nothing to show. One piece.",
     "group": "component",
     "path": "contracts/empty.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "navigationmenu",
     "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
     "group": "component",
     "path": "contracts/navigationmenu.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "numbertransition",
     "intent": "Rolling number treatment for live metrics and counters.",
     "group": "component",
     "path": "contracts/numbertransition.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "pageheader",
     "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
     "group": "component",
     "path": "contracts/pageheader.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "pagination",
     "intent": "Page navigation with previous, next, page numbers, and ellipsis. Not ButtonGroup. Not Tabs.",
     "group": "component",
     "path": "contracts/pagination.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "piechart",
     "intent": "Part-to-whole share for a handful of segments, as a donut or solid pie.",
     "group": "component",
     "path": "contracts/piechart.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "progress",
     "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
     "group": "component",
     "path": "contracts/progress.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "progresssteps",
     "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
     "group": "component",
     "path": "contracts/progresssteps.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "section",
     "intent": "Grouped page block with optional heading, description, and actions. Unframed: no fill, radius, border, shadow, or box padding — Card owns the framed surface; layout-content owns page inset. Pass collapsible for a chevron that toggles the body.",
     "group": "component",
     "path": "contracts/section.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "appheader",
     "intent": "Product top chrome: brand mark on the start, centered kit Input search, trailing actions. Not a page title. Not a sidebar.",
     "group": "component",
     "path": "contracts/appheader.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "appnav",
     "intent": "Vertical sidebar navigation with title, optional grouped catalog, and active item state.",
     "group": "component",
     "path": "contracts/appnav.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "anchornav",
     "intent": "A list of the sections on one long page. It jumps to a section and shows the one the page is at.",
     "group": "component",
     "path": "contracts/anchornav.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "sidenav",
-    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
+    "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item compose parts. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
     "group": "component",
     "path": "contracts/sidenav.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "skeleton",
     "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
     "group": "component",
     "path": "contracts/skeleton.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "table",
     "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
     "group": "component",
     "path": "contracts/table.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "thinkinganimation",
     "intent": "Calm processing indicator for assistants and short system waits.",
     "group": "component",
     "path": "contracts/thinkinganimation.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "timeline",
     "intent": "Vertical sequence of now, next, and later for ordered multi-stage work.",
     "group": "component",
     "path": "contracts/timeline.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "toast",
     "intent": "A short note that floats in after an action, like Saved successfully, and goes away on its own after a few seconds, with an optional Undo.",
     "group": "component",
     "path": "contracts/toast.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "accordion",
     "intent": "One-open disclosure list for short related sections.",
     "group": "component",
     "path": "contracts/accordion.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "treeview",
     "intent": "Nested hierarchy people open and close level by level to browse, pick, or check items.",
     "group": "component",
     "path": "contracts/treeview.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "usagelist",
     "intent": "A list of usage limits, one a row: the limit's name, how much is used of it, a bar, and a short note.",
     "group": "component",
     "path": "contracts/usagelist.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "alert",
     "intent": "Inline status banner that stays on the page.",
     "group": "component",
     "path": "contracts/alert.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "alertdialog",
     "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
     "group": "component",
     "path": "contracts/alertdialog.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "avatar",
     "intent": "Face or initials for a person. Not a status chip and not a button.",
     "group": "component",
     "path": "contracts/avatar.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "avatargroup",
     "intent": "Overlapping row of kit Avatars with an optional leftover count.",
     "group": "component",
     "path": "contracts/avatargroup.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "segmentedcontrol",
     "intent": "Choose one of a few visible options in a joined track. role=radiogroup, sm or md, icons optional.",
     "group": "component",
     "path": "contracts/segmentedcontrol.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "tilegroup",
     "intent": "Selectable cards for a plan or option picker. Single or multi select, with title, description, and a price or meta slot.",
     "group": "component",
     "path": "contracts/tilegroup.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "kbd",
     "intent": "A shortcut chip for one keyboard key. Place several in a row for a chord.",
     "group": "component",
     "path": "contracts/kbd.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "approvalcard",
     "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
     "group": "component",
     "path": "contracts/approvalcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agenttrail",
     "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
     "group": "component",
     "path": "contracts/agenttrail.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentplan",
     "intent": "What an agent intends to do, before or during a run. People edit, accept, run, skip, stop, or retry steps.",
     "group": "component",
     "path": "contracts/agentplan.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentfleet",
     "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
     "group": "component",
     "path": "contracts/agentfleet.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "toolcallcard",
     "intent": "One agent tool call on one line: status, mono name, summary and a live timer. Opens to arguments and result; with calls it rolls several calls into one group row.",
     "group": "component",
     "path": "contracts/toolcallcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "permissionrequest",
     "intent": "An agent asks for standing access to a capability (files, email, repo, billing), scope by scope, with why and expiry. Grant / Deny, then one line.",
     "group": "component",
     "path": "contracts/permissionrequest.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "runningnow",
     "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
     "group": "component",
     "path": "contracts/runningnow.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentmonitor",
     "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
     "group": "component",
     "path": "contracts/agentmonitor.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agenttree",
     "intent": "An orchestrator and its sub-agents as a tree. Every node shows status, time and cost; branch costs roll up (Σ). Fold branches; approve or retry in place.",
     "group": "component",
     "path": "contracts/agenttree.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentlanes",
     "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
     "group": "component",
     "path": "contracts/agentlanes.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentinbox",
     "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
     "group": "component",
     "path": "contracts/agentinbox.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "decisioncard",
     "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
     "group": "component",
     "path": "contracts/decisioncard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "autonomydial",
     "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
     "group": "component",
     "path": "contracts/autonomydial.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "agentsteering",
     "intent": "Redirect, pause or stop an agent while it runs: a steer composer with quick steers, Pause / Resume and Stop with an optional AlertDialog confirm.",
     "group": "component",
     "path": "contracts/agentsteering.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "modelpicker",
     "intent": "Choose which model an agent or chat uses: grouped by vendor, with context window and cost tier, recommended models, and disabled models that keep their reason. Built on kit DropdownMenu.",
     "group": "component",
     "path": "contracts/modelpicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "contextwindow",
     "intent": "How full the prompt context is and what uses the space, by segment, with a warning near the limit and Trim oldest. Compact form for a header.",
     "group": "component",
     "path": "contracts/contextwindow.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "citedanswer",
     "intent": "An assistant reply with inline citation marks and a source list. Marks are real links; a missing source shows as a broken cite.",
     "group": "component",
     "path": "contracts/citedanswer.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "messageactions",
     "intent": "The compact action row on a chat message: copy, retry or edit, thumbs up / down with reasons, and a More menu. Icon Buttons with Tooltips.",
     "group": "component",
     "path": "contracts/messageactions.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "inlinediff",
     "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
     "group": "component",
     "path": "contracts/inlinediff.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "memorypanel",
     "intent": "Facts an agent has stored: search, add, pin, edit or forget them (confirmed in an AlertDialog), and see which ones this thread used.",
     "group": "component",
     "path": "contracts/memorypanel.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "tracewaterfall",
     "intent": "Where a run's time and money went: a waterfall of model, tool and approval spans with totals and span detail; compact form for a header.",
     "group": "component",
     "path": "contracts/tracewaterfall.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "usagemeter",
     "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
     "group": "component",
     "path": "contracts/usagemeter.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "setupguide",
     "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
     "group": "component",
     "path": "contracts/setupguide.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "notificationstack",
     "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
     "group": "component",
     "path": "contracts/notificationstack.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "changesummary",
     "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
     "group": "component",
     "path": "contracts/changesummary.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "experimentcard",
     "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
     "group": "component",
     "path": "contracts/experimentcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "commentthread",
     "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
     "group": "component",
     "path": "contracts/commentthread.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "commentspanel",
     "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
     "group": "component",
     "path": "contracts/commentspanel.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "integrationpicker",
     "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
     "group": "component",
     "path": "contracts/integrationpicker.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "pricingplans",
     "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
     "group": "component",
     "path": "contracts/pricingplans.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "invoicedocument",
     "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
     "group": "component",
     "path": "contracts/invoicedocument.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "taskboard",
     "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
     "group": "component",
     "path": "contracts/taskboard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "organism"
   },
   {
     "id": "blurcrossfade",
     "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
     "group": "component",
     "path": "contracts/blurcrossfade.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "textreveal",
     "intent": "A short heading that rises in by word or by line, for docs heroes and empty states. The full string is always in the DOM.",
     "group": "component",
     "path": "contracts/textreveal.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "tiltcard",
     "intent": "A kit Card that tilts a few degrees toward the pointer with a soft highlight, for rare showcase spots (a pricing highlight, a docs gallery). Wraps Card; never the default Card.",
     "group": "component",
     "path": "contracts/tiltcard.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "molecule"
   },
   {
     "id": "gridbackground",
     "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast.",
     "group": "component",
     "path": "contracts/gridbackground.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "gradienttext",
     "intent": "A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image; no motion.",
     "group": "component",
     "path": "contracts/gradienttext.json",
-    "status": "stable"
+    "status": "stable",
+    "level": "atom"
   },
   {
     "id": "agentoverview",
@@ -916,6 +1045,7 @@
     "group": "component",
     "path": "contracts/agentoverview.json",
     "status": "stable",
+    "level": "block",
     "category": "Agents",
     "summary": "See what your agents did since you last looked, what is running, and what needs you."
   },
@@ -926,6 +1056,7 @@
     "group": "component",
     "path": "contracts/logostrip.json",
     "status": "stable",
+    "level": "block",
     "category": "Social proof",
     "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges."
   },
@@ -936,6 +1067,7 @@
     "group": "component",
     "path": "contracts/plans.json",
     "status": "stable",
+    "level": "block",
     "category": "Pricing",
     "summary": "A pricing section: plans with a monthly / yearly switch and the questions people ask before they buy."
   },
@@ -946,6 +1078,7 @@
     "group": "component",
     "path": "contracts/livesession.json",
     "status": "stable",
+    "level": "block",
     "category": "Agents",
     "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask."
   },
@@ -956,6 +1089,7 @@
     "group": "component",
     "path": "contracts/rundetail.json",
     "status": "stable",
+    "level": "block",
     "category": "Agents",
     "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call."
   },
@@ -966,6 +1100,7 @@
     "group": "component",
     "path": "contracts/appdirectory.json",
     "status": "stable",
+    "level": "block",
     "category": "Integrations",
     "summary": "Browse, search and connect the apps your workspace works with."
   },
@@ -976,6 +1111,7 @@
     "group": "component",
     "path": "contracts/workboard.json",
     "status": "stable",
+    "level": "block",
     "category": "Productivity",
     "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through."
   },
@@ -986,6 +1122,7 @@
     "group": "component",
     "path": "contracts/kpiboard.json",
     "status": "stable",
+    "level": "block",
     "category": "Analytics",
     "summary": "Pick a KPI to chart it and list its top rows, with one range for all."
   },
@@ -996,6 +1133,7 @@
     "group": "component",
     "path": "contracts/usagebilling.json",
     "status": "stable",
+    "level": "block",
     "category": "Billing",
     "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade."
   },
@@ -1006,6 +1144,7 @@
     "group": "component",
     "path": "contracts/activityfeed.json",
     "status": "stable",
+    "level": "block",
     "category": "Productivity",
     "summary": "See what people and agents did across the workspace, by day, filtered by type or person."
   },
@@ -1016,6 +1155,7 @@
     "group": "component",
     "path": "contracts/planreview.json",
     "status": "stable",
+    "level": "block",
     "category": "Agents",
     "summary": "Approve an agent's plan before it runs: its steps, what it changes, and how much it may do alone."
   },
@@ -1026,6 +1166,7 @@
     "group": "component",
     "path": "contracts/changereview.json",
     "status": "stable",
+    "level": "block",
     "category": "Agents",
     "summary": "Review what an agent changed: file by file, with the diff, comments, and accept or reject."
   },
@@ -1035,6 +1176,7 @@
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add dashboard"
   },
@@ -1044,6 +1186,7 @@
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add settings-form"
   },
@@ -1053,6 +1196,7 @@
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add list-detail"
   },
@@ -1062,6 +1206,7 @@
     "group": "pattern",
     "path": "contracts/patterns/empty-first-run.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add empty-first-run"
   },
@@ -1071,6 +1216,7 @@
     "group": "pattern",
     "path": "contracts/patterns/app-shell.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add app-shell"
   },
@@ -1080,6 +1226,7 @@
     "group": "pattern",
     "path": "contracts/patterns/sign-in.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add sign-in"
   },
@@ -1089,6 +1236,7 @@
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add billing-schedule"
   },
@@ -1098,6 +1246,7 @@
     "group": "pattern",
     "path": "contracts/patterns/integration-settings.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add integration-settings"
   },
@@ -1107,6 +1256,7 @@
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add settings"
   },
@@ -1116,6 +1266,7 @@
     "group": "pattern",
     "path": "contracts/patterns/onboarding.json",
     "status": "stable",
+    "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add onboarding"
   }

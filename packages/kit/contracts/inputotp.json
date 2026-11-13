@@ -1,6 +1,7 @@
 {
   "id": "inputotp",
   "status": "stable",
+  "level": "molecule",
   "intent": "One-time code / PIN as separate slots. Paste and autocomplete work. Not a row of Inputs.",
   "useWhen": [
     "email/SMS verification, PIN, 2FA code"

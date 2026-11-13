@@ -1,6 +1,7 @@
 {
   "id": "gridbackground",
   "status": "stable",
+  "level": "atom",
   "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast.",
   "useWhen": [
     "behind a product demo, hero or empty state on a docs or marketing page",

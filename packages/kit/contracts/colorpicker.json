@@ -1,6 +1,7 @@
 {
   "id": "colorpicker",
   "status": "stable",
+  "level": "molecule",
   "intent": "Inline colour picker for theming and branding settings: saturation/brightness area, hue track, optional opacity track, hex Input, and optional preset swatches. One piece, no popover.",
   "useWhen": [
     "Picking a brand, theme, label, or chart colour in a settings form",

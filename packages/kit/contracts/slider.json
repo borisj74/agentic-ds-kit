@@ -1,6 +1,7 @@
 {
   "id": "slider",
   "status": "stable",
+  "level": "atom",
   "intent": "Pick a value or range along a track. One piece. Range is a two-value array, not a RangeSlider cousin.",
   "useWhen": [
     "Adjust a numeric setting on a continuous scale",

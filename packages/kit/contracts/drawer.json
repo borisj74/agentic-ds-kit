@@ -1,6 +1,7 @@
 {
   "id": "drawer",
   "status": "stable",
+  "level": "organism",
   "intent": "Edge panel for secondary tasks. Floating sheet inset from the opening edge.",
   "useWhen": [
     "Settings",

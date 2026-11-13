@@ -1,6 +1,7 @@
 {
   "id": "tag",
   "status": "stable",
+  "level": "atom",
   "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
   "useWhen": [
     "Filter chips the user picks or clears",

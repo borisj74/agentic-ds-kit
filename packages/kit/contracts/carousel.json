@@ -1,6 +1,7 @@
 {
   "id": "carousel",
   "status": "stable",
+  "level": "organism",
   "intent": "Paged track of slides with prev/next kit Buttons. One piece.",
   "useWhen": [
     "galleries",

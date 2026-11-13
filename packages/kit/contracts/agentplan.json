@@ -1,6 +1,7 @@
 {
   "id": "agentplan",
   "status": "stable",
+  "level": "organism",
   "intent": "What an agent intends to do, before or during a run. People edit, accept, run, skip, stop, or retry steps.",
   "useWhen": [
     "an agent proposes several steps and the person should accept or edit them first",
