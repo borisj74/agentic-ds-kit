@@ -73,7 +73,7 @@ function displayValue(column: DataGridColumn, value: string): string {
 
 function overlayOpen(): boolean {
   return Boolean(
-    document.querySelector('[role="menu"]') || document.querySelector('[aria-label="Choose date"]'),
+    document.querySelector('[role="menu"]') || document.querySelector('[data-kit-date-panel]'),
   );
 }
 
@@ -222,7 +222,7 @@ export function DataGrid({
       if (!(target instanceof Element)) return;
       const cell = tableRef.current?.querySelector(cellSelector(spot));
       if (cell?.contains(target)) return;
-      if (target.closest('[role="menu"]') || target.closest('[aria-label="Choose date"]')) return;
+      if (target.closest('[role="menu"]') || target.closest('[data-kit-date-panel]')) return;
       setEditing(null);
     }
     document.addEventListener("pointerdown", onPointerDown);

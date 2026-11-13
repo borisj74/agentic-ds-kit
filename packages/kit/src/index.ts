@@ -155,4 +155,6 @@ export type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../ui/shared/c
 export { ICON_STROKE, ICON_STROKE_STRONG } from "../lib/icon";
 export { ThemeScopeProvider, useThemeScopeMarker } from "../ui/shared/themeScope";
 export type { ThemeScopeValue } from "../ui/shared/themeScope";
+export { KitLabelsProvider, useKitLabels, DEFAULT_KIT_LABELS } from "../ui/shared/labels";
+export type { KitLabels, KitLabelsProviderProps } from "../ui/shared/labels";
 

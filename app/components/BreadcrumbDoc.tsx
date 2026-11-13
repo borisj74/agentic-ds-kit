@@ -93,6 +93,7 @@ export function BreadcrumbDoc() {
                     items={items}
                     separator={separator}
                     maxItems={collapsed ? 3 : undefined}
+                    ariaLabel="Breadcrumb example"
                   />
                 </div>
               </div>
@@ -125,7 +126,8 @@ export function BreadcrumbDoc() {
                 <p className={styles.usageBody}>
                   Breadcrumb for the path to this page. PageHeader composes Breadcrumb when the page
                   also needs a title. AppNav for the sidebar. Last crumb is the current page and is
-                  not a link.
+                  not a link. The nav is named Breadcrumb; set ariaLabel to translate it or when a page
+                  has two.
                 </p>
               </div>
               <CodeBlock code={masterCode(separator, collapsed)} />
@@ -137,7 +139,7 @@ export function BreadcrumbDoc() {
               <h2 className={styles.exampleTitle}>Basic</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Breadcrumb items={BASIC_ITEMS} />
+                  <Breadcrumb items={BASIC_ITEMS} ariaLabel="Basic example" />
                 </div>
               </div>
               <div>
@@ -154,7 +156,7 @@ export function BreadcrumbDoc() {
               <h2 className={styles.exampleTitle}>Slash</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Breadcrumb items={BASIC_ITEMS} separator="slash" />
+                  <Breadcrumb items={BASIC_ITEMS} separator="slash" ariaLabel="Slash example" />
                 </div>
               </div>
               <div>
@@ -171,7 +173,7 @@ export function BreadcrumbDoc() {
               <h2 className={styles.exampleTitle}>Home icon</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Breadcrumb items={HOME_ICON_ITEMS} />
+                  <Breadcrumb items={HOME_ICON_ITEMS} ariaLabel="Home icon example" />
                 </div>
               </div>
               <div>
@@ -194,7 +196,7 @@ export function BreadcrumbDoc() {
               <h2 className={styles.exampleTitle}>Collapsed</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>
-                  <Breadcrumb items={SIX_ITEMS} maxItems={4} />
+                  <Breadcrumb items={SIX_ITEMS} maxItems={4} ariaLabel="Collapsed example" />
                 </div>
               </div>
               <div>

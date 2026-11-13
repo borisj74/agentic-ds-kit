@@ -10,6 +10,7 @@ import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
+import { useKitLabels } from "../shared/labels";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
 
@@ -27,6 +28,7 @@ export function AlertDialog({
   ref,
   ...rest
 }: AlertDialogProps) {
+  const labels = useKitLabels();
   const titleId = useId();
   const descriptionId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -124,7 +126,7 @@ export function AlertDialog({
           {description}
         </p>
         <div className={styles.footer}>
-          <ButtonGroup ariaLabel="Dialog actions">
+          <ButtonGroup ariaLabel={labels.dialogActions}>
             <Button appearance="outline" mode="neutral" size="md" onClick={onCancel}>
               {cancelLabel}
             </Button>

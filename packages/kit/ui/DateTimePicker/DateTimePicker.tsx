@@ -12,6 +12,7 @@ import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import controlStyles from "../shared/controls.module.css";
 import type { DateTimePickerProps, DateTimeValue } from "./DateTimePicker.types";
 import styles from "./DateTimePicker.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { DateTimePickerProps, DateTimePickerSize, DateTimeValue } from "./DateTimePicker.types";
 
@@ -29,6 +30,7 @@ export function DateTimePicker({
   placeholder = "Pick a date and time",
   className,
 }: DateTimePickerProps) {
+  const labels = useKitLabels();
   const panelId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -77,7 +79,7 @@ export function DateTimePicker({
       </button>
       {name ? <input type="hidden" name={name} value={hidden} /> : null}
       {open ? (
-        <div id={panelId} role="dialog" aria-label="Choose date and time" className={styles.panel} tabIndex={-1}>
+        <div id={panelId} role="dialog" aria-label={labels.chooseDateAndTime} className={styles.panel} tabIndex={-1}>
           <MonthGrid
             size={size === "sm" ? "sm" : "md"}
             value={current.date}
@@ -90,7 +92,7 @@ export function DateTimePicker({
               hourCycle={hourCycle}
               value={current.time ?? "09:00"}
               onValueChange={(time) => emit({ ...current, time })}
-              ariaLabel="Time"
+              ariaLabel={labels.time}
             />
             <Button appearance="outline" mode="neutral" size="sm" onClick={() => close("escape")}>
               Done

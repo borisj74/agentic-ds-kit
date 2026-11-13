@@ -1,0 +1,23 @@
+name: Component or feature request
+description: Ask for a component, prop, pattern or token the kit doesn't have.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you need to build?
+      description: The screen or task, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What did you try with the existing kit?
+      description: Which components or patterns came close, and why they don't fit. See packages/kit/contracts/index.json.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal (optional)
+      description: Name, props, accessibility, and which tokens it would use.

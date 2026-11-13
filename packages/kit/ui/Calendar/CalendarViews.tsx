@@ -20,6 +20,7 @@ import {
   type PlacedEvent,
 } from "./calendarModel";
 import styles from "./Calendar.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export interface CalendarViewsProps {
   view: CalendarView;
@@ -82,6 +83,7 @@ function EventChip({
 }
 
 function MonthView({ gridRef, onMonthKey, ...props }: CalendarViewsProps) {
+  const labels = useKitLabels();
   const first = new Date(props.focus.getFullYear(), props.focus.getMonth(), 1);
   const start = weekOf(first, props.weekStart);
   const weeks = Array.from({ length: 6 }, (_, week) =>
@@ -93,7 +95,7 @@ function MonthView({ gridRef, onMonthKey, ...props }: CalendarViewsProps) {
       ref={gridRef}
       className={styles.month}
       role="grid"
-      aria-label="Month"
+      aria-label={labels.month}
       onKeyDown={onMonthKey}
     >
       <div role="row" className={styles.weekdays}>

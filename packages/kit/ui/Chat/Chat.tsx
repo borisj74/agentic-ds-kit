@@ -8,6 +8,7 @@ import { ThinkingAnimation } from "../ThinkingAnimation";
 import type { ChatProps } from "./Chat.types";
 import { cx } from "../shared/cx";
 import styles from "./Chat.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
 
@@ -34,6 +35,7 @@ export function Chat({
   ref,
   ...rest
 }: ChatProps) {
+  const labels = useKitLabels();
   const [internalValue, setInternalValue] = useState(defaultValue);
   const threadRef = useRef<HTMLDivElement>(null);
   const inputId = useId();
@@ -107,7 +109,7 @@ export function Chat({
         ref={threadRef}
         className={styles.thread}
         role="log"
-        aria-label="Conversation"
+        aria-label={labels.conversation}
         aria-live="polite"
         aria-busy={isThinking}
       >
@@ -136,7 +138,7 @@ export function Chat({
       </div>
 
       {suggestions.length > 0 ? (
-        <div className={styles.suggestions} aria-label="Suggested prompts">
+        <div className={styles.suggestions} aria-label={labels.suggestedPrompts}>
           {suggestions.map((suggestion) => (
             <Button
               key={suggestion}
@@ -172,7 +174,7 @@ export function Chat({
           appearance={sendAppearance}
           mode="primary"
           size="md"
-          ariaLabel="Send"
+          ariaLabel={labels.send}
           disabled={disabled || !draft.trim()}
           iconStart="Send"
         />

@@ -5,6 +5,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { ModalCardProps } from "./ModalCard.types";
 import { cx } from "../shared/cx";
 import styles from "./ModalCard.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { ModalCardProps, ModalCardSize } from "./ModalCard.types";
 
@@ -22,6 +23,7 @@ export function ModalCard({
   ref,
   ...rest
 }: ModalCardProps) {
+  const labels = useKitLabels();
   const titleId = useId();
   const descriptionId = useId();
 
@@ -48,7 +50,7 @@ export function ModalCard({
           ) : null}
         </div>
         {onClose ? (
-          <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
+          <button type="button" className={styles.close} onClick={onClose} aria-label={labels.close}>
             <LucideByName name="X" size={16} />
           </button>
         ) : null}

@@ -6,6 +6,7 @@ import controlStyles from "../shared/controls.module.css";
 import { bump, formatTime, parseTime, toTime, togglePeriod } from "./time";
 import type { TimePickerProps } from "./TimePicker.types";
 import styles from "./TimePicker.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { HourCycle, TimePickerProps, TimePickerSize } from "./TimePicker.types";
 export { formatTime } from "./time";
@@ -24,6 +25,7 @@ export function TimePicker({
   ariaLabel,
   className,
 }: TimePickerProps) {
+  const labels = useKitLabels();
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "09:00");
   const current = isControlled ? value : uncontrolled;
@@ -52,7 +54,7 @@ export function TimePicker({
         className={styles.segment}
         role="spinbutton"
         inputMode="numeric"
-        aria-label="Hour"
+        aria-label={labels.hour}
         aria-valuenow={hourCycle === "24" ? hour : hour % 12 || 12}
         aria-valuemin={hourCycle === "24" ? 0 : 1}
         aria-valuemax={hourCycle === "24" ? 23 : 12}
@@ -78,7 +80,7 @@ export function TimePicker({
         className={styles.segment}
         role="spinbutton"
         inputMode="numeric"
-        aria-label="Minute"
+        aria-label={labels.minute}
         aria-valuenow={minute}
         aria-valuemin={0}
         aria-valuemax={59}
@@ -99,7 +101,7 @@ export function TimePicker({
         <button
           type="button"
           className={styles.period}
-          aria-label={`Period, ${period}`}
+          aria-label={labels.period(period)}
           disabled={disabled}
           onClick={() => emit(togglePeriod(hour), minute)}
         >

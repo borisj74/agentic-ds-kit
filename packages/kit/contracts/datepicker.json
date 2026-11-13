@@ -112,7 +112,8 @@
       "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger. Escape closes only this overlay, not a parent Modal, Drawer or AlertDialog",
       "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll",
       "Must have associated label via Field or a visible label pointing at id",
-      "error described by Field via describedBy"
+      "error described by Field via describedBy",
+      "built-in labels (previousMonth, nextMonth, chooseDate, chooseDates) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

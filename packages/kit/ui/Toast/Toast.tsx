@@ -10,6 +10,7 @@ import { cx } from "../shared/cx";
 import styles from "./Toast.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
+import { useKitLabels } from "../shared/labels";
 
 export type { ToastProps, ToastStatus } from "./Toast.types";
 
@@ -65,6 +66,7 @@ function ToastCard({
   ref,
   ...rest
 }: Omit<ToastProps, "open">) {
+  const labels = useKitLabels();
   const duration = durationProp === undefined ? 5000 : durationProp;
   const titleId = useId();
   const descriptionId = useId();
@@ -145,7 +147,7 @@ function ToastCard({
             </div>
           ) : null}
         </div>
-        <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel="Dismiss" onClick={onClose} />
+        <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={labels.dismiss} onClick={onClose} />
       </div>
     </div>
   );

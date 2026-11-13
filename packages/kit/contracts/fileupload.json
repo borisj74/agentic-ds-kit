@@ -133,7 +133,8 @@
       "Uploading rows use Progress with ariaLabel 'Uploading {name}'",
       "Remove Button has aria-label 'Remove {name}'; retry Button has aria-label 'Retry {name}'",
       "Status is never color alone: icon plus text",
-      "Focus ring uses --focus-ring at --border-focus-width, like Button"
+      "Focus ring uses --focus-ring at --border-focus-width, like Button",
+      "built-in labels (files, uploading, retryFile, removeFile) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

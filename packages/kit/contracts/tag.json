@@ -130,7 +130,8 @@
       "Removable: the X is a button with aria-label Remove {children}",
       "disabled sets aria-disabled and disables both the checkbox and the remove button",
       "Dot is aria-hidden; never the only signal",
-      "Checkbox and remove button show a focus-visible ring using --border-focus"
+      "Checkbox and remove button show a focus-visible ring using --border-focus",
+      "built-in labels (remove) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

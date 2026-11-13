@@ -56,6 +56,12 @@
       "type": "number",
       "required": false,
       "note": "When items.length > maxItems, show the first item, an ellipsis, then the last (maxItems - 1) items. Ellipsis is aria-hidden, not interactive."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Breadcrumb",
+      "note": "The nav landmark's name. Set it to translate."
     }
   },
   "passthrough": {
@@ -76,7 +82,7 @@
   "a11y": {
     "element": "nav",
     "requirements": [
-      "nav with aria-label=\"Breadcrumb\"",
+      "nav with aria-label from ariaLabel (default \"Breadcrumb\")",
       "ordered list",
       "current page has aria-current=\"page\" and is not a link",
       "separators aria-hidden",

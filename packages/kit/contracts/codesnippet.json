@@ -38,6 +38,11 @@
       "required": false,
       "note": "filename or caption in the header; with tabs it only names the code region"
     },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "note": "names the code region when there is no title (title wins). Give each snippet on a page its own name"
+    },
     "showLineNumbers": {
       "type": "boolean",
       "default": false,
@@ -96,11 +101,13 @@
     "element": "pre > code inside a div role=region",
     "requirements": [
       "Code renders in <pre><code>",
-      "The region is named by title, the active tab label, or the language",
+      "The region is named by title, ariaLabel, the active tab label, or the language (\"Code\" when none)",
+      "Two snippets on one page need different names (title or ariaLabel)",
       "The region is focusable (tabIndex 0) only when it scrolls, so keyboard users can scroll it",
       "Copy button is named by its visible text (Copy, then Copied); a polite live region announces Copied",
       "Line numbers are aria-hidden and user-select none; copy writes the raw code string",
-      "Tabs follow kit Tabs keyboard (arrows, Home, End)"
+      "Tabs follow kit Tabs keyboard (arrows, Home, End)",
+      "built-in labels (code, languageCode, copy, copied) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

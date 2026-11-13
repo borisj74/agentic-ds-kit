@@ -17,6 +17,7 @@ import {
 } from "./dateRange";
 import type { DateRangePickerProps } from "./DateRangePicker.types";
 import styles from "./DateRangePicker.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { DateRange, DateRangePreset, DateRangePickerProps, DateRangePickerSize } from "./DateRangePicker.types";
 export { defaultDateRangePresets } from "./dateRange";
@@ -63,6 +64,7 @@ export function DateRangePicker({
   className,
   ref,
 }: DateRangePickerProps) {
+  const labels = useKitLabels();
   const fallbackId = useId();
   const triggerId = id || fallbackId;
   const panelId = `${triggerId}-dialog`;
@@ -200,7 +202,7 @@ export function DateRangePicker({
           className={styles.panel}
           role="dialog"
           aria-modal="true"
-          aria-label="Choose dates"
+          aria-label={labels.chooseDates}
           tabIndex={-1}
         >
           <span className={styles.srOnly} aria-live="polite">
@@ -208,7 +210,7 @@ export function DateRangePicker({
           </span>
           <div className={styles.body}>
             {resolvedPresets.length > 0 ? (
-              <div className={styles.presets} role="group" aria-label="Presets">
+              <div className={styles.presets} role="group" aria-label={labels.presets}>
                 {resolvedPresets.map((preset) => (
                   <button
                     key={preset.id}

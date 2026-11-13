@@ -92,7 +92,8 @@
       "region with aria-roledescription=carousel",
       "slides are role=group with aria-roledescription=slide",
       "button names Previous slide / Next slide",
-      "index live region if shown"
+      "index live region if shown",
+      "built-in labels (previousSlide, nextSlide, slide) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

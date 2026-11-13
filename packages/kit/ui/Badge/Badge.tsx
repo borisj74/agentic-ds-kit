@@ -5,6 +5,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { BadgeProps, BadgeTone } from "./Badge.types";
 import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { BadgeProps, BadgeTone, BadgeAppearance, BadgeSize } from "./Badge.types";
 
@@ -26,6 +27,7 @@ export function Badge({
   ref,
   ...rest
 }: BadgeProps) {
+  const labels = useKitLabels();
   const iconPx = ICON_SIZE[size];
   const toneClass = resolvedTone(tone);
 
@@ -48,7 +50,7 @@ export function Badge({
         <button
           type="button"
           className={styles.remove}
-          aria-label={`Remove ${children}`}
+          aria-label={labels.remove(String(children))}
           disabled={disabled}
           onClick={() => {
             if (disabled) return;

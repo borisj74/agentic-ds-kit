@@ -45,7 +45,8 @@
       "Backspace on an empty query removes the last tag",
       "Duplicate tags, compared case-insensitively, are ignored",
       "Escape closes suggestions. Each tag remove button removes that tag",
-      "Must have a Field label or ariaLabel"
+      "Must have a Field label or ariaLabel",
+      "built-in labels (suggestions) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

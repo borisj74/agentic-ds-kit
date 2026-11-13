@@ -30,6 +30,7 @@ import {
 } from "./calendarModel";
 import { cx } from "../shared/cx";
 import styles from "./Calendar.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type {
   CalendarEvent,
@@ -72,6 +73,7 @@ export function Calendar({
   ref,
   ...rest
 }: CalendarProps) {
+  const labels = useKitLabels();
   const TitleTag = headingLevel === 3 ? "h3" : headingLevel === 4 ? "h4" : "h2";
   const titleId = useId();
   const formId = useId();
@@ -255,7 +257,7 @@ export function Calendar({
           </TitleTag>
           <Tooltip content="Choose month">
           <DropdownMenu
-            ariaLabel="Choose month"
+            ariaLabel={labels.chooseMonth}
             trigger=""
             appearance="ghost" mode="neutral"
             size="sm"
@@ -294,7 +296,7 @@ export function Calendar({
             <Tabs
               size="sm"
               variant="line"
-              ariaLabel="Calendar view"
+              ariaLabel={labels.calendarView}
               value={view}
               onChange={(id) => setView(id as CalendarView)}
               items={offered.map((item) => ({ id: item, label: VIEW_LABELS[item] }))}

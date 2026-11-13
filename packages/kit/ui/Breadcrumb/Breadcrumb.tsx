@@ -45,12 +45,20 @@ function CrumbBody({ item }: { item: BreadcrumbItem }) {
   );
 }
 
-export function Breadcrumb({ items, separator = "chevron", maxItems, className, ref, ...rest }: BreadcrumbProps) {
+export function Breadcrumb({
+  items,
+  separator = "chevron",
+  maxItems,
+  ariaLabel = "Breadcrumb",
+  className,
+  ref,
+  ...rest
+}: BreadcrumbProps) {
   const nodes = visibleNodes(items, maxItems);
   const lastIndex = items.length - 1;
 
   return (
-    <nav {...rest} ref={ref} className={className} aria-label="Breadcrumb">
+    <nav {...rest} ref={ref} className={className} aria-label={ariaLabel}>
       <ol className={styles.list}>
         {nodes.map((node, position) => {
           const key = node.kind === "ellipsis" ? "ellipsis" : `crumb-${node.index}`;

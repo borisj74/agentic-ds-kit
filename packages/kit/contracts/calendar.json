@@ -157,7 +157,8 @@
       "Month event chips, +N more, and day numbers are at least 24px tall",
       "Icon-only Previous and Next are kit Buttons with a kit Tooltip; aria-labels name the step (month, week, or day)",
       "The event form and the Calendars list open in a kit Drawer, which traps focus",
-      "+N more and the day numbers open Day view"
+      "+N more and the day numbers open Day view",
+      "built-in labels (chooseMonth, calendarView, month, allDay) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

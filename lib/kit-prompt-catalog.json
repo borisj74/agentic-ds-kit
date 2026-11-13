@@ -3149,6 +3149,11 @@
           "required": false,
           "note": "filename or caption in the header; with tabs it only names the code region"
         },
+        "ariaLabel": {
+          "type": "string",
+          "required": false,
+          "note": "names the code region when there is no title (title wins). Give each snippet on a page its own name"
+        },
         "showLineNumbers": {
           "type": "boolean",
           "default": false,
@@ -4324,6 +4329,12 @@
           "required": false,
           "note": "Extra explanation. Field puts HelpPopover beside the label (placement right). title is the Field label. content is help. Not a substitute for hint."
         },
+        "helpLabel": {
+          "type": "string",
+          "default": "Help",
+          "required": false,
+          "note": "Name of the help button shown with help. Set it to translate."
+        },
         "error": {
           "type": "string",
           "required": false
@@ -4988,6 +4999,12 @@
           "type": "number",
           "required": false,
           "note": "When items.length > maxItems, show the first item, an ellipsis, then the last (maxItems - 1) items. Ellipsis is aria-hidden, not interactive."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "default": "Breadcrumb",
+          "required": false,
+          "note": "The nav landmark's name. Set it to translate."
         }
       }
     },

@@ -21,6 +21,7 @@
     "htmlFor": { "type": "string", "required": true },
     "hint": { "type": "string", "required": false, "note": "helper text. Hidden when error is set." },
     "help": { "type": "string", "required": false, "note": "Extra explanation. Field puts HelpPopover beside the label (placement right). title is the Field label. content is help. Not a substitute for hint." },
+    "helpLabel": { "type": "string", "required": false, "default": "Help", "note": "Name of the help button shown with help. Set it to translate." },
     "error": { "type": "string", "required": false },
     "labelPosition": {
       "type": "enum",

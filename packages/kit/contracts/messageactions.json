@@ -124,7 +124,8 @@
       "thumbs are toggle buttons with aria-pressed",
       "thanks text is role=status",
       "hover-only rows still show on keyboard focus and always show under prefers-reduced-motion",
-      "More is the kit DropdownMenu"
+      "More is the kit DropdownMenu",
+      "built-in labels (copy, retry, edit, goodResponse, badResponse, moreActions, whatWentWrong) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

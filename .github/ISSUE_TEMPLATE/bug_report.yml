@@ -1,0 +1,38 @@
+name: Bug report
+description: Something in agentic-ds-kit or the docs site doesn't work as its contract says.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: For security problems, don't use this form. See SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: Run `npx agentic-ds-kit --version`.
+      placeholder: "0.20.0"
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component, pattern or page
+      placeholder: "Pagination, /patterns/dashboard, MCP list_components…"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps or code to reproduce
+      render: tsx
+  - type: input
+    id: env
+    attributes:
+      label: Browser, framework and versions
+      placeholder: "Chrome 140, Next.js 16, React 19"

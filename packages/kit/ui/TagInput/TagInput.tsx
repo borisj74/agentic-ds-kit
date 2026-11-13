@@ -8,6 +8,7 @@ import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import controlStyles from "../shared/controls.module.css";
 import type { TagInputProps } from "./TagInput.types";
 import styles from "./TagInput.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { TagInputProps, TagInputSize } from "./TagInput.types";
 
@@ -32,6 +33,7 @@ export function TagInput({
   className,
   ref,
 }: TagInputProps) {
+  const labels = useKitLabels();
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -166,7 +168,7 @@ export function TagInput({
         />
       </div>
       {showList ? (
-        <ul id={listId} role="listbox" aria-label="Suggestions" className={styles.list}>
+        <ul id={listId} role="listbox" aria-label={labels.suggestions} className={styles.list}>
           {matches.map((item, index) => (
             <li
               key={item}

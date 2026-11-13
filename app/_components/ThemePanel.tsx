@@ -193,8 +193,8 @@ export function ThemePanel({ onClose, showActions = true, showHeader = true }: T
         </Group>
 
         <Group label="Primary colour">
+          {/* No id: with one, ColorPicker expects an outside label for its hex field (axe "label"). */}
           <ColorPicker
-            id={`${baseId}-primary`}
             ariaLabel="Primary colour"
             value={state.brand}
             onChange={(hex) => {

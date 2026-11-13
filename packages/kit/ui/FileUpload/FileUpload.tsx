@@ -8,6 +8,7 @@ import { Progress } from "../Progress";
 import type { FileUploadItem, FileUploadProps } from "./FileUpload.types";
 import { cx } from "../shared/cx";
 import styles from "./FileUpload.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { FileUploadProps, FileUploadItem, FileUploadStatus } from "./FileUpload.types";
 
@@ -51,6 +52,7 @@ function FileRow({
   onRemove?: (id: string) => void;
   onRetry?: (id: string) => void;
 }) {
+  const labels = useKitLabels();
   const percent = Math.round(Math.min(100, Math.max(0, file.progress ?? 0)));
   const size = formatSize(file.size);
 
@@ -82,7 +84,7 @@ function FileRow({
           </span>
         </div>
         {file.status === "uploading" ? (
-          <Progress value={percent} size="sm" ariaLabel={`Uploading ${file.name}`} />
+          <Progress value={percent} size="sm" ariaLabel={labels.uploading(file.name)} />
         ) : null}
       </div>
       <div className={styles.actions}>
@@ -91,7 +93,7 @@ function FileRow({
             appearance="ghost" mode="neutral"
             size="sm"
             iconStart="RotateCcw"
-            ariaLabel={`Retry ${file.name}`}
+            ariaLabel={labels.retryFile(file.name)}
             disabled={disabled}
             onClick={() => onRetry(file.id)}
           />
@@ -101,7 +103,7 @@ function FileRow({
             appearance="ghost" mode="neutral"
             size="sm"
             iconStart={file.status === "uploading" ? "X" : "Trash2"}
-            ariaLabel={`Remove ${file.name}`}
+            ariaLabel={labels.removeFile(file.name)}
             disabled={disabled}
             onClick={() => onRemove(file.id)}
           />
@@ -127,6 +129,7 @@ export function FileUpload({
   ref,
   ...rest
 }: FileUploadProps) {
+  const labels = useKitLabels();
   const uid = useId();
   const zoneId = id ?? `${uid}-zone`;
   const hintId = `${uid}-hint`;
@@ -214,7 +217,7 @@ export function FileUpload({
         }}
       />
       {files.length > 0 ? (
-        <ul className={styles.list} aria-label="Files">
+        <ul className={styles.list} aria-label={labels.files}>
           {files.map((file) => (
             <FileRow
               key={file.id}

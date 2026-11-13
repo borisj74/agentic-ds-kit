@@ -11,6 +11,8 @@ export interface FieldProps extends Omit<ComponentPropsWithoutRef<"div">, FieldO
   htmlFor: string;
   hint?: string;
   help?: string;
+  /** Name of the help button shown with `help`. Default "Help"; set it to translate. */
+  helpLabel?: string;
   error?: string;
   labelPosition?: FieldLabelPosition;
   children: ReactNode;

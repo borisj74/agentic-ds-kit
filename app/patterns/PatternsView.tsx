@@ -170,7 +170,7 @@ function ScreenPatternView({
             Install
           </h2>
           <p className={playground.body}>{contract.copyNote?.replace(/`/g, "")}</p>
-          <CodeBlock code={contract.add} />
+          <CodeBlock code={contract.add} label="Install command" />
           {contract.requires?.length ? (
             <p className={playground.body}>
               Also copies{" "}
@@ -189,7 +189,7 @@ function ScreenPatternView({
           <h2 id={`${slug}-usage`} className={styles.sectionTitle}>
             Usage
           </h2>
-          <CodeBlock code={usage} />
+          <CodeBlock code={usage} label="Usage code" />
         </section>
 
         <section className={styles.section} aria-labelledby={`${slug}-must`}>

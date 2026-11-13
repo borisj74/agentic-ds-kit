@@ -20,6 +20,8 @@ export interface CodeSnippetProps extends Omit<ComponentPropsWithoutRef<"div">, 
   language?: string;
   /** Filename or caption in the header. With tabs, it names the code region only. */
   title?: string;
+  /** Names the code region when there is no title, e.g. "Install command". Give each snippet on a page its own name. */
+  ariaLabel?: string;
   /** Decorative line numbers (aria-hidden, never copied). */
   showLineNumbers?: boolean;
   /** Copy button. */

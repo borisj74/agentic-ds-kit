@@ -102,7 +102,8 @@
       "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Overlay click closes",
       "Focus returns to the opener on close (Escape, Close or overlay click)",
-      "Unique ids via useId"
+      "Unique ids via useId",
+      "built-in labels (close) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
