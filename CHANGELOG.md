@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-11-13
+
 ### Added
 
 - `describedBy` on InputOTP, SegmentedControl, RadioGroup and Slider; `labelledBy` and `error` on Slider. Field passes its label id to a Slider so the thumbs are named
@@ -14,10 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Alert titles use the `-fg` tones for contrast; the icon keeps the status colour
+- Escape in an open Select or DatePicker inside a Modal, Drawer or AlertDialog closes only the Select or DatePicker. Modal, Drawer and AlertDialog ignore an Escape that a child already handled (`event.defaultPrevented`)
 - Escape in an open overlay (ContextMenu, Tooltip, Popover, DateRangePicker, Combobox, MultiSelect, TagInput, AnchorNav, DateTimePicker) closes only that overlay, not a parent Modal or Drawer
 - Field no longer adds `role="group"`; RadioGroup's fieldset is `role="radiogroup"` and carries `aria-invalid` instead of each radio
 - `aria-invalid` is no longer set on the DatePicker, Select and FileUpload trigger buttons; the error still reaches them through `aria-describedby`
 - Modal, Drawer, AlertDialog and ModalCard skip their entrance animation under `prefers-reduced-motion`
+- Muted text on tinted AgentInbox and SetupGuide rows uses `--text-fg-muted` for contrast
+- NumberTransition, ShimmerText and the TraceWaterfall totals give screen readers visually hidden text and hide the animated part. TraceWaterfall totals now read their value, not "Total time" / "Total cost"
+- LineChart, BarChart and UsageMeter use `role="group"` with a label when their points are focusable
+- The Modal and Drawer focus trap skips disabled controls and only matches `a[href]`
+- The Select trigger has `aria-haspopup` in server-rendered HTML
 
 ### Known issues
 
