@@ -68,11 +68,6 @@ const ACTION_ROWS = [
     controls: "Default and stronger separators.",
     usedBy: "Cards, tables, layout dividers.",
   },
-  {
-    token: "--border-field",
-    controls: "Resting border of form controls, 3:1 or more against the field fill.",
-    usedBy: "Input, Textarea, Select, Combobox, date and time pickers.",
-  },
 ];
 
 const STATUS_ROWS = [

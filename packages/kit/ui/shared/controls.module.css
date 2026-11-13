@@ -8,8 +8,7 @@
   line-height: var(--type-line-body);
   color: var(--text-fg);
   background-color: var(--bg-field);
-  /* --border-field: 3:1 or more against --bg-field in light and dark (WCAG 1.4.11). */
-  border: var(--border-width-thin) solid var(--border-field);
+  border: var(--border-width-thin) solid var(--line);
   border-radius: var(--radius-control-md);
   box-shadow: var(--shadow-xs);
   transition: border-color var(--motion-fast) ease, outline-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;

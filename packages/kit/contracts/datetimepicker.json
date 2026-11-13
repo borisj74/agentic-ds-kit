@@ -25,7 +25,7 @@
     "placeholder": { "type": "string", "default": "Pick a date and time" }
   },
   "passthrough": { "root": "div", "ref": "trigger button", "className": "root", "rest": "none" },
-  "tokens": ["text.primary", "text.muted", "icon.muted", "surface.card", "border.faint", "border.field", "border.focus", "status.danger"],
+  "tokens": ["text.primary", "text.muted", "icon.muted", "surface.card", "border.faint", "border.focus", "status.danger"],
   "a11y": {
     "element": "button",
     "requirements": [
