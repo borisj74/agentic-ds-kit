@@ -31,14 +31,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Build
+        run: npm run build
+
       - name: Typecheck (root)
         run: npx tsc --noEmit
 
       - name: Typecheck (kit)
         run: npx tsc --noEmit -p packages/kit
-
-      - name: Build
-        run: npm run build
 
       - name: Test
         run: npm test
