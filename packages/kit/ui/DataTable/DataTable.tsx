@@ -262,6 +262,7 @@ export function DataTable({
     const ids = new Set(indexedRows.map((entry) => entry.id));
     const next = selected.filter((id) => ids.has(id));
     if (next.length !== selected.length) emitSelection(next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- emitSelection is recreated each render; re-run only when rows or selection change.
   }, [indexedRows, selected]);
 
   function emitSelection(next: string[]) {

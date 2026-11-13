@@ -358,14 +358,14 @@ export const FOUNDATION_ITEMS = [
 
 export const PATTERN_ITEMS = [
   { slug: "dashboard", label: "Dashboard" },
-  { slug: "settings", label: "Settings" },
+  { slug: "settings-form", label: "Settings form" },
   { slug: "list-detail", label: "List detail" },
-  { slug: "empty", label: "Empty" },
+  { slug: "empty-first-run", label: "Empty first run" },
   { slug: "sign-in", label: "Sign in" },
   { slug: "app-shell", label: "App shell" },
   { slug: "billing-schedule", label: "Billing schedule" },
   { slug: "integration-settings", label: "Integration settings" },
-  { slug: "settings-area", label: "Settings area" },
+  { slug: "settings", label: "Settings" },
   { slug: "onboarding", label: "Onboarding" },
   { slug: "layouts", label: "Layouts" },
 ] as const;
@@ -382,7 +382,7 @@ export function isBlockSlug(value: string): value is BlockSlug {
 }
 
 const PATTERN_HASH_ALIASES: Record<string, PatternSlug> = {
-  research: "empty",
+  research: "empty-first-run",
   projects: "list-detail",
   "launch-brief": "list-detail",
   "qa-checklist": "list-detail",

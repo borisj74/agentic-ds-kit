@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { PageHeader } from "agentic-ds-kit";
 import playground from "../playground.module.css";
 import { StudioShowcase } from "./StudioShowcase";
+import { canonical } from "@/lib/site";
 
 export const metadata: Metadata = {
+  ...canonical("/studio"),
   title: "Studio",
 };
 

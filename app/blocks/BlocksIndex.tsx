@@ -31,7 +31,14 @@ export function BlocksIndex() {
               title={doc.label}
               description={doc.contract.summary}
               href={`/blocks/${doc.slug}`}
-              thumb={<ScaledFrame src={blockFrameUrl(doc.slug, mode)} title={`${doc.label} block`} interactive={false} />}
+              thumb={
+                <ScaledFrame
+                  src={blockFrameUrl(doc.slug, mode)}
+                  title={`${doc.label} block`}
+                  interactive={false}
+                  deferUntilVisible
+                />
+              }
             />
           ))}
         </div>

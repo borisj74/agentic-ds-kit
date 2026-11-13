@@ -18,7 +18,8 @@ export function DocPageExtras({ slug }: DocPageExtrasProps) {
           <h2 id={`${slug}-props`} className={styles.usageTitle}>
             Props
           </h2>
-          <div className={styles.propsTableWrap}>
+          {/* Scrolls sideways on narrow screens, so it takes focus to be scrollable by keyboard. */}
+          <div className={styles.propsTableWrap} tabIndex={0} role="region" aria-label="Props table">
             <table className={styles.propsTable}>
               <thead>
                 <tr>

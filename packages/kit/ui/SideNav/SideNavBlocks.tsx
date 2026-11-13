@@ -3,7 +3,6 @@
 import {
   Children,
   useContext,
-  useEffect,
   useId,
   useLayoutEffect,
   useMemo,

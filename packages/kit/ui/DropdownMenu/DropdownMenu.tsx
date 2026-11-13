@@ -196,13 +196,14 @@ export function DropdownMenu({
     setSubCoords(subPanelStyle(el.getBoundingClientRect()));
   }
 
+  const hasTriggerTags = triggerTags !== undefined;
   useLayoutEffect(() => {
     const button = triggerButton();
     if (!button) return;
     button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", open ? "true" : "false");
     button.setAttribute("aria-controls", menuId);
-  }, [open, menuId, triggerStyle, triggerTags === undefined]);
+  }, [open, menuId, triggerStyle, hasTriggerTags]);
 
   // A removed Tag unmounts; move focus to the next remove button, or the trigger.
   useLayoutEffect(() => {
@@ -220,6 +221,7 @@ export function DropdownMenu({
     const button = findTrigger(rootRef.current);
     if (!button) return;
     setCoords(panelStyle(button.getBoundingClientRect()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- panelStyle is a render-scope helper over align/size/columns, which are listed.
   }, [open, align, size, triggerStyle, columns]);
 
   useLayoutEffect(() => {
@@ -273,6 +275,7 @@ export function DropdownMenu({
       window.removeEventListener("resize", onReposition);
       window.removeEventListener("scroll", onReposition, true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- placePanel/placeSubPanel/setOpen are render-scope helpers; their inputs are listed.
   }, [open, align, size, columns, openSubId, activeId]);
 
   useEffect(() => {

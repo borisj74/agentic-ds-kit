@@ -3,6 +3,7 @@ import { Section, Table } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
+import { canonical } from "@/lib/site";
 
 const VERSION = kitPackage.version;
 
@@ -67,6 +68,7 @@ const TOOL_ROWS = [
 ];
 
 export const metadata: Metadata = {
+  ...canonical("/mcp"),
   title: "MCP",
 };
 

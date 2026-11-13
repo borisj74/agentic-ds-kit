@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Section, Table } from "agentic-ds-kit";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
+import { canonical } from "@/lib/site";
 
 const TOKEN_COLUMNS = [
   { key: "token", header: "Token", emphasis: true },
@@ -139,6 +140,7 @@ const RADIUS = `--radius-control-sm: var(--radius-50);
 --radius-pill: var(--radius-full);`;
 
 export const metadata: Metadata = {
+  ...canonical("/theming"),
   title: "Theming",
 };
 

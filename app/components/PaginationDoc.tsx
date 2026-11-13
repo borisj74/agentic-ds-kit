@@ -23,6 +23,7 @@ export function PaginationDoc() {
   const [size, setSize] = useState<PaginationSize>("md");
   const [simplePage, setSimplePage] = useState(2);
   const [iconsPage, setIconsPage] = useState(2);
+  const [compactPage, setCompactPage] = useState(2);
 
   return (
     <div>
@@ -142,6 +143,23 @@ export function PaginationDoc() {
   onPageChange={() => {}}
 />`}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Compact</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Pagination page={compactPage} pageCount={10} compact onPageChange={setCompactPage} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  For narrow screens: Previous, &ldquo;2 of 10&rdquo; and Next on one line. Screen readers
+                  hear &ldquo;Page 2 of 10&rdquo; when it changes.
+                </p>
+              </div>
+              <CodeBlock code={`<Pagination page={2} pageCount={10} compact onPageChange={setPage} />`} />
             </section>
           </div>
         )}

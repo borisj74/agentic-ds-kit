@@ -13,10 +13,12 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
   const current = views.some((item) => item.id === view) ? view : views[0].id;
   switch (slug) {
     case "dashboard":
-    case "settings":
     case "list-detail":
-    case "empty":
       return <DashboardScreen pattern={slug} view={slug === "dashboard" ? current : undefined} />;
+    case "settings-form":
+      return <DashboardScreen pattern="settings" />;
+    case "empty-first-run":
+      return <DashboardScreen pattern="empty" />;
     case "sign-in":
       return <SignInScreen view={current} />;
     case "app-shell":
@@ -25,7 +27,7 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
       return <BillingScheduleScreen view={current} />;
     case "integration-settings":
       return <IntegrationSettingsScreen view={current} />;
-    case "settings-area":
+    case "settings":
       return <SettingsScreen view={current} />;
     case "onboarding":
       return <OnboardingScreen view={current} />;

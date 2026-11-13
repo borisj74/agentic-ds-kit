@@ -143,7 +143,8 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
         </div>
       </header>
 
-      <div id="site-sidebar" className={styles.sidebar}>
+      {/* An aside, so the brand mark sits inside a landmark (axe "region"); the site nav stays inside it. */}
+      <aside id="site-sidebar" className={styles.sidebar} aria-label="Site">
         <div className={styles.brandRow}>
           <div className={styles.brand}>
             <NisthaLogo />
@@ -162,7 +163,7 @@ function DocsShell({ children, pathname }: { children: React.ReactNode; pathname
           />
         </div>
         <SiteNav query={query} onQuery={setQuery} pathname={pathname} searchId="site-nav-search" />
-      </div>
+      </aside>
 
       {customize.docked ? (
         <aside id="customize-panel" className={styles.themeColumn} aria-label="Theme" tabIndex={-1}>

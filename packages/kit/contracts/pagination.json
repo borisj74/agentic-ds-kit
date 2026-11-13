@@ -15,6 +15,11 @@
     "button"
   ],
   "props": {
+    "compact": {
+      "type": "boolean",
+      "default": false,
+      "note": "Narrow layout for small screens: icon-only Previous and Next (\"Previous page\", \"Next page\") around a \"2 of 10\" status. Ignores showPages and showLabels. The default layout wraps instead of overflowing."
+    },
     "page": {
       "type": "number",
       "required": false,
@@ -79,7 +84,7 @@
       "Next disabled on last page",
       "current page uses kit Button appearance=outline mode=neutral and aria-current=page",
       "ellipsis is a span with Lucide Ellipsis, aria-hidden, not a Button",
-      "icon-only Previous/Next set ariaLabel"
+      "icon-only Previous/Next set ariaLabel", "compact: the status reads \"Page 2 of 10\" (\"Page\" visually hidden) in an aria-live=polite span"
     ]
   },
   "doNot": [

@@ -53,6 +53,7 @@ export function Pagination({
   showLabels = true,
   showPreviousNext = true,
   size = "md",
+  compact = false,
   "aria-label": ariaLabel = "Pagination",
   className,
   ref,
@@ -69,6 +70,35 @@ export function Pagination({
     if (nextPage === current) return;
     if (!isControlled) setUncontrolled(nextPage);
     onPageChange?.(nextPage);
+  }
+
+  if (compact) {
+    return (
+      <nav {...rest} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, styles.compact, className)}>
+        <Button
+          size={size}
+          appearance="ghost"
+          mode="neutral"
+          iconStart="ChevronLeft"
+          ariaLabel="Previous page"
+          disabled={current <= 1}
+          onClick={() => go(current - 1)}
+        />
+        <span className={cx(styles.status, styles[size])} aria-live="polite">
+          <span className={styles.srOnly}>Page </span>
+          {current} of {count}
+        </span>
+        <Button
+          size={size}
+          appearance="ghost"
+          mode="neutral"
+          iconStart="ChevronRight"
+          ariaLabel="Next page"
+          disabled={current >= count}
+          onClick={() => go(current + 1)}
+        />
+      </nav>
+    );
   }
 
   return (

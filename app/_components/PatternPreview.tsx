@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button, CodeSnippet, SegmentedControl } from "agentic-ds-kit";
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
@@ -28,17 +28,44 @@ export function ScaledFrame({
   title,
   device = "desktop",
   interactive = true,
+  deferUntilVisible = false,
   className,
 }: {
   src: string;
   title: string;
   device?: Device;
   interactive?: boolean;
+  /**
+   * Mount the iframe only once the card is near the viewport (index grids). Native lazy loading
+   * starts far ahead of the viewport, so every card on /blocks loaded at once.
+   */
+  deferUntilVisible?: boolean;
   className?: string;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
+  const [visible, setVisible] = useState(!deferUntilVisible);
   const size = DEVICES[device];
+
+  useEffect(() => {
+    if (visible) return;
+    const host = hostRef.current;
+    if (!host || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [visible]);
 
   useLayoutEffect(() => {
     const host = hostRef.current;
@@ -59,14 +86,16 @@ export function ScaledFrame({
         className={styles.frameBox}
         style={{ width: size.width * scale, height: size.height * scale, visibility: scale ? "visible" : "hidden" }}
       >
-        <iframe
-          src={src}
-          title={title}
-          loading="lazy"
-          tabIndex={interactive ? undefined : -1}
-          className={styles.frame}
-          style={{ width: size.width, height: size.height, transform: `scale(${scale})` }}
-        />
+        {visible ? (
+          <iframe
+            src={src}
+            title={title}
+            loading="lazy"
+            tabIndex={interactive ? undefined : -1}
+            className={styles.frame}
+            style={{ width: size.width, height: size.height, transform: `scale(${scale})` }}
+          />
+        ) : null}
       </div>
     </div>
   );

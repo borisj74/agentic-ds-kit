@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `agentic-ds-kit/icons-on-demand`: opt-in entry that lets any Lucide icon name render in kit icon props, each loaded as its own chunk
 - MCP: `detail` (`summary` or `full`), `limit` and `offset` on `list_components`, `get_tokens` and `questions`; `kind` filter on `list_components`. Paged answers carry `page: { offset, limit, total, next }`
 - CLI: `npx agentic-ds-kit --version` (also `-v`)
+- Pagination `compact`: icon-only Previous and Next around a "2 of 10" status for narrow screens (screen readers hear "Page 2 of 10")
 
 ### Changed
 
@@ -28,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Peer dependency is `next >=15` (Next 14 does not support React 19)
 - The published package no longer ships source maps: 644 kB instead of 1.1 MB (2.7 MB unpacked instead of 4.4 MB)
 - The README states that the package is ESM-only
+- Pagination wraps instead of overflowing on narrow screens
+- CommentsPanel no longer overflows a 375px screen: a thread's one-line preview truncates instead of setting the panel's minimum width
 
 ### Removed
 

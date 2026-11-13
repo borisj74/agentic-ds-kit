@@ -88,7 +88,8 @@ export function Tooltip({
     // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
     document.addEventListener("keydown", handleKeyDown, true);
     return () => document.removeEventListener("keydown", handleKeyDown, true);
-  }, [open]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hide is a render-scope helper; re-registering it every render adds nothing.
+  }, [open, isControlled]);
 
   const trigger = isValidElement(children)
     ? cloneElement(children as ReactElement<{ "aria-describedby"?: string }>, {

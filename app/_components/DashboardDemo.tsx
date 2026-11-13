@@ -7,7 +7,6 @@ import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
 import { SideNav } from "agentic-ds-kit";
 import type { SideNavItemData } from "agentic-ds-kit";
-import type { PatternSlug } from "@/lib/playground-nav";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
@@ -149,7 +148,8 @@ function selectedProjectId(page: string) {
   return page;
 }
 
-type DashboardRoute = Extract<PatternSlug, "dashboard" | "settings" | "list-detail" | "empty">;
+/** The four dashboard-family screens (its own variant names; the docs slugs are settings-form and empty-first-run). */
+type DashboardRoute = "dashboard" | "settings" | "list-detail" | "empty";
 
 /**
  * The content patterns (dashboard, settings-form, list-detail, empty-first-run) as one full

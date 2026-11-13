@@ -37,17 +37,17 @@ interface PatternContract {
   snippet?: string;
 }
 
-/** Docs slug → pattern contract (the `settings` slug predates the settings pattern, so it is settings-form). */
+/** Docs slug → pattern contract. Slugs are the pattern ids. */
 const CONTRACTS: Record<Exclude<PatternSlug, "layouts">, PatternContract> = {
   dashboard,
-  settings: settingsForm,
+  "settings-form": settingsForm,
   "list-detail": listDetail,
-  empty: emptyFirstRun,
+  "empty-first-run": emptyFirstRun,
   "sign-in": signIn,
   "app-shell": appShell,
   "billing-schedule": billingSchedule,
   "integration-settings": integrationSettings,
-  "settings-area": settings,
+  settings,
   onboarding,
 };
 

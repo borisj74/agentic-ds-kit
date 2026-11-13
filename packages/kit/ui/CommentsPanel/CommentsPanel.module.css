@@ -113,6 +113,9 @@
   flex-direction: column;
   gap: var(--space-stack-2xs);
   min-width: 0;
+  /* The one-line preview must not set the panel's minimum width (it overflowed at 375px);
+     it truncates with an ellipsis instead. */
+  contain: inline-size;
 }
 
 .threadTitle {

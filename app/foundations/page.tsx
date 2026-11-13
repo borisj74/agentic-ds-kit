@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { FoundationsView } from "./FoundationsView";
 import playground from "../playground.module.css";
+import { canonical } from "@/lib/site";
 
 export const metadata: Metadata = {
+  ...canonical("/foundations"),
   title: "Foundations",
 };
 

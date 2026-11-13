@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Breadcrumb, CodeSnippet, ICON_STROKE } from "agentic-ds-kit";
 import { FileText, MessageSquare } from "lucide-react";
 import styles from "./get-started.module.css";
+import { canonical } from "@/lib/site";
 
 export const metadata: Metadata = {
+  ...canonical("/get-started"),
   title: "Get started",
 };
 
