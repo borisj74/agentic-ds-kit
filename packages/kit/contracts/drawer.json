@@ -99,7 +99,7 @@
       "role=dialog and aria-modal",
       "Title is the accessible name, description is aria-describedby when present",
       "Focus is trapped while open",
-      "Escape closes",
+      "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Overlay click closes",
       "Focus returns to the opener on close (Escape, Close or overlay click)",
       "Unique ids via useId"

@@ -209,7 +209,7 @@
       "With triggerTags, each Tag remove is a sibling button before the trigger in Tab order; the trigger keeps aria-haspopup, aria-expanded, aria-controls",
       "Panel is role=menu",
       "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
-      "Escape and outside click close; arrows move; Tab closes. Search Input is focused first when searchable",
+      "Escape and outside click close; Escape closes only the menu, not a parent Modal, Drawer or AlertDialog; arrows move; Tab closes. Search Input is focused first when searchable",
       "Icon-only trigger needs ariaLabel",
       "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens. In a submenu, Escape or ArrowLeft closes only the submenu and focuses its parent item; Escape again closes the menu and focuses the trigger"
     ]

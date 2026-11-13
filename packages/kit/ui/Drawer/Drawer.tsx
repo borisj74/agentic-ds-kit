@@ -62,6 +62,8 @@ export function Drawer({
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        // A nested overlay (Select, DatePicker) already handled this Escape.
+        if (event.defaultPrevented) return;
         event.preventDefault();
         onCloseRef.current();
         return;

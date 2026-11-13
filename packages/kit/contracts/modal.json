@@ -91,7 +91,7 @@
       "Composes ModalCard with role=dialog and aria-modal",
       "Title is the accessible name, description is aria-describedby when present",
       "Focus is trapped while open",
-      "Escape closes",
+      "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Scrim click closes",
       "Focus restores to the previously focused element on close",
       "Unique ids via useId — do not hardcode modal-title"

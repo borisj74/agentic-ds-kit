@@ -263,12 +263,13 @@ export function DropdownMenu({
     }
 
     document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onDocumentKey);
+    // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
+    document.addEventListener("keydown", onDocumentKey, true);
     window.addEventListener("resize", onReposition);
     window.addEventListener("scroll", onReposition, true);
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onDocumentKey);
+      document.removeEventListener("keydown", onDocumentKey, true);
       window.removeEventListener("resize", onReposition);
       window.removeEventListener("scroll", onReposition, true);
     };
