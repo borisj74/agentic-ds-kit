@@ -5,6 +5,22 @@ All notable changes to `agentic-ds-kit` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `--border-field` token: the resting border of form controls. Slate 500 in light and dark (4.76:1 and 3.75:1 against the field fill), neutral 500 under `data-color="ink"`. Input, Textarea, Select and the pickers that share the control styles (Combobox, MultiSelect, TagInput, NumberInput, DatePicker, DateRangePicker, DateTimePicker, TimePicker) use it
+- `describedBy` on InputOTP, SegmentedControl, RadioGroup and Slider; `labelledBy` and `error` on Slider. Field passes its label id to a Slider so the thumbs are named
+
+### Changed
+
+- Field borders are darker so they reach 3:1 contrast. Hover and focus colours are unchanged
+- Alert titles use the `-fg` tones for contrast; the icon keeps the status colour
+- Escape in an open overlay (ContextMenu, Tooltip, Popover, DateRangePicker, Combobox, MultiSelect, TagInput, AnchorNav, DateTimePicker) closes only that overlay, not a parent Modal or Drawer
+- Field no longer adds `role="group"`; RadioGroup's fieldset is `role="radiogroup"` and carries `aria-invalid` instead of each radio
+- `aria-invalid` is no longer set on the DatePicker, Select and FileUpload trigger buttons; the error still reaches them through `aria-describedby`
+- Modal, Drawer, AlertDialog and ModalCard skip their entrance animation under `prefers-reduced-motion`
+
 ## [0.19.0] - 2026-11-12
 
 ### Added

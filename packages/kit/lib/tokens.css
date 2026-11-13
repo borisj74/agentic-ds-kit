@@ -136,6 +136,7 @@
   --surface-brand-subtle: var(--primary-subtle);
   --border-faint: var(--line-default);
   --border-strong: var(--line-strong);
+  --border-field: #64748b;
   --border-focus: var(--line-focus);
   --border-disabled: var(--line-default);
   --border-subtle: var(--bg-subtle);
@@ -569,6 +570,7 @@
   --surface-brand-subtle: var(--primary-subtle);
   --border-faint: var(--line-default);
   --border-strong: var(--line-strong);
+  --border-field: #64748b;
   --border-focus: var(--line-focus);
   --border-disabled: var(--line-default);
   --border-subtle: var(--bg-subtle);
@@ -705,6 +707,7 @@
   --line-focus: #0A0A0A;
   --line-strong: #D4D4D4;
   --line-inverse: #FFFFFF;
+  --border-field: #737373;
   --primary-base: #000000;
   --primary-hover: #121212;
   --primary-active: #090909;
@@ -742,6 +745,7 @@
   --line-focus: #F2F2F2;
   --line-strong: #404040;
   --line-inverse: #0A0A0A;
+  --border-field: #737373;
   --primary-base: #F2F2F2;
   --primary-hover: #FFFFFF;
   --primary-active: #E5E5E5;

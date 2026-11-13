@@ -151,7 +151,8 @@
   gap: var(--space-2);
   width: 100%;
   margin: 0;
-  border: var(--border-width-thin) solid var(--border-faint);
+  /* --border-field: 3:1 or more against --bg-field in light and dark (WCAG 1.4.11). */
+  border: var(--border-width-thin) solid var(--border-field);
   background-color: var(--surface-card);
   color: var(--text-primary);
   font-family: var(--font-sans);

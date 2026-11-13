@@ -31,7 +31,7 @@
     "steppers": { "type": "boolean", "default": true, "note": "Decrease and increase buttons." }
   },
   "passthrough": { "root": "div", "ref": "input", "className": "root", "rest": "none" },
-  "tokens": ["text.primary", "text.muted", "surface.muted", "border.faint", "border.focus", "status.danger"],
+  "tokens": ["text.primary", "text.muted", "surface.muted", "border.faint", "border.field", "border.focus", "status.danger"],
   "a11y": {
     "element": "input",
     "requirements": [
