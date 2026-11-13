@@ -38,10 +38,6 @@ const patches = [
     /"agentic-ds-kit": "\^\d+\.\d+\.\d+"/,
     `"agentic-ds-kit": "^${version}"`,
   ],
-  [
-    /No `transpilePackages` for this package \(\d+\.\d+\.\d+\+\)/,
-    `No \`transpilePackages\` for this package (${version}+)`,
-  ],
 ];
 
 for (const [re, replacement] of patches) {

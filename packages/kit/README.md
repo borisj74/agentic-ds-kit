@@ -1,5 +1,7 @@
 # Nistha
 
+**Docs: [NISTHA_DOCS_URL](NISTHA_DOCS_URL)**
+
 The Agentic DS Kit. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
 React components, JSON contracts, and tokens for agent-built UI. This is the **installable kit**, not the docs playground.
@@ -23,6 +25,8 @@ Importing from the package loads semantic tokens. If your own CSS uses those var
 ```tsx
 import "agentic-ds-kit/tokens.css";
 ```
+
+The package exports 140 components, including 12 **blocks**: larger compositions for a whole area of a screen (AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, KpiBoard, UsageBilling, AppDirectory, WorkBoard, ActivityFeed, Plans, LogoStrip). Import a block like any component and put it inside your page's `<main>`. Browse them on the docs site at `/blocks`.
 
 The package exports components only. Patterns (app-shell, sign-in, dashboard, empty-first-run, list-detail, settings-form, billing-schedule, integration-settings, settings, onboarding) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
 
@@ -74,7 +78,7 @@ Setup and the tool list: [docs/getting-started.md](https://github.com/borisj74/a
 npm run generate:tokens -w agentic-ds-kit
 ```
 
-Components consume **semantic** variables (`--surface-page`, `--action-primary`, `--radius-control-md`). Primitive `--color-*` ramps are the source scale only.
+Components consume **semantic** variables (`--bg-canvas`, `--primary-base`, `--radius-control-md`). Primitive `--color-*` ramps are the source scale only. Older names such as `--surface-page` and `--action-primary` still work as aliases of `--bg-canvas` and `--primary-base`; use the current names in new code.
 
 `agentic-ds-kit/color-ramp` exports `generateColorRamp(hex)`: an OKLCH ramp with steps 50–950. Step 500 stays within ΔE 3 of the input, and lightness falls from 50 to 950.
 

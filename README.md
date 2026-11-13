@@ -1,5 +1,7 @@
 # Nistha
 
+**Docs: [NISTHA_DOCS_URL](NISTHA_DOCS_URL)**
+
 The Agentic DS Kit. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
 A **code-only** design system for agents and product UIs. Contracts, tokens, React components, and example screen patterns — published as [`agentic-ds-kit`](https://www.npmjs.com/package/agentic-ds-kit).
@@ -24,7 +26,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (113 components, 6 patterns).
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (140 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -32,18 +34,30 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 
 ### Components
 
-- **Actions** — Button, ButtonGroup, DropdownMenu, FilterButton
-- **Forms** — Input, Textarea, Select, SegmentedControl, TileGroup, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker
+- **Actions** — Button, ButtonGroup, DropdownMenu, FilterButton, FilterBar
+- **Forms** — Input, Textarea, Select, SegmentedControl, TileGroup, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker, DateRangePicker, DateTimePicker, TimePicker, NumberInput, CurrencyInput, Combobox, MultiSelect, TagInput, ColorPicker, FileUpload
 - **Data & charts** — Table, DataTable, DataGrid, Cell, HeaderCell, ListView, LinkList, TreeView, UsageList, Scorecard, Scoreboard, LineChart, BarChart, PieChart, NumberTransition, InsightCard, Calendar, Meter
-- **Feedback** — Alert, Badge, Count, Kbd, Tooltip, Toast, Empty, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText, Skeleton
-- **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command, HelpPopover
-- **Navigation & chrome** — AppHeader, AppNav, SideNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
-- **Structure** — Card, Accordion, Collapsible, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline
+- **Feedback** — Alert, Badge, Tag, Count, Kbd, Tooltip, Toast, Empty, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText, Skeleton
+- **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command, HelpPopover, Popover, ContextMenu
+- **Navigation & chrome** — AppHeader, AppNav, SideNav, AnchorNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
+- **Structure** — Card, Accordion, Collapsible, Resizable, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline, CodeSnippet
 - **Agent** — ApprovalCard, AgentTrail, AgentPlan, AgentFleet, ToolCallCard, PermissionRequest, RunningNow, AgentMonitor, AgentTree, AgentLanes, AgentInbox, DecisionCard, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall, UsageMeter
 - **SaaS** — SetupGuide, NotificationStack, ChangeSummary, ExperimentCard, CommentThread, CommentsPanel, IntegrationPicker, PricingPlans, InvoiceDocument, TaskBoard
 - **Motion** — BlurCrossfade, TextReveal, TiltCard, GridBackground, GradientText
 
-### Patterns (8)
+### Blocks (12)
+
+Blocks are larger kit components for a whole area of a screen (`"kind": "block"` in the contract). Import them from `agentic-ds-kit` like any component and put them inside the page's `<main>`; they bring no app chrome. See them on the docs site at `/blocks`.
+
+- **Agents** — AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview
+- **Productivity** — WorkBoard, ActivityFeed
+- **Analytics** — KpiBoard
+- **Billing** — UsageBilling
+- **Integrations** — AppDirectory
+- **Pricing** — Plans
+- **Social proof** — LogoStrip
+
+### Patterns (10)
 
 Patterns are examples of what you can build from the components, not rules: start from one, borrow from it, or ignore it. Layout (top bar, side nav, both, neither) is your choice. None are exported from the package; `npx agentic-ds-kit add <id>` copies one's source into your app. Each contract lists `must` (kit look and accessibility) and `defaults` (suggestions you can change).
 
@@ -70,6 +84,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 - `/studio` — Live font, weight, primary, radius, shadow, and theme
 - `/foundations` — Token scales
 - `/components` — Component gallery and per-component docs
+- `/blocks` — Blocks gallery and per-block pages (`/blocks/[slug]`)
 - `/patterns/dashboard` — Live pattern screens (`settings`, `list-detail`, `layouts`, and the rest)
 
 ### Agent files

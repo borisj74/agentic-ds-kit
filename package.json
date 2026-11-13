@@ -15,7 +15,7 @@
     "test": "npm test -w agentic-ds-kit && npx --yes tsx --test lib/theme-scope.test.ts lib/component-contract.test.ts",
     "sync:kit-docs": "node scripts/sync-kit-version-docs.mjs",
     "bump:kit": "npm version --no-git-tag-version -w agentic-ds-kit",
-    "publish:kit": "npm run sync:kit-docs && npm publish -w agentic-ds-kit --access public"
+    "publish:kit": "node scripts/publish-kit.mjs"
   },
   "dependencies": {
     "agentic-ds-kit": "*",
