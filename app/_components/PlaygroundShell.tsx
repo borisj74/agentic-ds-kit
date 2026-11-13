@@ -1,5 +1,7 @@
 "use client";
 
+// The docs show icon props with any Lucide name, so the playground opts in to on-demand icons.
+import "agentic-ds-kit/icons-on-demand";
 import { useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { AppNav, Button, Drawer, Input } from "agentic-ds-kit";

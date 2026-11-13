@@ -26,7 +26,7 @@
     "icon": {
       "type": "KitIcon",
       "required": false,
-      "note": "Shown in a circular media well. Not EmptyMedia. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
+      "note": "Shown in a circular media well. Not EmptyMedia. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "media": {
       "type": "slot",

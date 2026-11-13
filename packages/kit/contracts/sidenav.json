@@ -74,7 +74,7 @@
     "items": {
       "type": "array",
       "required": false,
-      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: any Lucide name or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
       "type": "slot",

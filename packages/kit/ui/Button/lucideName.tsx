@@ -2,7 +2,7 @@ import { createElement, isValidElement, type ComponentType, type ReactElement } 
 import type { LucideIcon, LucideProps } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { normalizeIconName } from "./iconName";
-import { LucideOnDemand } from "./LucideOnDemand";
+import { getOnDemandIconRenderer } from "./iconRegistry";
 import {
   House,
   Search,
@@ -92,6 +92,34 @@ import {
   FileText,
   Users,
   ChartLine,
+  Activity,
+  Blocks,
+  Brain,
+  CheckCheck,
+  ClipboardList,
+  Compass,
+  FileDiff,
+  Hand,
+  History,
+  Inbox,
+  LayoutGrid,
+  ListChecks,
+  LoaderCircle,
+  MessageSquare,
+  Network,
+  Pin,
+  Plug,
+  Reply,
+  Rocket,
+  Scissors,
+  Shield,
+  SkipForward,
+  Square,
+  ThumbsDown,
+  ThumbsUp,
+  Unplug,
+  UserMinus,
+  Wrench,
 } from "lucide-react";
 
 const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
@@ -184,6 +212,34 @@ const LUCIDE_BY_NAME: Record<string, LucideIcon> = {
   FileText,
   Users,
   ChartLine,
+  Activity,
+  Blocks,
+  Brain,
+  CheckCheck,
+  ClipboardList,
+  Compass,
+  FileDiff,
+  Hand,
+  History,
+  Inbox,
+  LayoutGrid,
+  ListChecks,
+  LoaderCircle,
+  MessageSquare,
+  Network,
+  Pin,
+  Plug,
+  Reply,
+  Rocket,
+  Scissors,
+  Shield,
+  SkipForward,
+  Square,
+  ThumbsDown,
+  ThumbsUp,
+  Unplug,
+  UserMinus,
+  Wrench,
 };
 
 /** Curated names, keyed by normalized name so `LayoutDashboard` and `layout-dashboard` both hit. */
@@ -209,9 +265,12 @@ export function isKitIcon(value: unknown): value is KitIcon {
   return typeof value === "object" && value !== null && "$$typeof" in value;
 }
 
+const warnedNames = new Set<string>();
+
 /**
- * Renders a kit icon prop. Curated names render synchronously; any other Lucide
- * name loads on demand (see LucideOnDemand). Components get the kit's size and
+ * Renders a kit icon prop. Curated names render synchronously. Any other Lucide name renders
+ * only after `import "agentic-ds-kit/icons-on-demand"` (it then loads as its own chunk);
+ * without it the icon is skipped and a dev warning names it. Components get the kit's size and
  * stroke; elements render as given.
  */
 export function LucideByName({
@@ -226,6 +285,16 @@ export function LucideByName({
   if (!name) return null;
   if (isValidElement(name)) return name;
   const Icon = typeof name === "string" ? CURATED.get(normalizeIconName(name)) : name;
-  if (!Icon) return <LucideOnDemand name={name as string} size={size} className={className} />;
+  if (!Icon) {
+    const OnDemand = getOnDemandIconRenderer();
+    if (OnDemand) return createElement(OnDemand, { name: name as string, size, className });
+    if (process.env.NODE_ENV !== "production" && !warnedNames.has(name as string)) {
+      warnedNames.add(name as string);
+      console.warn(
+        `[agentic-ds-kit] Icon "${name as string}" is not in the curated set. Pass the Lucide component, or import "agentic-ds-kit/icons-on-demand" once to load any Lucide name.`,
+      );
+    }
+    return null;
+  }
   return createElement(Icon, { size, strokeWidth: ICON_STROKE, "aria-hidden": true, className });
 }

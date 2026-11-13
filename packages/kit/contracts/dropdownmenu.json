@@ -44,7 +44,7 @@
     "iconStart": {
       "type": "KitIcon",
       "required": false,
-      "note": "Icon on the kit Button. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
+      "note": "Icon on the kit Button. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "ariaLabel": {
       "type": "string",
@@ -128,7 +128,7 @@
     "iconEnd": {
       "type": "KitIcon",
       "required": false,
-      "note": "Icon on a field trigger (default ChevronsUpDown) or kit Button trigger. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
+      "note": "Icon on a field trigger (default ChevronsUpDown) or kit Button trigger. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "columns": {
       "type": "enum",

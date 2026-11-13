@@ -22,6 +22,8 @@ npm install agentic-ds-kit@latest
 import { Button, Scoreboard } from "agentic-ds-kit";
 ```
 
+The package is ESM-only (`import`, not `require()`), needs React 19, and supports Next.js 15 or later.
+
 Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package into the app root so Cursor and Claude Code follow the kit. Step-by-step (existing app, new folder, upgrade from 0.1.0, troubleshooting): [docs/getting-started.md](docs/getting-started.md#install-the-package-in-your-app).
 
 ## What's here
@@ -122,13 +124,13 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 
 | Tool | What it returns |
 | --- | --- |
-| `list_components` | Name, category, one-line purpose |
+| `list_components` | Id, name, kind and a short purpose; `detail: "full"`, `kind`, `limit`/`offset` |
 | `get_component` | Props, variants, must/doNot, tokens, import, usage example |
 | `search_components` | Match by name, purpose, or contract keywords |
-| `get_tokens` | Semantic color, type, space, radius, and grid, with value and usage notes |
+| `get_tokens` | Semantic tokens with value (and dark); `detail: "full"` adds usage notes; `group`, `limit`/`offset` |
 | `list_patterns` / `get_pattern` | Description and `npx agentic-ds-kit add <id>` |
 | `get_rules` | `AGENTS.md`, including the page-layout grid rule |
-| `questions` | The same JSON as `npx agentic-ds-kit questions` |
+| `questions` | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"`, `limit`/`offset` |
 
 Step-by-step: [docs/getting-started.md](docs/getting-started.md#mcp). The playground page is `/mcp`.
 

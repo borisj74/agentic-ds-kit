@@ -70,12 +70,12 @@
     "iconStart": {
       "type": "KitIcon",
       "required": false,
-      "note": "Left icon. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
+      "note": "Left icon. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "iconEnd": {
       "type": "KitIcon",
       "required": false,
-      "note": "Right icon. Any Lucide name (PascalCase or kebab-case): curated names render instantly, others load on demand; or pass the Lucide component (Plus) or an element."
+      "note": "Right icon. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "demo": {
       "type": "enum",

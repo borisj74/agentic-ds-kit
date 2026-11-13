@@ -94,10 +94,12 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(root, "src/index.ts"),
+      // icons-on-demand is a separate, opt-in entry so importing Button never pulls lucide-react/dynamic.
+      entry: { "src/index": resolve(root, "src/index.ts"), "src/icons-on-demand": resolve(root, "src/icons-on-demand.ts") },
       formats: ["es"],
     },
-    sourcemap: true,
+    // No source maps in the published package (N2): they were about 2.5 MB of 4.4 MB unpacked.
+    sourcemap: false,
     cssCodeSplit: true,
     cssMinify: false,
     emptyOutDir: true,

@@ -18,6 +18,7 @@ import {
   packageRoot,
   searchComponents,
 } from "./catalog.mjs";
+import { MAX_LIMIT, shapeComponents, shapeQuestions, shapeTokens } from "./mcp-shape.mjs";
 import { QuestionsError, buildQuestions } from "./questions.mjs";
 
 export const MCP_HELP = `Usage: npx agentic-ds-kit mcp
@@ -27,14 +28,14 @@ command and query the installed kit. Answers are read from this install's
 contracts, tokens, patterns, and AGENTS.md. Nothing is fetched.
 
 Tools:
-  list_components       Name, category, kind (component or block), one-line purpose
+  list_components       Name, kind (component or block), short purpose; detail, kind, limit, offset
   get_component         Props, variants, must/doNot, tokens, import, example, kind
   search_components     Match name, purpose, or contract keywords
-  get_tokens            Semantic color, type, space, radius, and grid
+  get_tokens            Semantic tokens by group; summary by default, detail full, limit, offset
   list_patterns         Description and the add command
   get_pattern           One pattern by id
   get_rules             AGENTS.md, including the page-layout grid rule
-  questions             Same JSON as npx agentic-ds-kit questions
+  questions             Same JSON as npx agentic-ds-kit questions; detail summary, limit, offset
 
 Options:
   -h, --help            Show this help`;
@@ -46,6 +47,14 @@ const READ_ONLY = {
   openWorldHint: false,
 };
 
+const detail = (fallback) =>
+  z
+    .enum(["summary", "full"])
+    .optional()
+    .describe(`summary (short rows) or full (every field). Default ${fallback}.`);
+const limit = z.number().int().min(1).max(MAX_LIMIT).optional().describe(`Page size, 1-${MAX_LIMIT}. Omit for all rows.`);
+const offset = z.number().int().min(0).optional().describe("Rows to skip. Use page.next from the previous answer.");
+
 const tokenGroup = z
   .enum(TOKEN_GROUPS)
   .optional()
@@ -56,8 +65,9 @@ function register(server, name, config, fn) {
     try {
       const data = fn(args ?? {});
       return {
-        content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
-        structuredContent: data,
+        // Compact JSON: the same data, about a fifth smaller than pretty-printed.
+        // No structuredContent: the tools declare no outputSchema, and sending it doubled every payload.
+        content: [{ type: "text", text: JSON.stringify(data) }],
       };
     } catch (error) {
       if (error instanceof CatalogError || error instanceof QuestionsError) {
@@ -94,9 +104,15 @@ function createServer() {
     {
       title: "List components",
       description:
-        "List every UI component in this install, blocks included. Each entry has the code name, the catalog group as category, kind (component, or block for a larger composition such as AgentOverview), and a one-line purpose from its contract. Use get_component for props and rules.",
+        "List every UI component in this install, blocks included. Default summary rows: id, code name, kind (component, or block for a larger composition such as AgentOverview) and the first sentence of its purpose. detail full adds the category and the whole purpose line. Filter with kind; page with limit and offset (page.next). Use get_component for props and rules.",
+      inputSchema: {
+        detail: detail("summary"),
+        kind: z.enum(["component", "block"]).optional().describe("Only components or only blocks."),
+        limit,
+        offset,
+      },
     },
-    () => listComponents(),
+    (args) => shapeComponents(listComponents(), args),
   );
 
   register(
@@ -133,10 +149,10 @@ function createServer() {
     {
       title: "Get tokens",
       description:
-        "Semantic tokens from this install, with the CSS variable name, the value, and the usage note from tokens/usage.json. Groups: color (light value plus dark), type, space, radius, grid. Omit group for all five. Primitive --color-* ramps are not included.",
-      inputSchema: { group: tokenGroup },
+        "Semantic tokens from this install. Default summary rows: CSS variable name, group and value (color adds the dark value). detail full adds the usage note, useWhen and doNot from tokens/usage.json. Groups: color, type, space, radius, grid; omit group for all five. Page with limit and offset (page.next). Primitive --color-* ramps are not included.",
+      inputSchema: { group: tokenGroup, detail: detail("summary"), limit, offset },
     },
-    ({ group }) => getTokens(group),
+    ({ group, ...rest }) => shapeTokens(getTokens(group), rest),
   );
 
   register(
@@ -181,7 +197,7 @@ function createServer() {
     {
       title: "Questions option list",
       description:
-        "Build the same closed option list as `npx agentic-ds-kit questions` from this install's contracts. Pass no arguments for the full list. Options match the CLI: only, group (component or pattern), overlay (the JSON object, not a file path), none, useWhen, notWhen, askStyle (part or strict), enums (own, all, or none).",
+        "Build the same closed option list as `npx agentic-ds-kit questions` from this install's contracts. Pass no arguments for the full list. Options match the CLI: only, group (component or pattern), overlay (the JSON object, not a file path), none, useWhen, notWhen, askStyle (part or strict), enums (own, all, or none). detail summary returns only id, label and kind per option (no enums); limit and offset page the options (page.next).",
       inputSchema: {
         only: z.array(z.string()).optional().describe("Contract ids to keep."),
         group: z.enum(["component", "pattern"]).optional().describe("Limit to components or patterns."),
@@ -194,9 +210,12 @@ function createServer() {
         notWhen: z.number().int().min(0).optional().describe("doNotUseWhen lines per description. Default 2."),
         askStyle: z.enum(["part", "strict"]).optional().describe("part (default) or strict."),
         enums: z.enum(["own", "all", "none"]).optional().describe("own (default), all, or none."),
+        detail: detail("full"),
+        limit,
+        offset,
       },
     },
-    (args) => buildQuestions(questionsOptions(args)),
+    (args) => shapeQuestions(buildQuestions(questionsOptions(args)), args),
   );
 
   return server;

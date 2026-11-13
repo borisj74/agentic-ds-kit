@@ -12,7 +12,9 @@ React components, JSON contracts, and tokens for agent-built UI. This is the **i
 npm install agentic-ds-kit@latest
 ```
 
-Peer: React 19. `AppNav` uses `next/link`; Next.js is an optional peer if you use that component.
+Peer: React 19. `AppNav` uses `next/link`; Next.js 15 or later is an optional peer if you use that component (Next 14 does not support React 19).
+
+The package is **ESM-only**: use `import`, not `require()`. Next.js, Vite and other modern bundlers handle this out of the box; a CommonJS-only setup (for example an old Jest config) needs ESM support turned on.
 
 ## Use
 
@@ -44,6 +46,24 @@ The copy imports kit components from `agentic-ds-kit`, keeps its demo data in a 
 Contracts live in the package: `agentic-ds-kit/contracts/index.json`. Copy `AGENTS.md` (and `CLAUDE.md`) from this package into your app so Cursor and Claude Code follow the kit.
 
 If your app lets a decision model or LLM pick which kit view to render, `npx agentic-ds-kit questions` builds the option list (labels, descriptions, enum props) from the contracts. No network, no model calls: [docs/questions.md](https://github.com/borisj74/agentic-ds-kit/blob/main/docs/questions.md).
+
+## Icons
+
+Icon props (`iconStart`, `icon`, …) take a Lucide name, a Lucide component or an element. About 120 common names (Plus, Search, ChevronDown, Settings, …) are bundled and render instantly. For any other Lucide name, either pass the component:
+
+```tsx
+import { Telescope } from "lucide-react";
+<Button iconStart={Telescope}>Explore</Button>
+```
+
+or opt in once to load any name on demand (each icon becomes its own small chunk):
+
+```tsx
+// in a client module every page loads, e.g. app/providers.tsx
+import "agentic-ds-kit/icons-on-demand";
+```
+
+Without the opt-in, a name outside the bundled set renders nothing and logs a warning in development.
 
 ## MCP
 
