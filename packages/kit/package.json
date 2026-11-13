@@ -8,7 +8,7 @@
     "url": "git+https://github.com/borisj74/agentic-ds-kit.git",
     "directory": "packages/kit"
   },
-  "homepage": "NISTHA_DOCS_URL",
+  "homepage": "https://agentic-ds-kit.vercel.app",
   "bugs": {
     "url": "https://github.com/borisj74/agentic-ds-kit/issues"
   },

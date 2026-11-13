@@ -1,6 +1,6 @@
 # Nistha
 
-**Docs: [NISTHA_DOCS_URL](NISTHA_DOCS_URL)**
+**Docs: [https://agentic-ds-kit.vercel.app](https://agentic-ds-kit.vercel.app)**
 
 The Agentic DS Kit. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
