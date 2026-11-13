@@ -1,6 +1,7 @@
 {
   "id": "calendar",
   "status": "stable",
+  "level": "molecule",
   "intent": "A full calendar of events by month, week, day, or list. Browse dates, filter calendars, add / edit / delete events.",
   "useWhen": [
     "A schedule people browse by date: shifts, PTO, holidays, billing runs, meetings",

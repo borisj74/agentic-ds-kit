@@ -1,6 +1,7 @@
 {
   "id": "toast",
   "status": "stable",
+  "level": "molecule",
   "intent": "A short note that floats in after an action, like Saved successfully, and goes away on its own after a few seconds, with an optional Undo.",
   "useWhen": [
     "Confirming an action people just took: saved, sent, deleted",

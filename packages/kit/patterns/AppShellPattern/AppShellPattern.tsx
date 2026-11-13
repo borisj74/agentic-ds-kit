@@ -29,7 +29,7 @@ export type AppShellNav = Omit<SideNavProps, "showHeader" | "radius" | "side">;
 export interface AppShellPatternProps {
   /**
    * AppHeader props (the shell injects the narrow-screen Menu Button), or a header you
-   * built from `AppHeader.Root` and its blocks. A built header places
+   * built from `AppHeader.Root` and its compose parts. A built header places
    * `AppShellPattern.MenuButton` itself, usually as the `AppHeader.Brand` logo.
    * Optional: with no header there is no top bar when wide (SideNav shows its own brand
    * header) and `narrowHeader` is the top bar below the breakpoint.
@@ -53,7 +53,7 @@ export interface AppShellPatternProps {
   /** Icon mark for the default `narrowHeader` (a Lucide name, component, or element). Wins over `mark`. Same fallback as `mark`. */
   markIcon?: AppShellNav["markIcon"];
   /**
-   * SideNav props, or a nav you built (a `SideNav`, or SideNav blocks). A built nav
+   * SideNav props, or a nav you built (a `SideNav`, or SideNav compose parts). A built nav
    * renders in the rail when wide and inside the left Drawer when narrow; read
    * `useAppShell().navPlacement` to adapt it (e.g. always expanded in the Drawer), or pass
    * a function that gets the placement: `(placement) => <ShellNav placement={placement} />`.

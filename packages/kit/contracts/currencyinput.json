@@ -1,6 +1,7 @@
 {
   "id": "currencyinput",
   "status": "stable",
+  "level": "molecule",
   "intent": "A money amount with a currency symbol, locale formatting, min, max, and step.",
   "useWhen": [
     "A price, amount, or balance in a form",

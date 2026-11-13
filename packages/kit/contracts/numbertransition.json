@@ -1,6 +1,7 @@
 {
   "id": "numbertransition",
   "status": "stable",
+  "level": "atom",
   "intent": "Rolling number treatment for live metrics and counters.",
   "useWhen": [
     "Dashboard metrics that update in place",

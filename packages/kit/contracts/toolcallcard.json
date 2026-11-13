@@ -1,6 +1,7 @@
 {
   "id": "toolcallcard",
   "status": "stable",
+  "level": "organism",
   "intent": "One agent tool call on one line: status, mono name, summary and a live timer. Opens to arguments and result; with calls it rolls several calls into one group row.",
   "useWhen": [
     "show each tool an agent calls in a chat or a run log",

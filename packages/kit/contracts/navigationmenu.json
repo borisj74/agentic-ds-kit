@@ -1,6 +1,7 @@
 {
   "id": "navigationmenu",
   "status": "stable",
+  "level": "organism",
   "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
   "useWhen": [
     "Top-of-page site navigation with links and dropdowns",

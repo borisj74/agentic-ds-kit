@@ -34,7 +34,7 @@ export interface ShellNavProps {
 }
 
 /**
- * SideNav for your app, built from the SideNav blocks so you can rearrange it. It imports
+ * SideNav for your app, built from the SideNav compose parts so you can rearrange it. It imports
  * only kit components. On its own it is a closeable rail with a brand header (SideNavBrand:
  * its mark reopens the closed rail) and a Toggle. With `placement` it drops the header (the
  * host's AppHeader has the brand), sits flush in a rail, or is forced open inside a Drawer.

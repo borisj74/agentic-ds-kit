@@ -1,6 +1,7 @@
 {
   "id": "appnav",
   "status": "stable",
+  "level": "organism",
   "intent": "Vertical sidebar navigation with title, optional grouped catalog, and active item state.",
   "useWhen": [
     "Playground or product shells with a persistent left sidebar",

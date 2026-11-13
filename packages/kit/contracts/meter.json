@@ -1,6 +1,7 @@
 {
   "id": "meter",
   "status": "stable",
+  "level": "atom",
   "intent": "How far along or how full something is, from 0 to 100, as a bar, a ring, or a half ring, with optional red, amber, and green zones.",
   "useWhen": [
     "Task completion with a known percent: uploads, imports, onboarding — when you need zones, a datatip, or indeterminate",

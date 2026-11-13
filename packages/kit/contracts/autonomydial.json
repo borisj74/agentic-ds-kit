@@ -1,6 +1,7 @@
 {
   "id": "autonomydial",
   "status": "stable",
+  "level": "organism",
   "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
   "useWhen": [
     "set an agent's autonomy level in settings or before a run",

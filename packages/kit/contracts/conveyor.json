@@ -1,6 +1,7 @@
 {
   "id": "conveyor",
   "status": "stable",
+  "level": "organism",
   "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
   "useWhen": [
     "A row of Scorecards, chips, or cards that runs past the edge",

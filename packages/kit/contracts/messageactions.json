@@ -1,6 +1,7 @@
 {
   "id": "messageactions",
   "status": "stable",
+  "level": "molecule",
   "intent": "The compact action row on a chat message: copy, retry or edit, thumbs up / down with reasons, and a More menu. Icon Buttons with Tooltips.",
   "useWhen": [
     "actions under an assistant or user message",

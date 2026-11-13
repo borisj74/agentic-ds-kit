@@ -2,7 +2,7 @@
  * Copies pattern sources into patterns-src/<id>/ for `agentic-ds-kit add`:
  * - patterns/<Name>Pattern/: every pattern (app-shell, sign-in, dashboard, list-detail, …). Copy-in
  *   examples only; not in dist.
- * - the RECIPES below (component presets rebuilt from their blocks, in recipes/).
+ * - the RECIPES below (component presets rebuilt from their compose parts, in recipes/).
  * Kit-relative imports (`../../ui/Button`, `../../ui/shared/chartMath`) become one import from
  * "agentic-ds-kit", so the copied files compile inside a user's app.
  * A pattern may build on another pattern (`../BillingSchedulePattern`): that import becomes
@@ -27,7 +27,7 @@ function toId(dirName) {
 }
 
 /**
- * Component presets rebuilt from their blocks. `add <id>` copies recipes/<dir>/ plus the
+ * Component presets rebuilt from their compose parts. `add <id>` copies recipes/<dir>/ plus the
  * listed component contracts, so agents keep the kit rules in the copy.
  */
 const RECIPES = [

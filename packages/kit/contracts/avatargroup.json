@@ -1,6 +1,7 @@
 {
   "id": "avatargroup",
   "status": "stable",
+  "level": "molecule",
   "intent": "Overlapping row of kit Avatars with an optional leftover count.",
   "useWhen": [
     "several people on a row, card, or table cell"

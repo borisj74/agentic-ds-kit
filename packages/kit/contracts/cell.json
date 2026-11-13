@@ -1,6 +1,7 @@
 {
   "id": "cell",
   "status": "stable",
+  "level": "molecule",
   "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
   "useWhen": [
     "DataTable body cells",

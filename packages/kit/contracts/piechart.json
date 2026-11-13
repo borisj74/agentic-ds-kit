@@ -1,6 +1,7 @@
 {
   "id": "piechart",
   "status": "stable",
+  "level": "organism",
   "intent": "Part-to-whole share for a handful of segments, as a donut or solid pie.",
   "useWhen": [
     "Rough share at a glance for up to six segments",

@@ -1,6 +1,7 @@
 {
   "id": "combobox",
   "status": "stable",
+  "level": "molecule",
   "intent": "Type to filter one value, including a list the parent loads asynchronously.",
   "useWhen": [
     "A long list the person searches by typing",

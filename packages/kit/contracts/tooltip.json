@@ -1,6 +1,7 @@
 {
   "id": "tooltip",
   "status": "stable",
+  "level": "atom",
   "intent": "Brief supplementary text on hover or focus of a trigger element.",
   "useWhen": [
     "Explaining an icon or abbreviated label",

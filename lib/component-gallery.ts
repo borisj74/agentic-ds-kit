@@ -1,8 +1,23 @@
 import contracts from "agentic-ds-kit/contracts/index.json";
+import { COMPONENT_LEVELS } from "../packages/kit/bin/levels.mjs";
 import { COMPONENT_GROUPS, COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
 
 /** "all" or a COMPONENT_GROUPS label. */
 export type GalleryFilter = string;
+
+/** "all" or a component level from the contracts (atom, molecule, organism, block). */
+export type GalleryLevel = string;
+
+/** Level filter options: All, then each component level in order, smallest first. */
+export const GALLERY_LEVELS: { value: GalleryLevel; label: string }[] = [
+  { value: "all", label: "All levels" },
+  ...COMPONENT_LEVELS.map((level) => ({ value: level, label: levelLabel(level) })),
+];
+
+/** "molecule" → "Molecule". */
+export function levelLabel(level: string): string {
+  return level.charAt(0).toUpperCase() + level.slice(1);
+}
 
 export interface GalleryItem {
   id: string;
@@ -10,6 +25,8 @@ export interface GalleryItem {
   label: string;
   description: string;
   group: string;
+  /** Where it sits, from the contract (atom, molecule, organism, block). */
+  level: string;
   filters: ("agent" | "base" | "motion")[];
 }
 
@@ -77,6 +94,7 @@ const MOTION_IDS = new Set([
 const EXTRA_IDS = ["barchart", "linechart", "piechart"] as const;
 
 const intents = new Map(contracts.map((entry) => [entry.id, entry.intent]));
+const levels = new Map(contracts.map((entry) => [entry.id, "level" in entry ? entry.level : undefined]));
 
 function filtersFor(id: string): GalleryItem["filters"] {
   const filters: GalleryItem["filters"] = [];
@@ -93,6 +111,7 @@ function toItem(id: string): GalleryItem {
     label: componentLabel(id),
     description: intents.get(id) ?? "Kit component.",
     group: groupOf(id),
+    level: levels.get(id) ?? "",
     filters: filtersFor(id),
   };
 }
@@ -144,8 +163,9 @@ function matchesDescription(item: GalleryItem, query: string): boolean {
   return words.every((word) => tokens.some((token) => token === word || (word.length >= 3 && token.startsWith(word))));
 }
 
-export function filterGalleryItems(filter: GalleryFilter, query = ""): GalleryItem[] {
-  const group = filter === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.group === filter);
+export function filterGalleryItems(filter: GalleryFilter, query = "", level: GalleryLevel = "all"): GalleryItem[] {
+  const byGroup = filter === "all" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((item) => item.group === filter);
+  const group = level === "all" ? byGroup : byGroup.filter((item) => item.level === level);
   const normalized = query.trim();
   if (!normalized) return group;
 

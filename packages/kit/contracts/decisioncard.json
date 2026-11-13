@@ -1,6 +1,7 @@
 {
   "id": "decisioncard",
   "status": "stable",
+  "level": "organism",
   "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
   "useWhen": [
     "an agent needs the person to pick between options before it continues",

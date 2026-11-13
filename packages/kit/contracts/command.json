@@ -1,6 +1,7 @@
 {
   "id": "command",
   "status": "stable",
+  "level": "organism",
   "intent": "Searchable command menu for quick actions.",
   "useWhen": [
     "Searchable actions and quick jumps",

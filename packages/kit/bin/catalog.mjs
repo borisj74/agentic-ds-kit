@@ -224,6 +224,7 @@ function load(root = packageRoot) {
         name,
         category: entry.group,
         kind: contract.kind === "block" || entry.kind === "block" ? "block" : "component",
+        level: contract.level ?? entry.level ?? null,
         block:
           contract.kind === "block" || entry.kind === "block"
             ? { category: contract.category ?? entry.category ?? "", summary: oneLine(contract.summary ?? entry.summary) }
@@ -246,6 +247,7 @@ function load(root = packageRoot) {
       const contract = contracts.get(entry.id);
       return {
         id: entry.id,
+        level: contract.level ?? entry.level ?? "template",
         description: oneLine(contract.intent || entry.intent),
         add: contract.add || entry.add || `npx agentic-ds-kit add ${entry.id}`,
         must: lines(contract.must),
@@ -268,13 +270,17 @@ function load(root = packageRoot) {
   return data;
 }
 
-/** kind is "block" for blocks (larger compositions such as AgentOverview), else "component". Blocks add { category, summary }. */
+/**
+ * kind is "block" for blocks (larger compositions such as AgentOverview), else "component". Blocks add { category, summary }.
+ * level is where the piece sits: atom, molecule, organism or block (see bin/levels.mjs).
+ */
 function summary(component) {
   return {
     id: component.id,
     name: component.name,
     category: component.category,
     kind: component.kind,
+    level: component.level,
     ...(component.block ? { block: component.block } : {}),
     purpose: component.purpose,
   };
@@ -335,6 +341,7 @@ export function getComponent(name) {
       name: component.name,
       category: component.category,
       kind: component.kind,
+      level: component.level,
       ...(component.block ? { block: component.block } : {}),
       purpose: component.purpose,
       props: component.props,
@@ -372,7 +379,7 @@ export function listPatterns() {
   const data = load();
   return {
     kit: data.version,
-    patterns: data.patterns.map(({ id, description, add }) => ({ id, description, add })),
+    patterns: data.patterns.map(({ id, level, description, add }) => ({ id, level, description, add })),
   };
 }
 

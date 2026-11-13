@@ -1,6 +1,7 @@
 {
   "id": "contextmenu",
   "status": "stable",
+  "level": "molecule",
   "intent": "Actions for one target, opened with a right-click or Shift+F10.",
   "useWhen": [
     "Actions that belong to a row, card, or canvas, not a visible button",

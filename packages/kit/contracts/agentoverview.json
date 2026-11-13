@@ -4,6 +4,7 @@
   "category": "Agents",
   "summary": "See what your agents did since you last looked, what is running, and what needs you.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
   "useWhen": [
     "the first screen of an agent workspace",

@@ -1,6 +1,7 @@
 {
   "id": "contextwindow",
   "status": "stable",
+  "level": "organism",
   "intent": "How full the prompt context is and what uses the space, by segment, with a warning near the limit and Trim oldest. Compact form for a header.",
   "useWhen": [
     "show a thread's context usage next to a chat or agent",

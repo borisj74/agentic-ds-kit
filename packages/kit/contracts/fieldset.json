@@ -1,6 +1,7 @@
 {
   "id": "fieldset",
   "status": "stable",
+  "level": "molecule",
   "intent": "Semantic group of fields with a legend and optional description. This is the form group.",
   "useWhen": [
     "Related fields that need a shared heading, like billing or profile",

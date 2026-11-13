@@ -132,8 +132,8 @@ export default function InstallationPage() {
             </p>
             <p className={playground.body}>
               The same command copies chrome recipes: add app-header and add side-nav write
-              ShellHeader and ShellNav (the AppHeader and SideNav presets rebuilt from their building
-              blocks) to components/chrome/. They work on their own; add app-shell copies the
+              ShellHeader and ShellNav (the AppHeader and SideNav presets rebuilt from their compose
+              parts) to components/chrome/. They work on their own; add app-shell copies the
               layout that can host them.
             </p>
           </div>

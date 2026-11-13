@@ -4,6 +4,7 @@
   "category": "Productivity",
   "summary": "Move tasks across a board, then open one to set its status, assignee and talk it through.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: a task board with detail. TaskBoard columns (drag or keyboard moves); a card opens a Drawer with the task, Status and Assignee Fields (Select, Avatar) and its CommentThread.",
   "useWhen": [
     "a team's tasks by status, with the detail one click away",

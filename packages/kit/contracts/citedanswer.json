@@ -1,6 +1,7 @@
 {
   "id": "citedanswer",
   "status": "stable",
+  "level": "organism",
   "intent": "An assistant reply with inline citation marks and a source list. Marks are real links; a missing source shows as a broken cite.",
   "useWhen": [
     "an assistant answer that cites documents, pages or files",

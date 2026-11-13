@@ -1,6 +1,7 @@
 {
   "id": "invoicedocument",
   "status": "stable",
+  "level": "organism",
   "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
   "useWhen": [
     "show one invoice or credit note inside the product",

@@ -1,6 +1,7 @@
 {
   "id": "tabs",
   "status": "stable",
+  "level": "molecule",
   "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
   "useWhen": [
     "Grouped settings or detail sections on one page",

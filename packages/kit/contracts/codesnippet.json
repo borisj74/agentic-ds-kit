@@ -1,6 +1,7 @@
 {
   "id": "codesnippet",
   "status": "stable",
+  "level": "molecule",
   "intent": "Read-only block of code with a copy button, optional title, language label, tabs, and line numbers. No syntax highlighting.",
   "useWhen": [
     "Showing a command, config, or code sample the reader will copy",

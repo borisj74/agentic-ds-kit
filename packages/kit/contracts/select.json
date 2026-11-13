@@ -1,6 +1,7 @@
 {
   "id": "select",
   "status": "stable",
+  "level": "molecule",
   "intent": "Choose one or several options from a list. Field trigger, kit DropdownMenu panel. Not a native select.",
   "useWhen": [
     "Choosing one value in a Field",

@@ -1,6 +1,7 @@
 {
   "id": "accordion",
   "status": "stable",
+  "level": "molecule",
   "intent": "One-open disclosure list for short related sections.",
   "useWhen": [
     "FAQ or help copy grouped under short titles",

@@ -1,6 +1,7 @@
 {
   "id": "billing-schedule",
   "status": "stable",
+  "level": "template",
   "role": "example",
   "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
   "delivery": "copy-in",

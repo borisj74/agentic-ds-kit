@@ -1,6 +1,7 @@
 {
   "id": "commentthread",
   "status": "stable",
+  "level": "organism",
   "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
   "useWhen": [
     "people discuss a record (invoice, document, task) with replies and @mentions",

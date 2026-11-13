@@ -1,6 +1,7 @@
 {
   "id": "permissionrequest",
   "status": "stable",
+  "level": "organism",
   "intent": "An agent asks for standing access to a capability (files, email, repo, billing), scope by scope, with why and expiry. Grant / Deny, then one line.",
   "useWhen": [
     "an agent needs access that lasts beyond one action",

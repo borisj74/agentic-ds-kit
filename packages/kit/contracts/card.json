@@ -1,6 +1,7 @@
 {
   "id": "card",
   "status": "stable",
+  "level": "molecule",
   "intent": "Framed tile with optional header, body, and footer actions.",
   "useWhen": [
     "Login or settings tiles",

@@ -1,6 +1,7 @@
 {
   "id": "modal",
   "status": "stable",
+  "level": "organism",
   "intent": "Dismissible overlay for short tasks, forms, or extra detail. Composes ModalCard. Not a must-choose confirm.",
   "useWhen": [
     "Short forms",

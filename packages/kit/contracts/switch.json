@@ -1,6 +1,7 @@
 {
   "id": "switch",
   "status": "stable",
+  "level": "atom",
   "intent": "Immediate on/off setting. Pill track, role=switch. Not a Checkbox.",
   "useWhen": [
     "Settings rows (notifications, dark mode)",

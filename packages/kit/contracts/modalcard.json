@@ -1,6 +1,7 @@
 {
   "id": "modalcard",
   "status": "stable",
+  "level": "organism",
   "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
   "useWhen": [
     "The surface inside a Modal",

@@ -1,6 +1,7 @@
 {
   "id": "multiselect",
   "status": "stable",
+  "level": "molecule",
   "intent": "Choose several values. Selected values stay in the field as removable tags, and typing filters the list.",
   "useWhen": [
     "Several values from a list, shown as tags in the field",

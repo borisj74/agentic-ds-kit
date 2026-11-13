@@ -428,12 +428,12 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 
 | Tool | Arguments | Returns |
 | --- | --- | --- |
-| `list_components` | `detail`, `kind` (`component`, `block`), `limit`, `offset`; all optional | Summary rows (id, name, kind, first sentence of the purpose) by default; `detail: "full"` adds the category and the whole purpose |
-| `get_component` | `name` | Props, variants, must and doNot rules, tokens used, an import line, and a usage example |
-| `search_components` | `query` | Components whose name, purpose, or contract keywords match |
+| `list_components` | `detail`, `kind` (`component`, `block`), `level` (`atom`, `molecule`, `organism`, `block`), `limit`, `offset`; all optional | Summary rows (id, name, kind, level, first sentence of the purpose) by default; `detail: "full"` adds the category and the whole purpose |
+| `get_component` | `name` | Kind, level, props, variants, must and doNot rules, tokens used, an import line, and a usage example |
+| `search_components` | `query` | Components whose name, purpose, or contract keywords match (rows include level) |
 | `get_tokens` | `group` (`color`, `type`, `space`, `radius`, `grid`), `detail`, `limit`, `offset`; all optional | Name, group and value (dark too for color) by default; `detail: "full"` adds the usage note, useWhen and doNot |
-| `list_patterns` | none | Description and `npx agentic-ds-kit add <id>` |
-| `get_pattern` | `id` | Description, the add command, and the pattern's must and defaults |
+| `list_patterns` | none | Level (`template`), description and `npx agentic-ds-kit add <id>` |
+| `get_pattern` | `id` | Level (`template`), description, the add command, and the pattern's must and defaults |
 | `get_rules` | none | `AGENTS.md`, including the page-layout grid rule |
 | `questions` | options, `detail`, `limit`, `offset`; all optional | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"` keeps id, label and kind (no enums) |
 
@@ -512,6 +512,8 @@ Three groups in `contracts/index.json`:
 | `pattern` | A screen that only composes components | `packages/kit/contracts/patterns/dashboard.json` → `packages/kit/patterns/DashboardPattern/` (copy-in) |
 
 A **component** contract has `props`, `doNot`, tokens, a11y. A **pattern** contract has `role: "example"`, `contains` (which components), `must` (kit look and accessibility rules a copy keeps) and `defaults` (the example's suggested composition, each line changeable). Patterns are examples, not a field inside Button.
+
+Every component and pattern contract also has a `level`, and its index row copies it: `atom`, `molecule`, `organism`, `block` (the `kind: "block"` contracts) or `template` (patterns). Tokens have no level. Agents use it to reuse the biggest piece that fits before building from smaller ones.
 
 If the index has no match, the agent must ask. That is the product, not a gap in the docs.
 

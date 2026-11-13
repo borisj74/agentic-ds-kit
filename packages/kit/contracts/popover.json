@@ -1,6 +1,7 @@
 {
   "id": "popover",
   "status": "stable",
+  "level": "molecule",
   "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
   "useWhen": [
     "A small panel of content or actions anchored to a button",

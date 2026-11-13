@@ -6,6 +6,7 @@ import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { COMPONENT_LEVELS } from "../bin/levels.mjs";
 import { buildQuestions } from "../bin/questions.mjs";
 
 const kitRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -61,6 +62,7 @@ function assertSummary(item) {
   assert.equal(typeof item.name, "string");
   assert.ok(item.name.length > 0);
   assert.equal(item.category, "component");
+  assert.ok(COMPONENT_LEVELS.includes(item.level), `${item.id} level ${item.level}`);
   assert.equal(typeof item.purpose, "string");
   assert.equal(item.purpose.includes("\n"), false);
   assert.ok(item.purpose.length > 0);
@@ -126,6 +128,8 @@ describe("mcp server", { timeout: 20_000 }, () => {
     assert.equal(component.id, "button");
     assert.equal(component.name, "Button");
     assert.equal(component.category, "component");
+    assert.equal(component.level, button.level);
+    assert.equal(component.level, "atom");
     assert.equal(component.purpose, button.intent);
     assert.deepEqual(component.props, button.props);
     assert.deepEqual(component.doNot, button.doNot);
@@ -218,10 +222,12 @@ describe("mcp server", { timeout: 20_000 }, () => {
     );
     for (const pattern of listed.patterns) {
       assert.equal(typeof pattern.description, "string");
+      assert.equal(pattern.level, "template");
       assert.match(pattern.add, new RegExp(`^npx agentic-ds-kit add ${pattern.id}$`));
     }
 
     const result = await call("get_pattern", { id: "dashboard" });
+    assert.equal(result.pattern.level, "template");
     assert.equal(result.pattern.description, dashboard.intent);
     assert.equal(result.pattern.add, "npx agentic-ds-kit add dashboard");
     assert.deepEqual(result.pattern.must, dashboard.must);
@@ -265,16 +271,39 @@ describe("mcp server", { timeout: 20_000 }, () => {
     assert.equal(summary.page.total, componentIds.length);
     assert.equal(summary.page.next, null);
     for (const row of summary.components) {
-      assert.deepEqual(Object.keys(row).sort(), ["id", "kind", "name", "purpose"]);
+      assert.deepEqual(Object.keys(row).sort(), ["id", "kind", "level", "name", "purpose"]);
       assert.ok(row.purpose.length <= 100);
     }
     const blocks = await call("list_components", { kind: "block" });
     assert.ok(blocks.components.length > 0 && blocks.components.every((row) => row.kind === "block"));
+    const full = await call("list_components", { detail: "full" });
+    for (const row of full.components) assert.ok(COMPONENT_LEVELS.includes(row.level), row.id);
     const first = await call("list_components", { limit: 10 });
     assert.equal(first.components.length, 10);
     assert.equal(first.page.next, 10);
     const second = await call("list_components", { limit: 10, offset: first.page.next });
     assert.equal(second.components[0].id, componentIds[10]);
+  });
+
+  test("list_components level filter returns only that level; an unknown level is a tool error", async () => {
+    const byLevel = Object.fromEntries(index.filter((row) => row.group === "component").map((row) => [row.id, row.level]));
+    for (const level of COMPONENT_LEVELS) {
+      const listed = await call("list_components", { level });
+      const expected = Object.keys(byLevel).filter((id) => byLevel[id] === level);
+      assert.ok(listed.components.length > 0, `no ${level} rows`);
+      assert.ok(listed.components.every((row) => row.level === level), level);
+      assert.deepEqual(listed.components.map((row) => row.id), expected);
+    }
+    // kind and level work together.
+    const blocks = await call("list_components", { kind: "block", level: "block" });
+    assert.ok(blocks.components.length > 0);
+    const none = await call("list_components", { kind: "block", level: "atom" });
+    assert.deepEqual(none.components, []);
+
+    const unknown = await callError("list_components", { level: "galaxy" });
+    assert.match(unknown, /level/);
+    const template = await callError("list_components", { level: "template" });
+    assert.match(template, /level/);
   });
 
   test("get_tokens defaults to name, group and value; full adds the usage notes", async () => {
@@ -304,7 +333,8 @@ describe("mcp server", { timeout: 20_000 }, () => {
       const result = await client.callTool({ name, arguments: args });
       sizes[name] = JSON.stringify(result).length;
     }
-    assert.ok(sizes.list_components < 25_000, `list_components ${sizes.list_components}`);
+    // Summary rows carry level (about 3.5 KB for 141 rows), so the budget is 28 KB, not 25 KB.
+    assert.ok(sizes.list_components < 28_000, `list_components ${sizes.list_components}`);
     assert.ok(sizes.get_tokens < 30_000, `get_tokens ${sizes.get_tokens}`);
     assert.ok(sizes.questions < 15_000, `questions summary ${sizes.questions}`);
   });

@@ -1,6 +1,7 @@
 {
   "id": "barchart",
   "status": "stable",
+  "level": "organism",
   "intent": "Compare magnitudes across categories with vertical or horizontal bars.",
   "useWhen": [
     "Ranking values at a glance",

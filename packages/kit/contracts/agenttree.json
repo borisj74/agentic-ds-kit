@@ -1,6 +1,7 @@
 {
   "id": "agenttree",
   "status": "stable",
+  "level": "organism",
   "intent": "An orchestrator and its sub-agents as a tree. Every node shows status, time and cost; branch costs roll up (Σ). Fold branches; approve or retry in place.",
   "useWhen": [
     "show how an orchestrator split work into sub-agents",

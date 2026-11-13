@@ -1,6 +1,7 @@
 {
   "id": "modelpicker",
   "status": "stable",
+  "level": "molecule",
   "intent": "Choose which model an agent or chat uses: grouped by vendor, with context window and cost tier, recommended models, and disabled models that keep their reason. Built on kit DropdownMenu.",
   "useWhen": [
     "pick a model for an agent, chat or run",

@@ -1,6 +1,7 @@
 {
   "id": "field",
   "status": "stable",
+  "level": "molecule",
   "intent": "One labeled control with optional hint and error. Label on top or start (left).",
   "useWhen": [
     "Any labeled Input, Textarea, Select, DatePicker, or Switch",

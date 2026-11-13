@@ -1,6 +1,7 @@
 {
   "id": "alertdialog",
   "status": "stable",
+  "level": "organism",
   "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
   "useWhen": [
     "Confirming a destructive or irreversible action",

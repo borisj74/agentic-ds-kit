@@ -1,6 +1,7 @@
 {
   "id": "fileupload",
   "status": "stable",
+  "level": "molecule",
   "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
   "useWhen": [
     "Attaching files to a form, message, or record",

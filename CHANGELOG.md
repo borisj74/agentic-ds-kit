@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`level` on every contract**: `atom`, `molecule`, `organism`, `block` (the `kind: "block"` contracts) or `template` (patterns), right after `status`. `contracts/index.json` copies it from each contract (`npm run sync:index -w agentic-ds-kit` now syncs `level` as well as `intent`, and `--check` reports both). The tokens row has no level. A new test checks every contract and index row
+- **MCP level filter**: `list_components` takes an optional `level` (`atom`, `molecule`, `organism`, `block`) next to `kind`, and its rows include `level`. `get_component` and `search_components` include `level`; `list_patterns` and `get_pattern` include `level: "template"`. An unknown level is a tool error
+- **Build order** in `AGENTS.md` and the `prototype-from-kit` skill: start from the biggest piece that fits (pattern, block, organism, molecule, atom), check `level` in the index, and never rebuild a block or organism from atoms when the kit has it
+- Docs site: a level Badge on component and block pages, and a level filter (`?level=`) in the components gallery that works with the group tabs and search
+
+### Changed
+
+- **AppHeader and SideNav contracts: `compose.blocks` is now `compose.parts`.** If you read the raw contract JSON, read `compose.parts`. The wording "building blocks" is now "compose parts" in the contracts, CLI help, skill, docs and comments, so it no longer clashes with blocks (`kind: "block"`). Component names and exports (`AppHeaderRoot`, `SideNavRoot`, …) do not change
+
 ## [0.21.0] - 2026-11-13
 
 ### Added

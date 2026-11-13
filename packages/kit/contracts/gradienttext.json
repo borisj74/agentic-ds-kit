@@ -1,6 +1,7 @@
 {
   "id": "gradienttext",
   "status": "stable",
+  "level": "atom",
   "intent": "A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image; no motion.",
   "useWhen": [
     "one hero or empty-state heading per view",

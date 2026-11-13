@@ -1,6 +1,7 @@
 {
   "id": "commentspanel",
   "status": "stable",
+  "level": "organism",
   "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
   "useWhen": [
     "a page (invoice, document) has several comment threads",

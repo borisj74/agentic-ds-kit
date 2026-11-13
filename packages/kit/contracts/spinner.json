@@ -1,6 +1,7 @@
 {
   "id": "spinner",
   "status": "stable",
+  "level": "atom",
   "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
   "useWhen": [
     "Button or inline action is processing",

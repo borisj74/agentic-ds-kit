@@ -20,7 +20,7 @@ const srcRoot = join(pkgRoot, "patterns-src");
 const HELP = `Usage: npx agentic-ds-kit add <name> [options]
 
 Copy a pattern (an example screen or layout built from kit components), or a
-chrome recipe (a component preset rebuilt from its building blocks), into your
+chrome recipe (a component preset rebuilt from its compose parts), into your
 app so you can edit it. Patterns are starting points; change or ignore them.
 
 Options:
@@ -132,7 +132,7 @@ function printList(manifest) {
   const width = Math.max(...manifest.map((p) => p.id.length));
   const sections = [
     ["Patterns (examples to start from):", "pattern"],
-    ["Recipes (chrome presets built from blocks):", "recipe"],
+    ["Recipes (chrome presets built from compose parts):", "recipe"],
   ];
   for (const [heading, kind] of sections) {
     const entries = manifest.filter((p) => kindOf(p) === kind);

@@ -1,6 +1,7 @@
 {
   "id": "pricingplans",
   "status": "stable",
+  "level": "organism",
   "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
   "useWhen": [
     "upgrade or change plan inside the product",

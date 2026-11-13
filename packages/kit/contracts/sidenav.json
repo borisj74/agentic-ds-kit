@@ -1,7 +1,8 @@
 {
   "id": "sidenav",
   "status": "stable",
-  "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item blocks. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
+  "level": "organism",
+  "intent": "Product side nav: brand header, icon items, optional badges, closeable; preset props or compose your own from SideNav.Root/Header/Brand/Toggle/Nav/Section/Item compose parts. Not AppNav. Not an overlay itself: on small screens put it inside kit Drawer (the app-shell example shows one way).",
   "useWhen": [
     "Product app chrome",
     "Persistent nav with icons"
@@ -90,7 +91,7 @@
     "header": {
       "type": "slot",
       "required": false,
-      "note": "Replaces the brand (mark + title) in the header. The preset keeps a SideNav.Toggle beside it: Close while open; on the closed rail the slot fades and goes inert and the Toggle moves to the start edge to reopen the rail. For a mark inside a custom header, build it from blocks with SideNav.Brand. Ignored when showHeader is false."
+      "note": "Replaces the brand (mark + title) in the header. The preset keeps a SideNav.Toggle beside it: Close while open; on the closed rail the slot fades and goes inert and the Toggle moves to the start edge to reopen the rail. For a mark inside a custom header, build it from compose parts with SideNav.Brand. Ignored when showHeader is false."
     },
     "beforeGroups": {
       "type": "slot",
@@ -116,8 +117,8 @@
     "note": "aria-label defaults to title and can be overridden."
   },
   "compose": {
-    "note": "The data props above are the preset. Build your own nav from these blocks; the preset is built from them (SideNav.Brand + SideNav.Toggle in its header). Dot access (SideNav.Root) in client components; named exports (SideNavRoot, SideNavBrand, SideNavItem, \u2026) in Server Components, which cannot dot into a client module. SideNavItem is the row component; the preset row data type is SideNavItemData. Every block takes ref, className and native attributes (K22).",
-    "blocks": {
+    "note": "The data props above are the preset. Build your own nav from these compose parts; the preset is built from them (SideNav.Brand + SideNav.Toggle in its header). Dot access (SideNav.Root) in client components; named exports (SideNavRoot, SideNavBrand, SideNavItem, \u2026) in Server Components, which cannot dot into a client module. SideNavItem is the row component; the preset row data type is SideNavItemData. Every part takes ref, className and native attributes (K22).",
+    "parts": {
       "SideNav.Root": {
         "export": "SideNavRoot",
         "element": "aside > div.panel",
@@ -173,7 +174,7 @@
         "export": "SideNavAccount",
         "element": "div: Avatar + name/secondary + action Button",
         "props": "name, secondary?, src?, initials?, action? { label, icon? (default LogOut), onClick? }",
-        "note": "The signed-in user, last in SideNav.Footer. Kit Avatar sm sits on the rail icon axis; name and secondary truncate (title holds the full text); the avatar is aria-hidden because the visible name names the block. Closed rail: only the avatar shows, with the name in a kit Tooltip; the text stays in the DOM and the action is inert until the rail opens. ref/className/rest on the div."
+        "note": "The signed-in user, last in SideNav.Footer. Kit Avatar sm sits on the rail icon axis; name and secondary truncate (title holds the full text); the avatar is aria-hidden because the visible name names the part. Closed rail: only the avatar shows, with the name in a kit Tooltip; the text stays in the DOM and the action is inert until the rail opens. ref/className/rest on the div."
       }
     },
     "nesting": {

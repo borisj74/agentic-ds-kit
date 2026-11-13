@@ -1,6 +1,7 @@
 {
   "id": "filterbutton",
   "status": "stable",
+  "level": "molecule",
   "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
   "useWhen": [
     "Filters above a table or list, like Status, Owner, or Date",

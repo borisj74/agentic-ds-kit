@@ -1,6 +1,7 @@
 {
   "id": "buttongroup",
   "status": "stable",
+  "level": "molecule",
   "intent": "Joined row of kit Buttons that share one size and act as one control cluster.",
   "useWhen": [
     "Related sibling actions such as a view switch",

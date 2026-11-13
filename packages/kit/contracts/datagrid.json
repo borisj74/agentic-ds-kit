@@ -1,6 +1,7 @@
 {
   "id": "datagrid",
   "status": "stable",
+  "level": "organism",
   "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
   "useWhen": [
     "People build or change rows in place: rule conditions, price tiers, field mappings, line items",

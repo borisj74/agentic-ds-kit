@@ -1,6 +1,7 @@
 {
   "id": "input",
   "status": "stable",
+  "level": "atom",
   "intent": "Single-line text entry for forms and filters. Optional start and end slots sit inside the field.",
   "useWhen": [
     "Collecting short text such as name, email, or search queries",

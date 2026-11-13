@@ -1,6 +1,7 @@
 {
   "id": "count",
   "status": "stable",
+  "level": "atom",
   "intent": "Small number badge for counts, like unread items on a nav link or tab.",
   "useWhen": [
     "Unread or pending counts on nav items, tabs, and buttons",

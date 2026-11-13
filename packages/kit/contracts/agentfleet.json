@@ -1,6 +1,7 @@
 {
   "id": "agentfleet",
   "status": "stable",
+  "level": "organism",
   "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
   "useWhen": [
     "monitor several running agents or orchestrators at once",

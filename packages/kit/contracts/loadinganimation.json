@@ -1,6 +1,7 @@
 {
   "id": "loadinganimation",
   "status": "stable",
+  "level": "atom",
   "intent": "Square dot-grid loading indicator for compact waits.",
   "useWhen": [
     "Panel or card content is loading",

@@ -1,6 +1,7 @@
 {
   "id": "anchornav",
   "status": "stable",
+  "level": "molecule",
   "intent": "A list of the sections on one long page. It jumps to a section and shows the one the page is at.",
   "useWhen": [
     "A long page split into named sections, like settings or a long record",

@@ -4,6 +4,7 @@
   "category": "Social proof",
   "summary": "A trusted-by wall: rows of named customer logos drifting in opposite directions, with soft edges.",
   "status": "stable",
+  "level": "block",
   "intent": "Block: a social proof wall. A short heading over rows of customer logos that loop sideways on their own, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Hover and keyboard focus hold the motion; under reduced motion the rows stand still and wrap.",
   "useWhen": [
     "a trusted-by row on a landing or pricing page",

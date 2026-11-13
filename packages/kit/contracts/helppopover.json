@@ -1,6 +1,7 @@
 {
   "id": "helppopover",
   "status": "stable",
+  "level": "molecule",
   "intent": "Small help panel: optional title plus one to three short sentences.",
   "useWhen": [
     "Extra explanation beside a Field label or a setting",

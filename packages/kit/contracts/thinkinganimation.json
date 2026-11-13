@@ -1,6 +1,7 @@
 {
   "id": "thinkinganimation",
   "status": "stable",
+  "level": "atom",
   "intent": "Calm processing indicator for assistants and short system waits.",
   "useWhen": [
     "Agent or assistant is actively working",

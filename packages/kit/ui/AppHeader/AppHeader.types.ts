@@ -47,11 +47,11 @@ export interface AppHeaderProps extends Omit<ComponentPropsWithoutRef<"header">,
   ref?: Ref<HTMLElement>;
 }
 
-/* ---------- Building blocks (AppHeader.Root, .Brand, .Title, .Search, .Center, .Actions, .Spacer, .Mark) ---------- */
+/* ---------- Compose parts (AppHeader.Root, .Brand, .Title, .Search, .Center, .Actions, .Spacer, .Mark) ---------- */
 
 /** `ref`, `className` and other native attributes go to the `<header>`. */
 export interface AppHeaderRootProps extends Omit<ComponentPropsWithoutRef<"header">, "aria-label"> {
-  /** Blocks in bar order: Brand (start), Search / Center / Spacer (center, optional), Actions (end). */
+  /** Compose parts in bar order: Brand (start), Search / Center / Spacer (center, optional), Actions (end). */
   children?: ReactNode;
   /** Names the header landmark. Default "Application". */
   ariaLabel?: string;

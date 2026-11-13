@@ -1,6 +1,7 @@
 {
   "id": "shimmertext",
   "status": "stable",
+  "level": "atom",
   "intent": "Animated text for short indeterminate processing copy.",
   "useWhen": [
     "Generating or loading message placeholders",

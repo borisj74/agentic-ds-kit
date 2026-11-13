@@ -5,10 +5,12 @@ import {
   agentReads,
   componentGroupOf,
   contractIntent,
+  contractLevel,
   contractStatus,
   contractUseWhen,
   importLine,
 } from "@/lib/component-contract";
+import { levelLabel } from "@/lib/component-gallery";
 import { ComponentStage } from "./ComponentStage";
 import styles from "./ComponentPage.module.css";
 
@@ -69,6 +71,7 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
   const name = componentLabel(id);
   const group = componentGroupOf(id);
   const status = contractStatus(id);
+  const level = contractLevel(id);
   const { use, avoid } = contractUseWhen(id);
   const crumbs = [
     { label: "Components", href: "/components" },
@@ -86,6 +89,11 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
           <Badge tone={status === "stable" ? "success" : "warning"} appearance="soft" size="sm">
             {status}
           </Badge>
+          {level ? (
+            <Badge tone="neutral" appearance="soft" size="sm">
+              {levelLabel(level)}
+            </Badge>
+          ) : null}
           <Badge tone="neutral" appearance="soft" size="sm">
             {`contracts/${id}.json`}
           </Badge>

@@ -1,6 +1,7 @@
 {
   "id": "notificationstack",
   "status": "stable",
+  "level": "organism",
   "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
   "useWhen": [
     "show payments, sign-ins and billing updates people can read later",

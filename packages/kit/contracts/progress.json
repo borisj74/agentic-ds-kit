@@ -1,6 +1,7 @@
 {
   "id": "progress",
   "status": "stable",
+  "level": "atom",
   "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
   "useWhen": [
     "Upload, import, or task completion",

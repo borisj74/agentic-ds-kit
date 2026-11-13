@@ -1,6 +1,7 @@
 {
   "id": "datetimepicker",
   "status": "stable",
+  "level": "molecule",
   "intent": "Pick a calendar date and a time in one field.",
   "useWhen": [
     "An appointment, deadline, or schedule that needs both a day and a time"

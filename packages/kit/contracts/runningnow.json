@@ -1,6 +1,7 @@
 {
   "id": "runningnow",
   "status": "stable",
+  "level": "organism",
   "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
   "useWhen": [
     "an at-a-glance list of running agents in app chrome",

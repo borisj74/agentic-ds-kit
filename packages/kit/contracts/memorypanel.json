@@ -1,6 +1,7 @@
 {
   "id": "memorypanel",
   "status": "stable",
+  "level": "organism",
   "intent": "Facts an agent has stored: search, add, pin, edit or forget them (confirmed in an AlertDialog), and see which ones this thread used.",
   "useWhen": [
     "show and manage an agent's long-term memory",

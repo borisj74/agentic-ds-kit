@@ -1,6 +1,7 @@
 {
   "id": "empty",
   "status": "stable",
+  "level": "molecule",
   "intent": "Placeholder when a list, page, or region has nothing to show. One piece.",
   "useWhen": [
     "A list or table has no rows",

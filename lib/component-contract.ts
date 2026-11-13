@@ -43,6 +43,12 @@ export function contractStatus(id: string): string {
   return typeof status === "string" ? status : "stable";
 }
 
+/** Where the piece sits (atom, molecule, organism, block), or null when the contract has none. */
+export function contractLevel(id: string): string | null {
+  const level = contractFor(id)?.level;
+  return typeof level === "string" ? level : null;
+}
+
 export function contractIntent(id: string): string {
   const intent = contractFor(id)?.intent;
   return typeof intent === "string" ? intent : "";

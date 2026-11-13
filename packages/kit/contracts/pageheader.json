@@ -1,6 +1,7 @@
 {
   "id": "pageheader",
   "status": "stable",
+  "level": "organism",
   "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
   "useWhen": [
     "Product page title with optional Breadcrumb trail and actions",

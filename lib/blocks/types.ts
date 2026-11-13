@@ -2,6 +2,8 @@
 export interface BlockContract {
   id: string;
   kind: string;
+  /** Always "block" for a block contract. */
+  level: string;
   category: string;
   summary: string;
   intent: string;

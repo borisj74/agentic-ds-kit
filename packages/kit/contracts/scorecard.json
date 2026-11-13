@@ -1,6 +1,7 @@
 {
   "id": "scorecard",
   "status": "stable",
+  "level": "molecule",
   "intent": "one KPI with label, value, optional delta/trend/hint/badge",
   "useWhen": [
     "Showing a single metric such as revenue, users, or conversion rate"

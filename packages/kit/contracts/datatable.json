@@ -1,6 +1,7 @@
 {
   "id": "datatable",
   "status": "stable",
+  "level": "organism",
   "intent": "Framed dataset with search, filters, column settings, and a caption title.",
   "useWhen": [
     "Searchable datasets with filters or column settings",

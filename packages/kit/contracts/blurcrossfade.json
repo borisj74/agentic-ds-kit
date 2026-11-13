@@ -1,6 +1,7 @@
 {
   "id": "blurcrossfade",
   "status": "stable",
+  "level": "atom",
   "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
   "useWhen": [
     "a status, value or thumbnail swaps in place and a hard cut would feel jumpy",

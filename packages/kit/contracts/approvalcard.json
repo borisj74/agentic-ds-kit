@@ -1,6 +1,7 @@
 {
   "id": "approvalcard",
   "status": "stable",
+  "level": "organism",
   "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
   "useWhen": [
     "an agent needs a person's OK before a command, file edit, or other side effect",
