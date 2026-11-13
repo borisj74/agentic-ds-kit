@@ -6,6 +6,7 @@ import { Tooltip } from "../Tooltip";
 import { cx } from "../shared/cx";
 import type { MessageActionsProps } from "./MessageActions.types";
 import styles from "./MessageActions.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { MessageActionsProps, MessageFeedback } from "./MessageActions.types";
 
@@ -30,6 +31,7 @@ export function MessageActions({
   ref,
   ...rest
 }: MessageActionsProps) {
+  const labels = useKitLabels();
   const hasFeedback = Boolean(onFeedback);
 
   return (
@@ -43,7 +45,7 @@ export function MessageActions({
               </Button>
             ) : (
               <Tooltip content="Copy">
-                <Button size="sm" appearance="ghost" mode="neutral" iconStart="Copy" ariaLabel="Copy" onClick={onCopy} disabled={disabled} />
+                <Button size="sm" appearance="ghost" mode="neutral" iconStart="Copy" ariaLabel={labels.copy} onClick={onCopy} disabled={disabled} />
               </Tooltip>
             )
           ) : null}
@@ -54,13 +56,13 @@ export function MessageActions({
               </Button>
             ) : (
               <Tooltip content="Retry">
-                <Button size="sm" appearance="ghost" mode="neutral" iconStart="RotateCcw" ariaLabel="Retry" onClick={onRetry} disabled={disabled} />
+                <Button size="sm" appearance="ghost" mode="neutral" iconStart="RotateCcw" ariaLabel={labels.retry} onClick={onRetry} disabled={disabled} />
               </Tooltip>
             )
           ) : null}
           {onEdit ? (
             <Tooltip content="Edit">
-              <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel="Edit" onClick={onEdit} disabled={disabled} />
+              <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel={labels.edit} onClick={onEdit} disabled={disabled} />
             </Tooltip>
           ) : null}
           {hasFeedback ? (
@@ -72,7 +74,7 @@ export function MessageActions({
                   appearance={feedback === "up" ? "soft" : "ghost"}
                   mode="neutral"
                   iconStart="ThumbsUp"
-                  ariaLabel="Good response"
+                  ariaLabel={labels.goodResponse}
                   aria-pressed={feedback === "up"}
                   className={feedback === "up" ? styles.on : undefined}
                   onClick={() => onFeedback?.(feedback === "up" ? null : "up")}
@@ -85,7 +87,7 @@ export function MessageActions({
                   appearance={feedback === "down" ? "soft" : "ghost"}
                   mode="neutral"
                   iconStart="ThumbsDown"
-                  ariaLabel="Bad response"
+                  ariaLabel={labels.badResponse}
                   aria-pressed={feedback === "down"}
                   onClick={() => onFeedback?.(feedback === "down" ? null : "down")}
                   disabled={disabled}
@@ -99,7 +101,7 @@ export function MessageActions({
               appearance="ghost"
               mode="neutral"
               iconStart="Ellipsis"
-              ariaLabel="More actions"
+              ariaLabel={labels.moreActions}
               align="start"
               disabled={disabled}
               groups={[{ items: moreItems }]}
@@ -114,7 +116,7 @@ export function MessageActions({
         ) : null}
       </div>
       {feedback === "down" && reasons.length ? (
-        <ul className={styles.reasons} aria-label="What went wrong?">
+        <ul className={styles.reasons} aria-label={labels.whatWentWrong}>
           {reasons.map((reason) => (
             <li key={reason}>
               <button type="button" className={styles.reason} onClick={() => onReason?.(reason)}>

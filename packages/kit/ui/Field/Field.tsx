@@ -12,6 +12,7 @@ export function Field({
   htmlFor,
   hint,
   help,
+  helpLabel = "Help",
   error,
   labelPosition = "top",
   children,
@@ -53,7 +54,7 @@ export function Field({
         <div className={styles.labelRow}>
           {labelNode}
           <HelpPopover title={label} content={help} placement="right">
-            <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel="Help" />
+            <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel={helpLabel} />
           </HelpPopover>
         </div>
       ) : (

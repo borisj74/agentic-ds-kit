@@ -10,6 +10,7 @@ import styles from "./Drawer.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { DrawerBodyContext } from "../shared/drawerContext";
+import { useKitLabels } from "../shared/labels";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
 
@@ -37,6 +38,7 @@ export function Drawer({
   ref,
   ...rest
 }: DrawerProps) {
+  const labels = useKitLabels();
   const titleId = useId();
   const descriptionId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -143,7 +145,7 @@ export function Drawer({
             ) : null}
           </div>
           {showClose ? (
-            <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
+            <button type="button" className={styles.close} onClick={onClose} aria-label={labels.close}>
               <LucideByName name="X" size={16} />
             </button>
           ) : null}

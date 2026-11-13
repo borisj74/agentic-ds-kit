@@ -94,7 +94,8 @@
       "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Scrim click closes",
       "Focus restores to the previously focused element on close",
-      "Unique ids via useId — do not hardcode modal-title"
+      "Unique ids via useId — do not hardcode modal-title",
+      "built-in labels (closeDialog) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

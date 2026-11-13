@@ -8,6 +8,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import controlStyles from "../shared/controls.module.css";
 import type { DatePickerProps, DatePickerRange } from "./DatePicker.types";
 import styles from "./DatePicker.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type {
   DatePickerProps,
@@ -58,6 +59,7 @@ function nextRange(current: DatePickerRange | undefined, iso: string): DatePicke
 }
 
 export function DatePicker(props: DatePickerProps) {
+  const labels = useKitLabels();
   const {
     id,
     size = "md",
@@ -244,7 +246,8 @@ export function DatePicker(props: DatePickerProps) {
           className={styles.panel}
           role="dialog"
           aria-modal="true"
-          aria-label={isRange ? "Choose dates" : "Choose date"}
+          aria-label={isRange ? labels.chooseDates : labels.chooseDate}
+          data-kit-date-panel=""
           tabIndex={-1}
         >
           {isRange ? (

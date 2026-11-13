@@ -32,7 +32,8 @@
       "ArrowUp and ArrowDown change the focused part",
       "In 12-hour mode, a button switches AM and PM and is labelled Period",
       "The submitted value is HH:mm",
-      "Must have a Field label or ariaLabel"
+      "Must have a Field label or ariaLabel",
+      "built-in labels (hour, minute, period) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

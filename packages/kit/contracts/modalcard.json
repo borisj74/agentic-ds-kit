@@ -84,7 +84,8 @@
       "Title is the accessible name via aria-labelledby",
       "description is aria-describedby when present",
       "Close is a button with aria-label Close, only when onClose is set",
-      "Unique ids via useId"
+      "Unique ids via useId",
+      "built-in labels (close) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

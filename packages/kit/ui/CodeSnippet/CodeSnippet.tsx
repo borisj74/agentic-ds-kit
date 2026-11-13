@@ -6,6 +6,7 @@ import { Tabs } from "../Tabs";
 import type { CodeSnippetProps } from "./CodeSnippet.types";
 import { cx } from "../shared/cx";
 import styles from "./CodeSnippet.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { CodeSnippetProps, CodeSnippetTab } from "./CodeSnippet.types";
 
@@ -37,6 +38,7 @@ export function CodeSnippet({
   tabs,
   language,
   title,
+  ariaLabel,
   showLineNumbers = false,
   copyable = true,
   wrap = false,
@@ -45,6 +47,7 @@ export function CodeSnippet({
   ref,
   ...rest
 }: CodeSnippetProps) {
+  const labels = useKitLabels();
   const hasTabs = Boolean(tabs && tabs.length > 0);
   const [activeIndex, setActiveIndex] = useState(0);
   const activeTab = hasTabs ? tabs![Math.min(activeIndex, tabs!.length - 1)] : undefined;
@@ -88,7 +91,7 @@ export function CodeSnippet({
   }, [text, wrap, maxHeight, showLineNumbers]);
 
   const hasHeader = hasTabs || Boolean(title) || Boolean(lang);
-  const regionLabel = title ?? activeTab?.label ?? (lang ? `${lang} code` : "Code");
+  const regionLabel = title ?? ariaLabel ?? activeTab?.label ?? (lang ? labels.languageCode(lang) : labels.code);
   const lines = showLineNumbers ? text.split("\n") : null;
 
   const copyButton = copyable ? (
@@ -98,7 +101,7 @@ export function CodeSnippet({
       iconStart={copied ? "Check" : "Copy"}
       onClick={onCopy}
     >
-      {copied ? "Copied" : "Copy"}
+      {copied ? labels.copied : labels.copy}
     </Button>
   ) : null;
 
@@ -111,7 +114,7 @@ export function CodeSnippet({
               <Tabs
                 variant="line"
                 size="sm"
-                ariaLabel={title ?? "Code"}
+                ariaLabel={title ?? ariaLabel ?? labels.code}
                 value={String(Math.min(activeIndex, tabs!.length - 1))}
                 onChange={(id) => setActiveIndex(Number(id))}
                 items={tabs!.map((tab, index) => ({ id: String(index), label: tab.label }))}
@@ -154,7 +157,7 @@ export function CodeSnippet({
       {!hasHeader && copyButton ? <div className={styles.floatingCopy}>{copyButton}</div> : null}
       {copyable ? (
         <span className={styles.srOnly} aria-live="polite">
-          {copied ? "Copied" : ""}
+          {copied ? labels.copied : ""}
         </span>
       ) : null}
     </div>

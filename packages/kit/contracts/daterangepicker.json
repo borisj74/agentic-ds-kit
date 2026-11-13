@@ -54,7 +54,8 @@
       "Overlay is role=dialog aria-modal labelled Choose dates and contains the month grid",
       "Presets sit on the start and two months side by side (one below 40rem). A preset, or a first and second day click, sets a pending range; Apply commits it and closes. Cancel, Escape, or a click outside leave the value as it was",
       "Escape closes and returns focus to the trigger. Tab stays inside the dialog",
-      "Must have a Field label pointing at id"
+      "Must have a Field label pointing at id",
+      "built-in labels (previousMonth, nextMonth, chooseDates, presets) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

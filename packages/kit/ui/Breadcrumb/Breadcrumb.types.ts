@@ -23,5 +23,7 @@ export interface BreadcrumbProps extends Omit<ComponentPropsWithoutRef<"nav">, B
   items: BreadcrumbItem[];
   separator?: BreadcrumbSeparator;
   maxItems?: number;
+  /** The nav landmark's name. Default "Breadcrumb"; set it to translate. */
+  ariaLabel?: string;
   ref?: Ref<HTMLElement>;
 }

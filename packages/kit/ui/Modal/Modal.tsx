@@ -8,6 +8,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Modal.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
+import { useKitLabels } from "../shared/labels";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
 
@@ -28,6 +29,7 @@ export function Modal({
   ref,
   ...rest
 }: ModalProps) {
+  const labels = useKitLabels();
   const cardRef = useRef<HTMLDivElement>(null);
   const setCardRef = useMemo(() => mergeRefs(cardRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
@@ -105,7 +107,7 @@ export function Modal({
       data-theme-scope={scope.id}
       data-theme={scope.mode === "dark" ? "dark" : undefined}
     >
-      <button type="button" className={styles.scrim} aria-label="Close dialog" onClick={onClose} />
+      <button type="button" className={styles.scrim} aria-label={labels.closeDialog} onClick={onClose} />
       <ModalCard
         {...rest}
         ref={setCardRef}

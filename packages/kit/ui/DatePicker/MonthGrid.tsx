@@ -4,6 +4,7 @@ import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "re
 import { Button } from "../Button";
 import type { MonthGridProps } from "./MonthGrid.types";
 import styles from "./MonthGrid.module.css";
+import { useKitLabels } from "../shared/labels";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
 
@@ -122,6 +123,7 @@ export function MonthGrid({
   hoverDate,
   onHoverDateChange,
 }: MonthGridProps) {
+  const labels = useKitLabels();
   const headingId = useId();
   const isControlled = value !== undefined;
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -267,7 +269,7 @@ export function MonthGrid({
             appearance="ghost" mode="neutral"
             size="sm"
             iconStart="ChevronLeft"
-            ariaLabel="Previous month"
+            ariaLabel={labels.previousMonth}
             disabled={prevDisabled}
             onClick={() => goMonth(-1)}
           />
@@ -282,7 +284,7 @@ export function MonthGrid({
             appearance="ghost" mode="neutral"
             size="sm"
             iconStart="ChevronRight"
-            ariaLabel="Next month"
+            ariaLabel={labels.nextMonth}
             disabled={nextDisabled}
             onClick={() => goMonth(1)}
           />

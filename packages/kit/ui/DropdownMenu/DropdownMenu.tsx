@@ -34,6 +34,7 @@ export type {
   DropdownMenuTriggerTag,
 } from "./DropdownMenu.types";
 import { useIsClient } from "../shared/useIsClient";
+import { useKitLabels } from "../shared/labels";
 
 // Tag remove buttons come first in a tags field, so prefer the marked trigger.
 function findTrigger(root: HTMLElement | null): HTMLButtonElement | null {
@@ -79,6 +80,7 @@ export function DropdownMenu({
   triggerProps,
   ...rest
 }: DropdownMenuProps) {
+  const labels = useKitLabels();
   const isControlled = typeof openProp === "boolean";
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = isControlled ? openProp : uncontrolledOpen;
@@ -549,7 +551,7 @@ export function DropdownMenu({
                   placeholder={searchPlaceholder}
                   value={query}
                   onChange={setQuery}
-                  ariaLabel="Search options"
+                  ariaLabel={labels.searchOptions}
                 />
               </div>
             ) : null}

@@ -94,7 +94,8 @@
       "disabled sets aria-disabled and prevents interaction",
       "When removable, the X control is a button with aria-label Remove {children}",
       "If removable and disabled, the remove control does not fire",
-      "Remove control shows a focus-visible ring using --border-focus"
+      "Remove control shows a focus-visible ring using --border-focus",
+      "built-in labels (remove) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

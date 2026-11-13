@@ -6,6 +6,7 @@ import { Button } from "../Button";
 import type { CarouselProps } from "./Carousel.types";
 import { cx } from "../shared/cx";
 import styles from "./Carousel.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type {
   CarouselProps,
@@ -28,6 +29,7 @@ export function Carousel({
   ref,
   ...rest
 }: CarouselProps) {
+  const labels = useKitLabels();
   const emblaOptions = useMemo(
     () => ({
       axis: (orientation === "vertical" ? "y" : "x") as "x" | "y",
@@ -139,7 +141,7 @@ export function Carousel({
                 className={styles.slide}
                 role="group"
                 aria-roledescription="slide"
-                aria-label={`Slide ${i + 1} of ${items.length}`}
+                aria-label={labels.slide(i + 1, items.length)}
               >
                 {item}
               </div>
@@ -153,7 +155,7 @@ export function Carousel({
                 appearance="outline" mode="neutral"
                 size="sm"
                 iconStart={prevIcon}
-                ariaLabel="Previous slide"
+                ariaLabel={labels.previousSlide}
                 disabled={!canScrollPrev}
                 onClick={scrollPrev}
               />
@@ -163,7 +165,7 @@ export function Carousel({
                 appearance="outline" mode="neutral"
                 size="sm"
                 iconStart={nextIcon}
-                ariaLabel="Next slide"
+                ariaLabel={labels.nextSlide}
                 disabled={!canScrollNext}
                 onClick={scrollNext}
               />

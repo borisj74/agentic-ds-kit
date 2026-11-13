@@ -477,6 +477,30 @@ The kit always wins on what it owns: `role`, the `aria-*` it manages, `data-stat
 - `id` on Tag, Cell and HeaderCell names the inner checkbox; target the root with `data-*`.
 - Navigation landmarks (Pagination, NavigationMenu, AppNav, SideNav) accept your `aria-label` so several navs on one page can be told apart.
 
+## Translate built-in labels
+
+Some kit controls name themselves for screen readers: the X on Drawer, the arrows on Pagination and DatePicker, the remove button on Tag. These names are English by default. To translate or reword them, wrap your app (or one part of it) in `KitLabelsProvider` and pass only the keys you want to change:
+
+```tsx
+import { KitLabelsProvider } from "agentic-ds-kit";
+
+<KitLabelsProvider
+  labels={{
+    close: "Schließen",
+    previousPage: "Vorherige Seite",
+    nextPage: "Nächste Seite",
+    pageStatus: (page, count) => `Seite ${page} von ${count}`,
+    remove: (name) => `${name} entfernen`,
+  }}
+>
+  <App />
+</KitLabelsProvider>
+```
+
+Keys you leave out stay English. Providers nest: an inner one changes only its own keys. The full list, with the English defaults, is the `KitLabels` type and `DEFAULT_KIT_LABELS`. A component's own `ariaLabel` prop still wins where it has one.
+
+Breadcrumb and Field work without client JavaScript, so they take a prop instead: `<Breadcrumb ariaLabel="Fil d'Ariane" … />` and `<Field helpLabel="Aide" … />`.
+
 ## How the catalog works
 
 Three groups in `contracts/index.json`:

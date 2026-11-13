@@ -9,6 +9,7 @@ import { Count } from "../Count";
 import type { TagProps } from "./Tag.types";
 import { cx } from "../shared/cx";
 import styles from "./Tag.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { TagProps, TagSize, TagDotTone, TagAvatar } from "./Tag.types";
 
@@ -38,6 +39,7 @@ export function Tag({
   ref,
   ...rest
 }: TagProps) {
+  const labels = useKitLabels();
   const generatedId = useId();
   const checkboxId = id ?? `tag-${generatedId}`;
   const iconPx = ICON_SIZE[size];
@@ -85,7 +87,7 @@ export function Tag({
         <button
           type="button"
           className={styles.remove}
-          aria-label={`Remove ${children}`}
+          aria-label={labels.remove(String(children))}
           disabled={disabled}
           onClick={(event) => {
             if (disabled) return;

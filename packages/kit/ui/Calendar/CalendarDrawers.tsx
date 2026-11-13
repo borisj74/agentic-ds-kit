@@ -9,6 +9,7 @@ import { Textarea } from "../Textarea";
 import type { CalendarSource } from "./Calendar.types";
 import { timeOptions, toneClass, TONES, type EventDraft } from "./calendarModel";
 import styles from "./Calendar.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export function CalendarsDrawer({
   open,
@@ -72,6 +73,7 @@ export function EventDrawer({
   onStartDate: (value: string) => void;
   onStartTime: (value: string) => void;
 }) {
+  const labels = useKitLabels();
   const ids = {
     calendar: `${formId}-calendar`,
     title: `${formId}-title`,
@@ -121,7 +123,7 @@ export function EventDrawer({
             <Input id={ids.title} value={draft.title} onChange={(value) => onEdit({ title: value })} />
           </Field>
           <Field label="All day" htmlFor={ids.allDay}>
-            <Switch id={ids.allDay} ariaLabel="All day" checked={draft.allDay} onChange={(value) => onEdit({ allDay: value })} />
+            <Switch id={ids.allDay} ariaLabel={labels.allDay} checked={draft.allDay} onChange={(value) => onEdit({ allDay: value })} />
           </Field>
           <div className={styles.pair}>
             <Field label="Start" htmlFor={ids.start}>

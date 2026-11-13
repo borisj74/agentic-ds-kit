@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MCP: `detail` (`summary` or `full`), `limit` and `offset` on `list_components`, `get_tokens` and `questions`; `kind` filter on `list_components`. Paged answers carry `page: { offset, limit, total, next }`
 - CLI: `npx agentic-ds-kit --version` (also `-v`)
 - Pagination `compact`: icon-only Previous and Next around a "2 of 10" status for narrow screens (screen readers hear "Page 2 of 10")
+- `KitLabelsProvider` (with `useKitLabels`, `DEFAULT_KIT_LABELS` and the `KitLabels` type): translate or reword the screen-reader labels the kit writes itself (close buttons, pager and month arrows, picker panels, remove buttons, Chat and MessageActions controls) across 23 components. Pass only the keys you change; the rest stay English. Components' own `ariaLabel` props still win
+- Breadcrumb `ariaLabel` (default "Breadcrumb") and Field `helpLabel` (default "Help"), so these server-rendered components can be translated without the provider
 
 ### Changed
 

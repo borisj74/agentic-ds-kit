@@ -45,6 +45,12 @@ cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills
 
 const UPGRADE = `npm install agentic-ds-kit@latest`;
 
+const LABELS = `import { KitLabelsProvider } from "agentic-ds-kit";
+
+<KitLabelsProvider labels={{ close: "Schließen", remove: (name) => \`\${name} entfernen\` }}>
+  <App />
+</KitLabelsProvider>`;
+
 export const metadata: Metadata = {
   ...canonical("/installation"),
   title: "Installation",
@@ -67,8 +73,8 @@ export default function InstallationPage() {
         >
           <div className={playground.stack}>
             <p className={playground.body}>Install, then smoke-test a primary Button.</p>
-            <CodeBlock code={INSTALL} />
-            <CodeBlock code={SMOKE} />
+            <CodeBlock code={INSTALL} label="Install command" />
+            <CodeBlock code={SMOKE} label="Smoke test" />
             <p className={playground.body}>
               The button should look like the kit primary, not a default browser control. Importing
               from the package loads tokens and pattern layout classes. Do not add transpilePackages for agentic-ds-kit.
@@ -81,7 +87,7 @@ export default function InstallationPage() {
           description="Read contracts/index.json in the package, then import the matching component."
         >
           <div className={playground.stack}>
-            <CodeBlock code={USAGE} />
+            <CodeBlock code={USAGE} label="Import components" />
             <p className={playground.body}>
               The package exports components only. Compose them into any layout: top bar only, side
               nav only, both, or neither. Keep page content in a main landmark and the nav reachable
@@ -91,17 +97,32 @@ export default function InstallationPage() {
         </Section>
 
         <Section
+          title="Translate built-in labels"
+          description="Close buttons, pager arrows and picker panels name themselves for screen readers, in English by default."
+        >
+          <div className={playground.stack}>
+            <CodeBlock code={LABELS} label="Translate labels" />
+            <p className={playground.body}>
+              Pass only the keys you want to change; the rest stay English. The full list is the
+              KitLabels type and DEFAULT_KIT_LABELS. A component&apos;s own ariaLabel prop still wins.
+              Breadcrumb and Field take ariaLabel and helpLabel props instead, so they stay
+              server-rendered.
+            </p>
+          </div>
+        </Section>
+
+        <Section
           title="Copy a pattern into your app"
           description="Patterns are examples, not package exports. Copy one's source in to start from it, then own its layout, sections, copy, and data."
         >
           <div className={playground.stack}>
-            <CodeBlock code={ADD_PATTERN} />
+            <CodeBlock code={ADD_PATTERN} label="Copy a pattern" />
             <p className={playground.body}>
               This writes components/patterns/dashboard/ (src/components/patterns/ when the app
               uses src/): the pattern files, dashboard-data.ts with the demo data to replace, and dashboard.contract.json. Kit imports point at
               agentic-ds-kit, so the copy compiles with no edits. Import it from there:
             </p>
-            <CodeBlock code={USE_COPY} />
+            <CodeBlock code={USE_COPY} label="Import the copied pattern" />
             <p className={playground.body}>
               Use --dir to pick another folder and --force to overwrite. Keep the contract JSON next
               to the files: agents follow its must lines (kit look and accessibility) and treat its
@@ -123,7 +144,7 @@ export default function InstallationPage() {
           description="Only if your own stylesheets use kit variables before any kit component is imported."
         >
           <div className={playground.stack}>
-            <CodeBlock code={TOKENS} />
+            <CodeBlock code={TOKENS} label="Import tokens" />
             <p className={playground.body}>
               Skip this when every screen already imports a kit component. Importing tokens twice is
               harmless. AppNav uses next/link — Next is an optional peer for that component only.
@@ -142,7 +163,7 @@ export default function InstallationPage() {
               own body rule wins. Without IBM Plex loaded it falls back to system-ui. Load Plex with
               next/font and the variables the tokens read, or override --font-sans in :root.
             </p>
-            <CodeBlock code={FONTS} />
+            <CodeBlock code={FONTS} label="Load fonts" />
           </div>
         </Section>
 
@@ -150,7 +171,7 @@ export default function InstallationPage() {
           title="New folder"
           description="The kit is not an app. Scaffold Next first."
         >
-          <CodeBlock code={NEW_APP} />
+          <CodeBlock code={NEW_APP} label="New app commands" />
         </Section>
 
         <Section
@@ -158,7 +179,7 @@ export default function InstallationPage() {
           description="Optional. Copy these so Cursor and Claude Code follow the kit. The UI works without them."
         >
           <div className={playground.stack}>
-            <CodeBlock code={AGENT_FILES} />
+            <CodeBlock code={AGENT_FILES} label="Copy agent files" />
             <p className={playground.body}>
               Add .cursor/rules/kit.mdc with the same six lines as AGENTS.md. Claude Code loads
               CLAUDE.md (@AGENTS.md).
@@ -171,7 +192,7 @@ export default function InstallationPage() {
           description={`Current version is ${VERSION}. Update the package only. Do not recreate the Next app. Skip 0.2.0 — it shipped CSS filenames Next re-scopes.`}
         >
           <div className={playground.stack}>
-            <CodeBlock code={UPGRADE} />
+            <CodeBlock code={UPGRADE} label="Upgrade command" />
             <p className={playground.body}>
               Remove transpilePackages for this kit if you added it. Re-copy agent files from
               node_modules if they changed.

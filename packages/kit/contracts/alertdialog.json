@@ -83,7 +83,8 @@
       "Focus moves to Cancel when opened",
       "Focus is trapped while open",
       "Escape cancels, unless an open panel inside it (Select, DatePicker) handles that Escape first",
-      "Overlay click does not dismiss"
+      "Overlay click does not dismiss",
+      "built-in labels (dialogActions) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

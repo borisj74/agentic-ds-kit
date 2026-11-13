@@ -7,6 +7,7 @@ import controlStyles from "../shared/controls.module.css";
 import { bumpNumber, clampNumber, currencyAffix, editNumber, formatNumber, parseNumber } from "./numberFormat";
 import type { NumberInputProps } from "./NumberInput.types";
 import styles from "./NumberInput.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export interface FormattedNumberFieldProps extends NumberInputProps {
   /** ISO 4217 code. When set, the symbol sits beside the number and the value formats as money. */
@@ -34,6 +35,7 @@ export function FormattedNumberField({
   className,
   ref,
 }: FormattedNumberFieldProps) {
+  const labels = useKitLabels();
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = useState<number | null>(defaultValue);
   const numeric = isControlled ? value : uncontrolled;
@@ -127,7 +129,7 @@ export function FormattedNumberField({
             mode="neutral"
             size="sm"
             iconStart="Minus"
-            ariaLabel="Decrease value"
+            ariaLabel={labels.decreaseValue}
             disabled={disabled || atMin}
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => stepBy(-1)}
@@ -137,7 +139,7 @@ export function FormattedNumberField({
             mode="neutral"
             size="sm"
             iconStart="Plus"
-            ariaLabel="Increase value"
+            ariaLabel={labels.increaseValue}
             disabled={disabled || atMax}
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => stepBy(1)}

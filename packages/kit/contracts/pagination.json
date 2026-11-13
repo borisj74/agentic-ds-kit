@@ -84,7 +84,8 @@
       "Next disabled on last page",
       "current page uses kit Button appearance=outline mode=neutral and aria-current=page",
       "ellipsis is a span with Lucide Ellipsis, aria-hidden, not a Button",
-      "icon-only Previous/Next set ariaLabel", "compact: the status reads \"Page 2 of 10\" (\"Page\" visually hidden) in an aria-live=polite span"
+      "icon-only Previous/Next set ariaLabel", "compact: the status shows \"2 of 10\" (pageOf, aria-hidden) and reads \"Page 2 of 10\" (pageStatus, visually hidden) in an aria-live=polite span",
+      "built-in labels (previous, next, previousPage, nextPage, pageOf, pageStatus) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

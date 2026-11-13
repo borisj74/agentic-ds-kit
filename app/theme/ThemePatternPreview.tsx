@@ -21,7 +21,7 @@ const NAV: SideNavItemData[] = [
   { id: "settings", label: "Settings", icon: "Settings" },
 ];
 
-function ScaledFrame({ children }: { children: ReactNode }) {
+function ScaledFrame({ label, children }: { label: string; children: ReactNode }) {
   const slotRef = useRef<HTMLDivElement>(null);
   const designRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -48,10 +48,13 @@ function ScaledFrame({ children }: { children: ReactNode }) {
   }, [children]);
 
   return (
-    <div ref={slotRef} className={styles.slot}>
+    // A picture of a whole app page: it is named as one image, and the page inside is inert so its
+    // own h1, landmarks and controls don't mix into this page's outline or tab order.
+    <div ref={slotRef} className={styles.slot} role="img" aria-label={label}>
       <div className={styles.scaler} style={{ height }}>
         <div
           ref={designRef}
+          inert
           className={styles.design}
           style={{ width: designWidth, transform: scale < 1 ? `scale(${scale})` : undefined }}
         >
@@ -62,10 +65,16 @@ function ScaledFrame({ children }: { children: ReactNode }) {
   );
 }
 
+const PREVIEW_LABEL: Record<ThemePatternId, string> = {
+  dashboard: "Dashboard pattern in your theme",
+  list: "List pattern in your theme",
+  settings: "Settings pattern in your theme",
+};
+
 export function ThemePatternPreview({ pattern }: { pattern: ThemePatternId }) {
   const active = pattern === "settings" ? "settings" : "overview";
   return (
-    <ScaledFrame>
+    <ScaledFrame label={PREVIEW_LABEL[pattern]}>
       <AppShellPattern
         navLabel="Agentix"
         header={{

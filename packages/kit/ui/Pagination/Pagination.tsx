@@ -6,6 +6,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { PaginationProps } from "./Pagination.types";
 import { cx } from "../shared/cx";
 import styles from "./Pagination.module.css";
+import { useKitLabels } from "../shared/labels";
 
 export type { PaginationProps, PaginationSize } from "./Pagination.types";
 
@@ -59,6 +60,7 @@ export function Pagination({
   ref,
   ...rest
 }: PaginationProps) {
+  const labels = useKitLabels();
   const count = clampCount(pageCount);
   const isControlled = typeof page === "number";
   const [uncontrolled, setUncontrolled] = useState(() => clampPage(defaultPage, count));
@@ -80,20 +82,20 @@ export function Pagination({
           appearance="ghost"
           mode="neutral"
           iconStart="ChevronLeft"
-          ariaLabel="Previous page"
+          ariaLabel={labels.previousPage}
           disabled={current <= 1}
           onClick={() => go(current - 1)}
         />
         <span className={cx(styles.status, styles[size])} aria-live="polite">
-          <span className={styles.srOnly}>Page </span>
-          {current} of {count}
+          <span aria-hidden="true">{labels.pageOf(current, count)}</span>
+          <span className={styles.srOnly}>{labels.pageStatus(current, count)}</span>
         </span>
         <Button
           size={size}
           appearance="ghost"
           mode="neutral"
           iconStart="ChevronRight"
-          ariaLabel="Next page"
+          ariaLabel={labels.nextPage}
           disabled={current >= count}
           onClick={() => go(current + 1)}
         />
@@ -112,14 +114,14 @@ export function Pagination({
             disabled={current <= 1}
             onClick={() => go(current - 1)}
           >
-            Previous
+            {labels.previous}
           </Button>
         ) : (
           <Button
             size={size}
             appearance="ghost" mode="neutral"
             iconStart="ChevronLeft"
-            ariaLabel="Previous"
+            ariaLabel={labels.previous}
             disabled={current <= 1}
             onClick={() => go(current - 1)}
           />
@@ -164,14 +166,14 @@ export function Pagination({
             disabled={current >= count}
             onClick={() => go(current + 1)}
           >
-            Next
+            {labels.next}
           </Button>
         ) : (
           <Button
             size={size}
             appearance="ghost" mode="neutral"
             iconStart="ChevronRight"
-            ariaLabel="Next"
+            ariaLabel={labels.next}
             disabled={current >= count}
             onClick={() => go(current + 1)}
           />

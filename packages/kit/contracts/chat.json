@@ -132,7 +132,8 @@
       "thread is role=log with aria-live=polite",
       "aria-busy while thinking",
       "composer input has an accessible name",
-      "Send and Close are named icon-only kit Buttons"
+      "Send and Close are named icon-only kit Buttons",
+      "built-in labels (conversation, suggestedPrompts, send) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
