@@ -2,7 +2,7 @@
 
 **Docs: [https://agentic-ds-kit.vercel.app](https://agentic-ds-kit.vercel.app)**
 
-The Agentic DS Kit. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
+Nistha — a code-only design system for coding agents and product UI. Nistha means steadfast, steady practice. Install: npm i agentic-ds-kit
 
 React components, JSON contracts, and tokens for agent-built UI. This is the **installable kit**, not the docs playground.
 

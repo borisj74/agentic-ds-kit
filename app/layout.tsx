@@ -33,14 +33,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description =
-  "Code is the contract. Nistha is the Agentic DS Kit: JSON contracts, tokens, and React components for agents.";
+const tagline = "Nistha — a code-only design system for coding agents and product UI.";
 
-const siteName = "Nistha — Agentic DS Kit";
+const description = `${tagline} JSON contracts, tokens, and React components.`;
+
+const siteName = "Nistha";
 
 export const metadata: Metadata = {
   title: {
-    default: siteName,
+    default: tagline,
     template: "%s · Nistha",
   },
   description,
