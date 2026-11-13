@@ -594,7 +594,8 @@ export function readPlaygroundAppearance() {
  * preview theme is saved ("nistha-theme-playground", THEME_STORAGE_KEY in theme-playground.ts),
  * so previews stay hidden until that theme is applied instead of flashing the default.
  */
-export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);if(localStorage.getItem("${PLAYGROUND_SIDEBAR_STORAGE_KEY}")==="closed")root.setAttribute("data-sidebar","closed");var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark")root.setAttribute("data-theme","dark");if(localStorage.getItem("nistha-theme-playground"))root.setAttribute("data-preview-theme","stored");}catch(e){}})();`;
+/** Before paint: stored panel/sidebar state, and the theme (stored choice, else prefers-color-scheme). */
+export const PLAYGROUND_THEME_INIT_SCRIPT = `(function(){try{var root=document.documentElement;var panel=localStorage.getItem("${PLAYGROUND_CUSTOMIZE_STORAGE_KEY}");if(panel==="open"||panel==="closed")root.setAttribute("data-customize",panel);if(localStorage.getItem("${PLAYGROUND_SIDEBAR_STORAGE_KEY}")==="closed")root.setAttribute("data-sidebar","closed");var t=localStorage.getItem("${PLAYGROUND_THEME_STORAGE_KEY}");if(t==="dark"||(t===null&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches))root.setAttribute("data-theme","dark");if(localStorage.getItem("nistha-theme-playground"))root.setAttribute("data-preview-theme","stored");}catch(e){}})();`;
 
 
 export { COLOR_SHORTCUTS };

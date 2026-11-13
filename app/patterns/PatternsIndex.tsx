@@ -100,7 +100,7 @@ export function PatternsIndex() {
               copyText={screen.copy}
               thumb={
                 screen.slug && screen.view ? (
-                  <ScaledFrame src={frameUrl(screen.slug, screen.view, mode)} title={screen.title} interactive={false} />
+                  <ScaledFrame src={frameUrl(screen.slug, screen.view, mode)} title={screen.title} interactive={false} deferUntilVisible />
                 ) : (
                   <LayoutsThumb>
                     <LayoutsPreview />

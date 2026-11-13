@@ -1,9 +1,44 @@
 .nav {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
+  max-inline-size: 100%;
+}
+
+/* Compact: Previous, "2 of 10", Next on one line at any width. */
+.compact {
+  flex-wrap: nowrap;
+}
+
+.status {
+  padding-inline: var(--space-2);
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg);
+  white-space: nowrap;
+}
+
+.sm {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.md {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .page {

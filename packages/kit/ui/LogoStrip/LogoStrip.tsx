@@ -12,7 +12,6 @@ type Item = ReturnType<typeof stripLogos>[number];
 
 function Mark({ logo, kind }: { logo: LogoStripLogo; kind: Item["kind"] }) {
   // The kit is framework-agnostic: a plain img, not next/image.
-  // eslint-disable-next-line @next/next/no-img-element
   if (kind === "image") return <img className={styles.image} src={logo.src} alt={logo.name} loading="lazy" decoding="async" />;
   if (kind === "node")
     return (

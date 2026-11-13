@@ -289,6 +289,7 @@ export function HelpPopover({
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hide/updatePosition are render-scope helpers; their inputs are listed.
   }, [open, disabled, isControlled, placement, title, content]);
 
   function onBlur(event: ReactFocusEvent<HTMLSpanElement>) {

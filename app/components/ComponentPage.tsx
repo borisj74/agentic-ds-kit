@@ -92,7 +92,12 @@ export function ComponentPage({ id, children, footer }: { id: string; children: 
         </div>
       </header>
 
-      <ComponentStage id={id} doc={children} />
+      {/* The doc's own hero and Master headings are hidden on this page, so this visually hidden h2
+          keeps the outline h1 → h2 → the component's own h3 titles (axe heading-order). */}
+      <div>
+        <h2 className={styles.srOnly}>Preview</h2>
+        <ComponentStage id={id} doc={children} />
+      </div>
 
       {use.length > 0 || avoid.length > 0 ? (
         <div className={`layout-split ${styles.rules}`}>

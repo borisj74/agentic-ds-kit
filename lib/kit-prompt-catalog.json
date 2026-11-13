@@ -5730,6 +5730,11 @@
         "page numbers are kit Button"
       ],
       "props": {
+        "compact": {
+          "type": "boolean",
+          "default": false,
+          "note": "Narrow layout for small screens: icon-only Previous and Next (\"Previous page\", \"Next page\") around a \"2 of 10\" status. Ignores showPages and showLabels. The default layout wraps instead of overflowing."
+        },
         "page": {
           "type": "number",
           "required": false,

@@ -15,5 +15,10 @@ export interface PaginationProps extends Omit<ComponentPropsWithoutRef<"nav">, P
   showLabels?: boolean;
   showPreviousNext?: boolean;
   size?: PaginationSize;
+  /**
+   * Narrow layout for small screens: icon-only Previous and Next around a "2 of 10" status.
+   * Ignores showPages and showLabels.
+   */
+  compact?: boolean;
   ref?: Ref<HTMLElement>;
 }

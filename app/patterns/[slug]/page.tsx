@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isPatternSlug, PATTERN_ITEMS } from "@/lib/playground-nav";
 import { PatternsView } from "../PatternsView";
+import { canonical } from "@/lib/site";
 
 export function generateStaticParams() {
   return PATTERN_ITEMS.map((item) => ({ slug: item.slug }));
@@ -14,7 +15,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const label = PATTERN_ITEMS.find((item) => item.slug === slug)?.label;
-  return { title: label ?? "Pattern" };
+  return { title: label ?? "Pattern", ...canonical(`/patterns/${slug}`) };
 }
 
 export default async function PatternPage({

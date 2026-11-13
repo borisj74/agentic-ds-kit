@@ -687,6 +687,26 @@ function kitValue(value: string): string {
   return match[2] ? `var(--color-${match[1]}-${match[2]})` : `var(--color-${kebabKey(match[1])})`;
 }
 
+/**
+ * The kit's status colours (danger, caution, success, highlight) for this mode, plus the aliases
+ * that point at them (status, text, icon, fill). Aliases such as --text-success: var(--success-fg)
+ * are resolved where they are declared, so without re-declaring them here a light preview inside a
+ * dark page inherited the page's dark values (a pale green delta on a white card, 1.21:1).
+ */
+function statusRoles(mode: ThemeMode): Record<string, string> {
+  const theme = (tokens.semantic as unknown as Record<string, Record<string, Record<string, string>>>)[mode];
+  const out: Record<string, string> = {};
+  for (const family of ["danger", "caution", "success", "highlight"] as const) {
+    for (const [key, value] of Object.entries(theme[family] ?? {})) out[`--${family}-${kebabKey(key)}`] = kitValue(value);
+  }
+  for (const family of ["status", "text", "icon", "fill"] as const) {
+    for (const [key, value] of Object.entries(theme[family] ?? {})) {
+      if (/var\(--(danger|caution|success|highlight)-/.test(value)) out[`--${family}-${kebabKey(key)}`] = value;
+    }
+  }
+  return out;
+}
+
 /** True when brand and neutrals are the kit default (Electric Blue on Slate). */
 export function usesKitColors(state: ThemeState): boolean {
   return normalizeHex(state.brand) === KIT_BRAND_HEX && state.neutral === "slate";
@@ -752,6 +772,7 @@ export function themeDeclarations(state: ThemeState, mode: ThemeMode, which: "pr
     ...shared,
     ...neutral,
     ...brand,
+    ...(which === "preview" ? statusRoles(mode) : {}),
     ...(usesKitColors(state) ? kitColorRoles(mode) : LEGACY_INFO[mode]),
     ...accentRoles(palette, mode),
     ...shadowVars(state, mode),

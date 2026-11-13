@@ -84,63 +84,6 @@ const CELL_TYPE_ROWS: DataTableRow[] = [
   },
 ];
 
-
-const INTERACTIVE_COLUMNS: DataTableColumn[] = [
-  { key: "status", header: "Status" },
-  { key: "progress", header: "Progress" },
-  { key: "rating", header: "Rating" },
-  { key: "actions", header: "Actions" },
-  { key: "icons", header: "Icons" },
-  { key: "menu", header: "Menu" },
-];
-
-const INTERACTIVE_ROWS: DataTableRow[] = [
-  {
-    status: {
-      type: "select",
-      label: "Status",
-      value: "active",
-      options: [
-        { value: "active", label: "Active" },
-        { value: "invited", label: "Invited" },
-        { value: "away", label: "Away" },
-      ],
-    },
-    progress: { type: "progress", value: 64 },
-    rating: { type: "rating", value: 4 },
-    actions: {
-      type: "actions",
-      actions: [{ label: "Edit" }, { label: "Delete", appearance: "solid", mode: "danger" }],
-    },
-    icons: {
-      type: "actionIcons",
-      actions: [
-        { icon: "Pencil", ariaLabel: "Edit" },
-        { icon: "Trash2", ariaLabel: "Delete", appearance: "solid", mode: "danger" },
-      ],
-    },
-    menu: {
-      type: "actionMenu",
-      label: "Row actions",
-      actions: [
-        { label: "Edit", icon: "Pencil" },
-        { label: "Make a copy", icon: "Copy" },
-        { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" },
-      ],
-    },
-  },
-];
-
-const INTERACTIVE_CODE = `<DataTable
-  caption="Interactive cells"
-  columns={[
-    { key: "status", header: "Status" },
-    { key: "progress", header: "Progress" },
-    { key: "rating", header: "Rating" },
-    { key: "actions", header: "Actions" },
-  ]}
-  rows={rows}
-/>`;
 const FILTERS = [
   { key: "status", label: "Status" },
   { key: "role", label: "Role" },

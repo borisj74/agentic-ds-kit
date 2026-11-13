@@ -3,6 +3,7 @@ import { Section } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
+import { canonical } from "@/lib/site";
 
 const VERSION = kitPackage.version;
 
@@ -45,6 +46,7 @@ cp node_modules/agentic-ds-kit/skills/prototype-from-kit/SKILL.md .claude/skills
 const UPGRADE = `npm install agentic-ds-kit@latest`;
 
 export const metadata: Metadata = {
+  ...canonical("/installation"),
   title: "Installation",
 };
 
