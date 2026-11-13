@@ -100,11 +100,13 @@
       "type": "enum",
       "values": [
         "neutral",
+        "primary",
         "brand",
         "success",
         "warning",
         "danger",
-        "info"
+        "info",
+        "highlight"
       ],
       "default": "neutral",
       "note": "Single Badge. Demos use success for Active-like, else neutral."

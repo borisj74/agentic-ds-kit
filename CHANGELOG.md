@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Link**: text that navigates. `variant="inline"` (underlined, inherits the sentence's type) or `"standalone"` (on its own line, underlined on hover), `external` (new tab, `rel="noopener noreferrer"`, ExternalLink icon and a screen-reader "opens in a new tab"), and `linkAs` for router links. Contract, docs page and tests included; Button's contract now points navigation to Link
+- Cell `tone` and Scorecard `badgeTone` contracts list `primary` and `highlight` (the components already supported them through Badge)
+- Contracts document props the components already had: Button `draggable` / `onDragStart` / `onDragEnd`; DropdownMenu `triggerDraggable` / `onTriggerDragStart` / `onTriggerDragEnd`; Input, Select and Textarea `describedBy`; HeaderCell `defaultChecked`; Scoreboard `aria-label`; ShimmerText `style`; ModalCard `role`, `tabIndex` and `aria-modal`
+
+### Changed
+
+- The BillingSchedule pattern's next-charge panel is a kit Card (`size="sm"`) with a vertical Divider. Its surface is now the card fill instead of the subtle grey. Re-copy with `npx agentic-ds-kit add billing-schedule --force`
+- `contracts/index.json` intents are generated from each contract (84 had drifted); the contract wins
+- DatePicker's panel uses `var(--z-overlay)` instead of a fixed `z-index: 20`
+
+### Removed
+
+- DropdownMenu `triggerRef` and `triggerProps` are no longer in the published types. They were marked `@internal` (Select's pass-through) and still work at runtime
+
 ## [0.20.0] - 2026-11-13
 
 ### Added

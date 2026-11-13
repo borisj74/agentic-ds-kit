@@ -10,11 +10,14 @@
     "Icon-only actions when space is tight and ariaLabel names the action"
   ],
   "doNotUseWhen": [
-    "Navigation that should be a link — use an anchor styled elsewhere",
+    "Navigation to another page or site — use Link (inline, standalone or external)",
     "Icon-only without aria-label — icon-only must set ariaLabel",
     "More than one solid-primary button in the same view"
   ],
   "props": {
+    "draggable": {"type": "boolean", "required": false, "note": "Native drag source. Use with onDragStart/onDragEnd, e.g. a chip that drags into a list."},
+    "onDragStart": {"type": "function", "required": false, "note": "(event: DragEvent<HTMLButtonElement>) => void. Set dataTransfer here."},
+    "onDragEnd": {"type": "function", "required": false, "note": "(event: DragEvent<HTMLButtonElement>) => void."},
     "size": {
       "type": "enum",
       "values": ["lg", "md", "sm"],

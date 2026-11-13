@@ -87,6 +87,8 @@ export default defineConfig({
     dts({
       include: ["src", "ui", "css-modules.d.ts"],
       tsconfigPath: resolve(root, "tsconfig.json"),
+      // Drop `@internal` members (DropdownMenu triggerRef/triggerProps, Select's pass-through) from the published types.
+      compilerOptions: { stripInternal: true },
     }),
     importEmittedCss(),
   ],

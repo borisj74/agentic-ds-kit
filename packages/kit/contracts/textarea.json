@@ -12,6 +12,7 @@
     "Rich text or markdown editing — out of scope"
   ],
   "props": {
+    "describedBy": {"type": "string", "required": false, "note": "Id(s) for aria-describedby on the textarea. Field passes its hint or error id."},
     "id": { "type": "string", "required": true },
     "size": { "type": "enum", "values": ["sm", "md", "lg"], "default": "md" },
     "rows": { "type": "number", "required": false, "note": "optional native rows; height also comes from size" },

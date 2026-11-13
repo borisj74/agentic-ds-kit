@@ -1,6 +1,6 @@
 {
   "kit": "agentic-ds-kit",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "rules": [
     "Import from agentic-ds-kit only. Never invent a local cousin.",
     "Read contracts/index.json, then only the matching contract file(s).",
@@ -441,7 +441,7 @@
         "Icon-only actions when space is tight and ariaLabel names the action"
       ],
       "doNotUseWhen": [
-        "Navigation that should be a link — use an anchor styled elsewhere",
+        "Navigation to another page or site — use Link (inline, standalone or external)",
         "Icon-only without aria-label — icon-only must set ariaLabel",
         "More than one solid-primary button in the same view"
       ],
@@ -453,6 +453,21 @@
         "Do not ship icon-only without ariaLabel"
       ],
       "props": {
+        "draggable": {
+          "type": "boolean",
+          "required": false,
+          "note": "Native drag source. Use with onDragStart/onDragEnd, e.g. a chip that drags into a list."
+        },
+        "onDragStart": {
+          "type": "function",
+          "required": false,
+          "note": "(event: DragEvent<HTMLButtonElement>) => void. Set dataTransfer here."
+        },
+        "onDragEnd": {
+          "type": "function",
+          "required": false,
+          "note": "(event: DragEvent<HTMLButtonElement>) => void."
+        },
         "size": {
           "type": "enum",
           "values": [
@@ -658,11 +673,13 @@
           "type": "enum",
           "values": [
             "neutral",
+            "primary",
             "brand",
             "success",
             "warning",
             "danger",
-            "info"
+            "info",
+            "highlight"
           ],
           "default": "neutral",
           "note": "kit Badge tone"
@@ -705,6 +722,12 @@
         "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}"
       ],
       "props": {
+        "aria-label": {
+          "type": "string",
+          "default": "Key metrics",
+          "required": false,
+          "note": "Names the section (and the Conveyor when scroll is on)."
+        },
         "items": {
           "type": "array",
           "required": true,
@@ -738,6 +761,11 @@
         "Do not render a separate Lucide icon beside it — pass a Lucide name or component to the icon props"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for aria-describedby on the input. Field passes its hint or error id."
+        },
         "id": {
           "type": "string",
           "required": true
@@ -1306,6 +1334,58 @@
       }
     },
     {
+      "id": "link",
+      "group": "component",
+      "intent": "Text that navigates to another page or place: inline inside a sentence, or standalone on its own line, with an external variant that opens a new tab.",
+      "useWhen": [
+        "Navigating to another page, section or site",
+        "A link inside running text (inline)",
+        "A link on its own line, under a card or in a short list (standalone)",
+        "A link that leaves the app (external)"
+      ],
+      "doNotUseWhen": [
+        "Running an action such as save, delete or open a dialog — use Button",
+        "A list of related links with descriptions — use LinkList",
+        "Primary site or app navigation — use AppNav, SideNav or NavigationMenu"
+      ],
+      "doNot": [
+        "Do not use Link for actions; use Button",
+        "Do not style a Button to look like a link, or an a to look like a Button",
+        "Do not set target=_blank by hand; use external",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "href": {
+          "type": "string",
+          "required": true
+        },
+        "children": {
+          "type": "node",
+          "required": true,
+          "note": "The link text. Say where it goes; not \"click here\"."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "inline",
+            "standalone"
+          ],
+          "default": "inline",
+          "note": "inline: underlined and inherits the surrounding font. standalone: body-sm label weight, underlined on hover."
+        },
+        "external": {
+          "type": "boolean",
+          "default": false,
+          "note": "Opens in a new tab (target=_blank, rel=noopener noreferrer), shows the ExternalLink icon and adds \"(opens in a new tab)\" for screen readers."
+        },
+        "linkAs": {
+          "type": "component",
+          "required": false,
+          "note": "Router link to render instead of <a>, e.g. Next.js Link (same KitLinkComponent as Card and Cell). Ignored when external."
+        }
+      }
+    },
+    {
       "id": "linklist",
       "group": "component",
       "intent": "A column of links, one a row with a chevron at the end, like an account's quick links.",
@@ -1624,6 +1704,11 @@
         "Do not use raw hex"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for aria-describedby on the textarea. Field passes its hint or error id."
+        },
         "id": {
           "type": "string",
           "required": true
@@ -1785,6 +1870,11 @@
         "Do not use for navigation — use AppNav or links"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for aria-describedby on the trigger button. Field passes its hint or error id."
+        },
         "id": {
           "type": "string",
           "required": true
@@ -2069,6 +2159,11 @@
         "Do not use raw hex"
       ],
       "props": {
+        "style": {
+          "type": "object",
+          "required": false,
+          "note": "Inline style on the root span, merged with the kit's --shimmer-duration-factor variable."
+        },
         "children": {
           "type": "string",
           "required": true
@@ -3336,11 +3431,13 @@
           "type": "enum",
           "values": [
             "neutral",
+            "primary",
             "brand",
             "success",
             "warning",
             "danger",
-            "info"
+            "info",
+            "highlight"
           ],
           "default": "neutral",
           "note": "Single Badge. Demos use success for Active-like, else neutral."
@@ -3418,6 +3515,11 @@
         "Do not invent a SortButton or extra chevron component"
       ],
       "props": {
+        "defaultChecked": {
+          "type": "boolean",
+          "required": false,
+          "note": "Uncontrolled initial state of the header checkbox (checkbox only). Use checked + onCheckedChange to control it."
+        },
         "label": {
           "type": "string",
           "required": false,
@@ -5097,6 +5199,26 @@
         "Footer actions must be kit Buttons / ButtonGroup"
       ],
       "props": {
+        "role": {
+          "type": "string",
+          "default": "group",
+          "required": false,
+          "note": "Modal sets dialog. Leave the default when ModalCard is static."
+        },
+        "tabIndex": {
+          "type": "number",
+          "required": false,
+          "note": "Modal sets -1 so the dialog can take focus."
+        },
+        "aria-modal": {
+          "type": "enum",
+          "values": [
+            "true",
+            "false"
+          ],
+          "required": false,
+          "note": "Modal sets true."
+        },
         "title": {
           "type": "string",
           "required": true
@@ -5233,6 +5355,21 @@
         "Do not use raw hex"
       ],
       "props": {
+        "triggerDraggable": {
+          "type": "boolean",
+          "required": false,
+          "note": "Makes the trigger button a drag source (TreeView rows use it)."
+        },
+        "onTriggerDragStart": {
+          "type": "function",
+          "required": false,
+          "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."
+        },
+        "onTriggerDragEnd": {
+          "type": "function",
+          "required": false,
+          "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."
+        },
         "id": {
           "type": "string",
           "required": false,
