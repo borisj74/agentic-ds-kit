@@ -13,3 +13,5 @@ Run the **jev-token-check** skill.
 4. Report a table. Fix only high-confidence failures. If `needs_new_token` is yes, stop and ask — do not invent tokens or rewrite JSX for taste.
 
 Do not use Jev to write components.
+
+The Jev MCP server is pinned in `.mcp.json` (`npx -y jev-mcp@0.5.1`). Upgrading it is a deliberate edit to that pinned version.

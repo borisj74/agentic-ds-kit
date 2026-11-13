@@ -67,7 +67,7 @@ Without the opt-in, a name outside the bundled set renders nothing and logs a wa
 
 ## MCP
 
-`npx agentic-ds-kit mcp` starts a read-only stdio server. Agents can list components, read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
+`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only, no extra dependencies). Agents can list components, read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
 
 Cursor, `.cursor/mcp.json`:
 

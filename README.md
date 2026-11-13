@@ -99,7 +99,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 
 ## MCP
 
-`npx agentic-ds-kit mcp` starts a read-only stdio server. It answers from the installed package (contracts, tokens, patterns, `AGENTS.md`, and the `questions` output), so the answers match the version you installed. Run it from the app root. Cursor and Claude Code both start `npx -y agentic-ds-kit mcp`.
+`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only; it adds no dependencies to your app). It answers from the installed package (contracts, tokens, patterns, `AGENTS.md`, and the `questions` output), so the answers match the version you installed. Run it from the app root. Cursor and Claude Code both start `npx -y agentic-ds-kit mcp`.
 
 ### Cursor
 
