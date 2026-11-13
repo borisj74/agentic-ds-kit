@@ -8,35 +8,35 @@
   },
   {
     "id": "button",
-    "intent": "Primary action control for forms and dashboards.",
+    "intent": "Clickable action control with appearance × mode (plus an optional flat set) and a fixed set of sizes.",
     "group": "component",
     "path": "contracts/button.json",
     "status": "stable"
   },
   {
     "id": "buttongroup",
-    "intent": "Joined row of kit Buttons.",
+    "intent": "Joined row of kit Buttons that share one size and act as one control cluster.",
     "group": "component",
     "path": "contracts/buttongroup.json",
     "status": "stable"
   },
   {
     "id": "scorecard",
-    "intent": "Single KPI tile with label, value, optional delta and trend.",
+    "intent": "one KPI with label, value, optional delta/trend/hint/badge",
     "group": "component",
     "path": "contracts/scorecard.json",
     "status": "stable"
   },
   {
     "id": "scoreboard",
-    "intent": "Horizontal row of Scorecards for a metrics strip.",
+    "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
     "group": "component",
     "path": "contracts/scoreboard.json",
     "status": "stable"
   },
   {
     "id": "input",
-    "intent": "Single-line text entry with optional start and end slots inside the field.",
+    "intent": "Single-line text entry for forms and filters. Optional start and end slots sit inside the field.",
     "group": "component",
     "path": "contracts/input.json",
     "status": "stable"
@@ -77,6 +77,13 @@
     "status": "stable"
   },
   {
+    "id": "link",
+    "intent": "Text that navigates to another page or place: inline inside a sentence, or standalone on its own line, with an external variant that opens a new tab.",
+    "group": "component",
+    "path": "contracts/link.json",
+    "status": "stable"
+  },
+  {
     "id": "linklist",
     "intent": "A column of links, one a row with a chevron at the end, like an account's quick links.",
     "group": "component",
@@ -106,7 +113,7 @@
   },
   {
     "id": "textarea",
-    "intent": "Multi-line text for notes. Wrap with Field.",
+    "intent": "Multi-line text entry for notes and descriptions. Wrap with Field.",
     "group": "component",
     "path": "contracts/textarea.json",
     "status": "stable"
@@ -120,7 +127,7 @@
   },
   {
     "id": "select",
-    "intent": "Choose one or several options from a short list. Field trigger, kit DropdownMenu panel.",
+    "intent": "Choose one or several options from a list. Field trigger, kit DropdownMenu panel. Not a native select.",
     "group": "component",
     "path": "contracts/select.json",
     "status": "stable"
@@ -148,14 +155,14 @@
   },
   {
     "id": "slider",
-    "intent": "Pick a value or range along a track.",
+    "intent": "Pick a value or range along a track. One piece. Range is a two-value array, not a RangeSlider cousin.",
     "group": "component",
     "path": "contracts/slider.json",
     "status": "stable"
   },
   {
     "id": "spinner",
-    "intent": "Spinning circular loader for indeterminate waits.",
+    "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
     "group": "component",
     "path": "contracts/spinner.json",
     "status": "stable"
@@ -176,14 +183,14 @@
   },
   {
     "id": "collapsible",
-    "intent": "Single show/hide panel.",
+    "intent": "Single show/hide panel with a title and a toggle.",
     "group": "component",
     "path": "contracts/collapsible.json",
     "status": "stable"
   },
   {
     "id": "colorpicker",
-    "intent": "Inline colour picker: saturation/brightness area, hue, optional opacity, hex input, and preset swatches.",
+    "intent": "Inline colour picker for theming and branding settings: saturation/brightness area, hue track, optional opacity track, hex Input, and optional preset swatches. One piece, no popover.",
     "group": "component",
     "path": "contracts/colorpicker.json",
     "status": "stable"
@@ -211,7 +218,7 @@
   },
   {
     "id": "datatable",
-    "intent": "Responsive structured data with search, filters, column settings, and clear empty states.",
+    "intent": "Framed dataset with search, filters, column settings, and a caption title.",
     "group": "component",
     "path": "contracts/datatable.json",
     "status": "stable"
@@ -225,7 +232,7 @@
   },
   {
     "id": "daterangepicker",
-    "intent": "Pick a date range from named presets such as This month or Last 30 days, or from the month grid.",
+    "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
     "group": "component",
     "path": "contracts/daterangepicker.json",
     "status": "stable"
@@ -239,14 +246,14 @@
   },
   {
     "id": "codesnippet",
-    "intent": "Read-only code block with copy, optional title, language label, tabs, and line numbers.",
+    "intent": "Read-only block of code with a copy button, optional title, language label, tabs, and line numbers. No syntax highlighting.",
     "group": "component",
     "path": "contracts/codesnippet.json",
     "status": "stable"
   },
   {
     "id": "divider",
-    "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action.",
+    "intent": "Thin rule that separates content, horizontal or vertical, with an optional label or action on the line.",
     "group": "component",
     "path": "contracts/divider.json",
     "status": "stable"
@@ -260,14 +267,14 @@
   },
   {
     "id": "cell",
-    "intent": "Inline cell content for datasets: text, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions.",
+    "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
     "group": "component",
     "path": "contracts/cell.json",
     "status": "stable"
   },
   {
     "id": "headercell",
-    "intent": "Column header for DataTable: label, optional select-all checkbox, sm or md.",
+    "intent": "Column header for DataTable: label, optional select-all checkbox, optional sort, sm or md.",
     "group": "component",
     "path": "contracts/headercell.json",
     "status": "stable"
@@ -323,7 +330,7 @@
   },
   {
     "id": "radiogroup",
-    "intent": "Choose exactly one option from a small visible radio set.",
+    "intent": "Choose exactly one option from a small visible set. Custom circle, not a native radio. One piece.",
     "group": "component",
     "path": "contracts/radiogroup.json",
     "status": "stable"
@@ -344,7 +351,7 @@
   },
   {
     "id": "fileupload",
-    "intent": "Drop zone plus file rows with progress, done, and error. Presentational: the app does the upload.",
+    "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
     "group": "component",
     "path": "contracts/fileupload.json",
     "status": "stable"
@@ -386,7 +393,7 @@
   },
   {
     "id": "badge",
-    "intent": "Compact status or category pill.",
+    "intent": "Compact read-only status or category pill set by the system.",
     "group": "component",
     "path": "contracts/badge.json",
     "status": "stable"
@@ -407,7 +414,7 @@
   },
   {
     "id": "tooltip",
-    "intent": "Brief supplementary text on hover or focus.",
+    "intent": "Brief supplementary text on hover or focus of a trigger element.",
     "group": "component",
     "path": "contracts/tooltip.json",
     "status": "stable"
@@ -435,7 +442,7 @@
   },
   {
     "id": "drawer",
-    "intent": "Edge panel for secondary tasks that need more room than a Modal.",
+    "intent": "Edge panel for secondary tasks. Floating sheet inset from the opening edge.",
     "group": "component",
     "path": "contracts/drawer.json",
     "status": "stable"
@@ -449,7 +456,7 @@
   },
   {
     "id": "empty",
-    "intent": "Placeholder when a list, page, or region has nothing to show.",
+    "intent": "Placeholder when a list, page, or region has nothing to show. One piece.",
     "group": "component",
     "path": "contracts/empty.json",
     "status": "stable"
@@ -491,35 +498,35 @@
   },
   {
     "id": "progress",
-    "intent": "Task completion as a bar or circle from 0 to 100. Optional label and percent.",
+    "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
     "group": "component",
     "path": "contracts/progress.json",
     "status": "stable"
   },
   {
     "id": "progresssteps",
-    "intent": "Ordered wizard steps as numbered circles with complete, current, and upcoming.",
+    "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
     "group": "component",
     "path": "contracts/progresssteps.json",
     "status": "stable"
   },
   {
     "id": "section",
-    "intent": "Grouped page block with heading, optional description and actions. Unframed — Card owns the framed surface; layout-content owns page inset.",
+    "intent": "Grouped page block with optional heading, description, and actions. Unframed: no fill, radius, border, shadow, or box padding — Card owns the framed surface; layout-content owns page inset. Pass collapsible for a chevron that toggles the body.",
     "group": "component",
     "path": "contracts/section.json",
     "status": "stable"
   },
   {
     "id": "appheader",
-    "intent": "Product top chrome: brand mark, centered search, trailing actions. Preset, or AppHeader.Root building blocks.",
+    "intent": "Product top chrome: brand mark on the start, centered kit Input search, trailing actions. Not a page title. Not a sidebar.",
     "group": "component",
     "path": "contracts/appheader.json",
     "status": "stable"
   },
   {
     "id": "appnav",
-    "intent": "Vertical sidebar navigation with active item state.",
+    "intent": "Vertical sidebar navigation with title, optional grouped catalog, and active item state.",
     "group": "component",
     "path": "contracts/appnav.json",
     "status": "stable"
@@ -645,259 +652,259 @@
   },
   {
     "id": "approvalcard",
-    "intent": "The agent asks before it acts: risk, exact command or diff, keyboard-first Approve / Deny.",
+    "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
     "group": "component",
     "path": "contracts/approvalcard.json",
     "status": "stable"
   },
   {
     "id": "agenttrail",
-    "intent": "Vertical step list for a running agent task: done, running or awaiting approval, pending.",
+    "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
     "group": "component",
     "path": "contracts/agenttrail.json",
     "status": "stable"
   },
   {
     "id": "agentplan",
-    "intent": "What an agent intends to do: edit, accept, run, skip, stop, or retry its steps.",
+    "intent": "What an agent intends to do, before or during a run. People edit, accept, run, skip, stop, or retry steps.",
     "group": "component",
     "path": "contracts/agentplan.json",
     "status": "stable"
   },
   {
     "id": "agentfleet",
-    "intent": "Several agents side by side with sub-agent progress, cost, and time; one opens into its sub-agent tree.",
+    "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
     "group": "component",
     "path": "contracts/agentfleet.json",
     "status": "stable"
   },
   {
     "id": "toolcallcard",
-    "intent": "One agent tool call on one line with a live timer; opens to arguments and result; groups several calls.",
+    "intent": "One agent tool call on one line: status, mono name, summary and a live timer. Opens to arguments and result; with calls it rolls several calls into one group row.",
     "group": "component",
     "path": "contracts/toolcallcard.json",
     "status": "stable"
   },
   {
     "id": "permissionrequest",
-    "intent": "An agent asks for standing access, scope by scope, with why and expiry; Grant / Deny.",
+    "intent": "An agent asks for standing access to a capability (files, email, repo, billing), scope by scope, with why and expiry. Grant / Deny, then one line.",
     "group": "component",
     "path": "contracts/permissionrequest.json",
     "status": "stable"
   },
   {
     "id": "runningnow",
-    "intent": "Compact strip of running agents for a header (row) or sidebar (stack).",
+    "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
     "group": "component",
     "path": "contracts/runningnow.json",
     "status": "stable"
   },
   {
     "id": "agentmonitor",
-    "intent": "One agent at work: live clock, cost, a time strip of steps, and the pending action to approve.",
+    "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
     "group": "component",
     "path": "contracts/agentmonitor.json",
     "status": "stable"
   },
   {
     "id": "agenttree",
-    "intent": "An orchestrator and its sub-agents as a tree; status, time and rolled-up cost per node.",
+    "intent": "An orchestrator and its sub-agents as a tree. Every node shows status, time and cost; branch costs roll up (Σ). Fold branches; approve or retry in place.",
     "group": "component",
     "path": "contracts/agenttree.json",
     "status": "stable"
   },
   {
     "id": "agentlanes",
-    "intent": "One lane per agent over a time window: blocks, handoffs, decisions on the block.",
+    "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
     "group": "component",
     "path": "contracts/agentlanes.json",
     "status": "stable"
   },
   {
     "id": "agentinbox",
-    "intent": "Queue of approvals, questions, failures and recaps from agents, with a detail pane.",
+    "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
     "group": "component",
     "path": "contracts/agentinbox.json",
     "status": "stable"
   },
   {
     "id": "decisioncard",
-    "intent": "An agent asks the person to choose or answer mid-run; confirm or skip.",
+    "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
     "group": "component",
     "path": "contracts/decisioncard.json",
     "status": "stable"
   },
   {
     "id": "autonomydial",
-    "intent": "How far an agent may go without asking: readable stops on a SegmentedControl.",
+    "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
     "group": "component",
     "path": "contracts/autonomydial.json",
     "status": "stable"
   },
   {
     "id": "agentsteering",
-    "intent": "Redirect, pause or stop a running agent; stop confirms in an AlertDialog.",
+    "intent": "Redirect, pause or stop an agent while it runs: a steer composer with quick steers, Pause / Resume and Stop with an optional AlertDialog confirm.",
     "group": "component",
     "path": "contracts/agentsteering.json",
     "status": "stable"
   },
   {
     "id": "modelpicker",
-    "intent": "Choose a model: grouped by vendor with context window, cost tier and disabled reasons.",
+    "intent": "Choose which model an agent or chat uses: grouped by vendor, with context window and cost tier, recommended models, and disabled models that keep their reason. Built on kit DropdownMenu.",
     "group": "component",
     "path": "contracts/modelpicker.json",
     "status": "stable"
   },
   {
     "id": "contextwindow",
-    "intent": "How full the prompt context is, by segment, with a near-limit warning and Trim oldest.",
+    "intent": "How full the prompt context is and what uses the space, by segment, with a warning near the limit and Trim oldest. Compact form for a header.",
     "group": "component",
     "path": "contracts/contextwindow.json",
     "status": "stable"
   },
   {
     "id": "citedanswer",
-    "intent": "Assistant reply with inline citation marks and a source list; missing sources flagged.",
+    "intent": "An assistant reply with inline citation marks and a source list. Marks are real links; a missing source shows as a broken cite.",
     "group": "component",
     "path": "contracts/citedanswer.json",
     "status": "stable"
   },
   {
     "id": "messageactions",
-    "intent": "Action row on a chat message: copy, retry or edit, feedback, More menu.",
+    "intent": "The compact action row on a chat message: copy, retry or edit, thumbs up / down with reasons, and a More menu. Icon Buttons with Tooltips.",
     "group": "component",
     "path": "contracts/messageactions.json",
     "status": "stable"
   },
   {
     "id": "inlinediff",
-    "intent": "Proposed edits to accept or reject in place: unified, split or inline, with + / − marks.",
+    "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
     "group": "component",
     "path": "contracts/inlinediff.json",
     "status": "stable"
   },
   {
     "id": "memorypanel",
-    "intent": "An agent's stored facts: search, add, pin, edit or forget, and which this thread used.",
+    "intent": "Facts an agent has stored: search, add, pin, edit or forget them (confirmed in an AlertDialog), and see which ones this thread used.",
     "group": "component",
     "path": "contracts/memorypanel.json",
     "status": "stable"
   },
   {
     "id": "tracewaterfall",
-    "intent": "Where a run's time and money went: model, tool and approval spans with totals and detail.",
+    "intent": "Where a run's time and money went: a waterfall of model, tool and approval spans with totals and span detail; compact form for a header.",
     "group": "component",
     "path": "contracts/tracewaterfall.json",
     "status": "stable"
   },
   {
     "id": "usagemeter",
-    "intent": "Plan usage or credits against a limit; composes Meter, UsageList, LineChart and Alert.",
+    "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
     "group": "component",
     "path": "contracts/usagemeter.json",
     "status": "stable"
   },
   {
     "id": "setupguide",
-    "intent": "First-run checklist: overall progress and one action per task; feeds onboarding screens.",
+    "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
     "group": "component",
     "path": "contracts/setupguide.json",
     "status": "stable"
   },
   {
     "id": "notificationstack",
-    "intent": "In-app notification inbox: bell with unread count and a popover list; not a Toast.",
+    "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
     "group": "component",
     "path": "contracts/notificationstack.json",
     "status": "stable"
   },
   {
     "id": "changesummary",
-    "intent": "\"What moved\" card: before → after and a delta per metric, with good or bad per metric.",
+    "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
     "group": "component",
     "path": "contracts/changesummary.json",
     "status": "stable"
   },
   {
     "id": "experimentcard",
-    "intent": "A/B or A/B/n experiment card: status, traffic split, metric per variant and one decision.",
+    "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
     "group": "component",
     "path": "contracts/experimentcard.json",
     "status": "stable"
   },
   {
     "id": "commentthread",
-    "intent": "One comment conversation on a document or record: comments, one level of replies, edit and a composer.",
+    "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
     "group": "component",
     "path": "contracts/commentthread.json",
     "status": "stable"
   },
   {
     "id": "commentspanel",
-    "intent": "Side panel for a page's comment threads: Open / Resolved / All, previews and the selected thread.",
+    "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
     "group": "component",
     "path": "contracts/commentspanel.json",
     "status": "stable"
   },
   {
     "id": "integrationpicker",
-    "intent": "Filterable catalogue of integrations: search, category filter and one Connect per tile.",
+    "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
     "group": "component",
     "path": "contracts/integrationpicker.json",
     "status": "stable"
   },
   {
     "id": "pricingplans",
-    "intent": "In-product plan comparison: Monthly / Yearly switch, price, features and one CTA per plan.",
+    "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
     "group": "component",
     "path": "contracts/pricingplans.json",
     "status": "stable"
   },
   {
     "id": "invoicedocument",
-    "intent": "Invoice or credit note document view: status, bill-to, lines, totals and one line about payment.",
+    "intent": "A document view for an invoice or a credit note, not a PDF engine: header with status and actions, bill-to and dates, line items, totals and one line about payment. A credit note always names the invoice it reduces. Built on kit Table, Badge, Button and Empty.",
     "group": "component",
     "path": "contracts/invoicedocument.json",
     "status": "stable"
   },
   {
     "id": "taskboard",
-    "intent": "Kanban board of columns and task cards; move by drag or keyboard (Space, arrows, Space).",
+    "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
     "group": "component",
     "path": "contracts/taskboard.json",
     "status": "stable"
   },
   {
     "id": "blurcrossfade",
-    "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for status and value swaps. A motion primitive, not a Card.",
+    "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
     "group": "component",
     "path": "contracts/blurcrossfade.json",
     "status": "stable"
   },
   {
     "id": "textreveal",
-    "intent": "A short heading that rises in by word or by line, for docs heroes and empty states.",
+    "intent": "A short heading that rises in by word or by line, for docs heroes and empty states. The full string is always in the DOM.",
     "group": "component",
     "path": "contracts/textreveal.json",
     "status": "stable"
   },
   {
     "id": "tiltcard",
-    "intent": "A kit Card that tilts a few degrees toward the pointer, for rare showcase spots. Never the default Card.",
+    "intent": "A kit Card that tilts a few degrees toward the pointer with a soft highlight, for rare showcase spots (a pricing highlight, a docs gallery). Wraps Card; never the default Card.",
     "group": "component",
     "path": "contracts/tiltcard.json",
     "status": "stable"
   },
   {
     "id": "gridbackground",
-    "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only.",
+    "intent": "A quiet line or dot grid behind a demo or hero, fading out toward the edges. Decorative only; the foreground keeps its full contrast.",
     "group": "component",
     "path": "contracts/gridbackground.json",
     "status": "stable"
   },
   {
     "id": "gradienttext",
-    "intent": "A restrained, token-based gradient fill for one rare heading. Real text, no motion.",
+    "intent": "A restrained, token-based gradient fill for one rare heading (a docs hero, an empty-state title). Real text, never an image; no motion.",
     "group": "component",
     "path": "contracts/gradienttext.json",
     "status": "stable"
@@ -905,7 +912,7 @@
   {
     "id": "agentoverview",
     "kind": "block",
-    "intent": "Block: home for a fleet of agents. Since-you-last-looked summary, every agent on one time axis, and an inbox of what waits on you, under one filter.",
+    "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
     "group": "component",
     "path": "contracts/agentoverview.json",
     "status": "stable",
@@ -915,7 +922,7 @@
   {
     "id": "logostrip",
     "kind": "block",
-    "intent": "Block: trusted-by wall. Rows of named logos looping in opposite directions with soft edges; still under reduced motion.",
+    "intent": "Block: a social proof wall. A short heading over rows of customer logos that loop sideways on their own, neighbouring rows in opposite directions, fading out at both edges. Each logo is named for screen readers. Hover and keyboard focus hold the motion; under reduced motion the rows stand still and wrap.",
     "group": "component",
     "path": "contracts/logostrip.json",
     "status": "stable",
@@ -925,7 +932,7 @@
   {
     "id": "plans",
     "kind": "block",
-    "intent": "Block: pricing section. PricingPlans with its Monthly / Yearly switch and an FAQ Accordion.",
+    "intent": "Block: a whole pricing section. A heading and lead, PricingPlans (its Monthly / Yearly switch drives every price) and an FAQ Accordion. The recommended plan's CTA is the one solid primary.",
     "group": "component",
     "path": "contracts/plans.json",
     "status": "stable",
@@ -935,7 +942,7 @@
   {
     "id": "livesession",
     "kind": "block",
-    "intent": "Block: work alongside running agents. Chat, who is working, one inline approval and steering for one agent.",
+    "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
     "group": "component",
     "path": "contracts/livesession.json",
     "status": "stable",
@@ -945,7 +952,7 @@
   {
     "id": "rundetail",
     "kind": "block",
-    "intent": "Block: one agent run in detail. Monitor, the selected step's tool call, who started whom and the step log, on one selected step.",
+    "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
     "group": "component",
     "path": "contracts/rundetail.json",
     "status": "stable",
@@ -955,7 +962,7 @@
   {
     "id": "appdirectory",
     "kind": "block",
-    "intent": "Block: browse, search and connect apps. Connected chip over the IntegrationPicker catalogue; a tile opens a Drawer with detail and Connect / Disconnect.",
+    "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
     "group": "component",
     "path": "contracts/appdirectory.json",
     "status": "stable",
@@ -965,7 +972,7 @@
   {
     "id": "workboard",
     "kind": "block",
-    "intent": "Block: a task board with detail. TaskBoard columns; a card opens a Drawer with Status and Assignee Fields and its CommentThread.",
+    "intent": "Block: a task board with detail. TaskBoard columns (drag or keyboard moves); a card opens a Drawer with the task, Status and Assignee Fields (Select, Avatar) and its CommentThread.",
     "group": "component",
     "path": "contracts/workboard.json",
     "status": "stable",
@@ -995,7 +1002,7 @@
   {
     "id": "activityfeed",
     "kind": "block",
-    "intent": "Block: what happened across a workspace. Events from people and agents grouped by day, Type and Person filters, Open / Reply per event, Load more.",
+    "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
     "group": "component",
     "path": "contracts/activityfeed.json",
     "status": "stable",
@@ -1005,7 +1012,7 @@
   {
     "id": "planreview",
     "kind": "block",
-    "intent": "Block: approve an agent's plan before it runs. AgentPlan steps, ChangeSummary of what it changes, AutonomyDial, and Approve / Request changes / Reject.",
+    "intent": "Block: the go / no-go on an agent's plan. The steps (AgentPlan, editable while pending), what the plan expects to change (ChangeSummary), how far the agent may go without asking (AutonomyDial), and one decision: Approve plan, Request changes with a note, or Reject.",
     "group": "component",
     "path": "contracts/planreview.json",
     "status": "stable",
@@ -1015,7 +1022,7 @@
   {
     "id": "changereview",
     "kind": "block",
-    "intent": "Block: review an agent's change set. ChangeSummary, a ListView of changed files beside the selected file's InlineDiff and CommentThread; accept or reject per file, Accept all.",
+    "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all is the one solid primary.",
     "group": "component",
     "path": "contracts/changereview.json",
     "status": "stable",
@@ -1024,7 +1031,7 @@
   },
   {
     "id": "dashboard",
-    "intent": "Dashboard example: PageHeader, Scoreboard, LineChart, Section, DataTable.",
+    "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable",
@@ -1033,7 +1040,7 @@
   },
   {
     "id": "settings-form",
-    "intent": "Settings example: PageHeader, Fields, and save actions.",
+    "intent": "Settings page example: header, grouped fields, and save/cancel actions.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
@@ -1042,7 +1049,7 @@
   },
   {
     "id": "list-detail",
-    "intent": "List-detail example: AppNav, Table, and detail Section.",
+    "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
     "status": "stable",
@@ -1060,7 +1067,7 @@
   },
   {
     "id": "app-shell",
-    "intent": "Layout example (one option of many): AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer.",
+    "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap); narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
     "group": "pattern",
     "path": "contracts/patterns/app-shell.json",
     "status": "stable",
@@ -1069,7 +1076,7 @@
   },
   {
     "id": "sign-in",
-    "intent": "Sign-in / sign-up page example: centred Card, Field-wrapped email and password, one primary, 'or' Divider, SSO buttons.",
+    "intent": "Sign-in / sign-up page example: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
     "group": "pattern",
     "path": "contracts/patterns/sign-in.json",
     "status": "stable",
@@ -1078,7 +1085,7 @@
   },
   {
     "id": "billing-schedule",
-    "intent": "Billing schedule example: Section, next charge, failed-payment Alert, and charges in a Table with status Badges.",
+    "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",
@@ -1087,7 +1094,7 @@
   },
   {
     "id": "integration-settings",
-    "intent": "Integration settings example: Section with status Badge, FieldSet of Fields (Select, Switch), scope Tags, Save, and a confirmed Disconnect.",
+    "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
     "group": "pattern",
     "path": "contracts/patterns/integration-settings.json",
     "status": "stable",
@@ -1096,7 +1103,7 @@
   },
   {
     "id": "settings",
-    "intent": "Settings pages example, Stage look: Profile, Billing, Team, Notifications and Security with their states, on the inset panel of a layout-shell--inset shell whose SideNav lists the sections.",
+    "intent": "Settings pages in the Stage look: Profile, Billing, Team, Notifications and Security, each under a Settings › section breadcrumb on the inset panel of a layout-shell--inset app shell whose SideNav lists the sections; with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",
@@ -1105,7 +1112,7 @@
   },
   {
     "id": "onboarding",
-    "intent": "Onboarding example: reduced AppHeader with ProgressSteps, Welcome / Workspace / Connect (SetupGuide) / Done steps, Back and one primary in a footer bar, with validation error and submitting states.",
+    "intent": "Guided setup after sign-in: Welcome, Workspace (validation error, submitting), Connect or choose with the SetupGuide, Done. Not sign-in and not empty-first-run.",
     "group": "pattern",
     "path": "contracts/patterns/onboarding.json",
     "status": "stable",

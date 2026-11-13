@@ -74,6 +74,7 @@ export * from "../ui/InsightCard";
 export * from "../ui/Kbd";
 export * from "../ui/KpiBoard";
 export * from "../ui/LineChart";
+export * from "../ui/Link";
 export * from "../ui/LinkList";
 export * from "../ui/ListView";
 export * from "../ui/LiveSession";

@@ -69,11 +69,13 @@
       "type": "enum",
       "values": [
         "neutral",
+        "primary",
         "brand",
         "success",
         "warning",
         "danger",
-        "info"
+        "info",
+        "highlight"
       ],
       "default": "neutral",
       "note": "kit Badge tone"

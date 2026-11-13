@@ -26,7 +26,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (140 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (141 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -39,7 +39,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 - **Data & charts** — Table, DataTable, DataGrid, Cell, HeaderCell, ListView, LinkList, TreeView, UsageList, Scorecard, Scoreboard, LineChart, BarChart, PieChart, NumberTransition, InsightCard, Calendar, Meter
 - **Feedback** — Alert, Badge, Tag, Count, Kbd, Tooltip, Toast, Empty, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText, Skeleton
 - **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command, HelpPopover, Popover, ContextMenu
-- **Navigation & chrome** — AppHeader, AppNav, SideNav, AnchorNav, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
+- **Navigation & chrome** — AppHeader, AppNav, SideNav, AnchorNav, Link, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
 - **Structure** — Card, Accordion, Collapsible, Resizable, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline, CodeSnippet
 - **Agent** — ApprovalCard, AgentTrail, AgentPlan, AgentFleet, ToolCallCard, PermissionRequest, RunningNow, AgentMonitor, AgentTree, AgentLanes, AgentInbox, DecisionCard, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall, UsageMeter
 - **SaaS** — SetupGuide, NotificationStack, ChangeSummary, ExperimentCard, CommentThread, CommentsPanel, IntegrationPicker, PricingPlans, InvoiceDocument, TaskBoard

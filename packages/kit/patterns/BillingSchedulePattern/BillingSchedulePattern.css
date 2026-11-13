@@ -8,23 +8,18 @@
   min-width: 0;
 }
 
+/* Layout inside the kit Card only: the Card owns the surface, border, radius and padding. */
 .billing-schedule-pattern__next {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-4);
-  padding: var(--space-4);
-  background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
 }
 
 .billing-schedule-pattern__next-amount {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding-inline-end: var(--space-4);
-  border-inline-end: var(--border-width-thin) solid var(--line-default);
 }
 
 .billing-schedule-pattern__next-meta {

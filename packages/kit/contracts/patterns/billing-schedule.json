@@ -15,7 +15,9 @@
     "alert",
     "button",
     "empty",
-    "skeleton"
+    "skeleton",
+    "card",
+    "divider"
   ],
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
@@ -30,7 +32,7 @@
   ],
   "defaults": [
     "Section title \"Billing schedule\" with Download all as a ghost Button in its actions",
-    "Next-charge summary above the table; nextOnly shows just the summary",
+    "Next-charge summary in a kit Card (size sm) with a vertical kit Divider between the amount and the date, above the table; nextOnly shows just the summary",
     "summary is the overview card for a Billing page (the settings example uses it): no next-charge strip, the first `limit` charges (default 3) in two columns, charge with date and status, and amount, so it fits a half-width column, plus View all (ghost) via onViewAll",
     "Update card is the one solid primary when a payment failed; Change card is outline",
     "Loading uses Skeleton lines; empty uses a kit Empty; a load error uses a danger Alert and Retry"

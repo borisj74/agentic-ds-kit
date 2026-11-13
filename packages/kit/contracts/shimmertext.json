@@ -11,6 +11,7 @@
     "Long paragraphs of final content"
   ],
   "props": {
+    "style": {"type": "object", "required": false, "note": "Inline style on the root span, merged with the kit's --shimmer-duration-factor variable."},
     "children": { "type": "string", "required": true },
     "size": {
       "type": "enum",

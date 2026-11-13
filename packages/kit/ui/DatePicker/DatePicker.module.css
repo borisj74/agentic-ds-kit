@@ -38,7 +38,7 @@
 
 .panel {
   position: absolute;
-  z-index: 20;
+  z-index: var(--z-overlay);
   top: calc(100% + var(--space-1));
   /* Grow toward the start edge so the month grid stays inside drawers and
      other clipped panels when the field sits in a trailing column. */

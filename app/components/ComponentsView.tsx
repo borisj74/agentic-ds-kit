@@ -85,6 +85,7 @@ import { PermissionRequestDoc } from "./PermissionRequestDoc";
 import { AgentMonitorDoc } from "./AgentMonitorDoc";
 import { KbdDoc } from "./KbdDoc";
 import { LineChartDoc } from "./LineChartDoc";
+import { LinkDoc } from "./LinkDoc";
 import { LinkListDoc } from "./LinkListDoc";
 import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
@@ -234,6 +235,7 @@ const TITLES: Record<string, string> = {
   piechart: "Pie",
   popover: "Popover",
   linechart: "Line",
+  link: "Link",
   linklist: "LinkList",
   listview: "ListView",
   loadinganimation: "LoadingAnimation",
@@ -341,6 +343,8 @@ function resolveHash(hash: string): string {
     "color-picker": "colorpicker",
     "colour-picker": "colorpicker",
     colourpicker: "colorpicker",
+    hyperlink: "link",
+    anchor: "link",
     "link-list": "linklist",
     quicklinks: "linklist",
     shortcut: "kbd",
@@ -469,6 +473,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "agentmonitor") return <AgentMonitorDoc />;
   if (resolved === "kbd") return <KbdDoc />;
   if (resolved === "linechart") return <LineChartDoc />;
+  if (resolved === "link") return <LinkDoc />;
   if (resolved === "linklist") return <LinkListDoc />;
   if (resolved === "listview") return <ListViewDoc />;
   if (resolved === "loadinganimation") return <LoadingAnimationDoc />;

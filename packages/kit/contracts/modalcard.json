@@ -14,6 +14,9 @@
     "Must-choose confirm — use AlertDialog"
   ],
   "props": {
+    "role": {"type": "string", "required": false, "default": "group", "note": "Modal sets dialog. Leave the default when ModalCard is static."},
+    "tabIndex": {"type": "number", "required": false, "note": "Modal sets -1 so the dialog can take focus."},
+    "aria-modal": {"type": "enum", "values": ["true", "false"], "required": false, "note": "Modal sets true."},
     "title": {
       "type": "string",
       "required": true

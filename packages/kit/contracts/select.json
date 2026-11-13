@@ -21,6 +21,7 @@
     "tag"
   ],
   "props": {
+    "describedBy": {"type": "string", "required": false, "note": "Id(s) for aria-describedby on the trigger button. Field passes its hint or error id."},
     "id": {
       "type": "string",
       "required": true

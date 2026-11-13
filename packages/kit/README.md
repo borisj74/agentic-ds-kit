@@ -26,7 +26,7 @@ Importing from the package loads semantic tokens. If your own CSS uses those var
 import "agentic-ds-kit/tokens.css";
 ```
 
-The package exports 140 components, including 12 **blocks**: larger compositions for a whole area of a screen (AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, KpiBoard, UsageBilling, AppDirectory, WorkBoard, ActivityFeed, Plans, LogoStrip). Import a block like any component and put it inside your page's `<main>`. Browse them on the docs site at `/blocks`.
+The package exports 141 components, including 12 **blocks**: larger compositions for a whole area of a screen (AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, KpiBoard, UsageBilling, AppDirectory, WorkBoard, ActivityFeed, Plans, LogoStrip). Import a block like any component and put it inside your page's `<main>`. Browse them on the docs site at `/blocks`.
 
 The package exports components only. Patterns (app-shell, sign-in, dashboard, empty-first-run, list-detail, settings-form, billing-schedule, integration-settings, settings, onboarding) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
 

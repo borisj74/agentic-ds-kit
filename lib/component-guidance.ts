@@ -63,6 +63,7 @@ import contract_inputotp from "../packages/kit/contracts/inputotp.json";
 import contract_insightcard from "../packages/kit/contracts/insightcard.json";
 import contract_kbd from "../packages/kit/contracts/kbd.json";
 import contract_linechart from "../packages/kit/contracts/linechart.json";
+import contract_link from "../packages/kit/contracts/link.json";
 import contract_linklist from "../packages/kit/contracts/linklist.json";
 import contract_listview from "../packages/kit/contracts/listview.json";
 import contract_loadinganimation from "../packages/kit/contracts/loadinganimation.json";
@@ -199,6 +200,7 @@ const contracts: Record<string, ContractNotes> = {
   "insightcard": contract_insightcard,
   "kbd": contract_kbd,
   "linechart": contract_linechart,
+  "link": contract_link,
   "linklist": contract_linklist,
   "listview": contract_listview,
   "loadinganimation": contract_loadinganimation,

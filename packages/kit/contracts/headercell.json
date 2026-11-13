@@ -16,6 +16,7 @@
     "checkbox"
   ],
   "props": {
+    "defaultChecked": {"type": "boolean", "required": false, "note": "Uncontrolled initial state of the header checkbox (checkbox only). Use checked + onCheckedChange to control it."},
     "label": {
       "type": "string",
       "required": false,

@@ -1,0 +1,82 @@
+{
+  "id": "link",
+  "status": "stable",
+  "intent": "Text that navigates to another page or place: inline inside a sentence, or standalone on its own line, with an external variant that opens a new tab.",
+  "useWhen": [
+    "Navigating to another page, section or site",
+    "A link inside running text (inline)",
+    "A link on its own line, under a card or in a short list (standalone)",
+    "A link that leaves the app (external)"
+  ],
+  "doNotUseWhen": [
+    "Running an action such as save, delete or open a dialog — use Button",
+    "A list of related links with descriptions — use LinkList",
+    "Primary site or app navigation — use AppNav, SideNav or NavigationMenu"
+  ],
+  "props": {
+    "href": {
+      "type": "string",
+      "required": true
+    },
+    "children": {
+      "type": "node",
+      "required": true,
+      "note": "The link text. Say where it goes; not \"click here\"."
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "inline",
+        "standalone"
+      ],
+      "default": "inline",
+      "note": "inline: underlined and inherits the surrounding font. standalone: body-sm label weight, underlined on hover."
+    },
+    "external": {
+      "type": "boolean",
+      "default": false,
+      "note": "Opens in a new tab (target=_blank, rel=noopener noreferrer), shows the ExternalLink icon and adds \"(opens in a new tab)\" for screen readers."
+    },
+    "linkAs": {
+      "type": "component",
+      "required": false,
+      "note": "Router link to render instead of <a>, e.g. Next.js Link (same KitLinkComponent as Card and Cell). Ignored when external."
+    }
+  },
+  "passthrough": {
+    "root": "a",
+    "ref": "a",
+    "className": "root",
+    "rest": "a"
+  },
+  "tokens": [
+    "link.default",
+    "link.hover",
+    "link.active",
+    "focus.ring",
+    "border.focus.width",
+    "radius.controlSm",
+    "font.sans",
+    "type.size.bodySm",
+    "type.weight.label",
+    "type.line.uiSm",
+    "space.1",
+    "space.inset.2xs"
+  ],
+  "a11y": {
+    "element": "a",
+    "requirements": [
+      "A native a with href, so it is announced as a link and opens with Enter",
+      "Inline links are underlined so they are not told apart by colour alone",
+      "external adds target=_blank, rel=noopener noreferrer and visually hidden \"(opens in a new tab)\"; the icon is aria-hidden",
+      "focus-visible kit ring"
+    ]
+  },
+  "doNot": [
+    "Do not use Link for actions; use Button",
+    "Do not style a Button to look like a link, or an a to look like a Button",
+    "Do not set target=_blank by hand; use external",
+    "Do not use raw hex"
+  ],
+  "snippet": "<p>Read the <Link href=\"/docs/billing\">billing guide</Link> first.</p>\n<Link href=\"/settings/team\" variant=\"standalone\">Manage team</Link>\n<Link href=\"https://status.example.com\" external>Status page</Link>"
+}

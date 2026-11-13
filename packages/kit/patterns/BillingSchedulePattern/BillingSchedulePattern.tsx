@@ -4,6 +4,8 @@ import { Alert } from "../../ui/Alert";
 import { Badge } from "../../ui/Badge";
 import type { BadgeTone } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
+import { Card } from "../../ui/Card";
+import { Divider } from "../../ui/Divider";
 import { Empty } from "../../ui/Empty";
 import { Section } from "../../ui/Section";
 import { Skeleton } from "../../ui/Skeleton";
@@ -122,21 +124,24 @@ export function BillingSchedulePattern({
         ) : (
           <>
             {next && !summary ? (
-              <div className="billing-schedule-pattern__next">
-                <div className="billing-schedule-pattern__next-amount">
-                  <span className="billing-schedule-pattern__caption">Next charge</span>
-                  <span className="billing-schedule-pattern__figure">{next.amount}</span>
+              <Card size="sm" aria-label="Next charge">
+                <div className="billing-schedule-pattern__next">
+                  <div className="billing-schedule-pattern__next-amount">
+                    <span className="billing-schedule-pattern__caption">Next charge</span>
+                    <span className="billing-schedule-pattern__figure">{next.amount}</span>
+                  </div>
+                  <Divider orientation="vertical" />
+                  <div className="billing-schedule-pattern__next-meta">
+                    <span className="billing-schedule-pattern__date">on {next.date}</span>
+                    <span className="billing-schedule-pattern__caption">{paymentMethod}</span>
+                  </div>
+                  {onChangeCard ? (
+                    <Button size="sm" appearance="outline" mode="neutral" onClick={onChangeCard}>
+                      Change card
+                    </Button>
+                  ) : null}
                 </div>
-                <div className="billing-schedule-pattern__next-meta">
-                  <span className="billing-schedule-pattern__date">on {next.date}</span>
-                  <span className="billing-schedule-pattern__caption">{paymentMethod}</span>
-                </div>
-                {onChangeCard ? (
-                  <Button size="sm" appearance="outline" mode="neutral" onClick={onChangeCard}>
-                    Change card
-                  </Button>
-                ) : null}
-              </div>
+              </Card>
             ) : null}
 
             {failed && !nextOnly ? (

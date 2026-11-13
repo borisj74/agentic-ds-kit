@@ -13,6 +13,7 @@
     "Standalone labeled forms without Field \u2014 you must wire label association yourself"
   ],
   "props": {
+    "describedBy": {"type": "string", "required": false, "note": "Id(s) for aria-describedby on the input. Field passes its hint or error id."},
     "id": {
       "type": "string",
       "required": true
