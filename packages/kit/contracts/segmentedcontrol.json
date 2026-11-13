@@ -13,6 +13,11 @@
     "Independent booleans — use Checkbox"
   ],
   "props": {
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Id(s) for aria-describedby on the radiogroup. Field passes its hint or error id."
+    },
     "ariaLabel": {
       "type": "string",
       "required": true,
@@ -88,7 +93,7 @@
     "element": "div[role=radiogroup]",
     "requirements": [
       "role=radiogroup on the root and role=radio on each segment",
-      "aria-checked reflects the selected segment",
+      "aria-checked reflects the selected segment", "describedBy lands on the radiogroup as aria-describedby",
       "Roving tabindex: one segment is tabbable",
       "Arrow keys, Home, and End move selection and focus, skipping disabled segments",
       "Disabled segments stay visible and are not selectable",

@@ -43,6 +43,7 @@ export function InputOTP({
   name,
   autoComplete = "one-time-code",
   ariaLabel,
+  describedBy,
   className,
   ref,
   ...rest
@@ -100,6 +101,7 @@ export function InputOTP({
         inputMode={pattern === "digits" ? "numeric" : "text"}
         aria-invalid={error || undefined}
         aria-label={ariaLabel}
+        aria-describedby={describedBy}
         onChange={(event) => commit(event.target.value)}
         onPaste={(event) => {
           event.preventDefault();

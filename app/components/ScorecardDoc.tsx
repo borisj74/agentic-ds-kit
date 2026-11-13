@@ -52,7 +52,7 @@ export function ScorecardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Scorecard</h1>
+        <h2 className={styles.heroTitle}>Scorecard</h2>
         <p className={styles.lede}>
           Metric surfaces for dashboards with a label, value, and trend in lg, md, and sm. One
           piece. Not InsightCard. Not Card. Not a KpiCard cousin.

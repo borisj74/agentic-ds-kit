@@ -28,7 +28,7 @@ export function TimelineDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Timeline</h1>
+        <h2 className={styles.heroTitle}>Timeline</h2>
         <p className={styles.lede}>
           A vertical sequence of now, next, and later — for roadmaps and multi-stage work. One
           piece. Numbered wizard steps use ProgressSteps.

@@ -26,7 +26,7 @@ export function NumberTransitionDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>NumberTransition</h1>
+        <h2 className={styles.heroTitle}>NumberTransition</h2>
         <p className={styles.lede}>
           Rolling digits for live metrics and counters. Tabular numerals. One piece. Not a CountUp
           cousin.

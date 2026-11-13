@@ -29,5 +29,7 @@ export interface SegmentedControlProps
   size?: SegmentedControlSize;
   /** Locks every segment. */
   disabled?: boolean;
+  /** Id(s) for aria-describedby on the radiogroup. Field passes its hint or error id. */
+  describedBy?: string;
   ref?: Ref<HTMLDivElement>;
 }

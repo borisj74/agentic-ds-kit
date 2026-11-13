@@ -28,7 +28,7 @@ export function SwitchDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Switch</h1>
+        <h2 className={styles.heroTitle}>Switch</h2>
         <p className={styles.lede}>
           Immediate on/off. Pill track, role=switch. Not a Checkbox.
         </p>

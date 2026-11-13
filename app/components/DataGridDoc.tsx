@@ -121,7 +121,7 @@ export function DataGridDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DataGrid</h1>
+        <h2 className={styles.heroTitle}>DataGrid</h2>
         <p className={styles.lede}>
           An editable table: people click a cell to add or change its content, like rule conditions,
           line items, or mappings.

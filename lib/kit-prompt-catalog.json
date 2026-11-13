@@ -1039,6 +1039,11 @@
         "Unlabeled needs Field or ariaLabel"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for aria-describedby on the input. Field passes its hint or error id."
+        },
         "id": {
           "type": "string",
           "required": true
@@ -2109,6 +2114,21 @@
         "Do not use a native range input"
       ],
       "props": {
+        "labelledBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) of the visible label for each thumb's aria-labelledby. Field passes its label id, so a Slider inside Field is named by the Field label."
+        },
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for each thumb's aria-describedby. Field passes its hint or error id."
+        },
+        "error": {
+          "type": "boolean",
+          "required": false,
+          "note": "Marks each thumb aria-invalid. Field sets it when it has an error."
+        },
         "value": {
           "type": "number | number[]",
           "required": true,
@@ -4011,6 +4031,11 @@
         "Do not use for multi-select — use Checkbox"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Extra id(s) for aria-describedby on the group, after the hint or error."
+        },
         "name": {
           "type": "string",
           "required": true
@@ -6977,6 +7002,11 @@
         "Do not ship the group without ariaLabel"
       ],
       "props": {
+        "describedBy": {
+          "type": "string",
+          "required": false,
+          "note": "Id(s) for aria-describedby on the radiogroup. Field passes its hint or error id."
+        },
         "ariaLabel": {
           "type": "string",
           "required": true,

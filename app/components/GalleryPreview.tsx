@@ -1056,7 +1056,7 @@ export function GalleryPreview({ id }: { id: string }) {
     case "slider":
       return (
         <Stage variant="wide">
-          <Slider value={40} onValueChange={noop} />
+          <Slider aria-label="Volume" value={40} onValueChange={noop} />
         </Stage>
       );
     case "spinner":

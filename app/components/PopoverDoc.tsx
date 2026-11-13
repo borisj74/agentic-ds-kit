@@ -17,7 +17,7 @@ export function PopoverDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Popover</h1>
+        <h2 className={styles.heroTitle}>Popover</h2>
         <p className={styles.lede}>
           A panel anchored to a trigger. Click opens it. Escape and a click outside close it and
           return focus to the trigger.

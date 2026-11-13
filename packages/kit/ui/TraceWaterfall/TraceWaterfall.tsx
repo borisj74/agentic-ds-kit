@@ -126,13 +126,13 @@ export function TraceWaterfall({
           <div className={styles.stat}>
             <dt>Total time</dt>
             <dd>
-              <NumberTransition value={seconds(end)} label="Total time" />
+              <NumberTransition value={seconds(end)} />
             </dd>
           </div>
           <div className={styles.stat}>
             <dt>Total cost</dt>
             <dd>
-              <NumberTransition value={money(cost)} label="Total cost" />
+              <NumberTransition value={money(cost)} />
             </dd>
           </div>
           <div className={styles.stat}>

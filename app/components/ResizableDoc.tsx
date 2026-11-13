@@ -18,7 +18,7 @@ export function ResizableDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Resizable</h1>
+        <h2 className={styles.heroTitle}>Resizable</h2>
         <p className={styles.lede}>
           Two panels and a separator. Drag it, or focus it and use the arrow keys. Shift steps
           further. Home and End go to the limits.

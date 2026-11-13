@@ -103,7 +103,7 @@ export function PermissionRequestDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>PermissionRequest</h1>
+        <h2 className={styles.heroTitle}>PermissionRequest</h2>
         <p className={styles.lede}>Standing access, scope by scope. Not ApprovalCard. Not Switch.</p>
       </header>
 

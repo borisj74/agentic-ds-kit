@@ -42,7 +42,7 @@ export function CarouselDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Carousel</h1>
+        <h2 className={styles.heroTitle}>Carousel</h2>
         <p className={styles.lede}>
           Swipe through slides. Prev and next are kit Buttons. One piece. Not Content, Item,
           Previous, or Next cousins.

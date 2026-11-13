@@ -85,7 +85,7 @@ export function AppHeaderDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AppHeader</h1>
+        <h2 className={styles.heroTitle}>AppHeader</h2>
         <p className={styles.lede}>
           Product top chrome. Letter mark or a logo slot on the start, kit Input search in the
           center, kit Buttons on the end. Not PageHeader. Not AppNav.

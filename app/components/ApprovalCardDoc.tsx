@@ -164,7 +164,7 @@ export function ApprovalCardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ApprovalCard</h1>
+        <h2 className={styles.heroTitle}>ApprovalCard</h2>
         <p className={styles.lede}>The agent asks before it acts. Not AlertDialog. Not InsightCard.</p>
       </header>
 

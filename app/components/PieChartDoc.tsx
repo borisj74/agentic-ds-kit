@@ -77,7 +77,7 @@ export function PieChartDoc() {
     <div>
       <header className={styles.hero}>
         <p className={styles.heroKicker}>Chart</p>
-        <h1 className={styles.heroTitle}>Pie</h1>
+        <h2 className={styles.heroTitle}>Pie</h2>
         <p className={styles.lede}>
           Part-to-whole share for a handful of segments, as a donut or pie. One piece. Not a Chart
           cousin.

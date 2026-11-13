@@ -56,7 +56,7 @@ export function ModalCardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ModalCard</h1>
+        <h2 className={styles.heroTitle}>ModalCard</h2>
         <p className={styles.lede}>
           Panel chrome for a modal. Not Card. Not InsightCard. Overlay behavior is Modal.
         </p>

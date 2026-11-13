@@ -159,7 +159,7 @@ export function AgentMonitorDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AgentMonitor</h1>
+        <h2 className={styles.heroTitle}>AgentMonitor</h2>
         <p className={styles.lede}>One agent at work. Not RunningNow. Not AgentFleet.</p>
       </header>
 

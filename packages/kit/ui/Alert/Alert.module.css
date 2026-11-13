@@ -7,29 +7,35 @@
   border: var(--border-100) solid var(--status-info-border);
   border-radius: var(--radius-surface-sm);
   background: var(--status-info-subtle);
-  color: var(--status-info);
+  /* Text uses the -fg role (4.5:1+ on the subtle fill); the icon keeps the status base. */
+  color: var(--info-fg);
+  --alert-icon: var(--status-info);
 }
 
 .success {
   border-color: var(--status-success-border);
   background: var(--status-success-subtle);
-  color: var(--status-success);
+  color: var(--success-fg);
+  --alert-icon: var(--status-success);
 }
 
 .warning {
   border-color: var(--status-warning-border);
   background: var(--status-warning-subtle);
-  color: var(--status-warning);
+  color: var(--caution-fg);
+  --alert-icon: var(--status-warning);
 }
 
 .danger {
   border-color: var(--status-danger-border);
   background: var(--status-danger-subtle);
-  color: var(--status-danger);
+  color: var(--danger-fg);
+  --alert-icon: var(--status-danger);
 }
 
 .icon {
   margin-top: 0.1rem;
+  color: var(--alert-icon);
 }
 
 .copy {

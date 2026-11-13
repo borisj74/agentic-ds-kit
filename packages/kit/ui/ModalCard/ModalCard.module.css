@@ -137,3 +137,9 @@
     opacity: var(--opacity-full);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .card[role="dialog"] {
+    animation: none;
+  }
+}

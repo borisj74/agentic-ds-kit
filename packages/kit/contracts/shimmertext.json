@@ -32,7 +32,7 @@
   "tokens": ["text.primary", "text.muted"],
   "a11y": {
     "element": "span",
-    "requirements": ["aria-label mirrors visible text", "Respect prefers-reduced-motion"]
+    "requirements": ["Visually hidden text carries the text; the animated characters are aria-hidden. No aria-label on the span", "Respect prefers-reduced-motion"]
   },
   "doNot": ["Do not use raw hex"],
   "snippet": "<ShimmerText speed=\"normal\">Generating response…</ShimmerText>"

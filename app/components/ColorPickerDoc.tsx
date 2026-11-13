@@ -42,7 +42,7 @@ export function ColorPickerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ColorPicker</h1>
+        <h2 className={styles.heroTitle}>ColorPicker</h2>
         <p className={styles.lede}>
           Inline colour picker: saturation and brightness area, hue, optional opacity, a hex Input,
           and preset swatches. The picked colour is user data, painted with inline style; all chrome

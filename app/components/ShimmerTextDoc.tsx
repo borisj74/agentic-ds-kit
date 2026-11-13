@@ -29,7 +29,7 @@ export function ShimmerTextDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ShimmerText</h1>
+        <h2 className={styles.heroTitle}>ShimmerText</h2>
         <p className={styles.lede}>
           Animated text for short, indeterminate processing. One piece. Not a Skeleton cousin.
         </p>

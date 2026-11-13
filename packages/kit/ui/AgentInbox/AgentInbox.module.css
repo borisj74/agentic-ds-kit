@@ -98,6 +98,12 @@
   background-color: var(--action-selected);
 }
 
+/* Subtle text drops below 4.5:1 on the selected tint; use the muted role there. */
+.selected .type,
+.selected .time {
+  color: var(--text-fg-muted);
+}
+
 .typeIcon {
   flex-shrink: 0;
   margin-top: var(--space-px);

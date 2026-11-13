@@ -56,7 +56,7 @@ export function LineChartDoc() {
     <div>
       <header className={styles.hero}>
         <p className={styles.heroKicker}>Chart</p>
-        <h1 className={styles.heroTitle}>Line</h1>
+        <h2 className={styles.heroTitle}>Line</h2>
         <p className={styles.lede}>
           Change over time. Follow a trajectory, not unrelated magnitudes. One piece. Not a Chart
           cousin.

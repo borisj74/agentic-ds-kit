@@ -28,6 +28,7 @@ export function RadioGroup({
   disabled = false,
   error,
   hint,
+  describedBy,
   className,
   ref,
   ...rest
@@ -38,6 +39,8 @@ export function RadioGroup({
   const value = isControlled ? valueProp : uncontrolled;
   const message = error || hint;
   const messageId = message ? `${uid}-message` : undefined;
+  const legendId = `${uid}-legend`;
+  const describedByIds = [messageId, describedBy].filter(Boolean).join(" ") || undefined;
 
   function emit(next: string) {
     if (disabled) return;
@@ -51,10 +54,15 @@ export function RadioGroup({
       ref={ref}
       className={cx(styles.group, styles[size], layout === "card" && styles.card, error && styles.groupError, className)}
       disabled={disabled}
+      // radiogroup (not the fieldset's implicit group) so aria-invalid is a supported state here.
+      role="radiogroup"
+      aria-labelledby={legendId}
       aria-invalid={error ? true : undefined}
-      aria-describedby={messageId}
+      aria-describedby={describedByIds}
     >
-      <legend className={hideLegend ? styles.legendHidden : styles.legend}>{legend}</legend>
+      <legend id={legendId} className={hideLegend ? styles.legendHidden : styles.legend}>
+        {legend}
+      </legend>
       <div
         className={`${styles.options} ${orientation === "horizontal" && layout !== "card" ? styles.horizontal : ""}`}
       >
@@ -78,7 +86,6 @@ export function RadioGroup({
                 value={option.value}
                 checked={checked}
                 disabled={optionDisabled}
-                aria-invalid={error ? true : undefined}
                 onChange={() => emit(option.value)}
               />
               {layout === "card" ? (

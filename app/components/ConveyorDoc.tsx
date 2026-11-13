@@ -153,7 +153,7 @@ export function ConveyorDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Conveyor</h1>
+        <h2 className={styles.heroTitle}>Conveyor</h2>
         <p className={styles.lede}>
           Arrows at both ends of a row or column that is too long to fit, so people can move it
           along without a scrollbar.

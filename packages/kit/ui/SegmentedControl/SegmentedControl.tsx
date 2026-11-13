@@ -34,6 +34,7 @@ export function SegmentedControl({
   onChange,
   size = "md",
   disabled = false,
+  describedBy,
   className,
   ref,
   ...rest
@@ -80,6 +81,7 @@ export function SegmentedControl({
       ref={ref}
       role="radiogroup"
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
       aria-orientation="horizontal"
       aria-disabled={disabled || undefined}
       className={cx(styles.root, styles[size], className)}

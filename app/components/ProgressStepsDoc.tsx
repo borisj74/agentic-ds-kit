@@ -42,7 +42,7 @@ export function ProgressStepsDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ProgressSteps</h1>
+        <h2 className={styles.heroTitle}>ProgressSteps</h2>
         <p className={styles.lede}>
           Ordered wizard steps: numbered circles, labels, and a connecting line. Complete, current,
           and upcoming. One piece. Not Progress. Not Timeline.

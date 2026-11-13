@@ -21,7 +21,7 @@ export function TimePickerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>TimePicker</h1>
+        <h2 className={styles.heroTitle}>TimePicker</h2>
         <p className={styles.lede}>
           Hour and minute. Arrow keys change the focused part. 12-hour mode has an AM/PM button.
           The value is always HH:mm.

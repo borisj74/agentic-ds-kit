@@ -37,7 +37,7 @@ export function SkeletonDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Skeleton</h1>
+        <h2 className={styles.heroTitle}>Skeleton</h2>
         <p className={styles.lede}>
           Gray placeholder shapes in the layout of content that is still loading. Not ShimmerText. Not
           Spinner. Not Progress.

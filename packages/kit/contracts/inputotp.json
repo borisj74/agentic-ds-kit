@@ -11,6 +11,11 @@
     "choosing options — Select/RadioGroup"
   ],
   "props": {
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Id(s) for aria-describedby on the input. Field passes its hint or error id."
+    },
     "id": {
       "type": "string",
       "required": true
@@ -109,7 +114,7 @@
       "Single native input so paste, autocomplete, and form submit work",
       "id associates with Field htmlFor",
       "Unlabeled needs Field or ariaLabel (default One-time code)",
-      "aria-invalid when error",
+      "aria-invalid when error", "describedBy lands on the input as aria-describedby",
       "Disabled is exposed on the input"
     ]
   },

@@ -33,7 +33,7 @@ export function DatePickerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DatePicker</h1>
+        <h2 className={styles.heroTitle}>DatePicker</h2>
         <p className={styles.lede}>
           Form field that opens a month grid. One date by default. mode range picks a start and an
           end. Wrap with Field. Not a native date input. Not the event Calendar.

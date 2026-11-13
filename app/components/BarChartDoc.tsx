@@ -74,7 +74,7 @@ export function BarChartDoc() {
     <div>
       <header className={styles.hero}>
         <p className={styles.heroKicker}>Chart</p>
-        <h1 className={styles.heroTitle}>Bar</h1>
+        <h2 className={styles.heroTitle}>Bar</h2>
         <p className={styles.lede}>
           Compare magnitudes across categories. Bar length ranks close values. One piece. Not a
           Chart cousin.

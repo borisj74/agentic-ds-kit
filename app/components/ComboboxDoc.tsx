@@ -40,7 +40,7 @@ export function ComboboxDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Combobox</h1>
+        <h2 className={styles.heroTitle}>Combobox</h2>
         <p className={styles.lede}>
           Type to filter one value. Arrow keys move through the list, Enter selects, and Escape
           closes. Pass onQueryChange when the list loads asynchronously.

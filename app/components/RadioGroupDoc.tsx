@@ -40,7 +40,7 @@ export function RadioGroupDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>RadioGroup</h1>
+        <h2 className={styles.heroTitle}>RadioGroup</h2>
         <p className={styles.lede}>
           Single-select choices for settings and forms. Each in lg, md, and sm. One piece. Not a
           Radio cousin.

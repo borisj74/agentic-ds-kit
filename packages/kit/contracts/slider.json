@@ -13,6 +13,21 @@
     "Determinate task completion — use Progress"
   ],
   "props": {
+    "labelledBy": {
+      "type": "string",
+      "required": false,
+      "note": "Id(s) of the visible label for each thumb's aria-labelledby. Field passes its label id, so a Slider inside Field is named by the Field label."
+    },
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Id(s) for each thumb's aria-describedby. Field passes its hint or error id."
+    },
+    "error": {
+      "type": "boolean",
+      "required": false,
+      "note": "Marks each thumb aria-invalid. Field sets it when it has an error."
+    },
     "value": {
       "type": "number | number[]",
       "required": true,
@@ -69,7 +84,7 @@
   "a11y": {
     "element": "span[role=slider]",
     "requirements": [
-      "Each thumb has role=slider",
+      "Each thumb has role=slider and an accessible name: aria-label, aria-labelledby, or the Field label via labelledBy", "describedBy and error land on each thumb (aria-describedby, aria-invalid)",
       "aria-valuemin, aria-valuemax, aria-valuenow on each thumb",
       "Arrow keys adjust by step. Home and End jump to min and max",
       "Focus ring on thumb focus-visible"
@@ -81,5 +96,5 @@
     "Do not use radix or @base-ui/react",
     "Do not use a native range input"
   ],
-  "snippet": "<Slider value={33} onValueChange={setValue} />\n<Slider value={[25, 75]} onValueChange={setRange} />\n<Slider value={50} orientation=\"vertical\" disabled />"
+  "snippet": "<Field label=\"Volume\" htmlFor=\"volume\">\n  <Slider id=\"volume\" value={33} onValueChange={setValue} />\n</Field>\n<Slider aria-label=\"Price range\" value={[25, 75]} onValueChange={setRange} />\n<Slider aria-label=\"Level\" value={50} orientation=\"vertical\" disabled />"
 }

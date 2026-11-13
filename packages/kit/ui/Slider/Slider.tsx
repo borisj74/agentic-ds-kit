@@ -43,8 +43,13 @@ export function Slider({
   orientation = "horizontal",
   disabled = false,
   onValueChange,
+  labelledBy,
+  describedBy,
+  error = false,
   className,
   ref,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...rest
 }: SliderProps) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -168,8 +173,10 @@ export function Slider({
               role="slider"
               className={styles.thumb}
               tabIndex={disabled ? -1 : 0}
-              aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
-              aria-labelledby={typeof rest["aria-labelledby"] === "string" ? rest["aria-labelledby"] : undefined}
+              aria-label={ariaLabel}
+              aria-labelledby={ariaLabelledBy ?? labelledBy}
+              aria-describedby={describedBy}
+              aria-invalid={error || undefined}
               aria-valuemin={min}
               aria-valuemax={max}
               aria-valuenow={thumbValue}
@@ -193,3 +200,6 @@ export function Slider({
     </div>
   );
 }
+
+/** Field reads this and passes its label id as `labelledBy`, since a <label for> cannot name role="slider". */
+Slider.fieldLabelledBy = true;

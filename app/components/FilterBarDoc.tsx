@@ -25,7 +25,7 @@ export function FilterBarDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>FilterBar</h1>
+        <h2 className={styles.heroTitle}>FilterBar</h2>
         <p className={styles.lede}>
           A row of filter chips. Add a filter, open one, or clear them all. Extra chips collapse
           into a +N menu.

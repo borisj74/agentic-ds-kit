@@ -26,7 +26,7 @@ export function DateRangePickerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DateRangePicker</h1>
+        <h2 className={styles.heroTitle}>DateRangePicker</h2>
         <p className={styles.lede}>
           A period with presets such as This month or Last 30 days, plus the month grid when the
           preset is not enough.

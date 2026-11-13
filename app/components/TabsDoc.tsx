@@ -51,7 +51,7 @@ export function TabsDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Tabs</h1>
+        <h2 className={styles.heroTitle}>Tabs</h2>
         <p className={styles.lede}>
           Switch between related views in place. Line by default, or segmented, in lg, md, and sm. One piece.
           Not AppNav. Not RadioGroup. Not TabsList or TabsTrigger cousins.

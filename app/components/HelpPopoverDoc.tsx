@@ -29,7 +29,7 @@ export function HelpPopoverDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>HelpPopover</h1>
+        <h2 className={styles.heroTitle}>HelpPopover</h2>
         <p className={styles.lede}>
           A small help panel: optional title plus one to three short sentences. Hover or focus
           shows it; click or tap pins it. Not Tooltip. Not Field hint. Not Modal.

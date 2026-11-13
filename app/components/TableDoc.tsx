@@ -93,7 +93,7 @@ export function TableDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Table</h1>
+        <h2 className={styles.heroTitle}>Table</h2>
         <p className={styles.lede}>
           Simple semantic table for invoices, lists, and text rows. Search and filters belong on
           DataTable. One piece. Not TableHeader/TableRow/TableCell cousins.

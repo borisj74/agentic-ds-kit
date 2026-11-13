@@ -336,7 +336,8 @@ export function BarChart({
       width={layout.scrolls ? layout.contentWidth : width || "100%"}
       height={height}
       style={layout.scrolls ? { width: layout.contentWidth } : undefined}
-      role="img"
+      // Focusable bars inside: a named group, not role="img" (which hides its children).
+      role={layout.bars.length > 0 ? "group" : "img"}
       aria-label={title}
     >
       {showGrid

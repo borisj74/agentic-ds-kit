@@ -629,7 +629,6 @@ export function DropdownMenu({
             aria-haspopup="menu"
             aria-expanded={open}
             aria-controls={menuId}
-            aria-invalid={error || undefined}
             aria-describedby={describedBy}
             className={`${styles.fieldTrigger} ${styles.tagsTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}`}
             onClick={() => {
@@ -652,7 +651,9 @@ export function DropdownMenu({
           id={id}
           disabled={disabled}
           aria-label={ariaLabel}
-          aria-invalid={error || undefined}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          aria-controls={menuId}
           aria-describedby={describedBy}
           className={`${styles.fieldTrigger} ${styles[`field${size}`]}${error ? ` ${styles.fieldError}` : ""}${triggerMuted ? ` ${styles.fieldMuted}` : ""}`}
           onClick={() => {

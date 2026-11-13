@@ -61,6 +61,7 @@
   "a11y": {
     "element": "span",
     "requirements": [
+      "Escape hides an uncontrolled tooltip without closing a parent Modal, Drawer or AlertDialog",
       "Trigger must be focusable",
       "Tooltip content available to assistive tech on focus"
     ]

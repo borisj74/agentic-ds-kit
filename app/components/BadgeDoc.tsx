@@ -54,7 +54,7 @@ export function BadgeDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Badges</h1>
+        <h2 className={styles.heroTitle}>Badges</h2>
         <p className={styles.lede}>
           Appearance × tone: soft, tint, solid, outline across status colors. Not Avatar. Not a button.
         </p>

@@ -32,7 +32,7 @@ export function CountDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Count</h1>
+        <h2 className={styles.heroTitle}>Count</h2>
         <p className={styles.lede}>
           Small number badge for unread or pending counts. Not Badge. Not a button. Counts above max
           show as max+.

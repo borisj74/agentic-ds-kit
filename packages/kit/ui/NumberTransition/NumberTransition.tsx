@@ -54,9 +54,9 @@ export function NumberTransition({
       {...rest}
       ref={ref}
       className={cx(styles.root, styles[size], className)}
-      aria-label={label ?? formattedValue}
       aria-live="polite"
     >
+      <span className={styles.srOnly}>{label ?? formattedValue}</span>
       <span className={styles.content} aria-hidden="true">
         {currentCharacters.map((character, index) => {
           const previousCharacter = previousCharacters[index];

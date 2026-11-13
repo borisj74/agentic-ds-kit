@@ -28,7 +28,7 @@ export function MultiSelectDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>MultiSelect</h1>
+        <h2 className={styles.heroTitle}>MultiSelect</h2>
         <p className={styles.lede}>
           Several values stay in the field as removable tags. Typing filters the list. A short menu
           of choices is still Select multiple.

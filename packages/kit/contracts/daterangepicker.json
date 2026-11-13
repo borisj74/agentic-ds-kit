@@ -49,6 +49,7 @@
   "a11y": {
     "element": "button",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, and aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose dates and contains the month grid",
       "Presets sit on the start and two months side by side (one below 40rem). A preset, or a first and second day click, sets a pending range; Apply commits it and closes. Cancel, Escape, or a click outside leave the value as it was",

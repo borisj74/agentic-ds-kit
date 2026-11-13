@@ -44,14 +44,18 @@
     "status.info",
     "status.success",
     "status.warning",
-    "status.danger"
+    "status.danger",
+    "info.fg",
+    "success.fg",
+    "caution.fg",
+    "danger.fg"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
       "info and success use role=status",
       "warning and danger use role=alert",
-      "Title and body are readable text"
+      "Title uses the -fg tone and body uses text.primary (4.5:1 or more on the tinted fill); the icon keeps the status colour"
     ]
   },
   "doNot": [

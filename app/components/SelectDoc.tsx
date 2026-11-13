@@ -90,7 +90,7 @@ export function SelectDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Select</h1>
+        <h2 className={styles.heroTitle}>Select</h2>
         <p className={styles.lede}>
           Choose from a list. Field trigger, kit DropdownMenu panel. One piece. multiple for several
           values. searchable for a long fixed list. Not a native select.

@@ -70,3 +70,10 @@
     opacity: var(--opacity-full);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .dialog {
+    animation: none;
+  }
+}

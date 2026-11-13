@@ -60,7 +60,7 @@ export function CodeSnippetDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>CodeSnippet</h1>
+        <h2 className={styles.heroTitle}>CodeSnippet</h2>
         <p className={styles.lede}>
           Read-only code with a copy button. Optional title, language label, tabs, and line numbers. No syntax
           highlighting, so it adds no dependency.

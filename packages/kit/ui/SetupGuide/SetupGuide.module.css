@@ -72,6 +72,12 @@
   animation: rowIn var(--motion-duration-200) var(--motion-ease-out);
 }
 
+/* Subtle text drops below 4.5:1 on the current-row tint; use the muted role there. */
+.rowCurrent .rowDescription,
+.rowCurrent .skippedWord {
+  color: var(--text-fg-muted);
+}
+
 .marker {
   display: inline-flex;
   flex-shrink: 0;

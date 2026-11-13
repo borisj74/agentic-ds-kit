@@ -37,7 +37,7 @@ export function InputOTPDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>InputOTP</h1>
+        <h2 className={styles.heroTitle}>InputOTP</h2>
         <p className={styles.lede}>
           One-time code or PIN as separate slots. One native input so paste and autocomplete
           work. Not a row of Inputs.

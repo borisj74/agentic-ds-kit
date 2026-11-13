@@ -69,7 +69,7 @@ export function BreadcrumbDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Breadcrumb</h1>
+        <h2 className={styles.heroTitle}>Breadcrumb</h2>
         <p className={styles.lede}>Path of links. Not PageHeader. Not AppNav.</p>
       </header>
 

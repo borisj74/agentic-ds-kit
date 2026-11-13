@@ -21,7 +21,7 @@ export function TagInputDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>TagInput</h1>
+        <h2 className={styles.heroTitle}>TagInput</h2>
         <p className={styles.lede}>
           Tags the person types. Enter or a comma adds one. Suggestions are optional. A fixed list
           is MultiSelect.

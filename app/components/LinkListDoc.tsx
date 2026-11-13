@@ -56,7 +56,7 @@ export function LinkListDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>LinkList</h1>
+        <h2 className={styles.heroTitle}>LinkList</h2>
         <p className={styles.lede}>
           A column of links, one a row with a chevron at the end. Put it in a Section. Not ListView.
           Not navigation. Not a Card of its own.

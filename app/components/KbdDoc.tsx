@@ -9,7 +9,7 @@ export function KbdDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Kbd</h1>
+        <h2 className={styles.heroTitle}>Kbd</h2>
         <p className={styles.lede}>
           A shortcut chip for one key. Put several in a row for a chord.
         </p>

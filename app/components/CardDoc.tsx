@@ -66,7 +66,7 @@ export function CardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Cards</h1>
+        <h2 className={styles.heroTitle}>Cards</h2>
         <p className={styles.lede}>Framed tile. Section is unframed. Scorecard is a KPI.</p>
       </header>
 

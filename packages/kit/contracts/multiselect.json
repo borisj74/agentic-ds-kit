@@ -47,6 +47,7 @@
   "a11y": {
     "element": "input",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "The filter input is role=combobox. The popup is role=listbox aria-multiselectable=true",
       "Each option is role=option with aria-selected. Enter toggles the active option. The list stays open",
       "Backspace on an empty query removes the last tag. Each tag remove button removes that value",

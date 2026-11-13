@@ -52,7 +52,7 @@ export function ChatDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Chat</h1>
+        <h2 className={styles.heroTitle}>Chat</h2>
         <p className={styles.lede}>
           Assistant panel with a header, a thread, and a composer. One piece. Not Modal.
         </p>

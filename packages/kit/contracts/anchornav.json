@@ -44,6 +44,7 @@
   "a11y": {
     "element": "nav",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Rail is a nav landmark. Each row is a link to the section id",
       "The current section has aria-current=location, a caret, and a strong line",
       "Clicking a row scrolls to the section and moves focus to it",

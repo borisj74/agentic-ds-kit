@@ -21,7 +21,7 @@ export function ContextMenuDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ContextMenu</h1>
+        <h2 className={styles.heroTitle}>ContextMenu</h2>
         <p className={styles.lede}>
           Actions for one target. Right-click or press Shift+F10. Arrow keys move, Enter chooses,
           Escape closes.
