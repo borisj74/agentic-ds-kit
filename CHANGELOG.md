@@ -12,12 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Link**: text that navigates. `variant="inline"` (underlined, inherits the sentence's type) or `"standalone"` (on its own line, underlined on hover), `external` (new tab, `rel="noopener noreferrer"`, ExternalLink icon and a screen-reader "opens in a new tab"), and `linkAs` for router links. Contract, docs page and tests included; Button's contract now points navigation to Link
 - Cell `tone` and Scorecard `badgeTone` contracts list `primary` and `highlight` (the components already supported them through Badge)
 - Contracts document props the components already had: Button `draggable` / `onDragStart` / `onDragEnd`; DropdownMenu `triggerDraggable` / `onTriggerDragStart` / `onTriggerDragEnd`; Input, Select and Textarea `describedBy`; HeaderCell `defaultChecked`; Scoreboard `aria-label`; ShimmerText `style`; ModalCard `role`, `tabIndex` and `aria-modal`
+- `agentic-ds-kit/icons-on-demand`: opt-in entry that lets any Lucide icon name render in kit icon props, each loaded as its own chunk
+- MCP: `detail` (`summary` or `full`), `limit` and `offset` on `list_components`, `get_tokens` and `questions`; `kind` filter on `list_components`. Paged answers carry `page: { offset, limit, total, next }`
+- CLI: `npx agentic-ds-kit --version` (also `-v`)
 
 ### Changed
 
 - The BillingSchedule pattern's next-charge panel is a kit Card (`size="sm"`) with a vertical Divider. Its surface is now the card fill instead of the subtle grey. Re-copy with `npx agentic-ds-kit add billing-schedule --force`
 - `contracts/index.json` intents are generated from each contract (84 had drifted); the contract wins
 - DatePicker's panel uses `var(--z-overlay)` instead of a fixed `z-index: 20`
+- `npx agentic-ds-kit mcp` runs on a small built-in server with no runtime dependencies (MCP protocol **2025-06-18**, tools only; it also answers 2025-03-26 and 2024-11-05 clients). `@modelcontextprotocol/sdk` and `zod` are no longer dependencies, so installing the kit no longer pulls express, hono and the rest of the SDK. Tool names, arguments and answers are unchanged; invalid arguments still return an `isError` result
+- **Breaking edge, icons:** a Lucide name outside the bundled set (about 120 common icons, including every name the kit's own components use) no longer loads by default; it renders nothing and warns in development. Pass the Lucide component, or `import "agentic-ds-kit/icons-on-demand"` once to keep the old behaviour. Importing Button now bundles about 110 modules instead of about 1,800
+- **Breaking edge, MCP:** `list_components` and `get_tokens` return summary rows by default (no category or usage notes). Pass `detail: "full"` for the previous fields. Answers are compact JSON and no longer repeat the data as `structuredContent`, so they are 3 to 6 times smaller. `questions` still returns the full CLI JSON by default
+- `npx agentic-ds-kit add` reads `paths` (and `baseUrl`) from tsconfig.json or jsconfig.json, comments allowed, to print the `@/...` import for both root and `src/` aliases
+- Peer dependency is `next >=15` (Next 14 does not support React 19)
+- The published package no longer ships source maps: 644 kB instead of 1.1 MB (2.7 MB unpacked instead of 4.4 MB)
+- The README states that the package is ESM-only
 
 ### Removed
 

@@ -29,6 +29,7 @@ Options:
                  components/chrome/<name> for recipes; under src/ when the app uses src/)
   --force        Overwrite files that already exist
   --cwd <path>   App root (default: current folder)
+  -v, --version  Print the installed agentic-ds-kit version
   -h, --help     Show this help
 
 Examples:
@@ -43,6 +44,63 @@ Other commands:
                  model or LLM. Run: npx agentic-ds-kit questions --help
   mcp            Start a read-only stdio MCP server for this install.
                  Run: npx agentic-ds-kit mcp`;
+
+// Removes line and block comments outside strings (tsconfig allows them); strings such as the
+// "@/" path key keep their slashes and stars.
+function stripJsonComments(text) {
+  let out = "";
+  let inString = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inString) {
+      out += ch;
+      if (ch === "\\") {
+        out += text[i + 1] ?? "";
+        i += 1;
+      } else if (ch === '"') inString = false;
+    } else if (ch === '"') {
+      inString = true;
+      out += ch;
+    } else if (ch === "/" && text[i + 1] === "/") {
+      while (i < text.length && text[i] !== "\n") i += 1;
+      out += "\n";
+    } else if (ch === "/" && text[i + 1] === "*") {
+      i += 2;
+      while (i < text.length && !(text[i] === "*" && text[i + 1] === "/")) i += 1;
+      i += 1;
+    } else out += ch;
+  }
+  return out;
+}
+
+/**
+ * The `@/...` import for `target` when tsconfig.json (or jsconfig.json) maps "@/*", else null.
+ * Reads compilerOptions.paths and baseUrl (comments and trailing commas allowed), so both
+ * "@/*": ["./*"] and "@/*": ["./src/*"] resolve. Falls back to the create-next-app layout
+ * (app root, or src/ when the app uses it) if the file cannot be parsed.
+ */
+async function aliasImport(cwd, target) {
+  for (const name of ["tsconfig.json", "jsconfig.json"]) {
+    const file = join(cwd, name);
+    if (!existsSync(file)) continue;
+    const text = await readFile(file, "utf8");
+    let mapped;
+    let baseUrl = ".";
+    try {
+      const json = JSON.parse(stripJsonComments(text).replace(/,(\s*[}\]])/g, "$1"));
+      baseUrl = json.compilerOptions?.baseUrl ?? ".";
+      mapped = json.compilerOptions?.paths?.["@/*"]?.[0];
+    } catch {
+      if (!text.includes('"@/*"')) continue;
+      mapped = existsSync(join(cwd, "src")) && !existsSync(join(cwd, "components")) ? "./src/*" : "./*";
+    }
+    if (typeof mapped !== "string" || !mapped.endsWith("*")) continue;
+    const aliasRoot = resolve(cwd, baseUrl, mapped.slice(0, -1));
+    const inside = relative(aliasRoot, target).split("\\").join("/");
+    if (inside && !inside.startsWith("..") && !inside.startsWith("/")) return `@/${inside}`;
+  }
+  return null;
+}
 
 function fail(message) {
   console.error(`agentic-ds-kit: ${message}`);
@@ -86,6 +144,11 @@ function printList(manifest) {
   console.log("npx agentic-ds-kit add <name>");
 }
 
+if (process.argv[2] === "--version" || process.argv[2] === "-v") {
+  const { version } = JSON.parse(await readFile(join(pkgRoot, "package.json"), "utf8"));
+  console.log(version);
+  process.exit(0);
+}
 if (process.argv[2] === "questions") process.exit(runQuestions(process.argv.slice(3)));
 if (process.argv[2] === "mcp") {
   const { runMcp } = await import("./mcp.mjs");
@@ -101,6 +164,7 @@ try {
       dir: { type: "string" },
       force: { type: "boolean" },
       cwd: { type: "string" },
+      version: { type: "boolean", short: "v" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -109,6 +173,12 @@ try {
 }
 const { values: opts, positionals } = parsed;
 const [command, ...names] = positionals;
+
+if (opts.version) {
+  const { version } = JSON.parse(await readFile(join(pkgRoot, "package.json"), "utf8"));
+  console.log(version);
+  process.exit(0);
+}
 
 if (opts.help || !command) {
   console.log(HELP);
@@ -188,13 +258,7 @@ if (stale.length) {
   console.log(`\nNo longer imported (patterns now use plain CSS); delete them once any edits are moved over:`);
   for (const file of stale) console.log(`  ${rel}/${file}`);
 }
-// create-next-app maps "@/*" to the app root (or src/); fall back to the folder path.
-const tsconfig = existsSync(join(cwd, "tsconfig.json")) ? await readFile(join(cwd, "tsconfig.json"), "utf8") : "";
-const aliasBase = usesSrc ? "src/" : "";
-const spec =
-  tsconfig.includes('"@/*"') && !rel.startsWith("..") && rel.startsWith(aliasBase)
-    ? `@/${rel.slice(aliasBase.length)}`
-    : rel;
+const spec = (await aliasImport(cwd, target)) ?? rel;
 const contracts = pattern.files.filter((f) => f.endsWith(".contract.json")).join(", ");
 const rules =
   kindOf(pattern) === "pattern"

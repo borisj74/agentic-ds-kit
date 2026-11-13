@@ -428,16 +428,18 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 
 | Tool | Arguments | Returns |
 | --- | --- | --- |
-| `list_components` | none | Name, category, and a one-line purpose |
+| `list_components` | `detail`, `kind` (`component`, `block`), `limit`, `offset`; all optional | Summary rows (id, name, kind, first sentence of the purpose) by default; `detail: "full"` adds the category and the whole purpose |
 | `get_component` | `name` | Props, variants, must and doNot rules, tokens used, an import line, and a usage example |
 | `search_components` | `query` | Components whose name, purpose, or contract keywords match |
-| `get_tokens` | `group` optional (`color`, `type`, `space`, `radius`, `grid`) | Semantic tokens with value and usage notes |
+| `get_tokens` | `group` (`color`, `type`, `space`, `radius`, `grid`), `detail`, `limit`, `offset`; all optional | Name, group and value (dark too for color) by default; `detail: "full"` adds the usage note, useWhen and doNot |
 | `list_patterns` | none | Description and `npx agentic-ds-kit add <id>` |
 | `get_pattern` | `id` | Description, the add command, and the pattern's must and defaults |
 | `get_rules` | none | `AGENTS.md`, including the page-layout grid rule |
-| `questions` | options, optional | The same JSON as `npx agentic-ds-kit questions` |
+| `questions` | options, `detail`, `limit`, `offset`; all optional | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"` keeps id, label and kind (no enums) |
 
 `questions` options match the CLI: `only`, `group`, `overlay` (the object, not a file path), `none`, `useWhen`, `notWhen`, `askStyle`, `enums`.
+
+Paged answers include `page: { offset, limit, total, next }`; pass `offset: page.next` for the next page. Answers are compact JSON.
 
 The playground page with this setup is `/mcp`.
 

@@ -106,7 +106,7 @@ describe("mcp server", { timeout: 20_000 }, () => {
   });
 
   test("list_components matches the installed contracts", async () => {
-    const listed = await call("list_components");
+    const listed = await call("list_components", { detail: "full" });
     assert.equal(listed.kit, version);
     assert.equal(listed.components.length, componentIds.length);
     for (const item of listed.components) assertSummary(item);
@@ -164,7 +164,7 @@ describe("mcp server", { timeout: 20_000 }, () => {
   });
 
   test("get_tokens reads tokens.json and usage.json", async () => {
-    const all = await call("get_tokens");
+    const all = await call("get_tokens", { detail: "full" });
     assert.equal(all.kit, version);
     assert.equal(all.group, null);
     assert.deepEqual([...new Set(all.tokens.map((token) => token.group))].sort(), [
@@ -177,7 +177,7 @@ describe("mcp server", { timeout: 20_000 }, () => {
     for (const token of all.tokens) assertToken(token);
     assert.equal(all.tokens.some((token) => token.name.startsWith("--color-")), false);
 
-    const color = await call("get_tokens", { group: "color" });
+    const color = await call("get_tokens", { group: "color", detail: "full" });
     assert.ok(color.tokens.every((token) => token.group === "color"));
     assert.ok(color.tokens.length < all.tokens.length);
     const canvas = color.tokens.find((token) => token.name === "--bg-canvas");
@@ -187,22 +187,22 @@ describe("mcp server", { timeout: 20_000 }, () => {
     assert.equal(canvas.useWhen, usage.tokens["--bg-canvas"].useWhen);
     assert.equal(canvas.doNot, usage.tokens["--bg-canvas"].doNot);
 
-    const type = await call("get_tokens", { group: "type" });
+    const type = await call("get_tokens", { group: "type", detail: "full" });
     const ui = type.tokens.find((token) => token.name === "--type-size-ui-md");
     assert.equal(ui.value, tokens.semantic.type.ladder.uiMd.size);
 
-    const space = await call("get_tokens", { group: "space" });
+    const space = await call("get_tokens", { group: "space", detail: "full" });
     assert.equal(space.tokens.find((token) => token.name === "--space-4").value, tokens.primitive.space["4"]);
     assert.equal(space.tokens.find((token) => token.name === "--space-inset-md").value, tokens.primitive.space["3"]);
 
-    const radius = await call("get_tokens", { group: "radius" });
+    const radius = await call("get_tokens", { group: "radius", detail: "full" });
     const base = radius.tokens.find((token) => token.name === "--radius-base");
     assert.equal(base.value, tokens.primitive.radius.base);
     assert.equal(base.note, usage.tokens["--radius-base"].note);
     const md = radius.tokens.find((token) => token.name === "--radius-md");
     assert.equal(md.note, usage.families["--radius-"].note);
 
-    const grid = await call("get_tokens", { group: "grid" });
+    const grid = await call("get_tokens", { group: "grid", detail: "full" });
     const columns = grid.tokens.find((token) => token.name === "--grid-columns");
     assert.equal(columns.value, tokens.semantic.grid.columns);
     assert.equal(columns.note, usage.families["--grid-"].note);
@@ -256,6 +256,57 @@ describe("mcp server", { timeout: 20_000 }, () => {
       await call("questions", { group: "pattern", none: true, enums: "none", useWhen: 1, notWhen: 0 }),
       buildQuestions({ group: "pattern", none: true, enums: "none", useWhen: 1, notWhen: 0 }),
     );
+  });
+
+  test("list_components defaults to short summary rows; kind filters and limit/offset page", async () => {
+    const summary = await call("list_components");
+    assert.equal(summary.detail, "summary");
+    assert.equal(summary.components.length, componentIds.length);
+    assert.equal(summary.page.total, componentIds.length);
+    assert.equal(summary.page.next, null);
+    for (const row of summary.components) {
+      assert.deepEqual(Object.keys(row).sort(), ["id", "kind", "name", "purpose"]);
+      assert.ok(row.purpose.length <= 100);
+    }
+    const blocks = await call("list_components", { kind: "block" });
+    assert.ok(blocks.components.length > 0 && blocks.components.every((row) => row.kind === "block"));
+    const first = await call("list_components", { limit: 10 });
+    assert.equal(first.components.length, 10);
+    assert.equal(first.page.next, 10);
+    const second = await call("list_components", { limit: 10, offset: first.page.next });
+    assert.equal(second.components[0].id, componentIds[10]);
+  });
+
+  test("get_tokens defaults to name, group and value; full adds the usage notes", async () => {
+    const summary = await call("get_tokens", { group: "color" });
+    assert.equal(summary.detail, "summary");
+    const canvas = summary.tokens.find((token) => token.name === "--bg-canvas");
+    assert.deepEqual(Object.keys(canvas).sort(), ["dark", "group", "name", "value"]);
+    const space = await call("get_tokens", { group: "space", limit: 5 });
+    assert.equal(space.tokens.length, 5);
+    assert.deepEqual(Object.keys(space.tokens[0]).sort(), ["group", "name", "value"]);
+    assert.equal(space.page.next, 5);
+  });
+
+  test("questions stays the full CLI JSON by default; summary and paging are opt-in", async () => {
+    const full = await call("questions");
+    assert.deepEqual(full, buildQuestions({ root: kitRoot }));
+    const summary = await call("questions", { detail: "summary", limit: 5 });
+    assert.equal(summary.options.length, 5);
+    assert.deepEqual(Object.keys(summary.options[0]).sort(), ["id", "kind", "label"]);
+    assert.equal(summary.enums, undefined);
+    assert.equal(summary.page.total, full.options.length);
+  });
+
+  test("default answers stay small", async () => {
+    const sizes = {};
+    for (const [name, args] of [["list_components", {}], ["get_tokens", {}], ["questions", { detail: "summary" }]]) {
+      const result = await client.callTool({ name, arguments: args });
+      sizes[name] = JSON.stringify(result).length;
+    }
+    assert.ok(sizes.list_components < 25_000, `list_components ${sizes.list_components}`);
+    assert.ok(sizes.get_tokens < 30_000, `get_tokens ${sizes.get_tokens}`);
+    assert.ok(sizes.questions < 15_000, `questions summary ${sizes.questions}`);
   });
 
   test("rejects a token group the kit does not publish", async () => {

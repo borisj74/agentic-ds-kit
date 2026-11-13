@@ -26,8 +26,8 @@ const TOOL_COLUMNS = [
 const TOOL_ROWS = [
   {
     tool: "list_components",
-    args: "none",
-    returns: "Name, category, and a one-line purpose for every component",
+    args: "detail, kind, limit, offset; all optional",
+    returns: "Summary rows (id, name, kind, short purpose) by default; detail full adds category and the whole purpose",
   },
   {
     tool: "get_component",
@@ -41,8 +41,8 @@ const TOOL_ROWS = [
   },
   {
     tool: "get_tokens",
-    args: "group, optional",
-    returns: "Semantic color, type, space, radius, and grid tokens, each with a value and a usage note",
+    args: "group, detail, limit, offset; all optional",
+    returns: "Semantic tokens with name and value (dark too for color); detail full adds the usage notes",
   },
   {
     tool: "list_patterns",
@@ -61,8 +61,8 @@ const TOOL_ROWS = [
   },
   {
     tool: "questions",
-    args: "options, optional",
-    returns: "The same option list as npx agentic-ds-kit questions",
+    args: "options, detail, limit, offset; all optional",
+    returns: "The same option list as npx agentic-ds-kit questions; detail summary keeps id, label and kind",
   },
 ];
 
