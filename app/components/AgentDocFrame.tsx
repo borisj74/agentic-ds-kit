@@ -42,7 +42,7 @@ export function AgentDocFrame({
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>{name}</h1>
+        <h2 className={styles.heroTitle}>{name}</h2>
         <p className={styles.lede}>{lede}</p>
       </header>
 

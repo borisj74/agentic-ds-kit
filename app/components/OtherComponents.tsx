@@ -12,7 +12,7 @@ export function OtherComponent({ id, title }: { id: string; title: string }) {
   return (
     <div>
       <header className={doc.hero}>
-        <h1 className={doc.heroTitle}>{title}</h1>
+        <h2 className={doc.heroTitle}>{title}</h2>
         <p className={doc.lede}>Kit example with live controls and contract snippets.</p>
       </header>
       <div className={styles.anchor} id={id}>
