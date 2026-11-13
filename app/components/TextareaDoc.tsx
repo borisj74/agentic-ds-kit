@@ -46,7 +46,7 @@ export function TextareaDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Textarea</h1>
+        <h2 className={styles.heroTitle}>Textarea</h2>
         <p className={styles.lede}>
           Multi-line text in lg, md, and sm. Field label sits on top or start (left). Not Input.
         </p>

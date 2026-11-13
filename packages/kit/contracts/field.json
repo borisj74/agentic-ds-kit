@@ -44,9 +44,9 @@
   "a11y": {
     "element": "div",
     "requirements": [
-      "role=group",
+      "No role on the wrapper (a nameless group added nothing); the label has id {htmlFor}-label",
       "Label htmlFor matches child control id",
-      "Hint or error id is passed to the child as describedBy",
+      "Hint or error id is passed to the child as describedBy", "A Slider child gets labelledBy={htmlFor}-label, since a label for cannot name role=slider",
       "When help is set, HelpPopover sits beside the label; hint and error stay under the control",
       "data-invalid when error is set"
     ]

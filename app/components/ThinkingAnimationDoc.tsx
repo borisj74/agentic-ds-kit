@@ -26,7 +26,7 @@ export function ThinkingAnimationDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ThinkingAnimation</h1>
+        <h2 className={styles.heroTitle}>ThinkingAnimation</h2>
         <p className={styles.lede}>
           A calm processing indicator for assistants and short system waits. One piece. Not
           LoadingAnimation. Not Spinner.

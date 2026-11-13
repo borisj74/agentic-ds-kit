@@ -35,7 +35,7 @@ export function AvatarDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Avatar</h1>
+        <h2 className={styles.heroTitle}>Avatar</h2>
         <p className={styles.lede}>Face or initials for a person. Badge is for status. Not a button.</p>
       </header>
 

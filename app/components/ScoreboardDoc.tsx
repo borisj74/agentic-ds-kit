@@ -111,7 +111,7 @@ export function ScoreboardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Scoreboard</h1>
+        <h2 className={styles.heroTitle}>Scoreboard</h2>
         <p className={styles.lede}>
           A metrics strip of kit Scorecards. Two to four fill the row. Four stay in one row until
           the strip narrows. More than four compose Conveyor. One KPI alone is Scorecard.

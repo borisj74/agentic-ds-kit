@@ -64,7 +64,7 @@ export function ButtonDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Buttons</h1>
+        <h2 className={styles.heroTitle}>Buttons</h2>
         <p className={styles.lede}>
           Appearance × mode: solid, outline, soft, ghost across primary, neutral, and danger. Optional flat set
           drops elevation. One solid-primary CTA per view. Lucide icon slots via iconStart and iconEnd. Icon-only

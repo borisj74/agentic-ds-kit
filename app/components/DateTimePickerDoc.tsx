@@ -20,7 +20,7 @@ export function DateTimePickerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DateTimePicker</h1>
+        <h2 className={styles.heroTitle}>DateTimePicker</h2>
         <p className={styles.lede}>
           One field for a day and a time. The dialog keeps the month grid and the time together
           until Done or Escape.

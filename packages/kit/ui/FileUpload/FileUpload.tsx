@@ -183,7 +183,6 @@ export function FileUpload({
         disabled={disabled}
         aria-disabled={disabled || undefined}
         aria-describedby={describedByIds}
-        aria-invalid={error || undefined}
         onClick={() => inputRef.current?.click()}
         onDragEnter={onDragEnter}
         onDragOver={onDragOver}

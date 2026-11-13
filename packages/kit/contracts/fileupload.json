@@ -125,6 +125,7 @@
   "a11y": {
     "element": "div",
     "requirements": [
+      "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
       "Drop zone is a button that opens the hidden file input; Enter and Space work. Drag and drop is an enhancement.",
       "The file input is hidden and out of the tab order",
       "Drop zone hint (maxSizeLabel) is linked with aria-describedby, plus Field's hint or error id",

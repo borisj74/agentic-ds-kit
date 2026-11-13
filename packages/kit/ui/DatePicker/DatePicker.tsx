@@ -220,7 +220,6 @@ export function DatePicker(props: DatePickerProps) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={panelId}
-        aria-invalid={error || undefined}
         aria-describedby={describedBy}
         className={cx(
           controlStyles.control,

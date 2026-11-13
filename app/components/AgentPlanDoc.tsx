@@ -138,7 +138,7 @@ export function AgentPlanDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AgentPlan</h1>
+        <h2 className={styles.heroTitle}>AgentPlan</h2>
         <p className={styles.lede}>What the agent intends to do. Not AgentTrail. Not ProgressSteps.</p>
       </header>
 

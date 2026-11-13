@@ -29,6 +29,7 @@
   "a11y": {
     "element": "button",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, and aria-controls",
       "The dialog contains the month grid and a TimePicker",
       "Choosing a day or a time updates the value and leaves the dialog open until Done or Escape",

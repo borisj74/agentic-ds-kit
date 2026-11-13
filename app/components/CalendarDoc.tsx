@@ -49,7 +49,7 @@ export function CalendarDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Calendar</h1>
+        <h2 className={styles.heroTitle}>Calendar</h2>
         <p className={styles.lede}>
           A full calendar of events by month, week, day, or list. Browse dates, filter calendars, add,
           edit, or delete events. Not a date field — use DatePicker for that.

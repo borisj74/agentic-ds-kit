@@ -42,7 +42,7 @@ export function SegmentedControlDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>SegmentedControl</h1>
+        <h2 className={styles.heroTitle}>SegmentedControl</h2>
         <p className={styles.lede}>
           One choice in a joined track. Controlled or uncontrolled, sm or md, icons optional.
           role=radiogroup with arrow keys.

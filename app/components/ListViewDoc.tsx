@@ -91,7 +91,7 @@ export function ListViewDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ListView</h1>
+        <h2 className={styles.heroTitle}>ListView</h2>
         <p className={styles.lede}>
           A list of records, one row each. Not Table. Not TreeView. Not the list-detail pattern.
         </p>

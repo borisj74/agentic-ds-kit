@@ -232,7 +232,7 @@ export function NavigationMenuDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>NavigationMenu</h1>
+        <h2 className={styles.heroTitle}>NavigationMenu</h2>
         <p className={styles.lede}>
           Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.
         </p>

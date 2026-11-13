@@ -41,7 +41,7 @@ export function MeterDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Meter</h1>
+        <h2 className={styles.heroTitle}>Meter</h2>
         <p className={styles.lede}>
           How far along or how full something is, 0 to 100, as a bar, ring, or half ring, with
           optional zones. Not Progress. Not UsageList. Not MeterCircle.

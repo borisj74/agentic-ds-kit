@@ -24,7 +24,7 @@ export function TooltipDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Tooltip</h1>
+        <h2 className={styles.heroTitle}>Tooltip</h2>
         <p className={styles.lede}>
           Brief supplementary text on hover or focus. Keep copy short and non-essential. One
           piece. Not a Popover cousin.

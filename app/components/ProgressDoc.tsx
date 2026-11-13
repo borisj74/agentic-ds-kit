@@ -38,7 +38,7 @@ export function ProgressDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Progress</h1>
+        <h2 className={styles.heroTitle}>Progress</h2>
         <p className={styles.lede}>
           Task completion as a bar or circle, 0 to 100. Percent can overlay the track, sit at the
           end, or sit in the ring hole. Tones are brand, warning, danger, and muted. Fill grows once

@@ -51,7 +51,7 @@ export function FieldDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Field</h1>
+        <h2 className={styles.heroTitle}>Field</h2>
         <p className={styles.lede}>
           Label, control, hint, and error as one piece. FieldSet is the form group. No FieldLabel,
           Form, or FormDisplay.

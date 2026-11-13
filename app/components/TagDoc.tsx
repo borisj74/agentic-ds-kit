@@ -62,7 +62,7 @@ export function TagDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Tags</h1>
+        <h2 className={styles.heroTitle}>Tags</h2>
         <p className={styles.lede}>Labels the user applies or manages. Removable, selectable, with an optional count, dot, or avatar.</p>
       </header>
 

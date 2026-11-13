@@ -39,7 +39,7 @@ export function AppNavDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AppNav</h1>
+        <h2 className={styles.heroTitle}>AppNav</h2>
         <p className={styles.lede}>
           Vertical sidebar for playground and product shells. Grouped catalog or a flat list. Not
           SideNav. Not AppHeader.

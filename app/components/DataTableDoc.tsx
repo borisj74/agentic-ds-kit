@@ -244,7 +244,7 @@ export function DataTableDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DataTable</h1>
+        <h2 className={styles.heroTitle}>DataTable</h2>
         <p className={styles.lede}>
           Responsive structured data with search, filters, column settings, and clear empty states.
         </p>

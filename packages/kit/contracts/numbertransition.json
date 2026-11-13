@@ -31,7 +31,7 @@
     "element": "span",
     "requirements": [
       "aria-live=polite",
-      "aria-label mirrors formatted value when label omitted"
+      "Visually hidden text carries the formatted value (or label when given); the animated digits are aria-hidden. No aria-label on the span"
     ]
   },
   "doNot": ["Do not use raw hex"],

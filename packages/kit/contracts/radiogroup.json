@@ -13,6 +13,11 @@
     "Tabs for panel switching \u2014 use Tabs"
   ],
   "props": {
+    "describedBy": {
+      "type": "string",
+      "required": false,
+      "note": "Extra id(s) for aria-describedby on the group, after the hint or error."
+    },
     "name": {
       "type": "string",
       "required": true
@@ -118,9 +123,9 @@
   "a11y": {
     "element": "fieldset",
     "requirements": [
-      "legend names the group",
+      "The fieldset has role=radiogroup and is named by its legend (aria-labelledby)",
       "Each radio is a native input type=radio with a visible label",
-      "error sets aria-invalid on the group and options",
+      "error sets aria-invalid on the radiogroup, not on each radio; the error or hint is the group's aria-describedby",
       "Disabled options stay in the a11y tree but cannot be selected"
     ]
   },

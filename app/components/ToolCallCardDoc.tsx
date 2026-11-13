@@ -100,7 +100,7 @@ export function ToolCallCardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ToolCallCard</h1>
+        <h2 className={styles.heroTitle}>ToolCallCard</h2>
         <p className={styles.lede}>One tool call on one line. Not CodeSnippet. Not AgentTrail.</p>
       </header>
 

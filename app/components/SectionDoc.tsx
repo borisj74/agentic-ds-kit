@@ -78,7 +78,7 @@ export function SectionDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Section</h1>
+        <h2 className={styles.heroTitle}>Section</h2>
         <p className={styles.lede}>
           Grouped page block. Unframed: no fill, radius, border, or box padding. Headings are static by
           default; pass collapsible for a chevron that toggles the body. Not PageHeader. Not Card.

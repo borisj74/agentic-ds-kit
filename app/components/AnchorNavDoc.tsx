@@ -52,7 +52,7 @@ export function AnchorNavDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AnchorNav</h1>
+        <h2 className={styles.heroTitle}>AnchorNav</h2>
         <p className={styles.lede}>
           A list of the sections on one long page. Click a row to jump, and the caret follows the
           section in view. The menu variant is the same list in a popover.

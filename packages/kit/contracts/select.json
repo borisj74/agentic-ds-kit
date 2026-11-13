@@ -130,6 +130,7 @@
   "a11y": {
     "element": "button",
     "requirements": [
+      "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
       "Trigger is a field-styled button with aria-haspopup=menu",
       "Must have associated label via Field or ariaLabel",
       "Each option needs a human-readable label",

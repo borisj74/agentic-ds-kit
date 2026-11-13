@@ -106,7 +106,7 @@ export function FileUploadDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>FileUpload</h1>
+        <h2 className={styles.heroTitle}>FileUpload</h2>
         <p className={styles.lede}>
           Drop zone plus file rows with progress, done, and error. Presentational: the app does the
           upload and passes the state back. Rows compose kit Progress and Button. Not Dropzone or

@@ -62,7 +62,7 @@ export function CollapsibleDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Collapsible</h1>
+        <h2 className={styles.heroTitle}>Collapsible</h2>
         <p className={styles.lede}>Single show/hide panel. Accordion is the one-open list.</p>
       </header>
 

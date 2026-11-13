@@ -21,18 +21,23 @@ export function Field({
 }: FieldProps) {
   const hintId = hint && !error ? `${htmlFor}-hint` : undefined;
   const errorId = error ? `${htmlFor}-error` : undefined;
+  const labelId = `${htmlFor}-label`;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
-  const controlProps: { describedBy?: string; error?: boolean } = {};
+  const controlProps: { describedBy?: string; error?: boolean; labelledBy?: string } = {};
   if (describedBy) controlProps.describedBy = describedBy;
   if (error) controlProps.error = true;
+  // Controls a <label for> cannot name (Slider's role="slider" thumbs) opt in to get the label id.
+  if (isValidElement(children) && (children.type as { fieldLabelledBy?: boolean }).fieldLabelledBy) {
+    controlProps.labelledBy = labelId;
+  }
 
   const control =
     Object.keys(controlProps).length > 0 && isValidElement(children)
-      ? cloneElement(children as ReactElement<{ describedBy?: string; error?: boolean }>, controlProps)
+      ? cloneElement(children as ReactElement<typeof controlProps>, controlProps)
       : children;
 
   const labelNode = (
-    <label className={styles.label} htmlFor={htmlFor}>
+    <label id={labelId} className={styles.label} htmlFor={htmlFor}>
       {label}
     </label>
   );
@@ -42,7 +47,6 @@ export function Field({
       {...rest}
       ref={ref}
       className={cx(styles.field, styles[labelPosition], className)}
-      role="group"
       data-invalid={error ? "true" : undefined}
     >
       {help ? (

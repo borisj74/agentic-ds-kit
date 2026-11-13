@@ -39,8 +39,8 @@ export function ShimmerText({
       ref={ref}
       className={cx(styles.root, styles[size], className)}
       style={cssVars}
-      aria-label={text}
     >
+      <span className={styles.srOnly}>{text}</span>
       <span className={styles.content} aria-hidden="true">
         {characters.map((character, index) => (
           <span

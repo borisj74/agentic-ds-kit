@@ -21,7 +21,7 @@ export function NumberInputDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>NumberInput</h1>
+        <h2 className={styles.heroTitle}>NumberInput</h2>
         <p className={styles.lede}>
           A number with locale formatting, min, max, and step. Arrow keys and the stepper buttons
           move by step. Money is CurrencyInput.

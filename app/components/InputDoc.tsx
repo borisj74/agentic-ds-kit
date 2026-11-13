@@ -32,7 +32,7 @@ export function InputDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Input</h1>
+        <h2 className={styles.heroTitle}>Input</h2>
         <p className={styles.lede}>
           Single-line text in lg, md, and sm. Field label sits on top or start (left). start and
           iconStart are prefix slots inside the control. No InputGroup cousin.

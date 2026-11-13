@@ -51,7 +51,7 @@ export function UsageListDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>UsageList</h1>
+        <h2 className={styles.heroTitle}>UsageList</h2>
         <p className={styles.lede}>
           A list of usage limits, one a row: the limit&apos;s name, how much is used of it, a bar,
           and a short note. Not ListView. Not Table. Not Progress alone.

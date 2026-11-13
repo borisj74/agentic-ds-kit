@@ -32,7 +32,7 @@ export function FilterButtonDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>FilterButton</h1>
+        <h2 className={styles.heroTitle}>FilterButton</h2>
         <p className={styles.lede}>
           Filter chip for lists and tables. Same chrome as a secondary Button. Applied shows a kit Count
           in ink. With onToggle the name turns the filter on or off. Not Button. Not Badge.

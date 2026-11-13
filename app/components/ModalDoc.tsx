@@ -116,7 +116,7 @@ export function ModalDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Modal</h1>
+        <h2 className={styles.heroTitle}>Modal</h2>
         <p className={styles.lede}>Dismissible overlay. Composes ModalCard. Not AlertDialog. Not Drawer.</p>
       </header>
 

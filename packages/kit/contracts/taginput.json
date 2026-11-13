@@ -39,6 +39,7 @@
   "a11y": {
     "element": "input",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Input is role=combobox when suggestions are open",
       "Enter or a delimiter adds the typed text. Arrow keys move through suggestions",
       "Backspace on an empty query removes the last tag",

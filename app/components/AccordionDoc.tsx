@@ -33,7 +33,7 @@ export function AccordionDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Accordion</h1>
+        <h2 className={styles.heroTitle}>Accordion</h2>
         <p className={styles.lede}>One-open disclosure list for short related sections.</p>
       </header>
 

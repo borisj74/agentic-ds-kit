@@ -26,6 +26,7 @@
   "a11y": {
     "element": "span",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Trigger gets aria-haspopup=dialog, aria-expanded, and aria-controls",
       "Panel is role=dialog and labelled by label",
       "Escape closes and returns focus to the trigger",

@@ -127,7 +127,7 @@ export function TreeViewDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>TreeView</h1>
+        <h2 className={styles.heroTitle}>TreeView</h2>
         <p className={styles.lede}>
           A nested list people open and close level by level, like teams in an organization,
           project folders or account hierarchies, to pick or check items.

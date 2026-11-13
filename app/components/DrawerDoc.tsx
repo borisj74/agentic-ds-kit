@@ -171,7 +171,7 @@ export function DrawerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Drawer</h1>
+        <h2 className={styles.heroTitle}>Drawer</h2>
         <p className={styles.lede}>Edge panel. Not Modal. Not AlertDialog.</p>
       </header>
 

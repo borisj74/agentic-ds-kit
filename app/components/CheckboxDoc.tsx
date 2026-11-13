@@ -53,7 +53,7 @@ export function CheckboxDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Checkboxes</h1>
+        <h2 className={styles.heroTitle}>Checkboxes</h2>
         <p className={styles.lede}>
           Multi-select and confirmations. Each in lg, md, and sm. Label optional.
         </p>

@@ -60,10 +60,11 @@ export function ContextMenu({ items, onSelect, children, ariaLabel = "Actions", 
       close();
     }
     document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKey);
+    // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
+    document.addEventListener("keydown", onKey, true);
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKey, true);
     };
   }, [open, close]);
 

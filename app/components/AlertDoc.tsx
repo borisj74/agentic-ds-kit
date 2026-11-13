@@ -41,7 +41,7 @@ export function AlertDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Alert</h1>
+        <h2 className={styles.heroTitle}>Alert</h2>
         <p className={styles.lede}>Inline status banner that stays on the page. Not a toast.</p>
       </header>
 

@@ -26,6 +26,7 @@
   "a11y": {
     "element": "div",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Right-click or Shift+F10 opens the menu at the pointer or the target",
       "Menu is role=menu. Each action is role=menuitem",
       "Arrow keys, Home, and End move. Enter and Space choose. Escape closes",

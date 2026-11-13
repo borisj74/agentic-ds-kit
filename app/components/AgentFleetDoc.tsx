@@ -122,7 +122,7 @@ export function AgentFleetDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AgentFleet</h1>
+        <h2 className={styles.heroTitle}>AgentFleet</h2>
         <p className={styles.lede}>Several agents side by side. Not Scoreboard. Not DataTable.</p>
       </header>
 

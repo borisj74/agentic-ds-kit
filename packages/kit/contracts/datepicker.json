@@ -105,6 +105,7 @@
   "a11y": {
     "element": "button",
     "requirements": [
+      "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose date (or Choose dates in range) and contains DatePicker’s own month grid",
       "Range: first click sets start, second click sets end and closes. Escape discards an in-progress range",

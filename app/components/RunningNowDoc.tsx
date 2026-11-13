@@ -83,7 +83,7 @@ export function RunningNowDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>RunningNow</h1>
+        <h2 className={styles.heroTitle}>RunningNow</h2>
         <p className={styles.lede}>Many agents, small. Not AgentMonitor. Not AgentFleet.</p>
       </header>
 

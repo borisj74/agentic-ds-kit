@@ -205,6 +205,8 @@
   "a11y": {
     "element": "div",
     "requirements": [
+      "Field trigger renders aria-haspopup=menu, aria-expanded and aria-controls in server HTML",
+      "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
       "Trigger has aria-haspopup=menu, aria-expanded, aria-controls. button is kit Button; field is a field control; nav is a ghost text control",
       "With triggerTags, each Tag remove is a sibling button before the trigger in Tab order; the trigger keeps aria-haspopup, aria-expanded, aria-controls",
       "Panel is role=menu",

@@ -125,7 +125,7 @@ export function AgentTrailDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AgentTrail</h1>
+        <h2 className={styles.heroTitle}>AgentTrail</h2>
         <p className={styles.lede}>What an agent did and is doing now. Not Timeline. Not ProgressSteps.</p>
       </header>
 

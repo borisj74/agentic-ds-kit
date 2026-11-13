@@ -119,7 +119,7 @@ export function CommandDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Command</h1>
+        <h2 className={styles.heroTitle}>Command</h2>
         <p className={styles.lede}>Searchable command menu for quick actions.</p>
       </header>
 

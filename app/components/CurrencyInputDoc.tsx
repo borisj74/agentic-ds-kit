@@ -20,7 +20,7 @@ export function CurrencyInputDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>CurrencyInput</h1>
+        <h2 className={styles.heroTitle}>CurrencyInput</h2>
         <p className={styles.lede}>
           A money amount. The symbol and grouping follow the currency and locale. Step defaults to
           0.01.

@@ -62,7 +62,7 @@ export function AlertDialogDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AlertDialog</h1>
+        <h2 className={styles.heroTitle}>AlertDialog</h2>
         <p className={styles.lede}>Must-choose overlay. Not Alert. Not Modal.</p>
       </header>
 

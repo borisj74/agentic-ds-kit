@@ -147,7 +147,7 @@ export function DropdownMenuDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>DropdownMenu</h1>
+        <h2 className={styles.heroTitle}>DropdownMenu</h2>
         <p className={styles.lede}>
           Actions from a kit Button. Select is a form list. Command is searchable in a Modal.
         </p>

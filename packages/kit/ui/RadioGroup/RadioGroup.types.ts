@@ -35,5 +35,7 @@ export interface RadioGroupProps extends Omit<ComponentPropsWithoutRef<"fieldset
   disabled?: boolean;
   error?: string;
   hint?: string;
+  /** Extra id(s) for aria-describedby on the group (added after the hint or error). */
+  describedBy?: string;
   ref?: Ref<HTMLFieldSetElement>;
 }

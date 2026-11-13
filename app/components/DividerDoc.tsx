@@ -56,7 +56,7 @@ export function DividerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Divider</h1>
+        <h2 className={styles.heroTitle}>Divider</h2>
         <p className={styles.lede}>
           Thin rule between groups of content, with an optional label or action on the line. Not a spacer. Not a
           container border.

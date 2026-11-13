@@ -34,7 +34,7 @@ export function EmptyDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Empty</h1>
+        <h2 className={styles.heroTitle}>Empty</h2>
         <p className={styles.lede}>
           Placeholder when a list, page, or region has nothing to show. One piece. Not
           EmptyHeader, EmptyMedia, or EmptyContent.

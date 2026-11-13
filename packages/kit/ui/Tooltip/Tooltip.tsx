@@ -80,10 +80,14 @@ export function Tooltip({
   useEffect(() => {
     if (!open) return undefined;
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") hide();
+      if (event.key !== "Escape" || isControlled) return;
+      // Mark it handled so a parent Modal/Drawer keeps open while this tooltip closes.
+      event.preventDefault();
+      hide();
     }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, [open]);
 
   const trigger = isValidElement(children)

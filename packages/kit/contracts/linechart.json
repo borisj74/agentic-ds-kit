@@ -104,7 +104,7 @@
   "a11y": {
     "element": "figure",
     "requirements": [
-      "Title on figure when provided",
+      "Title on figure when provided", "The plot svg is role=group named by the title when it holds focusable points (role=img only when empty)",
       "Hover reads the sample",
       "Legend highlight emphasises one series",
       "Table view keeps values readable",

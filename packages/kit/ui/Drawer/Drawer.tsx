@@ -13,7 +13,9 @@ import { DrawerBodyContext } from "../shared/drawerContext";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
 
-const FOCUSABLE = "a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])";
+// Tabbable controls only: links with href, enabled form controls, and positive or zero tabindex.
+const FOCUSABLE =
+  "a[href], button:not(:disabled), input:not(:disabled):not([type='hidden']), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
 
 const SIZE_CLASS = {
   sm: styles.sizeSm,

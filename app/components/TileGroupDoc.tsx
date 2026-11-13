@@ -35,7 +35,7 @@ export function TileGroupDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>TileGroup</h1>
+        <h2 className={styles.heroTitle}>TileGroup</h2>
         <p className={styles.lede}>
           Selectable cards for a plan or a set of options. Title, description, and a price slot.
           Single or multi select, with checked and disabled tiles.

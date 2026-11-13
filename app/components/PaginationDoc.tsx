@@ -27,7 +27,7 @@ export function PaginationDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Pagination</h1>
+        <h2 className={styles.heroTitle}>Pagination</h2>
         <p className={styles.lede}>
           Previous, page numbers, ellipsis, Next. Kit Buttons. Not ButtonGroup.
         </p>

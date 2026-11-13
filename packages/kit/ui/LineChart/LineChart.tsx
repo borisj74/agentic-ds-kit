@@ -333,7 +333,14 @@ export function LineChart({
       className={className}
     >
       <div ref={ref} className={styles.plot}>
-        <svg className={styles.chart} width={width || "100%"} height={height} role="img" aria-label={title}>
+        <svg
+          className={styles.chart}
+          width={width || "100%"}
+          height={height}
+          // Focusable points inside: a named group, not role="img" (which hides its children).
+          role={layout.samples.length > 0 ? "group" : "img"}
+          aria-label={title}
+        >
           {showGrid && isArea && width > 0 ? (
             <defs>
               <mask id={gridMaskId} maskUnits="userSpaceOnUse">

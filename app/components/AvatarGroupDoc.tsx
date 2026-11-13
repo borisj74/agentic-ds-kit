@@ -53,7 +53,7 @@ export function AvatarGroupDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>AvatarGroup</h1>
+        <h2 className={styles.heroTitle}>AvatarGroup</h2>
         <p className={styles.lede}>Overlapping kit Avatars. Leftover is +N, not another person.</p>
       </header>
 

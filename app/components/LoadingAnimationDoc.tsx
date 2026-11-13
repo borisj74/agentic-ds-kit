@@ -21,7 +21,7 @@ export function LoadingAnimationDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>LoadingAnimation</h1>
+        <h2 className={styles.heroTitle}>LoadingAnimation</h2>
         <p className={styles.lede}>
           Square dot-grid wait for compact panels and cards. One piece. Not Spinner. Not
           ThinkingAnimation.

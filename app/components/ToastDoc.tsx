@@ -88,7 +88,7 @@ export function ToastDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Toast</h1>
+        <h2 className={styles.heroTitle}>Toast</h2>
         <p className={styles.lede}>
           A short note that floats in after an action, like Saved successfully, and goes away on
           its own after a few seconds, with an optional Undo.

@@ -35,5 +35,7 @@ export interface InputOTPProps extends Omit<ComponentPropsWithoutRef<"input">, I
   name?: string;
   autoComplete?: string;
   ariaLabel?: string;
+  /** Id(s) for aria-describedby on the input. Field passes its hint or error id. */
+  describedBy?: string;
   ref?: Ref<HTMLInputElement>;
 }

@@ -38,7 +38,7 @@ export function CellDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Cell</h1>
+        <h2 className={styles.heroTitle}>Cell</h2>
         <p className={styles.lede}>
           Inline dataset cell. Compose kit Avatar, Badge, Checkbox, Select, Button, and ButtonGroup.
           DataTable renders Cell in each td.

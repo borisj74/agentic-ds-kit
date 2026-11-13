@@ -22,7 +22,7 @@ export function FieldSetDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>FieldSet</h1>
+        <h2 className={styles.heroTitle}>FieldSet</h2>
         <p className={styles.lede}>
           A legend and optional description around related fields. This is the form group. A single
           labeled control stays Field.

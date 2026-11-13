@@ -31,7 +31,7 @@ export function ButtonGroupDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>ButtonGroup</h1>
+        <h2 className={styles.heroTitle}>ButtonGroup</h2>
         <p className={styles.lede}>
           Joined row of kit Buttons. Same size. Only kit Buttons. One primary per view.
         </p>

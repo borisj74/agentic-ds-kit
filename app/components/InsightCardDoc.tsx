@@ -233,7 +233,7 @@ export function InsightCardDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>InsightCard</h1>
+        <h2 className={styles.heroTitle}>InsightCard</h2>
         <p className={styles.lede}>Recommended insight. Not Card. Not Scorecard. Not Alert.</p>
       </header>
 

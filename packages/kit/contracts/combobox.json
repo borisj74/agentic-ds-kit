@@ -59,6 +59,7 @@
   "a11y": {
     "element": "input",
     "requirements": [
+      "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Input is role=combobox, aria-autocomplete=list, aria-expanded, aria-controls, aria-activedescendant",
       "Suggestions are role=listbox and each row is role=option with aria-selected",
       "Arrow keys, Home, and End move the active option. Enter selects it. Escape closes and returns focus to the input",

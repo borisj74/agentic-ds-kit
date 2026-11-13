@@ -14,5 +14,11 @@ export interface SliderProps extends Omit<ComponentPropsWithoutRef<"div">, "chil
   orientation?: SliderOrientation;
   disabled?: boolean;
   onValueChange?: (value: number | number[]) => void;
+  /** Id(s) of the visible label for each thumb's aria-labelledby. Field passes its label id. */
+  labelledBy?: string;
+  /** Id(s) for each thumb's aria-describedby. Field passes its hint or error id. */
+  describedBy?: string;
+  /** Marks each thumb aria-invalid. Field sets it when it has an error. */
+  error?: boolean;
   ref?: Ref<HTMLDivElement>;
 }

@@ -75,7 +75,7 @@ before(async () => {
   useState = React.useState;
   act = React.act;
   ({ createRoot } = await import("react-dom/client"));
-  for (const name of ["Modal", "Drawer", "AlertDialog", "Select", "DatePicker", "Tabs"]) {
+  for (const name of ["Modal", "Drawer", "AlertDialog", "Select", "DatePicker", "Tabs", "ContextMenu", "DateRangePicker", "Tooltip", "Popover", "LineChart", "BarChart"]) {
     kit[name] = (await import(`../dist/ui/${name}/${name}.js`))[name];
   }
 });
@@ -278,5 +278,86 @@ describe("Tabs keyboard", { skip }, () => {
     assert.equal(selected(), "Delta");
     assert.match(document.querySelector('[role="tabpanel"]').textContent, /Panel D/);
     await view.unmount();
+  });
+});
+
+describe("Escape in more overlays inside a Modal closes only the overlay", { skip }, () => {
+  const cases = {
+    ContextMenu: {
+      element: () =>
+        h(
+          kit.ContextMenu,
+          { items: [{ id: "copy", label: "Copy" }], ariaLabel: "Row actions" },
+          h("div", { id: "inner", tabIndex: 0 }, "Right-click me"),
+        ),
+      async open() {
+        document.getElementById("inner").focus();
+        await press("ContextMenu");
+      },
+      isOpen: () => document.querySelector('[role="menu"][aria-label="Row actions"]') !== null,
+    },
+    DateRangePicker: {
+      element: () => h(kit.DateRangePicker, { id: "inner", "aria-label": "Dates" }),
+      open: () => click(document.getElementById("inner")),
+      isOpen: () => document.querySelector('[role="dialog"][aria-label="Choose dates"]') !== null,
+    },
+    Tooltip: {
+      element: () => h(kit.Tooltip, { content: "Copies the link" }, h("button", { id: "inner", type: "button" }, "Copy")),
+      async open() {
+        await act(async () => document.getElementById("inner").focus());
+      },
+      isOpen: () => document.getElementById("inner").hasAttribute("aria-describedby"),
+    },
+    Popover: {
+      element: () =>
+        h(kit.Popover, { label: "Filters", trigger: h("button", { id: "inner", type: "button" }, "Filters") }, "Panel body"),
+      open: () => click(document.getElementById("inner")),
+      isOpen: () => document.querySelector('[role="dialog"][aria-label="Filters"]') !== null,
+    },
+  };
+
+  for (const [name, overlay] of Object.entries(cases)) {
+    test(`${name} inside Modal: first Escape closes the ${name}, second closes the Modal`, async () => {
+      const closes = { count: 0 };
+      const view = await render(h(harness("Modal", overlay.element(), closes)));
+      await overlay.open();
+      assert.ok(overlay.isOpen(), `${name} open`);
+
+      const event = await press("Escape");
+      assert.ok(event.defaultPrevented, `${name} marks its Escape as handled`);
+      assert.ok(!overlay.isOpen(), `${name} closed`);
+      assert.equal(closes.count, 0, "Modal must stay open");
+      assert.ok(dialogOpen("Dialog"), "Modal still open");
+
+      await press("Escape");
+      assert.equal(closes.count, 1, "second Escape closes the Modal");
+      await view.unmount();
+    });
+  }
+});
+
+describe("S17: charts with focusable points are named groups", { skip }, () => {
+  test("LineChart and BarChart svg is role=group with the title once points render", async () => {
+    const descriptor = Object.getOwnPropertyDescriptor(window.HTMLElement.prototype, "clientWidth");
+    Object.defineProperty(window.HTMLElement.prototype, "clientWidth", { configurable: true, get: () => 600 });
+    try {
+      const view = await render(
+        h(
+          "div",
+          null,
+          h(kit.LineChart, { title: "Runs", data: [{ label: "Mon", value: 1 }, { label: "Tue", value: 3 }] }),
+          h(kit.BarChart, { title: "Spend", data: [{ label: "North", value: 2 }, { label: "South", value: 4 }] }),
+        ),
+      );
+      for (const title of ["Runs", "Spend"]) {
+        const svg = view.container.querySelector(`svg[aria-label="${title}"]`);
+        assert.ok(svg, `${title} svg rendered`);
+        assert.ok(svg.querySelector('[tabindex="0"]'), `${title} has focusable points`);
+        assert.equal(svg.getAttribute("role"), "group", `${title} is a named group, not role=img`);
+      }
+      await view.unmount();
+    } finally {
+      if (descriptor) Object.defineProperty(window.HTMLElement.prototype, "clientWidth", descriptor);
+    }
   });
 });

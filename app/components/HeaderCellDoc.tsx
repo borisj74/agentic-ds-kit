@@ -37,7 +37,7 @@ export function HeaderCellDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>HeaderCell</h1>
+        <h2 className={styles.heroTitle}>HeaderCell</h2>
         <p className={styles.lede}>
           Column title for DataTable. Optional select-all checkbox. Cell is the body.
         </p>

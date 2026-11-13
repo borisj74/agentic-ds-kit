@@ -23,7 +23,7 @@ export function SpinnerDoc() {
   return (
     <div>
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Spinner</h1>
+        <h2 className={styles.heroTitle}>Spinner</h2>
         <p className={styles.lede}>
           Spinning circular loader for indeterminate waits. One piece. Not LoadingAnimation dot-grid.
           Not ThinkingAnimation.
