@@ -5,6 +5,85 @@ All notable changes to `agentic-ds-kit` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.0] - 2026-11-12
+
+### Added
+
+- **Blocks**: larger kit components for a whole area of a screen, imported like any component. Their contracts have `"kind": "block"`, a `category` and a `summary`; the MCP returns `kind` and `block`. Twelve ship: AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, KpiBoard, UsageBilling, AppDirectory, WorkBoard, ActivityFeed, Plans and LogoStrip
+- Selection props on AgentTrail, AgentTree, AgentSteering and Chat; a selected state on Scorecard; `aria-expanded` on AgentInbox rows
+
+### Changed
+
+- LineChart draws smooth lines by default (`curve="linear"` keeps straight segments)
+- AgentMonitor's step strip gives every step the same width
+
+### Deprecated
+
+- AgentMonitor `weight` is ignored
+
+## [0.18.0] - 2026-11-12
+
+Polish release. No prop or API changes.
+
+### Changed
+
+- Cell and HeaderCell are tighter (sm 40px, md 48px), so DataTable rows are shorter
+- A single-series BarChart paints every bar in the first palette colour unless a datum sets `color`; chart gridlines are fainter
+- AgentInbox and NotificationStack drop the unread dot (unread rows stay bold); AutonomyDial drops its tick dots
+- LoadingAnimation, Timeline's Now step, AnchorNav's selected link, FilterButton's count and the Slider thumb follow the brand colour
+- AppNav's active fill uses `--surface-brand-subtle`, as SideNav does
+
+### Fixed
+
+- AgentLanes handoff lines, FileUpload row alignment and touch targets, AgentMonitor touch targets, UsageMeter's chart and ExperimentCard's variant letters
+
+## [0.17.0] - 2026-11-11
+
+### Added
+
+- Copy-in patterns `settings` (Billing, Profile, Team, Notifications and Security sections) and `onboarding` (four steps plus error and submitting states)
+- `layout-shell--inset` layout class: the canvas frames the nav and the page floats on an inset panel
+- `--sidenav-divider` variable on SideNav; the default SideNav look is unchanged
+
+### Changed
+
+- `npx agentic-ds-kit add <id>` also copies the patterns a pattern builds on
+
+## [0.16.0] - 2026-11-10
+
+### Added
+
+- Motion components: BlurCrossfade (crossfades a value or state; the one approved use of `filter: blur`, off under reduced motion), TextReveal, TiltCard, GridBackground and GradientText (ink, brand and inverse tones). All opt-in; no existing component animates differently
+
+## [0.15.0] - 2026-11-10
+
+### Added
+
+- 22 agent components, each with a contract the MCP lists: ApprovalCard, AgentTrail, AgentPlan, AgentFleet, ToolCallCard, PermissionRequest, RunningNow, AgentMonitor, AgentTree, AgentLanes, AgentInbox, DecisionCard, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall and UsageMeter
+- 10 SaaS components: ChangeSummary, CommentThread, CommentsPanel, ExperimentCard, IntegrationPicker, InvoiceDocument, NotificationStack, PricingPlans, SetupGuide and TaskBoard
+- Copy-in patterns `billing-schedule` and `integration-settings` (`npx agentic-ds-kit add <id>`)
+- DateRangePicker can show two months
+
+### Fixed
+
+- Avatar fill on canvas, the CodeSnippet tab inset and ProgressSteps colour
+
+Nothing is removed or renamed.
+
+## [0.14.0] - 2026-11-10
+
+### Changed
+
+- The Nistha look is the default: Electric Blue primary on cool Slate neutrals, and info follows the brand blue. To keep the previous black look, set `data-color="ink"` on `<html>`
+- Page titles are 700 with tighter tracking; overlines, table heads and nav group labels are Plex Mono caps
+- A selected DataTable row uses `--action-selected`
+
+### Added
+
+- `--primary-fg` token for brand text on light blue fills
+
+Token names and component props are unchanged.
+
 ## [0.13.0] - 2026-11-07
 
 ### Added

@@ -97,5 +97,5 @@
     "Do not nest more than one subgroup level",
     "Do not set component variables to raw hex or primitive --color-* ramps \u2014 use semantic tokens"
   ],
-  "snippet": "<AppNav title=\"Agentic DS Kit\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
+  "snippet": "<AppNav title=\"Nistha\" groups={[{ label: 'Components', items: [{ href: '/components#button', label: 'Button', active: true }] }]} />"
 }
