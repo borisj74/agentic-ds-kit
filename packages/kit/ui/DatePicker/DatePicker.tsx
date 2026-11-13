@@ -137,10 +137,11 @@ export function DatePicker(props: DatePickerProps) {
     }
 
     document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
+    // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
+    document.addEventListener("keydown", onKeyDown, true);
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKeyDown, true);
     };
   }, [open]);
 
