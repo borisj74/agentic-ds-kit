@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-11-14
+
 ### Added
 
 - **`review --score`**: a 0–100 contract fit score, the share of UI elements that come from the kit minus 5 per error and 2 per warning for every 100 elements (up to 100 elements counts as 100), so a big folder is not pushed to 0 by its size. UI elements are opening JSX tags: kit imports count as kit; `button`, `a`, `input`, `select`, `textarea`, `img`, `table` and `dialog` count as other; layout and text tags, icons and other components are not counted. Text output prints the score and the formula; `--json --score` adds `score: { value, kitElements, otherElements, errors, warnings, formula }`. Without `--score` or `--min`, output and exit codes are unchanged
