@@ -16,6 +16,7 @@ import {
 } from "../shared/chartMath";
 import type { PieChartProps } from "./PieChart.types";
 import styles from "./PieChart.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PieChartLayout, PieChartProps, PieChartVariant } from "./PieChart.types";
 
@@ -296,7 +297,7 @@ export function PieChart({
 
   return (
     <ChartFrame
-      {...rest}
+      {...rest} {...nisthaAttr("piechart", rest)}
       ref={rootRef}
       title={title}
       description={description}

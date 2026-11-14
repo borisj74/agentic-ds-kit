@@ -11,6 +11,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { TraceSpan, TraceSpanKind, TraceWaterfallProps } from "./TraceWaterfall.types";
 import styles from "./TraceWaterfall.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TraceWaterfallProps, TraceSpan, TraceSpanKind, TraceStatus } from "./TraceWaterfall.types";
 
@@ -71,7 +72,7 @@ export function TraceWaterfall({
 
   if (compact) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.compact, className)} aria-label={`${title}: ${seconds(end)}, ${money(cost)}${running ? ", running" : ""}`}>
+      <section {...rest} {...nisthaAttr("tracewaterfall", rest)} ref={ref} className={cx(styles.compact, className)} aria-label={`${title}: ${seconds(end)}, ${money(cost)}${running ? ", running" : ""}`}>
         <History size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         <span className={styles.compactBar} aria-hidden="true">
           {spans.map((span) => (
@@ -260,7 +261,7 @@ export function TraceWaterfall({
   }
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("tracewaterfall", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <History size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>

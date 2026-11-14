@@ -7,6 +7,7 @@ import type { CodeSnippetProps } from "./CodeSnippet.types";
 import { cx } from "../shared/cx";
 import styles from "./CodeSnippet.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CodeSnippetProps, CodeSnippetTab } from "./CodeSnippet.types";
 
@@ -106,7 +107,7 @@ export function CodeSnippet({
   ) : null;
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, !hasHeader && styles.bare, className)}>
+    <div {...rest} {...nisthaAttr("codesnippet", rest)} ref={ref} className={cx(styles.root, !hasHeader && styles.bare, className)}>
       {hasHeader ? (
         <div className={`${styles.header}${hasTabs ? ` ${styles.withTabs}` : ""}`}>
           {hasTabs ? (

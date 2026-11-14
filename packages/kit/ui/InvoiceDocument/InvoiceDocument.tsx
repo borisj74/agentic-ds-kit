@@ -13,6 +13,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { InvoiceDocumentProps, InvoiceStatus } from "./InvoiceDocument.types";
 import styles from "./InvoiceDocument.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { InvoiceDocumentProps, InvoiceLine, InvoiceKind, InvoiceStatus } from "./InvoiceDocument.types";
 
@@ -71,7 +72,7 @@ export function InvoiceDocument({
 
   if (loading) {
     return (
-      <article {...rest} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name} ${number}`}>
+      <article {...rest} {...nisthaAttr("invoicedocument", rest)} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name} ${number}`}>
         <div className={styles.loadingHead}>
           <Skeleton width="30%" />
           <Skeleton width="25%" height="var(--space-8)" />
@@ -84,7 +85,7 @@ export function InvoiceDocument({
 
   if (error) {
     return (
-      <article {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId}>
+      <article {...rest} {...nisthaAttr("invoicedocument", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId}>
         <header className={styles.errorHead}>
           <FileText size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           <h3 id={titleId} className={styles.errorTitle}>
@@ -106,7 +107,7 @@ export function InvoiceDocument({
   const FootIcon = credit ? ReceiptText : status === "paid" ? CircleCheck : status === "overdue" ? TriangleAlert : CircleX;
 
   return (
-    <article {...rest} ref={ref} className={cx(styles.card, voided && styles.voided, className)} aria-labelledby={titleId}>
+    <article {...rest} {...nisthaAttr("invoicedocument", rest)} ref={ref} className={cx(styles.card, voided && styles.voided, className)} aria-labelledby={titleId}>
       <header className={styles.header}>
         <div className={styles.heading}>
           <h3 id={titleId} className={styles.title}>

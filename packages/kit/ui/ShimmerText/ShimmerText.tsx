@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { ShimmerTextProps, ShimmerTextSpeed } from "./ShimmerText.types";
 import { cx } from "../shared/cx";
 import styles from "./ShimmerText.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ShimmerTextProps, ShimmerTextSize, ShimmerTextSpeed } from "./ShimmerText.types";
 
@@ -35,7 +36,7 @@ export function ShimmerText({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("shimmertext", rest)}
       ref={ref}
       className={cx(styles.root, styles[size], className)}
       style={cssVars}

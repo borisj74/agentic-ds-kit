@@ -30,6 +30,7 @@ const TOOLS = [
   "get_pattern",
   "get_rules",
   "get_tokens",
+  "inspect_ui",
   "list_components",
   "list_patterns",
   "questions",
@@ -355,6 +356,7 @@ describe("mcp command", () => {
     assert.match(help.stdout, /get_tokens/);
     assert.match(help.stdout, /questions/);
     assert.match(help.stdout, /review_ui/);
+    assert.match(help.stdout, /inspect_ui/);
     const top = spawnSync(process.execPath, [bin, "--help"], { encoding: "utf8", timeout: 5000 });
     assert.equal(top.status, 0);
     assert.match(top.stdout, /mcp\s+Start a read-only stdio MCP server/);

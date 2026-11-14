@@ -9,6 +9,7 @@ import type { ChatProps } from "./Chat.types";
 import { cx } from "../shared/cx";
 import styles from "./Chat.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
 
@@ -61,7 +62,7 @@ export function Chat({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("chat", rest)}
       ref={ref}
       className={cx(styles.panel, radius === "none" && styles.radiusNone, className)}
       aria-label={title}

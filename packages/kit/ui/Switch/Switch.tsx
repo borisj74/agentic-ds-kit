@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import type { SwitchProps } from "./Switch.types";
 import { cx } from "../shared/cx";
 import styles from "./Switch.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SwitchProps, SwitchSize } from "./Switch.types";
 
@@ -42,7 +43,7 @@ export function Switch({
   }
 
   return (
-    <div
+    <div {...nisthaAttr("switch")}
       className={cx(styles.switch, styles[size], label && styles.labeled, className)}
       data-disabled={disabled || undefined}
     >

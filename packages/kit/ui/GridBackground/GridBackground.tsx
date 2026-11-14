@@ -1,6 +1,7 @@
 import type { GridBackgroundProps } from "./GridBackground.types";
 import { cx } from "../shared/cx";
 import styles from "./GridBackground.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { GridBackgroundProps, GridBackgroundVariant } from "./GridBackground.types";
 
@@ -18,7 +19,7 @@ export function GridBackground({
   ...rest
 }: GridBackgroundProps) {
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, inverse && styles.inverse, className)}>
+    <div {...rest} {...nisthaAttr("gridbackground", rest)} ref={ref} className={cx(styles.root, inverse && styles.inverse, className)}>
       {variant !== "none" ? <div className={cx(styles.grid, styles[variant])} aria-hidden="true" /> : null}
       <div className={styles.content}>{children}</div>
     </div>

@@ -13,6 +13,7 @@ import { cx } from "../shared/cx";
 import { UNASSIGNED, cardsFor, columnOf, taskMeta, workBoardHandlers } from "./workBoard.logic";
 import type { WorkBoardProps } from "./WorkBoard.types";
 import styles from "./WorkBoard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   WorkBoardProps,
@@ -77,7 +78,7 @@ export function WorkBoard(props: WorkBoardProps) {
   }
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("workboard", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <h2 id={titleId} className={styles.title}>
           {title}

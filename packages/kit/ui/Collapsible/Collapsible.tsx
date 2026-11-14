@@ -6,6 +6,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { CollapsibleProps } from "./Collapsible.types";
 import { cx } from "../shared/cx";
 import styles from "./Collapsible.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CollapsibleProps } from "./Collapsible.types";
 
@@ -33,7 +34,7 @@ export function Collapsible({
   }
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)}>
+    <div {...rest} {...nisthaAttr("collapsible", rest)} ref={ref} className={cx(styles.root, className)}>
       <div className={styles.header}>
         <p id={titleId} className={styles.title}>
           {trigger}

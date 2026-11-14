@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, type KeyboardEvent as ReactKeyboardEvent
 import { cx } from "../shared/cx";
 import type { ResizableProps } from "./Resizable.types";
 import styles from "./Resizable.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ResizableOrientation, ResizableProps } from "./Resizable.types";
 
@@ -85,7 +86,7 @@ export function Resizable({
   const startStyle = vertical ? { flexBasis: `${size}%` } : { flexBasis: `${size}%` };
 
   return (
-    <div
+    <div {...nisthaAttr("resizable")}
       ref={rootRef}
       className={cx(styles.root, className)}
       data-orientation={orientation}

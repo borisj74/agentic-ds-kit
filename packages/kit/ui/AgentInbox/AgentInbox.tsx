@@ -13,6 +13,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { AgentInboxFilter, AgentInboxItem, AgentInboxItemType, AgentInboxProps } from "./AgentInbox.types";
 import styles from "./AgentInbox.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentInboxProps, AgentInboxItem, AgentInboxItemType, AgentInboxFilter } from "./AgentInbox.types";
 
@@ -236,7 +237,7 @@ export function AgentInbox(props: AgentInboxProps) {
   const filters: AgentInboxFilter[] = ["all", "approval", "question", "failure", "recap"];
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.inbox, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("agentinbox", rest)} ref={ref} className={cx(styles.inbox, className)} aria-labelledby={titleId}>
       <header className={styles.header}>
         <Inbox size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>

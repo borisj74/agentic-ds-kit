@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { MeterIntent, MeterProps } from "./Meter.types";
 import { cx } from "../shared/cx";
 import styles from "./Meter.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   MeterProps,
@@ -65,7 +66,7 @@ export function Meter({
 
   if (indeterminate) {
     return (
-      <div {...rest} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
+      <div {...rest} {...nisthaAttr("meter", rest)} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
         <div className={styles.barRow}>
           <div className={styles.trackWrap}>
             <div className={`${styles.track} ${styles.neutral}`}>
@@ -79,7 +80,7 @@ export function Meter({
 
   if (shape === "bar") {
     return (
-      <div {...rest} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
+      <div {...rest} {...nisthaAttr("meter", rest)} ref={ref} className={cx(styles.progress, styles.bar, styles[size], className)} {...a11y}>
         {datatip ? (
           <div className={styles.tipRow} aria-hidden="true">
             <span className={styles.tip} style={{ left: `${percent}%`, transform: `translateX(-${percent}%)` }}>
@@ -140,7 +141,7 @@ export function Meter({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("meter", rest)}
       ref={ref}
       className={cx(styles.progress, styles.ring, semi && styles.semi, styles[size], className)}
       {...a11y}

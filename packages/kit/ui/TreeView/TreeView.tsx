@@ -16,6 +16,7 @@ import { DropdownMenu } from "../DropdownMenu";
 import type { TreeViewItem, TreeViewProps } from "./TreeView.types";
 import { cx } from "../shared/cx";
 import styles from "./TreeView.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   TreeViewItem,
@@ -686,7 +687,7 @@ export function TreeView({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("treeview", rest)}
       ref={ref}
       className={rootClass}
       role="tree"

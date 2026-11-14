@@ -13,6 +13,7 @@ import controlStyles from "../shared/controls.module.css";
 import type { DateTimePickerProps, DateTimeValue } from "./DateTimePicker.types";
 import styles from "./DateTimePicker.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { DateTimePickerProps, DateTimePickerSize, DateTimeValue } from "./DateTimePicker.types";
 
@@ -56,7 +57,7 @@ export function DateTimePicker({
   const hidden = current.date && current.time ? `${current.date}T${current.time}` : current.date ?? "";
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("datetimepicker")} ref={rootRef} className={cx(styles.root, className)}>
       <button
         ref={triggerRef}
         id={id}

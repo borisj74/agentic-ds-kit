@@ -9,6 +9,7 @@ import type {
 } from "./NavigationMenu.types";
 import { cx } from "../shared/cx";
 import styles from "./NavigationMenu.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   NavigationMenuDropdownItem,
@@ -32,7 +33,7 @@ export function NavigationMenu({
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <nav {...rest} ref={ref} className={cx(styles.root, className)} aria-label={ariaLabel}>
+    <nav {...rest} {...nisthaAttr("navigationmenu", rest)} ref={ref} className={cx(styles.root, className)} aria-label={ariaLabel}>
       {items.map((item) => {
         if (isDropdown(item)) {
           return (

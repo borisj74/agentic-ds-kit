@@ -3,6 +3,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { ProgressStepsItem, ProgressStepsProps, ProgressStepsStatus } from "./ProgressSteps.types";
 import { cx } from "../shared/cx";
 import styles from "./ProgressSteps.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ProgressStepsItem,
@@ -56,7 +57,7 @@ export function ProgressSteps({
 
   return (
     <nav
-      {...rest}
+      {...rest} {...nisthaAttr("progresssteps", rest)}
       ref={ref}
       className={cx(styles.root, styles[orientation], styles[size], className)}
       aria-label={ariaLabel}

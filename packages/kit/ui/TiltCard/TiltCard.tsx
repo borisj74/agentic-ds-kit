@@ -5,6 +5,7 @@ import { Card } from "../Card";
 import type { TiltCardProps } from "./TiltCard.types";
 import { cx } from "../shared/cx";
 import styles from "./TiltCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TiltCardProps } from "./TiltCard.types";
 
@@ -56,7 +57,7 @@ export function TiltCard({
 
   return (
     <Card
-      {...rest}
+      {...rest} {...nisthaAttr("tiltcard", rest)}
       className={cx(styles.root, disabled && styles.disabled, className)}
       aria-disabled={disabled || undefined}
       onPointerMove={handleMove}

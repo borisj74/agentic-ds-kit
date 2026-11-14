@@ -9,6 +9,7 @@ import { cx } from "../shared/cx";
 import { invoiceItems, limitsSummary, upgradeLabel } from "./usageBilling.logic";
 import type { UsageBillingProps } from "./UsageBilling.types";
 import styles from "./UsageBilling.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   UsageBillingProps,
@@ -50,7 +51,7 @@ export function UsageBilling(props: UsageBillingProps) {
   const invoicesLabel = `Recent invoices, ${rows.length} of ${invoices.length}`;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("usagebilling", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.heading}>
         <h2 id={titleId} className={styles.title}>
           {title}

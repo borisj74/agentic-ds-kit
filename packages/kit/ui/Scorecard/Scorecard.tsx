@@ -6,6 +6,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { ScorecardDeltaTone, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
 import { cx } from "../shared/cx";
 import styles from "./Scorecard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ScorecardProps, ScorecardTrend, ScorecardSize, ScorecardDeltaTone } from "./Scorecard.types";
 
@@ -102,7 +103,7 @@ export function Scorecard({
   if (onClick) {
     return (
       <button
-        {...rest}
+        {...rest} {...nisthaAttr("scorecard", rest)}
         ref={ref as Ref<HTMLButtonElement>}
         type="button"
         className={className}
@@ -116,7 +117,7 @@ export function Scorecard({
   }
 
   return (
-    <article {...rest} ref={ref} className={className} aria-labelledby={labelledBy}>
+    <article {...rest} {...nisthaAttr("scorecard", rest)} ref={ref} className={className} aria-labelledby={labelledBy}>
       {body}
     </article>
   );

@@ -1,6 +1,7 @@
 import type { TimelineProps } from "./Timeline.types";
 import { cx } from "../shared/cx";
 import styles from "./Timeline.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TimelineItem, TimelineProps, TimelineStatus } from "./Timeline.types";
 
@@ -25,7 +26,7 @@ export function Timeline({
   const TitleTag = headingTag(headingLevel);
 
   return (
-    <ol {...rest} ref={ref} className={cx(styles.timeline, className)} aria-label={label}>
+    <ol {...rest} {...nisthaAttr("timeline", rest)} ref={ref} className={cx(styles.timeline, className)} aria-label={label}>
       {items.map((item, index) => {
         const status = STATUSES.includes(item.status ?? "next")
           ? (item.status ?? "next")

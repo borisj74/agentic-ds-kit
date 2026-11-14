@@ -11,6 +11,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { ContextWindowProps } from "./ContextWindow.types";
 import styles from "./ContextWindow.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ContextWindowProps, ContextSegment } from "./ContextWindow.types";
 
@@ -42,7 +43,7 @@ export function ContextWindow({
 
   if (compact) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.compact, styles[state], className)} aria-label={label} aria-busy={loading || undefined}>
+      <section {...rest} {...nisthaAttr("contextwindow", rest)} ref={ref} className={cx(styles.compact, styles[state], className)} aria-label={label} aria-busy={loading || undefined}>
         {loading ? (
           <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" />
         ) : (
@@ -65,7 +66,7 @@ export function ContextWindow({
   const total = Math.max(limit ?? used, 1);
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, styles[state], className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("contextwindow", rest)} ref={ref} className={cx(styles.card, styles[state], className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <Layers size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>

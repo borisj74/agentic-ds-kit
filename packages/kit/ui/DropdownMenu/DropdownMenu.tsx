@@ -35,6 +35,7 @@ export type {
 } from "./DropdownMenu.types";
 import { useIsClient } from "../shared/useIsClient";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr, withoutInspectAttr } from "../shared/inspect";
 
 // Tag remove buttons come first in a tags field, so prefer the marked trigger.
 function findTrigger(root: HTMLElement | null): HTMLButtonElement | null {
@@ -109,7 +110,7 @@ export function DropdownMenu({
     if (subKey === null) setSubCoords(null);
   }
   const setTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [triggerRef, ref]);
-  const passthrough = { ...(triggerProps as typeof rest | undefined), ...rest };
+  const passthrough = withoutInspectAttr({ ...(triggerProps as typeof rest | undefined), ...rest });
 
   const visibleGroups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -591,7 +592,7 @@ export function DropdownMenu({
   const iconPx = size === "sm" ? 14 : size === "lg" ? 18 : 16;
 
   return (
-    <div ref={rootRef} className={cx(styles.root, fieldTrigger && styles.rootField, className)}>
+    <div {...nisthaAttr("dropdownmenu", rest)} ref={rootRef} className={cx(styles.root, fieldTrigger && styles.rootField, className)}>
       {tagsField && triggerTags ? (
         <div className={`${styles.tagsField} ${styles[`tagsField${size}`]}`}>
           <div

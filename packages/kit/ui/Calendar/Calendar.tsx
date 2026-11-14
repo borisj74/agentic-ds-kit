@@ -31,6 +31,7 @@ import {
 import { cx } from "../shared/cx";
 import styles from "./Calendar.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   CalendarEvent,
@@ -244,7 +245,7 @@ export function Calendar({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("calendar", rest)}
       ref={ref}
       className={cx(styles.calendar, pending && styles.pending, className)}
       role="region"

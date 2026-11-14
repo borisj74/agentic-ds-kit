@@ -7,6 +7,7 @@ import { cx } from "../shared/cx";
 import type { MessageActionsProps } from "./MessageActions.types";
 import styles from "./MessageActions.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { MessageActionsProps, MessageFeedback } from "./MessageActions.types";
 
@@ -35,7 +36,7 @@ export function MessageActions({
   const hasFeedback = Boolean(onFeedback);
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.wrap, visible === "hover" && styles.hover, className)}>
+    <div {...rest} {...nisthaAttr("messageactions", rest)} ref={ref} className={cx(styles.wrap, visible === "hover" && styles.hover, className)}>
       <div className={styles.row}>
         <div role="toolbar" aria-label={label} aria-disabled={disabled || undefined} className={styles.toolbar}>
           {onCopy ? (

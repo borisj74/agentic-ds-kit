@@ -30,6 +30,8 @@ New app from a working screen: `npx agentic-ds-kit init my-app --template dashbo
 
 Check what an agent built: `npx agentic-ds-kit review app` lists hardcoded values, wrong use of kit parts and imports from other UI libraries, each with a fix ([Review](docs/getting-started.md#review)). Add `--score` for a 0–100 contract fit score, and copy `templates/github/contract-fit.yml` to post it on pull requests ([Contract fit](docs/getting-started.md#contract-fit)).
 
+Check the running page: start the app with `NEXT_PUBLIC_NISTHA_INSPECT=1` and `npx agentic-ds-kit inspect http://localhost:3000` lists the kit pieces it renders, by level, and flags a missing `<main>` or `<h1>` ([Live check](docs/getting-started.md#live-check)).
+
 ## What's here
 
 Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (141 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.
@@ -136,6 +138,7 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 | `get_rules` | `AGENTS.md`, including the page-layout grid rule |
 | `questions` | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"`, `limit`/`offset` |
 | `review_ui` | The same findings and contract fit score as `npx agentic-ds-kit review --score`; `path`, or `code` plus `filename` for a draft |
+| `inspect_ui` | The same result as `npx agentic-ds-kit inspect`: kit pieces on a rendered page by level, and landmark problems; `url`, or `html` plus `name` |
 
 Step-by-step: [docs/getting-started.md](docs/getting-started.md#mcp). The playground page is `/mcp`.
 

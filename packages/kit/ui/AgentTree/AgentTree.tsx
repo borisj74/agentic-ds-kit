@@ -10,6 +10,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { AgentTreeNode, AgentTreeProps, AgentTreeStatus } from "./AgentTree.types";
 import styles from "./AgentTree.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentTreeProps, AgentTreeNode, AgentTreeStatus } from "./AgentTree.types";
 
@@ -169,7 +170,7 @@ export function AgentTree({
   };
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.tree, className)} aria-labelledby={labelId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("agenttree", rest)} ref={ref} className={cx(styles.tree, className)} aria-labelledby={labelId} aria-busy={loading || undefined}>
       <header className={styles.head}>
         <span id={labelId} className={styles.label}>
           {label}

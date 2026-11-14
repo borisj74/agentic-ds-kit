@@ -5,6 +5,7 @@ import { Button } from "../Button";
 import type { ConveyorProps } from "./Conveyor.types";
 import { cx } from "../shared/cx";
 import styles from "./Conveyor.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ConveyorProps, ConveyorOrientation } from "./Conveyor.types";
 
@@ -88,7 +89,7 @@ export function Conveyor({
           : "";
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, styles[orientation], className)}>
+    <div {...rest} {...nisthaAttr("conveyor", rest)} ref={ref} className={cx(styles.root, styles[orientation], className)}>
       {shown ? (
         <div className={styles.end}>
           <Button

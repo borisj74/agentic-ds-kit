@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { SkeletonProps } from "./Skeleton.types";
 import { cx } from "../shared/cx";
 import styles from "./Skeleton.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SkeletonProps, SkeletonShape, SkeletonSize, SkeletonAnimation } from "./Skeleton.types";
 
@@ -33,7 +34,7 @@ export function Skeleton({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("skeleton", rest)}
       ref={ref}
       className={cx(styles.root, styles[shape], styles[size], styles[animation], className)}
       style={shape === "text" ? { ...style, width: px(width) } : style}

@@ -4,6 +4,7 @@ import { HelpPopover } from "../HelpPopover";
 import type { FieldProps } from "./Field.types";
 import { cx } from "../shared/cx";
 import styles from "./Field.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { FieldProps, FieldLabelPosition } from "./Field.types";
 
@@ -45,7 +46,7 @@ export function Field({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("field", rest)}
       ref={ref}
       className={cx(styles.field, styles[labelPosition], className)}
       data-invalid={error ? "true" : undefined}

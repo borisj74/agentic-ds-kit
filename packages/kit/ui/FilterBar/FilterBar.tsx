@@ -5,6 +5,7 @@ import { DropdownMenu } from "../DropdownMenu";
 import { FilterButton } from "../FilterButton";
 import type { FilterBarFilter, FilterBarProps } from "./FilterBar.types";
 import styles from "./FilterBar.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { FilterBarFilter, FilterBarProps, FilterBarSize } from "./FilterBar.types";
 
@@ -31,7 +32,7 @@ export function FilterBar({
   const canClear = filters.some(isSet);
 
   return (
-    <div className={className ? `${styles.root} ${className}` : styles.root} role="group" aria-label={ariaLabel}>
+    <div {...nisthaAttr("filterbar")} className={className ? `${styles.root} ${className}` : styles.root} role="group" aria-label={ariaLabel}>
       {visible.map((filter) => (
         <FilterButton
           key={filter.id}

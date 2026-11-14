@@ -5,6 +5,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { TileGroupItem, TileGroupProps } from "./TileGroup.types";
 import { cx } from "../shared/cx";
 import styles from "./TileGroup.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   TileGroupProps,
@@ -106,7 +107,7 @@ export function TileGroup({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("tilegroup", rest)}
       ref={ref}
       role={multiple ? "group" : "radiogroup"}
       aria-label={ariaLabel}

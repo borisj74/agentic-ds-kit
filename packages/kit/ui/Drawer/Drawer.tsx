@@ -11,6 +11,7 @@ import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { DrawerBodyContext } from "../shared/drawerContext";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
 
@@ -125,6 +126,7 @@ export function Drawer({
     >
       <div
         {...rest}
+        {...nisthaAttr("drawer", rest)}
         ref={setPanelRef}
         role="dialog"
         aria-modal="true"

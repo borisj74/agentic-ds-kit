@@ -9,6 +9,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { ChangeItem, ChangeSummaryProps } from "./ChangeSummary.types";
 import styles from "./ChangeSummary.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ChangeSummaryProps, ChangeItem, ChangeDirection, ChangeSentiment } from "./ChangeSummary.types";
 
@@ -36,7 +37,7 @@ export function ChangeSummary({
   const titleId = useId();
   const showPeriod = Boolean(period) && !loading && !error && items.length > 0;
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("changesummary", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <TrendingUp size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.headerIcon} />
         <h3 id={titleId} className={styles.title}>

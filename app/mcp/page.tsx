@@ -70,6 +70,11 @@ const TOOL_ROWS = [
     args: "path, or code and filename",
     returns: "The same findings and counts as npx agentic-ds-kit review; code with filename checks a draft that is not saved",
   },
+  {
+    tool: "inspect_ui",
+    args: "url, or html and name",
+    returns: "The same result as npx agentic-ds-kit inspect: kit pieces on a rendered page by level, and landmark problems",
+  },
 ];
 
 export const metadata: Metadata = {
@@ -96,7 +101,7 @@ export default function McpPage() {
             <CodeBlock code={CURSOR} />
             <p className={playground.body}>
               The command is npx -y agentic-ds-kit mcp. The server is read-only. It does not edit
-              files or call the network.
+              files, and only inspect_ui calls the network, to fetch the page URL you give it.
             </p>
           </div>
         </Section>
@@ -113,7 +118,7 @@ export default function McpPage() {
 
         <Section
           title="Tools"
-          description="Nine read-only tools. questions takes the same options as the CLI: only, group, overlay, none, useWhen, notWhen, askStyle, and enums. Pass the overlay as an object, not a file path."
+          description="Ten read-only tools. questions takes the same options as the CLI: only, group, overlay, none, useWhen, notWhen, askStyle, and enums. Pass the overlay as an object, not a file path."
         >
           <Table columns={[...TOOL_COLUMNS]} rows={TOOL_ROWS} caption="MCP tools" />
         </Section>

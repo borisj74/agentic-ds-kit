@@ -60,8 +60,9 @@ export function validate(schema, value, path = "arguments") {
 
 /**
  * tools: [{ name, title, description, inputSchema, annotations, handler(args) }]. A handler
- * returns data (sent as compact JSON text) or throws: ToolInputError (and anything `isToolError`
- * accepts) becomes an isError result; anything else is a JSON-RPC internal error.
+ * returns data (sent as compact JSON text), or a promise of it, or throws: ToolInputError (and
+ * anything `isToolError` accepts) becomes an isError result; anything else is a JSON-RPC internal
+ * error. A promise makes `handle` and `handleLine` return promises too.
  */
 export function createServer({ name, version, instructions, tools, isToolError = () => false }) {
   const byName = new Map(tools.map((tool) => [tool.name, tool]));
@@ -104,11 +105,18 @@ export function createServer({ name, version, instructions, tools, isToolError =
       const args = params.arguments ?? {};
       const problems = validate(tool.inputSchema, args);
       if (problems.length) return toolResult(`Invalid arguments for tool ${tool.name}: ${problems.join("; ")}`, true);
-      try {
-        return toolResult(JSON.stringify(tool.handler(args)));
-      } catch (error) {
+      const onError = (error) => {
         if (error instanceof ToolInputError || isToolError(error)) return toolResult(error.message, true);
         throw error;
+      };
+      try {
+        const data = tool.handler(args);
+        if (data && typeof data.then === "function") {
+          return data.then((value) => toolResult(JSON.stringify(value)), onError);
+        }
+        return toolResult(JSON.stringify(data));
+      } catch (error) {
+        return onError(error);
       }
     },
   };
@@ -125,18 +133,26 @@ export function createServer({ name, version, instructions, tools, isToolError =
     if (!method) {
       return { jsonrpc: "2.0", id: message.id, error: { code: METHOD_NOT_FOUND, message: `Method not found: ${message.method}` } };
     }
+    const failure = (error) => ({
+      jsonrpc: "2.0",
+      id: message.id,
+      error: { code: error.code ?? INTERNAL_ERROR, message: error.message || "Internal error" },
+    });
     try {
-      return { jsonrpc: "2.0", id: message.id, result: method(message.params) };
+      const result = method(message.params);
+      if (result && typeof result.then === "function") {
+        return result.then((value) => ({ jsonrpc: "2.0", id: message.id, result: value }), failure);
+      }
+      return { jsonrpc: "2.0", id: message.id, result };
     } catch (error) {
-      return {
-        jsonrpc: "2.0",
-        id: message.id,
-        error: { code: error.code ?? INTERNAL_ERROR, message: error.message || "Internal error" },
-      };
+      return failure(error);
     }
   }
 
-  /** Handle one line of input. Returns the response line(s) to write, without newlines. */
+  /**
+   * Handle one line of input. Returns the response line(s) to write, without newlines, or a
+   * promise of them when a tool handler is async.
+   */
   function handleLine(line) {
     if (!line.trim()) return [];
     let message;
@@ -146,16 +162,29 @@ export function createServer({ name, version, instructions, tools, isToolError =
       return [JSON.stringify({ jsonrpc: "2.0", id: null, error: { code: PARSE_ERROR, message: "Parse error" } })];
     }
     const responses = Array.isArray(message) ? message.map(handle) : [handle(message)];
-    return responses.filter(Boolean).map((response) => JSON.stringify(response));
+    const lines = (list) => list.filter(Boolean).map((response) => JSON.stringify(response));
+    if (responses.some((response) => response && typeof response.then === "function")) {
+      return Promise.all(responses).then(lines);
+    }
+    return lines(responses);
   }
 
   return { handle, handleLine };
 }
 
-/** Serve on stdin/stdout until stdin ends. Resolves when the input is closed. */
+/**
+ * Serve on stdin/stdout until stdin ends. Resolves when the input is closed and every answer is
+ * written. Answers go out in the order the requests came in, async tools included.
+ */
 export function serveStdio(server, { input = process.stdin, output = process.stdout } = {}) {
   return new Promise((resolve) => {
     let buffer = "";
+    let queue = Promise.resolve();
+    const answer = (line) => {
+      queue = queue.then(async () => {
+        for (const response of await server.handleLine(line)) output.write(`${response}\n`);
+      });
+    };
     input.setEncoding("utf8");
     input.on("data", (chunk) => {
       buffer += chunk;
@@ -163,13 +192,13 @@ export function serveStdio(server, { input = process.stdin, output = process.std
       while (newline !== -1) {
         const line = buffer.slice(0, newline).replace(/\r$/, "");
         buffer = buffer.slice(newline + 1);
-        for (const response of server.handleLine(line)) output.write(`${response}\n`);
+        answer(line);
         newline = buffer.indexOf("\n");
       }
     });
     input.on("end", () => {
-      for (const response of server.handleLine(buffer)) output.write(`${response}\n`);
-      resolve();
+      answer(buffer);
+      queue.then(resolve);
     });
   });
 }

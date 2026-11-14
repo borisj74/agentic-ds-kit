@@ -7,6 +7,7 @@ import { cx } from "../shared/cx";
 import { faqItems, plansHandlers } from "./plans.logic";
 import type { PlansInterval, PlansProps } from "./Plans.types";
 import styles from "./Plans.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PlansProps, PlansPlan, PlansInterval, PlansFaq } from "./Plans.types";
 
@@ -49,7 +50,7 @@ export function Plans(props: PlansProps) {
   const questions = faqItems(faqs);
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("plans", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.heading}>
         <h2 id={titleId} className={styles.title}>
           {title}

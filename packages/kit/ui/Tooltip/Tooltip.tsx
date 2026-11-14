@@ -14,6 +14,7 @@ import {
 } from "react";
 import { cx } from "../shared/cx";
 import styles from "./Tooltip.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
@@ -98,7 +99,7 @@ export function Tooltip({
     : children;
 
   return (
-    <span
+    <span {...nisthaAttr("tooltip")}
       className={cx(styles.wrapper, className)}
       onPointerEnter={() => show()}
       onPointerLeave={hide}

@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { LoadingAnimationProps } from "./LoadingAnimation.types";
 import { cx } from "../shared/cx";
 import styles from "./LoadingAnimation.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   LoadingAnimationProps,
@@ -21,7 +22,7 @@ export function LoadingAnimation({
 }: LoadingAnimationProps) {
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("loadinganimation", rest)}
       ref={ref}
       className={cx(styles.root, styles[size], styles[variant], className)}
       role="status"

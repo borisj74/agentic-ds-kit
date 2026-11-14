@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Inspect mode**: with `NEXT_PUBLIC_NISTHA_INSPECT=1` (or `true`), every kit component writes `data-nistha="<contract id>"` on its root element. A component built on another kit component writes both ids on the shared element (`tiltcard card`, `select dropdownmenu`). Off by default, and off in production builds (`NODE_ENV=production`) unless `NEXT_PUBLIC_NISTHA_INSPECT_FORCE=1` is also set. With the mode off the markup is unchanged. The switch is a plain function (`ui/shared/inspect.ts`), so server components such as Button, Card and Table stay server components
+- **`inspect <url-or-file>`**: reads a rendered page (Node `fetch` of the server HTML, or a local `.html` file) and lists the kit pieces on it, grouped by level, with counts, plus ids not in the installed index. Landmark checks: `no-main`, `multiple-main`, `no-h1` (errors). No markers is a note that inspect mode may be off, not an error. `--json` prints the same data. `--browser` reads the live page after hydration with Playwright, an optional install the kit loads only then. Exit 0 OK, 1 landmark errors, 2 could not run
+- **MCP `inspect_ui`**: the same result for an agent, from a `url` or from `html` plus `name`
+
 ## [0.24.0] - 2026-11-14
 
 ### Added

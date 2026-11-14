@@ -16,6 +16,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AgentPlanProps, AgentPlanStatus, AgentPlanStep } from "./AgentPlan.types";
 import styles from "./AgentPlan.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentPlanProps, AgentPlanStatus, AgentPlanStep } from "./AgentPlan.types";
 
@@ -190,7 +191,7 @@ export function AgentPlan({
 
   if (collapsed) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={titleId}>
+      <section {...rest} {...nisthaAttr("agentplan", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={titleId}>
         <ClipboardList size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {title}
@@ -241,7 +242,7 @@ export function AgentPlan({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("agentplan", rest)}
       ref={mergeRefs(rootRef, ref)}
       className={cx(styles.plan, className)}
       aria-labelledby={titleId}

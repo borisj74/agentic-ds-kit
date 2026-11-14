@@ -4,6 +4,7 @@ import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "re
 import type { TabsProps } from "./Tabs.types";
 import { cx } from "../shared/cx";
 import styles from "./Tabs.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TabsProps, TabItem, TabsSize, TabsVariant } from "./Tabs.types";
 
@@ -92,7 +93,7 @@ export function Tabs({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("tabs", rest)}
       ref={ref}
       className={cx(styles.tabs, styles[size], styles[variant], !showPanel && styles.listOnly, className)}
     >

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { NumberTransitionProps } from "./NumberTransition.types";
 import { cx } from "../shared/cx";
 import styles from "./NumberTransition.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { NumberTransitionProps, NumberTransitionSize } from "./NumberTransition.types";
 
@@ -51,7 +52,7 @@ export function NumberTransition({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("numbertransition", rest)}
       ref={ref}
       className={cx(styles.root, styles[size], className)}
       aria-live="polite"

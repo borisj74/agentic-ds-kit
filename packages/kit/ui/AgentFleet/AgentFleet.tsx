@@ -16,6 +16,7 @@ import type {
   AgentFleetSubAgentStatus,
 } from "./AgentFleet.types";
 import styles from "./AgentFleet.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   AgentFleetProps,
@@ -406,7 +407,7 @@ export function AgentFleet({
   }
 
   return (
-    <section {...rest} ref={mergeRefs(rootRef, ref)} className={cx(styles.fleet, className)} aria-label={ariaLabel}>
+    <section {...rest} {...nisthaAttr("agentfleet", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.fleet, className)} aria-label={ariaLabel}>
       {body}
       {line && !loading && agents.length > 0 ? (
         <p className={styles.totals}>

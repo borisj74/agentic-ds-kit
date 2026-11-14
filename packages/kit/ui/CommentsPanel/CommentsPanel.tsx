@@ -13,6 +13,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { CommentsFilter, CommentsPanelProps, CommentThreadSummary } from "./CommentsPanel.types";
 import styles from "./CommentsPanel.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CommentsPanelProps, CommentThreadSummary, CommentsFilter } from "./CommentsPanel.types";
 
@@ -78,7 +79,7 @@ export function CommentsPanel({
 
   if (inline) {
     return (
-      <div {...rest} ref={ref} className={cx(styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
+      <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
         <header className={styles.inlineHeader}>
           <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           <h2 className={styles.inlineTitle}>{label}</h2>
@@ -95,7 +96,7 @@ export function CommentsPanel({
 
   const trigger = showTrigger ?? true;
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)}>
+    <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.root, className)}>
       {trigger ? (
         <span className={styles.trigger}>
           <Button

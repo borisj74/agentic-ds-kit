@@ -11,6 +11,7 @@ import styles from "./AlertDialog.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
 
@@ -111,6 +112,7 @@ export function AlertDialog({
     >
       <div
         {...rest}
+        {...nisthaAttr("alertdialog", rest)}
         ref={setDialogRef}
         role="alertdialog"
         aria-modal="true"

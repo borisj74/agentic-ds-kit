@@ -9,6 +9,7 @@ import controlStyles from "../shared/controls.module.css";
 import type { TagInputProps } from "./TagInput.types";
 import styles from "./TagInput.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TagInputProps, TagInputSize } from "./TagInput.types";
 
@@ -117,7 +118,7 @@ export function TagInput({
   const showList = open && matches.length > 0;
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("taginput")} ref={rootRef} className={cx(styles.root, className)}>
       {name ? <input type="hidden" name={name} value={tags.join(",")} /> : null}
       <div
         className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell)}

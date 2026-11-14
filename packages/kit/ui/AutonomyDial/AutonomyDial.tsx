@@ -9,6 +9,7 @@ import { SegmentedControl } from "../SegmentedControl";
 import { cx } from "../shared/cx";
 import type { AutonomyDialProps, AutonomyStop } from "./AutonomyDial.types";
 import styles from "./AutonomyDial.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AutonomyDialProps, AutonomyStop } from "./AutonomyDial.types";
 
@@ -46,7 +47,7 @@ export function AutonomyDial({
   const current = options[index];
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.dial, styles[size], className)} aria-labelledby={labelId}>
+    <section {...rest} {...nisthaAttr("autonomydial", rest)} ref={ref} className={cx(styles.dial, styles[size], className)} aria-labelledby={labelId}>
       <header className={styles.header}>
         <Gauge size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         <h3 id={labelId} className={styles.label}>

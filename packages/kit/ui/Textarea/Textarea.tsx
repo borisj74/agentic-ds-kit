@@ -3,6 +3,7 @@
 import type { TextareaProps } from "./Textarea.types";
 import { cx } from "../shared/cx";
 import styles from "./Textarea.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TextareaProps, TextareaSize } from "./Textarea.types";
 
@@ -31,7 +32,7 @@ export function Textarea({
 }: TextareaProps) {
   return (
     <textarea
-      {...rest}
+      {...rest} {...nisthaAttr("textarea", rest)}
       ref={ref}
       id={id}
       name={name}

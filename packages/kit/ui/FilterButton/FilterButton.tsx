@@ -5,6 +5,7 @@ import { Count } from "../Count";
 import type { FilterButtonProps } from "./FilterButton.types";
 import { cx } from "../shared/cx";
 import styles from "./FilterButton.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { FilterButtonProps, FilterButtonSize, FilterButtonToggle } from "./FilterButton.types";
 
@@ -67,7 +68,7 @@ export function FilterButton({
   if (!hasDropdown) {
     return (
       <button
-        {...rest}
+        {...rest} {...nisthaAttr("filterbutton", rest)}
         ref={ref}
         type="button"
         className={className}
@@ -82,7 +83,7 @@ export function FilterButton({
 
   if (split) {
     return (
-      <span className={className}>
+      <span {...nisthaAttr("filterbutton")} className={className}>
         <button
           {...rest}
           ref={ref}
@@ -111,7 +112,7 @@ export function FilterButton({
 
   return (
     <button
-      {...rest}
+      {...rest} {...nisthaAttr("filterbutton", rest)}
       ref={ref}
       type="button"
       className={className}

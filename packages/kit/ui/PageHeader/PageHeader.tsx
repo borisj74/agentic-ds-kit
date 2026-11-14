@@ -2,6 +2,7 @@ import { Breadcrumb } from "../Breadcrumb";
 import type { PageHeaderProps } from "./PageHeader.types";
 import { cx } from "../shared/cx";
 import styles from "./PageHeader.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PageHeaderProps } from "./PageHeader.types";
 
@@ -20,7 +21,7 @@ export function PageHeader({
   const trail = breadcrumbs && breadcrumbs.length >= 2 ? breadcrumbs : undefined;
 
   return (
-    <header {...rest} ref={ref} className={cx(styles.header, className)}>
+    <header {...rest} {...nisthaAttr("pageheader", rest)} ref={ref} className={cx(styles.header, className)}>
       {trail ? (
         <div className={styles.trail}>
           <Breadcrumb

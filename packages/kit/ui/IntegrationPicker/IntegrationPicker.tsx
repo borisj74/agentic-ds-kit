@@ -14,6 +14,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { IntegrationItem, IntegrationPickerProps } from "./IntegrationPicker.types";
 import styles from "./IntegrationPicker.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { IntegrationPickerProps, IntegrationItem, IntegrationStatus } from "./IntegrationPicker.types";
 
@@ -67,7 +68,7 @@ export function IntegrationPicker({
   );
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("integrationpicker", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <Plug size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.headerIcon} />
         <h3 id={titleId} className={styles.title}>

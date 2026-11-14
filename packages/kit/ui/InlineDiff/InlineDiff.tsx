@@ -12,6 +12,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
 import type { DiffLine, InlineDiffProps, InlineDiffStatus } from "./InlineDiff.types";
 import styles from "./InlineDiff.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { InlineDiffProps, InlineDiffStatus, InlineDiffMode, DiffLine, DiffSegment } from "./InlineDiff.types";
 
@@ -75,7 +76,7 @@ export function InlineDiff({
     const Icon = accepted ? CircleCheck : CircleX;
     return (
       <section
-        {...rest}
+        {...rest} {...nisthaAttr("inlinediff", rest)}
         ref={mergeRefs(focus.rowRef, ref)}
         tabIndex={-1}
         className={cx(styles.resolved, styles[status], className)}
@@ -199,7 +200,7 @@ export function InlineDiff({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("inlinediff", rest)}
       ref={ref}
       tabIndex={-1}
       className={cx(styles.card, className)}

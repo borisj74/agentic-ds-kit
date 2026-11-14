@@ -7,6 +7,7 @@ import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import type { ContextMenuItem, ContextMenuProps } from "./ContextMenu.types";
 import styles from "./ContextMenu.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ContextMenuItem, ContextMenuProps } from "./ContextMenu.types";
 
@@ -137,7 +138,7 @@ export function ContextMenu({ items, onSelect, children, ariaLabel = "Actions", 
       : null;
 
   return (
-    <div
+    <div {...nisthaAttr("contextmenu")}
       className={styles.target}
       onContextMenu={onContextMenu}
       onKeyDown={(event) => {

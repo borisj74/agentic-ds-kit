@@ -6,6 +6,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { AccordionProps } from "./Accordion.types";
 import { cx } from "../shared/cx";
 import styles from "./Accordion.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AccordionProps, AccordionItem } from "./Accordion.types";
 
@@ -13,7 +14,7 @@ export function Accordion({ items, defaultOpen, className, ref, ...rest }: Accor
   const [openId, setOpenId] = useState<string | null>(defaultOpen ?? null);
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)}>
+    <div {...rest} {...nisthaAttr("accordion", rest)} ref={ref} className={cx(styles.root, className)}>
       {items.map((item) => {
         const open = openId === item.id;
         const panelId = `accordion-panel-${item.id}`;

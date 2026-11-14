@@ -12,6 +12,7 @@ import { cx } from "../shared/cx";
 import { DECISION_COPY, approveHint, planLead } from "./planReview.logic";
 import type { PlanReviewProps } from "./PlanReview.types";
 import styles from "./PlanReview.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PlanReviewProps, PlanReviewDecision, PlanReviewApproval } from "./PlanReview.types";
 
@@ -95,7 +96,7 @@ export function PlanReview(props: PlanReviewProps) {
   const outcome = pending ? null : DECISION_COPY[decision];
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("planreview", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <h2 id={titleId} className={styles.title}>
           {title}

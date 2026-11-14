@@ -5,6 +5,7 @@ import { cx } from "../shared/cx";
 import { listLabel, rowDirection, rowDuration, stripLogos, stripRows } from "./logoStrip.logic";
 import type { LogoStripLogo, LogoStripProps } from "./LogoStrip.types";
 import styles from "./LogoStrip.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { LogoStripProps, LogoStripLogo } from "./LogoStrip.types";
 
@@ -64,7 +65,7 @@ export function LogoStrip(props: LogoStripProps) {
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("logostrip", rest)}
       ref={ref}
       className={cx(styles.root, align === "start" && styles.start, paused && styles.paused, className)}
       aria-labelledby={titleId}

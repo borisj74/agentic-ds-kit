@@ -18,6 +18,7 @@ import {
 import type { DateRangePickerProps } from "./DateRangePicker.types";
 import styles from "./DateRangePicker.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { DateRange, DateRangePreset, DateRangePickerProps, DateRangePickerSize } from "./DateRangePicker.types";
 export { defaultDateRangePresets } from "./dateRange";
@@ -165,7 +166,7 @@ export function DateRangePicker({
   const hidden = selected?.start ? (selected.end ? `${selected.start}/${selected.end}` : selected.start) : "";
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("daterangepicker")} ref={rootRef} className={cx(styles.root, className)}>
       <button
         ref={setTriggerRef}
         id={triggerId}

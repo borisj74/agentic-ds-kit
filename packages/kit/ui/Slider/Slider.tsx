@@ -4,6 +4,7 @@ import { useCallback, useRef, type KeyboardEvent, type PointerEvent } from "reac
 import type { SliderProps } from "./Slider.types";
 import { cx } from "../shared/cx";
 import styles from "./Slider.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SliderProps, SliderOrientation } from "./Slider.types";
 
@@ -150,7 +151,7 @@ export function Slider({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("slider", rest)}
       ref={ref}
       className={cx(styles.root, styles[orientation], disabled && styles.disabled, className)}
     >

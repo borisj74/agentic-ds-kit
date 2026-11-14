@@ -3,6 +3,7 @@ import { Scorecard } from "../Scorecard";
 import type { ScoreboardProps } from "./Scoreboard.types";
 import { cx } from "../shared/cx";
 import styles from "./Scoreboard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ScoreboardProps } from "./Scoreboard.types";
 
@@ -20,6 +21,7 @@ export function Scoreboard({
     const strip = (
       <section
         {...rest}
+        {...nisthaAttr("scoreboard", rest)}
         ref={ref}
         className={cx(styles.scoreboard, styles.overflowStrip, className)}
         aria-label={ariaLabel}
@@ -53,7 +55,7 @@ export function Scoreboard({
           : styles.count4;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.scoreboard, className)} aria-label={ariaLabel}>
+    <section {...rest} {...nisthaAttr("scoreboard", rest)} ref={ref} className={cx(styles.scoreboard, className)} aria-label={ariaLabel}>
       <div className={cx(styles.grid, countClass)}>{cards}</div>
     </section>
   );

@@ -12,6 +12,8 @@ import { useKitLabels } from "../shared/labels";
 export interface FormattedNumberFieldProps extends NumberInputProps {
   /** ISO 4217 code. When set, the symbol sits beside the number and the value formats as money. */
   currency?: string;
+  /** Inspect-mode ids from NumberInput / CurrencyInput, written on the root. Not public. */
+  "data-nistha"?: string;
 }
 
 export function FormattedNumberField({
@@ -34,6 +36,7 @@ export function FormattedNumberField({
   steppers = true,
   className,
   ref,
+  "data-nistha": inspectId,
 }: FormattedNumberFieldProps) {
   const labels = useKitLabels();
   const isControlled = value !== undefined;
@@ -68,6 +71,7 @@ export function FormattedNumberField({
 
   return (
     <div
+      data-nistha={inspectId}
       className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell, className)}
       data-disabled={disabled || undefined}
       data-error={error || undefined}

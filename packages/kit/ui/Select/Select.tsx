@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DropdownMenu } from "../DropdownMenu";
 import type { SelectProps } from "./Select.types";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SelectProps, SelectOption, SelectSize, SelectItemCheck, SelectValueDisplay } from "./Select.types";
 
@@ -79,6 +80,7 @@ export function Select({
         <input type="hidden" name={name} value={multiple ? values.join(",") : (values[0] ?? "")} />
       ) : null}
       <DropdownMenu
+        {...nisthaAttr("select")}
         className={className}
         triggerRef={ref}
         triggerProps={rest}

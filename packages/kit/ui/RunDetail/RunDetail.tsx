@@ -10,6 +10,7 @@ import { cx } from "../shared/cx";
 import { agentForStep, failedStepForAgent, lastFailedStep, monitorSteps, runSummary, stepForAgent, toolCallFor, trailSteps } from "./runDetail.logic";
 import type { RunDetailProps } from "./RunDetail.types";
 import styles from "./RunDetail.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { RunDetailProps, RunDetailRun, RunDetailStep, RunDetailStepStatus } from "./RunDetail.types";
 
@@ -59,7 +60,7 @@ export function RunDetail(props: RunDetailProps) {
   const retry = onRetry ? (id: string) => onRetry(id) : undefined;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("rundetail", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <h2 id={titleId} className={styles.title}>
           {title}

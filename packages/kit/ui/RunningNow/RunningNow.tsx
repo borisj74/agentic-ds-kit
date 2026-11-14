@@ -7,6 +7,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { RunningNowItem, RunningNowProps, RunningNowStatus } from "./RunningNow.types";
 import styles from "./RunningNow.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { RunningNowProps, RunningNowItem, RunningNowStatus, RunningNowLayout } from "./RunningNow.types";
 
@@ -69,7 +70,7 @@ export function RunningNow({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("runningnow", rest)}
       ref={ref}
       className={cx(styles.strip, styles[`layout-${layout}`], className)}
       aria-labelledby={labelId}

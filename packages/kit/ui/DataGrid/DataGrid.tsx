@@ -19,6 +19,7 @@ import { Tooltip } from "../Tooltip";
 import type { DataGridColumn, DataGridProps, DataGridRow } from "./DataGrid.types";
 import { cx } from "../shared/cx";
 import styles from "./DataGrid.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   DataGridProps,
@@ -292,7 +293,7 @@ export function DataGrid({
   } as CSSProperties;
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)} data-size={size}>
+    <div {...rest} {...nisthaAttr("datagrid", rest)} ref={ref} className={cx(styles.root, className)} data-size={size}>
       <div className={styles.scroller} tabIndex={0} role="region" aria-label={label}>
         <table ref={tableRef} className={styles.table} aria-label={label} style={stickyStyle}>
           <thead>

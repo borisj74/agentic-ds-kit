@@ -6,6 +6,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { HeaderCellProps } from "./HeaderCell.types";
 import { cx } from "../shared/cx";
 import styles from "./HeaderCell.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   HeaderCellProps,
@@ -55,7 +56,7 @@ export function HeaderCell({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("headercell", rest)}
       ref={ref}
       className={cx(
         styles.cell,

@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import type { BlurCrossfadeProps } from "./BlurCrossfade.types";
 import { cx } from "../shared/cx";
 import styles from "./BlurCrossfade.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { BlurCrossfadeProps, BlurCrossfadeDuration } from "./BlurCrossfade.types";
 
@@ -45,7 +46,7 @@ export function BlurCrossfade({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("blurcrossfade", rest)}
       ref={ref}
       className={cx(styles.root, styles[duration], className)}
       data-swapping={swapping ? "" : undefined}

@@ -10,6 +10,7 @@ import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import controlStyles from "../shared/controls.module.css";
 import type { ComboboxOption, ComboboxProps } from "./Combobox.types";
 import styles from "./Combobox.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ComboboxOption, ComboboxProps, ComboboxSize } from "./Combobox.types";
 
@@ -125,7 +126,7 @@ export function Combobox({
   const activeId = open && active >= 0 ? `${listId}-${active}` : undefined;
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("combobox")} ref={rootRef} className={cx(styles.root, className)}>
       {name ? <input type="hidden" name={name} value={current} /> : null}
       <div
         className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell)}

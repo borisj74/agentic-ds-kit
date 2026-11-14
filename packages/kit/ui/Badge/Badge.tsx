@@ -6,6 +6,7 @@ import type { BadgeProps, BadgeTone } from "./Badge.types";
 import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { BadgeProps, BadgeTone, BadgeAppearance, BadgeSize } from "./Badge.types";
 
@@ -33,7 +34,7 @@ export function Badge({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("badge", rest)}
       ref={ref}
       className={cx(
         styles.badge,

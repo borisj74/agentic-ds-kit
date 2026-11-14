@@ -9,6 +9,7 @@ import controlStyles from "../shared/controls.module.css";
 import type { DatePickerProps, DatePickerRange } from "./DatePicker.types";
 import styles from "./DatePicker.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   DatePickerProps,
@@ -212,7 +213,7 @@ export function DatePicker(props: DatePickerProps) {
       : "Pick an end date";
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("datepicker")} ref={rootRef} className={cx(styles.root, className)}>
       <button
         {...rest}
         ref={setTriggerRef}

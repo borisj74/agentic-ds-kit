@@ -12,6 +12,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
 import type { PermissionAccess, PermissionRequestProps, PermissionScope } from "./PermissionRequest.types";
 import styles from "./PermissionRequest.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   PermissionRequestProps,
@@ -61,7 +62,7 @@ export function PermissionRequest({
     const label = status === "granted" ? "Granted" : status === "denied" ? "Denied" : "Expired";
     const parts = [scopes.length > 1 ? `${scopes.length} scopes` : summaryOf(scopes[0]), resolvedNote].filter(Boolean);
     return (
-      <section {...rest} ref={mergeRefs(focus.rowRef, ref)} tabIndex={-1} className={cx(styles.resolved, styles[status], className)} aria-label={`${label}: ${title}`}>
+      <section {...rest} {...nisthaAttr("permissionrequest", rest)} ref={mergeRefs(focus.rowRef, ref)} tabIndex={-1} className={cx(styles.resolved, styles[status], className)} aria-label={`${label}: ${title}`}>
         <Icon size={16} strokeWidth={ICON_STROKE} className={styles.resolvedIcon} aria-hidden="true" />
         <span className={styles.resolvedLabel}>{label}</span>
         <span className={styles.resolvedText}>{parts.join(" · ")}</span>
@@ -84,7 +85,7 @@ export function PermissionRequest({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("permissionrequest", rest)}
       ref={ref}
       tabIndex={-1}
       className={cx(styles.card, busy && styles.busy, className)}

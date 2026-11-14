@@ -3,6 +3,7 @@ import { useId } from "react";
 import type { ProgressProps } from "./Progress.types";
 import { cx } from "../shared/cx";
 import styles from "./Progress.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ProgressProps,
@@ -134,7 +135,7 @@ export function Progress({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("progress", rest)}
       ref={ref}
       className={cx(styles.root, styles[size], styles[tone], styles[shape], overlay && styles.overlay, className)}
     >

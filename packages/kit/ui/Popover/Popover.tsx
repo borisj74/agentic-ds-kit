@@ -18,6 +18,7 @@ import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import { placePopover } from "./placePopover";
 import type { PopoverProps } from "./Popover.types";
 import styles from "./Popover.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PopoverPlacement, PopoverProps } from "./Popover.types";
 
@@ -113,7 +114,7 @@ export function Popover({
       : null;
 
   return (
-    <span ref={rootRef} className={styles.root}>
+    <span {...nisthaAttr("popover")} ref={rootRef} className={styles.root}>
       <span
         className={styles.trigger}
         onClick={() => setOpen(!open)}

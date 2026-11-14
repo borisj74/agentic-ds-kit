@@ -1,6 +1,7 @@
 import { LucideByName } from "../Button/lucideName";
 import type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb.types";
 import styles from "./Breadcrumb.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { BreadcrumbItem, BreadcrumbProps, BreadcrumbSeparator } from "./Breadcrumb.types";
 
@@ -58,7 +59,7 @@ export function Breadcrumb({
   const lastIndex = items.length - 1;
 
   return (
-    <nav {...rest} ref={ref} className={className} aria-label={ariaLabel}>
+    <nav {...rest} {...nisthaAttr("breadcrumb", rest)} ref={ref} className={className} aria-label={ariaLabel}>
       <ol className={styles.list}>
         {nodes.map((node, position) => {
           const key = node.kind === "ellipsis" ? "ellipsis" : `crumb-${node.index}`;

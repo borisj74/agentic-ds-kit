@@ -9,6 +9,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { Citation, CitedAnswerProps } from "./CitedAnswer.types";
 import styles from "./CitedAnswer.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CitedAnswerProps, Citation } from "./CitedAnswer.types";
 
@@ -77,7 +78,7 @@ export function CitedAnswer({
   if (last < content.length) parts.push(content.slice(last));
 
   return (
-    <article {...rest} ref={ref} className={cx(styles.answer, className)} aria-busy={loading || undefined}>
+    <article {...rest} {...nisthaAttr("citedanswer", rest)} ref={ref} className={cx(styles.answer, className)} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <span className={styles.avatar} aria-hidden="true">
           <Sparkles size={14} strokeWidth={ICON_STROKE} />

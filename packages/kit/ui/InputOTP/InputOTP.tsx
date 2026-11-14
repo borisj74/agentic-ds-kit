@@ -6,6 +6,7 @@ import type { InputOTPPattern, InputOTPProps, InputOTPSize } from "./InputOTP.ty
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./InputOTP.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { InputOTPProps, InputOTPSize, InputOTPPattern } from "./InputOTP.types";
 
@@ -80,7 +81,7 @@ export function InputOTP({
   );
 
   return (
-    <div
+    <div {...nisthaAttr("inputotp")}
       className={cx(styles.root, styles[size], className)}
       data-disabled={disabled || undefined}
       data-error={error || undefined}

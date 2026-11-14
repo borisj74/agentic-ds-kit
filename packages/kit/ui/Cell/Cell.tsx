@@ -14,6 +14,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { CellProps, CellType, KitLinkComponent } from "./Cell.types";
 import { cx } from "../shared/cx";
 import styles from "./Cell.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   CellProps,
@@ -306,7 +307,7 @@ export function Cell({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("cell", rest)}
       ref={ref}
       className={cx(styles.cell, styles[size], actionMenu && styles.actionMenu, className)}
       aria-label={rootAria}

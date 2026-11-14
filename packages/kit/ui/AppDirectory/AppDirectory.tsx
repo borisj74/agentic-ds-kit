@@ -12,6 +12,7 @@ import { cx } from "../shared/cx";
 import { connectedSummary, directoryHandlers, drawerState, visibleApps } from "./appDirectory.logic";
 import type { AppDirectoryProps } from "./AppDirectory.types";
 import styles from "./AppDirectory.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AppDirectoryProps, AppDirectoryApp } from "./AppDirectory.types";
 
@@ -67,7 +68,7 @@ export function AppDirectory(props: AppDirectoryProps) {
   const state = selected ? drawerState(selected, connectingId) : undefined;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("appdirectory", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>

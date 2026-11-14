@@ -6,6 +6,7 @@ import type { ModalCardProps } from "./ModalCard.types";
 import { cx } from "../shared/cx";
 import styles from "./ModalCard.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ModalCardProps, ModalCardSize } from "./ModalCard.types";
 
@@ -29,7 +30,7 @@ export function ModalCard({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("modalcard", rest)}
       ref={ref}
       role={role}
       tabIndex={tabIndex}
