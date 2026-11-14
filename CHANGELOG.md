@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-11-14
+
 ### Changed
 
 - **Modal and ModalCard titles are larger, so they read as headings above 14px field labels.** The default (`md`) title is now `--type-size-heading` (24px, was 16px) with `--type-tracking-heading`, the same as Drawer, AlertDialog and Card. `sm` is now `--type-size-body` (16px, was 14px, the label size), like Card `sm`. `lg` does not change
