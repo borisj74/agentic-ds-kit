@@ -16,6 +16,7 @@ Use this skill when adding or changing UI in an app that depends on `agentic-ds-
    - **Chrome from source:** `npx agentic-ds-kit add app-header` / `add side-nav` copy recipes ShellHeader / ShellNav (the presets rebuilt from AppHeader and SideNav compose parts) into `components/chrome/<id>/` with the component contracts. They import only kit components and work on their own; to host them in the `app-shell` copy, pass `header={<ShellHeader menuButton={AppShellMenuButton} />}` and `nav={(placement) => <ShellNav placement={placement} />}` from a client component.
 4. **Compose from the package** — `import { Button, Scoreboard } from "agentic-ds-kit"`. Match props exactly to contract enums; do not add variants.
 5. **Stop if missing** — If no kit component covers a piece you need, stop and ask. Do not scaffold a one-off component. (A layout or screen of your own built from kit components is not a one-off.)
+6. **Review before you finish** — Run `npx agentic-ds-kit review <path>` (or the MCP tool `review_ui`) on the files you changed. Fix every error; for a warning, use the bigger kit piece or pattern it names, or say why not.
 
 ## Hard rules
 

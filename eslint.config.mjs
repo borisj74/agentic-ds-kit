@@ -19,6 +19,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Generated copy of patterns/ and recipes/ for `agentic-ds-kit add`.
     "packages/kit/patterns-src/**",
+    // Sample screens for `review` tests; the bad ones break the rules on purpose.
+    "packages/kit/test/fixtures/**",
     // Kit build output.
     "packages/kit/dist/**",
     // Other sessions' git worktrees (each lints itself).

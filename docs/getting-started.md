@@ -402,6 +402,28 @@ The rule is short on purpose:
 
 **Eval prompts** (also in the README) are the smoke test that a coworker’s agent is actually using the kit.
 
+## Review
+
+After an agent builds a screen, check it against the kit:
+
+```bash
+npx agentic-ds-kit review app
+```
+
+Pass a file or a folder. It reads `.tsx`, `.ts`, `.jsx`, `.js` and `.css` files (CSS modules too) and skips `node_modules`, `dist`, `.next` and token source files. Nothing is sent anywhere.
+
+| Rule | Severity | What it finds |
+| --- | --- | --- |
+| `raw-value` | error | A hardcoded colour, spacing, radius or shadow in inline `style`, a `className` string or CSS, or a primitive `--color-*` ramp. The fix names the closest semantic token. Typography, motion and z-index are not checked yet. |
+| `wrong-use` | error | A Button with `href`, `to` or `as="a"` (use Link); more than one solid primary Button in a file (a missing `appearance` or `mode` counts as solid and primary); an icon-only Button without an aria label. |
+| `outside-kit` | error | Imports from other UI libraries (Radix, MUI, Chakra, shadcn and similar), or a local copy such as `components/ui/button`. |
+| `rebuild` | warning | The file uses most of the parts of a kit organism or block without importing it. |
+| `pattern-fits` | warning | The file looks like a kit pattern; the fix is `npx agentic-ds-kit add <id>`. |
+
+Every finding has an `id`, `rule`, `severity`, `file`, `line`, `contractId`, `message` and `fix`. Add `--json` for the findings plus the error and warning counts. The command exits 1 when there is an error; warnings alone exit 0. A value the scanner cannot read for sure (an expression or a spread) is treated as unknown and never reported.
+
+Agents can run the same check through the MCP tool `review_ui`, including on a draft that is not saved yet. Run review on what you changed and fix every error before you finish.
+
 ## MCP
 
 The package includes a local MCP server so an agent can query the kit that is installed, instead of guessing from an older copy of the contracts. It is read-only and speaks stdio. Every answer is read from that install's `contracts/`, `tokens/tokens.json`, `tokens/usage.json`, pattern contracts, and `AGENTS.md`.
@@ -448,6 +470,7 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 | `list_patterns` | none | Level (`template`), description and `npx agentic-ds-kit add <id>` |
 | `get_pattern` | `id` | Level (`template`), description, the add command, and the pattern's must and defaults |
 | `get_rules` | none | `AGENTS.md`, including the page-layout grid rule |
+| `review_ui` | `path`, or `code` and `filename` | The same findings and counts as `npx agentic-ds-kit review`. `code` with `filename` checks a draft that is not saved yet |
 | `questions` | options, `detail`, `limit`, `offset`; all optional | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"` keeps id, label and kind (no enums) |
 
 `questions` options match the CLI: `only`, `group`, `overlay` (the object, not a file path), `none`, `useWhen`, `notWhen`, `askStyle`, `enums`.

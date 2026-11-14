@@ -65,6 +65,11 @@ const TOOL_ROWS = [
     args: "options, detail, limit, offset; all optional",
     returns: "The same option list as npx agentic-ds-kit questions; detail summary keeps id, label and kind",
   },
+  {
+    tool: "review_ui",
+    args: "path, or code and filename",
+    returns: "The same findings and counts as npx agentic-ds-kit review; code with filename checks a draft that is not saved",
+  },
 ];
 
 export const metadata: Metadata = {
@@ -108,7 +113,7 @@ export default function McpPage() {
 
         <Section
           title="Tools"
-          description="Eight read-only tools. questions takes the same options as the CLI: only, group, overlay, none, useWhen, notWhen, askStyle, and enums. Pass the overlay as an object, not a file path."
+          description="Nine read-only tools. questions takes the same options as the CLI: only, group, overlay, none, useWhen, notWhen, askStyle, and enums. Pass the overlay as an object, not a file path."
         >
           <Table columns={[...TOOL_COLUMNS]} rows={TOOL_ROWS} caption="MCP tools" />
         </Section>

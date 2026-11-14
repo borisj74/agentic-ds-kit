@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`npx agentic-ds-kit review <path>`**: checks a file or folder (`.tsx`, `.ts`, `.jsx`, `.js`, `.css`) against the contracts and tokens and says what to fix. Five rules: `raw-value` (error: hardcoded colour, spacing, radius or shadow, or a primitive `--color-*` ramp; the fix names the closest semantic token), `wrong-use` (error: Button with `href`/`to`/`as="a"`, more than one solid primary Button in a file, icon-only Button without an aria label), `outside-kit` (error: other UI libraries and local copies such as `components/ui/button`), `rebuild` (warning: an organism or block built by hand from its parts) and `pattern-fits` (warning: the file looks like a pattern; fix `npx agentic-ds-kit add <id>`). Text output by default, `--json` for findings plus error and warning counts. Exit 1 on any error, 0 for warnings only, 2 when the review cannot run
+- **MCP `review_ui`**: the same findings for an agent, from a `path` or from `code` plus `filename` (a draft that is not saved yet). Read-only
+- `AGENTS.md` and the `prototype-from-kit` skill tell agents to run review on what they changed and fix the errors before finishing
+
 ## [0.22.0] - 2026-11-14
 
 ### Added

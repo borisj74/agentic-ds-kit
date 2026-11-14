@@ -16,6 +16,8 @@ Peer: React 19. `AppNav` uses `next/link`; Next.js 15 or later is an optional pe
 
 New app from a working screen (a Next app with a pattern, the agent rules and the MCP config; nothing is installed until you run `npm install`): `npx agentic-ds-kit init my-app --template dashboard`. For product managers and designers: [Start here](https://agentic-ds-kit.vercel.app/start-here).
 
+Check a screen against the contracts: `npx agentic-ds-kit review app` says what to fix (hardcoded values, wrong use of kit parts, other UI libraries) and exits 1 on errors.
+
 The package is **ESM-only**: use `import`, not `require()`. Next.js, Vite and other modern bundlers handle this out of the box; a CommonJS-only setup (for example an old Jest config) needs ESM support turned on.
 
 ## Use
@@ -69,7 +71,7 @@ Without the opt-in, a name outside the bundled set renders nothing and logs a wa
 
 ## MCP
 
-`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only, no extra dependencies). Agents can list components (filter by `kind` or `level`), read a contract, search, look up semantic tokens, list patterns, and read the kit rules from this install. Component, block and pattern answers include `level`. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
+`npx agentic-ds-kit mcp` starts a read-only stdio server (MCP protocol 2025-06-18, tools only, no extra dependencies). Agents can list components (filter by `kind` or `level`), read a contract, search, look up semantic tokens, list patterns, read the kit rules, and review UI code (`review_ui`) from this install. Component, block and pattern answers include `level`. Cursor and Claude Code both run `npx -y agentic-ds-kit mcp`.
 
 Cursor, `.cursor/mcp.json`:
 

@@ -20,7 +20,8 @@ export class CatalogError extends Error {
 const cache = new Map();
 
 const oneLine = (text) => String(text ?? "").replace(/\s+/g, " ").trim();
-const compact = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+/** Lowercase letters and digits only, so "AgentOverview", "agent-overview" and "agentoverview" match. */
+export const compact = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 function readJson(file, what) {
   if (!existsSync(file)) {
@@ -114,6 +115,12 @@ function colorTokens(tokens) {
       value: resolveRef(ref, tokens.primitive),
       dark: dark.has(name) ? resolveRef(dark.get(name), tokens.primitive) : null,
     }));
+}
+
+function shadowTokens(tokens) {
+  return flattenLeaves(tokens.semantic.light ?? {})
+    .filter(([name]) => name.startsWith("shadow-"))
+    .map(([name, ref]) => ({ name: `--${name}`, value: resolveRef(ref, tokens.primitive) }));
 }
 
 function typeTokens(tokens) {
@@ -238,6 +245,7 @@ function load(root = packageRoot) {
         import: `import { ${name} } from "agentic-ds-kit";`,
         example: typeof contract.snippet === "string" ? contract.snippet : "",
         keywords: keywordText(contract),
+        contains: lines(contract.contains),
       };
     });
 
@@ -265,7 +273,7 @@ function load(root = packageRoot) {
     ...withNotes(gridTokens(tokens), "grid", usage),
   ];
 
-  const data = { version, rules, components, patterns, semantic };
+  const data = { version, rules, components, patterns, semantic, shadows: shadowTokens(tokens), tokens };
   cache.set(root, data);
   return data;
 }
@@ -315,6 +323,11 @@ function requireText(value, label, example) {
     throw new CatalogError(`${label} is required. ${example}`);
   }
   return value.trim();
+}
+
+/** Everything `review` needs from this install, read once: components (with contains), patterns, tokens. */
+export function kitData(root = packageRoot) {
+  return load(root);
 }
 
 export function listComponents() {
