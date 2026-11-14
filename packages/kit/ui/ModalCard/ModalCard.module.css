@@ -55,23 +55,17 @@
 .title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
+  font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-heading);
   color: var(--text-primary);
 }
 
 .sm .title {
-  font-size: var(--type-size-body-sm);
-}
-
-.md .title {
   font-size: var(--type-size-body);
-}
-
-.lg .title {
-  font-size: var(--type-size-heading);
-  letter-spacing: var(--type-tracking-heading);
+  letter-spacing: normal;
+  line-height: var(--type-line-body);
 }
 
 .description {
