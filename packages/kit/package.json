@@ -1,6 +1,6 @@
 {
   "name": "agentic-ds-kit",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Code-only agentic design system: contracts, tokens, React components, and a local MCP server.",
   "license": "MIT",
   "repository": {

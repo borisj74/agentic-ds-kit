@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-11-14
+
 ### Added
 
 - **`level` on every contract**: `atom`, `molecule`, `organism`, `block` (the `kind: "block"` contracts) or `template` (patterns), right after `status`. `contracts/index.json` copies it from each contract (`npm run sync:index -w agentic-ds-kit` now syncs `level` as well as `intent`, and `--check` reports both). The tokens row has no level. A new test checks every contract and index row
