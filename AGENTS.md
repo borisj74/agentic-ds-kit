@@ -1,5 +1,17 @@
 # Kit sandbox rules
 
+## Working rules for every task
+
+- Use the `github` remote, never `origin`. One branch and one PR per task. Never merge or push to `main`; Boris merges.
+- No tags, publishing or releases without Boris's yes.
+- Before any PR, run lint, both `tsc --noEmit` runs, build and test. All must pass.
+- Leave `.cursor/mcp.json` uncommitted and never commit secrets.
+- Contracts are the source of truth. Don't add contract fields. Compose from kit components and tokens, never make local cousins, and if something is missing, stop and ask.
+- Make minimal changes, with no new runtime dependencies.
+- Run the Jev token gate (`jev-mcp@0.5.1`): the deterministic scan, then `jev_triage`. Stop on `needs_new_token`.
+- Use our own wording and design. Don't copy Affect UI, onsystem or @shadcn/lint.
+- In the PR, list what you skipped or are unsure about, then stop and report the link.
+
 Before writing UI, read `packages/kit/contracts/index.json`, then only the matching contract file(s).
 If a contract exists, import it from `agentic-ds-kit`. Never invent a local cousin.
 Compose components freely; layout (top bar, side nav, both, neither) is the user's choice. Patterns in `packages/kit/contracts/patterns/` are examples to start from or ignore: `npx agentic-ds-kit add <id>` copies one into the app. In a pattern contract, follow `must` and treat `defaults` as suggestions; ask before breaking a `must`.
