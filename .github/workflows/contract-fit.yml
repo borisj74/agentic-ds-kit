@@ -1,0 +1,46 @@
+name: Contract fit
+
+# Nistha's own contract fit check. Not part of the verify job and not a required check.
+# Runs the CLI from this checkout (not the npm release) on the kit's patterns, and on the docs
+# app as a report only (the docs CSS still has known raw values).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contract-fit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract-fit:
+    name: contract fit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build the kit
+        run: npm run build -w agentic-ds-kit
+
+      # Patterns score 100 today (211 kit elements, no other elements, no findings), so
+      # anything below 100 is a regression.
+      - name: Patterns (must be 100)
+        run: node packages/kit/bin/agentic-ds-kit.mjs review packages/kit/patterns --json --score --min 100
+
+      - name: Docs app (report only)
+        run: |
+          node packages/kit/bin/agentic-ds-kit.mjs review app --score > app-review.txt || true
+          tail -n 6 app-review.txt

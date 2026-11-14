@@ -12,9 +12,9 @@ import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { reviewCode, reviewPath } from "../bin/review.mjs";
+import { SCORE_FORMULA, contractFit, reviewCode, reviewPath } from "../bin/review.mjs";
 import { loadKit } from "../bin/review/kit.mjs";
-import { rebuildCandidates, shareMatch } from "../bin/review/rules.mjs";
+import { COUNTED_NATIVE_TAGS, rebuildCandidates, shareMatch } from "../bin/review/rules.mjs";
 
 const kitRoot = fileURLToPath(new URL("..", import.meta.url));
 const cli = join(kitRoot, "bin/agentic-ds-kit.mjs");
@@ -248,8 +248,9 @@ describe("review_ui MCP tool", () => {
     const result = await client.callTool({ name: "review_ui", arguments: { path: "test/fixtures/review/outside-kit/bad.tsx" } });
     assert.notEqual(result.isError, true, text(result));
     const out = JSON.parse(text(result));
-    const cliOut = JSON.parse(run(["review", "test/fixtures/review/outside-kit/bad.tsx", "--json"]).stdout);
+    const cliOut = JSON.parse(run(["review", "test/fixtures/review/outside-kit/bad.tsx", "--json", "--score"]).stdout);
     assert.deepEqual(out, cliOut);
+    assert.equal(typeof out.score.value, "number");
   });
 
   test("code plus filename reviews a draft that is not saved", async () => {
@@ -259,6 +260,8 @@ describe("review_ui MCP tool", () => {
     assert.equal(out.errors, 4);
     assert.equal(out.findings[0].file, "app/draft/page.tsx");
     assert.equal(out.findings[0].id, "wrong-use:app/draft/page.tsx:6");
+    assert.equal(out.score.errors, 4);
+    assert.equal(out.score.formula, SCORE_FORMULA);
   });
 
   test("missing or mixed arguments are tool errors", async () => {
@@ -266,5 +269,118 @@ describe("review_ui MCP tool", () => {
       const result = await client.callTool({ name: "review_ui", arguments: args });
       assert.equal(result.isError, true, JSON.stringify(args));
     }
+  });
+});
+
+describe("contract fit score", () => {
+  const SCORE_FIELDS = ["value", "kitElements", "otherElements", "errors", "warnings", "formula"];
+  const score = (code, filename = "x.tsx") => reviewCode(code, filename, { score: true }).score;
+
+  test("the formula: share x 100, minus 5 per error and 2 per warning, kept in 0-100", () => {
+    assert.equal(contractFit({ kitElements: 18, otherElements: 2, errors: 1, warnings: 0 }).value, 85);
+    assert.equal(contractFit({ kitElements: 1, otherElements: 2, errors: 0, warnings: 1 }).value, 31);
+    assert.equal(contractFit({ kitElements: 1, otherElements: 1, errors: 20, warnings: 0 }).value, 0);
+    assert.equal(contractFit({ kitElements: 0, otherElements: 0, errors: 0, warnings: 0 }).value, 100);
+    assert.deepEqual(Object.keys(contractFit({ kitElements: 0, otherElements: 0, errors: 0, warnings: 0 })), SCORE_FIELDS);
+  });
+
+  test("counts kit tags by root name and only the listed native tags", () => {
+    assert.deepEqual(COUNTED_NATIVE_TAGS, ["button", "a", "input", "select", "textarea", "img", "table", "dialog"]);
+    const code = [
+      'import { Button, Card } from "agentic-ds-kit";',
+      'import { Plus } from "lucide-react";',
+      'import Image from "next/image";',
+      'import { Local } from "./local";',
+      "export function X() {",
+      "  return (",
+      "    <main><div><h1>T</h1><p>x</p><ul><li>a</li></ul><span /></div>",
+      '      <>Hi</><Card><Card.Header>H</Card.Header></Card><Button><Plus /></Button>',
+      '      <a href="/x">x</a><button type="button">b</button><input /><img alt="" src="/a.png" />',
+      '      <Image alt="" src="/a.png" /><Local /></main>',
+      "  );",
+      "}",
+    ].join("\n");
+    const s = score(code);
+    assert.equal(s.kitElements, 3, "Card, Card.Header, Button");
+    assert.equal(s.otherElements, 4, "a, button, input, img");
+  });
+
+  test("zero countable elements: share is 1, then penalties", () => {
+    assert.equal(score(".a { color: var(--text-fg); }", "a.module.css").value, 100, "a clean CSS-only file scores 100");
+    const css = score(".a { color: #0f172a; padding: 12px; }", "a.module.css");
+    assert.equal(css.kitElements + css.otherElements, 0);
+    assert.equal(css.errors, 2);
+    assert.equal(css.value, 90);
+    assert.equal(score("export const x = 1;", "x.ts").value, 100);
+    const fixture = reviewPath(join(fixtures, "raw-value/bad.module.css"), { cwd: fixtures, score: true }).score;
+    assert.equal(fixture.value, 75, "5 errors, no elements");
+  });
+
+  test("JSON without --score keeps its shape; with --score adds score", () => {
+    const file = join(fixtures, "wrong-use/bad.tsx");
+    const plain = run(["review", file, "--json"]);
+    assert.equal(plain.status, 1);
+    assert.deepEqual(Object.keys(JSON.parse(plain.stdout)).sort(), ["errors", "files", "findings", "kit", "warnings"]);
+    const scored = run(["review", file, "--json", "--score"]);
+    assert.equal(scored.status, 1, "errors still exit 1");
+    const out = JSON.parse(scored.stdout);
+    assert.deepEqual(Object.keys(out).sort(), ["errors", "files", "findings", "kit", "score", "warnings"]);
+    assert.deepEqual(Object.keys(out.score), SCORE_FIELDS);
+    assert.equal(out.score.errors, out.errors);
+    assert.equal(out.score.formula, SCORE_FORMULA);
+    assert.equal(out.score.kitElements, 4);
+  });
+
+  test("text output prints the score and the formula", () => {
+    const res = run(["review", join(fixtures, "rebuild/good.tsx"), "--score"]);
+    assert.equal(res.status, 0);
+    assert.match(res.stdout, /No problems found in 1 file\./);
+    assert.match(res.stdout, /Contract fit: 100\/100/);
+    assert.match(res.stdout, /value = max\(0, min\(100, round\(100 \* share - 5 \* errors - 2 \* warnings\)\)\)/);
+    assert.doesNotMatch(run(["review", join(fixtures, "rebuild/good.tsx")]).stdout, /Contract fit/);
+  });
+
+  test("--min exit codes", () => {
+    const clean = join(fixtures, "rebuild/good.tsx");
+    const warned = join(fixtures, "rebuild/bad.tsx");
+    assert.equal(run(["review", clean, "--min", "100"]).status, 0);
+    assert.match(run(["review", clean, "--min", "100"]).stdout, /Contract fit: 100/, "--min turns on --score");
+    const low = run(["review", warned, "--min", "100"]);
+    assert.equal(low.status, 1, "a warning alone takes it under 100");
+    assert.match(low.stdout, /is below --min 100/);
+    assert.equal(run(["review", warned, "--min", "50"]).status, 0, "warnings alone still exit 0 when the score is high enough");
+    assert.equal(run(["review", warned, "--json", "--min", "100"]).status, 1);
+    for (const bad of ["abc", "-1", "101", ""]) {
+      const res = run(["review", clean, "--min", bad]);
+      assert.equal(res.status, 2, bad);
+      if (bad !== "-1") assert.match(res.stderr, /--min needs a number from 0 to 100/);
+    }
+    assert.equal(run(["review", clean, "--min"]).status, 2);
+  });
+
+  test("--help names --score and --min", () => {
+    const help = run(["review", "--help"]).stdout;
+    for (const word of ["--score", "--min", "Contract fit", "button, a, input, select, textarea, img, table, dialog"]) {
+      assert.ok(help.includes(word), word);
+    }
+  });
+});
+
+describe("contract fit workflow template", () => {
+  const yml = readFileSync(join(kitRoot, "templates/github/contract-fit.yml"), "utf8");
+
+  test("runs on pull_request only, never pull_request_target", () => {
+    assert.match(yml, /^on:\n {2}pull_request:\n/m);
+    assert.ok(!yml.includes("pull_request_target"));
+  });
+
+  test("posts one comment by marker, with only the allowed actions and permissions", () => {
+    assert.ok(yml.includes("<!-- agentic-ds-kit-contract-fit -->"));
+    assert.match(yml, /permissions:\n {2}contents: read\n {2}pull-requests: write\n/);
+    const actions = [...yml.matchAll(/uses:\s*([\w-]+\/[\w-]+)@/g)].map((m) => m[1]).sort();
+    assert.deepEqual([...new Set(actions)], ["actions/checkout", "actions/github-script", "actions/setup-node"]);
+    assert.ok(!/secrets\./.test(yml), "no secrets");
+    assert.match(yml, /agentic-ds-kit review "\$REVIEW_PATH" --json --score/);
+    assert.ok(!yml.includes("0.23.0"), "does not pin 0.23.0");
   });
 });

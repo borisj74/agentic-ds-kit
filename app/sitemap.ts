@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { BLOCK_ITEMS, COMPONENT_ITEMS, PATTERN_ITEMS } from "@/lib/playground-nav";
 import { SITE_URL } from "@/lib/site";
 
-const PAGES = ["/", "/start-here", "/get-started", "/installation", "/mcp", "/theming", "/theme", "/studio", "/foundations", "/components", "/patterns", "/blocks"];
+const PAGES = ["/", "/start-here", "/get-started", "/installation", "/mcp", "/theming", "/theme", "/contract-fit", "/studio", "/foundations", "/components", "/patterns", "/blocks"];
 
 /** Every docs page: the top-level pages, each component, pattern and block page. Frames are left out. */
 export default function sitemap(): MetadataRoute.Sitemap {

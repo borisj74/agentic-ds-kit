@@ -524,6 +524,7 @@ const DOC_PAGES = [
   { href: "/mcp", label: "MCP server" },
   { href: "/theming", label: "Theming" },
   { href: "/theme", label: "Theme builder" },
+  { href: "/contract-fit", label: "Contract fit" },
 ] as const;
 
 /**

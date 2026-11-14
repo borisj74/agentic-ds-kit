@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`review --score`**: a 0–100 contract fit score, the share of UI elements that come from the kit minus 5 per error and 2 per warning. UI elements are opening JSX tags: kit imports count as kit; `button`, `a`, `input`, `select`, `textarea`, `img`, `table` and `dialog` count as other; layout and text tags, icons and other components are not counted. Text output prints the score and the formula; `--json --score` adds `score: { value, kitElements, otherElements, errors, warnings, formula }`. Without `--score` or `--min`, output and exit codes are unchanged
+- **`review --min <n>`**: exits 1 when the score is below `n` (and turns on `--score`); an invalid `n` exits 2
+- **MCP `review_ui`** results include `score`
+- **`templates/github/contract-fit.yml`**: a workflow to copy into `.github/workflows/`. On `pull_request` it runs `review --json --score` and keeps one PR comment with the score, counts and top 10 findings. Report only unless `MIN_SCORE` is set; fork PRs still pass with the score in the log
+- **Contract fit docs page** (`/contract-fit`) with the formula and a worked example
+- Nistha runs contract fit in its own CI (`.github/workflows/contract-fit.yml`, not a required check): patterns must score 100, the docs app is report only
+
 ## [0.23.0] - 2026-11-14
 
 ### Added

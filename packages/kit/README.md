@@ -16,7 +16,7 @@ Peer: React 19. `AppNav` uses `next/link`; Next.js 15 or later is an optional pe
 
 New app from a working screen (a Next app with a pattern, the agent rules and the MCP config; nothing is installed until you run `npm install`): `npx agentic-ds-kit init my-app --template dashboard`. For product managers and designers: [Start here](https://agentic-ds-kit.vercel.app/start-here).
 
-Check a screen against the contracts: `npx agentic-ds-kit review app` says what to fix (hardcoded values, wrong use of kit parts, other UI libraries) and exits 1 on errors.
+Check a screen against the contracts: `npx agentic-ds-kit review app` says what to fix (hardcoded values, wrong use of kit parts, other UI libraries) and exits 1 on errors. Add `--score` for a 0–100 contract fit score (the share of UI elements from the kit, minus penalties for errors and warnings); `templates/github/contract-fit.yml` posts it on pull requests.
 
 The package is **ESM-only**: use `import`, not `require()`. Next.js, Vite and other modern bundlers handle this out of the box; a CommonJS-only setup (for example an old Jest config) needs ESM support turned on.
 
