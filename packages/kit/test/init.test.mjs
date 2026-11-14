@@ -35,6 +35,7 @@ const APP_FILES = [
   "AGENTS.md",
   "CLAUDE.md",
   "app/layout.tsx",
+  "app/icons-on-demand.tsx",
   "app/page.tsx",
 ];
 
@@ -62,7 +63,7 @@ describe("agentic-ds-kit init", () => {
       assertApp(dir);
 
       const page = readFileSync(join(dir, "app/page.tsx"), "utf8");
-      assert.match(page, new RegExp(`import \\{ ${pattern.name} \\} from "@/components/patterns/${pattern.id}";`));
+      assert.match(page, new RegExp(`import \\{ (?:[\\w, ]+, )?${pattern.name} \\} from "@/components/patterns/${pattern.id}";`));
       assert.match(page, new RegExp(`<${pattern.name}[\\s/>]`));
       // One main landmark: the page's, or the pattern's own.
       const source = readFileSync(join(dir, "components/patterns", pattern.id, `${pattern.name}.tsx`), "utf8");
@@ -80,6 +81,17 @@ describe("agentic-ds-kit init", () => {
       }
     });
   }
+
+  test("--template settings hosts the pattern in the app-shell example, as its contract asks", () => {
+    const dir = join(root, "app-settings");
+    const page = readFileSync(join(dir, "app/page.tsx"), "utf8");
+    assert.match(page, /import \{ AppShellPattern \} from "@\/components\/patterns\/app-shell";/);
+    assert.match(page, /import \{ SETTINGS_SECTIONS, SettingsPattern \} from "@\/components\/patterns\/settings";/);
+    assert.match(page, /className="layout-shell--inset layout-shell--viewport"/);
+    assert.match(page, /label: `Settings · \$\{SETTINGS_SECTIONS\.length\}`/);
+    assert.match(page, /active: item\.id === section/);
+    assert.ok(existsSync(join(dir, "components/patterns/app-shell/app-shell.contract.json")), "app-shell is copied too");
+  });
 
   test("accepts the same name forms as add", () => {
     run("init", "named", "--template", "DashboardPattern");

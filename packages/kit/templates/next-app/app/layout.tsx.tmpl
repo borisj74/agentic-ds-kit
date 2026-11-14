@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "agentic-ds-kit/tokens.css";
 import "agentic-ds-kit/layout.css";
+import { IconsOnDemand } from "./icons-on-demand";
 
 export const metadata: Metadata = {
   title: "{{title}}",
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <IconsOnDemand />
+        {children}
+      </body>
     </html>
   );
 }

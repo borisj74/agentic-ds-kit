@@ -63,13 +63,16 @@ function packageName(folder) {
 /**
  * How app/page.tsx holds the pattern, read from the pattern's own source and contract `must` lines
  * ("Render inside a main landmark"):
- * - "own-main": it renders its own <main> (onboarding, settings); render it as is.
+ * - "settings-shell": settings' contract `must` puts its section links in the app's SideNav, in the
+ *   app-shell example with layout-shell--inset; the page hosts it there (app-shell is copied too).
+ * - "own-main": it renders its own <main> (onboarding); render it as is.
  * - "shell": app-shell is chrome (header + nav) around page content; the content goes in <main>.
  * - "section": its root is a kit Section (a block for one area of a page); <main> gets the kit
  *   canvas and content classes around it.
  * - "main": anything else (a whole page body); wrap it in <main>.
  */
 async function placement(pattern) {
+  if (pattern.id === "settings") return "settings-shell";
   const source = await readFile(join(srcRoot, pattern.id, `${pattern.name}.tsx`), "utf8");
   if (/<main[\s>]/.test(source)) return "own-main";
   if (pattern.id === "app-shell") return "shell";
@@ -115,6 +118,34 @@ export default function Page() {
         </div>
       </main>
     </${pattern.name}>
+  );
+}
+`;
+  }
+  if (how === "settings-shell") {
+    // Contract `must`: section links in the app's SideNav under a Settings group from SETTINGS_SECTIONS,
+    // current one marked; layout-shell--inset; the pattern renders its own <main>.
+    return `import { AppShellPattern } from "@/components/patterns/app-shell";
+import { SETTINGS_SECTIONS, SettingsPattern } from "${spec}";
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ section?: string }> }) {
+  const { section: wanted } = await searchParams;
+  const section = SETTINGS_SECTIONS.find((item) => item.id === wanted)?.id ?? "billing";
+  const items = SETTINGS_SECTIONS.map((item) => ({
+    id: item.id,
+    label: item.label,
+    icon: item.icon,
+    href: \`/?section=\${item.id}\`,
+    active: item.id === section,
+  }));
+
+  return (
+    <AppShellPattern
+      className="layout-shell--inset layout-shell--viewport"
+      nav={{ title: ${JSON.stringify(title)}, groups: [{ label: \`Settings · \${SETTINGS_SECTIONS.length}\`, items }] }}
+    >
+      <SettingsPattern section={section} />
+    </AppShellPattern>
   );
 }
 `;
@@ -210,7 +241,8 @@ export async function runInit(argv, { cwd = process.cwd(), log = console.log } =
   for (const rel of await templateFiles()) {
     files.push([outputName(rel), fill(await readFile(join(templateRoot, rel), "utf8"), vars)]);
   }
-  files.push(["app/page.tsx", pattern ? patternPage(pattern, await placement(pattern), title) : blankPage(title)]);
+  const how = pattern ? await placement(pattern) : null;
+  files.push(["app/page.tsx", pattern ? patternPage(pattern, how, title) : blankPage(title)]);
 
   const written = [];
   const skipped = [];
@@ -238,13 +270,16 @@ export async function runInit(argv, { cwd = process.cwd(), log = console.log } =
 
   if (pattern) {
     // Same copy as `add`: the pattern, its contract, and any patterns it requires.
-    const lines = [];
-    try {
-      await addPattern({ cwd: root, name: pattern.id, manifest, log: (line) => lines.push(line) });
-      for (const line of lines) if (line.startsWith("Added ")) log(line.replace(/ \(agentic-ds-kit [^)]+\)/, ""));
-    } catch (error) {
-      if (!opts.force) return fail(error.message);
-      skipped.push(`components/patterns/${pattern.id}/ (already there, kept)`);
+    // Settings is hosted in the app-shell example, so that comes along too.
+    for (const id of how === "settings-shell" ? [pattern.id, "app-shell"] : [pattern.id]) {
+      const lines = [];
+      try {
+        await addPattern({ cwd: root, name: id, manifest, log: (line) => lines.push(line) });
+        for (const line of lines) if (line.startsWith("Added ")) log(line.replace(/ \(agentic-ds-kit [^)]+\)/, ""));
+      } catch (error) {
+        if (!opts.force) return fail(error.message);
+        skipped.push(`components/patterns/${id}/ (already there, kept)`);
+      }
     }
   }
 
