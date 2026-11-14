@@ -209,6 +209,33 @@ const raw = (f, offset) => ({
   fix: f.fix,
 });
 
+/**
+ * Native tags that count as UI elements for contract fit: things people click, type into or
+ * clearly see, and that the kit has a component for. Layout and text tags (div, span, main,
+ * headings, lists, p, …) are left out: the kit expects you to write those yourself.
+ */
+export const COUNTED_NATIVE_TAGS = Object.freeze(["button", "a", "input", "select", "textarea", "img", "table", "dialog"]);
+const COUNTED_NATIVE = new Set(COUNTED_NATIVE_TAGS);
+
+/**
+ * UI elements in one file, for contract fit: { kit, other }. Each opening JSX tag counts once.
+ * Kit: the tag's root name (Button, or Card in Card.Header) is a kit import. Other: a native tag
+ * from COUNTED_NATIVE_TAGS. Everything else (layout tags, fragments, icons, Next.js tags, other
+ * components) is not counted. CSS and .ts files have no elements.
+ */
+export function countElements(kit, { file, absPath, text }) {
+  if (!/\.(tsx|jsx|js)$/i.test(file)) return { kit: 0, other: 0 };
+  const code = stripComments(text);
+  const fromKit = kitImports(kit, readImports(code), absPath);
+  let kitCount = 0;
+  let other = 0;
+  for (const tag of readJsxTags(code)) {
+    if (fromKit.has(tag.name.split(".")[0])) kitCount++;
+    else if (COUNTED_NATIVE.has(tag.name)) other++;
+  }
+  return { kit: kitCount, other };
+}
+
 /** Where each kit component is imported in this file: Map(local name -> { component, offset }). */
 function kitImports(kit, imports, absPath) {
   const out = new Map();

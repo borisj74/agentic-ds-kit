@@ -424,6 +424,34 @@ Every finding has an `id`, `rule`, `severity`, `file`, `line`, `contractId`, `me
 
 Agents can run the same check through the MCP tool `review_ui`, including on a draft that is not saved yet. Run review on what you changed and fix every error before you finish.
 
+### Contract fit
+
+Add `--score` for a 0–100 contract fit score: the share of UI elements that come from the kit, minus 5 for each error and 2 for each warning per 100 elements (anything with up to 100 elements counts as 100, so on one screen an error costs a full 5 points).
+
+```bash
+npx agentic-ds-kit review app --score
+npx agentic-ds-kit review app --min 80
+```
+
+A UI element is an opening JSX tag. Kit components count as kit. The native tags `button`, `a`, `input`, `select`, `textarea`, `img`, `table` and `dialog` count as other. Layout and text tags, icons, Next.js tags and other components are not counted, and CSS files add findings but no elements. With no countable elements the share is 1, so a clean CSS file scores 100.
+
+```text
+share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements
+scale = 100 / max(100, kitElements + otherElements)
+value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))
+```
+
+`--json --score` adds `score: { value, kitElements, otherElements, errors, warnings, formula }`. `--min <n>` turns on the score and exits 1 when it is below `n`; errors still exit 1 as before. `review_ui` always includes `score`. See the [Contract fit](https://agentic-ds-kit.vercel.app/contract-fit) page for a worked example.
+
+To post the score on pull requests, copy the workflow template into your app:
+
+```bash
+mkdir -p .github/workflows
+cp node_modules/agentic-ds-kit/templates/github/contract-fit.yml .github/workflows/
+```
+
+Set `REVIEW_PATH` in the file to your UI folder. On each pull request it keeps one comment up to date with the score, the error and warning counts and the top 10 findings. It only reports unless you set `MIN_SCORE`. On pull requests from forks GitHub does not let the job comment; the job still passes and the score is in the log.
+
 ## MCP
 
 The package includes a local MCP server so an agent can query the kit that is installed, instead of guessing from an older copy of the contracts. It is read-only and speaks stdio. Every answer is read from that install's `contracts/`, `tokens/tokens.json`, `tokens/usage.json`, pattern contracts, and `AGENTS.md`.
@@ -470,7 +498,7 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 | `list_patterns` | none | Level (`template`), description and `npx agentic-ds-kit add <id>` |
 | `get_pattern` | `id` | Level (`template`), description, the add command, and the pattern's must and defaults |
 | `get_rules` | none | `AGENTS.md`, including the page-layout grid rule |
-| `review_ui` | `path`, or `code` and `filename` | The same findings and counts as `npx agentic-ds-kit review`. `code` with `filename` checks a draft that is not saved yet |
+| `review_ui` | `path`, or `code` and `filename` | The same findings, counts and contract fit `score` as `npx agentic-ds-kit review --score`. `code` with `filename` checks a draft that is not saved yet |
 | `questions` | options, `detail`, `limit`, `offset`; all optional | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"` keeps id, label and kind (no enums) |
 
 `questions` options match the CLI: `only`, `group`, `overlay` (the object, not a file path), `none`, `useWhen`, `notWhen`, `askStyle`, `enums`.

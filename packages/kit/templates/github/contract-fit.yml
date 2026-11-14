@@ -1,0 +1,103 @@
+# Contract fit for agentic-ds-kit.
+#
+# Copy this file to .github/workflows/contract-fit.yml in your app:
+#   mkdir -p .github/workflows
+#   cp node_modules/agentic-ds-kit/templates/github/contract-fit.yml .github/workflows/
+#
+# On every pull request it runs `npx agentic-ds-kit review <path> --json --score` with the
+# agentic-ds-kit version your app installs (it must be a release that has --score),
+# then posts one comment with the score and the top findings, and updates that same comment
+# on each new push. On pull requests from forks GitHub does not let the job comment; the job
+# still passes and the score is in the job log.
+#
+# Set REVIEW_PATH to your UI folder. By default the job only reports. To fail it when the score
+# is below a number (or when review finds errors), set MIN_SCORE, for example to 80.
+name: Contract fit
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: contract-fit-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  REVIEW_PATH: app
+  MIN_SCORE: ""
+
+jobs:
+  contract-fit:
+    name: contract fit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Review
+        id: review
+        run: |
+          status=0
+          npx --no-install agentic-ds-kit review "$REVIEW_PATH" --json --score ${MIN_SCORE:+--min "$MIN_SCORE"} > contract-fit.json || status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          # 0 = fine, 1 = errors or a score below MIN_SCORE (checked in the last step), 2 = review could not run.
+          if [ "$status" -ge 2 ]; then
+            cat contract-fit.json
+            exit "$status"
+          fi
+          node -e 'const r=require("./contract-fit.json");console.log(`Contract fit: ${r.score.value}/100 (${r.errors} errors, ${r.warnings} warnings, ${r.score.kitElements} kit elements, ${r.score.otherElements} other)`)'
+
+      - name: Comment on the pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const marker = "<!-- agentic-ds-kit-contract-fit -->";
+            const result = JSON.parse(fs.readFileSync("contract-fit.json", "utf8"));
+            const { score } = result;
+            const top = [...result.findings]
+              .sort((a, b) => (a.severity === b.severity ? 0 : a.severity === "error" ? -1 : 1))
+              .slice(0, 10);
+            const lines = [
+              marker,
+              `### Contract fit: ${score.value}/100`,
+              "",
+              `${result.errors} errors, ${result.warnings} warnings in ${result.files} files under \`${process.env.REVIEW_PATH}\`. ` +
+                `${score.kitElements} kit elements, ${score.otherElements} other.`,
+              "",
+            ];
+            if (top.length) {
+              lines.push(`Top ${top.length} of ${result.findings.length} findings:`, "");
+              for (const f of top) lines.push(`- \`${f.file}:${f.line}\` ${f.severity} ${f.rule}: ${f.fix}`);
+            } else {
+              lines.push("No findings.");
+            }
+            lines.push("", `<sub>${score.formula}</sub>`);
+            const body = lines.join("\n");
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            try {
+              const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
+              const mine = comments.find((c) => c.body && c.body.includes(marker));
+              if (mine) await github.rest.issues.updateComment({ owner, repo, comment_id: mine.id, body });
+              else await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            } catch (error) {
+              core.warning(`Could not post the contract fit comment (${error.message}). The score is in the Review step log.`);
+            }
+
+      - name: Check MIN_SCORE
+        if: env.MIN_SCORE != '' && steps.review.outputs.status != '0'
+        run: |
+          echo "Review found errors, or contract fit is below $MIN_SCORE. See the Review step."
+          exit 1

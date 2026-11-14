@@ -28,7 +28,7 @@ Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package 
 
 New app from a working screen: `npx agentic-ds-kit init my-app --template dashboard`. Not an engineer? Read [Start here](https://agentic-ds-kit.vercel.app/start-here).
 
-Check what an agent built: `npx agentic-ds-kit review app` lists hardcoded values, wrong use of kit parts and imports from other UI libraries, each with a fix ([Review](docs/getting-started.md#review)).
+Check what an agent built: `npx agentic-ds-kit review app` lists hardcoded values, wrong use of kit parts and imports from other UI libraries, each with a fix ([Review](docs/getting-started.md#review)). Add `--score` for a 0–100 contract fit score, and copy `templates/github/contract-fit.yml` to post it on pull requests ([Contract fit](docs/getting-started.md#contract-fit)).
 
 ## What's here
 
@@ -135,7 +135,7 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 | `list_patterns` / `get_pattern` | Level (`template`), description and `npx agentic-ds-kit add <id>` |
 | `get_rules` | `AGENTS.md`, including the page-layout grid rule |
 | `questions` | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"`, `limit`/`offset` |
-| `review_ui` | The same findings as `npx agentic-ds-kit review`; `path`, or `code` plus `filename` for a draft |
+| `review_ui` | The same findings and contract fit score as `npx agentic-ds-kit review --score`; `path`, or `code` plus `filename` for a draft |
 
 Step-by-step: [docs/getting-started.md](docs/getting-started.md#mcp). The playground page is `/mcp`.
 

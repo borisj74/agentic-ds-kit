@@ -38,8 +38,8 @@ Tools:
   get_pattern           One pattern by id, with level (template)
   get_rules             AGENTS.md, including the page-layout grid rule
   questions             Same JSON as npx agentic-ds-kit questions; detail summary, limit, offset
-  review_ui             Same findings as npx agentic-ds-kit review: a path, or code plus
-                        filename for a draft that is not saved yet
+  review_ui             Same findings as npx agentic-ds-kit review --score: a path, or code
+                        plus filename for a draft that is not saved yet
 
 Levels, smallest to biggest: ${COMPONENT_LEVELS.join(", ")}, template (patterns).
 Reuse the biggest piece that fits before building from smaller ones.
@@ -205,7 +205,7 @@ function createServer() {
     {
       title: "Review UI",
       description:
-        "Check UI code against this install's contracts and tokens, the same as `npx agentic-ds-kit review`. Pass path (a file or folder, relative to the folder the server runs in), or code plus filename to check a draft that is not saved yet (filename picks the rules and names the file, such as app/page.tsx). Returns findings (id, rule, severity, file, line, contractId, message, fix) and the error and warning counts. Rules: raw-value, wrong-use, outside-kit (errors); rebuild, pattern-fits (warnings). Fix every error before you finish.",
+        "Check UI code against this install's contracts and tokens, the same as `npx agentic-ds-kit review`. Pass path (a file or folder, relative to the folder the server runs in), or code plus filename to check a draft that is not saved yet (filename picks the rules and names the file, such as app/page.tsx). Returns findings (id, rule, severity, file, line, contractId, message, fix), the error and warning counts, and score (the contract fit score, 0-100, as from `review --score`). Rules: raw-value, wrong-use, outside-kit (errors); rebuild, pattern-fits (warnings). Fix every error before you finish.",
       inputSchema: objectSchema({
         path: { type: "string", description: "File or folder to review, such as app or app/page.tsx." },
         code: { type: "string", description: "Source text of a draft. Needs filename." },
@@ -214,9 +214,9 @@ function createServer() {
     },
     ({ path, code, filename }) => {
       if (path !== undefined && code !== undefined) throw new ReviewError("Pass path, or code with filename, not both.");
-      if (code !== undefined || filename !== undefined) return reviewCode(code, filename);
+      if (code !== undefined || filename !== undefined) return reviewCode(code, filename, { score: true });
       if (path === undefined) throw new ReviewError("Pass path (a file or folder), or code with filename.");
-      return reviewPath(path);
+      return reviewPath(path, { score: true });
     },
   );
 

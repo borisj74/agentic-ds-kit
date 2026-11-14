@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { parseArgs } from "node:util";
 import { loadKit } from "./review/kit.mjs";
-import { RULES, reviewSource } from "./review/rules.mjs";
+import { COUNTED_NATIVE_TAGS, RULES, countElements, reviewSource } from "./review/rules.mjs";
 import { lineIndex } from "./review/scan.mjs";
 
 export const REVIEW_HELP = `Usage: npx agentic-ds-kit review <path> [options]
@@ -28,18 +28,30 @@ Rules:
   rebuild       warning  The file builds a kit organism or block by hand from its parts.
   pattern-fits  warning  The file looks like a kit pattern; start from the pattern.
 
+Contract fit (--score): a 0-100 number for how much of the UI comes from the kit.
+  UI elements are opening JSX tags: kit components count as kit; the native tags
+  ${COUNTED_NATIVE_TAGS.join(", ")} count as other. Layout and text tags,
+  icons and other components are not counted. CSS files add findings, not elements.
+  share = kitElements / (kitElements + otherElements), or 1 with no elements
+  score = share x 100, minus 5 per error and 2 per warning for every 100
+          elements (screens with up to 100 elements count as 100), kept 0-100
+
 Options:
   --json        Print the findings and the error and warning counts as JSON
+  --score       Also print the contract fit score (adds "score" to --json)
+  --min <n>     Exit 1 when the score is below n (0-100). Turns on --score
   --cwd <path>  Folder that <path> and the printed file names are relative to
                 (default: current folder)
   -h, --help    Show this help
 
-Exit codes: 0 no errors (warnings are fine), 1 one or more errors,
-2 the review could not run (for example, the path does not exist).
+Exit codes: 0 no errors (warnings are fine), 1 one or more errors (or, with
+--min, a score below n), 2 the review could not run (for example, the path
+does not exist, or n is not a number from 0 to 100).
 
 Examples:
   npx agentic-ds-kit review app
-  npx agentic-ds-kit review app/page.tsx --json`;
+  npx agentic-ds-kit review app/page.tsx --json
+  npx agentic-ds-kit review app --score --min 80`;
 
 export class ReviewError extends Error {
   constructor(message) {
@@ -103,16 +115,41 @@ export function reviewText(text, file, absPath) {
   return reviewSource(kit, { file, absPath, text }).map((finding) => ({ ...finding, file, line: lineOf(finding.offset) }));
 }
 
-function summarize(findings, files) {
+/** Elements in one source text, for contract fit: { kit, other }. */
+export function elementsInText(text, file, absPath) {
+  return countElements(loadKit(), { file, absPath, text });
+}
+
+export const SCORE_FORMULA =
+  "share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements; " +
+  "scale = 100 / max(100, kitElements + otherElements); " +
+  "value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))";
+
+/** The contract fit score: { value, kitElements, otherElements, errors, warnings, formula }. */
+export function contractFit({ kitElements, otherElements, errors, warnings }) {
+  const total = kitElements + otherElements;
+  const share = total === 0 ? 1 : kitElements / total;
+  // Penalties are per 100 elements, so a big folder is not pushed to 0 by its size alone.
+  // Up to 100 elements the scale is 1: each error costs 5 points and each warning 2.
+  const scale = 100 / Math.max(100, total);
+  const value = Math.max(0, Math.min(100, Math.round(100 * share - (5 * errors + 2 * warnings) * scale)));
+  return { value, kitElements, otherElements, errors, warnings, formula: SCORE_FORMULA };
+}
+
+function summarize(findings, files, elements, { score = false } = {}) {
   const sorted = findings.sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.rule.localeCompare(b.rule));
   const out = withIds(sorted);
-  return {
+  const result = {
     kit: loadKit().version,
     files,
     errors: out.filter((f) => f.severity === "error").length,
     warnings: out.filter((f) => f.severity === "warning").length,
     findings: out,
   };
+  if (score) {
+    result.score = contractFit({ kitElements: elements.kit, otherElements: elements.other, errors: result.errors, warnings: result.warnings });
+  }
+  return result;
 }
 
 const display = (cwd, file) => {
@@ -120,30 +157,57 @@ const display = (cwd, file) => {
   return rel.split(sep).join("/");
 };
 
-/** Review a file or folder. Returns { kit, files, errors, warnings, findings }. */
-export function reviewPath(path, { cwd = process.cwd() } = {}) {
+/**
+ * Review a file or folder. Returns { kit, files, errors, warnings, findings }, plus
+ * score ({ value, kitElements, otherElements, errors, warnings, formula }) when `score` is true.
+ */
+export function reviewPath(path, { cwd = process.cwd(), score = false } = {}) {
   if (typeof path !== "string" || !path.trim()) throw new ReviewError("path is required. Pass a file or folder, such as app.");
   const target = isAbsolute(path) ? path : resolve(cwd, path);
   const files = listFiles(target);
   const findings = [];
-  for (const file of files) findings.push(...reviewText(readFileSync(file, "utf8"), display(cwd, file), file));
-  return summarize(findings, files.length);
+  const elements = { kit: 0, other: 0 };
+  for (const file of files) {
+    const text = readFileSync(file, "utf8");
+    const name = display(cwd, file);
+    findings.push(...reviewText(text, name, file));
+    if (score) {
+      const counted = elementsInText(text, name, file);
+      elements.kit += counted.kit;
+      elements.other += counted.other;
+    }
+  }
+  return summarize(findings, files.length, elements, { score });
 }
 
 /** Review a draft that is not saved yet. `filename` picks the rules (.css or script) and names the file. */
-export function reviewCode(code, filename, { cwd = process.cwd() } = {}) {
+export function reviewCode(code, filename, { cwd = process.cwd(), score = false } = {}) {
   if (typeof code !== "string") throw new ReviewError("code is required with filename.");
   if (typeof filename !== "string" || !filename.trim()) {
     throw new ReviewError("filename is required with code, such as app/page.tsx. It picks the rules and names the file.");
   }
   if (!EXTENSIONS.test(filename)) throw new ReviewError(`filename must end in .tsx, .ts, .jsx, .js or .css, not ${basename(filename)}.`);
   const absPath = isAbsolute(filename) ? filename : resolve(cwd, filename);
-  return summarize(reviewText(code, filename.split(sep).join("/"), absPath), 1);
+  const name = filename.split(sep).join("/");
+  const elements = score ? elementsInText(code, name, absPath) : { kit: 0, other: 0 };
+  return summarize(reviewText(code, name, absPath), 1, elements, { score });
+}
+
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+function printScore(score) {
+  const { value, kitElements, otherElements, errors, warnings } = score;
+  console.log(`\nContract fit: ${value}/100`);
+  console.log(`  ${kitElements} kit element${kitElements === 1 ? "" : "s"}, ${otherElements} other, ${plural(errors, "error")}, ${plural(warnings, "warning")}.`);
+  console.log("  share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements");
+  console.log("  scale = 100 / max(100, kitElements + otherElements)");
+  console.log("  value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))");
 }
 
 function printText(result) {
   if (!result.findings.length) {
     console.log(`No problems found in ${result.files} file${result.files === 1 ? "" : "s"}.`);
+    if (result.score) printScore(result.score);
     return;
   }
   let current = null;
@@ -156,8 +220,15 @@ function printText(result) {
     console.log(`  ${String(f.line).padStart(4)}  ${f.severity.padEnd(7)}  ${f.rule.padEnd(12)}  ${f.message}`);
     console.log(`  ${" ".repeat(4)}  ${" ".repeat(7)}  ${" ".repeat(12)}  Fix: ${f.fix}`);
   }
-  const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
   console.log(`\n${plural(result.errors, "error")}, ${plural(result.warnings, "warning")} in ${plural(result.files, "file")}.`);
+  if (result.score) printScore(result.score);
+}
+
+/** --min value: a number from 0 to 100, or null when it is not one. */
+function parseMin(raw) {
+  if (typeof raw !== "string" || !/^\s*\d+(\.\d+)?\s*$/.test(raw)) return null;
+  const n = Number(raw);
+  return n >= 0 && n <= 100 ? n : null;
 }
 
 /** CLI entry. Returns the exit code. */
@@ -169,6 +240,8 @@ export function runReview(argv) {
       allowPositionals: true,
       options: {
         json: { type: "boolean" },
+        score: { type: "boolean" },
+        min: { type: "string" },
         cwd: { type: "string" },
         help: { type: "boolean", short: "h" },
       },
@@ -186,15 +259,28 @@ export function runReview(argv) {
     console.error(`agentic-ds-kit: ${positionals.length ? "review one path at a time." : "name a file or folder to review."}\n\n${REVIEW_HELP}`);
     return 2;
   }
+  let min = null;
+  if (values.min !== undefined) {
+    min = parseMin(values.min);
+    if (min === null) {
+      console.error(`agentic-ds-kit: --min needs a number from 0 to 100, not "${values.min}".`);
+      return 2;
+    }
+  }
+  const score = Boolean(values.score) || min !== null;
   let result;
   try {
-    result = reviewPath(positionals[0], { cwd: values.cwd ? resolve(values.cwd) : process.cwd() });
+    result = reviewPath(positionals[0], { cwd: values.cwd ? resolve(values.cwd) : process.cwd(), score });
   } catch (error) {
     console.error(`agentic-ds-kit: ${error.message}`);
     return 2;
   }
   if (values.json) console.log(JSON.stringify(result, null, 2));
   else printText(result);
+  if (min !== null && result.score.value < min) {
+    if (!values.json) console.log(`Contract fit ${result.score.value} is below --min ${min}.`);
+    return 1;
+  }
   return result.errors > 0 ? 1 : 0;
 }
 
