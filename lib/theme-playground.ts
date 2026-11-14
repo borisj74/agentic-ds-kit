@@ -10,7 +10,7 @@ import {
   type RampStep,
 } from "agentic-ds-kit/color-ramp";
 import tokens from "agentic-ds-kit/tokens/tokens.json";
-import { NEUTRAL_RAMPS, type PlaygroundNeutralScale } from "./playground-theme";
+import { DEFAULT_HEADING_WEIGHT, NEUTRAL_RAMPS, type PlaygroundNeutralScale } from "./playground-theme";
 
 export const THEME_STORAGE_KEY = "nistha-theme-playground";
 export const DEFAULT_ACCENT = "#0d9488";
@@ -80,7 +80,7 @@ interface Preset {
   headingWeight: HeadingWeight;
 }
 
-const SHADOW_DEFAULTS = { shadowIntensity: 100, shadowScale: 100, shadowTint: "neutral" as const, pill: false, headingWeight: "600" as const };
+const SHADOW_DEFAULTS = { shadowIntensity: 100, shadowScale: 100, shadowTint: "neutral" as const, pill: false, headingWeight: DEFAULT_HEADING_WEIGHT };
 
 export const PRESETS: readonly Preset[] = [
   { id: "nistha", label: "Nistha", brand: "#2b2bf5", accent: "", neutral: "slate", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },

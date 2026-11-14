@@ -3,6 +3,7 @@ import { Section, Table } from "agentic-ds-kit";
 import { CodeBlock } from "../components/CodeBlock";
 import playground from "../playground.module.css";
 import { canonical } from "@/lib/site";
+import { DEFAULT_HEADING_WEIGHT } from "@/lib/playground-theme";
 
 const TOKEN_COLUMNS = [
   { key: "token", header: "Token", emphasis: true },
@@ -114,7 +115,7 @@ const BRAND_HTML = `<html lang="en" data-color="violet">`;
 const FONT = `--font-sans: var(--font-inter), system-ui, sans-serif;
 --font-display: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
 --font-mono: var(--font-geist-mono), ui-monospace, monospace;
---type-weight-heading: 600;`;
+--type-weight-heading: ${DEFAULT_HEADING_WEIGHT};`;
 
 const OVERRIDE = `:root {
   --action-primary: var(--color-violet-600);

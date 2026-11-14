@@ -1,3 +1,4 @@
+import tokens from "agentic-ds-kit/tokens/tokens.json";
 import { applyPrimaryRamp, clearPrimaryRamp, normalizeHex } from "./primary-ramp";
 
 export const PLAYGROUND_THEME_STORAGE_KEY = "playground-theme";
@@ -45,6 +46,13 @@ export const PLAYGROUND_FONTS: { value: PlaygroundFont; label: string }[] = [
   { value: "geist", label: "Geist" },
   { value: "system", label: "System" },
 ];
+
+/** Shipped --type-weight-heading, read from tokens.json so the playground never pins its own default. */
+export const DEFAULT_HEADING_WEIGHT = (() => {
+  const ref = tokens.semantic.type.weight.heading;
+  const key = ref.replace("primitive.fontWeight.", "") as keyof typeof tokens.primitive.fontWeight;
+  return tokens.primitive.fontWeight[key] as PlaygroundHeadingWeight;
+})();
 
 export const PLAYGROUND_HEADING_WEIGHTS: { value: PlaygroundHeadingWeight; label: string }[] = [
   { value: "400", label: "400" },
@@ -473,13 +481,13 @@ export function applyPlaygroundShadowIntensity(percent: number): void {
 }
 
 export function readPlaygroundHeadingWeight(): PlaygroundHeadingWeight {
-  if (typeof document === "undefined") return "600";
+  if (typeof document === "undefined") return DEFAULT_HEADING_WEIGHT;
   const weight = document.documentElement.style.getPropertyValue("--type-weight-heading").trim();
-  return isHeadingWeight(weight) ? weight : "600";
+  return isHeadingWeight(weight) ? weight : DEFAULT_HEADING_WEIGHT;
 }
 
 export function applyPlaygroundHeadingWeight(weight: PlaygroundHeadingWeight): void {
-  if (weight === "600") {
+  if (weight === DEFAULT_HEADING_WEIGHT) {
     document.documentElement.style.removeProperty("--type-weight-heading");
   } else {
     document.documentElement.style.setProperty("--type-weight-heading", weight);
@@ -528,7 +536,7 @@ export function resetPlaygroundAppearance(): void {
   applyPlaygroundFontRole("interface", "ibm-plex");
   applyPlaygroundFontRole("heading", "ibm-plex");
   applyPlaygroundFontRole("mono", "ibm-plex");
-  applyPlaygroundHeadingWeight("600");
+  applyPlaygroundHeadingWeight(DEFAULT_HEADING_WEIGHT);
   applyPlaygroundNeutralScale("neutral");
   applyPlaygroundSpaceScale(DEFAULT_SPACE_SCALE);
   applyPlaygroundShadowIntensity(DEFAULT_SHADOW_INTENSITY);
