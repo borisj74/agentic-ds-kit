@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.0] - 2026-11-14
+
 ### Added
 
 - **Inspect mode**: with `NEXT_PUBLIC_NISTHA_INSPECT=1` (or `true`), every kit component writes `data-nistha="<contract id>"` on its root element. A component built on another kit component writes both ids on the shared element (`tiltcard card`, `select dropdownmenu`). Off by default, and off in production builds (`NODE_ENV=production`) unless `NEXT_PUBLIC_NISTHA_INSPECT_FORCE=1` is also set. With the mode off the markup is unchanged. The switch is a plain function (`ui/shared/inspect.ts`), so server components such as Button, Card and Table stay server components
