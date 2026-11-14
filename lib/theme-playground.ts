@@ -285,14 +285,10 @@ function onPrimary(ramp: ColorRamp, step: RampStep, neutral: ColorRamp): string 
   return white >= ink ? "var(--color-white)" : ref("neutral", "950");
 }
 
-/**
- * The first step from `step` (moving darker in light mode, lighter in dark) that reaches `minimum`
- * contrast against `against`: 4.5 for text, 3 for icons and other meaningful graphics (WCAG 1.4.11).
- */
-function readable(ramp: ColorRamp, step: RampStep, against: string, direction: 1 | -1, minimum = 4.5): RampStep {
+function readable(ramp: ColorRamp, step: RampStep, against: string, direction: 1 | -1): RampStep {
   let current = step;
   for (let hop = 0; hop < RAMP_STEPS.length; hop += 1) {
-    if (contrastRatio(ramp[current], against) >= minimum) return current;
+    if (contrastRatio(ramp[current], against) >= 4.5) return current;
     const next = shift(current, direction);
     if (next === current) break;
     current = next;
@@ -313,9 +309,9 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
   const focus = mode === "light" ? shift(action, -1) : action;
   const surface = mode === "light" ? "#ffffff" : neutral["900"];
   const text = readable(brand, action, surface, mode === "light" ? 1 : -1);
-  // Brand icons (spinners, running steps) need 3:1 on the surface. The action step alone can miss it:
-  // Ink's dark action step is a mid grey at 2.6:1 on the dark surface.
-  const icon = readable(brand, action, surface, mode === "light" ? 1 : -1, 3);
+  // Brand icons (spinners, running steps) use the brand text step: 4.5:1 on the surface. The action
+  // step alone can miss even 3:1 (Ink dark, 2.6:1) and reads pale in Amber and Teal light (~3.8:1).
+  const icon = text;
   const subtle = mode === "light" ? "50" : "900";
   const subtleStrong = mode === "light" ? "100" : "800";
   const subtleStronger = mode === "light" ? "200" : "700";
@@ -983,7 +979,7 @@ export function contrastReport(state: ThemeState): ContrastPair[] {
     { name: "Muted on surface", fg: "--text-fg-muted", bg: "--bg-surface", minimum: 4.5 },
     { name: "Subtle on surface", fg: "--text-fg-subtle", bg: "--bg-surface", minimum: 4.5 },
     { name: "Brand text on surface", fg: "--text-brand", bg: "--bg-surface", minimum: 4.5 },
-    { name: "Brand icon on surface", fg: "--icon-brand", bg: "--bg-surface", minimum: 3 },
+    { name: "Brand icon on surface", fg: "--icon-brand", bg: "--bg-surface", minimum: 4.5 },
     { name: "Button label", fg: "--action-on-primary", bg: "--action-primary", minimum: 4.5 },
     { name: "Button on canvas", fg: "--action-primary", bg: "--bg-canvas", minimum: 3 },
   ];

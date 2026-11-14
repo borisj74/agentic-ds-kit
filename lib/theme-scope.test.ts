@@ -45,7 +45,7 @@ describe("theme scope", () => {
     assert.notEqual(dramatic["--shadow-lg"], "none");
   });
 
-  test("brand icons reach 3:1 on the surface in every preset, light and dark", () => {
+  test("brand icons reach 4.5:1 on the surface in every preset, light and dark", () => {
     for (const preset of PRESETS) {
       for (const mode of ["light", "dark"] as const) {
         const pair = contrastReport(presetState(preset.id, mode)).find((item) => item.name === "Brand icon on surface");
