@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-11-14
+
+### Changed
+
+- **Lighter headings: `--type-weight-heading` is now 500 (was 600).** Section, Card, Drawer, AlertDialog and Modal titles, and `heading-1…5`, use the semantic token `type.weight.heading`, which now points at `fontWeight.medium`. Page titles stay at 700 (`--type-weight-title`); sizes and tracking do not change. Modal titles are 16px, so at 500 they sit close to 14px/500 field labels; to keep the old weight, set `--type-weight-heading: 600` in your theme
+- `generate-tokens` emits every `--type-weight-*` from `tokens.semantic.type.weight` in `tokens.json` instead of fixed primitive picks, so editing a semantic weight now reaches `tokens.css`. Output for the other weights is unchanged
+
 ## [0.25.0] - 2026-11-14
 
 ### Added
