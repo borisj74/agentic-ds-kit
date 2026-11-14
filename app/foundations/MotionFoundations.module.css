@@ -76,7 +76,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .card:hover .stage {
-    background: var(--color-neutral-200);
+    background: var(--bg-track);
   }
 }
 
@@ -95,7 +95,7 @@
 
 .footer {
   display: grid;
-  gap: 0.15rem;
+  gap: var(--space-px);
   min-width: 0;
 }
 

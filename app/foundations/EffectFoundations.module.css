@@ -15,7 +15,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-gap-md);
 }
 
 .title {
@@ -46,20 +46,20 @@
 
 .list {
   display: grid;
-  gap: 0.65rem;
+  gap: var(--space-gap-sm);
 }
 
 .listOpacity {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--space-gap-sm);
 }
 
 .row {
   display: grid;
   grid-template-columns: minmax(14rem, 18rem) 5.5rem max-content;
   align-items: center;
-  gap: 1rem;
-  padding: 0.55rem 0;
+  gap: var(--space-gap-md);
+  padding: var(--space-inset-sm) 0;
   border-bottom: var(--border-width-thin) solid var(--border-faint);
 }
 
@@ -72,15 +72,15 @@
 }
 
 .rowShadow {
-  padding: 0.85rem 0;
+  padding: var(--space-inset-md) 0;
 }
 
 .rowOpacity {
   display: grid;
   grid-template-columns: minmax(14rem, 18rem) 5.5rem minmax(8rem, 12rem);
   align-items: center;
-  gap: 1rem;
-  padding: 0.55rem 0;
+  gap: var(--space-gap-md);
+  padding: var(--space-inset-sm) 0;
   border-bottom: var(--border-width-thin) solid var(--border-faint);
 }
 
@@ -122,7 +122,7 @@
 .swatch {
   width: 3rem;
   height: 3rem;
-  background: var(--color-neutral-200);
+  background: var(--bg-track);
 }
 
 .swatchBorder {
@@ -130,7 +130,7 @@
   height: 3.5rem;
   background: var(--surface-card);
   border-style: solid;
-  border-color: var(--color-neutral-300);
+  border-color: var(--line-strong);
   border-radius: var(--radius-control-sm);
 }
 
@@ -150,8 +150,8 @@
   overflow: hidden;
   background-color: var(--surface-page);
   background-image:
-    linear-gradient(45deg, var(--color-neutral-200) 25%, transparent 25%, transparent 75%, var(--color-neutral-200) 75%),
-    linear-gradient(45deg, var(--color-neutral-200) 25%, transparent 25%, transparent 75%, var(--color-neutral-200) 75%);
+    linear-gradient(45deg, var(--bg-track) 25%, transparent 25%, transparent 75%, var(--bg-track) 75%),
+    linear-gradient(45deg, var(--bg-track) 25%, transparent 25%, transparent 75%, var(--bg-track) 75%);
   background-position: 0 0, 0.5rem 0.5rem;
   background-size: 1rem 1rem;
 }

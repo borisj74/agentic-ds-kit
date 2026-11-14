@@ -67,6 +67,6 @@
 .bar {
   height: 0.75rem;
   min-width: 1px;
-  border-radius: 2px;
-  background: var(--color-neutral-200);
+  border-radius: var(--radius-xs);
+  background: var(--bg-track);
 }

@@ -101,7 +101,7 @@
 .mapMetrics span,
 .mapSplit span {
   border-radius: var(--radius-control-sm);
-  background: var(--color-neutral-200);
+  background: var(--bg-track);
 }
 
 .mapSplit {
@@ -250,8 +250,8 @@
 .bar {
   height: 0.75rem;
   min-width: 1px;
-  border-radius: 2px;
-  background: var(--color-neutral-200);
+  border-radius: var(--radius-xs);
+  background: var(--bg-track);
 }
 
 .containerTrack {
@@ -265,7 +265,7 @@
   display: grid;
   place-items: center;
   min-height: 2rem;
-  background: var(--color-neutral-200);
+  background: var(--bg-track);
   border-radius: var(--radius-control-sm);
   font-family: var(--font-mono);
   font-size: 0.75rem;
