@@ -38,7 +38,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
-  margin-bottom: 0.35rem;
+  margin-bottom: var(--space-stack-xs);
 }
 
 .hueTitle {
@@ -61,7 +61,7 @@
 .chipRow {
   display: flex;
   flex-wrap: nowrap;
-  gap: 3px;
+  gap: var(--space-px);
   width: 100%;
   overflow-x: auto;
 }
@@ -149,7 +149,7 @@
 }
 
 .subgroupTitle {
-  margin: 0 0 0.45rem;
+  margin: 0 0 var(--space-stack-sm);
   padding: 0;
   font-family: var(--font-sans);
   font-size: 0.8125rem;
@@ -187,18 +187,18 @@
 .tokenChipGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-  gap: 0.15rem 0.75rem;
+  gap: var(--space-px) var(--space-gap-sm);
 }
 
 .tokenChip {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--space-gap-sm);
   width: 100%;
   margin: 0;
-  padding: 0.4rem 0.35rem;
+  padding: var(--space-inset-sm) var(--space-inset-xs);
   border: 0;
-  border-radius: 0.4rem;
+  border-radius: var(--radius-md);
   background: transparent;
   text-align: left;
   cursor: pointer;
@@ -218,13 +218,13 @@
   display: block;
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.35rem;
+  border-radius: var(--radius-md);
   border: var(--border-width-thin) solid var(--border-faint);
 }
 
 .tokenChipBody {
   display: grid;
-  gap: 0.1rem;
+  gap: var(--space-px);
   min-width: 0;
 }
 

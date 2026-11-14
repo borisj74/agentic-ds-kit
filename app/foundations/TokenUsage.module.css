@@ -1,6 +1,6 @@
 .note {
   display: grid;
-  gap: 0.15rem;
+  gap: var(--space-px);
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-xs);
