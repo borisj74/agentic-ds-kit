@@ -33,7 +33,8 @@ Contract fit (--score): a 0-100 number for how much of the UI comes from the kit
   ${COUNTED_NATIVE_TAGS.join(", ")} count as other. Layout and text tags,
   icons and other components are not counted. CSS files add findings, not elements.
   share = kitElements / (kitElements + otherElements), or 1 with no elements
-  score = share x 100, minus 5 per error and 2 per warning, kept between 0 and 100
+  score = share x 100, minus 5 per error and 2 per warning for every 100
+          elements (screens with up to 100 elements count as 100), kept 0-100
 
 Options:
   --json        Print the findings and the error and warning counts as JSON
@@ -121,13 +122,17 @@ export function elementsInText(text, file, absPath) {
 
 export const SCORE_FORMULA =
   "share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements; " +
-  "value = max(0, min(100, round(100 * share - 5 * errors - 2 * warnings)))";
+  "scale = 100 / max(100, kitElements + otherElements); " +
+  "value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))";
 
 /** The contract fit score: { value, kitElements, otherElements, errors, warnings, formula }. */
 export function contractFit({ kitElements, otherElements, errors, warnings }) {
   const total = kitElements + otherElements;
   const share = total === 0 ? 1 : kitElements / total;
-  const value = Math.max(0, Math.min(100, Math.round(100 * share - 5 * errors - 2 * warnings)));
+  // Penalties are per 100 elements, so a big folder is not pushed to 0 by its size alone.
+  // Up to 100 elements the scale is 1: each error costs 5 points and each warning 2.
+  const scale = 100 / Math.max(100, total);
+  const value = Math.max(0, Math.min(100, Math.round(100 * share - (5 * errors + 2 * warnings) * scale)));
   return { value, kitElements, otherElements, errors, warnings, formula: SCORE_FORMULA };
 }
 
@@ -195,7 +200,8 @@ function printScore(score) {
   console.log(`\nContract fit: ${value}/100`);
   console.log(`  ${kitElements} kit element${kitElements === 1 ? "" : "s"}, ${otherElements} other, ${plural(errors, "error")}, ${plural(warnings, "warning")}.`);
   console.log("  share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements");
-  console.log("  value = max(0, min(100, round(100 * share - 5 * errors - 2 * warnings)))");
+  console.log("  scale = 100 / max(100, kitElements + otherElements)");
+  console.log("  value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))");
 }
 
 function printText(result) {

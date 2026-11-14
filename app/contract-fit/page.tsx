@@ -10,7 +10,8 @@ npx agentic-ds-kit review app --min 80`;
 
 const FORMULA = `share = kitElements / (kitElements + otherElements)
         (or 1 when there are no countable elements)
-value = max(0, min(100, round(100 * share - 5 * errors - 2 * warnings)))`;
+scale = 100 / max(100, kitElements + otherElements)
+value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))`;
 
 const JSON_SHAPE = `"score": {
   "value": 85,
@@ -18,7 +19,7 @@ const JSON_SHAPE = `"score": {
   "otherElements": 2,
   "errors": 1,
   "warnings": 0,
-  "formula": "share = kitElements / (kitElements + otherElements), ..."
+  "formula": "share = kitElements / (kitElements + otherElements), ...; scale = ...; value = ..."
 }`;
 
 const COPY = `mkdir -p .github/workflows
@@ -61,7 +62,7 @@ export default function ContractFitPage() {
         <p className={playground.pageLead}>
           A number from 0 to 100 for how well a screen follows the kit. It is the share of UI
           elements that come from the kit, minus a penalty for each review error and a smaller one
-          for each warning. It sits on top of review: the findings and what to fix stay the same.
+          for each warning, counted per 100 elements. It sits on top of review: the findings and what to fix stay the same.
         </p>
 
         <Section title="Run it" description="Add --score to review. --min fails the run when the score is too low.">
@@ -79,14 +80,17 @@ export default function ContractFitPage() {
           <Table size="sm" caption="How review sorts tags." columns={[...COUNT_COLUMNS]} rows={[...COUNT_ROWS]} />
         </Section>
 
-        <Section title="The formula" description="Share first, then penalties, then kept between 0 and 100.">
+        <Section title="The formula" description="Share first, then penalties per 100 elements, then kept between 0 and 100.">
           <div className={playground.stack}>
             <CodeBlock code={FORMULA} />
             <p className={playground.body}>
               In plain words: take the part of your elements that come from the kit, as a percent.
-              Take off 5 for every error and 2 for every warning. Round it, and never go below 0 or
-              above 100. A file with no countable elements, such as a clean CSS file, starts at 100,
-              so errors in it still bring the score down.
+              Take off 5 for every error and 2 for every warning, for every 100 elements. Round it,
+              and never go below 0 or above 100. Anything with up to 100 elements counts as 100, so
+              on a single screen each error costs a full 5 points. In a folder with 400 elements it
+              costs 1.25, so a big app is not pushed to 0 just by being big. A file with no
+              countable elements, such as a clean CSS file, starts at 100, so errors in it still
+              bring the score down.
             </p>
           </div>
         </Section>
@@ -96,8 +100,9 @@ export default function ContractFitPage() {
             <p className={playground.body}>
               The page uses 18 kit components (Buttons, Inputs, a Table and so on) and two native
               tags: one a and one img. Review finds one error, a hardcoded colour, and no warnings.
-              Share is 18 / 20 = 0.9, so 90. Minus 5 for the error gives 85. Swap the a for kit Link
-              and fix the colour, and the score goes to 95.
+              Share is 18 / 20 = 0.9, so 90. The page has fewer than 100 elements, so the scale is
+              1 and the error costs 5, which gives 85. Swap the a for kit Link and fix the colour,
+              and the score goes to 95.
             </p>
             <CodeBlock code={JSON_SHAPE} />
           </div>

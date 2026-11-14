@@ -426,7 +426,7 @@ Agents can run the same check through the MCP tool `review_ui`, including on a d
 
 ### Contract fit
 
-Add `--score` for a 0–100 contract fit score: the share of UI elements that come from the kit, minus 5 for each error and 2 for each warning.
+Add `--score` for a 0–100 contract fit score: the share of UI elements that come from the kit, minus 5 for each error and 2 for each warning per 100 elements (anything with up to 100 elements counts as 100, so on one screen an error costs a full 5 points).
 
 ```bash
 npx agentic-ds-kit review app --score
@@ -437,7 +437,8 @@ A UI element is an opening JSX tag. Kit components count as kit. The native tags
 
 ```text
 share = kitElements / (kitElements + otherElements), or 1 when there are no countable elements
-value = max(0, min(100, round(100 * share - 5 * errors - 2 * warnings)))
+scale = 100 / max(100, kitElements + otherElements)
+value = max(0, min(100, round(100 * share - (5 * errors + 2 * warnings) * scale)))
 ```
 
 `--json --score` adds `score: { value, kitElements, otherElements, errors, warnings, formula }`. `--min <n>` turns on the score and exits 1 when it is below `n`; errors still exit 1 as before. `review_ui` always includes `score`. See the [Contract fit](https://agentic-ds-kit.vercel.app/contract-fit) page for a worked example.

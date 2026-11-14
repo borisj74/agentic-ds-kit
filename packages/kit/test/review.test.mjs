@@ -276,11 +276,14 @@ describe("contract fit score", () => {
   const SCORE_FIELDS = ["value", "kitElements", "otherElements", "errors", "warnings", "formula"];
   const score = (code, filename = "x.tsx") => reviewCode(code, filename, { score: true }).score;
 
-  test("the formula: share x 100, minus 5 per error and 2 per warning, kept in 0-100", () => {
+  test("the formula: share x 100, minus 5 per error and 2 per warning per 100 elements, kept in 0-100", () => {
     assert.equal(contractFit({ kitElements: 18, otherElements: 2, errors: 1, warnings: 0 }).value, 85);
     assert.equal(contractFit({ kitElements: 1, otherElements: 2, errors: 0, warnings: 1 }).value, 31);
     assert.equal(contractFit({ kitElements: 1, otherElements: 1, errors: 20, warnings: 0 }).value, 0);
     assert.equal(contractFit({ kitElements: 0, otherElements: 0, errors: 0, warnings: 0 }).value, 100);
+    assert.equal(contractFit({ kitElements: 100, otherElements: 0, errors: 2, warnings: 0 }).value, 90, "100 elements: scale is still 1");
+    assert.equal(contractFit({ kitElements: 400, otherElements: 0, errors: 2, warnings: 0 }).value, 98, "400 elements: errors cost a quarter");
+    assert.equal(contractFit({ kitElements: 1526, otherElements: 130, errors: 36, warnings: 5 }).value, 81, "a big folder is not pushed to 0 by size");
     assert.deepEqual(Object.keys(contractFit({ kitElements: 0, otherElements: 0, errors: 0, warnings: 0 })), SCORE_FIELDS);
   });
 
@@ -336,7 +339,8 @@ describe("contract fit score", () => {
     assert.equal(res.status, 0);
     assert.match(res.stdout, /No problems found in 1 file\./);
     assert.match(res.stdout, /Contract fit: 100\/100/);
-    assert.match(res.stdout, /value = max\(0, min\(100, round\(100 \* share - 5 \* errors - 2 \* warnings\)\)\)/);
+    assert.match(res.stdout, /scale = 100 \/ max\(100, kitElements \+ otherElements\)/);
+    assert.match(res.stdout, /value = max\(0, min\(100, round\(100 \* share - \(5 \* errors \+ 2 \* warnings\) \* scale\)\)\)/);
     assert.doesNotMatch(run(["review", join(fixtures, "rebuild/good.tsx")]).stdout, /Contract fit/);
   });
 
