@@ -518,6 +518,7 @@ function patternLeaves(pathname: string): AppNavItem[] {
 
 /** Docs pages in reading order, for the Docs group. */
 const DOC_PAGES = [
+  { href: "/start-here", label: "Start here" },
   { href: "/get-started", label: "Get started" },
   { href: "/installation", label: "Installation" },
   { href: "/mcp", label: "MCP server" },

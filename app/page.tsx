@@ -47,6 +47,12 @@ export default function Home() {
           published as agentic-ds-kit {kitPackage.version}.
         </p>
 
+        <p className={playground.pageLead}>
+          <Link href="/start-here" linkAs={NextLink} variant="standalone">
+            New to Nistha and not an engineer? Start here
+          </Link>
+        </p>
+
         <Section title="Install" description="In a React 19 app (Next.js 15 or later, Vite, …). Tokens load with the first import.">
           <div className={playground.stack}>
             <CodeBlock code={'npm install agentic-ds-kit\n\nimport { Button } from "agentic-ds-kit";'} />

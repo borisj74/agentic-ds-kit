@@ -14,6 +14,8 @@ npm install agentic-ds-kit@latest
 
 Peer: React 19. `AppNav` uses `next/link`; Next.js 15 or later is an optional peer if you use that component (Next 14 does not support React 19).
 
+New app from a working screen (a Next app with a pattern, the agent rules and the MCP config; nothing is installed until you run `npm install`): `npx agentic-ds-kit init my-app --template dashboard`. For product managers and designers: [Start here](https://agentic-ds-kit.vercel.app/start-here).
+
 The package is **ESM-only**: use `import`, not `require()`. Next.js, Vite and other modern bundlers handle this out of the box; a CommonJS-only setup (for example an old Jest config) needs ESM support turned on.
 
 ## Use

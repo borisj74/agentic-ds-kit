@@ -26,6 +26,8 @@ The package is ESM-only (`import`, not `require()`), needs React 19, and support
 
 Tokens load with that import. Copy `AGENTS.md` and `CLAUDE.md` from the package into the app root so Cursor and Claude Code follow the kit. Step-by-step (existing app, new folder, upgrade from 0.1.0, troubleshooting): [docs/getting-started.md](docs/getting-started.md#install-the-package-in-your-app).
 
+New app from a working screen: `npx agentic-ds-kit init my-app --template dashboard`. Not an engineer? Read [Start here](https://agentic-ds-kit.vercel.app/start-here).
+
 ## What's here
 
 Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (141 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.

@@ -166,6 +166,19 @@ Do not paste the kit rules into chat every session.
 
 Do not `npm init` and stop there — the kit is not an app.
 
+**Quick path:** `init` writes a small Next app (App Router, TypeScript) into a new folder, starting from a pattern. It includes `AGENTS.md`, `CLAUDE.md` and `.mcp.json`, so Claude Code and Cursor follow the kit straight away. It does not install anything or touch the network.
+
+```bash
+npx agentic-ds-kit init my-app --template dashboard
+cd my-app
+npm install
+npm run dev
+```
+
+Any pattern id works after `--template` (`npx agentic-ds-kit add --list` shows them). Leave `--template` out for a blank page. The folder must be new or empty; `--force` uses a folder that has files and only adds the missing ones. Product managers and designers: [Start here](https://agentic-ds-kit.vercel.app/start-here) walks through the same steps in plain words.
+
+**Manual path:** create the Next app yourself, then add the kit.
+
 ```bash
 mkdir my-app
 cd my-app
