@@ -11,6 +11,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
 import type { ApprovalCardAction, ApprovalCardProps, ApprovalCardRisk } from "./ApprovalCard.types";
 import styles from "./ApprovalCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ApprovalCardProps,
@@ -154,7 +155,7 @@ export function ApprovalCard({
       status === "expired" ? "auto-denied" : [resolvedBy, resolvedAt].filter(Boolean).join(" · ") || undefined;
     return (
       <article
-        {...rest}
+        {...rest} {...nisthaAttr("approvalcard", rest)}
         ref={mergeRefs(focus.rowRef, ref)}
         tabIndex={-1}
         className={cx(styles.resolved, styles[status], className)}
@@ -186,7 +187,7 @@ export function ApprovalCard({
 
   return (
     <article
-      {...rest}
+      {...rest} {...nisthaAttr("approvalcard", rest)}
       ref={ref}
       tabIndex={-1}
       className={cx(styles.card, className)}

@@ -30,6 +30,7 @@ import {
 } from "./activityFeed.logic";
 import type { ActivityEvent, ActivityFeedFilters, ActivityFeedProps } from "./ActivityFeed.types";
 import styles from "./ActivityFeed.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ActivityActor,
@@ -277,7 +278,7 @@ export function ActivityFeed(props: ActivityFeedProps) {
   }
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("activityfeed", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>

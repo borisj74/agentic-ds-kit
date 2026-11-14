@@ -14,6 +14,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { CommentThreadProps, ThreadComment } from "./CommentThread.types";
 import styles from "./CommentThread.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CommentThreadProps, ThreadComment, CommentAuthor } from "./CommentThread.types";
 
@@ -193,7 +194,7 @@ export function CommentThread({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("commentthread", rest)}
       ref={mergeRefs(rootRef, ref)}
       className={cx(styles.thread, title && styles.card, className)}
       aria-labelledby={title ? titleId : undefined}

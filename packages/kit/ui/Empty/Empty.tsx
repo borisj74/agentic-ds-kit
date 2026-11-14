@@ -2,6 +2,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { EmptyProps } from "./Empty.types";
 import { cx } from "../shared/cx";
 import styles from "./Empty.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { EmptyProps } from "./Empty.types";
 
@@ -22,7 +23,7 @@ export function Empty({
   const showMedia = Boolean(media);
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, outlined && styles.outlined, className)}>
+    <div {...rest} {...nisthaAttr("empty", rest)} ref={ref} className={cx(styles.root, outlined && styles.outlined, className)}>
       {showIcon ? (
         <div className={styles.mediaWell} aria-hidden>
           <LucideByName name={icon} size={ICON_SIZE} />

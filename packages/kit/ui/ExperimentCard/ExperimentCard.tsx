@@ -12,6 +12,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { ExperimentCardProps, ExperimentVariant } from "./ExperimentCard.types";
 import styles from "./ExperimentCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ExperimentCardProps, ExperimentVariant, ExperimentStatus } from "./ExperimentCard.types";
 
@@ -68,7 +69,7 @@ export function ExperimentCard({
 
   if (loading) {
     return (
-      <article {...rest} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={name}>
+      <article {...rest} {...nisthaAttr("experimentcard", rest)} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={name}>
         <div className={styles.loadingHead}>
           <Skeleton width="50%" />
           <Skeleton width="20%" />
@@ -82,7 +83,7 @@ export function ExperimentCard({
   const winnerLetter = winner ? LETTERS[winnerIndex] : "";
 
   return (
-    <article {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId}>
+    <article {...rest} {...nisthaAttr("experimentcard", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId}>
       <header className={styles.header}>
         <FlaskConical size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.headerIcon} />
         <h3 id={titleId} className={styles.title}>

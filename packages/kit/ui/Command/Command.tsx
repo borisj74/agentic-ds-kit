@@ -5,6 +5,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { CommandProps } from "./Command.types";
 import { cx } from "../shared/cx";
 import styles from "./Command.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CommandProps, CommandGroup, CommandItem } from "./Command.types";
 
@@ -95,7 +96,7 @@ export function Command({
   }
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)}>
+    <div {...rest} {...nisthaAttr("command", rest)} ref={ref} className={cx(styles.root, className)}>
       <div className={styles.search}>
         <LucideByName name="Search" size={16} className={styles.searchIcon} />
         <input

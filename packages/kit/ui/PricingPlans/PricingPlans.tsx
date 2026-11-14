@@ -12,6 +12,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { PricingPlan, PricingPlansProps } from "./PricingPlans.types";
 import styles from "./PricingPlans.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PricingPlansProps, PricingPlan, PricingInterval } from "./PricingPlans.types";
 
@@ -44,7 +45,7 @@ export function PricingPlans({
     plan.yearlyPrice !== undefined && plan.price > 0 ? Math.round((1 - plan.yearlyPrice / plan.price) * 100) : 0;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("pricingplans", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <div className={styles.heading}>
           <h3 id={titleId} className={styles.title}>

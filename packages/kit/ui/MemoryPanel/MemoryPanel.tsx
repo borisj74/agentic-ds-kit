@@ -14,6 +14,7 @@ import { Textarea } from "../Textarea";
 import { cx } from "../shared/cx";
 import type { MemoryItem, MemoryPanelProps } from "./MemoryPanel.types";
 import styles from "./MemoryPanel.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { MemoryPanelProps, MemoryItem } from "./MemoryPanel.types";
 
@@ -227,7 +228,7 @@ export function MemoryPanel({
   }
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.panel, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("memorypanel", rest)} ref={ref} className={cx(styles.panel, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <Brain size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>

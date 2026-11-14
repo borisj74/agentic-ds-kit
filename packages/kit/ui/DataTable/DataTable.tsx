@@ -27,6 +27,7 @@ import type {
 } from "./DataTable.types";
 import { cx } from "../shared/cx";
 import styles from "./DataTable.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   DataTableProps,
@@ -338,7 +339,7 @@ export function DataTable({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("datatable", rest)}
       ref={ref}
       className={cx(styles.root, className)}
       data-size={cellSize}

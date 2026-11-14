@@ -9,6 +9,7 @@ import type { FileUploadItem, FileUploadProps } from "./FileUpload.types";
 import { cx } from "../shared/cx";
 import styles from "./FileUpload.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { FileUploadProps, FileUploadItem, FileUploadStatus } from "./FileUpload.types";
 
@@ -176,7 +177,7 @@ export function FileUpload({
   const describedByIds = [hintId, describedBy].filter(Boolean).join(" ");
 
   return (
-    <div className={cx(styles.root, className)}>
+    <div {...nisthaAttr("fileupload")} className={cx(styles.root, className)}>
       <button
         {...rest}
         ref={ref}

@@ -7,6 +7,7 @@ import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
 import type { AgentTrailProps, AgentTrailStep, AgentTrailStepStatus } from "./AgentTrail.types";
 import styles from "./AgentTrail.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentTrailProps, AgentTrailStep, AgentTrailStepStatus } from "./AgentTrail.types";
 
@@ -55,7 +56,7 @@ export function AgentTrail({
   const firstOpen = steps.findIndex((step) => step.status !== "done");
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.trail, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("agenttrail", rest)} ref={ref} className={cx(styles.trail, className)} aria-labelledby={titleId}>
       <header className={styles.header}>
         <div className={styles.titleRow}>
           {icon ? <LucideByName name={icon} size={16} className={styles.titleIcon} /> : null}

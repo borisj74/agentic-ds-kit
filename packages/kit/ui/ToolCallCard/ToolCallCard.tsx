@@ -8,6 +8,7 @@ import { Button } from "../Button";
 import { cx } from "../shared/cx";
 import type { ToolCall, ToolCallCardProps, ToolCallStatus } from "./ToolCallCard.types";
 import styles from "./ToolCallCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ToolCallCardProps, ToolCall, ToolCallStatus } from "./ToolCallCard.types";
 
@@ -152,7 +153,7 @@ export function ToolCallCard({
   );
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.card, styles[headStatus], className)}>
+    <div {...rest} {...nisthaAttr("toolcallcard", rest)} ref={ref} className={cx(styles.card, styles[headStatus], className)}>
       {hasDetail ? (
         <button type="button" className={styles.head} aria-expanded={open} aria-controls={panelId} onClick={toggle}>
           {headInner}

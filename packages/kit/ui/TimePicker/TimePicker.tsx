@@ -7,6 +7,7 @@ import { bump, formatTime, parseTime, toTime, togglePeriod } from "./time";
 import type { TimePickerProps } from "./TimePicker.types";
 import styles from "./TimePicker.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { HourCycle, TimePickerProps, TimePickerSize } from "./TimePicker.types";
 export { formatTime } from "./time";
@@ -42,7 +43,7 @@ export function TimePicker({
   const sizeClass = size === "sm" ? controlStyles.controlSm : controlStyles.controlMd;
 
   return (
-    <div
+    <div {...nisthaAttr("timepicker")}
       className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell, className)}
       role="group"
       aria-label={ariaLabel ?? "Time"}

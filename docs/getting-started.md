@@ -452,9 +452,61 @@ cp node_modules/agentic-ds-kit/templates/github/contract-fit.yml .github/workflo
 
 Set `REVIEW_PATH` in the file to your UI folder. On each pull request it keeps one comment up to date with the score, the error and warning counts and the top 10 findings. It only reports unless you set `MIN_SCORE`. On pull requests from forks GitHub does not let the job comment; the job still passes and the score is in the log.
 
+## Live check
+
+`review` reads source files. `inspect` reads the page your app actually renders and lists the kit pieces on it, grouped by level, with counts. It also checks the page landmarks.
+
+Turn on inspect mode when you start the app:
+
+```bash
+NEXT_PUBLIC_NISTHA_INSPECT=1 npm run dev
+```
+
+In inspect mode every kit component writes `data-nistha="<contract id>"` on its root element, for example `data-nistha="button"`. A component built on another kit component writes both ids on the shared element (`data-nistha="tiltcard card"`). Nothing else in the markup changes, and with the variable unset the attribute is never written.
+
+Production builds (`NODE_ENV=production`) never write it, even with `NEXT_PUBLIC_NISTHA_INSPECT=1`. To check a production build on purpose, set `NEXT_PUBLIC_NISTHA_INSPECT_FORCE=1` as well when you build it, and don't deploy that build. Next.js reads `NEXT_PUBLIC_*` at build time, so restart `next dev` or rebuild after you change either variable.
+
+Then point `inspect` at a page:
+
+```bash
+npx agentic-ds-kit inspect http://localhost:3000
+npx agentic-ds-kit inspect http://localhost:3000/settings --json
+```
+
+```text
+http://localhost:3000 (server HTML)
+
+14 kit pieces, 6 different.
+
+block (1)
+  AgentOverview  1
+
+molecule (3)
+  Card           3
+
+atom (10)
+  Button         6
+  Badge          4
+
+Landmarks: 1 <main>, 1 <h1>.
+No landmark problems.
+```
+
+| Check | Severity | What it finds |
+| --- | --- | --- |
+| `no-main` | error | The page has no `<main>` (or `role="main"`). |
+| `multiple-main` | error | The page has more than one `<main>`. |
+| `no-h1` | error | The page has no `<h1>`. |
+
+By default `inspect` fetches the HTML the server sends, with no browser, so parts that render only in the browser (an open Modal, a Toast) are not counted. `--browser` loads the page in Playwright and reads it after it hydrates. Playwright is not installed with the kit; add it with `npm i -D playwright` and `npx playwright install chromium`. Without it, `--browser` exits 2 and says so. You can also pass a saved `.html` file instead of a URL.
+
+If the page has no markers, `inspect` says inspect mode may be off; that is not an error. Ids that are not in the installed kit's index are listed under "Not in this kit's index". `--json` prints the same data: `levels` (each with `level`, `count` and `pieces`), `unknown`, `landmarks`, `problems` and `errors`. The command exits 0 with no landmark errors, 1 with one or more, and 2 when it can't run (the app is not running, the file does not exist, or Playwright is missing for `--browser`).
+
+Agents can run the same check through the MCP tool `inspect_ui`.
+
 ## MCP
 
-The package includes a local MCP server so an agent can query the kit that is installed, instead of guessing from an older copy of the contracts. It is read-only and speaks stdio. Every answer is read from that install's `contracts/`, `tokens/tokens.json`, `tokens/usage.json`, pattern contracts, and `AGENTS.md`.
+The package includes a local MCP server so an agent can query the kit that is installed, instead of guessing from an older copy of the contracts. It is read-only and speaks stdio. Every answer is read from that install's `contracts/`, `tokens/tokens.json`, `tokens/usage.json`, pattern contracts, and `AGENTS.md`. The one tool that reads anything else is `inspect_ui`, which fetches the page URL you give it.
 
 Run it from the app root so `npx` uses the local install:
 
@@ -499,6 +551,7 @@ claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 | `get_pattern` | `id` | Level (`template`), description, the add command, and the pattern's must and defaults |
 | `get_rules` | none | `AGENTS.md`, including the page-layout grid rule |
 | `review_ui` | `path`, or `code` and `filename` | The same findings, counts and contract fit `score` as `npx agentic-ds-kit review --score`. `code` with `filename` checks a draft that is not saved yet |
+| `inspect_ui` | `url`, or `html` and `name` | The same result as `npx agentic-ds-kit inspect`: kit pieces on a rendered page by level, landmark counts and problems. `url` fetches the server HTML (no browser); `html` with `name` reads markup you already have |
 | `questions` | options, `detail`, `limit`, `offset`; all optional | The same JSON as `npx agentic-ds-kit questions`; `detail: "summary"` keeps id, label and kind (no enums) |
 
 `questions` options match the CLI: `only`, `group`, `overlay` (the object, not a file path), `none`, `useWhen`, `notWhen`, `askStyle`, `enums`.

@@ -4,6 +4,7 @@ import type { CardAction, CardProps } from "./Card.types";
 import type { KitLinkComponent } from "../shared/link";
 import { cx } from "../shared/cx";
 import styles from "./Card.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CardProps, CardSize, CardAction } from "./Card.types";
 
@@ -42,7 +43,7 @@ export function Card({
 
   return (
     <article
-      {...rest}
+      {...rest} {...nisthaAttr("card", rest)}
       ref={ref}
       className={cx(styles.card, styles[size], flush && styles.flush, className)}
       aria-labelledby={title ? titleId : undefined}

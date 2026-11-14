@@ -12,6 +12,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
 import type { DecisionCardProps } from "./DecisionCard.types";
 import styles from "./DecisionCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { DecisionCardProps, DecisionCardStatus, DecisionOption } from "./DecisionCard.types";
 
@@ -52,7 +53,7 @@ export function DecisionCard({
     const Icon = status === "resolved" ? CircleCheck : ArrowRight;
     return (
       <section
-        {...rest}
+        {...rest} {...nisthaAttr("decisioncard", rest)}
         ref={mergeRefs(focus.rowRef, ref)}
         tabIndex={-1}
         className={cx(styles.resolved, styles[status], className)}
@@ -80,7 +81,7 @@ export function DecisionCard({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("decisioncard", rest)}
       ref={ref}
       className={cx(styles.card, sending && styles.sending, className)}
       aria-labelledby={titleId}

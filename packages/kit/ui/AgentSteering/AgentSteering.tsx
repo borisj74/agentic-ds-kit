@@ -10,6 +10,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { AgentSteeringProps, AgentSteeringStatus } from "./AgentSteering.types";
 import styles from "./AgentSteering.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentSteeringProps, AgentSteeringStatus } from "./AgentSteering.types";
 
@@ -76,7 +77,7 @@ export function AgentSteering({
 
   if (loading) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name}, loading`}>
+      <section {...rest} {...nisthaAttr("agentsteering", rest)} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name}, loading`}>
         <div className={styles.header}>
           <Skeleton shape="circle" size="md" />
           <div className={styles.heading}>
@@ -91,7 +92,7 @@ export function AgentSteering({
 
   if (status === "stopped") {
     return (
-      <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={nameId}>
+      <section {...rest} {...nisthaAttr("agentsteering", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={nameId}>
         {header}
         {stoppedNote ? (
           <p className={styles.stopped}>
@@ -131,7 +132,7 @@ export function AgentSteering({
         : "Steer: e.g. focus on refunds";
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={nameId} aria-busy={sending || undefined}>
+    <section {...rest} {...nisthaAttr("agentsteering", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={nameId} aria-busy={sending || undefined}>
       {header}
 
       {applied && !error ? (

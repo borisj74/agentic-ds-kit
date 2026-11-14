@@ -1,6 +1,7 @@
 import type { CountProps } from "./Count.types";
 import { cx } from "../shared/cx";
 import styles from "./Count.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CountProps, CountIntent, CountSize } from "./Count.types";
 
@@ -19,7 +20,7 @@ export function Count({
   const shown = count > max ? `${max}+` : String(count);
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("count", rest)}
       ref={ref}
       className={cx(styles.count, styles[intent], styles[size], subtle && styles.subtle, disabled && styles.disabled, className)}
       aria-disabled={disabled || undefined}

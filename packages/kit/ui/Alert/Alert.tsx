@@ -3,6 +3,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { AlertProps, AlertVariant } from "./Alert.types";
 import { cx } from "../shared/cx";
 import styles from "./Alert.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AlertProps, AlertVariant } from "./Alert.types";
 
@@ -18,7 +19,7 @@ export function Alert({ children, variant = "info", title, className, ref, ...re
   const role = variant === "warning" || variant === "danger" ? "alert" : "status";
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.alert, styles[variant], className)} role={role}>
+    <div {...rest} {...nisthaAttr("alert", rest)} ref={ref} className={cx(styles.alert, styles[variant], className)} role={role}>
       <Icon className={styles.icon} size={18} strokeWidth={ICON_STROKE} aria-hidden />
       <div className={styles.copy}>
         {title ? <p className={styles.title}>{title}</p> : null}

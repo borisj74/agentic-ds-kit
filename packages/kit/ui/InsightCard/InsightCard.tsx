@@ -4,6 +4,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { InsightCardAction, InsightCardProps, InsightCardTone } from "./InsightCard.types";
 import { cx } from "../shared/cx";
 import styles from "./InsightCard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   InsightCardProps,
@@ -70,7 +71,7 @@ export function InsightCard({
 
   return (
     <article
-      {...rest}
+      {...rest} {...nisthaAttr("insightcard", rest)}
       ref={ref}
       className={cx(styles.card, styles[size], styles[tone], className)}
       aria-labelledby={titleId}

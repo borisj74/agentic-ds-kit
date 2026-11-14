@@ -20,6 +20,7 @@ import { COMPONENT_LEVELS } from "./levels.mjs";
 import { createServer as createRpcServer, serveStdio } from "./mcp-server.mjs";
 import { MAX_LIMIT, shapeComponents, shapeQuestions, shapeTokens } from "./mcp-shape.mjs";
 import { QuestionsError, buildQuestions } from "./questions.mjs";
+import { InspectError, inspectHtml, inspectTarget } from "./inspect.mjs";
 import { ReviewError, reviewCode, reviewPath } from "./review.mjs";
 
 export const MCP_HELP = `Usage: npx agentic-ds-kit mcp
@@ -40,6 +41,8 @@ Tools:
   questions             Same JSON as npx agentic-ds-kit questions; detail summary, limit, offset
   review_ui             Same findings as npx agentic-ds-kit review --score: a path, or code
                         plus filename for a draft that is not saved yet
+  inspect_ui            Same result as npx agentic-ds-kit inspect: kit pieces on a rendered
+                        page by level, and landmark problems; a url, or html plus name
 
 Levels, smallest to biggest: ${COMPONENT_LEVELS.join(", ")}, template (patterns).
 Reuse the biggest piece that fits before building from smaller ones.
@@ -70,8 +73,15 @@ const objectSchema = (properties = {}, required = []) => ({
   additionalProperties: false,
 });
 
-function tool(name, { title, description, inputSchema }, handler) {
-  return { name, title, description, inputSchema: inputSchema ?? objectSchema(), annotations: READ_ONLY, handler };
+function tool(name, { title, description, inputSchema, annotations }, handler) {
+  return {
+    name,
+    title,
+    description,
+    inputSchema: inputSchema ?? objectSchema(),
+    annotations: { ...READ_ONLY, ...annotations },
+    handler,
+  };
 }
 
 function questionsOptions(args) {
@@ -220,15 +230,47 @@ function createServer() {
     },
   );
 
+  register(
+    "inspect_ui",
+    {
+      title: "Inspect UI",
+      description:
+        "List the kit pieces on a rendered page, the same as `npx agentic-ds-kit inspect`. Kit components write data-nistha=\"<id>\" on their root when the app runs with NEXT_PUBLIC_NISTHA_INSPECT=1 (never in production builds). Pass url (an http(s) page, read as the HTML the server sends, without a browser), or html plus name for markup you already have, such as a saved page. Returns the pieces grouped by level (biggest first) with counts, ids not in this kit's index, landmark counts (main, h1) and problems: no-main, multiple-main, no-h1 (errors). With no markers, inspectMode is false and note says inspect mode may be off.",
+      inputSchema: objectSchema({
+        url: { type: "string", description: "Page to read, such as http://localhost:3000/settings." },
+        html: { type: "string", description: "Page markup to read instead of a url. Needs name." },
+        name: { type: "string", description: "Name for the html in the result, such as settings.html. Needs html." },
+      }),
+      annotations: { idempotentHint: false, openWorldHint: true },
+    },
+    ({ url, html, name }) => {
+      if (url !== undefined && (html !== undefined || name !== undefined)) {
+        throw new InspectError("Pass url, or html with name, not both.");
+      }
+      if (html !== undefined || name !== undefined) {
+        if (typeof html !== "string" || !html.trim()) throw new InspectError("html is required with name: pass the page markup.");
+        if (typeof name !== "string" || !name.trim()) throw new InspectError("name is required with html, such as settings.html.");
+        return inspectHtml(html, { source: name.trim(), mode: "html" });
+      }
+      if (url === undefined) throw new InspectError("Pass url (an http(s) page), or html with name.");
+      if (!/^https?:\/\//i.test(url.trim())) throw new InspectError(`url must start with http:// or https://, not ${url}.`);
+      return inspectTarget(url);
+    },
+  );
+
   return createRpcServer({
     name: "agentic-ds-kit",
     version,
     instructions:
       "Read-only catalog of the agentic-ds-kit install this process was started from. " +
-      "Use these tools for components, tokens, patterns, kit rules, the questions option list, and review_ui to check UI code. " +
+      "Use these tools for components, tokens, patterns, kit rules, the questions option list, review_ui to check UI code, and inspect_ui to list the kit pieces on a rendered page. " +
       "Answers come from that install's files. Do not invent a component or token the tools do not return.",
     tools,
-    isToolError: (error) => error instanceof CatalogError || error instanceof QuestionsError || error instanceof ReviewError,
+    isToolError: (error) =>
+      error instanceof CatalogError ||
+      error instanceof QuestionsError ||
+      error instanceof ReviewError ||
+      error instanceof InspectError,
   });
 }
 

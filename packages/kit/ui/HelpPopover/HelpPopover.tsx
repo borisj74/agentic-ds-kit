@@ -17,6 +17,7 @@ import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./HelpPopover.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { HelpPopoverProps, HelpPopoverPlacement } from "./HelpPopover.types";
 
@@ -330,7 +331,7 @@ export function HelpPopover({
     : null;
 
   return (
-    <span
+    <span {...nisthaAttr("helppopover")}
       ref={wrapperRef}
       className={styles.wrapper}
       onPointerEnter={() => show()}

@@ -2,6 +2,7 @@ import type { ButtonAppearance, ButtonProps } from "./Button.types";
 import { LucideByName } from "./lucideName";
 import { cx } from "../shared/cx";
 import styles from "./Button.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ButtonProps,
@@ -43,7 +44,7 @@ export function Button({
 
   return (
     <button
-      {...rest}
+      {...rest} {...nisthaAttr("button", rest)}
       ref={ref}
       type={type}
       disabled={disabled}

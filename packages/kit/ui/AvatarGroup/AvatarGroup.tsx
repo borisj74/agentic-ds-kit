@@ -2,6 +2,7 @@ import { Avatar } from "../Avatar";
 import type { AvatarGroupProps } from "./AvatarGroup.types";
 import { cx } from "../shared/cx";
 import styles from "./AvatarGroup.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AvatarGroupItem, AvatarGroupProps, AvatarGroupSize } from "./AvatarGroup.types";
 
@@ -10,7 +11,7 @@ export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className,
   const leftover = items.length - max;
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.group, className)} role="group" aria-label={ariaLabel}>
+    <div {...rest} {...nisthaAttr("avatargroup", rest)} ref={ref} className={cx(styles.group, className)} role="group" aria-label={ariaLabel}>
       {visible.map((item, index) => (
         <span key={`${item.name}-${index}`} className={styles.item} style={{ zIndex: index + 1 }}>
           <Avatar name={item.name} src={item.src} initials={item.initials} size={size} />

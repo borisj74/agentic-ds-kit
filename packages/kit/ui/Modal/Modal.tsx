@@ -9,6 +9,7 @@ import styles from "./Modal.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
 
@@ -110,6 +111,7 @@ export function Modal({
       <button type="button" className={styles.scrim} aria-label={labels.closeDialog} onClick={onClose} />
       <ModalCard
         {...rest}
+        {...nisthaAttr("modal", rest)}
         ref={setCardRef}
         role="dialog"
         aria-modal="true"

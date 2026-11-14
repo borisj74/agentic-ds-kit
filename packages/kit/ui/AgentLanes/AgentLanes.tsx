@@ -11,6 +11,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AgentLanesProps, AgentLanesTask } from "./AgentLanes.types";
 import styles from "./AgentLanes.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   AgentLanesProps,
@@ -131,7 +132,7 @@ export function AgentLanes({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("agentlanes", rest)}
       ref={mergeRefs(rootRef, ref)}
       className={cx(styles.lanes, className)}
       style={{ ...style, ["--lane-count" as string]: agents.length } as CSSProperties}

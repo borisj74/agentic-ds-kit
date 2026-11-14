@@ -12,6 +12,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AgentMonitorProps, AgentMonitorStatus, AgentMonitorStep } from "./AgentMonitor.types";
 import styles from "./AgentMonitor.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   AgentMonitorProps,
@@ -113,7 +114,7 @@ export function AgentMonitor({
 
   if (loading) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.monitor, className)} aria-busy="true" aria-label={`${name}, loading`}>
+      <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={ref} className={cx(styles.monitor, className)} aria-busy="true" aria-label={`${name}, loading`}>
         <div className={styles.header}>
           <Skeleton shape="circle" size="md" />
           <div className={styles.heading}>
@@ -129,7 +130,7 @@ export function AgentMonitor({
 
   if (collapsed) {
     return (
-      <section {...rest} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={nameId}>
+      <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={nameId}>
         <span className={styles.lead} aria-hidden="true">
           <Bot size={16} strokeWidth={ICON_STROKE} />
         </span>
@@ -171,7 +172,7 @@ export function AgentMonitor({
   const showNow = status !== "idle" && !selected && !(status === "waiting" && pendingAction);
 
   return (
-    <section {...rest} ref={mergeRefs(rootRef, ref)} className={cx(styles.monitor, className)} aria-labelledby={nameId}>
+    <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.monitor, className)} aria-labelledby={nameId}>
       <header className={styles.header}>
         <span className={styles.lead} aria-hidden="true">
           <Bot size={16} strokeWidth={ICON_STROKE} />

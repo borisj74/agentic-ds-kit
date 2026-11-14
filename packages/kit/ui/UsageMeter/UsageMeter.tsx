@@ -13,6 +13,7 @@ import { UsageList } from "../UsageList";
 import { cx } from "../shared/cx";
 import type { UsageMeterProps } from "./UsageMeter.types";
 import styles from "./UsageMeter.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { UsageMeterProps, UsageCategory } from "./UsageMeter.types";
 
@@ -54,7 +55,7 @@ export function UsageMeter({
   const today = daily.length ? daily[daily.length - 1] : undefined;
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("usagemeter", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <h3 id={titleId} className={styles.title}>
           {title}

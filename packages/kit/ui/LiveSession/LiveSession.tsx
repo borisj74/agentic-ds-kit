@@ -9,6 +9,7 @@ import { cx } from "../shared/cx";
 import { currentRequest, runningItems, sessionSummary, steeredAgent, steeringStatus } from "./liveSession.logic";
 import type { LiveSessionProps } from "./LiveSession.types";
 import styles from "./LiveSession.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { LiveSessionProps, LiveSessionAgent, LiveSessionAgentStatus, LiveSessionRequest } from "./LiveSession.types";
 
@@ -54,7 +55,7 @@ export function LiveSession(props: LiveSessionProps) {
   }
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("livesession", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <h2 id={titleId} className={styles.title}>
           {title}

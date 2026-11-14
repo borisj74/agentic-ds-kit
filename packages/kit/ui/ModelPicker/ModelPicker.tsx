@@ -8,6 +8,7 @@ import type { DropdownMenuGroup } from "../DropdownMenu/DropdownMenu.types";
 import { cx } from "../shared/cx";
 import type { ModelPickerProps, PickerModel } from "./ModelPicker.types";
 import styles from "./ModelPicker.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ModelPickerProps, PickerModel } from "./ModelPicker.types";
 
@@ -70,7 +71,7 @@ export function ModelPicker({
         : "Choose a model";
 
   return (
-    <div {...rest} ref={ref} className={cx(styles.picker, styles[size], className)}>
+    <div {...rest} {...nisthaAttr("modelpicker", rest)} ref={ref} className={cx(styles.picker, styles[size], className)}>
       <label htmlFor={id} className={cx(styles.label, hideLabel && styles.srOnly)}>
         {label}
       </label>

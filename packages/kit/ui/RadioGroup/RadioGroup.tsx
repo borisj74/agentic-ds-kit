@@ -5,6 +5,7 @@ import { Badge } from "../Badge";
 import type { RadioGroupProps } from "./RadioGroup.types";
 import { cx } from "../shared/cx";
 import styles from "./RadioGroup.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   RadioGroupProps,
@@ -50,7 +51,7 @@ export function RadioGroup({
 
   return (
     <fieldset
-      {...rest}
+      {...rest} {...nisthaAttr("radiogroup", rest)}
       ref={ref}
       className={cx(styles.group, styles[size], layout === "card" && styles.card, error && styles.groupError, className)}
       disabled={disabled}

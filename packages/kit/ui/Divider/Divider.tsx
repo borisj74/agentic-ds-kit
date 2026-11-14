@@ -2,6 +2,7 @@ import type { Ref } from "react";
 import type { DividerProps } from "./Divider.types";
 import { cx } from "../shared/cx";
 import styles from "./Divider.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { DividerProps, DividerOrientation, DividerAlign, DividerTone } from "./Divider.types";
 
@@ -20,7 +21,7 @@ export function Divider({
   if (orientation === "vertical") {
     return (
       <div
-        {...rest}
+        {...rest} {...nisthaAttr("divider", rest)}
         ref={ref as Ref<HTMLDivElement>}
         className={cx(styles.vertical, toneClass, className)}
         role="separator"
@@ -30,11 +31,11 @@ export function Divider({
   }
 
   if (!label && !action) {
-    return <hr {...rest} ref={ref as Ref<HTMLHRElement>} className={cx(styles.rule, toneClass, className)} />;
+    return <hr {...rest} {...nisthaAttr("divider", rest)} ref={ref as Ref<HTMLHRElement>} className={cx(styles.rule, toneClass, className)} />;
   }
 
   return (
-    <div {...rest} ref={ref as Ref<HTMLDivElement>} className={cx(styles.labelled, toneClass, className)}>
+    <div {...rest} {...nisthaAttr("divider", rest)} ref={ref as Ref<HTMLDivElement>} className={cx(styles.labelled, toneClass, className)}>
       {align !== "start" ? <span className={styles.line} aria-hidden /> : null}
       <span className={styles.content}>
         {label ? <span className={styles.label}>{label}</span> : null}

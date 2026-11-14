@@ -12,6 +12,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { NotificationItem, NotificationStackProps, NotificationTone } from "./NotificationStack.types";
 import styles from "./NotificationStack.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { NotificationStackProps, NotificationItem, NotificationTone } from "./NotificationStack.types";
 
@@ -83,7 +84,7 @@ export function NotificationStack({
 
   if (inline) {
     return (
-      <div {...rest} ref={ref} className={cx(styles.panel, styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
+      <div {...rest} {...nisthaAttr("notificationstack", rest)} ref={ref} className={cx(styles.panel, styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
         {panel}
       </div>
     );
@@ -91,7 +92,7 @@ export function NotificationStack({
 
   const triggerName = unread > 0 ? `${label}, ${unread} unread` : label;
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)}>
+    <div {...rest} {...nisthaAttr("notificationstack", rest)} ref={ref} className={cx(styles.root, className)}>
       <Popover
         label={label}
         open={open}

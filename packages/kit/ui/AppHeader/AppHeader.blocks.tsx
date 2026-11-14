@@ -13,6 +13,7 @@ import type {
 } from "./AppHeader.types";
 import { cx } from "../shared/cx";
 import styles from "./AppHeader.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 /**
  * The `<header>` landmark and its bar grid (start | center | end). Container queries
@@ -30,6 +31,7 @@ export function AppHeaderRoot({
   return (
     <header
       {...rest}
+      {...nisthaAttr("appheader", rest)}
       ref={ref}
       className={cx(styles.header, radius === "md" && styles.radiusMd, className)}
       aria-label={ariaLabel}

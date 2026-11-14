@@ -6,6 +6,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { AvatarProps } from "./Avatar.types";
 import { cx } from "../shared/cx";
 import styles from "./Avatar.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AvatarProps, AvatarSize } from "./Avatar.types";
 
@@ -52,7 +53,7 @@ export function Avatar({ name, src, initials, size = "md", className, ref, ...re
 
   if (showImage) {
     return (
-      <span {...rest} ref={ref} className={cx(styles.avatar, styles[size], className)}>
+      <span {...rest} {...nisthaAttr("avatar", rest)} ref={ref} className={cx(styles.avatar, styles[size], className)}>
         <img className={styles.image} src={src} alt={name} onError={() => setFailed(true)} />
       </span>
     );
@@ -60,7 +61,7 @@ export function Avatar({ name, src, initials, size = "md", className, ref, ...re
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("avatar", rest)}
       ref={ref}
       className={cx(styles.avatar, styles[size], styles.fallback, className)}
       role="img"

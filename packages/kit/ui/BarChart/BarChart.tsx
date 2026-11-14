@@ -20,6 +20,7 @@ import { measureLabel } from "../shared/measureLabel";
 import { useChartSize } from "../shared/useChartSize";
 import type { BarChartProps } from "./BarChart.types";
 import styles from "./BarChart.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { BarChartProps, BarChartOrientation } from "./BarChart.types";
 
@@ -418,7 +419,7 @@ export function BarChart({
 
   return (
     <ChartFrame
-      {...rest}
+      {...rest} {...nisthaAttr("barchart", rest)}
       ref={rootRef}
       title={title}
       description={description}

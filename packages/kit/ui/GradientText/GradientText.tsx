@@ -1,6 +1,7 @@
 import type { GradientTextProps } from "./GradientText.types";
 import { cx } from "../shared/cx";
 import styles from "./GradientText.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { GradientTextProps, GradientTextTone, GradientTextElement } from "./GradientText.types";
 
@@ -19,7 +20,7 @@ export function GradientText({
   ...rest
 }: GradientTextProps) {
   return (
-    <Tag {...rest} ref={ref} className={cx(styles.root, styles[tone], inverse && styles.inverse, className)}>
+    <Tag {...rest} {...nisthaAttr("gradienttext", rest)} ref={ref} className={cx(styles.root, styles[tone], inverse && styles.inverse, className)}>
       {children}
     </Tag>
   );

@@ -7,6 +7,7 @@ import type { CheckboxProps } from "./Checkbox.types";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./Checkbox.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { CheckboxProps, CheckboxSize } from "./Checkbox.types";
 
@@ -42,7 +43,7 @@ export function Checkbox({
   }, [indeterminate]);
 
   return (
-    <label
+    <label {...nisthaAttr("checkbox")}
       className={cx(styles.label, styles[size], className)}
       htmlFor={id}
       data-disabled={disabled || undefined}

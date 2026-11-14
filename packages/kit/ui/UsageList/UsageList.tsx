@@ -4,6 +4,7 @@ import { Progress } from "../Progress";
 import type { UsageListItem, UsageListProps } from "./UsageList.types";
 import { cx } from "../shared/cx";
 import styles from "./UsageList.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { UsageListItem, UsageListProps } from "./UsageList.types";
 
@@ -56,7 +57,7 @@ function barTone(level: Threshold): "brand" | "warning" | "danger" {
 
 export function UsageList({ items, label = "Usage", className, ref, ...rest }: UsageListProps) {
   return (
-    <div {...rest} ref={ref} className={cx(styles.root, className)} role="list" aria-label={label}>
+    <div {...rest} {...nisthaAttr("usagelist", rest)} ref={ref} className={cx(styles.root, className)} role="list" aria-label={label}>
       {items.map((item) => {
         const ratio = usageRatio(item);
         const level = thresholdOf(ratio);

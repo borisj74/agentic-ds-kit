@@ -7,6 +7,7 @@ import { cx } from "../shared/cx";
 import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import type { AnchorNavItem, AnchorNavProps } from "./AnchorNav.types";
 import styles from "./AnchorNav.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AnchorNavItem, AnchorNavProps, AnchorNavVariant } from "./AnchorNav.types";
 
@@ -152,7 +153,7 @@ export function AnchorNav({
   }
 
   return (
-    <nav className={cx(styles.rail, className)} aria-label={ariaLabel} onKeyDown={onListKeyDown}>
+    <nav {...nisthaAttr("anchornav")} className={cx(styles.rail, className)} aria-label={ariaLabel} onKeyDown={onListKeyDown}>
       <AnchorLinks items={items} active={active} onJump={go} />
     </nav>
   );
@@ -192,7 +193,7 @@ function AnchorMenu({
   }, [open]);
 
   return (
-    <div ref={rootRef} className={cx(styles.menuRoot, className)}>
+    <div {...nisthaAttr("anchornav")} ref={rootRef} className={cx(styles.menuRoot, className)}>
       <button
         type="button"
         className={styles.menuTrigger}

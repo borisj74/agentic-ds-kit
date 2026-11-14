@@ -10,6 +10,7 @@ import type { TagProps } from "./Tag.types";
 import { cx } from "../shared/cx";
 import styles from "./Tag.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TagProps, TagSize, TagDotTone, TagAvatar } from "./Tag.types";
 
@@ -46,7 +47,7 @@ export function Tag({
 
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("tag", rest)}
       ref={ref}
       className={cx(styles.tag, styles[size], avatar && !selectable && styles.avatarLead, disabled && styles.disabled, className)}
       aria-disabled={disabled || undefined}

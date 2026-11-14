@@ -2,6 +2,7 @@ import { useId, type ReactNode } from "react";
 import type { TableColumn, TableProps } from "./Table.types";
 import { cx } from "../shared/cx";
 import styles from "./Table.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   TableProps,
@@ -50,7 +51,7 @@ export function Table({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("table", rest)}
       ref={ref}
       className={cx(styles.wrapper, styles[size], className)}
       tabIndex={0}

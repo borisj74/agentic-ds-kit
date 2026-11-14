@@ -21,6 +21,7 @@ import {
 } from "./agentOverview.logic";
 import type { AgentOverviewFilter, AgentOverviewProps } from "./AgentOverview.types";
 import styles from "./AgentOverview.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AgentOverviewProps, AgentOverviewAgent, AgentOverviewEvent, AgentOverviewFilter } from "./AgentOverview.types";
 
@@ -96,7 +97,7 @@ export function AgentOverview(props: AgentOverviewProps) {
   const handlers = inboxHandlers({ onApprove, onReject, onRetry });
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("agentoverview", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>

@@ -11,6 +11,7 @@ import { Empty } from "../Empty";
 import type { ListViewGroup, ListViewItem, ListViewProps } from "./ListView.types";
 import { cx } from "../shared/cx";
 import styles from "./ListView.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ListViewAction,
@@ -338,7 +339,7 @@ export function ListView({
 
   if (items.length === 0) {
     return (
-      <div {...rest} ref={ref} className={rootClass} role={listRole} aria-label={label} tabIndex={0}>
+      <div {...rest} {...nisthaAttr("listview", rest)} ref={ref} className={rootClass} role={listRole} aria-label={label} tabIndex={0}>
         <Empty
           title={empty?.title ?? "No records"}
           description={empty?.description}
@@ -351,7 +352,7 @@ export function ListView({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("listview", rest)}
       ref={ref}
       className={rootClass}
       role={listRole}

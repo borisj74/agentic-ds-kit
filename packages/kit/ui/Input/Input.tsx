@@ -5,6 +5,7 @@ import type { InputProps } from "./Input.types";
 import { cx } from "../shared/cx";
 import controlStyles from "../shared/controls.module.css";
 import styles from "./Input.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { InputProps, InputSize, InputType } from "./Input.types";
 
@@ -35,7 +36,7 @@ export function Input({
   const iconPx = ICON_PX[size];
 
   return (
-    <div
+    <div {...nisthaAttr("input")}
       className={cx(
         controlStyles.control,
         size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd,

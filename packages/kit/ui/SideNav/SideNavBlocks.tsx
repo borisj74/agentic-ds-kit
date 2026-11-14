@@ -33,6 +33,7 @@ import type {
   SideNavToggleProps,
 } from "./SideNav.types";
 import styles from "./SideNav.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 const ICON_SIZE = 16;
 
@@ -167,6 +168,7 @@ export function SideNavRoot({
     <SideNavContext.Provider value={context}>
       <aside
         {...rest}
+        {...nisthaAttr("sidenav")}
         ref={mergeRefs(rootRef, ref)}
         className={cx(
           styles.root,

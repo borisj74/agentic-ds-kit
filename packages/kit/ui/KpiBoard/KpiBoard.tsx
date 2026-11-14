@@ -9,6 +9,7 @@ import { cx } from "../shared/cx";
 import { cardsFor, resolveMetric, resolveRange, seriesFor, topRows } from "./kpiBoard.logic";
 import type { KpiBoardProps } from "./KpiBoard.types";
 import styles from "./KpiBoard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { KpiBoardProps, KpiBoardMetric, KpiBoardRange, KpiBoardValue } from "./KpiBoard.types";
 
@@ -59,7 +60,7 @@ export function KpiBoard(props: KpiBoardProps) {
   const rowsTitle = metric?.rowsTitle ?? "Top rows";
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("kpiboard", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>

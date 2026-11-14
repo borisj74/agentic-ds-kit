@@ -5,6 +5,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { SegmentedControlItem, SegmentedControlProps } from "./SegmentedControl.types";
 import { cx } from "../shared/cx";
 import styles from "./SegmentedControl.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   SegmentedControlProps,
@@ -77,7 +78,7 @@ export function SegmentedControl({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("segmentedcontrol", rest)}
       ref={ref}
       role="radiogroup"
       aria-label={ariaLabel}

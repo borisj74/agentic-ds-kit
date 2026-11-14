@@ -1,6 +1,7 @@
 import type { ThinkingAnimationProps } from "./ThinkingAnimation.types";
 import { cx } from "../shared/cx";
 import styles from "./ThinkingAnimation.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ThinkingAnimationProps, ThinkingAnimationSize } from "./ThinkingAnimation.types";
 
@@ -14,7 +15,7 @@ export function ThinkingAnimation({
 }: ThinkingAnimationProps) {
   return (
     <span
-      {...rest}
+      {...rest} {...nisthaAttr("thinkinganimation", rest)}
       ref={ref}
       className={cx(styles.root, styles[size], className)}
       role="status"

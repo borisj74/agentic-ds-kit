@@ -8,6 +8,7 @@
  * agentic-ds-kit questions: contracts → neutral option list (see ./questions.mjs).
  * agentic-ds-kit mcp: read-only stdio MCP server (see ./mcp.mjs).
  * agentic-ds-kit review <path>: check UI files against the contracts (see ./review.mjs).
+ * agentic-ds-kit inspect <url-or-file>: list the kit pieces on a rendered page (see ./inspect.mjs).
  */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -44,6 +45,9 @@ Other commands:
   review         Check UI files against the kit's contracts and tokens, and say
                  what to fix. Example: npx agentic-ds-kit review app
                  Run: npx agentic-ds-kit review --help
+  inspect        List the kit pieces on a rendered page, by level, and check its
+                 landmarks. Example: npx agentic-ds-kit inspect http://localhost:3000
+                 Run: npx agentic-ds-kit inspect --help
   questions      Build a closed option list from the contracts for a decision
                  model or LLM. Run: npx agentic-ds-kit questions --help
   mcp            Start a read-only stdio MCP server for this install.
@@ -90,6 +94,10 @@ if (process.argv[2] === "init") {
 if (process.argv[2] === "review") {
   const { runReview } = await import("./review.mjs");
   process.exit(runReview(process.argv.slice(3)));
+}
+if (process.argv[2] === "inspect") {
+  const { runInspect } = await import("./inspect.mjs");
+  process.exit(await runInspect(process.argv.slice(3)));
 }
 if (process.argv[2] === "questions") process.exit(runQuestions(process.argv.slice(3)));
 if (process.argv[2] === "mcp") {

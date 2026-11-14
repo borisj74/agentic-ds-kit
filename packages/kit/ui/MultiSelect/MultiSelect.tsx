@@ -12,6 +12,7 @@ import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import controlStyles from "../shared/controls.module.css";
 import type { MultiSelectProps } from "./MultiSelect.types";
 import styles from "./MultiSelect.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { MultiSelectOption, MultiSelectProps, MultiSelectSize } from "./MultiSelect.types";
 
@@ -109,7 +110,7 @@ export function MultiSelect({
   const sizeClass = size === "sm" ? controlStyles.controlSm : controlStyles.controlMd;
 
   return (
-    <div ref={rootRef} className={cx(styles.root, className)}>
+    <div {...nisthaAttr("multiselect")} ref={rootRef} className={cx(styles.root, className)}>
       {name ? <input type="hidden" name={name} value={values.join(",")} /> : null}
       <div
         className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell)}

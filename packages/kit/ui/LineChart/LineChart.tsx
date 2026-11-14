@@ -19,6 +19,7 @@ import { measureLabel } from "../shared/measureLabel";
 import { useChartSize } from "../shared/useChartSize";
 import type { LineChartProps } from "./LineChart.types";
 import styles from "./LineChart.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { LineChartProps, LineChartVariant, LineChartCurve } from "./LineChart.types";
 
@@ -314,7 +315,7 @@ export function LineChart({
 
   return (
     <ChartFrame
-      {...rest}
+      {...rest} {...nisthaAttr("linechart", rest)}
       ref={rootRef}
       title={title}
       description={description}

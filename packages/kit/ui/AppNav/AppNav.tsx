@@ -7,6 +7,7 @@ import { ICON_STROKE } from "../../lib/icon";
 import type { AppNavGroup, AppNavItem, AppNavLeaf, AppNavProps } from "./AppNav.types";
 import { cx } from "../shared/cx";
 import styles from "./AppNav.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { AppNavProps, AppNavItem, AppNavLeaf, AppNavGroup } from "./AppNav.types";
 
@@ -174,7 +175,7 @@ export function AppNav({
   }
 
   return (
-    <nav {...rest} ref={ref} className={cx(styles.nav, className)} aria-label={ariaLabel}>
+    <nav {...rest} {...nisthaAttr("appnav", rest)} ref={ref} className={cx(styles.nav, className)} aria-label={ariaLabel}>
       {title ? <p className={styles.title}>{title}</p> : null}
       {useGroups ? (
         <ul className={styles.groupList}>

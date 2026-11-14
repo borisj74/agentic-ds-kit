@@ -7,6 +7,7 @@ import type { PaginationProps } from "./Pagination.types";
 import { cx } from "../shared/cx";
 import styles from "./Pagination.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { PaginationProps, PaginationSize } from "./Pagination.types";
 
@@ -76,7 +77,7 @@ export function Pagination({
 
   if (compact) {
     return (
-      <nav {...rest} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, styles.compact, className)}>
+      <nav {...rest} {...nisthaAttr("pagination", rest)} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, styles.compact, className)}>
         <Button
           size={size}
           appearance="ghost"
@@ -104,7 +105,7 @@ export function Pagination({
   }
 
   return (
-    <nav {...rest} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, className)}>
+    <nav {...rest} {...nisthaAttr("pagination", rest)} ref={ref} aria-label={ariaLabel} className={cx(styles.nav, className)}>
       {showPreviousNext ? (
         showLabels ? (
           <Button

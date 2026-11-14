@@ -27,6 +27,7 @@ import {
 } from "./changeReview.logic";
 import type { ChangeReviewProps } from "./ChangeReview.types";
 import styles from "./ChangeReview.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   ChangeReviewProps,
@@ -135,7 +136,7 @@ export function ChangeReview(props: ChangeReviewProps) {
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("changereview", rest)}
       ref={ref}
       className={cx(styles.root, className)}
       aria-labelledby={titleId}

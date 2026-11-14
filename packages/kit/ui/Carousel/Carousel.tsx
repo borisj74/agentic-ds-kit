@@ -7,6 +7,7 @@ import type { CarouselProps } from "./Carousel.types";
 import { cx } from "../shared/cx";
 import styles from "./Carousel.module.css";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type {
   CarouselProps,
@@ -123,7 +124,7 @@ export function Carousel({
 
   return (
     <div
-      {...rest}
+      {...rest} {...nisthaAttr("carousel", rest)}
       ref={ref}
       className={cx(styles.root, styles[orientation], perClass, className)}
       role="region"

@@ -13,6 +13,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { SetupGuideProps, SetupTask } from "./SetupGuide.types";
 import styles from "./SetupGuide.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SetupGuideProps, SetupTask, SetupTaskStatus } from "./SetupGuide.types";
 
@@ -70,7 +71,7 @@ export function SetupGuide({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("setupguide", rest)}
       ref={mergeRefs(rootRef, ref)}
       tabIndex={-1}
       className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>

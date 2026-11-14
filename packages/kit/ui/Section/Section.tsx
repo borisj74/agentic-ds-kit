@@ -5,6 +5,7 @@ import { LucideByName } from "../Button/lucideName";
 import type { SectionProps } from "./Section.types";
 import { cx } from "../shared/cx";
 import styles from "./Section.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { SectionProps, SectionSize } from "./Section.types";
 
@@ -38,7 +39,7 @@ export function Section({
 
   return (
     <section
-      {...rest}
+      {...rest} {...nisthaAttr("section", rest)}
       ref={ref}
       className={cx(styles.section, styles[size], canCollapse && styles.collapsible, className)}
       aria-labelledby={title ? headingId : undefined}

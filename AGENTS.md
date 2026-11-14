@@ -10,6 +10,7 @@ Never put hex in components; use semantic tokens from `agentic-ds-kit/tokens.css
 Lucide icons use strokeWidth 1.5 (--icon-stroke). Don't set other stroke widths on icons.
 One `appearance="solid"` `mode="primary"` Button per view.
 Before you finish, run `npx agentic-ds-kit review <path>` (or the MCP tool `review_ui`) on the files you changed and fix every error. Warnings name a bigger kit piece or a pattern to start from.
+To see which kit pieces a running page renders, start the app with `NEXT_PUBLIC_NISTHA_INSPECT=1` and run `npx agentic-ds-kit inspect <url>` (or the MCP tool `inspect_ui`).
 To let a model pick which kit view to render, generate the option list with `npx agentic-ds-kit questions` (`docs/questions.md`); do not hand-write one.
 
 ## Build order

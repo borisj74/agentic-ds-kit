@@ -12,6 +12,7 @@ import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import type { TaskBoardCard, TaskBoardColumn, TaskBoardProps } from "./TaskBoard.types";
 import styles from "./TaskBoard.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TaskBoardProps, TaskBoardColumn, TaskBoardCard } from "./TaskBoard.types";
 
@@ -152,7 +153,7 @@ export function TaskBoard({
   };
 
   return (
-    <section {...rest} ref={ref} className={cx(styles.board, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("taskboard", rest)} ref={ref} className={cx(styles.board, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <h3 id={titleId} className={styles.title}>
           {title}

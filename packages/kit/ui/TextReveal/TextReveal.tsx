@@ -2,6 +2,7 @@ import { Fragment, type CSSProperties } from "react";
 import type { TextRevealProps } from "./TextReveal.types";
 import { cx } from "../shared/cx";
 import styles from "./TextReveal.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { TextRevealProps, TextRevealBy, TextRevealElement } from "./TextReveal.types";
 
@@ -25,7 +26,7 @@ export function TextReveal({
   const spoken = label ?? (by === "line" ? lines.join(" ") : children);
 
   return (
-    <Tag {...rest} ref={ref} className={cx(styles.root, styles[by], className)}>
+    <Tag {...rest} {...nisthaAttr("textreveal", rest)} ref={ref} className={cx(styles.root, styles[by], className)}>
       <span className={styles.srOnly}>{spoken}</span>
       <span key={replayKey} className={styles.units} aria-hidden="true">
         {units.map((unit, index) => (

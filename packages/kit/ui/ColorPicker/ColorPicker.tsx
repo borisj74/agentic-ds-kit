@@ -19,6 +19,7 @@ import {
 import type { ColorPickerProps, ColorPickerSwatch } from "./ColorPicker.types";
 import { cx } from "../shared/cx";
 import styles from "./ColorPicker.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ColorPickerProps, ColorPickerSwatch } from "./ColorPicker.types";
 
@@ -287,7 +288,7 @@ export function ColorPicker({
   const inputDescribedBy = [describedBy, invalid ? messageId : undefined].filter(Boolean).join(" ");
 
   return (
-    <div
+    <div {...nisthaAttr("colorpicker")}
       className={cx(styles.root, className)}
       role="group"
       aria-label={ariaLabel}

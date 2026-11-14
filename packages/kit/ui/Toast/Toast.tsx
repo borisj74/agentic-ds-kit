@@ -11,6 +11,7 @@ import styles from "./Toast.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { ToastProps, ToastStatus } from "./Toast.types";
 
@@ -106,6 +107,7 @@ function ToastCard({
   return (
     <div
       {...rest}
+      {...nisthaAttr("toast", rest)}
       ref={ref}
       className={cx(styles.toast, styles[status], className)}
       role={isDanger ? "alert" : "status"}

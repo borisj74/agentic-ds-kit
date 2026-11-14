@@ -4,6 +4,7 @@ import type { KitLinkComponent } from "../shared/link";
 import { cx } from "../shared/cx";
 import type { LinkProps } from "./Link.types";
 import styles from "./Link.module.css";
+import { nisthaAttr } from "../shared/inspect";
 
 export type { LinkProps, LinkVariant } from "./Link.types";
 
@@ -27,7 +28,7 @@ export function Link({
 
   return (
     <Tag
-      {...rest}
+      {...rest} {...nisthaAttr("link", rest)}
       {...externalProps}
       ref={ref}
       href={href}
