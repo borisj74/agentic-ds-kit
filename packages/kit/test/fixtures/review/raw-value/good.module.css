@@ -1,0 +1,13 @@
+/* #ffffff in a comment is fine. */
+.box {
+  color: var(--text-fg);
+  padding: var(--space-inset-md) 0;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  background: color-mix(in srgb, var(--bg-surface) 80%, transparent);
+}
+.box:hover {
+  border-color: inherit;
+}

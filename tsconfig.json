@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "packages/kit/dist", "packages/kit/patterns-src"]
+  "exclude": ["node_modules", "packages/kit/dist", "packages/kit/patterns-src", "packages/kit/test/fixtures"]
 }

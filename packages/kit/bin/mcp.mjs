@@ -20,6 +20,7 @@ import { COMPONENT_LEVELS } from "./levels.mjs";
 import { createServer as createRpcServer, serveStdio } from "./mcp-server.mjs";
 import { MAX_LIMIT, shapeComponents, shapeQuestions, shapeTokens } from "./mcp-shape.mjs";
 import { QuestionsError, buildQuestions } from "./questions.mjs";
+import { ReviewError, reviewCode, reviewPath } from "./review.mjs";
 
 export const MCP_HELP = `Usage: npx agentic-ds-kit mcp
 
@@ -37,6 +38,8 @@ Tools:
   get_pattern           One pattern by id, with level (template)
   get_rules             AGENTS.md, including the page-layout grid rule
   questions             Same JSON as npx agentic-ds-kit questions; detail summary, limit, offset
+  review_ui             Same findings as npx agentic-ds-kit review: a path, or code plus
+                        filename for a draft that is not saved yet
 
 Levels, smallest to biggest: ${COMPONENT_LEVELS.join(", ")}, template (patterns).
 Reuse the biggest piece that fits before building from smaller ones.
@@ -197,15 +200,35 @@ function createServer() {
     (args) => shapeQuestions(buildQuestions(questionsOptions(args)), args),
   );
 
+  register(
+    "review_ui",
+    {
+      title: "Review UI",
+      description:
+        "Check UI code against this install's contracts and tokens, the same as `npx agentic-ds-kit review`. Pass path (a file or folder, relative to the folder the server runs in), or code plus filename to check a draft that is not saved yet (filename picks the rules and names the file, such as app/page.tsx). Returns findings (id, rule, severity, file, line, contractId, message, fix) and the error and warning counts. Rules: raw-value, wrong-use, outside-kit (errors); rebuild, pattern-fits (warnings). Fix every error before you finish.",
+      inputSchema: objectSchema({
+        path: { type: "string", description: "File or folder to review, such as app or app/page.tsx." },
+        code: { type: "string", description: "Source text of a draft. Needs filename." },
+        filename: { type: "string", description: "Name for the draft, such as app/page.tsx. Needs code." },
+      }),
+    },
+    ({ path, code, filename }) => {
+      if (path !== undefined && code !== undefined) throw new ReviewError("Pass path, or code with filename, not both.");
+      if (code !== undefined || filename !== undefined) return reviewCode(code, filename);
+      if (path === undefined) throw new ReviewError("Pass path (a file or folder), or code with filename.");
+      return reviewPath(path);
+    },
+  );
+
   return createRpcServer({
     name: "agentic-ds-kit",
     version,
     instructions:
       "Read-only catalog of the agentic-ds-kit install this process was started from. " +
-      "Use these tools for components, tokens, patterns, kit rules, and the questions option list. " +
+      "Use these tools for components, tokens, patterns, kit rules, the questions option list, and review_ui to check UI code. " +
       "Answers come from that install's files. Do not invent a component or token the tools do not return.",
     tools,
-    isToolError: (error) => error instanceof CatalogError || error instanceof QuestionsError,
+    isToolError: (error) => error instanceof CatalogError || error instanceof QuestionsError || error instanceof ReviewError,
   });
 }
 
