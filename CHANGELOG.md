@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Collapsible's toggle has the same corners as the controls around it.** It used `--radius-control-sm` (3px by default), sharper than a md Button and the rows a Collapsible usually holds. It now uses `--radius-control-md` (6px by default), and it follows the theme's radius like they do
+
 ## [0.26.1] - 2026-11-14
 
 ### Changed
