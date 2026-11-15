@@ -141,7 +141,7 @@
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .hint {
@@ -198,7 +198,7 @@
 
 .resolvedIcon {
   flex-shrink: 0;
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .resolvedLabel {
