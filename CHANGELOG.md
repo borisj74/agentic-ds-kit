@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **KpiBoard takes three to six KPIs (was three or four).** Five or six cards scroll sideways in the Scoreboard's Conveyor, which Scoreboard already does past four; the chart and table still follow the picked card. More than six still belongs in a Scoreboard with Conveyor and a separate chart
+
 ## [0.26.1] - 2026-11-14
 
 ### Changed
