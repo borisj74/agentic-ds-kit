@@ -1,0 +1,231 @@
+.root {
+  animation: donecheck-in var(--motion-normal) var(--motion-ease-out);
+}
+
+.body {
+  container: donecheck / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Verdict Badge, met-over-total bar, count */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.progress {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.count {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.list {
+  /* Status words line up in one column across rows (subgrid), as wide as the longest word. */
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  column-gap: var(--space-3);
+  padding: var(--space-3);
+  min-width: 0;
+}
+
+.row + .row {
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.status {
+  min-width: 0;
+}
+
+.statusInner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.statusLabel {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+}
+
+.met .icon,
+.met .statusLabel {
+  color: var(--status-success-text);
+}
+
+.not_met .icon,
+.not_met .statusLabel {
+  color: var(--status-danger-text);
+}
+
+.unverified .icon,
+.unverified .statusLabel {
+  color: var(--status-warning-text);
+}
+
+.checking .icon,
+.checking .statusLabel {
+  color: var(--text-fg-muted);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.text {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  color: var(--text-fg-subtle);
+}
+
+.reason {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--status-danger-subtle);
+  border-radius: var(--radius-surface-sm);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.reasonLead {
+  font-weight: var(--type-weight-label);
+  color: var(--status-danger-text);
+}
+
+.setBy {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.evidenceBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.note,
+.noEvidence {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.noEvidence {
+  font-size: var(--type-size-caption);
+  color: var(--text-fg-subtle);
+}
+
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.footerNote {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+.spin {
+  animation: donecheck-spin 1s linear infinite;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Narrow card: the status word sits above the check. Container queries cannot read var(). */
+@container donecheck (max-width: 30rem) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-2);
+  }
+}
+
+@keyframes donecheck-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes donecheck-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .spin {
+    animation: none;
+  }
+}

@@ -839,6 +839,14 @@
     "level": "organism"
   },
   {
+    "id": "donecheck",
+    "intent": "After an agent says it is finished: each agreed \"done when\" check marked met, not met, unverified or checking, with its proof. Unverified never counts as met. Accept when all are met, else send back.",
+    "group": "component",
+    "path": "contracts/donecheck.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "autonomydial",
     "intent": "How far an agent may go without asking: four readable stops on a kit SegmentedControl, with the current stop explained below.",
     "group": "component",

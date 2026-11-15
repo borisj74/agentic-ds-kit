@@ -46,6 +46,7 @@ import contract_datepicker from "../packages/kit/contracts/datepicker.json";
 import contract_daterangepicker from "../packages/kit/contracts/daterangepicker.json";
 import contract_datetimepicker from "../packages/kit/contracts/datetimepicker.json";
 import contract_decisioncard from "../packages/kit/contracts/decisioncard.json";
+import contract_donecheck from "../packages/kit/contracts/donecheck.json";
 import contract_divider from "../packages/kit/contracts/divider.json";
 import contract_drawer from "../packages/kit/contracts/drawer.json";
 import contract_dropdownmenu from "../packages/kit/contracts/dropdownmenu.json";
@@ -184,6 +185,7 @@ const contracts: Record<string, ContractNotes> = {
   "daterangepicker": contract_daterangepicker,
   "datetimepicker": contract_datetimepicker,
   "decisioncard": contract_decisioncard,
+  "donecheck": contract_donecheck,
   "divider": contract_divider,
   "drawer": contract_drawer,
   "dropdownmenu": contract_dropdownmenu,
