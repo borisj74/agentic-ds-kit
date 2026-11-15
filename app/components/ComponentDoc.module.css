@@ -140,6 +140,12 @@
   padding: var(--space-6);
 }
 
+/* Open menus (DropdownMenu): trigger at the top, room below for the whole panel. */
+.canvasMenu {
+  align-items: start;
+  min-height: calc(var(--space-16) * 9);
+}
+
 .layout:has(.panel) .canvas {
   padding-right: calc(var(--layout-sidebar) + var(--space-6));
 }
