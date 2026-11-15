@@ -36,7 +36,7 @@ type KpiBoardOwnedKeys = "children" | "title";
 
 /** `ref`, `className` and other native attributes land on the root `<section>`. */
 export interface KpiBoardProps extends Omit<ComponentPropsWithoutRef<"section">, KpiBoardOwnedKeys> {
-  /** Three or four KPIs. */
+  /** Three to six KPIs. Five or six scroll sideways in the Scoreboard's Conveyor. */
   metrics: KpiBoardMetric[];
   /** Chart samples by metric id, then range value: series[metricId][range]. */
   series: Record<string, Record<string, ChartDatum[]>>;

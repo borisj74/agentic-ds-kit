@@ -16,6 +16,10 @@ const DEVICES = {
 } as const;
 
 type Device = keyof typeof DEVICES;
+
+/** Crop thumbnails: the narrowest layout width the screen gets, and the window's height / width. */
+const CROP_MIN_WIDTH = 1024;
+const CROP_RATIO = 10 / 16;
 type Mode = "light" | "dark";
 
 export function frameUrl(slug: ScreenSlug, view: string, mode: Mode) {
@@ -29,6 +33,7 @@ export function ScaledFrame({
   device = "desktop",
   interactive = true,
   deferUntilVisible = false,
+  crop,
   className,
 }: {
   src: string;
@@ -40,10 +45,17 @@ export function ScaledFrame({
    * starts far ahead of the viewport, so every card on /blocks loaded at once.
    */
   deferUntilVisible?: boolean;
+  /**
+   * Thumbnail mode: show the top-left of the screen at this scale (about 0.6–0.75) in a fixed
+   * 16:10 window with a soft fade at the bottom, instead of the whole screen shrunk to fit. The
+   * screen lays out at the visible width (never under 1024px), so it reads as a desktop view.
+   */
+  crop?: number;
   className?: string;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
+  const [hostWidth, setHostWidth] = useState(0);
   const [visible, setVisible] = useState(!deferUntilVisible);
   const size = DEVICES[device];
 
@@ -72,6 +84,7 @@ export function ScaledFrame({
     if (!host) return;
     const fit = () => {
       if (host.clientWidth < 8) return;
+      setHostWidth(host.clientWidth);
       setScale(Math.min(1, host.clientWidth / size.width));
     };
     fit();
@@ -79,6 +92,24 @@ export function ScaledFrame({
     observer.observe(host);
     return () => observer.disconnect();
   }, [size.width]);
+
+  if (crop) {
+    const width = hostWidth ? Math.max(CROP_MIN_WIDTH, Math.round(hostWidth / crop)) : 0;
+    return (
+      <div ref={hostRef} className={[styles.frameHost, styles.frameCrop, className].filter(Boolean).join(" ")}>
+        {visible && width ? (
+          <iframe
+            src={src}
+            title={title}
+            loading="lazy"
+            tabIndex={interactive ? undefined : -1}
+            className={styles.frame}
+            style={{ width, height: Math.ceil(width * CROP_RATIO), transform: `scale(${crop})` }}
+          />
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <div ref={hostRef} className={[styles.frameHost, className].filter(Boolean).join(" ")}>

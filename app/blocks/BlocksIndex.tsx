@@ -4,16 +4,19 @@ import { BLOCK_DOCS } from "@/lib/blocks";
 import { ScaledFrame } from "../_components/PatternPreview";
 import { blockFrameUrl } from "../_components/BlockPreview";
 import { ScreenCard } from "../_components/ScreenCard";
-import { usePatternTheme } from "../_components/ThemeScope";
+import { usePreviewMode } from "../_components/ThemeScope";
 import playground from "../playground.module.css";
 
+/** Thumbnail scale: small enough to show a real area of the block, big enough to read. */
+const THUMB_SCALE = 0.65;
+
 /**
- * Every block as a card: its category, a live thumbnail of the block at desktop width, its name
- * and one line from the contract's summary. A card opens the block's page.
+ * Every block as a card: its category, a live thumbnail (the block's top-left at desktop width,
+ * cropped so it stays readable), its name and one line from the contract's summary. A card opens
+ * the block's page. Thumbnails follow the saved preview theme, else the site's light / dark.
  */
 export function BlocksIndex() {
-  const theme = usePatternTheme();
-  const mode = theme?.mode ?? "light";
+  const mode = usePreviewMode();
 
   return (
     <article>
@@ -36,6 +39,7 @@ export function BlocksIndex() {
                   src={blockFrameUrl(doc.slug, mode)}
                   title={`${doc.label} block`}
                   interactive={false}
+                  crop={THUMB_SCALE}
                   deferUntilVisible
                 />
               }
