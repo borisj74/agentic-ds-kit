@@ -44,7 +44,7 @@
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-sm);
   text-align: end;
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .error {
