@@ -43,6 +43,12 @@
   width: 100%;
 }
 
+/* The control is stretched to the dial's width; its stops grow into the extra space, so the
+   track's inside padding is the same on both ends instead of leaving a gap after the last stop. */
+.control > * {
+  flex: 1 1 auto;
+}
+
 /* End labels under the control: which way the stops lean. */
 .ends {
   display: flex;
