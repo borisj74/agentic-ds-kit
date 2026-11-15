@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **CodeSnippet tabs use the segmented style.** The tabs in a CodeSnippet header are now kit Tabs `segmented` (`sm`): a tray with a raised active tab, so the selected file stands out. They were `line` tabs, where the only difference was a darker label and a thin underline
+
+### Fixed
+
+- **Tabs inside another Tabs keep their own look.** Variant and size rules matched any descendant, so a Tabs in the panel of a `segmented` Tabs (for example a CodeSnippet on a page with segmented tabs) picked up the outer tray background and label colour. The rules now apply only to a Tabs' own list, tabs and panel
+
 ## [0.26.1] - 2026-11-14
 
 ### Changed
