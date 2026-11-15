@@ -50,7 +50,7 @@
 }
 
 /* Phones (under --grid-breakpoint-sm, 40rem; media queries cannot read var()): one stop per row,
-   icon and label at the start, so the icons line up down the list. */
+   icon and label at the start, so the icons line up down the list, with more room between them. */
 @media (max-width: 40rem) {
   .control {
     flex-direction: column;
@@ -59,6 +59,7 @@
 
   .control > * {
     justify-content: flex-start;
+    gap: var(--space-inline-sm);
   }
 }
 

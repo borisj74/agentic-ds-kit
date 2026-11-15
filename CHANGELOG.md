@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **AutonomyDial's stops fill the track evenly.** The control is stretched to the dial's width, but its stops kept their natural width, so the leftover space sat after the last stop and the track looked padded more on the right than the left. The stops now grow into that space, so the inside padding matches on both ends. On phones (under 40rem, `--grid-breakpoint-sm`) the stops sit one per row with the icon and label at the start, so the icons line up down the list
+- **AutonomyDial's stops fill the track evenly.** The control is stretched to the dial's width, but its stops kept their natural width, so the leftover space sat after the last stop and the track looked padded more on the right than the left. The stops now grow into that space, so the inside padding matches on both ends. On phones (under 40rem, `--grid-breakpoint-sm`) the stops sit one per row with the icon and label at the start, so the icons line up down the list, with `--space-inline-sm` between icon and label
 
 ## [0.26.1] - 2026-11-14
 
