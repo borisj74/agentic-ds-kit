@@ -171,9 +171,11 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+/* Every size keeps --radius-control-md, like Input and Select (shared controls), so a field
+   trigger has the same corners as the fields and buttons beside it. */
 .fieldsm {
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-control-md);
   font-size: var(--type-size-label);
 }
 
@@ -185,7 +187,7 @@
 
 .fieldlg {
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-control-lg);
+  border-radius: var(--radius-control-md);
   font-size: var(--type-size-body);
 }
 
