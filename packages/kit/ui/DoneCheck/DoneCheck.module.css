@@ -110,7 +110,7 @@
 .index {
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .reason {
@@ -153,7 +153,7 @@
 
 .noEvidence {
   font-size: var(--type-size-caption);
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .rowActions {
