@@ -8451,6 +8451,86 @@
       }
     },
     {
+      "id": "guardraillog",
+      "group": "component",
+      "intent": "Every time a policy rule stepped in on an agent by itself: blocked, rewritten or flagged, what the agent tried, newest first. A row opens a Drawer with the exact attempt, the rule and its owner, and a confirmed override request.",
+      "useWhen": [
+        "showing guardrails at work: rules that stopped, changed or flagged agent actions without being asked",
+        "a person needs to see exactly what an agent tried and ask the rule's owner for an exception",
+        "a header needs a one-line count of rule hits (compact)"
+      ],
+      "doNotUseWhen": [
+        "the agent asks before acting — ApprovalCard",
+        "the agent asks for standing access — PermissionRequest",
+        "a general stream of events and changes — ActivityFeed"
+      ],
+      "doNot": [
+        "Do not invent a local PolicyLog, RuleHitList or OverrideForm",
+        "Do not use it for questions the agent asks first (ApprovalCard, PermissionRequest)",
+        "Submit request is the one solid primary, in the Drawer",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "events": {
+          "type": "array",
+          "required": true,
+          "note": "Newest first. { id, verdict: \"blocked\" | \"rewritten\" | \"flagged\", rule: { name, text, owner }, agent: { name, src? }, attempted, sentInstead?, at, runHref? }[]. sentInstead shows for rewritten."
+        },
+        "title": {
+          "type": "string",
+          "default": "Guardrails"
+        },
+        "filters": {
+          "type": "object",
+          "required": false,
+          "note": "{ verdict?, rule?, agent?, time? }. Uncontrolled when omitted. Verdict, rule and agent filter the list; time is a label, so pass the events in that window."
+        },
+        "onFiltersChange": {
+          "type": "function",
+          "required": false
+        },
+        "timeOptions": {
+          "type": "array",
+          "default": [
+            "Today",
+            "This week",
+            "This month"
+          ]
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "The event open in the Drawer; null closes it. Uncontrolled when omitted."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void."
+        },
+        "onRequestOverride": {
+          "type": "function",
+          "required": false,
+          "note": "(id, reason) => void, after the AlertDialog confirms. Submit request is the Drawer's one solid primary; omit to hide the request."
+        },
+        "overrideStatus": {
+          "type": "enum",
+          "values": [
+            "idle",
+            "sending",
+            "sent",
+            "error"
+          ],
+          "default": "idle",
+          "note": "sending disables Submit; sent shows a success Alert; error a danger Alert, keeping the reason."
+        },
+        "compact": {
+          "type": "boolean",
+          "default": false,
+          "note": "One line: the summary (\"14 blocked · 3 rewritten · 6 flagged this week\") plus the latest event."
+        }
+      }
+    },
+    {
       "id": "decisioncard",
       "group": "component",
       "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",

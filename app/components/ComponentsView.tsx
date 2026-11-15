@@ -135,6 +135,7 @@ import { TaskBriefDoc } from "./TaskBriefDoc";
 import { DoneCheckDoc } from "./DoneCheckDoc";
 import { AssumptionLogDoc } from "./AssumptionLogDoc";
 import { RedactionPreviewDoc } from "./RedactionPreviewDoc";
+import { GuardrailLogDoc } from "./GuardrailLogDoc";
 import { ComponentGallery } from "./ComponentGallery";
 import playground from "../playground.module.css";
 
@@ -158,6 +159,7 @@ const TITLES: Record<string, string> = {
   textreveal: "TextReveal",
   tiltcard: "TiltCard",
   gridbackground: "GridBackground",
+  guardraillog: "GuardrailLog",
   gradienttext: "GradientText",
   invoicedocument: "InvoiceDocument",
   pricingplans: "PricingPlans",
@@ -457,6 +459,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "textreveal") return <TextRevealDoc />;
   if (resolved === "tiltcard") return <TiltCardDoc />;
   if (resolved === "gridbackground") return <GridBackgroundDoc />;
+  if (resolved === "guardraillog") return <GuardrailLogDoc />;
   if (resolved === "gradienttext") return <GradientTextDoc />;
   if (resolved === "changesummary") return <ChangeSummaryDoc />;
   if (resolved === "tracewaterfall") return <TraceWaterfallDoc />;

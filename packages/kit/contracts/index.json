@@ -847,6 +847,14 @@
     "level": "organism"
   },
   {
+    "id": "guardraillog",
+    "intent": "Every time a policy rule stepped in on an agent by itself: blocked, rewritten or flagged, what the agent tried, newest first. A row opens a Drawer with the exact attempt, the rule and its owner, and a confirmed override request.",
+    "group": "component",
+    "path": "contracts/guardraillog.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "decisioncard",
     "intent": "An agent presents a choice mid-run and waits: options with a recommended one, or a free-text answer. Confirm or skip, then one line.",
     "group": "component",

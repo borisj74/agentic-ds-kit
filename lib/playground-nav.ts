@@ -65,6 +65,7 @@ export const COMPONENT_ITEMS = [
   "fileupload",
   "gradienttext",
   "gridbackground",
+  "guardraillog",
   "headercell",
   "helppopover",
   "inlinediff",
@@ -175,6 +176,7 @@ export function componentLabel(id: string): string {
   if (id === "textreveal") return "TextReveal";
   if (id === "tiltcard") return "TiltCard";
   if (id === "gridbackground") return "GridBackground";
+  if (id === "guardraillog") return "GuardrailLog";
   if (id === "gradienttext") return "GradientText";
   if (id === "anchornav") return "AnchorNav";
   if (id === "appnav") return "AppNav";
@@ -237,7 +239,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "redactionpreview", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "guardraillog", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "redactionpreview", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
   {
     label: "SaaS",

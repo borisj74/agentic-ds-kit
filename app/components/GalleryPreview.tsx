@@ -39,6 +39,7 @@ import { TaskBrief } from "agentic-ds-kit";
 import { DoneCheck } from "agentic-ds-kit";
 import { AssumptionLog } from "agentic-ds-kit";
 import { RedactionPreview } from "agentic-ds-kit";
+import { GuardrailLog } from "agentic-ds-kit";
 import { RunningNow } from "agentic-ds-kit";
 import { ToolCallCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
@@ -492,6 +493,19 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <RedactionPreview status="sent" destination="Claude" payload="Reply to ana@acme.dev" spans={[{ start: 9, end: 21, type: "email" }]} />
+        </Stage>
+      );
+    case "guardraillog":
+      return (
+        <Stage variant="wide">
+          <GuardrailLog
+            compact
+            filters={{ time: "This week" }}
+            events={[
+              { id: "a", verdict: "blocked", rule: { name: "No refunds over €500", text: "", owner: "Finance ops" }, agent: { name: "Billing agent" }, attempted: "refund(740)", at: "14:02" },
+              { id: "b", verdict: "flagged", rule: { name: "External email", text: "", owner: "Security" }, agent: { name: "Email agent" }, attempted: "send()", at: "13:40" },
+            ]}
+          />
         </Stage>
       );
     case "usagemeter":
