@@ -102,6 +102,7 @@ export * from "../ui/Popover";
 export * from "../ui/Progress";
 export * from "../ui/ProgressSteps";
 export * from "../ui/RadioGroup";
+export * from "../ui/RedactionPreview";
 export * from "../ui/Resizable";
 export * from "../ui/RunDetail";
 export * from "../ui/RunningNow";

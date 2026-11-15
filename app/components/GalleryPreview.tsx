@@ -38,6 +38,7 @@ import { PermissionRequest } from "agentic-ds-kit";
 import { TaskBrief } from "agentic-ds-kit";
 import { DoneCheck } from "agentic-ds-kit";
 import { AssumptionLog } from "agentic-ds-kit";
+import { RedactionPreview } from "agentic-ds-kit";
 import { RunningNow } from "agentic-ds-kit";
 import { ToolCallCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
@@ -485,6 +486,12 @@ export function GalleryPreview({ id }: { id: string }) {
               { id: "b", text: "Spring starts 1 March", confidence: 0.86, status: "open" },
             ]}
           />
+        </Stage>
+      );
+    case "redactionpreview":
+      return (
+        <Stage variant="wide">
+          <RedactionPreview status="sent" destination="Claude" payload="Reply to ana@acme.dev" spans={[{ start: 9, end: 21, type: "email" }]} />
         </Stage>
       );
     case "usagemeter":

@@ -799,6 +799,14 @@
     "level": "organism"
   },
   {
+    "id": "redactionpreview",
+    "intent": "Shows exactly what is about to leave the product for a model or outside tool, with sensitive values masked by type and a mask rule per type, before it is sent. Send, then one line.",
+    "group": "component",
+    "path": "contracts/redactionpreview.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "runningnow",
     "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",
     "group": "component",

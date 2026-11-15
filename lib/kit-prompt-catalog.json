@@ -7887,6 +7887,98 @@
       }
     },
     {
+      "id": "redactionpreview",
+      "group": "component",
+      "intent": "Shows exactly what is about to leave the product for a model or outside tool, with sensitive values masked by type and a mask rule per type, before it is sent. Send, then one line.",
+      "useWhen": [
+        "an agent is about to send customer or company data to a model, API or outside tool",
+        "a person should see and control which sensitive values leave masked",
+        "secrets must never leave, whatever the person chooses"
+      ],
+      "doNotUseWhen": [
+        "how much of the model's context is used — ContextWindow",
+        "approving one command or edit — ApprovalCard",
+        "granting standing access to a resource — PermissionRequest"
+      ],
+      "doNot": [
+        "Do not invent a local PiiViewer, MaskedText or DataLeakPanel",
+        "Do not bend CodeSnippet to mark spans up",
+        "Do not let a person unlock secrets (lockedTypes)",
+        "Send is the one solid primary; Cancel is outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "destination": {
+          "type": "string",
+          "required": true,
+          "note": "Where the data goes. Title reads \"Sending to <destination>\"."
+        },
+        "region": {
+          "type": "string",
+          "required": false,
+          "note": "Data region of the destination, a Badge (\"EU region\")."
+        },
+        "payload": {
+          "type": "string",
+          "required": true,
+          "note": "Exactly what will be sent, as plain text. Shown read-only in mono."
+        },
+        "spans": {
+          "type": "array",
+          "required": true,
+          "note": "{ start, end, type }[] character ranges of sensitive values, e.g. type \"email\", \"card\", \"apiKey\". Overlaps are dropped."
+        },
+        "rules": {
+          "type": "object",
+          "required": false,
+          "note": "{ [type]: boolean } mask on or off. Types not listed are masked."
+        },
+        "lockedTypes": {
+          "type": "array",
+          "default": [
+            "apiKey",
+            "password",
+            "secret"
+          ],
+          "note": "Always masked; their Switch is locked on with lockedReason as the hint."
+        },
+        "lockedReason": {
+          "type": "string",
+          "default": "Secrets always stay masked. They are never sent to a model or outside tool."
+        },
+        "typeLabels": {
+          "type": "object",
+          "required": false,
+          "note": "{ [type]: label }. Common types (email, phone, card, apiKey…) have defaults."
+        },
+        "onRulesChange": {
+          "type": "function",
+          "required": false,
+          "note": "(rules) => void when a mask Switch flips."
+        },
+        "onSend": {
+          "type": "function",
+          "required": false,
+          "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\"."
+        },
+        "onCancel": {
+          "type": "function",
+          "required": false,
+          "note": "Cancel, outline."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "pending",
+            "sent",
+            "cancelled"
+          ],
+          "default": "pending",
+          "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"."
+        }
+      }
+    },
+    {
       "id": "runningnow",
       "group": "component",
       "intent": "Many agents, small: a strip of what runs now for a header (row of chips) or a sidebar (stack), with status, activity and a clock.",

@@ -71,6 +71,7 @@ const AGENT_IDS = new Set([
   "modelpicker",
   "numbertransition",
   "permissionrequest",
+  "redactionpreview",
   "runningnow",
   "shimmertext",
   "taskbrief",

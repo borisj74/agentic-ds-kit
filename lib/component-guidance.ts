@@ -82,6 +82,7 @@ import contract_numbertransition from "../packages/kit/contracts/numbertransitio
 import contract_pageheader from "../packages/kit/contracts/pageheader.json";
 import contract_pagination from "../packages/kit/contracts/pagination.json";
 import contract_permissionrequest from "../packages/kit/contracts/permissionrequest.json";
+import contract_redactionpreview from "../packages/kit/contracts/redactionpreview.json";
 import contract_piechart from "../packages/kit/contracts/piechart.json";
 import contract_popover from "../packages/kit/contracts/popover.json";
 import contract_progress from "../packages/kit/contracts/progress.json";
@@ -222,6 +223,7 @@ const contracts: Record<string, ContractNotes> = {
   "pageheader": contract_pageheader,
   "pagination": contract_pagination,
   "permissionrequest": contract_permissionrequest,
+  "redactionpreview": contract_redactionpreview,
   "piechart": contract_piechart,
   "popover": contract_popover,
   "progress": contract_progress,
