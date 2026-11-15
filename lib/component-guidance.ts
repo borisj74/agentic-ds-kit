@@ -115,6 +115,7 @@ import contract_treeview from "../packages/kit/contracts/treeview.json";
 import contract_usagelist from "../packages/kit/contracts/usagelist.json";
 import contract_usagemeter from "../packages/kit/contracts/usagemeter.json";
 import contract_taskboard from "../packages/kit/contracts/taskboard.json";
+import contract_taskbrief from "../packages/kit/contracts/taskbrief.json";
 import contract_invoicedocument from "../packages/kit/contracts/invoicedocument.json";
 import contract_pricingplans from "../packages/kit/contracts/pricingplans.json";
 import contract_integrationpicker from "../packages/kit/contracts/integrationpicker.json";
@@ -252,6 +253,7 @@ const contracts: Record<string, ContractNotes> = {
   "usagelist": contract_usagelist,
   "usagemeter": contract_usagemeter,
   "taskboard": contract_taskboard,
+  "taskbrief": contract_taskbrief,
   "invoicedocument": contract_invoicedocument,
   "pricingplans": contract_pricingplans,
   "integrationpicker": contract_integrationpicker,

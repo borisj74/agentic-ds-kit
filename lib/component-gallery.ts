@@ -71,6 +71,7 @@ const AGENT_IDS = new Set([
   "permissionrequest",
   "runningnow",
   "shimmertext",
+  "taskbrief",
   "thinkinganimation",
   "toolcallcard",
   "tracewaterfall",

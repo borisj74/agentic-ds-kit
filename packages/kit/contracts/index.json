@@ -999,6 +999,14 @@
     "level": "organism"
   },
   {
+    "id": "taskbrief",
+    "intent": "The brief a person hands an agent before it plans: a goal, one-line \"done when\" checks, optional spend, time and step limits, allowed tools, model and check-in level. Start, then one line.",
+    "group": "component",
+    "path": "contracts/taskbrief.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "blurcrossfade",
     "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",
     "group": "component",

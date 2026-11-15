@@ -114,6 +114,7 @@ export const COMPONENT_ITEMS = [
   "tag",
   "taginput",
   "taskboard",
+  "taskbrief",
   "textarea",
   "timepicker",
   "tilegroup",
@@ -163,6 +164,7 @@ export function componentLabel(id: string): string {
   if (id === "pricingplans") return "PricingPlans";
   if (id === "invoicedocument") return "InvoiceDocument";
   if (id === "taskboard") return "TaskBoard";
+  if (id === "taskbrief") return "TaskBrief";
   if (id === "blurcrossfade") return "BlurCrossfade";
   if (id === "textreveal") return "TextReveal";
   if (id === "tiltcard") return "TiltCard";
@@ -229,7 +231,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
   {
     label: "SaaS",
