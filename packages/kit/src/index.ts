@@ -57,6 +57,7 @@ export * from "../ui/DateRangePicker";
 export * from "../ui/DateTimePicker";
 export * from "../ui/DecisionCard";
 export * from "../ui/Divider";
+export * from "../ui/DoneCheck";
 export * from "../ui/Drawer";
 export * from "../ui/DropdownMenu";
 export * from "../ui/Empty";

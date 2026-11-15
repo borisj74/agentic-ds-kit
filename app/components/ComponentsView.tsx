@@ -132,6 +132,7 @@ import { TooltipDoc } from "./TooltipDoc";
 import { TreeViewDoc } from "./TreeViewDoc";
 import { UsageListDoc } from "./UsageListDoc";
 import { TaskBriefDoc } from "./TaskBriefDoc";
+import { DoneCheckDoc } from "./DoneCheckDoc";
 import { ComponentGallery } from "./ComponentGallery";
 import playground from "../playground.module.css";
 
@@ -175,6 +176,7 @@ const TITLES: Record<string, string> = {
   agentsteering: "AgentSteering",
   autonomydial: "AutonomyDial",
   decisioncard: "DecisionCard",
+  donecheck: "DoneCheck",
   agentinbox: "AgentInbox",
   agentlanes: "AgentLanes",
   agenttree: "AgentTree",
@@ -463,6 +465,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "agentsteering") return <AgentSteeringDoc />;
   if (resolved === "autonomydial") return <AutonomyDialDoc />;
   if (resolved === "decisioncard") return <DecisionCardDoc />;
+  if (resolved === "donecheck") return <DoneCheckDoc />;
   if (resolved === "agentinbox") return <AgentInboxDoc />;
   if (resolved === "agentlanes") return <AgentLanesDoc />;
   if (resolved === "agenttree") return <AgentTreeDoc />;

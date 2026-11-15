@@ -61,6 +61,7 @@ const AGENT_IDS = new Set([
   "citedanswer",
   "contextwindow",
   "decisioncard",
+  "donecheck",
   "inlinediff",
   "insightcard",
   "loadinganimation",

@@ -1,0 +1,106 @@
+{
+  "id": "donecheck",
+  "status": "stable",
+  "level": "organism",
+  "intent": "After an agent says it is finished: each agreed \"done when\" check marked met, not met, unverified or checking, with its proof. Unverified never counts as met. Accept when all are met, else send back.",
+  "useWhen": [
+    "an agent reports a task done and the result must be checked against agreed criteria",
+    "each check needs proof a person can open: a note, a link or test output",
+    "a person may overrule the agent's verdict on a check"
+  ],
+  "doNotUseWhen": [
+    "what a run did, step by step, with metrics — RunDetail",
+    "reviewing the files or records an agent changed — ChangeReview",
+    "onboarding steps a person ticks off — SetupGuide"
+  ],
+  "contains": [
+    "card",
+    "badge",
+    "progress",
+    "collapsible",
+    "codesnippet",
+    "link",
+    "button",
+    "blurcrossfade",
+    "empty"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "note": "The task, e.g. \"Update the EU price list\"."
+    },
+    "criteria": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, text, status: \"met\" | \"not_met\" | \"unverified\" | \"checking\", evidence?: { note?, href?, hrefLabel?, output?, outputLabel? }, reason?, setBy?: \"agent\" | \"person\" }[]. Not met sorts first and shows the agent's reason. Empty renders a kit Empty."
+    },
+    "onOverride": {
+      "type": "function",
+      "required": false,
+      "note": "(id, \"met\" | \"not_met\") => void. Row buttons Mark met / Mark not met; set setBy \"person\" to show \"set by you\"."
+    },
+    "onRecheck": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Row Re-check, ghost."
+    },
+    "onAccept": {
+      "type": "function",
+      "required": false,
+      "note": "Accept result, the one solid primary, shown only when every check is met."
+    },
+    "onSendBack": {
+      "type": "function",
+      "required": false,
+      "note": "Send back to agent: the one solid primary until every check is met, then outline beside Accept."
+    },
+    "checkedAt": {
+      "type": "string",
+      "required": false,
+      "note": "Card description, e.g. \"Checked 14:02\"."
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceMd",
+    "radius.surfaceSm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "motion.normal",
+    "status.successText",
+    "status.warningText",
+    "status.dangerText",
+    "status.dangerSubtle"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "the Card is aria-labelledby the task title",
+      "checks are an ordered list; each status is a word beside its icon, never colour alone",
+      "evidence is a kit Collapsible named \"Evidence for check <n>\", opened from the keyboard",
+      "the met-over-total bar has an accessible name (\"2 of 5 checks met\")",
+      "verdict changes are announced in a polite live region; checking sets aria-busy",
+      "motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local Checklist, CriteriaCard or AcceptanceList",
+    "Do not count unverified as met",
+    "Accept result is the one solid primary only when every check is met",
+    "Do not use raw hex"
+  ],
+  "snippet": "<DoneCheck title=\"Update the EU price list\" criteria={[{ id: \"skus\", text: \"Every SKU has a 2027 price\", status: \"met\", evidence: { href: \"/runs/482/sheet\", hrefLabel: \"Price sheet diff\" } }]} onOverride={override} onRecheck={recheck} onAccept={accept} onSendBack={sendBack} />"
+}

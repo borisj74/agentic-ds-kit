@@ -36,6 +36,7 @@ import { AppNav } from "agentic-ds-kit";
 import { ApprovalCard } from "agentic-ds-kit";
 import { PermissionRequest } from "agentic-ds-kit";
 import { TaskBrief } from "agentic-ds-kit";
+import { DoneCheck } from "agentic-ds-kit";
 import { RunningNow } from "agentic-ds-kit";
 import { ToolCallCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
@@ -458,6 +459,18 @@ export function GalleryPreview({ id }: { id: string }) {
           <TaskBrief
             status="started"
             value={{ goal: "Update the EU price list for spring", criteria: ["Every SKU priced", "Totals match", "No price drops over 20%"], spendCap: 5 }}
+          />
+        </Stage>
+      );
+    case "donecheck":
+      return (
+        <Stage variant="wide">
+          <DoneCheck
+            title="EU price list"
+            criteria={[
+              { id: "a", text: "Every SKU priced", status: "met" },
+              { id: "b", text: "Totals match", status: "not_met" },
+            ]}
           />
         </Stage>
       );
