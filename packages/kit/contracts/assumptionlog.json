@@ -1,0 +1,108 @@
+{
+  "id": "assumptionlog",
+  "status": "stable",
+  "level": "organism",
+  "intent": "The guesses an agent made without asking, each with confidence, source and the steps that depend on it, so a person can confirm or correct them before they matter. Compact: open count plus the weakest guess.",
+  "useWhen": [
+    "an agent filled a gap on its own (a currency, a date range, a default) and the person should check it",
+    "a correction should make the agent redo the steps that used the guess",
+    "a run header needs a one-line nudge about open guesses (compact)"
+  ],
+  "doNotUseWhen": [
+    "the agent asks a question and waits — DecisionCard",
+    "facts the agent keeps across sessions — MemoryPanel",
+    "a recommendation the person may act on — InsightCard"
+  ],
+  "contains": [
+    "card",
+    "badge",
+    "segmentedcontrol",
+    "meter",
+    "tag",
+    "popover",
+    "input",
+    "button",
+    "empty"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, text, confidence: 0–1, source?, steps?: string[], status: \"open\" | \"confirmed\" | \"corrected\", correction? }[]. Confidence below 0.5 is Low, below 0.8 Medium, else High. Open rows sort weakest first."
+    },
+    "title": {
+      "type": "string",
+      "default": "Assumptions"
+    },
+    "filter": {
+      "type": "enum",
+      "values": [
+        "open",
+        "confirmed",
+        "corrected",
+        "all"
+      ],
+      "required": false,
+      "note": "SegmentedControl value. Uncontrolled (starts on open) when omitted."
+    },
+    "onFilterChange": {
+      "type": "function",
+      "required": false
+    },
+    "onConfirm": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Confirm, outline, on open rows."
+    },
+    "onCorrect": {
+      "type": "function",
+      "required": false,
+      "note": "(id, correction) => void. Correct turns the row into a focused Input; Enter or Save sends, Escape or Cancel goes back. Corrected rows show the old text struck through, the new text and \"agent will redo n steps\"."
+    },
+    "compact": {
+      "type": "boolean",
+      "default": false,
+      "note": "One line: open count Badge, the weakest open assumption and its confidence."
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceMd",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "motion.fast",
+    "motion.normal",
+    "status.successText",
+    "status.warningText"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "the Card is aria-labelledby its title; compact is a section named by the title",
+      "confidence is a Meter with an accessible name plus the word Low, Medium or High, never colour alone",
+      "the filter is a kit SegmentedControl named \"Show assumptions\"",
+      "\"used in n steps\" is a Button that opens a kit Popover listing the steps",
+      "Correct focuses a labelled Input; Enter saves, Escape cancels, and focus returns to the row",
+      "corrected text uses del and ins with hidden \"Was\" / \"Now\" words",
+      "motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local GuessList, AssumptionCard or ConfidenceBar",
+    "Do not show confidence as colour alone",
+    "Do not use it for questions the agent waits on (DecisionCard)",
+    "Do not use raw hex"
+  ],
+  "snippet": "<AssumptionLog items={[{ id: \"cur\", text: \"Prices are in EUR\", confidence: 0.42, source: \"default\", steps: [\"Read supplier sheet\", \"Convert prices\", \"Write EU list\"], status: \"open\" }]} onConfirm={confirm} onCorrect={correct} />"
+}

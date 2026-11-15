@@ -133,6 +133,7 @@ import { TreeViewDoc } from "./TreeViewDoc";
 import { UsageListDoc } from "./UsageListDoc";
 import { TaskBriefDoc } from "./TaskBriefDoc";
 import { DoneCheckDoc } from "./DoneCheckDoc";
+import { AssumptionLogDoc } from "./AssumptionLogDoc";
 import { ComponentGallery } from "./ComponentGallery";
 import playground from "../playground.module.css";
 
@@ -184,6 +185,7 @@ const TITLES: Record<string, string> = {
   agentplan: "AgentPlan",
   agenttrail: "AgentTrail",
   approvalcard: "ApprovalCard",
+  assumptionlog: "AssumptionLog",
   toolcallcard: "ToolCallCard",
   runningnow: "RunningNow",
   permissionrequest: "PermissionRequest",
@@ -473,6 +475,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "agentplan") return <AgentPlanDoc />;
   if (resolved === "agenttrail") return <AgentTrailDoc />;
   if (resolved === "approvalcard") return <ApprovalCardDoc />;
+  if (resolved === "assumptionlog") return <AssumptionLogDoc />;
   if (resolved === "toolcallcard") return <ToolCallCardDoc />;
   if (resolved === "runningnow") return <RunningNowDoc />;
   if (resolved === "permissionrequest") return <PermissionRequestDoc />;

@@ -37,6 +37,7 @@ import { ApprovalCard } from "agentic-ds-kit";
 import { PermissionRequest } from "agentic-ds-kit";
 import { TaskBrief } from "agentic-ds-kit";
 import { DoneCheck } from "agentic-ds-kit";
+import { AssumptionLog } from "agentic-ds-kit";
 import { RunningNow } from "agentic-ds-kit";
 import { ToolCallCard } from "agentic-ds-kit";
 import { Avatar } from "agentic-ds-kit";
@@ -470,6 +471,18 @@ export function GalleryPreview({ id }: { id: string }) {
             criteria={[
               { id: "a", text: "Every SKU priced", status: "met" },
               { id: "b", text: "Totals match", status: "not_met" },
+            ]}
+          />
+        </Stage>
+      );
+    case "assumptionlog":
+      return (
+        <Stage variant="wide">
+          <AssumptionLog
+            compact
+            items={[
+              { id: "a", text: "Prices are in EUR", confidence: 0.42, status: "open" },
+              { id: "b", text: "Spring starts 1 March", confidence: 0.86, status: "open" },
             ]}
           />
         </Stage>

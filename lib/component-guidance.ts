@@ -15,6 +15,7 @@ import contract_anchornav from "../packages/kit/contracts/anchornav.json";
 import contract_appheader from "../packages/kit/contracts/appheader.json";
 import contract_appnav from "../packages/kit/contracts/appnav.json";
 import contract_approvalcard from "../packages/kit/contracts/approvalcard.json";
+import contract_assumptionlog from "../packages/kit/contracts/assumptionlog.json";
 import contract_autonomydial from "../packages/kit/contracts/autonomydial.json";
 import contract_avatar from "../packages/kit/contracts/avatar.json";
 import contract_avatargroup from "../packages/kit/contracts/avatargroup.json";
@@ -154,6 +155,7 @@ const contracts: Record<string, ContractNotes> = {
   "appheader": contract_appheader,
   "appnav": contract_appnav,
   "approvalcard": contract_approvalcard,
+  "assumptionlog": contract_assumptionlog,
   "autonomydial": contract_autonomydial,
   "avatar": contract_avatar,
   "avatargroup": contract_avatargroup,
