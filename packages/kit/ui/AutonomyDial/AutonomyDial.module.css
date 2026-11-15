@@ -49,6 +49,19 @@
   flex: 1 1 auto;
 }
 
+/* Phones (under --grid-breakpoint-sm, 40rem; media queries cannot read var()): one stop per row,
+   icon and label at the start, so the icons line up down the list. */
+@media (max-width: 40rem) {
+  .control {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .control > * {
+    justify-content: flex-start;
+  }
+}
+
 /* End labels under the control: which way the stops lean. */
 .ends {
   display: flex;
