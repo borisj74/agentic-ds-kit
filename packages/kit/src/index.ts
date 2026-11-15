@@ -137,6 +137,7 @@ export * from "../ui/UsageMeter";
 export * from "../ui/WorkBoard";
 export * from "../ui/ChangeReview";
 export * from "../ui/EvalSuite";
+export * from "../ui/FailureClusters";
 export * from "../ui/ChangeSummary";
 export * from "../ui/ExperimentCard";
 export * from "../ui/NotificationStack";

@@ -1,0 +1,221 @@
+/* FailureClusters block: kit components on kit layout classes. The block is its own inline-size
+   container and always takes the full width, so it stacks wherever it is placed. */
+.root {
+  container: failureclusters / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.columns {
+  min-width: 0;
+}
+
+.listColumn,
+.detail {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.picker {
+  padding: var(--space-3);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+/* Cluster list: a listbox, arrow keys move the selection */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.option {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-ease-out);
+}
+
+.option + .option {
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.option:first-child {
+  border-start-start-radius: var(--radius-surface-md);
+  border-start-end-radius: var(--radius-surface-md);
+}
+
+.option:last-child {
+  border-end-start-radius: var(--radius-surface-md);
+  border-end-end-radius: var(--radius-surface-md);
+}
+
+.option:hover {
+  background-color: var(--bg-control-hover);
+}
+
+.option:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(var(--border-focus-width) * -1);
+}
+
+.selected {
+  background-color: var(--bg-subtle);
+  box-shadow: inset var(--border-width-medium) 0 0 var(--action-selected-border);
+}
+
+.optionTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.cause {
+  min-width: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+.count {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.optionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.trend_up,
+.trend_new {
+  color: var(--status-danger-text);
+}
+
+.trend_down {
+  color: var(--status-success-text);
+}
+
+/* Selected cluster */
+.detail {
+  gap: var(--space-5);
+}
+
+.detailHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.detailHeading {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--type-size-body);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+.detailMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.block {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+/* Below the stack point the cluster list sits over the selected cluster. 64rem is
+   --grid-breakpoint-md (container queries cannot read var()), as in ChangeReview. */
+@container failureclusters (max-width: 64rem) {
+  .root .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option {
+    transition: none;
+  }
+}

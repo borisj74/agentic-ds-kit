@@ -12065,6 +12065,80 @@
       }
     },
     {
+      "id": "failureclusters",
+      "group": "component",
+      "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed), affected agents and the trend in words; beside it the selected cluster's first and last seen, a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Open issue is the one solid primary.",
+      "useWhen": [
+        "ops needs to see which causes break agent runs across many agents",
+        "a person decides whether a failure is known, should be muted or needs an issue",
+        "a fixed failure must show when it comes back (Regressed)"
+      ],
+      "doNotUseWhen": [
+        "a list of single failed runs to act on — AgentInbox",
+        "one run explained step by step — RunDetail",
+        "events and changes in general — ActivityFeed"
+      ],
+      "doNot": [
+        "Do not invent a local ErrorGroups, IncidentList or FailureTable",
+        "Do not list single runs as clusters (AgentInbox)",
+        "Open issue is the one solid primary; Mark known is outline and Mute ghost",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "clusters": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[], trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary?, args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
+        },
+        "title": {
+          "type": "string",
+          "default": "Failures"
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled (the largest cluster) when omitted."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Click, or Up / Down / Home / End in the list."
+        },
+        "filters": {
+          "type": "object",
+          "required": false,
+          "note": "{ time?, agent?, status? }. Uncontrolled when omitted. Agent and status filter the list; time is a label, so pass the clusters for that window."
+        },
+        "onFiltersChange": {
+          "type": "function",
+          "required": false
+        },
+        "timeOptions": {
+          "type": "array",
+          "default": [
+            "Last hour",
+            "Last 24 hours",
+            "Last 7 days"
+          ]
+        },
+        "onMarkKnown": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Mark known, outline; hidden when already known."
+        },
+        "onMute": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Mute 24h, ghost; shows mutedUntil while muted."
+        },
+        "onOpenIssue": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Open issue, the one solid primary."
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",

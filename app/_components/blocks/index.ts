@@ -12,6 +12,7 @@ import { ActivityFeedDemo } from "./ActivityFeedDemo";
 import { PlanReviewDemo } from "./PlanReviewDemo";
 import { ChangeReviewDemo } from "./ChangeReviewDemo";
 import { EvalSuiteDemo } from "./EvalSuiteDemo";
+import { FailureClustersDemo } from "./FailureClustersDemo";
 
 /** The live demo each block's preview frame renders, by docs slug. */
 export const BLOCK_DEMOS: Record<string, ComponentType> = {
@@ -28,4 +29,5 @@ export const BLOCK_DEMOS: Record<string, ComponentType> = {
   "plan-review": PlanReviewDemo,
   "change-review": ChangeReviewDemo,
   "eval-suite": EvalSuiteDemo,
+  "failure-clusters": FailureClustersDemo,
 };

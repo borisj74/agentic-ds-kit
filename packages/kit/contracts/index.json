@@ -1222,6 +1222,17 @@
     "summary": "Test a candidate agent version against the baseline on fixed cases before it ships: pass rate, cost and latency, regressions first."
   },
   {
+    "id": "failureclusters",
+    "kind": "block",
+    "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed), affected agents and the trend in words; beside it the selected cluster's first and last seen, a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Open issue is the one solid primary.",
+    "group": "component",
+    "path": "contracts/failureclusters.json",
+    "status": "stable",
+    "level": "block",
+    "category": "Agents",
+    "summary": "Failed runs across all agents grouped by likely cause, so ops fixes causes, not single runs."
+  },
+  {
     "id": "dashboard",
     "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
     "group": "pattern",
