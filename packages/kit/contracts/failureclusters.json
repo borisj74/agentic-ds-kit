@@ -1,0 +1,136 @@
+{
+  "id": "failureclusters",
+  "kind": "block",
+  "category": "Agents",
+  "summary": "Failed runs across all agents grouped by likely cause, so ops fixes causes, not single runs.",
+  "status": "stable",
+  "level": "block",
+  "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed), affected agents and the trend in words; beside it the selected cluster's first and last seen, a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Open issue is the one solid primary.",
+  "useWhen": [
+    "ops needs to see which causes break agent runs across many agents",
+    "a person decides whether a failure is known, should be muted or needs an issue",
+    "a fixed failure must show when it comes back (Regressed)"
+  ],
+  "doNotUseWhen": [
+    "a list of single failed runs to act on — AgentInbox",
+    "one run explained step by step — RunDetail",
+    "events and changes in general — ActivityFeed"
+  ],
+  "contains": [
+    "filterbar",
+    "radiogroup",
+    "badge",
+    "avatargroup",
+    "numbertransition",
+    "linechart",
+    "toolcallcard",
+    "table",
+    "link",
+    "empty",
+    "button"
+  ],
+  "props": {
+    "clusters": {
+      "type": "array",
+      "required": true,
+      "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[], trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary?, args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
+    },
+    "title": {
+      "type": "string",
+      "default": "Failures"
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled (the largest cluster) when omitted."
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Click, or Up / Down / Home / End in the list."
+    },
+    "filters": {
+      "type": "object",
+      "required": false,
+      "note": "{ time?, agent?, status? }. Uncontrolled when omitted. Agent and status filter the list; time is a label, so pass the clusters for that window."
+    },
+    "onFiltersChange": {
+      "type": "function",
+      "required": false
+    },
+    "timeOptions": {
+      "type": "array",
+      "default": [
+        "Last hour",
+        "Last 24 hours",
+        "Last 7 days"
+      ]
+    },
+    "onMarkKnown": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Mark known, outline; hidden when already known."
+    },
+    "onMute": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Mute 24h, ghost; shows mutedUntil while muted."
+    },
+    "onOpenIssue": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Open issue, the one solid primary."
+    }
+  },
+  "passthrough": {
+    "root": "section",
+    "ref": "section",
+    "className": "root",
+    "rest": "section"
+  },
+  "layout": [
+    "header, then the filtered cluster list beside the selected cluster in layout-split--secondary",
+    "the block is its own inline-size container and takes the full width; below --grid-breakpoint-md (64rem) of block width the list sits over the cluster"
+  ],
+  "tokens": [
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "radius.surfaceMd",
+    "type.family.heading",
+    "type.family.mono",
+    "type.size.uiXl",
+    "type.size.body",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.heading",
+    "type.weight.label",
+    "type.tracking.heading",
+    "layout.gutter.md",
+    "motion.fast",
+    "status.dangerText",
+    "status.successText",
+    "action.selectedBorder"
+  ],
+  "a11y": {
+    "element": "section",
+    "requirements": [
+      "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "the clusters are a listbox; each option has aria-selected, Up / Down / Home / End move the selection and focus with it",
+      "status is a word in a Badge and the trend is words with an icon, never colour alone",
+      "counts use NumberTransition with a spoken label (\"12 failed runs\")",
+      "the selected cluster is a section labelled by its h3 cause",
+      "the sample call is a ToolCallCard opened to its error; recent runs are a captioned kit Table",
+      "motion is off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local ErrorGroups, IncidentList or FailureTable",
+    "Do not list single runs as clusters (AgentInbox)",
+    "Open issue is the one solid primary; Mark known is outline and Mute ghost",
+    "Do not use raw hex"
+  ],
+  "snippet": "<FailureClusters clusters={clusters} filters={{ time: \"Last 24 hours\" }} onMarkKnown={markKnown} onMute={mute} onOpenIssue={openIssue} />"
+}
