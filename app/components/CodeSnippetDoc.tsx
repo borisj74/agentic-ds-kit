@@ -170,7 +170,7 @@ export function CodeSnippetDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Variants of one snippet. Kit Tabs (line, sm) sit on the header line; arrow keys move between them.
+                  Variants of one snippet. Kit Tabs (segmented, sm) sit in the header; arrow keys move between them.
                 </p>
               </div>
               <CodeBlock

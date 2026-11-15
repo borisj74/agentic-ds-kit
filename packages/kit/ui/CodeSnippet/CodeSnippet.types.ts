@@ -14,7 +14,7 @@ type CodeSnippetOwnedKeys = "children" | "title";
 export interface CodeSnippetProps extends Omit<ComponentPropsWithoutRef<"div">, CodeSnippetOwnedKeys> {
   /** The code. Ignored when `tabs` is set. */
   code?: string;
-  /** Several snippets behind kit Tabs (line, sm) in the header. */
+  /** Several snippets behind kit Tabs (segmented, sm) in the header. */
   tabs?: CodeSnippetTab[];
   /** Language label in the header (label only, no highlighting). A tab's own language wins. */
   language?: string;

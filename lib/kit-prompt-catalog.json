@@ -3137,7 +3137,7 @@
         "tabs": {
           "type": "array",
           "required": false,
-          "note": "renders kit Tabs (line, sm) in the header; a tab's language wins over language"
+          "note": "renders kit Tabs (segmented, sm) in the header; a tab's language wins over language"
         },
         "language": {
           "type": "string",

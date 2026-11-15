@@ -77,7 +77,9 @@
   outline: none;
 }
 
-.segmented .list {
+/* Variant and size rules use child combinators: a Tabs nested in another Tabs' panel (a CodeSnippet
+   with tabs inside a segmented page Tabs) must not pick up the outer variant's tray or colours. */
+.segmented > .list {
   gap: var(--space-inline-2xs);
   padding: var(--space-inset-2xs);
   border-radius: var(--radius-control-md);
@@ -85,29 +87,29 @@
   box-shadow: none;
 }
 
-.segmented .indicator {
+.segmented > .list > .indicator {
   border-radius: var(--radius-control-sm);
   background: var(--bg-control);
   box-shadow: var(--shadow-xs);
 }
 
-.segmented .trigger {
+.segmented > .list > .trigger {
   border-radius: var(--radius-control-sm);
   padding: var(--space-inset-sm) var(--space-inset-md);
 }
 
 /* On the tray, resting labels use muted text: subtle text on --bg-tray is below 4.5:1. */
-.segmented .trigger:not(:hover):not([data-state="active"]):not(:disabled) {
+.segmented > .list > .trigger:not(:hover):not([data-state="active"]):not(:disabled) {
   color: var(--text-secondary);
 }
 
-.line .list {
+.line > .list {
   gap: var(--space-inline-md);
   width: 100%;
   border-bottom: var(--border-divider) solid var(--border-faint);
 }
 
-.line .indicator {
+.line > .list > .indicator {
   top: auto;
   bottom: 0;
   height: var(--border-control-strong) !important;
@@ -115,7 +117,7 @@
   background: var(--text-primary);
 }
 
-.line .trigger {
+.line > .list > .trigger {
   padding: var(--space-inset-sm) var(--space-inset-2xs);
   margin-bottom: calc(-1 * var(--border-divider));
 }
@@ -124,13 +126,13 @@
   gap: var(--space-stack-sm);
 }
 
-.sm.segmented .trigger {
+.sm.segmented > .list > .trigger {
   padding: var(--space-inset-xs) var(--space-inset-sm);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
 }
 
-.sm.line .trigger {
+.sm.line > .list > .trigger {
   padding: var(--space-inset-xs) var(--space-inset-2xs);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
@@ -140,28 +142,28 @@
   gap: var(--space-stack-lg);
 }
 
-.lg.segmented .list {
+.lg.segmented > .list {
   padding: var(--space-inset-xs);
   border-radius: var(--radius-control-lg);
   gap: var(--space-inline-xs);
 }
 
-.lg.segmented .trigger {
+.lg.segmented > .list > .trigger {
   padding: var(--space-inset-sm) var(--space-inset-lg);
   border-radius: var(--radius-control-md);
   font-size: var(--type-size-body-sm);
 }
 
-.lg.segmented .indicator {
+.lg.segmented > .list > .indicator {
   border-radius: var(--radius-control-md);
 }
 
-.lg.line .trigger {
+.lg.line > .list > .trigger {
   padding: var(--space-inset-md) var(--space-inset-xs);
   font-size: var(--type-size-body-sm);
 }
 
-.lg .content {
+.lg > .content {
   font-size: var(--type-size-body);
 }
 

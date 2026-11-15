@@ -113,7 +113,7 @@ export function CodeSnippet({
           {hasTabs ? (
             <div className={styles.tabs}>
               <Tabs
-                variant="line"
+                variant="segmented"
                 size="sm"
                 ariaLabel={title ?? ariaLabel ?? labels.code}
                 value={String(Math.min(activeIndex, tabs!.length - 1))}
