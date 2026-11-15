@@ -132,6 +132,7 @@ import contract_blurcrossfade from "../packages/kit/contracts/blurcrossfade.json
 import contract_textreveal from "../packages/kit/contracts/textreveal.json";
 import contract_tiltcard from "../packages/kit/contracts/tiltcard.json";
 import contract_gridbackground from "../packages/kit/contracts/gridbackground.json";
+import contract_guardraillog from "../packages/kit/contracts/guardraillog.json";
 import contract_gradienttext from "../packages/kit/contracts/gradienttext.json";
 
 type ContractNotes = {
@@ -273,6 +274,7 @@ const contracts: Record<string, ContractNotes> = {
   "textreveal": contract_textreveal,
   "tiltcard": contract_tiltcard,
   "gridbackground": contract_gridbackground,
+  "guardraillog": contract_guardraillog,
   "gradienttext": contract_gradienttext,
   // Blocks bring their contracts from lib/blocks.
   ...Object.fromEntries(BLOCK_DOCS.map((doc) => [doc.contract.id, doc.contract])),

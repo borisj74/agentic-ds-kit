@@ -1,0 +1,297 @@
+.root {
+  /* Inline-size container: takes the full width so it never collapses in a shrink-to-fit parent. */
+  container: guardraillog / inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.titleIcon {
+  flex-shrink: 0;
+  color: var(--text-fg);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.summary {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.picker {
+  padding: var(--space-3);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+.list {
+  /* Columns line up across rows (subgrid): verdict, rule and attempt, agent, time. */
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.list > li {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
+.list > li + li {
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.row {
+  box-sizing: border-box;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  column-gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+  padding: var(--space-3);
+  background: none;
+  border: 0;
+  font: inherit;
+  text-align: start;
+  color: var(--text-fg);
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--motion-ease-out);
+}
+
+.list > li:first-child .row {
+  border-start-start-radius: var(--radius-surface-md);
+  border-start-end-radius: var(--radius-surface-md);
+}
+
+.list > li:last-child .row {
+  border-end-start-radius: var(--radius-surface-md);
+  border-end-end-radius: var(--radius-surface-md);
+}
+
+.row:hover {
+  background-color: var(--bg-control-hover);
+}
+
+.row:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(var(--border-focus-width) * -1);
+}
+
+.selected {
+  background-color: var(--bg-subtle);
+}
+
+.verdict {
+  justify-self: start;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rule {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.attempt {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.who {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.agent,
+.at {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+  white-space: nowrap;
+}
+
+.at {
+  font-family: var(--font-mono);
+  justify-self: end;
+}
+
+/* Drawer content */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.ruleText {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.owner {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.override {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.sending svg {
+  animation: guardrail-spin 1s linear infinite;
+}
+
+/* Compact: one line for a header */
+.compact {
+  box-sizing: border-box;
+  container-type: inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  font-family: var(--font-sans);
+}
+
+.compactIcon {
+  flex-shrink: 0;
+  color: var(--text-fg-muted);
+}
+
+.compactSummary {
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.compactLatest {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.compactText {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Narrow: verdict, rule, agent and time stack. Container queries cannot read var(). */
+@container guardraillog (max-width: 36rem) {
+  .list,
+  .list > li,
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .row {
+    align-items: start;
+    row-gap: var(--space-2);
+  }
+
+  .at {
+    justify-self: start;
+  }
+
+  .agent {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+@keyframes guardrail-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+
+  .sending svg {
+    animation: none;
+  }
+}

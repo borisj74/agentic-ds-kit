@@ -63,6 +63,7 @@ const AGENT_IDS = new Set([
   "contextwindow",
   "decisioncard",
   "donecheck",
+  "guardraillog",
   "inlinediff",
   "insightcard",
   "loadinganimation",
