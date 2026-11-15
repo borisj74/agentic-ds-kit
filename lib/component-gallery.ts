@@ -56,6 +56,7 @@ const AGENT_IDS = new Set([
   "agenttrail",
   "agenttree",
   "approvalcard",
+  "assumptionlog",
   "autonomydial",
   "chat",
   "citedanswer",

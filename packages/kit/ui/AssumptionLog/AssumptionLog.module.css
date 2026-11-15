@@ -1,0 +1,246 @@
+.root {
+  animation: assumptionlog-in var(--motion-normal) var(--motion-ease-out);
+}
+
+.body {
+  container: assumptionlog / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  min-width: 0;
+  animation: assumptionlog-fade var(--motion-fast) var(--motion-ease-out);
+}
+
+.row + .row {
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.row:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(var(--border-focus-width) * -1);
+}
+
+.main {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.text {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+.confirmed .text {
+  color: var(--text-fg-muted);
+}
+
+.old {
+  color: var(--text-fg-muted);
+  text-decoration: line-through;
+}
+
+.new {
+  text-decoration: none;
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.confidence {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.meter {
+  inline-size: var(--space-12);
+  flex-shrink: 0;
+}
+
+.level {
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+}
+
+.low .level {
+  color: var(--status-warning-text);
+}
+
+.medium .level {
+  color: var(--text-fg-muted);
+}
+
+.high .level {
+  color: var(--status-success-text);
+}
+
+.statusWord {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.actions {
+  display: inline-flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.steps {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+/* Correct: the row becomes an Input with Save / Cancel */
+.edit {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.editLabel {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.editActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.redoHint {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+/* Compact: one line for a run header */
+.compact {
+  box-sizing: border-box;
+  container-type: inline-size;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  font-family: var(--font-sans);
+}
+
+.compactIcon {
+  flex-shrink: 0;
+  color: var(--text-fg-muted);
+}
+
+.compactText {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compactLead {
+  color: var(--text-fg-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Narrow card: actions drop under the text. Container queries cannot read var(). */
+@container assumptionlog (max-width: 30rem) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+@keyframes assumptionlog-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes assumptionlog-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .row {
+    animation: none;
+  }
+}
+
+.body:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}

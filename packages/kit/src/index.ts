@@ -25,6 +25,7 @@ export * from "../ui/AppDirectory";
 export * from "../ui/AppHeader";
 export * from "../ui/AppNav";
 export * from "../ui/ApprovalCard";
+export * from "../ui/AssumptionLog";
 export * from "../ui/AutonomyDial";
 export * from "../ui/Avatar";
 export * from "../ui/AvatarGroup";

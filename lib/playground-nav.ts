@@ -17,6 +17,7 @@ export const COMPONENT_ITEMS = [
   "appheader",
   "appnav",
   "approvalcard",
+  "assumptionlog",
   "autonomydial",
   "avatar",
   "avatargroup",
@@ -137,6 +138,7 @@ export function componentLabel(id: string): string {
   if (id === "agentplan") return "AgentPlan";
   if (id === "agenttrail") return "AgentTrail";
   if (id === "approvalcard") return "ApprovalCard";
+  if (id === "assumptionlog") return "AssumptionLog";
   if (id === "agentmonitor") return "AgentMonitor";
   if (id === "permissionrequest") return "PermissionRequest";
   if (id === "runningnow") return "RunningNow";
@@ -233,7 +235,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
   {
     label: "SaaS",

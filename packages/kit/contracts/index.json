@@ -751,6 +751,14 @@
     "level": "organism"
   },
   {
+    "id": "assumptionlog",
+    "intent": "The guesses an agent made without asking, each with confidence, source and the steps that depend on it, so a person can confirm or correct them before they matter. Compact: open count plus the weakest guess.",
+    "group": "component",
+    "path": "contracts/assumptionlog.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "agenttrail",
     "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
     "group": "component",
