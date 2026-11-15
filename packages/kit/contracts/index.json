@@ -1211,6 +1211,17 @@
     "summary": "Review what an agent changed: file by file, with the diff, comments, and accept or reject."
   },
   {
+    "id": "evalsuite",
+    "kind": "block",
+    "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost, p50 latency and regressions; a SegmentedControl (Regressions / Improvements / All) and FilterBar (tag, dataset) over a DataTable of cases; a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled with a reason while regressions are unreviewed.",
+    "group": "component",
+    "path": "contracts/evalsuite.json",
+    "status": "stable",
+    "level": "block",
+    "category": "Agents",
+    "summary": "Test a candidate agent version against the baseline on fixed cases before it ships: pass rate, cost and latency, regressions first."
+  },
+  {
     "id": "dashboard",
     "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
     "group": "pattern",

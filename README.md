@@ -57,7 +57,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 
 Blocks are larger kit components for a whole area of a screen (`"kind": "block"` in the contract). Import them from `agentic-ds-kit` like any component and put them inside the page's `<main>`; they bring no app chrome. See them on the docs site at `/blocks`.
 
-- **Agents** — AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview
+- **Agents** — AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, EvalSuite
 - **Productivity** — WorkBoard, ActivityFeed
 - **Analytics** — KpiBoard
 - **Billing** — UsageBilling

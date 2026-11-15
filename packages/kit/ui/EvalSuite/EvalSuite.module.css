@@ -1,0 +1,144 @@
+/* EvalSuite block: kit components on kit spacing. The block is its own inline-size container and
+   always takes the full width, so it stacks wherever it is placed. */
+.root {
+  container: evalsuite / inline-size;
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--layout-gutter-md);
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--layout-gutter-sm);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-xl);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-fg);
+}
+
+.versions {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.progress {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.progressText {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.picker {
+  padding: var(--space-3);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+/* The table scrolls sideways inside its own frame on narrow screens (DataTable's scroller). */
+.table {
+  min-width: 0;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.blocker {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.actions,
+.drawerActions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+/* Drawer content */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+/* Narrow block: the Promote reason takes its own line above the buttons. Container queries cannot read var(). */
+@container evalsuite (max-width: 30rem) {
+  .blocker {
+    flex-basis: 100%;
+  }
+}

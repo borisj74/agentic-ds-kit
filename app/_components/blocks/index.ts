@@ -11,6 +11,7 @@ import { UsageBillingDemo } from "./UsageBillingDemo";
 import { ActivityFeedDemo } from "./ActivityFeedDemo";
 import { PlanReviewDemo } from "./PlanReviewDemo";
 import { ChangeReviewDemo } from "./ChangeReviewDemo";
+import { EvalSuiteDemo } from "./EvalSuiteDemo";
 
 /** The live demo each block's preview frame renders, by docs slug. */
 export const BLOCK_DEMOS: Record<string, ComponentType> = {
@@ -26,4 +27,5 @@ export const BLOCK_DEMOS: Record<string, ComponentType> = {
   "activity-feed": ActivityFeedDemo,
   "plan-review": PlanReviewDemo,
   "change-review": ChangeReviewDemo,
+  "eval-suite": EvalSuiteDemo,
 };

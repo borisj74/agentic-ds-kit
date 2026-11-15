@@ -11966,6 +11966,105 @@
       }
     },
     {
+      "id": "evalsuite",
+      "group": "component",
+      "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost, p50 latency and regressions; a SegmentedControl (Regressions / Improvements / All) and FilterBar (tag, dataset) over a DataTable of cases; a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled with a reason while regressions are unreviewed.",
+      "useWhen": [
+        "a new prompt, model or tool change must not break cases that passed before",
+        "a person decides whether to promote a candidate agent version",
+        "each failing case needs both outputs side by side"
+      ],
+      "doNotUseWhen": [
+        "a live traffic split between variants — ExperimentCard",
+        "reviewing the files an agent changed — ChangeReview",
+        "one run's steps and metrics — RunDetail"
+      ],
+      "doNot": [
+        "Do not invent a local EvalTable, RegressionList or VersionCompare",
+        "Do not let Promote run while regressions are unreviewed",
+        "Promote is the one solid primary; Re-run is outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "default": "Eval run"
+        },
+        "baseline": {
+          "type": "object",
+          "required": true,
+          "note": "{ label, metrics: { passRate (0–1), avgCost, p50LatencyMs } }, e.g. label \"v12\"."
+        },
+        "candidate": {
+          "type": "object",
+          "required": true,
+          "note": "Same shape as baseline, e.g. label \"v13\"."
+        },
+        "cases": {
+          "type": "array",
+          "required": true,
+          "note": "{ id, name, tags?, dataset?, input, baseline: { result: \"pass\" | \"fail\" | \"error\", output, score?, cost? }, candidate: same, graderNote?, accepted?, flagged? }[]. A regression passed in baseline and not in candidate; accepted or flagged counts it as reviewed."
+        },
+        "view": {
+          "type": "enum",
+          "values": [
+            "regressions",
+            "improvements",
+            "all"
+          ],
+          "required": false,
+          "note": "Uncontrolled (starts on regressions) when omitted. Rows sort regressions, errors, improvements, rest."
+        },
+        "onViewChange": {
+          "type": "function",
+          "required": false
+        },
+        "onPromote": {
+          "type": "function",
+          "required": false,
+          "note": "Promote <candidate>, the one solid primary; disabled with the reason beside it while running, after an error or while regressions are unreviewed."
+        },
+        "onRerun": {
+          "type": "function",
+          "required": false,
+          "note": "Re-run, outline."
+        },
+        "onAcceptExpected": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void from the case Drawer. Set accepted on the case."
+        },
+        "onFlag": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void from the case Drawer. Set flagged on the case."
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "running",
+            "done",
+            "error"
+          ],
+          "default": "done",
+          "note": "running shows a Progress with \"Running n of N cases\"; error a danger Alert."
+        },
+        "progress": {
+          "type": "number",
+          "default": 0,
+          "note": "0–1 while running."
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "The run stopped before every case finished."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD"
+        }
+      }
+    },
+    {
       "id": "dashboard",
       "group": "pattern",
       "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
