@@ -104,6 +104,7 @@
     "text.fg",
     "text.fgMuted",
     "text.fgInverse",
+    "action.onPrimary",
     "line.default",
     "primary.base",
     "primary.hover",

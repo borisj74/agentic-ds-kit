@@ -106,7 +106,7 @@
 
 .solid.primary {
   background-color: var(--primary);
-  color: var(--text-fg-inverse);
+  color: var(--action-on-primary);
 }
 
 .solid.success {
