@@ -65,7 +65,7 @@
 }
 
 .old {
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
   text-decoration: line-through;
 }
 
