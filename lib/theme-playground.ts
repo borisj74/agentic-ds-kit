@@ -309,6 +309,9 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
   const focus = mode === "light" ? shift(action, -1) : action;
   const surface = mode === "light" ? "#ffffff" : neutral["900"];
   const text = readable(brand, action, surface, mode === "light" ? 1 : -1);
+  // Brand icons (spinners, running steps) use the brand text step: 4.5:1 on the surface. The action
+  // step alone can miss even 3:1 (Ink dark, 2.6:1) and reads pale in Amber and Teal light (~3.8:1).
+  const icon = text;
   const subtle = mode === "light" ? "50" : "900";
   const subtleStrong = mode === "light" ? "100" : "800";
   const subtleStronger = mode === "light" ? "200" : "700";
@@ -338,7 +341,7 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
     "--line-focus": ref("brand", focus),
     "--border-focus": ref("brand", focus),
     "--text-brand": ref("brand", text),
-    "--icon-brand": ref("brand", action),
+    "--icon-brand": ref("brand", icon),
     "--fill-brand": ref("brand", action),
     "--fill-brand-subtle": ref("brand", subtle),
     "--surface-brand": ref("brand", action),
@@ -380,7 +383,7 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
       ring: pointer(focus),
     },
     text: { brand: pointer(text) },
-    icon: { brand: pointer(action) },
+    icon: { brand: pointer(icon) },
     fill: { brand: pointer(action), brandSubtle: pointer(subtle) },
     surface: { brand: pointer(action), brandSubtle: pointer(subtle) },
     border: { focus: pointer(focus), brand: pointer(action) },
@@ -976,6 +979,7 @@ export function contrastReport(state: ThemeState): ContrastPair[] {
     { name: "Muted on surface", fg: "--text-fg-muted", bg: "--bg-surface", minimum: 4.5 },
     { name: "Subtle on surface", fg: "--text-fg-subtle", bg: "--bg-surface", minimum: 4.5 },
     { name: "Brand text on surface", fg: "--text-brand", bg: "--bg-surface", minimum: 4.5 },
+    { name: "Brand icon on surface", fg: "--icon-brand", bg: "--bg-surface", minimum: 4.5 },
     { name: "Button label", fg: "--action-on-primary", bg: "--action-primary", minimum: 4.5 },
     { name: "Button on canvas", fg: "--action-primary", bg: "--bg-canvas", minimum: 3 },
   ];

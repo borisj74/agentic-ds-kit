@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **KpiBoard takes three to six KPIs (was three or four).** Five or six cards scroll sideways in the Scoreboard's Conveyor, which Scoreboard already does past four; the chart and table still follow the picked card. More than six still belongs in a Scoreboard with Conveyor and a separate chart
+
 ### Fixed
 
 - **AgentLanes fits a phone.** When the block is narrower than 40rem (`--grid-breakpoint-sm`), each lane puts its agent above a full-width time track, so the track gets the whole width instead of what is left beside a fixed agent column. Only the round ticks keep a label and a grid line (every 10m on a 30-minute window, every 2m on a 10-minute one), so labels no longer pile on top of each other. A waiting block shows its warning icon without the "Needs you" text, which the agent row's badge already says. Handoff lines and the popover follow the new lane height. Wider blocks do not change
