@@ -39,7 +39,8 @@
   color: var(--icon-muted);
   background-color: var(--surface-card);
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-control-sm);
+  /* Same corners as a md Button and the rows a Collapsible usually holds. */
+  border-radius: var(--radius-control-md);
   cursor: pointer;
 }
 
