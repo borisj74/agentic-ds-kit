@@ -11,6 +11,12 @@ export const AGENT_OVERVIEW_AGENTS: AgentOverviewAgent[] = [
   { id: "docs", name: "Docs writer", model: "Haiku 5.5", icon: "FileText" },
 ];
 
+/**
+ * A fixed "now" for the sample (any date works: every time in it is relative). Fixed so the
+ * server and the browser render the same block without a hydration mismatch.
+ */
+export const SAMPLE_NOW = Date.UTC(2026, 10, 2, 14, 0);
+
 /** The time of the person's last visit in the sample. */
 export function sampleSince(now: number) {
   return now - 2 * 60 * MINUTE;

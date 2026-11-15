@@ -1,6 +1,6 @@
 import type { DataTableColumn, DataTableRow, KpiBoardMetric, KpiBoardRange } from "agentic-ds-kit";
 
-/** Sample analytics for the KpiBoard docs: a B2B SaaS, four KPIs over three ranges. */
+/** Sample analytics for the KpiBoard docs: a B2B SaaS, six KPIs over three ranges. */
 export const KPI_RANGES: KpiBoardRange[] = [
   { value: "7d", label: "7 days" },
   { value: "30d", label: "30 days" },
@@ -71,6 +71,21 @@ const CHURN: [string, number, string, string][] = [
   ["Business", 2, "0.4%", "Budget"],
 ];
 
+const NPS: [string, number, number, string][] = [
+  ["Enterprise", 86, 71, "+4"],
+  ["Business", 142, 62, "+1"],
+  ["Pro", 318, 58, "−2"],
+  ["Starter", 204, 44, "+6"],
+];
+
+const TICKETS: [string, number, string, string][] = [
+  ["Billing", 96, "42 min", "+14%"],
+  ["Agent setup", 81, "1 h 10 min", "+32%"],
+  ["Integrations", 57, "55 min", "−6%"],
+  ["Login and SSO", 33, "18 min", "−21%"],
+  ["Data export", 21, "1 h 35 min", "+3%"],
+];
+
 function rowsFor(range: Range): Record<string, DataTableRow[]> {
   const s = SCALE[range];
   const users = range === "7d" ? 0.4 : range === "90d" ? 1.8 : 1;
@@ -79,6 +94,8 @@ function rowsFor(range: Range): Record<string, DataTableRow[]> {
     users: PAGES.map(([page, count, change], i) => ({ id: `p${i}`, page, users: Math.round(count * users), change })),
     conversion: CHANNELS.map(([channel, trials, rate, change], i) => ({ id: `t${i}`, channel, trials: Math.max(1, Math.round(trials * s)), rate, change })),
     churn: CHURN.map(([plan, accounts, rate, reason], i) => ({ id: `x${i}`, plan, accounts: Math.max(1, Math.round(accounts * s)), rate, reason })),
+    nps: NPS.map(([segment, responses, score, change], i) => ({ id: `n${i}`, segment, responses: Math.max(1, Math.round(responses * s)), score, change })),
+    tickets: TICKETS.map(([topic, count, reply, change], i) => ({ id: `k${i}`, topic, tickets: Math.max(1, Math.round(count * s)), reply, change })),
   };
 }
 
@@ -152,6 +169,40 @@ export const KPI_METRICS: KpiBoardMetric[] = [
     rowsTitle: "Churn by plan",
     rankBy: "accounts",
   },
+  {
+    id: "nps",
+    label: "NPS",
+    values: {
+      "7d": { value: "61", delta: "+3", trend: "up" },
+      "30d": { value: "58", delta: "+1", trend: "up" },
+      "90d": { value: "57", delta: "No change", trend: "flat" },
+    },
+    columns: [
+      { key: "segment", header: "Plan", wrap: true },
+      { key: "responses", header: "Responses", type: "number", sortable: true, width: "6.5rem" },
+      { key: "score", header: "Score", type: "number", width: "5rem" },
+      { key: "change", header: "Change", type: "number", width: "5.5rem" },
+    ],
+    rowsTitle: "NPS by plan",
+    rankBy: "responses",
+  },
+  {
+    id: "tickets",
+    label: "Support tickets",
+    values: {
+      "7d": { value: "71", delta: "+9%", trend: "up", deltaTone: "danger" },
+      "30d": { value: "288", delta: "−4%", trend: "down", deltaTone: "success" },
+      "90d": { value: "902", delta: "+11%", trend: "up", deltaTone: "danger" },
+    },
+    columns: [
+      { key: "topic", header: "Topic", wrap: true },
+      { key: "tickets", header: "Tickets", type: "number", sortable: true, width: "5.5rem" },
+      { key: "reply", header: "First reply", width: "7rem" },
+      { key: "change", header: "Change", type: "number", width: "5.5rem" },
+    ],
+    rowsTitle: "Tickets by topic",
+    rankBy: "tickets",
+  },
 ];
 
 const SERIES_MAKERS: Record<string, (range: Range) => Datum[]> = {
@@ -159,6 +210,8 @@ const SERIES_MAKERS: Record<string, (range: Range) => Datum[]> = {
   users: (r) => wave(r, r === "90d" ? 4700 : 3900, 0.12, r === "90d" ? 220 : 640),
   conversion: (r) => wave(r, 4.7, 0.08, 0.35, 1),
   churn: (r) => wave(r, 1.3, -0.2, 0.15, 2),
+  nps: (r) => wave(r, 56, 0.06, 2),
+  tickets: (r) => wave(r, r === "90d" ? 68 : 10, -0.05, r === "90d" ? 6 : 3),
 };
 
 function byRange<T>(make: (range: Range) => T): Record<string, T> {

@@ -5,6 +5,8 @@ import index from "agentic-ds-kit/contracts/index.json";
 import kitPackage from "agentic-ds-kit/package.json";
 import { canonical } from "@/lib/site";
 import { CodeBlock } from "./components/CodeBlock";
+import { HomePatterns } from "./_components/HomePatterns";
+import { HomeScene } from "./_components/HomeScene";
 import playground from "./playground.module.css";
 
 export const metadata: Metadata = {
@@ -36,22 +38,30 @@ const AREAS = [
   },
 ];
 
-/** The docs home: what Nistha is, how to install it, and where to go next. */
+/** The docs home: what Nistha is, the kit at work, patterns to start from, then install and where to go next. */
 export default function Home() {
   return (
     <div className={playground.page}>
-      <div className={playground.shell}>
+      <div className={playground.wideShell}>
         <h1 className={playground.pageTitle}>Nistha</h1>
-        <p className={playground.pageLead}>
+        <p className={playground.homeLead}>
           A code-only design system for coding agents and product UI: JSON contracts, tokens and React components,
-          published as agentic-ds-kit {kitPackage.version}.
-        </p>
-
-        <p className={playground.pageLead}>
+          published as agentic-ds-kit {kitPackage.version}.{" "}
           <Link href="/start-here" linkAs={NextLink} variant="standalone">
-            New to Nistha and not an engineer? Start here
+            New to Nistha? Start here
           </Link>
         </p>
+
+        <div className={playground.homeScene}>
+          <HomeScene />
+        </div>
+
+        <Section
+          title="Start from a pattern"
+          description="Whole screens built from kit components. Open one, copy it in with npx agentic-ds-kit add, then make it yours."
+        >
+          <HomePatterns />
+        </Section>
 
         <Section title="Install" description="In a React 19 app (Next.js 15 or later, Vite, …). Tokens load with the first import.">
           <div className={playground.stack}>

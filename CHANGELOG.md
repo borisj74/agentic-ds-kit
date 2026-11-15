@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **AgentLanes fits a phone.** When the block is narrower than 40rem (`--grid-breakpoint-sm`), each lane puts its agent above a full-width time track, so the track gets the whole width instead of what is left beside a fixed agent column. Only the round ticks keep a label and a grid line (every 10m on a 30-minute window, every 2m on a 10-minute one), so labels no longer pile on top of each other. A waiting block shows its warning icon without the "Needs you" text, which the agent row's badge already says. Handoff lines and the popover follow the new lane height. Wider blocks do not change
+- **AutonomyDial's stops fill the track evenly.** The control is stretched to the dial's width, but its stops kept their natural width, so the leftover space sat after the last stop and the track looked padded more on the right than the left. The stops now grow into that space, so the inside padding matches on both ends. On phones (under 40rem, `--grid-breakpoint-sm`) the stops sit one per row with the icon and label at the start, so the icons line up down the list, with `--space-inline-sm` between icon and label
+- **Tabs inside another Tabs keep their own look.** Variant and size rules matched any descendant, so a Tabs in the panel of a `segmented` Tabs (for example a CodeSnippet on a page with segmented tabs) picked up the outer tray background and label colour. The rules now apply only to a Tabs' own list, tabs and panel
 - **Collapsible's toggle has the same corners as the controls around it.** It used `--radius-control-sm` (3px by default), sharper than a md Button and the rows a Collapsible usually holds. It now uses `--radius-control-md` (6px by default), and it follows the theme's radius like they do
 
 ## [0.26.1] - 2026-11-14

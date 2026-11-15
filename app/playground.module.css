@@ -163,6 +163,21 @@
   color: var(--text-secondary);
 }
 
+/* Home: the lead sits closer to the live scene under it; the scene gets room before the first
+   section. */
+.homeLead {
+  margin: 0 0 var(--space-6);
+  max-width: var(--grid-width-sm);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.homeScene {
+  margin-block-end: var(--space-12);
+}
+
 .body {
   margin: 0;
   max-width: 40rem;
@@ -306,6 +321,23 @@
   border-radius: var(--radius-surface-lg);
   background: var(--bg-subtle);
   overflow: hidden;
+}
+
+/* Crop thumbnail (ScaledFrame crop): the screen's top-left in a 16:10 window, fading out at the
+   bottom into the card it sits on. */
+.frameCrop {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  justify-content: flex-start;
+}
+
+.frameCrop::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 32%;
+  background: linear-gradient(to bottom, transparent, var(--surface-card));
+  pointer-events: none;
 }
 
 .frameBox {

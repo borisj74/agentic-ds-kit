@@ -3137,7 +3137,7 @@
         "tabs": {
           "type": "array",
           "required": false,
-          "note": "renders kit Tabs (line, sm) in the header; a tab's language wins over language"
+          "note": "renders kit Tabs (segmented, sm) in the header; a tab's language wins over language"
         },
         "language": {
           "type": "string",
@@ -11096,7 +11096,7 @@
     {
       "id": "kpiboard",
       "group": "component",
-      "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+      "intent": "Block: the top of a dashboard. A Scoreboard of three to six KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
       "useWhen": [
         "the first row of an analytics or reporting dashboard",
         "compare a few KPIs and drill into one without leaving the page",
@@ -11106,12 +11106,12 @@
         "only a strip of numbers: Scoreboard",
         "one chart on its own: LineChart or BarChart",
         "a full dataset to search and filter: DataTable",
-        "more than four KPIs: Scoreboard with Conveyor"
+        "more than six KPIs: Scoreboard with Conveyor, and a separate chart"
       ],
       "doNot": [
         "Do not rebuild KpiBoard from a local dashboard; import the block",
         "Do not add a second range control; the one range drives cards, chart and table",
-        "Do not put more than four KPIs in it",
+        "Do not put more than six KPIs in it",
         "Do not use raw hex",
         "No solid primary Button in the block; leave it to the page"
       ],
@@ -11119,7 +11119,7 @@
         "metrics": {
           "type": "array",
           "required": true,
-          "note": "3–4 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+          "note": "3–6 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
         },
         "series": {
           "type": "object",

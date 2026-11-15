@@ -167,7 +167,7 @@ export function DropdownMenuDoc() {
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
-              <div className={styles.canvas}>
+              <div className={`${styles.canvas} ${styles.canvasMenu}`}>
                 <div className={styles.previewRow}>
                   <DropdownMenu
                     trigger="Open"

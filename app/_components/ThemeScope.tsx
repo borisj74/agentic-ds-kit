@@ -7,10 +7,27 @@ import { ThemeScopeProvider } from "agentic-ds-kit";
 import { ThemeScopeProvider as SourceThemeScopeProvider } from "../../packages/kit/ui/shared/themeScope";
 import { scopeCss, themeDeclarations, type ThemeState } from "@/lib/theme-playground";
 import { readPatternTheme, subscribeTheme } from "@/lib/theme-store";
+import { readPlaygroundTheme } from "@/lib/playground-theme";
 import { themeFontClassName } from "./theme-fonts";
 
 export function usePatternTheme(): ThemeState | null {
   return useSyncExternalStore(subscribeTheme, readPatternTheme, () => null);
+}
+
+function subscribeSiteMode(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  return () => observer.disconnect();
+}
+
+/**
+ * Light or dark for preview thumbnails: the saved preview theme's mode when there is one, else
+ * the docs site's own light / dark. The server (and hydration) render light.
+ */
+export function usePreviewMode(): "light" | "dark" {
+  const theme = usePatternTheme();
+  const site = useSyncExternalStore(subscribeSiteMode, readPlaygroundTheme, () => "light" as const);
+  return theme?.mode ?? site;
 }
 
 /** Preview wrapper. Token overrides and data-theme stay on this element. */
