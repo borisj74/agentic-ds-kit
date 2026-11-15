@@ -78,9 +78,13 @@ export function AgentLanes({
   // Whole-minute ticks: every 2m on wide windows, every minute on narrow ones.
   const spanMin = span / MINUTE;
   const stepMin = spanMin >= 8 ? 2 : 1;
-  const ticks: { at: number; label: string }[] = [];
+  // On a narrow board only "major" ticks keep a label and a grid line: the first round step
+  // (2, 5, 10, 15, 30 or 60 minutes) that leaves at most four.
+  const majorMin =
+    [2, 5, 10, 15, 30, 60].find((m) => m % stepMin === 0 && Math.floor((spanMin - 0.01) / m) <= 4) ?? spanMin;
+  const ticks: { at: number; label: string; major: boolean }[] = [];
   for (let back = Math.floor((spanMin - 0.01) / stepMin) * stepMin; back >= stepMin; back -= stepMin) {
-    ticks.push({ at: (1 - back / spanMin) * 100, label: `−${back}m` });
+    ticks.push({ at: (1 - back / spanMin) * 100, label: `−${back}m`, major: back % majorMin === 0 });
   }
   const open = openTaskId ? byId.get(openTaskId) : undefined;
 
@@ -175,7 +179,7 @@ export function AgentLanes({
           <span />
           <div className={styles.axis}>
             {ticks.map((tick) => (
-              <span key={tick.label} className={styles.tick} style={{ insetInlineStart: `${tick.at}%` }}>
+              <span key={tick.label} className={cx(styles.tick, !tick.major && styles.minor)} style={{ insetInlineStart: `${tick.at}%` }}>
                 {tick.label}
               </span>
             ))}
@@ -212,7 +216,12 @@ export function AgentLanes({
                 </div>
                 <div className={styles.track}>
                   {ticks.map((tick) => (
-                    <span key={tick.label} className={styles.grid} style={{ insetInlineStart: `${tick.at}%` }} aria-hidden="true" />
+                    <span
+                      key={tick.label}
+                      className={cx(styles.grid, !tick.major && styles.minor)}
+                      style={{ insetInlineStart: `${tick.at}%` }}
+                      aria-hidden="true"
+                    />
                   ))}
                   {own.map((task) => {
                     const left = pct(task.start);
@@ -236,7 +245,7 @@ export function AgentLanes({
                         {task.status === "waiting" ? (
                           <span className={styles.flag}>
                             <TriangleAlert size={12} strokeWidth={ICON_STROKE} aria-hidden="true" />
-                            Needs you
+                            <span className={styles.flagText}>Needs you</span>
                           </span>
                         ) : null}
                       </button>
