@@ -2,17 +2,9 @@
 
 import { useState } from "react";
 import { ContextWindow } from "agentic-ds-kit";
-import type { ContextSegment } from "agentic-ds-kit";
+import { contextSegments as seg } from "@/lib/agent-demo.sample";
 import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
 import agentDoc from "./AgentDoc.module.css";
-
-const seg = (system: number, memory: number, tools: number, messages: number, reserved: number): ContextSegment[] => [
-  { id: "system", label: "System", tokens: system },
-  { id: "memory", label: "Memory", tokens: memory },
-  { id: "tools", label: "Tools", tokens: tools },
-  { id: "messages", label: "Messages", tokens: messages },
-  { id: "reserved", label: "Reserved", tokens: reserved },
-];
 
 const STATES = {
   normal: { used: 104_000, segments: seg(6_200, 9_800, 21_400, 58_600, 8_000) },

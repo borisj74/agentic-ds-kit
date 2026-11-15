@@ -8,14 +8,9 @@ import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { RUNNING_NOW_ITEMS } from "@/lib/agent-demo.sample";
 
-const ITEMS: RunningNowItem[] = [
-  { id: "billing", name: "Billing refactor", activity: "editing invoice.ts", status: "running", elapsed: "02:14" },
-  { id: "docs", name: "Docs sweep", activity: "reading 14 pages", status: "running", elapsed: "00:48" },
-  { id: "flaky", name: "Flaky test hunt", activity: "rerunning suite", status: "running", elapsed: "05:31" },
-  { id: "migrate", name: "Migrate DB", activity: "waiting for OK", status: "waiting", elapsed: "00:31" },
-  { id: "deps", name: "Dependency bump", activity: "resolving lockfile", status: "running", elapsed: "01:02" },
-];
+const ITEMS = RUNNING_NOW_ITEMS;
 
 const WAITING = [ITEMS[0], ITEMS[3], ITEMS[1]];
 const MIXED: RunningNowItem[] = [
