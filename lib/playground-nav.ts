@@ -92,6 +92,7 @@ export const COMPONENT_ITEMS = [
   "pageheader",
   "pagination",
   "permissionrequest",
+  "redactionpreview",
   "popover",
   "pricingplans",
   "progress",
@@ -141,6 +142,7 @@ export function componentLabel(id: string): string {
   if (id === "assumptionlog") return "AssumptionLog";
   if (id === "agentmonitor") return "AgentMonitor";
   if (id === "permissionrequest") return "PermissionRequest";
+  if (id === "redactionpreview") return "RedactionPreview";
   if (id === "runningnow") return "RunningNow";
   if (id === "toolcallcard") return "ToolCallCard";
   if (id === "agenttree") return "AgentTree";
@@ -235,7 +237,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "redactionpreview", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
   {
     label: "SaaS",

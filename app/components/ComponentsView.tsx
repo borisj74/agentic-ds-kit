@@ -134,6 +134,7 @@ import { UsageListDoc } from "./UsageListDoc";
 import { TaskBriefDoc } from "./TaskBriefDoc";
 import { DoneCheckDoc } from "./DoneCheckDoc";
 import { AssumptionLogDoc } from "./AssumptionLogDoc";
+import { RedactionPreviewDoc } from "./RedactionPreviewDoc";
 import { ComponentGallery } from "./ComponentGallery";
 import playground from "../playground.module.css";
 
@@ -189,6 +190,7 @@ const TITLES: Record<string, string> = {
   toolcallcard: "ToolCallCard",
   runningnow: "RunningNow",
   permissionrequest: "PermissionRequest",
+  redactionpreview: "RedactionPreview",
   agentmonitor: "AgentMonitor",
   kbd: "Kbd",
   textarea: "Textarea",
@@ -479,6 +481,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "toolcallcard") return <ToolCallCardDoc />;
   if (resolved === "runningnow") return <RunningNowDoc />;
   if (resolved === "permissionrequest") return <PermissionRequestDoc />;
+  if (resolved === "redactionpreview") return <RedactionPreviewDoc />;
   if (resolved === "agentmonitor") return <AgentMonitorDoc />;
   if (resolved === "kbd") return <KbdDoc />;
   if (resolved === "linechart") return <LineChartDoc />;

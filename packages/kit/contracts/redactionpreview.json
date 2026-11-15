@@ -1,0 +1,145 @@
+{
+  "id": "redactionpreview",
+  "status": "stable",
+  "level": "organism",
+  "intent": "Shows exactly what is about to leave the product for a model or outside tool, with sensitive values masked by type and a mask rule per type, before it is sent. Send, then one line.",
+  "useWhen": [
+    "an agent is about to send customer or company data to a model, API or outside tool",
+    "a person should see and control which sensitive values leave masked",
+    "secrets must never leave, whatever the person chooses"
+  ],
+  "doNotUseWhen": [
+    "how much of the model's context is used — ContextWindow",
+    "approving one command or edit — ApprovalCard",
+    "granting standing access to a resource — PermissionRequest"
+  ],
+  "contains": [
+    "card",
+    "badge",
+    "tag",
+    "tooltip",
+    "switch",
+    "alert",
+    "button"
+  ],
+  "props": {
+    "destination": {
+      "type": "string",
+      "required": true,
+      "note": "Where the data goes. Title reads \"Sending to <destination>\"."
+    },
+    "region": {
+      "type": "string",
+      "required": false,
+      "note": "Data region of the destination, a Badge (\"EU region\")."
+    },
+    "payload": {
+      "type": "string",
+      "required": true,
+      "note": "Exactly what will be sent, as plain text. Shown read-only in mono."
+    },
+    "spans": {
+      "type": "array",
+      "required": true,
+      "note": "{ start, end, type }[] character ranges of sensitive values, e.g. type \"email\", \"card\", \"apiKey\". Overlaps are dropped."
+    },
+    "rules": {
+      "type": "object",
+      "required": false,
+      "note": "{ [type]: boolean } mask on or off. Types not listed are masked."
+    },
+    "lockedTypes": {
+      "type": "array",
+      "default": [
+        "apiKey",
+        "password",
+        "secret"
+      ],
+      "note": "Always masked; their Switch is locked on with lockedReason as the hint."
+    },
+    "lockedReason": {
+      "type": "string",
+      "default": "Secrets always stay masked. They are never sent to a model or outside tool."
+    },
+    "typeLabels": {
+      "type": "object",
+      "required": false,
+      "note": "{ [type]: label }. Common types (email, phone, card, apiKey…) have defaults."
+    },
+    "onRulesChange": {
+      "type": "function",
+      "required": false,
+      "note": "(rules) => void when a mask Switch flips."
+    },
+    "onSend": {
+      "type": "function",
+      "required": false,
+      "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\"."
+    },
+    "onCancel": {
+      "type": "function",
+      "required": false,
+      "note": "Cancel, outline."
+    },
+    "status": {
+      "type": "enum",
+      "values": [
+        "pending",
+        "sent",
+        "cancelled"
+      ],
+      "default": "pending",
+      "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"."
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.surface",
+    "bg.subtle",
+    "bg.controlHover",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "radius.surfaceMd",
+    "radius.surfaceLg",
+    "radius.controlSm",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.weight.label",
+    "type.family.mono",
+    "motion.fast",
+    "motion.normal",
+    "status.infoSubtle",
+    "status.infoBorder",
+    "status.infoText",
+    "status.warningSubtle",
+    "status.warningText",
+    "status.successText"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "the Card is aria-labelledby \"Sending to <destination>\"",
+      "masked spans are buttons named \"masked <type>\"; a Tooltip gives the type and aria-pressed tracks Reveal, which shows the value to the viewer only",
+      "unmasked spans carry hidden \"unmasked <type>:\" text, never colour alone",
+      "each mask rule is a labelled Switch; locked Switches are disabled and described by the reason",
+      "anything going out unmasked raises a warning Alert",
+      "the resolved row is named with what was sent and how many values were masked",
+      "motion is opacity and transform only, off under prefers-reduced-motion"
+    ]
+  },
+  "doNot": [
+    "Do not invent a local PiiViewer, MaskedText or DataLeakPanel",
+    "Do not bend CodeSnippet to mark spans up",
+    "Do not let a person unlock secrets (lockedTypes)",
+    "Send is the one solid primary; Cancel is outline",
+    "Do not use raw hex"
+  ],
+  "snippet": "<RedactionPreview destination=\"Claude (Anthropic API)\" region=\"EU\" payload={ticket} spans={[{ start: 34, end: 52, type: \"email\" }]} rules={rules} onRulesChange={setRules} onSend={send} onCancel={cancel} />"
+}
