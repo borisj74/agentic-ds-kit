@@ -1118,7 +1118,7 @@
   {
     "id": "kpiboard",
     "kind": "block",
-    "intent": "Block: the top of a dashboard. A Scoreboard of three or four KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+    "intent": "Block: the top of a dashboard. A Scoreboard of three to six KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
     "group": "component",
     "path": "contracts/kpiboard.json",
     "status": "stable",

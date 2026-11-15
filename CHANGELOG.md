@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **DropdownMenu's field trigger has the same corners as Input and Select at every size.** `sm` used `--radius-control-sm` (3px by default) and `lg` used `--radius-control-lg`, while Input and Select keep `--radius-control-md` at every size. All three sizes now use `--radius-control-md`, so a condition picker in a DataGrid row, for example, matches the fields and buttons beside it
+
 
 ## [0.26.1] - 2026-11-14
 

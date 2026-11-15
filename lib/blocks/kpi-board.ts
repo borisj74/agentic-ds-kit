@@ -7,7 +7,7 @@ export const kpiBoardDoc: BlockDoc = {
   name: "KpiBoard",
   contract,
   lead:
-    "The top of a dashboard. Three or four KPIs sit in one row and double as the picker: the chart and the table of top rows follow the one you pick. One range control changes all of them.",
+    "The top of a dashboard. Three to six KPIs sit in one row and double as the picker (five or six scroll sideways): the chart and the table of top rows follow the one you pick. One range control changes all of them.",
   usage: `import { KpiBoard } from "agentic-ds-kit";
 
 export function Dashboard({ metrics, series, rows }) {
