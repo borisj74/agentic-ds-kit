@@ -10190,6 +10190,91 @@
       }
     },
     {
+      "id": "taskbrief",
+      "group": "component",
+      "intent": "The brief a person hands an agent before it plans: a goal, one-line \"done when\" checks, optional spend, time and step limits, allowed tools, model and check-in level. Start, then one line.",
+      "useWhen": [
+        "a person sets up a task for an agent before it makes a plan",
+        "the result must pass agreed checks, which DoneCheck can mark later",
+        "the run needs hard caps on spend, time or steps"
+      ],
+      "doNotUseWhen": [
+        "the agent already has a plan to approve — PlanReview",
+        "a free-text conversation with the agent — Chat",
+        "steering a run that is already going — AgentSteering"
+      ],
+      "doNot": [
+        "Do not invent a local TaskForm, BriefCard or CriteriaList",
+        "Do not let Start run without a goal and at least one check",
+        "Start is the one solid primary; Save draft is outline",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "title": {
+          "type": "string",
+          "default": "New task"
+        },
+        "value": {
+          "type": "object",
+          "required": true,
+          "note": "{ goal, criteria: string[], spendCap?, minutes?, maxSteps?, tools?: string[], model?, autonomy? }. Limits are optional; null means no limit. 1–8 criteria; blank rows do not count."
+        },
+        "onChange": {
+          "type": "function",
+          "required": false,
+          "note": "(next) => void, the whole value on every edit."
+        },
+        "tools": {
+          "type": "array",
+          "required": false,
+          "note": "{ value, label }[] for the Tools MultiSelect. Empty hides it."
+        },
+        "models": {
+          "type": "array",
+          "required": false,
+          "note": "ModelPicker models. Omit to hide the picker."
+        },
+        "autonomyOptions": {
+          "type": "array",
+          "required": false,
+          "note": "AutonomyDial stops for the check-in level. Default AUTONOMY_STOPS."
+        },
+        "currency": {
+          "type": "string",
+          "default": "EUR"
+        },
+        "locale": {
+          "type": "string",
+          "default": "en"
+        },
+        "status": {
+          "type": "enum",
+          "values": [
+            "draft",
+            "starting",
+            "started",
+            "error"
+          ],
+          "default": "draft",
+          "note": "started folds to one line (goal · checks · cap). error keeps the form and shows a kit Alert."
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "Couldn't start the task."
+        },
+        "onStart": {
+          "type": "function",
+          "required": false,
+          "note": "(value) => void. Start, the one solid primary, disabled until there is a goal and one check; the reason sits beside it."
+        },
+        "onSaveDraft": {
+          "type": "function",
+          "required": false,
+          "note": "(value) => void. Save draft, outline. Omit to hide it."
+        }
+      }
+    },
+    {
       "id": "blurcrossfade",
       "group": "component",
       "intent": "A tiny wrapper that crossfades one child to the next when its key changes, for value and state swaps (a status chip going Running → Done, a thumbnail, a chart). A motion primitive, not a Card.",

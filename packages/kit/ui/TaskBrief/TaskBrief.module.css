@@ -1,0 +1,212 @@
+.root {
+  animation: taskbrief-in var(--motion-normal) var(--motion-ease-out);
+}
+
+.form {
+  container: taskbrief / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.busy .form {
+  opacity: var(--opacity-muted);
+  transition: opacity var(--motion-fast) var(--motion-ease-out);
+}
+
+/* Done when: numbered one-line checks */
+.criteria {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.criterion {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.criterion > :nth-child(2) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.criterionIndex {
+  flex-shrink: 0;
+  min-width: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  text-align: end;
+  color: var(--text-fg-subtle);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-danger);
+}
+
+/* Limits: side by side, stacked on phones */
+.limits {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.limits > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.blocker {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+.starting svg {
+  animation: taskbrief-spin 1s linear infinite;
+}
+
+/* Started: one line */
+.started {
+  box-sizing: border-box;
+  /* Inline-size container: the goal truncates without widening the parent, and the row can wrap by its own width. */
+  container: taskbrief-row / inline-size;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+  font-family: var(--font-sans);
+  animation: taskbrief-fade var(--motion-fast) var(--motion-ease-out);
+}
+
+.started:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.startedIcon,
+.startedLabel {
+  flex-shrink: 0;
+  color: var(--status-success-text);
+}
+
+.startedLabel {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+}
+
+.startedGoal {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.startedMeta {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes taskbrief-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes taskbrief-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes taskbrief-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Stack by the card's own width, not the viewport: the card often sits in a narrow column.
+   32rem fits three steppers side by side. Container queries cannot read var(). */
+@container taskbrief (max-width: 32rem) {
+  .limits {
+    flex-direction: column;
+  }
+}
+
+@container taskbrief-row (max-width: 30rem) {
+  .startedMeta {
+    flex-basis: 100%;
+  }
+}
+
+.started {
+  flex-wrap: wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .started,
+  .starting svg {
+    animation: none;
+  }
+
+  .busy .form {
+    transition: none;
+  }
+}

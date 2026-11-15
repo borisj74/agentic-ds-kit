@@ -131,6 +131,7 @@ import { ToastDoc } from "./ToastDoc";
 import { TooltipDoc } from "./TooltipDoc";
 import { TreeViewDoc } from "./TreeViewDoc";
 import { UsageListDoc } from "./UsageListDoc";
+import { TaskBriefDoc } from "./TaskBriefDoc";
 import { ComponentGallery } from "./ComponentGallery";
 import playground from "../playground.module.css";
 
@@ -149,6 +150,7 @@ const TITLES: Record<string, string> = {
   insightcard: "InsightCard",
   usagemeter: "UsageMeter",
   taskboard: "TaskBoard",
+  taskbrief: "TaskBrief",
   blurcrossfade: "BlurCrossfade",
   textreveal: "TextReveal",
   tiltcard: "TiltCard",
@@ -436,6 +438,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "insightcard") return <InsightCardDoc />;
   if (resolved === "usagemeter") return <UsageMeterDoc />;
   if (resolved === "taskboard") return <TaskBoardDoc />;
+  if (resolved === "taskbrief") return <TaskBriefDoc />;
   if (resolved === "invoicedocument") return <InvoiceDocumentDoc />;
   if (resolved === "pricingplans") return <PricingPlansDoc />;
   if (resolved === "integrationpicker") return <IntegrationPickerDoc />;

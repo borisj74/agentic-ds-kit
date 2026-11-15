@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **TaskBrief** (organism, Agents): the brief a person hands an agent before it plans. A goal, one to eight one-line "done when" checks, optional spend, time and step limits, allowed tools, model and check-in level, in a kit Card. Start is the one solid primary and stays disabled, with the reason beside it, until there is a goal and one check. `status` "started" folds to one line (goal · checks · cap); "error" keeps the form and shows a kit Alert
+
 ### Fixed
 
 
