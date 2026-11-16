@@ -69,13 +69,15 @@ const SEMANTIC_FAMILIES: SemanticFamily[] = [
   },
   {
     title: "Foreground",
-    pattern: "text-fg-*",
+    pattern: "text-fg-* · text-fixed-*",
     tokens: [
       { name: "text.fg", var: "--text-fg" },
       { name: "text.fg-muted", var: "--text-fg-muted" },
       { name: "text.fg-subtle", var: "--text-fg-subtle" },
       { name: "text.fg-disabled", var: "--text-fg-disabled" },
       { name: "text.fg-inverse", var: "--text-fg-inverse" },
+      { name: "text.fixed-dark", var: "--text-fixed-dark" },
+      { name: "text.fixed-light", var: "--text-fixed-light" },
     ],
   },
   {

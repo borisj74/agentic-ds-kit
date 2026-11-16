@@ -26,6 +26,18 @@ const ROLES = [
   { id: "type.overline-xs", size: "--type-size-overline-xs", weight: "--type-weight-overline", line: "--type-line-overline-xs", tracking: "--type-tracking-overline", family: "--type-family-overline", sample: "EYEBROWS / TABLE HEADS" },
 ] as const;
 
+/** Marketing and landing pages only. Product screens keep the roles above. */
+const MARKETING_ROLES = [
+  { id: "type.display-hero", size: "--type-size-display-hero", weight: "--type-weight-display-hero", line: "--type-line-display-hero", tracking: "--type-tracking-display-hero", family: "--font-heading", sample: "Agents you can trust" },
+  { id: "type.title-section", size: "--type-size-title-section", weight: "--type-weight-title-section", line: "--type-line-title-section", tracking: "--type-tracking-title-section", family: "--font-heading", sample: "Built for review, not guesswork" },
+] as const;
+
+const SEMANTIC_TRACKING = [
+  { name: "--type-tracking-tight", sample: "Hero and section titles" },
+  { name: "--type-tracking-snug", sample: "Bold page titles" },
+  { name: "--type-tracking-wide", sample: "MARKETING OVERLINE" },
+] as const;
+
 const SIZE_STEPS = [
   { name: "font-size-xs", size: "0.75rem" },
   { name: "font-size-sm", size: "0.875rem" },
@@ -50,8 +62,13 @@ const LINE_STEPS = [
 ] as const;
 
 const TRACKING_STEPS = [
+  { name: "letter-spacing-tightest", label: "tightest · -0.03em", value: "-0.03em" },
+  { name: "letter-spacing-tighter", label: "tighter · -0.02em", value: "-0.02em" },
+  { name: "letter-spacing-tight", label: "tight · -0.01em", value: "-0.01em" },
   { name: "letter-spacing-normal", label: "normal · 0", value: "0" },
   { name: "letter-spacing-wide", label: "wide · 0.02em", value: "0.02em" },
+  { name: "letter-spacing-caps", label: "caps · 0.06em", value: "0.06em" },
+  { name: "letter-spacing-widest", label: "widest · 0.08em", value: "0.08em" },
 ] as const;
 
 function CopyCode({ value }: { value: string }) {
@@ -114,6 +131,53 @@ export function TypographyFoundations() {
                   }}
                 >
                   {role.sample}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className={colorStyles.hueHeader}>
+            <h3 className={colorStyles.hueTitle}>Marketing roles</h3>
+            <code className={colorStyles.huePattern}>display-hero · title-section</code>
+          </div>
+          <p className={colorStyles.lead}>
+            Marketing and landing pages only. Sizes step down at the md and sm grid breakpoints. Product screens keep the
+            display and heading roles above.
+          </p>
+          <div className={styles.list}>
+            {MARKETING_ROLES.map((role) => (
+              <div key={role.id} className={styles.row}>
+                <div>
+                  <CopyCode value={role.size} />
+                  <TokenUsage token={role.size} compact />
+                </div>
+                <p
+                  className={styles.specimen}
+                  style={{
+                    fontFamily: `var(${role.family})`,
+                    fontSize: `var(${role.size})`,
+                    fontWeight: `var(${role.weight})`,
+                    lineHeight: `var(${role.line})`,
+                    letterSpacing: `var(${role.tracking})`,
+                  }}
+                >
+                  {role.sample}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className={colorStyles.hueHeader}>
+            <h3 className={colorStyles.hueTitle}>Tracking</h3>
+            <code className={colorStyles.huePattern}>type-tracking-tight · snug · wide</code>
+          </div>
+          <div className={styles.list}>
+            {SEMANTIC_TRACKING.map((step) => (
+              <div key={step.name} className={styles.row}>
+                <div>
+                  <CopyCode value={step.name} />
+                  <TokenUsage token={step.name} compact />
+                </div>
+                <p className={styles.specimen} style={{ letterSpacing: `var(${step.name})` }}>
+                  {step.sample}
                 </p>
               </div>
             ))}

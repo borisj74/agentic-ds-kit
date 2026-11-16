@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Marketing type roles.** Two roles for marketing and landing pages only; product screens keep the existing display and heading roles. Hero display (`--type-size-display-hero`, `--type-line-display-hero`) is 64/76 at desktop, 52/64 below the md grid breakpoint and 40/48 below sm. Section title (`--type-size-title-section`, `--type-line-title-section`) is 32/40, and 28/36 below sm. Both set weight 400 (`--type-weight-display-hero`, `--type-weight-title-section`) and -0.03em tracking (`--type-tracking-display-hero`, `--type-tracking-title-section`). In `tokens.json` they are ladder steps `displayHero` and `titleSection`; a ladder step can now carry `belowMd` / `belowSm` overrides, which the generator writes as `@media` blocks at the grid breakpoint values
+- **Tracking tokens.** `--type-tracking-tight` (-0.03em), `--type-tracking-snug` (-0.02em) and `--type-tracking-wide` (+0.08em, for marketing overlines), backed by new primitives `letterSpacing.tightest` and `letterSpacing.widest`. Existing tracking is unchanged: the 40/700 display title keeps -0.02em, the same value as snug
+- **Fixed text tokens.** `--text-fixed-dark` (slate 900) and `--text-fixed-light` (white) stay the same in light and dark mode, for labels on fills that don't change with the mode. The Color foundations page uses them for primitive swatch labels instead of `--color-slate-900` and `--color-white`
+- **Docs and agent guidance.** The Typography foundations page shows the marketing roles and the tracking steps next to the existing roles, and lists every letter-spacing primitive. `tokens/usage.json` (served by the MCP `get_tokens` tool) marks each new token as marketing and landing pages only. A token test checks the new roles, breakpoint values and tracking in the built CSS
+
 ## [0.27.1] - 2026-11-16
 
 ### Fixed
