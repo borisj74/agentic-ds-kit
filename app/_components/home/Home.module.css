@@ -6,13 +6,98 @@
  * 64rem is --grid-breakpoint-md, 40rem is --grid-breakpoint-sm.
  */
 
+/* The landing page has no docs chrome: its own top bar, then main. */
+.landing {
+  min-height: 100vh;
+  /* Paper's page is the white surface (bg-surface), so the subtle panels and tiles read. */
+  background-color: var(--surface-card);
+}
+
+.skip {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-toast);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-card);
+  color: var(--text-fg);
+  font-size: var(--type-size-body-sm);
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+  outline: var(--border-focus-width) solid var(--border-focus);
+}
+
+/* Paper top nav: 72px, 40px side padding, a hairline under it. Set through AppHeader's own
+   variables; the centre column is wide enough for the five links. */
+.nav {
+  --appheader-height: calc(var(--space-16) + var(--space-2));
+  --appheader-padding-inline: 0;
+  --appheader-background: var(--surface-card);
+  --appheader-border-color: var(--border-subtle);
+  --appheader-search-max-width: var(--grid-width-sm);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-overlay);
+  padding-inline: var(--space-10);
+  box-sizing: border-box;
+}
+
+.navLinks {
+  display: flex;
+  justify-content: center;
+}
+
+.navEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.navVersion {
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.navMenu {
+  display: none;
+}
+
+/* Below --grid-breakpoint-md (64rem) the links move into the Drawer. */
+@media (width < 64rem) {
+  .nav {
+    padding-inline: var(--space-4);
+  }
+
+  .navLinks,
+  .navVersion,
+  .navGithub {
+    display: none;
+  }
+
+  .navMenu {
+    display: inline-flex;
+  }
+}
+
 /* layout-content scrolls by default; the page itself scrolls here. */
 .home {
   --home-width: var(--grid-width-lg);
   --home-gutter: var(--grid-margin-md);
+  /* Paper's section rhythm is 96px (--space-24 in Paper); the kit scale stops at --space-16. */
+  --home-section: calc(var(--space-12) * 2);
   gap: 0;
-  padding: 0 0 var(--space-section-md);
+  padding: 0;
   overflow: visible;
+}
+
+.home:focus {
+  outline: none;
 }
 
 /* Every row but the hero sits in a centred column with a gutter each side. */
@@ -88,7 +173,8 @@
   color: var(--text-fg);
   font-family: var(--type-family-heading);
   font-size: var(--type-size-display-hero);
-  font-weight: var(--type-weight-display-hero);
+  /* Paper sets the hero at the heading weight (600), not the role's 400. */
+  font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-display-hero);
   line-height: var(--type-line-display-hero);
   text-wrap: balance;
@@ -209,17 +295,40 @@
 
 /* ---------- Sections ---------- */
 
+/* Paper Home J: 96px above each section, 24px between head and content, 16px inside the head. */
 .section {
   display: grid;
-  gap: var(--space-section-sm);
-  padding-top: var(--space-section-lg);
+  gap: var(--space-6);
+  padding-top: var(--home-section);
+}
+
+.section[data-section="parts"] {
+  padding-bottom: var(--home-section);
+}
+
+.section[data-section="screens"] {
+  padding-bottom: var(--space-12);
+}
+
+.section[data-section="themes"] {
+  gap: var(--space-12);
+  padding-bottom: var(--home-section);
+}
+
+.section[data-section="agents"] {
+  gap: var(--space-10);
+}
+
+.section[data-section="faq"] {
+  gap: var(--space-16);
+  padding-bottom: var(--home-section);
 }
 
 .sectionHead {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-stack-md);
+  gap: var(--space-4);
   max-width: var(--grid-width-sm);
   margin-inline: auto;
   text-align: center;
@@ -230,8 +339,9 @@
   color: var(--text-fg);
   font-family: var(--type-family-heading);
   font-size: var(--type-size-title-section);
-  font-weight: var(--type-weight-title-section);
-  letter-spacing: var(--type-tracking-title-section);
+  /* Paper: heading weight (600) and -0.02em tracking (snug). */
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-snug);
   line-height: var(--type-line-title-section);
   text-wrap: balance;
 }
@@ -302,6 +412,8 @@
 
 .tileCentered > * {
   width: min(100%, var(--grid-width-sm));
+  /* Below this AgentFleet's sub-agent names wrap a letter per line: scroll in the tile instead. */
+  min-width: calc(var(--space-16) * 6);
 }
 
 .tileCaption {
@@ -517,55 +629,140 @@
 
 .agents {
   display: grid;
-  gap: var(--space-section-sm);
+  gap: var(--space-10);
 }
 
-.agentRun {
+/* Paper: two rounded panels on the subtle surface, 660 / rest of 1200, 12px apart. */
+.agentPanels {
   display: grid;
-  gap: var(--space-stack-sm);
+  grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+  gap: var(--space-3);
+}
+
+.agentPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-8);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-muted);
+}
+
+.agentPrompt {
+  align-self: flex-start;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-card);
+  color: var(--text-fg);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
+}
+
+.agentCalls {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-2) 0 0;
+  list-style: none;
+}
+
+.agentCall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  min-width: 0;
+}
+
+.agentCheck {
+  flex-shrink: 0;
+  color: var(--icon-success);
+}
+
+.agentTool {
+  padding: var(--space-px) var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-base);
+  background-color: var(--surface-card);
+  color: var(--text-fg);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+  line-height: var(--type-line-body-sm);
+}
+
+.agentResult {
+  min-width: 0;
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+  line-height: var(--type-line-body-sm);
 }
 
 .agentReply {
-  margin: var(--space-2) 0 0;
+  max-width: var(--grid-width-sm);
+  margin: 0;
+  padding-top: var(--space-2);
   color: var(--text-fg);
-  font-size: var(--type-size-body-md);
-  line-height: var(--type-line-body-md);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-body-lg);
+}
+
+.agentPanel:last-child {
+  gap: var(--space-5);
+}
+
+.agentTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-md);
 }
 
 .agentNote {
   margin: 0;
   color: var(--text-fg-muted);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-md);
 }
 
 .worksWith {
   display: grid;
-  gap: var(--space-stack-xs);
-  margin-top: var(--space-2);
+  gap: var(--space-3);
+  padding-top: var(--space-6);
 }
 
 .overline {
   color: var(--text-fg-subtle);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline-xs);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-wide);
-  line-height: var(--type-line-overline-xs);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-ui-xs);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-ui-xs);
   text-transform: uppercase;
 }
 
 .tagRow {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-gap-sm);
+  gap: var(--space-2);
 }
 
 .install {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-stack-md);
+  gap: var(--space-6);
+}
+
+.installRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
 }
 
 .installLabel {
@@ -575,7 +772,7 @@
 }
 
 .installSnippet {
-  width: min(100%, var(--grid-width-sm));
+  width: min(100%, calc(var(--space-16) * 6.5));
 }
 
 /* ---------- FAQ ---------- */
@@ -591,8 +788,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-section-sm) var(--grid-gutter-xl);
-  margin-top: var(--space-section-lg);
   padding-top: var(--space-16);
+  padding-bottom: calc(var(--space-16) + var(--space-4));
   border-top: var(--border-width-thin) solid var(--border-subtle);
 }
 
@@ -669,6 +866,10 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .agentPanels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .peek {
     inset-inline: var(--space-8);
   }
@@ -697,7 +898,11 @@
   }
 
   .section {
-    padding-top: var(--space-section-md);
+    --home-section: var(--space-16);
+  }
+
+  .agentPanel {
+    padding: var(--space-5);
   }
 
   .tabs {
