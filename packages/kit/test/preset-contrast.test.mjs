@@ -18,13 +18,28 @@ function block(selector) {
   return vars;
 }
 
+/** `color-mix(in srgb, #aaa p%, #bbb)` as hex: a straight blend of the sRGB channels. */
+function mix(value) {
+  const match = /^color-mix\(in srgb, (#[0-9a-f]{6}) (\d+(?:\.\d+)?)%, (#[0-9a-f]{6})\)$/i.exec(value);
+  if (!match) return value;
+  const [, a, percent, b] = match;
+  const weight = Number(percent) / 100;
+  const channel = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
+  return `#${[0, 1, 2]
+    .map((i) => Math.round(channel(a, i) * weight + channel(b, i) * (1 - weight)).toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
 function resolve(vars, name, seen = new Set()) {
   assert.ok(!seen.has(name), `var cycle at ${name}`);
   seen.add(name);
   const value = vars[name];
   assert.ok(value, `${name} is not set`);
   const ref = /^var\((--[\w-]+)\)$/.exec(value);
-  return ref ? resolve(vars, ref[1], seen) : value;
+  if (ref) return resolve(vars, ref[1], seen);
+  const hex = mix(value);
+  assert.match(hex, /^#[0-9a-f]{6}$/i, `${name} is ${value}, which this test cannot measure`);
+  return hex;
 }
 
 const root = block(":root");
@@ -51,12 +66,17 @@ describe("primary button label contrast", () => {
     assert.deepEqual(presets.sort(), ["blue", "ink", "teal", "violet"]);
   });
 
+  // The label sits on the fill at rest, on hover and while pressed.
+  const fills = ["--action-primary", "--action-primary-hover", "--action-primary-pressed"];
+
   for (const [name, mode, vars] of themes) {
-    test(`${name} ${mode}: --action-on-primary on --action-primary is at least 4.5:1`, () => {
-      const fg = resolve(vars, "--action-on-primary");
-      const bg = resolve(vars, "--action-primary");
-      const ratio = contrastRatio(fg, bg);
-      assert.ok(ratio >= 4.5, `${fg} on ${bg} is ${ratio.toFixed(2)}:1`);
-    });
+    for (const fill of fills) {
+      test(`${name} ${mode}: --action-on-primary on ${fill} is at least 4.5:1`, () => {
+        const fg = resolve(vars, "--action-on-primary");
+        const bg = resolve(vars, fill);
+        const ratio = contrastRatio(fg, bg);
+        assert.ok(ratio >= 4.5, `${fg} on ${bg} is ${ratio.toFixed(2)}:1`);
+      });
+    }
   }
 });
