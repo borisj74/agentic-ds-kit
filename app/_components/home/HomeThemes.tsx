@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Avatar, Badge, Card, Scorecard, SegmentedControl, Tabs } from "agentic-ds-kit";
 import { presetState } from "@/lib/theme-playground";
 import { ThemeScope } from "../ThemeScope";
+import { useDemoLoop } from "./useDemoLoop";
 import styles from "./Home.module.css";
 
 type SetId = "ink" | "blue" | "teal" | "violet";
@@ -41,12 +42,16 @@ function FleetScreen() {
   );
 }
 
-/** One screen in light, in dark, and in the colour set the reader picks. */
+/** One screen in light, in dark, and in a colour set that cycles until the reader picks one. */
 export function HomeThemes() {
-  const [set, setSet] = useState<SetId>("teal");
+  // The colour-set card cycles through the four sets until someone picks one.
+  const [picked, setPicked] = useState<SetId | null>(null);
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(2600);
+  const order: SetId[] = ["teal", "violet", "ink", "blue"];
+  const set = picked ?? order[tick % order.length];
 
   return (
-    <div className={`layout-split--thirds ${styles.themes}`}>
+    <div ref={ref} className={`layout-split--thirds ${styles.themes}`}>
       <figure className={styles.themeCard} data-motion="reveal">
         <ThemeScope theme={presetState("nistha", "light")} className={styles.themeStage}>
           <FleetScreen />
@@ -79,7 +84,7 @@ export function HomeThemes() {
             ariaLabel="Colour set"
             items={SETS}
             value={set}
-            onChange={(value) => setSet(value as SetId)}
+            onChange={(value) => setPicked(value as SetId)}
           />
         </figcaption>
       </figure>

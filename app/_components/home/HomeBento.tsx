@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import {
   AgentFleet,
-  Button,
   ContextWindow,
   MemoryPanel,
   PermissionRequest,
   Tabs,
   type AgentFleetAgent,
+  type AgentFleetSubAgentStatus,
   type MemoryItem,
   type PermissionRequestStatus,
 } from "agentic-ds-kit";
 import { contextSegments } from "@/lib/agent-demo.sample";
-import { galleryGroups, GALLERY_ITEMS } from "@/lib/component-gallery";
+import { galleryGroups } from "@/lib/component-gallery";
 import {
   HOME_FLEET,
   HOME_MEMORIES,
@@ -21,31 +20,25 @@ import {
   HOME_PERMISSION_SCOPES,
   HOME_PERMISSION_WARNING,
 } from "@/lib/home.sample";
-import { GalleryPreview } from "../../components/GalleryPreview";
 import { PreviewScope } from "../ThemeScope";
+import { CATEGORY_BENTOS } from "./HomeCategoryBentos";
+import { useDemoLoop } from "./useDemoLoop";
 import styles from "./Home.module.css";
 
 /** The groups the bento offers, in order. */
 const SHOWN = ["AI", "SaaS", "Forms", "Data display", "Navigation", "Feedback", "Overlays"];
 
-/** How many parts each non-AI tab shows. */
-const PER_TAB = 4;
 
 
-/** Grant or deny, with the in-flight state in between; once resolved, it can be asked again. */
+/** Plays the request: it waits, Grant goes in flight, it is granted, then it asks again. */
+const PERMISSION_FRAMES: PermissionRequestStatus[] = ["pending", "pending", "pending", "granting", "granted", "granted"];
+
 function PermissionTile() {
-  const [status, setStatus] = useState<PermissionRequestStatus>("pending");
-  const timer = useRef<number | undefined>(undefined);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
-
-  function grant() {
-    setStatus("granting");
-    timer.current = window.setTimeout(() => setStatus("granted"), 900);
-  }
-
-  const resolved = status === "granted" || status === "denied";
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(1300);
+  const status = PERMISSION_FRAMES[tick % PERMISSION_FRAMES.length];
   return (
-    <div className={styles.tileStack}>
+    // inert: a self-playing demo, so its buttons do not take clicks or focus.
+    <div ref={ref} inert>
       <PermissionRequest
         description={HOME_PERMISSION_DESCRIPTION}
         scopes={HOME_PERMISSION_SCOPES}
@@ -53,73 +46,70 @@ function PermissionTile() {
         requestedAt="requested 14:02"
         status={status}
         resolvedNote={status === "granted" ? "until revoked" : undefined}
-        onGrant={grant}
-        onDeny={() => setStatus("denied")}
+        onGrant={() => {}}
+        onDeny={() => {}}
       />
-      {resolved ? (
-        <Button size="sm" appearance="ghost" mode="neutral" iconStart="RotateCcw" onClick={() => setStatus("pending")}>
-          Ask again
-        </Button>
-      ) : null}
     </div>
   );
 }
 
-/** Search, add, edit, pin and forget, as in the MemoryPanel docs. */
+/** "Used here" moves from memory to memory as the agent works; no edit or delete dialogs. */
 function MemoryTile() {
-  const [items, setItems] = useState<MemoryItem[]>(HOME_MEMORIES);
-  const [query, setQuery] = useState("");
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(2200);
+  const used = tick === 0 ? null : (tick - 1) % HOME_MEMORIES.length;
+  const items: MemoryItem[] = HOME_MEMORIES.map((item, index) => ({
+    ...item,
+    usedHere: used === null ? item.usedHere : index === used,
+  }));
   return (
-    <MemoryPanel
-      items={items}
-      query={query}
-      onQueryChange={setQuery}
-      onAdd={(content) => setItems((list) => [{ id: String(Date.now()), content, source: "from you", age: "now" }, ...list])}
-      onEdit={(id, content) => setItems((list) => list.map((item) => (item.id === id ? { ...item, content } : item)))}
-      onPin={(id, pinned) => setItems((list) => list.map((item) => (item.id === id ? { ...item, pinned } : item)))}
-      onDelete={(id) => setItems((list) => list.filter((item) => item.id !== id))}
-    />
+    <div ref={ref} inert>
+      <MemoryPanel items={items} />
+    </div>
   );
 }
 
-/** Trim oldest drops older messages, so the window falls back under the warning line. */
+/** Messages pile up until the window nears its limit, then the oldest are trimmed and it starts again. */
+const BASE_TOKENS = 10_200 + 16_100 + 35_200 + 13_200;
+
 function ContextTile() {
-  const [messages, setMessages] = useState(96_400);
-  const used = 10_200 + 16_100 + 35_200 + messages + 13_200;
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(1400);
+  const messages = tick === 0 ? 96_400 : 56_400 + ((tick - 1) % 12) * 4_200;
   return (
-    <ContextWindow
-      used={used}
-      limit={200_000}
-      segments={contextSegments(10_200, 16_100, 35_200, messages, 13_200)}
-      onTrim={() => setMessages((value) => Math.max(24_000, value - 40_000))}
-    />
+    <div ref={ref} inert>
+      <ContextWindow
+        used={BASE_TOKENS + messages}
+        limit={200_000}
+        segments={contextSegments(10_200, 16_100, 35_200, messages, 13_200)}
+        onTrim={() => {}}
+      />
+    </div>
   );
 }
 
-/** Open or close the orchestrator; Review on the waiting sub-agent sets it running. */
+/** The orchestrator's sub-agents move on: tests finish, the waiting migration runs, then it is done. */
+const FLEET_FRAMES: AgentFleetSubAgentStatus[][] = [
+  ["done", "done", "running", "waiting"],
+  ["done", "done", "done", "waiting"],
+  ["done", "done", "done", "running"],
+  ["done", "done", "done", "done"],
+];
+
 function FleetTile() {
-  const [agents, setAgents] = useState<AgentFleetAgent[]>(HOME_FLEET);
-  const [expandedId, setExpandedId] = useState<string | null>("billing");
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(2400);
+  const frame = FLEET_FRAMES[tick % FLEET_FRAMES.length];
+  const agents: AgentFleetAgent[] = HOME_FLEET.map((agent) => ({
+    ...agent,
+    status: frame.every((status) => status === "done") ? "done" : "running",
+    subAgents: agent.subAgents.map((sub, index) => ({ ...sub, status: frame[index] })),
+  }));
   return (
-    <AgentFleet
-      totals=""
-      agents={agents}
-      expandedId={expandedId}
-      onExpandedChange={setExpandedId}
-      onReview={(agentId, subId) =>
-        setAgents((list) =>
-          list.map((agent) =>
-            agent.id === agentId
-              ? { ...agent, subAgents: agent.subAgents.map((sub) => (sub.id === subId ? { ...sub, status: "running" as const } : sub)) }
-              : agent,
-          ),
-        )
-      }
-    />
+    <div ref={ref} inert>
+      <AgentFleet totals="" agents={agents} expandedId="billing" />
+    </div>
   );
 }
 
-/** The AI tab: the parts the design shows, full size, with example data. Every one works. */
+/** The AI tab: the parts the design shows, full size, with example data, each playing by itself. */
 function AiBento() {
   return (
     <div className={styles.bento}>
@@ -144,33 +134,18 @@ function AiBento() {
   );
 }
 
-/** Any other tab: the group's first few parts, as the component gallery shows them. */
-function GroupBento({ group }: { group: string }) {
-  const items = GALLERY_ITEMS.filter((item) => item.group === group).slice(0, PER_TAB);
-  return (
-    <div className={`layout-split ${styles.bentoGrid}`}>
-      {items.map((item) => (
-        <figure key={item.id} className={styles.tile}>
-          <GalleryPreview id={item.id} />
-          <figcaption className={styles.tileCaption}>{item.label}</figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
 /** Component categories as segmented tabs, each showing real kit parts with example data. */
 export function HomeBento() {
   const counts = new Map(galleryGroups().map((group) => [group.id, group.count]));
-  const items = SHOWN.map((group) => ({
-    id: group,
-    label: `${group} · ${counts.get(group) ?? 0}`,
-    content: group === "AI" ? <AiBento /> : <GroupBento group={group} />,
-  }));
+  const items = SHOWN.map((group) => {
+    // Rendered as components (not called), so each tab keeps its own hooks.
+    const Category = group === "AI" ? AiBento : (CATEGORY_BENTOS[group] ?? AiBento);
+    return { id: group, label: `${group} · ${counts.get(group) ?? 0}`, content: <Category /> };
+  });
 
   return (
     <PreviewScope className={styles.bentoScope}>
-      <Tabs className={styles.tabs} variant="segmented" ariaLabel="Component categories" defaultValue="AI" items={items} />
+      <Tabs className={styles.tabs} variant="line" ariaLabel="Component categories" defaultValue="AI" items={items} />
     </PreviewScope>
   );
 }

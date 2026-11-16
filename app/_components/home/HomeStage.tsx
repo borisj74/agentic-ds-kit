@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AgentFleet, AgentInbox, AgentMonitor, type AgentInboxItem, type AgentMonitorStep } from "agentic-ds-kit";
+import { AgentFleet, AgentInbox, AgentMonitor, type AgentFleetAgent, type AgentFleetSubAgentStatus, type AgentInboxItem, type AgentMonitorStep } from "agentic-ds-kit";
 import { AGENT_MONITOR_STEPS } from "@/lib/agent-demo.sample";
 import { HOME_FLEET_HERO } from "@/lib/home.sample";
+import { useDemoLoop } from "./useDemoLoop";
 import { PreviewScope } from "../ThemeScope";
 import styles from "./Home.module.css";
 
@@ -30,10 +31,37 @@ const HEADLINES: Record<string, string> = {
   search_files: "Searching",
 };
 
-const INBOX: AgentInboxItem[] = [
-  { id: "1", agentName: "Migrate DB", type: "approval", preview: "Run migration on staging?", time: "2m" },
-  { id: "2", agentName: "Docs sweep", type: "recap", preview: "Draft ready", time: "1h", read: true },
+/** Messages that arrive in the inbox one by one; the newest sits on top, unread. */
+const INBOX_POOL: Omit<AgentInboxItem, "read">[] = [
+  { id: "migrate", agentName: "Migrate DB", type: "approval", preview: "Run migration on staging?", time: "now" },
+  { id: "docs", agentName: "Docs sweep", type: "recap", preview: "Draft ready", time: "now" },
+  { id: "flaky", agentName: "Flaky test hunt", type: "failure", preview: "3 retries failed on checkout.spec", time: "now" },
+  { id: "billing", agentName: "Billing refactor", type: "question", preview: "Keep v1 rounding for old invoices?", time: "now" },
 ];
+const AGES = ["now", "2m", "1h"];
+
+function inboxAt(tick: number): AgentInboxItem[] {
+  return [0, 1, 2].map((offset) => {
+    const item = INBOX_POOL[(tick + INBOX_POOL.length - offset) % INBOX_POOL.length];
+    return { ...item, time: tick === 0 ? (offset === 0 ? "2m" : "1h") : AGES[offset], read: offset > 0 };
+  }).slice(0, tick === 0 ? 2 : 3);
+}
+
+/** The fleet's sub-agents move along: tests finish, the migration runs, then the run is done. */
+const FLEET_FRAMES: AgentFleetSubAgentStatus[][] = [
+  ["done", "done", "running", "queued"],
+  ["done", "done", "done", "running"],
+  ["done", "done", "done", "done"],
+];
+
+function fleetAt(tick: number): AgentFleetAgent[] {
+  const frame = FLEET_FRAMES[tick % FLEET_FRAMES.length];
+  return HOME_FLEET_HERO.map((agent) => ({
+    ...agent,
+    status: frame.every((status) => status === "done") ? "done" : "running",
+    subAgents: agent.subAgents.map((sub, index) => ({ ...sub, status: frame[index] })),
+  }));
+}
 
 function clock(seconds: number) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
@@ -74,17 +102,16 @@ function useStageClock(paused: boolean) {
 
 /**
  * The hero's product stage: AgentInbox, a live AgentMonitor and AgentFleet, all kit components
- * with example data, and all of them work: pick an inbox item or approve it, select a step, pause
- * or collapse the run, open the fleet. Server and first client render are the same frame, so
+ * with example data, each playing by itself: messages arrive in the inbox, the monitor's clock and
+ * steps run (pause and collapse work in place), the fleet's sub-agents finish. Nothing opens a
+ * panel on click. Server and first client render are the same frame, so
  * nothing mismatches on hydration; under reduced motion the stage holds that frame.
  */
 export function HomeStage() {
   const [paused, setPaused] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [stepId, setStepId] = useState<string | null>(null);
-  const [inbox, setInbox] = useState(INBOX);
-  const [inboxId, setInboxId] = useState<string | null>(null);
-  const [fleetId, setFleetId] = useState<string | null>(null);
+  const [inboxRef, inboxTick] = useDemoLoop<HTMLDivElement>(3600);
+  const [fleetRef, fleetTick] = useDemoLoop<HTMLDivElement>(2800);
   const seconds = useStageClock(paused);
   const phase = Math.min(MAX_PHASE, Math.floor(seconds / STEP_SECONDS));
   const elapsed = START_SECONDS + seconds;
@@ -95,17 +122,9 @@ export function HomeStage() {
   return (
     <PreviewScope className={styles.stageScope}>
       <section className={styles.stage} aria-label="Example: kit agent components with live sample data">
-        <div className={styles.stageSide} data-side="start" data-motion="stage">
-          <AgentInbox
-            items={inbox}
-            selectedId={inboxId}
-            onSelect={(id) => {
-              setInboxId(id);
-              setInbox((items) => items.map((item) => (item.id === id ? { ...item, read: true } : item)));
-            }}
-            onApprove={(id) => setInbox((items) => items.filter((item) => item.id !== id))}
-            onDeny={(id) => setInbox((items) => items.filter((item) => item.id !== id))}
-          />
+        {/* Self-playing: new messages arrive. inert, so a click opens no detail pane. */}
+        <div ref={inboxRef} className={styles.stageSide} data-side="start" data-motion="stage" inert>
+          <AgentInbox items={inboxAt(inboxTick)} />
         </div>
         <div className={styles.stageMain} data-motion="stage">
           <AgentMonitor
@@ -118,16 +137,15 @@ export function HomeStage() {
             cost={`$${(0.42 + seconds * 0.004).toFixed(2)}`}
             steps={steps}
             axis={["0:00", axisLabel(Math.floor(elapsed / 2)), axisLabel(elapsed)]}
-            selectedStepId={stepId}
-            onSelectStep={setStepId}
             collapsed={collapsed}
             onCollapsedChange={setCollapsed}
             onPause={() => setPaused(true)}
             onResume={() => setPaused(false)}
           />
         </div>
-        <div className={styles.stageSide} data-side="end" data-motion="stage">
-          <AgentFleet totals="" agents={HOME_FLEET_HERO} expandedId={fleetId} onExpandedChange={setFleetId} />
+        {/* Self-playing: sub-agents finish one by one. inert, so a click does not expand it. */}
+        <div ref={fleetRef} className={styles.stageSide} data-side="end" data-motion="stage" inert>
+          <AgentFleet totals="" agents={fleetAt(fleetTick)} expandedId={null} />
         </div>
       </section>
     </PreviewScope>

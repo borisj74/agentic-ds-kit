@@ -5,6 +5,7 @@ import { CodeSnippet, Tabs } from "agentic-ds-kit";
 import type { ScreenSlug } from "@/lib/pattern-screens";
 import { ScaledFrame, frameUrl } from "../PatternPreview";
 import { usePreviewMode } from "../ThemeScope";
+import { useDemoLoop } from "./useDemoLoop";
 import styles from "./Home.module.css";
 
 /** The screens the deck flips through: four settings pages, then onboarding. */
@@ -20,18 +21,22 @@ const SCREENS: { id: string; label: string; slug: ScreenSlug; view: string; url:
 const SCALE = 0.72;
 
 /**
- * Pattern screens in a browser window, with the next two peeking behind it. The tabs pick the
- * screen; the frame is the real pattern, rendered in an iframe at desktop width.
+ * Pattern screens in a browser window, with the next two peeking behind it. The deck flips through
+ * the screens by itself until a tab is picked. The frame is the real pattern in an iframe at desktop
+ * width; it takes no clicks, so nothing inside it (drawers, menus) opens on the landing page.
  */
 export function HomeScreens() {
   const mode = usePreviewMode();
-  const [active, setActive] = useState(SCREENS[0].id);
+  // The deck flips through the screens by itself until someone picks a tab.
+  const [picked, setPicked] = useState<string | null>(null);
+  const [ref, tick] = useDemoLoop<HTMLDivElement>(5000);
+  const active = picked ?? SCREENS[tick % SCREENS.length].id;
   const index = SCREENS.findIndex((screen) => screen.id === active);
   const screen = SCREENS[index];
   const peeks = [SCREENS[(index + 2) % SCREENS.length], SCREENS[(index + 1) % SCREENS.length]];
 
   return (
-    <div className={styles.screens}>
+    <div ref={ref} className={styles.screens}>
       <div className={styles.snippet}>
         <CodeSnippet code={`npx agentic-ds-kit add ${screen.slug}`} ariaLabel="Command to copy this pattern" wrap />
       </div>
@@ -40,7 +45,7 @@ export function HomeScreens() {
         size="sm"
         ariaLabel="Pattern screens"
         value={active}
-        onChange={setActive}
+        onChange={setPicked}
         items={SCREENS.map(({ id, label }) => ({ id, label }))}
       />
       <div className={styles.deck}>
@@ -62,7 +67,7 @@ export function HomeScreens() {
             key={`${screen.slug}-${screen.view}-${mode}`}
             src={frameUrl(screen.slug, screen.view, mode)}
             title={`${screen.label} screen from the ${screen.slug} pattern`}
-            interactive
+            interactive={false}
             crop={SCALE}
             deferUntilVisible
           />

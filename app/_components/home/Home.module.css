@@ -437,10 +437,68 @@
   justify-items: center;
 }
 
+/* Parts with their own max width (ModalCard) sit centred in the tile instead of hugging the left. */
+.tileCenter {
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+}
+
 .tileCentered > * {
   width: min(100%, var(--grid-width-sm));
   /* Below this AgentFleet's sub-agent names wrap a letter per line: scroll in the tile instead. */
   min-width: calc(var(--space-16) * 6);
+}
+
+/* Navigation tab: a small product frame (AppHeader over SideNav and the page). */
+.navFrame {
+  width: 100%;
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.navFrameBody {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-width: 0;
+}
+
+.navFrameMain {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-5);
+  border-left: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* Switching category: the new bento's tiles rise in one after another. CSS only; reduced motion skips it. */
+@media (prefers-reduced-motion: no-preference) {
+  .tabs > [role="tabpanel"] .bentoRow > .tile {
+    animation: home-tab-in var(--motion-duration-500) var(--motion-ease-out) both;
+  }
+
+  .tabs > [role="tabpanel"] .bentoRow > .tile:nth-child(2) {
+    animation-delay: var(--motion-duration-100);
+  }
+
+  .tabs > [role="tabpanel"] .bentoRow + .bentoRow > .tile:nth-child(1) {
+    animation-delay: var(--motion-duration-150);
+  }
+
+  .tabs > [role="tabpanel"] .bentoRow + .bentoRow > .tile:nth-child(2) {
+    animation-delay: var(--motion-duration-300);
+  }
+}
+
+@keyframes home-tab-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
 }
 
 .tileCaption {
@@ -932,6 +990,19 @@
 
   .agentPanel {
     padding: var(--space-5);
+  }
+
+  /* The product frame drops its SideNav on phones; the page keeps the width. */
+  .navFrameBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .navFrameBody > :first-child {
+    display: none;
+  }
+
+  .navFrameMain {
+    border-left: 0;
   }
 
   .sectionTitle {
