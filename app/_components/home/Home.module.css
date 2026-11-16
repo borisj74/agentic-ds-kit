@@ -1,0 +1,640 @@
+/*
+ * The docs home (app/page.tsx). The root is a kit layout-content, so it is the named
+ * "layout-content" size container and kit layout-split classes stack inside it at 38rem.
+ *
+ * Container queries cannot read var(), so breakpoint values are written out:
+ * 64rem is --grid-breakpoint-md, 40rem is --grid-breakpoint-sm.
+ */
+
+/* layout-content scrolls by default; the page itself scrolls here. */
+.home {
+  --home-width: var(--grid-width-lg);
+  --home-gutter: var(--grid-margin-md);
+  gap: 0;
+  padding: 0 0 var(--space-section-md);
+  overflow: visible;
+}
+
+/* Every row but the hero sits in a centred column with a gutter each side. */
+.home > * {
+  width: min(100% - var(--home-gutter) * 2, var(--home-width));
+  margin-inline: auto;
+}
+
+/* ---------- Hero ---------- */
+
+/* Full bleed: the grid runs edge to edge of the panel. */
+.home > .hero {
+  width: 100%;
+}
+
+.hero {
+  display: grid;
+  gap: var(--space-section-sm);
+  padding-bottom: var(--space-section-sm);
+  overflow: hidden;
+}
+
+.heroGrid {
+  padding: var(--space-16) var(--home-gutter) 0;
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-lg);
+  max-width: var(--grid-width-md);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.statPill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-control-lg);
+  background-color: var(--surface-card);
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.heroTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--type-family-heading);
+  font-size: var(--type-size-display-hero);
+  font-weight: var(--type-weight-display-hero);
+  letter-spacing: var(--type-tracking-display-hero);
+  line-height: var(--type-line-display-hero);
+  text-wrap: balance;
+}
+
+.heroLead {
+  max-width: var(--grid-width-sm);
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-lg);
+  line-height: var(--type-line-body-lg);
+  text-wrap: pretty;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-gap-md);
+}
+
+/* Subtle entrance, CSS only so server and client render the same markup. */
+@media (prefers-reduced-motion: no-preference) {
+  .heroCopy > *,
+  .stage {
+    animation: home-rise var(--motion-duration-600) var(--motion-ease-out) both;
+  }
+
+  .heroCopy > :nth-child(2) {
+    animation-delay: var(--motion-duration-100);
+  }
+
+  .heroCopy > :nth-child(3) {
+    animation-delay: var(--motion-duration-150);
+  }
+
+  .heroCopy > :nth-child(4) {
+    animation-delay: var(--motion-duration-200);
+  }
+
+  .stage {
+    animation-delay: var(--motion-duration-300);
+  }
+}
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
+}
+
+/* ---------- Hero stage ---------- */
+
+.stageScope {
+  padding-inline: var(--home-gutter);
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: var(--grid-gutter-lg);
+  align-items: start;
+  max-width: var(--home-width);
+  margin-inline: auto;
+}
+
+.stageMain,
+.stageSide {
+  min-width: 0;
+}
+
+.stageSide {
+  margin-top: var(--space-6);
+}
+
+/* ---------- Sections ---------- */
+
+.section {
+  display: grid;
+  gap: var(--space-section-sm);
+  padding-top: var(--space-section-lg);
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-md);
+  max-width: var(--grid-width-sm);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--type-family-heading);
+  font-size: var(--type-size-title-section);
+  font-weight: var(--type-weight-title-section);
+  letter-spacing: var(--type-tracking-title-section);
+  line-height: var(--type-line-title-section);
+  text-wrap: balance;
+}
+
+.sectionLead {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  text-wrap: pretty;
+}
+
+/* ---------- Bento ---------- */
+
+.bentoScope {
+  min-width: 0;
+}
+
+.tabs {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-stack-xl);
+}
+
+.tabs > [role="tablist"] {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tabs > [role="tabpanel"] {
+  justify-self: stretch;
+  min-width: 0;
+}
+
+.bento {
+  display: grid;
+  gap: var(--grid-gutter-lg);
+}
+
+.bentoRow,
+.bentoGrid {
+  gap: var(--grid-gutter-lg);
+}
+
+.bentoGrid {
+  align-items: stretch;
+}
+
+.tile {
+  display: grid;
+  align-content: center;
+  gap: var(--space-stack-sm);
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: var(--space-inset-lg);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-muted);
+  box-sizing: border-box;
+  /* AgentFleet's sub-agent rows are wider than a phone tile: scroll inside the tile, not the page. */
+  overflow-x: auto;
+}
+
+.tileCaption {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+/* ---------- Pattern screens ---------- */
+
+.screens {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-stack-lg);
+}
+
+.snippet {
+  max-width: 100%;
+}
+
+.screenTabs {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.deck {
+  position: relative;
+  width: 100%;
+  padding-top: var(--space-12);
+}
+
+.peek {
+  position: absolute;
+  inset-inline: var(--space-16);
+  top: 0;
+  padding: var(--space-1) var(--space-4) var(--space-6);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-lg) var(--radius-surface-lg) 0 0;
+  background-color: var(--surface-muted);
+  color: var(--text-fg-subtle);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.peek[data-depth="1"] {
+  inset-inline: var(--space-8);
+  top: var(--space-6);
+  background-color: var(--surface-card);
+}
+
+.browser {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-raised-md);
+}
+
+.browserBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: var(--border-width-thin) solid var(--border-subtle);
+  background-color: var(--surface-muted);
+}
+
+.browserDots {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.browserDots > span {
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--border-strong);
+}
+
+.browserUrl {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-control-md);
+  background-color: var(--surface-card);
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Themes ---------- */
+
+.themes {
+  align-items: stretch;
+  gap: var(--grid-gutter-md);
+}
+
+.themeCard {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-card);
+}
+
+/* The theme scope paints its own page colour, so dark shows as dark. */
+.themeStage {
+  height: calc(var(--space-16) * 4.4);
+  overflow: hidden;
+  padding: var(--space-6) 0 0 var(--space-6);
+  border-radius: var(--radius-surface-md);
+  background-color: var(--surface-page);
+}
+
+.fleet {
+  min-width: calc(var(--space-16) * 5.5);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-surface-md) 0 0 0;
+  background-color: var(--surface-card);
+  overflow: hidden;
+}
+
+.fleetBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-subtle);
+}
+
+.fleetName {
+  color: var(--text-fg);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-body-sm);
+}
+
+.fleetBody {
+  display: grid;
+  gap: var(--space-stack-md);
+  padding: var(--space-4);
+  background-color: var(--surface-muted);
+}
+
+.fleetTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-size: var(--type-size-heading-5);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-snug);
+  line-height: var(--type-line-heading-5);
+}
+
+.fleetMeta {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+}
+
+.fleetScores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gutter-sm);
+}
+
+.themeCaption {
+  display: grid;
+  align-content: start;
+  gap: var(--space-stack-xs);
+  padding: var(--space-4) var(--space-3) var(--space-3);
+}
+
+.themeName {
+  color: var(--text-fg);
+  font-size: var(--type-size-body-md);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body-md);
+}
+
+.themeNote {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.themeCaption > :last-child:not(span) {
+  margin-top: var(--space-2);
+  justify-self: start;
+}
+
+.inlineCode {
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+}
+
+/* ---------- Agents ---------- */
+
+.agents {
+  display: grid;
+  gap: var(--space-section-sm);
+}
+
+.agentRun {
+  display: grid;
+  gap: var(--space-stack-sm);
+}
+
+.agentReply {
+  margin: var(--space-2) 0 0;
+  color: var(--text-fg);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+}
+
+.agentNote {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.worksWith {
+  display: grid;
+  gap: var(--space-stack-xs);
+  margin-top: var(--space-2);
+}
+
+.overline {
+  color: var(--text-fg-subtle);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-wide);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-sm);
+}
+
+.install {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-md);
+}
+
+.installLabel {
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.installSnippet {
+  width: min(100%, var(--grid-width-sm));
+}
+
+/* ---------- FAQ ---------- */
+
+.faq {
+  min-width: 0;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-section-sm) var(--grid-gutter-xl);
+  margin-top: var(--space-section-lg);
+  padding-top: var(--space-16);
+  border-top: var(--border-width-thin) solid var(--border-subtle);
+}
+
+.footerBrand {
+  display: grid;
+  align-content: start;
+  gap: var(--space-stack-sm);
+  max-width: calc(var(--space-16) * 5);
+}
+
+.footerText {
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.footerMeta {
+  margin: 0;
+  color: var(--text-fg-subtle);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+}
+
+.footerColumns {
+  flex: 0 1 calc(var(--space-16) * 9);
+  gap: var(--grid-gutter-xl);
+}
+
+.footerColumn {
+  display: grid;
+  align-content: start;
+  gap: var(--space-stack-sm);
+}
+
+.footerHeading {
+  margin: 0;
+  color: var(--text-fg);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body-sm);
+}
+
+/* ---------- Narrower content: below --grid-breakpoint-md (64rem) ---------- */
+
+@container layout-content (width < 64rem) {
+  .stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stageMain {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .stageSide {
+    margin-top: 0;
+  }
+
+  .bentoRow:global(.layout-split--primary),
+  .bentoRow:global(.layout-split--secondary),
+  .bentoRow:global(.layout-split) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .themes:global(.layout-split--thirds) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .peek {
+    inset-inline: var(--space-8);
+  }
+
+  .peek[data-depth="1"] {
+    inset-inline: var(--space-4);
+  }
+}
+
+/* ---------- Phones: below --grid-breakpoint-sm (40rem) ---------- */
+
+/* The root is the container, so it cannot query itself: its own padding uses a media query. */
+@media (width < 40rem) {
+  .home {
+    --home-gutter: var(--grid-margin-sm);
+  }
+}
+
+@container layout-content (width < 40rem) {
+  .heroGrid {
+    padding-top: var(--space-10);
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section {
+    padding-top: var(--space-section-md);
+  }
+
+  .tabs {
+    justify-items: stretch;
+  }
+
+  .tile {
+    padding: var(--space-inset-sm);
+  }
+
+  .footerColumns:global(.layout-split--thirds) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

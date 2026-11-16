@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Card, Link, Section } from "agentic-ds-kit";
+import { Accordion, Link } from "agentic-ds-kit";
 import index from "agentic-ds-kit/contracts/index.json";
 import kitPackage from "agentic-ds-kit/package.json";
 import { canonical } from "@/lib/site";
-import { CodeBlock } from "./components/CodeBlock";
-import { HomePatterns } from "./_components/HomePatterns";
-import { HomeScene } from "./_components/HomeScene";
-import playground from "./playground.module.css";
+import { HOME_FAQ } from "@/lib/home.sample";
+import { HomeAgents } from "./_components/home/HomeAgents";
+import { HomeBento } from "./_components/home/HomeBento";
+import { HomeFooter } from "./_components/home/HomeFooter";
+import { HomeHero } from "./_components/home/HomeHero";
+import { HomeScreens } from "./_components/home/HomeScreens";
+import { HomeThemes } from "./_components/home/HomeThemes";
+import styles from "./_components/home/Home.module.css";
 
 export const metadata: Metadata = {
   title: { absolute: "Nistha — a code-only design system for coding agents and product UI." },
@@ -16,87 +20,82 @@ export const metadata: Metadata = {
 
 type Entry = { group: string; kind?: string };
 const entries = index as Entry[];
-const components = entries.filter((entry) => entry.group === "component");
-const blocks = components.filter((entry) => entry.kind === "block").length;
+const all = entries.filter((entry) => entry.group === "component");
+const blocks = all.filter((entry) => entry.kind === "block").length;
+/** Components without the blocks, as the stat pill counts them. */
+const components = all.filter((entry) => entry.kind !== "block");
 const patterns = entries.filter((entry) => entry.group === "pattern").length;
 
-const AREAS = [
-  {
-    title: "Components",
-    description: `${components.length} React components, ${blocks} of them blocks, each with a JSON contract agents read before they write UI.`,
-    href: "/components",
-  },
-  {
-    title: "Patterns",
-    description: `${patterns} example screens to copy into your app with npx agentic-ds-kit add, then make your own.`,
-    href: "/patterns",
-  },
-  {
-    title: "Blocks",
-    description: "Whole areas of a screen, such as an agent overview or a billing summary, imported like any component.",
-    href: "/blocks",
-  },
-];
-
-/** The docs home: what Nistha is, the kit at work, patterns to start from, then install and where to go next. */
+/**
+ * The docs home, a landing page: the hero with a live agent stage, the parts by category, whole
+ * screens, themes, how agents use the kit, questions, then the footer. Every preview is a real kit
+ * component with example data.
+ */
 export default function Home() {
   return (
-    <div className={playground.page}>
-      <div className={playground.wideShell}>
-        <h1 className={playground.pageTitle}>Nistha</h1>
-        <p className={playground.homeLead}>
-          A code-only design system for coding agents and product UI: JSON contracts, tokens and React components,
-          published as agentic-ds-kit {kitPackage.version}.{" "}
-          <Link href="/start-here" linkAs={NextLink} variant="standalone">
-            New to Nistha? Start here
+    <div className={`layout-content ${styles.home}`}>
+      <HomeHero version={kitPackage.version} components={components.length} blocks={blocks} patterns={patterns} />
+
+      <section className={styles.section} aria-labelledby="home-parts">
+        <header className={styles.sectionHead}>
+          <h2 id="home-parts" className={styles.sectionTitle}>
+            {`${components.length} parts, each with a contract an agent reads.`}
+          </h2>
+          <Link href="/components" linkAs={NextLink} variant="standalone">
+            All components →
           </Link>
-        </p>
+        </header>
+        <HomeBento />
+      </section>
 
-        <div className={playground.homeScene}>
-          <HomeScene />
+      <section className={styles.section} aria-labelledby="home-screens">
+        <header className={styles.sectionHead}>
+          <h2 id="home-screens" className={styles.sectionTitle}>
+            Start from a whole screen, then make it yours.
+          </h2>
+        </header>
+        <HomeScreens />
+      </section>
+
+      <section className={styles.section} aria-labelledby="home-themes">
+        <header className={styles.sectionHead}>
+          <h2 id="home-themes" className={styles.sectionTitle}>
+            One screen. Every theme.
+          </h2>
+          <p className={styles.sectionLead}>Same components, same markup. Flip one attribute and the tokens do the rest.</p>
+        </header>
+        <HomeThemes />
+      </section>
+
+      <section className={styles.section} aria-labelledby="home-agents">
+        <header className={styles.sectionHead}>
+          <h2 id="home-agents" className={styles.sectionTitle}>
+            Your agent builds with the kit, not around it.
+          </h2>
+          <p className={styles.sectionLead}>Connect once. It looks up the right part, adds it, then checks its own work.</p>
+        </header>
+        <HomeAgents />
+      </section>
+
+      <section className={styles.section} aria-labelledby="home-faq">
+        <header className={styles.sectionHead}>
+          <h2 id="home-faq" className={styles.sectionTitle}>
+            Questions, answered.
+          </h2>
+          <p className={styles.sectionLead}>
+            {"Still stuck? The "}
+            <Link href="/get-started" linkAs={NextLink}>
+              getting started guide
+            </Link>
+            {" walks through a first screen."}
+          </p>
+        </header>
+        <div className={styles.faq}>
+          <Accordion items={HOME_FAQ} defaultOpen="agent" />
         </div>
+      </section>
 
-        <Section
-          title="Start from a pattern"
-          description="Whole screens built from kit components. Open one, copy it in with npx agentic-ds-kit add, then make it yours."
-        >
-          <HomePatterns />
-        </Section>
-
-        <Section title="Install" description="In a React 19 app (Next.js 15 or later, Vite, …). Tokens load with the first import.">
-          <div className={playground.stack}>
-            <CodeBlock code={'npm install agentic-ds-kit\n\nimport { Button } from "agentic-ds-kit";'} />
-            <Link href="/get-started" linkAs={NextLink} variant="standalone">
-              Read the getting started guide
-            </Link>
-          </div>
-        </Section>
-
-        <Section title="Explore">
-          {/* layout-metrics: as many columns as fit (12rem minimum), one column on a phone. */}
-          <div className="layout-metrics">
-            {AREAS.map((area) => (
-              <Card key={area.href} size="sm" title={area.title} description={area.description}>
-                <Link href={area.href} linkAs={NextLink} variant="standalone">
-                  {`Browse ${area.title.toLowerCase()}`}
-                </Link>
-              </Card>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="For coding agents" description="Cursor and Claude Code read the same rules and contracts from the installed package.">
-          <div className={playground.stack}>
-            <p className={playground.body}>
-              Copy AGENTS.md and CLAUDE.md from the package into your app, and connect the local MCP server so agents can
-              look up components, tokens and patterns from the version you installed.
-            </p>
-            <Link href="/mcp" linkAs={NextLink} variant="standalone">
-              Set up the MCP server
-            </Link>
-          </div>
-        </Section>
-      </div>
+      <HomeFooter version={kitPackage.version} />
     </div>
   );
 }

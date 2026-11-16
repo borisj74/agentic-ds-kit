@@ -163,21 +163,6 @@
   color: var(--text-secondary);
 }
 
-/* Home: the lead sits closer to the live scene under it; the scene gets room before the first
-   section. */
-.homeLead {
-  margin: 0 0 var(--space-6);
-  max-width: var(--grid-width-sm);
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
-  color: var(--text-secondary);
-}
-
-.homeScene {
-  margin-block-end: var(--space-12);
-}
-
 .body {
   margin: 0;
   max-width: 40rem;
