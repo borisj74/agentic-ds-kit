@@ -9,6 +9,7 @@ import { HomeAgents } from "./_components/home/HomeAgents";
 import { HomeBento } from "./_components/home/HomeBento";
 import { HomeFooter } from "./_components/home/HomeFooter";
 import { HomeHero } from "./_components/home/HomeHero";
+import { HomeMotion } from "./_components/home/HomeMotion";
 import { HomeNav } from "./_components/home/HomeNav";
 import { HomeScreens } from "./_components/home/HomeScreens";
 import { HomeThemes } from "./_components/home/HomeThemes";
@@ -28,6 +29,12 @@ const components = all.filter((entry) => entry.kind !== "block");
 const patterns = entries.filter((entry) => entry.group === "pattern").length;
 
 /**
+ * Runs before first paint on a full load, so CSS can hide the motion targets until GSAP takes
+ * them over. Without JS it never runs and everything stays visible (see HomeMotion).
+ */
+const MOTION_SCRIPT = 'document.documentElement.setAttribute("data-home-motion","pending")';
+
+/**
  * The docs home, a landing page with its own top nav (no docs sidebar): the hero with a live agent stage, the parts by category, whole
  * screens, themes, how agents use the kit, questions, then the footer. Every preview is a real kit
  * component with example data.
@@ -35,6 +42,8 @@ const patterns = entries.filter((entry) => entry.group === "pattern").length;
 export default function Home() {
   return (
     <div className={styles.landing}>
+      <script dangerouslySetInnerHTML={{ __html: MOTION_SCRIPT }} />
+      <HomeMotion />
       <NextLink className={styles.skip} href="#main">
         Skip to content
       </NextLink>
@@ -43,7 +52,7 @@ export default function Home() {
         <HomeHero version={kitPackage.version} components={components.length} blocks={blocks} patterns={patterns} />
 
         <section className={styles.section} data-section="parts" aria-labelledby="home-parts">
-          <header className={styles.sectionHead}>
+          <header className={styles.sectionHead} data-motion="reveal">
             <h2 id="home-parts" className={styles.sectionTitle}>
               {`${components.length} parts, each with a contract an agent reads.`}
             </h2>
@@ -51,20 +60,24 @@ export default function Home() {
               All components →
             </Link>
           </header>
-          <HomeBento />
+          <div data-motion="reveal">
+            <HomeBento />
+          </div>
         </section>
 
         <section className={styles.section} data-section="screens" aria-labelledby="home-screens">
-          <header className={styles.sectionHead}>
+          <header className={styles.sectionHead} data-motion="reveal">
             <h2 id="home-screens" className={styles.sectionTitle}>
               Start from a whole screen, then make it yours.
             </h2>
           </header>
-          <HomeScreens />
+          <div data-motion="reveal">
+            <HomeScreens />
+          </div>
         </section>
 
         <section className={styles.section} data-section="themes" aria-labelledby="home-themes">
-          <header className={styles.sectionHead}>
+          <header className={styles.sectionHead} data-motion="reveal">
             <h2 id="home-themes" className={styles.sectionTitle}>
               One screen. Every theme.
             </h2>
@@ -74,17 +87,19 @@ export default function Home() {
         </section>
 
         <section className={styles.section} data-section="agents" aria-labelledby="home-agents">
-          <header className={styles.sectionHead}>
+          <header className={styles.sectionHead} data-motion="reveal">
             <h2 id="home-agents" className={styles.sectionTitle}>
               Your agent builds with the kit, not around it.
             </h2>
             <p className={styles.sectionLead}>Connect once. It looks up the right part, adds it, then checks its own work.</p>
           </header>
-          <HomeAgents />
+          <div data-motion="reveal">
+            <HomeAgents />
+          </div>
         </section>
 
         <section className={styles.section} data-section="faq" aria-labelledby="home-faq">
-          <header className={styles.sectionHead}>
+          <header className={styles.sectionHead} data-motion="reveal">
             <h2 id="home-faq" className={styles.sectionTitle}>
               Questions, answered.
             </h2>
@@ -96,12 +111,14 @@ export default function Home() {
               {" walks through a first screen."}
             </p>
           </header>
-          <div className={styles.faq}>
+          <div className={styles.faq} data-motion="reveal">
             <Accordion items={HOME_FAQ} defaultOpen="agent" />
           </div>
         </section>
 
-        <HomeFooter version={kitPackage.version} />
+        <div data-motion="reveal">
+          <HomeFooter version={kitPackage.version} />
+        </div>
       </main>
     </div>
   );

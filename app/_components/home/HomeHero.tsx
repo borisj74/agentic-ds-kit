@@ -69,24 +69,24 @@ export function HomeHero({
   return (
     <GridBackground variant="lines" className={styles.hero}>
       <div className={styles.heroInner}>
-        <div className={styles.heroSide} data-side="start">
+        <div className={styles.heroSide} data-side="start" data-motion="hero">
           <Calendar label="Example calendar" defaultView="list" defaultDate="2026-11-13" defaultEvents={SCHEDULE} headingLevel={3} />
         </div>
-        <div className={styles.heroSide} data-side="end">
+        <div className={styles.heroSide} data-side="end" data-motion="hero">
           <VerifyCard />
         </div>
         <div className={styles.heroCopy}>
-          <p className={styles.statPill}>
+          <p className={styles.statPill} data-motion="hero">
             <span>{`agentic-ds-kit ${short}`}</span>
             <span>{`${components} components`}</span>
             <span>{`${blocks} blocks`}</span>
             <span>{`${patterns} patterns`}</span>
           </p>
-          <h1 className={styles.heroTitle}>The design system for AI agents.</h1>
-          <p className={styles.heroLead}>
+          <h1 className={styles.heroTitle} data-motion="hero">The design system for AI agents.</h1>
+          <p className={styles.heroLead} data-motion="hero">
             Contracts, tokens and React components your coding agent reads before it writes a line of UI.
           </p>
-          <div className={styles.heroActions}>
+          <div className={styles.heroActions} data-motion="hero">
             <Button size="lg" appearance="outline" mode="neutral" onClick={() => router.push("/components")}>
               Browse components
             </Button>

@@ -47,7 +47,7 @@ export function HomeThemes() {
 
   return (
     <div className={`layout-split--thirds ${styles.themes}`}>
-      <figure className={styles.themeCard}>
+      <figure className={styles.themeCard} data-motion="reveal">
         <ThemeScope theme={presetState("nistha", "light")} className={styles.themeStage}>
           <FleetScreen />
         </ThemeScope>
@@ -56,7 +56,7 @@ export function HomeThemes() {
           <span className={styles.themeNote}>Every token has a light value. Nothing to set up.</span>
         </figcaption>
       </figure>
-      <figure className={styles.themeCard}>
+      <figure className={styles.themeCard} data-motion="reveal">
         <ThemeScope theme={presetState("nistha", "dark")} className={styles.themeStage}>
           <FleetScreen />
         </ThemeScope>
@@ -67,7 +67,7 @@ export function HomeThemes() {
           </span>
         </figcaption>
       </figure>
-      <figure className={styles.themeCard}>
+      <figure className={styles.themeCard} data-motion="reveal">
         <ThemeScope theme={presetState(set, "light")} className={styles.themeStage}>
           <FleetScreen />
         </ThemeScope>

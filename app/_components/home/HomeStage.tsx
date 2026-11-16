@@ -95,7 +95,7 @@ export function HomeStage() {
   return (
     <PreviewScope className={styles.stageScope}>
       <section className={styles.stage} aria-label="Example: kit agent components with live sample data">
-        <div className={styles.stageSide} data-side="start">
+        <div className={styles.stageSide} data-side="start" data-motion="stage">
           <AgentInbox
             items={inbox}
             selectedId={inboxId}
@@ -107,7 +107,7 @@ export function HomeStage() {
             onDeny={(id) => setInbox((items) => items.filter((item) => item.id !== id))}
           />
         </div>
-        <div className={styles.stageMain}>
+        <div className={styles.stageMain} data-motion="stage">
           <AgentMonitor
             name="Refactor billing service"
             meta="claude-code · acme-demo · example data"
@@ -126,7 +126,7 @@ export function HomeStage() {
             onResume={() => setPaused(false)}
           />
         </div>
-        <div className={styles.stageSide} data-side="end">
+        <div className={styles.stageSide} data-side="end" data-motion="stage">
           <AgentFleet totals="" agents={HOME_FLEET_HERO} expandedId={fleetId} onExpandedChange={setFleetId} />
         </div>
       </section>

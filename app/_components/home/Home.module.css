@@ -237,34 +237,22 @@
   }
 }
 
-/* Subtle entrance, CSS only so server and client render the same markup. */
+/*
+ * Motion (HomeMotion, GSAP). Targets are visible by default, so the page works without JS. Only
+ * while html[data-home-motion="pending"] (set by the page's inline script before first paint) and
+ * only when motion is allowed are they hidden, waiting for GSAP. If GSAP never takes over, the
+ * fallback shows them after 3s.
+ */
 @media (prefers-reduced-motion: no-preference) {
-  .heroCopy > *,
-  .stage {
-    animation: home-rise var(--motion-duration-600) var(--motion-ease-out) both;
-  }
-
-  .heroCopy > :nth-child(2) {
-    animation-delay: var(--motion-duration-100);
-  }
-
-  .heroCopy > :nth-child(3) {
-    animation-delay: var(--motion-duration-150);
-  }
-
-  .heroCopy > :nth-child(4) {
-    animation-delay: var(--motion-duration-200);
-  }
-
-  .stage {
-    animation-delay: var(--motion-duration-300);
+  :global(html[data-home-motion="pending"]) [data-motion] {
+    opacity: 0;
+    animation: home-motion-fallback 0s linear 3s forwards;
   }
 }
 
-@keyframes home-rise {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-3));
+@keyframes home-motion-fallback {
+  to {
+    opacity: 1;
   }
 }
 
