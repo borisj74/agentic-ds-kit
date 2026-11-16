@@ -1,0 +1,41 @@
+{
+  "command": "npx agentic-ds-kit review app/billing",
+  "findings": [
+    {
+      "id": "hex",
+      "rule": "raw-value",
+      "file": "app/billing/Invoice.module.css",
+      "message": "Hardcoded colour #2B2BF5 in color.",
+      "fix": {
+        "remove": "  color: #2B2BF5;",
+        "add": "  color: var(--text-brand);",
+        "oldNo": 14
+      },
+      "summary": "Uses the --text-brand token"
+    },
+    {
+      "id": "cousin",
+      "rule": "outside-kit",
+      "file": "app/billing/InvoiceActions.tsx",
+      "message": "\"@/components/ui/button\" is a local copy of Button.",
+      "fix": {
+        "remove": "import { Button } from \"@/components/ui/button\";",
+        "add": "import { Button } from \"agentic-ds-kit\";",
+        "oldNo": 3
+      },
+      "summary": "Imports Button from the kit"
+    },
+    {
+      "id": "label",
+      "rule": "wrong-use",
+      "file": "app/billing/InvoiceActions.tsx",
+      "message": "Icon-only Button without an aria label. Screen readers cannot name it.",
+      "fix": {
+        "remove": "<Button iconStart=\"Trash\" onClick={remove} />",
+        "add": "<Button iconStart=\"Trash\" ariaLabel=\"Delete invoice\" onClick={remove} />",
+        "oldNo": 28
+      },
+      "summary": "Names the action for screen readers"
+    }
+  ]
+}

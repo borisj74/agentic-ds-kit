@@ -9,7 +9,6 @@
 /* The landing page has no docs chrome: its own top bar, then main. */
 .landing {
   min-height: 100vh;
-  /* Paper's page is the white surface (bg-surface), so the subtle panels and tiles read. */
   background-color: var(--surface-card);
 }
 
@@ -31,8 +30,8 @@
   outline: var(--border-focus-width) solid var(--border-focus);
 }
 
-/* Paper top nav: 72px, 40px side padding, a hairline under it. Set through AppHeader's own
-   variables; the centre column is wide enough for the five links. */
+/* Top nav: 72px, a hairline under it. Set through AppHeader's own variables; the centre column
+   is wide enough for the five links. */
 .nav {
   --appheader-height: calc(var(--space-16) + var(--space-2));
   --appheader-padding-inline: 0;
@@ -85,12 +84,13 @@
   }
 }
 
-/* layout-content scrolls by default; the page itself scrolls here. */
-.home {
+/* layout-content scrolls and pads by default; here the page scrolls and the rows set their own
+   gutter. */
+.landing .home {
   --home-width: var(--grid-width-lg);
   --home-gutter: var(--grid-margin-md);
-  /* Paper's section rhythm is 96px (--space-24 in Paper); the kit scale stops at --space-16. */
-  --home-section: calc(var(--space-12) * 2);
+  /* 160px between sections, so each one has room to breathe. The kit scale stops at --space-16. */
+  --home-section: calc(var(--space-16) * 2.5);
   gap: 0;
   padding: 0;
   overflow: visible;
@@ -100,7 +100,7 @@
   outline: none;
 }
 
-/* Every row but the hero sits in a centred column with a gutter each side. */
+/* Every row sits in a centred column with a gutter each side. */
 .home > * {
   width: min(100% - var(--home-gutter) * 2, var(--home-width));
   margin-inline: auto;
@@ -108,84 +108,28 @@
 
 /* ---------- Hero ---------- */
 
-/* Full bleed: the hero band runs edge to edge. */
-.home > .hero {
-  width: 100%;
-}
-
-/*
- * Paper Home J hero band. The kit GridBackground wraps the whole band, so the grid runs under the
- * copy and the stage. Paper draws the lines at 45% and fades them with an ellipse (55% by 60%,
- * centred 35% down): clear in the middle from 15%, gone by 80%. GridBackground takes both through
- * its own variables. The mask only reads alpha, so any opaque token works as its colour.
- */
-.landing .hero {
-  --grid-bg-line: color-mix(in oklab, var(--border-faint) 45%, transparent);
-  --grid-bg-fade: radial-gradient(ellipse 55% 60% at 50% 35%, var(--text-fg) 15%, transparent 80%);
-  display: block;
-  overflow: hidden;
-}
-
-.heroInner {
-  position: relative;
-  container: home-hero / inline-size;
-  isolation: isolate;
+/* Left-aligned copy, then the Command screen in a large browser frame under it. */
+.hero {
   display: grid;
-  gap: var(--space-12);
-  width: 100%;
-  padding-top: calc(var(--space-12) * 2);
+  gap: var(--space-16);
+  padding-top: calc(var(--space-16) + var(--space-12));
 }
 
 .heroCopy {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-6);
+  min-width: 0;
   max-width: var(--grid-width-md);
-  margin-inline: auto;
-  padding-inline: var(--home-gutter);
-  text-align: center;
-}
-
-/* A tray of four labels; the version sits raised on the left. */
-.statPill {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  margin: 0;
-  padding: var(--space-1);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-base);
-  background-color: var(--surface-muted);
-  color: var(--text-fg-muted);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
-}
-
-.statPill > span {
-  padding: var(--space-1) var(--space-3);
-}
-
-.statPill > :first-child {
-  border-radius: var(--radius-control-md);
-  background-color: var(--surface-card);
-  box-shadow: var(--shadow-xs);
-  color: var(--text-fg);
-  font-family: var(--type-family-code);
-  font-weight: var(--type-weight-label);
 }
 
 .heroTitle {
-  /* Paper's title box is 880px, so the line breaks after "AI"; in em it follows the hero size. */
-  max-width: 13em;
   margin: 0;
   color: var(--text-fg);
   font-family: var(--type-family-heading);
   font-size: var(--type-size-display-hero);
-  /* Paper sets the hero at the heading weight (600), not the role's 400. */
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-display-hero);
   letter-spacing: var(--type-tracking-display-hero);
   line-height: var(--type-line-display-hero);
   text-wrap: balance;
@@ -197,364 +141,19 @@
   color: var(--text-fg-muted);
   font-size: var(--type-size-body-lg);
   line-height: var(--type-line-body-lg);
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: var(--space-3);
+  padding-top: var(--space-2);
 }
 
-/* Paper's side cards: 300px, 48px past each edge, 128px down. Opaque and working. Wide screens only. */
-.heroSide {
-  position: absolute;
-  top: calc(var(--space-16) * 2);
-  z-index: 1;
-  display: none;
-  width: calc(var(--space-16) * 4.7);
-  box-sizing: border-box;
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-card);
-  box-shadow: var(--shadow-raised-md);
-}
-
-.heroSide[data-side="start"] {
-  left: calc(var(--space-12) * -1);
-  padding: var(--space-4);
-  border: var(--border-width-thin) solid var(--border-faint);
-}
-
-.heroSide[data-side="end"] {
-  right: calc(var(--space-12) * -1);
-}
-
-/* 80rem is --grid-breakpoint-lg. */
-@container home-hero (width >= 80rem) {
-  .heroSide {
-    display: block;
-  }
-}
-
-/*
- * Motion (HomeMotion, GSAP). Targets are visible by default, so the page works without JS. Only
- * while html[data-home-motion="pending"] (set by the page's inline script before first paint) and
- * only when motion is allowed are they hidden, waiting for GSAP. If GSAP never takes over, the
- * fallback shows them after 3s.
- */
-@media (prefers-reduced-motion: no-preference) {
-  :global(html[data-home-motion="pending"]) [data-motion] {
-    opacity: 0;
-    animation: home-motion-fallback 0s linear 3s forwards;
-  }
-}
-
-@keyframes home-motion-fallback {
-  to {
-    opacity: 1;
-  }
-}
-
-/* ---------- Hero stage ---------- */
-
-/* Paper's bottom fade: an 80px wash into the page colour over the foot of the stage. No mask, so
-   the cards' shadows are not clipped at the stage's edges. */
-.stageScope {
-  position: relative;
-  z-index: 2;
-  padding-inline: var(--home-gutter);
-  padding-bottom: var(--space-12);
-}
-
-.stageScope::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: calc(var(--space-16) + var(--space-4));
-  background-image: linear-gradient(to bottom, transparent, var(--surface-card));
-  pointer-events: none;
-}
-
-/* Paper: 320 / 560 / 320 with 24px gaps; the sides sit a little higher than the monitor. */
-.stage {
-  display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) minmax(0, 4fr);
-  gap: var(--grid-gutter-lg);
-  align-items: start;
-  max-width: var(--grid-width-lg);
-  margin-inline: auto;
-}
-
-.stageMain,
-.stageSide {
-  min-width: 0;
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-card);
-  box-shadow: var(--shadow-raised-lg);
-}
-
-/* Kit parts size to their content; here each fills its column. */
-.stageMain > *,
-.stageSide > * {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.stageMain {
-  margin-top: var(--space-6);
-}
-
-.stageSide[data-side="start"] {
-  margin-top: var(--space-4);
-}
-
-/* ---------- Sections ---------- */
-
-/* Paper Home J: 96px above each section, 24px between head and content, 16px inside the head. */
-.section {
-  display: grid;
-  gap: var(--space-6);
-  padding-top: var(--home-section);
-}
-
-.section[data-section="parts"] {
-  padding-bottom: var(--home-section);
-}
-
-.section[data-section="screens"] {
-  padding-bottom: var(--space-12);
-}
-
-.section[data-section="themes"] {
-  gap: var(--space-12);
-  padding-bottom: var(--home-section);
-}
-
-.section[data-section="agents"] {
-  gap: var(--space-10);
-}
-
-.section[data-section="faq"] {
-  gap: var(--space-16);
-  padding-bottom: var(--home-section);
-}
-
-.sectionHead {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  max-width: var(--grid-width-sm);
-  margin-inline: auto;
-  text-align: center;
-}
-
-.sectionTitle {
-  margin: 0;
-  color: var(--text-fg);
-  font-family: var(--type-family-heading);
-  /* Paper: 48/56 (heading-2), heading weight (600), -0.02em tracking (snug). */
-  font-size: var(--type-size-heading-2);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-snug);
-  line-height: var(--type-line-heading-2);
-  text-wrap: balance;
-}
-
-.sectionLead {
-  margin: 0;
-  color: var(--text-fg-muted);
-  font-size: var(--type-size-body-md);
-  line-height: var(--type-line-body-md);
-  text-wrap: pretty;
-}
-
-/* ---------- Bento ---------- */
-
-.bentoScope {
-  min-width: 0;
-}
-
-.tabs {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-stack-xl);
-}
-
-.tabs > [role="tablist"] {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.tabs > [role="tabpanel"] {
-  justify-self: stretch;
-  min-width: 0;
-}
-
-.bento {
-  display: grid;
-  gap: var(--grid-gutter-lg);
-}
-
-.bentoRow,
-.bentoGrid {
-  gap: var(--grid-gutter-lg);
-}
-
-.bentoGrid {
-  align-items: stretch;
-}
-
-.tile {
-  display: grid;
-  align-content: center;
-  gap: var(--space-stack-sm);
-  min-width: 0;
-  height: 100%;
-  margin: 0;
-  padding: var(--space-inset-lg);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-muted);
-  box-sizing: border-box;
-  /* AgentFleet's sub-agent rows are wider than a phone tile: scroll inside the tile, not the page. */
-  overflow-x: auto;
-}
-
-.tileStack {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-3);
-  min-width: 0;
-}
-
-.tileStack > :first-child {
-  justify-self: stretch;
-}
-
-.tileCentered {
-  justify-items: center;
-}
-
-/* Parts with their own max width (ModalCard) sit centred in the tile instead of hugging the left. */
-.tileCenter {
-  display: grid;
-  justify-items: center;
-  min-width: 0;
-}
-
-.tileCentered > * {
-  width: min(100%, var(--grid-width-sm));
-  /* Below this AgentFleet's sub-agent names wrap a letter per line: scroll in the tile instead. */
-  min-width: calc(var(--space-16) * 6);
-}
-
-/* Navigation tab: a small product frame (AppHeader over SideNav and the page). */
-.navFrame {
-  width: 100%;
-  overflow: hidden;
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-md);
-  background-color: var(--surface-card);
-  box-shadow: var(--shadow-raised-sm);
-}
-
-.navFrameBody {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  min-width: 0;
-}
-
-.navFrameMain {
-  display: grid;
-  align-content: start;
-  gap: var(--space-4);
-  min-width: 0;
-  padding: var(--space-5);
-  border-left: var(--border-width-thin) solid var(--border-faint);
-}
-
-/* Switching category: the new bento's tiles rise in one after another. CSS only; reduced motion skips it. */
-@media (prefers-reduced-motion: no-preference) {
-  .tabs > [role="tabpanel"] .bentoRow > .tile {
-    animation: home-tab-in var(--motion-duration-500) var(--motion-ease-out) both;
-  }
-
-  .tabs > [role="tabpanel"] .bentoRow > .tile:nth-child(2) {
-    animation-delay: var(--motion-duration-100);
-  }
-
-  .tabs > [role="tabpanel"] .bentoRow + .bentoRow > .tile:nth-child(1) {
-    animation-delay: var(--motion-duration-150);
-  }
-
-  .tabs > [role="tabpanel"] .bentoRow + .bentoRow > .tile:nth-child(2) {
-    animation-delay: var(--motion-duration-300);
-  }
-}
-
-@keyframes home-tab-in {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-3));
-  }
-}
-
-.tileCaption {
-  color: var(--text-fg-muted);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
-}
-
-/* ---------- Pattern screens ---------- */
-
-.screens {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-stack-lg);
-}
-
-.snippet {
-  max-width: 100%;
-}
-
-.screenTabs {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.deck {
-  position: relative;
-  width: 100%;
-  padding-top: var(--space-12);
-}
-
-.peek {
-  position: absolute;
-  inset-inline: var(--space-16);
-  top: 0;
-  padding: var(--space-1) var(--space-4) var(--space-6);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg) var(--radius-surface-lg) 0 0;
-  background-color: var(--surface-muted);
-  color: var(--text-fg-subtle);
-  font-family: var(--type-family-code);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-body-xs);
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.peek[data-depth="1"] {
-  inset-inline: var(--space-8);
-  top: var(--space-6);
-  background-color: var(--surface-card);
-}
-
-.browser {
+/* The hero's browser frame. The Command screen inside is laid out at desktop size and scaled to
+   the frame's width (HomeCommand); until it is measured it shows unscaled and cropped. */
+.command {
   position: relative;
   overflow: hidden;
   border: var(--border-width-thin) solid var(--border-faint);
@@ -601,113 +200,442 @@
   text-overflow: ellipsis;
 }
 
-/* ---------- Themes ---------- */
 
-.themes {
-  align-items: stretch;
-  gap: var(--grid-gutter-md);
-}
-
-.themeCard {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-width: 0;
-  margin: 0;
-  padding: var(--space-2);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-card);
-}
-
-/* The theme scope paints its own page colour, so dark shows as dark. */
-.themeStage {
-  height: calc(var(--space-16) * 4.4);
+.commandHost {
+  position: relative;
   overflow: hidden;
-  padding: var(--space-6) 0 0 var(--space-6);
-  border-radius: var(--radius-surface-md);
+  aspect-ratio: 1440 / 900;
+}
+
+/* Once scaled, the host takes the scaled height (set inline) instead of the ratio. */
+.commandHost[style] {
+  aspect-ratio: auto;
+}
+
+.commandScope {
+  height: 100%;
+}
+
+.commandScreen {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+  overflow: hidden;
+  transform-origin: top left;
   background-color: var(--surface-page);
 }
 
-.fleet {
-  min-width: calc(var(--space-16) * 5.5);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-md) 0 0 0;
-  background-color: var(--surface-card);
-  overflow: hidden;
-}
-
-.fleetBar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-4) 0;
-  border-bottom: var(--border-width-thin) solid var(--border-faint);
-}
-
-.fleetName {
-  color: var(--text-fg);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-body-sm);
-}
-
-.fleetBody {
+.commandMain {
+  /* AgentFleet fills its row with as many cards as fit; a larger minimum gives exactly three here. */
+  --layout-auto-min: calc(var(--layout-metrics-min) * 1.75);
   display: grid;
-  gap: var(--space-stack-md);
-  padding: var(--space-4);
-  background-color: var(--surface-muted);
+  align-content: start;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-6) var(--space-6) 0;
 }
 
-.fleetTitle {
-  margin: 0;
-  color: var(--text-fg);
-  font-size: var(--type-size-heading-5);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-snug);
-  line-height: var(--type-line-heading-5);
+.commandRow {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: var(--space-4);
+  align-items: start;
 }
 
-.fleetMeta {
+.commandRow > *,
+.commandAsk > * {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* The permission request waits off stage, then slides in. Without motion it simply shows. */
+.commandAsk:not([data-shown]) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .commandAsk {
+    transition:
+      opacity var(--motion-duration-500) var(--motion-ease-out),
+      transform var(--motion-duration-500) var(--motion-ease-out),
+      visibility 0s linear var(--motion-duration-500);
+  }
+
+  .commandAsk:not([data-shown]) {
+    transform: translateY(var(--space-6));
+  }
+
+  .commandAsk[data-shown] {
+    transition-delay: 0s;
+  }
+
+  /* Grant pulses once when the request lands. */
+  .commandAsk[data-pulse] footer button:last-child {
+    animation: home-grant-pulse var(--motion-duration-600) var(--motion-ease-out);
+  }
+}
+
+@keyframes home-grant-pulse {
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 var(--space-2) var(--surface-brand-subtle);
+  }
+}
+
+/* How it works: the contract on the left, the live component on the right. */
+.loop {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gutter-md);
+  align-items: start;
+  min-width: 0;
+}
+
+.loopPane {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
   margin: 0;
+}
+
+.loopCaption {
   color: var(--text-fg-muted);
+  font-family: var(--type-family-code);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-body-xs);
 }
 
-.fleetScores {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--grid-gutter-sm);
+.loopStage {
+  min-width: 0;
 }
 
-.themeCaption {
-  display: grid;
-  align-content: start;
-  gap: var(--space-stack-xs);
-  padding: var(--space-4) var(--space-3) var(--space-3);
+.loopStage > div > * {
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-raised-md);
 }
 
-.themeName {
+/*
+ * Motion (HomeMotion, GSAP). Targets are visible by default, so the page works without JS. Only
+ * while html[data-home-motion="pending"] (set by the page's inline script before first paint) and
+ * only when motion is allowed are they hidden, waiting for GSAP. If GSAP never takes over, the
+ * fallback shows them after 3s.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :global(html[data-home-motion="pending"]) [data-motion] {
+    opacity: 0;
+    animation: home-motion-fallback 0s linear 3s forwards;
+  }
+}
+
+@keyframes home-motion-fallback {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- Sections ---------- */
+
+.section {
+  display: grid;
+  gap: var(--space-16);
+  padding-top: var(--home-section);
+}
+
+/* A small numbered label over each section title: "01 Contracts". */
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-family: var(--type-family-overline);
+  font-size: var(--type-size-overline);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  line-height: var(--type-line-overline-xs);
+  text-transform: uppercase;
+}
+
+.labelNumber {
   color: var(--text-fg);
-  font-size: var(--type-size-body-md);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-body-md);
 }
 
-.themeNote {
+.headStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* 01: title on the left, the lead on the right, both on one baseline row. */
+.headSplit {
+  align-items: end;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--type-family-heading);
+  font-size: var(--type-size-title-section);
+  font-weight: var(--type-weight-title-section);
+  letter-spacing: var(--type-tracking-title-section);
+  line-height: var(--type-line-title-section);
+  text-wrap: balance;
+}
+
+.sectionLead {
+  max-width: var(--grid-width-sm);
+  margin: 0;
+  color: var(--text-fg-muted);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  text-wrap: pretty;
+}
+
+.themeSplit,
+.reviewSplit,
+.faqSplit {
+  gap: var(--grid-gutter-xl);
+}
+
+.themeSplit {
+  align-items: start;
+}
+
+/* ---------- 01 Contracts: job scenes ---------- */
+
+.tabs {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-stack-lg);
+  min-width: 0;
+}
+
+/* One row of tabs; on narrow screens it scrolls sideways inside itself, never the page. */
+.tabs > [role="tablist"] {
+  max-width: 100%;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+
+.tabs > [role="tablist"] > * {
+  flex-shrink: 0;
+}
+
+.tabs > [role="tabpanel"] {
+  justify-self: stretch;
+  min-width: 0;
+}
+
+.scene {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+}
+
+.sceneCaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
   color: var(--text-fg-muted);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body-sm);
 }
 
-.themeCaption > :last-child:not(span) {
-  margin-top: var(--space-2);
-  justify-self: start;
-}
-
-.inlineCode {
+.sceneName {
+  color: var(--text-fg);
   font-family: var(--type-family-code);
   font-size: var(--type-size-code);
+}
+
+/* The scene sits on the page canvas in a framed window; wide blocks scroll inside it. */
+.sceneStage {
+  min-width: 0;
+  overflow-x: auto;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-page);
+}
+
+/* Switching job: the new scene rises in. CSS only; reduced motion skips it. */
+@media (prefers-reduced-motion: no-preference) {
+  .tabs > [role="tabpanel"] .scene {
+    animation: home-tab-in var(--motion-duration-500) var(--motion-ease-out) both;
+  }
+}
+
+@keyframes home-tab-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
+}
+
+/* ---------- Every theme ---------- */
+
+.themes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: var(--space-stack-lg);
+}
+
+.themeControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-2) var(--space-8);
+  max-width: 100%;
+}
+
+/* Each tab row stays on one line and scrolls inside itself on narrow screens. */
+.themeControls > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.themeControls [role="tablist"] {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+
+.themeControls [role="tablist"] > * {
+  flex-shrink: 0;
+}
+
+/* The theme scope paints its own page colour, so dark shows as dark. */
+.themeStage {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-page);
+}
+
+/* The workspace in the theme card: two columns of kit parts, one on narrow screens. */
+.workspace {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gutter-md);
+  align-items: start;
+}
+
+.workspaceColumn {
+  display: grid;
+  gap: var(--grid-gutter-md);
+  min-width: 0;
+}
+
+.workspaceColumn > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- 03 Review ---------- */
+
+.reviewSplit {
+  align-items: start;
+}
+
+/* The copy stays put while the demo plays beside it. */
+.reviewSplit > header {
+  position: sticky;
+  top: calc(var(--space-16) + var(--space-8));
+}
+
+.reviewDemo {
+  min-width: 0;
+}
+
+.review {
+  min-width: 0;
+  padding: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-page);
+}
+
+.reviewInner {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.reviewHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.reviewTitle {
+  color: var(--text-fg);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+  line-height: var(--type-line-body-sm);
+}
+
+.reviewList {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reviewItem {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.reviewMessage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  color: var(--text-fg);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.reviewRule {
+  color: var(--text-danger);
+  font-family: var(--type-family-code);
+  font-size: var(--type-size-code);
+}
+
+/* ---------- Questions ---------- */
+
+.faqSplit {
+  align-items: start;
+}
+
+.faq {
+  min-width: 0;
+}
+
+/* ---------- Close: how an agent uses the kit ---------- */
+
+/* Centred head over the two panels, then the install and the guide. */
+.agentsHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--grid-width-md);
+  margin-inline: auto;
+  text-align: center;
 }
 
 /* ---------- Agents ---------- */
@@ -717,7 +645,7 @@
   gap: var(--space-10);
 }
 
-/* Paper: two rounded panels on the subtle surface, 660 / rest of 1200, 12px apart. */
+/* Two rounded panels on the subtle surface, 11 / 9 of the row, 12px apart. */
 .agentPanels {
   display: grid;
   grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
@@ -860,12 +788,6 @@
   width: min(100%, calc(var(--space-16) * 6.5));
 }
 
-/* ---------- FAQ ---------- */
-
-.faq {
-  min-width: 0;
-}
-
 /* ---------- Footer ---------- */
 
 .footer {
@@ -873,6 +795,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-section-sm) var(--grid-gutter-xl);
+  /* Same rhythm as the sections: the section gap from the last section to the footer's hairline. */
+  margin-top: var(--home-section);
   padding-top: var(--space-16);
   padding-bottom: calc(var(--space-16) + var(--space-4));
   border-top: var(--border-width-thin) solid var(--border-faint);
@@ -922,47 +846,25 @@
 /* ---------- Narrower content: below --grid-breakpoint-md (64rem) ---------- */
 
 @container layout-content (width < 64rem) {
-  .stage {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .stageMain {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-
-  .stageMain,
-  .stageSide,
-  .stageSide[data-side="start"] {
-    margin-top: 0;
-  }
-
-
-  .bentoRow:global(.layout-split--primary),
-  .bentoRow:global(.layout-split--secondary),
-  .bentoRow:global(.layout-split) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .themes:global(.layout-split--thirds) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
+  .hero,
   .agentPanels {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .sectionTitle {
-    font-size: var(--type-size-heading-3);
-    line-height: var(--type-line-heading-3);
+  .hero {
+    padding-top: var(--space-16);
   }
 
-  .peek {
-    inset-inline: var(--space-8);
+  .themeSplit:global(.layout-split--secondary),
+  .reviewSplit:global(.layout-split--primary),
+  .faqSplit:global(.layout-split--secondary),
+  .headSplit:global(.layout-split) {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .peek[data-depth="1"] {
-    inset-inline: var(--space-4);
+  /* Stacked, the review copy reads before its demo. */
+  .reviewSplit > .reviewDemo {
+    order: 1;
   }
 }
 
@@ -970,52 +872,31 @@
 
 /* The root is the container, so it cannot query itself: its own padding uses a media query. */
 @media (width < 40rem) {
-  .home {
+  .landing .home {
     --home-gutter: var(--grid-margin-sm);
+    --home-section: calc(var(--space-12) * 2);
   }
 }
 
 @container layout-content (width < 40rem) {
-  .heroInner {
+  .hero {
+    gap: var(--space-10);
     padding-top: var(--space-10);
   }
 
-  .stage {
+  .loop,
+  .workspace {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .section {
-    --home-section: var(--space-16);
+  .sceneStage,
+  .review,
+  .themeStage {
+    padding: var(--space-3);
   }
 
   .agentPanel {
     padding: var(--space-5);
-  }
-
-  /* The product frame drops its SideNav on phones; the page keeps the width. */
-  .navFrameBody {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .navFrameBody > :first-child {
-    display: none;
-  }
-
-  .navFrameMain {
-    border-left: 0;
-  }
-
-  .sectionTitle {
-    font-size: var(--type-size-title-section);
-    line-height: var(--type-line-title-section);
-  }
-
-  .tabs {
-    justify-items: stretch;
-  }
-
-  .tile {
-    padding: var(--space-inset-sm);
   }
 
   .footerColumns:global(.layout-split--thirds) {

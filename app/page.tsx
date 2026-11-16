@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Accordion, Link } from "agentic-ds-kit";
-import index from "agentic-ds-kit/contracts/index.json";
+import { Accordion } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { canonical } from "@/lib/site";
 import { HOME_FAQ } from "@/lib/home.sample";
 import { HomeAgents } from "./_components/home/HomeAgents";
-import { HomeBento } from "./_components/home/HomeBento";
 import { HomeFooter } from "./_components/home/HomeFooter";
 import { HomeHero } from "./_components/home/HomeHero";
+import { HomeJobs } from "./_components/home/HomeJobs";
+import { HomeLoop } from "./_components/home/HomeLoop";
 import { HomeMotion } from "./_components/home/HomeMotion";
 import { HomeNav } from "./_components/home/HomeNav";
-import { HomeScreens } from "./_components/home/HomeScreens";
+import { HomeReview } from "./_components/home/HomeReview";
+import { HomeTheme } from "./_components/home/HomeTheme";
 import { HomeThemes } from "./_components/home/HomeThemes";
 import styles from "./_components/home/Home.module.css";
 
@@ -20,28 +21,32 @@ export const metadata: Metadata = {
   ...canonical("/"),
 };
 
-type Entry = { group: string; kind?: string };
-const entries = index as Entry[];
-const all = entries.filter((entry) => entry.group === "component");
-const blocks = all.filter((entry) => entry.kind === "block").length;
-/** Components without the blocks, as the stat pill counts them. */
-const components = all.filter((entry) => entry.kind !== "block");
-const patterns = entries.filter((entry) => entry.group === "pattern").length;
-
 /**
  * Runs before first paint on a full load, so CSS can hide the motion targets until GSAP takes
  * them over. Without JS it never runs and everything stays visible (see HomeMotion).
  */
 const MOTION_SCRIPT = 'document.documentElement.setAttribute("data-home-motion","pending")';
 
+/** A section's small numbered label: "01 Contracts". */
+function Label({ number, children }: { number: string; children: string }) {
+  return (
+    <p className={styles.label}>
+      <span className={styles.labelNumber}>{number}</span>
+      {children}
+    </p>
+  );
+}
+
 /**
- * The docs home, a landing page with its own top nav (no docs sidebar): the hero with a live agent stage, the parts by category, whole
- * screens, themes, how agents use the kit, questions, then the footer. Every preview is a real kit
- * component with example data.
+ * The docs home, a quiet landing page with its own top nav (no docs sidebar), in the Ink colour
+ * set so colour lives only in the product previews. The hero shows an agent Command screen built
+ * from kit parts; How it works puts a contract beside its component; three numbered sections follow, each laid out its own way: contracts as job scenes,
+ * tokens and themes, then the review step. Questions and how an agent
+ * uses the kit end the page. Every preview is a real kit component or block with example data.
  */
 export default function Home() {
   return (
-    <div className={styles.landing}>
+    <HomeTheme className={styles.landing}>
       <script dangerouslySetInnerHTML={{ __html: MOTION_SCRIPT }} />
       <HomeMotion />
       <NextLink className={styles.skip} href="#main">
@@ -49,45 +54,91 @@ export default function Home() {
       </NextLink>
       <HomeNav version={kitPackage.version} />
       <main id="main" className={`layout-content ${styles.home}`} tabIndex={-1}>
-        <HomeHero version={kitPackage.version} components={components.length} blocks={blocks} patterns={patterns} />
+        <HomeHero />
 
-        <section className={styles.section} data-section="parts" aria-labelledby="home-parts">
-          <header className={styles.sectionHead} data-motion="reveal">
-            <h2 id="home-parts" className={styles.sectionTitle}>
-              {`${components.length} parts, each with a contract an agent reads.`}
-            </h2>
-            <Link href="/components" linkAs={NextLink} variant="standalone">
-              All components →
-            </Link>
-          </header>
-          <div data-motion="reveal">
-            <HomeBento />
-          </div>
-        </section>
-
-        <section className={styles.section} data-section="screens" aria-labelledby="home-screens">
-          <header className={styles.sectionHead} data-motion="reveal">
-            <h2 id="home-screens" className={styles.sectionTitle}>
-              Start from a whole screen, then make it yours.
+        {/* How it works: one line, then the contract beside the component it describes. */}
+        <section className={styles.section} data-section="how" aria-labelledby="home-how">
+          <header className={styles.headStack} data-motion="reveal">
+            <p className={styles.label}>How it works</p>
+            <h2 id="home-how" className={styles.sectionTitle}>
+              Your agent reads the contract, then renders the real component.
             </h2>
           </header>
           <div data-motion="reveal">
-            <HomeScreens />
+            <HomeLoop />
           </div>
         </section>
 
+        {/* 01: label and title on the left, the lead on the right, then the scenes full width. */}
+        <section className={styles.section} data-section="contracts" aria-labelledby="home-contracts">
+          <header className={`layout-split ${styles.headSplit}`} data-motion="reveal">
+            <div className={styles.headStack}>
+              <Label number="01">Contracts</Label>
+              <h2 id="home-contracts" className={styles.sectionTitle}>
+                Pick the job. The kit has the whole scene.
+              </h2>
+            </div>
+            <p className={styles.sectionLead}>
+              Approving a plan, watching a run, chasing a failure, talking to an agent: each is one block your agent drops
+              into a page, built from parts that each carry their own contract.
+            </p>
+          </header>
+          <div data-motion="reveal">
+            <HomeJobs />
+          </div>
+        </section>
+
+        {/* 02: copy on the left, the themed workspace on the right. */}
         <section className={styles.section} data-section="themes" aria-labelledby="home-themes">
-          <header className={styles.sectionHead} data-motion="reveal">
-            <h2 id="home-themes" className={styles.sectionTitle}>
-              One screen. Every theme.
+          <div className={`layout-split--secondary ${styles.themeSplit}`}>
+            <header className={styles.headStack} data-motion="reveal">
+              <Label number="02">Tokens and themes</Label>
+              <h2 id="home-themes" className={styles.sectionTitle}>
+                Components name roles, not colours.
+              </h2>
+              <p className={styles.sectionLead}>
+                A button asks for the action colour and a card for the card surface. Swap the colour set or switch to dark,
+                and the same markup follows without a single edit.
+              </p>
+            </header>
+            <div data-motion="reveal">
+              <HomeThemes />
+            </div>
+          </div>
+        </section>
+
+        {/* 03: the demo first, the copy beside it on wide screens. */}
+        <section className={styles.section} data-section="review" aria-labelledby="home-review">
+          <div className={`layout-split--primary ${styles.reviewSplit}`}>
+            <div className={styles.reviewDemo} data-motion="reveal">
+              <HomeReview />
+            </div>
+            <header className={styles.headStack} data-motion="reveal">
+              <Label number="03">Review</Label>
+              <h2 id="home-review" className={styles.sectionTitle}>
+                It checks its own work before you do.
+              </h2>
+              <p className={styles.sectionLead}>
+                The review command reads the files your agent changed and points at anything off-system: a raw value, a
+                local copy of a kit part, a control nobody can name. Each finding comes with its fix.
+              </p>
+            </header>
+          </div>
+        </section>
+
+        <section className={styles.section} data-section="faq" aria-labelledby="home-faq">
+          <div className={`layout-split--secondary ${styles.faqSplit}`}>
+            <h2 id="home-faq" className={styles.sectionTitle} data-motion="reveal">
+              Questions
             </h2>
-            <p className={styles.sectionLead}>Same components, same markup. Flip one attribute and the tokens do the rest.</p>
-          </header>
-          <HomeThemes />
+            <div className={styles.faq} data-motion="reveal">
+              <Accordion items={HOME_FAQ} defaultOpen="agent" />
+            </div>
+          </div>
         </section>
 
         <section className={styles.section} data-section="agents" aria-labelledby="home-agents">
-          <header className={styles.sectionHead} data-motion="reveal">
+          <header className={styles.agentsHead} data-motion="reveal">
             <h2 id="home-agents" className={styles.sectionTitle}>
               Your agent builds with the kit, not around it.
             </h2>
@@ -98,28 +149,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={styles.section} data-section="faq" aria-labelledby="home-faq">
-          <header className={styles.sectionHead} data-motion="reveal">
-            <h2 id="home-faq" className={styles.sectionTitle}>
-              Questions, answered.
-            </h2>
-            <p className={styles.sectionLead}>
-              {"Still stuck? The "}
-              <Link href="/get-started" linkAs={NextLink}>
-                getting started guide
-              </Link>
-              {" walks through a first screen."}
-            </p>
-          </header>
-          <div className={styles.faq} data-motion="reveal">
-            <Accordion items={HOME_FAQ} defaultOpen="agent" />
-          </div>
-        </section>
-
-        <div data-motion="reveal">
-          <HomeFooter version={kitPackage.version} />
-        </div>
+        <HomeFooter version={kitPackage.version} />
       </main>
-    </div>
+    </HomeTheme>
   );
 }

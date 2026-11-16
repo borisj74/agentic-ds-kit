@@ -1,76 +1,9 @@
-import type { AccordionItem, AgentFleetAgent, LinkListItem, MemoryItem, PermissionScope } from "agentic-ds-kit";
+import type { AccordionItem, LinkListItem } from "agentic-ds-kit";
 
 /**
  * Example data for the docs home page (app/page.tsx). Fake names and numbers, the same story the
  * component docs tell: one agent refactoring a billing service.
  */
-
-export const HOME_PERMISSION_SCOPES: PermissionScope[] = [
-  {
-    id: "docs",
-    resource: "~/acme/ledger/docs",
-    access: "read",
-    icon: "Folder",
-    reason: "Summarise weekly doc changes for the Monday digest.",
-    expiry: "Expires in 7 days",
-  },
-  {
-    id: "mail",
-    resource: "Send email as ops@acme.dev",
-    access: "write",
-    icon: "Mail",
-    reason: "Post the digest to the #ops mailing list.",
-    expiry: "No expiry",
-  },
-];
-
-export const HOME_PERMISSION_DESCRIPTION =
-  "Research agent wants standing access, not a single action. It applies to every run until you revoke it or it expires.";
-
-export const HOME_PERMISSION_WARNING =
-  "Standing access. Every future run can send email without asking again. Revoke any time in Settings → Agents.";
-
-export const HOME_MEMORIES: MemoryItem[] = [
-  { id: "1", content: "Prefers sentence case for headings", source: "from chat · 12 Oct", age: "3w", pinned: true, usedHere: true },
-  { id: "2", content: "Billing code lives in src/billing; tests in invoice.test.ts", source: "from repo scan", age: "5d", pinned: true },
-  { id: "3", content: "Deploys need an approval on Fridays", source: "from you", age: "2d", usedHere: true },
-  { id: "4", content: "Uses pnpm, not npm", source: "from repo scan", age: "1d" },
-];
-
-/** The orchestrator in the bento: four sub-agents, one waiting for review. */
-export const HOME_FLEET: AgentFleetAgent[] = [
-  {
-    id: "billing",
-    name: "Billing refactor",
-    status: "running",
-    cost: "$1.28",
-    elapsed: "6m 40s",
-    meta: "Orchestrator · Opus 5.5 · example data",
-    subAgents: [
-      { id: "scan", name: "scan-codebase", status: "done", elapsed: "58s", cost: "$0.14" },
-      { id: "edit", name: "edit-invoice", status: "done", elapsed: "2m 02s", cost: "$0.61" },
-      { id: "tests", name: "write-tests", status: "running", elapsed: "1m 18s", cost: "$0.41" },
-      { id: "migrate", name: "migrate-db", status: "waiting", elapsed: "0:31", cost: "$0.12" },
-    ],
-  },
-];
-
-/** The smaller fleet card in the hero stage. */
-export const HOME_FLEET_HERO: AgentFleetAgent[] = [
-  {
-    id: "billing",
-    name: "Billing refactor",
-    status: "running",
-    cost: "$1.28",
-    elapsed: "6m 40s",
-    subAgents: [
-      { id: "scan", name: "scan-codebase", status: "done" },
-      { id: "edit", name: "edit-invoice", status: "done" },
-      { id: "tests", name: "write-tests", status: "running" },
-      { id: "migrate", name: "migrate-db", status: "queued" },
-    ],
-  },
-];
 
 export const HOME_FAQ: AccordionItem[] = [
   {
