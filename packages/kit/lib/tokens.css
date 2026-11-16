@@ -104,6 +104,8 @@
   --text-fg-subtle: #64748b;
   --text-fg-disabled: #cbd5e1;
   --text-fg-inverse: #ffffff;
+  --text-fixed-dark: #0f172a;
+  --text-fixed-light: #ffffff;
   --text-primary: var(--text-fg);
   --text-secondary: var(--text-fg-muted);
   --text-muted: var(--text-fg-subtle);
@@ -565,6 +567,8 @@
   --text-fg-subtle: #94a3b8;
   --text-fg-disabled: #475569;
   --text-fg-inverse: #020617;
+  --text-fixed-dark: #0f172a;
+  --text-fixed-light: #ffffff;
   --text-primary: var(--text-fg);
   --text-secondary: var(--text-fg-muted);
   --text-muted: var(--text-fg-subtle);

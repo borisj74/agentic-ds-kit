@@ -76,3 +76,13 @@ describe("tracking tokens", () => {
     assert.equal(root.get("--type-tracking-overline"), "0.06em");
   });
 });
+
+describe("fixed text tokens", () => {
+  test("same value in light and dark", () => {
+    const dark = declarations(':root[data-theme="dark"],\n[data-theme="dark"]');
+    assert.equal(root.get("--text-fixed-dark"), "#0f172a");
+    assert.equal(root.get("--text-fixed-light"), "#ffffff");
+    assert.equal(dark.get("--text-fixed-dark"), root.get("--text-fixed-dark"));
+    assert.equal(dark.get("--text-fixed-light"), root.get("--text-fixed-light"));
+  });
+});

@@ -232,6 +232,16 @@
       "useWhen": "Solid primary buttons, inverse bars",
       "doNot": "Do not use inverse on canvas"
     },
+    "--text-fixed-dark": {
+      "note": "Dark text (slate 900) that stays the same in light and dark mode.",
+      "useWhen": "Labels on a fill that keeps its colour in both modes, such as a primitive colour swatch or a light illustration",
+      "doNot": "Do not use for normal copy; use --text-fg, which follows the mode"
+    },
+    "--text-fixed-light": {
+      "note": "Light text (white) that stays the same in light and dark mode.",
+      "useWhen": "Labels on a fill that keeps its colour in both modes, such as a dark primitive colour swatch",
+      "doNot": "Do not use for normal copy or on solid primary; use --text-fg or --action-on-primary"
+    },
     "--line": {
       "note": "Default hairline.",
       "useWhen": "Card and control borders",
