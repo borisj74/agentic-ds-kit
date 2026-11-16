@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Primary button labels are readable in every colour preset.** The Ink, Blue, Violet and Teal presets did not set `--action-on-primary`, so the label fell back to `--text-fg-inverse`, about 3.7:1 on Teal's light fill. Each preset now picks white or neutral 950 by contrast, the same way the docs presets do, so every preset reaches at least 4.5:1 in light and dark. A test checks this for every preset
+- **RedactionPreview keeps a revealed value on the same value.** Reveal state was keyed by the chip's position, so when the payload or spans changed order a shown value could jump to another chip. It is now keyed by the value itself (its type, text and which occurrence it is), so the same value stays shown
+- **Agent components share one currency default.** TaskBrief defaulted to EUR while EvalSuite and CurrencyInput default to USD. TaskBrief now defaults to USD too; pass `currency` to change it
+- **README starts with a quick start.** `npx agentic-ds-kit init`, an example prompt, and a short note on how agents read `contracts/index.json` and compose from kit pieces only
+
 ## [0.27.0] - 2026-11-15
 
 ### Added

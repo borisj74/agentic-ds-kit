@@ -37,7 +37,7 @@ export interface TaskBriefProps extends Omit<ComponentPropsWithoutRef<"article">
   models?: PickerModel[];
   /** Check-in stops for the AutonomyDial. Default AUTONOMY_STOPS. */
   autonomyOptions?: AutonomyStop[];
-  /** ISO currency for the spend cap. Default "EUR". */
+  /** ISO currency for the spend cap. Default "USD". */
   currency?: string;
   /** Number and currency locale. Default "en". */
   locale?: string;

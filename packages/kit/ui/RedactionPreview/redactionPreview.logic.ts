@@ -46,15 +46,24 @@ export function isMasked(type: string, rules: RedactionRules = {}, locked: strin
   return locked.includes(type) || rules[type] !== false;
 }
 
-export type Segment = { kind: "text"; text: string } | { kind: "span"; text: string; span: RedactionSpan; index: number };
+/**
+ * A span segment's `key` names the value, not its position: type, the masked text and which
+ * occurrence of that text it is. It stays the same when the payload or spans are reordered.
+ */
+export type Segment = { kind: "text"; text: string } | { kind: "span"; text: string; span: RedactionSpan; index: number; key: string };
 
 /** Payload cut into plain text and sensitive spans. */
 export function segments(payload: string, spans: RedactionSpan[]): Segment[] {
   const out: Segment[] = [];
+  const seen = new Map<string, number>();
   let cursor = 0;
   cleanSpans(payload, spans).forEach((span, index) => {
     if (span.start > cursor) out.push({ kind: "text", text: payload.slice(cursor, span.start) });
-    out.push({ kind: "span", text: payload.slice(span.start, span.end), span, index });
+    const text = payload.slice(span.start, span.end);
+    const value = JSON.stringify([span.type, text]);
+    const occurrence = seen.get(value) ?? 0;
+    seen.set(value, occurrence + 1);
+    out.push({ kind: "span", text, span, index, key: `${value}#${occurrence}` });
     cursor = span.end;
   });
   if (cursor < payload.length) out.push({ kind: "text", text: payload.slice(cursor) });
