@@ -88,7 +88,7 @@ export function HomeStage() {
   return (
     <PreviewScope className={styles.stageScope}>
       <section className={styles.stage} aria-label="Example: kit agent components with live sample data">
-        <div className={styles.stageSide}>
+        <div className={styles.stageSide} data-side="start">
           <AgentInbox items={INBOX} />
         </div>
         <div className={styles.stageMain}>
@@ -104,7 +104,7 @@ export function HomeStage() {
             axis={["0:00", axisLabel(Math.floor(elapsed / 2)), axisLabel(elapsed)]}
           />
         </div>
-        <div className={styles.stageSide}>
+        <div className={styles.stageSide} data-side="end">
           <AgentFleet totals="" agents={HOME_FLEET_HERO} />
         </div>
       </section>

@@ -1,4 +1,4 @@
-import type { AccordionItem, AgentFleetAgent, LinkListItem, MemoryItem, PermissionScope, TraceSpan } from "agentic-ds-kit";
+import type { AccordionItem, AgentFleetAgent, LinkListItem, MemoryItem, PermissionScope } from "agentic-ds-kit";
 
 /**
  * Example data for the docs home page (app/page.tsx). Fake names and numbers, the same story the
@@ -70,13 +70,6 @@ export const HOME_FLEET_HERO: AgentFleetAgent[] = [
       { id: "migrate", name: "migrate-db", status: "queued" },
     ],
   },
-];
-
-export const HOME_TRACE: TraceSpan[] = [
-  { id: "plan", label: "Plan", kind: "model", startMs: 0, endMs: 4_000, cost: 0.03 },
-  { id: "read", label: "read_file", kind: "tool", startMs: 4_000, endMs: 6_000 },
-  { id: "edit", label: "edit_file", kind: "tool", startMs: 6_000, endMs: 9_500, cost: 0.12 },
-  { id: "ok", label: "Approval", kind: "approval", startMs: 9_500, endMs: 20_000 },
 ];
 
 export const HOME_FAQ: AccordionItem[] = [

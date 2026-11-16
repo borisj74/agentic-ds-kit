@@ -28,44 +28,62 @@
   width: 100%;
 }
 
+/* Paper Home J hero: copy 96px from the top, the stage under it, side cards clipped at the edges. */
 .hero {
+  position: relative;
+  container: home-hero / inline-size;
+  isolation: isolate;
   display: grid;
-  gap: var(--space-section-sm);
-  padding-bottom: var(--space-section-sm);
+  gap: var(--space-12);
   overflow: hidden;
 }
 
 .heroGrid {
-  padding: var(--space-16) var(--home-gutter) 0;
+  padding: calc(var(--space-12) * 2) var(--home-gutter) 0;
 }
 
 .heroCopy {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-stack-lg);
+  gap: var(--space-6);
   max-width: var(--grid-width-md);
   margin-inline: auto;
   text-align: center;
 }
 
+/* A tray of four labels; the version sits raised on the left. */
 .statPill {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-1);
   margin: 0;
-  padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+  padding: var(--space-1);
   border: var(--border-width-thin) solid var(--border-subtle);
-  border-radius: var(--radius-control-lg);
-  background-color: var(--surface-card);
+  border-radius: var(--radius-base);
+  background-color: var(--surface-muted);
   color: var(--text-fg-muted);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body-sm);
 }
 
+.statPill > span {
+  padding: var(--space-1) var(--space-3);
+}
+
+.statPill > :first-child {
+  border-radius: var(--radius-control-md);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-xs);
+  color: var(--text-fg);
+  font-family: var(--type-family-code);
+  font-weight: var(--type-weight-label);
+}
+
 .heroTitle {
+  max-width: var(--grid-width-md);
   margin: 0;
   color: var(--text-fg);
   font-family: var(--type-family-heading);
@@ -82,14 +100,36 @@
   color: var(--text-fg-muted);
   font-size: var(--type-size-body-lg);
   line-height: var(--type-line-body-lg);
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-gap-md);
+  gap: var(--space-3);
+}
+
+/* Side card from Paper: decorative, faded, half off the edges. Only where there is room. */
+.heroSide {
+  position: absolute;
+  top: calc(var(--space-16) * 2);
+  z-index: -1;
+  display: none;
+  width: calc(var(--space-16) * 5);
+  opacity: var(--opacity-muted);
+  pointer-events: none;
+}
+
+.heroSide[data-side="end"] {
+  right: calc(var(--space-12) * -1);
+}
+
+/* 80rem is --grid-breakpoint-lg. */
+@container home-hero (width >= 80rem) {
+  .heroSide {
+    display: block;
+  }
 }
 
 /* Subtle entrance, CSS only so server and client render the same markup. */
@@ -129,22 +169,42 @@
   padding-inline: var(--home-gutter);
 }
 
+/* Paper: 320 / 560 / 320 with 24px gaps, the sides faded and set a little higher; the bottom fades out. */
 .stage {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) minmax(0, 4fr);
   gap: var(--grid-gutter-lg);
   align-items: start;
-  max-width: var(--home-width);
+  max-width: var(--grid-width-lg);
   margin-inline: auto;
+  padding-bottom: var(--space-8);
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--space-16)), transparent);
 }
 
 .stageMain,
 .stageSide {
   min-width: 0;
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-raised-lg);
+}
+
+/* Kit parts size to their content; here each fills its column. */
+.stageMain > *,
+.stageSide > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stageMain {
+  margin-top: var(--space-6);
 }
 
 .stageSide {
-  margin-top: var(--space-6);
+  opacity: var(--opacity-muted);
+}
+
+.stageSide[data-side="start"] {
+  margin-top: var(--space-4);
 }
 
 /* ---------- Sections ---------- */
@@ -234,6 +294,14 @@
   box-sizing: border-box;
   /* AgentFleet's sub-agent rows are wider than a phone tile: scroll inside the tile, not the page. */
   overflow-x: auto;
+}
+
+.tileCentered {
+  justify-items: center;
+}
+
+.tileCentered > * {
+  width: min(100%, var(--grid-width-sm));
 }
 
 .tileCaption {
@@ -581,8 +649,14 @@
     grid-row: 1;
   }
 
-  .stageSide {
+  .stageMain,
+  .stageSide,
+  .stageSide[data-side="start"] {
     margin-top: 0;
+  }
+
+  .stageSide {
+    opacity: 1;
   }
 
   .bentoRow:global(.layout-split--primary),

@@ -1,6 +1,6 @@
 "use client";
 
-import { AgentFleet, AgentPlan, ContextWindow, MemoryPanel, PermissionRequest, Tabs, TraceWaterfall } from "agentic-ds-kit";
+import { AgentFleet, ContextWindow, MemoryPanel, PermissionRequest, Tabs } from "agentic-ds-kit";
 import { contextSegments } from "@/lib/agent-demo.sample";
 import { galleryGroups, GALLERY_ITEMS } from "@/lib/component-gallery";
 import {
@@ -9,7 +9,6 @@ import {
   HOME_PERMISSION_DESCRIPTION,
   HOME_PERMISSION_SCOPES,
   HOME_PERMISSION_WARNING,
-  HOME_TRACE,
 } from "@/lib/home.sample";
 import { GalleryPreview } from "../../components/GalleryPreview";
 import { PreviewScope } from "../ThemeScope";
@@ -22,13 +21,6 @@ const SHOWN = ["AI", "SaaS", "Forms", "Data display", "Navigation", "Feedback", 
 const PER_TAB = 4;
 
 const noop = () => {};
-
-const PLAN_STEPS = [
-  { id: "1", label: "Read the invoice module" },
-  { id: "2", label: "Find where totals round" },
-  { id: "3", label: "Switch to half-even rounding" },
-  { id: "4", label: "Add tests for 0.005 cases" },
-];
 
 /** The AI tab: the parts the design shows, full size, with example data. */
 function AiBento() {
@@ -53,16 +45,9 @@ function AiBento() {
         <div className={styles.tile}>
           <ContextWindow used={171_000} limit={200_000} segments={contextSegments(10_200, 16_100, 35_200, 96_400, 13_200)} onTrim={noop} />
         </div>
-        <div className={styles.tile}>
+        {/* Narrow enough for AgentFleet's one-column layout: with one agent its list column is empty. */}
+        <div className={`${styles.tile} ${styles.tileCentered}`}>
           <AgentFleet totals="" agents={HOME_FLEET} expandedId="billing" onReview={noop} />
-        </div>
-      </div>
-      <div className={`layout-split ${styles.bentoRow}`}>
-        <div className={styles.tile}>
-          <AgentPlan title="Fix invoice rounding" status="draft" steps={PLAN_STEPS} summary="4 steps · example data" editable={false} onAccept={noop} />
-        </div>
-        <div className={styles.tile}>
-          <TraceWaterfall title="Run trace" spans={HOME_TRACE} />
         </div>
       </div>
     </div>
