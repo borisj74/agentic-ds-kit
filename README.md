@@ -12,6 +12,20 @@ The **kit** lives in `packages/kit`. The **playground** in this repo is the docs
 
 [![npm](https://img.shields.io/npm/v/agentic-ds-kit)](https://www.npmjs.com/package/agentic-ds-kit)
 
+## Quick start
+
+```bash
+npx agentic-ds-kit init my-app
+```
+
+Open `my-app` in Claude Code or Cursor and ask for a screen, for example:
+
+> Add a page where I review what my agents did today: runs, failures and anything waiting for my approval. Use only kit components.
+
+### How agents use the kit
+
+The agent starts at `contracts/index.json`, the list of every kit piece with its level (pattern, block, organism, molecule, atom) and a one-line purpose. It picks the biggest piece that fits, opens only that piece's contract, and imports it from `agentic-ds-kit` with the props, tokens and rules the contract gives. If nothing fits, it stops and asks instead of building its own version. `AGENTS.md` in the app root holds these rules, and `npx agentic-ds-kit review` checks the result.
+
 ## Install in an app
 
 ```bash

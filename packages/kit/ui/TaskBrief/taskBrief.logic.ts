@@ -28,8 +28,8 @@ export function startBlocker(value: TaskBriefValue): string {
   return "";
 }
 
-/** Spend cap as money, whole units without decimals: "€5", "€12.50". */
-export function formatMoney(amount: number, currency = "EUR", locale = "en"): string {
+/** Spend cap as money, whole units without decimals: "$5", "$12.50". */
+export function formatMoney(amount: number, currency = "USD", locale = "en"): string {
   const whole = Number.isInteger(amount);
   try {
     return new Intl.NumberFormat(locale, {
@@ -43,8 +43,8 @@ export function formatMoney(amount: number, currency = "EUR", locale = "en"): st
   }
 }
 
-/** The limits that are set, in words: ["€5 cap", "30 min", "40 steps"]. */
-export function limitParts(value: TaskBriefValue, currency = "EUR", locale = "en"): string[] {
+/** The limits that are set, in words: ["$5 cap", "30 min", "40 steps"]. */
+export function limitParts(value: TaskBriefValue, currency = "USD", locale = "en"): string[] {
   const parts: string[] = [];
   if (value.spendCap != null) parts.push(`${formatMoney(value.spendCap, currency, locale)} cap`);
   if (value.minutes != null) parts.push(`${value.minutes} min`);
@@ -52,8 +52,8 @@ export function limitParts(value: TaskBriefValue, currency = "EUR", locale = "en
   return parts;
 }
 
-/** The started row after the goal: "3 checks · €5 cap · 30 min". */
-export function foldSummary(value: TaskBriefValue, currency = "EUR", locale = "en"): string {
+/** The started row after the goal: "3 checks · $5 cap · 30 min". */
+export function foldSummary(value: TaskBriefValue, currency = "USD", locale = "en"): string {
   return [plural(filledCriteria(value.criteria).length, "check"), ...limitParts(value, currency, locale)].join(" · ");
 }
 

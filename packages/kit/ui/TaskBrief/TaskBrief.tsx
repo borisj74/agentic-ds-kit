@@ -44,7 +44,7 @@ export function TaskBrief({
   tools = [],
   models,
   autonomyOptions = AUTONOMY_STOPS,
-  currency = "EUR",
+  currency = "USD",
   locale = "en",
   onStart,
   onSaveDraft,

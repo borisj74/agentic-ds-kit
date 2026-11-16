@@ -82,9 +82,10 @@ describe("TaskBrief logic", () => {
   });
 
   test("fold summary counts filled checks and set limits", () => {
-    assert.equal(logic.foldSummary(filled), "2 checks · €5 cap · 30 min · 40 steps");
+    assert.equal(logic.foldSummary(filled), "2 checks · $5 cap · 30 min · 40 steps");
     assert.equal(logic.foldSummary({ goal: "x", criteria: ["a"] }), "1 check");
     assert.equal(logic.formatMoney(12.5, "EUR"), "€12.50");
+    assert.equal(logic.foldSummary(filled, "EUR"), "2 checks · €5 cap · 30 min · 40 steps");
   });
 
   test("rows add up to eight and one always stays", () => {
@@ -124,7 +125,7 @@ describe("TaskBrief render", () => {
     assert.match(render({ status: "starting" }), /aria-busy="true"/);
     const html = render({ status: "started" });
     assert.match(html, /aria-label="Started: Update the EU price list"/);
-    assert.ok(html.includes("2 checks · €5 cap · 30 min · 40 steps"));
+    assert.ok(html.includes("2 checks · $5 cap · 30 min · 40 steps"));
     assert.ok(!html.includes("Done when"));
     assert.equal(solidPrimaries(html), 0);
   });

@@ -10533,7 +10533,7 @@
         },
         "currency": {
           "type": "string",
-          "default": "EUR"
+          "default": "USD"
         },
         "locale": {
           "type": "string",

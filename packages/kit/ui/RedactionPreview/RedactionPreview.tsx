@@ -51,7 +51,8 @@ export function RedactionPreview({
   ...rest
 }: RedactionPreviewProps) {
   const base = useId();
-  const [revealed, setRevealed] = useState<Set<number>>(() => new Set());
+  // Keyed by the value (segment key), not its position, so a reveal stays on the same value when the data changes.
+  const [revealed, setRevealed] = useState<Set<string>>(() => new Set());
   const resolved = status === "sent" || status === "cancelled";
   const focus = useResolvedFocus(resolved);
   const masked = maskedCount(payload, spans, rules, lockedTypes);
@@ -82,11 +83,11 @@ export function RedactionPreview({
     );
   }
 
-  function toggleReveal(index: number) {
+  function toggleReveal(key: string) {
     setRevealed((current) => {
       const next = new Set(current);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   }
@@ -145,15 +146,15 @@ export function RedactionPreview({
                   </mark>
                 );
               }
-              const shown = revealed.has(seg.index);
+              const shown = revealed.has(seg.key);
               return (
-                <Tooltip key={i} content={shown ? `${name}, shown to you only. It is still masked when sent.` : `${name}, masked. Select to show it to you only.`}>
+                <Tooltip key={seg.key}content={shown ? `${name}, shown to you only. It is still masked when sent.` : `${name}, masked. Select to show it to you only.`}>
                   <button
                     type="button"
                     className={cx(styles.chip, shown && styles.chipShown)}
                     aria-pressed={shown}
                     aria-label={shown ? `masked ${name.toLowerCase()}, shown to you: ${seg.text}` : `masked ${name.toLowerCase()}`}
-                    onClick={() => toggleReveal(seg.index)}
+                    onClick={() => toggleReveal(seg.key)}
                   >
                     {shown ? seg.text : `[${seg.span.type}]`}
                   </button>
