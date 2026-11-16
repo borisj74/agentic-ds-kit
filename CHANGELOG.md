@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-11-16
+
 ### Fixed
 
 - **Primary button labels are readable in every colour preset.** The Ink, Blue, Violet and Teal presets did not set `--action-on-primary`, so the label fell back to `--text-fg-inverse`, about 3.7:1 on Teal's light fill. Each preset now picks white or neutral 950 by contrast, the same way the docs presets do, so every preset reaches at least 4.5:1 in light and dark. Teal light's hover and pressed fills now get lighter (teal 500 and 400) instead of darker, because its label is near-black: they were 3.62:1 and 2.61:1 and are now above 4.5:1. A test checks the label on the rest, hover and pressed fill for every preset. The docs site's theme presets had the same problem: hover and pressed now move away from the label there too (Teal light, Amber light and Ink dark change; the rest keep their steps), and the Theme builder's contrast list adds "Button label on hover" and "Button label pressed"
