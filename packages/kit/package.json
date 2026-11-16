@@ -14,7 +14,7 @@
   },
   "type": "module",
   "bin": {
-    "agentic-ds-kit": "./bin/agentic-ds-kit.mjs"
+    "agentic-ds-kit": "bin/agentic-ds-kit.mjs"
   },
   "sideEffects": [
     "**/*.css",
