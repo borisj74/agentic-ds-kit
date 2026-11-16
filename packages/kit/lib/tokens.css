@@ -454,6 +454,11 @@
   --type-line-body-xs: 16px;
   --type-size-overline-xs: 12px;
   --type-line-overline-xs: 16px;
+  /* Marketing and landing pages only (responsive; see the @media blocks below) */
+  --type-size-display-hero: 64px;
+  --type-line-display-hero: 76px;
+  --type-size-title-section: 32px;
+  --type-line-title-section: 40px;
   /* Legacy type role aliases */
   --type-size-display: var(--type-size-heading-3);
   --type-size-title: var(--type-size-heading-4);
@@ -473,12 +478,19 @@
   --type-weight-caption: 500;
   --type-weight-overline: 500;
   --type-weight-code: 400;
+  --type-weight-display-hero: 400;
+  --type-weight-title-section: 400;
 
   --type-line-body: var(--type-line-body-md);
   --type-line-heading: var(--type-line-heading-5);
   --type-tracking-title: -0.02em;
   --type-tracking-heading: -0.01em;
   --type-tracking-overline: 0.06em;
+  --type-tracking-tight: -0.03em;
+  --type-tracking-snug: -0.02em;
+  --type-tracking-wide: 0.08em;
+  --type-tracking-display-hero: -0.03em;
+  --type-tracking-title-section: -0.03em;
 
   --z-overlay: 40;
   --z-modal: 50;
@@ -528,6 +540,22 @@
   /* Lucide icons. Data strokes (charts, Progress, Meter) stay their own widths. */
   --icon-stroke: 1.5;
   --icon-stroke-strong: 2;
+}
+
+@media (width < 64rem) {
+  :root {
+    --type-size-display-hero: 52px;
+    --type-line-display-hero: 64px;
+  }
+}
+
+@media (width < 40rem) {
+  :root {
+    --type-size-display-hero: 40px;
+    --type-line-display-hero: 48px;
+    --type-size-title-section: 28px;
+    --type-line-title-section: 36px;
+  }
 }
 
 :root[data-theme="dark"],

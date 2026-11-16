@@ -316,6 +316,9 @@ function typeLadderVars() {
   emit("body-sm", "bodySm");
   emit("body-xs", "bodyXs");
   emit("overline-xs", "overlineXs");
+  lines.push("  /* Marketing and landing pages only (responsive; see the @media blocks below) */");
+  emit("display-hero", "displayHero");
+  emit("title-section", "titleSection");
   lines.push(
     "  /* Legacy type role aliases */",
     "  --type-size-display: var(--type-size-heading-3);",
@@ -375,13 +378,11 @@ function staticVars() {
     "",
     ...typeLadderVars(),
     "",
-    ...Object.entries(tokens.semantic.type.weight).map(([role, ref]) => `  --type-weight-${role}: ${resolveRef(ref, p)};`),
+    ...Object.entries(tokens.semantic.type.weight).map(([role, ref]) => `  --type-weight-${kebab(role)}: ${resolveRef(ref, p)};`),
     "",
     `  --type-line-body: var(--type-line-body-md);`,
     `  --type-line-heading: var(--type-line-heading-5);`,
-    `  --type-tracking-title: ${resolveRef(tokens.semantic.type.tracking.title, p)};`,
-    `  --type-tracking-heading: ${resolveRef(tokens.semantic.type.tracking.heading, p)};`,
-    `  --type-tracking-overline: ${resolveRef(tokens.semantic.type.tracking.overline, p)};`,
+    ...Object.entries(tokens.semantic.type.tracking).map(([role, ref]) => `  --type-tracking-${kebab(role)}: ${resolveRef(ref, p)};`),
     "",
     `  --z-overlay: 40;`,
     `  --z-modal: 50;`,
@@ -392,6 +393,29 @@ function staticVars() {
     "",
     ...iconStrokeVars(),
   ];
+}
+
+/**
+ * Responsive ladder steps. A ladder step may carry `belowMd` / `belowSm`
+ * overrides; they apply under --grid-breakpoint-md / --grid-breakpoint-sm
+ * (media queries cannot read custom properties, so the values are inlined).
+ */
+function responsiveTypeBlocks() {
+  const ladder = tokens.semantic.type.ladder ?? {};
+  const { breakpoint } = tokens.semantic.grid;
+  const blocks = [];
+  for (const [key, bp] of [["belowMd", breakpoint.md], ["belowSm", breakpoint.sm]]) {
+    const lines = [];
+    for (const [step, value] of Object.entries(ladder)) {
+      const override = value?.[key];
+      if (!override) continue;
+      const css = kebab(step);
+      lines.push(`    --type-size-${css}: ${override.size};`);
+      lines.push(`    --type-line-${css}: ${override.line};`);
+    }
+    if (lines.length) blocks.push(`@media (width < ${bp}) {\n  :root {\n${lines.join("\n")}\n  }\n}`);
+  }
+  return blocks;
 }
 
 const css = `/* Generated from tokens/tokens.json — run: npm run generate:tokens */
@@ -407,6 +431,8 @@ ${aliasVars().join("\n")}
 
 ${staticVars().join("\n")}
 }
+
+${responsiveTypeBlocks().join("\n\n")}
 
 :root[data-theme="dark"],
 [data-theme="dark"] {

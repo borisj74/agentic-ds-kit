@@ -302,6 +302,61 @@
       "useWhen": "heading-1…5 and section titles",
       "doNot": "Do not hardcode a heading weight in a component"
     },
+    "--type-size-display-hero": {
+      "note": "Marketing and landing pages only. Hero display: 64/76 at desktop, 52/64 below --grid-breakpoint-md, 40/48 below --grid-breakpoint-sm. Pair with --type-line-display-hero, --type-weight-display-hero (400) and --type-tracking-display-hero (-0.03em).",
+      "useWhen": "The one big hero headline on a marketing or landing page",
+      "doNot": "Do not use on product screens; page titles there keep --type-size-display / PageHeader"
+    },
+    "--type-line-display-hero": {
+      "note": "Marketing and landing pages only. Line height for --type-size-display-hero; steps down with it at each breakpoint.",
+      "useWhen": "With --type-size-display-hero",
+      "doNot": "Do not pair with other sizes"
+    },
+    "--type-weight-display-hero": {
+      "note": "Marketing and landing pages only. Light hero weight (400).",
+      "useWhen": "With --type-size-display-hero",
+      "doNot": "Do not use for product page titles; they keep --type-weight-title"
+    },
+    "--type-tracking-display-hero": {
+      "note": "Marketing and landing pages only. Hero letter-spacing (-0.03em, = --type-tracking-tight).",
+      "useWhen": "With --type-size-display-hero",
+      "doNot": "Do not apply to body, label or product headings"
+    },
+    "--type-size-title-section": {
+      "note": "Marketing and landing pages only. Section title: 32/40, 28/36 below --grid-breakpoint-sm. Pair with --type-line-title-section, --type-weight-title-section (400) and --type-tracking-title-section (-0.03em).",
+      "useWhen": "Section titles on a marketing or landing page",
+      "doNot": "Do not use on product screens; section headings there keep --type-size-heading / Section"
+    },
+    "--type-line-title-section": {
+      "note": "Marketing and landing pages only. Line height for --type-size-title-section; steps down with it on mobile.",
+      "useWhen": "With --type-size-title-section",
+      "doNot": "Do not pair with other sizes"
+    },
+    "--type-weight-title-section": {
+      "note": "Marketing and landing pages only. Light section title weight (400).",
+      "useWhen": "With --type-size-title-section",
+      "doNot": "Do not use for product section headings; they keep --type-weight-heading"
+    },
+    "--type-tracking-title-section": {
+      "note": "Marketing and landing pages only. Section title letter-spacing (-0.03em, = --type-tracking-tight).",
+      "useWhen": "With --type-size-title-section",
+      "doNot": "Do not apply to body, label or product headings"
+    },
+    "--type-tracking-tight": {
+      "note": "Letter-spacing step: -0.03em.",
+      "useWhen": "Large light display type (hero, marketing section titles)",
+      "doNot": "Do not use on text below --type-size-heading-4"
+    },
+    "--type-tracking-snug": {
+      "note": "Letter-spacing step: -0.02em (same value as --type-tracking-title).",
+      "useWhen": "Large bold titles",
+      "doNot": "Do not apply negative tracking to body, label or caption text"
+    },
+    "--type-tracking-wide": {
+      "note": "Letter-spacing step: +0.08em, for uppercase overlines on marketing pages.",
+      "useWhen": "Uppercase overlines and eyebrows on marketing and landing pages",
+      "doNot": "Do not use on mixed-case text; product overlines keep --type-tracking-overline"
+    },
     "--radius-base": {
       "note": "One number drives xs…3xl (3,5,6,8,10,13,19).",
       "useWhen": "Theming corner scale",
