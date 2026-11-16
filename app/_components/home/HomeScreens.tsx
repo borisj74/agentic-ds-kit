@@ -62,7 +62,7 @@ export function HomeScreens() {
             key={`${screen.slug}-${screen.view}-${mode}`}
             src={frameUrl(screen.slug, screen.view, mode)}
             title={`${screen.label} screen from the ${screen.slug} pattern`}
-            interactive={false}
+            interactive
             crop={SCALE}
             deferUntilVisible
           />

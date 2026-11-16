@@ -37,7 +37,7 @@
   --appheader-height: calc(var(--space-16) + var(--space-2));
   --appheader-padding-inline: 0;
   --appheader-background: var(--surface-card);
-  --appheader-border-color: var(--border-subtle);
+  --appheader-border-color: var(--border-faint);
   --appheader-search-max-width: var(--grid-width-sm);
   position: sticky;
   top: 0;
@@ -108,23 +108,32 @@
 
 /* ---------- Hero ---------- */
 
-/* Full bleed: the grid runs edge to edge of the panel. */
+/* Full bleed: the hero band runs edge to edge. */
 .home > .hero {
   width: 100%;
 }
 
-/* Paper Home J hero: copy 96px from the top, the stage under it, side cards clipped at the edges. */
-.hero {
+/*
+ * Paper Home J hero band. The kit GridBackground wraps the whole band, so the grid runs under the
+ * copy and the stage. Paper draws the lines at 45% and fades them with an ellipse (55% by 60%,
+ * centred 35% down): clear in the middle from 15%, gone by 80%. GridBackground takes both through
+ * its own variables. The mask only reads alpha, so any opaque token works as its colour.
+ */
+.landing .hero {
+  --grid-bg-line: color-mix(in oklab, var(--border-faint) 45%, transparent);
+  --grid-bg-fade: radial-gradient(ellipse 55% 60% at 50% 35%, var(--text-fg) 15%, transparent 80%);
+  display: block;
+  overflow: hidden;
+}
+
+.heroInner {
   position: relative;
   container: home-hero / inline-size;
   isolation: isolate;
   display: grid;
   gap: var(--space-12);
-  overflow: hidden;
-}
-
-.heroGrid {
-  padding: calc(var(--space-12) * 2) var(--home-gutter) 0;
+  width: 100%;
+  padding-top: calc(var(--space-12) * 2);
 }
 
 .heroCopy {
@@ -134,6 +143,7 @@
   gap: var(--space-6);
   max-width: var(--grid-width-md);
   margin-inline: auto;
+  padding-inline: var(--home-gutter);
   text-align: center;
 }
 
@@ -146,7 +156,7 @@
   gap: var(--space-1);
   margin: 0;
   padding: var(--space-1);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-base);
   background-color: var(--surface-muted);
   color: var(--text-fg-muted);
@@ -168,7 +178,8 @@
 }
 
 .heroTitle {
-  max-width: var(--grid-width-md);
+  /* Paper's title box is 880px, so the line breaks after "AI"; in em it follows the hero size. */
+  max-width: 13em;
   margin: 0;
   color: var(--text-fg);
   font-family: var(--type-family-heading);
@@ -196,15 +207,23 @@
   gap: var(--space-3);
 }
 
-/* Side card from Paper: decorative, faded, half off the edges. Only where there is room. */
+/* Paper's side cards: 300px, 48px past each edge, 128px down. Opaque and working. Wide screens only. */
 .heroSide {
   position: absolute;
   top: calc(var(--space-16) * 2);
-  z-index: -1;
+  z-index: 1;
   display: none;
-  width: calc(var(--space-16) * 5);
-  opacity: var(--opacity-muted);
-  pointer-events: none;
+  width: calc(var(--space-16) * 4.7);
+  box-sizing: border-box;
+  border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-raised-md);
+}
+
+.heroSide[data-side="start"] {
+  left: calc(var(--space-12) * -1);
+  padding: var(--space-4);
+  border: var(--border-width-thin) solid var(--border-faint);
 }
 
 .heroSide[data-side="end"] {
@@ -251,11 +270,25 @@
 
 /* ---------- Hero stage ---------- */
 
+/* Paper's bottom fade: an 80px wash into the page colour over the foot of the stage. No mask, so
+   the cards' shadows are not clipped at the stage's edges. */
 .stageScope {
+  position: relative;
+  z-index: 2;
   padding-inline: var(--home-gutter);
+  padding-bottom: var(--space-12);
 }
 
-/* Paper: 320 / 560 / 320 with 24px gaps, the sides faded and set a little higher; the bottom fades out. */
+.stageScope::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: calc(var(--space-16) + var(--space-4));
+  background-image: linear-gradient(to bottom, transparent, var(--surface-card));
+  pointer-events: none;
+}
+
+/* Paper: 320 / 560 / 320 with 24px gaps; the sides sit a little higher than the monitor. */
 .stage {
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(0, 7fr) minmax(0, 4fr);
@@ -263,14 +296,13 @@
   align-items: start;
   max-width: var(--grid-width-lg);
   margin-inline: auto;
-  padding-bottom: var(--space-8);
-  mask-image: linear-gradient(to bottom, black calc(100% - var(--space-16)), transparent);
 }
 
 .stageMain,
 .stageSide {
   min-width: 0;
   border-radius: var(--radius-surface-lg);
+  background-color: var(--surface-card);
   box-shadow: var(--shadow-raised-lg);
 }
 
@@ -283,10 +315,6 @@
 
 .stageMain {
   margin-top: var(--space-6);
-}
-
-.stageSide {
-  opacity: var(--opacity-muted);
 }
 
 .stageSide[data-side="start"] {
@@ -338,11 +366,11 @@
   margin: 0;
   color: var(--text-fg);
   font-family: var(--type-family-heading);
-  font-size: var(--type-size-title-section);
-  /* Paper: heading weight (600) and -0.02em tracking (snug). */
+  /* Paper: 48/56 (heading-2), heading weight (600), -0.02em tracking (snug). */
+  font-size: var(--type-size-heading-2);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-snug);
-  line-height: var(--type-line-title-section);
+  line-height: var(--type-line-heading-2);
   text-wrap: balance;
 }
 
@@ -398,12 +426,23 @@
   height: 100%;
   margin: 0;
   padding: var(--space-inset-lg);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
   background-color: var(--surface-muted);
   box-sizing: border-box;
   /* AgentFleet's sub-agent rows are wider than a phone tile: scroll inside the tile, not the page. */
   overflow-x: auto;
+}
+
+.tileStack {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.tileStack > :first-child {
+  justify-self: stretch;
 }
 
 .tileCentered {
@@ -450,7 +489,7 @@
   inset-inline: var(--space-16);
   top: 0;
   padding: var(--space-1) var(--space-4) var(--space-6);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg) var(--radius-surface-lg) 0 0;
   background-color: var(--surface-muted);
   color: var(--text-fg-subtle);
@@ -472,7 +511,7 @@
 .browser {
   position: relative;
   overflow: hidden;
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
   background-color: var(--surface-card);
   box-shadow: var(--shadow-raised-md);
@@ -483,7 +522,7 @@
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-2) var(--space-4);
-  border-bottom: var(--border-width-thin) solid var(--border-subtle);
+  border-bottom: var(--border-width-thin) solid var(--border-faint);
   background-color: var(--surface-muted);
 }
 
@@ -503,7 +542,7 @@
   flex: 1;
   min-width: 0;
   padding: var(--space-1) var(--space-3);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-control-md);
   background-color: var(--surface-card);
   color: var(--text-fg-muted);
@@ -529,7 +568,7 @@
   min-width: 0;
   margin: 0;
   padding: var(--space-2);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
   background-color: var(--surface-card);
 }
@@ -545,7 +584,7 @@
 
 .fleet {
   min-width: calc(var(--space-16) * 5.5);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md) 0 0 0;
   background-color: var(--surface-card);
   overflow: hidden;
@@ -556,7 +595,7 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4) 0;
-  border-bottom: var(--border-width-thin) solid var(--border-subtle);
+  border-bottom: var(--border-width-thin) solid var(--border-faint);
 }
 
 .fleetName {
@@ -645,7 +684,7 @@
   gap: var(--space-4);
   min-width: 0;
   padding: var(--space-8);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
   background-color: var(--surface-muted);
 }
@@ -684,7 +723,7 @@
 
 .agentTool {
   padding: var(--space-px) var(--space-2);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-base);
   background-color: var(--surface-card);
   color: var(--text-fg);
@@ -790,7 +829,7 @@
   gap: var(--space-section-sm) var(--grid-gutter-xl);
   padding-top: var(--space-16);
   padding-bottom: calc(var(--space-16) + var(--space-4));
-  border-top: var(--border-width-thin) solid var(--border-subtle);
+  border-top: var(--border-width-thin) solid var(--border-faint);
 }
 
 .footerBrand {
@@ -852,9 +891,6 @@
     margin-top: 0;
   }
 
-  .stageSide {
-    opacity: 1;
-  }
 
   .bentoRow:global(.layout-split--primary),
   .bentoRow:global(.layout-split--secondary),
@@ -868,6 +904,11 @@
 
   .agentPanels {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sectionTitle {
+    font-size: var(--type-size-heading-3);
+    line-height: var(--type-line-heading-3);
   }
 
   .peek {
@@ -889,7 +930,7 @@
 }
 
 @container layout-content (width < 40rem) {
-  .heroGrid {
+  .heroInner {
     padding-top: var(--space-10);
   }
 
@@ -903,6 +944,11 @@
 
   .agentPanel {
     padding: var(--space-5);
+  }
+
+  .sectionTitle {
+    font-size: var(--type-size-title-section);
+    line-height: var(--type-line-title-section);
   }
 
   .tabs {

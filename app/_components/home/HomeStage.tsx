@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AgentFleet, AgentInbox, AgentMonitor, type AgentMonitorStep } from "agentic-ds-kit";
+import { AgentFleet, AgentInbox, AgentMonitor, type AgentInboxItem, type AgentMonitorStep } from "agentic-ds-kit";
 import { AGENT_MONITOR_STEPS } from "@/lib/agent-demo.sample";
 import { HOME_FLEET_HERO } from "@/lib/home.sample";
 import { PreviewScope } from "../ThemeScope";
@@ -30,9 +30,9 @@ const HEADLINES: Record<string, string> = {
   search_files: "Searching",
 };
 
-const INBOX = [
-  { id: "1", agentName: "Migrate DB", type: "approval" as const, preview: "Run migration on staging?", time: "2m" },
-  { id: "2", agentName: "Docs sweep", type: "recap" as const, preview: "Draft ready", time: "1h", read: true },
+const INBOX: AgentInboxItem[] = [
+  { id: "1", agentName: "Migrate DB", type: "approval", preview: "Run migration on staging?", time: "2m" },
+  { id: "2", agentName: "Docs sweep", type: "recap", preview: "Draft ready", time: "1h", read: true },
 ];
 
 function clock(seconds: number) {
@@ -61,24 +61,31 @@ function stepsAt(phase: number): AgentMonitorStep[] {
   return [...done, ...more].slice(-STEPS_SHOWN);
 }
 
-function useStageClock() {
+function useStageClock(paused: boolean) {
   const [seconds, setSeconds] = useState(0);
   useEffect(() => {
     // Under reduced motion the stage stays on its first frame: no clock, no new steps.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = window.setInterval(() => setSeconds((value) => value + 1), 1000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [paused]);
   return seconds;
 }
 
 /**
  * The hero's product stage: AgentInbox, a live AgentMonitor and AgentFleet, all kit components
- * with example data. Server and first client render are the same frame, so nothing mismatches
- * on hydration; under reduced motion the stage holds that frame.
+ * with example data, and all of them work: pick an inbox item or approve it, select a step, pause
+ * or collapse the run, open the fleet. Server and first client render are the same frame, so
+ * nothing mismatches on hydration; under reduced motion the stage holds that frame.
  */
 export function HomeStage() {
-  const seconds = useStageClock();
+  const [paused, setPaused] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [stepId, setStepId] = useState<string | null>(null);
+  const [inbox, setInbox] = useState(INBOX);
+  const [inboxId, setInboxId] = useState<string | null>(null);
+  const [fleetId, setFleetId] = useState<string | null>(null);
+  const seconds = useStageClock(paused);
   const phase = Math.min(MAX_PHASE, Math.floor(seconds / STEP_SECONDS));
   const elapsed = START_SECONDS + seconds;
   const steps = stepsAt(phase);
@@ -89,23 +96,38 @@ export function HomeStage() {
     <PreviewScope className={styles.stageScope}>
       <section className={styles.stage} aria-label="Example: kit agent components with live sample data">
         <div className={styles.stageSide} data-side="start">
-          <AgentInbox items={INBOX} />
+          <AgentInbox
+            items={inbox}
+            selectedId={inboxId}
+            onSelect={(id) => {
+              setInboxId(id);
+              setInbox((items) => items.map((item) => (item.id === id ? { ...item, read: true } : item)));
+            }}
+            onApprove={(id) => setInbox((items) => items.filter((item) => item.id !== id))}
+            onDeny={(id) => setInbox((items) => items.filter((item) => item.id !== id))}
+          />
         </div>
         <div className={styles.stageMain}>
           <AgentMonitor
             name="Refactor billing service"
             meta="claude-code · acme-demo · example data"
-            status="running"
+            status={paused ? "paused" : "running"}
             headline={running ? `${HEADLINES[running.tool] ?? "Running"} ${target}` : undefined}
             headlineNote={`step ${AGENT_MONITOR_STEPS.length + phase}`}
             elapsed={clock(elapsed)}
             cost={`$${(0.42 + seconds * 0.004).toFixed(2)}`}
             steps={steps}
             axis={["0:00", axisLabel(Math.floor(elapsed / 2)), axisLabel(elapsed)]}
+            selectedStepId={stepId}
+            onSelectStep={setStepId}
+            collapsed={collapsed}
+            onCollapsedChange={setCollapsed}
+            onPause={() => setPaused(true)}
+            onResume={() => setPaused(false)}
           />
         </div>
         <div className={styles.stageSide} data-side="end">
-          <AgentFleet totals="" agents={HOME_FLEET_HERO} />
+          <AgentFleet totals="" agents={HOME_FLEET_HERO} expandedId={fleetId} onExpandedChange={setFleetId} />
         </div>
       </section>
     </PreviewScope>

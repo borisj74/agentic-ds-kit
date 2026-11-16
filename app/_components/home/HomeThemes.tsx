@@ -18,7 +18,7 @@ const SETS: { value: SetId; label: string }[] = [
 /** The same small fleet screen in every card: kit parts only, so the theme does all the work. */
 function FleetScreen() {
   return (
-    <div className={styles.fleet} inert>
+    <div className={styles.fleet}>
       <div className={styles.fleetBar}>
         <Avatar name="Fleetwise" size="sm" />
         <span className={styles.fleetName}>Fleetwise</span>
