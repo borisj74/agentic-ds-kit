@@ -214,6 +214,11 @@ function darkerStep(ramp: ColorRamp, step: RampStep, delta: number): RampStep {
   return towardDark ? shift(step, delta) : shift(step, -delta);
 }
 
+function lighterStep(ramp: ColorRamp, step: RampStep, delta: number): RampStep {
+  const towardLight = oklchLightness(ramp[shift(step, -delta)]) > oklchLightness(ramp[step]) + 0.004;
+  return towardLight ? shift(step, -delta) : shift(step, delta);
+}
+
 function shippedRamp(name: "blue" | "violet" | "teal"): ColorRamp {
   const source = tokens.primitive.color[name] as Record<string, string>;
   const ramp = {} as ColorRamp;
@@ -304,8 +309,13 @@ interface RoleSet {
 function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): RoleSet {
   const { brand, neutral } = palette;
   const action = mode === "light" ? step : shift(step, -2);
-  const hover = mode === "light" ? darkerStep(brand, action, 1) : shift(action, -1);
-  const pressed = mode === "light" ? darkerStep(brand, action, 2) : shift(action, -2);
+  const on = onPrimary(brand, action, neutral);
+  // Hover and pressed move away from the label: darker under a white label, lighter under a
+  // near-black one. Darkening under a dark label failed (Teal light 2.61:1, Amber light 1.48:1
+  // pressed), and lightening under a white one did too (Ink dark 1.73:1 pressed).
+  const awayFromLabel = on === "var(--color-white)" ? darkerStep : lighterStep;
+  const hover = awayFromLabel(brand, action, 1);
+  const pressed = awayFromLabel(brand, action, 2);
   const focus = mode === "light" ? shift(action, -1) : action;
   const surface = mode === "light" ? "#ffffff" : neutral["900"];
   const text = readable(brand, action, surface, mode === "light" ? 1 : -1);
@@ -316,7 +326,6 @@ function brandRoles(palette: ThemePalette, step: RampStep, mode: ThemeMode): Rol
   const subtleStrong = mode === "light" ? "100" : "800";
   const subtleStronger = mode === "light" ? "200" : "700";
   const link = readable(brand, text, surface, mode === "light" ? 1 : -1);
-  const on = onPrimary(brand, action, neutral);
 
   const css: Record<string, string> = {
     "--primary-base": ref("brand", action),
@@ -965,6 +974,15 @@ function resolveColor(value: string, palette: ThemePalette): string {
     const hex = ramp && typeof ramp === "object" ? (ramp as Record<string, string>)[kit[2]] : undefined;
     if (hex) return normalizeHex(hex) ?? hex;
   }
+  // Nistha dark hover and pressed are `color-mix(in srgb, #a p%, #b)`: blend the sRGB channels.
+  const mix = value.match(/^color-mix\(in srgb, (#[0-9a-f]{6}) (\d+(?:\.\d+)?)%, (#[0-9a-f]{6})\)$/i);
+  if (mix) {
+    const weight = Number(mix[2]) / 100;
+    const channel = (hex: string, i: number) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
+    return `#${[0, 1, 2]
+      .map((i) => Math.round(channel(mix[1], i) * weight + channel(mix[3], i) * (1 - weight)).toString(16).padStart(2, "0"))
+      .join("")}`;
+  }
   if (value.startsWith("#")) return value;
   return "#000000";
 }
@@ -981,6 +999,8 @@ export function contrastReport(state: ThemeState): ContrastPair[] {
     { name: "Brand text on surface", fg: "--text-brand", bg: "--bg-surface", minimum: 4.5 },
     { name: "Brand icon on surface", fg: "--icon-brand", bg: "--bg-surface", minimum: 4.5 },
     { name: "Button label", fg: "--action-on-primary", bg: "--action-primary", minimum: 4.5 },
+    { name: "Button label on hover", fg: "--action-on-primary", bg: "--action-primary-hover", minimum: 4.5 },
+    { name: "Button label pressed", fg: "--action-on-primary", bg: "--action-primary-pressed", minimum: 4.5 },
     { name: "Button on canvas", fg: "--action-primary", bg: "--bg-canvas", minimum: 3 },
   ];
   return pairs.map((pair) => {

@@ -53,4 +53,17 @@ describe("theme scope", () => {
       }
     }
   });
+
+  test("button labels reach 4.5:1 at rest, on hover and pressed in every preset, light and dark", () => {
+    for (const preset of PRESETS) {
+      for (const mode of ["light", "dark"] as const) {
+        const report = contrastReport(presetState(preset.id, mode));
+        for (const name of ["Button label", "Button label on hover", "Button label pressed"]) {
+          const pair = report.find((item) => item.name === name);
+          assert.ok(pair, `${name} is in the report`);
+          assert.ok(pair.pass, `${preset.id} ${mode}: ${name} ${pair.ratio.toFixed(2)}:1`);
+        }
+      }
+    }
+  });
 });
