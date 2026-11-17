@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { CircleHelp, FlaskConical } from "lucide-react";
+import { FlaskConical, Info } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Badge } from "../Badge";
@@ -113,7 +113,7 @@ export function ExperimentCard({
 
           {confidenceNote ? (
             <p className={styles.note}>
-              <CircleHelp size={14} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.noteIcon} />
+              <Info size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.noteIcon} />
               {confidenceNote}
             </p>
           ) : null}
@@ -122,7 +122,7 @@ export function ExperimentCard({
             {status === "running" ? (
               <>
                 {onStop ? (
-                  <Button ref={stopRef} size="sm" appearance="outline" mode="danger" iconStart="Square" onClick={() => setConfirm("stop")}>
+                  <Button ref={stopRef} size="sm" appearance="outline" mode="neutral" iconStart="Square" onClick={() => setConfirm("stop")}>
                     Stop
                   </Button>
                 ) : null}

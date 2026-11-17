@@ -33,11 +33,11 @@ export function ExperimentCardDoc() {
   const [status, setStatus] = useState<ExperimentStatus>("running");
   const props =
     status === "running"
-      ? { variants: RUNNING, dates: "Started 02 Nov · ends 16 Nov", confidenceNote: "84% confidence · needs ~4 more days for 95%." }
+      ? { variants: RUNNING, dates: "Started 02 Nov · ends 16 Nov", confidenceNote: "84% confidence · needs ~4 more days for 95%" }
       : status === "concluded"
-        ? { variants: WON, dates: "Ran 02 – 16 Nov", confidenceNote: "B wins: +0.8 pts, 97% confidence." }
+        ? { variants: WON, dates: "Ran 02 – 16 Nov", confidenceNote: "B wins: +0.8 pts, 97% confidence" }
         : status === "stopped"
-          ? { variants: STOPPED, dates: "Ran 02 – 05 Nov", confidenceNote: "Stopped early on 05 Nov by Priya · example." }
+          ? { variants: STOPPED, dates: "Ran 02 – 05 Nov", confidenceNote: "Stopped early on 05 Nov by Priya · example" }
           : { variants: DRAFT, dates: "Not started" };
   return (
     <AgentDocFrame
@@ -65,7 +65,7 @@ export function ExperimentCardDoc() {
   status="running"
   dates="Started 02 Nov · ends 16 Nov"
   variants={variants}
-  confidenceNote="84% confidence · needs ~4 more days for 95%."
+  confidenceNote="84% confidence · needs ~4 more days for 95%"
   onStop={stop}
   onView={view}
 />`}
@@ -74,13 +74,13 @@ export function ExperimentCardDoc() {
           title: "Running",
           about: "Leading is an outline badge; Stop (danger outline) and View.",
           code: `<ExperimentCard … status="running" onStop={stop} onView={view} />`,
-          render: <ExperimentCard {...BASE} status="running" variants={RUNNING} dates="Started 02 Nov · ends 16 Nov" confidenceNote="84% confidence · needs ~4 more days for 95%." onStop={noop} onView={noop} />,
+          render: <ExperimentCard {...BASE} status="running" variants={RUNNING} dates="Started 02 Nov · ends 16 Nov" confidenceNote="84% confidence · needs ~4 more days for 95%" onStop={noop} onView={noop} />,
         },
         {
           title: "Concluded — winner",
           about: "The winning row is highlighted and says Winner; Ship winner confirms with an AlertDialog.",
           code: `<ExperimentCard … status="concluded" variants={[…, { id: "b", …, isWinner: true }]} onShip={ship} onView={view} />`,
-          render: <ExperimentCard {...BASE} status="concluded" variants={WON} dates="Ran 02 – 16 Nov" confidenceNote="B wins: +0.8 pts, 97% confidence." onShip={noop} onView={noop} />,
+          render: <ExperimentCard {...BASE} status="concluded" variants={WON} dates="Ran 02 – 16 Nov" confidenceNote="B wins: +0.8 pts, 97% confidence" onShip={noop} onView={noop} />,
         },
         {
           title: "Inconclusive",
@@ -92,7 +92,7 @@ export function ExperimentCardDoc() {
           title: "Stopped",
           about: "A neutral badge and View.",
           code: `<ExperimentCard … status="stopped" onView={view} />`,
-          render: <ExperimentCard {...BASE} status="stopped" variants={STOPPED} dates="Ran 02 – 05 Nov" confidenceNote="Stopped early on 05 Nov by Priya · example." onView={noop} />,
+          render: <ExperimentCard {...BASE} status="stopped" variants={STOPPED} dates="Ran 02 – 05 Nov" confidenceNote="Stopped early on 05 Nov by Priya · example" onView={noop} />,
         },
         {
           title: "Draft — A/B/n",

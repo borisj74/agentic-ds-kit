@@ -16,7 +16,6 @@
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
   animation: decision-in var(--motion-duration-200) var(--motion-ease-out);
 }
 

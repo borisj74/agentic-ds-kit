@@ -111,7 +111,6 @@
     "radius.surfaceLg",
     "radius.surfaceMd",
     "radius.sm",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -119,7 +118,6 @@
     "type.family.mono",
     "status.dangerSubtle",
     "status.dangerText",
-    "primary",
     "primary.subtleStrong",
     "motion.duration200"
   ],
@@ -139,5 +137,5 @@
     "Do not mark the winner by colour alone",
     "Do not use raw hex"
   ],
-  "snippet": "<ExperimentCard name=\"Checkout button copy\" metricLabel=\"Conversion rate\" status=\"running\" dates=\"Started 02 Nov · ends 16 Nov\" variants={variants} confidenceNote=\"84% confidence · needs ~4 more days for 95%.\" onStop={stop} onView={view} />"
+  "snippet": "<ExperimentCard name=\"Checkout button copy\" metricLabel=\"Conversion rate\" status=\"running\" dates=\"Started 02 Nov · ends 16 Nov\" variants={variants} confidenceNote=\"84% confidence · needs ~4 more days for 95%\" onStop={stop} onView={view} />"
 }

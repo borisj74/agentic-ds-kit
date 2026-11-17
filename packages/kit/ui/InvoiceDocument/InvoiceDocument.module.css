@@ -9,7 +9,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
   color: var(--text-fg);
 }
@@ -24,16 +23,17 @@
   text-decoration: line-through;
 }
 
+/* A wrapping row: the actions sit beside the title when there is room and drop under it when there isn't. */
 .header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--space-3);
-  row-gap: var(--space-1);
+  gap: var(--space-2) var(--space-3);
 }
 
 .heading {
   display: flex;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
@@ -52,17 +52,17 @@
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   color: var(--text-fg-muted);
+  white-space: nowrap;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
   gap: var(--space-2);
 }
 
 .from {
-  grid-column: 1 / -1;
+  flex-basis: 100%;
   margin: 0;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
@@ -86,11 +86,8 @@
 }
 
 .metaItem dt {
-  font-family: var(--font-mono);
-  font-size: var(--type-size-overline);
+  font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
   color: var(--text-fg-subtle);
 }
 

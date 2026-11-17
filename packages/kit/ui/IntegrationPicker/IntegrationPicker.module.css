@@ -9,7 +9,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -21,7 +20,7 @@
 
 .headerIcon {
   flex-shrink: 0;
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .title {
@@ -89,9 +88,8 @@
   justify-content: center;
   width: var(--space-8);
   height: var(--space-8);
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
   background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-sm);
 }
 
@@ -109,11 +107,8 @@
 }
 
 .category {
-  font-family: var(--font-mono);
-  font-size: var(--type-size-overline);
+  font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
   color: var(--text-fg-subtle);
 }
 
