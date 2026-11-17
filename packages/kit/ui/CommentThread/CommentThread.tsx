@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
-import { AtSign, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Avatar } from "../Avatar";
@@ -248,16 +248,13 @@ export function CommentThread({
               disabled={submitting}
             />
             <div className={styles.composerBar}>
-              <AtSign size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.mentionHint} />
               <span className={styles.spacer} />
-              <span className={styles.keyHint} aria-hidden="true">
-                ⌘⏎
-              </span>
               <Button
                 size="sm"
                 appearance={submitAppearance}
                 iconStart={submitting ? "LoaderCircle" : "Send"}
                 className={submitting ? styles.sending : undefined}
+                shortcut={submitting ? undefined : "⌘⏎"}
                 aria-keyshortcuts="Meta+Enter Control+Enter"
                 disabled={!submitting && !canPost}
                 onClick={submitting ? undefined : onSubmit}

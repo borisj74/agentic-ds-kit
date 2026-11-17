@@ -968,7 +968,7 @@
   },
   {
     "id": "changesummary",
-    "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+    "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
     "group": "component",
     "path": "contracts/changesummary.json",
     "status": "stable",

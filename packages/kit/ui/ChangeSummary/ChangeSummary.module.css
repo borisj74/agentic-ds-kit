@@ -22,7 +22,7 @@
 
 .headerIcon {
   flex-shrink: 0;
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .title {
@@ -53,7 +53,7 @@
 
 .row {
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   gap: var(--space-3);
   padding-block: var(--space-3);
   border-block-end: var(--border-width-thin) solid var(--line-default);
@@ -103,15 +103,8 @@
 }
 
 .sentiment {
+  font-family: var(--font-sans);
   color: var(--text-fg-muted);
-}
-
-.good {
-  color: var(--status-success-text);
-}
-
-.bad {
-  color: var(--status-danger-text);
 }
 
 .delta {
@@ -119,28 +112,23 @@
   flex-shrink: 0;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-px) var(--space-2);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
   font-variant-numeric: tabular-nums;
-  border-radius: var(--radius-full);
 }
 
 .delta_good {
   color: var(--status-success-text);
-  background-color: var(--status-success-subtle);
 }
 
 .delta_bad {
   color: var(--status-danger-text);
-  background-color: var(--status-danger-subtle);
 }
 
 .delta_neutral {
   color: var(--text-fg-muted);
-  background-color: var(--bg-subtle);
 }
 
 .viewAll {

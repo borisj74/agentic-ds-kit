@@ -2,7 +2,7 @@
   "id": "changesummary",
   "status": "stable",
   "level": "organism",
-  "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta pill. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+  "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
   "useWhen": [
     "summarise the changes between two periods on a dashboard or report",
     "say whether each move is good or bad for the business",
@@ -80,11 +80,8 @@
     "type.weight.label",
     "type.weight.heading",
     "type.family.mono",
-    "status.dangerSubtle",
     "status.dangerText",
     "primary.fg",
-    "bg.subtle",
-    "status.successSubtle",
     "status.successText"
   ],
   "a11y": {

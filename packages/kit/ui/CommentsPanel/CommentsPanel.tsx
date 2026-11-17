@@ -81,11 +81,9 @@ export function CommentsPanel({
     return (
       <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
         <header className={styles.inlineHeader}>
-          <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+          <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.inlineHeaderIcon} />
           <h2 className={styles.inlineTitle}>{label}</h2>
-          <Badge tone="neutral" size="sm" appearance="outline">
-            {loading ? "…" : error ? "—" : String(threads.length)}
-          </Badge>
+          <span className={styles.inlineCount}>{loading ? "…" : error ? "—" : String(threads.length)}</span>
           <span className={styles.spacer} />
           <Button size="sm" appearance="ghost" mode="neutral" iconStart={X} ariaLabel={`Close ${label.toLowerCase()}`} onClick={() => onOpenChange(false)} />
         </header>
@@ -112,7 +110,7 @@ export function CommentsPanel({
             {label}
           </Button>
           {openCount ? (
-            <Badge id={countId} className={styles.triggerBadge} tone="info" size="sm">
+            <Badge id={countId} className={styles.triggerBadge} tone="neutral" size="sm">
               {`${openCount} open`}
             </Badge>
           ) : null}
@@ -276,7 +274,6 @@ function Body({
                   onSelect(thread.id);
                 }}
               >
-                <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.threadIcon} />
                 <span className={styles.threadText}>
                   <span className={styles.threadTitle}>
                     {thread.title}

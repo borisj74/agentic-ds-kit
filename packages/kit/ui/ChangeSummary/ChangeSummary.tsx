@@ -16,7 +16,7 @@ export type { ChangeSummaryProps, ChangeItem, ChangeDirection, ChangeSentiment }
 const DIRECTION_WORD = { up: "up", down: "down", flat: "unchanged" } as const;
 
 /**
- * A compact "what moved" card for a period: each metric shows before → after and a delta pill. Good and bad
+ * A compact "what moved" card for a period: each metric shows before → after and a delta. Good and bad
  * are set per metric, and direction and sentiment are always spelled out, never colour alone.
  */
 export function ChangeSummary({
@@ -91,7 +91,7 @@ function Row({ item }: { item: ChangeItem }) {
           <span className={styles.before}>{item.before}</span>
           <ArrowRight size={12} strokeWidth={ICON_STROKE} className={styles.valuesArrow} />
           <span className={styles.after}>{item.after}</span>
-          <span className={cx(styles.sentiment, styles[sentiment])}>· {sentiment}</span>
+          <span className={styles.sentiment}>· {sentiment}</span>
         </span>
       </span>
       <span className={cx(styles.delta, styles[`delta_${sentiment}`])} aria-hidden="true">

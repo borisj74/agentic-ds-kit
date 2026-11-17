@@ -26,7 +26,7 @@
 
 .headerIcon {
   flex-shrink: 0;
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .title {
@@ -173,18 +173,8 @@
   gap: var(--space-2);
 }
 
-.mentionHint {
-  color: var(--text-fg-subtle);
-}
-
 .spacer {
   flex: 1 1 0;
-}
-
-.keyHint {
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  color: var(--text-fg-subtle);
 }
 
 .sending svg {
