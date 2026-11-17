@@ -59,9 +59,6 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-inset-xs);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-control-md);
-  background-color: var(--surface-card);
   color: var(--icon-default);
 }
 
@@ -109,10 +106,6 @@
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
   background-color: var(--surface-card);
-}
-
-.rowError {
-  border-color: var(--status-danger-border);
 }
 
 /* As tall as the file name's line, so the icon centres on the name (and the 32px actions). */

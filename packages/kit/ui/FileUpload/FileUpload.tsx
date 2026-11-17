@@ -58,9 +58,9 @@ function FileRow({
   const size = formatSize(file.size);
 
   return (
-    <li className={`${styles.row} ${file.status === "error" ? styles.rowError : ""}`}>
+    <li className={styles.row}>
       <span className={styles.fileIcon} aria-hidden>
-        <FileIcon size={20} strokeWidth={ICON_STROKE} />
+        <FileIcon size={16} strokeWidth={ICON_STROKE} />
       </span>
       <div className={styles.body}>
         <div className={styles.meta}>
@@ -70,10 +70,10 @@ function FileRow({
           <span className={styles.detail}>
             {size ? <span>{size}</span> : null}
             {file.status === "done" ? (
-              <CircleCheck size={14} className={styles.done} strokeWidth={ICON_STROKE} aria-hidden />
+              <CircleCheck size={16} className={styles.done} strokeWidth={ICON_STROKE} aria-hidden />
             ) : null}
             {file.status === "error" ? (
-              <CircleAlert size={14} className={styles.failed} strokeWidth={ICON_STROKE} aria-hidden />
+              <CircleAlert size={16} className={styles.failed} strokeWidth={ICON_STROKE} aria-hidden />
             ) : null}
             <span
               className={file.status === "error" ? styles.errorText : undefined}
@@ -194,7 +194,7 @@ export function FileUpload({
         onDrop={onDrop}
       >
         <span className={styles.zoneIcon} aria-hidden>
-          <Upload size={20} strokeWidth={ICON_STROKE} />
+          <Upload size={16} strokeWidth={ICON_STROKE} />
         </span>
         <span className={styles.zoneText}>
           <span className={styles.zoneAction}>Click to upload</span> or drag and drop
