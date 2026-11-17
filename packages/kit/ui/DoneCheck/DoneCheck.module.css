@@ -23,14 +23,7 @@
   min-width: 0;
 }
 
-.count {
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg-muted);
-}
-
+/* No frame of its own inside the Card: rows are split by hairlines. */
 .list {
   /* Status words line up in one column across rows (subgrid), as wide as the longest word. */
   display: grid;
@@ -38,8 +31,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
 }
 
 .row {

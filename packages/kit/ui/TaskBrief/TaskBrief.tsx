@@ -109,7 +109,7 @@ export function TaskBrief({
       onBlurCapture={focus.onBlurCapture}
     >
       <div className={styles.form}>
-        <Field label="Goal" htmlFor={ids.goal} hint="What should be true when the agent is done?" error={goalError}>
+        <Field label="Goal" htmlFor={ids.goal} hint="One sentence on what the agent should do." error={goalError}>
           <Textarea
             id={ids.goal}
             rows={3}

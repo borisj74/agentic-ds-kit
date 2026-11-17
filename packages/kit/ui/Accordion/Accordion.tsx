@@ -24,14 +24,14 @@ export function Accordion({ items, defaultOpen, className, ref, ...rest }: Accor
             <button
               type="button"
               id={buttonId}
-              className={`${styles.trigger} ${open ? styles.triggerOpen : ""}`}
+              className={cx(styles.trigger, open && styles.triggerOpen)}
               aria-expanded={open}
               aria-controls={panelId}
               onClick={() => setOpenId((current) => (current === item.id ? null : item.id))}
             >
               <span className={styles.title}>{item.title}</span>
               <ChevronDown
-                className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
+                className={cx(styles.chevron, open && styles.chevronOpen)}
                 size={16}
                 strokeWidth={ICON_STROKE}
                 aria-hidden
@@ -41,10 +41,11 @@ export function Accordion({ items, defaultOpen, className, ref, ...rest }: Accor
               id={panelId}
               role="region"
               aria-labelledby={buttonId}
-              className={styles.panel}
-              hidden={!open}
+              className={cx(styles.panel, open && styles.panelOpen)}
             >
-              <p className={styles.body}>{item.content}</p>
+              <div className={styles.panelInner}>
+                <p className={styles.body}>{item.content}</p>
+              </div>
             </div>
           </div>
         );

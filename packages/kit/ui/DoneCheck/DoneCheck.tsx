@@ -84,9 +84,6 @@ export function DoneCheck({
               tone={done ? "brand" : "muted"}
               ariaLabel={`${met} of ${criteria.length} checks met`}
             />
-            <span className={styles.count}>
-              {met}/{criteria.length}
-            </span>
           </div>
 
           <ol className={styles.list}>
@@ -129,7 +126,7 @@ export function DoneCheck({
                             </Link>
                           ) : null}
                           {item.evidence?.output ? (
-                            <CodeSnippet code={item.evidence.output} title={item.evidence.outputLabel ?? "Output"} wrap />
+                            <CodeSnippet code={item.evidence.output} title={item.evidence.outputLabel ?? "Output"} />
                           ) : null}
                         </div>
                       </Collapsible>

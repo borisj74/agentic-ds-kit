@@ -185,7 +185,8 @@
   flex: 0 0 auto;
 }
 
-/* shortcut: a small key chip after the label. Tinted from the label colour so it works on every appearance. */
+/* shortcut: a small key chip after the label. Tinted from the label colour so it works on every appearance.
+   Sans, not mono: the mono face squeezes ⌘ and ⏎ into its narrow cell, well below cap height. */
 .shortcut {
   box-sizing: border-box;
   display: inline-flex;
@@ -195,7 +196,7 @@
   border-radius: var(--radius-control-sm);
   background-color: color-mix(in srgb, currentColor 14%, transparent);
   color: inherit;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-ui-xs);
