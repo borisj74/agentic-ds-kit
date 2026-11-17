@@ -62,12 +62,6 @@
   min-width: 0;
 }
 
-.picker {
-  padding: var(--space-3);
-  background-color: var(--bg-subtle);
-  border-radius: var(--radius-surface-md);
-}
-
 /* The table scrolls sideways inside its own frame on narrow screens (DataTable's scroller). */
 .table {
   min-width: 0;

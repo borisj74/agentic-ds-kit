@@ -45,12 +45,6 @@
   min-width: 0;
 }
 
-.picker {
-  padding: var(--space-3);
-  background-color: var(--bg-subtle);
-  border-radius: var(--radius-surface-md);
-}
-
 /* Cluster list: a listbox, arrow keys move the selection */
 .list {
   margin: 0;

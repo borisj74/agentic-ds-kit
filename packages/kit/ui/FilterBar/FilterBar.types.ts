@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type FilterBarSize = "sm" | "md";
 
 export interface FilterBarFilter {
@@ -15,6 +17,9 @@ export interface FilterBarProps {
   /** Id of the filter whose options are open. */
   openId?: string;
   onFilterClick?: (id: string) => void;
+  /** Options for one filter. When set, each chip opens them in a kit Popover anchored to the chip;
+   *  openId and onFilterClick still say which one is open. */
+  renderOptions?: (id: string) => ReactNode;
   onClear?: () => void;
   onAdd?: () => void;
   addLabel?: string;

@@ -127,27 +127,28 @@ export function FailureClusters({
             filters={filterKeys.map((key) => ({ id: key, label: options[key].label, value: valueLabel(key) }))}
             openId={openFilter}
             onFilterClick={(id) => setOpenFilter((current) => (current === id ? undefined : (id as FilterKey)))}
+            renderOptions={(id) => {
+              const key = id as FilterKey;
+              return (
+                <RadioGroup
+                  name={`${base}-${key}`}
+                  legend={options[key].label}
+                  size="sm"
+                  options={[{ value: ANY, label: "Any" }, ...options[key].values]}
+                  value={(filters[key] as string | undefined) ?? ANY}
+                  onChange={(value) => {
+                    setFilters({ ...filters, [key]: value === ANY ? undefined : value });
+                    setOpenFilter(undefined);
+                  }}
+                />
+              );
+            }}
             onClear={() => {
               setFilters({});
               setOpenFilter(undefined);
             }}
           />
-          {openFilter ? (
-            <RadioGroup
-              className={styles.picker}
-              name={`${base}-${openFilter}`}
-              legend={options[openFilter].label}
-              size="sm"
-              orientation="horizontal"
-              options={[{ value: ANY, label: "Any" }, ...options[openFilter].values]}
-              value={(filters[openFilter] as string | undefined) ?? ANY}
-              onChange={(value) => {
-                setFilters({ ...filters, [openFilter]: value === ANY ? undefined : value });
-                setOpenFilter(undefined);
-              }}
-            />
-          ) : null}
-
+          
           {shown.length === 0 ? (
             <Empty icon="CircleCheck" title="No failures in this window" description="Try a longer window or clear the filters." outlined />
           ) : (

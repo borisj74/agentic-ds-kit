@@ -3,6 +3,7 @@
 import { Button } from "../Button";
 import { DropdownMenu } from "../DropdownMenu";
 import { FilterButton } from "../FilterButton";
+import { Popover } from "../Popover";
 import type { FilterBarFilter, FilterBarProps } from "./FilterBar.types";
 import styles from "./FilterBar.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -17,6 +18,7 @@ export function FilterBar({
   filters,
   openId,
   onFilterClick,
+  renderOptions,
   onClear,
   onAdd,
   addLabel = "Add filter",
@@ -33,18 +35,42 @@ export function FilterBar({
 
   return (
     <div {...nisthaAttr("filterbar")} className={className ? `${styles.root} ${className}` : styles.root} role="group" aria-label={ariaLabel}>
-      {visible.map((filter) => (
-        <FilterButton
-          key={filter.id}
-          size={size}
-          value={filter.value}
-          count={filter.count}
-          open={openId === filter.id}
-          onClick={() => onFilterClick?.(filter.id)}
-        >
-          {filter.label}
-        </FilterButton>
-      ))}
+      {visible.map((filter) => {
+        const open = openId === filter.id;
+        if (!renderOptions) {
+          return (
+            <FilterButton
+              key={filter.id}
+              size={size}
+              value={filter.value}
+              count={filter.count}
+              open={open}
+              onClick={() => onFilterClick?.(filter.id)}
+            >
+              {filter.label}
+            </FilterButton>
+          );
+        }
+        // The Popover toggles on click and closes on Escape or a click outside; each change is
+        // reported as a click on the chip, so openId stays the one source of truth.
+        return (
+          <Popover
+            key={filter.id}
+            label={`${filter.label} filter`}
+            open={open}
+            onOpenChange={(next) => {
+              if (next !== open) onFilterClick?.(filter.id);
+            }}
+            trigger={
+              <FilterButton size={size} value={filter.value} count={filter.count} open={open}>
+                {filter.label}
+              </FilterButton>
+            }
+          >
+            {renderOptions(filter.id)}
+          </Popover>
+        );
+      })}
       {hidden.length > 0 ? (
         <DropdownMenu
           trigger={`+${hidden.length}`}

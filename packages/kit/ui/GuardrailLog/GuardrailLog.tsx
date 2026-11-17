@@ -32,7 +32,8 @@ export type {
   GuardrailOverrideStatus,
 } from "./GuardrailLog.types";
 
-const VERDICT_TONE: Record<GuardrailVerdict, "danger" | "warning" | "info"> = { blocked: "danger", rewritten: "warning", flagged: "info" };
+// Flagged is the mildest verdict: a neutral badge, so red and amber carry the ones that changed the action.
+const VERDICT_TONE: Record<GuardrailVerdict, "danger" | "warning" | "neutral"> = { blocked: "danger", rewritten: "warning", flagged: "neutral" };
 const DEFAULT_TIMES = ["Today", "This week", "This month"];
 const ANY = "__any";
 
@@ -153,26 +154,27 @@ export function GuardrailLog({
         filters={filterKeys.map((key) => ({ id: key, label: options[key].label, value: valueLabel(key) }))}
         openId={openFilter}
         onFilterClick={(id) => setOpenFilter((current) => (current === id ? undefined : (id as FilterKey)))}
+        renderOptions={(id) => {
+          const key = id as FilterKey;
+          return (
+            <RadioGroup
+              name={`${base}-${key}`}
+              legend={options[key].label}
+              size="sm"
+              options={[{ value: ANY, label: "Any" }, ...options[key].values]}
+              value={(filters[key] as string | undefined) ?? ANY}
+              onChange={(value) => {
+                setFilters({ ...filters, [key]: value === ANY ? undefined : value });
+                setOpenFilter(undefined);
+              }}
+            />
+          );
+        }}
         onClear={() => {
           setFilters({});
           setOpenFilter(undefined);
         }}
       />
-      {openFilter ? (
-        <RadioGroup
-          className={styles.picker}
-          name={`${base}-${openFilter}`}
-          legend={options[openFilter].label}
-          size="sm"
-          orientation="horizontal"
-          options={[{ value: ANY, label: "Any" }, ...options[openFilter].values]}
-          value={(filters[openFilter] as string | undefined) ?? ANY}
-          onChange={(value) => {
-            setFilters({ ...filters, [openFilter]: value === ANY ? undefined : value });
-            setOpenFilter(undefined);
-          }}
-        />
-      ) : null}
 
       {shown.length === 0 ? (
         <Empty icon={ShieldAlert} title="No rule has fired in this window" description="Try another time window or clear the filters." />
@@ -199,7 +201,8 @@ export function GuardrailLog({
                   <span className={styles.attempt}>{event.attempted}</span>
                 </span>
                 <span className={styles.who}>
-                  <Avatar name={event.agent.name} src={event.agent.src} size="sm" />
+                  {/* Initials would repeat the name beside them; show a face only when there is one. */}
+                  {event.agent.src ? <Avatar name={event.agent.name} src={event.agent.src} size="sm" /> : null}
                   <span className={styles.agent}>{event.agent.name}</span>
                 </span>
                 <span className={styles.at}>{event.at}</span>
