@@ -70,7 +70,7 @@
     "axis": {
       "type": "string[]",
       "required": false,
-      "note": "Labels under the strip, e.g. [\"0:00\", \"1:00\", \"2:14\"]."
+      "note": "Start and end labels under the strip, e.g. [\"0:00\", \"2:14\"]. Step tiles are equal widths, so only the first and last labels show."
     },
     "selectedStepId": {
       "type": "string",
@@ -102,7 +102,7 @@
     "collapsed": {
       "type": "boolean",
       "default": false,
-      "note": "One row with clock, cost and the tools used."
+      "note": "A compact card: name, clock, cost and status in one row, the same step strip below. Picking a step opens the card on that step."
     },
     "onCollapsedChange": {
       "type": "function",
@@ -165,7 +165,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -204,5 +203,5 @@
     "Only one solid primary: Approve, Resume or Start run, never two",
     "Do not use raw hex"
   ],
-  "snippet": "<AgentMonitor name=\"Refactor billing service\" meta=\"claude-code · acme-demo\" status=\"running\" headline=\"Editing src/billing/invoice.ts\" headlineNote=\"step 6\" elapsed=\"02:14\" cost=\"$0.42\" steps={steps} axis={[\"0:00\", \"1:00\", \"2:14\"]} onSelectStep={setStepId} />"
+  "snippet": "<AgentMonitor name=\"Refactor billing service\" meta=\"claude-code · acme-demo\" status=\"running\" headline=\"Editing src/billing/invoice.ts\" headlineNote=\"step 6\" elapsed=\"02:14\" cost=\"$0.42\" steps={steps} axis={[\"0:00\", \"2:14\"]} onSelectStep={setStepId} />"
 }

@@ -37,7 +37,7 @@
         "high"
       ],
       "default": "medium",
-      "note": "Colors the lead tile and the risk Badge. high uses a shield icon."
+      "note": "Sets the risk Badge (and, at high, the ⌘⏎ approve shortcut)."
     },
     "action": {
       "type": "object",
@@ -63,12 +63,12 @@
     "onApprove": {
       "type": "function",
       "required": false,
-      "note": "Approve button and Enter while focus is inside the card (not on another control)."
+      "note": "Approve button and Enter while focus is inside the card (not on another control). High risk needs ⌘⏎ or Ctrl+⏎."
     },
     "onDeny": {
       "type": "function",
       "required": false,
-      "note": "Deny button and Escape while focus is inside the card."
+      "note": "Deny button and Escape while focus is inside the card (not on another control)."
     },
     "onExpire": {
       "type": "function",
@@ -110,17 +110,12 @@
     "text.fgSubtle",
     "status.dangerSubtle",
     "status.dangerText",
-    "status.warningSubtle",
-    "status.warningText",
     "status.successSubtle",
     "status.successText",
-    "primary.subtle",
-    "primary.fg",
     "icon.success",
     "icon.danger",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "space.2",
     "space.3",
     "space.4",
@@ -137,7 +132,7 @@
     "element": "article",
     "requirements": [
       "title is h3, article aria-labelledby it",
-      "Enter approves and Escape denies while focus is inside the card; buttons carry aria-keyshortcuts",
+      "Enter approves and Escape denies while focus is inside the card but not on another control; high risk approves with ⌘⏎ or Ctrl+⏎ only; buttons carry aria-keyshortcuts",
       "key chips are aria-hidden",
       "diff lines announce Added / Removed",
       "countdown is role=timer with aria-live off; the bar is a kit Progress with an accessible name",

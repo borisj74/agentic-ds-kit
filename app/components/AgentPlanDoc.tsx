@@ -112,8 +112,8 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: <AgentPlan title="New plan" status="draft" steps={[]} onDraft={noop} />,
   },
   {
-    title: "Collapsed — one-line summary",
-    about: "collapsed shows one row. With onCollapsedChange the chevron opens it.",
+    title: "Collapsed",
+    about: "collapsed keeps the header: title, status and the summary line. With onCollapsedChange the chevron opens it.",
     code: `<AgentPlan title="Fix invoice rounding" steps={steps} collapsed onCollapsedChange={setCollapsed} />`,
     render: <AgentPlan title="Fix invoice rounding" steps={STEPS} collapsed onCollapsedChange={noop} />,
   },

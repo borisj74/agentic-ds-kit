@@ -15,7 +15,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -90,19 +89,22 @@
 }
 
 /* Steps */
+/* Rows keep inline padding for their tinted states; the list pulls out by the same amount so step
+   text lines up with the header and footer. */
 .steps {
   display: flex;
   flex-direction: column;
   gap: var(--space-px);
-  margin: 0;
+  margin: 0 calc(var(--space-3) * -1);
   padding: 0;
   list-style: none;
 }
 
+/* A 20px number slot plus a 4px gap puts step text on the title's line (16px icon plus 8px gap). */
 .step {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
+  gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-surface-md);
   animation: plan-row-in var(--motion-duration-200) var(--motion-ease-out);
@@ -122,6 +124,7 @@
   animation: plan-fade var(--motion-duration-200) var(--motion-ease-out);
 }
 
+/* A plain step number in the same slot as the done and failed marks, so every row lines up. */
 .number {
   box-sizing: border-box;
   display: inline-flex;
@@ -130,19 +133,16 @@
   justify-content: center;
   width: var(--space-5);
   height: var(--space-5);
-  border: var(--border-width-thin) solid var(--line-strong);
-  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
   line-height: 1;
   color: var(--text-fg-muted);
 }
 
 .numberCurrent {
-  border-color: transparent;
-  background-color: var(--primary);
-  color: var(--action-on-primary);
+  color: var(--primary-fg);
   font-weight: var(--type-weight-heading);
 }
 
@@ -324,34 +324,10 @@
 }
 
 /* Collapsed: one line */
-.collapsed {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  width: 100%;
-  min-width: 0;
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-lg);
-  font-family: var(--font-sans);
-}
-
-.collapsed .title {
-  flex: 0 1 auto;
-}
-
-.collapsedSummary {
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Collapsed: the header alone, with no rule under it. */
+.collapsed .header {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 @keyframes plan-row-in {

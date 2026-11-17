@@ -9,7 +9,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -40,6 +39,17 @@
   gap: var(--space-2);
 }
 
+/* The filter stays one row and scrolls sideways when the inbox is narrow, instead of wrapping. */
+.filter {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.filter > * {
+  flex-shrink: 0;
+}
+
 .split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -61,6 +71,16 @@
   padding: 0 var(--grid-gutter-md) 0 0;
   border-inline-end: var(--border-width-thin) solid var(--line-default);
   list-style: none;
+}
+
+/* Stacked (40rem is --grid-breakpoint-sm), the side rule becomes a rule under the list and rows
+   take the full width. This sits after .list so it wins. */
+@container agentinbox (max-width: 40rem) {
+  .list {
+    padding: 0 0 var(--space-3);
+    border-inline-end: 0;
+    border-block-end: var(--border-width-thin) solid var(--line-default);
+  }
 }
 
 .cell {
@@ -93,9 +113,12 @@
   outline-offset: calc(var(--border-focus-width) * -1);
 }
 
+/* A surface step plus a hairline: the hairline keeps selected apart from hover where the two tints
+   match (dark mode). */
 .selected,
 .selected:hover {
   background-color: var(--action-selected);
+  box-shadow: inset 0 0 0 var(--border-width-thin) var(--line-strong);
 }
 
 /* Subtle text drops below 4.5:1 on the selected tint; use the muted role there. */
@@ -104,19 +127,17 @@
   color: var(--text-fg-muted);
 }
 
+/* Amber for what waits on you, green for what is done; failures stay neutral, so the detail's risk
+   Badge is the one red. */
 .typeIcon {
   flex-shrink: 0;
   margin-top: var(--space-px);
-  color: var(--text-fg-subtle);
+  color: var(--icon-muted);
 }
 
 .approval .typeIcon,
 .question .typeIcon {
-  color: var(--status-warning-text);
-}
-
-.failure .typeIcon {
-  color: var(--icon-danger);
+  color: var(--icon-warning);
 }
 
 .recap .typeIcon {
@@ -144,10 +165,6 @@
   color: var(--text-fg);
 }
 
-/* Unread rows keep the bold name; read rows drop to body weight. */
-.read .agent {
-  font-weight: var(--type-weight-body);
-}
 
 .type {
   color: var(--text-fg-subtle);
@@ -216,14 +233,11 @@
 
 .detailIcon {
   flex-shrink: 0;
+  color: var(--icon-muted);
 }
 
 .detail.recap .detailIcon {
   color: var(--icon-success);
-}
-
-.detail.failure .detailIcon {
-  color: var(--icon-danger);
 }
 
 .detailTitle {

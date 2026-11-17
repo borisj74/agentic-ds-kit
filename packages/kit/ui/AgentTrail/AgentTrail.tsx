@@ -27,8 +27,9 @@ const STATUS_TEXT: Record<AgentTrailStepStatus, string> = {
   failed: "Failed",
 };
 
+// Pending steps leave the time column empty: the hollow marker and muted label already say it.
 function meta(step: AgentTrailStep): string | undefined {
-  if (step.status === "pending") return "Pending";
+  if (step.status === "pending") return undefined;
   if (step.status === "running" || step.status === "approval") return step.timer ?? step.duration;
   return step.duration ?? step.timer;
 }

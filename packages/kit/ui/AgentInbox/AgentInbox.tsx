@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { Check, CircleCheck, CircleHelp, CircleX, Inbox, ShieldAlert } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { ApprovalCard } from "../ApprovalCard";
@@ -147,10 +147,22 @@ export function AgentInbox(props: AgentInboxProps) {
   } = props;
   const titleId = useId();
   const detailId = useId();
+  const paneRef = useRef<HTMLDivElement>(null);
+
+  // Stacked (narrow), the detail sits under the list: bring it into view after a row is picked.
+  function select(id: string) {
+    onSelect?.(id);
+    requestAnimationFrame(() => {
+      const pane = paneRef.current;
+      const list = pane?.previousElementSibling as HTMLElement | null;
+      if (!pane || !list || pane.offsetTop <= list.offsetTop) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      pane.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    });
+  }
   const unread = items.filter((item) => !item.read).length;
   const shown = filter === "all" ? items : items.filter((item) => item.type === filter);
   const selected = shown.find((item) => item.id === selectedId);
-  const counts = (key: AgentInboxFilter) => (key === "all" ? items.length : items.filter((item) => item.type === key).length);
 
   let body;
   if (loading) {
@@ -204,7 +216,7 @@ export function AgentInbox(props: AgentInboxProps) {
                   aria-current={isSelected ? "true" : undefined}
                   aria-expanded={isSelected}
                   aria-controls={detailId}
-                  onClick={() => onSelect?.(item.id)}
+                  onClick={() => select(item.id)}
                 >
                   <Icon size={16} strokeWidth={ICON_STROKE} className={styles.typeIcon} aria-hidden="true" />
                   <span className={styles.rowText}>
@@ -221,7 +233,7 @@ export function AgentInbox(props: AgentInboxProps) {
             );
           })}
         </ul>
-        <div id={detailId} className={styles.pane} role="region" aria-label="Item detail" aria-live="polite">
+        <div ref={paneRef} id={detailId} className={styles.pane} role="region" aria-label="Item detail" aria-live="polite">
           {selected ? (
             <div key={selected.id} className={styles.paneInner}>
               <Detail item={selected} props={{ onApprove, onDeny, onAnswer, onRetryItem, onViewDiff, onOpenTrail, renderDetail }} />
@@ -253,11 +265,12 @@ export function AgentInbox(props: AgentInboxProps) {
         <div className={styles.toolbar}>
           {onFilterChange ? (
             <SegmentedControl
+              className={styles.filter}
               size="sm"
               ariaLabel="Filter"
               value={filter}
               onChange={(value) => onFilterChange(value as AgentInboxFilter)}
-              items={filters.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts(key)}` }))}
+              items={filters.map((key) => ({ value: key, label: FILTER_LABEL[key] }))}
             />
           ) : (
             <span />

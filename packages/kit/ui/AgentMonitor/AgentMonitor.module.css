@@ -8,7 +8,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -21,28 +20,21 @@
 
 .collapsed {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
+}
+
+/* Collapsed, the step strip takes its own row at the bottom, as it does when open. */
+.collapsedStrip {
+  flex-basis: 100%;
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-}
-
-.lead {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-8);
-  height: var(--space-8);
-  background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-pill);
-  color: var(--text-fg);
 }
 
 .heading {
@@ -242,8 +234,13 @@
   color: var(--text-fg);
 }
 
+/* Waiting: the approval takes the clock panel's place and surface, without a frame of its own. */
 .approval {
   width: 100%;
+  padding: var(--space-4);
+  background-color: var(--bg-subtle);
+  border: 0;
+  border-radius: var(--radius-surface-md);
   box-shadow: none;
 }
 
@@ -436,26 +433,6 @@ button.selected:hover {
 }
 
 /* Collapsed */
-.tools {
-  display: flex;
-  gap: var(--space-1);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tool {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-6);
-  height: var(--space-6);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-md);
-  color: var(--text-fg-muted);
-  animation: monitor-step-in var(--motion-duration-200) var(--motion-ease-out) backwards;
-}
-
 .footer {
   display: flex;
   flex-wrap: wrap;
@@ -515,8 +492,7 @@ button.selected:hover {
 @media (prefers-reduced-motion: reduce) {
   .spin,
   .cell,
-  .detail,
-  .tool {
+  .detail {
     animation: none;
   }
 

@@ -16,7 +16,7 @@ const APPROVAL_STEPS: AgentTrailStep[] = [
     id: "approve",
     label: "Awaiting approval",
     status: "approval",
-    timer: "0:18",
+    timer: "18s",
     sublabel: "write_file src/middleware/auth.ts",
   },
   { id: "test", label: "Run unit tests", status: "pending" },
@@ -25,7 +25,7 @@ const APPROVAL_STEPS: AgentTrailStep[] = [
 
 const RUNNING_STEPS: AgentTrailStep[] = [
   { id: "read", label: "Read auth module", status: "done", duration: "4.1s" },
-  { id: "apply", label: "Apply rate-limit patch", status: "running", timer: "0:18", sublabel: "applying hunk 2/4" },
+  { id: "apply", label: "Apply rate-limit patch", status: "running", timer: "18s", sublabel: "applying hunk 2/4" },
   { id: "test", label: "Run unit tests", status: "pending" },
 ];
 
@@ -57,7 +57,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   steps={[
     { id: "read", label: "Read auth module", status: "done", duration: "4.1s" },
     { id: "draft", label: "Draft patch", status: "done", duration: "12.0s" },
-    { id: "approve", label: "Awaiting approval", status: "approval", timer: "0:18", sublabel: "write_file src/middleware/auth.ts" },
+    { id: "approve", label: "Awaiting approval", status: "approval", timer: "18s", sublabel: "write_file src/middleware/auth.ts" },
     { id: "test", label: "Run unit tests", status: "pending" },
     { id: "pr", label: "Open pull request", status: "pending" },
   ]}
@@ -79,7 +79,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   title="Current · running"
   steps={[
     { id: "read", label: "Read auth module", status: "done", duration: "4.1s" },
-    { id: "apply", label: "Apply rate-limit patch", status: "running", timer: "0:18", sublabel: "applying hunk 2/4" },
+    { id: "apply", label: "Apply rate-limit patch", status: "running", timer: "18s", sublabel: "applying hunk 2/4" },
     { id: "test", label: "Run unit tests", status: "pending" },
   ]}
 />`,
