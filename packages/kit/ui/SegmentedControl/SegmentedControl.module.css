@@ -17,14 +17,16 @@
   gap: var(--space-inline-xs);
   margin: 0;
   border: 0;
-  border-radius: var(--radius-control-sm);
+  /* Nested radius: the track's radius minus its padding, so the thumb follows the track's curve. */
+  border-radius: calc(var(--radius-control-md) - var(--space-inset-2xs));
   padding: var(--space-inset-sm) var(--space-inset-md);
   background: transparent;
   color: var(--text-secondary);
   font-family: var(--font-sans);
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-label);
-  line-height: var(--type-line-body);
+  /* UI line height so the track is as tall as a Button of the same size (md 40, sm 32). */
+  line-height: var(--type-line-ui-sm);
   cursor: pointer;
   transition:
     background-color var(--motion-interaction-duration) var(--motion-interaction-easing),
