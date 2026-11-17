@@ -15,7 +15,6 @@
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
   background: var(--surface-card);
-  box-shadow: var(--shadow-sm);
   color: var(--text-primary);
   text-align: start;
   cursor: pointer;

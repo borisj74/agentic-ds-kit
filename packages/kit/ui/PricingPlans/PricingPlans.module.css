@@ -70,12 +70,10 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
 }
 
 .planHighlight {
   border-color: var(--primary);
-  box-shadow: 0 0 0 var(--border-width-thin) var(--primary), var(--shadow-sm);
 }
 
 .planHead {
@@ -146,5 +144,5 @@
 
 .check {
   flex-shrink: 0;
-  color: var(--status-success);
+  color: var(--text-fg-muted);
 }

@@ -49,7 +49,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -164,12 +163,10 @@
   color: var(--text-fg-muted);
 }
 
-.toneSuccess {
-  color: var(--status-success);
-}
-
+/* Only tones that need attention keep their colour; the rest read as plain icons. */
+.toneSuccess,
 .toneInfo {
-  color: var(--status-info);
+  color: var(--text-fg-muted);
 }
 
 .toneWarning {
@@ -178,6 +175,16 @@
 
 .toneDanger {
   color: var(--status-danger);
+}
+
+/* Unread dot: trails the text next to the time, centred on the title line, so every row keeps the 16px start edge. */
+.unreadDot {
+  flex-shrink: 0;
+  margin-block-start: calc((var(--type-line-ui-sm) - var(--space-1) * 1.5) / 2);
+  width: calc(var(--space-1) * 1.5);
+  height: calc(var(--space-1) * 1.5);
+  background-color: var(--primary);
+  border-radius: var(--radius-full);
 }
 
 .text {

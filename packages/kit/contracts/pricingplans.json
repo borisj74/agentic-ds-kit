@@ -93,7 +93,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -102,7 +101,6 @@
     "status.dangerSubtle",
     "status.dangerText",
     "primary",
-    "status.success",
     "status.successText",
     "type.size.uiLg",
     "grid.gutter.md"

@@ -100,7 +100,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -113,7 +112,6 @@
     "primary.subtle",
     "primary.fg",
     "line.strong",
-    "shadow.xs",
     "shadow.md",
     "grid.gutter.sm",
     "motion.duration200"

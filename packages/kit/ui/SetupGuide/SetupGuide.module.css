@@ -11,7 +11,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -24,7 +23,7 @@
 
 .headerIcon {
   flex-shrink: 0;
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .title {
@@ -68,11 +67,11 @@
 }
 
 .rowCurrent {
-  background-color: var(--primary-subtle-strong);
+  background-color: var(--bg-subtle);
   animation: rowIn var(--motion-duration-200) var(--motion-ease-out);
 }
 
-/* Subtle text drops below 4.5:1 on the current-row tint; use the muted role there. */
+/* Subtle text loses contrast on the current-row fill; use the muted role there. */
 .rowCurrent .rowDescription,
 .rowCurrent .skippedWord {
   color: var(--text-fg-muted);
@@ -144,15 +143,17 @@
   align-items: center;
 }
 
+/* Same inline padding and border as a kit sm Button, so the words line up with the Start / Continue labels. */
 .doneWord,
 .skippedWord {
+  padding-inline: calc(var(--space-3) + var(--border-width-thin));
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
 }
 
 .doneWord {
-  color: var(--status-success-text);
+  color: var(--text-fg-muted);
 }
 
 .skippedWord {
