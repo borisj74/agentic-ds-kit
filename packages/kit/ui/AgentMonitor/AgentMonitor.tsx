@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef } from "react";
-import { Bot, ChevronDown, CircleCheck, CirclePause, CircleX, LoaderCircle, X } from "lucide-react";
+import { ChevronDown, CircleCheck, CircleDot, CirclePause, CircleX, LoaderCircle, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { ApprovalCard } from "../ApprovalCard";
 import { Button } from "../Button";
@@ -103,7 +103,6 @@ export function AgentMonitor({
     });
   }
   const selected = selectedStepId ? steps.find((step) => step.id === selectedStepId) : undefined;
-  const tools = Array.from(new Set(steps.map((step) => String(iconFor(step)))));
 
   const statusChip = (
     <span className={cx(styles.status, styles[`status-${status}`])}>
@@ -129,31 +128,22 @@ export function AgentMonitor({
   }
 
   if (collapsed) {
+    // Collapsed keeps the status and the same step strip; picking a step opens the card on it.
+    const openOn = onCollapsedChange
+      ? (stepId: string) => {
+          onCollapsedChange(false);
+          onSelectStep?.(stepId);
+        }
+      : undefined;
     return (
       <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={nameId}>
-        <span className={styles.lead} aria-hidden="true">
-          <Bot size={16} strokeWidth={ICON_STROKE} />
-        </span>
         <div className={styles.heading}>
           <h3 id={nameId} className={cx(styles.name, styles.nameSmall)}>
             {name}
           </h3>
-          <p className={styles.meta}>
-            {status === "done" ? "done · " : ""}
-            {[elapsed, cost].filter(Boolean).join(" · ")}
-          </p>
+          <p className={styles.meta}>{[elapsed, cost].filter(Boolean).join(" · ")}</p>
         </div>
-        {status === "done" ? (
-          <CircleCheck size={16} strokeWidth={ICON_STROKE} className={styles.doneIcon} aria-label="Done" />
-        ) : (
-          <ul className={styles.tools} aria-label="Tools used">
-            {tools.map((tool) => (
-              <li key={tool} className={styles.tool}>
-                <LucideByName name={tool} size={14} />
-              </li>
-            ))}
-          </ul>
-        )}
+        {statusChip}
         {onCollapsedChange ? (
           <button
             type="button"
@@ -165,6 +155,31 @@ export function AgentMonitor({
             <ChevronDown size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           </button>
         ) : null}
+        {steps.length > 0 ? (
+          <ol className={cx(styles.strip, styles.collapsedStrip)} aria-label="Steps">
+            {steps.map((step, index) => {
+              const label = `Step ${index + 1}: ${step.tool}, ${step.status}${step.duration ? `, ${step.duration}` : ""}`;
+              return (
+                <li key={step.id} className={styles.cell}>
+                  {openOn ? (
+                    <button
+                      type="button"
+                      className={cx(styles.step, styles[`step-${step.status}`])}
+                      aria-label={`${label}. Opens ${name}`}
+                      onClick={() => openOn(step.id)}
+                    >
+                      <StepIcon step={step} />
+                    </button>
+                  ) : (
+                    <span className={cx(styles.step, styles[`step-${step.status}`])} role="img" aria-label={label}>
+                      <StepIcon step={step} />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        ) : null}
       </section>
     );
   }
@@ -174,9 +189,6 @@ export function AgentMonitor({
   return (
     <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.monitor, className)} aria-labelledby={nameId}>
       <header className={styles.header}>
-        <span className={styles.lead} aria-hidden="true">
-          <Bot size={16} strokeWidth={ICON_STROKE} />
-        </span>
         <div className={styles.heading}>
           <h3 id={nameId} className={styles.name}>
             {name}
@@ -216,7 +228,7 @@ export function AgentMonitor({
         <div className={cx(styles.now, status === "failed" && styles.nowFailed)}>
           {headline ? (
             <p className={styles.headline}>
-              {status === "running" ? <LoaderCircle size={14} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" /> : null}
+              {status === "running" ? <CircleDot size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
               {status === "paused" ? <CirclePause size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
               {status === "done" ? <CircleCheck size={14} strokeWidth={ICON_STROKE} className={styles.doneIcon} aria-hidden="true" /> : null}
               {status === "failed" ? <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
@@ -289,13 +301,11 @@ export function AgentMonitor({
               );
             })}
           </ol>
+          {/* Tiles are equal widths, not durations, so only the ends are true: the start and now. */}
           {axis && axis.length > 0 ? (
             <div className={styles.axis} aria-hidden="true">
-              {axis.map((tick, index) => (
-                <span key={`${tick}-${index}`} className={index === axis.length - 1 ? styles.axisEnd : undefined}>
-                  {tick}
-                </span>
-              ))}
+              <span>{axis[0]}</span>
+              {axis.length > 1 ? <span className={styles.axisEnd}>{axis[axis.length - 1]}</span> : null}
             </div>
           ) : null}
         </div>

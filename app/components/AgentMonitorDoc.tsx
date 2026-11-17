@@ -12,7 +12,7 @@ import { AGENT_MONITOR_AXIS, AGENT_MONITOR_STEPS } from "@/lib/agent-demo.sample
 
 const STEPS = AGENT_MONITOR_STEPS;
 const AXIS = AGENT_MONITOR_AXIS;
-const BASE = { name: "Refactor billing service", meta: "claude-code · acme-demo · example data", axis: AXIS };
+const BASE = { name: "Refactor billing service", meta: "claude-code · acme-demo", axis: AXIS };
 
 const WAITING_STEPS: AgentMonitorStep[] = [...STEPS.slice(0, 5), { id: "s6", tool: "psql", status: "waiting" }];
 const PAUSED_STEPS: AgentMonitorStep[] = [...STEPS.slice(0, 5), { id: "s6", tool: "edit_file", status: "waiting" }];
@@ -50,7 +50,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   elapsed="02:14"
   cost="$0.42"
   steps={steps}
-  axis={["0:00", "1:00", "2:14"]}
+  axis={["0:00", "2:14"]}
   onSelectStep={setStepId}
 />`,
     render: (
@@ -72,8 +72,8 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     ),
   },
   {
-    title: "Collapsed — tools used",
-    about: "collapsed keeps one row: clock, cost and the tools the run used. A finished run shows a check.",
+    title: "Collapsed",
+    about: "collapsed keeps the status and the step strip; picking a step opens the card on that step.",
     code: `<AgentMonitor … collapsed onCollapsedChange={setCollapsed} />`,
     render: (
       <div className={agentDoc.stack}>
@@ -102,7 +102,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
         elapsed="04:02"
         cost="$0.58"
         steps={DONE_STEPS}
-        axis={["0:00", "2:00", "4:02"]}
+        axis={["0:00", "4:02"]}
         onViewDiff={noop}
         onOpenTrail={noop}
       />
@@ -121,7 +121,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
         elapsed="01:48"
         cost="$0.31"
         steps={FAILED_STEPS}
-        axis={["0:00", "1:00", "1:48"]}
+        axis={["0:00", "1:48"]}
         onRetry={noop}
         onOpenTrail={noop}
       />

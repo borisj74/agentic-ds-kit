@@ -13,7 +13,7 @@ export const AGENT_MONITOR_STEPS: AgentMonitorStep[] = [
   { id: "s6", tool: "edit_file", status: "running", target: "src/billing/invoice.ts", started: "2:01" },
 ];
 
-export const AGENT_MONITOR_AXIS = ["0:00", "1:00", "2:14"];
+export const AGENT_MONITOR_AXIS = ["0:00", "2:14"];
 
 /** ContextWindow segments in display order. */
 export function contextSegments(system: number, memory: number, tools: number, messages: number, reserved: number): ContextSegment[] {

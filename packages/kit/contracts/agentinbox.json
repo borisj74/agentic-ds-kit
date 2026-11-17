@@ -55,7 +55,7 @@
     "onFilterChange": {
       "type": "function",
       "required": false,
-      "note": "(filter) => void. Shows the SegmentedControl with counts."
+      "note": "(filter) => void. Shows the SegmentedControl with type labels; the unread Badge carries the count."
     },
     "onMarkAllRead": {
       "type": "function",
@@ -127,7 +127,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -137,8 +136,8 @@
     "action.selected",
     "primary.base",
     "icon.success",
-    "icon.danger",
-    "status.warningText",
+    "icon.warning",
+    "icon.muted",
     "status.dangerSubtle",
     "status.dangerText",
     "grid.gutter.md"

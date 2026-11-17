@@ -15,7 +15,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
   animation: approval-in var(--motion-duration-200) var(--motion-ease-out);
 }
@@ -29,31 +28,6 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-}
-
-.lead {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-8);
-  height: var(--space-8);
-  border-radius: var(--radius-lg);
-}
-
-.lead-high {
-  background-color: var(--status-danger-subtle);
-  color: var(--status-danger-text);
-}
-
-.lead-medium {
-  background-color: var(--status-warning-subtle);
-  color: var(--status-warning-text);
-}
-
-.lead-low {
-  background-color: var(--primary-subtle);
-  color: var(--primary-fg);
 }
 
 .heading {

@@ -57,6 +57,7 @@
     "rest": "section"
   },
   "tokens": [
+    "radius.controlMd",
     "bg.surface",
     "bg.subtle",
     "line.default",
@@ -70,8 +71,6 @@
     "icon.danger",
     "status.dangerText",
     "radius.surfaceLg",
-    "radius.pill",
-    "shadow.sm",
     "space.1",
     "space.2",
     "space.3",
@@ -99,5 +98,5 @@
     "Do not use raw hex for status colors",
     "Do not put actions in the trail; approvals go in ApprovalCard"
   ],
-  "snippet": "<AgentTrail title=\"Implement login rate limit\" icon=\"GitPullRequest\" steps={[{ id: \"1\", label: \"Read auth module\", status: \"done\", duration: \"4.1s\" }, { id: \"2\", label: \"Awaiting approval\", status: \"approval\", timer: \"0:18\", sublabel: \"write_file src/middleware/auth.ts\" }, { id: \"3\", label: \"Run unit tests\", status: \"pending\" }]} />"
+  "snippet": "<AgentTrail title=\"Implement login rate limit\" icon=\"GitPullRequest\" steps={[{ id: \"1\", label: \"Read auth module\", status: \"done\", duration: \"4.1s\" }, { id: \"2\", label: \"Awaiting approval\", status: \"approval\", timer: \"18s\", sublabel: \"write_file src/middleware/auth.ts\" }, { id: \"3\", label: \"Run unit tests\", status: \"pending\" }]} />"
 }

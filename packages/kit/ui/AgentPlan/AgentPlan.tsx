@@ -189,28 +189,37 @@ export function AgentPlan({
   const badge = STATUS_BADGE[status];
   const empty = status === "draft" && steps.length === 0 && !adding;
 
-  if (collapsed) {
-    return (
-      <section {...rest} {...nisthaAttr("agentplan", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={titleId}>
+  // Collapsed is the open card's header on its own, at the same width, so nothing jumps.
+  const header = (open: boolean) => (
+    <header className={styles.header}>
+      <div className={styles.titleRow}>
         <ClipboardList size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
-        <span className={styles.collapsedSummary}>· {line}</span>
         <Badge tone={badge.tone} size="sm">
           {badge.label}
         </Badge>
         {onCollapsedChange ? (
           <button
             type="button"
-            className={styles.expand}
-            aria-expanded="false"
-            aria-label={`Show plan: ${title}`}
-            onClick={() => onCollapsedChange(false)}
+            className={cx(styles.expand, open && styles.expandOpen)}
+            aria-expanded={open}
+            aria-label={`${open ? "Hide" : "Show"} plan: ${title}`}
+            onClick={() => onCollapsedChange(open)}
           >
             <ChevronDown size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           </button>
         ) : null}
+      </div>
+      <p className={styles.summary}>{line}</p>
+    </header>
+  );
+
+  if (collapsed) {
+    return (
+      <section {...rest} {...nisthaAttr("agentplan", rest)} ref={ref} className={cx(styles.plan, styles.collapsed, className)} aria-labelledby={titleId}>
+        {header(false)}
       </section>
     );
   }
@@ -249,29 +258,7 @@ export function AgentPlan({
       aria-busy={status === "drafting" || undefined}
       onKeyDown={handleKeyDown}
     >
-      <header className={styles.header}>
-        <div className={styles.titleRow}>
-          <ClipboardList size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
-          <h3 id={titleId} className={styles.title}>
-            {title}
-          </h3>
-          <Badge tone={badge.tone} size="sm">
-            {badge.label}
-          </Badge>
-          {onCollapsedChange ? (
-            <button
-              type="button"
-              className={cx(styles.expand, styles.expandOpen)}
-              aria-expanded="true"
-              aria-label={`Hide plan: ${title}`}
-              onClick={() => onCollapsedChange(true)}
-            >
-              <ChevronDown size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-            </button>
-          ) : null}
-        </div>
-        <p className={styles.summary}>{line}</p>
-      </header>
+      {header(true)}
 
       {status === "drafting" ? (
         <div className={styles.loading}>

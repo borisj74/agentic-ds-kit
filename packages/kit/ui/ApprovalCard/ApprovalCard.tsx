@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
-import { Check, FilePen, Pencil, ShieldAlert, SquareTerminal, Timer, X } from "lucide-react";
+import { Check, FilePen, SquareTerminal, Timer, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -33,15 +33,6 @@ function formatClock(totalSec: number): string {
 
 function summaryOf(action: ApprovalCardAction): string {
   return action.kind === "command" ? action.command : action.file;
-}
-
-function LeadIcon({ risk, kind }: { risk: ApprovalCardRisk; kind: ApprovalCardAction["kind"] }) {
-  const Icon = risk === "high" ? ShieldAlert : kind === "diff" ? Pencil : SquareTerminal;
-  return (
-    <span className={cx(styles.lead, styles[`lead-${risk}`])} aria-hidden="true">
-      <Icon size={16} strokeWidth={ICON_STROKE} />
-    </span>
-  );
 }
 
 function Preview({ action }: { action: ApprovalCardAction }) {
@@ -169,15 +160,19 @@ export function ApprovalCard({
     );
   }
 
+  // High risk approves only with ⌘⏎ or Ctrl+⏎, so a stray Enter cannot run a destructive action.
+  const strongApprove = risk === "high";
+
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.defaultPrevented) return;
     const target = event.target as HTMLElement;
-    // Leave Enter alone on other buttons and fields inside the card.
+    // Leave both keys alone on buttons and fields inside the card: Esc on Approve must not deny.
     const onOtherControl = target !== event.currentTarget && target.closest("button, a, input, textarea, select");
+    if (onOtherControl) return;
     if (event.key === "Escape" && onDeny) {
       event.preventDefault();
       onDeny();
-    } else if (event.key === "Enter" && onApprove && !onOtherControl) {
+    } else if (event.key === "Enter" && onApprove && (!strongApprove || event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       onApprove();
     }
@@ -198,7 +193,6 @@ export function ApprovalCard({
       onKeyDown={handleKeyDown}
     >
       <header className={styles.header}>
-        <LeadIcon risk={risk} kind={action.kind} />
         <div className={styles.heading}>
           <h3 id={titleId} className={styles.title}>
             {title}
@@ -233,7 +227,13 @@ export function ApprovalCard({
         <Button appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" onClick={onDeny}>
           {denyLabel}
         </Button>
-        <Button appearance="solid" mode="primary" shortcut="⏎" aria-keyshortcuts="Enter" onClick={onApprove}>
+        <Button
+          appearance="solid"
+          mode="primary"
+          shortcut={strongApprove ? "⌘⏎" : "⏎"}
+          aria-keyshortcuts={strongApprove ? "Meta+Enter Control+Enter" : "Enter"}
+          onClick={onApprove}
+        >
           {approveLabel}
         </Button>
       </footer>

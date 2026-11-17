@@ -7430,7 +7430,7 @@
             "high"
           ],
           "default": "medium",
-          "note": "Colors the lead tile and the risk Badge. high uses a shield icon."
+          "note": "Sets the risk Badge (and, at high, the ⌘⏎ approve shortcut)."
         },
         "action": {
           "type": "object",
@@ -7456,12 +7456,12 @@
         "onApprove": {
           "type": "function",
           "required": false,
-          "note": "Approve button and Enter while focus is inside the card (not on another control)."
+          "note": "Approve button and Enter while focus is inside the card (not on another control). High risk needs ⌘⏎ or Ctrl+⏎."
         },
         "onDeny": {
           "type": "function",
           "required": false,
-          "note": "Deny button and Escape while focus is inside the card."
+          "note": "Deny button and Escape while focus is inside the card (not on another control)."
         },
         "onExpire": {
           "type": "function",
@@ -7615,7 +7615,7 @@
       "useWhen": [
         "an agent proposes several steps and the person should accept or edit them first",
         "show which planned step runs now and which need approval",
-        "a compact one-line plan summary in a chat"
+        "a compact plan summary in a chat"
       ],
       "doNotUseWhen": [
         "what already happened in a run — AgentTrail",
@@ -7725,7 +7725,7 @@
         "collapsed": {
           "type": "boolean",
           "default": false,
-          "note": "One-line summary row."
+          "note": "The header alone: title, status and the summary line, at the open width."
         },
         "onCollapsedChange": {
           "type": "function",
@@ -8209,7 +8209,7 @@
         "axis": {
           "type": "string[]",
           "required": false,
-          "note": "Labels under the strip, e.g. [\"0:00\", \"1:00\", \"2:14\"]."
+          "note": "Start and end labels under the strip, e.g. [\"0:00\", \"2:14\"]. Step tiles are equal widths, so only the first and last labels show."
         },
         "selectedStepId": {
           "type": "string",
@@ -8241,7 +8241,7 @@
         "collapsed": {
           "type": "boolean",
           "default": false,
-          "note": "One row with clock, cost and the tools used."
+          "note": "A compact card: name, clock, cost and status in one row, the same step strip below. Picking a step opens the card on that step."
         },
         "onCollapsedChange": {
           "type": "function",
@@ -8492,7 +8492,7 @@
         "onFilterChange": {
           "type": "function",
           "required": false,
-          "note": "(filter) => void. Shows the SegmentedControl with counts."
+          "note": "(filter) => void. Shows the SegmentedControl with type labels; the unread Badge carries the count."
         },
         "onMarkAllRead": {
           "type": "function",

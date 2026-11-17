@@ -6,7 +6,7 @@
   "useWhen": [
     "an agent proposes several steps and the person should accept or edit them first",
     "show which planned step runs now and which need approval",
-    "a compact one-line plan summary in a chat"
+    "a compact plan summary in a chat"
   ],
   "doNotUseWhen": [
     "what already happened in a run — AgentTrail",
@@ -120,7 +120,7 @@
     "collapsed": {
       "type": "boolean",
       "default": false,
-      "note": "One-line summary row."
+      "note": "The header alone: title, status and the summary line, at the open width."
     },
     "onCollapsedChange": {
       "type": "function",
@@ -135,17 +135,16 @@
     "rest": "section"
   },
   "tokens": [
+    "primary.fg",
     "bg.surface",
     "bg.subtle",
     "bg.controlHover",
     "line.default",
-    "line.strong",
     "text.fg",
     "text.fgMuted",
     "text.fgSubtle",
     "primary.base",
     "primary.subtle",
-    "action.onPrimary",
     "icon.success",
     "icon.danger",
     "status.dangerSubtle",
@@ -154,7 +153,6 @@
     "radius.surfaceLg",
     "radius.surfaceMd",
     "radius.pill",
-    "shadow.sm",
     "space.1",
     "space.2",
     "space.3",
