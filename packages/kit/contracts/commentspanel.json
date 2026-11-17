@@ -127,7 +127,6 @@
     "status.dangerSubtle",
     "status.dangerText",
     "bg.subtle",
-    "shadow.md",
     "motion.duration200"
   ],
   "a11y": {
