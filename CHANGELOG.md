@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed text tokens.** `--text-fixed-dark` (slate 900) and `--text-fixed-light` (white) stay the same in light and dark mode, for labels on fills that don't change with the mode. The Color foundations page uses them for primitive swatch labels instead of `--color-slate-900` and `--color-white`
 - **Docs and agent guidance.** The Typography foundations page shows the marketing roles and the tracking steps next to the existing roles, and lists every letter-spacing primitive. `tokens/usage.json` (served by the MCP `get_tokens` tool) marks each new token as marketing and landing pages only. A token test checks the new roles, breakpoint values and tracking in the built CSS
 
+### Changed
+
+- **Surfaces in the page flow drop their shadow (1 of 3).** Card, ChangeSummary, Command, CommentThread and CommentsPanel keep their hairline border and lose `--shadow-sm`, so the border alone draws the edge. Menus, popovers and dialogs keep the `--shadow-overlay-*` shadows. Contracts drop `shadow.sm` from their `tokens` lists (CommentsPanel draws its edge through Card, so only its contract changes)
+
 ## [0.27.1] - 2026-11-16
 
 ### Fixed
