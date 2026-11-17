@@ -18,12 +18,11 @@
   gap: var(--space-3);
 }
 
+/* No frame of its own inside the Card: rows are split by hairlines. */
 .list {
   margin: 0;
   padding: 0;
   list-style: none;
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
 }
 
 .row {
