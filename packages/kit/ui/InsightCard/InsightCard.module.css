@@ -12,25 +12,31 @@
   background-color: var(--surface-card);
   border: var(--border-highlight) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  box-shadow: var(--shadow-sm);
 }
 
+/* The title follows the card size, so a small card does not carry a page-section heading. */
 .sm {
   --insight-padding: var(--space-4);
   --insight-gap: var(--space-3);
   --insight-width: 20rem;
+  --insight-title: var(--type-size-body);
+  --insight-title-line: var(--type-line-ui-md);
 }
 
 .md {
   --insight-padding: var(--space-6);
   --insight-gap: var(--space-4);
   --insight-width: 24rem;
+  --insight-title: var(--type-size-ui-lg);
+  --insight-title-line: var(--type-line-ui-lg);
 }
 
 .lg {
   --insight-padding: var(--space-8);
   --insight-gap: var(--space-5);
   --insight-width: 28rem;
+  --insight-title: var(--type-size-heading);
+  --insight-title-line: var(--type-line-heading);
 }
 
 .header {
@@ -108,10 +114,10 @@
   margin: 0;
   overflow-wrap: anywhere;
   font-family: var(--font-sans);
-  font-size: var(--type-size-heading);
+  font-size: var(--insight-title, var(--type-size-heading));
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-heading);
+  line-height: var(--insight-title-line, var(--type-line-heading));
   color: var(--text-primary);
 }
 

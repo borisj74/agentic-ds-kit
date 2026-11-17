@@ -73,6 +73,8 @@
     "rest": "section"
   },
   "tokens": [
+    "surface.card",
+    "fill.strong",
     "bg.surface",
     "bg.subtle",
     "line.default",
@@ -82,7 +84,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",

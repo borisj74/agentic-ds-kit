@@ -24,7 +24,7 @@
   margin: 0;
   overflow-wrap: anywhere;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
+  font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
   color: var(--text-primary);
 }

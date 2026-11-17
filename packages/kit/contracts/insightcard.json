@@ -116,11 +116,14 @@
     "rest": "article"
   },
   "tokens": [
+    "type.line.uiLg",
+    "type.line.uiMd",
+    "type.size.uiLg",
+    "type.size.body",
     "surface.card",
     "border.highlight",
     "border.faint",
     "radius.surfaceMd",
-    "shadow.sm",
     "text.primary",
     "text.secondary",
     "text.muted",

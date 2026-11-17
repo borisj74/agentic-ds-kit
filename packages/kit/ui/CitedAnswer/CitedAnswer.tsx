@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { ChevronDown, CircleX, ExternalLink, Layers, Sparkles } from "lucide-react";
+import { ChevronDown, CircleX, ExternalLink, Layers } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { ShimmerText } from "../ShimmerText";
@@ -80,9 +80,6 @@ export function CitedAnswer({
   return (
     <article {...rest} {...nisthaAttr("citedanswer", rest)} ref={ref} className={cx(styles.answer, className)} aria-busy={loading || undefined}>
       <header className={styles.header}>
-        <span className={styles.avatar} aria-hidden="true">
-          <Sparkles size={14} strokeWidth={ICON_STROKE} />
-        </span>
         <span className={styles.author}>{author}</span>
         {time ? <span className={styles.time}>· {time}</span> : null}
       </header>
