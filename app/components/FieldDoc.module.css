@@ -1,7 +1,9 @@
+/* Month, Year and CVC share a row when there is room (columns at least 6rem, space-16 × 1.5)
+   and wrap instead of clipping the Select values on a narrow card. */
 .split {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-16) * 1.5)), 1fr));
+  gap: var(--grid-gutter-sm);
   min-width: 0;
 }
 
