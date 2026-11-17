@@ -32,10 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **DoneCheck is lighter.** The check list no longer draws its own frame inside the Card (rows keep hairlines), evidence output keeps its columns and scrolls sideways instead of wrapping, and the trailing "3/5" goes, since the "3 of 5 met" badge and the bar already say it
 - **TaskBrief's Goal hint says what to write.** It reads "One sentence on what the agent should do." instead of repeating the Done when question
 
-### Changed
-
-- **AssumptionLog loses its inner frame.** The list of assumptions no longer draws its own border and radius inside the Card; rows are split by hairlines. Medium confidence uses the new neutral Meter instead of blue, so colour stays at the ends: amber for low, green for high
-
 ## [0.27.1] - 2026-11-16
 
 ### Fixed
