@@ -110,8 +110,6 @@
     "primary.fg",
     "action.onPrimary",
     "bg.subtle",
-    "status.success",
-    "status.info",
     "status.warning",
     "status.danger",
     "motion.duration200",

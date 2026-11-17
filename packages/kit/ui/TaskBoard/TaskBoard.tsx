@@ -289,20 +289,24 @@ export function TaskBoard({
                                 ))}
                               </span>
                             ) : null}
-                            <span className={styles.cardFoot}>
-                              <span className={cx(styles.due, !card.dueOn && styles.noDue)}>
-                                {card.dueOn ? <CalendarDays size={12} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
-                                {card.dueOn ? `Due ${card.dueOn}` : "No due date"}
+                            {card.dueOn || card.assignee ? (
+                              <span className={styles.cardFoot}>
+                                {card.dueOn ? (
+                                  <span className={styles.due}>
+                                    <CalendarDays size={12} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                                    {`Due ${card.dueOn}`}
+                                  </span>
+                                ) : null}
+                                {card.assignee ? (
+                                  <Avatar
+                                    size="sm"
+                                    name={card.assignee.name}
+                                    initials={card.assignee.initials ?? initialsOf(card.assignee.name)}
+                                    src={card.assignee.avatarSrc}
+                                  />
+                                ) : null}
                               </span>
-                              {card.assignee ? (
-                                <Avatar
-                                  size="sm"
-                                  name={card.assignee.name}
-                                  initials={card.assignee.initials ?? initialsOf(card.assignee.name)}
-                                  src={card.assignee.avatarSrc}
-                                />
-                              ) : null}
-                            </span>
+                            ) : null}
                           </button>
                         </li>
                       );

@@ -149,7 +149,7 @@ function Panel({
           {label}
         </h3>
         {unread > 0 && !loading && !error ? (
-          <Badge tone="info" size="sm">
+          <Badge tone="neutral" size="sm">
             {`${unread} unread`}
           </Badge>
         ) : null}
@@ -220,6 +220,7 @@ function Row({
         </span>
         {item.body ? <span className={styles.itemBody}>{item.body}</span> : null}
       </span>
+      {!item.read ? <span className={styles.unreadDot} aria-hidden="true" /> : null}
       <time className={styles.time}>{item.createdAt}</time>
     </>
   );

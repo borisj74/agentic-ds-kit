@@ -74,7 +74,6 @@
 
 .planHighlight {
   border-color: var(--primary);
-  box-shadow: 0 0 0 var(--border-width-thin) var(--primary);
 }
 
 .planHead {
@@ -145,5 +144,5 @@
 
 .check {
   flex-shrink: 0;
-  color: var(--status-success);
+  color: var(--text-fg-muted);
 }
