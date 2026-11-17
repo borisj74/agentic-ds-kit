@@ -682,7 +682,7 @@ npm run bump:kit -- patch
 npm run publish:kit
 ```
 
-`bump:kit` writes `packages/kit/package.json` and rewrites the current-version pins in this file. Use `minor` or an exact version (`0.3.0`) instead of `patch` when that is the bump. Commit the bump, then run `publish:kit`. It syncs the pins again, refuses a dirty tree or an existing tag, publishes, then tags the commit `vX.Y.Z` and pushes the tag to the **github** remote (set `KIT_RELEASE_REMOTE` for another). Add the release notes to `CHANGELOG.md` in the bump commit. Historical notes for **0.1.0** and **0.2.0** stay as written.
+`bump:kit` writes `packages/kit/package.json` and rewrites the current-version pins in this file. Use `minor` or an exact version (`0.3.0`) instead of `patch` when that is the bump. Commit the bump, then run `publish:kit`. It syncs the pins again, refuses a dirty tree or an existing tag, publishes, then tags the commit `vX.Y.Z` and pushes the tag to the **github** remote (set `KIT_RELEASE_REMOTE` for another). Before committing the bump, run `npm run changelog`: it moves every `changes/*.md` entry (and anything left under `[Unreleased]`) under a new `## [X.Y.Z] - date` heading in `CHANGELOG.md` and deletes those files, so the release notes land in the bump commit. Pull requests add `changes/<branch-name>.md` and never edit `CHANGELOG.md` (see [changes/README.md](../changes/README.md)). Historical notes for **0.1.0** and **0.2.0** stay as written.
 
 To turn the tag into a GitHub Release:
 
