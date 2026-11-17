@@ -16,5 +16,7 @@ type UsageListOwnedKeys = "children" | "role" | "aria-label";
 export interface UsageListProps extends Omit<ComponentPropsWithoutRef<"div">, UsageListOwnedKeys> {
   items: UsageListItem[];
   label?: string;
+  /** Show only the used amount, without "of limit", when every item shares one limit (a breakdown). */
+  hideLimit?: boolean;
   ref?: Ref<HTMLDivElement>;
 }

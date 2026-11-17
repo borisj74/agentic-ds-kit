@@ -2,7 +2,7 @@
   "id": "progress",
   "status": "stable",
   "level": "atom",
-  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
+  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
   "useWhen": [
     "Upload, import, or task completion",
     "A determinate percent in a form, card, or page",
@@ -69,9 +69,11 @@
         "brand",
         "warning",
         "danger",
-        "muted"
+        "muted",
+        "neutral"
       ],
-      "default": "brand"
+      "default": "brand",
+      "note": "muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
     },
     "ariaLabel": {
       "type": "string",

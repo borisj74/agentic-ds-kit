@@ -107,6 +107,23 @@
   stroke: var(--fill-strong);
 }
 
+/* Neutral: a mid grey for a value with no judgement (muted is ink, for a value that should read strong). */
+.neutral .track {
+  background-color: var(--fill-subtle);
+}
+
+.neutral .fill {
+  background-color: color-mix(in srgb, var(--fill-strong) 45%, var(--surface-card));
+}
+
+.neutral .trackArc {
+  stroke: var(--fill-subtle);
+}
+
+.neutral .valueArc {
+  stroke: color-mix(in srgb, var(--fill-strong) 45%, var(--surface-card));
+}
+
 .sm .track {
   height: var(--space-1);
 }

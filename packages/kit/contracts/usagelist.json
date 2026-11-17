@@ -35,6 +35,11 @@
       "type": "string",
       "default": "Usage",
       "note": "Names the list for screen readers, like Plan usage."
+    },
+    "hideLimit": {
+      "type": "boolean",
+      "default": false,
+      "note": "Visible figures show only the used amount, without \"of limit\", for a breakdown where every item shares one limit. The bar's name still says used of limit."
     }
   },
   "passthrough": {

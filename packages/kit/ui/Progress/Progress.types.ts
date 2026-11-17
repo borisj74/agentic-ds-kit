@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressValuePosition = "overlay" | "end";
-export type ProgressTone = "brand" | "warning" | "danger" | "muted";
+export type ProgressTone = "brand" | "warning" | "danger" | "muted" | "neutral";
 export type ProgressShape = "bar" | "circle" | "semicircle";
 
 /** Native div attributes the kit sets itself (or replaces with its own prop). */

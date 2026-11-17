@@ -1747,10 +1747,11 @@
             "info",
             "success",
             "warning",
-            "danger"
+            "danger",
+            "neutral"
           ],
           "required": false,
-          "note": "Sets the value's color outright, whatever thresholds says, when the screen knows what the value means. Leave it out for the brand (ink) value or the threshold zones."
+          "note": "Sets the value's color outright, whatever thresholds says, when the screen knows what the value means. neutral is a mid grey for a value that carries no judgement. Leave it out for the brand (ink) value or the threshold zones."
         },
         "referenceLines": {
           "type": "boolean",
@@ -5977,7 +5978,7 @@
     {
       "id": "progress",
       "group": "component",
-      "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted. Sizes sm, md, lg. Fill grows once on load.",
+      "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
       "useWhen": [
         "Upload, import, or task completion",
         "A determinate percent in a form, card, or page",
@@ -6059,9 +6060,11 @@
             "brand",
             "warning",
             "danger",
-            "muted"
+            "muted",
+            "neutral"
           ],
-          "default": "brand"
+          "default": "brand",
+          "note": "muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
         },
         "ariaLabel": {
           "type": "string",
@@ -7022,6 +7025,11 @@
           "type": "string",
           "default": "Usage",
           "note": "Names the list for screen readers, like Plan usage."
+        },
+        "hideLimit": {
+          "type": "boolean",
+          "default": false,
+          "note": "Visible figures show only the used amount, without \"of limit\", for a breakdown where every item shares one limit. The bar's name still says used of limit."
         }
       }
     },

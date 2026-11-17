@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 export type MeterShape = "bar" | "circle" | "semicircle";
 export type MeterSize = "sm" | "md" | "lg";
 export type MeterThresholds = "none" | "bar" | "plotArea" | "all";
-export type MeterIntent = "info" | "success" | "warning" | "danger";
+export type MeterIntent = "info" | "success" | "warning" | "danger" | "neutral";
 
 /** Native div attributes the kit sets itself (or replaces with its own prop). */
 type MeterOwnedKeys = "children" | "role" | "aria-label" | "aria-valuemin" | "aria-valuemax" | "aria-valuenow" | "aria-valuetext";
