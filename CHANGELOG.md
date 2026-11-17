@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **UsageList bars are grey until they matter, and can hide a shared limit.** Normal bars use Progress's new `neutral` tone (a mid grey) instead of brand blue; amber near the limit and red at it are unchanged. A new optional `hideLimit` shows only the used amount ("3,510 credits") for a breakdown where every item shares one limit; the bar's name still says used of limit. The contract adds `hideLimit`
 - **UsageMeter lets the total lead.** Its category breakdown uses UsageList's `hideLimit` and grey bars, so the amber total is the one coloured bar, and the daily chart sits in the card without a frame of its own. The card keeps its hairline border and drops `--shadow-sm`; the contract's `tokens` list drops `shadow.sm`
 - **Surfaces in the page flow drop their shadow (1 of 3).** Card, ChangeSummary, Command, CommentThread and CommentsPanel keep their hairline border and lose `--shadow-sm`, so the border alone draws the edge. Menus, popovers and dialogs keep the `--shadow-overlay-*` shadows. Contracts drop `shadow.sm` from their `tokens` lists (CommentsPanel draws its edge through Card, so only its contract changes)
+- **Surfaces in the page flow drop their shadow (2 of 3).** DecisionCard, ExperimentCard, InlineDiff, IntegrationPicker and InvoiceDocument keep their hairline border and lose `--shadow-sm`. Contracts drop `shadow.sm` from their `tokens` lists
 
 ## [0.27.1] - 2026-11-16
 
