@@ -30,17 +30,17 @@ const YEARS = [
 ];
 
 const MASTER_CODE = `<Card
-  title="Payment Method"
-  description="All transactions are secure and encrypted"
-  actions={[{ label: "Submit" }, { label: "Cancel", appearance: "outline", mode: "neutral" }]}
+  title="Payment method"
+  description="Card details for this workspace"
+  actions={[{ label: "Pay $49.00", appearance: "solid", mode: "primary" }, { label: "Cancel", appearance: "outline", mode: "neutral" }]}
 >
-  <Field label="Name on Card" htmlFor="name">
-    <Input id="name" placeholder="Evil Rabbit" />
+  <Field label="Name on card" htmlFor="name">
+    <Input id="name" placeholder="Priya Shah" />
   </Field>
-  <Field label="Card Number" htmlFor="card" hint="Enter your 16-digit card number">
-    <Input id="card" placeholder="ACCT-000003" iconStart="CreditCard" />
+  <Field label="Card number" htmlFor="card" hint="16 digits on the front of the card">
+    <Input id="card" placeholder="4242 4242 4242 4242" iconStart="CreditCard" />
   </Field>
-  <FieldSet legend="Billing Address" description="The billing address associated with your payment method">
+  <FieldSet legend="Billing address" description="Where the card is billed">
     <Checkbox id="same" label="Same as shipping address" />
   </FieldSet>
 </Card>`;
@@ -75,22 +75,22 @@ export function FieldDoc() {
               <div className={styles.canvas}>
                 <div className={local.masterCard}>
                   <Card
-                    title="Payment Method"
-                    description="All transactions are secure and encrypted"
+                    title="Payment method"
+                    description="Card details for this workspace"
                     actions={[
-                      { label: "Submit" },
+                      { label: "Pay $49.00", appearance: "solid", mode: "primary" },
                       { label: "Cancel", appearance: "outline", mode: "neutral" },
                     ]}
                   >
-                    <Field label="Name on Card" htmlFor="field-name">
-                      <Input id="field-name" placeholder="Evil Rabbit" />
+                    <Field label="Name on card" htmlFor="field-name">
+                      <Input id="field-name" placeholder="Priya Shah" />
                     </Field>
                     <Field
-                      label="Card Number"
+                      label="Card number"
                       htmlFor="field-card"
-                      hint="Enter your 16-digit card number"
+                      hint="16 digits on the front of the card"
                     >
-                      <Input id="field-card" placeholder="ACCT-000003" iconStart="CreditCard" />
+                      <Input id="field-card" placeholder="4242 4242 4242 4242" iconStart="CreditCard" />
                     </Field>
                     <div className={local.split}>
                       <Field label="Month" htmlFor="field-month">
@@ -99,18 +99,18 @@ export function FieldDoc() {
                       <Field label="Year" htmlFor="field-year">
                         <Select id="field-year" options={YEARS} />
                       </Field>
-                      <Field label="CVV" htmlFor="field-cvv">
-                        <Input id="field-cvv" placeholder="CVC" />
+                      <Field label="CVC" htmlFor="field-cvv">
+                        <Input id="field-cvv" placeholder="123" />
                       </Field>
                     </div>
                     <FieldSet
-                      legend="Billing Address"
-                      description="The billing address associated with your payment method"
+                      legend="Billing address"
+                      description="Where the card is billed"
                     >
                       <Checkbox id="field-same" label="Same as shipping address" defaultChecked />
                     </FieldSet>
                     <Field label="Comments" htmlFor="field-comments">
-                      <Textarea id="field-comments" placeholder="Add a comment..." />
+                      <Textarea id="field-comments" placeholder="Add a note" />
                     </Field>
                   </Card>
                 </div>
@@ -219,8 +219,8 @@ export function FieldDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
                   <FieldSet
-                    legend="Billing Address"
-                    description="The billing address associated with your payment method"
+                    legend="Billing address"
+                    description="Where the card is billed"
                   >
                     <Checkbox id="field-set-same" label="Same as shipping address" defaultChecked />
                   </FieldSet>
@@ -233,7 +233,7 @@ export function FieldDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={'<FieldSet legend="Billing Address" description="The billing address associated with your payment method"><Checkbox id="same" label="Same as shipping address" /></FieldSet>'}
+                code={'<FieldSet legend="Billing address" description="Where the card is billed"><Checkbox id="same" label="Same as shipping address" /></FieldSet>'}
               />
             </section>
           </div>
