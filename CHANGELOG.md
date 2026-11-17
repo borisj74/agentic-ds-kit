@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed text tokens.** `--text-fixed-dark` (slate 900) and `--text-fixed-light` (white) stay the same in light and dark mode, for labels on fills that don't change with the mode. The Color foundations page uses them for primitive swatch labels instead of `--color-slate-900` and `--color-white`
 - **Docs and agent guidance.** The Typography foundations page shows the marketing roles and the tracking steps next to the existing roles, and lists every letter-spacing primitive. `tokens/usage.json` (served by the MCP `get_tokens` tool) marks each new token as marketing and landing pages only. A token test checks the new roles, breakpoint values and tracking in the built CSS
 
+### Changed
+
+- **Progress has a neutral tone.** `tone="neutral"` draws a mid grey fill (the same mix as Meter's neutral), for a value that carries no judgement; `muted` stays an ink fill. The contract adds `neutral` to `tone`
+- **Meter has a neutral intent.** `intent="neutral"` draws the value in a mid grey (`--fill-strong` mixed into the card surface), for a value that carries no judgement. It works on the bar, ring and half ring. The contract adds `neutral` to `intent`
+- **UsageList bars are grey until they matter, and can hide a shared limit.** Normal bars use Progress's new `neutral` tone (a mid grey) instead of brand blue; amber near the limit and red at it are unchanged. A new optional `hideLimit` shows only the used amount ("3,510 credits") for a breakdown where every item shares one limit; the bar's name still says used of limit. The contract adds `hideLimit`
+- **UsageMeter lets the total lead.** Its category breakdown uses UsageList's `hideLimit` and grey bars, so the amber total is the one coloured bar, and the daily chart sits in the card without a frame of its own. The card keeps its hairline border and drops `--shadow-sm`; the contract's `tokens` list drops `shadow.sm`
+
 ## [0.27.1] - 2026-11-16
 
 ### Fixed

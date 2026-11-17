@@ -109,6 +109,7 @@ export function UsageMeter({
             <UsageList
               className={styles.list}
               label={`${title} by category`}
+              hideLimit
               items={categories.map((category) => ({ id: category.id, label: category.label, used: category.value, limit, unit }))}
             />
           ) : null}
