@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Bot, CircleCheck, CircleX, Square } from "lucide-react";
+import { CircleCheck, CircleX, Square } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Button } from "../Button";
@@ -54,9 +54,6 @@ export function AgentSteering({
 
   const header = (
     <header className={styles.header}>
-      <span className={styles.lead} aria-hidden="true">
-        <Bot size={16} strokeWidth={ICON_STROKE} />
-      </span>
       <div className={styles.heading}>
         <h3 id={nameId} className={styles.name}>
           {name}
@@ -79,7 +76,6 @@ export function AgentSteering({
     return (
       <section {...rest} {...nisthaAttr("agentsteering", rest)} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name}, loading`}>
         <div className={styles.header}>
-          <Skeleton shape="circle" size="md" />
           <div className={styles.heading}>
             <Skeleton width="45%" />
             <Skeleton width="30%" size="sm" />
@@ -146,7 +142,6 @@ export function AgentSteering({
         <Input
           id={inputId}
           className={styles.input}
-          iconStart="Compass"
           ariaLabel={`Steer ${name}`}
           placeholder={placeholder}
           value={value}
@@ -216,7 +211,7 @@ export function AgentSteering({
           Stop
         </Button>
         <span className={styles.hint} aria-hidden="true">
-          steer with ⏎
+          Enter to steer
         </span>
       </footer>
 

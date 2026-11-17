@@ -1,6 +1,7 @@
 .lanes {
   --lane-agent: calc(var(--space-16) * 2 + var(--space-8));
-  --lane-h: var(--space-10);
+  --lane-h: var(--space-12);
+  --block-h: var(--space-8);
   --axis-h: var(--space-6);
   /* Where the track starts after the agent column, and the track's vertical middle in a lane.
      The narrow layout below changes both; handoff lines read them. */
@@ -16,7 +17,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -83,7 +83,9 @@
 }
 
 /* Board: one grid column for agents, one for the time track. */
+/* The grid sits a step quieter than block edges and handoff lines, which draw over it. */
 .board {
+  --lanes-grid: color-mix(in srgb, var(--line-default) 55%, transparent);
   position: relative;
   padding: var(--space-2) var(--space-3) var(--space-3);
   background-color: var(--bg-subtle);
@@ -138,7 +140,7 @@
 }
 
 .lane + .lane {
-  border-top: var(--border-width-thin) solid var(--line-default);
+  border-top: var(--border-width-thin) solid var(--lanes-grid);
 }
 
 .agent {
@@ -189,7 +191,7 @@
 .grid {
   position: absolute;
   inset-block: 0;
-  border-inline-start: var(--border-width-thin) dashed var(--line-default);
+  border-inline-start: var(--border-width-thin) solid var(--lanes-grid);
 }
 
 /* Blocks */
@@ -200,7 +202,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  height: var(--space-6);
+  height: var(--block-h);
   margin: 0;
   padding-inline: var(--space-2);
   overflow: hidden;
@@ -215,6 +217,7 @@
   text-align: start;
   transform: translateY(-50%);
   cursor: pointer;
+  z-index: 2;
 }
 
 .block:disabled {
@@ -234,22 +237,22 @@
   white-space: nowrap;
 }
 
+/* Coloured blocks keep the same hairline as done blocks: neutral on running, tinted where the
+   status has its own border token. */
 .running {
   background-color: var(--primary-subtle);
-  border-color: transparent;
-  border-inline-end-color: var(--primary);
   color: var(--primary-fg);
 }
 
 .waiting {
   background-color: var(--status-warning-subtle);
-  border-color: transparent;
+  border-color: var(--status-warning-border);
   color: var(--status-warning-text);
 }
 
 .failed {
   background-color: var(--status-danger-subtle);
-  border-color: transparent;
+  border-color: var(--status-danger-border);
   color: var(--status-danger-text);
 }
 
@@ -277,16 +280,16 @@
   pointer-events: none;
 }
 
-/* Handoffs: a ring where the line leaves the source block, a drop just
-   left of the target, a rounded turn and a dot before the target's start.
-   Drawn under the rows so a block the line crosses covers it. */
+/* Handoffs: a neutral hairline that drops just left of the target, a rounded turn and one dot
+   before the target's start. Layers: grid at the bottom, handoff lines over it, blocks over the
+   lines (a block a line crosses covers it), the popover on top. */
 .rows {
   position: relative;
-  z-index: 1;
 }
 
 .connectors {
   position: absolute;
+  z-index: 1;
   inset: calc(var(--space-2) + var(--axis-h)) var(--space-3) var(--space-3) calc(var(--space-3) + var(--lane-offset));
   pointer-events: none;
 }
@@ -294,45 +297,27 @@
 .handoff {
   --handoff-dot: calc(var(--space-1) + var(--border-width-thin));
   position: absolute;
-  top: calc(var(--from-lane) * var(--lane-h) + var(--lane-mid) + var(--space-3));
+  top: calc(var(--from-lane) * var(--lane-h) + var(--lane-mid) + var(--block-h) / 2);
   inset-inline-start: var(--handoff-x);
   box-sizing: border-box;
   width: max(var(--space-2), calc(var(--handoff-to) - var(--space-1) - var(--handoff-x)));
-  height: calc(var(--rows) * var(--lane-h) - var(--space-3));
+  height: calc(var(--rows) * var(--lane-h) - var(--block-h) / 2);
   border-inline-start: var(--border-width-thin) solid currentColor;
   border-bottom: var(--border-width-thin) solid currentColor;
   border-end-start-radius: var(--radius-md);
   color: var(--line-strong);
 }
 
-.handoff::before,
+/* Dot just before the target block. */
 .handoff::after {
   content: "";
   position: absolute;
   border-radius: var(--radius-pill);
-}
-
-/* Ring just past the source block's edge; centred on it, the block would hide half. */
-.handoff::before {
-  top: 0;
-  inset-inline-start: calc(var(--space-1) / -2 - var(--border-width-thin) * 1.5);
-  width: var(--space-1);
-  height: var(--space-1);
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid currentColor;
-}
-
-/* Dot just before the target block. */
-.handoff::after {
   bottom: calc(var(--handoff-dot) / -2 - var(--border-width-thin) / 2);
   inset-inline-end: calc(var(--handoff-dot) / -2);
   width: var(--handoff-dot);
   height: var(--handoff-dot);
   background-color: currentColor;
-}
-
-.handoffLive {
-  color: var(--primary);
 }
 
 /* Up: the target lane is on top, so the line starts at its middle and ends
@@ -345,11 +330,6 @@
   border-start-start-radius: var(--radius-md);
 }
 
-.up::before {
-  top: auto;
-  bottom: 0;
-}
-
 .up::after {
   top: calc(var(--handoff-dot) / -2 - var(--border-width-thin) / 2);
   bottom: auto;
@@ -358,7 +338,7 @@
 /* Popover: detail or decision, under the open lane (or above it, see .above). */
 .popover {
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: calc(var(--space-2) + var(--axis-h) + (var(--pop-lane) + 1) * var(--lane-h));
   inset-inline-end: var(--space-3);
   box-sizing: border-box;
@@ -477,8 +457,8 @@
 @container (width < 40rem) {
   /* .board, not .lanes: a container query styles the container's descendants, not the container. */
   .board {
-    --lane-h: var(--space-16);
-    --lane-track: var(--space-8);
+    --lane-h: calc(var(--space-16) + var(--space-2));
+    --lane-track: var(--space-10);
     /* A length, not a bare 0: it is added inside calc(). */
     --lane-offset: 0px;
     --lane-mid: calc(var(--lane-h) - var(--lane-track) / 2);

@@ -86,6 +86,8 @@
     "rest": "section"
   },
   "tokens": [
+    "status.warningBorder",
+    "status.dangerBorder",
     "bg.surface",
     "bg.subtle",
     "bg.controlHover",
@@ -96,7 +98,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",

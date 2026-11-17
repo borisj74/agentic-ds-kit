@@ -8,7 +8,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -67,11 +66,8 @@
 .ends {
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-overline);
+  font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
   color: var(--text-fg-subtle);
 }
 
@@ -81,7 +77,6 @@
   gap: var(--space-1);
   padding: var(--space-3) var(--space-4);
   background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
   animation: dial-fade var(--motion-duration-200) var(--motion-ease-out);
 }
