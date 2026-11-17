@@ -13,6 +13,18 @@
   cursor: text;
 }
 
+/* Tags are taller than the text line, so the shell trims its vertical padding and holds the same
+   height as an Input of its size (line + control padding + border); wrapped rows still grow it. */
+.shellMd {
+  padding-block: var(--space-1);
+  min-height: calc(var(--type-line-body) + var(--space-2) * 2 + var(--border-width-thin) * 2);
+}
+
+.shellSm {
+  padding-block: var(--space-px);
+  min-height: calc(var(--type-line-body) + var(--space-1) * 2 + var(--border-width-thin) * 2);
+}
+
 .shell:hover:not([data-disabled]) {
   border-color: var(--border-strong);
 }
@@ -34,9 +46,10 @@
   background-color: var(--surface-muted);
 }
 
+/* Narrow enough to stay on the tags' row on a phone-width field; it still grows to fill the row. */
 .native {
-  flex: 1 1 var(--space-16);
-  min-width: var(--space-16);
+  flex: 1 1 var(--space-10);
+  min-width: var(--space-10);
   margin: 0;
   padding: 0;
   border: 0;
