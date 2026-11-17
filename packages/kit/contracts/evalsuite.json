@@ -119,7 +119,6 @@
     "the block is its own inline-size container and takes the full width; the DataTable scrolls sideways inside its frame on narrow screens"
   ],
   "tokens": [
-    "bg.subtle",
     "line.default",
     "text.fg",
     "text.fgMuted",

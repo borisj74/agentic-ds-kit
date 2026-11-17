@@ -235,28 +235,29 @@ export function EvalSuite({
           filters={(["tag", "dataset"] as FilterKey[]).map((key) => ({ id: key, label: filterOptions[key].label, value: filters[key] }))}
           openId={openFilter}
           onFilterClick={(id) => setOpenFilter((current) => (current === id ? undefined : (id as FilterKey)))}
+          renderOptions={(id) => {
+            const key = id as FilterKey;
+            return (
+              <RadioGroup
+                name={`${base}-${key}`}
+                legend={filterOptions[key].label}
+                size="sm"
+                options={[{ value: ANY, label: "Any" }, ...filterOptions[key].values.map((v) => ({ value: v, label: v }))]}
+                value={filters[key] ?? ANY}
+                onChange={(value) => {
+                  setFilters({ ...filters, [key]: value === ANY ? undefined : value });
+                  setOpenFilter(undefined);
+                }}
+              />
+            );
+          }}
           onClear={() => {
             setFilters({});
             setOpenFilter(undefined);
           }}
         />
       </div>
-      {openFilter ? (
-        <RadioGroup
-          className={styles.picker}
-          name={`${base}-${openFilter}`}
-          legend={filterOptions[openFilter].label}
-          size="sm"
-          orientation="horizontal"
-          options={[{ value: ANY, label: "Any" }, ...filterOptions[openFilter].values.map((v) => ({ value: v, label: v }))]}
-          value={filters[openFilter] ?? ANY}
-          onChange={(value) => {
-            setFilters({ ...filters, [openFilter]: value === ANY ? undefined : value });
-            setOpenFilter(undefined);
-          }}
-        />
-      ) : null}
-
+      
       <DataTable
         className={styles.table}
         ariaLabel={`Cases, ${VIEWS.find((v) => v.value === view)?.label.toLowerCase()} first`}

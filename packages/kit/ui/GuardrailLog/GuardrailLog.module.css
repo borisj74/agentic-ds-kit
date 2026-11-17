@@ -11,7 +11,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -43,12 +42,7 @@
   color: var(--text-fg-muted);
 }
 
-.picker {
-  padding: var(--space-3);
-  background-color: var(--bg-subtle);
-  border-radius: var(--radius-surface-md);
-}
-
+/* No frame of its own inside the card: rows are split by hairlines. */
 .list {
   /* Columns line up across rows (subgrid): verdict, rule and attempt, agent, time. */
   display: grid;
@@ -56,8 +50,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
 }
 
 .list > li {

@@ -12,7 +12,8 @@
     "Search inside a table — use DataTable",
     "Page actions — use Button"
   ],
-  "contains": ["filterbutton", "dropdownmenu", "button"],
+  "contains": ["filterbutton", "dropdownmenu",
+    "popover", "button"],
   "props": {
     "filters": {
       "type": "array",
@@ -21,6 +22,11 @@
     },
     "openId": { "type": "string", "required": false, "note": "Which chip's options are open." },
     "onFilterClick": { "type": "function", "required": false, "note": "(id: string) => void" },
+    "renderOptions": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => ReactNode. Options for one filter. When set, each chip opens them in a kit Popover anchored to the chip; openId and onFilterClick still say which one is open."
+    },
     "onClear": { "type": "function", "required": false, "note": "Clear all. Shown when a filter has a value or count." },
     "onAdd": { "type": "function", "required": false, "note": "Shows Add filter when set." },
     "addLabel": { "type": "string", "default": "Add filter" },
@@ -37,6 +43,7 @@
       "The row is a group labelled Filters, or ariaLabel",
       "Each chip is a kit FilterButton",
       "Overflow is a menu of the hidden filters",
+      "With renderOptions, a chip opens a kit Popover (aria-haspopup=dialog) that Escape and a click outside close",
       "Clear all is a button, present only when a filter is set"
     ]
   },

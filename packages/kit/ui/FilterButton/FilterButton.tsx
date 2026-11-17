@@ -1,5 +1,7 @@
 "use client";
 
+import type { AriaAttributes } from "react";
+
 import { LucideByName } from "../Button/lucideName";
 import { Count } from "../Count";
 import type { FilterButtonProps } from "./FilterButton.types";
@@ -117,7 +119,8 @@ export function FilterButton({
       type="button"
       className={className}
       disabled={disabled}
-      aria-haspopup="menu"
+      // A wrapper such as Popover can say what opens (dialog); a plain chip opens a menu.
+      aria-haspopup={(rest as { "aria-haspopup"?: AriaAttributes["aria-haspopup"] })["aria-haspopup"] ?? "menu"}
       aria-expanded={open}
       onClick={onClick}
     >

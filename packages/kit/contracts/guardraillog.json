@@ -32,7 +32,7 @@
     "events": {
       "type": "array",
       "required": true,
-      "note": "Newest first. { id, verdict: \"blocked\" | \"rewritten\" | \"flagged\", rule: { name, text, owner }, agent: { name, src? }, attempted, sentInstead?, at, runHref? }[]. sentInstead shows for rewritten."
+      "note": "Newest first. { id, verdict: \"blocked\" | \"rewritten\" | \"flagged\", rule: { name, text, owner }, agent: { name, src? } (the Avatar shows only with src), attempted, sentInstead?, at, runHref? }[]. sentInstead shows for rewritten."
     },
     "title": {
       "type": "string",
@@ -102,7 +102,6 @@
     "text.fgMuted",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
