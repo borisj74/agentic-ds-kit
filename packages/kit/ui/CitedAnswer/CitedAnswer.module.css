@@ -11,7 +11,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -21,17 +20,6 @@
   gap: var(--space-2);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-}
-
-.avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-6);
-  height: var(--space-6);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-pill);
-  color: var(--text-fg);
 }
 
 .author {
@@ -51,11 +39,14 @@
   color: var(--text-fg);
 }
 
+/* A raised, small mark that reads past the sentence instead of breaking it; still a real link. */
 .mark {
+  margin-inline-start: var(--space-px);
   border-radius: var(--radius-control-sm);
-  font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-body);
+  line-height: 0;
+  vertical-align: super;
   color: var(--link-default);
   text-decoration: none;
 }

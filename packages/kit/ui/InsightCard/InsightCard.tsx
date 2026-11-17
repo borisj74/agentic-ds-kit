@@ -15,12 +15,12 @@ export type {
 } from "./InsightCard.types";
 
 const TONE_ICON: Record<InsightCardTone, string> = {
-  opportunity: "Sparkles",
+  opportunity: "Lightbulb",
   success: "CircleCheck",
   warning: "TriangleAlert",
   danger: "CircleX",
   info: "Info",
-  neutral: "Sparkles",
+  neutral: "Lightbulb",
 };
 
 const ICON_SIZE = { sm: 14, md: 16, lg: 18 } as const;

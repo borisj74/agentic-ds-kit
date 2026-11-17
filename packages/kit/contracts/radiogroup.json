@@ -107,6 +107,10 @@
     "rest": "fieldset"
   },
   "tokens": [
+    "space.3",
+    "space.2",
+    "type.size.bodySm",
+    "action.selectedBorder",
     "text.primary",
     "text.muted",
     "text.danger",

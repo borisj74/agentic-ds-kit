@@ -254,6 +254,24 @@
   box-sizing: border-box;
 }
 
+/* The chosen card shows it: a hairline in the selection colour its dot already uses. */
+.card .radio[data-checked] {
+  border-color: var(--action-selected-border);
+}
+
+/* Small cards sit under a small question: 14px titles, tighter padding and gaps. */
+.sm.card .options {
+  gap: var(--space-2);
+}
+
+.sm.card .radio {
+  padding: var(--space-3);
+}
+
+.sm.card .label {
+  font-size: var(--type-size-body-sm);
+}
+
 .card .copy {
   display: grid;
   gap: var(--space-1);

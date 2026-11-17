@@ -11,7 +11,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -101,9 +100,9 @@
   background-color: var(--primary);
 }
 
+/* A solid mid grey (as Meter's neutral value), darker than seg0 and the empty track, so it reads as filled. */
 .seg4 {
-  background-color: var(--bg-tray);
-  box-shadow: inset 0 0 0 var(--border-width-thin) var(--line-strong);
+  background-color: color-mix(in srgb, var(--fill-strong) 45%, var(--surface-card));
 }
 
 .unknownBar {
