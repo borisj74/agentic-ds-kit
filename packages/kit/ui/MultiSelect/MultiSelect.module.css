@@ -46,9 +46,10 @@
   background-color: var(--surface-muted);
 }
 
+/* Narrow enough to stay on the tags' row on a phone-width field; it still grows to fill the row. */
 .native {
-  flex: 1 1 var(--space-16);
-  min-width: var(--space-16);
+  flex: 1 1 var(--space-10);
+  min-width: var(--space-10);
   margin: 0;
   padding: 0;
   border: 0;
