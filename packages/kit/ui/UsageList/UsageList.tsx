@@ -22,10 +22,10 @@ function formatAmount(value: number): string {
   });
 }
 
-function figuresText(item: UsageListItem): string {
+function figuresText(item: UsageListItem, hideLimit = false): string {
   const used = formatAmount(item.used);
   const limit = formatAmount(item.limit);
-  const base = `${used} of ${limit}`;
+  const base = hideLimit ? used : `${used} of ${limit}`;
   return item.unit ? `${base} ${item.unit}` : base;
 }
 
@@ -49,19 +49,22 @@ function statusCopy(level: Threshold): string | undefined {
   return undefined;
 }
 
-function barTone(level: Threshold): "brand" | "warning" | "danger" {
+// Colour only where the bar has something to say: amber near the limit, red at it; grey otherwise.
+function barTone(level: Threshold): "neutral" | "warning" | "danger" {
   if (level === "warning") return "warning";
   if (level === "danger") return "danger";
-  return "brand";
+  return "neutral";
 }
 
-export function UsageList({ items, label = "Usage", className, ref, ...rest }: UsageListProps) {
+export function UsageList({ items, label = "Usage", hideLimit = false, className, ref, ...rest }: UsageListProps) {
   return (
     <div {...rest} {...nisthaAttr("usagelist", rest)} ref={ref} className={cx(styles.root, className)} role="list" aria-label={label}>
       {items.map((item) => {
         const ratio = usageRatio(item);
         const level = thresholdOf(ratio);
+        // The bar's name always says "of limit"; hideLimit only drops it from the visible figures.
         const figures = figuresText(item);
+        const shown = figuresText(item, hideLimit);
         const status = statusCopy(level);
         const percent = ratio * 100;
         const ariaLabel = status ? `${item.label}, ${figures}, ${status}` : `${item.label}, ${figures}`;
@@ -80,7 +83,7 @@ export function UsageList({ items, label = "Usage", className, ref, ...rest }: U
                     aria-hidden
                   />
                 ) : null}
-                <span className={styles.amount}>{figures}</span>
+                <span className={styles.amount}>{shown}</span>
                 {status ? <span className={styles.srOnly}>{status}</span> : null}
               </span>
             </div>

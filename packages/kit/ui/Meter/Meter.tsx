@@ -48,6 +48,8 @@ export function Meter({
   const zone = zoneOf(percent);
   const fillIntent: MeterIntent | Zone | "brand" = intent ?? (thresholds === "bar" ? zone : "brand");
   const trackIntent = thresholds === "plotArea" ? zone : "neutral";
+  // The neutral value fill has its own class: `.neutral` already names the grey track.
+  const fillClass = (name: string) => (name === "neutral" ? styles.fillNeutral : styles[name]);
   const a11y = indeterminate
     ? ({
         role: "progressbar",
@@ -70,7 +72,7 @@ export function Meter({
         <div className={styles.barRow}>
           <div className={styles.trackWrap}>
             <div className={`${styles.track} ${styles.neutral}`}>
-              <span className={`${styles.fill} ${styles.slide} ${styles[intent ?? "brand"]}`} />
+              <span className={`${styles.fill} ${styles.slide} ${fillClass(intent ?? "brand")}`} />
             </div>
           </div>
         </div>
@@ -94,7 +96,7 @@ export function Meter({
               {thresholds === "all"
                 ? ZONES.map((band) => <span key={band} className={`${styles.band} ${styles[band]}`} />)
                 : null}
-              <span className={`${styles.fill} ${styles[fillIntent]}`} style={{ width: `${percent}%` }} />
+              <span className={`${styles.fill} ${fillClass(fillIntent)}`} style={{ width: `${percent}%` }} />
             </div>
             {referenceLines
               ? EDGES.map((edge) => (
@@ -158,7 +160,7 @@ export function Meter({
                 ),
               )
             : null}
-          {arc(0, (percent / 100) * (semi ? 100 : total), `${styles.arc} ${styles[fillIntent]}`)}
+          {arc(0, (percent / 100) * (semi ? 100 : total), `${styles.arc} ${fillClass(fillIntent)}`)}
         </g>
         {referenceLines
           ? EDGES.map((edge) => {
