@@ -85,15 +85,12 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
     "type.family.mono",
     "motion.fast",
-    "primary.base",
-    "type.size.overline",
-    "type.tracking.overline"
+    "primary.base"
   ],
   "a11y": {
     "element": "section",

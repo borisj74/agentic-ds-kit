@@ -12,7 +12,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -36,7 +35,6 @@
   display: grid;
   grid-template-columns: var(--tree-status) var(--tree-time) var(--tree-cost);
   gap: var(--space-2);
-  font-family: var(--font-mono);
   color: var(--text-fg-subtle);
 }
 
@@ -53,6 +51,27 @@
 
 .list {
   padding-top: var(--space-2);
+}
+
+/* Indent guides: an open branch drops a hairline from its chevron (or the root icon) down the left
+   of its children. The group inherits its parent's --tree-depth, so the line lands on the parent's
+   toggle centre. Tinted rows cover it where they sit. */
+.group {
+  position: relative;
+}
+
+.group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: var(--space-4);
+  inset-inline-start: calc(var(--space-2) * 2 + var(--tree-depth, 0) * var(--tree-indent));
+  border-inline-start: var(--border-width-thin) solid var(--line-default);
+  pointer-events: none;
+}
+
+.row {
+  position: relative;
 }
 
 .item {
@@ -219,8 +238,7 @@
 }
 
 .flagged.waiting {
-  border-style: dashed;
-  border-color: var(--status-warning);
+  background-color: var(--status-warning-subtle);
 }
 
 .flagged.failed {
@@ -290,7 +308,7 @@
   }
 }
 
-/* After .flagged so the selected ring wins over the waiting dash. */
+/* After .flagged so the selected ring wins over the flagged tint's edge. */
 .row.selected {
   border-style: solid;
   border-color: var(--primary);

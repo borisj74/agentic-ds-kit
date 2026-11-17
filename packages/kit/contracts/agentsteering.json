@@ -134,7 +134,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -148,6 +147,7 @@
     "status.successText",
     "status.dangerSubtle",
     "status.dangerText",
+    "radius.controlMd",
     "radius.pill"
   ],
   "a11y": {

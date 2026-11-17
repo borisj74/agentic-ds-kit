@@ -82,7 +82,7 @@ export function AutonomyDial({
             <LucideByName name={current.icon} size={16} className={styles.panelIcon} />
             <span className={styles.panelTitle}>{current.label}</span>
             {current.id === defaultValue ? (
-              <Badge tone="primary" size="sm">
+              <Badge tone="neutral" size="sm">
                 default
               </Badge>
             ) : null}

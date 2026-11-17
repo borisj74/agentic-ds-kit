@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { Circle, CircleCheck, CirclePause, CircleX, Layers, LoaderCircle, Minimize2, Network } from "lucide-react";
+import { Circle, CircleCheck, CirclePause, CircleX, LoaderCircle, Minimize2, Network } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { Empty } from "../Empty";
@@ -141,7 +141,6 @@ function OverviewCard({
   return (
     <article className={cx(styles.card, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
-        <Lead />
         <h3 id={nameId} className={styles.name}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -153,18 +152,22 @@ function OverviewCard({
         </h3>
         <StatusDot status={agent.status} />
       </header>
-      <p className={styles.count}>
-        <span className={styles.countValue}>{agent.subAgents.length}</span>
-        <span className={styles.countLabel}>sub-agents</span>
-      </p>
-      <div className={styles.progress}>
-        <Segments agent={agent} />
-        <Legend agent={agent} />
+      <div className={styles.summary}>
+        <p className={styles.count}>
+          <span className={styles.countValue}>{agent.subAgents.length}</span>
+          <span className={styles.countLabel}>sub-agents</span>
+        </p>
+        <div className={styles.progress}>
+          <Segments agent={agent} />
+          <Legend agent={agent} />
+        </div>
       </div>
       {waitingSub ? (
         <div className={styles.attention}>
           <CirclePause size={16} strokeWidth={ICON_STROKE} className={styles.attentionIcon} aria-hidden="true" />
-          <span className={styles.attentionText}>{waitingSub.name} waits for your OK</span>
+          <span className={styles.attentionText}>
+            <span className={styles.attentionName}>{waitingSub.name}</span> waits for your OK
+          </span>
           {onReview ? (
             <Button
               size="sm"
@@ -192,7 +195,6 @@ function CompactCard({ agent, onOpen }: { agent: AgentFleetAgent; onOpen?: () =>
   return (
     <article className={cx(styles.compact, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
-        <Lead />
         <h3 id={nameId} className={cx(styles.name, styles.nameSmall)}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -410,10 +412,7 @@ export function AgentFleet({
     <section {...rest} {...nisthaAttr("agentfleet", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.fleet, className)} aria-label={ariaLabel}>
       {body}
       {line && !loading && agents.length > 0 ? (
-        <p className={styles.totals}>
-          <Layers size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
-          {line}
-        </p>
+        <p className={styles.totals}>{line}</p>
       ) : null}
     </section>
   );

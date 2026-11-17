@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
-import { ArrowRight, Sparkles, TriangleAlert, X } from "lucide-react";
+import { ArrowRight, ChartGantt, TriangleAlert, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -144,7 +144,7 @@ export function AgentLanes({
       onKeyDown={handleKey}
     >
       <header className={styles.header}>
-        <Sparkles size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
+        <ChartGantt size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
@@ -191,7 +191,6 @@ export function AgentLanes({
           {agents.map((agent) => {
             const own = tasks.filter((task) => task.agentId === agent.id && visible(task));
             const busy = own.some((task) => task.status === "running" || task.status === "waiting");
-            const needsYou = own.some((task) => task.status === "waiting");
             return (
               <li key={agent.id} className={styles.lane}>
                 <div className={styles.agent}>
@@ -201,11 +200,7 @@ export function AgentLanes({
                   <span className={styles.agentText}>
                     <span className={styles.agentName}>
                       {agent.name}
-                      {needsYou ? (
-                        <Badge tone="warning" size="sm">
-                          Needs you
-                        </Badge>
-                      ) : !busy ? (
+                      {!busy ? (
                         <Badge tone="neutral" size="sm">
                           Idle
                         </Badge>
@@ -271,7 +266,7 @@ export function AgentLanes({
               return (
                 <span
                   key={`${task.id}-${target.id}`}
-                  className={cx(styles.handoff, toLane < fromLane && styles.up, target.end === undefined && styles.handoffLive)}
+                  className={cx(styles.handoff, toLane < fromLane && styles.up)}
                   style={
                     {
                       // Drop just left of the target, but never past the source block's end.

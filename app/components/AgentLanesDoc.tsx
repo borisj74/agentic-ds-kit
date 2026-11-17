@@ -18,9 +18,9 @@ const AGENTS: AgentLanesAgent[] = [
 ];
 
 const TASKS: AgentLanesTask[] = [
-  { id: "plan", agentId: "orch", title: "plan & dispatch", status: "running", start: NOW - 8 * M, icon: "Network", handoffTo: "edit" },
+  { id: "plan", agentId: "orch", title: "plan & dispatch", status: "running", start: NOW - 8 * M, handoffTo: "edit" },
   { id: "scan", agentId: "research", title: "scan + read docs", status: "done", start: NOW - 7.8 * M, end: NOW - 5.6 * M },
-  { id: "edit", agentId: "coder", title: "edit invoice", status: "done", start: NOW - 5.4 * M, end: NOW - 2.2 * M, icon: "Pencil", handoffTo: "migrate" },
+  { id: "edit", agentId: "coder", title: "edit invoice", status: "done", start: NOW - 5.4 * M, end: NOW - 2.2 * M, handoffTo: "migrate" },
   {
     id: "tests",
     agentId: "coder",

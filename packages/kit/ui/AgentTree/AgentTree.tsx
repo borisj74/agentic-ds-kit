@@ -181,9 +181,9 @@ export function AgentTree({
           </Badge>
         ) : root ? (
           <span className={styles.columns} aria-hidden="true">
-            <span>status</span>
-            <span className={styles.end}>time</span>
-            <span className={styles.end}>cost</span>
+            <span>Status</span>
+            <span className={styles.end}>Time</span>
+            <span className={styles.end}>Cost</span>
           </span>
         ) : null}
       </header>
