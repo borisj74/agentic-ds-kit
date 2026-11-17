@@ -99,6 +99,8 @@
     "rest": "article"
   },
   "tokens": [
+    "line.strong",
+    "bg.tray",
     "bg.surface",
     "bg.subtle",
     "bg.controlHover",
@@ -115,9 +117,6 @@
     "type.family.mono",
     "motion.fast",
     "motion.normal",
-    "status.infoSubtle",
-    "status.infoBorder",
-    "status.infoText",
     "status.warningSubtle",
     "status.warningText",
     "status.successText"
