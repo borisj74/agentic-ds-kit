@@ -43,7 +43,6 @@
     "rest": "article"
   },
   "tokens": [
-    "shadow.sm",
     "shadow.md",
     "radius.surfaceMd",
     "text.fg",
