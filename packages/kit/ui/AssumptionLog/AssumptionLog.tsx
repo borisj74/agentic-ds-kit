@@ -35,7 +35,8 @@ export type {
   ConfidenceLevel,
 } from "./AssumptionLog.types";
 
-const LEVEL_INTENT: Record<ConfidenceLevel, "warning" | "info" | "success"> = { low: "warning", medium: "info", high: "success" };
+// Colour only at the ends: amber says check this, green says likely fine; medium stays neutral.
+const LEVEL_INTENT: Record<ConfidenceLevel, "warning" | "neutral" | "success"> = { low: "warning", medium: "neutral", high: "success" };
 
 const FILTERS: { value: AssumptionFilter; label: string }[] = [
   { value: "open", label: "Open" },
