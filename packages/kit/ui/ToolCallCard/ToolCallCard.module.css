@@ -10,7 +10,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
 }
 
@@ -119,10 +118,10 @@ button.head:focus-visible {
   animation: toolcall-open var(--motion-duration-200) var(--motion-ease-out);
 }
 
+/* A grey surface, no frame of its own: the tint separates code from chrome. */
 .pane {
   overflow: hidden;
   background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
 }
 

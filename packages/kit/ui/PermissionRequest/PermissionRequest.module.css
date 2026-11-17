@@ -9,7 +9,6 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
   animation: permission-in var(--motion-duration-200) var(--motion-ease-out);
 }
@@ -40,17 +39,12 @@
   color: var(--text-fg);
 }
 
+/* Quiet meta, not a pill: "2 scopes". */
 .count {
   flex-shrink: 0;
-  padding-inline: var(--space-2);
-  background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
-  text-transform: uppercase;
   color: var(--text-fg-muted);
 }
 
@@ -66,7 +60,6 @@
   padding: 0;
   list-style: none;
   background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
 }
 
@@ -117,8 +110,6 @@
 
 .access {
   flex-shrink: 0;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
 }
 
 .reason {

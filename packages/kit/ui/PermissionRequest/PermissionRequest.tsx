@@ -21,8 +21,9 @@ export type {
   PermissionAccess,
 } from "./PermissionRequest.types";
 
-const ACCESS_TONE: Record<PermissionAccess, "info" | "warning" | "danger"> = {
-  read: "info",
+// Colour only where access carries risk: write amber, admin red; read stays neutral.
+const ACCESS_TONE: Record<PermissionAccess, "neutral" | "warning" | "danger"> = {
+  read: "neutral",
   write: "warning",
   admin: "danger",
 };

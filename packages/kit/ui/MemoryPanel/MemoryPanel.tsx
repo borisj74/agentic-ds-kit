@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Brain, CircleX, Lock } from "lucide-react";
+import { BookMarked, CircleX, Lock } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Badge } from "../Badge";
@@ -122,13 +122,12 @@ export function MemoryPanel({
     }
     return (
       <li key={item.id} className={styles.item}>
-        <Brain size={16} strokeWidth={ICON_STROKE} className={styles.itemIcon} aria-hidden="true" />
         <div className={styles.itemBody}>
           <span className={styles.content}>{item.content}</span>
           <span className={styles.meta}>
             {[item.source, item.age].filter(Boolean).join(" · ")}
             {item.usedHere ? (
-              <Badge tone="primary" size="sm">
+              <Badge tone="neutral" size="sm">
                 Used here
               </Badge>
             ) : null}
@@ -164,7 +163,6 @@ export function MemoryPanel({
       <div className={styles.loading}>
         {[0, 1, 2].map((key) => (
           <div key={key} className={styles.skeletonRow}>
-            <Skeleton shape="circle" size="sm" />
             <div className={styles.skeletonText}>
               <Skeleton width="80%" />
               <Skeleton width="40%" size="sm" />
@@ -188,7 +186,7 @@ export function MemoryPanel({
   } else if (items.length === 0 && !adding) {
     body = (
       <Empty
-        icon="Brain"
+        icon="BookMarked"
         title="Nothing remembered yet"
         description="Agents save useful facts here. You can add your own, pin what matters, or forget anything."
       />
@@ -230,7 +228,7 @@ export function MemoryPanel({
   return (
     <section {...rest} {...nisthaAttr("memorypanel", rest)} ref={ref} className={cx(styles.panel, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
-        <Brain size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
+        <BookMarked size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {label}
         </h3>

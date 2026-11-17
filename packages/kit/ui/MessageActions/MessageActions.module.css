@@ -12,14 +12,13 @@
   gap: var(--space-3);
 }
 
+/* Bare ghost icons under the message, no frame of their own. The row pulls back by a button's
+   inset so the first glyph lines up under the text. */
 .toolbar {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1);
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
+  margin-inline-start: calc(var(--space-2) * -1);
 }
 
 .toolbar[aria-disabled="true"] {

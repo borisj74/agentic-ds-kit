@@ -40,6 +40,28 @@ function kindClass(span: TraceSpan) {
   return styles[`kind-${span.kind}`];
 }
 
+/** Axis steps people read at a glance (seconds); the first one giving five or fewer intervals wins. */
+const TICK_STEPS = [1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1200, 1800, 3600];
+
+/** One unit per axis: seconds for runs under two minutes, minutes (and seconds) above. */
+function tickLabel(value: number, inMinutes: boolean): string {
+  if (!inMinutes) return `${value}s`;
+  const minutes = Math.floor(value / 60);
+  const rest = value % 60;
+  return rest ? `${minutes}m ${rest}s` : `${minutes}m`;
+}
+
+function niceTicks(endMs: number): { at: number; label: string }[] {
+  const totalSeconds = Math.max(endMs / 1000, 1);
+  const step = TICK_STEPS.find((candidate) => totalSeconds / candidate <= 5) ?? TICK_STEPS[TICK_STEPS.length - 1];
+  const inMinutes = totalSeconds >= 120;
+  const ticks: { at: number; label: string }[] = [];
+  for (let value = 0; value <= totalSeconds; value += step) {
+    ticks.push({ at: (value / totalSeconds) * 100, label: tickLabel(value, inMinutes) });
+  }
+  return ticks;
+}
+
 /** Where a run's time and money went: a waterfall of model, tool and approval spans, with totals and span detail. */
 export function TraceWaterfall({
   title,
@@ -91,7 +113,7 @@ export function TraceWaterfall({
     );
   }
 
-  const ticks = [0, 0.25, 0.5, 0.75, 1].map((step) => ({ at: step * 100, label: `${Math.round((end * step) / 1000)}s` }));
+  const ticks = niceTicks(end);
 
   let body;
   if (loading) {
@@ -171,7 +193,6 @@ export function TraceWaterfall({
               const inner = (
                 <>
                   <span className={styles.label}>
-                    <span className={cx(styles.dot, kindClass(span))} aria-hidden="true" />
                     <span className={styles.labelText}>{span.label}</span>
                   </span>
                   <span className={styles.track} aria-hidden="true">
