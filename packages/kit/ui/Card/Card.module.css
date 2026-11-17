@@ -11,7 +11,6 @@
   background-color: var(--surface-card);
   border: 1px solid var(--border-faint);
   border-radius: var(--radius-surface-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .sm {
