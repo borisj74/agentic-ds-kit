@@ -5,6 +5,7 @@
 - Use the `github` remote, never `origin`. One branch and one PR per task. Never merge or push to `main`; Boris merges.
 - No tags, publishing or releases without Boris's yes.
 - Before any PR, run lint, both `tsc --noEmit` runs, build and test. All must pass.
+- Never edit `CHANGELOG.md` in a PR. If a kit user would notice the change, add one `changes/<branch-name>.md` file (`/` in the branch name becomes `-`) with the entry under `### Added`, `### Changed`, `### Fixed` (etc.). See `changes/README.md`. `npm run changelog` folds them into `CHANGELOG.md` at release time.
 - Leave `.cursor/mcp.json` uncommitted and never commit secrets.
 - Contracts are the source of truth. Don't add contract fields. Compose from kit components and tokens, never make local cousins, and if something is missing, stop and ask.
 - Make minimal changes, with no new runtime dependencies.

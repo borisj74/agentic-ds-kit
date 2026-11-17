@@ -17,4 +17,4 @@
 
 - [ ] Contract, `ui/` and docs updated together if behaviour changed
 - [ ] Semantic tokens only (no hex, no primitive `--color-*`, no new tokens without discussion)
-- [ ] `CHANGELOG.md` `[Unreleased]` updated if a kit user would notice
+- [ ] `changes/<branch-name>.md` added if a kit user would notice (`CHANGELOG.md` itself not edited; see `changes/README.md`)

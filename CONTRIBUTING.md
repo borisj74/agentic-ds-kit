@@ -34,7 +34,7 @@ Lint must finish with 0 warnings.
 - **Tokens only.** No hex, `rgb()` or primitive `--color-*` ramps in components. Use the semantic tokens in `packages/kit/lib/tokens.css`, and the `--grid-*` tokens and layout classes for layout. New tokens need a discussion first.
 - **Icons** are Lucide at `strokeWidth` 1.5 (`ICON_STROKE`).
 - **Accessibility** is part of the contract: keep the `a11y` requirements true, and run axe on the pages you change.
-- **Changelog.** Add a line under `[Unreleased]` in `CHANGELOG.md` for anything a kit user would notice.
+- **Changelog.** Don't edit `CHANGELOG.md`. For anything a kit user would notice, add `changes/<branch-name>.md` (with `/` turned into `-`) holding the entry under a `### Added` / `### Changed` / `### Fixed` heading. [changes/README.md](changes/README.md) has the format; maintainers fold the files into `CHANGELOG.md` with `npm run changelog` when releasing.
 
 More detail: [AGENTS.md](AGENTS.md) and [docs/getting-started.md](docs/getting-started.md).
 
