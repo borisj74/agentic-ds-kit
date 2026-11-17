@@ -38,31 +38,85 @@
   font-weight: var(--type-weight-heading);
 }
 
+/* Opening runs 680ms: the longest duration token plus one short step, since the scale stops at 500ms.
+   The chevron turns with a soft spring, so it settles a hair past the half turn and back. */
 .chevron {
   flex-shrink: 0;
   color: var(--icon-muted);
-  transition: transform var(--motion-expand-duration) var(--motion-ease-out);
+  transition:
+    transform calc(var(--motion-duration-600) + var(--motion-duration-200)) var(--motion-ease-spring-soft),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.trigger:hover .chevron,
+.chevronOpen {
+  color: var(--icon-default);
 }
 
 .chevronOpen {
   transform: rotate(180deg);
 }
 
+/*
+ * The panel unfolds instead of popping: its row grows from 0fr to 1fr, then the text settles in a
+ * beat later. Closing folds faster. A closed panel stays visibility: hidden, which keeps it out of
+ * the accessibility tree and the tab order; the hide waits for the fold to finish.
+ */
 .panel {
-  padding: 0 0 var(--space-4);
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-duration-500) var(--motion-expand-easing),
+    visibility 0s linear var(--motion-duration-500);
+}
+
+.panelOpen {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows calc(var(--motion-duration-600) + var(--motion-duration-200)) var(--motion-ease-in-out),
+    visibility 0s;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
 }
 
 .body {
   margin: 0;
-  padding-top: var(--space-1);
+  padding: var(--space-1) 0 var(--space-4);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
   color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--space-2)));
+  transition:
+    opacity var(--motion-duration-200) var(--motion-overlay-exit-easing),
+    transform var(--motion-duration-200) var(--motion-overlay-exit-easing);
 }
 
+.panelOpen .body {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity calc(var(--motion-duration-600) + var(--motion-duration-200)) var(--motion-ease-in-out) var(--motion-duration-300),
+    transform calc(var(--motion-duration-600) + var(--motion-duration-200)) var(--motion-ease-in-out) var(--motion-duration-300);
+}
+
+/* Reduced motion: no fold, no slide, no turn. The text still fades so the change reads. */
 @media (prefers-reduced-motion: reduce) {
-  .chevron {
+  .chevron,
+  .panel,
+  .panelOpen {
     transition: none;
+  }
+
+  .body,
+  .panelOpen .body {
+    transform: none;
+    transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
   }
 }
