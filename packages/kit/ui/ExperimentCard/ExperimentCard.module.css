@@ -22,7 +22,7 @@
 
 .headerIcon {
   flex-shrink: 0;
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .title {
@@ -57,7 +57,6 @@
 .variants {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -67,15 +66,23 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
+  padding-block: var(--space-3);
+  border-block-end: var(--border-width-thin) solid var(--line-default);
   transition: background-color var(--motion-duration-200) var(--motion-ease-standard);
 }
 
+.variant:last-child,
+.variant:has(+ .variantWinner) {
+  border-block-end-color: transparent;
+}
+
+/* The winner row fills into the card padding so its text stays on the same line as the others. */
 .variantWinner {
+  margin-inline: calc(var(--space-3) * -1);
+  padding-inline: var(--space-3);
   background-color: var(--primary-subtle-strong);
-  border-color: var(--primary);
+  border-block-end-color: transparent;
+  border-radius: var(--radius-surface-md);
 }
 
 /* Variant letter as a small tinted tile, so A / B read as labels, not stray text. */

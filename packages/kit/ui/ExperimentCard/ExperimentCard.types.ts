@@ -29,7 +29,7 @@ export interface ExperimentCardProps extends Omit<ComponentPropsWithoutRef<"arti
   variants: ExperimentVariant[];
   /** Right of the metric label, e.g. "Started 02 Nov · ends 16 Nov", "Ran 02 – 16 Nov", "Not started". */
   dates?: string;
-  /** e.g. "84% confidence · needs ~4 more days for 95%." */
+  /** e.g. "84% confidence · needs ~4 more days for 95%" */
   confidenceNote?: string;
   onView?: () => void;
   /** Ship the winner. Confirms with a kit AlertDialog first. The one solid primary. */

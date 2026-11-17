@@ -6,7 +6,7 @@ import { AgentDocFrame } from "./AgentDocFrame";
 
 const ITEMS: IntegrationItem[] = [
   { id: "ledger", name: "Northwind Ledger", description: "Sync invoices and payments", category: "Accounting", status: "connected", icon: "FileText" },
-  { id: "bank", name: "Plaid-like Bank", description: "Match bank feeds to invoices", category: "Banking", status: "available", icon: "Landmark" },
+  { id: "bank", name: "Ledgerline Bank", description: "Match bank feeds to invoices", category: "Banking", status: "available", icon: "Landmark" },
   { id: "mail", name: "Mailroom", description: "Send invoices from your domain", category: "Email", status: "available", icon: "Mail" },
   { id: "chat", name: "Team Chat", description: "Post payment alerts to a channel", category: "Messaging", status: "connected", icon: "Hash" },
   { id: "db", name: "Warehouse DB", description: "Nightly export of billing data", category: "Data", status: "available", icon: "Database" },
