@@ -121,7 +121,10 @@
     "type.size.caption",
     "type.size.label",
     "type.size.bodySm",
-    "type.weight.label"
+    "type.weight.label",
+    "type.line.uiXs",
+    "type.line.uiSm",
+    "type.line.uiMd"
   ],
   "a11y": {
     "element": "span",

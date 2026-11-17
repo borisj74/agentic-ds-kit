@@ -8107,7 +8107,7 @@
         "maxVisible": {
           "type": "number",
           "required": false,
-          "note": "Default 3 (row) or 4 (stack); the rest is \"+N\" / \"View all\"."
+          "note": "Default 3 (row) or 4 (stack); the rest is said as \"N more\" (row: on the label line) or \"+N more running\" (stack), with \"View all\" when onShowAll is set."
         },
         "label": {
           "type": "string",

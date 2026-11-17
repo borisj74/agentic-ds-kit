@@ -66,15 +66,16 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+/* Masked is the safe state: a quiet grey placeholder. Amber is kept for what is unmasked. */
 .chip {
   display: inline;
   margin: 0;
   padding: 0 var(--space-1);
-  background-color: var(--status-info-subtle);
-  border: var(--border-width-thin) solid var(--status-info-border);
+  background-color: var(--bg-tray);
+  border: var(--border-width-thin) solid transparent;
   border-radius: var(--radius-control-sm);
   font: inherit;
-  color: var(--status-info-text);
+  color: var(--text-fg-muted);
   cursor: pointer;
   transition: background-color var(--motion-fast) var(--motion-ease-out);
 }
@@ -89,6 +90,7 @@
 }
 
 .chipShown {
+  border-color: var(--line-strong);
   border-style: dashed;
 }
 

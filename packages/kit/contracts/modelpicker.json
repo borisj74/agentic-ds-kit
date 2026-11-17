@@ -71,6 +71,8 @@
     "rest": "div"
   },
   "tokens": [
+    "type.line.uiSm",
+    "type.size.label",
     "bg.surface",
     "bg.subtle",
     "line.default",
@@ -80,7 +82,6 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",

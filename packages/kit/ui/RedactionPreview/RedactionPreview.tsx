@@ -119,7 +119,7 @@ export function RedactionPreview({
             <ul className={styles.tags} aria-label="Sensitive values found">
               {counts.map(({ type, count }) => (
                 <li key={type}>
-                  <Tag size="sm" count={count} dot={isMasked(type, rules, lockedTypes) ? "success" : "warning"}>
+                  <Tag size="sm" count={count} dot={isMasked(type, rules, lockedTypes) ? undefined : "warning"}>
                     {label(type)}
                   </Tag>
                 </li>

@@ -7,10 +7,11 @@
   font-family: var(--font-sans);
 }
 
+/* Same size as a kit Field label, so the picker matches the form around it. */
 .label {
-  font-size: var(--type-size-caption);
+  font-size: var(--type-size-label);
   font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-xs);
+  line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
 

@@ -47,13 +47,13 @@
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
+/* Group headings in sentence case: a quiet caption, not a shouted overline. */
 .heading {
   padding: var(--space-2) var(--space-2) var(--space-1);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
   color: var(--text-secondary);
 }
 

@@ -188,12 +188,12 @@
     "note": "ref goes to the always-mounted trigger (same as Select); the menu panel mounts only while open and stays kit-owned."
   },
   "tokens": [
+    "type.line.uiXs",
     "surface.card",
     "surface.muted",
     "border.faint",
     "border.focus",
     "radius.surface.sm",
-    "shadow.sm",
     "text.primary",
     "text.secondary",
     "text.muted",
@@ -202,9 +202,7 @@
     "type.size.caption",
     "type.weight.label",
     "radius.control.md",
-    "focus.ring",
-    "type.family.overline",
-    "type.tracking.overline"
+    "focus.ring"
   ],
   "a11y": {
     "element": "div",

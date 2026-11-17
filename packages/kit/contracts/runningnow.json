@@ -33,7 +33,7 @@
     "maxVisible": {
       "type": "number",
       "required": false,
-      "note": "Default 3 (row) or 4 (stack); the rest is \"+N\" / \"View all\"."
+      "note": "Default 3 (row) or 4 (stack); the rest is said as \"N more\" (row: on the label line) or \"+N more running\" (stack), with \"View all\" when onShowAll is set."
     },
     "label": {
       "type": "string",
@@ -75,14 +75,11 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
-    "shadow.sm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
     "type.family.mono",
     "motion.fast",
-    "type.size.overline",
-    "type.tracking.overline",
     "icon.brand",
     "status.warningText",
     "status.dangerText",
@@ -95,7 +92,7 @@
       "section named by its heading (label plus count)",
       "items are a list; each names its status in text",
       "with onSelect each item is a button",
-      "the +N overflow says how many more",
+      "the overflow says how many more in words",
       "aria-busy while loading",
       "spinner and entry motion use transform and opacity, off under prefers-reduced-motion"
     ]

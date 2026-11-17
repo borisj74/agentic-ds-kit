@@ -76,12 +76,24 @@ export function RunningNow({
       aria-labelledby={labelId}
       aria-busy={loading || undefined}
     >
-      <h3 id={labelId} className={styles.label}>
-        {label}
-        <span className={styles.count} aria-hidden={loading || undefined}>
-          {loading ? "…" : items.length}
-        </span>
-      </h3>
+      <div className={styles.head}>
+        <h3 id={labelId} className={styles.label}>
+          {label}
+          <span className={styles.count} aria-hidden={loading || undefined}>
+            {loading ? "…" : items.length}
+          </span>
+        </h3>
+        {/* Row layout: the overflow is said in words on the label line, not as a lone "+N" chip. */}
+        {layout === "row" && !loading && hidden > 0 ? (
+          onShowAll ? (
+            <button type="button" className={styles.headMore} onClick={onShowAll} aria-label={`${hidden} more running, view all`}>
+              {hidden} more · View all
+            </button>
+          ) : (
+            <span className={cx(styles.headMore, styles.headMoreText)}>{hidden} more</span>
+          )
+        ) : null}
+      </div>
       {loading ? (
         <div className={styles.loading}>
           {Array.from({ length: 3 }, (_, index) =>
@@ -108,23 +120,11 @@ export function RunningNow({
           {visible.map((item) => (
             <Item key={item.id} item={item} layout={layout} onSelect={onSelect} />
           ))}
-          {hidden > 0 ? (
+          {hidden > 0 && layout === "stack" ? (
             <li className={styles.cell}>
-              {layout === "row" ? (
-                <button
-                  type="button"
-                  className={cx(styles.item, styles.chip, styles.more, onShowAll && styles.button)}
-                  onClick={onShowAll}
-                  disabled={!onShowAll}
-                  aria-label={`${hidden} more running${onShowAll ? ", view all" : ""}`}
-                >
-                  +{hidden}
-                </button>
-              ) : (
-                <button type="button" className={styles.viewAll} onClick={onShowAll} disabled={!onShowAll}>
-                  +{hidden} more running{onShowAll ? " · View all" : ""}
-                </button>
-              )}
+              <button type="button" className={styles.viewAll} onClick={onShowAll} disabled={!onShowAll}>
+                +{hidden} more running{onShowAll ? " · View all" : ""}
+              </button>
             </li>
           ) : null}
         </ul>
