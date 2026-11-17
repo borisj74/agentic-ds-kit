@@ -113,7 +113,7 @@ export function MultiSelect({
     <div {...nisthaAttr("multiselect")} ref={rootRef} className={cx(styles.root, className)}>
       {name ? <input type="hidden" name={name} value={values.join(",")} /> : null}
       <div
-        className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell)}
+        className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell, size === "sm" ? styles.shellSm : styles.shellMd)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
       >
