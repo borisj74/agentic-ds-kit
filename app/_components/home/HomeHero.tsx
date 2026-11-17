@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "agentic-ds-kit";
-import { HomeCommand } from "./HomeCommand";
+import { HomeStory } from "./HomeStory";
 import styles from "./Home.module.css";
 
 /**
- * Hero, left-aligned: the promise, one line under it and two ways in, then a large browser frame
- * with an agent Command screen built live from kit parts. The kit Button has no link form, so the
- * two calls to action navigate with the router.
+ * Hero, left-aligned and written for the person who owns the design system: the promise, one line,
+ * and two ways in. Under it the story: one product screen, pinned, that agents
+ * build, a brand repaints and a review checks as the reader scrolls. The kit Button has no link
+ * form, so the two calls to action navigate with the router.
  */
 export function HomeHero() {
   const router = useRouter();
@@ -17,11 +18,11 @@ export function HomeHero() {
     <div className={styles.hero}>
       <div className={styles.heroCopy}>
         <h1 className={styles.heroTitle} data-motion="hero">
-          Your agent reads the contract. Then it writes the UI.
+          Agents build with your system. It stays yours
         </h1>
         <p className={styles.heroLead} data-motion="hero">
-          Every Nistha component ships with a JSON contract, semantic tokens and a review step, so a coding agent builds
-          screens that match your system on the first pass.
+          Nistha hands coding agents your components, tokens and rules as contracts they read first, so every screen they
+          build stays on-system and on-brand.
         </p>
         <div className={styles.heroActions} data-motion="hero">
           <Button size="lg" iconEnd="ArrowRight" onClick={() => router.push("/start-here")}>
@@ -32,7 +33,7 @@ export function HomeHero() {
           </Button>
         </div>
       </div>
-      <HomeCommand />
+      <HomeStory />
     </div>
   );
 }

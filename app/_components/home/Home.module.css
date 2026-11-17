@@ -67,20 +67,27 @@
   display: none;
 }
 
-/* Below --grid-breakpoint-md (64rem) the links move into the Drawer. */
-@media (width < 64rem) {
-  .nav {
-    padding-inline: var(--space-4);
-  }
-
-  .navLinks,
-  .navVersion,
-  .navGithub {
+/* Below --grid-breakpoint-lg (80rem) the five links no longer fit beside the logo, version and
+   GitHub, so they move into the Drawer. */
+@media (width < 80rem) {
+  .navLinks {
     display: none;
   }
 
   .navMenu {
     display: inline-flex;
+  }
+}
+
+/* Below --grid-breakpoint-md (64rem) the version and GitHub go too. */
+@media (width < 64rem) {
+  .nav {
+    padding-inline: var(--space-4);
+  }
+
+  .navVersion,
+  .navGithub {
+    display: none;
   }
 }
 
@@ -153,13 +160,36 @@
 
 /* The hero's browser frame. The Command screen inside is laid out at desktop size and scaled to
    the frame's width (HomeCommand); until it is measured it shows unscaled and cropped. */
-.command {
+/*
+ * The hero stage, framed like a product shot (stageshow's wide hero): the browser window at 1:1,
+ * inset at the top, running off the right edge and fading out at its foot with a mask, so the
+ * page is the ground and nothing floats in a box. The permission request is a satellite on the
+ * window's lower edge, over the screen's quiet margin. Narrower layouts scale the window and
+ * crop closer through --command-scale and --command-shift.
+ */
+.commandStage {
+  --command-scale: 1;
+  --command-shift: 0;
   position: relative;
+  overflow: hidden;
+  height: calc(var(--space-16) * 12.5);
+}
+
+.commandScope {
+  height: 100%;
+}
+
+.commandWindow {
+  position: absolute;
+  top: var(--space-2);
+  left: 0;
   overflow: hidden;
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-lg);
   background-color: var(--surface-card);
   box-shadow: var(--shadow-raised-md);
+  transform: scale(var(--command-scale)) translateX(var(--command-shift));
+  transform-origin: top left;
 }
 
 .browserBar {
@@ -201,32 +231,14 @@
 }
 
 
-.commandHost {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1440 / 900;
-}
-
-/* Once scaled, the host takes the scaled height (set inline) instead of the ratio. */
-.commandHost[style] {
-  aspect-ratio: auto;
-}
-
-.commandScope {
-  height: 100%;
-}
-
 .commandScreen {
   display: grid;
   grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
   overflow: hidden;
-  transform-origin: top left;
   background-color: var(--surface-page);
 }
 
 .commandMain {
-  /* AgentFleet fills its row with as many cards as fit; a larger minimum gives exactly three here. */
-  --layout-auto-min: calc(var(--layout-metrics-min) * 1.75);
   display: grid;
   align-content: start;
   gap: var(--space-4);
@@ -236,19 +248,35 @@
 
 .commandRow {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  /* The monitor at its own width; the fleet takes the rest, so no gap opens between them. */
+  grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-4);
   align-items: start;
 }
 
-.commandRow > *,
-.commandAsk > * {
+.commandRow > * {
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* The permission request waits off stage, then slides in. Without motion it simply shows. */
+/* The satellite: the payoff, raised over the window's lower edge. */
+.commandAsk {
+  position: absolute;
+  right: var(--space-8);
+  bottom: var(--space-6);
+  transform-origin: bottom right;
+  scale: var(--command-scale);
+}
+
+.commandAsk > * {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-raised-lg);
+}
+
+/* It waits off stage, then slides in. Without motion it simply shows. */
 .commandAsk:not([data-shown]) {
   visibility: hidden;
   opacity: 0;
@@ -258,12 +286,12 @@
   .commandAsk {
     transition:
       opacity var(--motion-duration-500) var(--motion-ease-out),
-      transform var(--motion-duration-500) var(--motion-ease-out),
+      translate var(--motion-duration-500) var(--motion-ease-out),
       visibility 0s linear var(--motion-duration-500);
   }
 
   .commandAsk:not([data-shown]) {
-    transform: translateY(var(--space-6));
+    translate: 0 var(--space-8);
   }
 
   .commandAsk[data-shown] {
@@ -288,7 +316,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--grid-gutter-md);
-  align-items: start;
+  /* Both panes take the row's height, so the card matches the code beside it. */
+  align-items: stretch;
   min-width: 0;
 }
 
@@ -308,12 +337,49 @@
 
 .loopStage {
   min-width: 0;
+  height: 100%;
+}
+
+.loopCard,
+.loopCard > * {
+  height: 100%;
+}
+
+/* The typed snippet sits over an invisible full copy in one grid cell. */
+.loopType {
+  grid-template-areas: "code";
+}
+
+.loopType > * {
+  grid-area: code;
+  min-width: 0;
+}
+
+.loopGhost {
+  visibility: hidden;
+}
+
+/* The card waits while its contract types in, then rises into place. */
+.loopCard:not([data-shown]) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loopCard {
+    transition:
+      opacity var(--motion-duration-500) var(--motion-ease-out),
+      translate var(--motion-duration-500) var(--motion-ease-out);
+  }
+
+  .loopCard:not([data-shown]) {
+    translate: 0 var(--space-4);
+  }
 }
 
 .loopStage > div > * {
   width: 100%;
   box-sizing: border-box;
-  box-shadow: var(--shadow-raised-md);
+  box-shadow: none;
 }
 
 /*
@@ -335,6 +401,80 @@
   }
 }
 
+/* ---------- Hero story ---------- */
+
+/*
+ * Captions scroll on the left; the product screen stays pinned on the right and changes with the
+ * chapter the reader is on. The screen is shown at 75% with its sidebar and browser bar cropped,
+ * so the monitor leads and the satellites land on its edge.
+ */
+.story {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: var(--grid-gutter-xl);
+  align-items: start;
+}
+
+.storySteps {
+  display: grid;
+  margin: 0;
+  /* Room above chapter 1, so the screen has pinned by the time its caption is read. */
+  padding: calc(var(--space-16) * 2) 0 calc(var(--space-16) * 3);
+  list-style: none;
+}
+
+/* Each chapter is tall enough to be read on its own as it crosses the middle of the viewport. */
+.storyStep {
+  display: grid;
+  align-content: center;
+  gap: var(--space-3);
+  min-height: calc(var(--space-16) * 7);
+  opacity: 0.45;
+}
+
+.storyStep[data-active] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .storyStep {
+    transition: opacity var(--motion-duration-300) var(--motion-ease-out);
+  }
+}
+
+.storyStepTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--type-family-heading);
+  font-size: var(--type-size-title-section);
+  font-weight: var(--type-weight-title-section);
+  letter-spacing: var(--type-tracking-title-section);
+  line-height: var(--type-line-title-section);
+  text-wrap: balance;
+}
+
+.storyStage {
+  position: sticky;
+  top: calc(var(--space-16) + var(--space-8));
+  min-width: 0;
+  height: min(calc(100dvh - var(--space-16) * 2.5), calc(var(--space-16) * 11));
+}
+
+.storyStage .commandStage {
+  --command-scale: 0.75;
+  --command-shift: calc(var(--layout-sidebar) * -1);
+  height: 100%;
+}
+
+.storyStage .commandWindow .browserBar {
+  display: none;
+}
+
+.storyFindings {
+  display: grid;
+  gap: var(--space-2);
+}
+
 /* ---------- Sections ---------- */
 
 .section {
@@ -353,9 +493,7 @@
   font-family: var(--type-family-overline);
   font-size: var(--type-size-overline);
   font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
   line-height: var(--type-line-overline-xs);
-  text-transform: uppercase;
 }
 
 .labelNumber {
@@ -368,11 +506,6 @@
   align-items: flex-start;
   gap: var(--space-4);
   min-width: 0;
-}
-
-/* 01: title on the left, the lead on the right, both on one baseline row. */
-.headSplit {
-  align-items: end;
 }
 
 .sectionTitle {
@@ -395,224 +528,8 @@
   text-wrap: pretty;
 }
 
-.themeSplit,
-.reviewSplit,
 .faqSplit {
   gap: var(--grid-gutter-xl);
-}
-
-.themeSplit {
-  align-items: start;
-}
-
-/* ---------- 01 Contracts: job scenes ---------- */
-
-.tabs {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-stack-lg);
-  min-width: 0;
-}
-
-/* One row of tabs; on narrow screens it scrolls sideways inside itself, never the page. */
-.tabs > [role="tablist"] {
-  max-width: 100%;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  scrollbar-width: none;
-}
-
-.tabs > [role="tablist"] > * {
-  flex-shrink: 0;
-}
-
-.tabs > [role="tabpanel"] {
-  justify-self: stretch;
-  min-width: 0;
-}
-
-.scene {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
-  margin: 0;
-}
-
-.sceneCaption {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-3);
-  color: var(--text-fg-muted);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
-}
-
-.sceneName {
-  color: var(--text-fg);
-  font-family: var(--type-family-code);
-  font-size: var(--type-size-code);
-}
-
-/* The scene sits on the page canvas in a framed window; wide blocks scroll inside it. */
-.sceneStage {
-  min-width: 0;
-  overflow-x: auto;
-  padding: var(--space-6);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-page);
-}
-
-/* Switching job: the new scene rises in. CSS only; reduced motion skips it. */
-@media (prefers-reduced-motion: no-preference) {
-  .tabs > [role="tabpanel"] .scene {
-    animation: home-tab-in var(--motion-duration-500) var(--motion-ease-out) both;
-  }
-}
-
-@keyframes home-tab-in {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-3));
-  }
-}
-
-/* ---------- Every theme ---------- */
-
-.themes {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: start;
-  gap: var(--space-stack-lg);
-}
-
-.themeControls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--space-2) var(--space-8);
-  max-width: 100%;
-}
-
-/* Each tab row stays on one line and scrolls inside itself on narrow screens. */
-.themeControls > * {
-  min-width: 0;
-  max-width: 100%;
-}
-
-.themeControls [role="tablist"] {
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  scrollbar-width: none;
-}
-
-.themeControls [role="tablist"] > * {
-  flex-shrink: 0;
-}
-
-/* The theme scope paints its own page colour, so dark shows as dark. */
-.themeStage {
-  width: 100%;
-  box-sizing: border-box;
-  padding: var(--space-6);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-page);
-}
-
-/* The workspace in the theme card: two columns of kit parts, one on narrow screens. */
-.workspace {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--grid-gutter-md);
-  align-items: start;
-}
-
-.workspaceColumn {
-  display: grid;
-  gap: var(--grid-gutter-md);
-  min-width: 0;
-}
-
-.workspaceColumn > * {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* ---------- 03 Review ---------- */
-
-.reviewSplit {
-  align-items: start;
-}
-
-/* The copy stays put while the demo plays beside it. */
-.reviewSplit > header {
-  position: sticky;
-  top: calc(var(--space-16) + var(--space-8));
-}
-
-.reviewDemo {
-  min-width: 0;
-}
-
-.review {
-  min-width: 0;
-  padding: var(--space-6);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-lg);
-  background-color: var(--surface-page);
-}
-
-.reviewInner {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
-}
-
-.reviewHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-
-.reviewTitle {
-  color: var(--text-fg);
-  font-family: var(--type-family-code);
-  font-size: var(--type-size-code);
-  line-height: var(--type-line-body-sm);
-}
-
-.reviewList {
-  display: grid;
-  gap: var(--space-4);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.reviewItem {
-  display: grid;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.reviewMessage {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-1) var(--space-3);
-  margin: 0;
-  color: var(--text-fg);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body-sm);
-}
-
-.reviewRule {
-  color: var(--text-danger);
-  font-family: var(--type-family-code);
-  font-size: var(--type-size-code);
 }
 
 /* ---------- Questions ---------- */
@@ -752,9 +669,7 @@
   color: var(--text-fg-subtle);
   font-family: var(--type-family-code);
   font-size: var(--type-size-ui-xs);
-  letter-spacing: var(--type-tracking-overline);
   line-height: var(--type-line-ui-xs);
-  text-transform: uppercase;
 }
 
 .tagRow {
@@ -830,6 +745,11 @@
 }
 
 .footerColumn {
+  /* Quiet links: secondary text, the accent only on hover. */
+  --link-default: var(--text-fg-muted);
+  --link-visited: var(--text-fg-muted);
+  --icon-brand: var(--text-fg-subtle);
+
   display: grid;
   align-content: start;
   gap: var(--space-stack-sm);
@@ -841,6 +761,22 @@
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-body-sm);
+}
+
+/* ---------- Hero below --grid-breakpoint-lg (80rem) ---------- */
+
+/* The window at 80% with the sidebar and browser bar cropped away, so the monitor leads on the
+   left and the satellite lands on the right, clear of its clock. */
+@container layout-content (width < 80rem) {
+  .commandStage {
+    --command-scale: 0.8;
+    --command-shift: calc(var(--layout-sidebar) * -1);
+    height: calc(var(--space-16) * 10);
+  }
+
+  .commandWindow .browserBar {
+    display: none;
+  }
 }
 
 /* ---------- Narrower content: below --grid-breakpoint-md (64rem) ---------- */
@@ -855,22 +791,41 @@
     padding-top: var(--space-16);
   }
 
-  .themeSplit:global(.layout-split--secondary),
-  .reviewSplit:global(.layout-split--primary),
-  .faqSplit:global(.layout-split--secondary),
-  .headSplit:global(.layout-split) {
+  .faqSplit:global(.layout-split--secondary) {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  /* Stacked, the review copy reads before its demo. */
-  .reviewSplit > .reviewDemo {
-    order: 1;
+  /* Stacked: the screen comes first, unpinned, in chapter 1's finished state; the chapters read
+     below it in full. */
+  .story {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .storyStage {
+    position: static;
+    order: -1;
+    height: auto;
+  }
+
+  .storyStage .commandStage {
+    height: calc(var(--space-16) * 10);
+  }
+
+  .storySteps {
+    gap: var(--space-8);
+    padding-bottom: 0;
+  }
+
+  .storyStep {
+    min-height: 0;
+    opacity: 1;
   }
 }
 
 /* ---------- Phones: below --grid-breakpoint-sm (40rem) ---------- */
 
-/* The root is the container, so it cannot query itself: its own padding uses a media query. */
+/* The root is the container, so it cannot query itself: its own padding uses a media query.
+   40rem is --grid-breakpoint-sm. */
 @media (width < 40rem) {
   .landing .home {
     --home-gutter: var(--grid-margin-sm);
@@ -884,16 +839,29 @@
     padding-top: var(--space-10);
   }
 
-  .loop,
-  .workspace {
+  .loop {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .sceneStage,
-  .review,
-  .themeStage {
-    padding: var(--space-3);
+  /* Phone: a second composition, not a squeeze. The sidebar is cropped away so the monitor
+     leads, the window runs off the right, and the satellite sits on its foot. */
+  .commandStage {
+    --command-scale: 0.62;
+    --command-shift: calc(var(--layout-sidebar) * -1);
+    height: calc(var(--space-16) * 8.5);
   }
+
+  .commandAsk {
+    right: 0;
+    bottom: var(--space-4);
+  }
+
+  .storyStage .commandStage {
+    --command-scale: 0.62;
+    height: calc(var(--space-16) * 8.5);
+  }
+
+
 
   .agentPanel {
     padding: var(--space-5);

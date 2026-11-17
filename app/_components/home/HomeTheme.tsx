@@ -6,9 +6,9 @@ import { PreviewFallbackProvider, ThemeScope, useSiteMode } from "../ThemeScope"
 
 /**
  * The landing page keeps Ink's quiet neutral greys but takes the Nistha brand colour, so the logo
- * tile and the main calls to action are brand blue and everything else stays calm. Every
- * PreviewScope inside falls back to the kit's own Nistha look (or the preview theme the reader
- * saved). Light or dark follows the site.
+ * tile and the main calls to action are the only brand blue on the page. The product previews run
+ * in plain Ink (or the preview theme the reader saved), so their own Approve and Grant buttons
+ * never read as calls to action. Light or dark follows the site.
  */
 export function HomeTheme({ className, children }: { className?: string; children: ReactNode }) {
   const mode = useSiteMode();
@@ -16,7 +16,7 @@ export function HomeTheme({ className, children }: { className?: string; childre
   const theme = { ...presetState("ink", mode), brand: brand.brand, step: brand.step };
   return (
     <ThemeScope theme={theme} className={className}>
-      <PreviewFallbackProvider value={brand}>{children}</PreviewFallbackProvider>
+      <PreviewFallbackProvider value={presetState("ink", mode)}>{children}</PreviewFallbackProvider>
     </ThemeScope>
   );
 }
