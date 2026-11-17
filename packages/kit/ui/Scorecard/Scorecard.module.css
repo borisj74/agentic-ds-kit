@@ -9,7 +9,6 @@
   border: var(--border-highlight) solid var(--line);
   border-radius: var(--radius-surface-md);
   background: var(--bg-surface);
-  box-shadow: var(--shadow-sm);
   font-family: var(--font-sans);
   text-align: start;
 }
