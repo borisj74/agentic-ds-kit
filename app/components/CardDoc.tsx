@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "agentic-ds-kit";
 import { Card } from "agentic-ds-kit";
+import { Divider } from "agentic-ds-kit";
 import type { CardSize } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
@@ -38,11 +40,15 @@ function masterCode(size: CardSize): string {
     '  description="Enter your email below to login to your account."',
     `  size="${size}"`,
     '  headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}',
-    "  actions={[",
-    '    { label: "Login", appearance: "solid", mode: "primary" },',
-    '    { label: "Login with Google", appearance: "outline", mode: "neutral" },',
-    "  ]}",
+    '  actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}',
     ">",
+    '  <Button appearance="outline" mode="neutral" block>',
+    "    Continue with Google",
+    "  </Button>",
+    '  <Button appearance="outline" mode="neutral" block>',
+    "    Continue with Apple",
+    "  </Button>",
+    '  <Divider label="or" />',
     '  <Field label="Name" htmlFor="card-login-name">',
     '    <Input id="card-login-name" type="text" placeholder="Boris Jovanovic" />',
     "  </Field>",
@@ -76,7 +82,7 @@ export function CardDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            A login-style Card composing kit Field, Input, and footer Buttons.
+            A login-style Card composing kit Buttons, Divider, Field and Input.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -91,11 +97,15 @@ export function CardDoc() {
                     description="Enter your email below to login to your account."
                     size={size}
                     headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-                    actions={[
-                      { label: "Login", appearance: "solid", mode: "primary" },
-                      { label: "Login with Google", appearance: "outline", mode: "neutral" },
-                    ]}
+                    actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
                   >
+                    <Button appearance="outline" mode="neutral" block>
+                      Continue with Google
+                    </Button>
+                    <Button appearance="outline" mode="neutral" block>
+                      Continue with Apple
+                    </Button>
+                    <Divider label="or" />
                     <Field label="Name" htmlFor="card-login-name">
                       <Input id="card-login-name" type="text" placeholder="Boris Jovanovic" />
                     </Field>
@@ -171,11 +181,15 @@ export function CardDoc() {
                     title="Login to your account"
                     description="Enter your email below to login to your account."
                     headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-                    actions={[
-                      { label: "Login", appearance: "solid", mode: "primary" },
-                      { label: "Login with Google", appearance: "outline", mode: "neutral" },
-                    ]}
+                    actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
                   >
+                    <Button appearance="outline" mode="neutral" block>
+                      Continue with Google
+                    </Button>
+                    <Button appearance="outline" mode="neutral" block>
+                      Continue with Apple
+                    </Button>
+                    <Divider label="or" />
                     <Field label="Name" htmlFor="card-variant-login-name">
                       <Input id="card-variant-login-name" type="text" placeholder="Boris Jovanovic" />
                     </Field>
@@ -194,8 +208,8 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Footer actions are kit Buttons stacked full-width. Login is the one primary. Sign
-                  Up in the header is tertiary.
+                  Sign-in options are outline block Buttons above a Divider, then the fields. Login
+                  is the one primary in the footer. Sign Up in the header is tertiary.
                 </p>
               </div>
               <CodeBlock
@@ -203,8 +217,15 @@ export function CardDoc() {
   title="Login to your account"
   description="Enter your email below to login to your account."
   headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-  actions={[{ label: "Login", appearance: "solid", mode: "primary" }, { label: "Login with Google", appearance: "outline", mode: "neutral" }]}
+  actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
 >
+  <Button appearance="outline" mode="neutral" block>
+    Continue with Google
+  </Button>
+  <Button appearance="outline" mode="neutral" block>
+    Continue with Apple
+  </Button>
+  <Divider label="or" />
   <Field label="Name" htmlFor="name">
     <Input id="name" type="text" placeholder="Boris Jovanovic" />
   </Field>
