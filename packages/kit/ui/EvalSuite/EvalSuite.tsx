@@ -157,8 +157,9 @@ export function EvalSuite({
     { key: "tags", header: "Tags" },
     { key: "baseline", header: baseline.label },
     { key: "candidate", header: candidate.label },
-    { key: "score", header: "Score Δ", type: "number" },
-    { key: "cost", header: "Cost Δ", type: "number" },
+    // The change columns say what they compare to in words, not with a Δ glyph.
+    { key: "score", header: `Score vs ${baseline.label}`, type: "number" },
+    { key: "cost", header: `Cost vs ${baseline.label}`, type: "number" },
     { key: "open", header: "Details" },
   ];
 
@@ -169,7 +170,8 @@ export function EvalSuite({
     return {
       id: x.id,
       name: `${x.name}${state}`,
-      tags: { type: "badges", badges: (x.tags ?? []).map((t) => ({ label: t, tone: "neutral" })) },
+      // Tags are plain text, so the Pass / Fail badges are the only colour in the row.
+      tags: (x.tags ?? []).join(", ") || "—",
       baseline: { type: "badge", label: RESULT_LABEL[x.baseline.result], tone: RESULT_TONE[x.baseline.result] },
       candidate: { type: "badge", label: RESULT_LABEL[x.candidate.result], tone: RESULT_TONE[x.candidate.result] },
       score: scoreDelta,
@@ -177,7 +179,7 @@ export function EvalSuite({
       open: {
         type: "actions",
         label: `Details for ${x.name}`,
-        actions: [{ label: "Open", ariaLabel: `Open ${x.name}`, appearance: "outline", mode: "neutral", onClick: () => setOpenId(x.id) }],
+        actions: [{ label: "Open", ariaLabel: `Open ${x.name}`, appearance: "ghost", mode: "neutral", onClick: () => setOpenId(x.id) }],
       },
     };
   });
