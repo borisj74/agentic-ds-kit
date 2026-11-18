@@ -1,4 +1,5 @@
 .card {
+  container: integrationpicker / inline-size;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -47,6 +48,17 @@
 .search {
   flex: 0 1 calc(var(--space-16) * 4);
   min-width: calc(var(--space-16) * 3);
+}
+
+.categories {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segments {
+  flex-wrap: nowrap;
+  max-width: none;
 }
 
 /* Tiles are at least 14rem (space-16 × 3.5) and fill the row. */
@@ -173,6 +185,16 @@
 @keyframes integrationSpin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Narrow card: search takes the full row and the categories sit under it.
+   40rem is --grid-breakpoint-sm (container queries cannot read var()). */
+@container integrationpicker (max-width: 40rem) {
+  .search,
+  .categories {
+    flex: 1 1 100%;
+    min-width: 0;
   }
 }
 

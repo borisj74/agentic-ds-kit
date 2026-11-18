@@ -84,19 +84,23 @@ export function IntegrationPicker({
           type="search"
           size="sm"
           iconStart="Search"
-          placeholder="Search integrations"
+          placeholder="Search"
           ariaLabel={`Search ${title.toLowerCase()}`}
           value={query}
           onChange={setQuery}
         />
         {allCategories.length ? (
-          <SegmentedControl
-            size="sm"
-            ariaLabel="Category"
-            value={category}
-            onChange={setCategory}
-            items={[{ value: "all", label: "All" }, ...allCategories.map((name) => ({ value: name, label: name }))]}
-          />
+          // One row of categories; on a narrow card the row scrolls instead of wrapping.
+          <div className={styles.categories}>
+            <SegmentedControl
+              className={styles.segments}
+              size="sm"
+              ariaLabel="Category"
+              value={category}
+              onChange={setCategory}
+              items={[{ value: "all", label: "All" }, ...allCategories.map((name) => ({ value: name, label: name }))]}
+            />
+          </div>
         ) : null}
       </div>
 
