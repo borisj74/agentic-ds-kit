@@ -56,13 +56,15 @@ function masterCode(size: CardSize): string {
     '  <Button appearance="solid" mode="primary" block>',
     "    Login",
     "  </Button>",
-    '  <Divider label="or" />',
-    '  <Button appearance="outline" mode="neutral" block>',
-    "    Continue with Google",
-    "  </Button>",
-    '  <Button appearance="outline" mode="neutral" block>',
-    "    Continue with Apple",
-    "  </Button>",
+    '  <Divider label="Or continue with" />',
+    '  <div className="layout-split">',
+    '    <Button appearance="outline" mode="neutral" block>',
+    "      Google",
+    "    </Button>",
+    '    <Button appearance="outline" mode="neutral" block>',
+    "      Apple",
+    "    </Button>",
+    "  </div>",
     "</Card>",
   ].join("\n");
 }
@@ -90,13 +92,15 @@ function LoginCard({ idPrefix, size }: { idPrefix: string; size?: CardSize }) {
       <Button appearance="solid" mode="primary" block>
         Login
       </Button>
-      <Divider label="or" />
-      <Button appearance="outline" mode="neutral" block>
-        Continue with Google
-      </Button>
-      <Button appearance="outline" mode="neutral" block>
-        Continue with Apple
-      </Button>
+      <Divider label="Or continue with" />
+      <div className="layout-split">
+        <Button appearance="outline" mode="neutral" block>
+          Google
+        </Button>
+        <Button appearance="outline" mode="neutral" block>
+          Apple
+        </Button>
+      </div>
     </Card>
   );
 }
@@ -193,8 +197,8 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Login is the one primary, a block Button after the fields. Sign-in options follow
-                  under a Divider as outline block Buttons. Sign Up in the header is tertiary.
+                  Login is the one primary, a block Button after the fields. Google and Apple sit
+                  side by side in a layout-split under a Divider. Sign Up in the header is tertiary.
                 </p>
               </div>
               <CodeBlock
@@ -218,13 +222,15 @@ export function CardDoc() {
   <Button appearance="solid" mode="primary" block>
     Login
   </Button>
-  <Divider label="or" />
-  <Button appearance="outline" mode="neutral" block>
-    Continue with Google
-  </Button>
-  <Button appearance="outline" mode="neutral" block>
-    Continue with Apple
-  </Button>
+  <Divider label="Or continue with" />
+  <div className="layout-split">
+    <Button appearance="outline" mode="neutral" block>
+      Google
+    </Button>
+    <Button appearance="outline" mode="neutral" block>
+      Apple
+    </Button>
+  </div>
 </Card>`}
               />
             </section>
