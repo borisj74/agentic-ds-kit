@@ -1,8 +1,0 @@
-### Changed
-
-- **MemoryPanel is quieter.** Memories drop the brain icon repeated on every row, so their text shares one left edge with the group labels; the header and empty state use BookMarked instead of Brain, and "Used here" is a neutral badge
-- **MessageActions loses its frame.** The action row is bare ghost icons under the message instead of a bordered box inside the card, and it pulls back by a button's inset so the first icon lines up under the text. Hover and focus reveal, tooltips and the divider stay
-- **PermissionRequest is quieter.** The scope count reads "2 scopes" as plain muted mono text instead of an uppercase pill, access badges read "read", "write" and "admin" without forced uppercase, read is neutral so colour stays for write (amber) and admin (red), and the scope list keeps its grey surface without a border
-- **ToolCallCard panes lose their frame.** Arguments and Result keep their grey surface, radius and header hairline but drop the outer border, so the open card no longer stacks two boxes inside itself
-- **TraceWaterfall reads faster.** Axis ticks fall on round steps that fit the run (0s 20s 40s 60s for a 74-second run; runs of two minutes or more count in minutes) in one unit per axis instead of quarter splits like 19s and 37s. Span rows drop the kind dot that repeated the bar's colour (the legend and the detail header keep it), and the span detail uses the stats panel's grey surface instead of a bordered box
-- **Contract token lists follow.** MemoryPanel, PermissionRequest, ToolCallCard and TraceWaterfall drop `shadow.sm` from their `tokens` lists (their cards keep the hairline border without `--shadow-sm`); MessageActions drops `radius.surfaceMd`

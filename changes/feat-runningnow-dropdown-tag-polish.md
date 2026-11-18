@@ -1,7 +1,0 @@
-### Changed
-
-- **RunningNow row is compact and says its overflow.** In row layout the strip is as wide as its chips instead of its container, and the overflow is a text button on the label line ("2 more · View all", or plain "2 more") instead of a lone "+2" chip that wrapped onto its own line. The label reads "Running now" in sentence case instead of uppercase tracked mono. The contract's `maxVisible` note and a11y line say so
-- **RedactionPreview keeps colour for what is exposed.** Masked values in the payload are quiet grey placeholders instead of blue bordered chips (they still reveal on click, with a dashed edge while shown), and summary tags show the amber dot only for a type that is not masked, instead of a green dot on every tag
-- **DropdownMenu group headings are sentence case.** Headings such as a ModelPicker vendor read as a muted caption ("Anthropic") instead of an uppercase tracked overline ("ANTHROPIC"); every grouped dropdown follows
-- **ModelPicker's label matches other form labels.** It uses the form-label size (`--type-size-label`, 14px) like a kit Field instead of caption size, so "Model" no longer looks smaller than the labels around it, as in TaskBrief
-- **Tag is the right height.** Each Tag size now sets its own UI line height (sm 16px, md 20px, lg 24px) instead of the shared 32px heading line height, so a small tag is 24px tall instead of 42px and sits level with the buttons beside it
