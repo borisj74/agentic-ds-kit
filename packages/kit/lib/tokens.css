@@ -542,6 +542,7 @@
   /* Lucide icons. Data strokes (charts, Progress, Meter) stay their own widths. */
   --icon-stroke: 1.5;
   --icon-stroke-strong: 2;
+  --icon-size-sm: 1rem;
 }
 
 @media (width < 64rem) {

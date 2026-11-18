@@ -340,7 +340,13 @@ function iconStrokeVars() {
     "  /* Lucide icons. Data strokes (charts, Progress, Meter) stay their own widths. */",
     `  --icon-stroke: ${stroke.default};`,
     `  --icon-stroke-strong: ${stroke.strong};`,
+    ...iconSizeVars(),
   ];
+}
+
+function iconSizeVars() {
+  const size = tokens.semantic.iconSize ?? {};
+  return Object.entries(size).map(([step, value]) => `  --icon-size-${kebab(step)}: ${value};`);
 }
 
 function aliasVars() {
