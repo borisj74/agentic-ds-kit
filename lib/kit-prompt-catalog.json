@@ -5022,6 +5022,7 @@
       ],
       "doNot": [
         "Do not invent chart container cousins",
+        "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
         "Do not use raw hex"
       ],
       "props": {
@@ -5088,6 +5089,64 @@
           "type": "boolean",
           "default": false,
           "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
+        }
+      }
+    },
+    {
+      "id": "barlist",
+      "group": "component",
+      "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+      "useWhen": [
+        "Top items by one measure in a side column or card, like top pages by views or top customers by revenue",
+        "A short ranking where people read the exact value of each row, and rows may open the item they name",
+        "A breakdown that is too long or too narrow for an axis chart"
+      ],
+      "doNotUseWhen": [
+        "Several series, an axis, gridlines or a table view — use BarChart",
+        "Usage against a plan limit, with near-limit warnings — use UsageList",
+        "Part of a whole for a handful of segments — use PieChart",
+        "Records with avatars, actions or selection — use ListView",
+        "Values compared across several columns — use Table or DataTable"
+      ],
+      "doNot": [
+        "Do not use it for several series or an axis — use BarChart",
+        "Do not use it for usage against a limit — use UsageList",
+        "Do not build ranked rows from ListView, Table or loose bars and text — use BarList",
+        "Do not colour single rows to mean good or bad; it is one measure in one colour",
+        "Do not pass negative values; bars start at zero",
+        "Do not put it in a Card and a Section at once, or draw a box around it yourself. The title comes from a parent Section or Card",
+        "Do not use raw hex or primitive --color-* ramps"
+      ],
+      "props": {
+        "data": {
+          "type": "array",
+          "required": true,
+          "note": "One row per item, in any order: sort decides the order shown. An empty array shows No data."
+        },
+        "sort": {
+          "type": "enum",
+          "values": [
+            "descending",
+            "ascending",
+            "none"
+          ],
+          "default": "descending",
+          "note": "descending puts the largest first; none keeps the order of data."
+        },
+        "maxRows": {
+          "type": "number",
+          "required": false,
+          "note": "Rows shown before Show all. Without it every row shows. Show all appears only when data has more rows than maxRows, and it turns into Show fewer once open."
+        },
+        "valueFormatter": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for the value text, like a currency or a percent. Defaults to the chart format: 1,240, 12.4k, 1.2M."
+        },
+        "label": {
+          "type": "string",
+          "default": "Ranked list",
+          "note": "Names the list for screen readers, like Top pages by views. The visible title comes from a parent Section or Card."
         }
       }
     },
@@ -7058,6 +7117,7 @@
         "Do not put it in a Card and a Section at once, or draw a box around it yourself. Title comes from a parent Section or Card.",
         "Do not invent a local progress bar — compose kit Progress with showValue={false} and ariaLabel.",
         "Do not invent a local icon set — use TriangleAlert and CircleAlert from lucide-react, same as Alert and Toast.",
+        "Do not use it to rank items by one measure, like top pages or top customers — use BarList",
         "Do not use raw hex or primitive --color-* ramps"
       ],
       "props": {

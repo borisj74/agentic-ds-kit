@@ -463,6 +463,14 @@
     "level": "organism"
   },
   {
+    "id": "barlist",
+    "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+    "group": "component",
+    "path": "contracts/barlist.json",
+    "status": "stable",
+    "level": "molecule"
+  },
+  {
     "id": "breadcrumb",
     "intent": "Path to the current page as a hierarchy of links.",
     "group": "component",

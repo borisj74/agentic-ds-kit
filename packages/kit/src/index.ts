@@ -31,6 +31,7 @@ export * from "../ui/Avatar";
 export * from "../ui/AvatarGroup";
 export * from "../ui/Badge";
 export * from "../ui/BarChart";
+export * from "../ui/BarList";
 export * from "../ui/Breadcrumb";
 export * from "../ui/Button";
 export * from "../ui/ButtonGroup";

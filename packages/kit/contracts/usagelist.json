@@ -84,6 +84,7 @@
     "Do not put it in a Card and a Section at once, or draw a box around it yourself. Title comes from a parent Section or Card.",
     "Do not invent a local progress bar — compose kit Progress with showValue={false} and ariaLabel.",
     "Do not invent a local icon set — use TriangleAlert and CircleAlert from lucide-react, same as Alert and Toast.",
+    "Do not use it to rank items by one measure, like top pages or top customers — use BarList",
     "Do not use raw hex or primitive --color-* ramps"
   ],
   "snippet": "<UsageList\n  label=\"Plan usage\"\n  items={[\n    { id: 'api', label: 'API calls', used: 8420, limit: 10000, note: 'Resets on Oct 1' },\n    { id: 'storage', label: 'Storage', used: 32, limit: 50, unit: 'GB' },\n    { id: 'seats', label: 'Seats', used: 12, limit: 12, note: 'All seats in use' },\n  ]}\n/>"

@@ -1,0 +1,112 @@
+{
+  "id": "barlist",
+  "status": "stable",
+  "level": "molecule",
+  "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+  "useWhen": [
+    "Top items by one measure in a side column or card, like top pages by views or top customers by revenue",
+    "A short ranking where people read the exact value of each row, and rows may open the item they name",
+    "A breakdown that is too long or too narrow for an axis chart"
+  ],
+  "doNotUseWhen": [
+    "Several series, an axis, gridlines or a table view — use BarChart",
+    "Usage against a plan limit, with near-limit warnings — use UsageList",
+    "Part of a whole for a handful of segments — use PieChart",
+    "Records with avatars, actions or selection — use ListView",
+    "Values compared across several columns — use Table or DataTable"
+  ],
+  "props": {
+    "data": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "label": {
+          "type": "string",
+          "required": true,
+          "note": "What the row is. Labels are the row keys, so keep them unique."
+        },
+        "value": {
+          "type": "number",
+          "required": true,
+          "note": "Zero or more. The bar is sized against the largest value in data, shown or not."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "note": "Makes the label a link to the item it names."
+        }
+      },
+      "note": "One row per item, in any order: sort decides the order shown. An empty array shows No data."
+    },
+    "sort": {
+      "type": "enum",
+      "values": [
+        "descending",
+        "ascending",
+        "none"
+      ],
+      "default": "descending",
+      "note": "descending puts the largest first; none keeps the order of data."
+    },
+    "maxRows": {
+      "type": "number",
+      "required": false,
+      "note": "Rows shown before Show all. Without it every row shows. Show all appears only when data has more rows than maxRows, and it turns into Show fewer once open."
+    },
+    "valueFormatter": {
+      "type": "function",
+      "required": false,
+      "note": "(value: number) => string for the value text, like a currency or a percent. Defaults to the chart format: 1,240, 12.4k, 1.2M."
+    },
+    "label": {
+      "type": "string",
+      "default": "Ranked list",
+      "note": "Names the list for screen readers, like Top pages by views. The visible title comes from a parent Section or Card."
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "chart.1",
+    "surface.card",
+    "text.primary",
+    "text.muted",
+    "link.hover",
+    "border.focus",
+    "radius.controlSm",
+    "type.size.bodySm",
+    "type.weight.body",
+    "type.weight.label",
+    "type.line.body",
+    "motion.interaction",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.8",
+    "space.inset2xs"
+  ],
+  "a11y": {
+    "element": "ol",
+    "requirements": [
+      "An ordered list named by label, so the rank and the number of rows are read",
+      "Each row reads its label and its value as text; the bar is decoration and hidden from screen readers",
+      "A row with href is one link, reachable with Tab, with a visible focus ring",
+      "Show all is a kit Button with aria-expanded and aria-controls pointing at the list, and focus stays on it when rows open or close"
+    ]
+  },
+  "doNot": [
+    "Do not use it for several series or an axis — use BarChart",
+    "Do not use it for usage against a limit — use UsageList",
+    "Do not build ranked rows from ListView, Table or loose bars and text — use BarList",
+    "Do not colour single rows to mean good or bad; it is one measure in one colour",
+    "Do not pass negative values; bars start at zero",
+    "Do not put it in a Card and a Section at once, or draw a box around it yourself. The title comes from a parent Section or Card",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<Section title=\"Top pages\">\n  <BarList\n    label=\"Top pages by views\"\n    maxRows={5}\n    data={[\n      { label: \"/pricing\", value: 4820, href: \"/analytics/pricing\" },\n      { label: \"/docs/install\", value: 3110 },\n      { label: \"/blog/launch\", value: 1960 },\n    ]}\n  />\n</Section>"
+}

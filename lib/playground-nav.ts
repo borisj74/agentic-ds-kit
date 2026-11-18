@@ -188,6 +188,7 @@ export function componentLabel(id: string): string {
   if (id === "avatar") return "Avatar";
   if (id === "avatargroup") return "AvatarGroup";
   if (id === "barchart") return "Bar";
+  if (id === "barlist") return "BarList";
   if (id === "datagrid") return "DataGrid";
   if (id === "datatable") return "DataTable";
   if (id === "headercell") return "HeaderCell";
@@ -349,7 +350,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Charts",
-    ids: ["barchart", "linechart", "piechart"],
+    ids: ["barchart", "barlist", "linechart", "piechart"],
   },
 ] as const;
 

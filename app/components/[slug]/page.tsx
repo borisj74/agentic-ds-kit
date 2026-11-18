@@ -6,7 +6,7 @@ import { DocPageExtras } from "../DocPageExtras";
 import { COMPONENT_ITEMS, componentLabel } from "@/lib/playground-nav";
 import { canonical } from "@/lib/site";
 
-const SLUGS = new Set<string>([...COMPONENT_ITEMS, "barchart", "linechart", "piechart"]);
+const SLUGS = new Set<string>([...COMPONENT_ITEMS, "barchart", "barlist", "linechart", "piechart"]);
 
 export function generateStaticParams() {
   return [...SLUGS].filter((slug) => slug !== "button").map((slug) => ({ slug }));

@@ -1,0 +1,98 @@
+.root {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Label over its bar on the start, the value on the end. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--space-8);
+}
+
+/* A quiet tint of the first chart colour, so the label on top keeps its full text contrast. */
+.bar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--barlist-length, 0%);
+  border-radius: var(--radius-control-sm);
+  background-color: color-mix(in srgb, var(--chart-1) 18%, var(--surface-card));
+  pointer-events: none;
+}
+
+.label {
+  position: relative;
+  min-width: 0;
+  padding-inline: var(--space-2);
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link {
+  border-radius: var(--radius-control-sm);
+  text-decoration: none;
+  transition: color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.value {
+  color: var(--text-primary);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.empty {
+  margin: 0;
+  padding-block: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--type-size-body-sm);
+}
+
+.footer {
+  display: flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
