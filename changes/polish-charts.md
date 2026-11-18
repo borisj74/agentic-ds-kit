@@ -5,7 +5,7 @@
 - **Chart legends use the same spacing.** Swatch-to-label spacing is now the same in horizontal and vertical legends.
 - **LineChart lines are a little thinner**, and the hover crosshair is a solid border-colour hairline.
 - **LineChart smooth curves are rounder.** With `curve="smooth"`, peaks and dips bend more fully. The line still passes through every point and never goes above a peak or below a dip.
-- **LineChart areas fade toward the baseline.** The `area` variant fills each series with a vertical gradient of its own colour, about 20% at the top fading to nothing at the baseline, in place of the flat 15% fill.
+- **LineChart areas fade toward the baseline.** The `area` variant fills each series with a vertical gradient of its own colour, about 20% at the top fading to nothing at the baseline, in place of the flat 15% fill. The bottom gridline stays visible under the fill.
 - **PieChart no longer glows or blurs.** The active slice has no glow, and the other slices just fade.
 
 ### Fixed

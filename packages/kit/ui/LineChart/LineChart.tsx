@@ -307,6 +307,11 @@ export function LineChart({
     ? layout.lines.filter((line) => line.seriesIndex === highlighted)
     : layout.lines;
   const activeSample = activeIndex !== null ? (layout.samples[activeIndex] ?? null) : null;
+  // Lowest value tick: its gridline sits on the plot floor, under the bottom of every area.
+  const floorTick = layout.ticks.reduce<TickMark | null>(
+    (lowest, tick) => (lowest === null || tick.value < lowest.value ? tick : lowest),
+    null,
+  );
   const flipTooltip = Boolean(activeSample && width > 0 && activeSample.x > width * 0.6);
 
   // Entrance: lines draw in left to right (series slightly staggered), area fills fade in after.
@@ -390,19 +395,34 @@ export function LineChart({
             </defs>
           ) : null}
           {showGrid ? (
-            <g mask={isArea && width > 0 ? `url(#${gridMaskId})` : undefined}>
-              {layout.ticks.map((tick) => (
+            <>
+              <g mask={isArea && width > 0 ? `url(#${gridMaskId})` : undefined}>
+                {layout.ticks.map((tick) =>
+                  isArea && tick.value === floorTick?.value ? null : (
+                    <line
+                      key={tick.value}
+                      x1={tick.gridX1}
+                      x2={tick.gridX2}
+                      y1={Math.round(tick.gridY1) + 0.5}
+                      y2={Math.round(tick.gridY1) + 0.5}
+                      className={`${styles.grid}${tick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  ),
+                )}
+              </g>
+              {/* The bottom gridline is the floor the area fades onto: keep it out of the mask so it shows. */}
+              {isArea && floorTick ? (
                 <line
-                  key={tick.value}
-                  x1={tick.gridX1}
-                  x2={tick.gridX2}
-                  y1={Math.round(tick.gridY1) + 0.5}
-                  y2={Math.round(tick.gridY1) + 0.5}
-                  className={`${styles.grid}${tick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
+                  x1={floorTick.gridX1}
+                  x2={floorTick.gridX2}
+                  y1={Math.round(floorTick.gridY1) + 0.5}
+                  y2={Math.round(floorTick.gridY1) + 0.5}
+                  className={`${styles.grid}${floorTick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
                   vectorEffect="non-scaling-stroke"
                 />
-              ))}
-            </g>
+              ) : null}
+            </>
           ) : null}
           {width > 0 && !showGrid ? (
             <>
