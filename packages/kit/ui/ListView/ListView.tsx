@@ -60,6 +60,11 @@ function sectionsOf(items: ListViewItem[], groups?: ListViewGroup[]): { group: L
   return sections;
 }
 
+/** A row's accessible name: primary, then secondary, then the badge, so a status shown only as a Badge is read too. */
+function rowName(item: ListViewItem): string {
+  return [item.primary, item.secondary, item.badge].filter(Boolean).join(", ");
+}
+
 export function ListView({
   items,
   label,
@@ -414,7 +419,7 @@ export function ListView({
                       role={itemRole}
                       className={styles.item}
                       tabIndex={tabIndex}
-                      aria-label={item.secondary ? `${item.primary}, ${item.secondary}` : item.primary}
+                      aria-label={rowName(item)}
                       aria-selected={selectable ? isSelected : undefined}
                       aria-disabled={item.disabled || undefined}
                       onFocus={() => setFocusedKey(item.id)}
