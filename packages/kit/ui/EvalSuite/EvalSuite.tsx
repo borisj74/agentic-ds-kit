@@ -157,8 +157,9 @@ export function EvalSuite({
     { key: "tags", header: "Tags" },
     { key: "baseline", header: baseline.label },
     { key: "candidate", header: candidate.label },
-    { key: "score", header: "Score Δ", type: "number" },
-    { key: "cost", header: "Cost Δ", type: "number" },
+    // The change columns say what they compare to in words, not with a Δ glyph.
+    { key: "score", header: `Score vs ${baseline.label}`, type: "number" },
+    { key: "cost", header: `Cost vs ${baseline.label}`, type: "number" },
     { key: "open", header: "Details" },
   ];
 
