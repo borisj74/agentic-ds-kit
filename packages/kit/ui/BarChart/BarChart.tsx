@@ -206,7 +206,8 @@ export function BarChart({
     const [rawMin, rawMax] = seriesExtent(series, { includeZero: true });
     // Whole-number data keeps whole-number ticks.
     const integer = series.every((entry) => entry.data.every((value) => !Number.isFinite(value) || Number.isInteger(value)));
-    const { ticks, min, max } = niceTicks(rawMin, rawMax, 5, { integer });
+    // Four target ticks: enough to read values, few enough to stay quiet behind the bars.
+    const { ticks, min, max } = niceTicks(rawMin, rawMax, 4, { integer });
     const valueScale = linearScale(
       [min, max],
       isVertical ? [plotBottom, plotTop] : [plotLeft, plotRight],
@@ -357,7 +358,7 @@ export function BarChart({
                 x2={x2}
                 y1={y1}
                 y2={y2}
-                className={styles.grid}
+                className={`${styles.grid}${tick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
                 vectorEffect="non-scaling-stroke"
               />
             );
@@ -365,22 +366,23 @@ export function BarChart({
         : null}
       {width > 0 && !showGrid ? (
         <>
-          {layout.scrolls ? null : (
+          {isVertical ? (
             <line
               className={styles.axis}
-              x1={layout.plotLeft}
-              x2={layout.plotLeft}
+              x1={layout.scrolls ? 0 : layout.plotLeft}
+              x2={layout.plotRight}
+              y1={Math.round(layout.baseline) + 0.5}
+              y2={Math.round(layout.baseline) + 0.5}
+            />
+          ) : (
+            <line
+              className={styles.axis}
+              x1={Math.round(layout.baseline) + 0.5}
+              x2={Math.round(layout.baseline) + 0.5}
               y1={layout.plotTop}
               y2={layout.plotBottom}
             />
           )}
-          <line
-            className={styles.axis}
-            x1={layout.scrolls ? 0 : layout.plotLeft}
-            x2={layout.plotRight}
-            y1={layout.plotBottom}
-            y2={layout.plotBottom}
-          />
         </>
       ) : null}
       {layout.bars.map((bar) => (
@@ -444,15 +446,6 @@ export function BarChart({
           <div className={styles.scrollLayout}>
             <svg className={styles.valueAxis} width={CHART_MARGINS.left} height={height} aria-hidden>
               {tickLabels}
-              {!showGrid ? (
-                <line
-                  className={styles.axis}
-                  x1={CHART_MARGINS.left - 1}
-                  x2={CHART_MARGINS.left - 1}
-                  y1={layout.plotTop}
-                  y2={layout.plotBottom}
-                />
-              ) : null}
             </svg>
             <div
               className={styles.scroller}

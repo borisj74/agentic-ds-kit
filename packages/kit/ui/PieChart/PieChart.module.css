@@ -5,6 +5,7 @@
 
 .stackPlot {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
 }
 
@@ -14,17 +15,23 @@
   align-items: center;
   gap: var(--space-6);
   width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
 }
 
+/* `size` is the most it takes. In a narrow card it shrinks to fit, square, instead of clipping. */
 .plot {
   position: relative;
   flex: none;
+  max-width: 100%;
+  aspect-ratio: 1;
   overflow: visible;
 }
 
 .chart {
   display: block;
+  width: 100%;
+  height: auto;
   overflow: visible;
 }
 
@@ -33,8 +40,7 @@
   transform-origin: center;
   transition:
     transform 0.56s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .sliceActive {
@@ -43,17 +49,6 @@
 
 .sliceDimmed {
   opacity: 0.45;
-  filter: blur(1.5px);
-}
-
-.glow {
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.sliceActive .glow {
-  opacity: 0.38;
 }
 
 .mark {
@@ -97,20 +92,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .slice,
-  .glow {
+  .slice {
     transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
   }
 
   .sliceActive {
     transform: none;
-  }
-
-  .sliceDimmed {
-    filter: none;
-  }
-
-  .sliceActive .glow {
-    opacity: 0;
   }
 }

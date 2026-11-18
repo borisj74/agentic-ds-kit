@@ -11,25 +11,30 @@
   overflow: visible;
 }
 
-/* Quiet guides: they sit behind the data, not over it. */
+/* Quiet guides: they sit behind the data, not over it. The zero line keeps full strength. */
 .grid {
+  stroke: var(--border-faint);
+  stroke-opacity: var(--opacity-muted);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.gridBaseline {
+  stroke-opacity: 1;
+}
+
+/* Without a grid only the baseline stays, as a hairline. No value-axis rule. */
+.axis {
   stroke: var(--border-faint);
   stroke-width: 1;
   shape-rendering: crispEdges;
   pointer-events: none;
 }
 
-.axis {
+.crosshair {
   stroke: var(--border-strong);
   stroke-width: 1;
-  shape-rendering: crispEdges;
-  pointer-events: none;
-}
-
-.crosshair {
-  stroke: var(--text-muted);
-  stroke-width: 1;
-  opacity: 0.45;
   pointer-events: none;
 }
 
@@ -48,7 +53,7 @@
 
 .line {
   fill: none;
-  stroke-width: 2.5;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   pointer-events: none;
@@ -56,7 +61,7 @@
 
 .dot {
   stroke: var(--surface-card);
-  stroke-width: 2.5;
+  stroke-width: 2;
   pointer-events: none;
 }
 
@@ -65,6 +70,7 @@
   fill: var(--text-muted);
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }

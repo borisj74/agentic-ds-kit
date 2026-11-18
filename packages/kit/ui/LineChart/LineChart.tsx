@@ -240,8 +240,8 @@ export function LineChart({
     const plotBottom = height - CHART_MARGINS.bottom;
 
     const [rawMin, rawMax] = seriesExtent(series, { includeZero });
-    // About one value label per 28px of plot (2 to 5), so short charts don't stack labels.
-    const tickCount = Math.max(2, Math.min(5, Math.floor((plotBottom - plotTop) / 28) + 1));
+    // About one value label per 40px of plot (2 to 4): quiet guides, and short charts don't stack labels.
+    const tickCount = Math.max(2, Math.min(4, Math.floor((plotBottom - plotTop) / 40) + 1));
     const { ticks, min, max } = niceTicks(rawMin, rawMax, tickCount);
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
@@ -375,7 +375,7 @@ export function LineChart({
                   x2={tick.gridX2}
                   y1={Math.round(tick.gridY1) + 0.5}
                   y2={Math.round(tick.gridY1) + 0.5}
-                  className={styles.grid}
+                  className={`${styles.grid}${tick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
                   vectorEffect="non-scaling-stroke"
                 />
               ))}
@@ -383,13 +383,6 @@ export function LineChart({
           ) : null}
           {width > 0 && !showGrid ? (
             <>
-              <line
-                className={styles.axis}
-                x1={layout.plotLeft}
-                x2={layout.plotLeft}
-                y1={layout.plotTop}
-                y2={layout.plotBottom}
-              />
               <line
                 className={styles.axis}
                 x1={layout.plotLeft}
