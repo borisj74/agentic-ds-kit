@@ -4,6 +4,7 @@
 - **Chart tooltips are smaller and line up.** BarChart, LineChart and PieChart tooltips have less padding, a smaller radius and a round key. Values align at the end of each row and long series names get an ellipsis. Tooltips sit on the raised surface, so they stand out from the card in dark mode.
 - **Chart legends use the same spacing.** Swatch-to-label spacing is now the same in horizontal and vertical legends.
 - **LineChart lines are a little thinner**, and the hover crosshair is a solid border-colour hairline.
+- **LineChart areas fade toward the baseline.** The `area` variant fills each series with a vertical gradient of its own colour, about 20% at the top fading to nothing at the baseline, in place of the flat 15% fill.
 - **PieChart no longer glows or blurs.** The active slice has no glow, and the other slices just fade.
 
 ### Fixed

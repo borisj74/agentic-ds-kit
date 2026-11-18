@@ -47,8 +47,16 @@
 }
 
 .area {
-  fill-opacity: 0.15;
   pointer-events: none;
+}
+
+/* Area gradient: about 0.2 of the series colour at the top, nothing at the baseline. */
+.areaStopTop {
+  stop-opacity: 0.2;
+}
+
+.areaStopBottom {
+  stop-opacity: 0;
 }
 
 .line {

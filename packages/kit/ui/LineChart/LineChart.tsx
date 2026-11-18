@@ -219,7 +219,9 @@ export function LineChart({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const { ref, width } = useChartSize(height);
-  const gridMaskId = `linechart-grid-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const gridMaskId = `linechart-grid-${chartId}`;
+  const areaFillId = (seriesIndex: number) => `linechart-area-${chartId}-${seriesIndex}`;
 
   const { labels, series } = useMemo(
     () => normalizeLineInput({ data, labels: labelsProp, series: seriesProp }),
@@ -342,6 +344,17 @@ export function LineChart({
           role={layout.samples.length > 0 ? "group" : "img"}
           aria-label={title}
         >
+          {isArea && width > 0 ? (
+            // Area fill: the series colour fades from the top of each area down to the baseline.
+            <defs>
+              {layout.lines.map((line) => (
+                <linearGradient key={line.seriesIndex} id={areaFillId(line.seriesIndex)} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" className={styles.areaStopTop} style={{ stopColor: line.color }} />
+                  <stop offset="1" className={styles.areaStopBottom} style={{ stopColor: line.color }} />
+                </linearGradient>
+              ))}
+            </defs>
+          ) : null}
           {showGrid && isArea && width > 0 ? (
             <defs>
               <mask id={gridMaskId} maskUnits="userSpaceOnUse">
@@ -404,7 +417,7 @@ export function LineChart({
                     className={`${styles.area}${animate ? ` ${motionStyles.fadeAfter}` : ""}`}
                     style={seriesMotion(line.seriesIndex)}
                     d={line.areaPath}
-                    fill={line.color}
+                    fill={`url(#${areaFillId(line.seriesIndex)})`}
                   />
                 ) : null}
                 <path
