@@ -125,11 +125,11 @@ describe("ActivityFeed render", () => {
 
   test("Open on every event, Reply only on comments, both named", () => {
     const html = render();
-    assert.equal((html.match(/>Open</g) ?? []).length, 5);
+    assert.equal((html.match(/aria-label="Open"/g) ?? []).length, 5);
     assert.equal((html.match(/>Reply</g) ?? []).length, 1);
     assert.match(html, /<button[^>]*id="([^"]+)-open"[^>]*aria-labelledby="\1-open \1-object"/);
     assert.ok(html.includes("to Maya Chen"));
-    assert.ok(!render({ onOpen: undefined, onReply: undefined }).includes(">Open<"));
+    assert.ok(!render({ onOpen: undefined, onReply: undefined }).includes('aria-label="Open"'));
   });
 
   test("filters: a picked type shows on its chip and narrows the feed; Clear filters shows", () => {
