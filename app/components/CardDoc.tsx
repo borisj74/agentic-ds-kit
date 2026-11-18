@@ -40,15 +40,7 @@ function masterCode(size: CardSize): string {
     '  description="Enter your email below to login to your account."',
     `  size="${size}"`,
     '  headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}',
-    '  actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}',
     ">",
-    '  <Button appearance="outline" mode="neutral" block>',
-    "    Continue with Google",
-    "  </Button>",
-    '  <Button appearance="outline" mode="neutral" block>',
-    "    Continue with Apple",
-    "  </Button>",
-    '  <Divider label="or" />',
     '  <Field label="Name" htmlFor="card-login-name">',
     '    <Input id="card-login-name" type="text" placeholder="Boris Jovanovic" />',
     "  </Field>",
@@ -61,8 +53,52 @@ function masterCode(size: CardSize): string {
     '  <Field label="Workspace" htmlFor="card-login-workspace">',
     '    <Input id="card-login-workspace" type="text" placeholder="Studio" />',
     "  </Field>",
+    '  <Button appearance="solid" mode="primary" block>',
+    "    Login",
+    "  </Button>",
+    '  <Divider label="or" />',
+    '  <Button appearance="outline" mode="neutral" block>',
+    "    Continue with Google",
+    "  </Button>",
+    '  <Button appearance="outline" mode="neutral" block>',
+    "    Continue with Apple",
+    "  </Button>",
     "</Card>",
   ].join("\n");
+}
+
+function LoginCard({ idPrefix, size }: { idPrefix: string; size?: CardSize }) {
+  return (
+    <Card
+      title="Login to your account"
+      description="Enter your email below to login to your account."
+      size={size}
+      headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
+    >
+      <Field label="Name" htmlFor={`${idPrefix}-name`}>
+        <Input id={`${idPrefix}-name`} type="text" placeholder="Boris Jovanovic" />
+      </Field>
+      <Field label="Email" htmlFor={`${idPrefix}-email`}>
+        <Input id={`${idPrefix}-email`} type="email" />
+      </Field>
+      <Field label="Password" htmlFor={`${idPrefix}-password`} hint="Forgot your password?">
+        <Input id={`${idPrefix}-password`} type="password" />
+      </Field>
+      <Field label="Workspace" htmlFor={`${idPrefix}-workspace`}>
+        <Input id={`${idPrefix}-workspace`} type="text" placeholder="Studio" />
+      </Field>
+      <Button appearance="solid" mode="primary" block>
+        Login
+      </Button>
+      <Divider label="or" />
+      <Button appearance="outline" mode="neutral" block>
+        Continue with Google
+      </Button>
+      <Button appearance="outline" mode="neutral" block>
+        Continue with Apple
+      </Button>
+    </Card>
+  );
 }
 
 export function CardDoc() {
@@ -92,33 +128,7 @@ export function CardDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <div className={styles.previewFill}>
-                  <Card
-                    title="Login to your account"
-                    description="Enter your email below to login to your account."
-                    size={size}
-                    headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-                    actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
-                  >
-                    <Button appearance="outline" mode="neutral" block>
-                      Continue with Google
-                    </Button>
-                    <Button appearance="outline" mode="neutral" block>
-                      Continue with Apple
-                    </Button>
-                    <Divider label="or" />
-                    <Field label="Name" htmlFor="card-login-name">
-                      <Input id="card-login-name" type="text" placeholder="Boris Jovanovic" />
-                    </Field>
-                    <Field label="Email" htmlFor="card-login-email">
-                      <Input id="card-login-email" type="email" />
-                    </Field>
-                    <Field label="Password" htmlFor="card-login-password" hint="Forgot your password?">
-                      <Input id="card-login-password" type="password" />
-                    </Field>
-                    <Field label="Workspace" htmlFor="card-login-workspace">
-                      <Input id="card-login-workspace" type="text" placeholder="Studio" />
-                    </Field>
-                  </Card>
+                  <LoginCard idPrefix="card-login" size={size} />
                 </div>
               </div>
               <aside className={styles.panel} aria-label="Controls">
@@ -177,39 +187,14 @@ export function CardDoc() {
               <h2 className={styles.exampleTitle}>Login</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
-                  <Card
-                    title="Login to your account"
-                    description="Enter your email below to login to your account."
-                    headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-                    actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
-                  >
-                    <Button appearance="outline" mode="neutral" block>
-                      Continue with Google
-                    </Button>
-                    <Button appearance="outline" mode="neutral" block>
-                      Continue with Apple
-                    </Button>
-                    <Divider label="or" />
-                    <Field label="Name" htmlFor="card-variant-login-name">
-                      <Input id="card-variant-login-name" type="text" placeholder="Boris Jovanovic" />
-                    </Field>
-                    <Field label="Email" htmlFor="card-variant-login-email">
-                      <Input id="card-variant-login-email" type="email" />
-                    </Field>
-                    <Field label="Password" htmlFor="card-variant-login-password" hint="Forgot your password?">
-                      <Input id="card-variant-login-password" type="password" />
-                    </Field>
-                    <Field label="Workspace" htmlFor="card-variant-login-workspace">
-                      <Input id="card-variant-login-workspace" type="text" placeholder="Studio" />
-                    </Field>
-                  </Card>
+                  <LoginCard idPrefix="card-variant-login" />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Sign-in options are outline block Buttons above a Divider, then the fields. Login
-                  is the one primary in the footer. Sign Up in the header is tertiary.
+                  Login is the one primary, a block Button after the fields. Sign-in options follow
+                  under a Divider as outline block Buttons. Sign Up in the header is tertiary.
                 </p>
               </div>
               <CodeBlock
@@ -217,15 +202,7 @@ export function CardDoc() {
   title="Login to your account"
   description="Enter your email below to login to your account."
   headerAction={{ label: "Sign Up", appearance: "ghost", mode: "neutral" }}
-  actions={[{ label: "Login", appearance: "solid", mode: "primary" }]}
 >
-  <Button appearance="outline" mode="neutral" block>
-    Continue with Google
-  </Button>
-  <Button appearance="outline" mode="neutral" block>
-    Continue with Apple
-  </Button>
-  <Divider label="or" />
   <Field label="Name" htmlFor="name">
     <Input id="name" type="text" placeholder="Boris Jovanovic" />
   </Field>
@@ -238,6 +215,16 @@ export function CardDoc() {
   <Field label="Workspace" htmlFor="workspace">
     <Input id="workspace" type="text" placeholder="Studio" />
   </Field>
+  <Button appearance="solid" mode="primary" block>
+    Login
+  </Button>
+  <Divider label="or" />
+  <Button appearance="outline" mode="neutral" block>
+    Continue with Google
+  </Button>
+  <Button appearance="outline" mode="neutral" block>
+    Continue with Apple
+  </Button>
 </Card>`}
               />
             </section>
