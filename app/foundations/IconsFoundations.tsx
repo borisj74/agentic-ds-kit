@@ -310,6 +310,24 @@ export function IconsFoundations() {
 
         <section className={styles.scale}>
           <div className={colorStyles.hueHeader}>
+            <h3 className={colorStyles.hueTitle}>Size</h3>
+            <code className={colorStyles.huePattern}>--icon-size-sm</code>
+          </div>
+          <p className={styles.note}>
+            Size icons in CSS with this token. In JSX, Lucide takes a number, so pass <code>{"size={16}"}</code> to
+            match it.
+          </p>
+          <div className={styles.demos}>
+            <div className={styles.demo}>
+              <Search aria-hidden="true" className={styles.iconSm} strokeWidth={ICON_STROKE} />
+              <CopyToken value="--icon-size-sm" />
+              <span className={styles.demoNote}>1rem (16px). Icons beside caption or body-sm text.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.scale}>
+          <div className={colorStyles.hueHeader}>
             <h3 className={colorStyles.hueTitle}>Rules</h3>
           </div>
           <ul className={styles.rules}>

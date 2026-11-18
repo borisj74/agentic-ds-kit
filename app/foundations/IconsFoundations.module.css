@@ -141,3 +141,8 @@
   font-size: 0.75rem;
   color: var(--text-primary);
 }
+
+.iconSm {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}

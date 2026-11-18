@@ -219,7 +219,7 @@
           "doNot": "Do not let Section own page padding"
         },
         "--icon-": {
-          "note": "Icon color roles and stroke width.",
+          "note": "Icon color roles, stroke width and size.",
           "useWhen": "Lucide icons in kit components",
           "doNot": "Do not hand-roll SVG cousins or set a stroke width other than these tokens"
         },
@@ -269,6 +269,11 @@
           "note": "Heavier stroke, 2, where 1.5 looks too thin.",
           "useWhen": "Tiny marks such as the Checkbox check and minus at 12px or smaller",
           "doNot": "Do not use on regular icons, or on chart, Progress, Meter, or PieChart strokes"
+        },
+        "--icon-size-sm": {
+          "note": "Small Lucide icon box, 1rem (16px).",
+          "useWhen": "Sizing an icon in CSS beside caption or body-sm text, such as a trend arrow next to a delta",
+          "doNot": "Do not use for spacing, or for Avatar and illustration sizes"
         },
         "--bg-canvas": {
           "note": "Page canvas behind surfaces.",
