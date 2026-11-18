@@ -39,21 +39,19 @@
   padding-inline: 0;
 }
 
-/* Table header label: overline type (Plex Mono, caps, wide tracking). */
+/* Table header label: sentence-case label type (body family, caption size, label weight). */
 .label {
   min-width: 0;
-  font-family: var(--type-family-overline);
-  font-weight: var(--type-weight-overline);
+  font-family: var(--type-family-body);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
   color: var(--text-secondary);
   overflow-wrap: anywhere;
 }
 
 .sm .label,
 .md .label {
-  font-size: var(--type-size-overline-xs);
+  font-size: var(--type-size-caption);
 }
 
 .sort {
