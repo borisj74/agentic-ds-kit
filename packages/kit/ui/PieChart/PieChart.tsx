@@ -126,7 +126,6 @@ export function PieChart({
 }: PieChartProps) {
   const [active, setActive] = useState<number | null>(null);
   const rawId = useId();
-  const glowId = `pie-glow-${rawId.replace(/:/g, "")}`;
   const sweepId = `pie-sweep-${rawId.replace(/:/g, "")}`;
   const isDonut = variant === "donut";
   const isSplit = layout === "split";
@@ -190,7 +189,7 @@ export function PieChart({
   ) : undefined;
 
   const plot = (
-    <div className={styles.plot} style={{ width: size, height: size }}>
+    <div className={styles.plot} style={{ width: size }}>
       <svg
         className={styles.chart}
         width={size}
@@ -198,13 +197,10 @@ export function PieChart({
         viewBox={`0 0 ${size} ${size}`}
         overflow="visible"
       >
-        <defs>
-          <filter id={glowId} x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="2.2" />
-          </filter>
-          {animate ? (
-            // Entrance: one wide stroke drawn clockwise from 12 o'clock reveals the slices as a sweep.
-            // Pure CSS, so the final state shows without JS; reduced motion skips it.
+        {/* Entrance: one wide stroke drawn clockwise from 12 o'clock reveals the slices as a sweep.
+            Pure CSS, so the final state shows without JS; reduced motion skips it. */}
+        {animate ? (
+          <defs>
             <mask id={sweepId} maskUnits="userSpaceOnUse" x={-size} y={-size} width={size * 3} height={size * 3}>
               <circle
                 className={motionStyles.draw}
@@ -218,8 +214,8 @@ export function PieChart({
                 transform={`rotate(-90 ${geometry.cx} ${geometry.cy})`}
               />
             </mask>
-          ) : null}
-        </defs>
+          </defs>
+        ) : null}
         <g mask={animate ? `url(#${sweepId})` : undefined}>
           {geometry.slices.map((slice, index) => {
             const isActive = active === index;
@@ -229,12 +225,6 @@ export function PieChart({
                 key={index}
                 className={`${styles.slice}${isActive ? ` ${styles.sliceActive}` : ""}${isDimmed ? ` ${styles.sliceDimmed}` : ""}`}
               >
-                <path
-                  className={styles.glow}
-                  d={slice.path}
-                  fill={slice.color}
-                  filter={`url(#${glowId})`}
-                />
                 <path className={styles.mark} d={slice.path} fill={slice.color} />
               </g>
             );
@@ -280,7 +270,8 @@ export function PieChart({
       {activeSlice ? (
         <div
           className={`${frameStyles.tooltip}${activeSlice.midX > size * 0.6 ? ` ${frameStyles.tooltipFlip}` : ""}`}
-          style={{ left: activeSlice.midX, top: activeSlice.midY }}
+          // Percent of the plot, so the tooltip stays on its slice when the plot shrinks to fit.
+          style={{ left: `${(activeSlice.midX / size) * 100}%`, top: `${(activeSlice.midY / size) * 100}%` }}
           role="status"
           aria-live="polite"
         >

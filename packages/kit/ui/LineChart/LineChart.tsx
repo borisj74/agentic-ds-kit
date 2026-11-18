@@ -153,9 +153,15 @@ function linearPath(points: PathPoint[]): string {
   return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
 }
 
+/** Longest Bézier handle, as a share of a segment's width. 1/3 is a plain Hermite curve; 1/2 gives rounder, fuller bends. */
+const CURVE_HANDLE = 0.5;
+
 /**
- * A smooth line through every point (monotone cubic, Fritsch–Carlson): rounded corners, and it
- * never bends above a peak or below a dip, so the line still reads the real values.
+ * A smooth line through every point. Tangents come from a monotone cubic (Fritsch–Carlson), so the
+ * line never bends above a peak or below a dip and still reads the real values. Handles then reach
+ * up to half way along each segment for rounder bends. Where a long handle would push past the
+ * segment's end values, that segment's handles get shorter instead: the tangent direction is kept,
+ * so the line stays smooth through every point.
  */
 function smoothPath(points: PathPoint[]): string {
   const n = points.length;
@@ -188,10 +194,14 @@ function smoothPath(points: PathPoint[]): string {
   }
   let d = `M ${points[0].x} ${points[0].y}`;
   for (let i = 0; i < n - 1; i += 1) {
-    const third = dx[i] / 3;
+    // The control points stay in order between the end values while (a + b) * share <= 1,
+    // a and b being the end tangents relative to this segment's slope.
+    const ab = slope[i] === 0 ? 0 : (tangent[i] + tangent[i + 1]) / slope[i];
+    const share = ab > 0 ? Math.min(CURVE_HANDLE, 1 / ab) : CURVE_HANDLE;
+    const reach = dx[i] * share;
     const p0 = points[i];
     const p1 = points[i + 1];
-    d += ` C ${p0.x + third} ${p0.y + tangent[i] * third} ${p1.x - third} ${p1.y - tangent[i + 1] * third} ${p1.x} ${p1.y}`;
+    d += ` C ${p0.x + reach} ${p0.y + tangent[i] * reach} ${p1.x - reach} ${p1.y - tangent[i + 1] * reach} ${p1.x} ${p1.y}`;
   }
   return d;
 }
@@ -219,7 +229,9 @@ export function LineChart({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const { ref, width } = useChartSize(height);
-  const gridMaskId = `linechart-grid-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const gridMaskId = `linechart-grid-${chartId}`;
+  const areaFillId = (seriesIndex: number) => `linechart-area-${chartId}-${seriesIndex}`;
 
   const { labels, series } = useMemo(
     () => normalizeLineInput({ data, labels: labelsProp, series: seriesProp }),
@@ -240,8 +252,8 @@ export function LineChart({
     const plotBottom = height - CHART_MARGINS.bottom;
 
     const [rawMin, rawMax] = seriesExtent(series, { includeZero });
-    // About one value label per 28px of plot (2 to 5), so short charts don't stack labels.
-    const tickCount = Math.max(2, Math.min(5, Math.floor((plotBottom - plotTop) / 28) + 1));
+    // About one value label per 40px of plot (2 to 4): quiet guides, and short charts don't stack labels.
+    const tickCount = Math.max(2, Math.min(4, Math.floor((plotBottom - plotTop) / 40) + 1));
     const { ticks, min, max } = niceTicks(rawMin, rawMax, tickCount);
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
@@ -295,6 +307,11 @@ export function LineChart({
     ? layout.lines.filter((line) => line.seriesIndex === highlighted)
     : layout.lines;
   const activeSample = activeIndex !== null ? (layout.samples[activeIndex] ?? null) : null;
+  // Lowest value tick: its gridline sits on the plot floor, under the bottom of every area.
+  const floorTick = layout.ticks.reduce<TickMark | null>(
+    (lowest, tick) => (lowest === null || tick.value < lowest.value ? tick : lowest),
+    null,
+  );
   const flipTooltip = Boolean(activeSample && width > 0 && activeSample.x > width * 0.6);
 
   // Entrance: lines draw in left to right (series slightly staggered), area fills fade in after.
@@ -342,6 +359,17 @@ export function LineChart({
           role={layout.samples.length > 0 ? "group" : "img"}
           aria-label={title}
         >
+          {isArea && width > 0 ? (
+            // Area fill: the series colour fades from the top of each area down to the baseline.
+            <defs>
+              {layout.lines.map((line) => (
+                <linearGradient key={line.seriesIndex} id={areaFillId(line.seriesIndex)} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" className={styles.areaStopTop} style={{ stopColor: line.color }} />
+                  <stop offset="1" className={styles.areaStopBottom} style={{ stopColor: line.color }} />
+                </linearGradient>
+              ))}
+            </defs>
+          ) : null}
           {showGrid && isArea && width > 0 ? (
             <defs>
               <mask id={gridMaskId} maskUnits="userSpaceOnUse">
@@ -367,29 +395,37 @@ export function LineChart({
             </defs>
           ) : null}
           {showGrid ? (
-            <g mask={isArea && width > 0 ? `url(#${gridMaskId})` : undefined}>
-              {layout.ticks.map((tick) => (
+            <>
+              <g mask={isArea && width > 0 ? `url(#${gridMaskId})` : undefined}>
+                {layout.ticks.map((tick) =>
+                  isArea && tick.value === floorTick?.value ? null : (
+                    <line
+                      key={tick.value}
+                      x1={tick.gridX1}
+                      x2={tick.gridX2}
+                      y1={Math.round(tick.gridY1) + 0.5}
+                      y2={Math.round(tick.gridY1) + 0.5}
+                      className={`${styles.grid}${tick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  ),
+                )}
+              </g>
+              {/* The bottom gridline is the floor the area fades onto: keep it out of the mask so it shows. */}
+              {isArea && floorTick ? (
                 <line
-                  key={tick.value}
-                  x1={tick.gridX1}
-                  x2={tick.gridX2}
-                  y1={Math.round(tick.gridY1) + 0.5}
-                  y2={Math.round(tick.gridY1) + 0.5}
-                  className={styles.grid}
+                  x1={floorTick.gridX1}
+                  x2={floorTick.gridX2}
+                  y1={Math.round(floorTick.gridY1) + 0.5}
+                  y2={Math.round(floorTick.gridY1) + 0.5}
+                  className={`${styles.grid}${floorTick.value === 0 ? ` ${styles.gridBaseline}` : ""}`}
                   vectorEffect="non-scaling-stroke"
                 />
-              ))}
-            </g>
+              ) : null}
+            </>
           ) : null}
           {width > 0 && !showGrid ? (
             <>
-              <line
-                className={styles.axis}
-                x1={layout.plotLeft}
-                x2={layout.plotLeft}
-                y1={layout.plotTop}
-                y2={layout.plotBottom}
-              />
               <line
                 className={styles.axis}
                 x1={layout.plotLeft}
@@ -411,7 +447,7 @@ export function LineChart({
                     className={`${styles.area}${animate ? ` ${motionStyles.fadeAfter}` : ""}`}
                     style={seriesMotion(line.seriesIndex)}
                     d={line.areaPath}
-                    fill={line.color}
+                    fill={`url(#${areaFillId(line.seriesIndex)})`}
                   />
                 ) : null}
                 <path
