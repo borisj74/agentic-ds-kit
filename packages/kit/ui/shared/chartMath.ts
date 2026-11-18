@@ -136,9 +136,19 @@ export function seriesExtent(
   return [min, max];
 }
 
-export function niceTicks(min: number, max: number, count = 5): { ticks: number[]; min: number; max: number } {
+/**
+ * Round axis ticks around [min, max]. With `integer`, the step is at least 1, so whole-number data
+ * (counts of runs, events, people) never gets 0.5 or 1.5 on its axis.
+ */
+export function niceTicks(
+  min: number,
+  max: number,
+  count = 5,
+  options: { integer?: boolean } = {},
+): { ticks: number[]; min: number; max: number } {
   const range = niceNum(max - min, false);
-  const step = niceNum(range / Math.max(count - 1, 1), true);
+  const nice = niceNum(range / Math.max(count - 1, 1), true);
+  const step = options.integer ? Math.max(nice, 1) : nice;
   const niceMin = Math.floor(min / step) * step;
   const niceMax = Math.ceil(max / step) * step;
   const ticks: number[] = [];
