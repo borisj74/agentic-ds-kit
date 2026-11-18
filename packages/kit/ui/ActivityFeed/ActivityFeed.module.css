@@ -127,6 +127,11 @@
   min-width: 0;
 }
 
+/* Avatar centres itself by default; in an event it sits on the first line with the text and actions. */
+.avatar {
+  align-self: start;
+}
+
 .copy {
   display: grid;
   gap: var(--space-1);
@@ -160,11 +165,17 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-  margin: 0;
+  margin: var(--space-1) 0 0;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-body-xs);
   color: var(--text-fg-muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* The event type is quiet meta after the time; the verb already says it, so it is not a Badge. */
+.type::before {
+  content: "·";
+  margin-inline-end: var(--space-2);
 }
 
 .actions {
@@ -210,16 +221,18 @@
   white-space: nowrap;
 }
 
-/* Narrow: the actions move under the copy, lined up with the text past the Avatar.
+/* Narrow: labelled actions move under the copy, with the first label lined up with the text past the
+   Avatar (Avatar sm + gap, less the sm Button's inline padding).
    40rem is --grid-breakpoint-sm (container queries cannot read var()). */
 @container activityfeed (max-width: 40rem) {
-  .event {
+  /* A lone icon-only Open stays at the row end; only rows with Reply move their actions down. */
+  .event:not(:has(.open:only-of-type)) {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
   }
 
-  .actions {
+  .event:not(:has(.open:only-of-type)) .actions {
     justify-content: start;
-    padding-inline-start: calc(var(--space-8) + var(--space-3));
+    padding-inline-start: var(--space-8);
   }
 }

@@ -159,14 +159,20 @@ export function ActivityFeed(props: ActivityFeedProps) {
           {eventSentence(event, now, locale, timeZone)}
         </p>
         <div className={styles.eventBody} aria-hidden="true">
-          <Avatar name={event.actor.name} src={event.actor.src} initials={event.actor.initials} size="sm" />
+          <Avatar
+            className={styles.avatar}
+            name={event.actor.name}
+            src={event.actor.src}
+            initials={event.actor.initials}
+            size="sm"
+          />
           <div className={styles.copy}>
             <p className={styles.line}>
               <span className={styles.actor}>{event.actor.name}</span>
               {agent ? (
                 <>
                   {" "}
-                  <Badge size="sm" appearance="soft" tone="info">
+                  <Badge size="sm" appearance="soft" tone="neutral">
                     Agent
                   </Badge>
                 </>
@@ -176,9 +182,7 @@ export function ActivityFeed(props: ActivityFeedProps) {
             {event.detail ? <p className={styles.detail}>{event.detail}</p> : null}
             <p className={styles.meta}>
               <time dateTime={new Date(time).toISOString()}>{timeLabel(time, locale, timeZone)}</time>
-              <Badge size="sm" appearance="outline" tone="neutral">
-                {TYPE_LABEL[event.type]}
-              </Badge>
+              <span className={styles.type}>{TYPE_LABEL[event.type]}</span>
               {event.status ? (
                 <Badge size="sm" appearance="soft" tone={event.status.tone ?? "neutral"}>
                   {event.status.label}
@@ -216,14 +220,15 @@ export function ActivityFeed(props: ActivityFeedProps) {
             {onOpen ? (
               <Button
                 id={`${id}-open`}
+                className={styles.open}
                 size="sm"
                 appearance="ghost"
                 mode="neutral"
+                iconStart="ArrowUpRight"
+                ariaLabel="Open"
                 aria-labelledby={`${id}-open ${id}-object`}
                 onClick={() => onOpen(event.id)}
-              >
-                Open
-              </Button>
+              />
             ) : null}
           </div>
         ) : null}
