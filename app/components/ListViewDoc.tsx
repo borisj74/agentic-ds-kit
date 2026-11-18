@@ -26,8 +26,6 @@ const PEOPLE: ListViewItem[] = [
     primary: "Jon Hale",
     secondary: "jon@acme.com",
     name: "Jon Hale",
-    badge: "Active",
-    badgeTone: "success",
   },
   {
     id: "priya",
@@ -38,10 +36,10 @@ const PEOPLE: ListViewItem[] = [
   {
     id: "owen",
     primary: "Owen Blake",
-    secondary: "Deactivated",
+    secondary: "owen@acme.com",
     name: "Owen Blake",
     disabled: true,
-    badge: "Disabled",
+    badge: "Deactivated",
   },
 ];
 

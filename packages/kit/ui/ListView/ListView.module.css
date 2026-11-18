@@ -95,6 +95,8 @@ button.groupHeader:focus-visible {
   outline-offset: calc(-1 * var(--border-focus-width));
 }
 
+/* One fade for the whole row (text, Avatar, Badge). Text keeps its primary and
+   secondary roles under it, so a disabled row stays readable. */
 .row[data-disabled] {
   color: var(--text-disabled);
   cursor: default;
@@ -196,11 +198,6 @@ button.body:focus {
   overflow-wrap: normal;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.row[data-disabled] .primary,
-.row[data-disabled] .secondary {
-  color: var(--text-disabled);
 }
 
 .trail {
