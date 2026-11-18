@@ -49,11 +49,11 @@
   flex: 1 1 auto;
 }
 
-/* A narrow dial: one stop per row, icon and label at the start, so the icons line up down the list.
-   It follows the dial's own width, not the viewport, so a dial in a side column never wraps its
-   scale 3 + 1. 36rem is just over the width the four md stops need on one row (about 34.5rem);
-   no breakpoint token sits there, and container queries cannot read var(). */
-@container autonomydial (max-width: 36rem) {
+/* A narrow dial (under 40rem of its own width, --grid-breakpoint-sm; container queries cannot read
+   var()): one stop per row, icon and label at the start, so the icons line up down the list. It
+   follows the dial's own width, not the viewport, so a dial in a side column never wraps its
+   scale 3 + 1. */
+@container autonomydial (max-width: 40rem) {
   .control {
     flex-direction: column;
     align-items: stretch;
