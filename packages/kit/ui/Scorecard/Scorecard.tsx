@@ -90,7 +90,7 @@ export function Scorecard({
         <span className={styles.footer}>
           {delta ? (
             <span className={`${styles.delta} ${deltaClass}`}>
-              <LucideByName name={deltaIcon} size={15} className={styles.icon} />
+              <LucideByName name={deltaIcon} size={16} className={styles.icon} />
               {delta}
             </span>
           ) : null}

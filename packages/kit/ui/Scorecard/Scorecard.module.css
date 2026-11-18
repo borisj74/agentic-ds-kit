@@ -5,7 +5,7 @@
   box-sizing: border-box;
   min-width: 0;
   margin: 0;
-  padding: var(--space-inset-md);
+  padding: var(--space-inset-lg);
   border: var(--border-highlight) solid var(--line);
   border-radius: var(--radius-surface-md);
   background: var(--bg-surface);
@@ -26,7 +26,7 @@
 .lg {
   width: min(100%, 20rem);
   gap: var(--space-stack-md);
-  padding: var(--space-inset-lg);
+  padding: var(--space-inset-xl);
 }
 
 .fill {
@@ -51,12 +51,9 @@
 .label {
   min-width: 0;
   color: var(--text-secondary);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline-xs);
-  font-weight: var(--type-weight-overline);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
   line-height: var(--type-line-body);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
 }
 
 .value {
@@ -95,8 +92,8 @@
 .icon {
   display: block;
   flex-shrink: 0;
-  width: 0.95rem;
-  height: 0.95rem;
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
 }
 
 .up {
