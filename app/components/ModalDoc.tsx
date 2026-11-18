@@ -2,7 +2,6 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "agentic-ds-kit";
-import { ButtonGroup } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import { Modal } from "agentic-ds-kit";
@@ -15,12 +14,10 @@ import { DocNotes } from "./DocNotes";
 
 const SIZES: ModalSize[] = ["sm", "md", "lg"];
 const STACK = { display: "grid", gap: "var(--space-4)" } as const;
+/* Not positioned: the contained Modal anchors to the whole preview, so its scrim fills it edge to edge. */
 const FRAME: CSSProperties = {
-  position: "relative",
   minHeight: "24rem",
   width: "100%",
-  overflow: "hidden",
-  borderRadius: "var(--radius-surface-md)",
 };
 
 type VariantKey = "footer" | "noclose" | "large" | "scrollable";
@@ -39,10 +36,10 @@ function masterCode(size: ModalSize, showDescription: boolean, showClose: boolea
   lines.push(
     "  onClose={close}",
     "  footer={",
-    '    <ButtonGroup ariaLabel="Modal actions">',
+    "    <>",
     '      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>',
     '      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>',
-    "    </ButtonGroup>",
+    "    </>",
     "  }",
     ">",
     '  <Field label="Name" htmlFor="name">',
@@ -56,22 +53,16 @@ function masterCode(size: ModalSize, showDescription: boolean, showClose: boolea
   return lines.join("\n");
 }
 
-function Actions({
-  onClose,
-  ariaLabel = "Modal actions",
-}: {
-  onClose: () => void;
-  ariaLabel?: string;
-}) {
+function Actions({ onClose }: { onClose: () => void }) {
   return (
-    <ButtonGroup ariaLabel={ariaLabel}>
+    <>
       <Button appearance="outline" mode="neutral" onClick={onClose}>
         Cancel
       </Button>
       <Button appearance="solid" mode="primary" onClick={onClose}>
         Save
       </Button>
-    </ButtonGroup>
+    </>
   );
 }
 
@@ -145,7 +136,7 @@ export function ModalDoc() {
               <div className={styles.canvas}>
                 <div style={FRAME}>
                   <div className={styles.previewRow} style={{ minHeight: "24rem" }}>
-                    <Button appearance="solid" mode="primary" size="md" onClick={() => setOpen(true)}>
+                    <Button appearance="outline" mode="neutral" size="md" onClick={() => setOpen(true)}>
                       Open modal
                     </Button>
                   </div>
@@ -204,7 +195,7 @@ export function ModalDoc() {
             <Variant
               title="With footer"
               usage="Title, description, and footer actions. Scrim click and Escape still close."
-              code={`<Modal\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Modal>`}
+              code={`<Modal\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <>\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </>\n  }\n>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("footer")}
             >
               <Modal
@@ -221,7 +212,7 @@ export function ModalDoc() {
             <Variant
               title="No close"
               usage="showClose is false. Footer still has Cancel. Scrim click and Escape still close."
-              code={`<Modal\n  open={open}\n  title="Edit profile"\n  showClose={false}\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Modal>`}
+              code={`<Modal\n  open={open}\n  title="Edit profile"\n  showClose={false}\n  onClose={close}\n  footer={\n    <>\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </>\n  }\n>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("noclose")}
             >
               <Modal
@@ -294,7 +285,7 @@ function Variant({
       <h2 className={styles.exampleTitle}>{title}</h2>
       <div className={styles.exampleCanvas}>
         <div className={styles.previewRow}>
-          <Button appearance="solid" mode="primary" size="md" onClick={onOpen}>
+          <Button appearance="outline" mode="neutral" size="md" onClick={onOpen}>
             Open modal
           </Button>
         </div>

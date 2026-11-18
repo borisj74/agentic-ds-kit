@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "agentic-ds-kit";
-import { ButtonGroup } from "agentic-ds-kit";
 import { ModalCard } from "agentic-ds-kit";
 import type { ModalCardSize } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
@@ -26,10 +25,10 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
   if (showClose) lines.push("  onClose={close}");
   lines.push(
     "  footer={",
-    '    <ButtonGroup ariaLabel="Modal actions">',
+    "    <>",
     '      <Button appearance="outline" mode="neutral">Cancel</Button>',
     '      <Button appearance="solid" mode="primary">Save</Button>',
-    "    </ButtonGroup>",
+    "    </>",
     "  }",
     ">",
     "  Update the name and email on this profile. Changes apply on save.",
@@ -40,10 +39,10 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
 
 function Footer() {
   return (
-    <ButtonGroup ariaLabel="Modal actions">
+    <>
       <Button appearance="outline" mode="neutral">Cancel</Button>
       <Button appearance="solid" mode="primary">Save</Button>
-    </ButtonGroup>
+    </>
   );
 }
 
@@ -187,10 +186,10 @@ export function ModalCardDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Footer is kit Buttons in a ButtonGroup. No divider.</p>
+                <p className={styles.usageBody}>Footer is kit Buttons, cancel then the primary action. No divider.</p>
               </div>
               <CodeBlock
-                code={`<ModalCard\n  title="Edit profile"\n  footer={\n    <ButtonGroup ariaLabel="Modal actions">\n      <Button appearance="outline" mode="neutral">Cancel</Button>\n      <Button appearance="solid" mode="primary">Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</ModalCard>`}
+                code={`<ModalCard\n  title="Edit profile"\n  footer={\n    <>\n      <Button appearance="outline" mode="neutral">Cancel</Button>\n      <Button appearance="solid" mode="primary">Save</Button>\n    </>\n  }\n>\n  ...\n</ModalCard>`}
               />
             </section>
 

@@ -49,7 +49,8 @@
 
 /* Group headings in sentence case: a quiet caption, not a shouted overline. */
 .heading {
-  padding: var(--space-2) var(--space-2) var(--space-1);
+  /* Inline padding matches .item so headings start on the item label line. */
+  padding: var(--space-2) var(--space-3) var(--space-1);
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
@@ -70,7 +71,8 @@
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+  /* 20px line + 8px padding each side = 36px rows. */
+  line-height: var(--type-line-ui-sm);
   text-align: left;
   text-decoration: none;
   cursor: pointer;
@@ -141,7 +143,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-caption);
-  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
   color: var(--text-muted);
 }
 
@@ -390,7 +392,7 @@
   width: 1px;
   height: 1px;
   padding: 0;
-  margin: -1px;
+  margin: 0;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

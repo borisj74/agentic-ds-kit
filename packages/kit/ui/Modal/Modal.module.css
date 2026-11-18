@@ -12,12 +12,10 @@
   position: absolute;
 }
 
+/* Absolute, so the root padding (room around the card) doesn't shrink the scrim. */
 .scrim {
-  grid-area: 1 / 1;
-  justify-self: stretch;
-  align-self: stretch;
-  width: auto;
-  height: auto;
+  position: absolute;
+  inset: 0;
   margin: 0;
   padding: 0;
   border: none;
