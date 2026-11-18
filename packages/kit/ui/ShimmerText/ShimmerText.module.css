@@ -23,7 +23,7 @@
 }
 
 .lg {
-  font-size: var(--type-size-heading-sm);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
 }
 
