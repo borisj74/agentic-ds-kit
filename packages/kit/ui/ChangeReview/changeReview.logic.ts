@@ -50,16 +50,14 @@ export function stateWord(file: ChangeReviewFile): string {
 }
 
 /**
- * ListView rows, one per file. The secondary line carries the folder, the counts and the state,
- * so the row's accessible name says all of it (ListView names rows from primary + secondary).
+ * ListView rows, one per file. The secondary line carries the folder and the counts. A decided or
+ * reviewed file shows its state as a Badge, which ListView adds to the row's accessible name, so
+ * the word is not repeated in secondary; "Not reviewed" has no Badge and stays in the line.
  */
 export function fileItems(files: ChangeReviewFile[]): ListViewItem[] {
   return files.map((file) => {
     const { additions, deletions } = lineCounts(file);
     const kind = file.kind ?? "modified";
-    const secondary = [KIND_WORD[kind], folderOf(file.path) || "root", `+${additions} −${deletions}`, stateWord(file)]
-      .filter(Boolean)
-      .join(" · ");
     const badge =
       file.verdict === "accepted"
         ? { badge: "Accepted", badgeTone: "success" as const }
@@ -68,6 +66,10 @@ export function fileItems(files: ChangeReviewFile[]): ListViewItem[] {
           : file.reviewed
             ? { badge: "Reviewed", badgeTone: "neutral" as const }
             : {};
+    const state = "badge" in badge ? "" : stateWord(file);
+    const secondary = [KIND_WORD[kind], folderOf(file.path) || "root", `+${additions} −${deletions}`, state]
+      .filter(Boolean)
+      .join(" · ");
     return { id: file.id, primary: fileName(file.path), secondary, icon: KIND_ICON[kind], ...badge };
   });
 }
