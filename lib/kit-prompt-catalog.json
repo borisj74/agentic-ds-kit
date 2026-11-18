@@ -541,7 +541,7 @@
           "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
         },
         "--chart-6": {
-          "note": "Chart series 6 (deep teal).",
+          "note": "Chart series 6 (navy in light, deep teal in dark).",
           "useWhen": "Series 6 when a chart shows 6 or more series",
           "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
         }
