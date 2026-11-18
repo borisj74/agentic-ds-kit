@@ -22,7 +22,7 @@ const DELTA: Record<ScorecardTrend, string> = {
 const MASTER_LABEL = "Revenue";
 const MASTER_VALUE = "$48.2k";
 const MASTER_HINT = "vs last 30 days";
-const MASTER_BADGE = "Live";
+const MASTER_BADGE = "Monthly";
 
 function masterCode(
   size: ScorecardSize,

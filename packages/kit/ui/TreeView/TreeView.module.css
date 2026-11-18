@@ -76,8 +76,8 @@
 .md .row {
   min-height: var(--space-8);
   padding: 0 var(--space-2);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
 }
 
 .twist {
@@ -147,6 +147,24 @@
   display: inline-flex;
   flex-shrink: 0;
   margin-inline-start: auto;
+  opacity: 0;
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+/* The grip shows on the row in use (hover, keyboard focus, open Move menu), not on every row. */
+.row:hover .handle,
+.row:focus-within .handle,
+.item:focus-visible > .row .handle,
+.handle:has([aria-expanded="true"]),
+.item[data-dragging] > .row .handle {
+  opacity: 1;
+}
+
+/* No hover on touch screens: keep every grip visible. */
+@media (hover: none) {
+  .handle {
+    opacity: 1;
+  }
 }
 
 .handle button {
@@ -174,7 +192,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .twistIcon {
+  .twistIcon,
+  .handle {
     transition: none;
   }
 }

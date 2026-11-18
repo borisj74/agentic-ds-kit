@@ -27,6 +27,8 @@
   border: var(--border-width-thin) solid var(--border-strong);
   border-radius: var(--radius-full);
   background: transparent;
+  /* Centre the dot on the phase line (line height minus dot, halved). */
+  margin-block-start: calc((var(--type-line-body-xs) - var(--space-3)) / 2);
 }
 
 .line {
@@ -76,6 +78,7 @@
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
   color: var(--text-muted);
 }
 
@@ -88,7 +91,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-heading);
+  line-height: var(--type-line-ui-sm);
   color: var(--text-primary);
 }
 
@@ -96,6 +99,6 @@
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+  line-height: var(--type-line-body-sm);
   color: var(--text-secondary);
 }

@@ -43,13 +43,13 @@ function OrderRows() {
         <span className={demo.label}>Status</span>
         <span className={demo.value}>Shipped</span>
       </div>
-      <div className={`${demo.row} ${demo.stack}`}>
-        <span className={demo.kicker}>Shipping address</span>
-        <span className={demo.copy}>100 Market St, San Francisco</span>
+      <div className={demo.row}>
+        <span className={demo.label}>Shipping address</span>
+        <span className={demo.value}>100 Market St, San Francisco</span>
       </div>
-      <div className={`${demo.row} ${demo.stack}`}>
-        <span className={demo.kicker}>Items</span>
-        <span className={demo.copy}>2x Studio Headphones</span>
+      <div className={demo.row}>
+        <span className={demo.label}>Items</span>
+        <span className={demo.value}>2x Studio Headphones</span>
       </div>
     </>
   );
