@@ -263,7 +263,7 @@ export function ListView({
             <Button
               key={action.id}
               size="sm"
-              appearance={action.danger ? "solid" : "ghost"} mode={action.danger ? "danger" : "neutral"}
+              appearance="ghost" mode={action.danger ? "danger" : "neutral"}
               iconStart={action.icon}
               ariaLabel={action.label}
               disabled={item.disabled || action.disabled}
@@ -273,7 +273,7 @@ export function ListView({
             <Button
               key={action.id}
               size="sm"
-              appearance={action.danger ? "solid" : "ghost"} mode={action.danger ? "danger" : "neutral"}
+              appearance="ghost" mode={action.danger ? "danger" : "neutral"}
               disabled={item.disabled || action.disabled}
               onClick={() => onAction?.(item.id, action.id)}
             >
