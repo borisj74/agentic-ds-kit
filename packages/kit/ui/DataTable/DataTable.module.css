@@ -241,7 +241,8 @@
   border-bottom: var(--border-divider) solid var(--border-faint);
   background-color: var(--surface-card);
   font-family: var(--font-sans);
-  font-size: var(--type-size-heading);
+  /* 16px, the size a chart title renders at, so a table beside a chart reads as its peer. */
+  font-size: var(--type-size-ui-md);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-heading);
