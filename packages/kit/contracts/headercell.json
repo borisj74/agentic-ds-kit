@@ -103,10 +103,8 @@
     "space.4",
     "icon.muted",
     "icon.primary",
-    "type.family.overline",
-    "type.size.overline",
-    "type.weight.overline",
-    "type.tracking.overline"
+    "type.family.body",
+    "type.weight.label"
   ],
   "a11y": {
     "element": "span",

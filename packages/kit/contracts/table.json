@@ -82,10 +82,8 @@
     "layout.metricsMin",
     "border.focus",
     "motion.interaction",
-    "type.family.overline",
-    "type.size.overline",
-    "type.weight.overline",
-    "type.tracking.overline"
+    "type.family.body",
+    "type.size.caption"
   ],
   "a11y": {
     "element": "table",

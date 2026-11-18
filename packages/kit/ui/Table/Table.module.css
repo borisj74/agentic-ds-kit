@@ -88,11 +88,10 @@
   height: 2.5rem;
   padding-inline: var(--space-2);
   padding-block: 0;
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline-xs);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
+  /* Sentence-case label type, so headers read as words and not as a mono caps band. */
+  font-family: var(--type-family-body);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   color: var(--text-primary);
   background-color: var(--surface-card);
 }
