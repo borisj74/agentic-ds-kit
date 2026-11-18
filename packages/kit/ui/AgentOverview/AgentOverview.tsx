@@ -103,7 +103,7 @@ export function AgentOverview(props: AgentOverviewProps) {
           <h2 id={titleId} className={styles.title}>
             {title}
           </h2>
-          <p className={styles.lead}>Your agents {sinceText}.</p>
+          <p className={styles.lead}>Your agents {sinceText}</p>
         </div>
         <SegmentedControl
           size="sm"
@@ -120,7 +120,8 @@ export function AgentOverview(props: AgentOverviewProps) {
       <div className={cx("layout-split--primary", styles.columns)}>
         <div className={styles.column}>
           <section className={cx(styles.summary, styles.areaSummary)} aria-labelledby={summaryId}>
-            <h3 id={summaryId} className={styles.subtitle}>
+            {/* Named for screen readers only, so the cards start level with the Activity chart. */}
+            <h3 id={summaryId} className={styles.srOnly}>
               Since you last looked
             </h3>
             <Scoreboard
