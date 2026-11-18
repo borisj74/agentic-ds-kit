@@ -85,9 +85,10 @@
   outline-offset: calc(var(--border-focus-width) * -1);
 }
 
-.selected {
-  background-color: var(--bg-subtle);
-  box-shadow: inset var(--border-width-medium) 0 0 var(--action-selected-border);
+/* Selected reads as a fill, like a kit ListView row, with no accent bar on the edge. */
+.selected,
+.selected:hover {
+  background-color: var(--action-selected);
 }
 
 .optionTop {
