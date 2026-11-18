@@ -132,10 +132,14 @@
   color: var(--icon-secondary);
 }
 
+/* One line with an ellipsis. Deep rows in a narrow tree otherwise break mid-word, letter by letter.
+   The full label stays in the row's accessible name and the hover title. */
 .labelText {
   flex: 1;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: var(--type-weight-body);
 }
 
