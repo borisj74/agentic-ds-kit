@@ -105,12 +105,16 @@ describe("ChangeReview logic", () => {
     assert.equal(logic.fileName(files[0].path), "rateLimit.ts");
     assert.equal(logic.folderOf("README.md"), "");
     const rows = logic.fileItems(files);
-    assert.equal(rows[0].secondary, "New file · src/middleware · +2 −0 · Reviewed");
+    assert.equal(rows[0].secondary, "New file · src/middleware · +2 −0");
+    assert.equal(rows[0].badge, "Reviewed");
     assert.equal(rows[0].icon, "FilePlus");
-    assert.equal(rows[1].secondary, "src · +1 −1 · Accepted");
+    assert.equal(rows[1].secondary, "src · +1 −1");
+    assert.equal(rows[1].badge, "Accepted");
     assert.equal(rows[1].badgeTone, "success");
     assert.equal(rows[2].secondary, "root · +4 −0 · Not reviewed");
     assert.equal(rows[2].badge, undefined);
+    const pending = logic.fileItems([{ ...files[2], verdict: "pending" }]);
+    assert.equal(pending[0].secondary, "root · +4 −0 · Not reviewed");
   });
 
   test("summary, undecided files and neighbours", () => {
