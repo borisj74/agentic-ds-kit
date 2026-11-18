@@ -1,4 +1,5 @@
 .dial {
+  container: autonomydial / inline-size;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -48,9 +49,11 @@
   flex: 1 1 auto;
 }
 
-/* Phones (under --grid-breakpoint-sm, 40rem; media queries cannot read var()): one stop per row,
-   icon and label at the start, so the icons line up down the list, with more room between them. */
-@media (max-width: 40rem) {
+/* A narrow dial (under 40rem of its own width, --grid-breakpoint-sm; container queries cannot read
+   var()): one stop per row, icon and label at the start, so the icons line up down the list. It
+   follows the dial's own width, not the viewport, so a dial in a side column never wraps its
+   scale 3 + 1. */
+@container autonomydial (max-width: 40rem) {
   .control {
     flex-direction: column;
     align-items: stretch;
