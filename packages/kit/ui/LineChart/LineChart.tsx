@@ -153,9 +153,15 @@ function linearPath(points: PathPoint[]): string {
   return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
 }
 
+/** Longest Bézier handle, as a share of a segment's width. 1/3 is a plain Hermite curve; 1/2 gives rounder, fuller bends. */
+const CURVE_HANDLE = 0.5;
+
 /**
- * A smooth line through every point (monotone cubic, Fritsch–Carlson): rounded corners, and it
- * never bends above a peak or below a dip, so the line still reads the real values.
+ * A smooth line through every point. Tangents come from a monotone cubic (Fritsch–Carlson), so the
+ * line never bends above a peak or below a dip and still reads the real values. Handles then reach
+ * up to half way along each segment for rounder bends. Where a long handle would push past the
+ * segment's end values, that segment's handles get shorter instead: the tangent direction is kept,
+ * so the line stays smooth through every point.
  */
 function smoothPath(points: PathPoint[]): string {
   const n = points.length;
@@ -188,10 +194,14 @@ function smoothPath(points: PathPoint[]): string {
   }
   let d = `M ${points[0].x} ${points[0].y}`;
   for (let i = 0; i < n - 1; i += 1) {
-    const third = dx[i] / 3;
+    // The control points stay in order between the end values while (a + b) * share <= 1,
+    // a and b being the end tangents relative to this segment's slope.
+    const ab = slope[i] === 0 ? 0 : (tangent[i] + tangent[i + 1]) / slope[i];
+    const share = ab > 0 ? Math.min(CURVE_HANDLE, 1 / ab) : CURVE_HANDLE;
+    const reach = dx[i] * share;
     const p0 = points[i];
     const p1 = points[i + 1];
-    d += ` C ${p0.x + third} ${p0.y + tangent[i] * third} ${p1.x - third} ${p1.y - tangent[i + 1] * third} ${p1.x} ${p1.y}`;
+    d += ` C ${p0.x + reach} ${p0.y + tangent[i] * reach} ${p1.x - reach} ${p1.y - tangent[i + 1] * reach} ${p1.x} ${p1.y}`;
   }
   return d;
 }
