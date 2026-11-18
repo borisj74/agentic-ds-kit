@@ -1,10 +1,10 @@
 .card {
   display: grid;
-  gap: var(--space-stack-xs);
+  gap: var(--space-stack-md);
   width: min(100%, 28rem);
   box-sizing: border-box;
   min-width: 0;
-  padding: var(--space-inset-lg);
+  padding: var(--space-inset-xl);
   overflow: auto;
   background-color: var(--bg-floating);
   border: none;
@@ -15,17 +15,18 @@
 
 .sm {
   width: min(100%, 22rem);
-  padding: var(--space-inset-md);
+  gap: var(--space-stack-md);
+  padding: var(--space-inset-lg);
 }
 
 .md {
   width: min(100%, 28rem);
-  padding: var(--space-inset-lg);
+  padding: var(--space-inset-xl);
 }
 
 .lg {
   width: min(100%, 36rem);
-  padding: var(--space-inset-xl);
+  padding: var(--space-inset-2xl);
 }
 
 .card[role="dialog"] {
@@ -88,8 +89,15 @@
   color: var(--icon-muted);
   background: transparent;
   border: none;
+  /* Pull the box out so the X icon sits on the padding edge. */
+  margin-inline-end: calc(var(--space-inset-sm) * -1);
   border-radius: var(--radius-control-sm);
   cursor: pointer;
+}
+
+/* sm title uses the body line height, so lift the X onto its center. */
+.sm .close {
+  margin-block-start: calc(var(--space-inset-xs) * -1);
 }
 
 .close:hover {
@@ -121,6 +129,12 @@
   justify-content: flex-end;
   gap: var(--space-inline-sm);
   min-width: 0;
+  /* Card gap (16) + this (8) = 24 above the actions. */
+  padding-block-start: var(--space-stack-sm);
+}
+
+.sm .footer {
+  padding-block-start: 0;
 }
 
 @keyframes cardEnter {

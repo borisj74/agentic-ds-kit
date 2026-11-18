@@ -670,3 +670,13 @@
   border-radius: var(--radius-surface-sm);
   background: var(--surface-card);
 }
+
+/* Open contained overlay (Modal): the scrim fills the rounded preview, and the
+   controls panel stays above it so size and state still change live. */
+.layout:has([aria-modal="true"]) {
+  overflow: clip;
+}
+
+.layout:has([aria-modal="true"]) .panel {
+  z-index: calc(var(--z-overlay) + 1);
+}

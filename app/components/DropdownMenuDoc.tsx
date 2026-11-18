@@ -11,7 +11,7 @@ import { DocNotes } from "./DocNotes";
 
 const ACCOUNT_GROUPS: DropdownMenuGroup[] = [
   {
-    heading: "My Account",
+    heading: "My account",
     items: [
       { id: "profile", label: "Profile", shortcut: "⇧⌘P" },
       { id: "billing", label: "Billing", shortcut: "⌘B" },
@@ -32,11 +32,11 @@ const ACCOUNT_GROUPS: DropdownMenuGroup[] = [
             ],
           },
           {
-            items: [{ id: "more", label: "More..." }],
+            items: [{ id: "more", label: "More…" }],
           },
         ],
       },
-      { id: "new-team", label: "New Team", shortcut: "⌘+T" },
+      { id: "new-team", label: "New team", shortcut: "⌘T" },
     ],
   },
   {
@@ -53,7 +53,7 @@ const ACCOUNT_GROUPS: DropdownMenuGroup[] = [
 
 const ICON_GROUPS: DropdownMenuGroup[] = [
   {
-    heading: "My Account",
+    heading: "My account",
     items: [
       { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
       { id: "billing", label: "Billing", icon: "CreditCard", shortcut: "⌘B" },
@@ -62,7 +62,7 @@ const ICON_GROUPS: DropdownMenuGroup[] = [
   },
   {
     items: [
-      { id: "new-team", label: "New team", icon: "User", shortcut: "⌘+T" },
+      { id: "new-team", label: "New team", icon: "User", shortcut: "⌘T" },
     ],
   },
 ];
@@ -84,7 +84,7 @@ const MASTER_CODE = `<DropdownMenu
   size="md"
   groups={[
     {
-      heading: "My Account",
+      heading: "My account",
       items: [
         { id: "profile", label: "Profile", shortcut: "⇧⌘P" },
         { id: "billing", label: "Billing", shortcut: "⌘B" },
@@ -99,7 +99,7 @@ const MASTER_CODE = `<DropdownMenu
           label: "Invite users",
           submenu: [{ items: [{ id: "email", label: "Email" }, { id: "message", label: "Message" }] }],
         },
-        { id: "new-team", label: "New Team", shortcut: "⌘+T" },
+        { id: "new-team", label: "New team", shortcut: "⌘T" },
       ],
     },
   ]}
@@ -110,7 +110,7 @@ const ICONS_CODE = `<DropdownMenu
   trigger="Open"
   groups={[
     {
-      heading: "My Account",
+      heading: "My account",
       items: [
         { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
         { id: "billing", label: "Billing", icon: "CreditCard", shortcut: "⌘B" },
