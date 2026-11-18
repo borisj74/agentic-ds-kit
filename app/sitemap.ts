@@ -7,7 +7,7 @@ const PAGES = ["/", "/start-here", "/get-started", "/installation", "/mcp", "/th
 /** Every docs page: the top-level pages, each component, pattern and block page. Frames are left out. */
 export default function sitemap(): MetadataRoute.Sitemap {
   // Same set as app/components/[slug] (the chart pages live outside COMPONENT_ITEMS).
-  const components = [...new Set<string>([...COMPONENT_ITEMS, "barchart", "barlist", "linechart", "piechart"])];
+  const components = [...new Set<string>([...COMPONENT_ITEMS, "barchart", "barlist", "heatmap", "linechart", "piechart"])];
   const paths = [
     ...PAGES,
     ...components.map((slug) => `/components/${slug}`),

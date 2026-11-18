@@ -471,6 +471,14 @@
     "level": "molecule"
   },
   {
+    "id": "heatmap",
+    "intent": "A grid of cells, rows by columns, like weekday by hour, where each cell's shade shows its value. One hue from light to dark, a low-to-high legend, a tooltip per cell and a table view.",
+    "group": "component",
+    "path": "contracts/heatmap.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "breadcrumb",
     "intent": "Path to the current page as a hierarchy of links.",
     "group": "component",

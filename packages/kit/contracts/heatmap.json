@@ -1,0 +1,114 @@
+{
+  "id": "heatmap",
+  "status": "stable",
+  "level": "organism",
+  "intent": "A grid of cells, rows by columns, like weekday by hour, where each cell's shade shows its value. One hue from light to dark, a low-to-high legend, a tooltip per cell and a table view.",
+  "useWhen": [
+    "When something happens across two dimensions, like runs by weekday and hour or errors by service and day",
+    "Spotting busy and quiet patches in a dense grid, where reading every number would be slow",
+    "One measure over a fixed set of rows and columns, with gaps that matter"
+  ],
+  "doNotUseWhen": [
+    "Exact values people compare cell by cell — use Table or DataTable",
+    "Editing values in cells — use DataGrid",
+    "Dated events people open or change — use Calendar",
+    "Change over time for one or a few series — use LineChart",
+    "A short ranking by one measure — use BarList"
+  ],
+  "props": {
+    "rows": {
+      "type": "string[]",
+      "required": true,
+      "note": "Row labels, top to bottom, like Mon to Sun. Each label is unique."
+    },
+    "columns": {
+      "type": "string[]",
+      "required": true,
+      "note": "Column labels, start to end, like 00 to 23. Each label is unique."
+    },
+    "data": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "row": {
+          "type": "string",
+          "required": true,
+          "note": "One of rows."
+        },
+        "column": {
+          "type": "string",
+          "required": true,
+          "note": "One of columns."
+        },
+        "value": {
+          "type": "number",
+          "required": true,
+          "note": "Zero or more. Shaded against the largest value in data."
+        }
+      },
+      "note": "One entry per cell with a value. A cell with no entry shows as empty (No data), a cell with 0 shows as zero; both keep a visible outline. Entries for unknown rows or columns are ignored."
+    },
+    "valueFormatter": {
+      "type": "function",
+      "required": false,
+      "note": "(value: number) => string for the tooltip, the legend ends and the table. Defaults to the chart format: 1,240, 12.4k, 1.2M."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Chart heading on the frame, like the other charts. Also names the grid for screen readers."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "One line under the title, like the time range."
+    }
+  },
+  "passthrough": {
+    "root": "figure",
+    "ref": "figure",
+    "className": "root",
+    "rest": "figure"
+  },
+  "tokens": [
+    "chart.1",
+    "surface.card",
+    "surface.muted",
+    "surface.elevated",
+    "border.faint",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "border.focus",
+    "radius.controlSm",
+    "radius.surfaceSm",
+    "shadow.overlaySm",
+    "type.size.caption",
+    "type.weight.caption",
+    "type.weight.label",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "space.5"
+  ],
+  "a11y": {
+    "element": "figure",
+    "requirements": [
+      "Title on the figure when provided, and the grid is named by it",
+      "The cells are a role=grid with column and row headers; the grid is one Tab stop and arrow keys, Home and End move between cells",
+      "Each cell names its row, column and value (or No data) and shows the tooltip on focus as well as on hover",
+      "Shade is never the only cue: the tooltip and the table view give every value as text",
+      "The Table toggle swaps the grid for a plain table with every value"
+    ]
+  },
+  "doNot": [
+    "Do not build a heatmap from a Table with coloured cells or from loose divs — use Heatmap",
+    "Do not use several hues or status colours for the scale; it is one measure in one hue",
+    "Do not use it for exact values people compare cell by cell — use Table",
+    "Do not squash the grid on small screens; it scrolls sideways inside its frame",
+    "Do not pass negative values; the scale starts at zero",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<Heatmap\n  title=\"Agent runs by hour\"\n  description=\"Last 7 days\"\n  rows={[\"Mon\", \"Tue\", \"Wed\"]}\n  columns={[\"09\", \"10\", \"11\"]}\n  data={[\n    { row: \"Mon\", column: \"09\", value: 12 },\n    { row: \"Mon\", column: \"10\", value: 30 },\n    { row: \"Tue\", column: \"11\", value: 4 },\n  ]}\n/>"
+}
