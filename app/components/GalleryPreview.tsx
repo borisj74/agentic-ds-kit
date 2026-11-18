@@ -46,6 +46,7 @@ import { Avatar } from "agentic-ds-kit";
 import { AvatarGroup } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
 import { BarChart } from "agentic-ds-kit";
+import { BarList } from "agentic-ds-kit";
 import { Breadcrumb } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { ButtonGroup } from "agentic-ds-kit";
@@ -586,6 +587,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <BarChart data={CHART} height={96} showTable={false} />
+        </Stage>
+      );
+    case "barlist":
+      return (
+        <Stage variant="wide">
+          <BarList label="Top days" data={CHART} />
         </Stage>
       );
     case "breadcrumb":
