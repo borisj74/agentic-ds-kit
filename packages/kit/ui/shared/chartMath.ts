@@ -10,13 +10,17 @@ export interface ChartSeries {
   color?: string;
 }
 
+/**
+ * Default series colours: the soft categorical palette (`--chart-1` to `--chart-6`), separate light
+ * and dark values. No status colours here; a series that means good or bad passes `color` itself.
+ */
 export const CHART_COLORS = [
-  "var(--fill-brand)",
-  "var(--fill-success)",
-  "var(--fill-warning)",
-  "var(--fill-danger)",
-  "var(--fill-info)",
-  "var(--fill-accent)",
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
 ] as const;
 
 export function formatValue(value: number): string {

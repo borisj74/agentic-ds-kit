@@ -136,9 +136,14 @@
       "doNot": "Prefer --bg-canvas / --bg-surface / --bg-floating in new work"
     },
     "--fill-": {
-      "note": "Fill aliases for charts and wells.",
-      "useWhen": "Chart series and status wells",
+      "note": "Fill aliases for status wells and status-coloured marks. Categorical chart series use --chart-*.",
+      "useWhen": "Status wells, and chart marks that carry a status meaning",
       "doNot": "Do not use fill as a Button background"
+    },
+    "--chart-": {
+      "note": "Soft categorical palette for chart series, chart-1 to chart-6 in order. Separate light and dark values keep contrast on the card.",
+      "useWhen": "Telling chart series or segments apart when the colour carries no status meaning",
+      "doNot": "Do not use chart colours for status; pass an explicit color (e.g. var(--fill-danger)) when a series means good or bad"
     },
     "--brand-": {
       "note": "Brand aliases of primary.",
@@ -406,6 +411,36 @@
       "note": "Section gap 24px.",
       "useWhen": "Space between sections",
       "doNot": "Section does not own page padding"
+    },
+    "--chart-1": {
+      "note": "Chart series 1 (blue).",
+      "useWhen": "First series, or the one series that matters",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+    },
+    "--chart-2": {
+      "note": "Chart series 2 (teal).",
+      "useWhen": "Series 2 when a chart shows 2 or more series",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+    },
+    "--chart-3": {
+      "note": "Chart series 3 (amber).",
+      "useWhen": "Series 3 when a chart shows 3 or more series",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+    },
+    "--chart-4": {
+      "note": "Chart series 4 (violet).",
+      "useWhen": "Series 4 when a chart shows 4 or more series",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+    },
+    "--chart-5": {
+      "note": "Chart series 5 (slate).",
+      "useWhen": "Series 5 when a chart shows 5 or more series",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+    },
+    "--chart-6": {
+      "note": "Chart series 6 (deep teal).",
+      "useWhen": "Series 6 when a chart shows 6 or more series",
+      "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
     }
   }
 }
