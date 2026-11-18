@@ -204,7 +204,9 @@ export function BarChart({
     const plotRight = contentWidth - CHART_MARGINS.right;
 
     const [rawMin, rawMax] = seriesExtent(series, { includeZero: true });
-    const { ticks, min, max } = niceTicks(rawMin, rawMax, 5);
+    // Whole-number data keeps whole-number ticks.
+    const integer = series.every((entry) => entry.data.every((value) => !Number.isFinite(value) || Number.isInteger(value)));
+    const { ticks, min, max } = niceTicks(rawMin, rawMax, 5, { integer });
     const valueScale = linearScale(
       [min, max],
       isVertical ? [plotBottom, plotTop] : [plotLeft, plotRight],
