@@ -122,13 +122,12 @@
     "type.weight.caption",
     "type.weight.metric",
     "space.stack.sm",
-    "space.inset.md",
+    "space.inset.sm",
+    "space.inset.lg",
+    "space.inset.xl",
     "motion.interaction",
     "border.focus",
-    "type.family.overline",
-    "type.size.overline",
-    "type.weight.overline",
-    "type.tracking.overline"
+    "icon.size.sm"
   ],
   "a11y": {
     "element": "article",
