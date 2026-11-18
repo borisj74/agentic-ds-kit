@@ -320,6 +320,11 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The kit Cell inside is a full-width flex row, so text-align alone leaves the number at the start. */
+.td.numeric > * {
+  justify-content: flex-end;
+}
+
 .actionCell {
   width: 1%;
   white-space: nowrap;
