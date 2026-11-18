@@ -63,12 +63,13 @@
   min-width: 0;
 }
 
-.subtitle {
-  margin: 0;
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .activity {
