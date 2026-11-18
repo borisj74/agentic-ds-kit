@@ -39,6 +39,7 @@ before(async () => {
     "FileUpload",
     "LineChart",
     "BarChart",
+    "ListView",
   ]) {
     kit[name] = (await import(`../dist/ui/${name}/${name}.js`))[name];
   }
@@ -168,5 +169,21 @@ describe("Select trigger popup state on the server", () => {
     assert.match(button, /aria-haspopup="menu"/);
     assert.match(button, /aria-expanded="false"/);
     assert.match(button, /aria-controls="[^"]+"/);
+  });
+});
+
+describe("ListView row names", () => {
+  test("the row's accessible name carries primary, secondary and the badge", () => {
+    const html = render(
+      h(kit.ListView, {
+        label: "Files",
+        items: [
+          { id: "a", primary: "app.ts", secondary: "src · +3 −1", badge: "Reviewed" },
+          { id: "b", primary: "notes.md" },
+        ],
+      }),
+    );
+    assert.match(html, /aria-label="app.ts, src · \+3 −1, Reviewed"/);
+    assert.match(html, /aria-label="notes.md"/);
   });
 });
