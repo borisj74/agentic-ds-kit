@@ -613,7 +613,9 @@ export function TreeView({
                 <LucideByName name={iconName} size={iconPx} />
               </span>
             ) : null}
-            <span className={styles.labelText}>{item.label}</span>
+            <span className={styles.labelText} title={item.label}>
+              {item.label}
+            </span>
             {reorderable && moves ? (
               <span className={styles.handle} onClick={stopHandle}>
                 <DropdownMenu
