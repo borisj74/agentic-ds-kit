@@ -88,7 +88,6 @@ export function KpiBoard(props: KpiBoardProps) {
         <div className={cx("layout-split--primary", styles.split)}>
           <LineChart
             title={`${metric.label}${rangeText}`}
-            description={cards.find((card) => card.id === metric.id)?.value}
             data={data}
             variant="area"
             height={240}
