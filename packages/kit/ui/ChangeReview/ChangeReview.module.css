@@ -86,6 +86,16 @@
   gap: var(--layout-gutter-sm);
 }
 
+/* Side by side, the file list stays in view while a long diff and its comments scroll. */
+.files {
+  position: sticky;
+  top: var(--space-4);
+  align-self: start;
+  /* A long list scrolls on its own instead of running past the bottom of the screen. */
+  max-block-size: calc(100dvh - var(--space-4) * 2);
+  overflow-y: auto;
+}
+
 .files > *,
 .detail > *,
 .comments > * {
@@ -126,5 +136,17 @@
 @container changereview (max-width: 64rem) {
   .root .columns {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .files {
+    position: static;
+    max-block-size: none;
+    overflow-y: visible;
+  }
+
+  /* Stacked usually means touch, so the J / K / R line is hidden. It stays in the page because the
+     block's aria-describedby points at it, and a hidden description is still read. */
+  .keys {
+    display: none;
   }
 }

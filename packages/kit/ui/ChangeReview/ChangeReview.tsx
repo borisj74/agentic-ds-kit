@@ -184,7 +184,8 @@ export function ChangeReview(props: ChangeReviewProps) {
                   {fileName(file.path)}
                 </h3>
                 <p className={styles.meta}>
-                  File {position} of {files.length} · +{counts.additions} −{counts.deletions} · {stateWord(file)}
+                  {/* The +/− counts sit in the diff header and the file row, so this line keeps position and state. */}
+                  File {position} of {files.length} · {stateWord(file)}
                 </p>
               </div>
               <div className={styles.nav}>
