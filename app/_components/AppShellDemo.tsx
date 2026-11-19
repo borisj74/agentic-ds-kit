@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppHeader,
   Avatar,
   Badge,
   Button,
   Empty,
+  ListView,
   PageHeader,
   Select,
   SideNavBrand,
@@ -16,70 +17,149 @@ import {
   SideNavRoot,
   SideNavSection,
   SideNavSlot,
+  Timeline,
 } from "agentic-ds-kit";
-import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
+import type { DropdownMenuGroup, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-  { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
   { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
   { id: "insights", label: "Insights", icon: "Sparkles" },
 ];
 
-const NAV_FOOTER: SideNavItemData[] = [{ id: "settings", label: "Settings", icon: "Settings" }];
+const PROJECTS: SideNavItemData[] = [
+  { id: "pricing", label: "Pricing study", icon: "Folder" },
+  { id: "triage", label: "Support triage", icon: "Folder" },
+  { id: "welcome", label: "Welcome emails", icon: "Folder" },
+];
+
+const ACCOUNT_MENU: DropdownMenuGroup[] = [
+  {
+    items: [
+      { id: "settings", label: "Settings", icon: "Settings" },
+      {
+        id: "theme",
+        label: "Theme",
+        icon: "Moon",
+        submenu: [
+          {
+            items: [
+              { id: "theme-light", label: "Light" },
+              { id: "theme-dark", label: "Dark" },
+              { id: "theme-system", label: "Match device", selected: true },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
+];
+
+const PANEL_TABS = [
+  {
+    id: "details",
+    label: "Details",
+    content: (
+      <ListView
+        label="Details"
+        size="sm"
+        items={[
+          { id: "owner", primary: "Owner", secondary: "Rin Okafor" },
+          { id: "state", primary: "State", secondary: "In review", badge: "2 open", badgeTone: "info" },
+          { id: "updated", primary: "Last change", secondary: "Today, 09:40" },
+        ]}
+      />
+    ),
+  },
+  {
+    id: "activity",
+    label: "Activity",
+    content: (
+      <Timeline
+        label="Activity"
+        items={[
+          { id: "a1", status: "now", title: "Draft summary posted", body: "Waiting on a second reviewer" },
+          { id: "a2", status: "next", title: "Rin asked for sources", body: "Two links added" },
+          { id: "a3", status: "later", title: "Project created" },
+        ]}
+      />
+    ),
+  },
+];
+
+type ShellView = "flat" | "inset" | "collapsed" | "panel" | "drawer";
+
+const VIEW_NOTES: Record<ShellView, string> = {
+  flat: "Flat: the nav sits on a soft neutral fill and the page runs edge to edge.",
+  inset: "Inset: the nav shares the page background and the page sits in a raised card.",
+  collapsed: "The rail shows icons only; hover or focus an icon for its name.",
+  panel: "A work panel with tabs on the right. Close it, or use the panel button in the top bar.",
+  drawer: "Below 64rem the nav opens in a left Drawer from the Menu button.",
+};
+
+/** Opens the nav Drawer on narrow screens, so the mobile view shows it. */
+function OpenDrawerOnNarrow() {
+  const shell = useAppShell();
+  const narrow = shell?.narrow;
+  const openNav = shell?.openNav;
+  useEffect(() => {
+    if (narrow) openNav?.();
+  }, [narrow]); // eslint-disable-line react-hooks/exhaustive-deps
+  return null;
+}
 
 /**
- * Responsive app shell in the playground browser frame. Narrow the window
- * below 64rem to swap SideNav for the Menu button and left Drawer.
+ * Responsive app shell in the playground browser frame, from props: header, nav, a Projects
+ * group, the account menu, and an optional work panel. Narrow the window below 64rem to swap
+ * SideNav for the Menu button and left Drawer.
  */
-function AppShellDefault() {
+function AppShellDefault({ view }: { view: ShellView }) {
   const [page, setPage] = useState("overview");
   const [query, setQuery] = useState("");
-  const [navOpen, setNavOpen] = useState(true);
+  const [collapsed, setCollapsed] = useState(view === "collapsed");
 
   const bind = (items: SideNavItemData[]) =>
     items.map((item) => ({ ...item, active: item.id === page, onClick: () => setPage(item.id) }));
-  const current = [...NAV_ITEMS, ...NAV_FOOTER].find((item) => item.id === page) ?? NAV_ITEMS[0];
+  const current = [...NAV_ITEMS, ...PROJECTS].find((item) => item.id === page) ?? NAV_ITEMS[0];
 
   return (
-    <>
-      <AppShellPattern
-        className="layout-shell--viewport"
-        header={{
-          title: "Agentix",
-          mark: "A",
-          searchPlaceholder: "Search",
-          searchShortcut: "⌘K",
-          searchValue: query,
-          onSearch: setQuery,
-          actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
-        }}
-        nav={{
-          title: "Agentix",
-          mark: "A",
-          open: navOpen,
-          onOpenChange: setNavOpen,
-          items: bind(NAV_ITEMS),
-          footer: bind(NAV_FOOTER),
-        }}
-      >
-        <div className="layout-canvas layout-canvas--sticky-header">
-          <div className="layout-header">
-            <PageHeader title={current.label} subtitle="Resize the window across 64rem to see the shell switch." />
-          </div>
-          <div className="layout-content">
-            <Empty
-              title={`${current.label} goes here`}
-              description="The shell owns the chrome. Pages render their own content and their one primary action."
-              icon={current.icon}
-              outlined
-            />
-          </div>
+    <AppShellPattern
+      className="layout-shell--viewport"
+      layout={view === "inset" ? "inset" : "flat"}
+      collapsed={view === "collapsed" ? collapsed : undefined}
+      onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
+      header={{
+        title: "Agentix",
+        mark: "A",
+        searchPlaceholder: "Search",
+        searchShortcut: "⌘K",
+        searchValue: query,
+        onSearch: setQuery,
+        actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
+      }}
+      nav={{ title: "Agentix", mark: "A", items: bind(NAV_ITEMS) }}
+      projects={{ items: bind(PROJECTS), onNew: () => setPage("overview") }}
+      account={{ name: "Rin Okafor", email: "rin.okafor@example.com", menu: ACCOUNT_MENU }}
+      workPanel={view === "panel" || view === "drawer" ? { title: "Context", tabs: PANEL_TABS, defaultOpen: view === "panel" } : undefined}
+    >
+      {view === "drawer" ? <OpenDrawerOnNarrow /> : null}
+      <main className="layout-canvas layout-canvas--sticky-header">
+        <div className="layout-header">
+          <PageHeader title={current.label} subtitle={VIEW_NOTES[view]} />
         </div>
-      </AppShellPattern>
-      </>
+        <div className="layout-content">
+          <Empty
+            title={`${current.label} goes here`}
+            description="The shell owns the chrome. Pages render their own content and their one primary action."
+            icon={current.icon}
+            outlined
+          />
+        </div>
+      </main>
+    </AppShellPattern>
   );
 }
 
@@ -264,9 +344,11 @@ function AppShellBuiltNav() {
   );
 }
 
-/** The app-shell example as a full screen. `view`: default (props), custom (built chrome) or built-nav (no header). */
-export function AppShellScreen({ view = "default" }: { view?: string }) {
+const SHELL_VIEWS: ShellView[] = ["flat", "inset", "collapsed", "panel", "drawer"];
+
+/** The app-shell example as a full screen. `view`: a props view (flat, inset, collapsed, panel, drawer), custom (built chrome) or built-nav (no header). */
+export function AppShellScreen({ view = "flat" }: { view?: string }) {
   if (view === "custom") return <AppShellCustom />;
   if (view === "built-nav") return <AppShellBuiltNav />;
-  return <AppShellDefault />;
+  return <AppShellDefault view={SHELL_VIEWS.includes(view as ShellView) ? (view as ShellView) : "flat"} />;
 }

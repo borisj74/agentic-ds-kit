@@ -59,7 +59,11 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "sign-up", label: "Sign up" },
   ],
   "app-shell": [
-    { id: "default", label: "Props" },
+    { id: "flat", label: "Flat" },
+    { id: "inset", label: "Inset" },
+    { id: "collapsed", label: "Collapsed rail" },
+    { id: "panel", label: "Work panel" },
+    { id: "drawer", label: "Mobile drawer" },
     { id: "custom", label: "Custom chrome" },
     { id: "built-nav", label: "Built nav, no header" },
   ],

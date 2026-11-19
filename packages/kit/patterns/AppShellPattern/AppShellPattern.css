@@ -1,6 +1,20 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The app-shell-pattern__ prefix keeps names unique. */
 
+/* layout="flat": the rail sits on a soft neutral fill, the page runs edge to edge, and
+   SideNav's own hairline divider (border-faint) separates them. Drawers are portaled, so
+   the nav inside a Drawer keeps its card surface. */
+.app-shell-pattern--flat {
+  --sidenav-background: var(--surface-muted);
+}
+
+/* layout="inset": layout-shell--inset (layout.css) puts the nav on the page background and
+   the page in a raised card. The top bar joins the page background too, with no rule. */
+.app-shell-pattern--inset {
+  --appheader-background: transparent;
+  --appheader-border-color: transparent;
+}
+
 /* Holds SideNav in the layout-app first column; stretches it to full height. */
 .app-shell-pattern__rail {
   display: flex;
@@ -26,13 +40,75 @@
   min-height: 0;
 }
 
-/* Wraps the Menu Button so the shell can return focus to it. */
+/* Wraps shell controls so the shell can return focus to them. */
 .app-shell-pattern__menu {
   display: contents;
 }
 
-/* Default narrowHeader: the nav's mark beside the title, after the Menu Button. Its brand
-   cell hugs the mark instead of taking a second rail-wide column. */
-.app-shell-pattern__narrow-brand {
+/* The mark beside the title, after the Menu Button or rail toggle. Its brand cell hugs
+   the mark instead of taking a second rail-wide column. */
+.app-shell-pattern__inner-brand {
   --appheader-brand-width: auto;
+}
+
+/* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */
+.app-shell-pattern__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.app-shell-pattern__account-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Page column with a work panel: the page, then a fixed --layout-rail panel when open.
+   It is layout-app's last child, so layout-shell--inset frames both in one card. */
+.app-shell-pattern__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-shell-pattern__main[data-panel="open"] {
+  grid-template-columns: minmax(0, 1fr) var(--layout-rail);
+}
+
+.app-shell-pattern__main > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Same as layout.css's .layout-app > .layout-canvas--sticky-header, one level deeper. */
+.app-shell-pattern__main > .layout-canvas.layout-canvas--sticky-header {
+  overflow: auto;
+}
+
+.app-shell-pattern__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  overflow: auto;
+  padding: var(--space-inset-md);
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+  background: var(--surface-card);
+}
+
+.app-shell-pattern__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-xs);
+}
+
+.app-shell-pattern__panel-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-md);
 }

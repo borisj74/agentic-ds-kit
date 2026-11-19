@@ -227,6 +227,33 @@ export function DropdownMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- panelStyle is a render-scope helper over align/size/columns, which are listed.
   }, [open, align, size, triggerStyle, columns]);
 
+  // Not enough room below (e.g. an account menu at the foot of a side nav): open above the
+  // trigger when there is more room there. Anchored by `bottom`, so filtering keeps it in place.
+  useLayoutEffect(() => {
+    if (!open || !coords || typeof coords.top !== "number") return;
+    const panel = panelRef.current;
+    const button = findTrigger(rootRef.current);
+    if (!panel || !button) return;
+    const rect = button.getBoundingClientRect();
+    const height = panel.getBoundingClientRect().height;
+    const below = window.innerHeight - rect.bottom;
+    if (height + 4 > below && rect.top > below) {
+      setCoords({ ...coords, top: "auto", bottom: window.innerHeight - rect.top + 4 });
+    }
+  }, [open, coords]);
+
+  // Same for a submenu that would run past the viewport bottom: align its bottom to the item's.
+  useLayoutEffect(() => {
+    if (!open || !openSubId || !subCoords || typeof subCoords.top !== "number") return;
+    const sub = subPanelRef.current;
+    const el = queryItem(panelRef.current, openSubId);
+    if (!sub || !el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top + sub.getBoundingClientRect().height > window.innerHeight) {
+      setSubCoords({ ...subCoords, top: "auto", bottom: window.innerHeight - rect.bottom });
+    }
+  }, [open, openSubId, subCoords]);
+
   useLayoutEffect(() => {
     if (!open || !openSubId) return;
     const el = queryItem(panelRef.current, openSubId);

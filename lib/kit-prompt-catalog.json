@@ -12644,7 +12644,26 @@
     {
       "id": "app-shell",
       "group": "pattern",
-      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap); narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in a flat or inset look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "useWhen": [
+        "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
+        "The nav should collapse to an icon rail to give the page more room",
+        "Pages need a secondary panel of details or activity beside the main content"
+      ],
+      "doNotUseWhen": [
+        "A single focused task with no app chrome (sign-in, onboarding) — use the sign-in or onboarding pattern",
+        "A temporary side task over the page — use kit Drawer on its own",
+        "Docs or catalog navigation — use AppNav"
+      ],
+      "doNot": [
+        "Do not hand-build a sidebar, rail, account card, or tab strip; use SideNav, SideNav.Account, DropdownMenu and Tabs",
+        "Do not add layout values outside the closed enum (flat, inset); restyle through tokens and component cssVars instead",
+        "Do not open the work panel by default; it is opt-in (defaultOpen or open)",
+        "Do not keep a collapsed rail below the breakpoint; the Drawer holds the nav there",
+        "Do not hard-code a breakpoint other than --grid-breakpoint-md (64rem)",
+        "Do not put a second solid primary Button in the chrome; pages own their one primary action",
+        "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer"
+      ],
       "must": [
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view; the shell has none, pages own theirs",
@@ -12674,6 +12693,45 @@
           "type": "string",
           "required": false,
           "note": "Drawer title on narrow screens. Default nav.title, or Navigation for a built nav."
+        },
+        "layout": {
+          "type": "enum",
+          "values": [
+            "flat",
+            "inset"
+          ],
+          "default": "flat",
+          "note": "flat: the rail sits on a soft neutral fill (--sidenav-background surface-muted), the page runs edge to edge, hairline dividers (border-faint). inset: layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin."
+        },
+        "collapsed": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled rail collapse, wide screens only: the rail shrinks to icons (--sidenav-width-collapsed) and every row names itself in a kit Tooltip. Without it the shell keeps the state itself and remembers it in sessionStorage for the browser session. A props nav's open / onOpenChange still work and win over the stored state. Ignored when narrow (the Drawer is always expanded)."
+        },
+        "defaultCollapsed": {
+          "type": "boolean",
+          "default": false,
+          "note": "Uncontrolled start state when nothing is stored yet for this session. The server render and first paint use it, so hydration matches; a stored value applies right after."
+        },
+        "onCollapsedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(collapsed: boolean) => void. Fires from the rail toggle (header shells) or the SideNav Toggle / mark (header-less shells)."
+        },
+        "projects": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only. Adds a captioned group after the nav groups (a flat items list becomes the first, uncaptioned group). Keep the list short. With onNew, the last row is a Plus row named newLabel. A built nav adds its own SideNavSection."
+        },
+        "account": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm, name, email) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+        },
+        "workPanel": {
+          "type": "object",
+          "required": false,
+          "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome)."
         },
         "mark": {
           "type": "string | node",

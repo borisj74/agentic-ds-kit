@@ -8,12 +8,26 @@
   "add": "npx agentic-ds-kit add app-shell",
   "import": "import { AppShellPattern } from \"@/components/patterns/app-shell\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/app-shell/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap); narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in a flat or inset look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+  "useWhen": [
+    "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
+    "The nav should collapse to an icon rail to give the page more room",
+    "Pages need a secondary panel of details or activity beside the main content"
+  ],
+  "doNotUseWhen": [
+    "A single focused task with no app chrome (sign-in, onboarding) — use the sign-in or onboarding pattern",
+    "A temporary side task over the page — use kit Drawer on its own",
+    "Docs or catalog navigation — use AppNav"
+  ],
   "contains": [
     "appheader",
     "sidenav",
     "drawer",
-    "button"
+    "button",
+    "dropdownmenu",
+    "tabs",
+    "avatar",
+    "tooltip"
   ],
   "props": {
     "header": {
@@ -35,6 +49,48 @@
       "type": "string",
       "required": false,
       "note": "Drawer title on narrow screens. Default nav.title, or Navigation for a built nav."
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "flat",
+        "inset"
+      ],
+      "default": "flat",
+      "note": "flat: the rail sits on a soft neutral fill (--sidenav-background surface-muted), the page runs edge to edge, hairline dividers (border-faint). inset: layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin."
+    },
+    "collapsed": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled rail collapse, wide screens only: the rail shrinks to icons (--sidenav-width-collapsed) and every row names itself in a kit Tooltip. Without it the shell keeps the state itself and remembers it in sessionStorage for the browser session. A props nav's open / onOpenChange still work and win over the stored state. Ignored when narrow (the Drawer is always expanded)."
+    },
+    "defaultCollapsed": {
+      "type": "boolean",
+      "default": false,
+      "note": "Uncontrolled start state when nothing is stored yet for this session. The server render and first paint use it, so hydration matches; a stored value applies right after."
+    },
+    "onCollapsedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(collapsed: boolean) => void. Fires from the rail toggle (header shells) or the SideNav Toggle / mark (header-less shells)."
+    },
+    "projects": {
+      "type": "object",
+      "required": false,
+      "shape": "{ label?: string (default Projects), items: SideNavItemData[], newLabel?: string (default New project), onNew?: () => void }",
+      "note": "Props nav only. Adds a captioned group after the nav groups (a flat items list becomes the first, uncaptioned group). Keep the list short. With onNew, the last row is a Plus row named newLabel. A built nav adds its own SideNavSection."
+    },
+    "account": {
+      "type": "object",
+      "required": false,
+      "shape": "{ name: string, email?: string, src?: string, initials?: string, menu: DropdownMenuGroup[], onSelect?: (id: string) => void, menuLabel?: string (default Account menu) }",
+      "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm, name, email) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+    },
+    "workPanel": {
+      "type": "object",
+      "required": false,
+      "shape": "{ title: string, tabs: TabItem[] (min 2), open?: boolean, defaultOpen?: boolean (default false), onOpenChange?: (open: boolean) => void, tab?: string, defaultTab?: string, onTabChange?: (id: string) => void }",
+      "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome)."
     },
     "mark": {
       "type": "string | node",
@@ -61,7 +117,9 @@
     "note": "header and nav accept nodes built from kit compose parts. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
     "exports": {
       "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Exported from your app-shell copy. Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
-      "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader }. hasHeader is false when wide with no header: a built nav shows its own brand (SideNavHeader) then. Null outside AppShellPattern. Client components only."
+      "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader, collapsed, setCollapsed, railId, hasPanel, panelOpen, setPanelOpen, panelId }. A built nav reads collapsed and passes open={!collapsed} to SideNavRoot in the rail. Null outside AppShellPattern. Client components only.",
+      "AppShellPattern.RailToggle": "Also AppShellRailToggle. Tertiary sm Button (PanelLeftClose / PanelLeftOpen) that collapses and expands the wide rail; aria-expanded and aria-controls point at the rail; label Collapse sidebar / Expand sidebar. Renders its children when narrow. A props header gets it in the brand cell automatically; a built header places it, usually as the AppHeader.Brand logo next to AppShellPattern.MenuButton's slot (wide shows one, narrow the other).",
+      "AppShellPattern.PanelToggle": "Also AppShellPanelToggle. Tertiary sm Button (PanelRightOpen / PanelRightClose) with aria-expanded that shows and hides the work panel; ariaLabel default Work panel. Renders nothing without workPanel. Focus returns to it when the panel's close Button is used."
     },
     "rules": [
       "A built header must contain AppShellPattern.MenuButton; without it the shell warns and narrow screens cannot reach the nav",
@@ -70,7 +128,9 @@
       "Build the nav from the named block exports (SideNavRoot, SideNavSlot, SideNavNav, SideNavSection, SideNavItem, SideNavFooter): they work from Server Components, where SideNav.Root dot access does not",
       "In the shell, drop SideNavHeader and SideNavToggle when there is a top bar (AppHeader has the brand and the Menu Button); with no header, show the brand in the rail when useAppShell().hasHeader is false; in the Drawer force the nav open (open, or inDrawer || open) so it is never a closed rail",
       "A props header that sets start loses the injected Menu Button: place AppShellPattern.MenuButton inside your start",
-      "In the Drawer, radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not"
+      "In the Drawer, radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not",
+      "A built header that wants collapse places AppShellPattern.RailToggle (wide) in the same brand-cell logo slot as AppShellPattern.MenuButton (narrow): <AppHeader.Brand logo={<><AppShellPattern.MenuButton /><AppShellPattern.RailToggle /></>}>",
+      "A built nav follows useAppShell().collapsed in the rail (open={!collapsed}) and stays open in the Drawer"
     ],
     "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
     "navSnippet": "function MyNav({ page, go }) {\n  const inDrawer = useAppShell()?.navPlacement === \"drawer\";\n  return (\n    <SideNavRoot aria-label=\"Acme\" radius={inDrawer ? \"md\" : \"none\"} open>\n      <SideNavNav>\n        <SideNavSection label=\"Work\">\n          <SideNavItem label=\"Home\" icon=\"House\" active={page === \"home\"} onClick={() => go(\"home\")} />\n        </SideNavSection>\n      </SideNavNav>\n    </SideNavRoot>\n  );\n}",
@@ -85,7 +145,9 @@
       "Left Drawer size sm holds SideNav showHeader false, always expanded",
       "Picking a leaf, Escape, or a scrim click closes the Drawer; focus returns to the Menu Button",
       "AppHeader search stays an Input; below 38rem AppHeader already stacks it under the brand row",
-      "Widening past the breakpoint closes the Drawer and brings SideNav back without a reload"
+      "Widening past the breakpoint closes the Drawer and brings SideNav back without a reload",
+      "The work panel moves into a right Drawer (size md) opened by AppShellPattern.PanelToggle; the rail toggle hides",
+      "The 64rem switch follows the token; there is no separate 900px step"
     ]
   },
   "a11y": {
@@ -94,7 +156,13 @@
       "The Drawer is the kit dialog: aria-modal, focus trapped, Escape and scrim close, focus restored to the trigger",
       "Parent nav items (disclosures) do not close the Drawer; leaves do",
       "Active leaf keeps aria-current=page in both SideNav and the Drawer",
-      "With a built header, AppShellPattern.MenuButton is the only Drawer trigger; it carries the same label and focus return as the injected one"
+      "With a built header, AppShellPattern.MenuButton is the only Drawer trigger; it carries the same label and focus return as the injected one",
+      "Landmarks: AppHeader is the banner header, SideNav is the nav (inside an aside), page content sits in <main>, the work panel is an aside named by its title",
+      "Rail toggle, Menu Button and PanelToggle are kit Buttons with aria-expanded; the rail toggle and PanelToggle also set aria-controls",
+      "Collapsed rail: every row and the account avatar name themselves in a kit Tooltip on hover and focus; labels stay in the DOM",
+      "Both Drawers (nav, work panel) trap focus, close on Escape and scrim click, and return focus to their trigger",
+      "The work panel close Button is named Close <title> and returns focus to the PanelToggle when there is one",
+      "The account menu is a kit DropdownMenu: aria-haspopup=menu, arrow keys, Escape closes it and returns focus to its trigger without closing a parent Drawer"
     ]
   },
   "must": [
@@ -107,15 +175,26 @@
     "A custom header places AppShellMenuButton (accessible name and focus return built in); without it narrow screens cannot reach the nav"
   ],
   "defaults": [
+    "layout flat; the rail expanded; the work panel closed",
     "Narrow screens: the nav moves into a left kit Drawer behind a Menu Button; another pattern is fine as long as the nav stays reachable",
     "The Menu Button sits at the start of AppHeader, in the brand cell on the rail axis",
     "Below the breakpoint there is no fixed SideNav or collapsed rail; the Drawer holds the nav",
     "Chrome is layout-shell (AppHeader, radius none) over layout-app (SideNav, radius none, no header), no gap",
     "Without header: side nav only when wide (SideNav brand header on), top bar only when narrow",
     "layout-shell--viewport on className when the shell is the whole page",
-    "One layout option among many: top bar only, side nav only, both, or neither are all fine"
+    "One layout option among many: top bar only, side nav only, both, or neither are all fine",
+    "Collapse is remembered in sessionStorage (key agentic-ds-kit:app-shell:collapsed) for the browser session"
   ],
   "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", markIcon: \"Receipt\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
   "builtNavSnippet": "<AppShellPattern className=\"layout-shell--viewport\" navLabel=\"Acme\" markIcon=\"Receipt\" nav={(placement) => <ShellNav placement={placement} />}><main className=\"layout-canvas\">…</main></AppShellPattern>",
-  "snippet": "<AppShellPattern header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery, actions: <Button appearance=\"ghost\" mode=\"neutral\" size=\"sm\" iconStart=\"Bell\" ariaLabel=\"Notifications\" /> }} nav={{ title: \"Acme\", items, footer }}><div className=\"layout-canvas\">…</div></AppShellPattern>"
+  "snippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  layout=\"inset\"\n  header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery }}\n  nav={{ title: \"Acme\", items }}\n  projects={{ items: projects, onNew: createProject }}\n  account={{ name: \"Rin Okafor\", email: \"rin@example.com\", menu: accountMenu, onSelect }}\n  workPanel={{ title: \"Context\", tabs: [{ id: \"details\", label: \"Details\", content: details }, { id: \"activity\", label: \"Activity\", content: activity }] }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>",
+  "doNot": [
+    "Do not hand-build a sidebar, rail, account card, or tab strip; use SideNav, SideNav.Account, DropdownMenu and Tabs",
+    "Do not add layout values outside the closed enum (flat, inset); restyle through tokens and component cssVars instead",
+    "Do not open the work panel by default; it is opt-in (defaultOpen or open)",
+    "Do not keep a collapsed rail below the breakpoint; the Drawer holds the nav there",
+    "Do not hard-code a breakpoint other than --grid-breakpoint-md (64rem)",
+    "Do not put a second solid primary Button in the chrome; pages own their one primary action",
+    "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer"
+  ]
 }
