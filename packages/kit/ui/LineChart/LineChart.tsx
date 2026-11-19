@@ -16,13 +16,14 @@ import {
   type ChartSeries,
 } from "../shared/chartMath";
 import { measureLabel } from "../shared/measureLabel";
-import { linearPath, smoothPath } from "../shared/curve";
+import { linearPath, reversedCurveCommands, smoothPath } from "../shared/curve";
+import { formatPercent, sharePercent, stackLayers, warnStackMisuse, type StackResult } from "./lineChart.logic";
 import { useChartSize } from "../shared/useChartSize";
 import type { LineChartProps } from "./LineChart.types";
 import styles from "./LineChart.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { LineChartProps, LineChartVariant, LineChartCurve } from "./LineChart.types";
+export type { LineChartProps, LineChartVariant, LineChartCurve, LineChartStack } from "./LineChart.types";
 
 type Point = { x: number; y: number };
 
@@ -55,6 +56,7 @@ type SampleHit = {
 };
 
 const EMPTY_LAYOUT = {
+  stacked: null as StackResult | null,
   lines: [] as LineGeom[],
   ticks: [] as TickMark[],
   categoryLabels: [] as CategoryLabel[],
@@ -65,7 +67,7 @@ const EMPTY_LAYOUT = {
   plotBottom: 0,
 };
 
-function ChartTable({ labels, series }: { labels: string[]; series: ChartSeries[] }) {
+function ChartTable({ labels, series, totals }: { labels: string[]; series: ChartSeries[]; totals?: number[] }) {
   return (
     <div className={frameStyles.tableScroll}>
       <table className={frameStyles.table}>
@@ -77,6 +79,7 @@ function ChartTable({ labels, series }: { labels: string[]; series: ChartSeries[
                 {entry.label}
               </th>
             ))}
+            {totals ? <th scope="col">Total</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -86,6 +89,7 @@ function ChartTable({ labels, series }: { labels: string[]; series: ChartSeries[
               {series.map((entry, seriesIndex) => (
                 <td key={seriesIndex}>{formatValue(entry.data[index] ?? 0)}</td>
               ))}
+              {totals ? <td>{formatValue(totals[index] ?? 0)}</td> : null}
             </tr>
           ))}
         </tbody>
@@ -99,15 +103,21 @@ function Legend({
   active,
   onActivate,
   onClear,
+  topFirst = false,
 }: {
   series: ChartSeries[];
   active: number | null;
   onActivate: (seriesIndex: number) => void;
   onClear: () => void;
+  /** Stacked bands list the top layer first, matching what the chart shows. */
+  topFirst?: boolean;
 }) {
+  const order = series.map((_, seriesIndex) => seriesIndex);
+  if (topFirst) order.reverse();
   return (
     <ul className={`${frameStyles.legend} ${frameStyles.legendInteractive}`}>
-      {series.map((entry, seriesIndex) => {
+      {order.map((seriesIndex) => {
+        const entry = series[seriesIndex];
         if (!entry.label.trim()) return null;
         const dimmed = active !== null && active !== seriesIndex;
         return (
@@ -155,6 +165,7 @@ export function LineChart({
   title,
   description,
   variant = "area",
+  stack = "none",
   curve = "smooth",
   height = 240,
   showGrid = true,
@@ -174,6 +185,7 @@ export function LineChart({
   const { ref, width } = useChartSize(height);
   const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const gridMaskId = `linechart-grid-${chartId}`;
+  const plotClipId = `linechart-clip-${chartId}`;
   const areaFillId = (seriesIndex: number) => `linechart-area-${chartId}-${seriesIndex}`;
 
   const { labels, series } = useMemo(
@@ -184,6 +196,9 @@ export function LineChart({
   const hasValues = series.some((entry) => entry.data.some((value) => Number.isFinite(value)));
   const isEmpty = !labels.length || !series.length || !hasValues;
   const isArea = variant === "area";
+  const isStacked = isArea && stack !== "none";
+  const isPercent = isStacked && stack === "percent";
+  warnStackMisuse(stack, isArea, series);
   const showLegend = series.filter((entry) => entry.label.trim().length > 0).length >= 2;
 
   const layout = useMemo(() => {
@@ -194,24 +209,41 @@ export function LineChart({
     const plotTop = CHART_MARGINS.top;
     const plotBottom = height - CHART_MARGINS.bottom;
 
-    const [rawMin, rawMax] = seriesExtent(series, { includeZero });
     // About one value label per 40px of plot (2 to 4): quiet guides, and short charts don't stack labels.
     const tickCount = Math.max(2, Math.min(4, Math.floor((plotBottom - plotTop) / 40) + 1));
+    // Stacked: the axis runs from 0 to the largest total (or 0–100% in percent mode).
+    const stacked = isStacked ? stackLayers(series, labels.length, isPercent ? "percent" : "stacked") : null;
+    const [rawMin, rawMax] = stacked ? [0, stacked.max || 1] : seriesExtent(series, { includeZero });
     const { ticks, min, max } = niceTicks(rawMin, rawMax, tickCount);
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
+    const draw = (points: Point[]) => (curve === "linear" ? linearPath(points) : smoothPath(points));
 
-    const lines: LineGeom[] = series.map((entry, seriesIndex) => {
-      const points = labels.map((_, index) => ({
-        x: xScale(index),
-        y: yScale(entry.data[index] ?? 0),
-      }));
-      const linePath = curve === "linear" ? linearPath(points) : smoothPath(points);
-      const areaPath = isArea
-        ? `${linePath} L ${points[points.length - 1]?.x ?? plotRight} ${plotBottom} L ${points[0]?.x ?? plotLeft} ${plotBottom} Z`
-        : "";
-      return { ...entry, seriesIndex, points, linePath, areaPath };
-    });
+    const lines: LineGeom[] = stacked
+      ? stacked.layers.map((layer) => {
+          // Each band runs along its own top edge, then back along the band below (or the floor), so
+          // neighbouring bands share one edge with no gap.
+          const points = labels.map((_, index) => ({ x: xScale(index), y: yScale(layer.upper[index]) }));
+          const below = labels.map((_, index) => ({ x: xScale(index), y: yScale(layer.lower[index]) }));
+          const linePath = draw(points);
+          const last = below[below.length - 1];
+          const back = layer.seriesIndex === 0
+            ? `L ${last?.x ?? plotRight} ${yScale(0)} L ${below[0]?.x ?? plotLeft} ${yScale(0)}`
+            : `L ${last?.x ?? plotRight} ${last?.y ?? plotBottom} ${reversedCurveCommands(below, curve === "linear" ? "linear" : "smooth")}`;
+          const entry = series[layer.seriesIndex];
+          return { ...entry, seriesIndex: layer.seriesIndex, points, linePath, areaPath: `${linePath} ${back} Z` };
+        })
+      : series.map((entry, seriesIndex) => {
+          const points = labels.map((_, index) => ({
+            x: xScale(index),
+            y: yScale(entry.data[index] ?? 0),
+          }));
+          const linePath = draw(points);
+          const areaPath = isArea
+            ? `${linePath} L ${points[points.length - 1]?.x ?? plotRight} ${plotBottom} L ${points[0]?.x ?? plotLeft} ${plotBottom} Z`
+            : "";
+          return { ...entry, seriesIndex, points, linePath, areaPath };
+        });
 
     const categoryLabels: CategoryLabel[] = axisLabels(labels, {
       spacing: labels.length > 1 ? xScale(1) - xScale(0) : plotRight - plotLeft,
@@ -227,7 +259,7 @@ export function LineChart({
 
     const tickMarks: TickMark[] = ticks.map((tick) => ({
       value: tick,
-      label: formatAxisTick(tick),
+      label: isPercent ? formatPercent(tick) : formatAxisTick(tick),
       x: plotLeft - 8,
       y: yScale(tick),
       gridX1: plotLeft,
@@ -243,8 +275,8 @@ export function LineChart({
       return { index, label, x, hitX: prev, hitWidth: Math.max(next - prev, 1) };
     });
 
-    return { lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom };
-  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, labels, series, tickInterval, width]);
+    return { stacked, lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom };
+  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, isPercent, isStacked, labels, series, tickInterval, width]);
 
   const visibleLines = highlighted !== null
     ? layout.lines.filter((line) => line.seriesIndex === highlighted)
@@ -273,6 +305,26 @@ export function LineChart({
 
   const clearSample = () => setActiveIndex(null);
 
+  // Stacked totals for the table, tooltip and accessible names, from the raw values (missing as 0).
+  const stackTotals = isStacked
+    ? (layout.stacked?.totals ?? stackLayers(series, labels.length, "stacked").totals)
+    : undefined;
+  const stackValueAt = (seriesIndex: number, index: number) =>
+    layout.stacked?.layers[seriesIndex]?.values[index] ?? 0;
+  // Stacked charts read top layer first, the way the bands sit.
+  const readingOrder = isStacked ? [...visibleLines].reverse() : visibleLines;
+  const sampleLabel = (index: number, label: string) => {
+    if (!isStacked) {
+      return `${label}: ${series.map((entry) => `${entry.label} ${formatValue(entry.data[index] ?? 0)}`).join(", ")}`;
+    }
+    const total = stackTotals?.[index] ?? 0;
+    const parts = [...series.keys()].reverse().map((seriesIndex) => {
+      const value = stackValueAt(seriesIndex, index);
+      return `${series[seriesIndex].label} ${formatValue(value)}${isPercent ? ` (${sharePercent(value, total)}%)` : ""}`;
+    });
+    return `${label}: ${parts.join(", ")}, Total ${formatValue(total)}`;
+  };
+
   return (
     <ChartFrame
       {...rest} {...nisthaAttr("linechart", rest)}
@@ -285,9 +337,10 @@ export function LineChart({
           active={highlighted}
           onActivate={setHighlighted}
           onClear={() => setHighlighted(null)}
+          topFirst={isStacked}
         />
       ) : undefined}
-      table={showTable ? <ChartTable labels={labels} series={series} /> : undefined}
+      table={showTable ? <ChartTable labels={labels} series={series} totals={stackTotals} /> : undefined}
       isEmpty={isEmpty}
       emptyLabel={emptyLabel}
       isLoading={isLoading}
@@ -302,13 +355,27 @@ export function LineChart({
           role={layout.samples.length > 0 ? "group" : "img"}
           aria-label={title}
         >
+          {width > 0 ? (
+            // Lines and fills stop at the plot's left and right edges, like the gridlines: a 2px line's round
+            // end would otherwise reach 1px past them. Open above and below, so the top line keeps its width.
+            <defs>
+              <clipPath id={plotClipId} clipPathUnits="userSpaceOnUse">
+                <rect
+                  x={layout.plotLeft}
+                  y={-height}
+                  width={Math.max(layout.plotRight - layout.plotLeft, 1)}
+                  height={height * 3}
+                />
+              </clipPath>
+            </defs>
+          ) : null}
           {isArea && width > 0 ? (
             // Area fill: the series colour fades from the top of each area down to the baseline.
             <defs>
               {layout.lines.map((line) => (
                 <linearGradient key={line.seriesIndex} id={areaFillId(line.seriesIndex)} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" className={styles.areaStopTop} style={{ stopColor: line.color }} />
-                  <stop offset="1" className={styles.areaStopBottom} style={{ stopColor: line.color }} />
+                  <stop offset="0" className={isStacked ? styles.bandStopTop : styles.areaStopTop} style={{ stopColor: line.color }} />
+                  <stop offset="1" className={isStacked ? styles.bandStopBottom : styles.areaStopBottom} style={{ stopColor: line.color }} />
                 </linearGradient>
               ))}
             </defs>
@@ -378,12 +445,39 @@ export function LineChart({
               />
             </>
           ) : null}
-          {layout.lines.map((line) => {
+          {isStacked ? (
+            <g clipPath={width > 0 ? `url(#${plotClipId})` : undefined}>
+              {/* Bands bottom to top, then every top edge, so no fill covers the line of the band below.
+                  Edges draw from the top band down: where a band is 0 its edge sits on the edge below, and
+                  the band that has the value must stay visible on top. */}
+              {layout.lines.map((line) => (
+                <path
+                  key={`band-${line.seriesIndex}`}
+                  className={`${styles.series} ${styles.area}${highlighted !== null && highlighted !== line.seriesIndex ? ` ${styles.seriesDimmed}` : ""}${animate ? ` ${motionStyles.fadeAfter}` : ""}`}
+                  style={seriesMotion(line.seriesIndex)}
+                  d={line.areaPath}
+                  fill={`url(#${areaFillId(line.seriesIndex)})`}
+                />
+              ))}
+              {[...layout.lines].reverse().map((line) => (
+                <path
+                  key={`edge-${line.seriesIndex}`}
+                  className={`${styles.series} ${styles.line}${highlighted !== null && highlighted !== line.seriesIndex ? ` ${styles.seriesDimmed}` : ""}${animate ? ` ${motionStyles.draw}` : ""}`}
+                  style={seriesMotion(line.seriesIndex)}
+                  d={line.linePath}
+                  stroke={line.color}
+                  pathLength={animate ? 1 : undefined}
+                />
+              ))}
+            </g>
+          ) : null}
+          {isStacked ? null : layout.lines.map((line) => {
             const dimmed = highlighted !== null && highlighted !== line.seriesIndex;
             return (
               <g
                 key={line.seriesIndex}
                 className={`${styles.series}${dimmed ? ` ${styles.seriesDimmed}` : ""}`}
+                clipPath={width > 0 ? `url(#${plotClipId})` : undefined}
               >
                 {isArea && line.areaPath ? (
                   <path
@@ -473,9 +567,7 @@ export function LineChart({
               height={Math.max(layout.plotBottom - layout.plotTop, 1)}
               tabIndex={0}
               role="button"
-              aria-label={`${sample.label}: ${series
-                .map((entry) => `${entry.label} ${formatValue(entry.data[sample.index] ?? 0)}`)
-                .join(", ")}`}
+              aria-label={sampleLabel(sample.index, sample.label)}
               onFocus={() => setActiveIndex(sample.index)}
               onBlur={clearSample}
             />
@@ -489,13 +581,26 @@ export function LineChart({
             aria-live="polite"
           >
             <p className={frameStyles.tooltipTitle}>{activeSample.label}</p>
-            {visibleLines.map((line) => (
-              <div key={line.seriesIndex} className={frameStyles.tooltipRow}>
-                <span className={frameStyles.tooltipKey} style={{ background: line.color }} aria-hidden />
-                <span className={frameStyles.tooltipShare}>{line.label}</span>
-                <span className={frameStyles.tooltipValue}>{formatValue(line.data[activeSample.index] ?? 0)}</span>
+            {readingOrder.map((line) => {
+              const raw = isStacked ? stackValueAt(line.seriesIndex, activeSample.index) : (line.data[activeSample.index] ?? 0);
+              const total = stackTotals?.[activeSample.index] ?? 0;
+              return (
+                <div key={line.seriesIndex} className={frameStyles.tooltipRow}>
+                  <span className={frameStyles.tooltipKey} style={{ background: line.color }} aria-hidden />
+                  <span className={frameStyles.tooltipShare}>{line.label}</span>
+                  <span className={frameStyles.tooltipValue}>
+                    {isPercent ? `${sharePercent(raw, total)}% · ${formatValue(raw)}` : formatValue(raw)}
+                  </span>
+                </div>
+              );
+            })}
+            {isStacked ? (
+              <div className={`${frameStyles.tooltipRow} ${styles.tooltipTotal}`}>
+                <span className={frameStyles.tooltipKey} aria-hidden />
+                <span className={frameStyles.tooltipShare}>Total</span>
+                <span className={frameStyles.tooltipValue}>{formatValue(stackTotals?.[activeSample.index] ?? 0)}</span>
               </div>
-            ))}
+            ) : null}
           </div>
         ) : null}
       </div>

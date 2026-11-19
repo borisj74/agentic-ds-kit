@@ -59,6 +59,15 @@
   stop-opacity: 0;
 }
 
+/* Stacked bands: a flatter gradient than a single area, so the layers stay readable on top of each other. */
+.bandStopTop {
+  stop-opacity: 0.35;
+}
+
+.bandStopBottom {
+  stop-opacity: 0.1;
+}
+
 .line {
   fill: none;
   stroke-width: 2;
@@ -105,4 +114,15 @@
   .series {
     transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
   }
+}
+
+/* The stacked total closes the tooltip under a hairline, with no colour key. */
+.tooltipTotal {
+  margin-block-start: var(--space-1);
+  padding-block-start: var(--space-1);
+  border-block-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.tooltipTotal > :first-child {
+  visibility: hidden;
 }
