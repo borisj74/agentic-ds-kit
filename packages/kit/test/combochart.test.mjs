@@ -62,8 +62,9 @@ describe("ComboChart logic", () => {
   test("value axis tries a four- and a five-tick target and keeps the one that wastes less height", () => {
     assert.deepEqual(logic.axisTicks(0, 76300, true).ticks, [0, 20000, 40000, 60000, 80000]);
     assert.deepEqual(logic.axisTicks(0, 40, true).ticks, [0, 20, 40], "a tie keeps the four-tick choice");
+    assert.deepEqual(logic.axisTicks(0, 401, true).ticks, [0, 200, 400, 600], "never more than five ticks");
     const { ticks } = logic.axisTicks(0, 100, true);
-    assert.ok(ticks.length >= 3 && ticks.length <= 6, `${ticks}`);
+    assert.ok(ticks.length >= 3 && ticks.length <= 5, `${ticks}`);
     assert.ok(ticks[ticks.length - 1] >= 100);
   });
 

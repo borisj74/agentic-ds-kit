@@ -110,13 +110,13 @@ export function ComboChartDoc() {
                 <div className={styles.previewFill}>
                   <ComboChart
                     title="Orders by week"
-                    description="Web and app, with the four-week average per channel"
+                    description="Web and app orders, with the two-channel average over the last four weeks"
                     data={ORDERS}
                     bars={[
                       { key: "web", label: "Web" },
                       { key: "app", label: "App" },
                     ]}
-                    line={{ key: "average", label: "Four-week average" }}
+                    line={{ key: "average", label: "Average of both channels" }}
                   />
                 </div>
               </div>
@@ -132,7 +132,7 @@ export function ComboChartDoc() {
   title="Orders by week"
   data={orders}
   bars={[{ key: "web", label: "Web" }, { key: "app", label: "App" }]}
-  line={{ key: "average", label: "Four-week average" }}
+  line={{ key: "average", label: "Average of both channels" }}
 />`}
               />
             </section>

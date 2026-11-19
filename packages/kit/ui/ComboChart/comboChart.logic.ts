@@ -31,15 +31,20 @@ export function extentOf(data: ComboChartDatum[], keys: string[]): [number, numb
   return [min, max];
 }
 
+/** Most value-axis ticks, so gridlines stay quiet. */
+const MAX_TICKS = 5;
+
 /**
  * Value-axis ticks: tries a four- and a five-tick target and keeps whichever leaves less empty space
- * above and below the data, so the bars and the line use the height. Ties keep four. Whole numbers stay whole.
+ * above and below the data, so the bars and the line use the height. The five-tick target only wins when
+ * it really gives five ticks or fewer, so the grid never gets busier than five lines. Ties keep four.
+ * Whole numbers stay whole.
  */
 export function axisTicks(min: number, max: number, integer: boolean): { ticks: number[]; min: number; max: number } {
   const four = niceTicks(min, max, 4, { integer });
   const five = niceTicks(min, max, 5, { integer });
   const waste = (axis: { min: number; max: number }) => (axis.max - max + (min - axis.min)) / (axis.max - axis.min || 1);
-  return waste(five) < waste(four) ? five : four;
+  return five.ticks.length <= MAX_TICKS && waste(five) < waste(four) ? five : four;
 }
 
 function stepUp(raw: number): number {
