@@ -78,6 +78,24 @@ describe("Heatmap logic", () => {
   });
 });
 
+describe("Heatmap column labels", () => {
+  test("up to 12 columns every label shows; past that, every third", () => {
+    assert.ok([0, 1, 11].every((index) => logic.showColumnLabel(index, 12)));
+    const shown = Array.from({ length: 24 }, (_, index) => index).filter((index) => logic.showColumnLabel(index, 24));
+    assert.deepEqual(shown, [0, 3, 6, 9, 12, 15, 18, 21]);
+  });
+
+  test("hidden labels stay as column headers for screen readers", () => {
+    const hours = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, "0"));
+    const html = renderToStaticMarkup(
+      React.createElement(Heatmap, { rows: ["Mon"], columns: hours, data: [{ row: "Mon", column: "09", value: 4 }], title: "Runs" }),
+    );
+    assert.equal((html.match(/role="columnheader"/g) ?? []).length, 25);
+    assert.match(html, /role="columnheader"[^>]*>03<\/span>/, "03 is drawn");
+    assert.match(html, /role="columnheader"[^>]*><span class="[^"]*srOnly[^"]*">01<\/span>/, "01 is kept for screen readers");
+  });
+});
+
 describe("Heatmap render", () => {
   test("a named grid with column and row headers and one labelled cell per row × column", () => {
     const html = render();
