@@ -87,8 +87,11 @@
   font-size: var(--type-size-body-sm);
 }
 
+/* The small ghost Button insets its text by its padding and border; pull it back so "Show all" lines
+   up with the row labels, which sit var(--space-2) inside their bars. */
 .footer {
   display: flex;
+  margin-inline-start: calc(var(--space-2) - var(--space-3) - var(--border-control));
 }
 
 @media (prefers-reduced-motion: reduce) {
