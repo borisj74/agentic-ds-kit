@@ -218,7 +218,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-metric);
 }
 
 .ring.semi .value {

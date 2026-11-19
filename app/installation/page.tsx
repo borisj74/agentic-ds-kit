@@ -25,12 +25,12 @@ const USE_COPY = `import { DashboardPattern } from "@/components/patterns/dashbo
 const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 
 const FONTS = `// app/layout.tsx
-import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
-const plexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-ibm-plex-sans" });
-const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-ibm-plex-mono" });
+const geistSans = Geist({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-geist-sans" });
+const geistMono = Geist_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-geist-mono" });
 
-// <html className={\`\${plexSans.variable} \${plexMono.variable}\`}>`;
+// <html className={\`\${geistSans.variable} \${geistMono.variable}\`}>`;
 
 const NEW_APP = `mkdir my-app
 cd my-app
@@ -160,7 +160,7 @@ export default function InstallationPage() {
           <div className={playground.stack}>
             <p className={playground.body}>
               A kit import sets body font-family to var(--font-sans), with zero specificity so your
-              own body rule wins. Without IBM Plex loaded it falls back to system-ui. Load Plex with
+              own body rule wins. Without Geist loaded it falls back to system-ui. Load Geist with
               next/font and the variables the tokens read, or override --font-sans in :root.
             </p>
             <CodeBlock code={FONTS} label="Load fonts" />

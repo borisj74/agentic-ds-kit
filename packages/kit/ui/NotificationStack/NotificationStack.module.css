@@ -64,6 +64,7 @@
   margin: 0;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -84,6 +85,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .textButton:disabled {
@@ -198,6 +200,7 @@
 .itemTitle {
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }

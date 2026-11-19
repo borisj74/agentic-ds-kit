@@ -23,7 +23,7 @@
   flex-shrink: 0;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   line-height: 1;
   user-select: none;
   /* bg-tray, like the Avatar fallback: surface-muted (slate-50) vanishes on canvas grounds. */

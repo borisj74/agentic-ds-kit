@@ -18,6 +18,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-heading-3);
   font-weight: var(--type-weight-title);
+  letter-spacing: var(--type-tracking-heading-3);
   line-height: var(--type-line-heading-3);
   color: var(--text-fg);
 }
@@ -57,6 +58,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-primary);
 }
 
@@ -342,6 +344,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-body);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-body);
   color: var(--text-primary);
 }
@@ -378,6 +381,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-primary);
 }
 
@@ -486,7 +490,7 @@
 .pagerLabel {
   font-family: var(--font-sans);
   font-size: var(--type-size-body);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   color: var(--action-primary);
 }
 

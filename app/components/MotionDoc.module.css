@@ -121,7 +121,7 @@
   box-sizing: border-box;
   border-radius: var(--radius-surface-md);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
 }
 
 .thumbA {

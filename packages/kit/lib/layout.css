@@ -2,12 +2,17 @@
 
 /* Page defaults so a fresh app is not browser serif. :where() keeps specificity
    at zero, so any app rule on body wins. The kit ships no font files: load
-   IBM Plex Sans (e.g. next/font, variable --font-ibm-plex-sans) or override
+   Geist (e.g. next/font, variable --font-geist-sans) or override
    --font-sans; otherwise this falls back to system-ui. */
 :where(body) {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--bg-canvas);
+}
+
+/* Strong text in body copy is semibold, not the browser's bolder (700). */
+:where(strong, b) {
+  font-weight: var(--type-weight-strong);
 }
 
 /* Product chrome: AppHeader full-bleed, then SideNav + page. No gap. */

@@ -4,7 +4,7 @@
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--type-size-ui-md);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-metric);
   line-height: var(--type-line-heading);
   font-variant-numeric: tabular-nums;
 }

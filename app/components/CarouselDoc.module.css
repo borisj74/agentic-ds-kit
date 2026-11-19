@@ -28,5 +28,6 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-display);
   font-weight: var(--type-weight-title);
+  letter-spacing: var(--type-tracking-heading-3);
   line-height: var(--type-line-heading);
 }

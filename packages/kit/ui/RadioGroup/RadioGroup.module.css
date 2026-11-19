@@ -289,7 +289,7 @@
 
 .card .label {
   font-size: var(--type-size-body);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
 }
 
 .card .description {

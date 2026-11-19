@@ -25,18 +25,18 @@ function declarations(head) {
 const root = declarations(":root");
 
 describe("marketing type roles", () => {
-  test("hero display: 64/76 at desktop, weight 400, tight tracking", () => {
+  test("hero display: 64/76 at desktop, weight 600, -0.06em tracking", () => {
     assert.equal(root.get("--type-size-display-hero"), "64px");
     assert.equal(root.get("--type-line-display-hero"), "76px");
-    assert.equal(root.get("--type-weight-display-hero"), "400");
-    assert.equal(root.get("--type-tracking-display-hero"), "-0.03em");
+    assert.equal(root.get("--type-weight-display-hero"), "600");
+    assert.equal(root.get("--type-tracking-display-hero"), "-0.06em");
   });
 
-  test("section title: 32/40, weight 400, tight tracking", () => {
+  test("section title: 32/40, weight 600, -0.04em tracking", () => {
     assert.equal(root.get("--type-size-title-section"), "32px");
     assert.equal(root.get("--type-line-title-section"), "40px");
-    assert.equal(root.get("--type-weight-title-section"), "400");
-    assert.equal(root.get("--type-tracking-title-section"), "-0.03em");
+    assert.equal(root.get("--type-weight-title-section"), "600");
+    assert.equal(root.get("--type-tracking-title-section"), "-0.04em");
   });
 
   test("tablet (below md breakpoint): hero 52/64", () => {
@@ -67,13 +67,38 @@ describe("tracking tokens", () => {
     assert.equal(root.get("--type-tracking-wide"), "0.08em");
   });
 
-  test("existing display, title and tracking roles are unchanged", () => {
+  test("display alias, title and overline roles", () => {
     assert.equal(root.get("--type-size-display"), "var(--type-size-heading-3)");
     assert.equal(root.get("--type-size-heading-3"), "40px");
-    assert.equal(root.get("--type-weight-title"), "700");
-    assert.equal(root.get("--type-tracking-title"), "-0.02em");
-    assert.equal(root.get("--type-tracking-heading"), "-0.01em");
+    assert.equal(root.get("--type-tracking-title"), "-0.04em");
+    assert.equal(root.get("--type-tracking-heading"), "-0.02em");
     assert.equal(root.get("--type-tracking-overline"), "0.06em");
+  });
+
+  test("heading tracking tightens with size", () => {
+    // 14–20px headings: -0.02em; 24 and 32px: -0.04em; 40px and up: -0.06em.
+    assert.equal(root.get("--type-tracking-heading-5"), "-0.04em");
+    assert.equal(root.get("--type-tracking-heading-4"), "-0.04em");
+    assert.equal(root.get("--type-tracking-heading-3"), "-0.06em");
+    assert.equal(root.get("--type-tracking-heading-2"), "-0.06em");
+    assert.equal(root.get("--type-tracking-heading-1"), "-0.06em");
+  });
+});
+
+describe("Geist weights", () => {
+  test("every heading role is semibold; body regular; labels medium; strong 600", () => {
+    for (const role of ["heading", "title", "display-hero", "title-section"]) {
+      assert.equal(root.get(`--type-weight-${role}`), "600", role);
+    }
+    assert.equal(root.get("--type-weight-body"), "400");
+    assert.equal(root.get("--type-weight-label"), "500");
+    assert.equal(root.get("--type-weight-strong"), "600");
+  });
+
+  test("Geist and Geist Mono families with system fallbacks", () => {
+    assert.match(root.get("--font-sans"), /^var\(--font-geist-sans, "Geist"\), system-ui/);
+    assert.match(root.get("--font-mono"), /^var\(--font-geist-mono, "Geist Mono"\), ui-monospace/);
+    assert.doesNotMatch(css, /Plex/);
   });
 });
 

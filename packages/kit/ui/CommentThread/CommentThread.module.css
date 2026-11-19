@@ -35,6 +35,7 @@
   overflow: hidden;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
   text-overflow: ellipsis;
@@ -94,7 +95,7 @@
 
 .author {
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   color: var(--text-fg);
 }
 

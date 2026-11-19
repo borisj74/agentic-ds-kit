@@ -388,7 +388,10 @@ function staticVars() {
     "",
     `  --type-line-body: var(--type-line-body-md);`,
     `  --type-line-heading: var(--type-line-heading-5);`,
-    ...Object.entries(tokens.semantic.type.tracking).map(([role, ref]) => `  --type-tracking-${kebab(role)}: ${resolveRef(ref, p)};`),
+    // heading1 → heading-1, matching the --type-size-heading-1 ladder names.
+    ...Object.entries(tokens.semantic.type.tracking).map(
+      ([role, ref]) => `  --type-tracking-${kebab(role).replace(/([a-z])(\d)$/, "$1-$2")}: ${resolveRef(ref, p)};`,
+    ),
     "",
     `  --z-overlay: 40;`,
     `  --z-modal: 50;`,

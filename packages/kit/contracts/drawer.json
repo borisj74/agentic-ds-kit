@@ -92,7 +92,7 @@
     "layout.drawerSm",
     "layout.drawerMd",
     "layout.drawerLg",
-    "type.tracking.heading"
+    "type.tracking.heading5"
   ],
   "a11y": {
     "element": "dialog",

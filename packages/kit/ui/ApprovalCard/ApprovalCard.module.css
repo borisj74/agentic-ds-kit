@@ -43,6 +43,7 @@
   overflow-wrap: anywhere;
   font-size: var(--type-size-ui-md);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-md);
   color: var(--text-fg);
 }

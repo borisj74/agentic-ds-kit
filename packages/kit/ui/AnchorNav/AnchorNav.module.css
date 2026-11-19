@@ -39,7 +39,7 @@
 /* The section in view: brand text, bar and caret. */
 .link[aria-current="location"] {
   color: var(--text-brand);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   box-shadow: inset var(--border-width-medium) 0 0 var(--fill-brand);
 }
 
@@ -71,7 +71,7 @@
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
   cursor: pointer;
   box-shadow: var(--shadow-xs);

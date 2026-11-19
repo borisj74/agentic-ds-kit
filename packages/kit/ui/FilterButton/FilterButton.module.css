@@ -14,7 +14,7 @@
   background: var(--surface-card);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-heading);
   white-space: nowrap;
   transition: background-color var(--motion-interaction-duration) var(--motion-interaction-easing);

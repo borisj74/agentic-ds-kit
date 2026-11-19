@@ -26,6 +26,7 @@
   margin: 0;
   font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-lg);
   color: var(--text-fg);
 }
@@ -87,6 +88,7 @@
   margin: 0;
   font-size: var(--type-size-body-md);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-md);
   color: var(--text-fg);
 }
@@ -106,7 +108,8 @@
 }
 
 .amount {
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-metric);
+  font-variant-numeric: tabular-nums;
   color: var(--text-fg);
 }
 

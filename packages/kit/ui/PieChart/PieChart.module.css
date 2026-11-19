@@ -73,7 +73,7 @@
 .centerValue {
   fill: var(--text-primary);
   font-family: var(--font-sans);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-metric);
   font-variant-numeric: tabular-nums;
 }
 

@@ -25,7 +25,7 @@
   font-size: var(--type-size-ui-xl);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-xl);
-  letter-spacing: var(--type-tracking-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-fg);
 }
 
@@ -46,6 +46,7 @@
   margin: 0;
   font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-lg);
   color: var(--text-fg);
 }
