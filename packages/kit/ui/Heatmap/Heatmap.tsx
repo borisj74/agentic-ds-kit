@@ -6,7 +6,7 @@ import frameStyles from "../shared/ChartFrame.module.css";
 import { formatValue } from "../shared/chartMath";
 import { cx } from "../shared/cx";
 import { nisthaAttr } from "../shared/inspect";
-import { cellKey, cellMap, LEVELS, levelOf, maxValue, moveFocus } from "./heatmap.logic";
+import { cellKey, cellMap, LEVELS, levelOf, maxValue, moveFocus, showColumnLabel } from "./heatmap.logic";
 import type { HeatmapProps } from "./Heatmap.types";
 import styles from "./Heatmap.module.css";
 
@@ -160,9 +160,10 @@ export function Heatmap({
               <span role="columnheader" className={styles.corner}>
                 <span className={styles.srOnly}>Row</span>
               </span>
-              {columns.map((column) => (
+              {/* Many columns: every third label shows; the rest stay as headers for screen readers. */}
+              {columns.map((column, columnIndex) => (
                 <span key={column} role="columnheader" className={styles.columnLabel}>
-                  {column}
+                  {showColumnLabel(columnIndex, columns.length) ? column : <span className={styles.srOnly}>{column}</span>}
                 </span>
               ))}
             </div>

@@ -52,7 +52,9 @@
   white-space: nowrap;
 }
 
+/* Positioned, so a label hidden for screen readers stays inside its own column (and the scroller). */
 .columnLabel {
+  position: relative;
   overflow: hidden;
   text-align: center;
   text-overflow: clip;

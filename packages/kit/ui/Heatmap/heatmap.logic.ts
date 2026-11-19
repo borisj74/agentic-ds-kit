@@ -3,6 +3,15 @@ import type { HeatmapDatum } from "./Heatmap.types";
 /** Shade steps above zero. Level 0 is zero or empty; 1 to LEVELS run light to dark. */
 export const LEVELS = 4;
 
+/** Above this many columns, only every third column label shows, so the header stays readable. */
+export const DENSE_COLUMNS = 12;
+const DENSE_STRIDE = 3;
+
+/** True when a column's label is drawn. Hidden labels stay in the grid for screen readers. */
+export function showColumnLabel(index: number, count: number): boolean {
+  return count <= DENSE_COLUMNS || index % DENSE_STRIDE === 0;
+}
+
 /** A value the grid can shade: finite and zero or more. */
 export function safeValue(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 0;
