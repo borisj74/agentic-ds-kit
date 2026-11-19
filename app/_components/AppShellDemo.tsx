@@ -102,7 +102,7 @@ const VIEW_NOTES: Record<ShellView, string> = {
 
 /**
  * Demo logo: a placeholder mark from PrebuiltUI's free logo set (prebuiltui.com/logos), drawn
- * in currentColor so it follows the theme. Passed through AppHeader's `logo` slot, smaller than the letter mark.
+ * in currentColor so it follows the theme. Passed through AppHeader's `logo` slot at --space-5, smaller than the letter mark.
  */
 function DemoLogo() {
   return (
@@ -110,7 +110,7 @@ function DemoLogo() {
       viewBox="0 0 48 43"
       aria-hidden="true"
       focusable="false"
-      style={{ display: "block", height: "var(--space-6)", width: "auto", color: "var(--icon-brand)" }}
+      style={{ display: "block", height: "var(--space-5)", width: "auto", color: "var(--icon-brand)" }}
     >
       <mask id="demo-logo-dot">
         <rect width="48" height="43" fill="white" />

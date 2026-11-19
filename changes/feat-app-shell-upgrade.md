@@ -5,6 +5,8 @@
 - **AppShellPattern `projects` and `account` props.** `projects` adds a short "Projects" group with a "New project" row to a props nav. `account` puts the signed-in person (avatar, name, email) at the bottom of the nav with a menu for actions such as Settings, Theme and Sign out.
 - **AppShellPattern work panel.** `workPanel` adds an optional right panel with Tabs, off by default, fixed width and closable. `AppShellPattern.PanelToggle` opens it. Below the breakpoint it opens in a right Drawer.
 
+- **AppHeader `--appheader-title-size`.** A new cssVar for the product title size, defaulting to `--type-size-heading`. AppShellPattern sets it to `--type-size-ui-lg`, so the product name stays quieter than the page title.
+
 ### Fixed
 
 - **DropdownMenu opens above its trigger when there is no room below,** so a menu near the bottom of the screen (such as an account menu at the foot of a side nav) no longer runs off-screen. Submenus do the same.

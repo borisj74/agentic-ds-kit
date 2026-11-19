@@ -1,6 +1,12 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The app-shell-pattern__ prefix keeps names unique. */
 
+/* Both layouts: a quieter brand, so the page title, not the product name, carries the weight. */
+.app-shell-pattern--flat,
+.app-shell-pattern--inset {
+  --appheader-title-size: var(--type-size-ui-lg);
+}
+
 /* layout="flat": the rail sits on a soft neutral fill, the page runs edge to edge, and
    SideNav's own hairline divider (border-faint) separates them. Drawers are portaled, so
    the nav inside a Drawer keeps its card surface. */

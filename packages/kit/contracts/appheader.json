@@ -244,6 +244,7 @@
     "--appheader-background": "Bar background (surface-card)",
     "--appheader-border-color": "Bottom border colour, or the full border with radius md (border-faint)",
     "--appheader-brand-width": "Column the default mark centers in (default: --sidenav-width-collapsed, then layout-sidebar-compact). Set --sidenav-width-collapsed on :root and the brand column follows; set this only to break the match",
+    "--appheader-title-size": "Product title size (type-size-heading). Set a smaller type size token, e.g. type-size-ui-lg, for a quieter brand; the app-shell example does",
     "--appheader-search-max-width": "Max width of the center column (layout-rail); the column also stays within 40% of the bar",
     "--appheader-search-min-width": "Min width of the center column before the bar stacks (12rem, capped at the column)"
   },
