@@ -47,6 +47,7 @@ import { AvatarGroup } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
 import { BarChart } from "agentic-ds-kit";
 import { BarList } from "agentic-ds-kit";
+import { Heatmap } from "agentic-ds-kit";
 import { Breadcrumb } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { ButtonGroup } from "agentic-ds-kit";
@@ -593,6 +594,19 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <BarList label="Top days" data={CHART} />
+        </Stage>
+      );
+    case "heatmap":
+      return (
+        <Stage variant="wide">
+          <Heatmap
+            rows={["AM", "PM"]}
+            columns={CHART.map((entry) => entry.label)}
+            data={CHART.flatMap((entry, index) => [
+              { row: "AM", column: entry.label, value: entry.value },
+              { row: "PM", column: entry.label, value: (entry.value * (index + 2)) % 20 },
+            ])}
+          />
         </Stage>
       );
     case "breadcrumb":

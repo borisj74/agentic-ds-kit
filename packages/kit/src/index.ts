@@ -154,6 +154,7 @@ export * from "../ui/BlurCrossfade";
 export * from "../ui/TextReveal";
 export * from "../ui/TiltCard";
 export * from "../ui/GridBackground";
+export * from "../ui/Heatmap";
 export * from "../ui/GuardrailLog";
 export * from "../ui/GradientText";
 
