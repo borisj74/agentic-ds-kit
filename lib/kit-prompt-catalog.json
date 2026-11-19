@@ -12644,7 +12644,7 @@
     {
       "id": "app-shell",
       "group": "pattern",
-      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a brand subtitle, a search slot that opens the kit command menu (⌘K), a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a brand subtitle, a notifications bell in the brand row, a search slot that opens the kit command menu (⌘K), a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
       "useWhen": [
         "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
         "The nav should collapse to an icon rail to give the page more room",
@@ -12664,7 +12664,9 @@
         "Do not put a second solid primary Button in the chrome; pages own their one primary action",
         "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer",
         "Do not build a local command palette, dialog or search popover; open kit Command inside kit Modal",
-        "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)"
+        "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)",
+        "Do not keep a top bar only for a notifications bell; put notifications in the nav's brand row so the page starts at the top inset",
+        "Do not build a local notification bell or list; compose kit Popover with NotificationStack inline, or use NotificationStack"
       ],
       "must": [
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
@@ -12739,6 +12741,11 @@
           "type": "object",
           "required": false,
           "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+        },
+        "notifications": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only; same in both layouts. An icon-only ghost sm Button (Bell) with a kit Tooltip (label) and an aria-hidden kit Badge (solid danger sm) counting unread items, opening a kit Popover with NotificationStack inline (the list, Mark all read, View all). Wide and open: aligned right in the nav's brand row, before the rail Toggle. Collapsed rail: under the brand mark (a keepOnRail SideNavSlot), tooltip on the right. Narrow: at the right end of the default narrow top bar. Place it in the nav instead of a top bar, so a header-less shell starts the page at the top inset."
         },
         "workPanel": {
           "type": "object",

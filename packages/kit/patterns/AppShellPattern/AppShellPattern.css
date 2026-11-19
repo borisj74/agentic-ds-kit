@@ -168,13 +168,38 @@
   cursor: pointer;
 }
 
-/* The closed rail keeps the open panel width and clips it, so center on the closed width,
-   pulling back over the slot's start padding. */
-.app-shell-pattern__search-rail {
+/* The closed rail keeps the open panel width and clips it, so rail controls (search, bell)
+   center on the closed width, pulling back over the slot's start padding. */
+.app-shell-pattern__rail-cell {
   display: flex;
   justify-content: center;
   width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
   margin-inline-start: calc(var(--space-inset-sm) * -1);
+}
+
+.app-shell-pattern__rail-slot {
+  padding-block-start: var(--space-inset-sm);
+}
+
+/* Notifications bell: the count Badge sits on the bell's top end corner, out of the pointer's way. */
+.app-shell-pattern__bell {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.app-shell-pattern__bell-count {
+  position: absolute;
+  inset-block-start: calc(var(--space-2) * -1);
+  inset-inline-end: calc(var(--space-2) * -1);
+  pointer-events: none;
+}
+
+/* The notifications list fills the kit Popover's widest content box (its max width, space-16 x 5,
+   less its space-3 padding on each side), so the list is readable and stays inside the panel. */
+.app-shell-pattern__notifications {
+  width: calc(var(--space-16) * 5 - var(--space-3) * 2);
+  max-width: 100%;
 }
 
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */

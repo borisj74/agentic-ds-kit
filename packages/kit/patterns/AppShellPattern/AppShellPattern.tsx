@@ -23,7 +23,11 @@ import type { DropdownMenuGroup } from "../../ui/DropdownMenu";
 import { Command } from "../../ui/Command";
 import type { CommandGroup } from "../../ui/Command";
 import { Input } from "../../ui/Input";
+import { Badge } from "../../ui/Badge";
 import { Modal } from "../../ui/Modal";
+import { NotificationStack } from "../../ui/NotificationStack";
+import type { NotificationItem } from "../../ui/NotificationStack";
+import { Popover } from "../../ui/Popover";
 import {
   SideNavAccount,
   SideNavBrand,
@@ -95,6 +99,19 @@ export interface AppShellSearch {
   shortcut?: boolean;
 }
 
+/** Notifications in the nav's brand row: a bell with an unread count that opens the kit inbox list. */
+export interface AppShellNotifications {
+  /** NotificationStack items. Unread items drive the count. */
+  items: NotificationItem[];
+  /** Tooltip, bell name and panel title. Default "Notifications". */
+  label?: string;
+  onItemClick?: (id: string) => void;
+  onMarkRead?: (id: string) => void;
+  onMarkAll?: () => void;
+  onViewAll?: () => void;
+  emptyTitle?: string;
+}
+
 /** Optional right work panel with tabs. Fixed width (--layout-rail). Off by default. */
 export interface AppShellWorkPanel {
   /** Panel name: the aside's label, the Drawer title on narrow screens, and the toggle's name. */
@@ -155,6 +172,8 @@ export interface AppShellPatternProps {
   account?: AppShellAccount;
   /** One muted line under the product name in the nav's brand (header-less shells, e.g. flat). Props nav only. */
   subtitle?: string;
+  /** Bell in the nav's brand row (under the mark on the collapsed rail, in the narrow top bar) opening the kit notifications list. Props nav only. */
+  notifications?: AppShellNotifications;
   /** Search field under the brand (an icon button with a tooltip on the collapsed rail) that opens the kit command menu; ⌘K opens it too. Props nav only. */
   search?: AppShellSearch;
   /** Optional right work panel with tabs. Off unless open. */
@@ -441,7 +460,7 @@ function SearchSlot({ search }: { search: AppShellSearch }) {
   const open = () => shell?.openSearch();
   if (rail) {
     return (
-      <span className="app-shell-pattern__search-rail">
+      <span className="app-shell-pattern__rail-cell">
         <Tooltip content={shortcut ? `${label} (⌘K)` : label} placement="right">
           <Button
             appearance="ghost"
@@ -482,6 +501,62 @@ function SearchSlot({ search }: { search: AppShellSearch }) {
   );
 }
 
+/**
+ * The notifications bell: a ghost sm Button with a Tooltip and an aria-hidden count Badge, opening a kit
+ * Popover with NotificationStack inline (the list, Mark all read, View all). Named "Notifications, 3 unread".
+ */
+function NotificationsBell({ notifications, placement }: { notifications: AppShellNotifications; placement: "bottom" | "right" }) {
+  const label = notifications.label ?? "Notifications";
+  const unread = notifications.items.filter((item) => !item.read).length;
+  const name = unread > 0 ? `${label}, ${unread} unread` : label;
+  return (
+    <span className="app-shell-pattern__bell">
+      <Tooltip content={label} placement={placement}>
+        <Popover
+          label={label}
+          placement={placement}
+          trigger={<Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel={name} />}
+        >
+          <div className="app-shell-pattern__notifications">
+          <NotificationStack
+            inline
+            label={label}
+            items={notifications.items}
+            onItemClick={notifications.onItemClick}
+            onMarkRead={notifications.onMarkRead}
+            onMarkAll={notifications.onMarkAll}
+            onViewAll={notifications.onViewAll}
+            emptyTitle={notifications.emptyTitle}
+          />
+          </div>
+        </Popover>
+      </Tooltip>
+      {unread > 0 ? (
+        <span className="app-shell-pattern__bell-count" aria-hidden="true">
+          <Badge appearance="solid" tone="danger" size="sm">
+            {unread > 99 ? "99+" : String(unread)}
+          </Badge>
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+/** The bell in the brand row while open; under the mark on the closed rail (a keepOnRail slot). */
+function HeaderBell({ notifications }: { notifications: AppShellNotifications }) {
+  const { rail } = useSideNav();
+  return rail ? null : <NotificationsBell notifications={notifications} placement="bottom" />;
+}
+
+function RailBell({ notifications }: { notifications: AppShellNotifications }) {
+  const { rail } = useSideNav();
+  return rail ? (
+    <span className="app-shell-pattern__rail-cell">
+      <NotificationsBell notifications={notifications} placement="right" />
+    </span>
+  ) : null;
+}
+
 /** Brand title for the nav header: the product name with an optional muted subtitle line. */
 function brandTitle(title: string, subtitle?: string): ReactNode {
   if (!subtitle) return title;
@@ -508,6 +583,7 @@ function ShellPropsNav({
   account,
   search,
   subtitle,
+  notifications,
 }: {
   nav: AppShellNav;
   placement: AppShellNavPlacement;
@@ -518,6 +594,7 @@ function ShellPropsNav({
   account?: AppShellAccount;
   search?: AppShellSearch;
   subtitle?: string;
+  notifications?: AppShellNotifications;
 }) {
   const inDrawer = placement === "drawer";
   const groups = navGroups(nav, projects);
@@ -532,8 +609,14 @@ function ShellPropsNav({
       {showHeader && !inDrawer ? (
         <SideNavHeader>
           {nav.header ?? <SideNavBrand title={brandTitle(nav.title, subtitle)} mark={nav.mark} markIcon={nav.markIcon} />}
+          {notifications ? <HeaderBell notifications={notifications} /> : null}
           <SideNavToggle />
         </SideNavHeader>
+      ) : null}
+      {showHeader && !inDrawer && notifications ? (
+        <SideNavSlot keepOnRail className="app-shell-pattern__rail-slot">
+          <RailBell notifications={notifications} />
+        </SideNavSlot>
       ) : null}
       {search ? (
         <SideNavSlot keepOnRail className="app-shell-pattern__search-slot">
@@ -606,7 +689,12 @@ function headerStart(header: AppShellHeader, narrow: boolean, collapsed: boolean
 }
 
 /** The default narrowHeader: AppHeader with the Menu Button, then the mark and title. No search. */
-function DefaultNarrowHeader({ title, mark, markIcon }: Pick<AppShellNav, "mark" | "markIcon"> & { title?: string }) {
+function DefaultNarrowHeader({
+  title,
+  mark,
+  markIcon,
+  notifications,
+}: Pick<AppShellNav, "mark" | "markIcon"> & { title?: string; notifications?: AppShellNotifications }) {
   const titleNode = title ? <AppHeader.Title>{title}</AppHeader.Title> : null;
   return (
     <AppHeader.Root ariaLabel={title ?? "Application"} radius="none" data-search="false">
@@ -621,6 +709,7 @@ function DefaultNarrowHeader({ title, mark, markIcon }: Pick<AppShellNav, "mark"
       </AppHeader.Brand>
       <AppHeader.Actions>
         <AppShellPanelToggle />
+        {notifications ? <NotificationsBell notifications={notifications} placement="bottom" /> : null}
       </AppHeader.Actions>
     </AppHeader.Root>
   );
@@ -672,6 +761,7 @@ function AppShellPatternRoot({
   account,
   subtitle,
   search,
+  notifications,
   workPanel,
   children,
   className = "",
@@ -759,7 +849,12 @@ function AppShellPatternRoot({
       ? header
       : narrow
         ? (narrowHeader ?? (
-            <DefaultNarrowHeader title={navLabel ?? rawNavProps?.title} mark={brand.mark} markIcon={brand.markIcon} />
+            <DefaultNarrowHeader
+              title={navLabel ?? rawNavProps?.title}
+              mark={brand.mark}
+              markIcon={brand.markIcon}
+              notifications={rawNavProps ? notifications : undefined}
+            />
           ))
         : null;
   const hasHeader = activeHeader != null;
@@ -871,6 +966,7 @@ function AppShellPatternRoot({
                         account={account}
                         search={search}
                         subtitle={subtitle}
+                        notifications={notifications}
                       />
                     ) : (
                       navNode("rail")
@@ -900,6 +996,7 @@ function AppShellPatternRoot({
                         account={account}
                         search={search}
                         subtitle={subtitle}
+                        notifications={notifications}
                       />
                     ) : (
                       navNode("drawer")

@@ -19,7 +19,7 @@ import {
   SideNavSlot,
   Timeline,
 } from "agentic-ds-kit";
-import type { CommandGroup, DropdownMenuGroup, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
+import type { CommandGroup, DropdownMenuGroup, NotificationItem, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 
 const NAV_ITEMS: SideNavItemData[] = [
@@ -90,6 +90,13 @@ const PANEL_TABS = [
   },
 ];
 
+const NOTIFICATIONS: NotificationItem[] = [
+  { id: "n1", title: "Rin asked you to review the pricing study", createdAt: "09:40", read: false, tone: "info" },
+  { id: "n2", title: "Support triage finished 42 tickets", body: "3 need a person", createdAt: "08:15", read: false, tone: "success" },
+  { id: "n3", title: "Welcome emails paused", body: "Sending limit reached", createdAt: "Yesterday", read: false, tone: "warning" },
+  { id: "n4", title: "New teammate joined Agentix", createdAt: "Mon", read: true },
+];
+
 type ShellView = "inset" | "flat" | "collapsed" | "panel" | "drawer";
 
 const COMMANDS: CommandGroup[] = [
@@ -113,7 +120,7 @@ const VIEW_NOTES: Record<ShellView, string> = {
   inset: "Inset: the nav shares the page background and the page sits in a raised card. Press ⌘K to search.",
   flat: "Flat: the nav leads with the brand and search, and the page runs edge to edge. Press ⌘K to search.",
   collapsed: "The rail shows icons only; hover or focus an icon, or the search button, for its name.",
-  panel: "A work panel with tabs on the right. Close it, or use the panel button in the top bar.",
+  panel: "A work panel with tabs on the right. Close it, or use the panel button beside the title.",
   drawer: "Below 64rem the nav opens in a left Drawer from the Menu button.",
 };
 
@@ -170,8 +177,11 @@ function AppShellDefault({ view }: { view: ShellView }) {
     items.map((item) => ({ ...item, active: item.id === page, onClick: () => setPage(item.id) }));
   const current = [...NAV_ITEMS, ...PROJECTS].find((item) => item.id === page) ?? NAV_ITEMS[0];
 
-  // Flat (and its collapsed and mobile views) is sidebar-led: no top bar when wide.
+  // Flat (and its collapsed and mobile views) uses the flat look; every view is sidebar-led, with
+  // no top bar when wide, so the page starts at the top inset.
   const flat = view === "flat" || view === "collapsed" || view === "drawer";
+  const [notes, setNotes] = useState(NOTIFICATIONS);
+  const markRead = (id: string) => setNotes((list) => list.map((item) => (item.id === id ? { ...item, read: true } : item)));
 
   return (
     <AppShellPattern
@@ -179,16 +189,12 @@ function AppShellDefault({ view }: { view: ShellView }) {
       layout={flat ? "flat" : "inset"}
       collapsed={view === "collapsed" ? collapsed : undefined}
       onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
-      header={
-        flat
-          ? undefined
-          : {
-              title: "Agentix",
-              logo: <DemoLogo />,
-              search: false,
-              actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
-            }
-      }
+      notifications={{
+        items: notes,
+        onMarkRead: markRead,
+        onItemClick: markRead,
+        onMarkAll: () => setNotes((list) => list.map((item) => ({ ...item, read: true }))),
+      }}
       nav={{ title: "Agentix", markIcon: <DemoLogo onBrand />, items: bind(NAV_ITEMS) }}
       subtitle="Agent operations"
       search={{ groups: COMMANDS, onSelect: (id) => setPage(id === "new-project" || id === "invite" ? page : id) }}
@@ -199,7 +205,11 @@ function AppShellDefault({ view }: { view: ShellView }) {
       {view === "drawer" ? <OpenDrawerOnNarrow /> : null}
       <main className="layout-canvas layout-canvas--sticky-header">
         <div className="layout-header">
-          <PageHeader title={current.label} subtitle={VIEW_NOTES[view]} />
+          <PageHeader
+            title={current.label}
+            subtitle={VIEW_NOTES[view]}
+            actions={view === "panel" ? <AppShellPattern.PanelToggle ariaLabel="Context" /> : undefined}
+          />
         </div>
         <div className="layout-content">
           <Empty
