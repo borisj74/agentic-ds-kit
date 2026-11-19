@@ -1,3 +1,0 @@
-### Added
-
-- **Heatmap.** A grid of cells, rows by columns (like weekday by hour), where each cell's shade shows its value. It uses four shades of `--chart-1` mixed into the card. A zero cell keeps a solid outline, and a cell with no entry has a dashed outline and reads "No data". It has a low-to-high legend and a tooltip on hover and focus, and the Table toggle shows every value. The grid is one Tab stop: arrow keys, Home and End move between cells. On narrow screens the grid scrolls sideways inside its frame. Props: `rows`, `columns`, `data` (`row`, `column`, `value`), `valueFormatter`, `title`, `description`.
