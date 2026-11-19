@@ -185,6 +185,7 @@ export function LineChart({
   const { ref, width } = useChartSize(height);
   const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const gridMaskId = `linechart-grid-${chartId}`;
+  const plotClipId = `linechart-clip-${chartId}`;
   const areaFillId = (seriesIndex: number) => `linechart-area-${chartId}-${seriesIndex}`;
 
   const { labels, series } = useMemo(
@@ -354,6 +355,20 @@ export function LineChart({
           role={layout.samples.length > 0 ? "group" : "img"}
           aria-label={title}
         >
+          {width > 0 ? (
+            // Lines and fills stop at the plot's left and right edges, like the gridlines: a 2px line's round
+            // end would otherwise reach 1px past them. Open above and below, so the top line keeps its width.
+            <defs>
+              <clipPath id={plotClipId} clipPathUnits="userSpaceOnUse">
+                <rect
+                  x={layout.plotLeft}
+                  y={-height}
+                  width={Math.max(layout.plotRight - layout.plotLeft, 1)}
+                  height={height * 3}
+                />
+              </clipPath>
+            </defs>
+          ) : null}
           {isArea && width > 0 ? (
             // Area fill: the series colour fades from the top of each area down to the baseline.
             <defs>
@@ -431,7 +446,7 @@ export function LineChart({
             </>
           ) : null}
           {isStacked ? (
-            <>
+            <g clipPath={width > 0 ? `url(#${plotClipId})` : undefined}>
               {/* Bands bottom to top, then every top edge, so no fill covers the line of the band below.
                   Edges draw from the top band down: where a band is 0 its edge sits on the edge below, and
                   the band that has the value must stay visible on top. */}
@@ -454,7 +469,7 @@ export function LineChart({
                   pathLength={animate ? 1 : undefined}
                 />
               ))}
-            </>
+            </g>
           ) : null}
           {isStacked ? null : layout.lines.map((line) => {
             const dimmed = highlighted !== null && highlighted !== line.seriesIndex;
@@ -462,6 +477,7 @@ export function LineChart({
               <g
                 key={line.seriesIndex}
                 className={`${styles.series}${dimmed ? ` ${styles.seriesDimmed}` : ""}`}
+                clipPath={width > 0 ? `url(#${plotClipId})` : undefined}
               >
                 {isArea && line.areaPath ? (
                   <path

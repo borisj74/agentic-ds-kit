@@ -10,4 +10,8 @@
 
 ### Changed
 
-- **The shared smooth curve can now be traced backwards** (`reversedCurveCommands` in `ui/shared/curve.ts`), so stacked bands share their edges. The forward curve is unchanged, and existing charts render exactly as before.
+- **The shared smooth curve can now be traced backwards** (`reversedCurveCommands` in `ui/shared/curve.ts`), so stacked bands share their edges. The forward curve itself is unchanged.
+
+### Fixed
+
+- **LineChart lines stop at the plot edges.** The 2px lines' round ends used to reach about 1px past the left and right edges, where the fills and gridlines stop. Every LineChart now clips its lines and areas to the plot width. Hover dots stay whole.
