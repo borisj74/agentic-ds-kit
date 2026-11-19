@@ -2,10 +2,12 @@
   "id": "scoreboard",
   "status": "stable",
   "level": "organism",
-  "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
+  "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
   "useWhen": [
     "Showing two or more KPIs side by side at the top of a dashboard",
-    "Replacing ad-hoc flex rows of metric boxes"
+    "Replacing ad-hoc flex rows of metric boxes",
+    "Picking which metric a chart shows — selectable",
+    "A quiet strip of three to five values with thin rules between them — appearance divided"
   ],
   "doNotUseWhen": [
     "A single KPI — render Scorecard directly",
@@ -16,18 +18,52 @@
     "conveyor"
   ],
   "props": {
-    "aria-label": {"type": "string", "required": false, "default": "Key metrics", "note": "Names the section (and the Conveyor when scroll is on)."},
+    "aria-label": {
+      "type": "string",
+      "required": false,
+      "default": "Key metrics",
+      "note": "Names the section (and the Conveyor when scroll is on)."
+    },
     "items": {
       "type": "array",
       "itemContract": "scorecard",
       "required": true,
       "minItems": 2,
-      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor."
+      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value."
     },
     "scroll": {
       "type": "boolean",
       "default": true,
       "note": "false renders the overflow strip without Conveyor so a page can wrap Scoreboard in its own Conveyor."
+    },
+    "appearance": {
+      "type": "enum",
+      "values": [
+        "cards",
+        "divided"
+      ],
+      "default": "cards",
+      "note": "cards: framed Scorecards with a gap. divided: plain Scorecards in one row with a thin border.faint rule between them; below about 38rem they stack and the rules turn horizontal."
+    },
+    "selectable": {
+      "type": "boolean",
+      "default": false,
+      "note": "The strip becomes a radiogroup named by aria-label. Each card is role radio with aria-checked; one card is in the tab order; arrow keys move and check (wrapping), Home and End jump. The strip sets each card's selected and onClick (an item onClick still runs)."
+    },
+    "value": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled checked item: its id, or label. Selectable only."
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "note": "Uncontrolled first checked item. Defaults to the first item. Selectable only."
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "note": "(value: string) => void when the checked item changes."
     }
   },
   "passthrough": {
@@ -39,23 +75,32 @@
   "tokens": [
     "surface.page",
     "layout.metricsMin",
-    "space.4"
+    "space.4",
+    "border.faint",
+    "border.widthThin",
+    "space.1",
+    "space.2"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "Expose aria-label describing the metrics group",
       "Each child Scorecard retains its own semantics",
-      "More than four items pass aria-label to kit Conveyor as label"
+      "More than four items pass aria-label to kit Conveyor as label",
+      "selectable: the card row is role radiogroup named by aria-label; cards are role radio with aria-checked",
+      "selectable: roving tabindex, arrow keys move and check, Home/End jump",
+      "Pair a selectable strip with a chart titled after the checked metric so the change is announced by context"
     ]
   },
   "doNot": [
     "Do not invent a local Scoreboard",
-    "Do not fake dividers with CSS borders between items",
+    "Do not fake dividers with CSS borders between items — use appearance divided",
     "Do not restyle Scorecard padding or borders inside Scoreboard",
     "Do not inline Scorecard markup — import from ui/Scorecard",
     "More than four items — Scoreboard composes kit Conveyor, do not invent a local scroller",
-    "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}"
+    "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}",
+    "Do not build a metric picker from Scorecard toggles by hand — use selectable",
+    "Do not use selectable for actions; each card picks a view, it does not navigate"
   ],
-  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }, { label: 'Users', value: '12.4k', delta: '+4.1%', trend: 'up' }, { label: 'NPS', value: '64', delta: '+2', trend: 'up' }]} />"
+  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }, { label: 'Users', value: '12.4k', delta: '+4.1%', trend: 'up' }, { label: 'NPS', value: '64', delta: '+2', trend: 'up' }]} />\n\n<Scoreboard\n  aria-label=\"Chart metric\"\n  appearance=\"divided\"\n  selectable\n  value={metric}\n  onValueChange={setMetric}\n  items={[\n    { id: \"mrr\", label: \"MRR\", value: \"$412k\", badge: \"+4.2%\", badgeTone: \"success\", sparkline: [380, 391, 398, 405, 412] },\n    { id: \"churn\", label: \"Churn\", value: \"2.1%\", badge: \"-0.3 pt\", badgeTone: \"success\", sparkline: [2.6, 2.5, 2.4, 2.2, 2.1] },\n  ]}\n/>"
 }

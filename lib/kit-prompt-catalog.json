@@ -764,7 +764,7 @@
       ],
       "doNotUseWhen": [
         "Multiple metrics — use Scoreboard",
-        "Charts, sparklines, or tables — out of scope for this contract",
+        "A full chart or a table — use LineChart, BarChart or Table; Scorecard only takes a small decorative sparkline",
         "A framed content tile — use Card",
         "A recommended action tile — use InsightCard"
       ],
@@ -773,7 +773,9 @@
         "Do not use raw hex colors in styles",
         "Do not pack multiple KPIs into one Scorecard",
         "Do not put buttons or links inside Scorecard besides the whole-card onClick",
-        "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge"
+        "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
+        "Do not draw a local sparkline beside Scorecard — pass sparkline",
+        "Do not use sparkline as the only sign of change; keep delta or hint"
       ],
       "props": {
         "label": {
@@ -844,6 +846,20 @@
           "default": "neutral",
           "note": "kit Badge tone"
         },
+        "sparkline": {
+          "type": "array",
+          "required": false,
+          "note": "number[], oldest first. A small trend line under the value in --chart-1, full width, --space-6 tall. Decorative (aria-hidden): delta and hint carry the meaning. Needs two or more finite numbers; others are skipped."
+        },
+        "appearance": {
+          "type": "enum",
+          "values": [
+            "card",
+            "plain"
+          ],
+          "default": "card",
+          "note": "card is the framed tile. plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw."
+        },
         "onClick": {
           "type": "function",
           "required": false,
@@ -853,6 +869,15 @@
           "type": "boolean",
           "required": false,
           "note": "With onClick: the card is a toggle in a picker (e.g. the metric a chart shows). Sets aria-pressed, draws the selected style (border.brand on action.selected), and adds the badge to the button's name. Leave undefined for a plain button."
+        },
+        "selectionRole": {
+          "type": "enum",
+          "values": [
+            "toggle",
+            "radio"
+          ],
+          "default": "toggle",
+          "note": "With onClick and selected. toggle sets aria-pressed. radio sets role radio and aria-checked, for a card inside a radiogroup; Scoreboard selectable sets it, so you rarely pass it."
         },
         "fill": {
           "type": "boolean",
@@ -864,10 +889,12 @@
     {
       "id": "scoreboard",
       "group": "component",
-      "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
+      "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
       "useWhen": [
         "Showing two or more KPIs side by side at the top of a dashboard",
-        "Replacing ad-hoc flex rows of metric boxes"
+        "Replacing ad-hoc flex rows of metric boxes",
+        "Picking which metric a chart shows — selectable",
+        "A quiet strip of three to five values with thin rules between them — appearance divided"
       ],
       "doNotUseWhen": [
         "A single KPI — render Scorecard directly",
@@ -875,11 +902,13 @@
       ],
       "doNot": [
         "Do not invent a local Scoreboard",
-        "Do not fake dividers with CSS borders between items",
+        "Do not fake dividers with CSS borders between items — use appearance divided",
         "Do not restyle Scorecard padding or borders inside Scoreboard",
         "Do not inline Scorecard markup — import from ui/Scorecard",
         "More than four items — Scoreboard composes kit Conveyor, do not invent a local scroller",
-        "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}"
+        "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}",
+        "Do not build a metric picker from Scorecard toggles by hand — use selectable",
+        "Do not use selectable for actions; each card picks a view, it does not navigate"
       ],
       "props": {
         "aria-label": {
@@ -891,12 +920,41 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor."
+          "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value."
         },
         "scroll": {
           "type": "boolean",
           "default": true,
           "note": "false renders the overflow strip without Conveyor so a page can wrap Scoreboard in its own Conveyor."
+        },
+        "appearance": {
+          "type": "enum",
+          "values": [
+            "cards",
+            "divided"
+          ],
+          "default": "cards",
+          "note": "cards: framed Scorecards with a gap. divided: plain Scorecards in one row with a thin border.faint rule between them; below about 38rem they stack and the rules turn horizontal."
+        },
+        "selectable": {
+          "type": "boolean",
+          "default": false,
+          "note": "The strip becomes a radiogroup named by aria-label. Each card is role radio with aria-checked; one card is in the tab order; arrow keys move and check (wrapping), Home and End jump. The strip sets each card's selected and onClick (an item onClick still runs)."
+        },
+        "value": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled checked item: its id, or label. Selectable only."
+        },
+        "defaultValue": {
+          "type": "string",
+          "required": false,
+          "note": "Uncontrolled first checked item. Defaults to the first item. Selectable only."
+        },
+        "onValueChange": {
+          "type": "function",
+          "required": false,
+          "note": "(value: string) => void when the checked item changes."
         }
       }
     },

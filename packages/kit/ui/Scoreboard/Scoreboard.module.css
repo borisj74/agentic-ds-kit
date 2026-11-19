@@ -13,6 +13,36 @@
   align-items: stretch;
 }
 
+.cell {
+  display: flex;
+  min-width: 0;
+}
+
+.cell > * {
+  flex: 1 1 auto;
+}
+
+/* Divided: one row, no gap, a thin rule before every cell but the first. */
+.divided .grid {
+  gap: 0;
+}
+
+.divided .cell + .cell {
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.divided .cell {
+  padding-inline: var(--space-2);
+}
+
+.divided .cell:first-child {
+  padding-inline-start: 0;
+}
+
+.divided .cell:last-child {
+  padding-inline-end: 0;
+}
+
 .count1 {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -29,10 +59,27 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-/* Collapse as the strip narrows. Lengths match tokens: metrics-min 12rem, space-4 1rem. Container queries cannot use calc(var()). */
+/* Collapse as the strip narrows. Lengths match tokens: metrics-min 12rem, space-4 1rem. Container queries cannot use calc(var()).
+   Divided stacks to one column at the first step, with the rules turning horizontal. */
 @container scoreboard (max-width: 38rem) {
   .count3 {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .divided .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .divided .cell,
+  .divided .cell:first-child,
+  .divided .cell:last-child {
+    padding-inline: 0;
+    padding-block: var(--space-1);
+  }
+
+  .divided .cell + .cell {
+    border-inline-start: 0;
+    border-block-start: var(--border-width-thin) solid var(--border-faint);
   }
 
   .count4 {
@@ -66,6 +113,15 @@
   width: var(--layout-metrics-min);
   min-width: var(--layout-metrics-min);
   scroll-snap-align: start;
+}
+
+.divided .overflowRow {
+  gap: 0;
+}
+
+.divided .overflowItem + .overflowItem {
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+  padding-inline-start: var(--space-2);
 }
 
 .overflowItem > * {
