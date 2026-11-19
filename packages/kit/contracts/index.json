@@ -32,7 +32,7 @@
   },
   {
     "id": "scoreboard",
-    "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor.",
+    "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
     "group": "component",
     "path": "contracts/scoreboard.json",
     "status": "stable",
