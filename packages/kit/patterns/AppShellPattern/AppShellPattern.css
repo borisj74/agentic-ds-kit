@@ -236,6 +236,16 @@
   overflow-clip-margin: var(--space-1);
 }
 
+/* On the closed rail SideNav shows the active row as a square chip (its ::before) over the icon, not a
+   row fill, so the open Notifications row does the same and matches the other active rows. */
+.app-shell-pattern__nav-open--rail.app-shell-pattern__nav-open--rail {
+  background: transparent;
+}
+
+.app-shell-pattern__nav-open--rail.app-shell-pattern__nav-open--rail::before {
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+}
+
 /* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
 .app-shell-pattern__nav-dot {
   position: relative;

@@ -656,7 +656,11 @@ function NotificationsRow({ notifications, placement }: { notifications: AppShel
   const label = notifications.label ?? "Notifications";
   const total = notifications.tabs.reduce((sum, tab) => sum + unreadCount(tab.items), 0);
   const open = Boolean(shell?.notificationsOpen);
-  const className = [open ? "app-shell-pattern__nav-open" : "", rail && total > 0 ? "app-shell-pattern__nav-dot" : ""]
+  const className = [
+    open ? "app-shell-pattern__nav-open" : "",
+    open && rail ? "app-shell-pattern__nav-open--rail" : "",
+    rail && total > 0 ? "app-shell-pattern__nav-dot" : "",
+  ]
     .filter(Boolean)
     .join(" ");
   if (placement === "drawer") {
