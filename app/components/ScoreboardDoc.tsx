@@ -105,6 +105,40 @@ const SNIPPET = `<Scoreboard
   ]}
 />`;
 
+const PICKER = [
+  { id: "seats", label: "Paid seats", value: "1,204", badge: "+6.2%", badgeTone: "success" as const, sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
+  { id: "trials", label: "Open trials", value: "88", badge: "-4", badgeTone: "neutral" as const, sparkline: [97, 95, 93, 90, 91, 88] },
+  { id: "refunds", label: "Refunds", value: "6", badge: "+2", badgeTone: "danger" as const, sparkline: [3, 4, 4, 5, 4, 6] },
+];
+
+const PICKER_CODE = `const [metric, setMetric] = useState("seats");
+
+<Scoreboard
+  aria-label="Chart metric"
+  appearance="divided"
+  selectable
+  value={metric}
+  onValueChange={setMetric}
+  items={[
+    { id: "seats", label: "Paid seats", value: "1,204", badge: "+6.2%", badgeTone: "success", sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
+    { id: "trials", label: "Open trials", value: "88", badge: "-4", sparkline: [97, 95, 93, 90, 91, 88] },
+    { id: "refunds", label: "Refunds", value: "6", badge: "+2", badgeTone: "danger", sparkline: [3, 4, 4, 5, 4, 6] },
+  ]}
+/>`;
+
+function MetricPicker() {
+  const [metric, setMetric] = useState("seats");
+  const chosen = PICKER.find((item) => item.id === metric);
+  return (
+    <>
+      <Scoreboard aria-label="Chart metric" appearance="divided" selectable value={metric} onValueChange={setMetric} items={PICKER} />
+      <p className={styles.usageBody} aria-live="polite">
+        Chart shows: {chosen?.label}
+      </p>
+    </>
+  );
+}
+
 export function ScoreboardDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
 
@@ -171,6 +205,28 @@ export function ScoreboardDoc() {
                 Four Scorecards fill the row. This is the Master count. They stay in one row until
                 the strip is too narrow.
               </p>
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Divided</h2>
+              <div className={styles.exampleCanvas}>
+                <Scoreboard appearance="divided" items={THREE} />
+              </div>
+              <p className={styles.usageBody}>
+                appearance divided drops the card frames and puts a thin rule between values. Below
+                about 38rem the values stack and the rules turn horizontal.
+              </p>
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Selectable</h2>
+              <div className={styles.exampleCanvas}>
+                <MetricPicker />
+              </div>
+              <p className={styles.usageBody}>
+                selectable makes the strip a radiogroup that picks what a chart shows. Tab in once,
+                then use the arrow keys; Home and End jump. sparkline adds a small decorative trend
+                under each value.
+              </p>
+              <CodeBlock code={PICKER_CODE} />
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>More</h2>

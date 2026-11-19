@@ -7,10 +7,10 @@
     "Showing a single metric such as revenue, users, or conversion rate"
   ],
   "doNotUseWhen": [
-    "Multiple metrics \u2014 use Scoreboard",
-    "Charts, sparklines, or tables \u2014 out of scope for this contract",
-    "A framed content tile \u2014 use Card",
-    "A recommended action tile \u2014 use InsightCard"
+    "Multiple metrics — use Scoreboard",
+    "A full chart or a table — use LineChart, BarChart or Table; Scorecard only takes a small decorative sparkline",
+    "A framed content tile — use Card",
+    "A recommended action tile — use InsightCard"
   ],
   "props": {
     "label": {
@@ -81,6 +81,20 @@
       "default": "neutral",
       "note": "kit Badge tone"
     },
+    "sparkline": {
+      "type": "array",
+      "required": false,
+      "note": "number[], oldest first. A small trend line under the value in --chart-1, full width, --space-6 tall. Decorative (aria-hidden): delta and hint carry the meaning. Needs two or more finite numbers; others are skipped."
+    },
+    "appearance": {
+      "type": "enum",
+      "values": [
+        "card",
+        "plain"
+      ],
+      "default": "card",
+      "note": "card is the framed tile. plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw."
+    },
     "onClick": {
       "type": "function",
       "required": false,
@@ -90,6 +104,15 @@
       "type": "boolean",
       "required": false,
       "note": "With onClick: the card is a toggle in a picker (e.g. the metric a chart shows). Sets aria-pressed, draws the selected style (border.brand on action.selected), and adds the badge to the button's name. Leave undefined for a plain button."
+    },
+    "selectionRole": {
+      "type": "enum",
+      "values": [
+        "toggle",
+        "radio"
+      ],
+      "default": "toggle",
+      "note": "With onClick and selected. toggle sets aria-pressed. radio sets role radio and aria-checked, for a card inside a radiogroup; Scoreboard selectable sets it, so you rarely pass it."
     },
     "fill": {
       "type": "boolean",
@@ -127,7 +150,13 @@
     "space.inset.xl",
     "motion.interaction",
     "border.focus",
-    "icon.size.sm"
+    "icon.size.sm",
+    "chart.1",
+    "icon.stroke",
+    "border.brand",
+    "action.selected",
+    "surface.muted",
+    "space.6"
   ],
   "a11y": {
     "element": "article",
@@ -138,7 +167,9 @@
       "delta text is the visible change",
       "deltaTone is color only; the delta text carries the meaning",
       "root is a button when onClick is set",
-      "with onClick and selected set, the button has aria-pressed and its name includes the badge text"
+      "with onClick and selected set, the button has aria-pressed and its name includes the badge text",
+      "sparkline is aria-hidden and not focusable",
+      "with selectionRole radio, the button has role radio and aria-checked instead of aria-pressed"
     ]
   },
   "doNot": [
@@ -146,9 +177,11 @@
     "Do not use raw hex colors in styles",
     "Do not pack multiple KPIs into one Scorecard",
     "Do not put buttons or links inside Scorecard besides the whole-card onClick",
-    "Do not invent a local Tag or Status on Scorecard \u2014 status uses kit Badge via badge"
+    "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
+    "Do not draw a local sparkline beside Scorecard — pass sparkline",
+    "Do not use sparkline as the only sign of change; keep delta or hint"
   ],
-  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />",
+  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />",
   "contains": [
     "badge"
   ]

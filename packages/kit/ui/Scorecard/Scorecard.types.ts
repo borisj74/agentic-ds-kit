@@ -8,6 +8,12 @@ export type ScorecardSize = "sm" | "md" | "lg";
 /** Delta color when it is not the trend's (up green, down red). */
 export type ScorecardDeltaTone = "success" | "warning" | "danger" | "neutral";
 
+/** `card` is the framed tile. `plain` drops the frame for a divided strip (Scoreboard appearance divided). */
+export type ScorecardAppearance = "card" | "plain";
+
+/** How a selected card is announced: `toggle` (aria-pressed) or `radio` (role radio, aria-checked) inside a radiogroup. */
+export type ScorecardSelectionRole = "toggle" | "radio";
+
 /** Native article attributes the kit sets itself (or replaces with its own prop). */
 type ScorecardOwnedKeys = "children" | "onClick" | "aria-labelledby" | "aria-pressed";
 
@@ -33,6 +39,17 @@ export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">
    * badge such as "In chart" on the selected card is read with it. Leave undefined otherwise.
    */
   selected?: boolean;
+  /**
+   * With `onClick` and `selected`: `toggle` (default) sets aria-pressed; `radio` sets role radio
+   * and aria-checked for a card in a radiogroup. Scoreboard selectable sets radio itself.
+   */
+  selectionRole?: ScorecardSelectionRole;
+  /**
+   * A small trend line under the value, oldest first. Decorative (aria-hidden): the delta and hint
+   * carry the meaning. Needs two or more finite numbers; others are skipped.
+   */
+  sparkline?: number[];
+  appearance?: ScorecardAppearance;
   fill?: boolean;
   ref?: Ref<HTMLElement>;
 }
