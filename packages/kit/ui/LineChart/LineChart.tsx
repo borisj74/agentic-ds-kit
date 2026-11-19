@@ -432,7 +432,9 @@ export function LineChart({
           ) : null}
           {isStacked ? (
             <>
-              {/* Bands bottom to top, then every top edge, so no fill covers the line of the band below. */}
+              {/* Bands bottom to top, then every top edge, so no fill covers the line of the band below.
+                  Edges draw from the top band down: where a band is 0 its edge sits on the edge below, and
+                  the band that has the value must stay visible on top. */}
               {layout.lines.map((line) => (
                 <path
                   key={`band-${line.seriesIndex}`}
@@ -442,7 +444,7 @@ export function LineChart({
                   fill={`url(#${areaFillId(line.seriesIndex)})`}
                 />
               ))}
-              {layout.lines.map((line) => (
+              {[...layout.lines].reverse().map((line) => (
                 <path
                   key={`edge-${line.seriesIndex}`}
                   className={`${styles.series} ${styles.line}${highlighted !== null && highlighted !== line.seriesIndex ? ` ${styles.seriesDimmed}` : ""}${animate ? ` ${motionStyles.draw}` : ""}`}
