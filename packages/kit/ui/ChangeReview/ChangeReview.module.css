@@ -53,8 +53,7 @@
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
   overflow-wrap: anywhere;

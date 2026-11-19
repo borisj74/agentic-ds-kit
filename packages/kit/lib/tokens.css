@@ -478,17 +478,18 @@
   --type-size-overline: var(--type-size-overline-xs);
   --type-size-code: var(--type-size-ui-sm);
 
+  --font-weight-heading: 550;
   --type-weight-body: 400;
   --type-weight-label: 500;
-  --type-weight-heading: 600;
-  --type-weight-title: 600;
+  --type-weight-heading: var(--font-weight-heading);
+  --type-weight-title: var(--font-weight-heading);
   --type-weight-metric: 500;
   --type-weight-caption: 500;
   --type-weight-overline: 500;
   --type-weight-code: 400;
-  --type-weight-display-hero: 600;
-  --type-weight-title-section: 600;
-  --type-weight-strong: 600;
+  --type-weight-display-hero: var(--font-weight-heading);
+  --type-weight-title-section: var(--font-weight-heading);
+  --type-weight-strong: var(--font-weight-heading);
 
   --type-line-body: var(--type-line-body-md);
   --type-line-heading: var(--type-line-heading-5);

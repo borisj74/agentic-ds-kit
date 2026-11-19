@@ -23,7 +23,7 @@ export type PlaygroundColorTheme = "ink" | "blue" | "violet" | "teal" | "custom"
 export type PlaygroundFont = "geist" | "inter" | "system";
 export type PlaygroundFontRole = "interface" | "heading" | "mono";
 export type PlaygroundNeutralScale = "neutral" | "zinc" | "slate" | "stone" | "gray";
-export type PlaygroundHeadingWeight = "400" | "500" | "600" | "700";
+export type PlaygroundHeadingWeight = "400" | "500" | "550" | "600" | "700";
 
 export const DEFAULT_SPACE_SCALE = 100;
 export const DEFAULT_SHADOW_INTENSITY = 100;
@@ -48,14 +48,16 @@ export const PLAYGROUND_FONTS: { value: PlaygroundFont; label: string }[] = [
 
 /** Shipped --type-weight-heading, read from tokens.json so the playground never pins its own default. */
 export const DEFAULT_HEADING_WEIGHT = (() => {
-  const ref = tokens.semantic.type.weight.heading;
-  const key = ref.replace("primitive.fontWeight.", "") as keyof typeof tokens.primitive.fontWeight;
+  // "var(--font-weight-heading)" → primitive.fontWeight.heading; "primitive.fontWeight.x" → x.
+  const ref: string = tokens.semantic.type.weight.heading;
+  const key = (ref.match(/^var\(--font-weight-([\w-]+)\)$/)?.[1] ?? ref.replace("primitive.fontWeight.", "")) as keyof typeof tokens.primitive.fontWeight;
   return tokens.primitive.fontWeight[key] as PlaygroundHeadingWeight;
 })();
 
 export const PLAYGROUND_HEADING_WEIGHTS: { value: PlaygroundHeadingWeight; label: string }[] = [
   { value: "400", label: "400" },
   { value: "500", label: "500" },
+  { value: "550", label: "550" },
   { value: "600", label: "600" },
   { value: "700", label: "700" },
 ];
@@ -267,7 +269,7 @@ function isFont(value: string | null): value is PlaygroundFont {
 }
 
 function isHeadingWeight(value: string | null): value is PlaygroundHeadingWeight {
-  return value === "400" || value === "500" || value === "600" || value === "700";
+  return value === "400" || value === "500" || value === "550" || value === "600" || value === "700";
 }
 
 function store(key: string, value: string): void {

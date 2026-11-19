@@ -114,6 +114,7 @@
     "radius.surfaceMd",
     "type.size.bodySm",
     "type.size.caption",
+    "type.weight.metric",
     "type.weight.label",
     "type.family.mono",
     "motion.fast",

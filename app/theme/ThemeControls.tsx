@@ -52,6 +52,7 @@ const NEUTRAL_OPTIONS: { value: NeutralChoice; label: string }[] = [
 const WEIGHTS: { value: HeadingWeight; label: string }[] = [
   { value: "400", label: "Regular" },
   { value: "500", label: "Medium" },
+  { value: "550", label: "Heading" },
   { value: "600", label: "Semibold" },
   { value: "700", label: "Bold" },
 ];

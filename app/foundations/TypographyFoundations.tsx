@@ -61,6 +61,7 @@ const SIZE_STEPS = [
 const WEIGHT_STEPS = [
   { name: "font-weight-normal", label: "normal · 400", value: 400 },
   { name: "font-weight-medium", label: "medium · 500", value: 500 },
+  { name: "font-weight-heading", label: "heading · 550", value: 550 },
   { name: "font-weight-semibold", label: "semibold · 600", value: 600 },
   { name: "font-weight-bold", label: "bold · 700", value: 700 },
 ] as const;
@@ -182,8 +183,8 @@ export function TypographyFoundations() {
             <code className={colorStyles.huePattern}>type-tracking-heading · heading-5 → heading-1</code>
           </div>
           <p className={colorStyles.lead}>
-            Geist headings are semibold (--type-weight-heading, 600) and tighten as they grow. Body stays 400, labels and
-            buttons 500, strong text in body copy 600 (--type-weight-strong).
+            Geist headings use --font-weight-heading (550, a true variable-font weight between medium and semibold) and
+            tighten as they grow. Body stays 400, labels and buttons 500, strong text in body copy 550 (--type-weight-strong).
           </p>
           <div className={styles.list}>
             {HEADING_TRACKING.map((step) => (

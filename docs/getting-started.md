@@ -118,14 +118,14 @@ If every screen already imports a kit component, you can skip this. Importing to
 
 If your own markup uses kit layout classes (`layout-canvas`, `layout-header`, `layout-content`, …) before any kit component is imported, also add `agentic-ds-kit/layout.css` the same way. A kit import already loads it.
 
-**Fonts.** A kit import sets a default body font (`var(--font-sans)`), text colour and page background with zero specificity, so any `body` rule of yours wins. The kit does not ship font files. `--font-sans` is `var(--font-geist-sans, "Geist"), system-ui, …`, so without Geist loaded you get `system-ui`. To get Geist (and Geist Mono for `--font-mono`), load it with `next/font` and expose the CSS variables the tokens read:
+**Fonts.** A kit import sets a default body font (`var(--font-sans)`), text colour and page background with zero specificity, so any `body` rule of yours wins. The kit does not ship font files. `--font-sans` is `var(--font-geist-sans, "Geist"), system-ui, …`, so without Geist loaded you get `system-ui`. To get Geist (and Geist Mono for `--font-mono`), load it with `next/font` and expose the CSS variables the tokens read. Leave out `weight` so the variable font loads with its full weight axis: headings use 550 (`--font-weight-heading`), which a static 500/600 subset would round off:
 
 ```tsx
 // app/layout.tsx
 import { Geist, Geist_Mono } from "next/font/google";
 
-const geistSans = Geist({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-geist-mono" });
+const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

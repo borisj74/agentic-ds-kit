@@ -8,17 +8,17 @@ import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Geist is the kit default (--font-sans / --font-display / --font-mono read these
-// variables). Only the weights the kit uses: 400 body, 500 labels, 600 headings.
+// variables). No `weight` list: next/font then loads the variable font with the full
+// wght axis (100–900) in one file, so headings at 550 (--font-weight-heading) render
+// as true 550 instead of snapping to a static 500 or 600 instance.
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
 });
 
 const inter = Inter({

@@ -25,17 +25,17 @@ function declarations(head) {
 const root = declarations(":root");
 
 describe("marketing type roles", () => {
-  test("hero display: 64/76 at desktop, weight 600, -0.06em tracking", () => {
+  test("hero display: 64/76 at desktop, heading weight, -0.06em tracking", () => {
     assert.equal(root.get("--type-size-display-hero"), "64px");
     assert.equal(root.get("--type-line-display-hero"), "76px");
-    assert.equal(root.get("--type-weight-display-hero"), "600");
+    assert.equal(root.get("--type-weight-display-hero"), "var(--font-weight-heading)");
     assert.equal(root.get("--type-tracking-display-hero"), "-0.06em");
   });
 
-  test("section title: 32/40, weight 600, -0.04em tracking", () => {
+  test("section title: 32/40, heading weight, -0.04em tracking", () => {
     assert.equal(root.get("--type-size-title-section"), "32px");
     assert.equal(root.get("--type-line-title-section"), "40px");
-    assert.equal(root.get("--type-weight-title-section"), "600");
+    assert.equal(root.get("--type-weight-title-section"), "var(--font-weight-heading)");
     assert.equal(root.get("--type-tracking-title-section"), "-0.04em");
   });
 
@@ -86,13 +86,13 @@ describe("tracking tokens", () => {
 });
 
 describe("Geist weights", () => {
-  test("every heading role is semibold; body regular; labels medium; strong 600", () => {
-    for (const role of ["heading", "title", "display-hero", "title-section"]) {
-      assert.equal(root.get(`--type-weight-${role}`), "600", role);
+  test("every heading role and strong read --font-weight-heading (550); body 400; labels 500", () => {
+    assert.equal(root.get("--font-weight-heading"), "550");
+    for (const role of ["heading", "title", "display-hero", "title-section", "strong"]) {
+      assert.equal(root.get(`--type-weight-${role}`), "var(--font-weight-heading)", role);
     }
     assert.equal(root.get("--type-weight-body"), "400");
     assert.equal(root.get("--type-weight-label"), "500");
-    assert.equal(root.get("--type-weight-strong"), "600");
   });
 
   test("Geist and Geist Mono families with system fallbacks", () => {

@@ -243,7 +243,7 @@ export default function ThemingPage() {
             <CodeBlock code={FONT} />
             <p className={playground.body}>
               Components use the trio, not per-component font cousins. Geist is the default.
-              Heading weight is still 400, 500, 600, or 700 on --type-weight-heading. Copy prompt
+              Heading weight is 400, 500, 550 (default, --font-weight-heading), 600, or 700 on --type-weight-heading. Copy prompt
               for AI includes each family, the neutral scale, spacing, and shadow intensity.
             </p>
           </div>

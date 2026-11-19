@@ -96,6 +96,7 @@
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
+    "type.weight.metric",
     "type.weight.heading",
     "type.family.mono",
     "status.dangerSubtle",

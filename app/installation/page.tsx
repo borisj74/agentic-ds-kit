@@ -27,8 +27,8 @@ const TOKENS = `import "agentic-ds-kit/tokens.css";`;
 const FONTS = `// app/layout.tsx
 import { Geist, Geist_Mono } from "next/font/google";
 
-const geistSans = Geist({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-geist-mono" });
+const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 // <html className={\`\${geistSans.variable} \${geistMono.variable}\`}>`;
 
@@ -160,7 +160,7 @@ export default function InstallationPage() {
           <div className={playground.stack}>
             <p className={playground.body}>
               A kit import sets body font-family to var(--font-sans), with zero specificity so your
-              own body rule wins. Without Geist loaded it falls back to system-ui. Load Geist with
+              own body rule wins. Without Geist loaded it falls back to system-ui. Load the variable Geist (no weight list, so headings get a true 550) with
               next/font and the variables the tokens read, or override --font-sans in :root.
             </p>
             <CodeBlock code={FONTS} label="Load fonts" />

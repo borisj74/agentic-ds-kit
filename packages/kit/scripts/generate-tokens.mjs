@@ -384,6 +384,8 @@ function staticVars() {
     "",
     ...typeLadderVars(),
     "",
+    // One dial for every heading role (and strong): Geist is variable, so 550 renders as 550.
+    `  --font-weight-heading: ${p.fontWeight.heading};`,
     ...Object.entries(tokens.semantic.type.weight).map(([role, ref]) => `  --type-weight-${kebab(role)}: ${resolveRef(ref, p)};`),
     "",
     `  --type-line-body: var(--type-line-body-md);`,

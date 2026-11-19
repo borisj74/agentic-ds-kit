@@ -66,7 +66,7 @@
       "doNot": "Do not invent a custom line-height"
     },
     "--type-weight-": {
-      "note": "Role weights. Body 400, label and metric 500, every heading role 600 (semibold), strong 600. Heading is live-tunable 400–700.",
+      "note": "Role weights. Body 400, label and metric 500. Every heading role and strong read --font-weight-heading (550). Heading is live-tunable 400–700.",
       "useWhen": "Body, label, heading, title, metric, caption, overline, code",
       "doNot": "Do not hardcode font-weight numbers in components"
     },
@@ -288,7 +288,7 @@
       "doNot": "Do not use mono for body copy"
     },
     "--type-weight-title": {
-      "note": "Page title weight (600, semibold, same as --type-weight-heading). Pair with the --type-tracking-heading-N that matches its size.",
+      "note": "Page title weight: var(--font-weight-heading) (550), same as --type-weight-heading. Pair with the --type-tracking-heading-N that matches its size.",
       "useWhen": "PageHeader title and other page-level titles",
       "doNot": "Do not use title weight for section or card headings; use --type-weight-heading"
     },
@@ -318,12 +318,12 @@
       "doNot": "Do not reuse the hover fill (--surface-muted) for selection"
     },
     "--type-weight-heading": {
-      "note": "Heading weight: 600 (semibold). Playground 400|500|600|700.",
+      "note": "Heading weight: var(--font-weight-heading) (550). Playground 400|500|550|600|700.",
       "useWhen": "heading-1…5 and section titles",
       "doNot": "Do not hardcode a heading weight in a component; labels, buttons, names and values use --type-weight-label or --type-weight-metric"
     },
     "--type-size-display-hero": {
-      "note": "Marketing and landing pages only. Hero display: 64/76 at desktop, 52/64 below --grid-breakpoint-md, 40/48 below --grid-breakpoint-sm. Pair with --type-line-display-hero, --type-weight-display-hero (600) and --type-tracking-display-hero (-0.06em).",
+      "note": "Marketing and landing pages only. Hero display: 64/76 at desktop, 52/64 below --grid-breakpoint-md, 40/48 below --grid-breakpoint-sm. Pair with --type-line-display-hero, --type-weight-display-hero (550) and --type-tracking-display-hero (-0.06em).",
       "useWhen": "The one big hero headline on a marketing or landing page",
       "doNot": "Do not use on product screens; page titles there keep --type-size-display / PageHeader"
     },
@@ -333,7 +333,7 @@
       "doNot": "Do not pair with other sizes"
     },
     "--type-weight-display-hero": {
-      "note": "Marketing and landing pages only. Hero weight (600, semibold like every heading).",
+      "note": "Marketing and landing pages only. Hero weight: var(--font-weight-heading) (550), like every heading.",
       "useWhen": "With --type-size-display-hero",
       "doNot": "Do not use for product page titles; they keep --type-weight-title"
     },
@@ -343,7 +343,7 @@
       "doNot": "Do not apply to body, label or product headings"
     },
     "--type-size-title-section": {
-      "note": "Marketing and landing pages only. Section title: 32/40, 28/36 below --grid-breakpoint-sm. Pair with --type-line-title-section, --type-weight-title-section (600) and --type-tracking-title-section (-0.04em).",
+      "note": "Marketing and landing pages only. Section title: 32/40, 28/36 below --grid-breakpoint-sm. Pair with --type-line-title-section, --type-weight-title-section (550) and --type-tracking-title-section (-0.04em).",
       "useWhen": "Section titles on a marketing or landing page",
       "doNot": "Do not use on product screens; section headings there keep --type-size-heading / Section"
     },
@@ -353,7 +353,7 @@
       "doNot": "Do not pair with other sizes"
     },
     "--type-weight-title-section": {
-      "note": "Marketing and landing pages only. Section title weight (600, semibold like every heading).",
+      "note": "Marketing and landing pages only. Section title weight: var(--font-weight-heading) (550), like every heading.",
       "useWhen": "With --type-size-title-section",
       "doNot": "Do not use for product section headings; they keep --type-weight-heading"
     },
@@ -468,9 +468,14 @@
       "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
     },
     "--type-weight-strong": {
-      "note": "Strong and b inside body copy (600). layout.css sets it on strong and b with zero specificity.",
+      "note": "Strong and b inside body copy: var(--font-weight-heading) (550). layout.css sets it on strong and b with zero specificity.",
       "useWhen": "Emphasis inside body text",
-      "doNot": "Do not use 700 for emphasis"
+      "doNot": "Do not use 600 or 700 for emphasis"
+    },
+    "--font-weight-heading": {
+      "note": "Heading weight: 550, between Geist medium and semibold. Needs the variable Geist (full wght axis) to render as 550. Every heading role (--type-weight-heading, -title, -display-hero, -title-section) and --type-weight-strong point at it.",
+      "useWhen": "Changing how heavy all headings are, in one place",
+      "doNot": "Do not use directly in components; use the --type-weight-* role"
     }
   }
 }

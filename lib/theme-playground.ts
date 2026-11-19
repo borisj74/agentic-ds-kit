@@ -35,7 +35,7 @@ export type NeutralChoice = PlaygroundNeutralScale | "tint";
 export type SansFont = "geist" | "inter" | "dm-sans" | "source-sans" | "outfit";
 export type DisplayFont = "geist" | "newsreader" | "fraunces" | "instrument-serif" | "outfit";
 export type PresetId = "nistha" | "ink" | "blue" | "violet" | "teal" | "rose" | "amber" | "indigo" | "forest" | "custom";
-export type HeadingWeight = "400" | "500" | "600" | "700";
+export type HeadingWeight = "400" | "500" | "550" | "600" | "700";
 export type ShadowPreset = "none" | "flat" | "subtle" | "default" | "raised" | "dramatic";
 export type ShadowTint = "neutral" | "primary";
 
@@ -1060,7 +1060,7 @@ function isTint(value: string | null): value is ShadowTint {
 }
 
 function isWeight(value: string | null): value is HeadingWeight {
-  return value === "400" || value === "500" || value === "600" || value === "700";
+  return value === "400" || value === "500" || value === "550" || value === "600" || value === "700";
 }
 
 export function themeFromSearch(params: URLSearchParams, fallbackMode: ThemeMode): ThemeState | null {
