@@ -74,6 +74,47 @@
   --appheader-brand-width: auto;
 }
 
+/* Collapsed rail: the brand is as wide as the closed rail and the logo centers on its icons.
+   The logo and the expand toggle share one cell; hover or keyboard focus (:focus-visible) swaps them, and a tap
+   on the logo lands on the toggle. */
+.app-shell-pattern__brand-row--collapsed {
+  display: grid;
+  place-items: center;
+  width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
+  padding-inline: 0;
+  --appheader-brand-width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
+}
+
+.app-shell-pattern__brand-row--collapsed > * {
+  grid-area: 1 / 1;
+}
+
+.app-shell-pattern__brand-mark,
+.app-shell-pattern__brand-toggle {
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.app-shell-pattern__brand-toggle {
+  opacity: 0;
+}
+
+.app-shell-pattern__brand-row--collapsed:hover .app-shell-pattern__brand-mark,
+.app-shell-pattern__brand-row--collapsed:has(:focus-visible) .app-shell-pattern__brand-mark {
+  opacity: 0;
+}
+
+.app-shell-pattern__brand-row--collapsed:hover .app-shell-pattern__brand-toggle,
+.app-shell-pattern__brand-row--collapsed:has(:focus-visible) .app-shell-pattern__brand-toggle {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell-pattern__brand-mark,
+  .app-shell-pattern__brand-toggle {
+    transition: none;
+  }
+}
+
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */
 .app-shell-pattern__account {
   display: flex;

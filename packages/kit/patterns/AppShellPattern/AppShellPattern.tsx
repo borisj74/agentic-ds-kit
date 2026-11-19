@@ -222,7 +222,13 @@ export function AppShellRailToggle({ children = null, ariaLabel }: AppShellRailT
       ariaLabel={ariaLabel ?? (shell.collapsed ? "Expand sidebar" : "Collapse sidebar")}
       aria-expanded={!shell.collapsed}
       aria-controls={shell.railId}
-      onClick={() => shell.setCollapsed(!shell.collapsed)}
+      onClick={() => {
+        shell.setCollapsed(!shell.collapsed);
+        // The header swaps brand layouts on collapse, which remounts this Button: keep focus on it.
+        requestAnimationFrame(() =>
+          document.querySelector<HTMLButtonElement>(`button[aria-controls="${CSS.escape(shell.railId)}"]`)?.focus(),
+        );
+      }}
     />
   );
 }
@@ -399,11 +405,25 @@ function withSections(nav: AppShellNav, projects?: AppShellProjects, account?: A
  * Start region for a props header. Narrow: the Menu Button in the brand cell, then the mark
  * and title. Wide: the logo or mark in the brand cell (on the rail icon axis) and the title,
  * then the rail toggle at the end of a row as wide as the open rail, so it lines up with the nav's edge.
+ * Wide and collapsed: only the logo or mark, as wide as the closed rail, with the expand toggle in the same cell.
  */
-function headerStart(header: AppShellHeader, narrow: boolean) {
+function headerStart(header: AppShellHeader, narrow: boolean, collapsed: boolean) {
   const titleNode = header.title ? <AppHeader.Title>{header.title}</AppHeader.Title> : null;
   const mark = header.mark ?? (header.logo || header.markIcon ? undefined : header.title?.charAt(0));
   const hasBrand = Boolean(header.logo || header.markIcon || mark);
+  if (!narrow && collapsed) {
+    // Collapsed rail: the brand shrinks to the rail's width and shows only the logo or mark.
+    // The expand toggle shares its cell and takes over on hover or keyboard focus; a tap on the
+    // logo expands the rail too. The title stays the header's accessible name (ariaLabel).
+    return (
+      <div className="app-shell-pattern__brand-row app-shell-pattern__brand-row--collapsed">
+        <AppHeader.Brand className="app-shell-pattern__brand-mark" mark={mark} markIcon={header.markIcon} logo={header.logo} />
+        <span className="app-shell-pattern__brand-toggle">
+          <AppShellRailToggle />
+        </span>
+      </div>
+    );
+  }
   if (!narrow) {
     return (
       <div className="app-shell-pattern__brand-row">
@@ -641,7 +661,7 @@ function AppShellPatternRoot({
               <AppHeader
                 {...headerProps}
                 radius="none"
-                start={headerProps.start ?? headerStart(headerProps, narrow)}
+                start={headerProps.start ?? headerStart(headerProps, narrow, collapsed)}
                 actions={headerActions}
               />
             ) : (

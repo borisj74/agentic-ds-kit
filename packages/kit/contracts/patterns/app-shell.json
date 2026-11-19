@@ -118,7 +118,7 @@
     "exports": {
       "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Exported from your app-shell copy. Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
       "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader, collapsed, setCollapsed, railId, hasPanel, panelOpen, setPanelOpen, panelId }. A built nav reads collapsed and passes open={!collapsed} to SideNavRoot in the rail. Null outside AppShellPattern. Client components only.",
-      "AppShellPattern.RailToggle": "Also AppShellRailToggle. Tertiary sm Button (PanelLeftClose / PanelLeftOpen) that collapses and expands the wide rail; aria-expanded and aria-controls point at the rail; label Collapse sidebar / Expand sidebar. Renders its children when narrow. A props header gets it after the logo or mark and title, at the end of a brand row as wide as the open rail (--sidenav-width), so it lines up with the nav's edge; a built header places it after its AppHeader.Brand.",
+      "AppShellPattern.RailToggle": "Also AppShellRailToggle. Tertiary sm Button (PanelLeftClose / PanelLeftOpen) that collapses and expands the wide rail; aria-expanded and aria-controls point at the rail; label Collapse sidebar / Expand sidebar. Renders its children when narrow. A props header gets it after the logo or mark and title, at the end of a brand row as wide as the open rail (--sidenav-width), so it lines up with the nav's edge; a built header places it after its AppHeader.Brand. With a props header and the rail collapsed, the brand shrinks to the closed rail's width and shows only the logo or mark; the toggle shares that cell, appears on hover or keyboard focus, and a tap on the logo expands the rail. Focus stays on the toggle across collapse and expand.",
       "AppShellPattern.PanelToggle": "Also AppShellPanelToggle. Tertiary sm Button (PanelRightOpen / PanelRightClose) with aria-expanded that shows and hides the work panel; ariaLabel default Work panel. Renders nothing without workPanel. Focus returns to it when the panel's close Button is used."
     },
     "rules": [
@@ -162,7 +162,8 @@
       "Collapsed rail: every row and the account avatar name themselves in a kit Tooltip on hover and focus; labels stay in the DOM",
       "Both Drawers (nav, work panel) trap focus, close on Escape and scrim click, and return focus to their trigger",
       "The work panel close Button is named Close <title> and returns focus to the PanelToggle when there is one",
-      "The account menu is a kit DropdownMenu: aria-haspopup=menu, arrow keys, Escape closes it and returns focus to its trigger without closing a parent Drawer"
+      "The account menu is a kit DropdownMenu: aria-haspopup=menu, arrow keys, Escape closes it and returns focus to its trigger without closing a parent Drawer",
+      "Collapsed rail with a props header: the expand toggle stays in the tab order under the logo, shows on hover and :focus-visible, and keeps focus after it is used; the title stays the header's accessible name"
     ]
   },
   "must": [
