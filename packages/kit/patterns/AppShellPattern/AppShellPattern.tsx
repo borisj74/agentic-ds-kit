@@ -679,9 +679,11 @@ function NotificationsRow({ notifications, placement }: { notifications: AppShel
       aria-haspopup="dialog"
       aria-expanded={open}
       renderControl={(control) => (
-        <Popover label={label} placement="right" open={open} onOpenChange={(next) => shell?.setNotificationsOpen(next)} trigger={control}>
-          <NotificationsPanel notifications={notifications} />
-        </Popover>
+        <span className="app-shell-pattern__row-anchor">
+          <Popover label={label} placement="right" open={open} onOpenChange={(next) => shell?.setNotificationsOpen(next)} trigger={control}>
+            <NotificationsPanel notifications={notifications} />
+          </Popover>
+        </span>
       )}
     />
   );

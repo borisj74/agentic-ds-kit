@@ -211,6 +211,21 @@
   color: var(--sidenav-item-active-icon, var(--icon-brand));
 }
 
+/* The Popover wraps the Notifications row's control in two inline spans (root, trigger); stretch them
+   so the row is full width and its count lines up with the other rows' counts. */
+.app-shell-pattern__row-anchor,
+.app-shell-pattern__row-anchor > span,
+.app-shell-pattern__row-anchor > span > span {
+  display: flex;
+  min-width: 0;
+}
+
+.app-shell-pattern__row-anchor > span,
+.app-shell-pattern__row-anchor > span > span,
+.app-shell-pattern__row-anchor > span > span > :is(button, a) {
+  flex: 1 1 auto;
+}
+
 /* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
 .app-shell-pattern__nav-dot {
   position: relative;
