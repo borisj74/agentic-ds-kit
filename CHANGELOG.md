@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.29.0] - 2026-11-19
+
+### Added
+
+- **Chart palette tokens.** `--chart-1` to `--chart-6` are a soft colour set for chart series, with light and dark values and at least 3:1 contrast on the card ([#246](https://github.com/borisj74/agentic-ds-kit/pull/246))
+- **BarList.** A ranked list for one measure, with a quiet bar behind each label, sorting, `maxRows` with Show all, and `href` rows ([#247](https://github.com/borisj74/agentic-ds-kit/pull/247))
+- **Heatmap.** A rows-by-columns grid where each cell's shade of `--chart-1` shows its value, with a legend, tooltip, arrow-key moves and a Table toggle ([#248](https://github.com/borisj74/agentic-ds-kit/pull/248))
+- **ComboChart.** Bars and a line over the same categories, on one shared axis or with `axis="dual"` for a second axis on the right ([#249](https://github.com/borisj74/agentic-ds-kit/pull/249))
+- **LineChart can stack areas.** New `stack` prop (`none`, `stacked`, `percent`) for `variant="area"`, with a total in the tooltip and table ([#250](https://github.com/borisj74/agentic-ds-kit/pull/250))
+- **ScatterChart.** One dot per item placed by two measures, with optional `group` colours and `size="value"` dot sizing ([#251](https://github.com/borisj74/agentic-ds-kit/pull/251))
+
+### Changed
+
+- **Charts are quieter.** BarChart and LineChart draw fewer, fainter gridlines, and axis labels use the caption weight ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **Chart tooltips are smaller and line up.** Values align at the end of each row, long names get an ellipsis, and tooltips sit on the raised surface ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **Chart legends use the same swatch spacing** in horizontal and vertical layouts ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **LineChart looks softer.** Lines are a little thinner, smooth curves bend more fully, the crosshair is a hairline, and areas fade toward the baseline ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **PieChart no longer glows or blurs.** The other slices just fade when one is active ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **Charts use the chart palette by default.** BarChart, LineChart and PieChart colour series from `--chart-1` to `--chart-6`, so a single series is blue, not the brand colour; pass `color` for a status meaning ([#246](https://github.com/borisj74/agentic-ds-kit/pull/246))
+- **The LineChart smooth curve is a shared module** (`ui/shared/curve.ts`) that ComboChart also uses; LineChart output is unchanged ([#249](https://github.com/borisj74/agentic-ds-kit/pull/249))
+- **The shared curve can be traced backwards** (`reversedCurveCommands`), so stacked bands share their edges ([#250](https://github.com/borisj74/agentic-ds-kit/pull/250))
+- **Heatmap column labels thin out on wide grids.** Above 12 columns only every third label is drawn; screen readers still get every header ([#252](https://github.com/borisj74/agentic-ds-kit/pull/252))
+
+### Fixed
+
+- **PieChart fits narrow cards.** The donut shrinks and stays square in a narrow container instead of running past the card edge ([#245](https://github.com/borisj74/agentic-ds-kit/pull/245))
+- **LineChart lines stop at the plot edges.** Round line ends no longer reach about 1px past the fills and gridlines ([#250](https://github.com/borisj74/agentic-ds-kit/pull/250))
+- **BarList's Show all lines up with the row labels.** The button text no longer starts about 5px right of the labels ([#253](https://github.com/borisj74/agentic-ds-kit/pull/253))
+
 ## [0.28.0] - 2026-11-18
 
 ### Added
