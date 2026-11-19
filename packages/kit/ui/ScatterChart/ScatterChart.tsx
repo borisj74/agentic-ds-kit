@@ -28,8 +28,9 @@ const TICK_GAP = 8;
 /** Space under the plot for the x tick labels, then the x axis name. */
 const X_TICK_OFFSET = 10;
 const X_TITLE_OFFSET = 30;
-/** Space above the plot for the y axis name. */
-const Y_TITLE_SPACE = 28;
+/** Space above the plot for the y axis name, and how far the name sits above the top tick. */
+const Y_TITLE_SPACE = 32;
+const Y_TITLE_OFFSET = 18;
 
 function widest(labels: string[]): number {
   return labels.reduce((max, label) => Math.max(max, measureLabel(label) ?? label.length * 6.5), 0);
@@ -282,7 +283,7 @@ export function ScatterChart({
               {xLabel}
             </text>
             {/* The y measure's name starts at the chart's left edge, in line with the title above and the tick numbers. */}
-            <text className={styles.axisTitle} x={0} y={layout.plotTop - 14} textAnchor="start" dominantBaseline="middle">
+            <text className={styles.axisTitle} x={0} y={layout.plotTop - Y_TITLE_OFFSET} textAnchor="start" dominantBaseline="middle">
               {yLabel}
             </text>
             {layout.paintOrder.map((dot) => (
