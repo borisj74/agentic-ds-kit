@@ -8,7 +8,7 @@
   "add": "npx agentic-ds-kit add app-shell",
   "import": "import { AppShellPattern } from \"@/components/patterns/app-shell\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/app-shell/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in a flat or inset look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a brand subtitle, a search slot that opens the kit command menu (⌘K), a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
   "useWhen": [
     "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
     "The nav should collapse to an icon rail to give the page more room",
@@ -27,7 +27,10 @@
     "dropdownmenu",
     "tabs",
     "avatar",
-    "tooltip"
+    "tooltip",
+    "command",
+    "input",
+    "modal"
   ],
   "props": {
     "header": {
@@ -53,11 +56,11 @@
     "layout": {
       "type": "enum",
       "values": [
-        "flat",
-        "inset"
+        "inset",
+        "flat"
       ],
-      "default": "flat",
-      "note": "flat: the rail sits on a soft neutral fill (--sidenav-background surface-muted), the page runs edge to edge, hairline dividers (border-faint). inset: layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin."
+      "default": "inset",
+      "note": "inset (default): layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin. flat: the nav sits on the surface (--sidenav-background surface-card) with SideNav's hairline inline-end border (border-faint); the page column (layout-canvas / layout-workspace) runs edge to edge on surface-muted with no card. Flat reads best header-less: the nav leads with the brand, subtitle and search."
     },
     "collapsed": {
       "type": "boolean",
@@ -83,8 +86,19 @@
     "account": {
       "type": "object",
       "required": false,
-      "shape": "{ name: string, email?: string, src?: string, initials?: string, menu: DropdownMenuGroup[], onSelect?: (id: string) => void, menuLabel?: string (default Account menu) }",
-      "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm, name, email) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+      "shape": "{ name: string, secondary?: string (role or email), src?: string, initials?: string, menu: DropdownMenuGroup[], onSelect?: (id: string) => void, menuLabel?: string (default Account menu) }",
+      "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm with initials or photo, name, secondary line such as a role) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+    },
+    "subtitle": {
+      "type": "string",
+      "required": false,
+      "note": "Props nav only. One muted line under the product name in the nav's brand (SideNav.Brand), shown when the nav carries the brand: header-less shells when wide, e.g. flat. Ignored when a top bar holds the brand."
+    },
+    "search": {
+      "type": "object",
+      "required": false,
+      "shape": "{ groups: CommandGroup[], onSelect?: (id: string) => void, placeholder?: string (default Search), commandPlaceholder?: string (default Search pages and actions), title?: string (default Command menu), shortcut?: boolean (default true) }",
+      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title, with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
     },
     "workPanel": {
       "type": "object",
@@ -117,7 +131,7 @@
     "note": "header and nav accept nodes built from kit compose parts. The shell keeps the layout (layout-shell over layout-app, no gap), the breakpoint, and the Drawer.",
     "exports": {
       "AppShellPattern.MenuButton": "Also AppShellMenuButton (use the named export from Server Components). Exported from your app-shell copy. Tertiary sm Menu Button that opens the nav Drawer when narrow; renders its children when wide (e.g. <AppHeader.Mark>A</AppHeader.Mark>). Focus returns to it when the Drawer closes. ariaLabel default Open navigation.",
-      "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader, collapsed, setCollapsed, railId, hasPanel, panelOpen, setPanelOpen, panelId }. A built nav reads collapsed and passes open={!collapsed} to SideNavRoot in the rail. Null outside AppShellPattern. Client components only.",
+      "useAppShell()": "Exported from your app-shell copy. Inside the shell: { narrow, navOpen, openNav, closeNav, navPlacement: rail | drawer | null, hasHeader, collapsed, setCollapsed, railId, hasPanel, panelOpen, setPanelOpen, panelId, hasSearch, openSearch }. A built nav reads collapsed and passes open={!collapsed} to SideNavRoot in the rail. Null outside AppShellPattern. Client components only.",
       "AppShellPattern.RailToggle": "Also AppShellRailToggle. Tertiary sm Button (PanelLeftClose / PanelLeftOpen) that collapses and expands the wide rail; aria-expanded and aria-controls point at the rail; label Collapse sidebar / Expand sidebar. Renders its children when narrow. A props header gets it after the logo or mark and title, at the end of a brand row as wide as the open rail (--sidenav-width), so it lines up with the nav's edge; a built header places it after its AppHeader.Brand. With a props header and the rail collapsed, the brand shrinks to the closed rail's width and shows only the logo or mark; the toggle shares that cell, appears on hover or keyboard focus, and a tap on the logo expands the rail. Focus stays on the toggle across collapse and expand.",
       "AppShellPattern.PanelToggle": "Also AppShellPanelToggle. Tertiary sm Button (PanelRightOpen / PanelRightClose) with aria-expanded that shows and hides the work panel; ariaLabel default Work panel. Renders nothing without workPanel. Focus returns to it when the panel's close Button is used."
     },
@@ -130,7 +144,8 @@
       "A props header that sets start loses the injected Menu Button: place AppShellPattern.MenuButton inside your start",
       "In the Drawer, radius md; leaf picks close the Drawer, disclosures (aria-expanded) do not",
       "A built nav follows useAppShell().collapsed in the rail (open={!collapsed}) and stays open in the Drawer",
-      "A built header that wants collapse places AppShellPattern.RailToggle after its AppHeader.Brand (the logo stays in the brand cell); AppShellPattern.MenuButton keeps the brand cell when narrow"
+      "A built header that wants collapse places AppShellPattern.RailToggle after its AppHeader.Brand (the logo stays in the brand cell); AppShellPattern.MenuButton keeps the brand cell when narrow",
+      "A props nav is built from the SideNav compose parts (SideNavRoot, Header with Brand and Toggle, a keepOnRail Slot for search, Nav, Sections, Footer with the account), so its rows, renderItem, header, beforeGroups and afterGroups keep working; a built nav places its own search (open it with useAppShell().openSearch)"
     ],
     "snippet": "<AppShellPattern\n  header={\n    <AppHeader.Root ariaLabel=\"Acme\">\n      <AppHeader.Brand logo={<AppShellPattern.MenuButton><AppHeader.Mark>A</AppHeader.Mark></AppShellPattern.MenuButton>}>\n        <AppHeader.Title>Acme</AppHeader.Title>\n      </AppHeader.Brand>\n      <AppHeader.Search placeholder=\"Search\" onSearch={setQuery} />\n      <AppHeader.Actions><Avatar name=\"Maya Chen\" size=\"sm\" /></AppHeader.Actions>\n    </AppHeader.Root>\n  }\n  nav={<MyNav />}\n  navLabel=\"Acme\"\n>\n  …\n</AppShellPattern>",
     "navSnippet": "function MyNav({ page, go }) {\n  const inDrawer = useAppShell()?.navPlacement === \"drawer\";\n  return (\n    <SideNavRoot aria-label=\"Acme\" radius={inDrawer ? \"md\" : \"none\"} open>\n      <SideNavNav>\n        <SideNavSection label=\"Work\">\n          <SideNavItem label=\"Home\" icon=\"House\" active={page === \"home\"} onClick={() => go(\"home\")} />\n        </SideNavSection>\n      </SideNavNav>\n    </SideNavRoot>\n  );\n}",
@@ -163,7 +178,11 @@
       "Both Drawers (nav, work panel) trap focus, close on Escape and scrim click, and return focus to their trigger",
       "The work panel close Button is named Close <title> and returns focus to the PanelToggle when there is one",
       "The account menu is a kit DropdownMenu: aria-haspopup=menu, arrow keys, Escape closes it and returns focus to its trigger without closing a parent Drawer",
-      "Collapsed rail with a props header: the expand toggle stays in the tab order under the logo, shows on hover and :focus-visible, and keeps focus after it is used; the title stays the header's accessible name"
+      "Collapsed rail with a props header: the expand toggle stays in the tab order under the logo, shows on hover and :focus-visible, and keeps focus after it is used; the title stays the header's accessible name",
+      "Search field: kit Input type=search, read-only, named by placeholder (Search), aria-haspopup=dialog and aria-keyshortcuts=\"Meta+K Control+K\"; Enter or typing opens the command menu",
+      "⌘K / Ctrl+K toggles the command menu from anywhere on the page and is announced through aria-keyshortcuts; it is skipped with Alt or Shift held",
+      "The command menu is the kit Modal (aria-modal, focus trap, Escape and scrim close, focus restored to the opener) with kit Command inside (combobox input, listbox); focus starts in the command input",
+      "Collapsed rail: the search slot is an icon-only Button named Search with a kit Tooltip (Search (⌘K)) on hover and focus"
     ]
   },
   "must": [
@@ -176,7 +195,7 @@
     "A custom header places AppShellMenuButton (accessible name and focus return built in); without it narrow screens cannot reach the nav"
   ],
   "defaults": [
-    "layout flat; the rail expanded; the work panel closed",
+    "layout inset; the rail expanded; the work panel closed",
     "Narrow screens: the nav moves into a left kit Drawer behind a Menu Button; another pattern is fine as long as the nav stays reachable",
     "The Menu Button sits at the start of AppHeader, in the brand cell on the rail axis",
     "Below the breakpoint there is no fixed SideNav or collapsed rail; the Drawer holds the nav",
@@ -188,7 +207,7 @@
   ],
   "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", markIcon: \"Receipt\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
   "builtNavSnippet": "<AppShellPattern className=\"layout-shell--viewport\" navLabel=\"Acme\" markIcon=\"Receipt\" nav={(placement) => <ShellNav placement={placement} />}><main className=\"layout-canvas\">…</main></AppShellPattern>",
-  "snippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  layout=\"inset\"\n  header={{ title: \"Acme\", mark: \"A\", onSearch: setQuery }}\n  nav={{ title: \"Acme\", items }}\n  projects={{ items: projects, onNew: createProject }}\n  account={{ name: \"Rin Okafor\", email: \"rin@example.com\", menu: accountMenu, onSelect }}\n  workPanel={{ title: \"Context\", tabs: [{ id: \"details\", label: \"Details\", content: details }, { id: \"activity\", label: \"Activity\", content: activity }] }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>",
+  "snippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  header={{ title: \"Acme\", logo: <Logo />, search: false }}\n  nav={{ title: \"Acme\", items }}\n  search={{ groups: commands, onSelect: go }}\n  projects={{ items: projects, onNew: createProject }}\n  account={{ name: \"Rin Okafor\", secondary: \"Operations lead\", menu: accountMenu, onSelect }}\n  workPanel={{ title: \"Context\", tabs: [{ id: \"details\", label: \"Details\", content: details }, { id: \"activity\", label: \"Activity\", content: activity }] }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>",
   "doNot": [
     "Do not hand-build a sidebar, rail, account card, or tab strip; use SideNav, SideNav.Account, DropdownMenu and Tabs",
     "Do not add layout values outside the closed enum (flat, inset); restyle through tokens and component cssVars instead",
@@ -196,6 +215,9 @@
     "Do not keep a collapsed rail below the breakpoint; the Drawer holds the nav there",
     "Do not hard-code a breakpoint other than --grid-breakpoint-md (64rem)",
     "Do not put a second solid primary Button in the chrome; pages own their one primary action",
-    "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer"
-  ]
+    "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer",
+    "Do not build a local command palette, dialog or search popover; open kit Command inside kit Modal",
+    "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)"
+  ],
+  "flatSnippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  layout=\"flat\"\n  nav={{ title: \"Ledgerline\", markIcon: \"Receipt\", items }}\n  subtitle=\"Billing ops\"\n  search={{ groups: commands, onSelect: go }}\n  account={{ name: \"Priya Nair\", secondary: \"Finance lead\", menu: accountMenu }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>"
 }

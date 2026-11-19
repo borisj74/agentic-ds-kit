@@ -19,7 +19,7 @@ import {
   SideNavSlot,
   Timeline,
 } from "agentic-ds-kit";
-import type { DropdownMenuGroup, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
+import type { CommandGroup, DropdownMenuGroup, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 
 const NAV_ITEMS: SideNavItemData[] = [
@@ -90,27 +90,49 @@ const PANEL_TABS = [
   },
 ];
 
-type ShellView = "flat" | "inset" | "collapsed" | "panel" | "drawer";
+type ShellView = "inset" | "flat" | "collapsed" | "panel" | "drawer";
+
+const COMMANDS: CommandGroup[] = [
+  {
+    heading: "Go to",
+    items: [
+      ...NAV_ITEMS.map((item) => ({ id: item.id, label: item.label, icon: item.icon })),
+      ...PROJECTS.map((item) => ({ id: item.id, label: item.label, icon: item.icon })),
+    ],
+  },
+  {
+    heading: "Actions",
+    items: [
+      { id: "new-project", label: "New project", icon: "Plus" },
+      { id: "invite", label: "Invite a teammate", icon: "User" },
+    ],
+  },
+];
 
 const VIEW_NOTES: Record<ShellView, string> = {
-  flat: "Flat: the nav sits on a soft neutral fill and the page runs edge to edge.",
-  inset: "Inset: the nav shares the page background and the page sits in a raised card.",
-  collapsed: "The rail shows icons only; hover or focus an icon for its name.",
+  inset: "Inset: the nav shares the page background and the page sits in a raised card. Press ⌘K to search.",
+  flat: "Flat: the nav leads with the brand and search, and the page runs edge to edge. Press ⌘K to search.",
+  collapsed: "The rail shows icons only; hover or focus an icon, or the search button, for its name.",
   panel: "A work panel with tabs on the right. Close it, or use the panel button in the top bar.",
   drawer: "Below 64rem the nav opens in a left Drawer from the Menu button.",
 };
 
 /**
  * Demo logo: a placeholder mark from PrebuiltUI's free logo set (prebuiltui.com/logos), drawn
- * in currentColor so it follows the theme. Passed through AppHeader's `logo` slot at --space-5, smaller than the letter mark.
+ * in currentColor so it follows the theme (on the brand fill when it is the nav mark). Passed through AppHeader's `logo` slot at --space-5, smaller than the letter mark.
  */
-function DemoLogo() {
+function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
   return (
     <svg
       viewBox="0 0 48 43"
       aria-hidden="true"
       focusable="false"
-      style={{ display: "block", height: "var(--space-5)", width: "auto", color: "var(--icon-brand)" }}
+      style={{
+        display: "block",
+        height: onBrand ? "var(--space-4)" : "var(--space-5)",
+        width: "auto",
+        color: onBrand ? "currentColor" : "var(--icon-brand)",
+      }}
     >
       <mask id="demo-logo-dot">
         <rect width="48" height="43" fill="white" />
@@ -142,31 +164,36 @@ function OpenDrawerOnNarrow() {
  */
 function AppShellDefault({ view }: { view: ShellView }) {
   const [page, setPage] = useState("overview");
-  const [query, setQuery] = useState("");
   const [collapsed, setCollapsed] = useState(view === "collapsed");
 
   const bind = (items: SideNavItemData[]) =>
     items.map((item) => ({ ...item, active: item.id === page, onClick: () => setPage(item.id) }));
   const current = [...NAV_ITEMS, ...PROJECTS].find((item) => item.id === page) ?? NAV_ITEMS[0];
 
+  // Flat (and its collapsed and mobile views) is sidebar-led: no top bar when wide.
+  const flat = view === "flat" || view === "collapsed" || view === "drawer";
+
   return (
     <AppShellPattern
       className="layout-shell--viewport"
-      layout={view === "inset" ? "inset" : "flat"}
+      layout={flat ? "flat" : "inset"}
       collapsed={view === "collapsed" ? collapsed : undefined}
       onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
-      header={{
-        title: "Agentix",
-        logo: <DemoLogo />,
-        searchPlaceholder: "Search",
-        searchShortcut: "⌘K",
-        searchValue: query,
-        onSearch: setQuery,
-        actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
-      }}
-      nav={{ title: "Agentix", mark: "A", items: bind(NAV_ITEMS) }}
+      header={
+        flat
+          ? undefined
+          : {
+              title: "Agentix",
+              logo: <DemoLogo />,
+              search: false,
+              actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
+            }
+      }
+      nav={{ title: "Agentix", markIcon: <DemoLogo onBrand />, items: bind(NAV_ITEMS) }}
+      subtitle="Agent operations"
+      search={{ groups: COMMANDS, onSelect: (id) => setPage(id === "new-project" || id === "invite" ? page : id) }}
       projects={{ items: bind(PROJECTS), onNew: () => setPage("overview") }}
-      account={{ name: "Rin Okafor", email: "rin.okafor@example.com", menu: ACCOUNT_MENU }}
+      account={{ name: "Rin Okafor", secondary: "Operations lead", initials: "RO", menu: ACCOUNT_MENU }}
       workPanel={view === "panel" || view === "drawer" ? { title: "Context", tabs: PANEL_TABS, defaultOpen: view === "panel" } : undefined}
     >
       {view === "drawer" ? <OpenDrawerOnNarrow /> : null}
@@ -368,11 +395,11 @@ function AppShellBuiltNav() {
   );
 }
 
-const SHELL_VIEWS: ShellView[] = ["flat", "inset", "collapsed", "panel", "drawer"];
+const SHELL_VIEWS: ShellView[] = ["inset", "flat", "collapsed", "panel", "drawer"];
 
 /** The app-shell example as a full screen. `view`: a props view (flat, inset, collapsed, panel, drawer), custom (built chrome) or built-nav (no header). */
-export function AppShellScreen({ view = "flat" }: { view?: string }) {
+export function AppShellScreen({ view = "inset" }: { view?: string }) {
   if (view === "custom") return <AppShellCustom />;
   if (view === "built-nav") return <AppShellBuiltNav />;
-  return <AppShellDefault view={SHELL_VIEWS.includes(view as ShellView) ? (view as ShellView) : "flat"} />;
+  return <AppShellDefault view={SHELL_VIEWS.includes(view as ShellView) ? (view as ShellView) : "inset"} />;
 }

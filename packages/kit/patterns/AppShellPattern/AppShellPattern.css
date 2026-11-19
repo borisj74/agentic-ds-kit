@@ -7,11 +7,15 @@
   --appheader-title-size: var(--type-size-ui-lg);
 }
 
-/* layout="flat": the rail sits on a soft neutral fill, the page runs edge to edge, and
-   SideNav's own hairline divider (border-faint) separates them. Drawers are portaled, so
-   the nav inside a Drawer keeps its card surface. */
+/* layout="flat": the nav sits on the surface with SideNav's own hairline edge (border-faint),
+   and the page runs edge to edge on the subtle background, with no raised card. Drawers are
+   portaled, so the nav inside a Drawer keeps its own surface. */
 .app-shell-pattern--flat {
-  --sidenav-background: var(--surface-muted);
+  --sidenav-background: var(--surface-card);
+}
+
+.app-shell-pattern--flat :is(.layout-app, .app-shell-pattern__main) > :is(.layout-canvas, .layout-workspace) {
+  background: var(--surface-muted);
 }
 
 /* layout="inset": layout-shell--inset (layout.css) puts the nav on the page background and
@@ -121,6 +125,56 @@
   .app-shell-pattern__brand-toggle {
     transition: none;
   }
+}
+
+/* Brand text in the nav header: the product name, then one muted subtitle line. Our own
+   node in SideNav.Brand's title, so it sets its own type. */
+.app-shell-pattern__brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-shell-pattern__brand-name,
+.app-shell-pattern__brand-subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: normal;
+}
+
+.app-shell-pattern__brand-name {
+  color: var(--text-primary);
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-md);
+}
+
+.app-shell-pattern__brand-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+}
+
+/* Search slot under the brand: the field fills the slot; on the closed rail the icon Button
+   centers on the rail's icon column. */
+.app-shell-pattern__search-slot {
+  padding-block-start: var(--space-inset-sm);
+}
+
+.app-shell-pattern__search {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* The closed rail keeps the open panel width and clips it, so center on the closed width,
+   pulling back over the slot's start padding. */
+.app-shell-pattern__search-rail {
+  display: flex;
+  justify-content: center;
+  width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
+  margin-inline-start: calc(var(--space-inset-sm) * -1);
 }
 
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */

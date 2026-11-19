@@ -12644,7 +12644,7 @@
     {
       "id": "app-shell",
       "group": "pattern",
-      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in a flat or inset look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a brand subtitle, a search slot that opens the kit command menu (⌘K), a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
       "useWhen": [
         "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
         "The nav should collapse to an icon rail to give the page more room",
@@ -12662,7 +12662,9 @@
         "Do not keep a collapsed rail below the breakpoint; the Drawer holds the nav there",
         "Do not hard-code a breakpoint other than --grid-breakpoint-md (64rem)",
         "Do not put a second solid primary Button in the chrome; pages own their one primary action",
-        "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer"
+        "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer",
+        "Do not build a local command palette, dialog or search popover; open kit Command inside kit Modal",
+        "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)"
       ],
       "must": [
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
@@ -12697,11 +12699,11 @@
         "layout": {
           "type": "enum",
           "values": [
-            "flat",
-            "inset"
+            "inset",
+            "flat"
           ],
-          "default": "flat",
-          "note": "flat: the rail sits on a soft neutral fill (--sidenav-background surface-muted), the page runs edge to edge, hairline dividers (border-faint). inset: layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin."
+          "default": "inset",
+          "note": "inset (default): layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin. flat: the nav sits on the surface (--sidenav-background surface-card) with SideNav's hairline inline-end border (border-faint); the page column (layout-canvas / layout-workspace) runs edge to edge on surface-muted with no card. Flat reads best header-less: the nav leads with the brand, subtitle and search."
         },
         "collapsed": {
           "type": "boolean",
@@ -12726,7 +12728,17 @@
         "account": {
           "type": "object",
           "required": false,
-          "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm, name, email) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+          "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm with initials or photo, name, secondary line such as a role) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+        },
+        "subtitle": {
+          "type": "string",
+          "required": false,
+          "note": "Props nav only. One muted line under the product name in the nav's brand (SideNav.Brand), shown when the nav carries the brand: header-less shells when wide, e.g. flat. Ignored when a top bar holds the brand."
+        },
+        "search": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title, with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
         },
         "workPanel": {
           "type": "object",

@@ -12,6 +12,7 @@ export type {
   AppShellProjects,
   AppShellAccount,
   AppShellWorkPanel,
+  AppShellSearch,
   AppShellPatternProps,
   AppShellMenuButtonProps,
   AppShellRailToggleProps,

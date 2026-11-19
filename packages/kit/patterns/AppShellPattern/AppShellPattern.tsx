@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  Fragment,
   isValidElement,
   useContext,
   useEffect,
@@ -19,10 +20,27 @@ import { Button } from "../../ui/Button";
 import { Drawer } from "../../ui/Drawer";
 import { DropdownMenu } from "../../ui/DropdownMenu";
 import type { DropdownMenuGroup } from "../../ui/DropdownMenu";
-import { SideNav, SideNavAccount, SideNavItem, SideNavSection, useSideNav } from "../../ui/SideNav";
+import { Command } from "../../ui/Command";
+import type { CommandGroup } from "../../ui/Command";
+import { Input } from "../../ui/Input";
+import { Modal } from "../../ui/Modal";
+import {
+  SideNavAccount,
+  SideNavBrand,
+  SideNavFooter,
+  SideNavHeader,
+  SideNavItem,
+  SideNavNav,
+  SideNavRoot,
+  SideNavSection,
+  SideNavSlot,
+  SideNavToggle,
+  useSideNav,
+} from "../../ui/SideNav";
 import type { SideNavGroup, SideNavItemData, SideNavProps } from "../../ui/SideNav";
 import { Tabs } from "../../ui/Tabs";
 import type { TabItem } from "../../ui/Tabs";
+import { Tooltip } from "../../ui/Tooltip";
 import "./AppShellPattern.css";
 
 /** AppHeader props. The shell owns `radius` (always none). */
@@ -31,7 +49,7 @@ export type AppShellHeader = Omit<AppHeaderProps, "radius">;
 /** The data SideNav takes. The shell owns `showHeader`, `radius`, and `side`. */
 export type AppShellNav = Omit<SideNavProps, "showHeader" | "radius" | "side">;
 
-/** flat: nav on a soft neutral fill, page edge to edge, hairline dividers. inset: nav on the page background, content in a raised card. */
+/** inset (default): nav on the page background, content in a raised card. flat: nav on the surface with a hairline edge, page on the subtle background, edge to edge. */
 export type AppShellLayout = "flat" | "inset";
 
 /** A "Projects" group added after the nav groups (props nav only). */
@@ -49,8 +67,8 @@ export interface AppShellProjects {
 /** The signed-in person, last in the nav footer, with a menu of account actions. */
 export interface AppShellAccount {
   name: string;
-  /** Second line, usually the email. */
-  email?: string;
+  /** Second line, e.g. a role or an email. */
+  secondary?: string;
   src?: string;
   initials?: string;
   /** DropdownMenu groups, e.g. Settings, a Theme submenu, Sign out. */
@@ -59,6 +77,22 @@ export interface AppShellAccount {
   onSelect?: (id: string) => void;
   /** Accessible name of the menu trigger. Default "Account menu". */
   menuLabel?: string;
+}
+
+/** Sidebar search that opens the kit command menu (Command in a Modal). Both layouts, same API. */
+export interface AppShellSearch {
+  /** Command groups and items. */
+  groups: CommandGroup[];
+  /** (id) => void for a picked command. The menu closes first. */
+  onSelect?: (id: string) => void;
+  /** Field placeholder and accessible name. Default "Search". */
+  placeholder?: string;
+  /** Placeholder inside the command menu. Default "Search pages and actions". */
+  commandPlaceholder?: string;
+  /** Command menu title (Modal title and Command label). Default "Command menu". */
+  title?: string;
+  /** Listen for ⌘K / Ctrl+K and show the hint. Default true. */
+  shortcut?: boolean;
 }
 
 /** Optional right work panel with tabs. Fixed width (--layout-rail). Off by default. */
@@ -108,7 +142,7 @@ export interface AppShellPatternProps {
   nav: AppShellNav | ReactNode | ((placement: AppShellNavPlacement) => ReactNode);
   /** Drawer title on narrow screens. Default: `nav.title`, or "Navigation" for a built nav. */
   navLabel?: string;
-  /** Chrome look. Default "flat". */
+  /** Chrome look. Default "inset". */
   layout?: AppShellLayout;
   /** Controlled rail collapse (icons only, labels in tooltips). Wide screens only. */
   collapsed?: boolean;
@@ -119,6 +153,10 @@ export interface AppShellPatternProps {
   projects?: AppShellProjects;
   /** The signed-in person and their menu, last in a props nav footer. */
   account?: AppShellAccount;
+  /** One muted line under the product name in the nav's brand (header-less shells, e.g. flat). Props nav only. */
+  subtitle?: string;
+  /** Search field under the brand (an icon button with a tooltip on the collapsed rail) that opens the kit command menu; ⌘K opens it too. Props nav only. */
+  search?: AppShellSearch;
   /** Optional right work panel with tabs. Off unless open. */
   workPanel?: AppShellWorkPanel;
   /** Page content: usually a `layout-canvas` or `layout-workspace`, or another pattern. */
@@ -151,6 +189,10 @@ export interface AppShellContextValue {
   setPanelOpen: (open: boolean) => void;
   /** id of the work panel, for aria-controls. */
   panelId: string;
+  /** A search slot is configured. */
+  hasSearch: boolean;
+  /** Opens the command menu (closes the nav Drawer first). */
+  openSearch: () => void;
 }
 
 interface MenuSlot {
@@ -357,11 +399,11 @@ function footerRows(footer: AppShellNav["footer"]): SideNavItemData[] | null {
 }
 
 /** SideNav.Account (avatar, name, email) with a kit DropdownMenu of account actions beside it. */
-function AccountMenu({ name, email, src, initials, menu, onSelect, menuLabel = "Account menu" }: AppShellAccount) {
+function AccountMenu({ name, secondary, src, initials, menu, onSelect, menuLabel = "Account menu" }: AppShellAccount) {
   const { rail } = useSideNav();
   return (
     <div className="app-shell-pattern__account">
-      <SideNavAccount className="app-shell-pattern__account-card" name={name} secondary={email} src={src} initials={initials} />
+      <SideNavAccount className="app-shell-pattern__account-card" name={name} secondary={secondary} src={src} initials={initials} />
       {rail ? null : (
         <DropdownMenu
           appearance="ghost"
@@ -378,27 +420,143 @@ function AccountMenu({ name, email, src, initials, menu, onSelect, menuLabel = "
   );
 }
 
-/** Builds the SideNav props the shell renders: projects group and account footer folded in. */
-function withSections(nav: AppShellNav, projects?: AppShellProjects, account?: AppShellAccount): AppShellNav {
-  let groups: SideNavGroup[] | undefined = nav.groups;
-  if (projects) {
-    const rows: SideNavItemData[] = [...projects.items];
-    if (projects.onNew) {
-      rows.push({ id: "app-shell-new-project", label: projects.newLabel ?? "New project", icon: "Plus", onClick: projects.onNew });
-    }
-    groups = [...(groups ?? (nav.items ? [{ label: "", items: nav.items }] : [])), { label: projects.label ?? "Projects", items: rows }];
+/** Nav groups with the Projects group folded in. */
+function navGroups(nav: AppShellNav, projects?: AppShellProjects): SideNavGroup[] {
+  const groups: SideNavGroup[] = nav.groups ?? (nav.items ? [{ label: "", items: nav.items }] : []);
+  if (!projects) return groups;
+  const rows: SideNavItemData[] = [...projects.items];
+  if (projects.onNew) {
+    rows.push({ id: "app-shell-new-project", label: projects.newLabel ?? "New project", icon: "Plus", onClick: projects.onNew });
   }
-  let footer = nav.footer;
-  if (account) {
-    const rows = footerRows(nav.footer);
-    footer = (
-      <>
-        {rows ? <SideNavSection>{rows.map(itemNode)}</SideNavSection> : (nav.footer as ReactNode)}
-        <AccountMenu {...account} />
-      </>
+  return [...groups, { label: projects.label ?? "Projects", items: rows }];
+}
+
+/** The search slot: a read-only search field with a ⌘K hint; on the collapsed rail an icon Button with a tooltip. */
+function SearchSlot({ search }: { search: AppShellSearch }) {
+  const shell = useContext(AppShellContext);
+  const { rail } = useSideNav();
+  const id = useId();
+  const label = search.placeholder ?? "Search";
+  const shortcut = search.shortcut !== false;
+  const open = () => shell?.openSearch();
+  if (rail) {
+    return (
+      <span className="app-shell-pattern__search-rail">
+        <Tooltip content={shortcut ? `${label} (⌘K)` : label} placement="right">
+          <Button
+            appearance="ghost"
+            mode="neutral"
+            size="sm"
+            iconStart="Search"
+            ariaLabel={label}
+            aria-haspopup="dialog"
+            aria-keyshortcuts={shortcut ? "Meta+K Control+K" : undefined}
+            onClick={open}
+          />
+        </Tooltip>
+      </span>
     );
   }
-  return { ...nav, groups, footer, account: account ? undefined : nav.account };
+  return (
+    <Input
+      id={id}
+      className="app-shell-pattern__search"
+      type="search"
+      size="sm"
+      iconStart="Search"
+      placeholder={label}
+      ariaLabel={label}
+      end={shortcut ? "⌘K" : undefined}
+      readOnly
+      aria-haspopup="dialog"
+      aria-keyshortcuts={shortcut ? "Meta+K Control+K" : undefined}
+      onClick={open}
+      onKeyDown={(event) => {
+        const typed = event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey;
+        if (event.key === "Enter" || typed) {
+          event.preventDefault();
+          open();
+        }
+      }}
+    />
+  );
+}
+
+/** Brand title for the nav header: the product name with an optional muted subtitle line. */
+function brandTitle(title: string, subtitle?: string): ReactNode {
+  if (!subtitle) return title;
+  return (
+    <span className="app-shell-pattern__brand-text">
+      <span className="app-shell-pattern__brand-name">{title}</span>
+      <span className="app-shell-pattern__brand-subtitle">{subtitle}</span>
+    </span>
+  );
+}
+
+/**
+ * A props nav built from the SideNav compose parts, so the search slot stays on the closed
+ * rail: brand with a Toggle (header-less shells), the search slot, the groups (Projects folded
+ * in), then footer rows and the account menu.
+ */
+function ShellPropsNav({
+  nav,
+  placement,
+  open,
+  onOpenChange,
+  showHeader,
+  projects,
+  account,
+  search,
+  subtitle,
+}: {
+  nav: AppShellNav;
+  placement: AppShellNavPlacement;
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showHeader: boolean;
+  projects?: AppShellProjects;
+  account?: AppShellAccount;
+  search?: AppShellSearch;
+  subtitle?: string;
+}) {
+  const inDrawer = placement === "drawer";
+  const groups = navGroups(nav, projects);
+  const rows = footerRows(nav.footer);
+  const row = (item: SideNavItemData) => {
+    const node = itemNode(item);
+    return nav.renderItem ? <Fragment key={item.id}>{nav.renderItem(item, node)}</Fragment> : node;
+  };
+  const hasFooter = Boolean(nav.footer || account || nav.account);
+  return (
+    <SideNavRoot aria-label={nav["aria-label"] ?? nav.title} radius={inDrawer ? "md" : "none"} open={open} onOpenChange={onOpenChange}>
+      {showHeader && !inDrawer ? (
+        <SideNavHeader>
+          {nav.header ?? <SideNavBrand title={brandTitle(nav.title, subtitle)} mark={nav.mark} markIcon={nav.markIcon} />}
+          <SideNavToggle />
+        </SideNavHeader>
+      ) : null}
+      {search ? (
+        <SideNavSlot keepOnRail className="app-shell-pattern__search-slot">
+          <SearchSlot search={search} />
+        </SideNavSlot>
+      ) : null}
+      {nav.beforeGroups ? <SideNavSlot>{nav.beforeGroups}</SideNavSlot> : null}
+      <SideNavNav>
+        {groups.map((group, index) => (
+          <SideNavSection key={group.label || `group-${index}`} label={group.label || undefined}>
+            {group.items.map(row)}
+          </SideNavSection>
+        ))}
+      </SideNavNav>
+      {nav.afterGroups ? <SideNavSlot placement="after">{nav.afterGroups}</SideNavSlot> : null}
+      {hasFooter ? (
+        <SideNavFooter>
+          {rows ? <SideNavSection>{rows.map(row)}</SideNavSection> : (nav.footer as ReactNode)}
+          {account ? <AccountMenu {...account} /> : nav.account ? <SideNavAccount {...nav.account} /> : null}
+        </SideNavFooter>
+      ) : null}
+    </SideNavRoot>
+  );
 }
 
 /**
@@ -506,12 +664,14 @@ function AppShellPatternRoot({
   navLabel,
   mark,
   markIcon,
-  layout = "flat",
+  layout = "inset",
   collapsed: collapsedProp,
   defaultCollapsed = false,
   onCollapsedChange,
   projects,
   account,
+  subtitle,
+  search,
   workPanel,
   children,
   className = "",
@@ -534,7 +694,34 @@ function AppShellPatternRoot({
   }));
   const wasOpen = useRef(false);
   const rawNavProps = typeof nav !== "function" && isPropsObject<AppShellNav>(nav) ? nav : null;
-  const navProps = rawNavProps ? withSections(rawNavProps, projects, account) : null;
+  const navProps = rawNavProps;
+
+  // Command menu: the search slot, or ⌘K / Ctrl+K anywhere in the page.
+  const [searchOpen, setSearchOpen] = useState(false);
+  const openSearch = () => {
+    setMenuOpen(false);
+    setSearchOpen(true);
+  };
+  const commandRef = useRef<HTMLDivElement>(null);
+  // The Modal focuses its first control (Close); put focus in the command input instead.
+  useEffect(() => {
+    if (!searchOpen) return undefined;
+    const frame = requestAnimationFrame(() => commandRef.current?.querySelector<HTMLInputElement>("input")?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [searchOpen]);
+  const searchShortcut = Boolean(search) && search?.shortcut !== false;
+  useEffect(() => {
+    if (!searchShortcut) return undefined;
+    function onKey(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setMenuOpen(false);
+        setSearchOpen((open) => !open);
+      }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [searchShortcut]);
 
   // Collapse: controlled prop, else a props nav's own open, else the session-stored state.
   const [storedCollapsed, setStoredCollapsed] = useStoredCollapsed(defaultCollapsed);
@@ -626,6 +813,8 @@ function AppShellPatternRoot({
     panelOpen,
     setPanelOpen,
     panelId,
+    hasSearch: Boolean(search),
+    openSearch,
   };
 
   const layoutClass = layout === "inset" ? "layout-shell--inset app-shell-pattern--inset" : "app-shell-pattern--flat";
@@ -672,12 +861,16 @@ function AppShellPatternRoot({
                 <div id={railId} className="app-shell-pattern__rail">
                   <AppShellContext.Provider value={{ ...shell, navPlacement: "rail" }}>
                     {navProps ? (
-                      <SideNav
-                        {...navProps}
+                      <ShellPropsNav
+                        nav={navProps}
+                        placement="rail"
                         open={!collapsed}
                         onOpenChange={(open) => setCollapsed(!open)}
                         showHeader={!hasHeader}
-                        radius="none"
+                        projects={projects}
+                        account={account}
+                        search={search}
+                        subtitle={subtitle}
                       />
                     ) : (
                       navNode("rail")
@@ -698,13 +891,36 @@ function AppShellPatternRoot({
                 <div className="app-shell-pattern__drawer-nav" onClick={closeOnPick}>
                   <AppShellContext.Provider value={{ ...shell, navPlacement: "drawer" }}>
                     {navProps ? (
-                      <SideNav {...navProps} open showHeader={false} radius="md" onOpenChange={undefined} />
+                      <ShellPropsNav
+                        nav={navProps}
+                        placement="drawer"
+                        open
+                        showHeader={false}
+                        projects={projects}
+                        account={account}
+                        search={search}
+                        subtitle={subtitle}
+                      />
                     ) : (
                       navNode("drawer")
                     )}
                   </AppShellContext.Provider>
                 </div>
               </Drawer>
+            ) : null}
+            {search ? (
+              <Modal open={searchOpen} title={search.title ?? "Command menu"} onClose={() => setSearchOpen(false)}>
+                <Command
+                  ref={commandRef}
+                  label={search.title ?? "Command menu"}
+                  placeholder={search.commandPlaceholder ?? "Search pages and actions"}
+                  groups={search.groups}
+                  onSelect={(id) => {
+                    setSearchOpen(false);
+                    search.onSelect?.(id);
+                  }}
+                />
+              </Modal>
             ) : null}
             {narrow && workPanel ? (
               <Drawer open={panelOpen} title={workPanel.title} side="right" size="md" onClose={() => setPanelOpen(false)}>
