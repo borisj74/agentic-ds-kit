@@ -59,6 +59,18 @@ describe("ComboChart logic", () => {
     assert.deepEqual(logic.extentOf([], ["growth"]), [0, 1]);
   });
 
+  test("value axis tries a four- and a five-tick target and keeps the one that wastes less height", () => {
+    assert.deepEqual(logic.axisTicks(0, 76300, true).ticks, [0, 20000, 40000, 60000, 80000]);
+    assert.deepEqual(logic.axisTicks(0, 40, true).ticks, [0, 20, 40], "a tie keeps the four-tick choice");
+    const { ticks } = logic.axisTicks(0, 100, true);
+    assert.ok(ticks.length >= 3 && ticks.length <= 6, `${ticks}`);
+    assert.ok(ticks[ticks.length - 1] >= 100);
+  });
+
+  test("the demo's growth range on five aligned ticks is -5% to 15%", () => {
+    assert.deepEqual(logic.alignedTicks(-3.1, 12.9, 5).ticks, [-5, 0, 5, 10, 15]);
+  });
+
   test("right-axis ticks match the left tick count and cover the range with one nice step", () => {
     for (const [min, max, count] of [[-3.1, 8.3, 4], [0, 12.5, 5], [0, 0.42, 3], [-40, 10, 4]]) {
       const { ticks } = logic.alignedTicks(min, max, count);

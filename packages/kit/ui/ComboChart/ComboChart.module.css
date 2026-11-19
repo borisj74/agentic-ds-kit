@@ -24,9 +24,9 @@
   stroke-opacity: 1;
 }
 
-/* The hovered or focused column, a step above the card. */
+/* The hovered or focused column: a faint wash of the bar colour, visible on light and dark cards. */
 .column {
-  fill: var(--surface-muted);
+  fill: color-mix(in srgb, var(--chart-1) 8%, var(--surface-card));
   pointer-events: none;
 }
 

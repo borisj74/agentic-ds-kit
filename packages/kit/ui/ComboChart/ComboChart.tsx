@@ -301,7 +301,7 @@ export function ComboChart({
       {layout.points.length > 1 ? (
         <path className={cx(styles.line, dimmed(lineIndex) && styles.dimmed)} d={layout.linePath} stroke={LINE_COLOR} />
       ) : null}
-      {activePoint ? <circle className={styles.dot} cx={activePoint.x} cy={activePoint.y} r={4} fill={LINE_COLOR} /> : null}
+      {activePoint ? <circle className={styles.dot} cx={activePoint.x} cy={activePoint.y} r={5} fill={LINE_COLOR} /> : null}
       {layout.categoryLabels.map((entry) => (
         <text key={entry.index} x={entry.x} y={entry.y} className={styles.categoryLabel} textAnchor="middle" dominantBaseline="hanging">
           {entry.label}

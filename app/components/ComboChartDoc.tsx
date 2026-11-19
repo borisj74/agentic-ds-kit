@@ -11,11 +11,13 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const REVENUE_VALUES = [42000, 45500, 44100, 49800, 53200, 51900, 56400, 61200, 59800, 64500, 70100, 76300];
 
 // Revenue per month as bars, month-over-month growth as the line on its own percent axis.
+// January has no earlier month to compare with, so it has no growth value and the line starts in February.
 const REVENUE = MONTHS.map((label, index) => {
   const revenue = REVENUE_VALUES[index];
   const previous = REVENUE_VALUES[index - 1];
-  const growth = previous ? Math.round(((revenue - previous) / previous) * 1000) / 10 : 0;
-  return { label, revenue, growth };
+  return previous === undefined
+    ? { label, revenue }
+    : { label, revenue, growth: Math.round(((revenue - previous) / previous) * 1000) / 10 };
 });
 
 const ORDERS = [
@@ -40,7 +42,7 @@ const CODE = `<ComboChart
   description="2026, by month"
   axis="dual"
   data={[
-    { label: "Jan", revenue: 42000, growth: 0 },
+    { label: "Jan", revenue: 42000 }, // no earlier month, so no growth
     { label: "Feb", revenue: 45500, growth: 8.3 },
     { label: "Mar", revenue: 44100, growth: -3.1 },
   ]}
