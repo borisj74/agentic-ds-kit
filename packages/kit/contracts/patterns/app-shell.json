@@ -107,7 +107,7 @@
       "type": "object",
       "required": false,
       "shape": "{ groups: CommandGroup[], onSelect?: (id: string) => void, placeholder?: string (default Quick actions), searchLabel?: string (default Search), onSearch?: () => void, commandPlaceholder?: string (default Search pages and actions), title?: string (default Search), shortcut?: boolean (default true) }",
-      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
     },
     "notifications": {
       "type": "object",
@@ -197,7 +197,7 @@
       "Search field: kit Input type=search, read-only, named by placeholder (Search), aria-haspopup=dialog and aria-keyshortcuts=\"Meta+K Control+K\"; Enter or typing opens the command menu",
       "⌘K / Ctrl+K toggles the command menu from anywhere on the page and is announced through aria-keyshortcuts; it is skipped with Alt or Shift held",
       "The command menu is the kit Modal (aria-modal, focus trap, Escape and scrim close, focus restored to the opener) with kit Command inside (combobox input, listbox); focus starts in the command input",
-      "Collapsed rail: the search slot is an icon-only Button named Search with a kit Tooltip (Search (⌘K)) on hover and focus",
+      "Collapsed rail: the search slot is a SideNav.Item named by the placeholder (Quick actions) with aria-keyshortcuts and the rail Tooltip on hover and focus",
       "Notifications row: a SideNav.Item button named by its label and count, with aria-haspopup=dialog and aria-expanded; it never takes aria-current for the open panel",
       "The notifications panel is the kit Popover dialog named by label: Escape and an outside click close it and focus returns to the Notifications row; Tab reaches the tabs, list and settings Button",
       "Collapsed rail: the row keeps its kit Tooltip; the unread dot is decorative (the count stays in the row's name)",

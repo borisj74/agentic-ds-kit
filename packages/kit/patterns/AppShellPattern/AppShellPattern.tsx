@@ -492,7 +492,7 @@ function navGroups(nav: AppShellNav, projects?: AppShellProjects): SideNavGroup[
 
 /**
  * Quick actions row: a read-only field with a ⌘K hint that opens the command menu, and an icon-only
- * search Button beside it. On the collapsed rail: one icon Button with a tooltip.
+ * search Button beside it. On the collapsed rail: one SideNav row (icon, with the rail tooltip).
  */
 function SearchSlot({ search }: { search: AppShellSearch }) {
   const shell = useContext(AppShellContext);
@@ -503,21 +503,18 @@ function SearchSlot({ search }: { search: AppShellSearch }) {
   const shortcut = search.shortcut !== false;
   const open = () => shell?.openSearch();
   if (rail) {
+    // A SideNav row on the rail, so it gets the same chip and the same tooltip outside the rail edge
+    // as the nav rows (a plain Tooltip here would be clipped by the rail).
     return (
-      <span className="app-shell-pattern__rail-cell">
-        <Tooltip content={shortcut ? `${label} (⌘K)` : label} placement="right">
-          <Button
-            appearance="ghost"
-            mode="neutral"
-            size="sm"
-            iconStart="Search"
-            ariaLabel={label}
-            aria-haspopup="dialog"
-            aria-keyshortcuts={shortcut ? "Meta+K Control+K" : undefined}
-            onClick={open}
-          />
-        </Tooltip>
-      </span>
+      <SideNavSection>
+        <SideNavItem
+          label={label}
+          icon="Search"
+          aria-haspopup="dialog"
+          aria-keyshortcuts={shortcut ? "Meta+K Control+K" : undefined}
+          onClick={open}
+        />
+      </SideNavSection>
     );
   }
   return (

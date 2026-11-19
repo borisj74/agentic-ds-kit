@@ -26,7 +26,7 @@ const NAV_ITEMS: SideNavItemData[] = [
   { id: "tasks", label: "Tasks", icon: "Check", badge: "18" },
   { id: "overview", label: "Overview", icon: "House" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-  { id: "insights", label: "Insights", icon: "Sparkles" },
+  { id: "insights", label: "Insights", icon: "ChartLine" },
 ];
 
 const PROJECTS: SideNavItemData[] = [

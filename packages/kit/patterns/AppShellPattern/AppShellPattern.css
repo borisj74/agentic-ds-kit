@@ -168,19 +168,6 @@
   cursor: pointer;
 }
 
-/* The closed rail keeps the open panel width and clips it, so rail controls (search, bell)
-   center on the closed width, pulling back over the slot's start padding. */
-.app-shell-pattern__rail-cell {
-  display: flex;
-  justify-content: center;
-  width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
-  margin-inline-start: calc(var(--space-inset-sm) * -1);
-}
-
-.app-shell-pattern__rail-slot {
-  padding-block-start: var(--space-inset-sm);
-}
-
 /* Quick actions row: the field fills, the search Button sits beside it. */
 .app-shell-pattern__quick {
   display: flex;
