@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+/**
+ * Measures the plot area's width. The ref is a callback so a remounted plot node (e.g. after
+ * ChartFrame swaps its table view back to the chart) is observed again instead of the detached one.
+ */
 export function useChartSize(fallbackHeight: number) {
-  const ref = useRef<HTMLDivElement>(null);
+  const [node, setNode] = useState<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(0);
+  const ref = useCallback((next: HTMLDivElement | null) => setNode(next), []);
 
   useEffect(() => {
-    const node = ref.current;
     if (!node) return undefined;
 
     const update = () => setWidth(node.clientWidth);
@@ -16,7 +20,7 @@ export function useChartSize(fallbackHeight: number) {
     const observer = new ResizeObserver(update);
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [node]);
 
   return { ref, width, height: fallbackHeight };
 }
