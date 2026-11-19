@@ -21,6 +21,12 @@ const SAMPLE = [
   { label: "Sun", value: 1320 },
 ];
 
+const GOAL_WEEKS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"];
+const GOAL_SERIES = [
+  { label: "This period", data: [312, 338, 297, 361, 374, 329, 388, 402] },
+  { label: "Previous period", data: [281, 296, 305, 300, 318, 322, 315, 331], dashed: true },
+];
+
 const YOY_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 
 const YOY_SERIES = [
@@ -293,6 +299,42 @@ export function LineChartDoc() {
                 </p>
               </div>
               <CodeBlock code={`<LineChart title="Share of seats by plan" variant="area" stack="percent" labels={months} series={plans} />`} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Reference line and comparison</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="Weekly signups"
+                    description="Against the goal, with the previous eight weeks dashed"
+                    variant="line"
+                    labels={GOAL_WEEKS}
+                    series={GOAL_SERIES}
+                    referenceLine={{ value: 350, label: "Goal 350", highlight: "above" }}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  referenceLine draws a labelled dashed guide; highlight marks points of solid series
+                  past it in the accent colour. A series with dashed true reads as a comparison, with
+                  no fill. The table names the line, and each point&apos;s name says when it is past it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="Weekly signups"
+  variant="line"
+  labels={weeks}
+  series={[
+    { label: "This period", data: thisPeriod },
+    { label: "Previous period", data: lastPeriod, dashed: true },
+  ]}
+  referenceLine={{ value: 350, label: "Goal 350", highlight: "above" }}
+/>`}
+              />
             </section>
 
             <section className={styles.example}>

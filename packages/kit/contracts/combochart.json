@@ -6,7 +6,8 @@
   "useWhen": [
     "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
     "Volumes with a running target or moving average drawn across them",
-    "Two measures people read together per column, where two separate charts would make them line up by eye"
+    "Two measures people read together per column, where two separate charts would make them line up by eye",
+    "Gains and losses per period with the net as a line — stack stacked, losses as negative values"
   ],
   "doNotUseWhen": [
     "Only amounts compared across categories — use BarChart",
@@ -47,7 +48,7 @@
           "note": "Shown in the legend, the tooltip and the table."
         }
       },
-      "note": "One to three bar series. They take --chart-1, --chart-2 and --chart-4 in order, so the line colour stays apart."
+      "note": "One to four bar series. They take --chart-1, --chart-2, --chart-4 and --chart-5 in order, so the line colour stays apart."
     },
     "line": {
       "type": "object",
@@ -72,6 +73,15 @@
       ],
       "default": "shared",
       "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+    },
+    "stack": {
+      "type": "enum",
+      "values": [
+        "none",
+        "stacked"
+      ],
+      "default": "none",
+      "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net."
     },
     "valueFormatter": {
       "type": "object",
@@ -131,7 +141,8 @@
     "type.weight.label",
     "space.1",
     "space.2",
-    "space.4"
+    "space.4",
+    "surface.card"
   ],
   "a11y": {
     "element": "figure",
@@ -150,7 +161,9 @@
     "Do not draw more than one line; a second trend belongs in LineChart",
     "Do not use axis dual for values in the same unit; it makes the two scales look comparable when they are not",
     "Do not use status colours for the series; a series that means good or bad says so in its label",
-    "Do not use raw hex or primitive --color-* ramps"
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not stack values that do not add up, like rates; use stack none",
+    "Do not pass losses as positive values with a status colour; make them negative so they pile below zero"
   ],
-  "snippet": "<ComboChart\n  title=\"Revenue and growth\"\n  description=\"2026, by month\"\n  axis=\"dual\"\n  data={[\n    { label: \"Jan\", revenue: 42000, growth: 3.1 },\n    { label: \"Feb\", revenue: 45500, growth: 8.3 },\n    { label: \"Mar\", revenue: 44100, growth: -3.1 },\n  ]}\n  bars={[{ key: \"revenue\", label: \"Revenue\" }]}\n  line={{ key: \"growth\", label: \"Growth\" }}\n  valueFormatter={{ line: (value) => `${value}%` }}\n/>"
+  "snippet": "<ComboChart\n  title=\"Revenue and growth\"\n  description=\"2026, by month\"\n  axis=\"dual\"\n  data={[\n    { label: \"Jan\", revenue: 42000, growth: 3.1 },\n    { label: \"Feb\", revenue: 45500, growth: 8.3 },\n    { label: \"Mar\", revenue: 44100, growth: -3.1 },\n  ]}\n  bars={[{ key: \"revenue\", label: \"Revenue\" }]}\n  line={{ key: \"growth\", label: \"Growth\" }}\n  valueFormatter={{ line: (value) => `${value}%` }}\n/>\n\n<ComboChart\n  title=\"Seat changes\"\n  stack=\"stacked\"\n  data={[{ label: \"Jan\", added: 40, removed: -12, net: 28 }]}\n  bars={[{ key: \"added\", label: \"Added\" }, { key: \"removed\", label: \"Removed\" }]}\n  line={{ key: \"net\", label: \"Net\" }}\n/>"
 }

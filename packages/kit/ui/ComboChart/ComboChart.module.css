@@ -35,6 +35,12 @@
   pointer-events: none;
 }
 
+/* Stacked segments: a hairline in the card colour keeps neighbouring segments apart. */
+.barStacked {
+  stroke: var(--surface-card);
+  stroke-width: 1;
+}
+
 .line {
   fill: none;
   stroke-width: 2;
