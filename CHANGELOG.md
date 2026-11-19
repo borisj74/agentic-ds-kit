@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-11-19
+
+The kit font is now Geist (with Geist Mono for code), replacing IBM Plex, and headings are 550 with tighter tracking ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255)). The kit still ships no font files. To keep the new look, load the variable Geist with `next/font/google` and no `weight` list, exposing `--font-geist-sans` and `--font-geist-mono` as the [getting-started guide](docs/getting-started.md) shows, or override `--font-sans` with your own font. Apps that load only Plex will render in `system-ui` until they do one of these.
+
+### Added
+
+- **`--font-weight-heading` (550)**, one dial for every heading role and for strong text. It needs the variable Geist to render as a true 550. ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+- **`--type-tracking-heading-1` … `--type-tracking-heading-5`** for the heading ladder: -0.06em at 40px and up, -0.04em at 24 and 32px. They sit on two new letter-spacing primitives, `condensed` (-0.04em) and `compressed` (-0.06em). ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+- **`--type-weight-strong`** (reads `--font-weight-heading`, 550). `layout.css` applies it to `strong` and `b` with zero specificity, so emphasis in body copy is 550, not 700. ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+
+### Changed
+
+- **Visual change: the kit font is now Geist and Geist Mono, replacing IBM Plex Sans and IBM Plex Mono.** `--font-sans`, `--font-display` and `--font-mono` read `--font-geist-sans` / `--font-geist-mono` and fall back to the system UI and mono stacks. The kit still ships no font files: load the variable Geist with `next/font/google` and no `weight` list (so the full weight axis loads) as the getting-started guide shows, or override `--font-sans`. Apps that still load only Plex will fall back to `system-ui` until they load Geist. ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+- **Visual change: every heading role is 550.** `--type-weight-heading` (was 500), `--type-weight-title` (was 700), `--type-weight-display-hero` and `--type-weight-title-section` (were 400) now all read the new `--font-weight-heading` (550). Body stays 400 and labels and buttons stay 500. Avatar initials, FilterButton, AnchorNav, author and list-row names (AgentFleet, AgentMonitor, AgentSteering, IntegrationPicker), block subtitles, tile labels and similar text that borrowed the heading weight now use `--type-weight-label` or `--type-weight-metric`, so they stay 500. ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+- **Visual change: heading tracking tightens with size.** `--type-tracking-heading` is now -0.02em (was -0.01em) for 14–20px headings, `--type-tracking-title` is -0.04em (was -0.02em), `--type-tracking-display-hero` is -0.06em and `--type-tracking-title-section` is -0.04em (both were -0.03em). Kit headings now use the tracking token that matches their size. ([#255](https://github.com/borisj74/agentic-ds-kit/pull/255))
+
 ## [0.29.0] - 2026-11-19
 
 ### Added
