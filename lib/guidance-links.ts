@@ -5,7 +5,7 @@ export interface GuidanceSegment {
   href?: string;
 }
 
-const SKIP_LABELS = new Set(["Bar", "Combo", "Line", "Pie"]);
+const SKIP_LABELS = new Set(["Bar", "Combo", "Line", "Pie", "Scatter"]);
 
 const COMPONENT_LINKS = [
   ...COMPONENT_GROUPS.flatMap((group) =>
@@ -16,6 +16,7 @@ const COMPONENT_LINKS = [
   ),
   { label: "BarChart", href: "/components/barchart" },
   { label: "ComboChart", href: "/components/combochart" },
+  { label: "ScatterChart", href: "/components/scatterchart" },
   { label: "LineChart", href: "/components/linechart" },
   { label: "PieChart", href: "/components/piechart" },
 ]

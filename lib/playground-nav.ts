@@ -190,6 +190,7 @@ export function componentLabel(id: string): string {
   if (id === "barchart") return "Bar";
   if (id === "barlist") return "BarList";
   if (id === "combochart") return "Combo";
+  if (id === "scatterchart") return "Scatter";
   if (id === "heatmap") return "Heatmap";
   if (id === "datagrid") return "DataGrid";
   if (id === "datatable") return "DataTable";
@@ -352,7 +353,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "Charts",
-    ids: ["barchart", "barlist", "combochart", "heatmap", "linechart", "piechart"],
+    ids: ["barchart", "barlist", "combochart", "heatmap", "linechart", "piechart", "scatterchart"],
   },
 ] as const;
 

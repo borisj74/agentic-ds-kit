@@ -48,6 +48,7 @@ import { Badge } from "agentic-ds-kit";
 import { BarChart } from "agentic-ds-kit";
 import { BarList } from "agentic-ds-kit";
 import { ComboChart } from "agentic-ds-kit";
+import { ScatterChart } from "agentic-ds-kit";
 import { Heatmap } from "agentic-ds-kit";
 import { Breadcrumb } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
@@ -605,6 +606,17 @@ export function GalleryPreview({ id }: { id: string }) {
             data={CHART.map((entry, index) => ({ label: entry.label, value: entry.value, trend: 10 + index * 3 }))}
             bars={[{ key: "value", label: "Value" }]}
             line={{ key: "trend", label: "Trend" }}
+          />
+        </Stage>
+      );
+    case "scatterchart":
+      return (
+        <Stage variant="wide">
+          <ScatterChart
+            height={120}
+            xLabel="Value"
+            yLabel="Trend"
+            data={CHART.map((entry, index) => ({ id: entry.label, label: entry.label, x: entry.value, y: 10 + index * 4 }))}
           />
         </Stage>
       );

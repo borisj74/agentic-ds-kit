@@ -1,0 +1,85 @@
+.plot {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Quiet guides on both axes. The bottom and left lines keep full strength. */
+.grid {
+  stroke: var(--border-faint);
+  stroke-opacity: var(--opacity-muted);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.gridEdge {
+  stroke-opacity: 1;
+}
+
+.tickLabel,
+.axisTitle {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.tickLabel {
+  fill: var(--text-muted);
+  font-weight: var(--type-weight-caption);
+}
+
+/* The measure names read a step stronger than the tick values. */
+.axisTitle {
+  fill: var(--text-secondary);
+  font-weight: var(--type-weight-label);
+}
+
+/* Solid with a little transparency, so overlapping dots show; the card-coloured outline keeps neighbours apart. */
+.dot {
+  fill-opacity: 0.8;
+  stroke: var(--surface-card);
+  stroke-width: 1;
+  pointer-events: none;
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.dimmed {
+  opacity: 0.2;
+}
+
+/* The hovered or focused dot. */
+.ring {
+  fill: none;
+  stroke: var(--focus-ring);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.plot .tooltipPlaced {
+  transform: translateY(-50%);
+}
+
+.textCell {
+  text-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    transition: none;
+  }
+}

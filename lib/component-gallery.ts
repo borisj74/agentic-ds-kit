@@ -96,7 +96,7 @@ const MOTION_IDS = new Set([
   "tiltcard",
 ]);
 
-const EXTRA_IDS = ["barchart", "barlist", "combochart", "heatmap", "linechart", "piechart"] as const;
+const EXTRA_IDS = ["barchart", "barlist", "combochart", "heatmap", "linechart", "piechart", "scatterchart"] as const;
 
 const intents = new Map(contracts.map((entry) => [entry.id, entry.intent]));
 const levels = new Map(contracts.map((entry) => [entry.id, "level" in entry ? entry.level : undefined]));
