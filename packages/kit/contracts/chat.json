@@ -6,14 +6,15 @@
   "useWhen": [
     "An inline assistant beside a workspace",
     "A help thread with send and a thinking state",
-    "Suggested prompts above a composer"
+    "Suggested prompts above a composer",
+    "Asking about one part of a screen, like a chart card, with context naming it"
   ],
   "doNotUseWhen": [
     "A blocking overlay — use Modal",
     "A must-choose confirm — use AlertDialog",
     "A short notice after an action — use Toast"
   ],
-  "contains": ["button", "input", "thinkinganimation", "dropdownmenu"],
+  "contains": ["button", "input", "tag", "thinkinganimation", "dropdownmenu"],
   "props": {
     "title": {
       "type": "string",
@@ -32,6 +33,15 @@
       "type": "array",
       "required": false,
       "note": "Prompt chips above the composer. kit Button sm tertiary."
+    },
+    "context": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "label": "string",
+        "onRemove": "function?"
+      },
+      "note": "What the next message is about, like the card and period a user asked from. A kit Tag sm above the composer; removable when onRemove is set. The composer input is described by it (\"Asking about <label>\")."
     },
     "placeholder": {
       "type": "string",
@@ -133,16 +143,18 @@
       "thread is role=log with aria-live=polite",
       "aria-busy while thinking",
       "composer input has an accessible name",
+      "with context, the composer input is described by \"Asking about <label>\"; the Tag remove button is named Remove <label>",
       "Send and Close are named icon-only kit Buttons",
-      "built-in labels (conversation, suggestedPrompts, send) come from KitLabelsProvider; English by default"
+      "built-in labels (conversation, suggestedPrompts, send, chatContext) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
+    "Do not put a context Tag outside Chat beside the composer — pass context",
     "Do not invent ChatMessage, ChatInput, ChatHeader, ChatBubble, or ChatAvatar cousins",
     "Do not use Modal for an inline assistant panel",
     "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
     "Do not use raw hex",
     "Do not use product-specific, billing-platform, or copilot wording in copy"
   ],
-  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />"
+  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>"
 }

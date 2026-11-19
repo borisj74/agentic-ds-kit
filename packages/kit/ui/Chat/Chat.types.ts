@@ -18,6 +18,14 @@ export interface ChatMenuItem {
 
 export type ChatRadius = "lg" | "none";
 
+/** What the next message is about, shown as a kit Tag above the composer. */
+export interface ChatContext {
+  /** Short text, like "MRR movements · Last 3 months". */
+  label: string;
+  /** When set, the Tag is removable and this runs when its X is pressed. */
+  onRemove?: () => void;
+}
+
 /** Root attributes the kit sets itself or replaces with its own prop (`title` is the header text). */
 type ChatOwnedKeys = "children" | "title" | "defaultValue" | "aria-label";
 
@@ -27,6 +35,8 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   status?: string;
   messages?: ChatMessage[];
   suggestions?: string[];
+  /** Context chip above the composer; the composer's description reads it to screen readers. */
+  context?: ChatContext;
   placeholder?: string;
   emptyState?: string;
   isThinking?: boolean;

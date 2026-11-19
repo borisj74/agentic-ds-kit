@@ -70,6 +70,8 @@ export interface KitLabels {
   conversation: string;
   suggestedPrompts: string;
   send: string;
+  /** Chat: the composer description when a context chip is set. */
+  chatContext: (label: string) => string;
   /** CodeSnippet: the code region with no title or language, or "<language> code". */
   code: string;
   languageCode: (language: string) => string;
@@ -125,6 +127,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   conversation: "Conversation",
   suggestedPrompts: "Suggested prompts",
   send: "Send",
+  chatContext: (label) => `Asking about ${label}`,
   code: "Code",
   languageCode: (language) => `${language} code`,
   copied: "Copied",
