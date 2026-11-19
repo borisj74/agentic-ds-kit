@@ -67,8 +67,8 @@
     "text.muted",
     "icon.muted",
     "space.1",
-    "type.family.overline",
-    "type.tracking.overline"
+    "type.size.caption",
+    "type.weight.label"
   ],
   "a11y": {
     "element": "div",
@@ -77,7 +77,8 @@
       "List is role=listbox",
       "Items are role=option with aria-selected when highlighted and aria-disabled when disabled",
       "useId for ids",
-      "Search icon is aria-hidden"
+      "Search icon is aria-hidden",
+      "Group headings are visible text in sentence case (no text-transform); inside a kit Modal, Command drops its own frame and the Modal card is the only one"
     ]
   },
   "doNot": [

@@ -89,7 +89,7 @@ export interface AppShellSearch {
   placeholder?: string;
   /** Placeholder inside the command menu. Default "Search pages and actions". */
   commandPlaceholder?: string;
-  /** Command menu title (Modal title and Command label). Default "Command menu". */
+  /** Command menu title (Modal title and Command label). Default "Search". */
   title?: string;
   /** Listen for ⌘K / Ctrl+K and show the hint. Default true. */
   shortcut?: boolean;
@@ -909,10 +909,10 @@ function AppShellPatternRoot({
               </Drawer>
             ) : null}
             {search ? (
-              <Modal open={searchOpen} title={search.title ?? "Command menu"} onClose={() => setSearchOpen(false)}>
+              <Modal open={searchOpen} title={search.title ?? "Search"} onClose={() => setSearchOpen(false)}>
                 <Command
                   ref={commandRef}
-                  label={search.title ?? "Command menu"}
+                  label={search.title ?? "Search"}
                   placeholder={search.commandPlaceholder ?? "Search pages and actions"}
                   groups={search.groups}
                   onSelect={(id) => {

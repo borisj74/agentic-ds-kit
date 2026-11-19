@@ -12738,7 +12738,7 @@
         "search": {
           "type": "object",
           "required": false,
-          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title, with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
         },
         "workPanel": {
           "type": "object",

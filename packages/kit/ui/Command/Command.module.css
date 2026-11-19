@@ -25,6 +25,24 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+/* Inside a kit Modal (its snippet): the Modal card is the one frame, so Command drops its
+   own border, corners and fill; the divider under the input stays. */
+:global([aria-modal="true"]) .root {
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+:global([aria-modal="true"]) .search {
+  border-radius: 0;
+}
+
+/* With no frame to ring, focus shows as the input row's rule in the focus colour, at the focus width. */
+:global([aria-modal="true"]) .search:focus-within {
+  outline: none;
+  border-bottom: var(--border-focus-width) solid var(--border-focus);
+}
+
 .searchIcon {
   flex-shrink: 0;
   color: var(--icon-muted);
@@ -72,13 +90,13 @@
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
+/* Group caption: sentence case, quieter than the rows it labels. */
 .heading {
   padding: var(--space-2) var(--space-2) var(--space-1);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
   color: var(--text-secondary);
 }
 
