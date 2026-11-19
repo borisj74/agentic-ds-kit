@@ -19,15 +19,32 @@ import { measureLabel } from "../shared/measureLabel";
 import { linearPath, reversedCurveCommands, smoothPath } from "../shared/curve";
 import { formatPercent, sharePercent, stackLayers, warnStackMisuse, type StackResult } from "./lineChart.logic";
 import { useChartSize } from "../shared/useChartSize";
-import type { LineChartProps } from "./LineChart.types";
+import type { LineChartProps, LineChartReference, LineChartSeries } from "./LineChart.types";
 import styles from "./LineChart.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { LineChartProps, LineChartVariant, LineChartCurve, LineChartStack } from "./LineChart.types";
+export type {
+  LineChartProps,
+  LineChartVariant,
+  LineChartCurve,
+  LineChartStack,
+  LineChartSeries,
+  LineChartReference,
+  LineChartReferenceHighlight,
+} from "./LineChart.types";
+
+/** True when a value is past the reference line on the highlighted side. */
+export function pastReference(value: number | undefined, reference: LineChartReference | undefined): boolean {
+  if (!reference?.highlight || value === undefined || !Number.isFinite(value) || !Number.isFinite(reference.value)) return false;
+  return reference.highlight === "above" ? value > reference.value : value < reference.value;
+}
+
+const isDashed = (entry: ChartSeries) => Boolean((entry as LineChartSeries).dashed);
 
 type Point = { x: number; y: number };
 
 type LineGeom = ChartSeries & {
+  dashed: boolean;
   seriesIndex: number;
   points: Point[];
   linePath: string;
@@ -65,12 +82,28 @@ const EMPTY_LAYOUT = {
   plotRight: 0,
   plotTop: 0,
   plotBottom: 0,
+  referenceY: null as number | null,
 };
 
-function ChartTable({ labels, series, totals }: { labels: string[]; series: ChartSeries[]; totals?: number[] }) {
+function ChartTable({
+  labels,
+  series,
+  totals,
+  reference,
+}: {
+  labels: string[];
+  series: ChartSeries[];
+  totals?: number[];
+  reference?: LineChartReference;
+}) {
   return (
     <div className={frameStyles.tableScroll}>
       <table className={frameStyles.table}>
+        {reference ? (
+          <caption className={styles.tableCaption}>
+            {reference.label}: {formatValue(reference.value)}
+          </caption>
+        ) : null}
         <thead>
           <tr>
             <th scope="col">Label</th>
@@ -131,8 +164,8 @@ function Legend({
               onBlur={onClear}
             >
               <span
-                className={`${frameStyles.legendSwatch} ${frameStyles.legendSwatchLine}`}
-                style={{ background: entry.color }}
+                className={`${frameStyles.legendSwatch} ${frameStyles.legendSwatchLine}${isDashed(entry) ? ` ${styles.swatchDashed}` : ""}`}
+                style={isDashed(entry) ? { color: entry.color } : { background: entry.color }}
                 aria-hidden
               />
               <span>{entry.label}</span>
@@ -176,6 +209,7 @@ export function LineChart({
   tickInterval,
   formatLabel,
   animate = false,
+  referenceLine,
   className,
   ref: rootRef,
   ...rest
@@ -213,7 +247,11 @@ export function LineChart({
     const tickCount = Math.max(2, Math.min(4, Math.floor((plotBottom - plotTop) / 40) + 1));
     // Stacked: the axis runs from 0 to the largest total (or 0–100% in percent mode).
     const stacked = isStacked ? stackLayers(series, labels.length, isPercent ? "percent" : "stacked") : null;
-    const [rawMin, rawMax] = stacked ? [0, stacked.max || 1] : seriesExtent(series, { includeZero });
+    const [dataMin, dataMax] = stacked ? [0, stacked.max || 1] : seriesExtent(series, { includeZero });
+    // The reference line always sits inside the plot.
+    const refValue = referenceLine && Number.isFinite(referenceLine.value) && !isPercent ? referenceLine.value : null;
+    const rawMin = refValue === null ? dataMin : Math.min(dataMin, refValue);
+    const rawMax = refValue === null ? dataMax : Math.max(dataMax, refValue);
     const { ticks, min, max } = niceTicks(rawMin, rawMax, tickCount);
     const yScale = linearScale([min, max], [plotBottom, plotTop]);
     const xScale = linearScale([0, Math.max(labels.length - 1, 1)], [plotLeft, plotRight]);
@@ -231,7 +269,7 @@ export function LineChart({
             ? `L ${last?.x ?? plotRight} ${yScale(0)} L ${below[0]?.x ?? plotLeft} ${yScale(0)}`
             : `L ${last?.x ?? plotRight} ${last?.y ?? plotBottom} ${reversedCurveCommands(below, curve === "linear" ? "linear" : "smooth")}`;
           const entry = series[layer.seriesIndex];
-          return { ...entry, seriesIndex: layer.seriesIndex, points, linePath, areaPath: `${linePath} ${back} Z` };
+          return { ...entry, dashed: false, seriesIndex: layer.seriesIndex, points, linePath, areaPath: `${linePath} ${back} Z` };
         })
       : series.map((entry, seriesIndex) => {
           const points = labels.map((_, index) => ({
@@ -239,10 +277,11 @@ export function LineChart({
             y: yScale(entry.data[index] ?? 0),
           }));
           const linePath = draw(points);
-          const areaPath = isArea
+          const dashed = isDashed(entry);
+          const areaPath = isArea && !dashed
             ? `${linePath} L ${points[points.length - 1]?.x ?? plotRight} ${plotBottom} L ${points[0]?.x ?? plotLeft} ${plotBottom} Z`
             : "";
-          return { ...entry, seriesIndex, points, linePath, areaPath };
+          return { ...entry, dashed, seriesIndex, points, linePath, areaPath };
         });
 
     const categoryLabels: CategoryLabel[] = axisLabels(labels, {
@@ -275,8 +314,22 @@ export function LineChart({
       return { index, label, x, hitX: prev, hitWidth: Math.max(next - prev, 1) };
     });
 
-    return { stacked, lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom };
-  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, isPercent, isStacked, labels, series, tickInterval, width]);
+    const referenceY = refValue === null ? null : yScale(refValue);
+
+    return { stacked, lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom, referenceY };
+  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, isPercent, isStacked, labels, referenceLine, series, tickInterval, width]);
+
+  // Accent dots: solid series only, never on stacked bands (their edges are running totals).
+  const highlightOn = Boolean(referenceLine?.highlight) && !isStacked && layout.referenceY !== null;
+  const highlightPoints = highlightOn
+    ? layout.lines.flatMap((line) =>
+        line.dashed
+          ? []
+          : line.points
+              .map((point, index) => ({ point, index, seriesIndex: line.seriesIndex }))
+              .filter(({ index }) => pastReference(line.data[index], referenceLine)),
+      )
+    : [];
 
   const visibleLines = highlighted !== null
     ? layout.lines.filter((line) => line.seriesIndex === highlighted)
@@ -315,7 +368,11 @@ export function LineChart({
   const readingOrder = isStacked ? [...visibleLines].reverse() : visibleLines;
   const sampleLabel = (index: number, label: string) => {
     if (!isStacked) {
-      return `${label}: ${series.map((entry) => `${entry.label} ${formatValue(entry.data[index] ?? 0)}`).join(", ")}`;
+      const past = (entry: ChartSeries) =>
+        highlightOn && !isDashed(entry) && pastReference(entry.data[index], referenceLine)
+          ? ` (${referenceLine?.highlight} ${referenceLine?.label})`
+          : "";
+      return `${label}: ${series.map((entry) => `${entry.label} ${formatValue(entry.data[index] ?? 0)}${past(entry)}`).join(", ")}`;
     }
     const total = stackTotals?.[index] ?? 0;
     const parts = [...series.keys()].reverse().map((seriesIndex) => {
@@ -340,7 +397,9 @@ export function LineChart({
           topFirst={isStacked}
         />
       ) : undefined}
-      table={showTable ? <ChartTable labels={labels} series={series} totals={stackTotals} /> : undefined}
+      table={showTable ? (
+        <ChartTable labels={labels} series={series} totals={stackTotals} reference={referenceLine && Number.isFinite(referenceLine.value) && !isPercent ? referenceLine : undefined} />
+      ) : undefined}
       isEmpty={isEmpty}
       emptyLabel={emptyLabel}
       isLoading={isLoading}
@@ -488,15 +547,44 @@ export function LineChart({
                   />
                 ) : null}
                 <path
-                  className={`${styles.line}${animate ? ` ${motionStyles.draw}` : ""}`}
+                  className={`${styles.line}${line.dashed ? ` ${styles.lineDashed}` : ""}${animate && !line.dashed ? ` ${motionStyles.draw}` : ""}`}
                   style={seriesMotion(line.seriesIndex)}
                   d={line.linePath}
                   stroke={line.color}
-                  pathLength={animate ? 1 : undefined}
+                  pathLength={animate && !line.dashed ? 1 : undefined}
                 />
               </g>
             );
           })}
+          {layout.referenceY !== null && referenceLine ? (
+            <g className={styles.reference}>
+              <line
+                className={styles.referenceLine}
+                x1={layout.plotLeft}
+                x2={layout.plotRight}
+                y1={Math.round(layout.referenceY) + 0.5}
+                y2={Math.round(layout.referenceY) + 0.5}
+                vectorEffect="non-scaling-stroke"
+              />
+              <text
+                className={styles.referenceLabel}
+                x={layout.plotRight}
+                y={layout.referenceY - 6}
+                textAnchor="end"
+              >
+                {referenceLine.label}
+              </text>
+            </g>
+          ) : null}
+          {highlightPoints.map(({ point, index, seriesIndex }) => (
+            <circle
+              key={`past-${seriesIndex}-${index}`}
+              className={`${styles.highlightDot}${highlighted !== null && highlighted !== seriesIndex ? ` ${styles.seriesDimmed}` : ""}`}
+              cx={point.x}
+              cy={point.y}
+              r={4.5}
+            />
+          ))}
           {activeSample ? (
             <line
               className={styles.crosshair}

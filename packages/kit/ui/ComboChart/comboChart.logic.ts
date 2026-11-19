@@ -31,6 +31,43 @@ export function extentOf(data: ComboChartDatum[], keys: string[]): [number, numb
   return [min, max];
 }
 
+/**
+ * Stacked bar segments for one column, in series order. Positive values pile up from zero, negative
+ * values pile down from zero, so gains and losses (like new and churned revenue) sit either side of
+ * the baseline. Missing values give null and take no room.
+ */
+export function stackSegments(row: ComboChartDatum, keys: string[]): ({ start: number; end: number } | null)[] {
+  let up = 0;
+  let down = 0;
+  return keys.map((key) => {
+    const value = valueOf(row, key);
+    if (value === undefined || value === 0) return value === 0 ? { start: up, end: up } : null;
+    if (value > 0) {
+      const segment = { start: up, end: up + value };
+      up += value;
+      return segment;
+    }
+    const segment = { start: down, end: down + value };
+    down += value;
+    return segment;
+  });
+}
+
+/** Lowest negative pile and highest positive pile over all columns, always including zero. */
+export function stackedExtentOf(data: ComboChartDatum[], keys: string[]): [number, number] {
+  let min = 0;
+  let max = 0;
+  for (const row of data) {
+    for (const segment of stackSegments(row, keys)) {
+      if (!segment) continue;
+      min = Math.min(min, segment.end);
+      max = Math.max(max, segment.end);
+    }
+  }
+  if (min === max) max = min + 1;
+  return [min, max];
+}
+
 /** Most value-axis ticks, so gridlines stay quiet. */
 const MAX_TICKS = 5;
 

@@ -6,11 +6,30 @@ export type LineChartVariant = "line" | "area";
 export type LineChartCurve = "smooth" | "linear";
 export type LineChartStack = "none" | "stacked" | "percent";
 
+/** A series; `dashed` draws it as a dashed line with no area fill, for a comparison such as the previous period. */
+export interface LineChartSeries extends ChartSeries {
+  dashed?: boolean;
+}
+
+/** Which points past the reference line get the accent dot. */
+export type LineChartReferenceHighlight = "above" | "below";
+
+/** One horizontal reference, like a target or last period's average. */
+export interface LineChartReference {
+  value: number;
+  /** Shown at the line's end and read in the table and point names, e.g. "Target". */
+  label: string;
+  /** Mark points of solid series above (or below) the line with an accent dot. Not with stack. */
+  highlight?: LineChartReferenceHighlight;
+}
+
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
   data?: ChartDatum[];
   labels?: string[];
-  series?: ChartSeries[];
+  series?: LineChartSeries[];
+  /** A dashed horizontal line at `value` with its label; the value axis widens to include it. */
+  referenceLine?: LineChartReference;
   title?: string;
   description?: string;
   variant?: LineChartVariant;

@@ -7,7 +7,9 @@
     "Following a trajectory across time or sequence",
     "Multi-series trends with shared labels",
     "Parts of a total over time, like usage by plan by month — variant area with stack stacked",
-    "Each part's share of the total over time — variant area with stack percent"
+    "Each part's share of the total over time — variant area with stack percent",
+    "This period against the last — a second series with dashed true",
+    "Showing a target or average — referenceLine, with highlight to mark points past it"
   ],
   "doNotUseWhen": [
     "Comparing unrelated magnitudes at one moment — use BarChart",
@@ -24,7 +26,18 @@
     },
     "series": {
       "type": "array",
-      "required": false
+      "required": false,
+      "note": "{ label, data: number[], color?, dashed? }[]. dashed draws the series as a dashed line with no area fill and a dashed legend swatch, for a comparison such as the previous period; it still counts toward the value axis."
+    },
+    "referenceLine": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "value": "number",
+        "label": "string",
+        "highlight": "\"above\" | \"below\"?"
+      },
+      "note": "One dashed horizontal guide (text.muted) at value, with its label at the line's right end. The value axis widens to include it. highlight marks points of solid series above (or below) it with an accent dot (fill.brand); not with stack (the edges are running totals). The table gets a caption with the label and value, and each point's name says when it is past the line. Ignored with stack percent."
     },
     "title": {
       "type": "string",
@@ -120,16 +133,23 @@
     "chart.3",
     "chart.4",
     "chart.5",
-    "chart.6"
+    "chart.6",
+    "fill.brand",
+    "type.weight.label",
+    "space.1",
+    "space.2"
   ],
   "a11y": {
     "element": "figure",
     "requirements": [
-      "Title on figure when provided", "The plot svg is role=group named by the title when it holds focusable points (role=img only when empty)",
+      "Title on figure when provided",
+      "The plot svg is role=group named by the title when it holds focusable points (role=img only when empty)",
       "Hover reads the sample",
       "Legend highlight emphasises one series",
       "Table view keeps values readable",
-      "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance"
+      "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance",
+      "referenceLine: the table caption names the label and value; a highlighted point's accessible name adds \"(above <label>)\" or \"(below <label>)\"",
+      "dashed series are told apart by their legend label, not by the dash alone"
     ]
   },
   "doNot": [
@@ -139,7 +159,10 @@
     "Do not stack series that can go negative; a stacked band starts where the one below ends, so a negative value has nowhere to go",
     "Do not stack values that do not add up to a real total, like rates, averages or overlapping counts; use stack none",
     "Do not set stack with variant line; stacking needs filled bands",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not draw a reference line or threshold with a second flat series — use referenceLine",
+    "Do not overlay a second chart to show the previous period — use a dashed series",
+    "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way"
   ],
-  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>"
+  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>\n\n<LineChart\n  title=\"Signups\"\n  variant=\"line\"\n  labels={[\"W1\", \"W2\", \"W3\", \"W4\"]}\n  series={[\n    { label: \"This period\", data: [310, 352, 298, 401] },\n    { label: \"Previous period\", data: [280, 300, 315, 330], dashed: true },\n  ]}\n  referenceLine={{ value: 350, label: \"Goal\", highlight: \"above\" }}\n/>"
 }

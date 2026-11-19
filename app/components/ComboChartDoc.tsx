@@ -51,6 +51,15 @@ const CODE = `<ComboChart
   valueFormatter={{ bars: euro, line: (value) => \`\${value}%\` }}
 />`;
 
+const SEATS = [
+  { label: "Jun", added: 48, grown: 21, shrunk: -9, removed: -14 },
+  { label: "Jul", added: 52, grown: 18, shrunk: -12, removed: -20 },
+  { label: "Aug", added: 39, grown: 25, shrunk: -7, removed: -11 },
+  { label: "Sep", added: 61, grown: 22, shrunk: -15, removed: -26 },
+  { label: "Oct", added: 57, grown: 30, shrunk: -10, removed: -18 },
+  { label: "Nov", added: 66, grown: 27, shrunk: -13, removed: -16 },
+].map((row) => ({ ...row, net: row.added + row.grown + row.shrunk + row.removed }));
+
 export function ComboChartDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
 
@@ -133,6 +142,47 @@ export function ComboChartDoc() {
   data={orders}
   bars={[{ key: "web", label: "Web" }, { key: "app", label: "App" }]}
   line={{ key: "average", label: "Average of both channels" }}
+/>`}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Stacked, gains and losses</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ComboChart
+                    title="Seat changes"
+                    description="Seats added and removed each month, with the net"
+                    stack="stacked"
+                    data={SEATS}
+                    bars={[
+                      { key: "added", label: "New teams" },
+                      { key: "grown", label: "Teams grew" },
+                      { key: "shrunk", label: "Teams shrank" },
+                      { key: "removed", label: "Teams left" },
+                    ]}
+                    line={{ key: "net", label: "Net change" }}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  stack stacked draws one bar per column. Positive values pile up from zero and
+                  negative values pile down, so losses sit below the baseline. The line is the net.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ComboChart
+  title="Seat changes"
+  stack="stacked"
+  data={seats}
+  bars={[
+    { key: "added", label: "New teams" },
+    { key: "grown", label: "Teams grew" },
+    { key: "shrunk", label: "Teams shrank" },
+    { key: "removed", label: "Teams left" },
+  ]}
+  line={{ key: "net", label: "Net change" }}
 />`}
               />
             </section>

@@ -9,11 +9,22 @@ import { cx } from "../shared/cx";
 import { nisthaAttr } from "../shared/inspect";
 import { measureLabel } from "../shared/measureLabel";
 import { useChartSize } from "../shared/useChartSize";
-import { alignedTicks, axisTicks, barColor, columnValues, extentOf, LINE_COLOR, nextColumn, valueOf } from "./comboChart.logic";
+import {
+  alignedTicks,
+  axisTicks,
+  barColor,
+  columnValues,
+  extentOf,
+  LINE_COLOR,
+  nextColumn,
+  stackedExtentOf,
+  stackSegments,
+  valueOf,
+} from "./comboChart.logic";
 import type { ComboChartProps, ComboChartSeries } from "./ComboChart.types";
 import styles from "./ComboChart.module.css";
 
-export type { ComboChartAxis, ComboChartDatum, ComboChartFormatters, ComboChartProps, ComboChartSeries } from "./ComboChart.types";
+export type { ComboChartAxis, ComboChartStack, ComboChartDatum, ComboChartFormatters, ComboChartProps, ComboChartSeries } from "./ComboChart.types";
 
 const MAX_BAR = 32;
 const MIN_BAR = 6;
@@ -83,6 +94,7 @@ export function ComboChart({
   bars,
   line,
   axis = "shared",
+  stack = "none",
   valueFormatter,
   title,
   description,
@@ -94,6 +106,7 @@ export function ComboChart({
   const formatBar = valueFormatter?.bars ?? formatValue;
   const formatLine = valueFormatter?.line ?? formatValue;
   const isDual = axis === "dual";
+  const isStacked = stack === "stacked";
   const { ref: sizeRef, width } = useChartSize(height);
   const [active, setActive] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState<number | null>(null);
@@ -109,7 +122,8 @@ export function ComboChart({
   const layout = useMemo(() => {
     if (isEmpty || width <= 0) return null;
     const count = data.length;
-    const seriesCount = bars.length;
+    // Stacked: one bar per column.
+    const seriesCount = isStacked ? 1 : bars.length;
     const plotTop = CHART_MARGINS.top;
     const plotBottom = height - CHART_MARGINS.bottom;
 
@@ -119,7 +133,13 @@ export function ComboChart({
       const value = valueOf(row, key);
       return value === undefined || Number.isInteger(value);
     }));
-    const [leftMin, leftMax] = extentOf(data, leftKeys);
+    const [barMin, barMax] = isStacked ? stackedExtentOf(data, barKeys) : extentOf(data, barKeys);
+    const [leftMin, leftMax] = isDual
+      ? [barMin, barMax]
+      : (() => {
+          const [lineMin, lineMax] = extentOf(data, [line.key]);
+          return [Math.min(barMin, lineMin), Math.max(barMax, lineMax)];
+        })();
     const left = axisTicks(leftMin, leftMax, integer);
     const right = isDual ? alignedTicks(...extentOf(data, [line.key]), left.ticks.length) : null;
     const leftLabels = left.ticks.map((value) => formatAxisLabel(value, valueFormatter?.bars));
@@ -146,7 +166,24 @@ export function ComboChart({
 
     const centers = data.map((_, index) => plotLeft + index * groupSize + groupSize / 2);
     const baseline = yLeft(0);
-    const barRects = data.flatMap((row, index) =>
+    const barRects = isStacked
+      ? data.flatMap((row, index) =>
+          stackSegments(row, barKeys).map((segment, seriesIndex) => {
+            if (!segment || segment.start === segment.end) return null;
+            const a = yLeft(segment.start);
+            const b = yLeft(segment.end);
+            return {
+              key: `${index}-${seriesIndex}`,
+              seriesIndex,
+              x: centers[index] - barWidth / 2,
+              y: Math.min(a, b),
+              width: barWidth,
+              height: Math.abs(b - a),
+              color: barColor(seriesIndex),
+            };
+          }),
+        ).filter((rect) => rect !== null)
+      : data.flatMap((row, index) =>
       bars.map((series, seriesIndex) => {
         const value = valueOf(row, series.key);
         if (value === undefined) return null;
@@ -200,7 +237,7 @@ export function ComboChart({
       linePath: smoothPath(points),
       categoryLabels,
     };
-  }, [bars, barKeys, data, height, isDual, isEmpty, line.key, valueFormatter?.bars, valueFormatter?.line, width]);
+  }, [bars, barKeys, data, height, isDual, isEmpty, isStacked, line.key, valueFormatter?.bars, valueFormatter?.line, width]);
 
   const offsetX = layout?.scrolls ? layout.leftMargin - scrollLeft : 0;
   const activeRow = active !== null ? data[active] : undefined;
@@ -289,12 +326,12 @@ export function ComboChart({
       {layout.barRects.map((rect) => (
         <rect
           key={rect.key}
-          className={cx(styles.bar, dimmed(rect.seriesIndex) && styles.dimmed)}
+          className={cx(styles.bar, isStacked && styles.barStacked, dimmed(rect.seriesIndex) && styles.dimmed)}
           x={rect.x}
           y={rect.y}
           width={rect.width}
           height={rect.height}
-          rx={2}
+          rx={isStacked ? 0 : 2}
           fill={rect.color}
         />
       ))}

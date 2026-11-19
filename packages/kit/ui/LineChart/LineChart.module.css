@@ -76,6 +76,56 @@
   pointer-events: none;
 }
 
+/* Comparison series: dashed, no fill. */
+.lineDashed {
+  stroke-dasharray: var(--space-1) var(--space-1);
+}
+
+.swatchDashed {
+  background: repeating-linear-gradient(
+    to right,
+    currentColor 0 var(--space-1),
+    transparent var(--space-1) calc(var(--space-1) * 1.5)
+  );
+}
+
+/* Reference: a dashed guide, quieter than the data, labelled at its end. */
+.reference {
+  pointer-events: none;
+}
+
+.referenceLine {
+  /* text.muted, not a border token: the guide must stay visible on dark cards. */
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: var(--space-1) var(--space-1);
+}
+
+.referenceLabel {
+  fill: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Points past the reference: the accent colour, ringed in the card so they sit on the line. */
+.highlightDot {
+  fill: var(--fill-brand);
+  stroke: var(--surface-card);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.tableCaption {
+  caption-side: top;
+  padding-block-end: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--type-size-caption);
+  text-align: start;
+  font-variant-numeric: tabular-nums;
+}
+
 .dot {
   stroke: var(--surface-card);
   stroke-width: 2;

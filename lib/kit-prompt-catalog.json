@@ -1406,7 +1406,9 @@
         "Following a trajectory across time or sequence",
         "Multi-series trends with shared labels",
         "Parts of a total over time, like usage by plan by month — variant area with stack stacked",
-        "Each part's share of the total over time — variant area with stack percent"
+        "Each part's share of the total over time — variant area with stack percent",
+        "This period against the last — a second series with dashed true",
+        "Showing a target or average — referenceLine, with highlight to mark points past it"
       ],
       "doNotUseWhen": [
         "Comparing unrelated magnitudes at one moment — use BarChart",
@@ -1419,7 +1421,10 @@
         "Do not stack series that can go negative; a stacked band starts where the one below ends, so a negative value has nowhere to go",
         "Do not stack values that do not add up to a real total, like rates, averages or overlapping counts; use stack none",
         "Do not set stack with variant line; stacking needs filled bands",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not draw a reference line or threshold with a second flat series — use referenceLine",
+        "Do not overlay a second chart to show the previous period — use a dashed series",
+        "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way"
       ],
       "props": {
         "data": {
@@ -1432,7 +1437,13 @@
         },
         "series": {
           "type": "array",
-          "required": false
+          "required": false,
+          "note": "{ label, data: number[], color?, dashed? }[]. dashed draws the series as a dashed line with no area fill and a dashed legend swatch, for a comparison such as the previous period; it still counts toward the value axis."
+        },
+        "referenceLine": {
+          "type": "object",
+          "required": false,
+          "note": "One dashed horizontal guide (text.muted) at value, with its label at the line's right end. The value axis widens to include it. highlight marks points of solid series above (or below) it with an accent dot (fill.brand); not with stack (the edges are running totals). The table gets a caption with the label and value, and each point's name says when it is past the line. Ignored with stack percent."
         },
         "title": {
           "type": "string",
@@ -5211,7 +5222,8 @@
       "useWhen": [
         "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
         "Volumes with a running target or moving average drawn across them",
-        "Two measures people read together per column, where two separate charts would make them line up by eye"
+        "Two measures people read together per column, where two separate charts would make them line up by eye",
+        "Gains and losses per period with the net as a line — stack stacked, losses as negative values"
       ],
       "doNotUseWhen": [
         "Only amounts compared across categories — use BarChart",
@@ -5226,7 +5238,9 @@
         "Do not draw more than one line; a second trend belongs in LineChart",
         "Do not use axis dual for values in the same unit; it makes the two scales look comparable when they are not",
         "Do not use status colours for the series; a series that means good or bad says so in its label",
-        "Do not use raw hex or primitive --color-* ramps"
+        "Do not use raw hex or primitive --color-* ramps",
+        "Do not stack values that do not add up, like rates; use stack none",
+        "Do not pass losses as positive values with a status colour; make them negative so they pile below zero"
       ],
       "props": {
         "data": {
@@ -5237,7 +5251,7 @@
         "bars": {
           "type": "array",
           "required": true,
-          "note": "One to three bar series. They take --chart-1, --chart-2 and --chart-4 in order, so the line colour stays apart."
+          "note": "One to four bar series. They take --chart-1, --chart-2, --chart-4 and --chart-5 in order, so the line colour stays apart."
         },
         "line": {
           "type": "object",
@@ -5252,6 +5266,15 @@
           ],
           "default": "shared",
           "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+        },
+        "stack": {
+          "type": "enum",
+          "values": [
+            "none",
+            "stacked"
+          ],
+          "default": "none",
+          "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net."
         },
         "valueFormatter": {
           "type": "object",

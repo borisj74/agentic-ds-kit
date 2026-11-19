@@ -3,6 +3,9 @@ import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 
 export type ComboChartAxis = "shared" | "dual";
 
+/** `none`: bars side by side. `stacked`: one bar per column, positives piled up from zero and negatives down. */
+export type ComboChartStack = "none" | "stacked";
+
 /** One category: its label plus one number per series key. */
 export interface ComboChartDatum {
   label: string;
@@ -26,12 +29,14 @@ export interface ComboChartFormatters {
 /** `ref`, `className` and other attributes land on the root `<figure>`. */
 export interface ComboChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
   data: ComboChartDatum[];
-  /** One to three bar series. */
+  /** One to four bar series. */
   bars: ComboChartSeries[];
   /** One line series. */
   line: ComboChartSeries;
   /** `shared`: one left axis. `dual`: the line gets its own axis on the right. */
   axis?: ComboChartAxis;
+  /** Default "none". "stacked" piles the bars in one column; negative values pile below zero. */
+  stack?: ComboChartStack;
   valueFormatter?: ComboChartFormatters;
   title?: string;
   description?: string;
