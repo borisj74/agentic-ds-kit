@@ -94,7 +94,15 @@
   transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
+/* The logo never takes the pointer, and the toggle stacks above it: an element at opacity
+   below 1 paints as its own layer, which would otherwise put the hidden logo over the toggle. */
+.app-shell-pattern__brand-mark {
+  pointer-events: none;
+}
+
 .app-shell-pattern__brand-toggle {
+  position: relative;
+  z-index: 1;
   opacity: 0;
 }
 
