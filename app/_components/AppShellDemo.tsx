@@ -140,14 +140,16 @@ const VIEW_NOTES: Record<ShellView, string> = {
 
 /**
  * Demo logo: a placeholder mark from PrebuiltUI's free logo set (prebuiltui.com/logos), drawn
- * in currentColor so it follows the theme (on the brand fill when it is the nav mark). Passed through AppHeader's `logo` slot at --space-5, smaller than the letter mark.
+ * in currentColor so it takes the kit brand colour (--icon-brand), or the on-brand colour on the
+ * brand fill when it is the nav mark. Passed through the `logo` / `mark` slots at --space-5.
  */
 function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
   return (
     <svg
-      viewBox="0 0 48 43"
+      viewBox="0 0 63 59"
       aria-hidden="true"
       focusable="false"
+      fill="currentColor"
       style={{
         display: "block",
         height: onBrand ? "var(--space-4)" : "var(--space-5)",
@@ -155,14 +157,8 @@ function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
         color: onBrand ? "currentColor" : "var(--icon-brand)",
       }}
     >
-      <mask id="demo-logo-dot">
-        <rect width="48" height="43" fill="white" />
-        <circle cx="24" cy="21.421" r="5.355" fill="black" />
-      </mask>
-      <g mask="url(#demo-logo-dot)" fill="currentColor">
-        <path d="M5.258 42.839c11.83 0 21.419-9.59 21.419-21.42S17.087 0 5.257 0c-11.829 0 .001 9.59.001 21.42 0 11.829-11.83 21.419 0 21.419" />
-        <path d="M42.742 42.839c-11.83 0-21.419-9.59-21.419-21.42S30.913 0 42.743 0c11.829 0-.001 9.59-.001 21.42 0 11.829 11.83 21.419 0 21.419" />
-      </g>
+      <path d="M27.7696 33.9423L19.6599 20.6719L9.82994 38.4886L0 56.3054H15.7279L27.7696 33.9423Z" />
+      <path d="M29.4812 1.44167L22.3329 16.7865L46.3377 56.2469L62.666 56.2469L29.4812 1.44167Z" />
     </svg>
   );
 }
