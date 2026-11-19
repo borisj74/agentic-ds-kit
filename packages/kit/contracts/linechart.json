@@ -5,11 +5,13 @@
   "intent": "Change and progress over ordered samples as a line or area chart.",
   "useWhen": [
     "Following a trajectory across time or sequence",
-    "Multi-series trends with shared labels"
+    "Multi-series trends with shared labels",
+    "Parts of a total over time, like usage by plan by month — variant area with stack stacked",
+    "Each part's share of the total over time — variant area with stack percent"
   ],
   "doNotUseWhen": [
     "Comparing unrelated magnitudes at one moment — use BarChart",
-    "Part-to-whole share — use PieChart"
+    "Part-to-whole share at one moment — use PieChart"
   ],
   "props": {
     "data": {
@@ -39,6 +41,16 @@
         "area"
       ],
       "default": "area"
+    },
+    "stack": {
+      "type": "enum",
+      "values": [
+        "none",
+        "stacked",
+        "percent"
+      ],
+      "default": "none",
+      "note": "Only with variant area. stacked piles the series as bands from the bottom up, so the top edge is the total; percent scales each column to 100% so the bands show each series' share. Missing or negative values count as 0. Ignored with variant line, with a warning in development"
     },
     "curve": {
       "type": "enum",
@@ -100,6 +112,9 @@
     "text.primary",
     "text.muted",
     "border.faint",
+    "border.strong",
+    "text.secondary",
+    "surface.elevated",
     "chart.1",
     "chart.2",
     "chart.3",
@@ -120,7 +135,10 @@
   "doNot": [
     "Do not invent chart container cousins",
     "Do not draw bars and a line on one chart from two charts — use ComboChart",
+    "Do not stack series that can go negative; a stacked band starts where the one below ends, so a negative value has nowhere to go",
+    "Do not stack values that do not add up to a real total, like rates, averages or overlapping counts; use stack none",
+    "Do not set stack with variant line; stacking needs filled bands",
     "Do not use raw hex"
   ],
-  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />"
+  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>"
 }

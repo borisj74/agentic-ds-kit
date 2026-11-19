@@ -28,6 +28,15 @@ const YOY_SERIES = [
   { label: "2024", data: [3800, 4200, 4500, 5100, 5400, 5800] },
 ];
 
+// Active seats by plan, Jan to Sep: Free grows slowly, Pro and Team faster, Enterprise starts in March.
+const PLAN_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
+const PLAN_SERIES = [
+  { label: "Free", data: [1200, 1260, 1310, 1340, 1390, 1420, 1460, 1480, 1510] },
+  { label: "Pro", data: [480, 540, 610, 660, 740, 800, 870, 930, 1010] },
+  { label: "Team", data: [220, 260, 300, 360, 410, 470, 540, 600, 690] },
+  { label: "Enterprise", data: [0, 0, 40, 60, 90, 120, 160, 190, 240] },
+];
+
 function masterCode(variant: LineChartVariant, showGrid: boolean) {
   const lines = [
     "<LineChart",
@@ -222,6 +231,68 @@ export function LineChartDoc() {
   data={weeklySessions}
 />`}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Stacked</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="Active seats by plan"
+                    description="2026, by month"
+                    variant="area"
+                    stack="stacked"
+                    labels={PLAN_MONTHS}
+                    series={PLAN_SERIES}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  stack=&quot;stacked&quot; piles the series as bands, first series at the bottom, so the top edge
+                  is the total. The tooltip and legend list the top band first, and the table adds a Total
+                  column. Only stack values that add up and never go negative.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="Active seats by plan"
+  variant="area"
+  stack="stacked"
+  labels={["Jan", "Feb", "Mar" /* … */]}
+  series={[
+    { label: "Free", data: [1200, 1260, 1310 /* … */] },
+    { label: "Pro", data: [480, 540, 610 /* … */] },
+    { label: "Team", data: [220, 260, 300 /* … */] },
+    { label: "Enterprise", data: [0, 0, 40 /* … */] },
+  ]}
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Percent</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="Share of seats by plan"
+                    description="2026, by month"
+                    variant="area"
+                    stack="percent"
+                    labels={PLAN_MONTHS}
+                    series={PLAN_SERIES}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  stack=&quot;percent&quot; scales every month to 100%, so each band is that plan&apos;s share. The axis
+                  runs 0–100%; the tooltip gives each share with its value, and the total.
+                </p>
+              </div>
+              <CodeBlock code={`<LineChart title="Share of seats by plan" variant="area" stack="percent" labels={months} series={plans} />`} />
             </section>
 
             <section className={styles.example}>

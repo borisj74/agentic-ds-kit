@@ -4,6 +4,7 @@ import type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../shared/char
 
 export type LineChartVariant = "line" | "area";
 export type LineChartCurve = "smooth" | "linear";
+export type LineChartStack = "none" | "stacked" | "percent";
 
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
@@ -13,6 +14,12 @@ export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">,
   title?: string;
   description?: string;
   variant?: LineChartVariant;
+  /**
+   * Only with `variant="area"`. `stacked` piles the series as bands so the top edge is the total;
+   * `percent` scales each column to 100% to show each series' share. Missing or negative values count
+   * as 0. Ignored (with a development warning) for `variant="line"`. Default "none".
+   */
+  stack?: LineChartStack;
   /** "smooth" (default) rounds the line through every point without overshooting it (monotone); "linear" draws straight segments. */
   curve?: LineChartCurve;
   height?: number;

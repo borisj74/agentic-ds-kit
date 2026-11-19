@@ -1,2 +1,2 @@
 export { LineChart } from "./LineChart";
-export type { LineChartProps, LineChartVariant, LineChartCurve } from "./LineChart.types";
+export type { LineChartProps, LineChartVariant, LineChartCurve, LineChartStack } from "./LineChart.types";

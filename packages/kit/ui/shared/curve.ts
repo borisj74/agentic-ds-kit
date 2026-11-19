@@ -20,8 +20,21 @@ export const CURVE_HANDLE = 0.5;
  * so the line stays smooth through every point.
  */
 export function smoothPath(points: PathPoint[]): string {
+  if (points.length < 3) return linearPath(points);
+  const segments = smoothSegments(points);
+  let d = `M ${points[0].x} ${points[0].y}`;
+  segments.forEach((segment, i) => {
+    const p1 = points[i + 1];
+    d += ` C ${segment.c1x} ${segment.c1y} ${segment.c2x} ${segment.c2y} ${p1.x} ${p1.y}`;
+  });
+  return d;
+}
+
+/** Control points of each cubic segment of `smoothPath` (one per gap between points). Needs three or more points. */
+type CurveSegment = { c1x: number; c1y: number; c2x: number; c2y: number };
+
+function smoothSegments(points: PathPoint[]): CurveSegment[] {
   const n = points.length;
-  if (n < 3) return linearPath(points);
   const dx: number[] = [];
   const slope: number[] = [];
   for (let i = 0; i < n - 1; i += 1) {
@@ -48,7 +61,7 @@ export function smoothPath(points: PathPoint[]): string {
       tangent[i + 1] = t * b * slope[i];
     }
   }
-  let d = `M ${points[0].x} ${points[0].y}`;
+  const segments: CurveSegment[] = [];
   for (let i = 0; i < n - 1; i += 1) {
     // The control points stay in order between the end values while (a + b) * share <= 1,
     // a and b being the end tangents relative to this segment's slope.
@@ -57,7 +70,37 @@ export function smoothPath(points: PathPoint[]): string {
     const reach = dx[i] * share;
     const p0 = points[i];
     const p1 = points[i + 1];
-    d += ` C ${p0.x + reach} ${p0.y + tangent[i] * reach} ${p1.x - reach} ${p1.y - tangent[i + 1] * reach} ${p1.x} ${p1.y}`;
+    segments.push({
+      c1x: p0.x + reach,
+      c1y: p0.y + tangent[i] * reach,
+      c2x: p1.x - reach,
+      c2y: p1.y - tangent[i + 1] * reach,
+    });
+  }
+  return segments;
+}
+
+/**
+ * Path commands that trace the same curve as `smoothPath` (or `linearPath`) backwards, from the last
+ * point to the first, with the pen already on the last point. Stacked areas close each band along the
+ * band below with these, so the two share one edge and leave no gap.
+ */
+export function reversedCurveCommands(points: PathPoint[], curve: "smooth" | "linear"): string {
+  const n = points.length;
+  if (n < 2) return "";
+  if (curve === "linear" || n < 3) {
+    return points
+      .slice(0, -1)
+      .reverse()
+      .map((point) => `L ${point.x} ${point.y}`)
+      .join(" ");
+  }
+  const segments = smoothSegments(points);
+  let d = "";
+  for (let i = n - 2; i >= 0; i -= 1) {
+    const segment = segments[i];
+    const p0 = points[i];
+    d += `${d ? " " : ""}C ${segment.c2x} ${segment.c2y} ${segment.c1x} ${segment.c1y} ${p0.x} ${p0.y}`;
   }
   return d;
 }
