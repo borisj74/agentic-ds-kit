@@ -132,7 +132,7 @@
     "type.weight.label",
     "layout.gutter.md",
     "layout.gutter.sm",
-    "type.tracking.heading"
+    "type.tracking.heading5"
   ],
   "a11y": {
     "element": "section",

@@ -49,7 +49,7 @@
   color: var(--text-fg);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   line-height: 1;
 }
 

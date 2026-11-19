@@ -12,9 +12,9 @@
   ],
   "tokens": {
     "typeFamily": {
-      "sans": "var(--font-ibm-plex-sans, \"IBM Plex Sans\"), system-ui, sans-serif",
-      "display": "var(--font-ibm-plex-sans, \"IBM Plex Sans\"), system-ui, sans-serif",
-      "mono": "var(--font-ibm-plex-mono, \"IBM Plex Mono\"), ui-monospace, monospace",
+      "sans": "var(--font-geist-sans, \"Geist\"), system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "display": "var(--font-geist-sans, \"Geist\"), system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+      "mono": "var(--font-geist-mono, \"Geist Mono\"), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
       "body": "var(--font-sans)",
       "heading": "var(--font-display)",
       "overline": "var(--font-mono)"
@@ -169,12 +169,12 @@
           "doNot": "Do not invent a custom line-height"
         },
         "--type-weight-": {
-          "note": "Role weights. Heading is live-tunable 400–700.",
+          "note": "Role weights. Body 400, label and metric 500. Every heading role and strong read --font-weight-heading (550). Heading is live-tunable 400–700.",
           "useWhen": "Body, label, heading, title, metric, caption, overline, code",
           "doNot": "Do not hardcode font-weight numbers in components"
         },
         "--type-family-": {
-          "note": "Aliases of the font trio. --type-family-overline is Plex Mono (alias of --font-mono).",
+          "note": "Aliases of the font trio. --type-family-overline is Geist Mono (alias of --font-mono).",
           "useWhen": "Prefer --font-heading / --font-body / --font-mono",
           "doNot": "Do not add a fourth family"
         },
@@ -391,27 +391,27 @@
           "doNot": "Do not use mono for body copy"
         },
         "--type-weight-title": {
-          "note": "Page title weight (700). Pair with --type-tracking-title.",
+          "note": "Page title weight: var(--font-weight-heading) (550), same as --type-weight-heading. Pair with the --type-tracking-heading-N that matches its size.",
           "useWhen": "PageHeader title and other page-level titles",
           "doNot": "Do not use title weight for section or card headings; use --type-weight-heading"
         },
         "--type-tracking-title": {
-          "note": "Page title letter-spacing (-0.02em).",
-          "useWhen": "Page titles set in --type-weight-title",
+          "note": "Page title letter-spacing (-0.04em). Prefer the --type-tracking-heading-N that matches the title size.",
+          "useWhen": "Page titles at 24–32px set in --type-weight-title",
           "doNot": "Do not apply negative tracking to body, label or caption text"
         },
         "--type-tracking-heading": {
-          "note": "Section heading letter-spacing (-0.01em).",
-          "useWhen": "Section, Card, dialog and drawer titles set in --type-weight-heading",
-          "doNot": "Do not use on text below --type-size-heading"
+          "note": "Heading letter-spacing for headings at 14–20px (-0.02em: 14px → -0.28px, 16px → -0.32px, 20px → -0.4px). Larger headings use --type-tracking-heading-1…5.",
+          "useWhen": "Card, panel, list-item and dialog titles at ui/body sizes set in --type-weight-heading",
+          "doNot": "Do not use on body, label or caption text; do not use on headings at 24px and up"
         },
         "--type-tracking-overline": {
-          "note": "Overline letter-spacing (+0.06em). Overline = --type-family-overline (Plex Mono), --type-weight-overline (500), --type-size-overline-xs, uppercase.",
+          "note": "Overline letter-spacing (+0.06em). Overline = --type-family-overline (Geist Mono), --type-weight-overline (500), --type-size-overline-xs, uppercase.",
           "useWhen": "Overlines, eyebrows, group labels, table header cells, metric labels",
           "doNot": "Do not use caps tracking on mixed-case text or body copy"
         },
         "--type-family-overline": {
-          "note": "Overline family: Plex Mono. Always uppercase with --type-tracking-overline.",
+          "note": "Overline family: Geist Mono. Always uppercase with --type-tracking-overline.",
           "useWhen": "Overlines, table header cells, metric labels",
           "doNot": "Do not use for body copy or values; use --font-mono for code"
         },
@@ -421,12 +421,12 @@
           "doNot": "Do not reuse the hover fill (--surface-muted) for selection"
         },
         "--type-weight-heading": {
-          "note": "Heading weight. Playground 400|500|600|700.",
+          "note": "Heading weight: var(--font-weight-heading) (550). Playground 400|500|550|600|700.",
           "useWhen": "heading-1…5 and section titles",
-          "doNot": "Do not hardcode a heading weight in a component"
+          "doNot": "Do not hardcode a heading weight in a component; labels, buttons, names and values use --type-weight-label or --type-weight-metric"
         },
         "--type-size-display-hero": {
-          "note": "Marketing and landing pages only. Hero display: 64/76 at desktop, 52/64 below --grid-breakpoint-md, 40/48 below --grid-breakpoint-sm. Pair with --type-line-display-hero, --type-weight-display-hero (400) and --type-tracking-display-hero (-0.03em).",
+          "note": "Marketing and landing pages only. Hero display: 64/76 at desktop, 52/64 below --grid-breakpoint-md, 40/48 below --grid-breakpoint-sm. Pair with --type-line-display-hero, --type-weight-display-hero (550) and --type-tracking-display-hero (-0.06em).",
           "useWhen": "The one big hero headline on a marketing or landing page",
           "doNot": "Do not use on product screens; page titles there keep --type-size-display / PageHeader"
         },
@@ -436,17 +436,17 @@
           "doNot": "Do not pair with other sizes"
         },
         "--type-weight-display-hero": {
-          "note": "Marketing and landing pages only. Light hero weight (400).",
+          "note": "Marketing and landing pages only. Hero weight: var(--font-weight-heading) (550), like every heading.",
           "useWhen": "With --type-size-display-hero",
           "doNot": "Do not use for product page titles; they keep --type-weight-title"
         },
         "--type-tracking-display-hero": {
-          "note": "Marketing and landing pages only. Hero letter-spacing (-0.03em, = --type-tracking-tight).",
+          "note": "Marketing and landing pages only. Hero letter-spacing (-0.06em).",
           "useWhen": "With --type-size-display-hero",
           "doNot": "Do not apply to body, label or product headings"
         },
         "--type-size-title-section": {
-          "note": "Marketing and landing pages only. Section title: 32/40, 28/36 below --grid-breakpoint-sm. Pair with --type-line-title-section, --type-weight-title-section (400) and --type-tracking-title-section (-0.03em).",
+          "note": "Marketing and landing pages only. Section title: 32/40, 28/36 below --grid-breakpoint-sm. Pair with --type-line-title-section, --type-weight-title-section (550) and --type-tracking-title-section (-0.04em).",
           "useWhen": "Section titles on a marketing or landing page",
           "doNot": "Do not use on product screens; section headings there keep --type-size-heading / Section"
         },
@@ -456,12 +456,12 @@
           "doNot": "Do not pair with other sizes"
         },
         "--type-weight-title-section": {
-          "note": "Marketing and landing pages only. Light section title weight (400).",
+          "note": "Marketing and landing pages only. Section title weight: var(--font-weight-heading) (550), like every heading.",
           "useWhen": "With --type-size-title-section",
           "doNot": "Do not use for product section headings; they keep --type-weight-heading"
         },
         "--type-tracking-title-section": {
-          "note": "Marketing and landing pages only. Section title letter-spacing (-0.03em, = --type-tracking-tight).",
+          "note": "Marketing and landing pages only. Section title letter-spacing (-0.04em).",
           "useWhen": "With --type-size-title-section",
           "doNot": "Do not apply to body, label or product headings"
         },
@@ -471,7 +471,7 @@
           "doNot": "Do not use on text below --type-size-heading-4"
         },
         "--type-tracking-snug": {
-          "note": "Letter-spacing step: -0.02em (same value as --type-tracking-title).",
+          "note": "Letter-spacing step: -0.02em (same value as --type-tracking-heading).",
           "useWhen": "Large bold titles",
           "doNot": "Do not apply negative tracking to body, label or caption text"
         },
@@ -544,6 +544,41 @@
           "note": "Chart series 6 (navy in light, deep teal in dark).",
           "useWhen": "Series 6 when a chart shows 6 or more series",
           "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
+        },
+        "--type-tracking-heading-1": {
+          "note": "Letter-spacing for --type-size-heading-1 (56px): -0.06em. Tracking tightens as headings grow.",
+          "useWhen": "Headings set at --type-size-heading-1",
+          "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
+        },
+        "--type-tracking-heading-2": {
+          "note": "Letter-spacing for --type-size-heading-2 (48px): -0.06em. Tracking tightens as headings grow.",
+          "useWhen": "Headings set at --type-size-heading-2",
+          "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
+        },
+        "--type-tracking-heading-3": {
+          "note": "Letter-spacing for --type-size-heading-3 (40px): -0.06em. Tracking tightens as headings grow.",
+          "useWhen": "Headings set at --type-size-heading-3 (also --type-size-display, 40px)",
+          "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
+        },
+        "--type-tracking-heading-4": {
+          "note": "Letter-spacing for --type-size-heading-4 (32px): -0.04em. Tracking tightens as headings grow.",
+          "useWhen": "Headings set at --type-size-heading-4 (also --type-size-title, 32px)",
+          "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
+        },
+        "--type-tracking-heading-5": {
+          "note": "Letter-spacing for --type-size-heading-5 (24px): -0.04em. Tracking tightens as headings grow.",
+          "useWhen": "Headings set at --type-size-heading-5 (also --type-size-heading and --type-size-ui-xl, both 24px)",
+          "doNot": "Do not use on text at another size; do not hard-code letter-spacing"
+        },
+        "--type-weight-strong": {
+          "note": "Strong and b inside body copy: var(--font-weight-heading) (550). layout.css sets it on strong and b with zero specificity.",
+          "useWhen": "Emphasis inside body text",
+          "doNot": "Do not use 600 or 700 for emphasis"
+        },
+        "--font-weight-heading": {
+          "note": "Heading weight: 550, between Geist medium and semibold. Needs the variable Geist (full wght axis) to render as 550. Every heading role (--type-weight-heading, -title, -display-hero, -title-section) and --type-weight-strong point at it.",
+          "useWhen": "Changing how heavy all headings are, in one place",
+          "doNot": "Do not use directly in components; use the --type-weight-* role"
         }
       }
     }

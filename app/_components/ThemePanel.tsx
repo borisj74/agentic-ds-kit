@@ -247,7 +247,7 @@ export function ThemePanel({ onClose, showActions = true, showHeader = true }: T
               size="sm"
               value={state.headingWeight}
               onChange={(value) => update({ headingWeight: value as HeadingWeight })}
-              items={["400", "500", "600", "700"].map((value) => ({ value, label: value }))}
+              items={["400", "500", "550", "600", "700"].map((value) => ({ value, label: value }))}
             />
           </div>
         </Group>

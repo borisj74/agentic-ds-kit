@@ -19,7 +19,7 @@
   font-family: var(--font-heading);
   font-size: var(--type-size-heading-4);
   font-weight: var(--type-weight-title);
-  letter-spacing: var(--type-tracking-title);
+  letter-spacing: var(--type-tracking-heading-4);
   line-height: var(--type-line-heading-4);
 }
 

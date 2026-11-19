@@ -30,7 +30,7 @@
   font-size: var(--type-size-ui-xl);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-xl);
-  letter-spacing: var(--type-tracking-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-fg);
 }
 
@@ -53,7 +53,7 @@
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
   overflow-wrap: anywhere;

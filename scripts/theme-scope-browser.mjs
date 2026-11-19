@@ -21,7 +21,7 @@ try {
 
   const before = await docs.evaluate((element) => getComputedStyle(element).borderRadius);
 
-  const query = "preset=custom&brand=e11d48&accent=none&neutral=neutral&step=600&density=default&shadow=default&shade=100&blur=100&tint=neutral&font=ibm-plex&display=ibm-plex&weight=600&mode=light";
+  const query = "preset=custom&brand=e11d48&accent=none&neutral=neutral&step=600&density=default&shadow=default&shade=100&blur=100&tint=neutral&font=geist&display=geist&weight=600&mode=light";
   await page.goto(`${base}/theme?${query}&radius=48&pill=0`, { waitUntil: "networkidle" });
   await preview.waitFor();
 

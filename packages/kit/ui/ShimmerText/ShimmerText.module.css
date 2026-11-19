@@ -25,6 +25,7 @@
 .lg {
   font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
 }
 
 @keyframes shimmer-wave {

@@ -38,7 +38,7 @@
 
 .used {
   font-size: var(--type-size-heading-5);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-metric);
   line-height: var(--type-line-heading-5);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);

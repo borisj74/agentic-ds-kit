@@ -139,8 +139,10 @@
     width: 100%;
   }
 
+  /* Content width first, then grow: a filter that does not fit takes its own row
+     instead of breaking its label onto two lines. */
   .toolbar:has(.filter) .filter {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -152,6 +154,7 @@
 
   .toolbar:has(.filter) .filter :global(button) {
     width: 100%;
+    white-space: nowrap;
   }
 
   .toolbar:has(.filter) .columns {

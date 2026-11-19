@@ -27,6 +27,7 @@
   margin: 0;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -161,7 +162,7 @@
 }
 
 .agent {
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   color: var(--text-fg);
 }
 
@@ -244,6 +245,7 @@
   flex: 1 1 0;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }

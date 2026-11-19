@@ -57,6 +57,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-heading);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-primary);
 }
 

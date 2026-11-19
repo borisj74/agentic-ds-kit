@@ -20,10 +20,10 @@ export const PLAYGROUND_SIDEBAR_STORAGE_KEY = "playground-sidebar";
 
 export type PlaygroundTheme = "light" | "dark";
 export type PlaygroundColorTheme = "ink" | "blue" | "violet" | "teal" | "custom";
-export type PlaygroundFont = "ibm-plex" | "inter" | "geist" | "system";
+export type PlaygroundFont = "geist" | "inter" | "system";
 export type PlaygroundFontRole = "interface" | "heading" | "mono";
 export type PlaygroundNeutralScale = "neutral" | "zinc" | "slate" | "stone" | "gray";
-export type PlaygroundHeadingWeight = "400" | "500" | "600" | "700";
+export type PlaygroundHeadingWeight = "400" | "500" | "550" | "600" | "700";
 
 export const DEFAULT_SPACE_SCALE = 100;
 export const DEFAULT_SHADOW_INTENSITY = 100;
@@ -41,22 +41,23 @@ export const PLAYGROUND_COLOR_THEMES: { value: PlaygroundColorTheme; label: stri
 ];
 
 export const PLAYGROUND_FONTS: { value: PlaygroundFont; label: string }[] = [
-  { value: "ibm-plex", label: "IBM Plex" },
-  { value: "inter", label: "Inter" },
   { value: "geist", label: "Geist" },
+  { value: "inter", label: "Inter" },
   { value: "system", label: "System" },
 ];
 
 /** Shipped --type-weight-heading, read from tokens.json so the playground never pins its own default. */
 export const DEFAULT_HEADING_WEIGHT = (() => {
-  const ref = tokens.semantic.type.weight.heading;
-  const key = ref.replace("primitive.fontWeight.", "") as keyof typeof tokens.primitive.fontWeight;
+  // "var(--font-weight-heading)" → primitive.fontWeight.heading; "primitive.fontWeight.x" → x.
+  const ref: string = tokens.semantic.type.weight.heading;
+  const key = (ref.match(/^var\(--font-weight-([\w-]+)\)$/)?.[1] ?? ref.replace("primitive.fontWeight.", "")) as keyof typeof tokens.primitive.fontWeight;
   return tokens.primitive.fontWeight[key] as PlaygroundHeadingWeight;
 })();
 
 export const PLAYGROUND_HEADING_WEIGHTS: { value: PlaygroundHeadingWeight; label: string }[] = [
   { value: "400", label: "400" },
   { value: "500", label: "500" },
+  { value: "550", label: "550" },
   { value: "600", label: "600" },
   { value: "700", label: "700" },
 ];
@@ -264,11 +265,11 @@ function isColorTheme(value: string | null): value is PlaygroundColorTheme {
 }
 
 function isFont(value: string | null): value is PlaygroundFont {
-  return value === "ibm-plex" || value === "inter" || value === "geist" || value === "system";
+  return value === "geist" || value === "inter" || value === "system";
 }
 
 function isHeadingWeight(value: string | null): value is PlaygroundHeadingWeight {
-  return value === "400" || value === "500" || value === "600" || value === "700";
+  return value === "400" || value === "500" || value === "550" || value === "600" || value === "700";
 }
 
 function store(key: string, value: string): void {
@@ -332,17 +333,12 @@ function fontStack(font: PlaygroundFont, mono: boolean): string {
   if (font === "inter") {
     return mono ? "ui-monospace, Menlo, monospace" : "var(--font-inter), system-ui, sans-serif";
   }
-  if (font === "geist") {
-    return mono
-      ? "var(--font-geist-mono), ui-monospace, monospace"
-      : "var(--font-geist-sans), system-ui, sans-serif";
-  }
   if (font === "system") {
     return mono ? "ui-monospace, Menlo, monospace" : "system-ui, sans-serif";
   }
   return mono
-    ? 'var(--font-ibm-plex-mono, "IBM Plex Mono"), ui-monospace, monospace'
-    : 'var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif';
+    ? 'var(--font-geist-mono, "Geist Mono"), ui-monospace, monospace'
+    : 'var(--font-geist-sans, "Geist"), system-ui, sans-serif';
 }
 
 function clampSpace(percent: number): number {
@@ -369,9 +365,9 @@ export function readPlaygroundFont(): PlaygroundFont {
 }
 
 export function readPlaygroundFontRole(role: PlaygroundFontRole): PlaygroundFont {
-  if (typeof document === "undefined") return "ibm-plex";
+  if (typeof document === "undefined") return "geist";
   const font = document.documentElement.getAttribute(FONT_ATTR[role]);
-  return isFont(font) ? font : "ibm-plex";
+  return isFont(font) ? font : "geist";
 }
 
 /** Sets one family. Interface writes --font-sans, headings --font-display, mono --font-mono. */
@@ -379,7 +375,7 @@ export function applyPlaygroundFontRole(role: PlaygroundFontRole, font: Playgrou
   const root = document.documentElement;
   root.removeAttribute("data-font");
   const rootVar = FONT_ROOT[role];
-  if (font === "ibm-plex") {
+  if (font === "geist") {
     root.style.removeProperty(rootVar);
     root.removeAttribute(FONT_ATTR[role]);
   } else {
@@ -393,7 +389,7 @@ export function applyPlaygroundFontRole(role: PlaygroundFontRole, font: Playgrou
 export function applyPlaygroundFont(font: PlaygroundFont): void {
   applyPlaygroundFontRole("interface", font);
   applyPlaygroundFontRole("heading", font);
-  applyPlaygroundFontRole("mono", font === "inter" ? "ibm-plex" : font);
+  applyPlaygroundFontRole("mono", font === "inter" ? "geist" : font);
 }
 
 function isNeutralScale(value: string | null): value is PlaygroundNeutralScale {
@@ -533,9 +529,9 @@ export function readPlaygroundPrimaryHex(): string {
 }
 
 export function resetPlaygroundAppearance(): void {
-  applyPlaygroundFontRole("interface", "ibm-plex");
-  applyPlaygroundFontRole("heading", "ibm-plex");
-  applyPlaygroundFontRole("mono", "ibm-plex");
+  applyPlaygroundFontRole("interface", "geist");
+  applyPlaygroundFontRole("heading", "geist");
+  applyPlaygroundFontRole("mono", "geist");
   applyPlaygroundHeadingWeight(DEFAULT_HEADING_WEIGHT);
   applyPlaygroundNeutralScale("neutral");
   applyPlaygroundSpaceScale(DEFAULT_SPACE_SCALE);

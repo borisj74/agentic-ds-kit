@@ -36,6 +36,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-body);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
 }
 
 /* Opening runs 680ms: the longest duration token plus one short step, since the scale stops at 500ms.

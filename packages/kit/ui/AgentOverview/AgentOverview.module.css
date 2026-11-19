@@ -29,7 +29,7 @@
   font-size: var(--type-size-ui-xl);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-xl);
-  letter-spacing: var(--type-tracking-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   color: var(--text-fg);
 }
 

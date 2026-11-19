@@ -42,6 +42,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-ui-md);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-md);
 }
 

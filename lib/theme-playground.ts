@@ -32,10 +32,10 @@ export const RAMP_STEPS = [
 export type ThemeMode = "light" | "dark";
 export type Density = "compact" | "default" | "comfy";
 export type NeutralChoice = PlaygroundNeutralScale | "tint";
-export type SansFont = "ibm-plex" | "inter" | "dm-sans" | "source-sans" | "outfit";
-export type DisplayFont = "ibm-plex" | "newsreader" | "fraunces" | "instrument-serif" | "outfit";
+export type SansFont = "geist" | "inter" | "dm-sans" | "source-sans" | "outfit";
+export type DisplayFont = "geist" | "newsreader" | "fraunces" | "instrument-serif" | "outfit";
 export type PresetId = "nistha" | "ink" | "blue" | "violet" | "teal" | "rose" | "amber" | "indigo" | "forest" | "custom";
-export type HeadingWeight = "400" | "500" | "600" | "700";
+export type HeadingWeight = "400" | "500" | "550" | "600" | "700";
 export type ShadowPreset = "none" | "flat" | "subtle" | "default" | "raised" | "dramatic";
 export type ShadowTint = "neutral" | "primary";
 
@@ -83,11 +83,11 @@ interface Preset {
 const SHADOW_DEFAULTS = { shadowIntensity: 100, shadowScale: 100, shadowTint: "neutral" as const, pill: false, headingWeight: DEFAULT_HEADING_WEIGHT };
 
 export const PRESETS: readonly Preset[] = [
-  { id: "nistha", label: "Nistha", brand: "#2b2bf5", accent: "", neutral: "slate", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
-  { id: "ink", label: "Ink", brand: "#000000", accent: "", neutral: "neutral", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
-  { id: "blue", label: "Blue", brand: "#3b82f6", accent: "", neutral: "slate", step: "600", radius: 8, density: "default", shadowPreset: "default", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
-  { id: "violet", label: "Violet", brand: "#8b5cf6", accent: "#0d9488", neutral: "zinc", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "ibm-plex", display: "newsreader", ...SHADOW_DEFAULTS },
-  { id: "teal", label: "Teal", brand: "#14b8a6", accent: "", neutral: "stone", step: "600", radius: 8, density: "default", shadowPreset: "subtle", font: "ibm-plex", display: "ibm-plex", ...SHADOW_DEFAULTS },
+  { id: "nistha", label: "Nistha", brand: "#2b2bf5", accent: "", neutral: "slate", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "geist", display: "geist", ...SHADOW_DEFAULTS },
+  { id: "ink", label: "Ink", brand: "#000000", accent: "", neutral: "neutral", step: "500", radius: 8, density: "default", shadowPreset: "subtle", font: "geist", display: "geist", ...SHADOW_DEFAULTS },
+  { id: "blue", label: "Blue", brand: "#3b82f6", accent: "", neutral: "slate", step: "600", radius: 8, density: "default", shadowPreset: "default", font: "geist", display: "geist", ...SHADOW_DEFAULTS },
+  { id: "violet", label: "Violet", brand: "#8b5cf6", accent: "#0d9488", neutral: "zinc", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "geist", display: "newsreader", ...SHADOW_DEFAULTS },
+  { id: "teal", label: "Teal", brand: "#14b8a6", accent: "", neutral: "stone", step: "600", radius: 8, density: "default", shadowPreset: "subtle", font: "geist", display: "geist", ...SHADOW_DEFAULTS },
   { id: "rose", label: "Rose", brand: "#f43f5e", accent: "", neutral: "stone", step: "600", radius: 16, density: "comfy", shadowPreset: "raised", font: "dm-sans", display: "fraunces", ...SHADOW_DEFAULTS },
   { id: "amber", label: "Amber", brand: "#f59e0b", accent: "", neutral: "stone", step: "600", radius: 4, density: "default", shadowPreset: "default", font: "source-sans", display: "newsreader", ...SHADOW_DEFAULTS },
   { id: "indigo", label: "Indigo", brand: "#6366f1", accent: "", neutral: "slate", step: "600", radius: 8, density: "compact", shadowPreset: "subtle", font: "outfit", display: "outfit", ...SHADOW_DEFAULTS },
@@ -157,7 +157,7 @@ const SHADOW_SPEC: Record<ThemeMode, Record<"xs" | "sm" | "md" | "lg", ShadowSpe
 };
 
 export const SANS_FONTS: { id: SansFont; label: string; preview: string; exported: string }[] = [
-  { id: "ibm-plex", label: "IBM Plex Sans", preview: 'var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif', exported: '"IBM Plex Sans", system-ui, sans-serif' },
+  { id: "geist", label: "Geist", preview: 'var(--font-geist-sans, "Geist"), system-ui, sans-serif', exported: '"Geist", system-ui, sans-serif' },
   { id: "inter", label: "Inter", preview: 'var(--font-inter), "Inter", system-ui, sans-serif', exported: '"Inter", system-ui, sans-serif' },
   { id: "dm-sans", label: "DM Sans", preview: 'var(--font-theme-dm-sans), "DM Sans", system-ui, sans-serif', exported: '"DM Sans", system-ui, sans-serif' },
   { id: "source-sans", label: "Source Sans 3", preview: 'var(--font-theme-source-sans), "Source Sans 3", system-ui, sans-serif', exported: '"Source Sans 3", system-ui, sans-serif' },
@@ -165,7 +165,7 @@ export const SANS_FONTS: { id: SansFont; label: string; preview: string; exporte
 ];
 
 export const DISPLAY_FONTS: { id: DisplayFont; label: string; preview: string; exported: string }[] = [
-  { id: "ibm-plex", label: "IBM Plex Sans", preview: 'var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif', exported: '"IBM Plex Sans", system-ui, sans-serif' },
+  { id: "geist", label: "Geist", preview: 'var(--font-geist-sans, "Geist"), system-ui, sans-serif', exported: '"Geist", system-ui, sans-serif' },
   { id: "newsreader", label: "Newsreader", preview: 'var(--font-theme-newsreader), "Newsreader", Georgia, serif', exported: '"Newsreader", Georgia, serif' },
   { id: "fraunces", label: "Fraunces", preview: 'var(--font-theme-fraunces), "Fraunces", Georgia, serif', exported: '"Fraunces", Georgia, serif' },
   { id: "instrument-serif", label: "Instrument Serif", preview: 'var(--font-theme-instrument-serif), "Instrument Serif", Georgia, serif', exported: '"Instrument Serif", Georgia, serif' },
@@ -882,7 +882,7 @@ export function exportTokens(state: ThemeState): string {
         family: {
           sans: sans.exported,
           display: display.exported,
-          mono: '"IBM Plex Mono", ui-monospace, monospace',
+          mono: '"Geist Mono", ui-monospace, monospace',
           body: "var(--font-sans)",
           heading: "var(--font-display)",
         },
@@ -896,8 +896,8 @@ export function exportTokens(state: ThemeState): string {
 
 export function exportDesign(state: ThemeState): string {
   const palette = themePalette(state);
-  const sans = SANS_FONTS.find((item) => item.id === state.font)?.label ?? "IBM Plex Sans";
-  const display = DISPLAY_FONTS.find((item) => item.id === state.display)?.label ?? "IBM Plex Sans";
+  const sans = SANS_FONTS.find((item) => item.id === state.font)?.label ?? "Geist";
+  const display = DISPLAY_FONTS.find((item) => item.id === state.display)?.label ?? "Geist";
   const neutralLabel = state.neutral === "tint" ? "Neutral, tinted toward the brand" : state.neutral[0].toUpperCase() + state.neutral.slice(1);
   const densityCopy = {
     compact: "Compact. Inset, stack, gap, and section roles point at smaller primitive steps.",
@@ -928,7 +928,7 @@ Theme for Nistha. Reassign semantic roles to primitive ramps. Do not put hex in 
 - Default: ${sans}.
 - Display: ${display}.
 - Heading weight: ${state.headingWeight}.
-- Mono stays IBM Plex Mono.
+- Mono stays Geist Mono.
 - Load the Google font before the override if it is not already on the page.
 
 ## Radius
@@ -1060,7 +1060,7 @@ function isTint(value: string | null): value is ShadowTint {
 }
 
 function isWeight(value: string | null): value is HeadingWeight {
-  return value === "400" || value === "500" || value === "600" || value === "700";
+  return value === "400" || value === "500" || value === "550" || value === "600" || value === "700";
 }
 
 export function themeFromSearch(params: URLSearchParams, fallbackMode: ThemeMode): ThemeState | null {

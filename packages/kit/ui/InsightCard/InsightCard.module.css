@@ -116,7 +116,7 @@
   font-family: var(--font-sans);
   font-size: var(--insight-title, var(--type-size-heading));
   font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading);
+  letter-spacing: var(--type-tracking-heading-5);
   line-height: var(--insight-title-line, var(--type-line-heading));
   color: var(--text-primary);
 }

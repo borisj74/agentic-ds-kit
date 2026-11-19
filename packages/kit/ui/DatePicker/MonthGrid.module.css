@@ -68,6 +68,7 @@
   text-align: center;
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-heading);
   color: var(--text-primary);
 }

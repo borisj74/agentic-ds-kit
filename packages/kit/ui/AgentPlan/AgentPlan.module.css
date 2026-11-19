@@ -45,6 +45,7 @@
   overflow-wrap: anywhere;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -143,7 +144,7 @@
 
 .numberCurrent {
   color: var(--primary-fg);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
 }
 
 .markDone {

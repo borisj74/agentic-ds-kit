@@ -421,9 +421,9 @@
   --border-width-thin: 1px;
   --border-width-medium: 2px;
 
-  --font-sans: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
-  --font-display: var(--font-ibm-plex-sans, "IBM Plex Sans"), system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono, "IBM Plex Mono"), ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans, "Geist"), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-geist-sans, "Geist"), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono, "Geist Mono"), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-body: var(--font-sans);
   --font-heading: var(--font-display);
   --type-family-body: var(--font-body);
@@ -478,27 +478,34 @@
   --type-size-overline: var(--type-size-overline-xs);
   --type-size-code: var(--type-size-ui-sm);
 
+  --font-weight-heading: 550;
   --type-weight-body: 400;
   --type-weight-label: 500;
-  --type-weight-heading: 500;
-  --type-weight-title: 700;
+  --type-weight-heading: var(--font-weight-heading);
+  --type-weight-title: var(--font-weight-heading);
   --type-weight-metric: 500;
   --type-weight-caption: 500;
   --type-weight-overline: 500;
   --type-weight-code: 400;
-  --type-weight-display-hero: 400;
-  --type-weight-title-section: 400;
+  --type-weight-display-hero: var(--font-weight-heading);
+  --type-weight-title-section: var(--font-weight-heading);
+  --type-weight-strong: var(--font-weight-heading);
 
   --type-line-body: var(--type-line-body-md);
   --type-line-heading: var(--type-line-heading-5);
-  --type-tracking-title: -0.02em;
-  --type-tracking-heading: -0.01em;
+  --type-tracking-title: -0.04em;
+  --type-tracking-heading: -0.02em;
   --type-tracking-overline: 0.06em;
   --type-tracking-tight: -0.03em;
   --type-tracking-snug: -0.02em;
   --type-tracking-wide: 0.08em;
-  --type-tracking-display-hero: -0.03em;
-  --type-tracking-title-section: -0.03em;
+  --type-tracking-display-hero: -0.06em;
+  --type-tracking-title-section: -0.04em;
+  --type-tracking-heading-1: -0.06em;
+  --type-tracking-heading-2: -0.06em;
+  --type-tracking-heading-3: -0.06em;
+  --type-tracking-heading-4: -0.04em;
+  --type-tracking-heading-5: -0.04em;
 
   --z-overlay: 40;
   --z-modal: 50;

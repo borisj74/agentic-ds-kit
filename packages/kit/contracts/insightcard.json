@@ -143,7 +143,7 @@
     "link.hover",
     "link.active",
     "border.focus",
-    "type.tracking.heading"
+    "type.tracking.heading5"
   ],
   "a11y": {
     "element": "article",

@@ -20,7 +20,7 @@
 .author {
   margin: 0;
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-label);
   color: var(--text-fg);
 }
 

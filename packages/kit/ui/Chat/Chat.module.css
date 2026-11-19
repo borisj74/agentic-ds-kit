@@ -39,6 +39,7 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-label);
   font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
   color: var(--text-primary);
 }
 
