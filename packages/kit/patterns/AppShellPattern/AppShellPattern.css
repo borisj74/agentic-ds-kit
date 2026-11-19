@@ -68,7 +68,10 @@
   width: var(--sidenav-width, var(--layout-sidebar));
   max-width: 100%;
   min-width: 0;
-  padding-inline-end: var(--space-inset-sm);
+  padding-inline: var(--space-4) var(--space-inset-sm);
+  /* The logo cell hugs the logo (no rail-wide cell), so the wordmark sits close to it; the
+     start padding lines the logo up with the nav icons' start edge instead. */
+  --appheader-brand-width: auto;
 }
 
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */
