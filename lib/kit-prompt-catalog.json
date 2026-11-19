@@ -4185,7 +4185,8 @@
       "useWhen": [
         "An inline assistant beside a workspace",
         "A help thread with send and a thinking state",
-        "Suggested prompts above a composer"
+        "Suggested prompts above a composer",
+        "Asking about one part of a screen, like a chart card, with context naming it"
       ],
       "doNotUseWhen": [
         "A blocking overlay — use Modal",
@@ -4193,6 +4194,7 @@
         "A short notice after an action — use Toast"
       ],
       "doNot": [
+        "Do not put a context Tag outside Chat beside the composer — pass context",
         "Do not invent ChatMessage, ChatInput, ChatHeader, ChatBubble, or ChatAvatar cousins",
         "Do not use Modal for an inline assistant panel",
         "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
@@ -4217,6 +4219,11 @@
           "type": "array",
           "required": false,
           "note": "Prompt chips above the composer. kit Button sm tertiary."
+        },
+        "context": {
+          "type": "object",
+          "required": false,
+          "note": "What the next message is about, like the card and period a user asked from. A kit Tag sm above the composer; removable when onRemove is set. The composer input is described by it (\"Asking about <label>\")."
         },
         "placeholder": {
           "type": "string",

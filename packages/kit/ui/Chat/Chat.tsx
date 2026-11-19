@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "../Button";
 import { DropdownMenu } from "../DropdownMenu";
 import { Input } from "../Input";
+import { Tag } from "../Tag";
 import { ThinkingAnimation } from "../ThinkingAnimation";
 import type { ChatProps } from "./Chat.types";
 import { cx } from "../shared/cx";
@@ -11,13 +12,14 @@ import styles from "./Chat.module.css";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
+export type { ChatContext, ChatMessage, ChatMessageRole, ChatMenuItem, ChatProps, ChatRadius } from "./Chat.types";
 
 export function Chat({
   title = "Assistant",
   status,
   messages = [],
   suggestions = [],
+  context,
   placeholder = "How can we help you?",
   emptyState = "Start a conversation.",
   isThinking = false,
@@ -40,6 +42,7 @@ export function Chat({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const threadRef = useRef<HTMLDivElement>(null);
   const inputId = useId();
+  const contextId = useId();
   const draft = value ?? internalValue;
 
   useEffect(() => {
@@ -155,6 +158,17 @@ export function Chat({
         </div>
       ) : null}
 
+      {context ? (
+        <div className={styles.context}>
+          <span id={contextId} className={styles.contextLabel}>
+            {labels.chatContext(context.label)}
+          </span>
+          <Tag size="sm" removable={Boolean(context.onRemove)} onRemove={() => context.onRemove?.()}>
+            {context.label}
+          </Tag>
+        </div>
+      ) : null}
+
       <form
         className={styles.composer}
         onSubmit={(event) => {
@@ -167,6 +181,7 @@ export function Chat({
           value={draft}
           placeholder={placeholder}
           ariaLabel={placeholder}
+          describedBy={context ? contextId : undefined}
           disabled={disabled}
           onChange={updateDraft}
         />

@@ -196,6 +196,37 @@ export function ChatDoc() {
 />`}
               />
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Context</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={doc.exampleFrame}>
+                  <Chat
+                    title="Ask"
+                    messages={[]}
+                    context={{ label: "Signups · Last 30 days", onRemove: () => {} }}
+                    suggestions={["Why did signups dip on Tuesday?", "Which source grew most?"]}
+                    onClose={() => {}}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  context names what the next message is about, like the card a user asked from. It
+                  shows as a kit Tag above the composer and describes the composer for screen
+                  readers. Pass onRemove to let people clear it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Chat
+  title="Ask"
+  messages={[]}
+  context={{ label: "Signups · Last 30 days", onRemove: clearContext }}
+  suggestions={["Why did signups dip on Tuesday?"]}
+  onSend={handleSend}
+/>`}
+              />
+            </section>
           </div>
         )}
       </section>

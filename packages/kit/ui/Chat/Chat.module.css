@@ -1,7 +1,7 @@
 .panel {
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
   width: 100%;
   min-block-size: 32rem;
   block-size: 100%;
@@ -138,6 +138,24 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   padding: 0 var(--space-4) var(--space-3);
+}
+
+.context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+/* Read by the composer's aria-describedby; the Tag shows the same text. */
+.contextLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .composer {
