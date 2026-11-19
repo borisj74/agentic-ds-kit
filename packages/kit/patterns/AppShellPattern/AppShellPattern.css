@@ -181,25 +181,65 @@
   padding-block-start: var(--space-inset-sm);
 }
 
-/* Notifications bell: the count Badge sits on the bell's top end corner, out of the pointer's way. */
-.app-shell-pattern__bell {
+/* Quick actions row: the field fills, the search Button sits beside it. */
+.app-shell-pattern__quick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.app-shell-pattern__quick > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Workspace switcher in the top row: takes the room before the collapse Toggle. */
+.app-shell-pattern__workspace {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Notifications row while its panel is open: SideNav's own active fill and colours (no aria-current). */
+.app-shell-pattern__nav-open.app-shell-pattern__nav-open {
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+  color: var(--sidenav-item-active-text, var(--text-brand));
+}
+
+.app-shell-pattern__nav-open.app-shell-pattern__nav-open svg {
+  color: var(--sidenav-item-active-icon, var(--icon-brand));
+}
+
+/* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
+.app-shell-pattern__nav-dot {
   position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
 }
 
-.app-shell-pattern__bell-count {
+.app-shell-pattern__nav-dot::after {
+  content: "";
   position: absolute;
-  inset-block-start: calc(var(--space-2) * -1);
-  inset-inline-end: calc(var(--space-2) * -1);
-  pointer-events: none;
+  inset-block-start: var(--space-1);
+  inset-inline-start: calc(var(--space-inset-sm) + var(--space-3));
+  width: var(--space-2);
+  height: var(--space-2);
+  border: var(--border-width-thin) solid var(--surface-card);
+  border-radius: var(--radius-full);
+  background: var(--status-danger);
 }
 
-/* The notifications list fills the kit Popover's widest content box (its max width, space-16 x 5,
-   less its space-3 padding on each side), so the list is readable and stays inside the panel. */
-.app-shell-pattern__notifications {
+/* Notifications panel in the Popover: the Popover's widest content box (space-16 x 5 less its
+   space-3 padding); in the Drawer it fills the body. */
+.app-shell-pattern__notify-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
   width: calc(var(--space-16) * 5 - var(--space-3) * 2);
   max-width: 100%;
+}
+
+:where([role="dialog"][aria-modal="true"]) .app-shell-pattern__notify-panel {
+  width: 100%;
 }
 
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */

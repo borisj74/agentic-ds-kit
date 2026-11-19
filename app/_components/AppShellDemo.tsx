@@ -23,9 +23,9 @@ import type { CommandGroup, DropdownMenuGroup, NotificationItem, SideNavGroup, S
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 
 const NAV_ITEMS: SideNavItemData[] = [
+  { id: "tasks", label: "Tasks", icon: "Check", badge: "18" },
   { id: "overview", label: "Overview", icon: "House" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-  { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
   { id: "insights", label: "Insights", icon: "Sparkles" },
 ];
 
@@ -91,10 +91,24 @@ const PANEL_TABS = [
 ];
 
 const NOTIFICATIONS: NotificationItem[] = [
-  { id: "n1", title: "Rin asked you to review the pricing study", createdAt: "09:40", read: false, tone: "info" },
-  { id: "n2", title: "Support triage finished 42 tickets", body: "3 need a person", createdAt: "08:15", read: false, tone: "success" },
-  { id: "n3", title: "Welcome emails paused", body: "Sending limit reached", createdAt: "Yesterday", read: false, tone: "warning" },
-  { id: "n4", title: "New teammate joined Agentix", createdAt: "Mon", read: true },
+  { id: "n1", title: "Support triage finished 42 tickets", body: "3 need a person", createdAt: "08:15", read: false, icon: "CircleCheck" },
+  { id: "n2", title: "Welcome emails paused", body: "Sending limit reached", createdAt: "Yesterday", read: false, icon: "TriangleAlert" },
+  { id: "n3", title: "New teammate joined Agentix", createdAt: "Mon", read: true, icon: "User" },
+];
+
+const REQUESTS: NotificationItem[] = [
+  { id: "r1", title: "Rin asked you to review the pricing study", createdAt: "09:40", read: false, icon: "MessageSquare" },
+];
+
+const WORKSPACE_MENU: DropdownMenuGroup[] = [
+  {
+    heading: "Workspaces",
+    items: [
+      { id: "agentix", label: "Agentix", selected: true },
+      { id: "northwind", label: "Northwind Labs" },
+    ],
+  },
+  { items: [{ id: "new-workspace", label: "Create workspace", icon: "Plus" }] },
 ];
 
 type ShellView = "inset" | "flat" | "collapsed" | "panel" | "drawer";
@@ -180,8 +194,12 @@ function AppShellDefault({ view }: { view: ShellView }) {
   // Flat (and its collapsed and mobile views) uses the flat look; every view is sidebar-led, with
   // no top bar when wide, so the page starts at the top inset.
   const flat = view === "flat" || view === "collapsed" || view === "drawer";
-  const [notes, setNotes] = useState(NOTIFICATIONS);
-  const markRead = (id: string) => setNotes((list) => list.map((item) => (item.id === id ? { ...item, read: true } : item)));
+  const [notes, setNotes] = useState({ notifications: NOTIFICATIONS, requests: REQUESTS });
+  const markRead = (tab: string, id: string) =>
+    setNotes((all) => ({
+      ...all,
+      [tab]: all[tab as keyof typeof all].map((item) => (item.id === id ? { ...item, read: true } : item)),
+    }));
 
   return (
     <AppShellPattern
@@ -190,11 +208,14 @@ function AppShellDefault({ view }: { view: ShellView }) {
       collapsed={view === "collapsed" ? collapsed : undefined}
       onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
       notifications={{
-        items: notes,
-        onMarkRead: markRead,
+        tabs: [
+          { id: "notifications", label: "Notifications", items: notes.notifications },
+          { id: "requests", label: "Requests", items: notes.requests, emptyTitle: "No requests", emptyDescription: "Review and approval asks land here." },
+        ],
         onItemClick: markRead,
-        onMarkAll: () => setNotes((list) => list.map((item) => ({ ...item, read: true }))),
+        onSettings: () => setPage("overview"),
       }}
+      workspace={{ name: "Agentix", mark: <DemoLogo />, menu: WORKSPACE_MENU }}
       nav={{ title: "Agentix", markIcon: <DemoLogo onBrand />, items: bind(NAV_ITEMS) }}
       subtitle="Agent operations"
       search={{ groups: COMMANDS, onSelect: (id) => setPage(id === "new-project" || id === "invite" ? page : id) }}

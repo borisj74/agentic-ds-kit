@@ -14,6 +14,8 @@ export type {
   AppShellWorkPanel,
   AppShellSearch,
   AppShellNotifications,
+  AppShellNotificationTab,
+  AppShellWorkspace,
   AppShellPatternProps,
   AppShellMenuButtonProps,
   AppShellRailToggleProps,

@@ -8,7 +8,7 @@
   "add": "npx agentic-ds-kit add app-shell",
   "import": "import { AppShellPattern } from \"@/components/patterns/app-shell\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/app-shell/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a brand subtitle, a notifications bell in the brand row, a search slot that opens the kit command menu (⌘K), a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
   "useWhen": [
     "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
     "The nav should collapse to an icon rail to give the page more room",
@@ -31,9 +31,9 @@
     "command",
     "input",
     "modal",
-    "notificationstack",
     "popover",
-    "badge"
+    "listview",
+    "empty"
   ],
   "props": {
     "header": {
@@ -97,17 +97,23 @@
       "required": false,
       "note": "Props nav only. One muted line under the product name in the nav's brand (SideNav.Brand), shown when the nav carries the brand: header-less shells when wide, e.g. flat. Ignored when a top bar holds the brand."
     },
+    "workspace": {
+      "type": "object",
+      "required": false,
+      "shape": "{ name: string, mark?: KitIcon, menu: DropdownMenuGroup[], onSelect?: (id: string) => void }",
+      "note": "Props nav only. The nav's top row, left: a ghost sm kit DropdownMenu trigger with the mark, the workspace name and ChevronsUpDown, opening menu (other workspaces, Create workspace). The collapse Toggle sits on the right. Replaces the brand (and subtitle) in that row; on the closed rail it fades and the Toggle reopens the rail. In the nav Drawer it sits at the top of the nav."
+    },
     "search": {
       "type": "object",
       "required": false,
-      "shape": "{ groups: CommandGroup[], onSelect?: (id: string) => void, placeholder?: string (default Search), commandPlaceholder?: string (default Search pages and actions), title?: string (default Search), shortcut?: boolean (default true) }",
-      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): a read-only kit Input type=search, size sm, with a Search icon and a ⌘K hint. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+      "shape": "{ groups: CommandGroup[], onSelect?: (id: string) => void, placeholder?: string (default Quick actions), searchLabel?: string (default Search), onSearch?: () => void, commandPlaceholder?: string (default Search pages and actions), title?: string (default Search), shortcut?: boolean (default true) }",
+      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as an icon-only Button (Search) with a kit Tooltip (Search (⌘K)). In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
     },
     "notifications": {
       "type": "object",
       "required": false,
-      "shape": "{ items: NotificationItem[], label?: string (default Notifications), onItemClick?: (id) => void, onMarkRead?: (id) => void, onMarkAll?: () => void, onViewAll?: () => void, emptyTitle?: string }",
-      "note": "Props nav only; same in both layouts. An icon-only ghost sm Button (Bell) with a kit Tooltip (label) and an aria-hidden kit Badge (solid danger sm) counting unread items, opening a kit Popover with NotificationStack inline (the list, Mark all read, View all). Wide and open: aligned right in the nav's brand row, before the rail Toggle. Collapsed rail: under the brand mark (a keepOnRail SideNavSlot), tooltip on the right. Narrow: at the right end of the default narrow top bar. Place it in the nav instead of a top bar, so a header-less shell starts the page at the top inset."
+      "shape": "{ tabs: { id: string, label: string, items: NotificationItem[], emptyTitle?: string (default Nothing new), emptyDescription?: string }[], label?: string (default Notifications), onItemClick?: (tabId: string, id: string) => void, settingsLabel?: string (default Notification settings), onSettings?: () => void }",
+      "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel: title with an icon-only settings Button, kit Tabs (one per tab, label with its unread count), each a kit ListView (size sm, drill; title, body · time, New badge for unread) or kit Empty (with an outline settings Button) when empty. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon with a dot for unread, same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
     },
     "workPanel": {
       "type": "object",
@@ -192,8 +198,11 @@
       "⌘K / Ctrl+K toggles the command menu from anywhere on the page and is announced through aria-keyshortcuts; it is skipped with Alt or Shift held",
       "The command menu is the kit Modal (aria-modal, focus trap, Escape and scrim close, focus restored to the opener) with kit Command inside (combobox input, listbox); focus starts in the command input",
       "Collapsed rail: the search slot is an icon-only Button named Search with a kit Tooltip (Search (⌘K)) on hover and focus",
-      "Notifications bell: a kit Button named \"Notifications, 3 unread\" (label alone at zero) with a kit Tooltip (Notifications); the count Badge is aria-hidden and not shown at zero",
-      "The notifications panel is the kit Popover dialog named by label: aria-haspopup=dialog and aria-expanded on the bell, Escape and an outside click close it, focus returns to the bell"
+      "Notifications row: a SideNav.Item button named by its label and count, with aria-haspopup=dialog and aria-expanded; it never takes aria-current for the open panel",
+      "The notifications panel is the kit Popover dialog named by label: Escape and an outside click close it and focus returns to the Notifications row; Tab reaches the tabs, list and settings Button",
+      "Collapsed rail: the row keeps its kit Tooltip; the unread dot is decorative (the count stays in the row's name)",
+      "Narrow: the panel is a kit Drawer (aria-modal, focus trap, Escape and scrim close)",
+      "Workspace switcher: kit DropdownMenu (aria-haspopup=menu, arrows, Escape returns focus to the trigger)"
     ]
   },
   "must": [
@@ -215,11 +224,11 @@
     "layout-shell--viewport on className when the shell is the whole page",
     "One layout option among many: top bar only, side nav only, both, or neither are all fine",
     "Collapse is remembered in sessionStorage (key agentic-ds-kit:app-shell:collapsed) for the browser session",
-    "No top bar when wide in the examples: the nav carries brand, notifications and search, so the page starts at the top inset"
+    "No top bar when wide in the examples: the nav carries the workspace switcher, quick actions and Notifications, so the page starts at the top inset"
   ],
   "headerlessSnippet": "<AppShellPattern className=\"layout-shell--viewport\" nav={{ title: \"Acme\", markIcon: \"Receipt\", items, footer }}><main className=\"layout-canvas\">…</main></AppShellPattern>",
   "builtNavSnippet": "<AppShellPattern className=\"layout-shell--viewport\" navLabel=\"Acme\" markIcon=\"Receipt\" nav={(placement) => <ShellNav placement={placement} />}><main className=\"layout-canvas\">…</main></AppShellPattern>",
-  "snippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  nav={{ title: \"Acme\", markIcon: \"Receipt\", items }}\n  subtitle=\"Billing ops\"\n  notifications={{ items: notifications, onMarkRead, onMarkAll }}\n  search={{ groups: commands, onSelect: go }}\n  projects={{ items: projects, onNew: createProject }}\n  account={{ name: \"Rin Okafor\", secondary: \"Operations lead\", menu: accountMenu, onSelect }}\n  workPanel={{ title: \"Context\", tabs: [{ id: \"details\", label: \"Details\", content: details }, { id: \"activity\", label: \"Activity\", content: activity }] }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>",
+  "snippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  nav={{ title: \"Acme\", items }}\n  workspace={{ name: \"Acme\", mark: \"Receipt\", menu: workspaces, onSelect: switchTo }}\n  search={{ groups: commands, onSelect: go }}\n  notifications={{\n    tabs: [\n      { id: \"notifications\", label: \"Notifications\", items: notifications },\n      { id: \"requests\", label: \"Requests\", items: requests },\n    ],\n    onItemClick: open,\n    onSettings: openSettings,\n  }}\n  projects={{ items: projects, onNew: createProject }}\n  account={{ name: \"Rin Okafor\", secondary: \"Operations lead\", menu: accountMenu, onSelect }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>",
   "doNot": [
     "Do not hand-build a sidebar, rail, account card, or tab strip; use SideNav, SideNav.Account, DropdownMenu and Tabs",
     "Do not add layout values outside the closed enum (flat, inset); restyle through tokens and component cssVars instead",
@@ -230,8 +239,8 @@
     "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer",
     "Do not build a local command palette, dialog or search popover; open kit Command inside kit Modal",
     "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)",
-    "Do not keep a top bar only for a notifications bell; put notifications in the nav's brand row so the page starts at the top inset",
-    "Do not build a local notification bell or list; compose kit Popover with NotificationStack inline, or use NotificationStack"
+    "Do not put a notifications bell in a top bar; notifications is the first nav row with its panel",
+    "Do not build a local flyout, sheet or notification list; use kit Popover (Drawer when narrow), Tabs, ListView and Empty"
   ],
-  "flatSnippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  layout=\"flat\"\n  nav={{ title: \"Ledgerline\", markIcon: \"Receipt\", items }}\n  subtitle=\"Billing ops\"\n  notifications={{ items: notifications, onMarkRead }}\n  search={{ groups: commands, onSelect: go }}\n  account={{ name: \"Priya Nair\", secondary: \"Finance lead\", menu: accountMenu }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>"
+  "flatSnippet": "<AppShellPattern\n  className=\"layout-shell--viewport\"\n  layout=\"flat\"\n  nav={{ title: \"Ledgerline\", markIcon: \"Receipt\", items }}\n  subtitle=\"Billing ops\"\n  notifications={{ tabs: [{ id: \"notifications\", label: \"Notifications\", items: notifications }] }}\n  search={{ groups: commands, onSelect: go }}\n  account={{ name: \"Priya Nair\", secondary: \"Finance lead\", menu: accountMenu }}\n>\n  <main className=\"layout-canvas\">…</main>\n</AppShellPattern>"
 }
