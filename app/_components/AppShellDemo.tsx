@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppHeader,
   Avatar,
   Badge,
   Button,
   Empty,
+  ListView,
   PageHeader,
   Select,
   SideNavBrand,
@@ -16,70 +17,227 @@ import {
   SideNavRoot,
   SideNavSection,
   SideNavSlot,
+  Timeline,
 } from "agentic-ds-kit";
-import type { SideNavGroup, SideNavItemData } from "agentic-ds-kit";
+import type { CommandGroup, DropdownMenuGroup, NotificationItem, SideNavGroup, SideNavItemData } from "agentic-ds-kit";
 import { AppShellPattern, useAppShell, type AppShellNavPlacement } from "../../packages/kit/patterns/AppShellPattern";
 
 const NAV_ITEMS: SideNavItemData[] = [
+  { id: "tasks", label: "Tasks", icon: "Check", badge: "18" },
   { id: "overview", label: "Overview", icon: "House" },
   { id: "inbox", label: "Inbox", icon: "Mail", badge: "7" },
-  { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
-  { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
-  { id: "insights", label: "Insights", icon: "Sparkles" },
+  { id: "insights", label: "Insights", icon: "ChartLine" },
 ];
 
-const NAV_FOOTER: SideNavItemData[] = [{ id: "settings", label: "Settings", icon: "Settings" }];
+const PROJECTS: SideNavItemData[] = [
+  { id: "pricing", label: "Pricing study", icon: "Folder" },
+  { id: "triage", label: "Support triage", icon: "Folder" },
+  { id: "welcome", label: "Welcome emails", icon: "Folder" },
+];
+
+const ACCOUNT_MENU: DropdownMenuGroup[] = [
+  {
+    items: [
+      { id: "settings", label: "Settings", icon: "Settings" },
+      {
+        id: "theme",
+        label: "Theme",
+        icon: "Moon",
+        submenu: [
+          {
+            items: [
+              { id: "theme-light", label: "Light" },
+              { id: "theme-dark", label: "Dark" },
+              { id: "theme-system", label: "Match device", selected: true },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
+];
+
+const PANEL_TABS = [
+  {
+    id: "details",
+    label: "Details",
+    content: (
+      <ListView
+        label="Details"
+        size="sm"
+        items={[
+          { id: "owner", primary: "Owner", secondary: "Rin Okafor" },
+          { id: "state", primary: "State", secondary: "In review", badge: "2 open", badgeTone: "info" },
+          { id: "updated", primary: "Last change", secondary: "Today, 09:40" },
+        ]}
+      />
+    ),
+  },
+  {
+    id: "activity",
+    label: "Activity",
+    content: (
+      <Timeline
+        label="Activity"
+        items={[
+          { id: "a1", status: "now", title: "Draft summary posted", body: "Waiting on a second reviewer" },
+          { id: "a2", status: "next", title: "Rin asked for sources", body: "Two links added" },
+          { id: "a3", status: "later", title: "Project created" },
+        ]}
+      />
+    ),
+  },
+];
+
+const NOTIFICATIONS: NotificationItem[] = [
+  { id: "n1", title: "Support triage finished 42 tickets", body: "3 need a person", createdAt: "08:15", read: false, icon: "CircleCheck" },
+  { id: "n2", title: "Welcome emails paused", body: "Sending limit reached", createdAt: "Yesterday", read: false, icon: "TriangleAlert" },
+  { id: "n3", title: "New teammate joined Agentix", createdAt: "Mon", read: true, icon: "User" },
+];
+
+const REQUESTS: NotificationItem[] = [
+  { id: "r1", title: "Rin asked you to review the pricing study", createdAt: "09:40", read: false, icon: "MessageSquare" },
+];
+
+const WORKSPACE_MENU: DropdownMenuGroup[] = [
+  {
+    heading: "Workspaces",
+    items: [
+      { id: "agentix", label: "Agentix", selected: true },
+      { id: "northwind", label: "Northwind Labs" },
+    ],
+  },
+  { items: [{ id: "new-workspace", label: "Create workspace", icon: "Plus" }] },
+];
+
+type ShellView = "inset" | "flat" | "collapsed" | "panel" | "drawer";
+
+const COMMANDS: CommandGroup[] = [
+  {
+    heading: "Go to",
+    items: [
+      ...NAV_ITEMS.map((item) => ({ id: item.id, label: item.label, icon: item.icon })),
+      ...PROJECTS.map((item) => ({ id: item.id, label: item.label, icon: item.icon })),
+    ],
+  },
+  {
+    heading: "Actions",
+    items: [
+      { id: "new-project", label: "New project", icon: "Plus" },
+      { id: "invite", label: "Invite a teammate", icon: "User" },
+    ],
+  },
+];
+
+const VIEW_NOTES: Record<ShellView, string> = {
+  inset: "Inset: the nav shares the page background and the page sits in a raised card. Press ⌘K to search.",
+  flat: "Flat: the nav leads with the brand and search, and the page runs edge to edge. Press ⌘K to search.",
+  collapsed: "The rail shows icons only; hover or focus an icon, or the search button, for its name.",
+  panel: "A work panel with tabs on the right. Close it, or use the panel button beside the title.",
+  drawer: "Below 64rem the nav opens in a left Drawer from the Menu button.",
+};
 
 /**
- * Responsive app shell in the playground browser frame. Narrow the window
- * below 64rem to swap SideNav for the Menu button and left Drawer.
+ * Demo logo: a placeholder mark from PrebuiltUI's free logo set (prebuiltui.com/logos), drawn
+ * in currentColor so it takes the kit brand colour (--icon-brand), or the on-brand colour on the
+ * brand fill when it is the nav mark. Passed through the `logo` / `mark` slots at --space-5.
  */
-function AppShellDefault() {
+function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 63 59"
+      aria-hidden="true"
+      focusable="false"
+      fill="currentColor"
+      style={{
+        display: "block",
+        height: onBrand ? "var(--space-4)" : "var(--space-5)",
+        width: "auto",
+        color: onBrand ? "currentColor" : "var(--icon-brand)",
+      }}
+    >
+      <path d="M27.7696 33.9423L19.6599 20.6719L9.82994 38.4886L0 56.3054H15.7279L27.7696 33.9423Z" />
+      <path d="M29.4812 1.44167L22.3329 16.7865L46.3377 56.2469L62.666 56.2469L29.4812 1.44167Z" />
+    </svg>
+  );
+}
+
+/** Opens the nav Drawer on narrow screens, so the mobile view shows it. */
+function OpenDrawerOnNarrow() {
+  const shell = useAppShell();
+  const narrow = shell?.narrow;
+  const openNav = shell?.openNav;
+  useEffect(() => {
+    if (narrow) openNav?.();
+  }, [narrow]); // eslint-disable-line react-hooks/exhaustive-deps
+  return null;
+}
+
+/**
+ * Responsive app shell in the playground browser frame, from props: header, nav, a Projects
+ * group, the account menu, and an optional work panel. Narrow the window below 64rem to swap
+ * SideNav for the Menu button and left Drawer.
+ */
+function AppShellDefault({ view }: { view: ShellView }) {
   const [page, setPage] = useState("overview");
-  const [query, setQuery] = useState("");
-  const [navOpen, setNavOpen] = useState(true);
+  const [collapsed, setCollapsed] = useState(view === "collapsed");
 
   const bind = (items: SideNavItemData[]) =>
     items.map((item) => ({ ...item, active: item.id === page, onClick: () => setPage(item.id) }));
-  const current = [...NAV_ITEMS, ...NAV_FOOTER].find((item) => item.id === page) ?? NAV_ITEMS[0];
+  const current = [...NAV_ITEMS, ...PROJECTS].find((item) => item.id === page) ?? NAV_ITEMS[0];
+
+  // Flat (and its collapsed and mobile views) uses the flat look; every view is sidebar-led, with
+  // no top bar when wide, so the page starts at the top inset.
+  const flat = view === "flat" || view === "collapsed" || view === "drawer";
+  const [notes, setNotes] = useState({ notifications: NOTIFICATIONS, requests: REQUESTS });
+  const markRead = (tab: string, id: string) =>
+    setNotes((all) => ({
+      ...all,
+      [tab]: all[tab as keyof typeof all].map((item) => (item.id === id ? { ...item, read: true } : item)),
+    }));
 
   return (
-    <>
-      <AppShellPattern
-        className="layout-shell--viewport"
-        header={{
-          title: "Agentix",
-          mark: "A",
-          searchPlaceholder: "Search",
-          searchShortcut: "⌘K",
-          searchValue: query,
-          onSearch: setQuery,
-          actions: <Button appearance="ghost" mode="neutral" size="sm" iconStart="Bell" ariaLabel="Notifications" />,
-        }}
-        nav={{
-          title: "Agentix",
-          mark: "A",
-          open: navOpen,
-          onOpenChange: setNavOpen,
-          items: bind(NAV_ITEMS),
-          footer: bind(NAV_FOOTER),
-        }}
-      >
-        <div className="layout-canvas layout-canvas--sticky-header">
-          <div className="layout-header">
-            <PageHeader title={current.label} subtitle="Resize the window across 64rem to see the shell switch." />
-          </div>
-          <div className="layout-content">
-            <Empty
-              title={`${current.label} goes here`}
-              description="The shell owns the chrome. Pages render their own content and their one primary action."
-              icon={current.icon}
-              outlined
-            />
-          </div>
+    <AppShellPattern
+      className="layout-shell--viewport"
+      layout={flat ? "flat" : "inset"}
+      collapsed={view === "collapsed" ? collapsed : undefined}
+      onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
+      notifications={{
+        tabs: [
+          { id: "notifications", label: "Notifications", items: notes.notifications },
+          { id: "requests", label: "Requests", items: notes.requests, emptyTitle: "No requests", emptyDescription: "Review and approval asks land here." },
+        ],
+        onItemClick: markRead,
+        onSettings: () => setPage("overview"),
+      }}
+      workspace={{ name: "Agentix", mark: <DemoLogo />, menu: WORKSPACE_MENU }}
+      nav={{ title: "Agentix", markIcon: <DemoLogo onBrand />, items: bind(NAV_ITEMS) }}
+      subtitle="Agent operations"
+      search={{ groups: COMMANDS, onSelect: (id) => setPage(id === "new-project" || id === "invite" ? page : id) }}
+      projects={{ items: bind(PROJECTS), onNew: () => setPage("overview") }}
+      account={{ name: "Rin Okafor", secondary: "Operations lead", initials: "RO", menu: ACCOUNT_MENU }}
+      workPanel={view === "panel" || view === "drawer" ? { title: "Context", tabs: PANEL_TABS, defaultOpen: view === "panel" } : undefined}
+    >
+      {view === "drawer" ? <OpenDrawerOnNarrow /> : null}
+      <main className="layout-canvas layout-canvas--sticky-header">
+        <div className="layout-header">
+          <PageHeader
+            title={current.label}
+            subtitle={VIEW_NOTES[view]}
+            actions={view === "panel" ? <AppShellPattern.PanelToggle ariaLabel="Context" /> : undefined}
+          />
         </div>
-      </AppShellPattern>
-      </>
+        <div className="layout-content">
+          <Empty
+            title={`${current.label} goes here`}
+            description="The shell owns the chrome. Pages render their own content and their one primary action."
+            icon={current.icon}
+            outlined
+          />
+        </div>
+      </main>
+    </AppShellPattern>
   );
 }
 
@@ -264,9 +422,11 @@ function AppShellBuiltNav() {
   );
 }
 
-/** The app-shell example as a full screen. `view`: default (props), custom (built chrome) or built-nav (no header). */
-export function AppShellScreen({ view = "default" }: { view?: string }) {
+const SHELL_VIEWS: ShellView[] = ["inset", "flat", "collapsed", "panel", "drawer"];
+
+/** The app-shell example as a full screen. `view`: a props view (flat, inset, collapsed, panel, drawer), custom (built chrome) or built-nav (no header). */
+export function AppShellScreen({ view = "inset" }: { view?: string }) {
   if (view === "custom") return <AppShellCustom />;
   if (view === "built-nav") return <AppShellBuiltNav />;
-  return <AppShellDefault />;
+  return <AppShellDefault view={SHELL_VIEWS.includes(view as ShellView) ? (view as ShellView) : "inset"} />;
 }

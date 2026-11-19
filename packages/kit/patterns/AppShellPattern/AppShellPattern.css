@@ -1,6 +1,30 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The app-shell-pattern__ prefix keeps names unique. */
 
+/* Both layouts: a quieter brand, so the page title, not the product name, carries the weight. */
+.app-shell-pattern--flat,
+.app-shell-pattern--inset {
+  --appheader-title-size: var(--type-size-ui-lg);
+}
+
+/* layout="flat": the nav sits on the surface with SideNav's own hairline edge (border-faint),
+   and the page runs edge to edge on the subtle background, with no raised card. Drawers are
+   portaled, so the nav inside a Drawer keeps its own surface. */
+.app-shell-pattern--flat {
+  --sidenav-background: var(--surface-card);
+}
+
+.app-shell-pattern--flat :is(.layout-app, .app-shell-pattern__main) > :is(.layout-canvas, .layout-workspace) {
+  background: var(--surface-muted);
+}
+
+/* layout="inset": layout-shell--inset (layout.css) puts the nav on the page background and
+   the page in a raised card. The top bar joins the page background too, with no rule. */
+.app-shell-pattern--inset {
+  --appheader-background: transparent;
+  --appheader-border-color: transparent;
+}
+
 /* Holds SideNav in the layout-app first column; stretches it to full height. */
 .app-shell-pattern__rail {
   display: flex;
@@ -26,13 +50,278 @@
   min-height: 0;
 }
 
-/* Wraps the Menu Button so the shell can return focus to it. */
+/* Wraps shell controls so the shell can return focus to them. */
 .app-shell-pattern__menu {
   display: contents;
 }
 
-/* Default narrowHeader: the nav's mark beside the title, after the Menu Button. Its brand
-   cell hugs the mark instead of taking a second rail-wide column. */
-.app-shell-pattern__narrow-brand {
+/* The mark beside the title, after the Menu Button or rail toggle. Its brand cell hugs
+   the mark instead of taking a second rail-wide column. */
+.app-shell-pattern__inner-brand {
   --appheader-brand-width: auto;
+}
+
+/* Wide props header: brand (logo or mark, title), then the rail toggle at the end of a row
+   as wide as the open rail, inset like the nav rows, so the toggle sits on the nav's edge. */
+.app-shell-pattern__brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-xs);
+  box-sizing: border-box;
+  width: var(--sidenav-width, var(--layout-sidebar));
+  max-width: 100%;
+  min-width: 0;
+  padding-inline: var(--space-4) var(--space-inset-sm);
+  /* The logo cell hugs the logo (no rail-wide cell), so the wordmark sits close to it; the
+     start padding lines the logo up with the nav icons' start edge instead. */
+  --appheader-brand-width: auto;
+}
+
+/* Collapsed rail: the brand is as wide as the closed rail and the logo centers on its icons.
+   The logo and the expand toggle share one cell; hover or keyboard focus (:focus-visible) swaps them, and a tap
+   on the logo lands on the toggle. */
+.app-shell-pattern__brand-row--collapsed {
+  display: grid;
+  place-items: center;
+  width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
+  padding-inline: 0;
+  --appheader-brand-width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
+}
+
+.app-shell-pattern__brand-row--collapsed > * {
+  grid-area: 1 / 1;
+}
+
+.app-shell-pattern__brand-mark,
+.app-shell-pattern__brand-toggle {
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+/* The logo never takes the pointer, and the toggle stacks above it: an element at opacity
+   below 1 paints as its own layer, which would otherwise put the hidden logo over the toggle. */
+.app-shell-pattern__brand-mark {
+  pointer-events: none;
+}
+
+.app-shell-pattern__brand-toggle {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+}
+
+.app-shell-pattern__brand-row--collapsed:hover .app-shell-pattern__brand-mark,
+.app-shell-pattern__brand-row--collapsed:has(:focus-visible) .app-shell-pattern__brand-mark {
+  opacity: 0;
+}
+
+.app-shell-pattern__brand-row--collapsed:hover .app-shell-pattern__brand-toggle,
+.app-shell-pattern__brand-row--collapsed:has(:focus-visible) .app-shell-pattern__brand-toggle {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell-pattern__brand-mark,
+  .app-shell-pattern__brand-toggle {
+    transition: none;
+  }
+}
+
+/* Brand text in the nav header: the product name, then one muted subtitle line. Our own
+   node in SideNav.Brand's title, so it sets its own type. */
+.app-shell-pattern__brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-shell-pattern__brand-name,
+.app-shell-pattern__brand-subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: normal;
+}
+
+.app-shell-pattern__brand-name {
+  color: var(--text-primary);
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-md);
+}
+
+.app-shell-pattern__brand-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+}
+
+/* Search slot under the brand: the field fills the slot; on the closed rail the icon Button
+   centers on the rail's icon column. */
+.app-shell-pattern__search-slot {
+  padding-block-start: var(--space-inset-sm);
+}
+
+.app-shell-pattern__search {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Quick actions row: the field fills, the search Button sits beside it. */
+.app-shell-pattern__quick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.app-shell-pattern__quick > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Workspace switcher in the top row: takes the room before the collapse Toggle. */
+.app-shell-pattern__workspace {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Notifications row while its panel is open: SideNav's own active fill and colours (no aria-current). */
+.app-shell-pattern__nav-open.app-shell-pattern__nav-open {
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+  color: var(--sidenav-item-active-text, var(--text-brand));
+}
+
+.app-shell-pattern__nav-open.app-shell-pattern__nav-open svg {
+  color: var(--sidenav-item-active-icon, var(--icon-brand));
+}
+
+/* The Popover wraps the Notifications row's control in two inline spans (root, trigger); stretch them
+   so the row is full width and its count lines up with the other rows' counts. */
+.app-shell-pattern__row-anchor,
+.app-shell-pattern__row-anchor > span,
+.app-shell-pattern__row-anchor > span > span {
+  display: flex;
+  min-width: 0;
+}
+
+.app-shell-pattern__row-anchor > span,
+.app-shell-pattern__row-anchor > span > span,
+.app-shell-pattern__row-anchor > span > span > :is(button, a) {
+  flex: 1 1 auto;
+}
+
+/* Collapsed rail: the panel keeps the open width and clips it, so the anchor is only as wide as the
+   visible rail row (closed width less the row inset on each side). The Popover then opens at the rail's edge. */
+.app-shell-pattern__row-anchor--rail > span {
+  flex: 0 0 auto;
+  width: calc(var(--sidenav-width-collapsed, var(--layout-sidebar-compact)) - var(--space-inset-sm) * 2);
+  /* clip, not hidden: focus moving into the panel must not scroll the row out of view. */
+  overflow: clip;
+  overflow-clip-margin: var(--space-1);
+}
+
+/* On the closed rail SideNav shows the active row as a square chip (its ::before) over the icon, not a
+   row fill, so the open Notifications row does the same and matches the other active rows. */
+.app-shell-pattern__nav-open--rail.app-shell-pattern__nav-open--rail {
+  background: transparent;
+}
+
+.app-shell-pattern__nav-open--rail.app-shell-pattern__nav-open--rail::before {
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+}
+
+/* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
+.app-shell-pattern__nav-dot {
+  position: relative;
+}
+
+.app-shell-pattern__nav-dot::after {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--space-1);
+  inset-inline-start: calc(var(--space-inset-sm) + var(--space-3));
+  width: var(--space-2);
+  height: var(--space-2);
+  border: var(--border-width-thin) solid var(--surface-card);
+  border-radius: var(--radius-full);
+  background: var(--status-danger);
+}
+
+/* Notifications panel in the Popover: the Popover's widest content box (space-16 x 5 less its
+   space-3 padding); in the Drawer it fills the body. */
+.app-shell-pattern__notify-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  width: calc(var(--space-16) * 5 - var(--space-3) * 2);
+  max-width: 100%;
+}
+
+:where([role="dialog"][aria-modal="true"]) .app-shell-pattern__notify-panel {
+  width: 100%;
+}
+
+/* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */
+.app-shell-pattern__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.app-shell-pattern__account-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Page column with a work panel: the page, then a fixed --layout-rail panel when open.
+   It is layout-app's last child, so layout-shell--inset frames both in one card. */
+.app-shell-pattern__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-shell-pattern__main[data-panel="open"] {
+  grid-template-columns: minmax(0, 1fr) var(--layout-rail);
+}
+
+.app-shell-pattern__main > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Same as layout.css's .layout-app > .layout-canvas--sticky-header, one level deeper. */
+.app-shell-pattern__main > .layout-canvas.layout-canvas--sticky-header {
+  overflow: auto;
+}
+
+.app-shell-pattern__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  overflow: auto;
+  padding: var(--space-inset-md);
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+  background: var(--surface-card);
+}
+
+.app-shell-pattern__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-xs);
+}
+
+.app-shell-pattern__panel-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-md);
 }

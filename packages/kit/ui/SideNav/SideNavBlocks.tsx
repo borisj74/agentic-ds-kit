@@ -503,8 +503,8 @@ export function SideNavItemImpl({
 }
 
 /** One row: icon, label, badge; `active` → aria-current="page"; nested `SideNav.Item` children → disclosure. */
-export function SideNavItem(props: SideNavItemProps) {
-  return <SideNavItemImpl {...props} />;
+export function SideNavItem({ renderControl, ...props }: SideNavItemProps) {
+  return <SideNavItemImpl {...props} wrap={renderControl} />;
 }
 
 

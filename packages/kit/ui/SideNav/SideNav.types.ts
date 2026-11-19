@@ -146,6 +146,11 @@ export interface SideNavItemProps extends Omit<HTMLAttributes<HTMLElement>, Side
   children?: ReactNode;
   /** Disclosure starts open. Default true. */
   defaultExpanded?: boolean;
+  /**
+   * Wrap the row control (the link or button, with the closed-rail Tooltip when closed) inside the
+   * `li`, e.g. to anchor a kit Popover on it. Compose twin of the preset's `renderItem`. Keep `control` in the tree.
+   */
+  renderControl?: (control: ReactElement) => ReactNode;
   ref?: Ref<HTMLElement>;
 }
 

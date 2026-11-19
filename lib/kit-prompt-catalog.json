@@ -12644,7 +12644,30 @@
     {
       "id": "app-shell",
       "group": "pattern",
-      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap); narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+      "useWhen": [
+        "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
+        "The nav should collapse to an icon rail to give the page more room",
+        "Pages need a secondary panel of details or activity beside the main content"
+      ],
+      "doNotUseWhen": [
+        "A single focused task with no app chrome (sign-in, onboarding) — use the sign-in or onboarding pattern",
+        "A temporary side task over the page — use kit Drawer on its own",
+        "Docs or catalog navigation — use AppNav"
+      ],
+      "doNot": [
+        "Do not hand-build a sidebar, rail, account card, or tab strip; use SideNav, SideNav.Account, DropdownMenu and Tabs",
+        "Do not add layout values outside the closed enum (flat, inset); restyle through tokens and component cssVars instead",
+        "Do not open the work panel by default; it is opt-in (defaultOpen or open)",
+        "Do not keep a collapsed rail below the breakpoint; the Drawer holds the nav there",
+        "Do not hard-code a breakpoint other than --grid-breakpoint-md (64rem)",
+        "Do not put a second solid primary Button in the chrome; pages own their one primary action",
+        "Do not use a local scrim, sheet, or fixed overlay for the nav or the work panel; use kit Drawer",
+        "Do not build a local command palette, dialog or search popover; open kit Command inside kit Modal",
+        "Do not put a second search in the top bar when the sidebar search slot is set (pass search: false to the header)",
+        "Do not put a notifications bell in a top bar; notifications is the first nav row with its panel",
+        "Do not build a local flyout, sheet or notification list; use kit Popover (Drawer when narrow), Tabs, ListView and Empty"
+      ],
       "must": [
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view; the shell has none, pages own theirs",
@@ -12658,7 +12681,7 @@
         "header": {
           "type": "object | slot",
           "required": false,
-          "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); on narrow screens the shell puts the Menu Button in the logo slot, so the mark or logo shows only when wide. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from compose parts). Or a header node built from AppHeader.Root and its compose parts: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
+          "note": "Optional. Omit it for side nav only when wide: no top bar, the shell is one row (layout-app fills it) and a SideNav props nav shows its brand header (showHeader true; a built nav reads useAppShell().hasHeader). Below the breakpoint narrowHeader shows so the Menu Button has a home. Otherwise AppHeader props except radius (always none); the shell builds the start region: when wide, logo or mark in the brand cell, title, then the rail toggle at the open rail's edge; when narrow, the Menu Button in the brand cell, then the logo or mark and title. Use logo for a real logo (keep it within --space-8; --space-5 reads smaller than the letter mark). The shell sets --appheader-title-size to type-size-ui-lg so the product name stays quiet; override it on className. Known gap: a start slot replaces the whole brand cell, logo included, so a props header with start loses the injected Menu Button; put AppShellPattern.MenuButton inside your start (or build the header from compose parts). Or a header node built from AppHeader.Root and its compose parts: then the shell injects nothing and the header must place AppShellPattern.MenuButton (usually as the AppHeader.Brand logo)."
         },
         "narrowHeader": {
           "type": "object | slot",
@@ -12674,6 +12697,65 @@
           "type": "string",
           "required": false,
           "note": "Drawer title on narrow screens. Default nav.title, or Navigation for a built nav."
+        },
+        "layout": {
+          "type": "enum",
+          "values": [
+            "inset",
+            "flat"
+          ],
+          "default": "inset",
+          "note": "inset (default): layout-shell--inset; the nav and top bar share the page background (bg-canvas) and the page column sits in a raised card (radius-surface-lg, shadow-xs) with a small margin. flat: the nav sits on the surface (--sidenav-background surface-card) with SideNav's hairline inline-end border (border-faint); the page column (layout-canvas / layout-workspace) runs edge to edge on surface-muted with no card. Flat reads best header-less: the nav leads with the brand, subtitle and search."
+        },
+        "collapsed": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled rail collapse, wide screens only: the rail shrinks to icons (--sidenav-width-collapsed) and every row names itself in a kit Tooltip. Without it the shell keeps the state itself and remembers it in sessionStorage for the browser session. A props nav's open / onOpenChange still work and win over the stored state. Ignored when narrow (the Drawer is always expanded)."
+        },
+        "defaultCollapsed": {
+          "type": "boolean",
+          "default": false,
+          "note": "Uncontrolled start state when nothing is stored yet for this session. The server render and first paint use it, so hydration matches; a stored value applies right after."
+        },
+        "onCollapsedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(collapsed: boolean) => void. Fires from the rail toggle (header shells) or the SideNav Toggle / mark (header-less shells)."
+        },
+        "projects": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only. Adds a captioned group after the nav groups (a flat items list becomes the first, uncaptioned group). Keep the list short. With onNew, the last row is a Plus row named newLabel. A built nav adds its own SideNavSection."
+        },
+        "account": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only. Last in the nav footer, below footer rows: SideNav.Account (Avatar sm with initials or photo, name, secondary line such as a role) with an icon-only kit DropdownMenu (ChevronsUpDown, align end) holding menu, e.g. Settings, a Theme submenu, Sign out. The menu opens above the trigger when there is no room below. On the collapsed rail only the avatar shows (name in a Tooltip) and the menu trigger is removed; expand the rail to reach it. Replaces nav.account."
+        },
+        "subtitle": {
+          "type": "string",
+          "required": false,
+          "note": "Props nav only. One muted line under the product name in the nav's brand (SideNav.Brand), shown when the nav carries the brand: header-less shells when wide, e.g. flat. Ignored when a top bar holds the brand."
+        },
+        "workspace": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only. The nav's top row, left: a ghost sm kit DropdownMenu trigger with the mark, the workspace name and ChevronsUpDown, opening menu (other workspaces, Create workspace). The collapse Toggle sits on the right. Replaces the brand (and subtitle) in that row; on the closed rail it fades and the Toggle reopens the rail. In the nav Drawer it sits at the top of the nav."
+        },
+        "search": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+        },
+        "notifications": {
+          "type": "object",
+          "required": false,
+          "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel: title with an icon-only settings Button, kit Tabs (one per tab, label with its unread count), each a kit ListView (size sm, drill; title, body · time, New badge for unread) or kit Empty (with an outline settings Button) when empty. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon with a dot for unread, same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
+        },
+        "workPanel": {
+          "type": "object",
+          "required": false,
+          "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome)."
         },
         "mark": {
           "type": "string | node",
