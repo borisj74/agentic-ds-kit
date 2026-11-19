@@ -226,6 +226,16 @@
   flex: 1 1 auto;
 }
 
+/* Collapsed rail: the panel keeps the open width and clips it, so the anchor is only as wide as the
+   visible rail row (closed width less the row inset on each side). The Popover then opens at the rail's edge. */
+.app-shell-pattern__row-anchor--rail > span {
+  flex: 0 0 auto;
+  width: calc(var(--sidenav-width-collapsed, var(--layout-sidebar-compact)) - var(--space-inset-sm) * 2);
+  /* clip, not hidden: focus moving into the panel must not scroll the row out of view. */
+  overflow: clip;
+  overflow-clip-margin: var(--space-1);
+}
+
 /* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
 .app-shell-pattern__nav-dot {
   position: relative;
