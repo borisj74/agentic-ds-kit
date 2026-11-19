@@ -1,0 +1,161 @@
+{
+  "id": "scatterchart",
+  "status": "stable",
+  "level": "organism",
+  "intent": "One dot per item, placed by two numeric measures, like accounts by monthly revenue and support tickets. Optional groups by colour and dot size by a third value.",
+  "useWhen": [
+    "The relationship between two numeric measures across many items, like revenue against tickets per account",
+    "Spotting clusters, outliers and items that break the pattern",
+    "Comparing groups of items on the same two measures, like plans or regions"
+  ],
+  "doNotUseWhen": [
+    "Change over time — use LineChart",
+    "Comparing amounts across categories — use BarChart",
+    "A short ranking by one measure — use BarList",
+    "Part of a whole — use PieChart"
+  ],
+  "props": {
+    "data": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "note": "Stable key for the dot."
+        },
+        "label": {
+          "type": "string",
+          "required": true,
+          "note": "What the dot is, like an account name. Shown in the tooltip, the table and the dot's accessible name."
+        },
+        "x": {
+          "type": "number",
+          "required": true
+        },
+        "y": {
+          "type": "number",
+          "required": true
+        },
+        "group": {
+          "type": "string",
+          "required": false,
+          "note": "Colours the dot by group, --chart-1 to --chart-6 in order of first appearance, and adds a legend when there are two or more groups."
+        },
+        "size": {
+          "type": "number",
+          "required": false,
+          "note": "The third value, read when size is value. Zero or more."
+        }
+      },
+      "note": "One row per item. Rows without a finite x and y are left out."
+    },
+    "xLabel": {
+      "type": "string",
+      "required": true,
+      "note": "Names the horizontal measure, like Monthly revenue. Shown under the x axis, in the tooltip and the table."
+    },
+    "yLabel": {
+      "type": "string",
+      "required": true,
+      "note": "Names the vertical measure, like Support tickets. Shown above the y axis, in the tooltip and the table."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "fixed",
+        "value"
+      ],
+      "default": "fixed",
+      "note": "fixed draws every dot the same size. value sizes each dot by its size field, by area (square root), so a dot with four times the value has twice the width."
+    },
+    "sizeLabel": {
+      "type": "string",
+      "default": "Size",
+      "note": "Names the size value in the tooltip and the table, like Seats. Only used with size value."
+    },
+    "valueFormatter": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "x": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for x values and the x axis."
+        },
+        "y": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for y values and the y axis."
+        },
+        "size": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for size values."
+        }
+      },
+      "note": "Each defaults to the chart format: 1,240, 12.4k, 1.2M on axes, the full value in the tooltip and table."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Chart heading on the frame, like the other charts. Also names the plot for screen readers."
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "height": {
+      "type": "number",
+      "default": 280
+    }
+  },
+  "passthrough": {
+    "root": "figure",
+    "ref": "figure",
+    "className": "root",
+    "rest": "figure"
+  },
+  "tokens": [
+    "chart.1",
+    "chart.2",
+    "chart.3",
+    "chart.4",
+    "chart.5",
+    "chart.6",
+    "surface.card",
+    "surface.elevated",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "border.faint",
+    "border.focus",
+    "radius.surfaceSm",
+    "shadow.overlaySm",
+    "type.size.caption",
+    "type.weight.caption",
+    "type.weight.label",
+    "space.1",
+    "space.2"
+  ],
+  "a11y": {
+    "element": "figure",
+    "requirements": [
+      "Title on the figure when provided, and the plot is a role=group named by it",
+      "The dots are one Tab stop; arrow keys move between them in x order (then y), Home and End go to the first and last",
+      "Each dot names its label, both measures, the size when set and the group",
+      "The tooltip shows on focus as well as on hover, and the focused dot gets a visible ring",
+      "Colour is never the only cue for a group: the legend, tooltip and table name it",
+      "The Table toggle swaps the chart for a plain table with every value"
+    ]
+  },
+  "doNot": [
+    "Do not use it for change over time — use LineChart",
+    "Do not use it to compare categories — use BarChart",
+    "Do not join the dots with lines; order along x is not a sequence",
+    "Do not use status colours for groups; a group that means good or bad says so in its name",
+    "Do not use more than six groups; the chart palette has six colours",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<ScatterChart\n  title=\"Accounts by revenue and tickets\"\n  xLabel=\"Monthly revenue\"\n  yLabel=\"Support tickets\"\n  data={[\n    { id: \"acme\", label: \"Acme\", x: 12400, y: 18, group: \"Pro\" },\n    { id: \"globex\", label: \"Globex\", x: 31800, y: 42, group: \"Enterprise\" },\n    { id: \"initech\", label: \"Initech\", x: 4200, y: 9, group: \"Pro\" },\n  ]}\n/>"
+}

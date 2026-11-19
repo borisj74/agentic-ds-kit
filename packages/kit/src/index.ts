@@ -98,6 +98,7 @@ export * from "../ui/PageHeader";
 export * from "../ui/Pagination";
 export * from "../ui/PermissionRequest";
 export * from "../ui/PieChart";
+export * from "../ui/ScatterChart";
 export * from "../ui/PlanReview";
 export * from "../ui/Plans";
 export * from "../ui/Popover";

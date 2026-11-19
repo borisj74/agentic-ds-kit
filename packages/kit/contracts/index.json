@@ -591,6 +591,14 @@
     "level": "organism"
   },
   {
+    "id": "scatterchart",
+    "intent": "One dot per item, placed by two numeric measures, like accounts by monthly revenue and support tickets. Optional groups by colour and dot size by a third value.",
+    "group": "component",
+    "path": "contracts/scatterchart.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "progress",
     "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
     "group": "component",

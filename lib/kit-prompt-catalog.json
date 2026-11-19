@@ -1380,6 +1380,7 @@
       "doNot": [
         "Do not invent chart container cousins",
         "Do not draw bars and a line on one chart from two charts — use ComboChart",
+        "Do not plot two numeric measures per item (x against y) — use ScatterChart",
         "Do not stack series that can go negative; a stacked band starts where the one below ends, so a negative value has nowhere to go",
         "Do not stack values that do not add up to a real total, like rates, averages or overlapping counts; use stack none",
         "Do not set stack with variant line; stacking needs filled bands",
@@ -5040,6 +5041,7 @@
         "Do not invent chart container cousins",
         "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
         "Do not draw bars and a line on one chart from two charts — use ComboChart",
+        "Do not plot two numeric measures per item (x against y) — use ScatterChart",
         "Do not use raw hex"
       ],
       "props": {
@@ -6219,6 +6221,79 @@
           "type": "boolean",
           "default": false,
           "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion; the final state shows without JS"
+        }
+      }
+    },
+    {
+      "id": "scatterchart",
+      "group": "component",
+      "intent": "One dot per item, placed by two numeric measures, like accounts by monthly revenue and support tickets. Optional groups by colour and dot size by a third value.",
+      "useWhen": [
+        "The relationship between two numeric measures across many items, like revenue against tickets per account",
+        "Spotting clusters, outliers and items that break the pattern",
+        "Comparing groups of items on the same two measures, like plans or regions"
+      ],
+      "doNotUseWhen": [
+        "Change over time — use LineChart",
+        "Comparing amounts across categories — use BarChart",
+        "A short ranking by one measure — use BarList",
+        "Part of a whole — use PieChart"
+      ],
+      "doNot": [
+        "Do not use it for change over time — use LineChart",
+        "Do not use it to compare categories — use BarChart",
+        "Do not join the dots with lines; order along x is not a sequence",
+        "Do not use status colours for groups; a group that means good or bad says so in its name",
+        "Do not use more than six groups; the chart palette has six colours",
+        "Do not use raw hex or primitive --color-* ramps"
+      ],
+      "props": {
+        "data": {
+          "type": "array",
+          "required": true,
+          "note": "One row per item. Rows without a finite x and y are left out."
+        },
+        "xLabel": {
+          "type": "string",
+          "required": true,
+          "note": "Names the horizontal measure, like Monthly revenue. Shown under the x axis, in the tooltip and the table."
+        },
+        "yLabel": {
+          "type": "string",
+          "required": true,
+          "note": "Names the vertical measure, like Support tickets. Shown above the y axis, in the tooltip and the table."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "fixed",
+            "value"
+          ],
+          "default": "fixed",
+          "note": "fixed draws every dot the same size. value sizes each dot by its size field, by area (square root), so a dot with four times the value has twice the width."
+        },
+        "sizeLabel": {
+          "type": "string",
+          "default": "Size",
+          "note": "Names the size value in the tooltip and the table, like Seats. Only used with size value."
+        },
+        "valueFormatter": {
+          "type": "object",
+          "required": false,
+          "note": "Each defaults to the chart format: 1,240, 12.4k, 1.2M on axes, the full value in the tooltip and table."
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "note": "Chart heading on the frame, like the other charts. Also names the plot for screen readers."
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "height": {
+          "type": "number",
+          "default": 280
         }
       }
     },

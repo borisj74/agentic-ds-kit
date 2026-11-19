@@ -135,6 +135,7 @@
   "doNot": [
     "Do not invent chart container cousins",
     "Do not draw bars and a line on one chart from two charts — use ComboChart",
+    "Do not plot two numeric measures per item (x against y) — use ScatterChart",
     "Do not stack series that can go negative; a stacked band starts where the one below ends, so a negative value has nowhere to go",
     "Do not stack values that do not add up to a real total, like rates, averages or overlapping counts; use stack none",
     "Do not set stack with variant line; stacking needs filled bands",
