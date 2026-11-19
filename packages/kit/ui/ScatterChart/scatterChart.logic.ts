@@ -21,9 +21,14 @@ export function groupColor(groups: string[], group: string | undefined): string 
   return colorAt(Math.max(0, groups.indexOf(group ?? "")));
 }
 
+/** Most ticks an axis falls back to when its target lands short. */
+const MAX_TICKS = 5;
+
 /**
  * Axis ticks for one measure. Counts and amounts that are all zero or more start at zero, so the
- * position reads as size; data with negatives keeps its own range.
+ * position reads as size; data with negatives keeps its own range. With a target of 4 or more, a
+ * result short of the target (nice steps can round 4 down to 3) tries one more and keeps it when it
+ * stays within five ticks, so both axes get a similar grid.
  */
 export function axisTicks(values: number[], target: number): { ticks: number[]; min: number; max: number } {
   if (!values.length) return niceTicks(0, 1, target);
@@ -32,7 +37,10 @@ export function axisTicks(values: number[], target: number): { ticks: number[]; 
   if (min >= 0) min = 0;
   if (min === max) max = min + 1;
   const integer = values.every((value) => Number.isInteger(value));
-  return niceTicks(min, max, target, { integer });
+  const first = niceTicks(min, max, target, { integer });
+  if (target < 4 || first.ticks.length >= target) return first;
+  const more = niceTicks(min, max, target + 1, { integer });
+  return more.ticks.length <= MAX_TICKS ? more : first;
 }
 
 /**

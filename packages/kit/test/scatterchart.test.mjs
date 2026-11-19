@@ -43,7 +43,8 @@ describe("ScatterChart scales", () => {
   });
 
   test("axes start at zero for non-negative data, keep negatives, and stay whole for whole numbers", () => {
-    assert.deepEqual(logic.axisTicks([4200, 12400, 31800], 4).ticks, [0, 20000, 40000]);
+    assert.deepEqual(logic.axisTicks([4200, 12400, 31800], 4).ticks, [0, 10000, 20000, 30000, 40000], "3 ticks fall back to 5");
+    assert.deepEqual(logic.axisTicks([4200, 12400, 31800], 3).ticks, [0, 20000, 40000], "a narrow target of 3 stays");
     assert.deepEqual(logic.axisTicks([7, 18, 41], 4).ticks, [0, 20, 40, 60]);
     const negative = logic.axisTicks([-12, 30], 4);
     assert.ok(negative.min <= -12 && negative.max >= 30);

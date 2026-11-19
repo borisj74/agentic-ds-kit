@@ -281,7 +281,8 @@ export function ScatterChart({
             <text className={styles.axisTitle} x={layout.plotRight} y={layout.plotBottom + X_TITLE_OFFSET} textAnchor="end" dominantBaseline="hanging">
               {xLabel}
             </text>
-            <text className={styles.axisTitle} x={layout.plotLeft} y={layout.plotTop - 14} textAnchor="start" dominantBaseline="middle">
+            {/* The y measure's name starts at the chart's left edge, in line with the title above and the tick numbers. */}
+            <text className={styles.axisTitle} x={0} y={layout.plotTop - 14} textAnchor="start" dominantBaseline="middle">
               {yLabel}
             </text>
             {layout.paintOrder.map((dot) => (
