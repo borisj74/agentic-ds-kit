@@ -1,0 +1,119 @@
+.plot {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Quiet guides behind the data. The zero line and the bottom line keep full strength. */
+.grid {
+  stroke: var(--border-faint);
+  stroke-opacity: var(--opacity-muted);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.gridBaseline {
+  stroke-opacity: 1;
+}
+
+/* The hovered or focused column, a step above the card. */
+.column {
+  fill: var(--surface-muted);
+  pointer-events: none;
+}
+
+.bar {
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+  pointer-events: none;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.dimmed {
+  opacity: 0.45;
+}
+
+.dot {
+  stroke: var(--surface-card);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.categoryLabel,
+.tickLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.overlay {
+  fill: transparent;
+  cursor: pointer;
+  touch-action: pan-x;
+}
+
+.hit {
+  fill: transparent;
+  outline: none;
+  pointer-events: none;
+}
+
+.hit:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--border-focus-width));
+}
+
+/* The tooltip is placed by measured position, so only the vertical centring stays. */
+.plot .tooltipPlaced {
+  transform: translateY(-50%);
+}
+
+/* The line's key in the tooltip is a short dash, like its legend swatch. */
+.lineKey {
+  height: var(--border-width-medium);
+}
+
+/* Many columns: value axes pinned, the plot scrolls sideways at a floor width per column. */
+.scrollLayout {
+  display: flex;
+  min-width: 0;
+}
+
+.axis {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
+.scroller {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .line {
+    transition: none;
+  }
+}

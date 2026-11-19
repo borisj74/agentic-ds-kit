@@ -1377,6 +1377,7 @@
       ],
       "doNot": [
         "Do not invent chart container cousins",
+        "Do not draw bars and a line on one chart from two charts — use ComboChart",
         "Do not use raw hex"
       ],
       "props": {
@@ -5023,6 +5024,7 @@
       "doNot": [
         "Do not invent chart container cousins",
         "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
+        "Do not draw bars and a line on one chart from two charts — use ComboChart",
         "Do not use raw hex"
       ],
       "props": {
@@ -5147,6 +5149,75 @@
           "type": "string",
           "default": "Ranked list",
           "note": "Names the list for screen readers, like Top pages by views. The visible title comes from a parent Section or Card."
+        }
+      }
+    },
+    {
+      "id": "combochart",
+      "group": "component",
+      "intent": "Bars and a line on one chart over the same categories, like revenue as bars with growth rate as a line. One shared value axis, or a second axis on the right for the line.",
+      "useWhen": [
+        "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
+        "Volumes with a running target or moving average drawn across them",
+        "Two measures people read together per column, where two separate charts would make them line up by eye"
+      ],
+      "doNotUseWhen": [
+        "Only amounts compared across categories — use BarChart",
+        "Only a trend over time, one or several series — use LineChart",
+        "Part of a whole — use PieChart",
+        "A short ranking by one measure — use BarList"
+      ],
+      "doNot": [
+        "Do not use it for bars alone — use BarChart",
+        "Do not use it for lines alone — use LineChart",
+        "Do not stack a BarChart and a LineChart on top of each other to fake one — use ComboChart",
+        "Do not draw more than one line; a second trend belongs in LineChart",
+        "Do not use axis dual for values in the same unit; it makes the two scales look comparable when they are not",
+        "Do not use status colours for the series; a series that means good or bad says so in its label",
+        "Do not use raw hex or primitive --color-* ramps"
+      ],
+      "props": {
+        "data": {
+          "type": "array",
+          "required": true,
+          "note": "One row per category, in the order shown."
+        },
+        "bars": {
+          "type": "array",
+          "required": true,
+          "note": "One to three bar series. They take --chart-1, --chart-2 and --chart-4 in order, so the line colour stays apart."
+        },
+        "line": {
+          "type": "object",
+          "required": true,
+          "note": "One line series, drawn smooth in --chart-3 with no area fill."
+        },
+        "axis": {
+          "type": "enum",
+          "values": [
+            "shared",
+            "dual"
+          ],
+          "default": "shared",
+          "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+        },
+        "valueFormatter": {
+          "type": "object",
+          "required": false,
+          "note": "Both default to the chart format: 1,240, 12.4k, 1.2M. With axis shared, the left axis uses the bars formatter."
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "note": "Chart heading on the frame, like the other charts. Also names the plot for screen readers."
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "height": {
+          "type": "number",
+          "default": 240
         }
       }
     },

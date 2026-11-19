@@ -81,6 +81,7 @@
   "doNot": [
     "Do not invent chart container cousins",
     "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
+    "Do not draw bars and a line on one chart from two charts — use ComboChart",
     "Do not use raw hex"
   ],
   "snippet": "<BarChart title=\"Revenue by region\" data={[{ label: 'North', value: 2610 }]} />"
