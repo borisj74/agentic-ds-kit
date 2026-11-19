@@ -51,6 +51,20 @@
   --appheader-brand-width: auto;
 }
 
+/* Wide props header: brand (logo or mark, title), then the rail toggle at the end of a row
+   as wide as the open rail, inset like the nav rows, so the toggle sits on the nav's edge. */
+.app-shell-pattern__brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-stack-xs);
+  box-sizing: border-box;
+  width: var(--sidenav-width, var(--layout-sidebar));
+  max-width: 100%;
+  min-width: 0;
+  padding-inline-end: var(--space-inset-sm);
+}
+
 /* Account row in the nav footer: SideNav.Account fills, the menu trigger sits at the end. */
 .app-shell-pattern__account {
   display: flex;

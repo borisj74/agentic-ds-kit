@@ -395,13 +395,27 @@ function withSections(nav: AppShellNav, projects?: AppShellProjects, account?: A
   return { ...nav, groups, footer, account: account ? undefined : nav.account };
 }
 
-/** Brand cell for a props header: a shell control on the rail axis, then the mark and title. */
-function headerStart(header: AppShellHeader, control: ReactNode) {
+/**
+ * Start region for a props header. Narrow: the Menu Button in the brand cell, then the mark
+ * and title. Wide: the logo or mark in the brand cell (on the rail icon axis) and the title,
+ * then the rail toggle at the end of a row as wide as the open rail, so it lines up with the nav's edge.
+ */
+function headerStart(header: AppShellHeader, narrow: boolean) {
   const titleNode = header.title ? <AppHeader.Title>{header.title}</AppHeader.Title> : null;
   const mark = header.mark ?? (header.logo || header.markIcon ? undefined : header.title?.charAt(0));
   const hasBrand = Boolean(header.logo || header.markIcon || mark);
+  if (!narrow) {
+    return (
+      <div className="app-shell-pattern__brand-row">
+        <AppHeader.Brand mark={mark} markIcon={header.markIcon} logo={header.logo}>
+          {titleNode}
+        </AppHeader.Brand>
+        <AppShellRailToggle />
+      </div>
+    );
+  }
   return (
-    <AppHeader.Brand logo={control}>
+    <AppHeader.Brand logo={<AppShellMenuButton />}>
       {hasBrand ? (
         <AppHeader.Brand className="app-shell-pattern__inner-brand" mark={mark} markIcon={header.markIcon} logo={header.logo}>
           {titleNode}
@@ -627,7 +641,7 @@ function AppShellPatternRoot({
               <AppHeader
                 {...headerProps}
                 radius="none"
-                start={headerProps.start ?? headerStart(headerProps, narrow ? <AppShellMenuButton /> : <AppShellRailToggle />)}
+                start={headerProps.start ?? headerStart(headerProps, narrow)}
                 actions={headerActions}
               />
             ) : (

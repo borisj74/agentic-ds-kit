@@ -100,6 +100,30 @@ const VIEW_NOTES: Record<ShellView, string> = {
   drawer: "Below 64rem the nav opens in a left Drawer from the Menu button.",
 };
 
+/**
+ * Demo logo: a placeholder mark from PrebuiltUI's free logo set (prebuiltui.com/logos), drawn
+ * in currentColor so it follows the theme. Passed through AppHeader's `logo` slot, smaller than the letter mark.
+ */
+function DemoLogo() {
+  return (
+    <svg
+      viewBox="0 0 48 43"
+      aria-hidden="true"
+      focusable="false"
+      style={{ display: "block", height: "var(--space-6)", width: "auto", color: "var(--icon-brand)" }}
+    >
+      <mask id="demo-logo-dot">
+        <rect width="48" height="43" fill="white" />
+        <circle cx="24" cy="21.421" r="5.355" fill="black" />
+      </mask>
+      <g mask="url(#demo-logo-dot)" fill="currentColor">
+        <path d="M5.258 42.839c11.83 0 21.419-9.59 21.419-21.42S17.087 0 5.257 0c-11.829 0 .001 9.59.001 21.42 0 11.829-11.83 21.419 0 21.419" />
+        <path d="M42.742 42.839c-11.83 0-21.419-9.59-21.419-21.42S30.913 0 42.743 0c11.829 0-.001 9.59-.001 21.42 0 11.829 11.83 21.419 0 21.419" />
+      </g>
+    </svg>
+  );
+}
+
 /** Opens the nav Drawer on narrow screens, so the mobile view shows it. */
 function OpenDrawerOnNarrow() {
   const shell = useAppShell();
@@ -133,7 +157,7 @@ function AppShellDefault({ view }: { view: ShellView }) {
       onCollapsedChange={view === "collapsed" ? setCollapsed : undefined}
       header={{
         title: "Agentix",
-        mark: "A",
+        logo: <DemoLogo />,
         searchPlaceholder: "Search",
         searchShortcut: "⌘K",
         searchValue: query,
