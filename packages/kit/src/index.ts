@@ -49,6 +49,7 @@ export * from "../ui/Checkbox";
 export * from "../ui/CodeSnippet";
 export * from "../ui/Collapsible";
 export * from "../ui/Combobox";
+export * from "../ui/ComboChart";
 export * from "../ui/ColorPicker";
 export * from "../ui/Command";
 export * from "../ui/ContextMenu";

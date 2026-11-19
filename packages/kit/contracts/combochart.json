@@ -1,0 +1,156 @@
+{
+  "id": "combochart",
+  "status": "stable",
+  "level": "organism",
+  "intent": "Bars and a line on one chart over the same categories, like revenue as bars with growth rate as a line. One shared value axis, or a second axis on the right for the line.",
+  "useWhen": [
+    "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
+    "Volumes with a running target or moving average drawn across them",
+    "Two measures people read together per column, where two separate charts would make them line up by eye"
+  ],
+  "doNotUseWhen": [
+    "Only amounts compared across categories — use BarChart",
+    "Only a trend over time, one or several series — use LineChart",
+    "Part of a whole — use PieChart",
+    "A short ranking by one measure — use BarList"
+  ],
+  "props": {
+    "data": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "label": {
+          "type": "string",
+          "required": true,
+          "note": "The category on the x axis, like Jan."
+        },
+        "[key]": {
+          "type": "number",
+          "required": false,
+          "note": "One number per series key named in bars and line. A missing value draws no bar and breaks nothing: the line skips straight to the next point."
+        }
+      },
+      "note": "One row per category, in the order shown."
+    },
+    "bars": {
+      "type": "array",
+      "required": true,
+      "itemShape": {
+        "key": {
+          "type": "string",
+          "required": true,
+          "note": "The data field this series reads."
+        },
+        "label": {
+          "type": "string",
+          "required": true,
+          "note": "Shown in the legend, the tooltip and the table."
+        }
+      },
+      "note": "One to three bar series. They take --chart-1, --chart-2 and --chart-4 in order, so the line colour stays apart."
+    },
+    "line": {
+      "type": "object",
+      "required": true,
+      "itemShape": {
+        "key": {
+          "type": "string",
+          "required": true
+        },
+        "label": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "note": "One line series, drawn smooth in --chart-3 with no area fill."
+    },
+    "axis": {
+      "type": "enum",
+      "values": [
+        "shared",
+        "dual"
+      ],
+      "default": "shared",
+      "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+    },
+    "valueFormatter": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "bars": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for bar values and the left axis."
+        },
+        "line": {
+          "type": "function",
+          "required": false,
+          "note": "(value: number) => string for line values and, with axis dual, the right axis."
+        }
+      },
+      "note": "Both default to the chart format: 1,240, 12.4k, 1.2M. With axis shared, the left axis uses the bars formatter."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Chart heading on the frame, like the other charts. Also names the plot for screen readers."
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "height": {
+      "type": "number",
+      "default": 240
+    }
+  },
+  "passthrough": {
+    "root": "figure",
+    "ref": "figure",
+    "className": "root",
+    "rest": "figure"
+  },
+  "tokens": [
+    "chart.1",
+    "chart.2",
+    "chart.3",
+    "chart.4",
+    "surface.card",
+    "surface.muted",
+    "surface.elevated",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "border.faint",
+    "border.focus",
+    "radius.controlSm",
+    "radius.surfaceSm",
+    "shadow.overlaySm",
+    "type.size.caption",
+    "type.weight.caption",
+    "type.weight.label",
+    "space.1",
+    "space.2",
+    "space.4"
+  ],
+  "a11y": {
+    "element": "figure",
+    "requirements": [
+      "Title on the figure when provided, and the plot is a role=group named by it",
+      "Each column is one focus stop in order; Tab and the arrow keys move column by column, and each column names its label and every bar and line value",
+      "The tooltip shows on focus as well as on hover, with every series for that column",
+      "The legend names each bar series and the line, with the line drawn as a line",
+      "The Table toggle swaps the chart for a plain table with every value"
+    ]
+  },
+  "doNot": [
+    "Do not use it for bars alone — use BarChart",
+    "Do not use it for lines alone — use LineChart",
+    "Do not stack a BarChart and a LineChart on top of each other to fake one — use ComboChart",
+    "Do not draw more than one line; a second trend belongs in LineChart",
+    "Do not use axis dual for values in the same unit; it makes the two scales look comparable when they are not",
+    "Do not use status colours for the series; a series that means good or bad says so in its label",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<ComboChart\n  title=\"Revenue and growth\"\n  description=\"2026, by month\"\n  axis=\"dual\"\n  data={[\n    { label: \"Jan\", revenue: 42000, growth: 3.1 },\n    { label: \"Feb\", revenue: 45500, growth: 8.3 },\n    { label: \"Mar\", revenue: 44100, growth: -3.1 },\n  ]}\n  bars={[{ key: \"revenue\", label: \"Revenue\" }]}\n  line={{ key: \"growth\", label: \"Growth\" }}\n  valueFormatter={{ line: (value) => `${value}%` }}\n/>"
+}

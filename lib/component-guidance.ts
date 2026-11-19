@@ -22,6 +22,7 @@ import contract_avatargroup from "../packages/kit/contracts/avatargroup.json";
 import contract_badge from "../packages/kit/contracts/badge.json";
 import contract_barchart from "../packages/kit/contracts/barchart.json";
 import contract_barlist from "../packages/kit/contracts/barlist.json";
+import contract_combochart from "../packages/kit/contracts/combochart.json";
 import contract_heatmap from "../packages/kit/contracts/heatmap.json";
 import contract_breadcrumb from "../packages/kit/contracts/breadcrumb.json";
 import contract_button from "../packages/kit/contracts/button.json";
@@ -166,6 +167,7 @@ const contracts: Record<string, ContractNotes> = {
   "badge": contract_badge,
   "barchart": contract_barchart,
   "barlist": contract_barlist,
+  "combochart": contract_combochart,
   "heatmap": contract_heatmap,
   "breadcrumb": contract_breadcrumb,
   "button": contract_button,

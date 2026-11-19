@@ -12,6 +12,7 @@ import { AvatarGroupDoc } from "./AvatarGroupDoc";
 import { BadgeDoc } from "./BadgeDoc";
 import { BarChartDoc } from "./BarChartDoc";
 import { BarListDoc } from "./BarListDoc";
+import { ComboChartDoc } from "./ComboChartDoc";
 import { HeatmapDoc } from "./HeatmapDoc";
 import { BreadcrumbDoc } from "./BreadcrumbDoc";
 import { ButtonDoc } from "./ButtonDoc";
@@ -230,6 +231,7 @@ const TITLES: Record<string, string> = {
   badge: "Badge",
   barchart: "Bar",
   barlist: "BarList",
+  combochart: "ComboChart",
   heatmap: "Heatmap",
   breadcrumb: "Breadcrumb",
   tooltip: "Tooltip",
@@ -304,6 +306,8 @@ function resolveHash(hash: string): string {
     bar: "barchart",
     "bar-chart": "barchart",
     "bar-list": "barlist",
+    "combo-chart": "combochart",
+    combo: "combochart",
     "heat-map": "heatmap",
     line: "linechart",
     "line-chart": "linechart",
@@ -401,6 +405,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "badge") return <BadgeDoc />;
   if (resolved === "barchart") return <BarChartDoc />;
   if (resolved === "barlist") return <BarListDoc />;
+  if (resolved === "combochart") return <ComboChartDoc />;
   if (resolved === "heatmap") return <HeatmapDoc />;
   if (resolved === "breadcrumb") return <BreadcrumbDoc />;
   if (resolved === "button") return <ButtonDoc />;

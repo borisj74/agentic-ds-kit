@@ -62,9 +62,9 @@ describe("questions: schema", () => {
     }
   });
 
-  test("136 component options plus one per block, and 8 pattern options by default", () => {
+  test("137 component options plus one per block, and 8 pattern options by default", () => {
     const { options } = buildQuestions();
-    assert.equal(componentIds.length - blockIds.length, 136);
+    assert.equal(componentIds.length - blockIds.length, 137);
     assert.ok(blockIds.includes("agentoverview"));
     assert.deepEqual(options.filter((o) => o.kind === "component").map((o) => o.id).sort(), [...componentIds].sort());
     assert.deepEqual(options.filter((o) => o.kind === "pattern").map((o) => o.id).sort(), [...patternIds].sort());

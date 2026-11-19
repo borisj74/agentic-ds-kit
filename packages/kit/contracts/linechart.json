@@ -119,6 +119,7 @@
   },
   "doNot": [
     "Do not invent chart container cousins",
+    "Do not draw bars and a line on one chart from two charts — use ComboChart",
     "Do not use raw hex"
   ],
   "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />"
