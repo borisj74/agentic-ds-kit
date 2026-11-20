@@ -62,10 +62,13 @@ function SiteNav({ query, onQuery, pathname, searchId }: { query: string; onQuer
   );
 }
 
-/** Pattern frames (/frame/…) are bare screens shown in an iframe: no docs chrome around them. */
+/**
+ * Pattern frames (/frame/…) are bare screens shown in an iframe, and the home page (/) is a
+ * landing page with its own top nav: no docs chrome around either. Every other page keeps it.
+ */
 export function PlaygroundShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  if (pathname?.startsWith("/frame/")) return <>{children}</>;
+  if (pathname?.startsWith("/frame/") || pathname === "/") return <>{children}</>;
   return <DocsShell pathname={pathname}>{children}</DocsShell>;
 }
 
