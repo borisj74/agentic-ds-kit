@@ -95,12 +95,10 @@ export const PRESETS: readonly Preset[] = [
 ];
 
 export const RADIUS_PRESETS = [
-  { id: "sharp", label: "Sharp", px: 0, pill: false },
   { id: "subtle", label: "Subtle", px: 4, pill: false },
   { id: "default", label: "Default", px: 8, pill: false },
   { id: "soft", label: "Soft", px: 16, pill: false },
   { id: "round", label: "Round", px: 24, pill: false },
-  { id: "extra", label: "Extra", px: 32, pill: false },
   { id: "pill", label: "Pill", px: 8, pill: true },
 ] as const;
 
@@ -506,54 +504,85 @@ const DENSITY_TOKEN: Record<Exclude<Density, "default">, Record<string, Record<s
   },
 };
 
-export function clampRadius(value: number): number {
+/** The kit's fixed radius scale. The studio picks one of these steps; it never scales them. */
+export const RADIUS_STEPS = [2, 4, 6, 8, 12, 16, 24] as const;
+export type RadiusStep = (typeof RADIUS_STEPS)[number];
+const RADIUS_NAMES = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"] as const;
+const DEFAULT_STEP_INDEX = RADIUS_STEPS.indexOf(8);
+
+/** Snap any number to the nearest fixed step (ties go to the smaller step). */
+export function clampRadius(value: number): RadiusStep {
   if (!Number.isFinite(value)) return 8;
-  return Math.min(48, Math.max(0, Math.round(value / 2) * 2));
+  let best: RadiusStep = RADIUS_STEPS[0];
+  for (const step of RADIUS_STEPS) {
+    if (Math.abs(step - value) < Math.abs(best - value)) best = step;
+  }
+  return best;
 }
 
-/** Round to the nearest 2px step so a scaled corner stays on the 2 and 4px grid. */
-function step2(value: number): number {
-  return Math.round(value / 2) * 2;
+/** Index of a step on the scale, for sliders that move one step at a time. */
+export function radiusStepIndex(value: number): number {
+  return RADIUS_STEPS.indexOf(clampRadius(value));
 }
 
-/** Scale the fixed kit steps (xs 2, sm 4, md 6, lg 8, xl 12, 2xl 16, 3xl 24) to a chosen lg. */
-export function radiusReadout(basePx: number, pill: boolean) {
-  const base = clampRadius(basePx);
-  const px = (part: number) => step2((base * part) / 8);
-  return { xs: px(2), sm: px(4), md: px(6), lg: base, xl: px(12), card: px(12), pill };
-}
-
-function radiusVars(basePx: number, pill: boolean): Record<string, string> {
-  const base = clampRadius(basePx);
-  const px = (part: number) => `${step2((base * part) / 8)}px`;
-  const lg = `${base}px`;
-  const control = pill ? "9999px" : null;
+/** Role steps for a chosen corner. The kit default (8) points each role at its usual step; another step moves every role along the fixed scale by the same number of steps. */
+function radiusRoles(value: number) {
+  const shift = radiusStepIndex(value) - DEFAULT_STEP_INDEX;
+  const at = (name: (typeof RADIUS_NAMES)[number]) => {
+    const index = Math.min(RADIUS_STEPS.length - 1, Math.max(0, RADIUS_NAMES.indexOf(name) + shift));
+    return RADIUS_STEPS[index];
+  };
   return {
-    "--radius-base": lg,
-    "--radius-xs": px(2),
-    "--radius-sm": px(4),
-    "--radius-md": px(6),
-    "--radius-lg": lg,
-    "--radius-xl": px(12),
-    "--radius-2xl": px(16),
-    "--radius-3xl": px(24),
-    "--radius-control-sm": control ?? px(2),
-    "--radius-control-md": control ?? px(6),
-    "--radius-control-lg": control ?? lg,
+    controlSm: at("xs"),
+    controlMd: at("md"),
+    controlLg: at("lg"),
+    surfaceSm: at("lg"),
+    surfaceMd: at("xl"),
+    surfaceLg: at("2xl"),
+    mediaSm: at("md"),
+    mediaMd: at("lg"),
+    mediaLg: at("xl"),
+  };
+}
+
+export function radiusReadout(value: number, pill: boolean) {
+  const roles = radiusRoles(value);
+  return {
+    step: clampRadius(value),
+    control: [roles.controlSm, roles.controlMd, roles.controlLg],
+    surface: [roles.surfaceSm, roles.surfaceMd, roles.surfaceLg],
+    media: [roles.mediaSm, roles.mediaMd, roles.mediaLg],
+    pill,
+  };
+}
+
+function radiusVars(value: number, pill: boolean): Record<string, string> {
+  const roles = radiusRoles(value);
+  const px = (n: number) => `${n}px`;
+  const control = pill ? "9999px" : null;
+  const scale: Record<string, string> = { "--radius-base": "8px", "--radius-full": "9999px" };
+  RADIUS_NAMES.forEach((name, index) => {
+    scale[`--radius-${name}`] = px(RADIUS_STEPS[index]);
+  });
+  return {
+    ...scale,
+    "--radius-control-sm": control ?? px(roles.controlSm),
+    "--radius-control-md": control ?? px(roles.controlMd),
+    "--radius-control-lg": control ?? px(roles.controlLg),
     "--radius-pill": "9999px",
-    "--radius-surface-sm": lg,
-    "--radius-surface-md": px(12),
-    "--radius-surface-lg": px(16),
-    "--radius-media-sm": px(6),
-    "--radius-media-md": lg,
-    "--radius-media-lg": px(12),
-    "--radius-50": px(2),
-    "--radius-100": px(4),
-    "--radius-200": lg,
-    "--radius-300": px(12),
-    "--radius-400": px(16),
-    "--radius-500": px(24),
-    "--radius-600": px(24),
+    "--radius-surface-sm": px(roles.surfaceSm),
+    "--radius-surface-md": px(roles.surfaceMd),
+    "--radius-surface-lg": px(roles.surfaceLg),
+    "--radius-media-sm": px(roles.mediaSm),
+    "--radius-media-md": px(roles.mediaMd),
+    "--radius-media-lg": px(roles.mediaLg),
+    "--radius-50": "var(--radius-xs)",
+    "--radius-100": "var(--radius-sm)",
+    "--radius-200": "var(--radius-lg)",
+    "--radius-300": "var(--radius-xl)",
+    "--radius-400": "var(--radius-2xl)",
+    "--radius-500": "var(--radius-3xl)",
+    "--radius-600": "var(--radius-3xl)",
   };
 }
 
@@ -873,7 +902,7 @@ export function exportTokens(state: ThemeState): string {
         ...(palette.accent ? { accent: palette.accent } : {}),
         neutral: palette.neutral,
       },
-      radius: { base: `${clampRadius(state.radius)}px`, pill: state.pill ? "9999px" : "scale" },
+      radius: { step: `${clampRadius(state.radius)}px`, pill: state.pill ? "9999px" : "scale" },
       shadow: shadowMap(state, "light"),
       shadowDark: shadowMap(state, "dark"),
     },
@@ -939,7 +968,7 @@ Theme for Nistha. Reassign semantic roles to primitive ramps. Do not put hex in 
 
 ## Radius
 
-Steps on 2px: xs ${readout.xs}, sm ${readout.sm}, md ${readout.md}, lg ${readout.lg}, xl ${readout.xl}, card ${readout.card}. Set each step; \`--radius-base\` does not move them. ${state.pill ? "Buttons and inputs use pill radius (9999px). Surfaces stay on the scale." : "Buttons and inputs follow the control radii."}
+The scale stays fixed (xs 2, sm 4, md 6, lg 8, xl 12, 2xl 16, 3xl 24). Corner step ${readout.step}px moves the roles along it: control ${readout.control.join(" / ")}, surface ${readout.surface.join(" / ")}, media ${readout.media.join(" / ")}. Point the \`--radius-control-*\`, \`--radius-surface-*\` and \`--radius-media-*\` roles at those steps; \`--radius-base\` does not move anything. ${state.pill ? "Buttons and inputs use pill radius (9999px). Surfaces stay on the scale." : "Buttons and inputs follow the control radii."}
 
 ## Spacing
 

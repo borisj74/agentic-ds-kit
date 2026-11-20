@@ -11,6 +11,8 @@ import {
   PRESETS,
   SANS_FONTS,
   clampRadius,
+  RADIUS_STEPS,
+  radiusStepIndex,
   exportCss,
   presetState,
   syncPreset,
@@ -28,7 +30,8 @@ import styles from "./ThemePanel.module.css";
 /** The four starting points the site offers. Nistha is the kit default. */
 const START_FROM = ["nistha", "ink", "violet", "teal"] as const satisfies readonly Exclude<PresetId, "custom">[];
 
-const RADIUS_MAX = 16;
+/** The panel slider stops at 16px, the largest surface step. */
+const RADIUS_MAX_INDEX = RADIUS_STEPS.indexOf(16);
 
 type ShadowChoice = "none" | "soft" | "strong";
 
@@ -256,14 +259,17 @@ export function ThemePanel({ onClose, showActions = true, showHeader = true }: T
           <Slider
             aria-label="Radius"
             min={0}
-            max={RADIUS_MAX}
-            step={2}
-            value={Math.min(RADIUS_MAX, clampRadius(state.radius))}
-            onValueChange={(value) => update({ radius: clampRadius(Array.isArray(value) ? value[0] : value) })}
+            max={RADIUS_MAX_INDEX}
+            step={1}
+            value={Math.min(RADIUS_MAX_INDEX, radiusStepIndex(state.radius))}
+            onValueChange={(value) => {
+              const index = Array.isArray(value) ? value[0] : value;
+              update({ radius: RADIUS_STEPS[index] ?? clampRadius(index) });
+            }}
           />
           <div className={styles.scale} aria-hidden="true">
-            <span>0</span>
-            <span>{RADIUS_MAX}</span>
+            <span>{RADIUS_STEPS[0]}</span>
+            <span>{RADIUS_STEPS[RADIUS_MAX_INDEX]}</span>
           </div>
         </Group>
 

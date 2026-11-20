@@ -2,6 +2,16 @@
 
 Decisions for the nistha website (the docs site in this repo), newest first.
 
+## 2026-11-20: Fixed radius scale (feat/radius-scale)
+
+Boris: corners go on a 4px grid with 2px steps, and `--radius-base` stops computing the scale.
+
+- **Scale:** `--radius-xs` 2, `sm` 4, `md` 6, `lg` 8, `xl` 12, `2xl` 16, `3xl` 24, `full` 9999px. These are plain values in `tokens.json`, and `generate-tokens.mjs` writes them as-is. Before, every step was a `calc()` of `--radius-base` (3, 5, 6, 8, 10, 13, 19). `--radius-base` stays 8px and moves nothing.
+- **Roles keep their steps.** These change in pixels: `--radius-control-sm` 3 → 2, `--radius-surface-md` 10 → 12, `--radius-surface-lg` 13 → 16, `--radius-media-lg` 10 → 12. So every kit card, panel and dialog on `surface-md` or `surface-lg` gets a little rounder. That's 57 components plus `layout-shell--inset` (the PR lists them). No kit component reads any `--radius-media-*` role yet. Avatar uses `--radius-pill`.
+- **Rule:** radius and spacing use only 2 or 4px steps (in `AGENTS.md`, `packages/kit/AGENTS.md`, `.cursor/rules/kit.mdc`). `packages/kit/test/radius-scale.test.mjs` fails on any radius token, or raw `border-radius` px in kit CSS, that isn't a multiple of 2. The 9999px pill is the one exception.
+- **Theme studio:** the radius slider picks one of the fixed steps (2…24, or 2…16 in the docked panel) instead of scaling a curve from lg. The primitives stay fixed. The chosen step moves every role along the scale by the same number of steps and stops at the ends: at 8 the roles are the kit's, and at 12 `surface-lg` is 24. The Sharp (0) and Extra (32) presets are gone because neither is a step. The unused `applyPlaygroundRadiusBase` / `readPlaygroundRadiusBase` and their storage key are deleted.
+- Older entries below still quote the old pixel values (for example `--radius-surface-lg` (13px)). They are left as history.
+
 ## 2026-11-12: Blocks catalogue (feat/blocks-mission-home)
 
 Boris (after looking at affectUI's Blocks): blocks are several kit components composed into one area, and the section needs a catalogue, not one opaque name. Decisions:

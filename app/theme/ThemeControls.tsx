@@ -19,12 +19,14 @@ import {
   DISPLAY_FONTS,
   PRESETS,
   RADIUS_PRESETS,
+  RADIUS_STEPS,
   RAMP_STEPS,
   SANS_FONTS,
   SHADOW_PRESETS,
   clampRadius,
   presetState,
   radiusReadout,
+  radiusStepIndex,
   syncPreset,
   themePalette,
   type DisplayFont,
@@ -208,17 +210,17 @@ export function ThemeControls({ onCollapse }: ThemeControlsProps) {
       </Section>
       <Section title="Shape" size="sm" collapsible defaultOpen={false}>
         <div className={styles.stack}>
-          <p className={styles.caption}>Base radius {readout.lg}px</p>
+          <p className={styles.caption}>Corner step {readout.step}px</p>
           <Slider
-            aria-label="Base radius"
+            aria-label="Corner step"
             min={0}
-            max={48}
-            step={2}
-            value={clampRadius(state.radius)}
-            onValueChange={(value) => update({ radius: clampRadius(asNumber(value)) })}
+            max={RADIUS_STEPS.length - 1}
+            step={1}
+            value={radiusStepIndex(state.radius)}
+            onValueChange={(value) => update({ radius: RADIUS_STEPS[asNumber(value)] ?? clampRadius(asNumber(value)) })}
           />
           <p className={styles.readout}>
-            xs {readout.xs} · sm {readout.sm} · md {readout.md} · lg {readout.lg} · xl {readout.xl} · card {readout.card}
+            control {readout.control.join(" · ")} · surface {readout.surface.join(" · ")} · media {readout.media.join(" · ")}
           </p>
           <div className={styles.chips} role="group" aria-label="Radius presets">
             {RADIUS_PRESETS.map((item) => {
