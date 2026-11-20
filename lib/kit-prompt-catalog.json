@@ -536,8 +536,8 @@
           "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
         },
         "--chart-5": {
-          "note": "Chart series 5 (slate).",
-          "useWhen": "Series 5 when a chart shows 5 or more series",
+          "note": "Chart series 5 (slate). Also the dashed previous period in charts and Scorecard expressive sparklines.",
+          "useWhen": "Series 5 when a chart shows 5 or more series, or a previous-period comparison line",
           "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
         },
         "--chart-6": {
@@ -760,7 +760,8 @@
       "group": "component",
       "intent": "one KPI with label, value, optional delta/trend/hint/badge",
       "useWhen": [
-        "Showing a single metric such as revenue, users, or conversion rate"
+        "Showing a single metric such as revenue, users, or conversion rate",
+        "A KPI with a trend against a target, or progress toward a goal or limit — sparklineVariant reference or meter"
       ],
       "doNotUseWhen": [
         "Multiple metrics — use Scoreboard",
@@ -775,7 +776,10 @@
         "Do not put buttons or links inside Scorecard besides the whole-card onClick",
         "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
         "Do not draw a local sparkline beside Scorecard — pass sparkline",
-        "Do not use sparkline as the only sign of change; keep delta or hint"
+        "Do not use sparkline as the only sign of change; keep delta or hint",
+        "Do not draw a local meter or bar beside Scorecard — pass meter",
+        "Do not color the sparkline or meter with brand; brand is only for the selected card",
+        "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
       ],
       "props": {
         "label": {
@@ -851,6 +855,42 @@
           "required": false,
           "note": "number[], oldest first. A small trend line under the value in --chart-1, full width, --space-6 tall. Decorative (aria-hidden): delta and hint carry the meaning. Needs two or more finite numbers; others are skipped."
         },
+        "sparklineVariant": {
+          "type": "enum",
+          "values": [
+            "plain",
+            "reference",
+            "expressive"
+          ],
+          "default": "plain",
+          "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates). expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the latest point's value (compact, e.g. 4.3k) in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
+        },
+        "reference": {
+          "type": "object",
+          "required": false,
+          "note": "sparklineVariant reference only. A dashed text.muted guide on the same scale as the line, e.g. { value: 400, label: 'Target $400k' }."
+        },
+        "compare": {
+          "type": "array",
+          "required": false,
+          "note": "sparklineVariant expressive only. number[], oldest first: the previous period, drawn dashed in --chart-5 on the same scale. Adds the legend."
+        },
+        "highlightLast": {
+          "type": "number",
+          "default": 0,
+          "required": false,
+          "note": "sparklineVariant reference only. Darker dots on the last N points, e.g. the weeks past a target."
+        },
+        "sparklineDates": {
+          "type": "array",
+          "required": false,
+          "note": "sparklineVariant reference only. Start and end labels under the line, e.g. ['Aug 28', 'Nov 20']."
+        },
+        "meter": {
+          "type": "object",
+          "required": false,
+          "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'of 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
+        },
         "appearance": {
           "type": "enum",
           "values": [
@@ -920,7 +960,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value."
+          "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
         },
         "scroll": {
           "type": "boolean",
