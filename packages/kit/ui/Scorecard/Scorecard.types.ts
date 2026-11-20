@@ -14,6 +14,29 @@ export type ScorecardAppearance = "card" | "plain";
 /** How a selected card is announced: `toggle` (aria-pressed) or `radio` (role radio, aria-checked) inside a radiogroup. */
 export type ScorecardSelectionRole = "toggle" | "radio";
 
+/** How the sparkline draws. `plain` is the thin line (default). `reference` adds an area, faint grid, a dashed reference line, dots on the last points and start/end dates. `expressive` is a smooth curve with a soft area, an optional dashed previous period and an end dot with the value. */
+export type ScorecardSparklineVariant = "plain" | "reference" | "expressive";
+
+/** A dashed guide on a `reference` sparkline, e.g. a target. */
+export interface ScorecardReference {
+  value: number;
+  /** Short text drawn above the start of the line, e.g. "Target $400k". */
+  label: string;
+}
+
+/** Whether a meter is good when full (`higher`) or when it stays under its limit (`lower`). */
+export type ScorecardMeterDirection = "higher" | "lower";
+
+/** Progress toward a target or under a limit, drawn with kit Meter (bar, sm). */
+export interface ScorecardMeter {
+  value: number;
+  /** The target (`higher`) or limit (`lower`). Must be above 0. */
+  max: number;
+  /** Text after the bar, e.g. "of $450k target" or "under 3.0% limit". */
+  label: string;
+  direction?: ScorecardMeterDirection;
+}
+
 /** Native article attributes the kit sets itself (or replaces with its own prop). */
 type ScorecardOwnedKeys = "children" | "onClick" | "aria-labelledby" | "aria-pressed";
 
@@ -49,6 +72,18 @@ export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">
    * carry the meaning. Needs two or more finite numbers; others are skipped.
    */
   sparkline?: number[];
+  /** How the sparkline draws. Default `plain`. */
+  sparklineVariant?: ScorecardSparklineVariant;
+  /** `reference` only: a dashed guide line with a label. */
+  reference?: ScorecardReference;
+  /** `expressive` only: the previous period, oldest first, drawn dashed in --chart-5 with a legend. */
+  compare?: number[];
+  /** `reference` only: darker dots on the last N points. */
+  highlightLast?: number;
+  /** `reference` only: start and end dates under the line, e.g. ["Aug 28", "Nov 20"]. */
+  sparklineDates?: [string, string];
+  /** A bar toward a target or under a limit in place of the sparkline. */
+  meter?: ScorecardMeter;
   appearance?: ScorecardAppearance;
   fill?: boolean;
   ref?: Ref<HTMLElement>;

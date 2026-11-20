@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Scorecard } from "agentic-ds-kit";
-import type { ScorecardSize, ScorecardTrend } from "agentic-ds-kit";
+import { Scoreboard, Scorecard } from "agentic-ds-kit";
+import type { ScorecardProps, ScorecardSize, ScorecardTrend } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -18,6 +18,73 @@ const DELTA: Record<ScorecardTrend, string> = {
   flat: "0.0%",
   neutral: "+0.4%",
 };
+
+const MRR = [370, 373, 376, 381, 385, 387, 392, 398, 401, 405, 408, 410, 412.6];
+const MRR_PREVIOUS = [352, 356, 355, 360, 362, 366, 365, 370, 372, 375, 378, 380, 382];
+
+const LOOKS: ScorecardProps[] = [
+  { id: "looks-plain", label: "MRR", value: "$412.6k", badge: "+10.9%", badgeTone: "success", hint: "vs previous 3 months", sparkline: MRR },
+  {
+    id: "looks-reference",
+    label: "MRR",
+    value: "$412.6k",
+    badge: "+10.9%",
+    badgeTone: "success",
+    hint: "vs previous 3 months",
+    sparkline: MRR,
+    sparklineVariant: "reference",
+    reference: { value: 400, label: "Target $400k" },
+    highlightLast: 4,
+    sparklineDates: ["Aug 28", "Nov 20"],
+  },
+  {
+    id: "looks-meter",
+    label: "Churn rate",
+    value: "2.1%",
+    badge: "-0.5 pt",
+    badgeTone: "success",
+    hint: "vs previous 3 months",
+    meter: { value: 2.1, max: 3, label: "under 3.0% limit", direction: "lower" },
+  },
+  {
+    id: "looks-expressive",
+    label: "MRR",
+    value: "$412.6k",
+    badge: "+10.9%",
+    badgeTone: "success",
+    sparkline: MRR,
+    sparklineVariant: "expressive",
+    compare: MRR_PREVIOUS,
+  },
+];
+
+const LOOKS_CODE = `<Scorecard label="MRR" value="$412.6k" hint="vs previous 3 months" sparkline={mrr} />
+
+<Scorecard
+  label="MRR"
+  value="$412.6k"
+  hint="vs previous 3 months"
+  sparkline={mrr}
+  sparklineVariant="reference"
+  reference={{ value: 400, label: "Target $400k" }}
+  highlightLast={4}
+  sparklineDates={["Aug 28", "Nov 20"]}
+/>
+
+<Scorecard
+  label="Churn rate"
+  value="2.1%"
+  hint="vs previous 3 months"
+  meter={{ value: 2.1, max: 3, label: "under 3.0% limit", direction: "lower" }}
+/>
+
+<Scorecard
+  label="MRR"
+  value="$412.6k"
+  sparkline={mrr}
+  sparklineVariant="expressive"
+  compare={mrrPrevious}
+/>`;
 
 const MASTER_LABEL = "Revenue";
 const MASTER_VALUE = "$48.2k";
@@ -170,6 +237,25 @@ export function ScorecardDoc() {
                   )
                   .join("\n")}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Looks</h2>
+              <div className={styles.exampleCanvas}>
+                <Scoreboard aria-label="Scorecard looks" items={LOOKS} />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Plain stays the default. reference adds a faint grid, a dashed target with its label,
+                  darker dots on the last points and start and end dates. meter swaps the line for a
+                  calm bar toward a target, or under a limit with direction lower; it turns amber only
+                  when the limit is passed. expressive draws a smooth curve, the previous period dashed
+                  with a legend, and the card&apos;s value on the latest point. Keep delta or hint: the
+                  drawing is decorative.
+                </p>
+              </div>
+              <CodeBlock code={LOOKS_CODE} />
             </section>
 
             <section className={styles.example}>

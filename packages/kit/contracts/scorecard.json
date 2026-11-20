@@ -4,7 +4,8 @@
   "level": "molecule",
   "intent": "one KPI with label, value, optional delta/trend/hint/badge",
   "useWhen": [
-    "Showing a single metric such as revenue, users, or conversion rate"
+    "Showing a single metric such as revenue, users, or conversion rate",
+    "A KPI with a trend against a target, or progress toward a goal or limit — sparklineVariant reference or meter"
   ],
   "doNotUseWhen": [
     "Multiple metrics — use Scoreboard",
@@ -86,6 +87,45 @@
       "required": false,
       "note": "number[], oldest first. A small trend line under the value in --chart-1, full width, --space-6 tall. Decorative (aria-hidden): delta and hint carry the meaning. Needs two or more finite numbers; others are skipped."
     },
+    "sparklineVariant": {
+      "type": "enum",
+      "values": [
+        "plain",
+        "reference",
+        "expressive"
+      ],
+      "default": "plain",
+      "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates); the label switches to heading weight. expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the card's value in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
+    },
+    "reference": {
+      "type": "object",
+      "required": false,
+      "shape": "{ value: number, label: string }",
+      "note": "sparklineVariant reference only. A dashed text.muted guide on the same scale as the line, e.g. { value: 400, label: 'Target $400k' }."
+    },
+    "compare": {
+      "type": "array",
+      "required": false,
+      "note": "sparklineVariant expressive only. number[], oldest first: the previous period, drawn dashed in --chart-5 on the same scale. Adds the legend."
+    },
+    "highlightLast": {
+      "type": "number",
+      "required": false,
+      "default": 0,
+      "note": "sparklineVariant reference only. Darker dots on the last N points, e.g. the weeks past a target."
+    },
+    "sparklineDates": {
+      "type": "array",
+      "required": false,
+      "shape": "[start: string, end: string]",
+      "note": "sparklineVariant reference only. Start and end labels under the line, e.g. ['Aug 28', 'Nov 20']."
+    },
+    "meter": {
+      "type": "object",
+      "required": false,
+      "shape": "{ value: number, max: number, label: string, direction?: 'higher' | 'lower' }",
+      "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'under 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
+    },
     "appearance": {
       "type": "enum",
       "values": [
@@ -156,7 +196,23 @@
     "border.brand",
     "action.selected",
     "surface.muted",
-    "space.6"
+    "space.6",
+    "chart.5",
+    "text.inverse",
+    "surface.inverse",
+    "font.mono",
+    "type.weight.heading",
+    "type.weight.label",
+    "type.size.label",
+    "space.16",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
+    "opacity.muted",
+    "radius.xs",
+    "radius.pill",
+    "border.widthThin"
   ],
   "a11y": {
     "element": "article",
@@ -169,7 +225,9 @@
       "root is a button when onClick is set",
       "with onClick and selected set, the button has aria-pressed and its name includes the badge text",
       "sparkline is aria-hidden and not focusable",
-      "with selectionRole radio, the button has role radio and aria-checked instead of aria-pressed"
+      "with selectionRole radio, the button has role radio and aria-checked instead of aria-pressed",
+      "reference and expressive drawings, dates and legend are aria-hidden; delta and hint carry the meaning",
+      "meter composes kit Meter: role progressbar named by the card label and meter label; the percent and label text under it are aria-hidden"
     ]
   },
   "doNot": [
@@ -179,10 +237,14 @@
     "Do not put buttons or links inside Scorecard besides the whole-card onClick",
     "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
     "Do not draw a local sparkline beside Scorecard — pass sparkline",
-    "Do not use sparkline as the only sign of change; keep delta or hint"
+    "Do not use sparkline as the only sign of change; keep delta or hint",
+    "Do not draw a local meter or bar beside Scorecard — pass meter",
+    "Do not color the sparkline or meter with brand; brand is only for the selected card",
+    "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
   ],
-  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />",
+  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"under 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
   "contains": [
-    "badge"
+    "badge",
+    "meter"
   ]
 }

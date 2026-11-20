@@ -6,6 +6,8 @@ import { LucideByName } from "../Button/lucideName";
 import type { ScorecardDeltaTone, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
 import { cx } from "../shared/cx";
 import styles from "./Scorecard.module.css";
+import { ScorecardMeterBar, ScorecardSparkline } from "./ScorecardVisual";
+import { meterState, sparklineLayout } from "./scorecardVisual.logic";
 import { nisthaAttr } from "../shared/inspect";
 
 export type {
@@ -15,6 +17,10 @@ export type {
   ScorecardDeltaTone,
   ScorecardAppearance,
   ScorecardSelectionRole,
+  ScorecardSparklineVariant,
+  ScorecardReference,
+  ScorecardMeter,
+  ScorecardMeterDirection,
 } from "./Scorecard.types";
 
 const SPARK_W = 100;
@@ -81,6 +87,12 @@ export function Scorecard({
   selected,
   selectionRole = "toggle",
   sparkline,
+  sparklineVariant = "plain",
+  reference,
+  compare,
+  highlightLast,
+  sparklineDates,
+  meter,
   appearance = "card",
   fill = false,
   className: userClassName,
@@ -95,15 +107,34 @@ export function Scorecard({
   const deltaClass = deltaTone ? DELTA_TONE_CLASS[deltaTone] : TREND_CLASS[trend];
   const deltaIcon = deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
   const radio = toggle && selectionRole === "radio";
-  const sparkPoints = sparklinePoints(sparkline);
-  const className = cx(styles.card, styles[size], appearance === "plain" && styles.plain, fill && styles.fill, onClick && styles.interactive, toggle && selected && styles.selected, userClassName);
+  // A meter replaces the sparkline. The reference and expressive looks move the chart to the card's foot.
+  const showMeter = meterState(meter) !== null;
+  const showRichLine = !showMeter && sparklineVariant !== "plain" && sparklineLayout(sparkline) !== null;
+  const richVisual = showMeter && meter
+    ? <ScorecardMeterBar meter={meter} cardLabel={label} />
+    : showRichLine && (sparklineVariant === "reference" || sparklineVariant === "expressive")
+      ? (
+          <ScorecardSparkline
+            values={sparkline}
+            variant={sparklineVariant}
+            reference={reference}
+            compare={compare}
+            highlightLast={highlightLast}
+            dates={sparklineDates}
+            value={value}
+          />
+        )
+      : null;
+  const rich = richVisual !== null;
+  const sparkPoints = rich ? null : sparklinePoints(sparkline);
+  const className = cx(styles.card, styles[size], rich && styles.stacked, appearance === "plain" && styles.plain, fill && styles.fill, onClick && styles.interactive, toggle && selected && styles.selected, userClassName);
 
   const body = (
     <>
       {label || badge ? (
         <span className={styles.header}>
           {label ? (
-            <span id={labelId} className={styles.label}>
+            <span id={labelId} className={cx(styles.label, showRichLine && sparklineVariant === "reference" && styles.labelHeading)}>
               {label}
             </span>
           ) : null}
@@ -141,6 +172,7 @@ export function Scorecard({
           {hint ? <span className={styles.hint}>{hint}</span> : null}
         </span>
       ) : null}
+      {richVisual}
     </>
   );
 
