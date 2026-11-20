@@ -7,7 +7,7 @@ export const VISUAL_H = 40;
 /** Room above the highest value (for the dots) and below the lowest (for the area). */
 const PAD_TOP = 4;
 /** Expressive lines leave room above for the end tag, so it never covers the value. */
-export const PAD_TOP_TAG = 16;
+export const PAD_TOP_TAG = 12;
 const PAD_BOTTOM = 3;
 
 export type SparklineLayout = {
