@@ -311,6 +311,12 @@
   background: var(--surface-card);
 }
 
+/* The Tabs take the panel's remaining height (Tabs fill), so a full-height tab such as Chat embedded reaches the bottom. */
+.app-shell-pattern__panel-tabs {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .app-shell-pattern__panel-head {
   display: flex;
   align-items: center;

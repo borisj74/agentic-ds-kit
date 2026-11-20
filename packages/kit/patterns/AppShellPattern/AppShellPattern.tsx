@@ -870,7 +870,7 @@ function WorkPanelBody({
           <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={`Close ${panel.title}`} onClick={onClose} />
         </div>
       ) : null}
-      <Tabs className="app-shell-pattern__panel-tabs" size="sm" ariaLabel={panel.title} items={panel.tabs} value={tab} onChange={onTab} />
+      <Tabs className="app-shell-pattern__panel-tabs" size="sm" fill ariaLabel={panel.title} items={panel.tabs} value={tab} onChange={onTab} />
     </>
   );
 }

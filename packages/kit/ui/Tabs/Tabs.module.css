@@ -4,6 +4,17 @@
   width: 100%;
 }
 
+/* fill: the panel row takes the rest of the height and its child stretches to it. */
+.fill {
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+}
+
+.fill > .content {
+  display: grid;
+  min-height: 0;
+}
+
 .listOnly {
   gap: 0;
   width: fit-content;

@@ -119,7 +119,7 @@
       "type": "object",
       "required": false,
       "shape": "{ title: string, tabs: TabItem[] (min 2), open?: boolean, defaultOpen?: boolean (default false), onOpenChange?: (open: boolean) => void, tab?: string, defaultTab?: string, onTabChange?: (id: string) => void }",
-      "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome)."
+      "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome). The Tabs fill the panel height (Tabs fill), so a tab can hold a full-height child such as Chat embedded."
     },
     "mark": {
       "type": "string | node",

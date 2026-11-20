@@ -227,6 +227,29 @@ export function ChatDoc() {
 />`}
               />
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Embedded</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={doc.exampleFrame}>
+                  <Chat
+                    title="Ask about invoices"
+                    embedded
+                    messages={[]}
+                    emptyState="Ask about any invoice on this page."
+                    suggestions={["Which invoices are overdue?", "Who pays latest?"]}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  embedded drops the header band, the outer border and Chat&apos;s own side padding,
+                  and fills its host. Use it in a work panel tab or a Drawer that already has a title
+                  and an edge; the title still names the section for screen readers.
+                </p>
+              </div>
+              <CodeBlock code={'<Chat title="Ask about invoices" embedded messages={messages} suggestions={suggestions} onSend={send} />'} />
+            </section>
           </div>
         )}
       </section>

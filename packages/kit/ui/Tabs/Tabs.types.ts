@@ -21,6 +21,8 @@ export interface TabsProps extends Omit<ComponentPropsWithoutRef<"div">, TabsOwn
   onChange?: (id: string) => void;
   size?: TabsSize;
   variant?: TabsVariant;
+  /** The panel takes the height left under the tab list, so a full-height child (like Chat embedded) fills it. Give Tabs a height or a flex/grid slot. */
+  fill?: boolean;
   ariaLabel?: string;
   ref?: Ref<HTMLDivElement>;
 }
