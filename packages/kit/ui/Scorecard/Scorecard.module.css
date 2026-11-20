@@ -33,8 +33,20 @@
   width: 100%;
   max-width: none;
   height: 100%;
-  /* In a stretched strip cell, keep rows at the top so headers line up with taller neighbours. */
-  align-content: start;
+}
+
+/* Stretched strip cell: rows stay at the top so headers line up, and the footer (or chart) sits at the
+   foot, on the same line as its neighbours' bottom rows. */
+.fill {
+  display: flex;
+  flex-direction: column;
+}
+
+.fill:not(.stacked) > .footer {
+  margin-block-start: auto;
+  /* The footer's taller line box (body) sits half a step lower, so its text shares a baseline with the
+     dates, meter row and legend (ui-xs) in neighbouring cards. */
+  margin-block-end: calc((var(--type-line-ui-xs) - var(--type-line-body)) / 2);
 }
 
 /* Plain: no frame, for a divided strip. Scoreboard draws the dividers. */
