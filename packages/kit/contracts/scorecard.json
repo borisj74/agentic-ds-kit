@@ -124,7 +124,7 @@
       "type": "object",
       "required": false,
       "shape": "{ value: number, max: number, label: string, direction?: 'higher' | 'lower' }",
-      "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'of 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
+      "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'of 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning and the row shows the word Over limit, so the state is not colour alone. max must be above 0. The progressbar is named by the card label and meter label."
     },
     "appearance": {
       "type": "enum",
