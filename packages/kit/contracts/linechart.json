@@ -112,6 +112,11 @@
       "type": "boolean",
       "default": false,
       "note": "Lines draw in left to right and area fills fade in after when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -162,7 +167,8 @@
     "Do not use raw hex",
     "Do not draw a reference line or threshold with a second flat series — use referenceLine",
     "Do not overlay a second chart to show the previous period — use a dashed series",
-    "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way"
+    "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>\n\n<LineChart\n  title=\"Signups\"\n  variant=\"line\"\n  labels={[\"W1\", \"W2\", \"W3\", \"W4\"]}\n  series={[\n    { label: \"This period\", data: [310, 352, 298, 401] },\n    { label: \"Previous period\", data: [280, 300, 315, 330], dashed: true },\n  ]}\n  referenceLine={{ value: 350, label: \"Goal\", highlight: \"above\" }}\n/>"
 }

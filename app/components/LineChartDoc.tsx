@@ -359,6 +359,32 @@ export function LineChartDoc() {
                 code={'<LineChart title="Weekly active users" description="Daily average, last 7 days" data={[]} />'}
               />
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Header actions</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="Weekly active users"
+                    description="Daily average"
+                    data={SAMPLE}
+                    actions={<Button appearance="ghost" mode="neutral" size="sm" iconStart="MessageCircle" ariaLabel="Ask about Weekly active users" />}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  actions puts kit Buttons in the chart header, before the Table toggle. Every chart takes it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="Weekly active users"
+  data={data}
+  actions={<Button appearance="ghost" mode="neutral" size="sm" iconStart="MessageCircle" ariaLabel="Ask about Weekly active users" />}
+/>`}
+              />
+            </section>
           </div>
         )}
       </section>

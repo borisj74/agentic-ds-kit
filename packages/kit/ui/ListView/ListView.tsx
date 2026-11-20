@@ -60,9 +60,23 @@ function sectionsOf(items: ListViewItem[], groups?: ListViewGroup[]): { group: L
   return sections;
 }
 
-/** A row's accessible name: primary, then secondary, then the badge, so a status shown only as a Badge is read too. */
+/** What a dot tone is read as, since the dot itself is aria-hidden. */
+const DOT_NAME: Record<NonNullable<ListViewItem["dot"]>, string> = {
+  neutral: "Note",
+  success: "Good",
+  warning: "Warning",
+  danger: "Problem",
+  info: "Info",
+};
+
+/**
+ * A row's accessible name: primary, then secondary, then meta, then the badge, so a status shown only
+ * as a Badge is read too. A dot adds its tone after the badge (the dot is aria-hidden).
+ */
 function rowName(item: ListViewItem): string {
-  return [item.primary, item.secondary, item.badge].filter(Boolean).join(", ");
+  return [item.primary, item.secondary, item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export function ListView({
@@ -225,6 +239,13 @@ export function ListView({
       return (
         <span className={styles.leading} aria-hidden>
           <LucideByName name={item.icon} size={iconPx} />
+        </span>
+      );
+    }
+    if (item.dot) {
+      return (
+        <span className={cx(styles.leading, styles.dotSlot)} aria-hidden>
+          <span className={cx(styles.dot, styles[`dot-${item.dot}`])} />
         </span>
       );
     }
@@ -453,6 +474,7 @@ export function ListView({
                         ) : null}
                         {renderBody(item)}
                         <span className={styles.trail} ref={bindInertControls}>
+                          {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
                           {item.badge ? (
                             <Badge tone={item.badgeTone ?? "neutral"} size="sm">
                               {item.badge}

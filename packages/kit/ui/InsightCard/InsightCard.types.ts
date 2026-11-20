@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 
 export type InsightCardTone = "opportunity" | "success" | "warning" | "danger" | "info" | "neutral";
 export type InsightCardSize = "sm" | "md" | "lg";
@@ -18,7 +18,8 @@ type InsightCardOwnedKeys = "children" | "title" | "aria-labelledby" | "aria-des
 /** `ref`, `className` and other native attributes land on the root `<article>`. */
 export interface InsightCardProps extends Omit<ComponentPropsWithoutRef<"article">, InsightCardOwnedKeys> {
   title: string;
-  description?: string;
+  /** Text or inline nodes, e.g. a sentence with key numbers in <strong>. Keep it to a sentence or two. */
+  description?: ReactNode;
   eyebrow?: string;
   tone?: InsightCardTone;
   size?: InsightCardSize;

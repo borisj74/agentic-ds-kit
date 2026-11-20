@@ -40,21 +40,41 @@
       "note": "sm = compact padding (space.4) and a body-sized title; md = space.6 and a heading title. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
     },
     "headerAction": {
-      "type": "object",
+      "type": "object | array",
       "required": false,
-      "note": "Header kit Button (shadcn CardAction). One max. Ghost or outline, not a second solid-primary. With href it is a text link instead (e.g. View all).",
+      "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. With href it stays a real link (<a>, or linkAs) but looks like the same sm Button (neutral ghost by default), never an underlined text link. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development.",
       "label": {
         "type": "string",
-        "required": true
+        "required": true,
+        "note": "Button text, or the accessible name when iconOnly"
+      },
+      "iconStart": {
+        "type": "KitIcon",
+        "required": false,
+        "note": "Leading Lucide icon (curated name, component or element)"
+      },
+      "iconOnly": {
+        "type": "boolean",
+        "required": false,
+        "note": "With iconStart: icon-only Button, named by label (aria-label and title)"
       },
       "appearance": {
         "type": "enum",
-        "values": ["solid", "outline", "soft", "ghost"],
+        "values": [
+          "solid",
+          "outline",
+          "soft",
+          "ghost"
+        ],
         "required": false
       },
       "mode": {
         "type": "enum",
-        "values": ["primary", "neutral", "danger"],
+        "values": [
+          "primary",
+          "neutral",
+          "danger"
+        ],
         "required": false
       },
       "onClick": {
@@ -64,7 +84,7 @@
       "href": {
         "type": "string",
         "required": false,
-        "note": "Renders a kit-styled text link (<a>) instead of a Button"
+        "note": "Renders a real link (<a href>, or linkAs) with the sm Button look, so it navigates and can open in a new tab"
       },
       "linkAs": {
         "type": "KitLinkComponent",
@@ -88,12 +108,21 @@
         },
         "appearance": {
           "type": "enum",
-          "values": ["solid", "outline", "soft", "ghost"],
+          "values": [
+            "solid",
+            "outline",
+            "soft",
+            "ghost"
+          ],
           "required": false
         },
         "mode": {
           "type": "enum",
-          "values": ["primary", "neutral", "danger"],
+          "values": [
+            "primary",
+            "neutral",
+            "danger"
+          ],
           "required": false
         },
         "onClick": {
@@ -129,9 +158,6 @@
     "space.4",
     "space.2",
     "border.divider",
-    "link.default",
-    "link.hover",
-    "link.active",
     "radius.controlSm",
     "type.tracking.heading5"
   ],
@@ -140,7 +166,9 @@
     "requirements": [
       "title is heading when set (use useId)",
       "aria-labelledby when title exists",
-      "headerAction with href is a real link (<a> or linkAs) named by its label"
+      "headerAction with href is a real link (<a> or linkAs) named by its label",
+      "An icon-only headerAction is a Button named by its label",
+      "A header action with href is a link (role link) named by its label, not a button"
     ]
   },
   "doNot": [
@@ -152,7 +180,10 @@
     "Do not invent CardHeader components",
     "headerAction is ghost/outline, not a second solid-primary",
     "Do not nest a framed DataTable in a padded Card — set flush",
-    "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel"
+    "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel",
+    "Do not put more than two header actions; move the rest to the footer or a DropdownMenu",
+    "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
+    "Do not style a header link as underlined text next to header Buttons; pass href and let Card give it the Button look"
   ],
   "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", appearance: \"ghost\", mode: \"neutral\" }}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field><Button appearance=\"solid\" mode=\"primary\" block>Login</Button><Divider label=\"Or continue with\" /><div className=\"layout-split\"><Button appearance=\"outline\" mode=\"neutral\" block>Google</Button><Button appearance=\"outline\" mode=\"neutral\" block>Apple</Button></div></Card>"
 }

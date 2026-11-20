@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 import type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../shared/chartMath";
 
@@ -25,6 +25,8 @@ export interface LineChartReference {
 
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface LineChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   data?: ChartDatum[];
   labels?: string[];
   series?: LineChartSeries[];

@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 import type { AxisLabelFormatter, ChartDatum, ChartSeries } from "../shared/chartMath";
 
@@ -6,6 +6,8 @@ export type BarChartOrientation = "vertical" | "horizontal";
 
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface BarChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   data?: ChartDatum[];
   categories?: string[];
   series?: ChartSeries[];

@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 
 export type ComboChartAxis = "shared" | "dual";
@@ -28,6 +28,8 @@ export interface ComboChartFormatters {
 
 /** `ref`, `className` and other attributes land on the root `<figure>`. */
 export interface ComboChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   data: ComboChartDatum[];
   /** One to four bar series. */
   bars: ComboChartSeries[];

@@ -1423,7 +1423,8 @@
         "Do not put a metric as the title (that is Scorecard)",
         "Actions are kit Buttons or the kit text link (href / actionStyle link); do not pass your own links or buttons",
         "Do not make a navigating action a Button — give it href",
-        "One primary per view (the primaryAction is the one)"
+        "One primary per view (the primaryAction is the one)",
+        "Do not put block content, lists or controls in description; it is one or two sentences"
       ],
       "props": {
         "title": {
@@ -1431,8 +1432,9 @@
           "required": true
         },
         "description": {
-          "type": "string",
-          "required": false
+          "type": "string | node",
+          "required": false,
+          "note": "Text, or inline nodes such as a sentence with key numbers in <strong>. One or two sentences; no blocks, lists or buttons."
         },
         "eyebrow": {
           "type": "string",
@@ -1522,7 +1524,8 @@
         "Do not use raw hex",
         "Do not draw a reference line or threshold with a second flat series — use referenceLine",
         "Do not overlay a second chart to show the previous period — use a dashed series",
-        "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way"
+        "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "data": {
@@ -1616,6 +1619,11 @@
           "type": "boolean",
           "default": false,
           "note": "Lines draw in left to right and area fills fade in after when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },
@@ -1743,13 +1751,14 @@
         "Do not use ListView for usage against a plan limit — use UsageList",
         "Do not use more than two inline row actions — overflow is kit DropdownMenu",
         "Do not place appearance=solid mode=primary Button on a row",
-        "Do not use raw hex or primitive --color-* ramps"
+        "Do not use raw hex or primitive --color-* ramps",
+        "Do not use dot as the only sign of a status; say it in primary or secondary"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line."
         },
         "label": {
           "type": "string",
@@ -4035,7 +4044,10 @@
         "Do not invent CardHeader components",
         "headerAction is ghost/outline, not a second solid-primary",
         "Do not nest a framed DataTable in a padded Card — set flush",
-        "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel"
+        "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel",
+        "Do not put more than two header actions; move the rest to the footer or a DropdownMenu",
+        "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
+        "Do not style a header link as underlined text next to header Buttons; pass href and let Card give it the Button look"
       ],
       "props": {
         "title": {
@@ -4061,9 +4073,9 @@
           "note": "sm = compact padding (space.4) and a body-sized title; md = space.6 and a heading title. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
         },
         "headerAction": {
-          "type": "object",
+          "type": "object | array",
           "required": false,
-          "note": "Header kit Button (shadcn CardAction). One max. Ghost or outline, not a second solid-primary. With href it is a text link instead (e.g. View all)."
+          "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. With href it stays a real link (<a>, or linkAs) but looks like the same sm Button (neutral ghost by default), never an underlined text link. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development."
         },
         "flush": {
           "type": "boolean",
@@ -5193,7 +5205,8 @@
         "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
         "Do not draw bars and a line on one chart from two charts — use ComboChart",
         "Do not plot two numeric measures per item (x against y) — use ScatterChart",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "data": {
@@ -5259,6 +5272,11 @@
           "type": "boolean",
           "default": false,
           "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },
@@ -5345,7 +5363,8 @@
         "Do not use status colours for the series; a series that means good or bad says so in its label",
         "Do not use raw hex or primitive --color-* ramps",
         "Do not stack values that do not add up, like rates; use stack none",
-        "Do not pass losses as positive values with a status colour; make them negative so they pile below zero"
+        "Do not pass losses as positive values with a status colour; make them negative so they pile below zero",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "data": {
@@ -5398,6 +5417,11 @@
         "height": {
           "type": "number",
           "default": 240
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },
@@ -5423,7 +5447,8 @@
         "Do not use it for exact values people compare cell by cell — use Table",
         "Do not squash the grid on small screens; it scrolls sideways inside its frame",
         "Do not pass negative values; the scale starts at zero",
-        "Do not use raw hex or primitive --color-* ramps"
+        "Do not use raw hex or primitive --color-* ramps",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "rows": {
@@ -5455,6 +5480,11 @@
           "type": "string",
           "required": false,
           "note": "One line under the title, like the time range."
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },
@@ -6312,7 +6342,8 @@
       "doNot": [
         "Do not invent local chart wrappers",
         "Do not use raw hex",
-        "Do not add chart-library compound APIs"
+        "Do not add chart-library compound APIs",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "data": {
@@ -6384,6 +6415,11 @@
           "type": "boolean",
           "default": false,
           "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion; the final state shows without JS"
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },
@@ -6408,7 +6444,8 @@
         "Do not join the dots with lines; order along x is not a sequence",
         "Do not use status colours for groups; a group that means good or bad says so in its name",
         "Do not use more than six groups; the chart palette has six colours",
-        "Do not use raw hex or primitive --color-* ramps"
+        "Do not use raw hex or primitive --color-* ramps",
+        "Do not wrap a chart in a Card only to get a header button — pass actions"
       ],
       "props": {
         "data": {
@@ -6457,6 +6494,11 @@
         "height": {
           "type": "number",
           "default": 280
+        },
+        "actions": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
         }
       }
     },

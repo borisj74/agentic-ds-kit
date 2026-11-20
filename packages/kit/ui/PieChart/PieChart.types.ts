@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 import type { ChartDatum } from "../shared/chartMath";
 
@@ -7,6 +7,8 @@ export type PieChartLayout = "split" | "stack";
 
 /** `ref`, `className` and other attributes land on the root `<figure>` (not the SVG). `title` is the chart heading. */
 export interface PieChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   data?: ChartDatum[];
   title?: string;
   description?: string;

@@ -9,4 +9,5 @@ export type {
   ListViewInteraction,
   ListViewTruncate,
   ListViewSize,
+  ListViewDotTone,
 } from "./ListView.types";

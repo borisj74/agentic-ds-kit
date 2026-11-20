@@ -108,6 +108,11 @@
     "height": {
       "type": "number",
       "default": 280
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -155,7 +160,8 @@
     "Do not join the dots with lines; order along x is not a sequence",
     "Do not use status colours for groups; a group that means good or bad says so in its name",
     "Do not use more than six groups; the chart palette has six colours",
-    "Do not use raw hex or primitive --color-* ramps"
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<ScatterChart\n  title=\"Accounts by revenue and tickets\"\n  xLabel=\"Monthly revenue\"\n  yLabel=\"Support tickets\"\n  data={[\n    { id: \"acme\", label: \"Acme\", x: 12400, y: 18, group: \"Pro\" },\n    { id: \"globex\", label: \"Globex\", x: 31800, y: 42, group: \"Enterprise\" },\n    { id: \"initech\", label: \"Initech\", x: 4200, y: 9, group: \"Pro\" },\n  ]}\n/>"
 }

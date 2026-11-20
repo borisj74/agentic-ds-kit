@@ -4,6 +4,8 @@ export type {
   ScorecardTrend,
   ScorecardSize,
   ScorecardDeltaTone,
+  ScorecardAppearance,
+  ScorecardSelectionRole,
   ScorecardSparklineVariant,
   ScorecardReference,
   ScorecardMeter,

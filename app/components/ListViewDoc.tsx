@@ -280,6 +280,36 @@ export function ListViewDoc() {
                 <p className={styles.usageBody}>Empty items render kit Empty. Do not invent a local blank slate.</p>
               </div>
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Status dot and time</h2>
+              <div className={styles.exampleCanvas}>
+                <ListView
+                  label="Recent changes"
+                  size="sm"
+                  items={[
+                    { id: "c1", primary: "Seats went up on three teams", secondary: "Mostly from the spring promotion", dot: "success", meta: "2h ago" },
+                    { id: "c2", primary: "Two cards are about to expire", secondary: "Both renew on the 1st", dot: "warning", meta: "Yesterday" },
+                    { id: "c3", primary: "Refund issued to one team", secondary: "Billed twice in error", dot: "neutral", meta: "Mon" },
+                  ]}
+                />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  dot puts a small status dot in the leading slot when there is no avatar or icon; the text still says what happened. meta is short muted text at the row end, like a relative time.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ListView
+  label="Recent changes"
+  size="sm"
+  items={[
+    { id: "c1", primary: "Seats went up on three teams", secondary: "Mostly from the spring promotion", dot: "success", meta: "2h ago" },
+    { id: "c2", primary: "Two cards are about to expire", secondary: "Both renew on the 1st", dot: "warning", meta: "Yesterday" },
+  ]}
+/>`}
+              />
+            </section>
           </div>
         )}
       </section>

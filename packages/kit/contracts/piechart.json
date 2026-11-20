@@ -18,31 +18,75 @@
       "required": false,
       "note": "{ label: string, value: number, color?: string }[]"
     },
-    "title": { "type": "string", "required": false },
-    "description": { "type": "string", "required": false },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
     "variant": {
       "type": "enum",
-      "values": ["donut", "pie"],
+      "values": [
+        "donut",
+        "pie"
+      ],
       "default": "donut"
     },
     "layout": {
       "type": "enum",
-      "values": ["split", "stack"],
+      "values": [
+        "split",
+        "stack"
+      ],
       "default": "split"
     },
-    "showCenterTotal": { "type": "boolean", "default": true },
-    "showTable": { "type": "boolean", "default": true },
-    "sort": { "type": "boolean", "default": true },
-    "maxSegments": { "type": "number", "default": 6 },
-    "size": { "type": "number", "default": 240 },
-    "otherLabel": { "type": "string", "default": "Other" },
-    "centerLabel": { "type": "string", "default": "Total" },
-    "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false },
+    "showCenterTotal": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTable": {
+      "type": "boolean",
+      "default": true
+    },
+    "sort": {
+      "type": "boolean",
+      "default": true
+    },
+    "maxSegments": {
+      "type": "number",
+      "default": 6
+    },
+    "size": {
+      "type": "number",
+      "default": 240
+    },
+    "otherLabel": {
+      "type": "string",
+      "default": "Other"
+    },
+    "centerLabel": {
+      "type": "string",
+      "default": "Total"
+    },
+    "emptyLabel": {
+      "type": "string",
+      "default": "No data for this range"
+    },
+    "isLoading": {
+      "type": "boolean",
+      "default": false
+    },
     "animate": {
       "type": "boolean",
       "default": false,
       "note": "Slices sweep in clockwise from 12 o'clock when the chart first appears. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion; the final state shows without JS"
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -80,7 +124,8 @@
   "doNot": [
     "Do not invent local chart wrappers",
     "Do not use raw hex",
-    "Do not add chart-library compound APIs"
+    "Do not add chart-library compound APIs",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<PieChart title=\"Properties by status\" variant=\"donut\" data={[{ label: 'Listed', value: 256 }]} />"
 }

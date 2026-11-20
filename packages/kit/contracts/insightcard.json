@@ -19,8 +19,9 @@
       "required": true
     },
     "description": {
-      "type": "string",
-      "required": false
+      "type": "string | node",
+      "required": false,
+      "note": "Text, or inline nodes such as a sentence with key numbers in <strong>. One or two sentences; no blocks, lists or buttons."
     },
     "eyebrow": {
       "type": "string",
@@ -162,7 +163,8 @@
     "Do not put a metric as the title (that is Scorecard)",
     "Actions are kit Buttons or the kit text link (href / actionStyle link); do not pass your own links or buttons",
     "Do not make a navigating action a Button — give it href",
-    "One primary per view (the primaryAction is the one)"
+    "One primary per view (the primaryAction is the one)",
+    "Do not put block content, lists or controls in description; it is one or two sentences"
   ],
   "snippet": "<InsightCard title=\"Rebook no-shows automatically\" description=\"Fill empty slots from the waitlist when clients cancel.\" tone=\"opportunity\" primaryAction={{ label: \"Review\" }} />"
 }

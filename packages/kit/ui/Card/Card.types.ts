@@ -1,11 +1,17 @@
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import type { ButtonAppearance, ButtonMode } from "../Button";
+import type { KitIcon } from "../Button/lucideName";
 import type { KitLinkComponent } from "../shared/link";
 
 export type CardSize = "sm" | "md";
 
 export interface CardAction {
+  /** Button text, or the accessible name when `iconOnly` is set. */
   label: string;
+  /** headerAction only: leading icon. */
+  iconStart?: KitIcon;
+  /** headerAction only, with iconStart: icon-only Button named by `label` (shown in a tooltip by the browser title). */
+  iconOnly?: boolean;
   appearance?: ButtonAppearance;
   mode?: ButtonMode;
   onClick?: () => void;
@@ -25,7 +31,8 @@ export interface CardProps extends Omit<ComponentPropsWithoutRef<"article">, Car
   children: ReactNode;
   size?: CardSize;
   actions?: CardAction[];
-  headerAction?: CardAction;
+  /** Header kit Button or link, or up to two (e.g. an icon-only Ask and a View all link). */
+  headerAction?: CardAction | CardAction[];
   /** Body runs edge to edge with no padding, for a DataTable (which drops its own frame) or a list. */
   flush?: boolean;
   imageSrc?: string;

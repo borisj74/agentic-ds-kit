@@ -17,20 +17,50 @@
       "required": false,
       "note": "single-series flat array"
     },
-    "categories": { "type": "array", "required": false },
-    "series": { "type": "array", "required": false },
-    "title": { "type": "string", "required": false },
-    "description": { "type": "string", "required": false },
+    "categories": {
+      "type": "array",
+      "required": false
+    },
+    "series": {
+      "type": "array",
+      "required": false
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
     "orientation": {
       "type": "enum",
-      "values": ["vertical", "horizontal"],
+      "values": [
+        "vertical",
+        "horizontal"
+      ],
       "default": "vertical"
     },
-    "showGrid": { "type": "boolean", "default": true },
-    "showTable": { "type": "boolean", "default": true },
-    "height": { "type": "number", "default": 240 },
-    "emptyLabel": { "type": "string", "default": "No data for this range" },
-    "isLoading": { "type": "boolean", "default": false },
+    "showGrid": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTable": {
+      "type": "boolean",
+      "default": true
+    },
+    "height": {
+      "type": "number",
+      "default": 240
+    },
+    "emptyLabel": {
+      "type": "string",
+      "default": "No data for this range"
+    },
+    "isLoading": {
+      "type": "boolean",
+      "default": false
+    },
     "tickInterval": {
       "type": "number",
       "required": false,
@@ -45,6 +75,11 @@
       "type": "boolean",
       "default": false,
       "note": "Bars grow from the zero line (negative values grow downward, horizontal bars sideways) with a short stagger when they first appear. Runs when the chart mounts; changing data on a mounted chart does not replay it. To replay (e.g. one chart per Tabs panel, or a range switcher), give the chart a key that changes with the data. Off under prefers-reduced-motion"
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -68,7 +103,8 @@
   "a11y": {
     "element": "figure",
     "requirements": [
-      "Title on figure when provided", "The plot svg is role=group named by the title when it holds focusable points (role=img only when empty)",
+      "Title on figure when provided",
+      "The plot svg is role=group named by the title when it holds focusable points (role=img only when empty)",
       "Hover reads the category",
       "Legend highlight emphasises one series",
       "Bars expose category and value in accessible names",
@@ -83,7 +119,8 @@
     "Do not use it for a short ranked list where each row shows its value or links to its item — use BarList",
     "Do not draw bars and a line on one chart from two charts — use ComboChart",
     "Do not plot two numeric measures per item (x against y) — use ScatterChart",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<BarChart title=\"Revenue by region\" data={[{ label: 'North', value: 2610 }]} />"
 }
