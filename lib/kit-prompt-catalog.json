@@ -1758,7 +1758,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon (colour only; the text carries the meaning). meta is short muted text at the row end, like a relative time, read after the secondary line."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line."
         },
         "label": {
           "type": "string",
@@ -4046,7 +4046,8 @@
         "Do not nest a framed DataTable in a padded Card — set flush",
         "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel",
         "Do not put more than two header actions; move the rest to the footer or a DropdownMenu",
-        "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix"
+        "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
+        "Do not style a header link as underlined text next to header Buttons; pass href and let Card give it the Button look"
       ],
       "props": {
         "title": {
@@ -4074,7 +4075,7 @@
         "headerAction": {
           "type": "object | array",
           "required": false,
-          "note": "Header kit Button (shadcn CardAction), or up to two (an array), e.g. an icon-only Ask and a View all link. Ghost or outline, not a second solid-primary. With href it is a text link instead (e.g. View all). iconStart adds a leading icon; iconOnly with iconStart makes it an icon-only Button named by label."
+          "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. With href it stays a real link (<a>, or linkAs) but looks like the same sm Button (neutral ghost by default), never an underlined text link. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development."
         },
         "flush": {
           "type": "boolean",
