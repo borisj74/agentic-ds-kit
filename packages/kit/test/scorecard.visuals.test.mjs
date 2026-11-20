@@ -134,6 +134,17 @@ describe("Scorecard looks", () => {
     const html = h(Scorecard, { ...base, meter: { value: 3.6, max: 3, label: "over 3.0% limit", direction: "lower" } });
     assert.match(html, /_fill_[^"]* _warning_/);
   });
+
+  test("meter over its limit says so in words, not colour alone", () => {
+    const over = h(Scorecard, { ...base, label: "Churn rate", meter: { value: 3.6, max: 3, label: "of 3.0% limit", direction: "lower" } });
+    assert.match(over, /_meterOver_[^>]*>Over limit</);
+    assert.match(over, /aria-label="Churn rate, of 3.0% limit, 120%, over limit"/);
+    const under = h(Scorecard, { ...base, meter: { value: 2.1, max: 3, label: "of 3.0% limit", direction: "lower" } });
+    assert.doesNotMatch(under, /Over limit/);
+    // Beating a higher-is-better target is not a warning.
+    const beat = h(Scorecard, { ...base, meter: { value: 495, max: 450, label: "of 450 target" } });
+    assert.doesNotMatch(beat, /Over limit/);
+  });
 });
 
 describe("Scoreboard passes looks through", () => {

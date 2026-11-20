@@ -29,17 +29,14 @@
   padding: var(--space-inset-xl);
 }
 
-.fill {
-  width: 100%;
-  max-width: none;
-  height: 100%;
-}
-
 /* Stretched strip cell: rows stay at the top so headers line up, and the footer (or chart) sits at the
    foot, on the same line as its neighbours' bottom rows. */
 .fill {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: none;
+  height: 100%;
 }
 
 .fill:not(.stacked) > .footer {
@@ -64,8 +61,8 @@
   stroke: var(--chart-1);
   /* Data line, not an icon: same weight as the kit's icon stroke so it reads at small size. */
   stroke-width: var(--icon-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
 }
 
 /* Reference, expressive and meter looks: the chart sits at the card's foot, so cards in a row line up. */
@@ -120,8 +117,8 @@
   fill: none;
   stroke: var(--chart-1);
   stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
 }
 
 /* Previous period: quieter and dashed. */
@@ -167,7 +164,6 @@
   position: absolute;
   inset-block: 0;
   width: var(--space-4);
-  border-radius: var(--radius-xs);
   background: color-mix(in srgb, var(--chart-1) 8%, transparent);
   transform: translateX(-50%);
 }
@@ -221,6 +217,11 @@
   font-weight: var(--type-weight-label);
 }
 
+.meterOver {
+  margin-inline-start: var(--space-inline-xs);
+  color: var(--text-warning);
+}
+
 .meterLabel {
   min-width: 0;
   text-align: end;
@@ -244,7 +245,6 @@
 .swatch {
   width: var(--space-3);
   height: var(--space-px);
-  border-radius: var(--radius-pill);
   background: var(--chart-1);
 }
 

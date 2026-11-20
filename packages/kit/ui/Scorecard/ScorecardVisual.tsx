@@ -132,7 +132,12 @@ export function ScorecardMeterBar({ meter, cardLabel }: { meter: ScorecardMeter;
   const state = meterState(meter);
   if (!state) return null;
   // Meter reads at most 100%; past that the real share joins the name so it matches the text on screen.
-  const parts = [cardLabel, meter.label, state.percent > 100 ? `${state.percent}%` : ""].filter(Boolean);
+  const parts = [
+    cardLabel,
+    meter.label,
+    state.percent > 100 ? `${state.percent}%` : "",
+    state.overLimit ? "over limit" : "",
+  ].filter(Boolean);
   const name = parts.join(", ");
   return (
     <span className={styles.visual}>
@@ -144,7 +149,11 @@ export function ScorecardMeterBar({ meter, cardLabel }: { meter: ScorecardMeter;
         label={name}
       />
       <span className={styles.meterRow} aria-hidden="true">
-        <span className={styles.meterPercent}>{state.percent}%</span>
+        <span className={styles.meterPercent}>
+          {state.percent}%
+          {/* A word, not colour alone, says the limit is crossed. */}
+          {state.overLimit ? <span className={styles.meterOver}>Over limit</span> : null}
+        </span>
         <span className={styles.meterLabel}>{meter.label}</span>
       </span>
     </span>
