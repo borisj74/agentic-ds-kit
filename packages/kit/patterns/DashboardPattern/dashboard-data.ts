@@ -185,7 +185,7 @@ export function metricsFor(period: DashboardPeriod, granularity: DashboardGranul
     },
     {
       id: "subscribers",
-      label: "Active subscribers",
+      label: "Subscribers",
       value: count(span.subscribers.end),
       delta: signed(`${subsDelta.toFixed(1)}%`, subsDelta),
       deltaTone: tone(subsDelta > 0, subsDelta),
