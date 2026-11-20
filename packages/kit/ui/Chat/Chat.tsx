@@ -34,6 +34,7 @@ export function Chat({
   menuItems = [],
   menuLabel = "More",
   radius = "lg",
+  embedded = false,
   className,
   ref,
   ...rest
@@ -67,47 +68,49 @@ export function Chat({
     <section
       {...rest} {...nisthaAttr("chat", rest)}
       ref={ref}
-      className={cx(styles.panel, radius === "none" && styles.radiusNone, className)}
+      className={cx(styles.panel, radius === "none" && styles.radiusNone, embedded && styles.embedded, className)}
       aria-label={title}
     >
-      <header className={styles.header}>
-        <span className={styles.identity}>
-          <span className={styles.title}>{title}</span>
-          {status ? (
-            <span className={styles.status}>
-              <span className={styles.statusDot} aria-hidden="true" />
-              {status}
-            </span>
-          ) : null}
-        </span>
-        <div className={styles.headerActions}>
-          {menuItems.length > 0 ? (
-            <DropdownMenu
-              ariaLabel={menuLabel}
-              iconStart="MoreHorizontal"
-              appearance="ghost" mode="neutral"
-              size="sm"
-              align="end"
-              groups={[
-                {
-                  items: menuItems.map((item, index) => ({
-                    id: item.id ?? `${item.label}-${index}`,
-                    label: item.label,
-                    danger: item.tone === "danger",
-                  })),
-                },
-              ]}
-              onSelect={(id) => {
-                const item = menuItems.find((entry, index) => (entry.id ?? `${entry.label}-${index}`) === id);
-                item?.onSelect?.();
-              }}
-            />
-          ) : null}
-          {onClose ? (
-            <Button type="button" appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={closeLabel} onClick={onClose} />
-          ) : null}
-        </div>
-      </header>
+      {embedded ? null : (
+        <header className={styles.header}>
+          <span className={styles.identity}>
+            <span className={styles.title}>{title}</span>
+            {status ? (
+              <span className={styles.status}>
+                <span className={styles.statusDot} aria-hidden="true" />
+                {status}
+              </span>
+            ) : null}
+          </span>
+          <div className={styles.headerActions}>
+            {menuItems.length > 0 ? (
+              <DropdownMenu
+                ariaLabel={menuLabel}
+                iconStart="MoreHorizontal"
+                appearance="ghost" mode="neutral"
+                size="sm"
+                align="end"
+                groups={[
+                  {
+                    items: menuItems.map((item, index) => ({
+                      id: item.id ?? `${item.label}-${index}`,
+                      label: item.label,
+                      danger: item.tone === "danger",
+                    })),
+                  },
+                ]}
+                onSelect={(id) => {
+                  const item = menuItems.find((entry, index) => (entry.id ?? `${entry.label}-${index}`) === id);
+                  item?.onSelect?.();
+                }}
+              />
+            ) : null}
+            {onClose ? (
+              <Button type="button" appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={closeLabel} onClick={onClose} />
+            ) : null}
+          </div>
+        </header>
+      )}
 
       <div
         ref={threadRef}

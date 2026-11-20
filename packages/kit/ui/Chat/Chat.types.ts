@@ -56,6 +56,12 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   menuLabel?: string;
   /** `lg` is the standalone card. `none` squares the panel and drops the outer block/end borders so Chat can sit flush in a workspace rail. */
   radius?: ChatRadius;
+  /**
+   * Inside a host that already has a title, an edge and padding (a work panel tab, a Drawer): no
+   * header band, no outer border, no inline insets of its own, and it fills the host's height.
+   * title still names the section; status, onClose and menuItems are not shown.
+   */
+  embedded?: boolean;
   className?: string;
   ref?: Ref<HTMLElement>;
 }

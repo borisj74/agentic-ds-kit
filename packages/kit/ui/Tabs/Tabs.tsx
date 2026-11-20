@@ -22,6 +22,7 @@ export function Tabs({
   onChange,
   size = "md",
   variant = "line",
+  fill = false,
   ariaLabel = "Tabs",
   className,
   ref,
@@ -95,7 +96,7 @@ export function Tabs({
     <div
       {...rest} {...nisthaAttr("tabs", rest)}
       ref={ref}
-      className={cx(styles.tabs, styles[size], styles[variant], !showPanel && styles.listOnly, className)}
+      className={cx(styles.tabs, styles[size], styles[variant], !showPanel && styles.listOnly, fill && showPanel && styles.fill, className)}
     >
       <div
         ref={listRef}
