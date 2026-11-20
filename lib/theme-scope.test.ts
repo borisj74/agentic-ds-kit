@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { PRESETS, contrastReport, presetState, scopeCss, scopeCssLeaksToPage, themeDeclarations } from "./theme-playground";
+import { PRESETS, clampRadius, contrastReport, presetState, scopeCss, scopeCssLeaksToPage, themeDeclarations } from "./theme-playground";
 
 describe("theme scope", () => {
   test("live css targets the preview scope and not the page root", () => {
@@ -11,25 +11,55 @@ describe("theme scope", () => {
     assert.doesNotMatch(css, /html\[data-theme/);
   });
 
-  test("radius 48 redeclares derived radius tokens", () => {
+  test("radius keeps the fixed scale and moves roles along it", () => {
+    const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 12, pill: false }, "light", "preview");
+    assert.equal(decls["--radius-base"], "8px");
+    assert.equal(decls["--radius-xs"], "2px");
+    assert.equal(decls["--radius-sm"], "4px");
+    assert.equal(decls["--radius-md"], "6px");
+    assert.equal(decls["--radius-lg"], "8px");
+    assert.equal(decls["--radius-xl"], "12px");
+    assert.equal(decls["--radius-2xl"], "16px");
+    assert.equal(decls["--radius-3xl"], "24px");
+    assert.equal(decls["--radius-control-sm"], "4px");
+    assert.equal(decls["--radius-control-md"], "8px");
+    assert.equal(decls["--radius-control-lg"], "12px");
+    assert.equal(decls["--radius-surface-md"], "16px");
+    assert.equal(decls["--radius-surface-lg"], "24px");
+    assert.equal(decls["--radius-media-lg"], "16px");
+  });
+
+  test("radius 8 matches the kit roles", () => {
+    const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 8, pill: false }, "light", "preview");
+    assert.equal(decls["--radius-control-sm"], "2px");
+    assert.equal(decls["--radius-control-md"], "6px");
+    assert.equal(decls["--radius-surface-md"], "12px");
+    assert.equal(decls["--radius-surface-lg"], "16px");
+    assert.equal(decls["--radius-media-lg"], "12px");
+  });
+
+  test("radius snaps to a fixed step and roles stop at the ends of the scale", () => {
+    assert.equal(clampRadius(10), 8);
+    assert.equal(clampRadius(13), 12);
+    assert.equal(clampRadius(0), 2);
+    assert.equal(clampRadius(48), 24);
     const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 48, pill: false }, "light", "preview");
-    assert.equal(decls["--radius-base"], "48px");
-    assert.equal(decls["--radius-xs"], "18px");
-    assert.equal(decls["--radius-sm"], "30px");
-    assert.equal(decls["--radius-md"], "36px");
-    assert.equal(decls["--radius-lg"], "48px");
-    assert.equal(decls["--radius-xl"], "60px");
-    assert.equal(decls["--radius-surface-md"], "60px");
-    assert.equal(decls["--radius-control-md"], "36px");
+    assert.equal(decls["--radius-surface-lg"], "24px");
+    assert.equal(decls["--radius-surface-md"], "24px");
+    for (const [name, value] of Object.entries(decls)) {
+      if (!name.startsWith("--radius-")) continue;
+      const px = /^(\d+)px$/.exec(value);
+      if (px && Number(px[1]) !== 9999) assert.equal(Number(px[1]) % 2, 0, `${name} is ${value}`);
+    }
   });
 
   test("pill radius applies to controls and leaves surfaces on the scale", () => {
-    const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 48, pill: true }, "light", "preview");
+    const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 12, pill: true }, "light", "preview");
     assert.equal(decls["--radius-control-sm"], "9999px");
     assert.equal(decls["--radius-control-md"], "9999px");
     assert.equal(decls["--radius-control-lg"], "9999px");
-    assert.equal(decls["--radius-surface-md"], "60px");
-    assert.equal(decls["--radius-base"], "48px");
+    assert.equal(decls["--radius-surface-md"], "16px");
+    assert.equal(decls["--radius-base"], "8px");
   });
 
   test("shadow presets write scoped shadow tokens", () => {
