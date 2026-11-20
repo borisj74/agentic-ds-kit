@@ -63,8 +63,13 @@ describe("Card header actions", () => {
     assert.ok(!html.includes(">Ask about Plan mix<"), "label is not visible text");
   });
 
-  test("two actions render, a third is dropped", () => {
-    const html = h(
+  test("two actions render, a third is dropped with a dev warning", () => {
+    const warned = [];
+    const original = console.warn;
+    console.warn = (message) => warned.push(String(message));
+    let html;
+    try {
+      html = h(
       kit.Card,
       {
         title: "Accounts",
@@ -75,10 +80,35 @@ describe("Card header actions", () => {
         ],
       },
       "body",
-    );
+      );
+    } finally {
+      console.warn = original;
+    }
     assert.match(html, /aria-label="Ask about Accounts"/);
-    assert.match(html, /<a[^>]*href="\/accounts"[^>]*>View all<\/a>/);
     assert.ok(!html.includes("Third"));
+    assert.equal(warned.length, 1);
+    assert.match(warned[0], /headerAction takes at most two actions; 1 more ignored/);
+  });
+
+  test("href action is a real link with the sm Button look, not a text link", () => {
+    const html = h(kit.Card, { title: "Accounts", headerAction: [{ label: "View all", href: "/accounts" }] }, "body");
+    const link = html.match(/<a[^>]*href="\/accounts"[^>]*>[\s\S]*?<\/a>/)?.[0];
+    assert.ok(link, "renders an <a> with the href");
+    assert.match(link, /class="[^"]*button[^"]*sm[^"]*ghost[^"]*neutral/);
+    assert.match(link, /<span>View all<\/span>/);
+    assert.ok(!/headerLink"/.test(html), "no text-link class");
+  });
+
+  test("no warning with two actions or fewer", () => {
+    const warned = [];
+    const original = console.warn;
+    console.warn = (message) => warned.push(String(message));
+    try {
+      h(kit.Card, { title: "T", headerAction: [{ label: "A" }, { label: "B" }] }, "b");
+    } finally {
+      console.warn = original;
+    }
+    assert.equal(warned.length, 0);
   });
 
   test("a single action object still works", () => {
@@ -102,7 +132,17 @@ describe("ListView dot and meta", () => {
     });
     assert.match(html, /<span class="[^"]*dotSlot[^"]*" aria-hidden="true"><span class="[^"]*dot-warning/);
     assert.match(html, />2h ago</);
-    assert.match(html, /Refunds rose, Three in one day, 2h ago/);
+    assert.match(html, /Refunds rose, Three in one day, 2h ago, Warning/);
+  });
+
+  test("each dot tone is read in the row name", () => {
+    const tones = { neutral: "Note", success: "Good", warning: "Warning", danger: "Problem", info: "Info" };
+    for (const [dot, word] of Object.entries(tones)) {
+      const html = h(kit.ListView, { label: "L", items: [{ id: "a", primary: "Row", dot }] });
+      assert.match(html, new RegExp(`Row, ${word}`), dot);
+    }
+    const plain = h(kit.ListView, { label: "L", items: [{ id: "a", primary: "Row" }] });
+    assert.ok(!/Row, (Note|Good|Warning|Problem|Info)/.test(plain));
   });
 
   test("icon wins over dot", () => {

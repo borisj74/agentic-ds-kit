@@ -81,7 +81,7 @@
       "doNot": "Do not use magic pixel spacing in components"
     },
     "--radius-": {
-      "note": "Radius from --radius-base (Cards curve).",
+      "note": "Fixed radius scale on 2 and 4px steps (2, 4, 6, 8, 12, 16, 24).",
       "useWhen": "control/surface/media/pill roles",
       "doNot": "Do not set a one-off border-radius"
     },
@@ -378,7 +378,7 @@
       "doNot": "Do not use on mixed-case text; product overlines keep --type-tracking-overline"
     },
     "--radius-base": {
-      "note": "One number drives xs…3xl (3,5,6,8,10,13,19).",
+      "note": "8px, the same as --radius-lg. It no longer generates the other steps.",
       "useWhen": "Theming corner scale",
       "doNot": "Components use control/surface/media/pill, not the base"
     },
@@ -433,8 +433,8 @@
       "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
     },
     "--chart-5": {
-      "note": "Chart series 5 (slate).",
-      "useWhen": "Series 5 when a chart shows 5 or more series",
+      "note": "Chart series 5 (slate). Also the dashed previous period in charts and Scorecard expressive sparklines.",
+      "useWhen": "Series 5 when a chart shows 5 or more series, or a previous-period comparison line",
       "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
     },
     "--chart-6": {

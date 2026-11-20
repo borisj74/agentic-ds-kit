@@ -81,7 +81,6 @@ export function buildAiPrompt(): string {
     `- neutrals: ${appearance.neutral} → --color-neutral-* and the surface, text, and line roles`,
     `- spacing scale: ${appearance.spaceScale}% → --space-*`,
     `- shadow intensity: ${appearance.shadowIntensity}% → --shadow-xs / --shadow-sm / --shadow-md / --shadow-lg`,
-    `- radius-base: ${appearance.radiusBase}px`,
     ``,
     `## Active tokens`,
     ...Object.entries(tokens).map(([name, value]) => `- ${name}: ${value}`),

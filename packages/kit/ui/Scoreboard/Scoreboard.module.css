@@ -94,8 +94,11 @@
   }
 }
 
+/* More than four: cards keep the metrics-min width and scroll, but when the strip has room they
+   share it, so labels like "Active subscribers" stay on one line instead of leaving a gap at the end. */
 .overflowStrip {
   width: max-content;
+  min-width: 100%;
   max-width: none;
 }
 
@@ -104,13 +107,13 @@
   align-items: stretch;
   gap: var(--space-4);
   width: max-content;
+  min-width: 100%;
 }
 
 .overflowItem {
   display: flex;
   flex-direction: column;
-  flex: 0 0 var(--layout-metrics-min);
-  width: var(--layout-metrics-min);
+  flex: 1 0 var(--layout-metrics-min);
   min-width: var(--layout-metrics-min);
   scroll-snap-align: start;
 }

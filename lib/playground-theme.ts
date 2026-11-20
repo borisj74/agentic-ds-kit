@@ -6,7 +6,6 @@ export const PLAYGROUND_COLOR_STORAGE_KEY = "playground-color-theme";
 export const PLAYGROUND_FONT_STORAGE_KEY = "playground-font";
 export const PLAYGROUND_HEADING_WEIGHT_KEY = "playground-heading-weight";
 export const PLAYGROUND_PRIMARY_HEX_KEY = "playground-primary-hex";
-export const PLAYGROUND_RADIUS_BASE_KEY = "playground-radius-base";
 export const PLAYGROUND_SHADOW_SM_KEY = "playground-shadow-sm";
 export const PLAYGROUND_FONT_INTERFACE_KEY = "playground-font-interface";
 export const PLAYGROUND_FONT_HEADING_KEY = "playground-font-heading";
@@ -242,7 +241,6 @@ const FONT_STORAGE: Record<PlaygroundFontRole, string> = {
   mono: PLAYGROUND_FONT_MONO_KEY,
 };
 
-export const DEFAULT_RADIUS_BASE = 8;
 export const DEFAULT_SHADOW_SM = "0 1px 2px 0px rgb(0 0 0 / 0.1)";
 export const DEFAULT_PRIMARY_HEX = "#000000";
 
@@ -537,10 +535,8 @@ export function resetPlaygroundAppearance(): void {
   applyPlaygroundSpaceScale(DEFAULT_SPACE_SCALE);
   applyPlaygroundShadowIntensity(DEFAULT_SHADOW_INTENSITY);
   const root = document.documentElement;
-  root.style.removeProperty("--radius-base");
   root.removeAttribute("data-font");
   try {
-    localStorage.removeItem(PLAYGROUND_RADIUS_BASE_KEY);
     localStorage.removeItem(PLAYGROUND_SHADOW_SM_KEY);
     localStorage.removeItem(PLAYGROUND_FONT_STORAGE_KEY);
   } catch {
@@ -548,19 +544,6 @@ export function resetPlaygroundAppearance(): void {
   }
   applyPlaygroundTheme("light");
   applyPlaygroundColorTheme("ink");
-}
-
-export function readPlaygroundRadiusBase(): number {
-  if (typeof document === "undefined") return DEFAULT_RADIUS_BASE;
-  const raw = document.documentElement.style.getPropertyValue("--radius-base").trim();
-  const n = Number.parseFloat(raw);
-  return Number.isFinite(n) ? n : DEFAULT_RADIUS_BASE;
-}
-
-export function applyPlaygroundRadiusBase(px: number): void {
-  const next = Math.min(24, Math.max(2, Math.round(px)));
-  document.documentElement.style.setProperty("--radius-base", `${next}px`);
-  store(PLAYGROUND_RADIUS_BASE_KEY, String(next));
 }
 
 export function readPlaygroundShadowSm(): string {
@@ -588,7 +571,6 @@ export function readPlaygroundAppearance() {
     shadowIntensity: readPlaygroundShadowIntensity(),
     headingWeight: readPlaygroundHeadingWeight(),
     primaryHex: readStoredPrimaryHex(),
-    radiusBase: readPlaygroundRadiusBase(),
     shadowSm: readPlaygroundShadowSm(),
   };
 }

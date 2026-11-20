@@ -46,7 +46,7 @@
         "meta": "string?"
       },
       "required": true,
-      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon (colour only; the text carries the meaning). meta is short muted text at the row end, like a relative time, read after the secondary line."
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line."
     },
     "label": {
       "type": "string",
@@ -163,7 +163,8 @@
     "status.warning",
     "status.danger",
     "status.info",
-    "text.muted"
+    "text.muted",
+    "radius.pill"
   ],
   "a11y": {
     "element": "div[role=list|listbox]",
@@ -177,7 +178,7 @@
       "When items is empty, kit Empty is rendered (title required) and the list keeps its accessible name",
       "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order",
       "truncate clips visually only: the row's accessible name and the title attribute keep the full primary and secondary text",
-      "dot is aria-hidden; meta is part of the row name"
+      "dot is aria-hidden and its tone (Note, Good, Warning, Problem, Info) joins the row name; meta is part of the row name"
     ]
   },
   "doNot": [
