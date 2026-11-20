@@ -109,7 +109,7 @@
     "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; workspace switcher, Quick actions (⌘K), Notifications, Revenue / Customers / Invoices / Plans, Saved views and the account menu; the work panel titled Assistant with Tabs Ask (Chat embedded: no header of its own, fills the panel) and What changed, closed",
     "Header: PageHeader Revenue overview with Export (outline) and the panel toggle; Tabs Overview, Subscribers, Churn, Cohorts (only Overview is built)",
     "Controls: period Select, granularity SegmentedControl, Compare to previous period Switch",
-    "Metric strip: Scoreboard selectable with five framed Scorecards (KPI cards), each with a delta Badge, what it compares to and a sparkline",
+    "Metric strip: Scoreboard selectable with five framed Scorecards (KPI cards), each with a delta Badge and what it compares to. Each tile uses the Scorecard look that fits its data: MRR the reference sparkline against its target (dots on the points past it, start and end dates), Net new MRR the expressive line (previous period dashed when compare is on), Active subscribers a meter toward its target, Churn rate a meter under its ceiling (direction lower), ARPA the plain sparkline",
     "Main chart: LineChart area with the metric's reference line (target or last period's average) and points past it in the accent colour",
     "Summary: InsightCard at the top of the rail beside the main chart when wide, above the metric strip when narrow (or without the rail)",
     "Chart hierarchy: the main chart leads; MRR movements (ComboChart stacked, net line) full width under it; Revenue by plan as a short percent stack (height 160); then a row of two in layout-split: Retention by signup month (Heatmap) and Top plans (BarList in a Card)",
@@ -131,7 +131,7 @@
     ]
   },
   "doNot": [
-    "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
+    "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, sparklineVariant and meter, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
     "Do not colour chart series by status; losses in MRR movements are negative values, not red bars",
     "Do not put more than five tiles in the metric strip",
     "Do not add a second solid primary Button",

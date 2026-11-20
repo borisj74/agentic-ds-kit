@@ -15,6 +15,7 @@ import { LineChart } from "../../ui/LineChart";
 import { ListView } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
 import { Scoreboard } from "../../ui/Scoreboard";
+import type { ScorecardProps } from "../../ui/Scorecard";
 import { SegmentedControl } from "../../ui/SegmentedControl";
 import { Select } from "../../ui/Select";
 import { Skeleton } from "../../ui/Skeleton";
@@ -260,6 +261,52 @@ function AtWidth({ wide = false, children }: { wide?: boolean; children: ReactNo
 }
 
 /**
+ * The Scorecard look for each demo metric, from data it already has:
+ * MRR against its target (reference), Net new MRR as an expressive line (its latest bucket differs
+ * from the period total; the previous period joins when compare is on), and subscribers and churn as
+ * meters toward a target or under a ceiling. ARPA and any other id keep the plain sparkline: ARPA's
+ * latest point is its headline value, and it sits above last period's average the whole time. A metric with another id keeps the plain sparkline.
+ */
+export function metricLook(
+  m: DashboardMetric,
+  labels: string[],
+  compare: boolean,
+): Pick<ScorecardProps, "sparkline" | "sparklineVariant" | "reference" | "highlightLast" | "sparklineDates" | "compare" | "meter"> {
+  const current = m.series.current;
+  const latest = current[current.length - 1] ?? 0;
+  switch (m.id) {
+    case "mrr": {
+      // Dots on the trailing points past the target; none when the whole period is past it (nothing crossed).
+      const pastRef = (v: number) => (m.reference.highlight === "above" ? v > m.reference.value : v < m.reference.value);
+      let past = 0;
+      for (let i = current.length - 1; i >= 0 && pastRef(current[i]); i -= 1) past += 1;
+      return {
+        sparkline: current,
+        sparklineVariant: "reference",
+        reference: { value: m.reference.value, label: m.reference.label },
+        highlightLast: past < current.length ? past : 0,
+        sparklineDates: labels.length > 1 ? [labels[0], labels[labels.length - 1]] : undefined,
+      };
+    }
+    case "netNew":
+      // A flow: the latest bucket in the end tag differs from the period total on the card.
+      return {
+        sparkline: current,
+        sparklineVariant: "expressive",
+        compare: compare ? m.series.previous : undefined,
+      };
+    case "subscribers":
+      return { meter: { value: latest, max: m.reference.value, label: `of ${m.format(m.reference.value)} target` } };
+    case "churn":
+      return {
+        meter: { value: latest, max: m.reference.value, label: `of ${m.format(m.reference.value)} ceiling`, direction: "lower" },
+      };
+    default:
+      return { sparkline: m.sparkline };
+  }
+}
+
+/**
  * Revenue overview for a subscription business, inside AppShellPattern (inset): title with Tabs
  * and Export, period / granularity / compare controls, a one-sentence summary, a metric strip that
  * picks the main chart's metric, MRR movements, revenue by plan, retention by signup month, top
@@ -488,7 +535,7 @@ export function DashboardPattern({
               badge: m.delta,
               badgeTone: m.deltaTone,
               hint: `vs previous ${period === "30d" ? "30 days" : period === "3m" ? "3 months" : "12 months"}`,
-              sparkline: m.sparkline,
+              ...metricLook(m, labels, compare),
             }))}
           />
       )}

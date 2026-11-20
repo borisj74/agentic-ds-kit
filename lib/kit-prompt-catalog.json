@@ -12786,7 +12786,7 @@
         "Live operations status that changes by the second — use the agent blocks (RunningNow, AgentMonitor)"
       ],
       "doNot": [
-        "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
+        "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, sparklineVariant and meter, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
         "Do not colour chart series by status; losses in MRR movements are negative values, not red bars",
         "Do not put more than five tiles in the metric strip",
         "Do not add a second solid primary Button",
