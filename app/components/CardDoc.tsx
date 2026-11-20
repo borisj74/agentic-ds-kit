@@ -370,7 +370,10 @@ export function CardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  headerAction takes up to two actions. iconOnly with iconStart makes an icon-only Button named by its label; href makes a text link.
+                  headerAction takes up to two actions; more are ignored, with a warning in
+                  development. iconOnly with iconStart makes an icon-only Button named by its label.
+                  With href the action stays a real link but looks like the same sm Button, so View all
+                  sits beside Ask as an equal.
                 </p>
               </div>
               <CodeBlock
