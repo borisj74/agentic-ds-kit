@@ -11,6 +11,8 @@ import type { SideNavItemData } from "agentic-ds-kit";
 // render them from their kit source.
 import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
 import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
+import type { DashboardPatternProps } from "../../packages/kit/patterns/DashboardPattern";
+import { sampleExchange } from "../../packages/kit/patterns/DashboardPattern/dashboard-data";
 import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
@@ -123,29 +125,38 @@ const LIST_DETAIL_PAGES = new Set([
   "support-macros",
 ]);
 
-const LIST_DETAIL_HASHES = new Set([
-  "list-detail",
-  "launch-brief",
-  "qa-checklist",
-  "release-notes",
-  "support-macros",
-]);
-
 function isListDetailPage(id: string) {
   return LIST_DETAIL_PAGES.has(id);
-}
-
-function hashForPage(id: string) {
-  if (id === "settings") return "settings";
-  if (id === "research") return "empty";
-  if (id === "projects" || id === "list-detail") return "list-detail";
-  if (LIST_DETAIL_HASHES.has(id)) return id;
-  return "dashboard";
 }
 
 function selectedProjectId(page: string) {
   if (page === "projects" || page === "list-detail") return "launch-brief";
   return page;
+}
+
+/** The dashboard's screens (lib/pattern-screens PATTERN_VIEWS.dashboard) as pattern props. */
+function dashboardViewProps(view?: string): DashboardPatternProps {
+  switch (view) {
+    case "compare":
+      return { defaultCompare: true };
+    case "metric":
+      return { defaultSelectedMetric: "churn", defaultCompare: true };
+    case "empty":
+      return { metrics: [] };
+    case "loading":
+      return { loading: true };
+    case "chat":
+      return {
+        panel: {
+          defaultOpen: true,
+          defaultTab: "ask",
+          defaultContext: "MRR movements · Last 3 months",
+          defaultMessages: sampleExchange("3m"),
+        },
+      };
+    default:
+      return {};
+  }
 }
 
 /** The four dashboard-family screens (its own variant names; the docs slugs are settings-form and empty-first-run). */
@@ -172,9 +183,7 @@ export function DashboardScreen({
         ? "research"
         : pattern === "list-detail"
           ? "projects"
-          : view && hashForPage(view) === "dashboard"
-            ? view
-            : "overview",
+          : "overview",
   );
 
   const go = useCallback((id: string) => setPage(id), []);
@@ -198,6 +207,16 @@ export function DashboardScreen({
   const current = findItem(allItems, page);
 
   const trail = breadcrumbsFor(page, go);
+
+  // The dashboard brings its own shell (header-less inset, with the Ask work panel); it takes this demo's nav.
+  if (page === "overview") {
+    return (
+      <DashboardPattern
+        {...dashboardViewProps(pattern === "dashboard" ? view : undefined)}
+        shell={{ navLabel: "Agentix", nav: { title: "Agentix", mark: "A", items, footer: navFooter } }}
+      />
+    );
+  }
 
   return (
     <>
@@ -236,9 +255,7 @@ export function DashboardScreen({
           )
         }
       >
-        {page === "overview" ? (
-          <DashboardPattern breadcrumbs={trail} />
-        ) : page === "settings" ? (
+        {page === "settings" ? (
           <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
         ) : page === "research" ? (
           <EmptyFirstRunPattern breadcrumbs={trail} />
@@ -246,9 +263,7 @@ export function DashboardScreen({
           <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
         ) : current ? (
           <PlaceholderPage item={current} breadcrumbs={trail} />
-        ) : (
-          <DashboardPattern breadcrumbs={trail} />
-        )}
+        ) : null}
       </AppShellPattern>
       </>
   );

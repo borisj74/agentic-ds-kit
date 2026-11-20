@@ -1,75 +1,633 @@
 "use client";
 
-import { useState } from "react";
-import { DataTable } from "../../ui/DataTable";
-import type { DataTableColumn } from "../../ui/DataTable";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { BarList } from "../../ui/BarList";
+import { Badge } from "../../ui/Badge";
+import { Button } from "../../ui/Button";
+import { Card } from "../../ui/Card";
+import { Chat } from "../../ui/Chat";
+import type { ChatMessage } from "../../ui/Chat";
+import { ComboChart } from "../../ui/ComboChart";
+import { Empty } from "../../ui/Empty";
+import { Heatmap } from "../../ui/Heatmap";
+import { InsightCard } from "../../ui/InsightCard";
 import { LineChart } from "../../ui/LineChart";
+import { ListView } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
-import type { PageHeaderProps } from "../../ui/PageHeader";
 import { Scoreboard } from "../../ui/Scoreboard";
-import { Section } from "../../ui/Section";
-import { SPRINT_METRICS, TASK_ROWS, WEEKLY_USERS } from "./dashboard-data";
+import { SegmentedControl } from "../../ui/SegmentedControl";
+import { Select } from "../../ui/Select";
+import { Skeleton } from "../../ui/Skeleton";
+import { Switch } from "../../ui/Switch";
+import { Table } from "../../ui/Table";
+import type { TableColumn } from "../../ui/Table";
+import { Tabs } from "../../ui/Tabs";
+import { AppShellPattern, useAppShell } from "../AppShellPattern";
+import type { AppShellPatternProps } from "../AppShellPattern";
+import {
+  CHANGES,
+  CHURN_RISKS,
+  GRANULARITIES,
+  MOVEMENT_KEYS,
+  NEEDS_ATTENTION,
+  NEEDS_ATTENTION_GROUPS,
+  PERIODS,
+  RETENTION,
+  STATUS,
+  SUGGESTIONS,
+  answerFor,
+  granularitiesFor,
+  insightFor,
+  metricsFor,
+  money,
+  moneyFull,
+  movementsFor,
+  planSeriesFor,
+  topPlansFor,
+  labelsFor,
+  type DashboardGranularity,
+  type DashboardMetric,
+  type DashboardPeriod,
+} from "./dashboard-data";
+import "./DashboardPattern.css";
 
-const TASK_COLUMNS: DataTableColumn[] = [
-  { key: "task", header: "Task", sortable: true },
-  { key: "owner", header: "Owner", sortable: true },
-  { key: "status", header: "Status", sortable: true },
+export type { DashboardGranularity, DashboardMetric, DashboardMetricId, DashboardPeriod } from "./dashboard-data";
+
+export type DashboardPanelTab = "ask" | "changes";
+
+export interface DashboardPanelOptions {
+  /** Open the work panel on first render. Default false. */
+  defaultOpen?: boolean;
+  /** Tab shown first. Default ask. */
+  defaultTab?: DashboardPanelTab;
+  /** Chat thread to start with, e.g. a finished exchange. */
+  defaultMessages?: ChatMessage[];
+  /** Context chip to start with, e.g. "MRR · Last 3 months". */
+  defaultContext?: string;
+}
+
+export interface DashboardPatternProps {
+  /** Metric tiles. Default: demo data for the period and granularity. An empty array shows the no-data state. */
+  metrics?: DashboardMetric[];
+  /** Controlled metric shown in the main chart (a metric id). */
+  selectedMetric?: string;
+  defaultSelectedMetric?: string;
+  onSelectedMetricChange?: (id: string) => void;
+  /** Controlled: the previous period as a dashed line in the main chart. */
+  compare?: boolean;
+  defaultCompare?: boolean;
+  onCompareChange?: (compare: boolean) => void;
+  period?: DashboardPeriod;
+  defaultPeriod?: DashboardPeriod;
+  onPeriodChange?: (period: DashboardPeriod) => void;
+  granularity?: DashboardGranularity;
+  defaultGranularity?: DashboardGranularity;
+  onGranularityChange?: (granularity: DashboardGranularity) => void;
+  /** The one-sentence summary. Default: built from the data. null hides it. */
+  insight?: ReactNode | null;
+  onInsightDismiss?: () => void;
+  /** Needs attention beside the content on wide screens (under the table when narrow). Default true. */
+  rail?: boolean;
+  /** Skeletons in every card while data loads. */
+  loading?: boolean;
+  /** Work panel start state (Ask and What changed). */
+  panel?: DashboardPanelOptions;
+  /** App shell props for your app (nav, workspace, account…), merged over the demo shell. */
+  shell?: Partial<Omit<AppShellPatternProps, "children" | "workPanel">>;
+}
+
+const ASK_ICON = "MessageCircle";
+
+/** Demo shell. Swap it for your app's nav through the shell prop, or edit it in your copy. */
+const DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
+  layout: "inset",
+  className: "layout-shell--viewport",
+  nav: {
+    title: "Meridian",
+    markIcon: "ChartLine",
+    items: [
+      { id: "revenue", label: "Revenue", icon: "ChartLine", active: true },
+      { id: "customers", label: "Customers", icon: "Users", badge: "3,486" },
+      { id: "invoices", label: "Invoices", icon: "FileText" },
+      { id: "plans", label: "Plans", icon: "Layers" },
+    ],
+    footer: [{ id: "settings", label: "Settings", icon: "Settings" }],
+  },
+  account: {
+    name: "Ada Brennan",
+    secondary: "Finance",
+    initials: "AB",
+    menu: [{ items: [{ id: "settings", label: "Settings", icon: "Settings" }] }, { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] }],
+  },
+};
+
+const CHURN_COLUMNS: TableColumn[] = [
+  { key: "account", header: "Account", emphasis: true },
+  { key: "plan", header: "Plan" },
+  { key: "mrr", header: "MRR", numeric: true },
+  { key: "change", header: "Change", numeric: true },
+  { key: "chance", header: "Chance", numeric: true },
+  { key: "status", header: "Status" },
+  { key: "next", header: "Next step" },
 ];
 
-export function DashboardPattern({ breadcrumbs }: { breadcrumbs?: PageHeaderProps["breadcrumbs"] }) {
-  const [taskRows, setTaskRows] = useState(TASK_ROWS);
+/** A controlled-or-uncontrolled value. */
+function useControllable<T>(value: T | undefined, initial: T, onChange?: (next: T) => void): [T, (next: T) => void] {
+  const [inner, setInner] = useState(initial);
+  const current = value ?? inner;
+  return [
+    current,
+    (next: T) => {
+      if (value === undefined) setInner(next);
+      onChange?.(next);
+    },
+  ];
+}
+
+/** A card that shows a skeleton while loading, kit Empty when there is no data, or its content. */
+function StateCard({
+  title,
+  description,
+  loading,
+  empty,
+  emptyTitle,
+  emptyDescription,
+  height = 240,
+  children,
+}: {
+  title: string;
+  description: string;
+  loading: boolean;
+  empty: boolean;
+  emptyTitle: string;
+  emptyDescription: string;
+  height?: number;
+  children: ReactNode;
+}) {
+  if (!loading && !empty) return <>{children}</>;
+  return (
+    <Card title={title} description={description} size="sm">
+      {loading ? (
+        <Skeleton shape="rect" height={height} label={`Loading ${title}`} />
+      ) : (
+        <Empty title={emptyTitle} description={emptyDescription} icon="ChartLine" />
+      )}
+    </Card>
+  );
+}
+
+/** The panel toggle beside Export when wide; narrow, the shell's top bar already has one. */
+function PagePanelToggle() {
+  const narrow = useAppShell()?.narrow ?? false;
+  return narrow ? null : <AppShellPattern.PanelToggle ariaLabel="Assistant" />;
+}
+
+/**
+ * Wide: the rail sits beside the charts and the table runs full width below, so its columns fit.
+ * Narrow (the shell's --grid-breakpoint-md): one column, with the rail under the table.
+ */
+function RailLayout({ main, table, rail }: { main: ReactNode; table: ReactNode; rail: ReactNode }) {
+  const narrow = useAppShell()?.narrow ?? false;
+  if (!rail || narrow) {
+    return (
+      <>
+        {main}
+        {table}
+        {rail}
+      </>
+    );
+  }
+  return (
+    <>
+      <div className="layout-split--primary dashboard-pattern__split">
+        <div className="dashboard-pattern__stack">{main}</div>
+        <div className="dashboard-pattern__stack">{rail}</div>
+      </div>
+      {table}
+    </>
+  );
+}
+
+/**
+ * Revenue overview for a subscription business, inside AppShellPattern (inset): title with Tabs
+ * and Export, period / granularity / compare controls, a one-sentence summary, a metric strip that
+ * picks the main chart's metric, MRR movements, revenue by plan, retention by signup month, top
+ * plans, accounts that might churn, and a Needs attention rail. The work panel holds Ask (kit
+ * Chat with a context chip per card) and What changed. Every card has an Ask button.
+ */
+export function DashboardPattern({
+  metrics: metricsProp,
+  selectedMetric: selectedProp,
+  defaultSelectedMetric = "mrr",
+  onSelectedMetricChange,
+  compare: compareProp,
+  defaultCompare = false,
+  onCompareChange,
+  period: periodProp,
+  defaultPeriod = "3m",
+  onPeriodChange,
+  granularity: granularityProp,
+  defaultGranularity = "weekly",
+  onGranularityChange,
+  insight,
+  onInsightDismiss,
+  rail = true,
+  loading = false,
+  panel,
+  shell,
+}: DashboardPatternProps) {
+  const [period, setPeriod] = useControllable(periodProp, defaultPeriod, onPeriodChange);
+  const [granularityRaw, setGranularity] = useControllable(granularityProp, defaultGranularity, onGranularityChange);
+  const [selected, setSelected] = useControllable(selectedProp, defaultSelectedMetric, onSelectedMetricChange);
+  const [compare, setCompare] = useControllable(compareProp, defaultCompare, onCompareChange);
+  const [insightOpen, setInsightOpen] = useState(true);
+
+  // A granularity the period does not offer falls back to the period's first one.
+  const allowed = granularitiesFor(period);
+  const granularity = allowed.includes(granularityRaw) ? granularityRaw : allowed[allowed.length - 1];
+  const periodLabel = PERIODS.find((p) => p.value === period)?.label ?? "";
+
+  const metrics = metricsProp ?? metricsFor(period, granularity);
+  const hasData = metrics.length > 0;
+  const metric = metrics.find((m) => m.id === selected) ?? metrics[0];
+  const labels = labelsFor(period, granularity);
+
+  // Work panel: Ask (Chat) and What changed.
+  const [panelOpen, setPanelOpen] = useState(panel?.defaultOpen ?? false);
+  const [panelTab, setPanelTab] = useState<string>(panel?.defaultTab ?? "ask");
+  const [context, setContext] = useState<string | undefined>(panel?.defaultContext);
+  const [messages, setMessages] = useState<ChatMessage[]>(panel?.defaultMessages ?? []);
+  const [thinking, setThinking] = useState(false);
+  const replyTimer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (replyTimer.current !== null) window.clearTimeout(replyTimer.current);
+  }, []);
+
+  function ask(card: string) {
+    setContext(`${card} · ${periodLabel}`);
+    setPanelTab("ask");
+    setPanelOpen(true);
+  }
+
+  function send(question: string) {
+    setMessages((all) => [...all, { id: `u${all.length}`, role: "user", content: question }]);
+    setThinking(true);
+    if (replyTimer.current !== null) window.clearTimeout(replyTimer.current);
+    replyTimer.current = window.setTimeout(() => {
+      setMessages((all) => [...all, { id: `a${all.length}`, role: "assistant", content: answerFor(question, period) }]);
+      setThinking(false);
+      replyTimer.current = null;
+    }, 900);
+  }
+
+  const askButton = (card: string) => (
+    <Button appearance="ghost" mode="neutral" size="sm" iconStart={ASK_ICON} ariaLabel={`Ask about ${card}`} onClick={() => ask(card)} />
+  );
+  const askAction = (card: string) => ({ label: `Ask about ${card}`, iconStart: ASK_ICON, iconOnly: true, onClick: () => ask(card) });
+
+  const numbers = insightFor(period);
+  const insightContent =
+    insight === undefined ? (
+      <>
+        Net new MRR was <strong>{numbers.netNew}</strong> over the {numbers.periodLabel}, mostly from{" "}
+        <strong>{numbers.driver}</strong> in new subscriptions, and churn fell from <strong>{numbers.churnFrom}</strong> to{" "}
+        <strong>{numbers.churnTo}</strong>.
+      </>
+    ) : (
+      insight
+    );
+  const showInsight = hasData && !loading && insight !== null && insightOpen;
+
+  // Main chart: the picked metric, the previous period dashed, a labelled reference line.
+  const mainSeries = metric
+    ? [
+        { label: compare ? "This period" : metric.label, data: metric.series.current },
+        ...(compare ? [{ label: "Previous period", data: metric.series.previous, dashed: true }] : []),
+      ]
+    : [];
+  const past = metric
+    ? metric.series.current.filter((v) => (metric.reference.highlight === "above" ? v > metric.reference.value : v < metric.reference.value)).length
+    : 0;
+  const mainSummary = metric
+    ? `${metric.label} went from ${metric.format(metric.series.current[0] ?? 0)} to ${metric.format(
+        metric.series.current[metric.series.current.length - 1] ?? 0,
+      )}. ${past} of ${metric.series.current.length} points are ${metric.reference.highlight} ${metric.reference.label}.${
+        compare ? ` The previous period ended at ${metric.format(metric.series.previous[metric.series.previous.length - 1] ?? 0)}.` : ""
+      }`
+    : "";
+
+  const movements = movementsFor(period);
+  const plans = planSeriesFor(period, granularity);
+  const topPlans = topPlansFor(period, granularity);
+  const churnRows = CHURN_RISKS.map((row) => ({
+    account: row.account,
+    plan: row.plan,
+    mrr: moneyFull(row.mrr),
+    change:
+      row.change === 0 ? (
+        <Badge size="sm" tone="neutral">
+          No change
+        </Badge>
+      ) : (
+        <Badge size="sm" tone={row.change < 0 ? "danger" : "success"}>
+          {moneyFull(row.change)}
+        </Badge>
+      ),
+    chance: `${row.chance}%`,
+    status: (
+      <Badge size="sm" tone={STATUS[row.status].tone}>
+        {STATUS[row.status].label}
+      </Badge>
+    ),
+    next: row.next,
+  }));
+
+  const empty = !hasData;
+  const noDataCopy = { emptyTitle: "No revenue yet", emptyDescription: "This fills in after your first paid invoice." };
+
+  const needsAttention = (
+    <Card title="Needs attention" description="Which payments and cards need a person today?" size="sm" flush headerAction={askAction("Needs attention")}>
+      {loading ? (
+        <div className="dashboard-pattern__pad">
+          <Skeleton lines={4} label="Loading Needs attention" />
+        </div>
+      ) : (
+        <ListView
+          label="Needs attention"
+          size="sm"
+          truncate="secondary"
+          groups={NEEDS_ATTENTION_GROUPS}
+          items={empty ? [] : NEEDS_ATTENTION}
+          empty={{ title: "Nothing needs you", description: "Failed payments and expiring cards show up here." }}
+        />
+      )}
+    </Card>
+  );
+
+  const overview = (
+    <div className="dashboard-pattern__body">
+      <div className="dashboard-pattern__controls" role="group" aria-label="Chart controls">
+        <div className="dashboard-pattern__period">
+          <Select
+            id="dashboard-period"
+            size="sm"
+            ariaLabel="Period"
+            value={period}
+            onChange={(value) => setPeriod(value as DashboardPeriod)}
+            options={PERIODS.map(({ value, label }) => ({ value, label }))}
+          />
+        </div>
+        <SegmentedControl
+          size="sm"
+          ariaLabel="Granularity"
+          value={granularity}
+          onChange={(value) => setGranularity(value as DashboardGranularity)}
+          items={GRANULARITIES.map(({ value, label }) => ({ value, label, disabled: !allowed.includes(value) }))}
+        />
+        <div className="dashboard-pattern__compare">
+          <Switch size="sm" label="Compare to previous period" checked={compare} onChange={setCompare} />
+        </div>
+      </div>
+
+      {showInsight ? (
+        <InsightCard
+          tone="info"
+          size="lg"
+          title="In short"
+          description={insightContent}
+          onDismiss={() => {
+            setInsightOpen(false);
+            onInsightDismiss?.();
+          }}
+        />
+      ) : null}
+
+      {loading ? (
+        <Card size="md">
+          <div className="layout-metrics">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} lines={3} label={i === 0 ? "Loading metrics" : ""} />
+            ))}
+          </div>
+        </Card>
+      ) : empty ? (
+        <Card size="md">
+          <Empty
+            title="No metrics yet"
+            description="MRR, subscribers and churn appear here after your first paid invoice. Connect billing to start."
+            icon="ChartLine"
+            actions={
+              <Button appearance="outline" mode="neutral" size="sm" iconStart="Settings">
+                Connect billing
+              </Button>
+            }
+          />
+        </Card>
+      ) : (
+        <Card size="md">
+          <Scoreboard
+            aria-label="Metric shown in the chart"
+            appearance="divided"
+            selectable
+            value={metric?.id}
+            onValueChange={setSelected}
+            items={metrics.map((m) => ({
+              id: m.id,
+              label: m.label,
+              value: m.value,
+              badge: m.delta,
+              badgeTone: m.deltaTone,
+              hint: `vs previous ${period === "30d" ? "30 days" : period === "3m" ? "3 months" : "12 months"}`,
+              sparkline: m.sparkline,
+            }))}
+          />
+        </Card>
+      )}
+
+      <RailLayout
+        rail={rail ? needsAttention : null}
+        main={
+          <>
+            <StateCard
+              title={metric?.label ?? "MRR"}
+              description={metric?.question ?? "Is recurring revenue on track for the target?"}
+              loading={loading}
+              empty={empty}
+              {...noDataCopy}
+            >
+              {metric ? (
+                <div>
+                  <LineChart
+                    key={`${metric.id}-${period}-${granularity}`}
+                    title={metric.label}
+                    description={metric.question}
+                    variant="area"
+                    labels={labels}
+                    series={mainSeries}
+                    referenceLine={metric.reference}
+                          actions={askButton(metric.label)}
+                  />
+                  <p className="dashboard-pattern__sr">{mainSummary}</p>
+                </div>
+              ) : null}
+            </StateCard>
+
+            <div className="layout-split">
+              <StateCard title="MRR movements" description="Where did this period's change come from?" loading={loading} empty={empty} {...noDataCopy}>
+                <ComboChart
+                  title="MRR movements"
+                  description="Where did this period's change come from?"
+                  stack="stacked"
+                  data={movements}
+                  bars={MOVEMENT_KEYS.map(({ key, label }) => ({ key, label }))}
+                  line={{ key: "net", label: "Net new MRR" }}
+                  valueFormatter={{ bars: money, line: money }}
+                  actions={askButton("MRR movements")}
+                />
+              </StateCard>
+              <StateCard title="Revenue by plan" description="Which plans carry recurring revenue?" loading={loading} empty={empty} {...noDataCopy}>
+                <LineChart
+                  title="Revenue by plan"
+                  description="Which plans carry recurring revenue?"
+                  variant="area"
+                  stack="stacked"
+                  labels={labels}
+                  series={plans}
+                  actions={askButton("Revenue by plan")}
+                />
+              </StateCard>
+            </div>
+
+            <div className="layout-split">
+              <StateCard
+                title="Retention by signup month"
+                description="How many accounts still pay, months after signing up?"
+                loading={loading}
+                empty={empty}
+                {...noDataCopy}
+              >
+                <Heatmap
+                  title="Retention by signup month"
+                  description="How many accounts still pay, months after signing up?"
+                  rows={RETENTION.rows}
+                  columns={RETENTION.columns}
+                  data={RETENTION.data}
+                  valueFormatter={(value) => `${value}%`}
+                  actions={askButton("Retention by signup month")}
+                />
+              </StateCard>
+              <Card title="Top plans" description="Which plans bring in the most MRR today?" size="sm" headerAction={askAction("Top plans")}>
+                {loading ? (
+                  <Skeleton lines={4} label="Loading Top plans" />
+                ) : empty ? (
+                  <Empty title="No plans billed yet" description="Plans show up here once someone pays for one." icon="Layers" />
+                ) : (
+                  <BarList label="Top plans by MRR" data={topPlans} valueFormatter={moneyFull} />
+                )}
+              </Card>
+            </div>
+          </>
+        }
+        table={
+          <Card
+            title="Might churn this month"
+            description="Which paying accounts could leave, and what happens next?"
+            size="sm"
+            flush
+            headerAction={[askAction("Might churn this month"), { label: "View all", href: "#accounts" }]}
+          >
+            {loading ? (
+              <div className="dashboard-pattern__pad">
+                <Skeleton lines={5} label="Loading accounts" />
+              </div>
+            ) : empty ? (
+              <div className="dashboard-pattern__pad">
+                <Empty title="No accounts at risk" description="Accounts with failed payments, downgrades or low use show up here." icon="Users" />
+              </div>
+            ) : (
+              <Table columns={CHURN_COLUMNS} rows={churnRows} size="md" />
+            )}
+          </Card>
+        }
+      />
+    </div>
+  );
+
+  const shellProps = { ...DEMO_SHELL, ...shell };
 
   return (
-    <div className="layout-canvas layout-canvas--sticky-header">
-      <div className="layout-header">
-        <PageHeader
-          title="Overview"
-          subtitle="Workspace overview for the current team."
-          breadcrumbs={breadcrumbs}
-        />
-      </div>
-      <div className="layout-content">
-        <Section title="Sprint metrics" size="sm">
-          <Scoreboard aria-label="Sprint metrics" items={SPRINT_METRICS} />
-        </Section>
-        <Section title="Weekly users" size="sm">
-          <LineChart data={WEEKLY_USERS} variant="line" showTable={false} />
-        </Section>
-        <Section title="Open tasks" description="4 items need attention" size="sm">
-          <DataTable
-            caption="Sprint backlog"
-            selectable
-            toolbar
-            cellSize="sm"
-            searchPlaceholder="Search tasks..."
-            filters={[
-              { key: "status", label: "Status" },
-              { key: "owner", label: "Owner" },
-            ]}
-            columnSettings
-            bulkActions={[
-              {
-                id: "export",
-                label: "Export",
-                appearance: "outline", mode: "neutral",
-                iconStart: "Download",
-                onClick: () => undefined,
-              },
-              {
-                id: "delete",
-                label: "Delete",
-                appearance: "solid", mode: "danger",
-                iconStart: "Trash2",
-                onClick: (ids) => {
-                  setTaskRows((current) => current.filter((row) => !ids.includes(String(row.id))));
-                },
-              },
-            ]}
-            columns={TASK_COLUMNS}
-            rows={taskRows}
+    <AppShellPattern
+      {...shellProps}
+      workPanel={{
+        title: "Assistant",
+        open: panelOpen,
+        onOpenChange: setPanelOpen,
+        tab: panelTab,
+        onTabChange: setPanelTab,
+        tabs: [
+          {
+            id: "ask",
+            label: "Ask",
+            content: (
+              <Chat
+                title="Ask about revenue"
+                radius="none"
+                messages={messages}
+                isThinking={thinking}
+                disabled={thinking}
+                suggestions={messages.length === 0 ? SUGGESTIONS : []}
+                emptyState="Ask about any card. The answer uses the numbers on this page."
+                placeholder="Ask about this dashboard"
+                context={context ? { label: context, onRemove: () => setContext(undefined) } : undefined}
+                onSend={send}
+              />
+            ),
+          },
+          {
+            id: "changes",
+            label: "What changed",
+            content: <ListView label="What changed since Monday" size="sm" items={CHANGES} />,
+          },
+        ],
+      }}
+    >
+      <main className="layout-canvas layout-canvas--sticky-header dashboard-pattern">
+        <div className="layout-header">
+          <PageHeader
+            title="Revenue overview"
+            subtitle="Recurring revenue, subscribers and churn across every plan."
+            actions={
+              <>
+                <Button appearance="outline" mode="neutral" size="md" iconStart="Download">
+                  Export
+                </Button>
+                <PagePanelToggle />
+              </>
+            }
           />
-        </Section>
-      </div>
-    </div>
+        </div>
+        <div className="layout-content">
+          <Tabs
+            ariaLabel="Revenue views"
+            defaultValue="overview"
+            items={[
+              { id: "overview", label: "Overview", content: overview },
+              ...["Subscribers", "Churn", "Cohorts"].map((label) => ({
+                id: label.toLowerCase(),
+                label,
+                content: (
+                  <Empty
+                    title={`${label} goes here`}
+                    description="This example builds the Overview tab. Compose the others from the same cards."
+                    icon="ChartLine"
+                    outlined
+                  />
+                ),
+              })),
+            ]}
+          />
+        </div>
+      </main>
+    </AppShellPattern>
   );
 }

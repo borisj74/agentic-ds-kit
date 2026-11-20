@@ -12721,14 +12721,95 @@
     {
       "id": "dashboard",
       "group": "pattern",
-      "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
+      "intent": "Revenue overview for a subscription business inside the app-shell example (inset): a title with Tabs and Export, period / granularity / compare controls, a dismissible one-sentence summary, a selectable metric strip that picks the main chart's metric, a main LineChart with a labelled reference line (and the previous period dashed when compare is on), MRR movements, revenue by plan, retention by signup month, top plans, accounts that might churn, and a Needs attention rail. Every card has an Ask button that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
+      "useWhen": [
+        "An overview page where a few headline numbers each open a closer look in one main chart",
+        "Recurring revenue, subscriptions or any metric set with this period against the last",
+        "A dashboard where people should be able to ask about one card without leaving the page"
+      ],
+      "doNotUseWhen": [
+        "One list of records to work through — start from list-detail",
+        "A page with one number or one chart — compose LineChart or Scoreboard directly",
+        "Live operations status that changes by the second — use the agent blocks (RunningNow, AgentMonitor)"
+      ],
+      "doNot": [
+        "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
+        "Do not colour chart series by status; losses in MRR movements are negative values, not red bars",
+        "Do not put more than five tiles in the metric strip",
+        "Do not add a second solid primary Button",
+        "Do not open a Modal for Ask; use the work panel (a right Drawer when narrow)"
+      ],
       "must": [
-        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts, sparklines, metric tiles)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view",
+        "Chart series take the chart palette (--chart-1 to --chart-6, set by the charts); status colours only where they mean something (past due, churn, a bad delta)",
+        "Every number uses tabular figures (the page root sets font-variant-numeric: tabular-nums)",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view; this page has none (Export is outline), so Chat's send stays solid",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
+        "Render inside a main landmark; nav stays reachable on small screens (the app shell's Drawer) and the work panel opens as its right Drawer when narrow"
+      ],
+      "props": {
+        "metrics": {
+          "type": "array",
+          "required": false,
+          "note": "DashboardMetric[]: { id, label, value, delta, deltaTone, sparkline, series: { current, previous }, reference: { value, label, highlight }, format, question }. Default: the demo data for period and granularity. An empty array is the no-data state: every card shows kit Empty."
+        },
+        "selectedMetric": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled metric id shown in the main chart. Uncontrolled with defaultSelectedMetric (default mrr); onSelectedMetricChange(id) fires from the strip."
+        },
+        "compare": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled: the previous period as a dashed series in the main chart. Uncontrolled with defaultCompare (default false); onCompareChange(compare) fires from the Switch."
+        },
+        "period": {
+          "type": "enum",
+          "values": [
+            "30d",
+            "3m",
+            "12m"
+          ],
+          "required": false,
+          "note": "Controlled period (Last 30 days, 3 months, 12 months). Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period)."
+        },
+        "granularity": {
+          "type": "enum",
+          "values": [
+            "daily",
+            "weekly",
+            "monthly"
+          ],
+          "required": false,
+          "note": "Controlled bucket size. Uncontrolled with defaultGranularity (default weekly); onGranularityChange(granularity). Options a period does not offer (monthly for 30 days, daily for 12 months) are disabled in the SegmentedControl, and a passed value that does not fit falls back."
+        },
+        "insight": {
+          "type": "node | null",
+          "required": false,
+          "note": "The one-sentence summary in a kit InsightCard (tone info) with Dismiss. Default: built from the data, key numbers in <strong>. null hides it; onInsightDismiss fires on Dismiss."
+        },
+        "rail": {
+          "type": "boolean",
+          "default": true,
+          "note": "Needs attention (failed payments, expiring cards) as a kit ListView in a Card. Wide: beside the charts in layout-split--primary, with the accounts table full width below. Narrow (the shell's --grid-breakpoint-md): under the table."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Every card shows kit Skeleton in its place; the summary hides."
+        },
+        "panel": {
+          "type": "object",
+          "required": false,
+          "note": "Work panel start state: { defaultOpen, defaultTab: ask | changes, defaultMessages: ChatMessage[], defaultContext: string }. Closed on Ask by default."
+        },
+        "shell": {
+          "type": "object",
+          "required": false,
+          "note": "AppShellPattern props (nav, workspace, account, layout, className…) merged over the demo shell, so the page takes your app's nav. workPanel and children stay the pattern's."
+        }
+      }
     },
     {
       "id": "settings-form",

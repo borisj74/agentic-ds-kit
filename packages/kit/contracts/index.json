@@ -1266,7 +1266,7 @@
   },
   {
     "id": "dashboard",
-    "intent": "Overview dashboard: page title, KPI strip, and chart plus task table in Sections.",
+    "intent": "Revenue overview for a subscription business inside the app-shell example (inset): a title with Tabs and Export, period / granularity / compare controls, a dismissible one-sentence summary, a selectable metric strip that picks the main chart's metric, a main LineChart with a labelled reference line (and the previous period dashed when compare is on), MRR movements, revenue by plan, retention by signup month, top plans, accounts that might churn, and a Needs attention rail. Every card has an Ask button that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable",

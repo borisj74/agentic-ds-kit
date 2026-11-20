@@ -155,6 +155,7 @@ function ScreenPatternView({
                       <ScaledFrame
                         src={frameUrl(slug, item.id, theme?.mode ?? "light")}
                         title={`${title}: ${item.label}`}
+                        device={item.device}
                         interactive={false}
                       />
                     }

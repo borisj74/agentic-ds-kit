@@ -1,0 +1,58 @@
+/* Plain CSS, not a CSS Module (see AppShellPattern.css). The dashboard-pattern__ prefix keeps names
+   unique. Layout comes from the kit layout classes; this file only stacks and lines up. */
+
+/* Every number on the page uses tabular figures, so columns of values line up. */
+.dashboard-pattern {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The Overview tab: controls, summary, metric strip, then the cards. */
+.dashboard-pattern__body {
+  display: grid;
+  gap: var(--space-gap-lg);
+  padding-block-start: var(--space-stack-md);
+  min-width: 0;
+}
+
+.dashboard-pattern__stack {
+  display: grid;
+  gap: var(--space-gap-lg);
+  min-width: 0;
+}
+
+.dashboard-pattern__split > * {
+  min-width: 0;
+}
+
+.dashboard-pattern__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-gap-sm) var(--space-gap-md);
+}
+
+/* A labelled Switch fills its row (label, then track); here it hugs its content in the controls row. */
+.dashboard-pattern__compare {
+  flex: 0 0 auto;
+}
+
+/* The period Select sizes to its longest option instead of filling the row. */
+.dashboard-pattern__period {
+  inline-size: var(--layout-metrics-min);
+  max-inline-size: 100%;
+}
+
+/* Card bodies with no padding of their own (flush cards) get the card inset back for a skeleton or Empty. */
+.dashboard-pattern__pad {
+  padding: var(--space-inset-md);
+}
+
+/* Read by screen readers after each chart: a one-line summary of what it shows. */
+.dashboard-pattern__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

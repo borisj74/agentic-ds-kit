@@ -236,7 +236,8 @@ describe("mcp server", { timeout: 20_000 }, () => {
     assert.deepEqual(result.pattern.defaults, dashboard.defaults);
     assert.deepEqual(result.pattern.contains, dashboard.contains);
 
-    assert.deepEqual(result.pattern.requires, []);
+    // The dashboard renders inside the app-shell example, so add copies both.
+    assert.deepEqual(result.pattern.requires, ["app-shell"]);
 
     // A pattern built on another lists it, so an agent knows add copies both.
     const settings = await call("get_pattern", { id: "settings" });
