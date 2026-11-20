@@ -29,7 +29,7 @@
       "itemContract": "scorecard",
       "required": true,
       "minItems": 2,
-      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
+      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor: the cards share the strip's width (12rem minimum, layout.metricsMin) and scroll once that no longer fits. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
     },
     "scroll": {
       "type": "boolean",
