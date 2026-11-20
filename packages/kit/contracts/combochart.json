@@ -112,6 +112,11 @@
     "height": {
       "type": "number",
       "default": 240
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -163,7 +168,8 @@
     "Do not use status colours for the series; a series that means good or bad says so in its label",
     "Do not use raw hex or primitive --color-* ramps",
     "Do not stack values that do not add up, like rates; use stack none",
-    "Do not pass losses as positive values with a status colour; make them negative so they pile below zero"
+    "Do not pass losses as positive values with a status colour; make them negative so they pile below zero",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<ComboChart\n  title=\"Revenue and growth\"\n  description=\"2026, by month\"\n  axis=\"dual\"\n  data={[\n    { label: \"Jan\", revenue: 42000, growth: 3.1 },\n    { label: \"Feb\", revenue: 45500, growth: 8.3 },\n    { label: \"Mar\", revenue: 44100, growth: -3.1 },\n  ]}\n  bars={[{ key: \"revenue\", label: \"Revenue\" }]}\n  line={{ key: \"growth\", label: \"Growth\" }}\n  valueFormatter={{ line: (value) => `${value}%` }}\n/>\n\n<ComboChart\n  title=\"Seat changes\"\n  stack=\"stacked\"\n  data={[{ label: \"Jan\", added: 40, removed: -12, net: 28 }]}\n  bars={[{ key: \"added\", label: \"Added\" }, { key: \"removed\", label: \"Removed\" }]}\n  line={{ key: \"net\", label: \"Net\" }}\n/>"
 }

@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 
 export type ScatterChartSize = "fixed" | "value";
@@ -23,6 +23,8 @@ export interface ScatterChartFormatters {
 
 /** `ref`, `className` and other attributes land on the root `<figure>`. */
 export interface ScatterChartProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   data: ScatterChartDatum[];
   /** Names the horizontal measure, like Monthly revenue. */
   xLabel: string;

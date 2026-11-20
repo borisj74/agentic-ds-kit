@@ -17,8 +17,21 @@ function HeaderAction({ action }: { action: CardAction }) {
       </LinkTag>
     );
   }
+  if (action.iconOnly && action.iconStart) {
+    return (
+      <Button
+        appearance={action.appearance ?? "ghost"}
+        mode={action.mode ?? "neutral"}
+        size="sm"
+        iconStart={action.iconStart}
+        ariaLabel={action.label}
+        title={action.label}
+        onClick={action.onClick}
+      />
+    );
+  }
   return (
-    <Button appearance={action.appearance ?? "ghost"} mode={action.mode ?? "neutral"} size="sm" onClick={action.onClick}>
+    <Button appearance={action.appearance ?? "ghost"} mode={action.mode ?? "neutral"} size="sm" iconStart={action.iconStart} onClick={action.onClick}>
       {action.label}
     </Button>
   );
@@ -40,6 +53,7 @@ export function Card({
 }: CardProps) {
   const titleId = useId();
   const footerActions = (actions ?? []).slice(0, 2);
+  const headerActions = (Array.isArray(headerAction) ? headerAction : headerAction ? [headerAction] : []).slice(0, 2);
 
   return (
     <article
@@ -52,7 +66,7 @@ export function Card({
         <img className={styles.image} src={imageSrc} alt={imageAlt ?? ""} />
       ) : null}
       <div className={styles.content}>
-        {title || description || headerAction ? (
+        {title || description || headerActions.length > 0 ? (
           <header className={styles.header}>
             <div className={styles.copy}>
               {title ? (
@@ -62,7 +76,14 @@ export function Card({
               ) : null}
               {description ? <p className={styles.description}>{description}</p> : null}
             </div>
-            {headerAction ? <HeaderAction action={headerAction} /> : null}
+            {headerActions.length === 1 ? <HeaderAction action={headerActions[0]} /> : null}
+            {headerActions.length > 1 ? (
+              <div className={styles.headerActions}>
+                {headerActions.map((action) => (
+                  <HeaderAction key={action.label} action={action} />
+                ))}
+              </div>
+            ) : null}
           </header>
         ) : null}
         <div className={styles.body}>{children}</div>

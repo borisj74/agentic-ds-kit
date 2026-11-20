@@ -357,6 +357,35 @@ export function InsightCardDoc() {
                 <CodeBlock code={doc.code} />
               </section>
             ))}
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Key numbers in the sentence</h2>
+              <div className={styles.exampleCanvas}>
+                <InsightCard
+                  tone="info"
+                  title="This week"
+                  description={
+                    <>
+                      Paid seats grew by <strong>64</strong>, mostly on the <strong>Team</strong> plan, while refunds stayed at <strong>2</strong>.
+                    </>
+                  }
+                  onDismiss={() => {}}
+                />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  description takes inline nodes, so key numbers can sit in strong text. Keep it to a sentence or two.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<InsightCard
+  tone="info"
+  title="This week"
+  description={<>Paid seats grew by <strong>64</strong>, mostly on the <strong>Team</strong> plan.</>}
+  onDismiss={dismiss}
+/>`}
+              />
+            </section>
           </div>
         )}
       </section>

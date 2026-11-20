@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, Ref, ReactNode } from "react";
 import type { ChartFrameOwnedKeys } from "../shared/ChartFrame";
 
 export interface HeatmapDatum {
@@ -12,6 +12,8 @@ export interface HeatmapDatum {
 
 /** `ref`, `className` and other attributes land on the root `<figure>`. */
 export interface HeatmapProps extends Omit<ComponentPropsWithoutRef<"figure">, ChartFrameOwnedKeys> {
+  /** Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. */
+  actions?: ReactNode;
   /** Row labels, top to bottom, like Mon to Sun. */
   rows: string[];
   /** Column labels, start to end, like 00 to 23. */

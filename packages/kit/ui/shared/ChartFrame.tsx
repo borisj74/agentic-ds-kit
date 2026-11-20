@@ -14,6 +14,8 @@ export interface ChartFrameProps extends Omit<ComponentPropsWithoutRef<"figure">
   title?: string;
   description?: string;
   legend?: ReactNode;
+  /** Kit Buttons in the header, before the Table toggle (e.g. an icon-only Ask). */
+  actions?: ReactNode;
   children: ReactNode;
   table?: ReactNode;
   footnote?: string;
@@ -28,6 +30,7 @@ export function ChartFrame({
   title,
   description,
   legend,
+  actions,
   children,
   table,
   footnote,
@@ -43,7 +46,7 @@ export function ChartFrame({
   const descriptionId = useId();
   const panelId = useId();
   const showTable = view === "table" && Boolean(table);
-  const hasChrome = Boolean(title || description || table || footnote || legend);
+  const hasChrome = Boolean(title || description || table || footnote || legend || actions);
 
   return (
     <figure
@@ -53,7 +56,7 @@ export function ChartFrame({
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={description ? descriptionId : undefined}
     >
-      {title || table ? (
+      {title || table || actions ? (
         <figcaption className={styles.header}>
           <div className={styles.heading}>
             {title ? (
@@ -67,8 +70,10 @@ export function ChartFrame({
               </p>
             ) : null}
           </div>
-          {table ? (
+          {table || actions ? (
             <div className={styles.actions}>
+              {actions}
+              {table ? (
               <button
                 type="button"
                 className={styles.toggle}
@@ -83,6 +88,7 @@ export function ChartFrame({
                 )}
                 <span>{showTable ? "Chart" : "Table"}</span>
               </button>
+              ) : null}
             </div>
           ) : null}
         </figcaption>

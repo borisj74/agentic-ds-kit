@@ -353,6 +353,39 @@ export function CardDoc() {
               </div>
               <CodeBlock code={SMALL_TABLE_CARD_CODE} />
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Two header actions</h2>
+              <div className={styles.exampleCanvas}>
+                <Card
+                  title="Open invoices"
+                  description="Which invoices are past their due date?"
+                  headerAction={[
+                    { label: "Ask about Open invoices", iconStart: "MessageCircle", iconOnly: true },
+                    { label: "View all", href: "#" },
+                  ]}
+                >
+                  <p className={styles.usageBody}>12 invoices, 3 past due.</p>
+                </Card>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  headerAction takes up to two actions. iconOnly with iconStart makes an icon-only Button named by its label; href makes a text link.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Card
+  title="Open invoices"
+  description="Which invoices are past their due date?"
+  headerAction={[
+    { label: "Ask about Open invoices", iconStart: "MessageCircle", iconOnly: true },
+    { label: "View all", href: "/invoices" },
+  ]}
+>
+  …
+</Card>`}
+              />
+            </section>
           </div>
         )}
       </section>

@@ -62,6 +62,11 @@
       "type": "string",
       "required": false,
       "note": "One line under the title, like the time range."
+    },
+    "actions": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Buttons in the chart header, before the Table toggle, like an icon-only Ask. ghost sm reads quietest. Setting it draws the frame even with no title."
     }
   },
   "passthrough": {
@@ -108,7 +113,8 @@
     "Do not use it for exact values people compare cell by cell — use Table",
     "Do not squash the grid on small screens; it scrolls sideways inside its frame",
     "Do not pass negative values; the scale starts at zero",
-    "Do not use raw hex or primitive --color-* ramps"
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not wrap a chart in a Card only to get a header button — pass actions"
   ],
   "snippet": "<Heatmap\n  title=\"Agent runs by hour\"\n  description=\"Last 7 days\"\n  rows={[\"Mon\", \"Tue\", \"Wed\"]}\n  columns={[\"09\", \"10\", \"11\"]}\n  data={[\n    { row: \"Mon\", column: \"09\", value: 12 },\n    { row: \"Mon\", column: \"10\", value: 30 },\n    { row: \"Tue\", column: \"11\", value: 4 },\n  ]}\n/>"
 }

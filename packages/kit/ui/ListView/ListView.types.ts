@@ -16,6 +16,9 @@ export interface ListViewAction {
   disabled?: boolean;
 }
 
+/** A small status dot as the leading mark, when there is no avatar or icon. Colour only; the text carries the meaning. */
+export type ListViewDotTone = "neutral" | "success" | "warning" | "danger" | "info";
+
 export interface ListViewItem {
   id: string;
   primary: string;
@@ -24,6 +27,10 @@ export interface ListViewItem {
   src?: string;
   initials?: string;
   icon?: KitIcon;
+  /** Leading status dot when there is no avatar or icon. */
+  dot?: ListViewDotTone;
+  /** Short muted text at the row's end, like a relative time ("2h ago"). Read after the secondary line. */
+  meta?: string;
   badge?: string;
   badgeTone?: BadgeTone;
   disabled?: boolean;

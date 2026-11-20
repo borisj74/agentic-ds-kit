@@ -41,10 +41,12 @@
         "badgeTone": "neutral | brand | success | warning | danger | info?",
         "disabled": "boolean?",
         "group": "string?",
-        "actions": "{ id, label, icon?, danger?, disabled? }[]?"
+        "actions": "{ id, label, icon?, danger?, disabled? }[]?",
+        "dot": "\"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\"?",
+        "meta": "string?"
       },
       "required": true,
-      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon (colour only; the text carries the meaning). meta is short muted text at the row end, like a relative time, read after the secondary line."
     },
     "label": {
       "type": "string",
@@ -53,12 +55,19 @@
     },
     "size": {
       "type": "enum",
-      "values": ["sm", "md"],
+      "values": [
+        "sm",
+        "md"
+      ],
       "default": "md"
     },
     "selection": {
       "type": "enum",
-      "values": ["none", "single", "multiple"],
+      "values": [
+        "none",
+        "single",
+        "multiple"
+      ],
       "default": "none",
       "note": "multiple composes kit Checkbox"
     },
@@ -79,7 +88,10 @@
     },
     "interaction": {
       "type": "enum",
-      "values": ["none", "drill"],
+      "values": [
+        "none",
+        "drill"
+      ],
       "default": "none",
       "note": "drill shows a trailing chevron and calls onOpen(id). The row body is a button."
     },
@@ -109,7 +121,11 @@
     },
     "truncate": {
       "type": "enum",
-      "values": ["none", "secondary", "both"],
+      "values": [
+        "none",
+        "secondary",
+        "both"
+      ],
       "default": "none",
       "note": "Clip lines to one line with an ellipsis instead of wrapping (e.g. long emails in a narrow rail wrap mid-word otherwise). secondary clips the secondary line; both also the primary. The full text stays in the row's accessible name and the hover title."
     },
@@ -142,7 +158,12 @@
     "border.faint",
     "border.focus",
     "opacity.disabled",
-    "radius.control.sm"
+    "radius.control.sm",
+    "status.success",
+    "status.warning",
+    "status.danger",
+    "status.info",
+    "text.muted"
   ],
   "a11y": {
     "element": "div[role=list|listbox]",
@@ -155,7 +176,8 @@
       "Grouped rows sit in role=group labelled by the header; collapsible headers are buttons with aria-expanded",
       "When items is empty, kit Empty is rendered (title required) and the list keeps its accessible name",
       "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order",
-      "truncate clips visually only: the row's accessible name and the title attribute keep the full primary and secondary text"
+      "truncate clips visually only: the row's accessible name and the title attribute keep the full primary and secondary text",
+      "dot is aria-hidden; meta is part of the row name"
     ]
   },
   "doNot": [
@@ -175,7 +197,8 @@
     "Do not use ListView for usage against a plan limit — use UsageList",
     "Do not use more than two inline row actions — overflow is kit DropdownMenu",
     "Do not place appearance=solid mode=primary Button on a row",
-    "Do not use raw hex or primitive --color-* ramps"
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not use dot as the only sign of a status; say it in primary or secondary"
   ],
   "snippet": "<ListView label=\"People\" items={[{ id: 'maya', primary: 'Maya Chen', secondary: 'maya@acme.com', name: 'Maya Chen', badge: 'Admin', badgeTone: 'info' }]} />"
 }

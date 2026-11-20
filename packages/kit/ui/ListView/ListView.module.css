@@ -226,3 +226,46 @@ button.body:focus {
     transition: none;
   }
 }
+
+/* Leading status dot (item.dot): the leading slot keeps its width so rows line up; the dot sits at the first line. */
+.leading.dotSlot {
+  align-self: flex-start;
+  width: var(--space-2);
+  height: calc(var(--type-size-body-sm) * var(--type-line-body));
+}
+
+.dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.dot-neutral {
+  background-color: var(--text-secondary);
+}
+
+.dot-success {
+  background-color: var(--status-success);
+}
+
+.dot-warning {
+  background-color: var(--status-warning);
+}
+
+.dot-danger {
+  background-color: var(--status-danger);
+}
+
+.dot-info {
+  background-color: var(--status-info);
+}
+
+/* item.meta: a relative time or count at the row's end, quiet and in tabular figures. */
+.meta {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
