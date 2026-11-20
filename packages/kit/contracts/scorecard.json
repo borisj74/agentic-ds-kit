@@ -95,7 +95,7 @@
         "expressive"
       ],
       "default": "plain",
-      "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates); the label switches to heading weight. expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the card's value in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
+      "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates). expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the latest point's value (compact, e.g. 4.3k) in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
     },
     "reference": {
       "type": "object",
@@ -124,7 +124,7 @@
       "type": "object",
       "required": false,
       "shape": "{ value: number, max: number, label: string, direction?: 'higher' | 'lower' }",
-      "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'under 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
+      "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'of 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
     },
     "appearance": {
       "type": "enum",
@@ -242,7 +242,7 @@
     "Do not color the sparkline or meter with brand; brand is only for the selected card",
     "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
   ],
-  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"under 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
+  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
   "contains": [
     "badge",
     "meter"

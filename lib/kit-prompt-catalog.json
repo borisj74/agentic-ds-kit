@@ -863,7 +863,7 @@
             "expressive"
           ],
           "default": "plain",
-          "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates); the label switches to heading weight. expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the card's value in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
+          "note": "plain: the thin --chart-1 line (unchanged). reference: area fill, faint grid, a dashed reference line with its label, darker dots on the last highlightLast points, start and end dates (sparklineDates). expressive: smooth curve, soft area, dashed previous period (compare) in --chart-5 with a This period / Previous legend, an end dot with the latest point's value (compact, e.g. 4.3k) in a small mono tag, and a faint band on the latest point. Both move the chart to the card's foot so cards in a row line up. Needs two or more finite numbers; otherwise nothing is drawn."
         },
         "reference": {
           "type": "object",
@@ -889,7 +889,7 @@
         "meter": {
           "type": "object",
           "required": false,
-          "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'under 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
+          "note": "A calm bar toward a target in place of the sparkline: kit Meter (bar, sm) with the percent of max on the left and label on the right, e.g. { value: 2.1, max: 3, label: 'of 3.0% limit', direction: 'lower' }. direction defaults to higher. The bar is neutral; with direction lower and value over max it turns warning. max must be above 0. The progressbar is named by the card label and meter label."
         },
         "appearance": {
           "type": "enum",

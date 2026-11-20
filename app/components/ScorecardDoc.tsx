@@ -20,7 +20,8 @@ const DELTA: Record<ScorecardTrend, string> = {
 };
 
 const MRR = [370, 373, 376, 381, 385, 387, 392, 398, 401, 405, 408, 410, 412.6];
-const MRR_PREVIOUS = [352, 356, 355, 360, 362, 366, 365, 370, 372, 375, 378, 380, 382];
+const NET_NEW = [2100, 3400, 2600, 4800, 2200, 3900, 5100, 2400, 3000, 2800, 4600, 3300, 4300];
+const NET_NEW_PREVIOUS = [1800, 2400, 2900, 2200, 3100, 2600, 2800, 3300, 2500, 2900, 3200, 2700, 3000];
 
 const LOOKS: ScorecardProps[] = [
   { id: "looks-plain", label: "MRR", value: "$412.6k", badge: "+10.9%", badgeTone: "success", hint: "vs previous 3 months", sparkline: MRR },
@@ -44,17 +45,17 @@ const LOOKS: ScorecardProps[] = [
     badge: "-0.5 pt",
     badgeTone: "success",
     hint: "vs previous 3 months",
-    meter: { value: 2.1, max: 3, label: "under 3.0% limit", direction: "lower" },
+    meter: { value: 2.1, max: 3, label: "of 3.0% limit", direction: "lower" },
   },
   {
     id: "looks-expressive",
-    label: "MRR",
-    value: "$412.6k",
-    badge: "+10.9%",
+    label: "Net new MRR",
+    value: "$40.7k",
+    badge: "+20.8%",
     badgeTone: "success",
-    sparkline: MRR,
+    sparkline: NET_NEW,
     sparklineVariant: "expressive",
-    compare: MRR_PREVIOUS,
+    compare: NET_NEW_PREVIOUS,
   },
 ];
 
@@ -75,15 +76,15 @@ const LOOKS_CODE = `<Scorecard label="MRR" value="$412.6k" hint="vs previous 3 m
   label="Churn rate"
   value="2.1%"
   hint="vs previous 3 months"
-  meter={{ value: 2.1, max: 3, label: "under 3.0% limit", direction: "lower" }}
+  meter={{ value: 2.1, max: 3, label: "of 3.0% limit", direction: "lower" }}
 />
 
 <Scorecard
-  label="MRR"
-  value="$412.6k"
-  sparkline={mrr}
+  label="Net new MRR"
+  value="$40.7k"
+  sparkline={weeklyNetNew}
   sparklineVariant="expressive"
-  compare={mrrPrevious}
+  compare={previousWeeklyNetNew}
 />`;
 
 const MASTER_LABEL = "Revenue";
@@ -251,7 +252,7 @@ export function ScorecardDoc() {
                   darker dots on the last points and start and end dates. meter swaps the line for a
                   calm bar toward a target, or under a limit with direction lower; it turns amber only
                   when the limit is passed. expressive draws a smooth curve, the previous period dashed
-                  with a legend, and the card&apos;s value on the latest point. Keep delta or hint: the
+                  with a legend, and the latest point&apos;s value on its end dot. Keep delta or hint: the
                   drawing is decorative.
                 </p>
               </div>

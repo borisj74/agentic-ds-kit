@@ -32,7 +32,7 @@ export interface ScorecardMeter {
   value: number;
   /** The target (`higher`) or limit (`lower`). Must be above 0. */
   max: number;
-  /** Text after the bar, e.g. "of $450k target" or "under 3.0% limit". */
+  /** Text after the bar, e.g. "of $450k target" or "of 3.0% limit". */
   label: string;
   direction?: ScorecardMeterDirection;
 }

@@ -97,7 +97,11 @@ describe("Scorecard looks", () => {
 
   test("expressive shows the end tag and a legend only with compare", () => {
     const plain = h(Scorecard, { ...base, sparkline: data, sparklineVariant: "expressive" });
-    assert.match(plain, /_endTag_[^>]*>\$412\.6k</);
+    // The tag shows the latest point (410 here), not the card's value.
+    assert.match(plain, /_endTag_[^>]*>410</);
+    assert.doesNotMatch(plain, /_endTag_[^>]*>\$412/);
+    const big = h(Scorecard, { ...base, sparkline: [2100, 4300], sparklineVariant: "expressive" });
+    assert.match(big, /_endTag_[^>]*>4\.3k</);
     assert.doesNotMatch(plain, /This period/);
     const withCompare = h(Scorecard, { ...base, sparkline: data, sparklineVariant: "expressive", compare: [360, 365, 370, 372, 380] });
     assert.match(withCompare, /This period/);
@@ -116,10 +120,10 @@ describe("Scorecard looks", () => {
       ...base,
       label: "Churn rate",
       sparkline: data,
-      meter: { value: 2.1, max: 3, label: "under 3.0% limit", direction: "lower" },
+      meter: { value: 2.1, max: 3, label: "of 3.0% limit", direction: "lower" },
     });
     assert.match(html, /role="progressbar"/);
-    assert.match(html, /aria-label="Churn rate, under 3.0% limit"/);
+    assert.match(html, /aria-label="Churn rate, of 3.0% limit"/);
     assert.match(html, /aria-valuenow="70"/);
     assert.match(html, />70%</);
     assert.doesNotMatch(html, /<polyline/);

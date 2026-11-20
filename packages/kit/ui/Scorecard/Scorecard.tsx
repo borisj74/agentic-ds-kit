@@ -121,7 +121,6 @@ export function Scorecard({
             compare={compare}
             highlightLast={highlightLast}
             dates={sparklineDates}
-            value={value}
           />
         )
       : null;
@@ -134,7 +133,7 @@ export function Scorecard({
       {label || badge ? (
         <span className={styles.header}>
           {label ? (
-            <span id={labelId} className={cx(styles.label, showRichLine && sparklineVariant === "reference" && styles.labelHeading)}>
+            <span id={labelId} className={styles.label}>
               {label}
             </span>
           ) : null}

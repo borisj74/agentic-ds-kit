@@ -33,6 +33,8 @@
   width: 100%;
   max-width: none;
   height: 100%;
+  /* In a stretched strip cell, keep rows at the top so headers line up with taller neighbours. */
+  align-content: start;
 }
 
 /* Plain: no frame, for a divided strip. Scoreboard draws the dividers. */
@@ -58,12 +60,6 @@
 .stacked {
   display: flex;
   flex-direction: column;
-}
-
-.label.labelHeading {
-  color: var(--text-primary);
-  font-size: var(--type-size-label);
-  font-weight: var(--type-weight-heading);
 }
 
 .visual {
@@ -173,11 +169,10 @@
   border: var(--border-width-thin) solid var(--surface-card);
   border-radius: var(--radius-pill);
   background: var(--chart-1);
-  box-shadow: 0 0 0 var(--space-1) color-mix(in srgb, var(--chart-1) 18%, transparent);
   transform: translate(-50%, -50%);
 }
 
-/* Small value tag on the end dot: mono, the only mono text on the card besides badges. */
+/* Latest point's value on the end dot: mono, the only mono text on the card besides badges. */
 .endTag {
   position: absolute;
   padding: 0 var(--space-1);

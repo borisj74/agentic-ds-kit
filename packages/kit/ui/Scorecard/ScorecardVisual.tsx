@@ -15,12 +15,12 @@ type SparklineProps = {
   compare?: number[];
   highlightLast?: number;
   dates?: [string, string];
-  /** The card's value, shown in the end tag of an expressive line. */
-  value: string;
 };
 
+const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+
 /** The reference and expressive sparklines. Decorative: the card's value, delta and hint carry the meaning. */
-export function ScorecardSparkline({ values, variant, reference, compare, highlightLast = 0, dates, value }: SparklineProps) {
+export function ScorecardSparkline({ values, variant, reference, compare, highlightLast = 0, dates }: SparklineProps) {
   const rawId = useId();
   const gradientId = `scorecard-area-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const expressive = variant === "expressive";
@@ -34,6 +34,10 @@ export function ScorecardSparkline({ values, variant, reference, compare, highli
 
   const { points, line, area, compareLine, referenceY } = layout;
   const last = points[points.length - 1];
+  const finite = (values ?? []).filter((v) => Number.isFinite(v));
+  // The latest point's own value (e.g. this week), not the card's headline figure, so nothing repeats.
+  // Lowercase suffix (4.3k) to match how the kit writes figures like $40.7k.
+  const latest = compact.format(finite[finite.length - 1]).toLowerCase();
   const dotCount = expressive ? 0 : Math.max(0, Math.min(Math.floor(highlightLast), points.length));
 
   return (
@@ -94,7 +98,7 @@ export function ScorecardSparkline({ values, variant, reference, compare, highli
               className={styles.endTag}
               style={{ left: pct(last.x, VISUAL_W), top: pct(last.y, VISUAL_H) }}
             >
-              {value}
+              {latest}
             </span>
           </>
         ) : null}
