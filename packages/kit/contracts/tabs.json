@@ -9,9 +9,9 @@
     "Compact local switching such as preview and code"
   ],
   "doNotUseWhen": [
-    "Top-level app routes \u2014 use AppNav",
-    "Mutually exclusive form values \u2014 use RadioGroup",
-    "Single panel content \u2014 use Section"
+    "Top-level app routes — use AppNav",
+    "Mutually exclusive form values — use RadioGroup",
+    "Single panel content — use Section"
   ],
   "props": {
     "items": {
@@ -58,6 +58,11 @@
       "type": "string",
       "required": false,
       "default": "Tabs"
+    },
+    "fill": {
+      "type": "boolean",
+      "default": false,
+      "note": "The panel takes the height left under the tab list and its child stretches to it, for a full-height tab such as Chat embedded. Tabs needs a height or a flex/grid slot from its host."
     }
   },
   "passthrough": {
@@ -91,8 +96,8 @@
   "doNot": [
     "Do not invent TabsList, TabsTrigger, or TabsContent cousins",
     "Do not use raw hex",
-    "Do not use Tabs for main app navigation \u2014 use AppNav",
+    "Do not use Tabs for main app navigation — use AppNav",
     "Do not nest tabs inside tabs"
   ],
-  "snippet": "<Tabs defaultValue=\"overview\" variant=\"line\" items={[{ id: 'overview', label: 'Overview', content: '\u2026' }, { id: 'docs', label: 'Docs', content: '\u2026' }]} />"
+  "snippet": "<Tabs defaultValue=\"overview\" variant=\"line\" items={[{ id: 'overview', label: 'Overview', content: '…' }, { id: 'docs', label: 'Docs', content: '…' }]} />"
 }

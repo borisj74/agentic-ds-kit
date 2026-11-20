@@ -19,6 +19,31 @@
   border-inline-end-width: 0;
 }
 
+/* embedded: the host draws the title, the edge and the padding. No header, so the thread is the first row. */
+.embedded {
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
+  min-block-size: calc(var(--space-16) * 5);
+  border: 0;
+  border-radius: var(--radius-0);
+  background: transparent;
+}
+
+.embedded .thread,
+.embedded .context {
+  padding-inline: 0;
+}
+
+.embedded .composer {
+  padding-inline: 0;
+  padding-block-end: 0;
+}
+
+/* Suggestion Buttons start at the thread's text edge: pull them out by the sm Button's inline padding. */
+.embedded .suggestions {
+  padding-inline: 0;
+  margin-inline-start: calc(var(--space-3) * -1);
+}
+
 .header {
   display: flex;
   align-items: center;
