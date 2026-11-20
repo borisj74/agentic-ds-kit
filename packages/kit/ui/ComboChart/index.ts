@@ -5,4 +5,5 @@ export type {
   ComboChartFormatters,
   ComboChartProps,
   ComboChartSeries,
+  ComboChartStack,
 } from "./ComboChart.types";

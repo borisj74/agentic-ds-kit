@@ -7,3 +7,7 @@
 ### Changed
 
 - **InsightCard `description` takes inline nodes**, so key numbers can sit in `<strong>`.
+
+### Fixed
+
+- **New types from the last releases are importable from `agentic-ds-kit`:** `ChatContext`, `ScoreboardItem`, `ScoreboardAppearance`, `ScorecardAppearance`, `ScorecardSelectionRole`, `LineChartSeries`, `LineChartReference`, `LineChartReferenceHighlight`, `ComboChartStack` and `ListViewDotTone`.

@@ -1,2 +1,2 @@
 export { Scoreboard } from "./Scoreboard";
-export type { ScoreboardProps } from "./Scoreboard.types";
+export type { ScoreboardProps, ScoreboardItem, ScoreboardAppearance } from "./Scoreboard.types";
