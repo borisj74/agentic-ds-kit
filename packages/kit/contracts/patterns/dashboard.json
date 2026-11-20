@@ -106,7 +106,7 @@
     "Render inside a main landmark; nav stays reachable on small screens (the app shell's Drawer) and the work panel opens as its right Drawer when narrow"
   ],
   "defaults": [
-    "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; workspace switcher, Quick actions (⌘K), Notifications, Revenue / Customers / Invoices / Plans, Saved views and the account menu; the work panel titled Assistant with Tabs Ask (Chat titled with the period) and What changed, closed",
+    "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; workspace switcher, Quick actions (⌘K), Notifications, Revenue / Customers / Invoices / Plans, Saved views and the account menu; the work panel titled Assistant with Tabs Ask (Chat embedded: no header of its own, fills the panel) and What changed, closed",
     "Header: PageHeader Revenue overview with Export (outline) and the panel toggle; Tabs Overview, Subscribers, Churn, Cohorts (only Overview is built)",
     "Controls: period Select, granularity SegmentedControl, Compare to previous period Switch",
     "Metric strip: Scoreboard selectable with five framed Scorecards (KPI cards), each with a delta Badge, what it compares to and a sparkline",

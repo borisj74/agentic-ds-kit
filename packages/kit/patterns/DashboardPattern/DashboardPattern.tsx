@@ -619,8 +619,8 @@ export function DashboardPattern({
             label: "Ask",
             content: (
               <Chat
-                title={periodLabel}
-                radius="none"
+                title={`Ask about revenue, ${periodLabel.toLowerCase()}`}
+                embedded
                 messages={messages}
                 isThinking={thinking}
                 disabled={thinking}
