@@ -10,7 +10,9 @@ import type { SideNavItemData } from "agentic-ds-kit";
 // Content patterns are copy-in only (npx agentic-ds-kit add <id>), not package exports:
 // render them from their kit source.
 import { AppShellPattern } from "../../packages/kit/patterns/AppShellPattern";
-import { DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
+import { DASHBOARD_DEMO_SHELL, DashboardPattern } from "../../packages/kit/patterns/DashboardPattern";
+import type { AppShellNav, AppShellWorkspace } from "../../packages/kit/patterns/AppShellPattern";
+import { DemoLogo } from "./AppShellDemo";
 import type { DashboardPatternProps } from "../../packages/kit/patterns/DashboardPattern";
 import { sampleExchange } from "../../packages/kit/patterns/DashboardPattern/dashboard-data";
 import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
@@ -213,7 +215,11 @@ export function DashboardScreen({
     return (
       <DashboardPattern
         {...dashboardViewProps(pattern === "dashboard" ? view : undefined)}
-        shell={{ navLabel: "Agentix", nav: { title: "Agentix", mark: "A", items, footer: navFooter } }}
+        shell={{
+          // The app-shell example's logo, so the dashboard matches the App shell screens.
+          workspace: { ...(DASHBOARD_DEMO_SHELL.workspace as AppShellWorkspace), mark: <DemoLogo /> },
+          nav: { ...(DASHBOARD_DEMO_SHELL.nav as AppShellNav), markIcon: <DemoLogo onBrand /> },
+        }}
       />
     );
   }

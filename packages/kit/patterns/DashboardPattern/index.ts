@@ -1,4 +1,4 @@
-export { DashboardPattern } from "./DashboardPattern";
+export { DashboardPattern, DASHBOARD_DEMO_SHELL } from "./DashboardPattern";
 export type {
   DashboardPatternProps,
   DashboardPanelOptions,

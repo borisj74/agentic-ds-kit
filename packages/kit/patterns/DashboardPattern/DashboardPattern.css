@@ -47,6 +47,11 @@
   padding: var(--space-inset-md);
 }
 
+/* Holds the main chart and its summary, so the visually hidden summary stays inside the scroll area. */
+.dashboard-pattern__chart {
+  position: relative;
+}
+
 /* Read by screen readers after each chart: a one-line summary of what it shows. */
 .dashboard-pattern__sr {
   position: absolute;

@@ -98,20 +98,62 @@ export interface DashboardPatternProps {
 
 const ASK_ICON = "MessageCircle";
 
-/** Demo shell. Swap it for your app's nav through the shell prop, or edit it in your copy. */
-const DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
+/** Demo shell: the app-shell example's chrome (workspace, quick actions, Notifications, saved views, account) with rows for a billing product. Swap it through the shell prop, or edit it in your copy. */
+export const DASHBOARD_DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
   layout: "inset",
   className: "layout-shell--viewport",
+  workspace: {
+    name: "Agentix",
+    mark: "ChartLine",
+    menu: [
+      { heading: "Workspaces", items: [{ id: "agentix", label: "Agentix", selected: true }, { id: "agentix-eu", label: "Agentix EU" }] },
+      { items: [{ id: "new-workspace", label: "Create workspace", icon: "Plus" }] },
+    ],
+  },
   nav: {
-    title: "Meridian",
+    title: "Agentix",
     markIcon: "ChartLine",
     items: [
       { id: "revenue", label: "Revenue", icon: "ChartLine", active: true },
       { id: "customers", label: "Customers", icon: "Users", badge: "3,486" },
-      { id: "invoices", label: "Invoices", icon: "FileText" },
+      { id: "invoices", label: "Invoices", icon: "FileText", badge: "12" },
       { id: "plans", label: "Plans", icon: "Layers" },
     ],
-    footer: [{ id: "settings", label: "Settings", icon: "Settings" }],
+  },
+  search: {
+    groups: [
+      {
+        heading: "Go to",
+        items: [
+          { id: "revenue", label: "Revenue", icon: "ChartLine" },
+          { id: "customers", label: "Customers", icon: "Users" },
+          { id: "invoices", label: "Invoices", icon: "FileText" },
+          { id: "plans", label: "Plans", icon: "Layers" },
+        ],
+      },
+      { heading: "Actions", items: [{ id: "export", label: "Export this view", icon: "Download" }] },
+    ],
+  },
+  notifications: {
+    tabs: [
+      {
+        id: "billing",
+        label: "Billing",
+        items: [
+          { id: "n1", title: "Three payments failed on Growth", body: "Retries run on Friday", createdAt: "Yesterday", read: false, icon: "CreditCard" },
+          { id: "n2", title: "Kettle Analytics asked to cancel", body: "$2,180 MRR", createdAt: "Tue", read: false, icon: "TriangleAlert" },
+          { id: "n3", title: "October invoices sent", body: "3,412 invoices", createdAt: "Nov 1", read: true, icon: "FileText" },
+        ],
+      },
+      { id: "mentions", label: "Mentions", items: [], emptyTitle: "No mentions", emptyDescription: "When someone tags you on a report, it shows up here." },
+    ],
+  },
+  projects: {
+    label: "Saved views",
+    items: [
+      { id: "board-pack", label: "Q4 board pack", icon: "Folder" },
+      { id: "churn-review", label: "Churn review", icon: "Folder" },
+    ],
   },
   account: {
     name: "Ada Brennan",
@@ -186,7 +228,7 @@ function PagePanelToggle() {
  * Wide: the rail sits beside the charts and the table runs full width below, so its columns fit.
  * Narrow (the shell's --grid-breakpoint-md): one column, with the rail under the table.
  */
-function RailLayout({ main, table, rail }: { main: ReactNode; table: ReactNode; rail: ReactNode }) {
+function RailLayout({ main, table, rail, lead }: { main: ReactNode; table: ReactNode; rail: ReactNode; lead?: ReactNode }) {
   const narrow = useAppShell()?.narrow ?? false;
   if (!rail || narrow) {
     return (
@@ -201,11 +243,20 @@ function RailLayout({ main, table, rail }: { main: ReactNode; table: ReactNode; 
     <>
       <div className="layout-split--primary dashboard-pattern__split">
         <div className="dashboard-pattern__stack">{main}</div>
-        <div className="dashboard-pattern__stack">{rail}</div>
+        <div className="dashboard-pattern__stack">
+          {lead}
+          {rail}
+        </div>
       </div>
       {table}
     </>
   );
+}
+
+/** Renders its children only when the shell is narrow (or, with wide, only when it is wide). */
+function AtWidth({ wide = false, children }: { wide?: boolean; children: ReactNode }) {
+  const narrow = useAppShell()?.narrow ?? false;
+  return narrow === !wide ? <>{children}</> : null;
 }
 
 /**
@@ -325,9 +376,7 @@ export function DashboardPattern({
     mrr: moneyFull(row.mrr),
     change:
       row.change === 0 ? (
-        <Badge size="sm" tone="neutral">
-          No change
-        </Badge>
+        "—"
       ) : (
         <Badge size="sm" tone={row.change < 0 ? "danger" : "success"}>
           {moneyFull(row.change)}
@@ -344,6 +393,19 @@ export function DashboardPattern({
 
   const empty = !hasData;
   const noDataCopy = { emptyTitle: "No revenue yet", emptyDescription: "This fills in after your first paid invoice." };
+
+  const insightCard = showInsight ? (
+    <InsightCard
+            tone="info"
+            size="lg"
+            title="In short"
+            description={insightContent}
+            onDismiss={() => {
+              setInsightOpen(false);
+              onInsightDismiss?.();
+            }}
+          />
+  ) : null;
 
   const needsAttention = (
     <Card title="Needs attention" description="Which payments and cards need a person today?" size="sm" flush headerAction={askAction("Needs attention")}>
@@ -389,18 +451,8 @@ export function DashboardPattern({
         </div>
       </div>
 
-      {showInsight ? (
-        <InsightCard
-          tone="info"
-          size="lg"
-          title="In short"
-          description={insightContent}
-          onDismiss={() => {
-            setInsightOpen(false);
-            onInsightDismiss?.();
-          }}
-        />
-      ) : null}
+      {/* The summary: above the metrics when narrow; at the top of the rail, beside the main chart, when wide. */}
+      {rail ? <AtWidth>{insightCard}</AtWidth> : insightCard}
 
       {loading ? (
         <Card size="md">
@@ -424,10 +476,8 @@ export function DashboardPattern({
           />
         </Card>
       ) : (
-        <Card size="md">
-          <Scoreboard
+        <Scoreboard
             aria-label="Metric shown in the chart"
-            appearance="divided"
             selectable
             value={metric?.id}
             onValueChange={setSelected}
@@ -441,11 +491,11 @@ export function DashboardPattern({
               sparkline: m.sparkline,
             }))}
           />
-        </Card>
       )}
 
       <RailLayout
         rail={rail ? needsAttention : null}
+        lead={insightCard}
         main={
           <>
             <StateCard
@@ -456,7 +506,7 @@ export function DashboardPattern({
               {...noDataCopy}
             >
               {metric ? (
-                <div>
+                <div className="dashboard-pattern__chart">
                   <LineChart
                     key={`${metric.id}-${period}-${granularity}`}
                     title={metric.label}
@@ -472,31 +522,30 @@ export function DashboardPattern({
               ) : null}
             </StateCard>
 
-            <div className="layout-split">
-              <StateCard title="MRR movements" description="Where did this period's change come from?" loading={loading} empty={empty} {...noDataCopy}>
-                <ComboChart
-                  title="MRR movements"
-                  description="Where did this period's change come from?"
-                  stack="stacked"
-                  data={movements}
-                  bars={MOVEMENT_KEYS.map(({ key, label }) => ({ key, label }))}
-                  line={{ key: "net", label: "Net new MRR" }}
-                  valueFormatter={{ bars: money, line: money }}
-                  actions={askButton("MRR movements")}
-                />
-              </StateCard>
-              <StateCard title="Revenue by plan" description="Which plans carry recurring revenue?" loading={loading} empty={empty} {...noDataCopy}>
-                <LineChart
-                  title="Revenue by plan"
-                  description="Which plans carry recurring revenue?"
-                  variant="area"
-                  stack="stacked"
-                  labels={labels}
-                  series={plans}
-                  actions={askButton("Revenue by plan")}
-                />
-              </StateCard>
-            </div>
+            <StateCard title="MRR movements" description="Where did this period's change come from?" loading={loading} empty={empty} {...noDataCopy}>
+              <ComboChart
+                title="MRR movements"
+                description="Where did this period's change come from?"
+                stack="stacked"
+                data={movements}
+                bars={MOVEMENT_KEYS.map(({ key, label }) => ({ key, label }))}
+                line={{ key: "net", label: "Net new MRR" }}
+                valueFormatter={{ bars: money, line: money }}
+                actions={askButton("MRR movements")}
+              />
+            </StateCard>
+            <StateCard title="Revenue by plan" description="What share of MRR does each plan bring in?" loading={loading} empty={empty} height={160} {...noDataCopy}>
+              <LineChart
+                title="Revenue by plan"
+                description="What share of MRR does each plan bring in?"
+                variant="area"
+                stack="percent"
+                height={160}
+                labels={labels}
+                series={plans}
+                actions={askButton("Revenue by plan")}
+              />
+            </StateCard>
 
             <div className="layout-split">
               <StateCard
@@ -553,7 +602,7 @@ export function DashboardPattern({
     </div>
   );
 
-  const shellProps = { ...DEMO_SHELL, ...shell };
+  const shellProps = { ...DASHBOARD_DEMO_SHELL, ...shell };
 
   return (
     <AppShellPattern
@@ -570,7 +619,7 @@ export function DashboardPattern({
             label: "Ask",
             content: (
               <Chat
-                title="Ask about revenue"
+                title={periodLabel}
                 radius="none"
                 messages={messages}
                 isThinking={thinking}
