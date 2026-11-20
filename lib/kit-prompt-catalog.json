@@ -4266,7 +4266,8 @@
         "An inline assistant beside a workspace",
         "A help thread with send and a thinking state",
         "Suggested prompts above a composer",
-        "Asking about one part of a screen, like a chart card, with context naming it"
+        "Asking about one part of a screen, like a chart card, with context naming it",
+        "A tab of a work panel or Drawer that already has its own title and edge — embedded"
       ],
       "doNotUseWhen": [
         "A blocking overlay — use Modal",
@@ -4279,7 +4280,9 @@
         "Do not use Modal for an inline assistant panel",
         "Do not override Chat radius from the host — use radius none for a full-height workspace rail",
         "Do not use raw hex",
-        "Do not use product-specific, billing-platform, or copilot wording in copy"
+        "Do not use product-specific, billing-platform, or copilot wording in copy",
+        "Do not hide or restyle the Chat header from the host — use embedded",
+        "Do not use embedded for a standalone chat card; it has no title on screen"
       ],
       "props": {
         "title": {
@@ -4374,6 +4377,11 @@
           ],
           "default": "lg",
           "note": "lg is the standalone card. none squares the panel and drops the outer block/end borders so Chat can sit flush in a workspace rail."
+        },
+        "embedded": {
+          "type": "boolean",
+          "default": false,
+          "note": "Inside a host that already has a title, an edge and padding (a work panel tab, a Drawer): no header band, no outer border, no inline insets of its own, and it fills the host height (min 20rem). Suggestions line up with the thread text. title still names the section; status, onClose and menuItems are not shown."
         },
         "className": {
           "type": "string",
@@ -5606,6 +5614,11 @@
           "type": "string",
           "default": "Tabs",
           "required": false
+        },
+        "fill": {
+          "type": "boolean",
+          "default": false,
+          "note": "The panel takes the height left under the tab list and its child stretches to it, for a full-height tab such as Chat embedded. Tabs needs a height or a flex/grid slot from its host."
         }
       }
     },
@@ -12965,7 +12978,7 @@
         "workPanel": {
           "type": "object",
           "required": false,
-          "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome)."
+          "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome). The Tabs fill the panel height (Tabs fill), so a tab can hold a full-height child such as Chat embedded."
         },
         "mark": {
           "type": "string | node",
