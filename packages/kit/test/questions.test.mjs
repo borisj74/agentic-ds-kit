@@ -137,8 +137,9 @@ describe("questions: schema", () => {
   test("--enums own (default), all, none", () => {
     const overlay = { composites: [{ label: "Table card", contracts: ["card", "datatable"], sentence: "x", base: "datatable" }] };
     const own = buildQuestions({ only: ["barchart", "dashboard"], overlay }).enums;
-    // Own contracts only: barchart, the composite's base (datatable); not card, not the dashboard's parts.
-    assert.deepEqual([...new Set(own.map((e) => e.component))], ["barchart", "datatable"]);
+    // Own contracts only: barchart, the dashboard's own enums (period, granularity), the composite's
+    // base (datatable); not card, not the dashboard's parts.
+    assert.deepEqual([...new Set(own.map((e) => e.component))], ["barchart", "dashboard", "datatable"]);
     const all = buildQuestions({ only: ["barchart", "dashboard"], overlay, enums: "all" }).enums;
     assert.ok(all.some((e) => e.component === "card"));
     assert.ok(all.length > own.length);

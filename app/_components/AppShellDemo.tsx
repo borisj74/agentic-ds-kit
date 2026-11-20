@@ -143,7 +143,7 @@ const VIEW_NOTES: Record<ShellView, string> = {
  * in currentColor so it takes the kit brand colour (--icon-brand), or the on-brand colour on the
  * brand fill when it is the nav mark. Passed through the `logo` / `mark` slots at --space-5.
  */
-function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
+export function DemoLogo({ onBrand = false }: { onBrand?: boolean }) {
   return (
     <svg
       viewBox="0 0 63 59"

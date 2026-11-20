@@ -163,7 +163,12 @@ export function PatternPreview({
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const theme = usePatternTheme();
   const [mode, setMode] = useState<Mode | null>(null);
-  const [device, setDevice] = useState<Device>("desktop");
+  const viewDevice: Device = views.find((item) => item.id === view)?.device ?? "desktop";
+  // A screen that is a phone view (e.g. Mobile 390) opens at that width; a pick on the Width control
+  // holds until another screen is chosen.
+  const [picked, setPicked] = useState<{ view: string; device: Device } | null>(null);
+  const device: Device = picked?.view === view ? picked.device : viewDevice;
+  const setDevice = (next: Device) => setPicked({ view, device: next });
   const pathname = usePathname();
   const customize = useCustomizeOpen(pathname);
   const shownMode: Mode = mode ?? theme?.mode ?? "light";

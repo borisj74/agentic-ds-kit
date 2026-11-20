@@ -73,6 +73,14 @@ const PREVIEW_LABEL: Record<ThemePatternId, string> = {
 
 export function ThemePatternPreview({ pattern }: { pattern: ThemePatternId }) {
   const active = pattern === "settings" ? "settings" : "overview";
+  // The dashboard brings its own app shell (with the Ask work panel); it only drops the viewport height here.
+  if (pattern === "dashboard") {
+    return (
+      <ScaledFrame label={PREVIEW_LABEL[pattern]}>
+        <DashboardPattern shell={{ className: undefined }} />
+      </ScaledFrame>
+    );
+  }
   return (
     <ScaledFrame label={PREVIEW_LABEL[pattern]}>
       <AppShellPattern
@@ -99,7 +107,6 @@ export function ThemePatternPreview({ pattern }: { pattern: ThemePatternId }) {
           items: NAV.map((item) => ({ ...item, active: item.id === active })),
         }}
       >
-        {pattern === "dashboard" ? <DashboardPattern /> : null}
         {pattern === "list" ? <ListDetailPattern /> : null}
         {pattern === "settings" ? <SettingsFormPattern /> : null}
       </AppShellPattern>

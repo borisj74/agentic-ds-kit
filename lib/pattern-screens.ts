@@ -10,6 +10,8 @@ import type { BillingState, SettingsSection, TeamState } from "../packages/kit/p
 export interface ScreenView {
   id: string;
   label: string;
+  /** Show this screen at phone width (390) in the preview and its thumbnail. */
+  device?: "mobile";
 }
 
 /** The screens on Paper p-6-0 (Settings set). Each one is a section plus that section's state. */
@@ -50,7 +52,15 @@ export type ScreenSlug = Exclude<PatternSlug, "layouts">;
 
 /** Each screen's states; the first is the default. One entry: no state picker. */
 export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
-  dashboard: [{ id: "overview", label: "Overview" }],
+  dashboard: [
+    { id: "overview", label: "Overview" },
+    { id: "compare", label: "Compare on" },
+    { id: "metric", label: "Different metric selected" },
+    { id: "chat", label: "Chat open" },
+    { id: "empty", label: "No data yet" },
+    { id: "loading", label: "Loading" },
+    { id: "mobile", label: "Mobile 390", device: "mobile" },
+  ],
   "settings-form": [{ id: "default", label: "Settings form" }],
   "list-detail": [{ id: "default", label: "List detail" }],
   "empty-first-run": [{ id: "default", label: "First run" }],
@@ -91,7 +101,7 @@ export function isScreenSlug(slug: string): slug is ScreenSlug {
 
 /** One line per pattern page: the index card description and the page lead. */
 export const PATTERN_BLURBS: Record<PatternSlug, string> = {
-  dashboard: "Overview with a KPI strip, chart, and task table.",
+  dashboard: "Revenue overview: metric strip that drives the main chart, movements, plans, retention, accounts that might churn, and an Ask panel.",
   "settings-form": "Grouped settings fields with save and cancel.",
   "list-detail": "A list of records beside the one you selected.",
   "empty-first-run": "First-run empty state with one primary action.",
