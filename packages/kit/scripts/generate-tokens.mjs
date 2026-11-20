@@ -164,16 +164,10 @@ function gridVars() {
 
 function radiusVars() {
   return [
-    "  /* Radius from one base (Cards curve: xs 3, sm 5, md 6, lg 8, xl 10, 2xl 13, 3xl 19) */",
-    "  --radius-base: 8px;",
-    "  --radius-xs: calc(var(--radius-base) * 3 / 8);",
-    "  --radius-sm: calc(var(--radius-base) * 5 / 8);",
-    "  --radius-md: calc(var(--radius-base) * 6 / 8);",
-    "  --radius-lg: var(--radius-base);",
-    "  --radius-xl: calc(var(--radius-base) * 10 / 8);",
-    "  --radius-2xl: calc(var(--radius-base) * 13 / 8);",
-    "  --radius-3xl: calc(var(--radius-base) * 19 / 8);",
-    "  --radius-full: 9999px;",
+    "  /* Radius: fixed scale on a 4px grid with 2px steps. --radius-base is 8px and generates nothing. */",
+    ...["base", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "full"].map(
+      (step) => `  --radius-${step}: ${tokens.primitive.radius[step]};`,
+    ),
     "  --radius-0: 0;",
     "  --radius-50: var(--radius-xs);",
     "  --radius-100: var(--radius-sm);",

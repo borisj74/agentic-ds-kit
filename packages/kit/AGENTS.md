@@ -24,6 +24,7 @@ Never rebuild a block or organism by hand from atoms when the kit has it. If not
 Build pages with the kit's layout classes: `layout-shell`, `layout-app`, `layout-canvas`, `layout-header`, `layout-content`, `layout-workspace`, `layout-split` (`--primary`, `--secondary`, `--thirds`, `--quarters`) and `layout-metrics`.
 For any custom grid, use the `--grid-*` tokens: `--grid-columns` (12), `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`, `--grid-breakpoint-*`.
 Don't hard-code column counts, max-widths, gutters or breakpoint values; no raw px/rem in `grid-template-columns`, `gap` or `max-width` when a token exists.
+Radius and spacing use only 2 or 4px steps: pick a `--radius-*` or `--space-*` token, and never a value off that grid (no 3px, 5px, 10px or 13px corners or gaps).
 If a layout can't be done with these, stop and propose a new layout class or token instead of a one-off.
 
 Copy this file to your app root as `AGENTS.md` (and `CLAUDE.md` with `@AGENTS.md`) so Cursor and Claude Code load it.
