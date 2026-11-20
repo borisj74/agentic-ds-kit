@@ -511,47 +511,53 @@ export function clampRadius(value: number): number {
   return Math.min(48, Math.max(0, Math.round(value / 2) * 2));
 }
 
+/** Round to the nearest 2px step so a scaled corner stays on the 2 and 4px grid. */
+function step2(value: number): number {
+  return Math.round(value / 2) * 2;
+}
+
+/** Scale the fixed kit steps (xs 2, sm 4, md 6, lg 8, xl 12, 2xl 16, 3xl 24) to a chosen lg. */
 export function radiusReadout(basePx: number, pill: boolean) {
   const base = clampRadius(basePx);
-  const px = (part: number) => Math.round((base * part) / 8);
-  return { xs: px(3), sm: px(5), md: px(6), lg: base, xl: px(10), card: px(10), pill };
+  const px = (part: number) => step2((base * part) / 8);
+  return { xs: px(2), sm: px(4), md: px(6), lg: base, xl: px(12), card: px(12), pill };
 }
 
 function radiusVars(basePx: number, pill: boolean): Record<string, string> {
   const base = clampRadius(basePx);
-  const px = (part: number) => `${Math.round((base * part) / 8)}px`;
+  const px = (part: number) => `${step2((base * part) / 8)}px`;
   const lg = `${base}px`;
   const control = pill ? "9999px" : null;
   return {
     "--radius-base": lg,
-    "--radius-xs": px(3),
-    "--radius-sm": px(5),
+    "--radius-xs": px(2),
+    "--radius-sm": px(4),
     "--radius-md": px(6),
     "--radius-lg": lg,
-    "--radius-xl": px(10),
-    "--radius-2xl": px(13),
-    "--radius-3xl": px(19),
-    "--radius-control-sm": control ?? px(3),
+    "--radius-xl": px(12),
+    "--radius-2xl": px(16),
+    "--radius-3xl": px(24),
+    "--radius-control-sm": control ?? px(2),
     "--radius-control-md": control ?? px(6),
     "--radius-control-lg": control ?? lg,
     "--radius-pill": "9999px",
     "--radius-surface-sm": lg,
-    "--radius-surface-md": px(10),
-    "--radius-surface-lg": px(13),
+    "--radius-surface-md": px(12),
+    "--radius-surface-lg": px(16),
     "--radius-media-sm": px(6),
     "--radius-media-md": lg,
-    "--radius-media-lg": px(10),
-    "--radius-50": px(3),
-    "--radius-100": px(5),
+    "--radius-media-lg": px(12),
+    "--radius-50": px(2),
+    "--radius-100": px(4),
     "--radius-200": lg,
-    "--radius-300": px(10),
-    "--radius-400": px(13),
-    "--radius-500": px(19),
-    "--radius-600": px(19),
+    "--radius-300": px(12),
+    "--radius-400": px(16),
+    "--radius-500": px(24),
+    "--radius-600": px(24),
   };
 }
 
-/** Semantic radii and shadows are calc()/var() on :root, so a child --radius-base does not move them. Restate them on the scope. */
+/** Radius steps are fixed and semantic radii and shadows are var() on :root, so the scope restates them. */
 const SHADOW_ALIASES: Record<string, string> = {
   "--shadow-100": "var(--shadow-xs)",
   "--shadow-150": "var(--shadow-xs)",
@@ -933,7 +939,7 @@ Theme for Nistha. Reassign semantic roles to primitive ramps. Do not put hex in 
 
 ## Radius
 
-\`--radius-base: ${readout.lg}px\`. Derived: xs ${readout.xs}, sm ${readout.sm}, md ${readout.md}, lg ${readout.lg}, xl ${readout.xl}, card ${readout.card}. ${state.pill ? "Buttons and inputs use pill radius (9999px). Surfaces stay on the scale." : "Buttons and inputs follow the control radii."}
+Steps on 2px: xs ${readout.xs}, sm ${readout.sm}, md ${readout.md}, lg ${readout.lg}, xl ${readout.xl}, card ${readout.card}. Set each step; \`--radius-base\` does not move them. ${state.pill ? "Buttons and inputs use pill radius (9999px). Surfaces stay on the scale." : "Buttons and inputs follow the control radii."}
 
 ## Spacing
 

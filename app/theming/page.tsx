@@ -256,9 +256,9 @@ export default function ThemingPage() {
           <div className={playground.stack}>
             <CodeBlock code={RADIUS} />
             <p className={playground.body}>
-              One --radius-base drives xs…3xl (3, 5, 6, 8, 10, 13, 19). Controls use
+              The scale is fixed on 2 and 4px steps: xs…3xl are 2, 4, 6, 8, 12, 16, 24. Controls use
               --radius-control-*. Cards and dialogs use --radius-surface-*. Badges use
-              --radius-pill. Components never read the base directly.
+              --radius-pill. --radius-base stays 8px and does not move the scale.
             </p>
           </div>
         </Section>

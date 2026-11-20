@@ -14,12 +14,12 @@ describe("theme scope", () => {
   test("radius 48 redeclares derived radius tokens", () => {
     const decls = themeDeclarations({ ...presetState("ink", "light"), radius: 48, pill: false }, "light", "preview");
     assert.equal(decls["--radius-base"], "48px");
-    assert.equal(decls["--radius-xs"], "18px");
-    assert.equal(decls["--radius-sm"], "30px");
+    assert.equal(decls["--radius-xs"], "12px");
+    assert.equal(decls["--radius-sm"], "24px");
     assert.equal(decls["--radius-md"], "36px");
     assert.equal(decls["--radius-lg"], "48px");
-    assert.equal(decls["--radius-xl"], "60px");
-    assert.equal(decls["--radius-surface-md"], "60px");
+    assert.equal(decls["--radius-xl"], "72px");
+    assert.equal(decls["--radius-surface-md"], "72px");
     assert.equal(decls["--radius-control-md"], "36px");
   });
 
@@ -28,7 +28,7 @@ describe("theme scope", () => {
     assert.equal(decls["--radius-control-sm"], "9999px");
     assert.equal(decls["--radius-control-md"], "9999px");
     assert.equal(decls["--radius-control-lg"], "9999px");
-    assert.equal(decls["--radius-surface-md"], "60px");
+    assert.equal(decls["--radius-surface-md"], "72px");
     assert.equal(decls["--radius-base"], "48px");
   });
 

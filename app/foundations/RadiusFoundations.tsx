@@ -11,13 +11,13 @@ type Tab = "primitives" | "semantics";
 
 const SCALE = [
   { name: "base", px: "8px" },
-  { name: "xs", px: "3px" },
-  { name: "sm", px: "5px" },
+  { name: "xs", px: "2px" },
+  { name: "sm", px: "4px" },
   { name: "md", px: "6px" },
   { name: "lg", px: "8px" },
-  { name: "xl", px: "10px" },
-  { name: "2xl", px: "13px" },
-  { name: "3xl", px: "19px" },
+  { name: "xl", px: "12px" },
+  { name: "2xl", px: "16px" },
+  { name: "3xl", px: "24px" },
   { name: "full", px: "9999px" },
 ] as const;
 
@@ -38,7 +38,7 @@ export function RadiusFoundations() {
     <div className={colorStyles.colorSection}>
       <FoundationTabList value={tab} onChange={setTab} ariaLabel="Radius views" />
       <p className={colorStyles.lead}>
-        Use semantic radius roles in components. Primitives are the source corner scale.
+        Use semantic radius roles in components. Primitives are a fixed corner scale on 2 and 4px steps.
       </p>
       {tab === "semantics" ? (
         <div className={styles.sections}>
@@ -69,7 +69,7 @@ export function RadiusFoundations() {
         <section className={styles.scale}>
           <header className={styles.header}>
             <h3 className={styles.title}>Scale</h3>
-            <code className={styles.pattern}>radius-base → radius-full</code>
+            <code className={styles.pattern}>radius-xs → radius-full</code>
           </header>
           <div className={styles.list}>
             {SCALE.map((step) => (
