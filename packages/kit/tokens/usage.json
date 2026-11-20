@@ -433,8 +433,8 @@
       "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
     },
     "--chart-5": {
-      "note": "Chart series 5 (slate).",
-      "useWhen": "Series 5 when a chart shows 5 or more series",
+      "note": "Chart series 5 (slate). Also the dashed previous period in charts and Scorecard expressive sparklines.",
+      "useWhen": "Series 5 when a chart shows 5 or more series, or a previous-period comparison line",
       "doNot": "Do not use outside data marks (bars, lines, slices, legend swatches)"
     },
     "--chart-6": {

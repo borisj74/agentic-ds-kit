@@ -29,10 +29,21 @@
   padding: var(--space-inset-xl);
 }
 
+/* Stretched strip cell: rows stay at the top so headers line up, and the footer (or chart) sits at the
+   foot, on the same line as its neighbours' bottom rows. */
 .fill {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: none;
   height: 100%;
+}
+
+.fill:not(.stacked) > .footer {
+  margin-block-start: auto;
+  /* The footer's taller line box (body) sits half a step lower, so its text shares a baseline with the
+     dates, meter row and legend (ui-xs) in neighbouring cards. */
+  margin-block-end: calc((var(--type-line-ui-xs) - var(--type-line-body)) / 2);
 }
 
 /* Plain: no frame, for a divided strip. Scoreboard draws the dividers. */
@@ -50,8 +61,199 @@
   stroke: var(--chart-1);
   /* Data line, not an icon: same weight as the kit's icon stroke so it reads at small size. */
   stroke-width: var(--icon-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+/* Reference, expressive and meter looks: the chart sits at the card's foot, so cards in a row line up. */
+.stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.visual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  min-width: 0;
+  margin-block-start: auto;
+}
+
+.plot {
+  position: relative;
+  display: block;
+  height: var(--space-12);
+}
+
+/* Room for the latest-point band and the end dot inside the card padding. */
+.plotExpressive {
+  margin-inline-end: var(--space-2);
+}
+
+.plotSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: var(--border-faint);
+  stroke-opacity: var(--opacity-muted);
+  stroke-width: 1;
+}
+
+.areaStopTop {
+  stop-color: var(--chart-1);
+  stop-opacity: 0.2;
+}
+
+.areaStopBottom {
+  stop-color: var(--chart-1);
+  stop-opacity: 0;
+}
+
+.dataLine {
+  fill: none;
+  stroke: var(--chart-1);
+  stroke-width: 2;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+/* Previous period: quieter and dashed. */
+.compareLine {
+  fill: none;
+  stroke: var(--chart-5);
+  stroke-width: var(--icon-stroke);
+  stroke-dasharray: var(--space-1) var(--space-1);
+}
+
+/* text.muted, as in LineChart: the guide must stay visible on dark cards. */
+.referenceLine {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: var(--space-1) var(--space-1);
+}
+
+/* Label at the start of the guide, away from the last points and their dots. */
+.referenceLabel {
+  position: absolute;
+  inset-inline-start: 0;
+  transform: translateY(calc(-100% - var(--space-px)));
+  color: var(--text-secondary);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Last points: a deeper shade of the line, darker on light cards and lighter on dark ones. */
+.highlightDot {
+  position: absolute;
+  width: calc(var(--space-1) * 1.5);
+  height: calc(var(--space-1) * 1.5);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--chart-1) 55%, var(--text-primary));
+  transform: translate(-50%, -50%);
+}
+
+/* A faint column behind the latest point. */
+.latestBand {
+  position: absolute;
+  inset-block: 0;
+  width: var(--space-4);
+  background: color-mix(in srgb, var(--chart-1) 8%, transparent);
+  transform: translateX(-50%);
+}
+
+.endDot {
+  position: absolute;
+  width: var(--space-2);
+  height: var(--space-2);
+  box-sizing: border-box;
+  border: var(--border-width-thin) solid var(--surface-card);
+  border-radius: var(--radius-pill);
+  background: var(--chart-1);
+  transform: translate(-50%, -50%);
+}
+
+/* Latest point's value on the end dot: mono, the only mono text on the card besides badges. */
+.endTag {
+  position: absolute;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-xs);
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transform: translate(calc(-100% + var(--space-1)), calc(-100% - var(--space-2)));
+}
+
+.dates,
+.meterRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-inline-sm);
+  color: var(--text-muted);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.meterRow {
+  color: var(--text-secondary);
+}
+
+.meterPercent {
+  color: var(--text-primary);
+  font-weight: var(--type-weight-label);
+}
+
+.meterOver {
+  margin-inline-start: var(--space-inline-xs);
+  color: var(--text-warning);
+}
+
+.meterLabel {
+  min-width: 0;
+  text-align: end;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-inline-xs) var(--space-inline-sm);
+  color: var(--text-muted);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline-xs);
+}
+
+.swatch {
+  width: var(--space-3);
+  height: var(--space-px);
+  background: var(--chart-1);
+}
+
+.swatchDashed {
+  background: repeating-linear-gradient(
+    to right,
+    var(--chart-5) 0 var(--space-1),
+    transparent var(--space-1) calc(var(--space-1) * 1.5)
+  );
 }
 
 .header {

@@ -29,7 +29,7 @@
       "itemContract": "scorecard",
       "required": true,
       "minItems": 2,
-      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor. With selectable, each item's id (or label) is its value."
+      "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor: the cards share the strip's width (12rem minimum, layout.metricsMin) and scroll once that no longer fits. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
     },
     "scroll": {
       "type": "boolean",
@@ -102,5 +102,5 @@
     "Do not build a metric picker from Scorecard toggles by hand — use selectable",
     "Do not use selectable for actions; each card picks a view, it does not navigate"
   ],
-  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }, { label: 'Users', value: '12.4k', delta: '+4.1%', trend: 'up' }, { label: 'NPS', value: '64', delta: '+2', trend: 'up' }]} />\n\n<Scoreboard\n  aria-label=\"Chart metric\"\n  appearance=\"divided\"\n  selectable\n  value={metric}\n  onValueChange={setMetric}\n  items={[\n    { id: \"mrr\", label: \"MRR\", value: \"$412k\", badge: \"+4.2%\", badgeTone: \"success\", sparkline: [380, 391, 398, 405, 412] },\n    { id: \"churn\", label: \"Churn\", value: \"2.1%\", badge: \"-0.3 pt\", badgeTone: \"success\", sparkline: [2.6, 2.5, 2.4, 2.2, 2.1] },\n  ]}\n/>"
+  "snippet": "<Scoreboard items={[{ label: 'Revenue', value: '$48.2k', delta: '+12.4%', trend: 'up' }, { label: 'Churn', value: '1.2%', delta: '-0.3%', trend: 'down' }, { label: 'Users', value: '12.4k', delta: '+4.1%', trend: 'up' }, { label: 'NPS', value: '64', delta: '+2', trend: 'up' }]} />\n\n<Scoreboard\n  aria-label=\"Chart metric\"\n  appearance=\"divided\"\n  selectable\n  value={metric}\n  onValueChange={setMetric}\n  items={[\n    { id: \"mrr\", label: \"MRR\", value: \"$412k\", badge: \"+4.2%\", badgeTone: \"success\", sparkline: [380, 391, 398, 405, 412] },\n    { id: \"churn\", label: \"Churn\", value: \"2.1%\", badge: \"-0.3 pt\", badgeTone: \"success\", sparkline: [2.6, 2.5, 2.4, 2.2, 2.1] },\n  ]}\n/>\n\n<Scoreboard items={[\n  { label: \"MRR\", value: \"$412.6k\", sparkline: mrr, sparklineVariant: \"reference\", reference: { value: 400, label: \"Target $400k\" }, highlightLast: 4 },\n  { label: \"Churn rate\", value: \"2.1%\", meter: { value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" } },\n]} />"
 }
