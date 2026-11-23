@@ -17,9 +17,9 @@ import {
 } from "../shared/chartMath";
 import { measureLabel } from "../shared/measureLabel";
 import { linearPath, reversedCurveCommands, smoothPath } from "../shared/curve";
-import { formatPercent, sharePercent, stackLayers, warnStackMisuse, type StackResult } from "./lineChart.logic";
+import { formatPercent, formatSigned, lastFiniteIndex, sharePercent, stackLayers, warnStackMisuse, type StackResult } from "./lineChart.logic";
 import { useChartSize } from "../shared/useChartSize";
-import type { LineChartProps, LineChartReference, LineChartSeries } from "./LineChart.types";
+import type { LineChartChangeStrip, LineChartProps, LineChartReference, LineChartSeries } from "./LineChart.types";
 import styles from "./LineChart.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
@@ -31,7 +31,17 @@ export type {
   LineChartSeries,
   LineChartReference,
   LineChartReferenceHighlight,
+  LineChartChangeStrip,
 } from "./LineChart.types";
+
+/** Space between the plot and the change strip, and the strip's own height. */
+const STRIP_GAP = 24;
+const STRIP_HEIGHT = 48;
+/** Widest change-strip bar. */
+const STRIP_BAR_MAX = 12;
+/** Strip axis labels sit this far inside its top and bottom, clear of the plot's floor label. */
+const STRIP_LABEL_INSET = 4;
+
 
 /** True when a value is past the reference line on the highlighted side. */
 export function pastReference(value: number | undefined, reference: LineChartReference | undefined): boolean {
@@ -64,6 +74,17 @@ type TickMark = {
 
 type CategoryLabel = { index: number; label: string; x: number; y: number };
 
+type StripBar = { index: number; x: number; y: number; width: number; height: number };
+
+type StripGeom = {
+  top: number;
+  bottom: number;
+  zeroY: number;
+  bars: StripBar[];
+  upperLabel: string;
+  lowerLabel: string;
+};
+
 type SampleHit = {
   index: number;
   label: string;
@@ -83,6 +104,7 @@ const EMPTY_LAYOUT = {
   plotTop: 0,
   plotBottom: 0,
   referenceY: null as number | null,
+  strip: null as StripGeom | null,
 };
 
 function ChartTable({
@@ -90,12 +112,15 @@ function ChartTable({
   series,
   totals,
   reference,
+  strip,
 }: {
   labels: string[];
   series: ChartSeries[];
   totals?: number[];
   reference?: LineChartReference;
+  strip?: LineChartChangeStrip;
 }) {
+  const formatStrip = strip?.format ?? formatSigned;
   return (
     <div className={frameStyles.tableScroll}>
       <table className={frameStyles.table}>
@@ -113,6 +138,7 @@ function ChartTable({
               </th>
             ))}
             {totals ? <th scope="col">Total</th> : null}
+            {strip ? <th scope="col">{strip.label}</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -123,6 +149,9 @@ function ChartTable({
                 <td key={seriesIndex}>{formatValue(entry.data[index] ?? 0)}</td>
               ))}
               {totals ? <td>{formatValue(totals[index] ?? 0)}</td> : null}
+              {strip ? (
+                <td>{Number.isFinite(strip.data[index]) ? formatStrip(strip.data[index]) : "—"}</td>
+              ) : null}
             </tr>
           ))}
         </tbody>
@@ -137,7 +166,9 @@ function Legend({
   onActivate,
   onClear,
   topFirst = false,
+  strip,
 }: {
+  strip?: { label: string; color: string };
   series: ChartSeries[];
   active: number | null;
   onActivate: (seriesIndex: number) => void;
@@ -173,6 +204,14 @@ function Legend({
           </li>
         );
       })}
+      {strip ? (
+        <li>
+          <span className={`${frameStyles.legendItem} ${frameStyles.legendButton} ${styles.legendStatic}`}>
+            <span className={`${frameStyles.legendSwatch} ${styles.swatchBar}`} style={{ background: strip.color }} aria-hidden />
+            <span>{strip.label}</span>
+          </span>
+        </li>
+      ) : null}
     </ul>
   );
 }
@@ -210,6 +249,11 @@ export function LineChart({
   formatLabel,
   animate = false,
   referenceLine,
+  highlightLast = false,
+  changeStrip,
+  error,
+  onRetry,
+  tooltipNote,
   className,
   ref: rootRef,
   ...rest
@@ -233,7 +277,12 @@ export function LineChart({
   const isStacked = isArea && stack !== "none";
   const isPercent = isStacked && stack === "percent";
   warnStackMisuse(stack, isArea, series);
-  const showLegend = series.filter((entry) => entry.label.trim().length > 0).length >= 2;
+  const strip = changeStrip && changeStrip.data.some((value) => Number.isFinite(value)) ? changeStrip : undefined;
+  const formatStrip = strip?.format ?? formatSigned;
+  // The strip and the latest-value dot take the first solid series' colour.
+  const accentColor = series.find((entry) => !isDashed(entry))?.color ?? series[0]?.color ?? "var(--chart-1)";
+  const svgHeight = strip ? height + STRIP_GAP + STRIP_HEIGHT : height;
+  const showLegend = series.filter((entry) => entry.label.trim().length > 0).length >= 2 || Boolean(strip);
 
   const layout = useMemo(() => {
     if (isEmpty || width <= 0) return EMPTY_LAYOUT;
@@ -284,6 +333,29 @@ export function LineChart({
           return { ...entry, dashed, seriesIndex, points, linePath, areaPath };
         });
 
+    // Change strip: its own symmetric scale around zero, between the plot and the axis labels.
+    let stripGeom: StripGeom | null = null;
+    if (strip) {
+      const top = plotBottom + STRIP_GAP;
+      const bottom = top + STRIP_HEIGHT;
+      const peak = strip.data.reduce((max, value) => (Number.isFinite(value) ? Math.max(max, Math.abs(value)) : max), 0) || 1;
+      const extent = niceTicks(-peak, peak, 3);
+      const reach = Math.max(Math.abs(extent.min), Math.abs(extent.max)) || 1;
+      const stripScale = linearScale([-reach, reach], [bottom, top]);
+      const zeroY = stripScale(0);
+      const spacing = labels.length > 1 ? xScale(1) - xScale(0) : plotRight - plotLeft;
+      const barWidth = Math.max(1, Math.min(STRIP_BAR_MAX, spacing * 0.6));
+      const bars: StripBar[] = [];
+      labels.forEach((_, index) => {
+        const value = strip.data[index];
+        if (value === undefined || !Number.isFinite(value) || value === 0) return;
+        const end = stripScale(value);
+        bars.push({ index, x: xScale(index) - barWidth / 2, y: Math.min(zeroY, end), width: barWidth, height: Math.abs(end - zeroY) });
+      });
+      stripGeom = { top, bottom, zeroY, bars, upperLabel: formatStrip(reach), lowerLabel: formatStrip(-reach) };
+    }
+    const labelsY = (stripGeom ? stripGeom.bottom : plotBottom) + 18;
+
     const categoryLabels: CategoryLabel[] = axisLabels(labels, {
       spacing: labels.length > 1 ? xScale(1) - xScale(0) : plotRight - plotLeft,
       tickInterval,
@@ -293,7 +365,7 @@ export function LineChart({
       index,
       label,
       x: xScale(index),
-      y: plotBottom + 18,
+      y: labelsY,
     }));
 
     const tickMarks: TickMark[] = ticks.map((tick) => ({
@@ -316,8 +388,16 @@ export function LineChart({
 
     const referenceY = refValue === null ? null : yScale(refValue);
 
-    return { stacked, lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom, referenceY };
-  }, [curve, formatLabel, height, includeZero, isArea, isEmpty, isPercent, isStacked, labels, referenceLine, series, tickInterval, width]);
+    return { stacked, lines, ticks: tickMarks, categoryLabels, samples, plotLeft, plotRight, plotTop, plotBottom, referenceY, strip: stripGeom };
+  }, [curve, formatLabel, formatStrip, height, includeZero, isArea, isEmpty, isPercent, isStacked, labels, referenceLine, series, strip, tickInterval, width]);
+
+  // The plot's interactive height: down to the strip's floor when there is one.
+  const hitBottom = layout.strip ? layout.strip.bottom : layout.plotBottom;
+
+  // Latest value: the last finite point of the first solid series. Not on stacked bands.
+  const lastLine = highlightLast && !isStacked ? layout.lines.find((line) => !line.dashed) : undefined;
+  const lastIndex = lastLine ? lastFiniteIndex(lastLine.data) : -1;
+  const lastPoint = lastLine && lastIndex >= 0 ? lastLine.points[lastIndex] : undefined;
 
   // Accent dots: solid series only, never on stacked bands (their edges are running totals).
   const highlightOn = Boolean(referenceLine?.highlight) && !isStacked && layout.referenceY !== null;
@@ -372,7 +452,8 @@ export function LineChart({
         highlightOn && !isDashed(entry) && pastReference(entry.data[index], referenceLine)
           ? ` (${referenceLine?.highlight} ${referenceLine?.label})`
           : "";
-      return `${label}: ${series.map((entry) => `${entry.label} ${formatValue(entry.data[index] ?? 0)}${past(entry)}`).join(", ")}`;
+      const stripPart = strip ? `, ${strip.label} ${Number.isFinite(strip.data[index]) ? formatStrip(strip.data[index]) : "no value"}` : "";
+      return `${label}: ${series.map((entry) => `${entry.label} ${formatValue(entry.data[index] ?? 0)}${past(entry)}`).join(", ")}${stripPart}`;
     }
     const total = stackTotals?.[index] ?? 0;
     const parts = [...series.keys()].reverse().map((seriesIndex) => {
@@ -395,27 +476,30 @@ export function LineChart({
           onActivate={setHighlighted}
           onClear={() => setHighlighted(null)}
           topFirst={isStacked}
+          strip={strip ? { label: strip.label, color: accentColor } : undefined}
         />
       ) : undefined}
       table={showTable ? (
-        <ChartTable labels={labels} series={series} totals={stackTotals} reference={referenceLine && Number.isFinite(referenceLine.value) && !isPercent ? referenceLine : undefined} />
+        <ChartTable labels={labels} series={series} totals={stackTotals} reference={referenceLine && Number.isFinite(referenceLine.value) && !isPercent ? referenceLine : undefined} strip={strip} />
       ) : undefined}
       isEmpty={isEmpty}
       emptyLabel={emptyLabel}
       isLoading={isLoading}
+      error={error}
+      onRetry={onRetry}
       className={className}
     >
       <div ref={ref} className={styles.plot}>
         <svg
           className={styles.chart}
           width={width || "100%"}
-          height={height}
+          height={svgHeight}
           // Focusable points inside: a named group, not role="img" (which hides its children).
           role={layout.samples.length > 0 ? "group" : "img"}
           aria-label={title}
         >
           {width > 0 ? (
-            // Lines and fills stop at the plot's left and right edges, like the gridlines: a 2px line's round
+            // Lines and fills stop at the plot's left and right edges, like the gridlines: a 2px line's square
             // end would otherwise reach 1px past them. Open above and below, so the top line keeps its width.
             <defs>
               <clipPath id={plotClipId} clipPathUnits="userSpaceOnUse">
@@ -585,13 +669,45 @@ export function LineChart({
               r={4.5}
             />
           ))}
+          {layout.strip ? (
+            <g className={styles.strip}>
+              <line
+                className={styles.stripZero}
+                x1={layout.plotLeft}
+                x2={layout.plotRight}
+                y1={Math.round(layout.strip.zeroY) + 0.5}
+                y2={Math.round(layout.strip.zeroY) + 0.5}
+                vectorEffect="non-scaling-stroke"
+              />
+              {layout.strip.bars.map((bar) => (
+                <rect
+                  key={`strip-${bar.index}`}
+                  className={activeSample && activeSample.index !== bar.index ? styles.stripBarQuiet : undefined}
+                  x={bar.x}
+                  y={bar.y}
+                  width={bar.width}
+                  height={bar.height}
+                  fill={accentColor}
+                />
+              ))}
+              <text className={styles.tickLabel} x={layout.plotLeft - 8} y={layout.strip.top + STRIP_LABEL_INSET} textAnchor="end" dominantBaseline="middle">
+                {layout.strip.upperLabel}
+              </text>
+              <text className={styles.tickLabel} x={layout.plotLeft - 8} y={layout.strip.bottom - STRIP_LABEL_INSET} textAnchor="end" dominantBaseline="middle">
+                {layout.strip.lowerLabel}
+              </text>
+            </g>
+          ) : null}
+          {lastPoint ? (
+            <circle className={styles.dot} cx={lastPoint.x} cy={lastPoint.y} r={4.5} fill={lastLine?.color} />
+          ) : null}
           {activeSample ? (
             <line
               className={styles.crosshair}
               x1={activeSample.x}
               x2={activeSample.x}
               y1={layout.plotTop}
-              y2={layout.plotBottom}
+              y2={hitBottom}
             />
           ) : null}
           {activeSample
@@ -640,7 +756,7 @@ export function LineChart({
               x={layout.plotLeft}
               y={layout.plotTop}
               width={Math.max(layout.plotRight - layout.plotLeft, 1)}
-              height={Math.max(layout.plotBottom - layout.plotTop, 1)}
+              height={Math.max(hitBottom - layout.plotTop, 1)}
               onPointerMove={handlePlotPointer}
               onPointerLeave={clearSample}
             />
@@ -652,7 +768,7 @@ export function LineChart({
               x={sample.hitX}
               y={layout.plotTop}
               width={sample.hitWidth}
-              height={Math.max(layout.plotBottom - layout.plotTop, 1)}
+              height={Math.max(hitBottom - layout.plotTop, 1)}
               tabIndex={0}
               role="button"
               aria-label={sampleLabel(sample.index, sample.label)}
@@ -661,6 +777,11 @@ export function LineChart({
             />
           ))}
         </svg>
+        {lastPoint && lastLine ? (
+          <span className={styles.lastValue} style={{ left: lastPoint.x, top: lastPoint.y }} aria-hidden>
+            {formatValue(lastLine.data[lastIndex])}
+          </span>
+        ) : null}
         {activeSample ? (
           <div
             className={`${frameStyles.tooltip}${flipTooltip ? ` ${frameStyles.tooltipFlip}` : ""}`}
@@ -689,6 +810,19 @@ export function LineChart({
                 <span className={frameStyles.tooltipValue}>{formatValue(stackTotals?.[activeSample.index] ?? 0)}</span>
               </div>
             ) : null}
+            {strip ? (
+              <div className={frameStyles.tooltipRow}>
+                <span className={`${frameStyles.tooltipKey} ${frameStyles.tooltipKeySquare}`} style={{ background: accentColor }} aria-hidden />
+                <span className={frameStyles.tooltipShare}>{strip.label}</span>
+                <span className={frameStyles.tooltipValue}>
+                  {Number.isFinite(strip.data[activeSample.index]) ? formatStrip(strip.data[activeSample.index]) : "—"}
+                </span>
+              </div>
+            ) : null}
+            {(() => {
+              const note = tooltipNote?.(activeSample.index);
+              return note ? <p className={frameStyles.tooltipNote}>{note}</p> : null;
+            })()}
           </div>
         ) : null}
       </div>

@@ -31,6 +31,21 @@ export function extentOf(data: ComboChartDatum[], keys: string[]): [number, numb
   return [min, max];
 }
 
+/** Smallest and largest value of one key, without forcing zero: a line on its own axis can float. */
+export function lineExtentOf(data: ComboChartDatum[], key: string): [number, number] {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const row of data) {
+    const value = valueOf(row, key);
+    if (value === undefined) continue;
+    min = Math.min(min, value);
+    max = Math.max(max, value);
+  }
+  if (!Number.isFinite(min)) return [0, 1];
+  if (min === max) return [min - 1, max + 1];
+  return [min, max];
+}
+
 /**
  * Stacked bar segments for one column, in series order. Positive values pile up from zero, negative
  * values pile down from zero, so gains and losses (like new and churned revenue) sit either side of

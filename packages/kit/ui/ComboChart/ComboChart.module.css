@@ -44,8 +44,8 @@
 .line {
   fill: none;
   stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
   pointer-events: none;
   transition: opacity var(--motion-interaction-duration) var(--motion-interaction-easing);
 }

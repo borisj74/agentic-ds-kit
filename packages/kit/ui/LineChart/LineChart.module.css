@@ -68,11 +68,12 @@
   stop-opacity: 0.1;
 }
 
+/* Square ends and mitred joins: the line reads as data, not a drawn stroke. */
 .line {
   fill: none;
   stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
   pointer-events: none;
 }
 
@@ -175,4 +176,47 @@
 
 .tooltipTotal > :first-child {
   visibility: hidden;
+}
+
+/* Change strip: square bars around a hairline zero, under the plot on the same labels. */
+.strip {
+  pointer-events: none;
+}
+
+.stripZero {
+  stroke: var(--border-faint);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+/* While one sample is active, the other strip bars step back so its bar reads. */
+.stripBarQuiet {
+  opacity: 0.45;
+}
+
+/* The strip's legend entry matches the series buttons but does nothing on hover. */
+.legendStatic {
+  cursor: default;
+}
+
+.swatchBar {
+  border-radius: 0;
+}
+
+/* Latest value: a small chip above and left of the last point, so the line's end stays visible. */
+.lastValue {
+  position: absolute;
+  padding: 0 var(--space-1);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-control-sm);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(calc(-100% + var(--space-1)), calc(-100% - var(--space-2)));
 }

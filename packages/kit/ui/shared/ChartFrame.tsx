@@ -4,6 +4,7 @@ import { BarChart3, Table2 } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { useId, useState, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
 import { cx } from "./cx";
+import { LoadError } from "./LoadError";
 import styles from "./ChartFrame.module.css";
 
 /** Figure attributes the frame sets itself (`title` is the chart heading, not a tooltip). */
@@ -22,6 +23,10 @@ export interface ChartFrameProps extends Omit<ComponentPropsWithoutRef<"figure">
   isEmpty?: boolean;
   emptyLabel?: string;
   isLoading?: boolean;
+  /** When set, the body shows the kit's "Couldn't load" row in place of the chart. */
+  error?: string;
+  /** Shows Retry on the error row. */
+  onRetry?: () => void;
   className?: string;
   ref?: Ref<HTMLElement>;
 }
@@ -37,6 +42,8 @@ export function ChartFrame({
   isEmpty = false,
   emptyLabel = "No data for this range",
   isLoading = false,
+  error,
+  onRetry,
   className,
   ref,
   ...rest
@@ -98,9 +105,18 @@ export function ChartFrame({
 
       <div
         id={panelId}
-        className={`${styles.body}${isLoading ? ` ${styles.loading}` : ""}`}
+        className={`${styles.body}${isLoading && !error ? ` ${styles.loading}` : ""}`}
+        aria-busy={isLoading && !error ? true : undefined}
       >
-        {isEmpty ? <p className={styles.empty}>{emptyLabel}</p> : showTable ? table : children}
+        {error ? (
+          <LoadError message={error} onRetry={onRetry} />
+        ) : isEmpty ? (
+          <p className={styles.empty}>{emptyLabel}</p>
+        ) : showTable ? (
+          table
+        ) : (
+          children
+        )}
       </div>
 
       {footnote ? <p className={styles.footnote}>{footnote}</p> : null}

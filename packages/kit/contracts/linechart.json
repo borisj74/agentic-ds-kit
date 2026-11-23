@@ -9,7 +9,9 @@
     "Parts of a total over time, like usage by plan by month — variant area with stack stacked",
     "Each part's share of the total over time — variant area with stack percent",
     "This period against the last — a second series with dashed true",
-    "Showing a target or average — referenceLine, with highlight to mark points past it"
+    "Showing a target or average — referenceLine, with highlight to mark points past it",
+    "A headline value with how it moved each day — highlightLast with a changeStrip",
+    "This period against the last on demand — a Compare Button in actions that adds a dashed series"
   ],
   "doNotUseWhen": [
     "Comparing unrelated magnitudes at one moment — use BarChart",
@@ -38,6 +40,21 @@
         "highlight": "\"above\" | \"below\"?"
       },
       "note": "One dashed horizontal guide (text.muted) at value, with its label at the line's right end. The value axis widens to include it. highlight marks points of solid series above (or below) it with an accent dot (fill.brand); not with stack (the edges are running totals). The table gets a caption with the label and value, and each point's name says when it is past the line. Ignored with stack percent."
+    },
+    "highlightLast": {
+      "type": "boolean",
+      "default": false,
+      "note": "A dot and a value chip on the latest point of the first solid series, like today's MRR. Ignored with stack."
+    },
+    "changeStrip": {
+      "type": "object",
+      "required": false,
+      "itemShape": {
+        "label": "string",
+        "data": "number[]",
+        "format": "(value: number) => string?"
+      },
+      "note": "A short bar strip under the plot on the same labels, like net change per day. Bars go up from zero for gains and down for losses, square, in the first solid series' colour, on their own scale with two axis labels. It shares the crosshair and tooltip, adds a legend item and a table column, and joins each point's accessible name. format defaults to a signed compact number with a real minus sign (+1,200, −1,600)."
     },
     "title": {
       "type": "string",
@@ -98,6 +115,16 @@
       "type": "boolean",
       "default": false
     },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "When set, the plot is replaced by the kit's \"Couldn't load\" row (role=alert) with this message. Say what failed and that data is safe, like \"Stripe didn't answer in time.\""
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Shows an outline Retry Button on the error row."
+    },
     "tickInterval": {
       "type": "number",
       "required": false,
@@ -107,6 +134,11 @@
       "type": "function",
       "required": false,
       "note": "(label, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw label"
+    },
+    "tooltipNote": {
+      "type": "function",
+      "required": false,
+      "note": "(index) => string | undefined. One sentence under the tooltip rows for that sample, like \"The largest drop in 30 days.\" Read with the tooltip; keep it short and plain."
     },
     "animate": {
       "type": "boolean",
@@ -142,7 +174,10 @@
     "fill.brand",
     "type.weight.label",
     "space.1",
-    "space.2"
+    "space.2",
+    "radius.controlSm",
+    "type.size.caption",
+    "type.weight.caption"
   ],
   "a11y": {
     "element": "figure",
@@ -154,7 +189,11 @@
       "Table view keeps values readable",
       "animate is decorative only: no motion under prefers-reduced-motion, and hover, focus, legend and table work during the entrance",
       "referenceLine: the table caption names the label and value; a highlighted point's accessible name adds \"(above <label>)\" or \"(below <label>)\"",
-      "dashed series are told apart by their legend label, not by the dash alone"
+      "dashed series are told apart by their legend label, not by the dash alone",
+      "changeStrip values are in the tooltip, the table and each point's accessible name; up and down are told by the sign, not by colour",
+      "The highlightLast chip is decorative (aria-hidden); the value stays in the table and the point's name",
+      "error replaces the plot with a role=alert row; Retry is a real Button",
+      "tooltipNote is read with the tooltip (role=status)"
     ]
   },
   "doNot": [
@@ -168,7 +207,11 @@
     "Do not draw a reference line or threshold with a second flat series — use referenceLine",
     "Do not overlay a second chart to show the previous period — use a dashed series",
     "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way",
-    "Do not wrap a chart in a Card only to get a header button — pass actions"
+    "Do not wrap a chart in a Card only to get a header button — pass actions",
+    "Do not draw a change strip as a second chart under the first — use changeStrip so labels, crosshair and tooltip stay shared",
+    "Do not colour strip bars green and red; a loss is a negative bar and its sign says so",
+    "Do not keep the comparison series on by default when it is only context — put a Compare Button in actions",
+    "Do not round line ends; the kit draws square ends and joins"
   ],
-  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>\n\n<LineChart\n  title=\"Signups\"\n  variant=\"line\"\n  labels={[\"W1\", \"W2\", \"W3\", \"W4\"]}\n  series={[\n    { label: \"This period\", data: [310, 352, 298, 401] },\n    { label: \"Previous period\", data: [280, 300, 315, 330], dashed: true },\n  ]}\n  referenceLine={{ value: 350, label: \"Goal\", highlight: \"above\" }}\n/>"
+  "snippet": "<LineChart title=\"Weekly active users\" variant=\"area\" data={[{ label: 'Mon', value: 1240 }]} />\n\n<LineChart\n  title=\"Usage by plan\"\n  variant=\"area\"\n  stack=\"stacked\"\n  labels={['Jan', 'Feb', 'Mar']}\n  series={[\n    { label: 'Free', data: [1200, 1350, 1410] },\n    { label: 'Pro', data: [640, 720, 810] },\n  ]}\n/>\n\n<LineChart\n  title=\"Signups\"\n  variant=\"line\"\n  labels={[\"W1\", \"W2\", \"W3\", \"W4\"]}\n  series={[\n    { label: \"This period\", data: [310, 352, 298, 401] },\n    { label: \"Previous period\", data: [280, 300, 315, 330], dashed: true },\n  ]}\n  referenceLine={{ value: 350, label: \"Goal\", highlight: \"above\" }}\n/>\n\n<LineChart\n  title=\"MRR\"\n  labels={days}\n  series={[{ label: \"MRR\", data: mrr }]}\n  referenceLine={{ value: 405000, label: \"Target\" }}\n  highlightLast\n  changeStrip={{ label: \"Net change per day\", data: netChange }}\n  tooltipNote={(index) => (index === worstDay ? \"The largest drop in 30 days.\" : undefined)}\n/>"
 }

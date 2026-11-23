@@ -16,6 +16,7 @@ import {
   columnValues,
   extentOf,
   LINE_COLOR,
+  lineExtentOf,
   nextColumn,
   stackedExtentOf,
   stackSegments,
@@ -99,6 +100,11 @@ export function ComboChart({
   title,
   description,
   height = 240,
+  isLoading = false,
+  emptyLabel,
+  error,
+  onRetry,
+  tooltipNote,
   className,
   ref,
   ...rest
@@ -141,7 +147,8 @@ export function ComboChart({
           return [Math.min(barMin, lineMin), Math.max(barMax, lineMax)];
         })();
     const left = axisTicks(leftMin, leftMax, integer);
-    const right = isDual ? alignedTicks(...extentOf(data, [line.key]), left.ticks.length) : null;
+    // The right axis fits the line alone: a running total like MRR should not be squashed against zero.
+    const right = isDual ? alignedTicks(...lineExtentOf(data, line.key), left.ticks.length) : null;
     const leftLabels = left.ticks.map((value) => formatAxisLabel(value, valueFormatter?.bars));
     const rightLabels = right ? right.ticks.map((value) => formatAxisLabel(value, valueFormatter?.line)) : [];
     const leftMargin = Math.max(CHART_MARGINS.left, widest(leftLabels) + TICK_GAP * 2);
@@ -331,7 +338,6 @@ export function ComboChart({
           y={rect.y}
           width={rect.width}
           height={rect.height}
-          rx={isStacked ? 0 : 2}
           fill={rect.color}
         />
       ))}
@@ -416,6 +422,10 @@ export function ComboChart({
       legend={legend}
       table={<ComboTable data={data} bars={bars} line={line} formatBar={formatBar} formatLine={formatLine} />}
       isEmpty={isEmpty}
+      emptyLabel={emptyLabel}
+      isLoading={isLoading}
+      error={error}
+      onRetry={onRetry}
       className={className}
     >
       <div ref={sizeRef} className={styles.plot}>
@@ -467,6 +477,10 @@ export function ComboChart({
               <span className={frameStyles.tooltipShare}>{line.label}</span>
               <span className={frameStyles.tooltipValue}>{values.line === undefined ? "—" : formatLine(values.line)}</span>
             </div>
+            {(() => {
+              const note = active !== null ? tooltipNote?.(active) : undefined;
+              return note ? <p className={frameStyles.tooltipNote}>{note}</p> : null;
+            })()}
           </div>
         ) : null}
       </div>

@@ -7,7 +7,8 @@
     "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
     "Volumes with a running target or moving average drawn across them",
     "Two measures people read together per column, where two separate charts would make them line up by eye",
-    "Gains and losses per period with the net as a line — stack stacked, losses as negative values"
+    "Gains and losses per period with the net as a line — stack stacked, losses as negative values",
+    "Net change per period that can go below zero, with the running total as the line on axis dual — one bar series, stack none"
   ],
   "doNotUseWhen": [
     "Only amounts compared across categories — use BarChart",
@@ -63,7 +64,7 @@
           "required": true
         }
       },
-      "note": "One line series, drawn smooth in --chart-3 with no area fill."
+      "note": "One line series, drawn smooth in --chart-3 with no area fill and square ends."
     },
     "axis": {
       "type": "enum",
@@ -72,7 +73,7 @@
         "dual"
       ],
       "default": "shared",
-      "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+      "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines. With dual, the right axis fits the line's own range and does not force zero, so a running total like MRR keeps its shape."
     },
     "stack": {
       "type": "enum",
@@ -81,7 +82,7 @@
         "stacked"
       ],
       "default": "none",
-      "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net."
+      "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net. With none, a single bar series still goes below zero for negative values, in one colour: use it for a daily net change with the running total as the line."
     },
     "valueFormatter": {
       "type": "object",
@@ -112,6 +113,30 @@
     "height": {
       "type": "number",
       "default": 240
+    },
+    "isLoading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Dims the plot and sets aria-busy while new data loads."
+    },
+    "emptyLabel": {
+      "type": "string",
+      "default": "No data for this range"
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "When set, the plot is replaced by the kit's \"Couldn't load\" row (role=alert) with this message. Say what failed and that data is safe, like \"Stripe didn't answer in time.\""
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Shows an outline Retry Button on the error row."
+    },
+    "tooltipNote": {
+      "type": "function",
+      "required": false,
+      "note": "(index) => string | undefined. One sentence under the tooltip rows for that column, like \"The largest one-day drop in this period.\" Read with the tooltip; keep it short and plain."
     },
     "actions": {
       "type": "slot",
@@ -156,7 +181,9 @@
       "Each column is one focus stop in order; Tab and the arrow keys move column by column, and each column names its label and every bar and line value",
       "The tooltip shows on focus as well as on hover, with every series for that column",
       "The legend names each bar series and the line, with the line drawn as a line",
-      "The Table toggle swaps the chart for a plain table with every value"
+      "The Table toggle swaps the chart for a plain table with every value",
+      "error replaces the plot with a role=alert row; Retry is a real Button",
+      "tooltipNote is read with the tooltip (role=status)"
     ]
   },
   "doNot": [
@@ -169,7 +196,8 @@
     "Do not use raw hex or primitive --color-* ramps",
     "Do not stack values that do not add up, like rates; use stack none",
     "Do not pass losses as positive values with a status colour; make them negative so they pile below zero",
-    "Do not wrap a chart in a Card only to get a header button — pass actions"
+    "Do not wrap a chart in a Card only to get a header button — pass actions",
+    "Do not round bar corners or line ends; bars and line ends are square"
   ],
   "snippet": "<ComboChart\n  title=\"Revenue and growth\"\n  description=\"2026, by month\"\n  axis=\"dual\"\n  data={[\n    { label: \"Jan\", revenue: 42000, growth: 3.1 },\n    { label: \"Feb\", revenue: 45500, growth: 8.3 },\n    { label: \"Mar\", revenue: 44100, growth: -3.1 },\n  ]}\n  bars={[{ key: \"revenue\", label: \"Revenue\" }]}\n  line={{ key: \"growth\", label: \"Growth\" }}\n  valueFormatter={{ line: (value) => `${value}%` }}\n/>\n\n<ComboChart\n  title=\"Seat changes\"\n  stack=\"stacked\"\n  data={[{ label: \"Jan\", added: 40, removed: -12, net: 28 }]}\n  bars={[{ key: \"added\", label: \"Added\" }, { key: \"removed\", label: \"Removed\" }]}\n  line={{ key: \"net\", label: \"Net\" }}\n/>"
 }

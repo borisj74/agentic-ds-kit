@@ -43,5 +43,15 @@ export interface ComboChartProps extends Omit<ComponentPropsWithoutRef<"figure">
   title?: string;
   description?: string;
   height?: number;
+  /** Dims the chart while new data loads. Default false. */
+  isLoading?: boolean;
+  /** Shown when there is nothing to draw. Default "No data for this range". */
+  emptyLabel?: string;
+  /** When set, the chart shows the kit's "Couldn't load" row with this message in place of the plot. */
+  error?: string;
+  /** Shows Retry on the error row. */
+  onRetry?: () => void;
+  /** One sentence under the tooltip rows for a column, like "The largest drop in this period". Return undefined for none. */
+  tooltipNote?: (index: number) => string | undefined;
   ref?: Ref<HTMLElement>;
 }
