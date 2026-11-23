@@ -7,7 +7,7 @@ export const planReviewDoc: BlockDoc = {
   name: "PlanReview",
   contract,
   lead:
-    "The go / no-go before an agent runs. Its steps, which you can edit, sit beside what the plan expects to change and how far the agent may go without asking. Approve hands back the steps and the autonomy you chose; or send the plan back with a note, or reject it.",
+    "The go / no-go before an agent runs. Its steps, which you can edit, sit beside what the plan expects to change and how far the agent may go without asking. Approve hands back the steps and the autonomy you chose; or send the plan back with a note, or reject it. ⌘/Ctrl+Enter approves and Escape rejects while focus is in the block.",
   usage: `import { PlanReview } from "agentic-ds-kit";
 
 export function PlanPage({ plan }) {
@@ -15,6 +15,7 @@ export function PlanPage({ plan }) {
   return (
     <main className="layout-content">
       <PlanReview
+        title="Run this plan to add rate limiting?"   // the block title is the question
         planTitle={plan.title}
         agent="Backend agent"
         target="acme/api"

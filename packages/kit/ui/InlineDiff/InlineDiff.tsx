@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type KeyboardEvent } from "react";
-import { CircleCheck, CircleX, FileText, Pencil, TriangleAlert } from "lucide-react";
+import { CircleX, FileText, Pencil, TriangleAlert } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -10,6 +10,8 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
+import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { handleReviewKeys } from "../shared/reviewKeys";
 import type { DiffLine, InlineDiffProps, InlineDiffStatus } from "./InlineDiff.types";
 import styles from "./InlineDiff.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -26,6 +28,11 @@ const BADGE: Partial<Record<InlineDiffStatus, { label: string; tone: "neutral" |
 
 const MARK = { add: "+", remove: "−", context: "" } as const;
 const SAY = { add: "Added: ", remove: "Removed: ", context: "" } as const;
+
+/** Counts in words, e.g. "2 added, 2 removed", so the change never rests on + / − alone. */
+function countsInWords(added: number, removed: number): string {
+  return `${added} added, ${removed} removed`;
+}
 
 function Line({ line, side }: { line: DiffLine; side?: "old" | "new" }) {
   const number = side === "old" ? line.oldNo : side === "new" ? line.newNo : (line.newNo ?? line.oldNo);
@@ -73,20 +80,18 @@ export function InlineDiff({
 
   if (resolved) {
     const accepted = status === "accepted";
-    const Icon = accepted ? CircleCheck : CircleX;
+    const label = accepted ? "Accepted" : "Rejected";
     return (
-      <section
+      <ResolvedRow
         {...rest} {...nisthaAttr("inlinediff", rest)}
         ref={mergeRefs(focus.rowRef, ref)}
-        tabIndex={-1}
-        className={cx(styles.resolved, styles[status], className)}
-        aria-label={`${accepted ? "Accepted" : "Rejected"}: ${title}`}
-      >
-        <Icon size={16} strokeWidth={ICON_STROKE} className={styles.resolvedIcon} aria-hidden="true" />
-        <span className={styles.resolvedLabel}>{accepted ? "Accepted" : "Rejected"}</span>
-        <span className={styles.resolvedText}>· {resolvedSummary ?? (accepted ? `+${added} −${removed}` : "kept the original")}</span>
-        {resolvedAt ? <span className={styles.resolvedAt}>{resolvedAt}</span> : null}
-      </section>
+        className={className}
+        outcome={accepted ? "yes" : "no"}
+        label={label}
+        text={resolvedSummary ?? (accepted ? countsInWords(added, removed) : "kept the original")}
+        meta={resolvedAt}
+        aria-label={`${label}: ${title}`}
+      />
     );
   }
 
@@ -94,14 +99,8 @@ export function InlineDiff({
   const stale = status === "stale";
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (!active || event.defaultPrevented) return;
-    if (event.key === "Escape" && onReject) {
-      event.preventDefault();
-      onReject();
-    } else if (event.key === "Enter" && (event.metaKey || event.ctrlKey) && onAccept) {
-      event.preventDefault();
-      onAccept();
-    }
+    if (!active) return;
+    handleReviewKeys(event, { onYes: onAccept, onNo: onReject });
   }
 
   const badge = BADGE[status];
@@ -182,9 +181,7 @@ export function InlineDiff({
             <FileText size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
             {file ? <span className={styles.file}>{file}</span> : null}
             {hunkHeader ? <span className={styles.hunk}>{hunkHeader}</span> : null}
-            <span className={styles.counts}>
-              +{added} −{removed}
-            </span>
+            <span className={styles.counts}>{countsInWords(added, removed)}</span>
           </div>
         ) : null}
         <pre className={styles.pre}>
@@ -203,7 +200,7 @@ export function InlineDiff({
       {...rest} {...nisthaAttr("inlinediff", rest)}
       ref={ref}
       tabIndex={-1}
-      className={cx(styles.card, className)}
+      className={cx(styles.card, reviewStyles.focusRing, className)}
       aria-labelledby={titleId}
       aria-busy={status === "loading" || undefined}
       onKeyDown={handleKeyDown}
@@ -228,22 +225,23 @@ export function InlineDiff({
           {staleReason}
         </p>
       ) : null}
-      {showActions ? (
-        <footer className={styles.footer}>
-          {hunkLabel ? <span className={styles.note}>{hunkLabel}</span> : <span />}
-          <span className={styles.actions}>
-            {onReject ? (
-              <Button size="sm" appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" disabled={stale} onClick={onReject}>
-                Reject
-              </Button>
-            ) : null}
+      {showActions && (onAccept || onReject || onAcceptAll) ? (
+        <footer className={reviewStyles.footer}>
+          {hunkLabel ? <span className={styles.note}>{hunkLabel}</span> : null}
+          <KeyHint>{[onAccept ? "⌘⏎ accept" : null, onReject ? "Esc reject" : null].filter(Boolean).join(" · ")}</KeyHint>
+          <span className={reviewStyles.actions}>
             {onAcceptAll ? (
-              <Button size="sm" appearance="ghost" mode="neutral" disabled={stale} onClick={onAcceptAll}>
+              <Button appearance="ghost" mode="neutral" disabled={stale} onClick={onAcceptAll}>
                 Accept all
               </Button>
             ) : null}
+            {onReject ? (
+              <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={stale} onClick={onReject}>
+                Reject
+              </Button>
+            ) : null}
             {onAccept ? (
-              <Button size="sm" shortcut="⌘⏎" aria-keyshortcuts="Meta+Enter Control+Enter" disabled={stale} onClick={onAccept}>
+              <Button iconStart="Check" aria-keyshortcuts="Meta+Enter Control+Enter" disabled={stale} onClick={onAccept}>
                 Accept
               </Button>
             ) : null}

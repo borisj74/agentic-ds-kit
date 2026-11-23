@@ -36,7 +36,6 @@
 
 .lead,
 .meta,
-.keys,
 .replying {
   margin: 0;
   font-size: var(--type-size-body-sm);
@@ -45,8 +44,10 @@
 }
 
 .meta,
-.keys {
-  font-size: var(--type-size-caption);
+/* Keys line and Accept all under everything, as in the review cards. */
+.footer {
+  padding-block-start: var(--layout-gutter-sm);
+  border-block-start: var(--border-width-thin) solid var(--border-divider);
 }
 
 .subtitle {
@@ -142,11 +143,5 @@
     position: static;
     max-block-size: none;
     overflow-y: visible;
-  }
-
-  /* Stacked usually means touch, so the J / K / R line is hidden. It stays in the page because the
-     block's aria-describedby points at it, and a hidden description is still read. */
-  .keys {
-    display: none;
   }
 }

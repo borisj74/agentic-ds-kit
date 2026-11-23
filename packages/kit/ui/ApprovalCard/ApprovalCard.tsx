@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
-import { Check, FilePen, SquareTerminal, Timer, X } from "lucide-react";
+import { FilePen, SquareTerminal, Timer } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -9,6 +9,8 @@ import { Progress } from "../Progress";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
+import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { handleReviewKeys } from "../shared/reviewKeys";
 import type { ApprovalCardAction, ApprovalCardProps, ApprovalCardRisk } from "./ApprovalCard.types";
 import styles from "./ApprovalCard.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -21,6 +23,7 @@ export type {
   ApprovalCardCommand,
   ApprovalCardDiff,
   ApprovalCardDiffLine,
+  ApprovalCardFact,
 } from "./ApprovalCard.types";
 
 const RISK_LABEL: Record<ApprovalCardRisk, string> = { low: "Low risk", medium: "Medium risk", high: "High risk" };
@@ -41,7 +44,7 @@ function Preview({ action }: { action: ApprovalCardAction }) {
       <figure className={styles.preview}>
         <figcaption className={styles.previewHead}>
           <SquareTerminal size={16} strokeWidth={ICON_STROKE} className={styles.previewIcon} aria-hidden="true" />
-          <span className={styles.previewLabel}>Command</span>
+          <span className={styles.previewLabel}>Exact command</span>
           {action.target ? <span className={styles.previewTarget}>{action.target}</span> : null}
         </figcaption>
         <pre className={styles.code}>
@@ -83,14 +86,15 @@ function Preview({ action }: { action: ApprovalCardAction }) {
 }
 
 /**
- * The agent asks before it acts: risk, an exact preview of what will run, and keyboard-first
- * Approve (Enter) / Deny (Escape). Resolved cards collapse to one line.
+ * The agent asks before it acts: risk, what will happen in words (facts), the exact command or
+ * diff, and Approve (⌘/Ctrl+Enter) / Deny (Escape). Resolved cards collapse to one line.
  */
 export function ApprovalCard({
   title,
   description,
   risk = "medium",
   action,
+  facts,
   status = "pending",
   countdownSec,
   onApprove,
@@ -140,78 +144,49 @@ export function ApprovalCard({
   }, [counting]);
 
   if (!pending) {
-    const Icon = status === "approved" ? Check : status === "denied" ? X : Timer;
     const label = status === "approved" ? "Approved" : status === "denied" ? "Denied" : "Expired";
     const meta =
       status === "expired" ? "auto-denied" : [resolvedBy, resolvedAt].filter(Boolean).join(" · ") || undefined;
     return (
-      <article
+      <ResolvedRow
         {...rest} {...nisthaAttr("approvalcard", rest)}
+        as="article"
         ref={mergeRefs(focus.rowRef, ref)}
-        tabIndex={-1}
-        className={cx(styles.resolved, styles[status], className)}
+        className={className}
+        outcome={status === "approved" ? "yes" : status === "denied" ? "no" : "expired"}
+        label={label}
+        text={<span className={styles.mono}>{summaryOf(action)}</span>}
+        meta={meta}
         aria-label={`${label}: ${title}`}
-      >
-        <Icon size={16} strokeWidth={ICON_STROKE} className={styles.resolvedIcon} aria-hidden="true" />
-        <span className={styles.resolvedLabel}>{label}</span>
-        <span className={styles.resolvedSummary}>{summaryOf(action)}</span>
-        {meta ? <span className={styles.resolvedMeta}>{meta}</span> : null}
-      </article>
+      />
     );
   }
 
-  // High risk approves only with ⌘⏎ or Ctrl+⏎, so a stray Enter cannot run a destructive action.
-  const strongApprove = risk === "high";
-
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.defaultPrevented) return;
-    const target = event.target as HTMLElement;
-    // Leave both keys alone on buttons and fields inside the card: Esc on Approve must not deny.
-    const onOtherControl = target !== event.currentTarget && target.closest("button, a, input, textarea, select");
-    if (onOtherControl) return;
-    if (event.key === "Escape" && onDeny) {
-      event.preventDefault();
-      onDeny();
-    } else if (event.key === "Enter" && onApprove && (!strongApprove || event.metaKey || event.ctrlKey)) {
-      event.preventDefault();
-      onApprove();
-    }
+    handleReviewKeys(event, { onYes: onApprove, onNo: onDeny });
   }
 
   const fraction = counting && remaining !== undefined ? (remaining / countdownSec) * 100 : 0;
+
+  const lastSeconds = counting && remaining !== undefined && remaining <= 10;
 
   return (
     <article
       {...rest} {...nisthaAttr("approvalcard", rest)}
       ref={ref}
       tabIndex={-1}
-      className={cx(styles.card, className)}
+      className={cx(styles.card, reviewStyles.focusRing, className)}
       onFocusCapture={focus.onFocusCapture}
       onBlurCapture={focus.onBlurCapture}
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
       onKeyDown={handleKeyDown}
     >
-      <header className={styles.header}>
-        <div className={styles.heading}>
-          <h3 id={titleId} className={styles.title}>
-            {title}
-          </h3>
-          {description ? (
-            <p id={descriptionId} className={styles.description}>
-              {description}
-            </p>
-          ) : null}
-        </div>
+      <div className={styles.top}>
         <Badge tone={RISK_TONE[risk]} size="sm" className={styles.risk}>
           {RISK_LABEL[risk]}
         </Badge>
-      </header>
-
-      <Preview action={action} />
-
-      {counting && remaining !== undefined ? (
-        <div className={styles.countdown}>
+        {counting && remaining !== undefined ? (
           <p className={styles.countdownText}>
             <Timer size={16} strokeWidth={ICON_STROKE} className={styles.countdownIcon} aria-hidden="true" />
             <span>Auto-deny in</span>
@@ -219,23 +194,48 @@ export function ApprovalCard({
               {formatClock(remaining)}
             </span>
           </p>
-          <Progress size="sm" tone="warning" value={fraction} ariaLabel="Time left before auto-deny" />
-        </div>
+        ) : null}
+      </div>
+
+      <header className={styles.heading}>
+        <h3 id={titleId} className={styles.title}>
+          {title}
+        </h3>
+        {description ? (
+          <p id={descriptionId} className={styles.description}>
+            {description}
+          </p>
+        ) : null}
+      </header>
+
+      {facts && facts.length > 0 ? (
+        <dl className={styles.facts}>
+          {facts.map((fact) => (
+            <div key={fact.label} className={styles.fact}>
+              <dt className={styles.factLabel}>{fact.label}</dt>
+              <dd className={styles.factValue}>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
       ) : null}
 
-      <footer className={styles.actions}>
-        <Button appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" onClick={onDeny}>
-          {denyLabel}
-        </Button>
-        <Button
-          appearance="solid"
-          mode="primary"
-          shortcut={strongApprove ? "⌘⏎" : "⏎"}
-          aria-keyshortcuts={strongApprove ? "Meta+Enter Control+Enter" : "Enter"}
-          onClick={onApprove}
-        >
-          {approveLabel}
-        </Button>
+      <Preview action={action} />
+
+      {counting ? <Progress size="sm" tone="warning" value={fraction} ariaLabel="Time left before auto-deny" /> : null}
+      <span className={styles.srOnly} role="status">
+        {lastSeconds ? "Denies in 10 seconds" : ""}
+      </span>
+
+      <footer className={reviewStyles.footer}>
+        <KeyHint>⌘⏎ approve · Esc deny</KeyHint>
+        <span className={reviewStyles.actions}>
+          <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" onClick={onDeny}>
+            {denyLabel}
+          </Button>
+          <Button appearance="solid" mode="primary" iconStart="Check" aria-keyshortcuts="Meta+Enter Control+Enter" onClick={onApprove}>
+            {approveLabel}
+          </Button>
+        </span>
       </footer>
     </article>
   );

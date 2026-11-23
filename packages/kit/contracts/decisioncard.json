@@ -38,7 +38,7 @@
     "options": {
       "type": "array",
       "required": false,
-      "note": "{ id, label, description?, recommended? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge."
+      "note": "{ id, label, description?, recommended?, disabled?, disabledReason? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge. A disabled option stays in the group and shows disabledReason in place of its description."
     },
     "allowFreeText": {
       "type": "boolean",
@@ -91,12 +91,12 @@
     "onConfirm": {
       "type": "function",
       "required": false,
-      "note": "Confirm, the one solid primary. ⌘/Ctrl+Enter inside the card."
+      "note": "Confirm (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
     },
     "onSkip": {
       "type": "function",
       "required": false,
-      "note": "Skip for now (ghost)."
+      "note": "Skip (outline). Escape while focus is in the card but not on another control."
     }
   },
   "passthrough": {
@@ -133,8 +133,9 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "options are a kit RadioGroup named by the question",
+      "a disabled option stays in the RadioGroup, disabled, with its reason as the description, so it is announced, not skipped",
       "free text is a Field-wrapped Textarea with a hint",
-      "Confirm carries aria-keyshortcuts; ⌘/Ctrl+Enter confirms inside the card",
+      "Confirm and Skip carry aria-keyshortcuts; ⌘/Ctrl+Enter confirms and Escape skips (not on another control) inside the card; the key hint line is aria-hidden and hidden on touch screens",
       "sending sets aria-busy and announces in a status region",
       "the error is role=alert",
       "once resolved, focus moves to the one-line row",
@@ -144,8 +145,8 @@
   "doNot": [
     "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
     "Do not start with nothing selected when an option is recommended; list it first and start value on it",
-    "Confirm is the one solid primary; Skip is ghost",
+    "Confirm is the one solid primary; Skip is outline neutral",
     "Do not use raw hex"
   ],
-  "snippet": "<DecisionCard title=\"Billing refactor asks\" meta=\"paused · 0:42\" question=\"The v1 invoices endpoint has 3 callers. What should I do with it?\" options={[{ id: \"keep\", label: \"Keep v1 endpoint for 30 days\", description: \"Safer; clients migrate on their own time.\", recommended: true }, { id: \"remove\", label: \"Remove v1 now\" }]} value={value} onValueChange={setValue} onConfirm={send} onSkip={skip} />"
+  "snippet": "<DecisionCard title=\"Dunning agent asks\" meta=\"paused · 09:12\" question=\"Which Northwind invoices should I chase this week?\" options={[{ id: \"pair\", label: \"INV-1842 and INV-1857\", description: \"$3,860.00, both over 14 days late\", recommended: true }, { id: \"all\", label: \"All four open invoices\" }, { id: \"1799\", label: \"INV-1799\", disabled: true, disabledReason: \"Unavailable: in collections since 2 Nov\" }]} value={value} onValueChange={setValue} onConfirm={send} onSkip={skip} />"
 }

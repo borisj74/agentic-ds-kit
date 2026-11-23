@@ -8,6 +8,10 @@ export interface DecisionOption {
   description?: string;
   /** Shows a quiet Recommended badge. */
   recommended?: boolean;
+  /** Shown but not choosable, e.g. an invoice already in collections. */
+  disabled?: boolean;
+  /** Why it is disabled, e.g. "Unavailable: in collections since 2 Nov". Replaces the description while disabled. */
+  disabledReason?: string;
 }
 
 /** Native section attributes the kit sets itself (or replaces with its own prop). */
@@ -38,6 +42,7 @@ export interface DecisionCardProps extends Omit<ComponentPropsWithoutRef<"sectio
   resolvedAt?: string;
   /** Confirm: the one solid primary; ⌘/Ctrl+Enter inside the card. */
   onConfirm?: () => void;
+  /** Skip (outline); Escape inside the card. */
   onSkip?: () => void;
   ref?: Ref<HTMLElement>;
 }

@@ -1,15 +1,9 @@
-/* Paper frames are 400px; same custom-width pattern as InsightCard (--insight-width). */
-.card,
-.resolved {
-  --approval-width: 25rem;
-}
-
 .card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  width: min(100%, var(--approval-width));
+  width: 100%;
   min-width: 0;
   padding: var(--space-5);
   background-color: var(--bg-surface);
@@ -19,20 +13,17 @@
   animation: approval-in var(--motion-duration-200) var(--motion-ease-out);
 }
 
-.card:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
-}
-
-.header {
+/* Risk Badge on the left, the countdown on the right. */
+.top {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .heading {
   display: flex;
-  flex: 1 1 0;
   flex-direction: column;
   gap: var(--space-px);
   min-width: 0;
@@ -41,10 +32,10 @@
 .title {
   margin: 0;
   overflow-wrap: anywhere;
-  font-size: var(--type-size-ui-md);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-ui-md);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-fg);
 }
 
@@ -58,6 +49,40 @@
 
 .risk {
   flex-shrink: 0;
+}
+
+/* Facts: what will happen and why, in words. */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+/* Two facts side by side on a wide card, stacked on a narrow one. */
+.fact {
+  flex: 1 1 calc(var(--grid-width-sm) / 4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.factLabel {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.factValue {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
 }
 
 /* Preview: the exact command or diff. */
@@ -166,12 +191,6 @@
   white-space: nowrap;
 }
 
-.countdown {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
 .countdownText {
   display: flex;
   align-items: center;
@@ -193,86 +212,6 @@
   color: var(--text-fg);
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--space-2);
-}
-
-/* Resolved: one line. */
-.resolved {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  width: min(100%, var(--approval-width));
-  min-width: 0;
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--bg-surface);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-lg);
-  font-family: var(--font-sans);
-  animation: approval-in var(--motion-duration-200) var(--motion-ease-out);
-}
-
-.resolvedIcon {
-  flex-shrink: 0;
-}
-
-.approved .resolvedIcon {
-  color: var(--icon-success);
-}
-
-.denied .resolvedIcon {
-  color: var(--icon-danger);
-}
-
-.expired {
-  background-color: transparent;
-  border-style: dashed;
-  border-color: var(--line-strong);
-}
-
-.expired .resolvedIcon {
-  color: var(--text-fg-subtle);
-}
-
-.resolvedLabel {
-  flex-shrink: 0;
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
-}
-
-.expired .resolvedLabel {
-  color: var(--text-fg-muted);
-}
-
-.resolvedSummary {
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg-muted);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.expired .resolvedSummary {
-  color: var(--text-fg-subtle);
-}
-
-.resolvedMeta {
-  flex-shrink: 0;
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-}
-
 @keyframes approval-in {
   from {
     opacity: 0;
@@ -285,13 +224,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card,
-  .resolved {
+  .card {
     animation: none;
   }
-}
-
-.resolved:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
 }

@@ -18,6 +18,7 @@ export function PlanReviewDemo() {
   return (
     <>
       <PlanReview
+        title="Run this plan to add rate limiting?"
         planTitle={PLAN_REVIEW_TITLE}
         agent="Backend agent"
         target="acme/api"

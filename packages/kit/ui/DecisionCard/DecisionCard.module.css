@@ -1,6 +1,5 @@
 /* Paper frames are 370px; same custom-width pattern as InsightCard (--insight-width). */
-.card,
-.resolved {
+.card {
   --decision-width: 24rem;
   box-sizing: border-box;
   width: min(100%, var(--decision-width));
@@ -14,14 +13,14 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--space-4);
+  padding: var(--space-5);
   animation: decision-in var(--motion-duration-200) var(--motion-ease-out);
 }
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-2);
 }
 
@@ -34,10 +33,10 @@
   flex: 1 1 0;
   margin: 0;
   min-width: 0;
-  font-size: var(--type-size-body-sm);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-ui-sm);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-fg);
 }
 
@@ -73,65 +72,8 @@
   color: var(--status-danger-text);
 }
 
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-}
-
 .spin svg {
   animation: decision-spin 1s linear infinite;
-}
-
-.resolved {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  animation: decision-fade var(--motion-duration-150) var(--motion-ease-out);
-}
-
-.resolved:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
-}
-
-.resolvedIcon {
-  flex-shrink: 0;
-  color: var(--text-fg-muted);
-}
-
-.resolved:not(.skipped) .resolvedIcon,
-.resolved:not(.skipped) .resolvedLabel {
-  color: var(--status-success-text);
-}
-
-.resolvedLabel {
-  flex-shrink: 0;
-  color: var(--text-fg);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-sm);
-}
-
-.resolvedText {
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.resolvedAt {
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
 }
 
 .srOnly {
@@ -154,15 +96,6 @@
   }
 }
 
-@keyframes decision-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes decision-spin {
   to {
     transform: rotate(360deg);
@@ -171,7 +104,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .resolved,
   .spin svg {
     animation: none;
   }

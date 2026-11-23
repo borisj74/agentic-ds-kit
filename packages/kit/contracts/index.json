@@ -776,7 +776,7 @@
   },
   {
     "id": "approvalcard",
-    "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
+    "intent": "The agent asks before it acts: risk, what will happen in words, an exact preview of the command or diff, and Approve (⌘/Ctrl+Enter) / Deny (Escape) with an optional auto-deny countdown.",
     "group": "component",
     "path": "contracts/approvalcard.json",
     "status": "stable",
@@ -952,7 +952,7 @@
   },
   {
     "id": "inlinediff",
-    "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
+    "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and the counts in words (\"2 added, 2 removed\"), then one line.",
     "group": "component",
     "path": "contracts/inlinediff.json",
     "status": "stable",
@@ -1234,7 +1234,7 @@
   {
     "id": "changereview",
     "kind": "block",
-    "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all is the one solid primary.",
+    "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all, under everything beside the keys line, is the one solid primary.",
     "group": "component",
     "path": "contracts/changereview.json",
     "status": "stable",

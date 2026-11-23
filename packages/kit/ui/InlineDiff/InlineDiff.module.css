@@ -1,5 +1,4 @@
-.card,
-.resolved {
+.card {
   box-sizing: border-box;
   min-width: 0;
   background-color: var(--bg-surface);
@@ -11,14 +10,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-4);
-}
-
-.card:focus-visible,
-.resolved:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
+  gap: var(--space-4);
+  padding: var(--space-5);
 }
 
 .header {
@@ -35,10 +28,10 @@
 .title {
   flex: 1 1 auto;
   margin: 0;
-  font-size: var(--type-size-body-sm);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-ui-sm);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-fg);
 }
 
@@ -210,68 +203,7 @@
   padding: var(--space-3);
 }
 
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-}
-
 .note {
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-}
-
-.actions {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-/* Resolved: one line */
-.resolved {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  animation: diff-settle var(--motion-duration-200) var(--motion-ease-out);
-}
-
-.resolvedIcon {
-  flex-shrink: 0;
-  color: var(--text-fg-subtle);
-}
-
-.accepted .resolvedIcon,
-.accepted .resolvedLabel {
-  color: var(--status-success-text);
-}
-
-.resolvedLabel {
-  flex-shrink: 0;
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
-}
-
-.resolvedText {
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg-muted);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.resolvedAt {
-  flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
@@ -285,21 +217,4 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-@keyframes diff-settle {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-1));
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .resolved {
-    animation: none;
-  }
 }

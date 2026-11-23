@@ -2,7 +2,7 @@
   "id": "approvalcard",
   "status": "stable",
   "level": "organism",
-  "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
+  "intent": "The agent asks before it acts: risk, what will happen in words, an exact preview of the command or diff, and Approve (⌘/Ctrl+Enter) / Deny (Escape) with an optional auto-deny countdown.",
   "useWhen": [
     "an agent needs a person's OK before a command, file edit, or other side effect",
     "human-in-the-loop gates in a chat, trail, or inbox",
@@ -37,12 +37,17 @@
         "high"
       ],
       "default": "medium",
-      "note": "Sets the risk Badge (and, at high, the ⌘⏎ approve shortcut)."
+      "note": "Sets the risk Badge."
     },
     "action": {
       "type": "object",
       "required": true,
       "note": "{ kind: \"command\", command, note?, target? } or { kind: \"diff\", file, lines: { type: \"context\" | \"add\" | \"remove\", text }[] }. Shown exactly as it will run."
+    },
+    "facts": {
+      "type": "array",
+      "required": false,
+      "note": "{ label, value }[], e.g. Will do / Why medium. What will happen and why the risk is what it is, in words, as a dl above the preview. The exact action still shows."
     },
     "status": {
       "type": "enum",
@@ -63,12 +68,12 @@
     "onApprove": {
       "type": "function",
       "required": false,
-      "note": "Approve button and Enter while focus is inside the card (not on another control). High risk needs ⌘⏎ or Ctrl+⏎."
+      "note": "Approve button (Check icon) and ⌘/Ctrl+Enter while focus is in the card. Plain Enter never approves."
     },
     "onDeny": {
       "type": "function",
       "required": false,
-      "note": "Deny button and Escape while focus is inside the card (not on another control)."
+      "note": "Deny button and Escape while focus is in the card but not on another control."
     },
     "onExpire": {
       "type": "function",
@@ -132,11 +137,13 @@
     "element": "article",
     "requirements": [
       "title is h3, article aria-labelledby it",
-      "Enter approves and Escape denies while focus is inside the card but not on another control; high risk approves with ⌘⏎ or Ctrl+⏎ only; buttons carry aria-keyshortcuts",
-      "key chips are aria-hidden",
+      "facts are a dl, so each label is read as a term",
+      "⌘/Ctrl+Enter approves and Escape denies while focus is in the card (Escape not on another control); plain Enter never approves; buttons carry aria-keyshortcuts",
+      "the key hint line is aria-hidden and hidden on touch screens",
       "diff lines announce Added / Removed",
-      "countdown is role=timer with aria-live off; the bar is a kit Progress with an accessible name",
-      "resolved row is an article named \"Approved: <title>\"",
+      "countdown is role=timer with aria-live off; at 10 seconds left a polite status says \"Denies in 10 seconds\" once; the bar is a kit Progress with an accessible name",
+      "resolved row is an article named \"Approved: <title>\" and takes focus if the card had it",
+      "focus uses the shared ring (canvas 1px, focus-ring 3px)",
       "entry motion is opacity and transform only, off under prefers-reduced-motion"
     ]
   },
@@ -147,5 +154,5 @@
     "Do not use raw hex; risk colors come from status tokens",
     "Do not hide the risk Badge for high-risk actions"
   ],
-  "snippet": "<ApprovalCard title=\"Run database migration?\" description=\"Agent wants to run a command on staging.\" risk=\"high\" action={{ kind: \"command\", command: \"npm run db:migrate -- --env=staging\", target: \"acme-demo / staging\" }} countdownSec={60} onApprove={approve} onDeny={deny} />"
+  "snippet": "<ApprovalCard title=\"Send a second reminder for INV-1842?\" description=\"Northwind owes $2,400.00, 18 days late.\" risk=\"medium\" facts={[{ label: \"Will do\", value: \"Email ap@northwind.com\" }, { label: \"Why medium\", value: \"Goes to the customer. Can't unsend.\" }]} action={{ kind: \"command\", command: \"dunning send --invoice INV-1842 --template overdue-2\", target: \"northwind / billing\" }} countdownSec={60} onApprove={approve} onDeny={deny} />"
 }

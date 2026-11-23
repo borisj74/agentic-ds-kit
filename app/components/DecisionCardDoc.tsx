@@ -11,6 +11,7 @@ const OPTIONS: DecisionOption[] = [
   { id: "keep", label: "Keep v1 endpoint for 30 days", description: "Safer; clients migrate on their own time.", recommended: true },
   { id: "remove", label: "Remove v1 now", description: "Faster; breaks 3 known clients." },
   { id: "ask", label: "Ask the API team first", description: "Pauses the run until they reply." },
+  { id: "delete", label: "Delete the v1 handler", disabled: true, disabledReason: "Unavailable: a release freeze is on until Friday." },
 ];
 
 const Q = "The v1 invoices endpoint has 3 callers. What should I do with it?";
@@ -77,7 +78,7 @@ export function DecisionCardDoc() {
       variants={[
         {
           title: "Pending — multiple choice",
-          about: "Options are a kit RadioGroup in card layout. Confirm stays disabled until something is chosen.",
+          about: "Options are a kit RadioGroup in card layout. Confirm stays disabled until something is chosen. A disabled option stays in the list and says why (disabled, disabledReason). Skip is outline and takes Escape.",
           code: `<DecisionCard title="Billing refactor asks" meta="paused · 0:42" question="…" options={options} onConfirm={send} onSkip={skip} />`,
           render: <DecisionCard {...BASE} onConfirm={noop} onSkip={noop} />,
         },

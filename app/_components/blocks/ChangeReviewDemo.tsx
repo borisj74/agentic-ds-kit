@@ -35,6 +35,7 @@ export function ChangeReviewDemo() {
   return (
     <>
       <ChangeReview
+        title="Apply the rate limiter to acme/api?"
         agent="Backend agent"
         files={files}
         summary={CHANGE_REVIEW_SUMMARY}

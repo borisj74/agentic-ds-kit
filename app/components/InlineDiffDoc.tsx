@@ -40,7 +40,7 @@ export function InlineDiffDoc() {
           onAccept={() => setStatus("accepted")}
           onReject={() => setStatus("rejected")}
           onAcceptAll={() => setStatus("accepted")}
-          resolvedSummary={status === "accepted" ? "calcTotal · +2 −1 · src/billing/invoice.ts" : "calcTotal · kept the original"}
+          resolvedSummary={status === "accepted" ? "calcTotal · 2 added, 1 removed · src/billing/invoice.ts" : "calcTotal · kept the original"}
           resolvedAt="14:03"
         />
       }
@@ -101,11 +101,11 @@ export function InlineDiffDoc() {
         {
           title: "Accepted and rejected — one line",
           about: "Resolved diffs collapse to a line that stays in the log.",
-          code: `<InlineDiff … status="accepted" resolvedSummary="calcTotal · +2 −1 · src/billing/invoice.ts" resolvedAt="14:03" />
+          code: `<InlineDiff … status="accepted" resolvedSummary="calcTotal · 2 added, 1 removed · src/billing/invoice.ts" resolvedAt="14:03" />
 <InlineDiff … status="rejected" resolvedSummary="calcTotal · kept the original" resolvedAt="14:03" />`,
           render: (
             <div className={agentDoc.stack}>
-              <InlineDiff className={agentDoc.trail} {...BASE} status="accepted" resolvedSummary="calcTotal · +2 −1 · src/billing/invoice.ts" resolvedAt="14:03" />
+              <InlineDiff className={agentDoc.trail} {...BASE} status="accepted" resolvedSummary="calcTotal · 2 added, 1 removed · src/billing/invoice.ts" resolvedAt="14:03" />
               <InlineDiff className={agentDoc.trail} {...BASE} status="rejected" resolvedSummary="calcTotal · kept the original" resolvedAt="14:03" />
             </div>
           ),

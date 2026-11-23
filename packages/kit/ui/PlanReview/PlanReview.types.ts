@@ -50,7 +50,7 @@ export interface PlanReviewProps extends Omit<ComponentPropsWithoutRef<"section"
   onRequestChanges?: (note: string) => void;
   /** Reject the plan. */
   onReject?: () => void;
-  /** Block heading. Default "Plan review". */
+  /** Block heading, best as the question, e.g. "Run this plan to close INV-1842?". Default "Plan review". */
   title?: string;
   ref?: Ref<HTMLElement>;
 }

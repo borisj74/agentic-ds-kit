@@ -89,6 +89,12 @@
   min-width: 0;
 }
 
+.hints {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
