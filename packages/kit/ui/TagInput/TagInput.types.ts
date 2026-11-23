@@ -1,6 +1,6 @@
 import type { Ref } from "react";
 
-export type TagInputSize = "sm" | "md";
+export type TagInputSize = "sm" | "md" | "lg";
 
 export interface TagInputProps {
   id: string;
@@ -15,6 +15,8 @@ export interface TagInputProps {
   suggestions?: string[];
   /** Keys that commit a tag, besides Enter. Default is a comma. */
   delimiters?: string[];
+  /** Most tags allowed. Shows a count (3/8) and blocks adds past it with a message. */
+  maxTags?: number;
   name?: string;
   ariaLabel?: string;
   describedBy?: string;

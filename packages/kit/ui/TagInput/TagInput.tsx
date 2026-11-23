@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ClipboardEvent, type KeyboardEvent } from "react";
+import { CircleAlert } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Tag } from "../Tag";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
@@ -28,6 +30,7 @@ export function TagInput({
   error = false,
   suggestions = [],
   delimiters = [","],
+  maxTags,
   name,
   ariaLabel,
   describedBy,
@@ -36,6 +39,8 @@ export function TagInput({
 }: TagInputProps) {
   const labels = useKitLabels();
   const listId = useId();
+  const noteId = `${listId}-note`;
+  const countId = `${listId}-count`;
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const setInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
@@ -45,6 +50,11 @@ export function TagInput({
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
+  /** First Backspace on an empty query highlights the last tag; the second removes it. */
+  const [pendingRemove, setPendingRemove] = useState(false);
+  const [notice, setNotice] = useState<{ kind: "warning" | "hint"; text: string } | null>(null);
+  const limit = maxTags !== undefined && maxTags > 0 ? Math.floor(maxTags) : undefined;
+  const full = limit !== undefined && tags.length >= limit;
   const matches = suggestions.filter((item) => {
     const needle = query.trim().toLowerCase();
     if (!needle) return false;
@@ -67,19 +77,37 @@ export function TagInput({
 
   function addMany(incoming: string[]) {
     const next = [...tags];
+    let duplicate: string | undefined;
+    let overLimit = false;
     for (const item of incoming) {
       const trimmed = item.trim();
       if (!trimmed) continue;
-      if (next.some((tag) => normalize(tag) === normalize(trimmed))) continue;
+      const existing = next.find((tag) => normalize(tag) === normalize(trimmed));
+      if (existing) {
+        duplicate ??= existing;
+        continue;
+      }
+      if (limit !== undefined && next.length >= limit) {
+        overLimit = true;
+        continue;
+      }
       next.push(trimmed);
     }
     if (next.length !== tags.length) emit(next);
+    if (overLimit && limit !== undefined) setNotice({ kind: "warning", text: labels.tagLimit(limit) });
+    else if (duplicate) setNotice({ kind: "warning", text: labels.tagExists(duplicate) });
+    else setNotice(null);
+    setPendingRemove(false);
     setQuery("");
     setOpen(false);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     const suggestionOpen = open && matches.length > 0;
+    if (event.key !== "Backspace" && pendingRemove) {
+      setPendingRemove(false);
+      setNotice(null);
+    }
     if (event.key === "ArrowDown" && suggestionOpen) {
       event.preventDefault();
       setActive((index) => (index + 1) % matches.length);
@@ -96,7 +124,15 @@ export function TagInput({
       return;
     }
     if (event.key === "Backspace" && query === "" && tags.length > 0) {
-      emit(tags.slice(0, -1));
+      event.preventDefault();
+      if (pendingRemove) {
+        emit(tags.slice(0, -1));
+        setPendingRemove(false);
+        setNotice(null);
+      } else {
+        setPendingRemove(true);
+        setNotice({ kind: "hint", text: labels.removeTagHint(tags[tags.length - 1]) });
+      }
       return;
     }
     if (event.key === "Enter" || delimiters.includes(event.key)) {
@@ -114,7 +150,11 @@ export function TagInput({
     addMany(text.split(pattern));
   }
 
-  const sizeClass = size === "sm" ? controlStyles.controlSm : controlStyles.controlMd;
+  const sizeClass =
+    size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd;
+  const describedByIds = [describedBy, limit !== undefined ? countId : undefined, notice ? noteId : undefined]
+    .filter(Boolean)
+    .join(" ");
   const showList = open && matches.length > 0;
 
   return (
@@ -122,18 +162,22 @@ export function TagInput({
       {name ? <input type="hidden" name={name} value={tags.join(",")} /> : null}
       <div
         className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell)}
+        data-size={size}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
       >
-        {tags.map((tag) => (
+        {tags.map((tag, index) => (
           <Tag
             key={tag}
             size={size === "sm" ? "sm" : "md"}
+            className={pendingRemove && index === tags.length - 1 ? styles.pendingTag : undefined}
             removable
             onRemove={(event) => {
               event.preventDefault();
               event.stopPropagation();
               emit(tags.filter((item) => item !== tag));
+              setPendingRemove(false);
+              setNotice(null);
             }}
           >
             {tag}
@@ -152,12 +196,14 @@ export function TagInput({
           aria-activedescendant={showList ? `${listId}-${safeActive}` : undefined}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
-          aria-describedby={describedBy}
+          aria-describedby={describedByIds || undefined}
           disabled={disabled}
           placeholder={tags.length === 0 ? placeholder : ""}
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
+            setPendingRemove(false);
+            setNotice(null);
             setActive(0);
             setOpen(true);
           }}
@@ -166,8 +212,30 @@ export function TagInput({
           onFocus={() => {
             if (query.trim()) setOpen(true);
           }}
+          onBlur={() => {
+            if (pendingRemove) {
+              setPendingRemove(false);
+              setNotice(null);
+            }
+          }}
         />
+        {limit !== undefined ? (
+          <span className={styles.count} data-full={full || undefined}>
+            <span aria-hidden>
+              {tags.length}/{limit}
+            </span>
+            <span id={countId} className={styles.srOnly}>
+              {labels.tagCount(tags.length, limit)}
+            </span>
+          </span>
+        ) : null}
       </div>
+      <p id={noteId} className={styles.note} data-kind={notice?.kind} aria-live="polite">
+        {notice?.kind === "warning" ? (
+          <CircleAlert size={14} strokeWidth={ICON_STROKE} className={styles.noteIcon} aria-hidden />
+        ) : null}
+        {notice?.text}
+      </p>
       {showList ? (
         <ul id={listId} role="listbox" aria-label={labels.suggestions} className={styles.list}>
           {matches.map((item, index) => (

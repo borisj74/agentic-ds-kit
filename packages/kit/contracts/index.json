@@ -400,7 +400,7 @@
   },
   {
     "id": "fileupload",
-    "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
+    "intent": "Choose files Button in a dashed drop zone (or a compact Button-only row) plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
     "group": "component",
     "path": "contracts/fileupload.json",
     "status": "stable",
@@ -440,7 +440,7 @@
   },
   {
     "id": "taginput",
-    "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+    "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions and an optional maximum with a visible count.",
     "group": "component",
     "path": "contracts/taginput.json",
     "status": "stable",

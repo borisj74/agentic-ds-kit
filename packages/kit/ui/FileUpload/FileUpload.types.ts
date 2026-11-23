@@ -2,6 +2,9 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type FileUploadStatus = "uploading" | "done" | "error";
 
+/** zone: dashed drop area with a Choose files Button. compact: the Button and the limits line only, for drawers and tight forms. */
+export type FileUploadVariant = "zone" | "compact";
+
 export interface FileUploadItem {
   id: string;
   name: string;
@@ -25,18 +28,21 @@ type FileUploadOwnedKeys =
   | "onDrop"
   | "aria-disabled"
   | "aria-describedby"
-  | "aria-invalid";
+  | "aria-invalid"
+  | "draggable";
 
 /**
- * The drop zone `<button>` is the focusable control: `ref` and other native attributes go to it.
+ * The Choose files `<button>` is the focusable control: `ref` and other native attributes go to it.
  * `className` goes to the root wrapper. The hidden file `<input>` stays kit-owned.
  */
 export interface FileUploadProps extends Omit<ComponentPropsWithoutRef<"button">, FileUploadOwnedKeys> {
-  /** Drop zone button id. Pass the same value as Field htmlFor. */
+  /** Choose files button id. Pass the same value as Field htmlFor. */
   id?: string;
+  /** zone (default) or compact. Both accept dropped files. */
+  variant?: FileUploadVariant;
   accept?: string;
   multiple?: boolean;
-  /** Hint under the drop zone text, e.g. "SVG, PNG or PDF, max 10 MB". */
+  /** Limits line, e.g. "PDF or PNG, max 10 MB, up to 5 files". */
   maxSizeLabel?: string;
   disabled?: boolean;
   onFilesSelected: (files: File[]) => void;

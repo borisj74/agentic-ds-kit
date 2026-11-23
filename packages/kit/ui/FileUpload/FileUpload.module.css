@@ -13,24 +13,32 @@
   align-items: center;
   gap: var(--space-stack-xs);
   width: 100%;
-  margin: 0;
   padding: var(--space-inset-lg) var(--space-inset-md);
   border: var(--border-width-thin) dashed var(--border-strong);
-  border-radius: var(--radius-surface-sm);
+  border-radius: var(--radius-control-md);
   background-color: var(--surface-card);
   color: var(--text-secondary);
-  font-family: inherit;
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
   text-align: center;
-  cursor: pointer;
   transition:
     background-color var(--motion-interaction-duration) var(--motion-interaction-easing),
     border-color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
-.zone:hover:not(:disabled) {
-  background-color: var(--surface-muted);
+/* compact: the Button and the limits line on one row. Dropped files still land here. */
+.compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline-md);
+  width: 100%;
+  border-radius: var(--radius-control-md);
+}
+
+.compact.dragging {
+  outline: var(--border-width-thin) dashed var(--border-brand);
+  outline-offset: var(--space-1);
 }
 
 .dragging {
@@ -38,13 +46,19 @@
   border-color: var(--border-brand);
 }
 
-.zone:focus-visible {
+/* One ring around the whole zone while the Choose files Button has keyboard focus. The Button stays
+   the only focusable control; its own ring is hidden here so there are not two. :has(:focus-visible)
+   keeps mouse clicks ring-free, like Button. */
+.zone:focus-within:has(:focus-visible) {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
 }
 
-.zone:disabled {
-  cursor: not-allowed;
+.zone:focus-within :focus-visible {
+  outline: none;
+}
+
+.zone[data-disabled] {
   background-color: var(--surface-disabled);
   border-color: var(--border-disabled);
   color: var(--text-disabled);
@@ -54,35 +68,29 @@
   border-color: var(--status-danger);
 }
 
-.zoneIcon {
+.zoneAction,
+.compactAction {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-inset-xs);
-  color: var(--icon-default);
-}
-
-.zone:disabled .zoneIcon {
-  color: var(--icon-disabled);
 }
 
 .zoneText {
   color: var(--text-secondary);
 }
 
-.zoneAction {
+.dropText {
   color: var(--text-brand);
   font-weight: var(--type-weight-label);
 }
 
-.zone:disabled .zoneText,
-.zone:disabled .zoneAction {
+.zone[data-disabled] .zoneText,
+.zone[data-disabled] .zoneHint {
   color: var(--text-disabled);
 }
 
 .zoneHint {
   color: var(--text-muted);
   font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
 }
 
 .input {
@@ -102,9 +110,9 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-inline-sm);
-  padding: var(--space-inset-sm);
+  padding: var(--space-inset-sm) var(--space-inset-md);
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-sm);
+  border-radius: var(--radius-control-md);
   background-color: var(--surface-card);
 }
 
@@ -151,6 +159,23 @@
   line-height: var(--type-line-ui-xs);
 }
 
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  min-width: 0;
+}
+
+.progress {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.progressRow .detail {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .done {
   color: var(--icon-success);
 }
@@ -172,6 +197,33 @@
 /* Small screens: the 32px actions keep their look but get a 44px touch area (--space-10 + --space-1).
    The gap keeps the two touch areas from overlapping. 40rem is --grid-breakpoint-sm. */
 @media (max-width: 40rem) {
+  .zoneAction,
+  .compactAction {
+    width: 100%;
+  }
+
+  .zoneAction > *,
+  .compactAction > * {
+    flex: 1 1 auto;
+  }
+
+  /* Retry drops to its own line, full width, so the name keeps its room. */
+  .row[data-status="error"] {
+    flex-wrap: wrap;
+  }
+
+  .row[data-status="error"] .body {
+    flex-basis: calc(100% - var(--space-8));
+  }
+
+  .row[data-status="error"] .actions {
+    flex-basis: 100%;
+  }
+
+  .retry {
+    flex: 1 1 auto;
+  }
+
   .actions {
     gap: var(--space-3);
   }

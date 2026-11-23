@@ -8,23 +8,24 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: TagInputSize[] = ["sm", "md"];
+const SIZES: TagInputSize[] = ["sm", "md", "lg"];
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
-const SUGGESTIONS = ["billing", "priority", "enterprise", "onboarding", "renewal"];
+const SUGGESTIONS = ["finance", "net-30", "northwind", "renewal", "enterprise", "overdue"];
 
 export function TagInputDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [size, setSize] = useState<TagInputSize>("md");
   const [tags, setTags] = useState<string[]>(["billing"]);
   const [keywords, setKeywords] = useState<string[]>([]);
+  const [invoiceLabels, setInvoiceLabels] = useState<string[]>(["finance", "net-30", "northwind"]);
 
   return (
     <div>
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>TagInput</h2>
         <p className={styles.lede}>
-          Tags the person types. Enter or a comma adds one. Suggestions are optional. A fixed list
-          is MultiSelect.
+          Tags the person types. Enter or a comma adds one. Suggestions and a maximum are optional.
+          A fixed list is MultiSelect.
         </p>
       </header>
       <section className={styles.master} aria-labelledby="taginput-master">
@@ -32,7 +33,10 @@ export function TagInputDoc() {
           <h2 id="taginput-master" className={styles.masterTitle}>
             Master
           </h2>
-          <p className={styles.masterSummary}>Duplicates are ignored. Backspace on an empty query removes the last tag.</p>
+          <p className={styles.masterSummary}>
+            A duplicate is not added and says so. The first Backspace on an empty query highlights
+            the last tag; the second removes it.
+          </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
         {tab === "preview" ? (
@@ -106,6 +110,32 @@ export function TagInputDoc() {
                 </p>
               </div>
               <CodeBlock code={'<TagInput id="labels" suggestions={labels} />'} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Maximum</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <Field label="Invoice labels" htmlFor="taginput-max">
+                    <TagInput
+                      id="taginput-max"
+                      placeholder="Add a label"
+                      maxTags={8}
+                      suggestions={SUGGESTIONS}
+                      value={invoiceLabels}
+                      onChange={setInvoiceLabels}
+                    />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  maxTags shows a count such as 3/8 at the end of the field. An add past the
+                  limit is blocked and the reason is shown and announced. Try adding finance again
+                  to see the duplicate message.
+                </p>
+              </div>
+              <CodeBlock code={'<TagInput id="labels" maxTags={8} suggestions={labels} />'} />
             </section>
           </div>
         )}

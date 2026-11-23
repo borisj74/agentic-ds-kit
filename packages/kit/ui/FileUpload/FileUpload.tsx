@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type DragEvent } from "react";
-import { CircleAlert, CircleCheck, File as FileIcon, Upload } from "lucide-react";
+import { CircleAlert, CircleCheck, File as FileIcon } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { Progress } from "../Progress";
@@ -11,7 +11,7 @@ import styles from "./FileUpload.module.css";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { FileUploadProps, FileUploadItem, FileUploadStatus } from "./FileUpload.types";
+export type { FileUploadProps, FileUploadItem, FileUploadStatus, FileUploadVariant } from "./FileUpload.types";
 
 function formatSize(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return "";
@@ -54,56 +54,70 @@ function FileRow({
   onRetry?: (id: string) => void;
 }) {
   const labels = useKitLabels();
+  const rowId = useId();
   const percent = Math.round(Math.min(100, Math.max(0, file.progress ?? 0)));
   const size = formatSize(file.size);
 
+  const failed = file.status === "error";
+  const uploading = file.status === "uploading";
+
   return (
-    <li className={styles.row}>
-      <span className={styles.fileIcon} aria-hidden>
-        <FileIcon size={16} strokeWidth={ICON_STROKE} />
+    <li className={styles.row} data-status={file.status}>
+      <span className={cx(styles.fileIcon, failed && styles.failed)} aria-hidden>
+        {failed ? (
+          <CircleAlert size={16} strokeWidth={ICON_STROKE} />
+        ) : (
+          <FileIcon size={16} strokeWidth={ICON_STROKE} />
+        )}
       </span>
       <div className={styles.body}>
         <div className={styles.meta}>
-          <span className={styles.name} title={file.name}>
+          <span id={`${rowId}-name`} className={styles.name} title={file.name}>
             {file.name}
           </span>
-          <span className={styles.detail}>
-            {size ? <span>{size}</span> : null}
-            {file.status === "done" ? (
-              <CircleCheck size={16} className={styles.done} strokeWidth={ICON_STROKE} aria-hidden />
-            ) : null}
-            {file.status === "error" ? (
-              <CircleAlert size={16} className={styles.failed} strokeWidth={ICON_STROKE} aria-hidden />
-            ) : null}
-            <span
-              className={file.status === "error" ? styles.errorText : undefined}
-              aria-live="polite"
-            >
-              {statusText(file)}
+          {uploading ? null : (
+            <span className={cx(styles.detail, failed && styles.errorText)}>
+              {size ? <span>{size}</span> : null}
+              {size && failed ? <span aria-hidden>·</span> : null}
+              {file.status === "done" ? (
+                <CircleCheck size={16} className={styles.done} strokeWidth={ICON_STROKE} aria-hidden />
+              ) : null}
+              <span aria-live="polite">{statusText(file)}</span>
             </span>
-            {file.status === "uploading" ? <span aria-hidden>{percent}%</span> : null}
-          </span>
+          )}
         </div>
-        {file.status === "uploading" ? (
-          <Progress value={percent} size="sm" ariaLabel={labels.uploading(file.name)} />
+        {uploading ? (
+          <div className={styles.progressRow}>
+            <Progress value={percent} size="sm" ariaLabel={labels.uploading(file.name)} className={styles.progress} />
+            <span className={styles.detail}>
+              <span aria-live="polite">{statusText(file)}</span>
+              <span aria-hidden>{percent}%</span>
+            </span>
+          </div>
         ) : null}
       </div>
       <div className={styles.actions}>
-        {file.status === "error" && onRetry ? (
+        {failed && onRetry ? (
           <Button
-            appearance="ghost" mode="neutral"
+            appearance="outline"
+            mode="neutral"
             size="sm"
             iconStart="RotateCcw"
-            ariaLabel={labels.retryFile(file.name)}
+            id={`${rowId}-retry`}
+            aria-labelledby={`${rowId}-retry ${rowId}-name`}
             disabled={disabled}
             onClick={() => onRetry(file.id)}
-          />
+            className={styles.retry}
+          >
+            {labels.retry}
+          </Button>
         ) : null}
         {onRemove ? (
           <Button
-            appearance="ghost" mode="neutral"
+            appearance="ghost"
+            mode="neutral"
             size="sm"
-            iconStart={file.status === "uploading" ? "X" : "Trash2"}
+            iconStart={uploading ? "X" : "Trash2"}
             ariaLabel={labels.removeFile(file.name)}
             disabled={disabled}
             onClick={() => onRemove(file.id)}
@@ -116,6 +130,7 @@ function FileRow({
 
 export function FileUpload({
   id,
+  variant = "zone",
   accept,
   multiple = true,
   maxSizeLabel,
@@ -147,14 +162,14 @@ export function FileUpload({
 
   const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer.types).includes("Files");
 
-  const onDragEnter = (event: DragEvent<HTMLButtonElement>) => {
+  const onDragEnter = (event: DragEvent<HTMLDivElement>) => {
     if (disabled || !hasFiles(event)) return;
     event.preventDefault();
     dragDepth.current += 1;
     setDragging(true);
   };
 
-  const onDragOver = (event: DragEvent<HTMLButtonElement>) => {
+  const onDragOver = (event: DragEvent<HTMLDivElement>) => {
     if (disabled || !hasFiles(event)) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
@@ -166,7 +181,7 @@ export function FileUpload({
     if (dragDepth.current === 0) setDragging(false);
   };
 
-  const onDrop = (event: DragEvent<HTMLButtonElement>) => {
+  const onDrop = (event: DragEvent<HTMLDivElement>) => {
     if (disabled) return;
     event.preventDefault();
     dragDepth.current = 0;
@@ -175,34 +190,54 @@ export function FileUpload({
   };
 
   const describedByIds = [hintId, describedBy].filter(Boolean).join(" ");
+  const hint = maxSizeLabel ?? (multiple ? "Select one or more files" : "Select a file");
+  const compact = variant === "compact";
+
+  const chooseButton = (
+    <Button
+      {...rest}
+      ref={ref}
+      id={zoneId}
+      appearance="outline"
+      mode="neutral"
+      size="sm"
+      iconStart="Upload"
+      disabled={disabled}
+      aria-describedby={describedByIds}
+      onClick={() => inputRef.current?.click()}
+    >
+      Choose files
+    </Button>
+  );
 
   return (
     <div {...nisthaAttr("fileupload")} className={cx(styles.root, className)}>
-      <button
-        {...rest}
-        ref={ref}
-        type="button"
-        id={zoneId}
-        className={cx(styles.zone, dragging && styles.dragging, error && styles.invalid)}
-        disabled={disabled}
-        aria-disabled={disabled || undefined}
-        aria-describedby={describedByIds}
-        onClick={() => inputRef.current?.click()}
+      <div
+        className={cx(
+          compact ? styles.compact : styles.zone,
+          dragging && styles.dragging,
+          error && styles.invalid,
+        )}
+        data-disabled={disabled || undefined}
         onDragEnter={onDragEnter}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
-        <span className={styles.zoneIcon} aria-hidden>
-          <Upload size={16} strokeWidth={ICON_STROKE} />
-        </span>
-        <span className={styles.zoneText}>
-          <span className={styles.zoneAction}>Click to upload</span> or drag and drop
-        </span>
+        {compact ? (
+          <span className={styles.compactAction}>{chooseButton}</span>
+        ) : dragging ? (
+          <span className={styles.dropText}>Drop files here</span>
+        ) : (
+          <>
+            <span className={styles.zoneAction}>{chooseButton}</span>
+            <span className={styles.zoneText}>or drag and drop</span>
+          </>
+        )}
         <span id={hintId} className={styles.zoneHint}>
-          {maxSizeLabel ?? (multiple ? "Select one or more files" : "Select a file")}
+          {hint}
         </span>
-      </button>
+      </div>
       <input
         ref={inputRef}
         type="file"
