@@ -99,13 +99,43 @@
   margin-top: calc(var(--space-1) * -1);
 }
 
-.eyebrow {
+.context {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
   min-width: 0;
   margin-right: auto;
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
+}
+
+/* Tone word keeps the -fg role, so status is a word as well as an icon. */
+.tone {
+  font-weight: var(--type-weight-label);
+  color: inherit;
+}
+
+.inline .tone {
+  color: var(--info-fg);
+}
+
+.inline.success .tone {
+  color: var(--success-fg);
+}
+
+.inline.warning .tone {
+  color: var(--caution-fg);
+}
+
+.inline.danger .tone {
+  color: var(--danger-fg);
+}
+
+.separator,
+.eyebrow {
+  min-width: 0;
+  font-weight: var(--type-weight-body);
   color: inherit;
 }
 
@@ -117,6 +147,7 @@
   color: var(--text-secondary);
 }
 
+.inline .separator,
 .inline .eyebrow {
   color: var(--text-secondary);
 }

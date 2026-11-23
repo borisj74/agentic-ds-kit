@@ -53,8 +53,13 @@ describe("Alert", () => {
         "Update the card before then or the workspace pauses.",
       ),
     );
-    assert.match(html, /role="alert"/);
-    assert.match(html, />Billing</);
+    // A warning on page load is a polite status, not an interruption.
+    assert.match(html, /role="status"/);
+    assert.doesNotMatch(html, /role="alert"/);
+    // Tone word, then the eyebrow: "Warning · Billing".
+    assert.ok(html.indexOf(">Warning<") >= 0, "tone word shows");
+    assert.ok(html.indexOf(">Warning<") < html.indexOf(">Billing<"), "tone word comes before the eyebrow");
+    assert.match(html, />·</);
     assert.match(html, />Nov 20</);
     assert.match(html, /aria-label="Dismiss"/);
   });
@@ -73,9 +78,21 @@ describe("Alert", () => {
         "The file store did not answer. Your data is safe.",
       ),
     );
+    assert.match(html, /role="alert"/, "danger stays role=alert");
+    assert.match(html, />Error</, "danger reads Error");
     const buttons = html.match(/<button[^>]*>/g) ?? [];
     assert.equal(buttons.length, 2);
     assert.ok(html.indexOf("Try again") < html.indexOf("View log"));
+  });
+});
+
+describe("Alert labels", () => {
+  test("the tone word comes from KitLabelsProvider", async () => {
+    const { KitLabelsProvider } = await import("../dist/ui/shared/labels.js");
+    const html = renderToStaticMarkup(
+      h(KitLabelsProvider, { labels: { warning: "Avertissement" } }, h(Alert, { variant: "warning", eyebrow: "Facturation" }, "Mettez la carte à jour.")),
+    );
+    assert.match(html, />Avertissement</);
   });
 });
 
@@ -98,6 +115,7 @@ describe("Toast", { skip }, () => {
       Element: window.Element,
       Event: window.Event,
       MouseEvent: window.MouseEvent,
+      MutationObserver: window.MutationObserver,
       getComputedStyle: window.getComputedStyle.bind(window),
       requestAnimationFrame: window.requestAnimationFrame.bind(window),
       cancelAnimationFrame: window.cancelAnimationFrame.bind(window),
@@ -130,6 +148,37 @@ describe("Toast", { skip }, () => {
   test("success counts down by default", async () => {
     await act(async () => root.render(h(Toast, { open: true, onClose: noop, status: "success", title: "3 invoices archived" })));
     assert.ok(card().querySelector('span[style*="animation-duration: 5000ms"]'));
+  });
+
+  test("past three, older toasts are hidden, paused and out of the live region", async () => {
+    let closed = 0;
+    const onClose = () => {
+      closed += 1;
+    };
+    const titles = ["One", "Two", "Three", "Four"];
+    await act(async () =>
+      root.render(
+        h(
+          "div",
+          null,
+          titles.map((title) => h(Toast, { key: title, open: true, onClose, title, duration: 40 })),
+        ),
+      ),
+    );
+    const cards = [...document.querySelectorAll("#agentic-ds-kit-toasts [aria-labelledby]")];
+    assert.equal(cards.length, 4);
+    const oldest = cards.find((card) => card.textContent.includes("One"));
+    assert.equal(oldest.hidden, true, "the oldest is hidden");
+    assert.equal(oldest.getAttribute("role"), null, "the hidden one has no live role");
+    assert.equal(oldest.getAttribute("aria-live"), null);
+    for (const card of cards.filter((c) => c !== oldest)) {
+      assert.equal(card.hidden, false);
+      assert.equal(card.getAttribute("role"), "status");
+    }
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 120)));
+    // The three visible ones timed out; the hidden one was paused, so it is still waiting.
+    assert.equal(closed, 3);
+    await act(async () => root.render(h("div", null)));
   });
 
   test("progress shows a named progressbar instead of the countdown", async () => {

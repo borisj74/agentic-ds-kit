@@ -5,7 +5,7 @@ import type { AlertProps, AlertVariant } from "./Alert.types";
 import { cx } from "../shared/cx";
 import styles from "./Alert.module.css";
 import { nisthaAttr } from "../shared/inspect";
-import { AlertDismiss } from "./AlertDismiss";
+import { AlertDismiss, AlertTone } from "./AlertLabels";
 
 export type { AlertAction, AlertPlacement, AlertProps, AlertVariant } from "./Alert.types";
 
@@ -31,8 +31,9 @@ export function Alert({
   ...rest
 }: AlertProps) {
   const Icon = ICONS[variant];
-  const role = variant === "warning" || variant === "danger" ? "alert" : "status";
-  const hasMeta = Boolean(eyebrow || timestamp || onDismiss);
+  // Only danger interrupts. A warning shown on page load is not urgent, so it is a polite status.
+  const role = variant === "danger" ? "alert" : "status";
+  const hasMeta = placement === "inline" || Boolean(eyebrow || timestamp || onDismiss);
   const hasActions = Boolean(action || secondaryAction);
 
   return (
@@ -47,7 +48,17 @@ export function Alert({
       <div className={styles.copy}>
         {hasMeta ? (
           <div className={styles.meta}>
-            {eyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
+            <span className={styles.context}>
+              <AlertTone variant={variant} className={styles.tone} />
+              {eyebrow ? (
+                <>
+                  <span className={styles.separator} aria-hidden="true">
+                    ·
+                  </span>
+                  <span className={styles.eyebrow}>{eyebrow}</span>
+                </>
+              ) : null}
+            </span>
             {timestamp ? <span className={styles.timestamp}>{timestamp}</span> : null}
             {onDismiss ? <AlertDismiss onDismiss={onDismiss} /> : null}
           </div>

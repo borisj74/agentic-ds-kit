@@ -11,6 +11,7 @@ import styles from "./Toast.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
+import { mergeRefs } from "../shared/mergeRefs";
 import { nisthaAttr } from "../shared/inspect";
 
 export type { ToastProps, ToastSize, ToastStatus } from "./Toast.types";
@@ -23,6 +24,30 @@ const ICONS: Record<ToastStatus, typeof Info> = {
 };
 
 const STACK_ID = "agentic-ds-kit-toasts";
+/** The stack shows the newest three; older ones wait hidden, paused and silent. */
+const MAX_VISIBLE = 3;
+
+/** True while this card sits behind the newest MAX_VISIBLE in the shared stack. */
+function useOverflowed() {
+  const [overflowed, setOverflowed] = useState(false);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const wrapper = cardRef.current?.parentElement;
+    const stack = wrapper?.parentElement;
+    if (!wrapper || !stack) return undefined;
+    const update = () => {
+      const index = Array.prototype.indexOf.call(stack.children, wrapper);
+      setOverflowed(index >= 0 && stack.children.length - index > MAX_VISIBLE);
+    };
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(stack, { childList: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return [overflowed, cardRef] as const;
+}
 
 function getStack(): HTMLElement {
   let el = document.getElementById(STACK_ID);
@@ -76,7 +101,9 @@ function ToastCard({
   const progressValue = hasProgress ? Math.min(Math.max(progress, 0), 100) : 0;
   const titleId = useId();
   const descriptionId = useId();
-  const [paused, setPaused] = useState(false);
+  const [hoverPaused, setPaused] = useState(false);
+  const [overflowed, cardRef] = useOverflowed();
+  const paused = hoverPaused || overflowed;
   const remaining = useRef(duration ?? 0);
   const timedFor = useRef(duration);
   const onCloseRef = useRef(onClose);
@@ -119,10 +146,11 @@ function ToastCard({
     <div
       {...rest}
       {...nisthaAttr("toast", rest)}
-      ref={ref}
+      ref={mergeRefs(cardRef, ref)}
       className={cx(styles.toast, styles[status], styles[size], className)}
-      role={isDanger ? "alert" : "status"}
-      aria-live={isDanger ? undefined : "polite"}
+      hidden={overflowed || undefined}
+      role={overflowed ? undefined : isDanger ? "alert" : "status"}
+      aria-live={overflowed || isDanger ? undefined : "polite"}
       aria-atomic="true"
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}

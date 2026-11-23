@@ -40,12 +40,12 @@
         "page"
       ],
       "default": "page",
-      "note": "page: tinted fill, for a problem that affects the whole page or account; put it above the content it is about. inline: neutral card surface with the status shown by the icon, for something in one part of the page."
+      "note": "page: tinted fill, for a problem that affects the whole page or account; put it above the content it is about. inline: neutral card surface with the status shown by the icon, for something in one part of the page. The header (tone word, eyebrow, timestamp, Dismiss) always shows on inline; on page it shows when eyebrow, timestamp or onDismiss is set."
     },
     "eyebrow": {
       "type": "string",
       "required": false,
-      "note": "Short context word in the header, like Billing."
+      "note": "Short context word after the tone word in the header, like Billing in Warning · Billing."
     },
     "timestamp": {
       "type": "string",
@@ -110,8 +110,9 @@
   "a11y": {
     "element": "div",
     "requirements": [
-      "info and success use role=status",
-      "warning and danger use role=alert",
+      "info, success and warning use role=status (a warning on page load is not urgent)",
+      "danger uses role=alert",
+      "The header starts with the tone word (Info, Success, Warning, Error from KitLabelsProvider keys info, success, warning, danger), then · eyebrow, so status is never colour alone",
       "Title uses the -fg tone and body uses text.primary (4.5:1 or more on the tinted fill); the icon keeps the status colour",
       "Dismiss is a kit Button named Dismiss (KitLabelsProvider); focus never jumps to the alert",
       "Actions are kit Buttons, so they stay keyboard reachable in reading order after the text"

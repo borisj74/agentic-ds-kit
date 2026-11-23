@@ -188,8 +188,10 @@ export function AlertDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  eyebrow names the area, timestamp says when. action is outline here; secondaryAction
-                  follows it. onDismiss adds Dismiss. Leave it out while the problem is still real.
+                  The header reads Warning · Billing: the tone word, then eyebrow. timestamp says when.
+                  action is outline here; secondaryAction follows it. onDismiss adds Dismiss. Leave it
+                  out while the problem is still real. A warning is role=status; only danger is
+                  role=alert.
                 </p>
               </div>
               <CodeBlock code={INLINE_CODE} />

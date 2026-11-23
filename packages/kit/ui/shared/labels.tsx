@@ -84,6 +84,11 @@ export interface KitLabels {
   badResponse: string;
   moreActions: string;
   whatWentWrong: string;
+  /** Alert: the tone word in the header, e.g. "Warning · Billing". */
+  info: string;
+  success: string;
+  warning: string;
+  danger: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -137,6 +142,10 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   badResponse: "Bad response",
   moreActions: "More actions",
   whatWentWrong: "What went wrong?",
+  info: "Info",
+  success: "Success",
+  warning: "Warning",
+  danger: "Error",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

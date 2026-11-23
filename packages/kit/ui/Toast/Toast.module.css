@@ -12,8 +12,8 @@
   pointer-events: none;
 }
 
-/* At most three toasts show; older ones stay hidden until a newer one closes. */
-.stack > :nth-last-child(n + 4) .toast {
+/* At most three toasts show; older ones are hidden (and paused) until a newer one closes. */
+.toast[hidden] {
   display: none;
 }
 

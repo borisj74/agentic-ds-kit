@@ -126,7 +126,7 @@
     "element": "div[role=status]",
     "requirements": [
       "Every open Toast portals into one shared stack at the bottom right. Create the stack if missing (role=status, aria-live=polite). Newest at the bottom. No Toaster.",
-      "The stack shows at most three toasts; older ones are hidden until a newer one closes.",
+      "The stack shows at most three toasts. Older ones are hidden, their timers pause, and they are left out of the live region until a newer one closes.",
       "info, success, and warning use role=status with aria-live=polite. danger uses role=alert (assertive).",
       "The countdown pauses while the pointer is over the toast or focus is inside it.",
       "Hover or focus pauses the timer so people can reach Dismiss or the action.",

@@ -16,7 +16,8 @@ type ToastOwnedKeys =
   | "onMouseEnter"
   | "onMouseLeave"
   | "onFocus"
-  | "onBlur";
+  | "onBlur"
+  | "hidden";
 
 /** `ref`, `className` and other native attributes go to the toast card, not the shared live-region stack. */
 export interface ToastProps extends Omit<ComponentPropsWithoutRef<"div">, ToastOwnedKeys> {
