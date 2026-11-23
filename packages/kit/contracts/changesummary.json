@@ -2,10 +2,11 @@
   "id": "changesummary",
   "status": "stable",
   "level": "organism",
-  "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+  "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out. An optional summary sentence leads, rows can be grouped into Better and Worse, and each row can carry a one-line why.",
   "useWhen": [
     "summarise the changes between two periods on a dashboard or report",
     "say whether each move is good or bad for the business",
+    "lead with one sentence on the period and say why each metric moved",
     "link to the full report"
   ],
   "doNotUseWhen": [
@@ -14,6 +15,8 @@
     "a time series — LineChart"
   ],
   "contains": [
+    "badge",
+    "button",
     "empty",
     "skeleton"
   ],
@@ -30,15 +33,34 @@
     "items": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral' }[] — values are pre-formatted strings."
+      "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral', why?: string }[] — values are pre-formatted strings; why is a one-line caption with no trailing period."
+    },
+    "summary": {
+      "type": "string",
+      "required": false,
+      "note": "The headline sentence above the rows. With no items it stands alone (a quiet month) instead of the Empty state."
+    },
+    "groupBy": {
+      "type": "enum",
+      "values": [
+        "sentiment"
+      ],
+      "required": false,
+      "note": "sentiment groups rows into Better, Worse and Steady, each with a count in a kit Badge. Default: one flat list."
     },
     "onViewAll": {
       "type": "function",
-      "required": false
+      "required": false,
+      "note": "Renders an outline neutral sm Button."
     },
     "viewAllLabel": {
       "type": "string",
       "default": "View full report"
+    },
+    "onAsk": {
+      "type": "function",
+      "required": false,
+      "note": "Adds a neutral outline sm Button \"Ask in Chat\" with the MessageCircle icon, e.g. to open Chat on this period."
     },
     "emptyTitle": {
       "type": "string",
@@ -81,14 +103,14 @@
     "type.weight.heading",
     "type.family.mono",
     "status.dangerText",
-    "primary.fg",
     "status.successText"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
-      "each row reads as one sentence, e.g. \"MRR up +9.8%, good. $48.2K to $52.9K.\"; the visual row is aria-hidden",
+      "each row reads as one sentence, e.g. \"MRR up +9.8%, good. $48.2K to $52.9K. Upgrades from Growth to Scale.\"; the visual row is aria-hidden",
+      "each group is an h4 (Better, Worse, Steady) with its count; its list is aria-labelledby that heading",
       "the word good, bad or neutral is visible next to the values, not colour alone",
       "aria-busy while loading; the error is role=alert"
     ]
@@ -99,5 +121,5 @@
     "Do not show arrows without the word",
     "Do not use raw hex"
   ],
-  "snippet": "<ChangeSummary period=\"Oct → Nov 2026\" items={changes} onViewAll={openReport} />"
+  "snippet": "<ChangeSummary period=\"Oct → Nov\" summary={headline} groupBy=\"sentiment\" items={changes} onViewAll={openReport} onAsk={openChat} />"
 }
