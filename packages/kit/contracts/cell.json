@@ -8,9 +8,9 @@
     "Mixed visual and label content in a row"
   ],
   "doNotUseWhen": [
-    "A full searchable dataset \u2014 use DataTable, which composes Cell",
-    "A short static text table \u2014 use Table",
-    "Editable in-place cells \u2014 use DataGrid"
+    "A full searchable dataset — use DataTable, which composes Cell",
+    "A short static text table — use Table",
+    "Editable in-place cells — use DataGrid"
   ],
   "contains": [
     "avatar",
@@ -139,7 +139,7 @@
     "onCheckedChange": {
       "type": "function",
       "required": false,
-      "note": "(checked: boolean) => void \u2014 only when checkbox"
+      "note": "(checked: boolean) => void — only when checkbox"
     },
     "id": {
       "type": "string",
@@ -215,7 +215,7 @@
       "type=progress composes kit Progress",
       "type=rating is role=img, '{n} of 5'",
       "type=actionIcons each icon-only Button needs ariaLabel",
-      "type=actionMenu ariaLabel is Row actions unless label is set",
+      "type=actionMenu ariaLabel is Row actions unless label is set. Name the menu after the row, e.g. label=\"Actions for INV-1842\"; the open menu takes the same name. The menu uses sm rows when the Cell is sm",
       "type=link is a real <a href> (or linkAs) named by label, keyboard-focusable; its click does not bubble to a row click handler"
     ]
   },
@@ -223,10 +223,10 @@
     "Do not invent DataTableCell, a local Tag, Trend, FileIcon, PaymentMethod, or a second Badge — status stays Badge; user labels use kit Tag",
     "Do not use raw hex",
     "Do not use Badge for trends",
-    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox \u2014 compose the kit pieces",
-    "Do not render a separate Lucide icon beside it \u2014 pass a Lucide name or component to the icon props",
-    "Do not invent a local progress bar \u2014 type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
-    "Do not invent a local DropdownMenu \u2014 type=actionMenu composes kit DropdownMenu",
+    "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox — compose the kit pieces",
+    "Do not render a separate Lucide icon beside it — pass a Lucide name or component to the icon props",
+    "Do not invent a local progress bar — type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
+    "Do not invent a local DropdownMenu — type=actionMenu composes kit DropdownMenu",
     "Do not invent local Select, Button, or ButtonGroup — compose the kit pieces",
     "Do not put a Button or onClick span in a cell for navigation — type=link"
   ],

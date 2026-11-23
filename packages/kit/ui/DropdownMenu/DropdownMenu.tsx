@@ -20,6 +20,7 @@ import { Checkbox } from "../Checkbox";
 import { Input } from "../Input";
 import { Tag } from "../Tag";
 import { LucideByName } from "../Button/lucideName";
+import { Keycaps, ariaKeyShortcuts } from "../shared/shortcut";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { DropdownMenuGroup, DropdownMenuItem, DropdownMenuProps } from "./DropdownMenu.types";
@@ -29,6 +30,7 @@ export type {
   DropdownMenuProps,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuGroupSelection,
   DropdownMenuAlign,
   DropdownMenuTriggerStyle,
   DropdownMenuTriggerTag,
@@ -100,6 +102,8 @@ export function DropdownMenu({
   const scope = useThemeScopeMarker();
   const [query, setQuery] = useState("");
   const searchId = `${uid}-search`;
+  // Typeahead: letters typed within 500ms build one prefix to match against item labels.
+  const typeahead = useRef({ text: "", at: 0 });
 
   // Drop stale positions while closed, so a reopen measures fresh before showing.
   const subKey = open ? openSubId : null;
@@ -314,7 +318,7 @@ export function DropdownMenu({
       panelRef.current?.querySelector<HTMLInputElement>("input")?.focus();
       return;
     }
-    const item = panelRef.current?.querySelector<HTMLElement>("[role='menuitem'][data-enabled='true'], [role='menuitemcheckbox'][data-enabled='true']");
+    const item = panelRef.current?.querySelector<HTMLElement>("[role='menuitem'][data-enabled='true'], [role='menuitemcheckbox'][data-enabled='true'], [role='menuitemradio'][data-enabled='true']");
     item?.focus();
   }, [open, mounted, coords, searchable]);
 
@@ -356,6 +360,34 @@ export function DropdownMenu({
     const next = (current + delta + enabledIds.length) % enabledIds.length;
     highlight(enabledIds[next]);
     queryItem(panelRef.current, enabledIds[next])?.focus();
+  }
+
+  function onTypeahead(
+    key: string,
+    now: number,
+    ids: string[],
+    items: DropdownMenuItem[],
+    current: string | null,
+  ): string | null {
+    const state = typeahead.current;
+    state.text = now - state.at > 500 ? key : state.text + key;
+    state.at = now;
+    const prefix = state.text.toLowerCase();
+    const labelOf = (id: string) => items.find((item) => item.id === id)?.label.toLowerCase() ?? "";
+    // A repeated single letter cycles through matches; a longer prefix starts from the current item.
+    const repeat = prefix.length > 1 && prefix.split("").every((ch) => ch === prefix[0]);
+    const needle = repeat ? prefix[0] : prefix;
+    const start = current ? ids.indexOf(current) : -1;
+    const offset = needle.length === 1 ? 1 : 0;
+    for (let step = 0; step < ids.length; step += 1) {
+      const id = ids[(start + offset + step + ids.length) % ids.length];
+      if (labelOf(id).startsWith(needle)) return id;
+    }
+    return null;
+  }
+
+  function isTypeaheadKey(event: ReactKeyboardEvent<HTMLDivElement>): boolean {
+    return event.key.length === 1 && event.key !== " " && !event.ctrlKey && !event.metaKey && !event.altKey;
   }
 
   function onMenuKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
@@ -412,6 +444,14 @@ export function DropdownMenu({
         triggerButton()?.focus();
         break;
       default:
+        if (isTypeaheadKey(event)) {
+          const hit = onTypeahead(event.key, event.timeStamp, enabledIds, mainItems, activeId);
+          if (hit) {
+            event.preventDefault();
+            highlight(hit);
+            queryItem(panelRef.current, hit)?.focus();
+          }
+        }
         break;
     }
   }
@@ -453,6 +493,14 @@ export function DropdownMenu({
         triggerButton()?.focus();
         break;
       default:
+        if (isTypeaheadKey(event)) {
+          const hit = onTypeahead(event.key, event.timeStamp, subEnabledIds, subItems, current ?? null);
+          if (hit) {
+            event.preventDefault();
+            event.stopPropagation();
+            queryItem(subPanelRef.current, hit)?.focus();
+          }
+        }
         break;
     }
   }
@@ -472,17 +520,19 @@ export function DropdownMenu({
           const asLink = Boolean(item.href) && !item.disabled && !hasSub;
           const className = [
             styles.item,
+            size === "sm" ? styles.itemsm : size === "lg" ? styles.itemlg : "",
             highlighted || openSubId === item.id ? styles.itemHighlighted : "",
             item.disabled ? styles.itemDisabled : "",
             item.danger ? styles.itemDanger : "",
-            item.description ? styles.itemWithDescription : "",
           ]
             .filter(Boolean)
             .join(" ");
-          const showCheck = typeof item.selected === "boolean" && !item.checkbox;
+          const asCheckbox = Boolean(item.checkbox);
+          const asRadio = group.selection === "radio" && !asCheckbox;
+          const showCheck = (asRadio || typeof item.selected === "boolean") && !asCheckbox;
           const body = (
             <>
-              {item.checkbox ? (
+              {asCheckbox ? (
                 <span className={styles.itemCheckbox} inert aria-hidden>
                   <Checkbox
                     id={`${uid}-cb-${item.id}`}
@@ -492,12 +542,6 @@ export function DropdownMenu({
                     onChange={() => {}}
                   />
                 </span>
-              ) : showCheck ? (
-                item.selected ? (
-                  <LucideByName name="Check" size={16} className={styles.itemCheck} />
-                ) : (
-                  <span className={styles.itemCheck} />
-                )
               ) : item.icon ? (
                 <LucideByName name={item.icon} size={16} className={styles.itemIcon} />
               ) : null}
@@ -507,19 +551,31 @@ export function DropdownMenu({
                   <span className={styles.itemDescription}>{item.description}</span>
                 ) : null}
               </span>
-              {item.shortcut ? <span className={styles.shortcut}>{item.shortcut}</span> : null}
+              {item.shortcut ? <Keycaps shortcut={item.shortcut} /> : null}
+              {/* End slot: the selected / radio check, or a 16px spacer so labels and chips line up. */}
+              {showCheck && !hasSub ? (
+                item.selected ? (
+                  <LucideByName name="Check" size={16} className={styles.itemCheck} />
+                ) : (
+                  <span className={styles.itemCheck} aria-hidden />
+                )
+              ) : null}
               {hasSub ? <LucideByName name="ChevronRight" size={16} className={styles.itemChevron} /> : null}
             </>
           );
           const shared = {
             className,
-            role: (item.checkbox ? "menuitemcheckbox" : "menuitem") as "menuitem" | "menuitemcheckbox",
+            role: (asCheckbox ? "menuitemcheckbox" : asRadio ? "menuitemradio" : "menuitem") as
+              | "menuitem"
+              | "menuitemcheckbox"
+              | "menuitemradio",
             "data-id": item.id,
             "data-enabled": item.disabled ? "false" : "true",
-            "aria-checked": item.checkbox ? Boolean(item.selected) : undefined,
+            "aria-checked": asCheckbox || asRadio ? Boolean(item.selected) : undefined,
             "aria-disabled": item.disabled || undefined,
             "aria-haspopup": hasSub ? ("menu" as const) : undefined,
             "aria-expanded": hasSub ? openSubId === item.id : undefined,
+            "aria-keyshortcuts": ariaKeyShortcuts(item.shortcut),
             tabIndex: highlighted ? 0 : -1,
           };
           const onMouseEnter = () => {

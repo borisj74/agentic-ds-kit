@@ -3,6 +3,7 @@ export type {
   DropdownMenuProps,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuGroupSelection,
   DropdownMenuAlign,
   DropdownMenuTriggerStyle,
   DropdownMenuTriggerTag,

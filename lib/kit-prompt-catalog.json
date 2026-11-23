@@ -2881,8 +2881,9 @@
       "group": "component",
       "intent": "Searchable command menu for quick actions.",
       "useWhen": [
-        "Searchable actions and quick jumps",
-        "Command palette — kit Button opens kit Modal with Command inside"
+        "Searchable actions and quick jumps: many items, recent items or async results",
+        "Command palette — kit Button (or ⌘K) opens kit Modal with Command inside",
+        "Which one: if people type to find it, use Command. If they act on one thing, use DropdownMenu. If they pick a value to save, use Select."
       ],
       "doNotUseWhen": [
         "Short Field dropdown — use Select",
@@ -2910,7 +2911,7 @@
         "groups": {
           "type": "array",
           "required": true,
-          "note": "Each group has optional heading and a required items array. Item icon: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+          "note": "Each group has optional heading and a required items array. Item icon: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. Recent items are a plain group with heading \"Recent\"."
         },
         "onSelect": {
           "type": "function",
@@ -2921,6 +2922,16 @@
           "type": "string",
           "default": "Command menu",
           "note": "Accessible name on the combobox input"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Async results on the way: a kit Spinner row and aria-busy on the list. Items already passed stay visible."
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "(query: string) => void. Adds an Ask Chat row (MessageCircle) at the foot of the list and in the empty state."
         }
       }
     },
@@ -5926,9 +5937,10 @@
       "group": "component",
       "intent": "Actions or value menu from a button, field, or nav trigger.",
       "useWhen": [
-        "A button that opens a short list of actions",
+        "A button, ⋯ or nav item that opens a short list of actions on one thing (up to about ten)",
         "Row actions in a DataTable via Cell type=actionMenu",
-        "Select composes this with triggerStyle=field"
+        "Select composes this with triggerStyle=field",
+        "Which one: if people type to find it, use Command. If they act on one thing, use DropdownMenu. If they pick a value to save, use Select."
       ],
       "doNotUseWhen": [
         "Choosing one value in a form — use Select (it composes this with triggerStyle=field)",

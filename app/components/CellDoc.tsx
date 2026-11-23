@@ -380,8 +380,8 @@ export function CellDoc() {
                 <div className={`${styles.previewRow} ${styles.previewCell}`}>
                   <Cell
                     type="actionMenu"
-                    size="md"
-                    label="Row actions"
+                    size="sm"
+                    label="Actions for INV-1842"
                     actions={[
                       { label: "Edit", icon: "Pencil" },
                       { label: "Make a copy", icon: "Copy" },
@@ -393,11 +393,12 @@ export function CellDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Kit DropdownMenu from the ellipsis. Pass actions. Align end.
+                  Kit DropdownMenu from the ellipsis. Pass actions. Align end. Name the menu after the
+                  row with label, e.g. &quot;Actions for INV-1842&quot;. A sm Cell gets 28px menu rows.
                 </p>
               </div>
               <CodeBlock
-                code={'<Cell type="actionMenu" label="Row actions" actions={[{ label: "Edit", icon: "Pencil" }, { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" }]} />'}
+                code={'<Cell type="actionMenu" size="sm" label="Actions for INV-1842" actions={[{ label: "Edit", icon: "Pencil" }, { label: "Delete", icon: "Trash2", appearance: "solid", mode: "danger" }]} />'}
               />
             </section>
           </div>

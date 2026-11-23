@@ -61,6 +61,17 @@ export interface KitLabels {
   suggestions: string;
   /** DropdownMenu: the search field. */
   searchOptions: string;
+  /** Command: the key footer ("↑↓ Navigate", "↵ Open"; Esc uses `close`). */
+  navigate: string;
+  openItem: string;
+  /** Command: the live result count read after each search, e.g. "3 results". */
+  resultCount: (count: number) => string;
+  /** Command: the Spinner while `loading`. */
+  loadingResults: string;
+  /** Command onAsk row: label, hint with no query, and hint with a query. */
+  ask: string;
+  askHint: string;
+  askAbout: (query: string) => string;
   /** Calendar. */
   chooseMonth: string;
   calendarView: string;
@@ -130,6 +141,13 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   removeFile: (fileName) => `Remove ${fileName}`,
   suggestions: "Suggestions",
   searchOptions: "Search options",
+  navigate: "Navigate",
+  openItem: "Open",
+  resultCount: (count) => (count === 1 ? "1 result" : `${count} results`),
+  loadingResults: "Loading results",
+  ask: "Ask Chat",
+  askHint: "Ask about your workspace",
+  askAbout: (query) => `Ask about “${query}”`,
   chooseMonth: "Choose month",
   calendarView: "Calendar view",
   month: "Month",

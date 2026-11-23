@@ -25,8 +25,13 @@ export interface DropdownMenuTriggerTag {
   label: string;
 }
 
+/** Group selection: radio items, with `selected` on the one chosen. Checkbox items stay per item (`checkbox: true`). */
+export type DropdownMenuGroupSelection = "radio";
+
 export interface DropdownMenuGroup {
   heading?: string;
+  /** radio: items are menuitemradio with aria-checked; `selected` marks the one chosen. */
+  selection?: DropdownMenuGroupSelection;
   items: DropdownMenuItem[];
 }
 

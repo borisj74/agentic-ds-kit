@@ -4,8 +4,9 @@
   "level": "organism",
   "intent": "Searchable command menu for quick actions.",
   "useWhen": [
-    "Searchable actions and quick jumps",
-    "Command palette — kit Button opens kit Modal with Command inside"
+    "Searchable actions and quick jumps: many items, recent items or async results",
+    "Command palette — kit Button (or ⌘K) opens kit Modal with Command inside",
+    "Which one: if people type to find it, use Command. If they act on one thing, use DropdownMenu. If they pick a value to save, use Select."
   ],
   "doNotUseWhen": [
     "Short Field dropdown — use Select",
@@ -32,12 +33,14 @@
             "id": "string",
             "label": "string",
             "icon": "KitIcon?",
+            "description": "string? subtle text after the label, one line with an ellipsis; search matches it",
+            "keywords": "string[]? extra words search matches, not shown",
             "shortcut": "string?",
             "disabled": "boolean?"
           }
         ]
       },
-      "note": "Each group has optional heading and a required items array. Item icon: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+      "note": "Each group has optional heading and a required items array. Item icon: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. Recent items are a plain group with heading \"Recent\"."
     },
     "onSelect": {
       "type": "function",
@@ -48,6 +51,16 @@
       "type": "string",
       "default": "Command menu",
       "note": "Accessible name on the combobox input"
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Async results on the way: a kit Spinner row and aria-busy on the list. Items already passed stay visible."
+    },
+    "onAsk": {
+      "type": "function",
+      "required": false,
+      "note": "(query: string) => void. Adds an Ask Chat row (MessageCircle) at the foot of the list and in the empty state."
     }
   },
   "passthrough": {
@@ -58,27 +71,43 @@
   },
   "tokens": [
     "surface.card",
-    "surface.muted",
+    "bg.tray",
     "border.faint",
     "border.focus",
     "radius.surfaceMd",
+    "radius.sm",
+    "radius.xs",
     "text.primary",
     "text.secondary",
     "text.muted",
+    "icon.secondary",
     "icon.muted",
     "space.1",
+    "space.2",
+    "space.10",
+    "font.mono",
     "type.size.caption",
-    "type.weight.label"
+    "type.weight.label",
+    "type.line.uiXs",
+    "type.weight.body"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
       "Input is role=combobox with aria-expanded=true, aria-controls the listbox, aria-autocomplete=list, aria-activedescendant, and aria-label from label",
       "List is role=listbox",
-      "Items are role=option with aria-selected when highlighted and aria-disabled when disabled",
+      "Items are role=option with aria-selected when highlighted and aria-disabled when disabled. An item with a shortcut sets aria-keyshortcuts for a chord (e.g. Shift+Meta+P); a sequence such as G I is read as \"G then I\"",
       "useId for ids",
       "Search icon is aria-hidden",
-      "Group headings are visible text in sentence case (no text-transform); inside a kit Modal, Command drops its own frame and the Modal card is the only one"
+      "Group headings are visible text in sentence case (no text-transform); inside a kit Modal, Command drops its own frame and the Modal card is the only one",
+      "Shortcut chips are Geist Mono, one chip per key, and aria-hidden",
+      "A polite live region reads the result count (resultCount label) after each search",
+      "The key footer (↑↓ navigate, ↵ open, Esc close) is aria-hidden; Esc hints show only inside a kit Modal",
+      "Rows are lg (40px) with a bg tray highlight and 4px radius, the same item anatomy as DropdownMenu",
+      "Placement: Command stays put. It always opens in a kit Modal, so it never flips or floats",
+      "built-in labels (navigate, openItem, close, resultCount) come from KitLabelsProvider; English by default",
+      "loading sets aria-busy on the listbox and shows kit Spinner (role=status)",
+      "The onAsk row is a role=option at the end of the list, reachable with the arrows like any item"
     ]
   },
   "doNot": [
@@ -89,5 +118,8 @@
     "Do not use raw hex",
     "Do not close itself — compose Modal for an overlay"
   ],
-  "snippet": "<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Search\" onClick={open} />\n<Modal open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Modal>"
+  "snippet": "<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Search\" onClick={open} />\n<Modal open={open} title=\"Command menu\" onClose={close}>\n  <Command groups={groups} onSelect={close} />\n</Modal>",
+  "contains": [
+    "spinner"
+  ]
 }

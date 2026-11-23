@@ -17,6 +17,10 @@
   border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
   box-shadow: var(--shadow-md);
+  /* Cap the height at the screen minus 16px; the list scrolls inside the panel. */
+  max-height: calc(100vh - var(--space-4));
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .panelColumns {
@@ -47,10 +51,16 @@
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
+/* Full-width separator: run the rule under the panel padding to both edges. */
+.panel:not(.panelColumns) > .group + .group {
+  margin-inline: calc(-1 * var(--space-1));
+  padding-inline: var(--space-1);
+}
+
 /* Group headings in sentence case: a quiet caption, not a shouted overline. */
 .heading {
   /* Inline padding matches .item so headings start on the item label line. */
-  padding: var(--space-2) var(--space-3) var(--space-1);
+  padding: var(--space-2) var(--space-2) var(--space-1);
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
@@ -63,15 +73,16 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
+  /* Rows: sm 28, md 32 (default), lg 40. Type, gaps and chips stay the same across sizes. */
+  min-height: var(--space-8);
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-1) var(--space-2);
   border: 0;
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  /* 20px line + 8px padding each side = 36px rows. */
   line-height: var(--type-line-ui-sm);
   text-align: left;
   text-decoration: none;
@@ -79,13 +90,17 @@
   box-sizing: border-box;
 }
 
-.itemWithDescription {
-  align-items: flex-start;
+.itemsm {
+  min-height: calc(var(--space-6) + var(--space-1));
+}
+
+.itemlg {
+  min-height: var(--space-10);
 }
 
 .item:hover:not([aria-disabled="true"]),
 .itemHighlighted {
-  background-color: var(--surface-muted);
+  background-color: var(--bg-tray);
 }
 
 .item:focus-visible {
@@ -105,22 +120,24 @@
 .itemIcon,
 .itemChevron {
   flex-shrink: 0;
-  color: var(--icon-muted);
+  color: var(--icon-secondary);
 }
 
 .itemDanger .itemIcon {
-  color: var(--text-danger);
+  color: var(--icon-danger);
 }
 
 .itemText {
   flex: 1;
   min-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  align-items: baseline;
+  gap: var(--space-2);
 }
 
 .itemLabel {
+  flex-shrink: 0;
+  max-width: 100%;
   color: var(--text-primary);
   overflow-wrap: anywhere;
 }
@@ -133,18 +150,14 @@
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-body);
-  line-height: var(--type-line-body);
+  line-height: var(--type-line-ui-xs);
   color: var(--text-muted);
-  overflow-wrap: anywhere;
-}
-
-.shortcut {
-  flex-shrink: 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-caption);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
+  /* One line with an ellipsis, after the label. */
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .fieldTrigger {
@@ -279,8 +292,8 @@
 
 .itemCheck {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: var(--space-4);
+  height: var(--space-4);
   color: var(--text-primary);
 }
 

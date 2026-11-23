@@ -131,6 +131,77 @@ const DESTRUCTIVE_CODE = `<DropdownMenu
   ]}
 />`;
 
+// Account menu from the board: start icons stay, the radio check sits in the end slot, Theme opens a submenu.
+const WORKSPACE_GROUPS: DropdownMenuGroup[] = [
+  {
+    heading: "Boris Jovanovic",
+    items: [
+      { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
+      { id: "settings", label: "Settings", icon: "Settings", shortcut: "⌘," },
+      {
+        id: "theme",
+        label: "Theme",
+        icon: "Eye",
+        submenu: [
+          {
+            selection: "radio",
+            items: [
+              { id: "theme-light", label: "Light", icon: "Sun", selected: true },
+              { id: "theme-dark", label: "Dark", icon: "Moon", selected: false },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    heading: "Workspaces",
+    selection: "radio",
+    items: [
+      { id: "agentix", label: "Agentix", icon: "LayoutGrid", selected: true },
+      { id: "northwind", label: "Northwind Labs", icon: "LayoutGrid", selected: false },
+    ],
+  },
+  { items: [{ id: "create-workspace", label: "Create workspace", icon: "Plus" }] },
+  { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
+];
+
+const WORKSPACE_CODE = `<DropdownMenu
+  iconStart="ChevronsUpDown"
+  ariaLabel="Account menu"
+  appearance="ghost" mode="neutral"
+  align="end"
+  groups={[
+    {
+      heading: "Boris Jovanovic",
+      items: [
+        { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
+        { id: "settings", label: "Settings", icon: "Settings", shortcut: "⌘," },
+        {
+          id: "theme",
+          label: "Theme",
+          icon: "Eye",
+          submenu: [{ selection: "radio", items: [
+            { id: "theme-light", label: "Light", icon: "Sun", selected: theme === "light" },
+            { id: "theme-dark", label: "Dark", icon: "Moon", selected: theme === "dark" },
+          ] }],
+        },
+      ],
+    },
+    {
+      heading: "Workspaces",
+      selection: "radio",
+      items: [
+        { id: "agentix", label: "Agentix", icon: "LayoutGrid", selected: workspace === "agentix" },
+        { id: "northwind", label: "Northwind Labs", icon: "LayoutGrid", selected: workspace === "northwind" },
+      ],
+    },
+    { items: [{ id: "create-workspace", label: "Create workspace", icon: "Plus" }] },
+    { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
+  ]}
+  onSelect={(id) => {}}
+/>`;
+
 const ICON_ONLY_CODE = `<DropdownMenu
   iconStart="Ellipsis"
   ariaLabel="Row actions"
@@ -222,8 +293,11 @@ export function DropdownMenuDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use for actions from a button. Use Select in a Field. Use Command in a Modal when
-                  the list is searchable. Do not add Trigger or Item cousins.
+                  Act on one thing, up to about ten actions, from a button, ⋯ or nav item. Rows follow
+                  size: sm 28px for dense tables, md 32px by default, lg 40px. It opens 4px below,
+                  flips above when there is more room there, and caps its height at the screen minus
+                  16px. Type a letter to jump to an item. If people type to find it, use Command; if
+                  they pick a value to save, use Select. Do not add Trigger or Item cousins.
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />
@@ -241,7 +315,8 @@ export function DropdownMenuDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Item icon is a Lucide name. Shortcut is a hint, not a keybinding.
+                  Item icon is a Lucide name. Shortcut is a hint, not a keybinding: one Geist Mono chip
+                  per key, and the item sets aria-keyshortcuts so it is read once.
                 </p>
               </div>
               <CodeBlock code={ICONS_CODE} />
@@ -259,6 +334,32 @@ export function DropdownMenuDoc() {
                 <p className={styles.usageBody}>danger marks an irreversible item. Not a second menu.</p>
               </div>
               <CodeBlock code={DESTRUCTIVE_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Account menu with a radio group</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <DropdownMenu
+                    iconStart="ChevronsUpDown"
+                    ariaLabel="Account menu"
+                    appearance="ghost" mode="neutral"
+                    align="end"
+                    groups={WORKSPACE_GROUPS}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  selection=&quot;radio&quot; makes the group menuitemradio rows; selected marks the
+                  one chosen with a check in the end slot, and the start icon stays. Theme opens a
+                  submenu with its own radio group. Create workspace is an action, so it sits in its
+                  own group rather than the radio group. Checkbox rows stay per item. Align end for
+                  account and row menus.
+                </p>
+              </div>
+              <CodeBlock code={WORKSPACE_CODE} />
             </section>
 
             <section className={styles.example}>
