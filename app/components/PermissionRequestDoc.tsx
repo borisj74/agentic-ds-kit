@@ -24,6 +24,7 @@ const SCOPES: PermissionScope[] = [
     access: "write",
     icon: "Mail",
     reason: "Post the digest to the #ops mailing list.",
+    limit: "50 emails a day",
     expiry: "No expiry",
   },
 ];
@@ -45,14 +46,14 @@ const BASE = {
 
 const SCOPES_CODE = `scopes={[
     { id: "docs", resource: "~/acme/ledger/docs", access: "read", icon: "Folder", reason: "Summarise weekly doc changes for the Monday digest.", expiry: "Expires in 7 days" },
-    { id: "mail", resource: "Send email as ops@acme.dev", access: "write", icon: "Mail", reason: "Post the digest to the #ops mailing list.", expiry: "No expiry" },
+    { id: "mail", resource: "Send email as ops@acme.dev", access: "write", icon: "Mail", reason: "Post the digest to the #ops mailing list.", limit: "50 emails a day", expiry: "No expiry" },
   ]}`;
 
 const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactNode }[] = [
   {
     title: "Pending — two scopes, risk note",
     about:
-      "Each scope shows the resource, its access level, why and when it expires. warning is a kit Alert for standing write access. Grant is ⌘/Ctrl+Enter, Deny is Escape.",
+      "Each scope shows the resource, its access level (Read, Write or Admin), why, its limit and when it expires. warning is a kit Alert for standing write access. Grant is ⌘/Ctrl+Enter, Deny is Escape.",
     code: `<PermissionRequest
   description="Research agent wants standing access, not a single action."
   ${SCOPES_CODE}

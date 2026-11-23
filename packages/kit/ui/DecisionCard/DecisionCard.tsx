@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type KeyboardEvent } from "react";
-import { ArrowRight, CircleCheck, CircleHelp, CircleX } from "lucide-react";
+import { CircleHelp, CircleX } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { Field } from "../Field";
@@ -10,6 +10,8 @@ import { Textarea } from "../Textarea";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
+import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { handleReviewKeys } from "../shared/reviewKeys";
 import type { DecisionCardProps } from "./DecisionCard.types";
 import styles from "./DecisionCard.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -50,40 +52,33 @@ export function DecisionCard({
   if (resolved) {
     const chosen = options.find((option) => option.id === value)?.label ?? value;
     const label = status === "resolved" ? "Chose" : "Skipped";
-    const Icon = status === "resolved" ? CircleCheck : ArrowRight;
     return (
-      <section
+      <ResolvedRow
         {...rest} {...nisthaAttr("decisioncard", rest)}
         ref={mergeRefs(focus.rowRef, ref)}
-        tabIndex={-1}
-        className={cx(styles.resolved, styles[status], className)}
+        className={className}
+        outcome={status === "resolved" ? "yes" : "skipped"}
+        label={label}
+        text={resolvedLabel ?? chosen}
+        meta={resolvedAt}
         aria-label={`${label}: ${title}`}
-      >
-        <Icon size={16} strokeWidth={ICON_STROKE} className={styles.resolvedIcon} aria-hidden="true" />
-        <span className={styles.resolvedLabel}>{label}</span>
-        <span className={styles.resolvedText}>
-          <span aria-hidden="true">· </span>
-          {resolvedLabel ?? chosen}
-        </span>
-        {resolvedAt ? <span className={styles.resolvedAt}>{resolvedAt}</span> : null}
-      </section>
+      />
     );
   }
 
   const canConfirm = Boolean(value.trim()) && !sending;
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.key === "Enter" && (event.metaKey || event.ctrlKey) && canConfirm && onConfirm) {
-      event.preventDefault();
-      onConfirm();
-    }
+    if (sending) return;
+    handleReviewKeys(event, { onYes: canConfirm ? onConfirm : undefined, onNo: onSkip });
   }
 
   return (
     <section
       {...rest} {...nisthaAttr("decisioncard", rest)}
       ref={ref}
-      className={cx(styles.card, sending && styles.sending, className)}
+      tabIndex={-1}
+      className={cx(styles.card, reviewStyles.focusRing, sending && styles.sending, className)}
       aria-labelledby={titleId}
       aria-busy={sending || undefined}
       onKeyDown={handleKeyDown}
@@ -112,7 +107,9 @@ export function DecisionCard({
           options={options.map((option) => ({
             value: option.id,
             label: option.label,
-            description: option.description,
+            // A disabled option stays in the group and says why, so it is announced, not skipped.
+            description: option.disabled && option.disabledReason ? option.disabledReason : option.description,
+            disabled: option.disabled,
             badge: option.recommended ? "Recommended" : undefined,
             badgeTone: "neutral",
           }))}
@@ -132,24 +129,24 @@ export function DecisionCard({
         </p>
       ) : null}
 
-      <footer className={styles.footer}>
-        {onSkip ? (
-          <Button appearance="ghost" mode="neutral" disabled={sending} onClick={onSkip}>
-            Skip for now
+      <footer className={reviewStyles.footer}>
+        <KeyHint>{onSkip ? "⌘⏎ confirm · Esc skip" : "⌘⏎ confirm"}</KeyHint>
+        <span className={reviewStyles.actions}>
+          {onSkip ? (
+            <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={sending} onClick={onSkip}>
+              Skip
+            </Button>
+          ) : null}
+          <Button
+            aria-keyshortcuts="Meta+Enter Control+Enter"
+            iconStart={sending ? "LoaderCircle" : "Check"}
+            className={sending ? styles.spin : undefined}
+            disabled={!canConfirm && !sending}
+            onClick={sending ? undefined : onConfirm}
+          >
+            {sending ? "Sending…" : "Confirm"}
           </Button>
-        ) : (
-          <span />
-        )}
-        <Button
-          shortcut={sending ? undefined : "⌘⏎"}
-          aria-keyshortcuts="Meta+Enter Control+Enter"
-          iconStart={sending ? "LoaderCircle" : undefined}
-          className={sending ? styles.spin : undefined}
-          disabled={!canConfirm && !sending}
-          onClick={sending ? undefined : onConfirm}
-        >
-          {sending ? "Sending…" : "Confirm"}
-        </Button>
+        </span>
       </footer>
       <span className={styles.srOnly} role="status">
         {sending ? "Sending your answer" : ""}

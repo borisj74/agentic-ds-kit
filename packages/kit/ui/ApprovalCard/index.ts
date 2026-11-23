@@ -7,4 +7,5 @@ export type {
   ApprovalCardCommand,
   ApprovalCardDiff,
   ApprovalCardDiffLine,
+  ApprovalCardFact,
 } from "./ApprovalCard.types";

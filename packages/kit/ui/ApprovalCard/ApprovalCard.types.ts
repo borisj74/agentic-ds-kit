@@ -30,6 +30,12 @@ export interface ApprovalCardDiff {
 
 export type ApprovalCardAction = ApprovalCardCommand | ApprovalCardDiff;
 
+/** One fact in words above the preview, e.g. { label: "Will do", value: "Email ap@northwind.com" }. */
+export interface ApprovalCardFact {
+  label: string;
+  value: string;
+}
+
 /** Native article attributes the kit sets itself (or replaces with its own prop). */
 type ApprovalCardOwnedKeys = "children" | "title" | "aria-labelledby" | "aria-describedby" | "onKeyDown";
 
@@ -41,6 +47,8 @@ export interface ApprovalCardProps extends Omit<ComponentPropsWithoutRef<"articl
   risk?: ApprovalCardRisk;
   /** Exactly what will run: a command or a diff. */
   action: ApprovalCardAction;
+  /** What will happen and why the risk is what it is, in words, e.g. Will do / Why medium. A dl above the preview. */
+  facts?: ApprovalCardFact[];
   status?: ApprovalCardStatus;
   /** Seconds until auto-deny. The card counts down and calls onExpire (or onDeny) at 0. */
   countdownSec?: number;

@@ -11,6 +11,8 @@ export interface PermissionScope {
   access: PermissionAccess;
   /** Why the agent needs it. */
   reason?: string;
+  /** How far the access goes, e.g. "$500 per refund" or "50 emails a day". */
+  limit?: string;
   /** e.g. "Expires in 7 days" or "No expiry". */
   expiry?: string;
   /** Lucide icon for the resource, e.g. "Folder", "Mail". Default by access. */

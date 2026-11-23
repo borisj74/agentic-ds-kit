@@ -30,7 +30,7 @@
     "scopes": {
       "type": "array",
       "required": true,
-      "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, expiry?, icon? }[]"
+      "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, limit?, expiry?, icon? }[]. limit says how far the access goes, e.g. \"$500 per refund\". The access Badge reads Read, Write or Admin."
     },
     "status": {
       "type": "enum",
@@ -52,7 +52,8 @@
     },
     "errorMessage": {
       "type": "string",
-      "default": "Couldn't save the grant."
+      "default": "Couldn't save the grant.",
+      "note": "Error row with a kit Button Retry."
     },
     "requestedAt": {
       "type": "string",
@@ -67,12 +68,12 @@
     "onGrant": {
       "type": "function",
       "required": false,
-      "note": "Grant, the one solid primary. ⌘/Ctrl+Enter inside the card."
+      "note": "Grant (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
     },
     "onDeny": {
       "type": "function",
       "required": false,
-      "note": "Deny, outline. Escape inside the card."
+      "note": "Deny, outline. Escape while focus is in the card but not on another control."
     },
     "onRetry": {
       "type": "function",
@@ -114,9 +115,9 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "scopes are a list; access is text in a Badge",
-      "Escape denies, ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts",
+      "Escape denies (not on another control) and ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts; the key hint line is aria-hidden and hidden on touch screens",
       "granting sets aria-busy and announces in a status region",
-      "the error is role=alert with a Retry button",
+      "the error is role=alert with a kit Button Retry",
       "resolved row is named \"Granted: <title>\"",
       "motion is opacity and transform only, off under prefers-reduced-motion"
     ]
@@ -127,5 +128,5 @@
     "Grant is the one solid primary; Deny is outline",
     "Do not use raw hex"
   ],
-  "snippet": "<PermissionRequest description=\"Research agent wants standing access.\" scopes={[{ id: \"docs\", resource: \"~/acme/ledger/docs\", access: \"read\", reason: \"Summarise weekly doc changes.\", expiry: \"Expires in 7 days\" }]} onGrant={grant} onDeny={deny} />"
+  "snippet": "<PermissionRequest title=\"Let Billing agent issue refunds on its own?\" description=\"Why: it found 6 duplicate card charges this month.\" scopes={[{ id: \"refunds\", resource: \"Stripe refunds\", access: \"write\", limit: \"$500 per refund\", expiry: \"Ends 22 Dec\" }]} warning=\"It won't ask again until 22 Dec. You can revoke it in Agent settings.\" onGrant={grant} onDeny={deny} />"
 }

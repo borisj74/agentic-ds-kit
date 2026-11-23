@@ -104,7 +104,7 @@
     "onApprove": {
       "type": "function",
       "required": false,
-      "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary."
+      "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary. ⌘/Ctrl+Enter while focus is in the block and not in a text field."
     },
     "onRequestChanges": {
       "type": "function",
@@ -114,11 +114,12 @@
     "onReject": {
       "type": "function",
       "required": false,
-      "note": "() => void. Reject (outline danger)."
+      "note": "() => void. Reject (outline neutral). Escape while focus is in the block, not on another control."
     },
     "title": {
       "type": "string",
-      "default": "Plan review"
+      "default": "Plan review",
+      "note": "Block heading, best as the question, e.g. \"Run this plan to close INV-1842?\"."
     }
   },
   "passthrough": {
@@ -153,6 +154,7 @@
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
       "the decision is a section labelled by its h3 \"Your decision\"; Approve plan is described by the line that says how many stops wait for your OK at the chosen autonomy",
+      "⌘/Ctrl+Enter approves and Escape rejects while focus is in the block; text fields keep both keys; Approve plan and Reject carry aria-keyshortcuts; the key hint line is aria-hidden and hidden on touch screens",
       "the note is a kit Field + Textarea labelled \"What should change?\"; it takes focus when opened, Escape cancels and returns focus to Request changes, ⌘/Ctrl+Enter sends",
       "the outcome is a kit Alert (status, or alert when rejected)",
       "the steps, their Edit / Remove buttons and the autonomy radio group are AgentPlan's and AutonomyDial's own controls",

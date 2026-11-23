@@ -7,13 +7,14 @@ export const changeReviewDoc: BlockDoc = {
   name: "ChangeReview",
   contract,
   lead:
-    "Review what an agent changed, file by file. What the change does leads; the changed files with their +/− counts sit beside the selected file's diff and its comments. Mark files reviewed, accept or reject each one, or accept the rest in one go. J and K move between files, R marks one reviewed.",
+    "Review what an agent changed, file by file. What the change does leads; the changed files with their +/− counts sit beside the selected file's diff and its comments. Mark files reviewed, accept or reject each one, or accept the rest in one go. J and K move between files, R marks one reviewed, and ⌘/Ctrl+Enter accepts the rest.",
   usage: `import { ChangeReview } from "agentic-ds-kit";
 
 export function ReviewPage({ change, me }) {
   return (
     <main className="layout-content">
       <ChangeReview
+        title="Apply the rate limiter to acme/api?"   // the block title is the question
         agent="Backend agent"
         files={change.files}          // { id, path, kind?, lines, hunkHeader?, reviewed?, verdict? }[]
         summary={change.summary}      // ChangeSummary items

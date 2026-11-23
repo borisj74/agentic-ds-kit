@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type KeyboardEvent } from "react";
-import { CircleCheck, CircleX, Clock, KeyRound, RotateCcw } from "lucide-react";
+import { CircleX } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Alert } from "../Alert";
 import { Badge } from "../Badge";
@@ -10,6 +10,8 @@ import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
+import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { handleReviewKeys } from "../shared/reviewKeys";
 import type { PermissionAccess, PermissionRequestProps, PermissionScope } from "./PermissionRequest.types";
 import styles from "./PermissionRequest.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -28,10 +30,12 @@ const ACCESS_TONE: Record<PermissionAccess, "neutral" | "warning" | "danger"> = 
   admin: "danger",
 };
 
+const ACCESS_LABEL: Record<PermissionAccess, string> = { read: "Read", write: "Write", admin: "Admin" };
+
 const ACCESS_ICON: Record<PermissionAccess, string> = { read: "Folder", write: "PenLine", admin: "ShieldAlert" };
 
 function summaryOf(scope: PermissionScope | undefined) {
-  return scope ? `${scope.access} ${scope.resource}` : "";
+  return scope ? `${ACCESS_LABEL[scope.access]} ${scope.resource}` : "";
 }
 
 /**
@@ -59,27 +63,25 @@ export function PermissionRequest({
   const busy = status === "granting";
 
   if (status === "granted" || status === "denied" || status === "expired") {
-    const Icon = status === "granted" ? CircleCheck : status === "denied" ? CircleX : Clock;
     const label = status === "granted" ? "Granted" : status === "denied" ? "Denied" : "Expired";
-    const parts = [scopes.length > 1 ? `${scopes.length} scopes` : summaryOf(scopes[0]), resolvedNote].filter(Boolean);
+    const text = scopes.length > 1 ? `${scopes.length} scopes` : summaryOf(scopes[0]);
     return (
-      <section {...rest} {...nisthaAttr("permissionrequest", rest)} ref={mergeRefs(focus.rowRef, ref)} tabIndex={-1} className={cx(styles.resolved, styles[status], className)} aria-label={`${label}: ${title}`}>
-        <Icon size={16} strokeWidth={ICON_STROKE} className={styles.resolvedIcon} aria-hidden="true" />
-        <span className={styles.resolvedLabel}>{label}</span>
-        <span className={styles.resolvedText}>{parts.join(" · ")}</span>
-      </section>
+      <ResolvedRow
+        {...rest} {...nisthaAttr("permissionrequest", rest)}
+        ref={mergeRefs(focus.rowRef, ref)}
+        className={className}
+        outcome={status === "granted" ? "yes" : status === "denied" ? "no" : "expired"}
+        label={label}
+        text={text}
+        meta={resolvedNote}
+        aria-label={`${label}: ${title}`}
+      />
     );
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (busy || event.defaultPrevented) return;
-    if (event.key === "Escape" && onDeny) {
-      event.preventDefault();
-      onDeny();
-    } else if (event.key === "Enter" && (event.metaKey || event.ctrlKey) && onGrant) {
-      event.preventDefault();
-      onGrant();
-    }
+    if (busy) return;
+    handleReviewKeys(event, { onYes: onGrant, onNo: onDeny });
   }
 
   const standing = warning ?? null;
@@ -89,7 +91,7 @@ export function PermissionRequest({
       {...rest} {...nisthaAttr("permissionrequest", rest)}
       ref={ref}
       tabIndex={-1}
-      className={cx(styles.card, busy && styles.busy, className)}
+      className={cx(styles.card, reviewStyles.focusRing, busy && styles.busy, className)}
       onFocusCapture={focus.onFocusCapture}
       onBlurCapture={focus.onBlurCapture}
       aria-labelledby={titleId}
@@ -97,12 +99,12 @@ export function PermissionRequest({
       onKeyDown={handleKeyDown}
     >
       <header className={styles.header}>
-        <KeyRound size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
         <span className={styles.count}>
           {scopes.length} {scopes.length === 1 ? "scope" : "scopes"}
+          {requestedAt ? ` · ${requestedAt}` : ""}
         </span>
       </header>
       {description ? <p className={styles.description}>{description}</p> : null}
@@ -115,12 +117,13 @@ export function PermissionRequest({
               <div className={styles.scopeRow}>
                 <span className={styles.resource}>{scope.resource}</span>
                 <Badge tone={ACCESS_TONE[scope.access]} size="sm" appearance="soft" className={styles.access}>
-                  {scope.access}
+                  {ACCESS_LABEL[scope.access]}
                 </Badge>
               </div>
-              {scope.reason || scope.expiry ? (
+              {scope.reason ? <span className={styles.reason}>Why: {scope.reason}</span> : null}
+              {scope.limit || scope.expiry ? (
                 <div className={styles.scopeRow}>
-                  {scope.reason ? <span className={styles.reason}>Why: {scope.reason}</span> : <span />}
+                  {scope.limit ? <span className={styles.limit}>Limit: {scope.limit}</span> : <span />}
                   {scope.expiry ? <span className={styles.expiry}>{scope.expiry}</span> : null}
                 </div>
               ) : null}
@@ -134,27 +137,25 @@ export function PermissionRequest({
           <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.errorIcon} aria-hidden="true" />
           <span className={styles.errorText}>{errorMessage}</span>
           {onRetry ?? onGrant ? (
-            <button type="button" className={styles.retry} onClick={onRetry ?? onGrant}>
-              <RotateCcw size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={onRetry ?? onGrant}>
               Retry
-            </button>
+            </Button>
           ) : null}
         </div>
       ) : standing ? (
         <Alert variant="warning">{standing}</Alert>
       ) : null}
 
-      <footer className={styles.footer}>
-        {requestedAt ? <span className={styles.note}>{requestedAt}</span> : <span />}
-        <span className={styles.actions}>
-          <Button appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" disabled={busy} onClick={onDeny}>
+      <footer className={reviewStyles.footer}>
+        <KeyHint>⌘⏎ grant · Esc deny</KeyHint>
+        <span className={reviewStyles.actions}>
+          <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={busy} onClick={onDeny}>
             Deny
           </Button>
           <Button
             appearance="solid"
             mode="primary"
-            shortcut={busy ? undefined : "⌘⏎"}
-            iconStart={busy ? "LoaderCircle" : undefined}
+            iconStart={busy ? "LoaderCircle" : "Check"}
             aria-keyshortcuts="Meta+Enter Control+Enter"
             className={busy ? styles.granting : undefined}
             onClick={busy ? undefined : onGrant}

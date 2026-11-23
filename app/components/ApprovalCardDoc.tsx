@@ -51,7 +51,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   {
     title: "Pending — high risk, countdown",
     about:
-      "High risk shows a shield and a danger Badge. countdownSec runs an auto-deny timer; at 0 the card calls onExpire, else onDeny. Enter approves and Escape denies while focus is in the card.",
+      "High risk shows a danger Badge. countdownSec runs an auto-deny timer; at 0 the card calls onExpire, else onDeny. ⌘/Ctrl+Enter approves and Escape denies while focus is in the card; plain Enter never approves.",
     code: `<ApprovalCard
   title="Run database migration?"
   description="Agent wants to run a command on staging in acme-demo."
@@ -75,11 +75,40 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     ),
   },
   {
+    title: "Pending — facts in words",
+    about:
+      "facts say what will happen and why the risk is what it is, as a dl above the exact command. Use them when the command alone does not say who it reaches.",
+    code: `<ApprovalCard
+  title="Send a second reminder for INV-1842?"
+  description="Northwind owes $2,400.00, 18 days late. The first reminder went out on 4 Nov."
+  facts={[
+    { label: "Will do", value: "Email ap@northwind.com" },
+    { label: "Why medium", value: "Goes to the customer. Can't unsend." },
+  ]}
+  action={{ kind: "command", command: "dunning send --invoice INV-1842 --template overdue-2", target: "northwind / billing" }}
+  onApprove={approve}
+  onDeny={deny}
+/>`,
+    render: (
+      <ApprovalCard
+        title="Send a second reminder for INV-1842?"
+        description="Northwind owes $2,400.00, 18 days late. The first reminder went out on 4 Nov."
+        facts={[
+          { label: "Will do", value: "Email ap@northwind.com" },
+          { label: "Why medium", value: "Goes to the customer. Can't unsend." },
+        ]}
+        action={{ kind: "command", command: "dunning send --invoice INV-1842 --template overdue-2", target: "northwind / billing" }}
+        onApprove={() => {}}
+        onDeny={() => {}}
+      />
+    ),
+  },
+  {
     title: "Pending — diff preview",
     about: "A file edit shows the exact diff. Added and removed lines read as Added / Removed to screen readers.",
     code: `<ApprovalCard
   title="Edit invoice.ts?"
-  description="1 file · +2 −1 lines"
+  description="1 file · 2 added, 1 removed"
   risk="low"
   ${DIFF_CODE}
   onApprove={approve}
@@ -88,7 +117,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: (
       <ApprovalCard
         title="Edit invoice.ts?"
-        description="1 file · +2 −1 lines"
+        description="1 file · 2 added, 1 removed"
         risk="low"
         action={DIFF}
         onApprove={() => {}}
@@ -174,7 +203,7 @@ export function ApprovalCardDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle risk, the preview kind and the countdown. Approve (Enter) or Deny (Escape) resolves the card to one
+            Toggle risk, the preview kind and the countdown. Approve (⌘/Ctrl+Enter) or Deny (Escape) resolves the card to one
             line.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
@@ -187,7 +216,7 @@ export function ApprovalCardDoc() {
                 <ApprovalCard
                   key={run}
                   title={diff ? "Edit invoice.ts?" : "Run database migration?"}
-                  description={diff ? "1 file · +2 −1 lines" : "Agent wants to run a command on staging in acme-demo."}
+                  description={diff ? "1 file · 2 added, 1 removed" : "Agent wants to run a command on staging in acme-demo."}
                   risk={risk}
                   action={diff ? DIFF : COMMAND}
                   status={status}

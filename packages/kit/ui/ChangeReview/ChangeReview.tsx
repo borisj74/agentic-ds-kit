@@ -8,7 +8,6 @@ import { CommentThread } from "../CommentThread";
 import { Empty } from "../Empty";
 import { Field } from "../Field";
 import { InlineDiff } from "../InlineDiff";
-import { Kbd } from "../Kbd";
 import { ListView } from "../ListView";
 import { Select } from "../Select";
 import { cx } from "../shared/cx";
@@ -28,6 +27,7 @@ import {
 import type { ChangeReviewProps } from "./ChangeReview.types";
 import styles from "./ChangeReview.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { KeyHint, reviewStyles } from "../shared/ResolvedRow";
 
 export type {
   ChangeReviewProps,
@@ -36,6 +36,11 @@ export type {
   ChangeReviewVerdict,
   ChangeReviewComment,
 } from "./ChangeReview.types";
+
+function inTextField(target: EventTarget) {
+  const element = target as HTMLElement;
+  return Boolean(element.closest?.("input, textarea, [contenteditable='true']"));
+}
 
 /**
  * Block: review what an agent changed. ChangeSummary on top; the changed files (ListView, with
@@ -102,7 +107,14 @@ export function ChangeReview(props: ChangeReviewProps) {
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     onKeyDown?.(event);
-    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.defaultPrevented) return;
+    // ⌘/Ctrl+Enter accepts every undecided file, outside text fields (a comment uses it to post).
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey) && onAcceptAll && open > 0 && !inTextField(event.target)) {
+      event.preventDefault();
+      onAcceptAll();
+      return;
+    }
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
     const action = reviewKey(event.key.toLowerCase(), event.target as HTMLElement);
     if (!action) return;
     if (action === "reviewed") {
@@ -150,11 +162,6 @@ export function ChangeReview(props: ChangeReviewProps) {
           </h2>
           <p className={styles.lead}>{reviewSummary(files, agent)}</p>
         </div>
-        {onAcceptAll ? (
-          <Button size="md" iconStart="CheckCheck" disabled={open === 0} onClick={onAcceptAll}>
-            {open === 0 ? "All files decided" : `Accept all ${open} ${open === 1 ? "file" : "files"}`}
-          </Button>
-        ) : null}
       </header>
 
       {summary ? <ChangeSummary className={styles.summary} title={summaryTitle} period={summaryPeriod} items={summary} /> : null}
@@ -171,9 +178,6 @@ export function ChangeReview(props: ChangeReviewProps) {
             items={items}
             empty={{ title: "No changed files", description: "Files the agent changes show here.", icon: "FileDiff", outlined: true }}
           />
-          <p id={keysId} className={styles.keys}>
-            <Kbd>J</Kbd> <Kbd>K</Kbd> next and previous file · <Kbd>R</Kbd> mark reviewed
-          </p>
         </div>
 
         {file ? (
@@ -228,8 +232,7 @@ export function ChangeReview(props: ChangeReviewProps) {
                 <Button
                   size="sm"
                   appearance="outline"
-                  mode="danger"
-                  iconStart="X"
+                  mode="neutral"
                   aria-pressed={file.verdict === "rejected"}
                   onClick={() => onReject(file.id)}
                 >
@@ -295,6 +298,25 @@ export function ChangeReview(props: ChangeReviewProps) {
           <Empty outlined icon="FileDiff" title="Nothing to review" description="The agent has not changed any files." />
         )}
       </div>
+
+      <footer className={cx(reviewStyles.footer, styles.footer)}>
+        <KeyHint id={keysId}>
+          J / K next and previous file · R mark reviewed{onAcceptAll ? " · ⌘⏎ accept all" : ""}
+        </KeyHint>
+        {onAcceptAll ? (
+          <span className={reviewStyles.actions}>
+            <Button
+              size="md"
+              iconStart="CheckCheck"
+              aria-keyshortcuts="Meta+Enter Control+Enter"
+              disabled={open === 0}
+              onClick={onAcceptAll}
+            >
+              {open === 0 ? "All files decided" : `Accept all ${open} ${open === 1 ? "file" : "files"}`}
+            </Button>
+          </span>
+        ) : null}
+      </footer>
     </section>
   );
 }

@@ -44,6 +44,7 @@ export interface InlineDiffProps extends Omit<ComponentPropsWithoutRef<"section"
   onAccept?: () => void;
   /** Reject: Escape in the card. */
   onReject?: () => void;
+  /** Accept all (ghost). Pass it only when the proposal has 2 or more hunks. */
   onAcceptAll?: () => void;
   /** Resolved line detail, e.g. "calcTotal · +2 −1 · src/billing/invoice.ts". */
   resolvedSummary?: string;

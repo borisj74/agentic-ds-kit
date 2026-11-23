@@ -8094,7 +8094,7 @@
     {
       "id": "approvalcard",
       "group": "component",
-      "intent": "The agent asks before it acts: risk, an exact preview of the command or diff, and keyboard-first Approve / Deny with an optional auto-deny countdown.",
+      "intent": "The agent asks before it acts: risk, what will happen in words, an exact preview of the command or diff, and Approve (⌘/Ctrl+Enter) / Deny (Escape) with an optional auto-deny countdown.",
       "useWhen": [
         "an agent needs a person's OK before a command, file edit, or other side effect",
         "human-in-the-loop gates in a chat, trail, or inbox",
@@ -8131,12 +8131,17 @@
             "high"
           ],
           "default": "medium",
-          "note": "Sets the risk Badge (and, at high, the ⌘⏎ approve shortcut)."
+          "note": "Sets the risk Badge."
         },
         "action": {
           "type": "object",
           "required": true,
           "note": "{ kind: \"command\", command, note?, target? } or { kind: \"diff\", file, lines: { type: \"context\" | \"add\" | \"remove\", text }[] }. Shown exactly as it will run."
+        },
+        "facts": {
+          "type": "array",
+          "required": false,
+          "note": "{ label, value }[], e.g. Will do / Why medium. What will happen and why the risk is what it is, in words, as a dl above the preview. The exact action still shows."
         },
         "status": {
           "type": "enum",
@@ -8157,12 +8162,12 @@
         "onApprove": {
           "type": "function",
           "required": false,
-          "note": "Approve button and Enter while focus is inside the card (not on another control). High risk needs ⌘⏎ or Ctrl+⏎."
+          "note": "Approve button (Check icon) and ⌘/Ctrl+Enter while focus is in the card. Plain Enter never approves."
         },
         "onDeny": {
           "type": "function",
           "required": false,
-          "note": "Deny button and Escape while focus is inside the card (not on another control)."
+          "note": "Deny button and Escape while focus is in the card but not on another control."
         },
         "onExpire": {
           "type": "function",
@@ -8640,7 +8645,7 @@
         "scopes": {
           "type": "array",
           "required": true,
-          "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, expiry?, icon? }[]"
+          "note": "{ id, resource, access: \"read\" | \"write\" | \"admin\", reason?, limit?, expiry?, icon? }[]. limit says how far the access goes, e.g. \"$500 per refund\". The access Badge reads Read, Write or Admin."
         },
         "status": {
           "type": "enum",
@@ -8662,7 +8667,8 @@
         },
         "errorMessage": {
           "type": "string",
-          "default": "Couldn't save the grant."
+          "default": "Couldn't save the grant.",
+          "note": "Error row with a kit Button Retry."
         },
         "requestedAt": {
           "type": "string",
@@ -8677,12 +8683,12 @@
         "onGrant": {
           "type": "function",
           "required": false,
-          "note": "Grant, the one solid primary. ⌘/Ctrl+Enter inside the card."
+          "note": "Grant (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
         },
         "onDeny": {
           "type": "function",
           "required": false,
-          "note": "Deny, outline. Escape inside the card."
+          "note": "Deny, outline. Escape while focus is in the card but not on another control."
         },
         "onRetry": {
           "type": "function",
@@ -9358,7 +9364,7 @@
       "doNot": [
         "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
         "Do not start with nothing selected when an option is recommended; list it first and start value on it",
-        "Confirm is the one solid primary; Skip is ghost",
+        "Confirm is the one solid primary; Skip is outline neutral",
         "Do not use raw hex"
       ],
       "props": {
@@ -9379,7 +9385,7 @@
         "options": {
           "type": "array",
           "required": false,
-          "note": "{ id, label, description?, recommended? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge."
+          "note": "{ id, label, description?, recommended?, disabled?, disabledReason? }[] as a kit RadioGroup (card layout). recommended shows a quiet Badge. A disabled option stays in the group and shows disabledReason in place of its description."
         },
         "allowFreeText": {
           "type": "boolean",
@@ -9432,12 +9438,12 @@
         "onConfirm": {
           "type": "function",
           "required": false,
-          "note": "Confirm, the one solid primary. ⌘/Ctrl+Enter inside the card."
+          "note": "Confirm (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
         },
         "onSkip": {
           "type": "function",
           "required": false,
-          "note": "Skip for now (ghost)."
+          "note": "Skip (outline). Escape while focus is in the card but not on another control."
         }
       }
     },
@@ -10002,7 +10008,7 @@
     {
       "id": "inlinediff",
       "group": "component",
-      "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks, then one line.",
+      "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and the counts in words (\"2 added, 2 removed\"), then one line.",
       "useWhen": [
         "an agent proposes an edit to a file or a paragraph",
         "accept or reject hunks before they land",
@@ -10085,17 +10091,17 @@
         "onAccept": {
           "type": "function",
           "required": false,
-          "note": "Accept, the one solid primary. ⌘/Ctrl+Enter in the card."
+          "note": "Accept (Check icon), the one solid primary. ⌘/Ctrl+Enter in the card."
         },
         "onReject": {
           "type": "function",
           "required": false,
-          "note": "Reject (outline). Escape in the card."
+          "note": "Reject (outline). Escape in the card, not on another control."
         },
         "onAcceptAll": {
           "type": "function",
           "required": false,
-          "note": "Accept all (ghost)."
+          "note": "Accept all (ghost). Pass it only when the proposal has 2 or more hunks."
         },
         "resolvedSummary": {
           "type": "string",
@@ -12654,7 +12660,7 @@
         "onApprove": {
           "type": "function",
           "required": false,
-          "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary."
+          "note": "({ autonomy, steps }) => void. Approve plan, the view's one solid primary. ⌘/Ctrl+Enter while focus is in the block and not in a text field."
         },
         "onRequestChanges": {
           "type": "function",
@@ -12664,18 +12670,19 @@
         "onReject": {
           "type": "function",
           "required": false,
-          "note": "() => void. Reject (outline danger)."
+          "note": "() => void. Reject (outline neutral). Escape while focus is in the block, not on another control."
         },
         "title": {
           "type": "string",
-          "default": "Plan review"
+          "default": "Plan review",
+          "note": "Block heading, best as the question, e.g. \"Run this plan to close INV-1842?\"."
         }
       }
     },
     {
       "id": "changereview",
       "group": "component",
-      "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all is the one solid primary.",
+      "intent": "Block: review an agent's change set. ChangeSummary on top; the changed files (ListView with +/− counts and a reviewed state) beside the selected file's InlineDiff, a Reviewed checkbox, Accept / Reject file and the file's comments (CommentThread, on the file or one changed line). Accept all, under everything beside the keys line, is the one solid primary.",
       "useWhen": [
         "an agent finished a change and a person reviews it before it lands",
         "accept some files and reject others",
@@ -12751,12 +12758,12 @@
         "onReject": {
           "type": "function",
           "required": false,
-          "note": "(fileId) => void. Reject file (outline danger, pressed when rejected)."
+          "note": "(fileId) => void. Reject file (outline neutral, pressed when rejected)."
         },
         "onAcceptAll": {
           "type": "function",
           "required": false,
-          "note": "() => void. Accept all N files: every file without a verdict. The one solid primary; disabled when none are left."
+          "note": "() => void. Accept all N files: every file without a verdict. The one solid primary, in the footer; ⌘/Ctrl+Enter outside text fields. Disabled when none are left."
         },
         "onComment": {
           "type": "function",
@@ -12780,7 +12787,8 @@
         },
         "title": {
           "type": "string",
-          "default": "Change review"
+          "default": "Change review",
+          "note": "Block heading, best as the question, e.g. \"Apply the $220.00 credit to INV-1842?\"."
         }
       }
     },

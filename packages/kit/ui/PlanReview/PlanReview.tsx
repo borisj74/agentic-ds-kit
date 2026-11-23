@@ -13,6 +13,8 @@ import { DECISION_COPY, approveHint, planLead } from "./planReview.logic";
 import type { PlanReviewProps } from "./PlanReview.types";
 import styles from "./PlanReview.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { KeyHint } from "../shared/ResolvedRow";
+import { handleReviewKeys } from "../shared/reviewKeys";
 
 export type { PlanReviewProps, PlanReviewDecision, PlanReviewApproval } from "./PlanReview.types";
 
@@ -43,6 +45,7 @@ export function PlanReview(props: PlanReviewProps) {
     onReject,
     title = "Plan review",
     className,
+    onKeyDown,
     ref,
     ...rest
   } = props;
@@ -94,9 +97,22 @@ export function PlanReview(props: PlanReviewProps) {
   }
 
   const outcome = pending ? null : DECISION_COPY[decision];
+  const canApprove = pending && !noteOpen && Boolean(onApprove) && steps.length > 0;
+
+  // ⌘/Ctrl+Enter approves the plan, Escape rejects it, while focus is in the block. Text fields
+  // (a step being edited, the note) keep both keys for themselves.
+  function blockKeys(event: KeyboardEvent<HTMLElement>) {
+    onKeyDown?.(event);
+    if (!pending || noteOpen) return;
+    if ((event.target as HTMLElement).closest?.("input, textarea, [contenteditable='true']")) return;
+    handleReviewKeys(event, {
+      onYes: canApprove ? () => onApprove?.({ autonomy, steps }) : undefined,
+      onNo: onReject,
+    });
+  }
 
   return (
-    <section {...rest} {...nisthaAttr("planreview", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("planreview", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId} onKeyDown={blockKeys}>
       <header className={styles.head}>
         <h2 id={titleId} className={styles.title}>
           {title}
@@ -172,12 +188,15 @@ export function PlanReview(props: PlanReviewProps) {
               </div>
             ) : (
               <div className={styles.row}>
-                <p id={hintId} className={styles.hint}>
-                  {approveHint(steps, autonomy, autonomyOptions)}
-                </p>
+                <div className={styles.hints}>
+                  <p id={hintId} className={styles.hint}>
+                    {approveHint(steps, autonomy, autonomyOptions)}
+                  </p>
+                  <KeyHint>{onReject ? "⌘⏎ approve plan · Esc reject" : "⌘⏎ approve plan"}</KeyHint>
+                </div>
                 <div className={styles.actions}>
                   {onReject ? (
-                    <Button size="md" appearance="outline" mode="danger" iconStart="X" onClick={onReject}>
+                    <Button size="md" appearance="outline" mode="neutral" aria-keyshortcuts="Escape" onClick={onReject}>
                       Reject
                     </Button>
                   ) : null}
@@ -191,6 +210,7 @@ export function PlanReview(props: PlanReviewProps) {
                       size="md"
                       iconStart="Check"
                       aria-describedby={hintId}
+                      aria-keyshortcuts="Meta+Enter Control+Enter"
                       disabled={steps.length === 0}
                       onClick={() => onApprove({ autonomy, steps })}
                     >
