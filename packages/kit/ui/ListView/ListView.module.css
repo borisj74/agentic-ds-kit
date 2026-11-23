@@ -103,6 +103,12 @@ button.groupHeader:focus-visible {
   opacity: var(--opacity-disabled);
 }
 
+/* xs: compact rows for dense cards. 40px tall with one line each of primary and secondary. */
+.xs .row {
+  min-height: var(--space-10);
+  padding: var(--space-1) var(--space-2);
+}
+
 .sm .row {
   padding: var(--space-1) var(--space-2);
 }
@@ -123,6 +129,11 @@ button.groupHeader:focus-visible {
   align-items: center;
   justify-content: center;
   color: var(--icon-secondary);
+}
+
+.xs .leading {
+  width: var(--space-4);
+  height: var(--space-4);
 }
 
 .sm .leading {
@@ -170,6 +181,15 @@ button.body:focus {
   overflow-wrap: anywhere;
   font-weight: var(--type-weight-label);
   color: var(--text-primary);
+}
+
+.xs .primary {
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.xs .secondary {
+  line-height: var(--type-line-ui-xs);
 }
 
 .sm .primary {
@@ -268,4 +288,59 @@ button.body:focus {
   line-height: var(--type-line-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* item.priority: three square bars in the leading slot; the word is in the secondary line. */
+.leading.prioritySlot {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: var(--space-px);
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.bar {
+  flex: 1;
+  border-radius: 0;
+  background-color: var(--bg-track);
+}
+
+.bar:nth-child(1) {
+  height: 40%;
+}
+
+.bar:nth-child(2) {
+  height: 70%;
+}
+
+.bar:nth-child(3) {
+  height: 100%;
+}
+
+.priority-high .bar[data-on] {
+  background-color: var(--status-danger);
+}
+
+.priority-medium .bar[data-on] {
+  background-color: var(--status-warning);
+}
+
+.priority-low .bar[data-on] {
+  background-color: var(--icon-secondary);
+}
+
+/* item.primaryAction: one fixed-width slot so the verbs line up as a column across rows. */
+.primaryActionSlot {
+  display: inline-flex;
+  flex-shrink: 0;
+  min-width: calc(var(--space-16) + var(--space-4));
+}
+
+.primaryActionSlot > * {
+  flex: 1;
 }

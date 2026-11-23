@@ -187,3 +187,36 @@ describe("ListView row names", () => {
     assert.match(html, /aria-label="notes.md"/);
   });
 });
+
+describe("ListView priority, sort and primaryAction", () => {
+  const items = [
+    { id: "m", primary: "Fernway Tours", secondary: "$310", priority: "medium" },
+    { id: "n", primary: "No priority" },
+    { id: "h", primary: "Marlow Dental", secondary: "$1,450", priority: "high", primaryAction: { id: "link", label: "Send link" }, actions: [{ id: "open", label: "Open" }] },
+    { id: "l", primary: "Quarry Coffee", priority: "low" },
+  ];
+
+  test("the priority word starts the visible secondary line and the row name", () => {
+    const html = render(h(kit.ListView, { label: "Needs attention", size: "xs", items }));
+    assert.match(html, /aria-label="Marlow Dental, High · \$1,450"/);
+    assert.match(html, />High · \$1,450</);
+    assert.match(html, /aria-label="Quarry Coffee, Low"/);
+  });
+
+  test("sort=priority orders high, medium, low, then unset", () => {
+    const html = render(h(kit.ListView, { label: "Needs attention", sort: "priority", items }));
+    const order = [...html.matchAll(/aria-label="([^,"]+)[,"]/g)].map((m) => m[1]).filter((n) => n !== "Needs attention" && !n.startsWith("Actions"));
+    assert.deepEqual(order, ["Marlow Dental", "Fernway Tours", "Quarry Coffee", "No priority"]);
+  });
+
+  test("sort=none keeps the given order", () => {
+    const html = render(h(kit.ListView, { label: "L", items }));
+    assert.ok(html.indexOf("Fernway Tours") < html.indexOf("Marlow Dental"));
+  });
+
+  test("primaryAction renders as a labelled Button and other actions go in the menu", () => {
+    const html = render(h(kit.ListView, { label: "L", items }));
+    assert.match(html, />Send link</);
+    assert.match(html, /aria-label="Actions for Marlow Dental"/);
+  });
+});

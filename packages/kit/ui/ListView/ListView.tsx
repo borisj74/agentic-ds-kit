@@ -20,9 +20,11 @@ export type {
   ListViewInteraction,
   ListViewTruncate,
   ListViewItem,
+  ListViewPriority,
   ListViewProps,
   ListViewSelection,
   ListViewSize,
+  ListViewSort,
 } from "./ListView.types";
 
 const GROUP_PREFIX = "group:";
@@ -60,6 +62,26 @@ function sectionsOf(items: ListViewItem[], groups?: ListViewGroup[]): { group: L
   return sections;
 }
 
+const PRIORITY_RANK: Record<NonNullable<ListViewItem["priority"]>, number> = { high: 0, medium: 1, low: 2 };
+const PRIORITY_WORD: Record<NonNullable<ListViewItem["priority"]>, string> = { high: "High", medium: "Medium", low: "Low" };
+const PRIORITY_BARS: Record<NonNullable<ListViewItem["priority"]>, number> = { high: 3, medium: 2, low: 1 };
+
+/** Stable sort by priority: high, medium, low, then rows without one. */
+function byPriority(items: ListViewItem[]): ListViewItem[] {
+  const rank = (item: ListViewItem) => (item.priority ? PRIORITY_RANK[item.priority] : 3);
+  return items
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => rank(a.item) - rank(b.item) || a.index - b.index)
+    .map((entry) => entry.item);
+}
+
+/** The visible secondary line: the priority word first, so the bar marker is never the only signal. */
+function secondaryOf(item: ListViewItem): string | undefined {
+  if (!item.priority) return item.secondary;
+  const word = PRIORITY_WORD[item.priority];
+  return item.secondary ? `${word} · ${item.secondary}` : word;
+}
+
 /** What a dot tone is read as, since the dot itself is aria-hidden. */
 const DOT_NAME: Record<NonNullable<ListViewItem["dot"]>, string> = {
   neutral: "Note",
@@ -74,7 +96,7 @@ const DOT_NAME: Record<NonNullable<ListViewItem["dot"]>, string> = {
  * as a Badge is read too. A dot adds its tone after the badge (the dot is aria-hidden).
  */
 function rowName(item: ListViewItem): string {
-  return [item.primary, item.secondary, item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
+  return [item.primary, secondaryOf(item), item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
     .filter(Boolean)
     .join(", ");
 }
@@ -94,6 +116,7 @@ export function ListView({
   collapsibleGroups = false,
   empty,
   truncate = "none",
+  sort = "none",
   className,
   ref,
   ...rest
@@ -106,7 +129,8 @@ export function ListView({
   const [selectedUncontrolled, setSelectedUncontrolled] = useState<string[]>(defaultSelected ?? []);
   const selectedIds = selectedControlled ? selectedProp : selectedUncontrolled;
   const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
-  const sections = useMemo(() => sectionsOf(items, groups), [items, groups]);
+  const ordered = useMemo(() => (sort === "priority" ? byPriority(items) : items), [items, sort]);
+  const sections = useMemo(() => sectionsOf(ordered, groups), [ordered, groups]);
   const [collapsed, setCollapsed] = useState<string[]>([]);
   const collapsedSet = useMemo(() => new Set(collapsed), [collapsed]);
   const shown = useMemo(() => {
@@ -123,9 +147,10 @@ export function ListView({
   const drill = interaction === "drill";
   const listRole = selectable ? "listbox" : "list";
   const itemRole = selectable ? "option" : "listitem";
-  const iconPx = size === "sm" ? 16 : 18;
-  const avatarSize = size === "sm" ? "sm" : "md";
-  const checkSize = size === "sm" ? "sm" : "md";
+  const compact = size === "sm" || size === "xs";
+  const iconPx = compact ? 16 : 18;
+  const avatarSize = compact ? "sm" : "md";
+  const checkSize = compact ? "sm" : "md";
 
   function setSelected(next: string[]) {
     if (!selectable) return;
@@ -242,6 +267,18 @@ export function ListView({
         </span>
       );
     }
+    if (item.priority) {
+      const filled = PRIORITY_BARS[item.priority];
+      return (
+        <span className={cx(styles.leading, styles.prioritySlot)} aria-hidden>
+          <span className={cx(styles.bars, styles[`priority-${item.priority}`])}>
+            {[1, 2, 3].map((bar) => (
+              <span key={bar} className={styles.bar} data-on={bar <= filled || undefined} />
+            ))}
+          </span>
+        </span>
+      );
+    }
     if (item.dot) {
       return (
         <span className={cx(styles.leading, styles.dotSlot)} aria-hidden>
@@ -252,13 +289,8 @@ export function ListView({
     return null;
   }
 
-  function renderActions(item: ListViewItem): ReactNode {
-    const actions = item.actions ?? [];
-    if (actions.length === 0) return null;
-    const stop = (event: MouseEvent) => event.stopPropagation();
-    if (actions.length > 2) {
-      return (
-        <span className={styles.actions} onClick={stop}>
+  function renderMenu(item: ListViewItem, actions: NonNullable<ListViewItem["actions"]>): ReactNode {
+    return (
           <DropdownMenu
             iconStart="Ellipsis"
             ariaLabel={`Actions for ${item.primary}`}
@@ -279,6 +311,37 @@ export function ListView({
             ]}
             onSelect={(actionId) => onAction?.(item.id, actionId)}
           />
+    );
+  }
+
+  function renderActions(item: ListViewItem): ReactNode {
+    const actions = item.actions ?? [];
+    const stop = (event: MouseEvent) => event.stopPropagation();
+    const primary = item.primaryAction;
+    if (primary) {
+      return (
+        <span className={styles.actions} onClick={stop}>
+          <span className={styles.primaryActionSlot}>
+            <Button
+              size="sm"
+              appearance="outline"
+              mode={primary.danger ? "danger" : "neutral"}
+              iconStart={primary.icon}
+              disabled={item.disabled || primary.disabled}
+              onClick={() => onAction?.(item.id, primary.id)}
+            >
+              {primary.label}
+            </Button>
+          </span>
+          {actions.length > 0 ? renderMenu(item, actions) : null}
+        </span>
+      );
+    }
+    if (actions.length === 0) return null;
+    if (actions.length > 2) {
+      return (
+        <span className={styles.actions} onClick={stop}>
+          {renderMenu(item, actions)}
         </span>
       );
     }
@@ -312,6 +375,7 @@ export function ListView({
   }
 
   function renderCopy(item: ListViewItem): ReactNode {
+    const secondary = secondaryOf(item);
     return (
       <span className={styles.copy}>
         <span
@@ -320,12 +384,12 @@ export function ListView({
         >
           {item.primary}
         </span>
-        {item.secondary ? (
+        {secondary ? (
           <span
             className={cx(styles.secondary, truncateSecondary && styles.truncate)}
-            title={truncateSecondary ? item.secondary : undefined}
+            title={truncateSecondary ? secondary : undefined}
           >
-            {item.secondary}
+            {secondary}
           </span>
         ) : null}
       </span>
