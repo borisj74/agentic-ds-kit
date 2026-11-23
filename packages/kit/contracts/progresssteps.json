@@ -2,7 +2,7 @@
   "id": "progresssteps",
   "status": "stable",
   "level": "molecule",
-  "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
+  "intent": "Ordered wizard steps as numbered circles with a connecting line and a status word under each label: Done, Current, Upcoming, Error, or Optional. Completed steps can be buttons. Horizontal switches to a compact Step n of m with a Progress bar in a narrow container. Vertical for side columns. One piece.",
   "useWhen": [
     "Checkout, onboarding, or multi-step forms",
     "A required sequence the user walks through in order",
@@ -12,13 +12,15 @@
     "A determinate percent 0 to 100 — use Progress",
     "A vertical now/next/later roadmap — use Timeline",
     "Peer views the user can switch freely — use Tabs",
-    "Paging a list or table — use Pagination"
+    "Paging a list or table — use Pagination",
+    "A first-run checklist people can skip or do in any order — use SetupGuide"
   ],
+  "contains": ["progress"],
   "props": {
     "steps": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, description?, status?: complete|current|upcoming|error }[]. Status is derived from current when omitted."
+      "note": "{ id, label, description?, status?: complete|current|upcoming|error, optional? }[]. Status is derived from current when omitted. optional: an upcoming optional step gets a dashed marker and the word Optional."
     },
     "current": {
       "type": "number",
@@ -29,7 +31,7 @@
       "type": "enum",
       "values": ["horizontal", "vertical"],
       "default": "horizontal",
-      "note": "horizontal is the Untitled UI default. vertical stacks marker, then copy."
+      "note": "horizontal is the default. In a container narrower than 30rem it shows Step n of m, the current label, and a kit Progress bar labelled with the next step. vertical stacks marker, then copy, for a side column or drawer."
     },
     "size": {
       "type": "enum",
@@ -41,6 +43,11 @@
       "type": "string",
       "required": false,
       "note": "nav label. Defaults to Progress."
+    },
+    "onStepClick": {
+      "type": "function",
+      "required": false,
+      "note": "(index, step) => void. When set, completed steps become buttons named by their label. Upcoming steps stay inert and out of the tab order."
     }
   },
   "passthrough": {
@@ -76,7 +83,11 @@
     "type.size.caption",
     "type.weight.label",
     "type.weight.body",
-    "motion.interactionDuration"
+    "motion.interactionDuration",
+    "border.focusWidth",
+    "focus.ring",
+    "radius.md",
+    "space.inset2xs"
   ],
   "a11y": {
     "element": "nav > ol",
@@ -84,7 +95,10 @@
       "nav with aria-label Progress or ariaLabel",
       "Ordered list of steps",
       "Current step sets aria-current=step",
-      "Marker is aria-hidden; status is announced as Completed, Current, Upcoming, or Error with step n of m"
+      "Marker is aria-hidden; the visible status word matches the announcement: Done, Current, Upcoming, Error, or Optional, with step n of m",
+      "With onStepClick, completed steps are buttons whose name includes the step label; upcoming steps are not in the tab order",
+      "The compact Progress bar always has a text label",
+      "Reduced motion turns off the marker and line colour transition"
     ]
   },
   "doNot": [
@@ -92,8 +106,11 @@
     "Do not use Progress for ordered wizard steps",
     "Do not use Timeline for numbered checkout or onboarding steps",
     "Do not use Tabs for a required sequence",
+    "Do not use ProgressSteps for a skippable first-run checklist — use SetupGuide",
+    "Do not make upcoming steps clickable",
+    "Do not put the Back and Continue footer inside ProgressSteps — compose it from kit Button, one primary",
     "Do not use raw hex",
     "Do not copy Untitled UI CSS or hex"
   ],
-  "snippet": "<ProgressSteps current={1} steps={[{ id: 'details', label: 'Your details', description: 'Name and email' }, { id: 'company', label: 'Company details' }]} />"
+  "snippet": "<ProgressSteps current={1} onStepClick={(index) => goTo(index)} steps={[{ id: 'plan', label: 'Plan' }, { id: 'billing', label: 'Billing' }, { id: 'addons', label: 'Add-ons', optional: true }, { id: 'review', label: 'Review' }]} />"
 }

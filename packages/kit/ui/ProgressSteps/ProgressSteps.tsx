@@ -1,7 +1,9 @@
 import { Check, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
-import type { ProgressStepsItem, ProgressStepsProps, ProgressStepsStatus } from "./ProgressSteps.types";
+import type { ProgressStepsProps, ProgressStepsStatus } from "./ProgressSteps.types";
 import { cx } from "../shared/cx";
+import { Progress } from "../Progress";
+import { clampCurrent, isOptional, resolveStatus, statusWord, summarize } from "./progressSteps.logic";
 import styles from "./ProgressSteps.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
@@ -14,30 +16,6 @@ export type {
 } from "./ProgressSteps.types";
 
 const ICON_SIZE = { sm: 12, md: 14 } as const;
-const STATUSES: readonly ProgressStepsStatus[] = ["complete", "current", "upcoming", "error"];
-
-function clampCurrent(value: number): number {
-  if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.round(value));
-}
-
-function isStatus(value: ProgressStepsStatus | undefined): value is ProgressStepsStatus {
-  return Boolean(value && STATUSES.includes(value));
-}
-
-function resolveStatus(step: ProgressStepsItem, index: number, current: number): ProgressStepsStatus {
-  if (isStatus(step.status)) return step.status;
-  if (index < current) return "complete";
-  if (index === current) return "current";
-  return "upcoming";
-}
-
-function statusPhrase(status: ProgressStepsStatus): string {
-  if (status === "complete") return "Completed";
-  if (status === "current") return "Current";
-  if (status === "error") return "Error";
-  return "Upcoming";
-}
 
 export function ProgressSteps({
   steps,
@@ -45,6 +23,7 @@ export function ProgressSteps({
   orientation = "horizontal",
   size = "md",
   ariaLabel = "Progress",
+  onStepClick,
   className,
   ref,
   ...rest
@@ -53,7 +32,8 @@ export function ProgressSteps({
 
   const currentIndex = clampCurrent(current);
   const iconPx = ICON_SIZE[size];
-  const statuses = steps.map((step, index) => resolveStatus(step, index, currentIndex));
+  const statuses: ProgressStepsStatus[] = steps.map((step, index) => resolveStatus(step, index, currentIndex));
+  const summary = orientation === "horizontal" ? summarize(steps, statuses, currentIndex) : null;
 
   return (
     <nav
@@ -65,10 +45,12 @@ export function ProgressSteps({
       <ol className={styles.list}>
         {steps.map((step, index) => {
           const status = statuses[index];
+          const optional = isOptional(step, status);
+          const word = statusWord(status, optional);
           const prevComplete = index > 0 && statuses[index - 1] === "complete";
           const thisComplete = status === "complete";
-          const lineStartClass = `${styles.line} ${styles.lineStart} ${prevComplete ? styles.lineComplete : ""}`.trim();
-          const lineEndClass = `${styles.line} ${styles.lineEnd} ${thisComplete ? styles.lineComplete : ""}`.trim();
+          const lineStartClass = cx(styles.line, styles.lineStart, prevComplete && styles.lineComplete);
+          const lineEndClass = cx(styles.line, styles.lineEnd, thisComplete && styles.lineComplete);
           const marker = (
             <span className={styles.marker}>
               {status === "complete" ? (
@@ -80,36 +62,59 @@ export function ProgressSteps({
               )}
             </span>
           );
-
-          return (
-            <li
-              key={step.id}
-              className={`${styles.step} ${styles[status]}`}
-              aria-current={status === "current" ? "step" : undefined}
-            >
-              <span className={styles.srOnly}>
-                {`${statusPhrase(status)}, step ${index + 1} of ${steps.length}`}
-              </span>
+          const content = (
+            <>
+              <span className={styles.srOnly}>{`${word}, step ${index + 1} of ${steps.length}`}</span>
               {orientation === "horizontal" ? (
-                <div className={styles.markerRow} aria-hidden="true">
+                <span className={styles.markerRow} aria-hidden="true">
                   <span className={lineStartClass} />
                   {marker}
                   <span className={lineEndClass} />
-                </div>
+                </span>
               ) : (
                 <span className={styles.rail} aria-hidden="true">
                   {marker}
                   {index < steps.length - 1 ? <span className={lineEndClass} /> : null}
                 </span>
               )}
-              <div className={styles.copy}>
+              <span className={styles.copy}>
                 <span className={styles.label}>{step.label}</span>
+                <span className={styles.status} aria-hidden="true">
+                  {word}
+                </span>
                 {step.description ? <span className={styles.description}>{step.description}</span> : null}
-              </div>
+              </span>
+            </>
+          );
+          const clickable = Boolean(onStepClick) && status === "complete";
+
+          return (
+            <li
+              key={step.id}
+              className={cx(styles.step, styles[status], optional && styles.optional)}
+              aria-current={status === "current" ? "step" : undefined}
+            >
+              {clickable ? (
+                <button type="button" className={styles.stepButton} onClick={() => onStepClick?.(index, step)}>
+                  {content}
+                </button>
+              ) : (
+                <span className={styles.stepBody}>{content}</span>
+              )}
             </li>
           );
         })}
       </ol>
+      {summary ? (
+        <div className={styles.compact}>
+          <span className={styles.compactPosition}>{summary.position}</span>
+          {summary.label ? <span className={styles.compactLabel}>{summary.label}</span> : null}
+          <Progress value={summary.value} size="md" ariaLabel={`${summary.position}. ${summary.next}`} />
+          <span className={styles.compactNext} aria-hidden="true">
+            {summary.next}
+          </span>
+        </div>
+      ) : null}
     </nav>
   );
 }

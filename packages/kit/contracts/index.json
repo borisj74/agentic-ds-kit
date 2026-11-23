@@ -608,7 +608,7 @@
   },
   {
     "id": "progresssteps",
-    "intent": "Ordered wizard steps as numbered circles with a connecting line. Complete, current, upcoming, and optional error. Horizontal or vertical. One piece.",
+    "intent": "Ordered wizard steps as numbered circles with a connecting line and a status word under each label: Done, Current, Upcoming, Error, or Optional. Completed steps can be buttons. Horizontal switches to a compact Step n of m with a Progress bar in a narrow container. Vertical for side columns. One piece.",
     "group": "component",
     "path": "contracts/progresssteps.json",
     "status": "stable",
