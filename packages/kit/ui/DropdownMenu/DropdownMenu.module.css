@@ -150,6 +150,11 @@
   color: var(--text-danger);
 }
 
+/* After the danger rule, so a disabled destructive item dims too instead of staying full red. */
+.itemDisabled.itemDanger .itemLabel {
+  color: var(--text-disabled);
+}
+
 .itemDescription {
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
