@@ -1000,7 +1000,7 @@
   },
   {
     "id": "changesummary",
-    "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+    "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out. An optional summary sentence leads, rows can be grouped into Better and Worse, and each row can carry a one-line why.",
     "group": "component",
     "path": "contracts/changesummary.json",
     "status": "stable",

@@ -10553,10 +10553,11 @@
     {
       "id": "changesummary",
       "group": "component",
-      "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out.",
+      "intent": "A compact \"what moved\" card for a period: each metric shows before → after and a delta. Good and bad are set per metric (churn down is good), and direction and sentiment are always spelled out. An optional summary sentence leads, rows can be grouped into Better and Worse, and each row can carry a one-line why.",
       "useWhen": [
         "summarise the changes between two periods on a dashboard or report",
         "say whether each move is good or bad for the business",
+        "lead with one sentence on the period and say why each metric moved",
         "link to the full report"
       ],
       "doNotUseWhen": [
@@ -10583,15 +10584,34 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral' }[] — values are pre-formatted strings."
+          "note": "{ id, label, before, after, delta, direction: 'up'|'down'|'flat', sentiment?: 'good'|'bad'|'neutral', why?: string }[] — values are pre-formatted strings; why is a one-line caption with no trailing period."
+        },
+        "summary": {
+          "type": "string",
+          "required": false,
+          "note": "The headline sentence above the rows. With no items it stands alone (a quiet month) instead of the Empty state."
+        },
+        "groupBy": {
+          "type": "enum",
+          "values": [
+            "sentiment"
+          ],
+          "required": false,
+          "note": "sentiment groups rows into Better, Worse and Steady, each with a count in a kit Badge. Default: one flat list."
         },
         "onViewAll": {
           "type": "function",
-          "required": false
+          "required": false,
+          "note": "Renders an outline neutral sm Button."
         },
         "viewAllLabel": {
           "type": "string",
           "default": "View full report"
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "Adds a neutral outline sm Button \"Ask in Chat\" with the MessageCircle icon, e.g. to open Chat on this period."
         },
         "emptyTitle": {
           "type": "string",
