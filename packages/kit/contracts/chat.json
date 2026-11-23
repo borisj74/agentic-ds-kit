@@ -2,9 +2,12 @@
   "id": "chat",
   "status": "stable",
   "level": "organism",
-  "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
+  "intent": "Assistant panel with a header, a thread, and a composer. Answers can carry figures, a table, a chart, sources and follow-ups. One piece.",
   "useWhen": [
     "An inline assistant beside a workspace",
+    "An assistant that answers with figures, a small table or a chart from the data on screen",
+    "Showing the steps behind an answer while it works, with Stop",
+    "A guided empty state: greeting, page context, suggested questions and recents",
     "A help thread with send and a thinking state",
     "Suggested prompts above a composer",
     "Asking about one part of a screen, like a chart card, with context naming it",
@@ -20,7 +23,14 @@
     "input",
     "tag",
     "thinkinganimation",
-    "dropdownmenu"
+    "dropdownmenu",
+    "scorecard",
+    "table",
+    "linechart",
+    "linklist",
+    "listview",
+    "skeleton",
+    "spinner"
   ],
   "props": {
     "title": {
@@ -34,12 +44,22 @@
     "messages": {
       "type": "array",
       "required": false,
-      "note": "ChatMessage[] with role user | assistant, content, optional id and timestamp. Type only — not a ChatMessage component."
+      "note": "ChatMessage[] with role user | assistant, content, optional id and timestamp. Type only — not a ChatMessage component. Assistant messages may add parts (ChatPart[], drawn in order under the text: metrics → kit Scorecard sm, table → kit Table sm with footer, chart → kit LineChart area, sources → footer line, followups → kit Button sm outline pill that sends its text), steps (ChatStep[], collapsed into one \"3 steps · 2.4s\" row that opens the list), status (streaming | error) and error ({ title, description?, onRetry?, onCopyDetails? }). streaming shows a caret and a Skeleton for parts still coming; error shows a card with a warning icon, a soft primary Retry and an outline Copy details.",
+      "itemShape": {
+        "id": "string?",
+        "role": "\"user\" | \"assistant\"",
+        "content": "string",
+        "timestamp": "string?",
+        "parts": "ChatPart[]?",
+        "steps": "{ label: string, status: \"done\" | \"active\" | \"pending\", durationMs?: number }[]?",
+        "status": "\"streaming\" | \"error\"?",
+        "error": "{ title: string, description?: string, onRetry?: function, onCopyDetails?: function }?"
+      }
     },
     "suggestions": {
       "type": "array",
       "required": false,
-      "note": "Prompt chips above the composer. kit Button sm tertiary."
+      "note": "Prompts that send their text. Plain strings are kit Buttons sm above the composer. Objects { label, hint?, icon? } are rows (kit LinkList) in the empty state."
     },
     "context": {
       "type": "object",
@@ -59,10 +79,51 @@
       "required": false,
       "default": "Start a conversation."
     },
+    "greeting": {
+      "type": "string",
+      "required": false,
+      "note": "Empty state heading, like \"Good morning, Ada\". Turns on the guided empty state."
+    },
+    "intro": {
+      "type": "string",
+      "required": false,
+      "note": "Empty state line under the greeting: what the assistant can do here. With context, the context Tag moves under it."
+    },
+    "recent": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "id": "string?",
+        "label": "string",
+        "meta": "string?",
+        "onSelect": "function?"
+      },
+      "note": "Recent questions at the foot of the empty state. kit ListView sm."
+    },
+    "recentEmptyLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Shown under the Recent heading when recent is an empty array."
+    },
     "isThinking": {
       "type": "boolean",
       "default": false,
       "note": "Shows kit ThinkingAnimation in the thread."
+    },
+    "thinkingSteps": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "label": "string",
+        "status": "\"done\" | \"active\" | \"pending\"",
+        "durationMs": "number?"
+      },
+      "note": "While thinking: a live step list (done check, active Spinner, pending dashed circle, each with a status word for screen readers) in place of ThinkingAnimation."
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "While thinking: the composer reads \"Working…\" and Send becomes an outline Stop Button that calls this."
     },
     "disabled": {
       "type": "boolean",
@@ -160,7 +221,10 @@
       "composer input has an accessible name",
       "with context, the composer input is described by \"Asking about <label>\"; the Tag remove button is named Remove <label>",
       "Send and Close are named icon-only kit Buttons",
-      "built-in labels (conversation, suggestedPrompts, send, chatContext) come from KitLabelsProvider; English by default",
+      "step lists are ordered lists; the active step has aria-current=step and each step's status is also in words",
+      "an error part is role=alert and names the problem with an icon and a title, not colour alone",
+      "the collapsed step row is a Button with aria-expanded that controls the step list",
+      "built-in labels (conversation, suggestedPrompts, send, chatContext, chatSuggested, chatRecent, chatStop, chatWorking, chatSteps, chatCopyDetails, retry) come from KitLabelsProvider; English by default",
       "embedded keeps the section named by title (aria-label) though the header is hidden"
     ]
   },
@@ -174,5 +238,5 @@
     "Do not hide or restyle the Chat header from the host — use embedded",
     "Do not use embedded for a standalone chat card; it has no title on screen"
   ],
-  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />"
+  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />"
 }

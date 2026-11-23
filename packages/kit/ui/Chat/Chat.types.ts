@@ -1,12 +1,86 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
+import type { ChartDatum } from "../shared/chartMath";
+import type { ScorecardTrend } from "../Scorecard/Scorecard.types";
+import type { TableColumn, TableFooter } from "../Table/Table.types";
 
 export type ChatMessageRole = "user" | "assistant";
+
+/** One figure an answer quotes. Drawn as a kit Scorecard sm. */
+export interface ChatMetric {
+  label: string;
+  value: string;
+  delta?: string;
+  trend?: ScorecardTrend;
+}
+
+/**
+ * Typed parts of an assistant answer, drawn in order under the text:
+ * `metrics` (Scorecard sm), `table` (Table sm), `chart` (LineChart area), `sources` (footer line),
+ * `followups` (pill Buttons that send their text).
+ */
+export type ChatPart =
+  | { type: "metrics"; items: ChatMetric[] }
+  | {
+      type: "table";
+      columns: TableColumn[];
+      rows: Record<string, string | number | ReactNode>[];
+      footer?: TableFooter;
+      caption?: string;
+    }
+  | { type: "chart"; label: string; range?: string; data: ChartDatum[] }
+  | { type: "sources"; label: string }
+  | { type: "followups"; items: string[] };
+
+export type ChatStepStatus = "done" | "active" | "pending";
+
+/** One step of the work behind an answer. */
+export interface ChatStep {
+  label: string;
+  status: ChatStepStatus;
+  /** Time the step took, in milliseconds. Shown as seconds. */
+  durationMs?: number;
+}
+
+/** What went wrong on an assistant message with status "error". */
+export interface ChatError {
+  title: string;
+  description?: string;
+  onRetry?: () => void;
+  onCopyDetails?: () => void;
+}
+
+export type ChatMessageStatus = "streaming" | "error";
 
 export interface ChatMessage {
   id?: string;
   role: ChatMessageRole;
   content: string;
   timestamp?: string;
+  /** Assistant only: figures, a table, a chart, sources and follow-ups under the text. */
+  parts?: ChatPart[];
+  /** Assistant only: the steps behind the answer, collapsed into one row that opens the list. */
+  steps?: ChatStep[];
+  /** `streaming` shows a caret and a placeholder for parts still coming. `error` shows `error`. */
+  status?: ChatMessageStatus;
+  error?: ChatError;
+}
+
+/** A suggested prompt with a hint line, shown as a row in the empty state. */
+export interface ChatSuggestion {
+  label: string;
+  /** What it looks at, like "Looks at MRR movements · 3 months". */
+  hint?: string;
+  icon?: KitIcon;
+}
+
+/** A recent question, shown under the suggestions in the empty state. */
+export interface ChatRecent {
+  id?: string;
+  label: string;
+  /** Short text at the row's end, like "Yesterday". */
+  meta?: string;
+  onSelect?: () => void;
 }
 
 export interface ChatMenuItem {
@@ -34,12 +108,28 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   title?: string;
   status?: string;
   messages?: ChatMessage[];
-  suggestions?: string[];
+  /**
+   * Prompts that send their text. Plain strings are Buttons above the composer. Objects with a
+   * hint are rows (kit LinkList) in the empty state.
+   */
+  suggestions?: (string | ChatSuggestion)[];
   /** Context chip above the composer; the composer's description reads it to screen readers. */
   context?: ChatContext;
   placeholder?: string;
   emptyState?: string;
+  /** Empty state heading, like "Good morning, Ada". */
+  greeting?: string;
+  /** Empty state line under the greeting: what the assistant can do here. */
+  intro?: string;
+  /** Recent questions in the empty state (kit ListView). */
+  recent?: ChatRecent[];
+  /** Shown under the Recent heading when `recent` is an empty array. */
+  recentEmptyLabel?: string;
   isThinking?: boolean;
+  /** While thinking: a live step list in place of the thinking dots. */
+  thinkingSteps?: ChatStep[];
+  /** While thinking: the composer reads "Working…" and Send becomes Stop, which calls this. */
+  onStop?: () => void;
   disabled?: boolean;
   value?: string;
   defaultValue?: string;

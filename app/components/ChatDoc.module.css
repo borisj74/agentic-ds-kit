@@ -1,20 +1,30 @@
+/* The board's panel: 384 × 720, the height of a work panel, so answers with a table and a chart fit. */
 .frame {
   width: min(24rem, 100%);
-  min-block-size: 32rem;
-  block-size: 32rem;
+  min-block-size: 45rem;
+  block-size: 45rem;
 }
 
-/* Same height as the master frame: at 28rem the panel overflowed and the variant scrolled. */
 .exampleFrame {
   width: min(24rem, 100%);
-  min-block-size: 32rem;
-  block-size: 32rem;
+  min-block-size: 45rem;
+  block-size: 45rem;
 }
 
 .canvas {
   display: grid;
   place-items: center;
   align-content: center;
-  min-height: 32rem;
+  min-height: 45rem;
   width: 100%;
+}
+
+/* Two or three panels side by side, wrapping on narrow screens. */
+.pair,
+.trio {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-6);
 }

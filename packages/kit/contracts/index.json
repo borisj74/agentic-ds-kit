@@ -368,7 +368,7 @@
   },
   {
     "id": "chat",
-    "intent": "Assistant panel with a header, a thread, and a composer. One piece.",
+    "intent": "Assistant panel with a header, a thread, and a composer. Answers can carry figures, a table, a chart, sources and follow-ups. One piece.",
     "group": "component",
     "path": "contracts/chat.json",
     "status": "stable",

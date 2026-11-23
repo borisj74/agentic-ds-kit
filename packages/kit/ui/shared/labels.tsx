@@ -72,6 +72,16 @@ export interface KitLabels {
   send: string;
   /** Chat: the composer description when a context chip is set. */
   chatContext: (label: string) => string;
+  /** Chat: the suggestion and recent headings in the empty state. */
+  chatSuggested: string;
+  chatRecent: string;
+  /** Chat: Stop while thinking, and the composer placeholder meanwhile. */
+  chatStop: string;
+  chatWorking: string;
+  /** Chat: the collapsed step row on an answer, like "3 steps · 2.4s". */
+  chatSteps: (count: number, duration?: string) => string;
+  /** Chat: the error's secondary action. */
+  chatCopyDetails: string;
   /** CodeSnippet: the code region with no title or language, or "<language> code". */
   code: string;
   languageCode: (language: string) => string;
@@ -128,6 +138,12 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   suggestedPrompts: "Suggested prompts",
   send: "Send",
   chatContext: (label) => `Asking about ${label}`,
+  chatSuggested: "Suggested",
+  chatRecent: "Recent",
+  chatStop: "Stop",
+  chatWorking: "Working…",
+  chatSteps: (count, duration) => `${count} ${count === 1 ? "step" : "steps"}${duration ? ` · ${duration}` : ""}`,
+  chatCopyDetails: "Copy details",
   code: "Code",
   languageCode: (language) => `${language} code`,
   copied: "Copied",
