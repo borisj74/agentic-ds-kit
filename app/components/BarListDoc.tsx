@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { BarList, Section } from "agentic-ds-kit";
+import { Building2, Layers, Sprout, TrendingUp } from "lucide-react";
+import { BarList, ICON_STROKE, Section } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -32,6 +33,18 @@ const MODELS = [
   { label: "Asked a follow-up", value: 0.12 },
   { label: "No answer", value: 0.05 },
 ];
+
+const PLAN_ICON = { size: 16, strokeWidth: ICON_STROKE } as const;
+
+const PLANS = [
+  { label: "Growth", value: 136240, previous: 121420, meta: "1,012 accounts", media: <TrendingUp {...PLAN_ICON} /> },
+  { label: "Scale", value: 127480, previous: 109800, meta: "412 accounts", media: <Layers {...PLAN_ICON} /> },
+  { label: "Enterprise", value: 95310, previous: 85170, meta: "38 accounts", media: <Building2 {...PLAN_ICON} /> },
+  { label: "Starter", value: 53570, previous: 55690, meta: "2,024 accounts", media: <Sprout {...PLAN_ICON} /> },
+];
+
+const usd = (value: number) =>
+  value.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
 const euro = (value: number) =>
   value.toLocaleString("en-US", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
@@ -96,6 +109,38 @@ export function BarListDoc() {
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Share, change and icons</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "24rem" }}>
+                  <Section title="Top plans">
+                    <BarList label="Top plans by MRR" scale="total" maxRows={3} valueFormatter={usd} data={PLANS} />
+                  </Section>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  scale=&quot;total&quot; sizes each bar as its share of the sum and writes the share first in the
+                  meta line. previous adds a Badge that says Up, Down or No change against last period. media puts a
+                  small icon before the label. Say what the bar and the Badge compare in the Section description.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<BarList
+  label="Top plans by MRR"
+  scale="total"
+  maxRows={3}
+  valueFormatter={usd}
+  data={[
+    { label: "Growth", value: 136240, previous: 121420, meta: "1,012 accounts", media: <TrendingUp /> },
+    { label: "Scale", value: 127480, previous: 109800, meta: "412 accounts", media: <Layers /> },
+    { label: "Enterprise", value: 95310, previous: 85170, meta: "38 accounts", media: <Building2 /> },
+    { label: "Starter", value: 53570, previous: 55690, meta: "2,024 accounts", media: <Sprout /> },
+  ]}
+/>`}
+              />
+            </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Formatted values</h2>
               <div className={styles.exampleCanvas}>

@@ -5389,7 +5389,7 @@
     {
       "id": "barlist",
       "group": "component",
-      "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+      "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value or the total. Rows can add an icon, a meta line and the change from last period. Top rows first, with Show all for the rest.",
       "useWhen": [
         "Top items by one measure in a side column or card, like top pages by views or top customers by revenue",
         "A short ranking where people read the exact value of each row, and rows may open the item they name",
@@ -5406,7 +5406,8 @@
         "Do not use it for several series or an axis — use BarChart",
         "Do not use it for usage against a limit — use UsageList",
         "Do not build ranked rows from ListView, Table or loose bars and text — use BarList",
-        "Do not colour single rows to mean good or bad; it is one measure in one colour",
+        "Do not colour single bars to mean good or bad; it is one measure in one colour. Direction goes in the change Badge from previous",
+        "Do not put buttons or menus in media or meta; a row's only action is its href link",
         "Do not pass negative values; bars start at zero",
         "Do not put it in a Card and a Section at once, or draw a box around it yourself. The title comes from a parent Section or Card",
         "Do not use raw hex or primitive --color-* ramps"
@@ -5426,6 +5427,15 @@
           ],
           "default": "descending",
           "note": "descending puts the largest first; none keeps the order of data."
+        },
+        "scale": {
+          "type": "enum",
+          "values": [
+            "max",
+            "total"
+          ],
+          "default": "max",
+          "note": "max sizes bars against the largest value. total sizes each bar as its share of the sum of all values and writes the share, like 33.0% of total, at the start of the meta line."
         },
         "maxRows": {
           "type": "number",
