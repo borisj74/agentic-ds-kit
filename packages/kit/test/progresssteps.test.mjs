@@ -104,7 +104,8 @@ describe("ProgressSteps render", () => {
   test("horizontal renders the compact summary with a labelled Progress bar; vertical does not", () => {
     const html = render();
     assert.match(html, /Step 2 of 4/);
-    assert.match(html, /role="progressbar"[^>]*aria-label="Step 2 of 4. Next is Add-ons, optional"|aria-label="Step 2 of 4. Next is Add-ons, optional"[^>]*role="progressbar"/);
+    assert.match(html, /role="progressbar"[^>]*aria-label="Next is Add-ons, optional"|aria-label="Next is Add-ons, optional"[^>]*role="progressbar"/);
+    assert.match(render({ current: 0 }), /aria-label="Next is Billing"/);
     assert.doesNotMatch(render({ orientation: "vertical" }), /progressbar/);
   });
 

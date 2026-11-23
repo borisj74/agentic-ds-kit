@@ -109,7 +109,7 @@ export function ProgressSteps({
         <div className={styles.compact}>
           <span className={styles.compactPosition}>{summary.position}</span>
           {summary.label ? <span className={styles.compactLabel}>{summary.label}</span> : null}
-          <Progress value={summary.value} size="md" ariaLabel={`${summary.position}. ${summary.next}`} />
+          <Progress value={summary.value} size="md" ariaLabel={summary.next} />
           <span className={styles.compactNext} aria-hidden="true">
             {summary.next}
           </span>
