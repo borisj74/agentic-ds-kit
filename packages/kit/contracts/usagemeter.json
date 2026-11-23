@@ -68,11 +68,17 @@
     },
     "warnAt": {
       "type": "number",
-      "default": 0.9
+      "default": 0.8,
+      "note": "Same 80% threshold as UsageList."
     },
     "paceNote": {
       "type": "string",
       "required": false
+    },
+    "overage": {
+      "type": "object",
+      "required": false,
+      "note": "{ rateLabel, amount }, pre-formatted. Usage past the limit keeps running and is billed: the warning and the meter's name say the rate and the amount so far."
     },
     "onUpgrade": {
       "type": "function",
@@ -129,6 +135,7 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "the total is a kit Meter with a full text label",
+      "past the limit the badge reads Over limit and the meter's name says how far over and, with overage, the amount so far",
       "categories are a kit UsageList",
       "the daily line is a kit LineChart with its data table",
       "near limit and limit reached are said in a Badge and a kit Alert, not colour alone",

@@ -12,6 +12,8 @@ export interface PricingPlan {
   /** Price per unit per month when billed yearly. Default: same as price. */
   yearlyPrice?: number;
   features: string[];
+  /** One line on how this plan fits current usage, e.g. "Fits with 13,760 credits spare" or "Too small for 11,240 credits". */
+  fit?: string;
   /** Button label. Default "Choose <name>". */
   ctaLabel?: string;
   /** The plan to steer toward: its CTA is the one solid primary. */

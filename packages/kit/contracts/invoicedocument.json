@@ -36,13 +36,15 @@
     "status": {
       "type": "enum",
       "values": [
+        "estimate",
         "draft",
         "issued",
         "paid",
         "overdue",
         "void"
       ],
-      "default": "draft"
+      "default": "draft",
+      "note": "estimate: the next invoice before the period closes. Badge Estimate, total reads Estimated total, no pay or record action."
     },
     "from": {
       "type": "string",
@@ -59,6 +61,11 @@
     "dueOn": {
       "type": "string",
       "required": false
+    },
+    "period": {
+      "type": "string",
+      "required": false,
+      "note": "Billing period, e.g. \"1–30 Nov 2026\"."
     },
     "relatedInvoiceId": {
       "type": "string",
@@ -89,7 +96,7 @@
     "footnote": {
       "type": "string",
       "required": false,
-      "note": "Paid on, overdue reminder, voided, or what the credit note reduces; icon and colour follow the status."
+      "note": "Paid on, overdue reminder, voided, estimate as of, or what the credit note reduces; the icon follows the status (paid check, issued and estimate clock, overdue warning, void cross)."
     },
     "onDownload": {
       "type": "function",
@@ -108,6 +115,11 @@
       "type": "function",
       "required": false,
       "note": "Issued or overdue: Record payment, the solid primary."
+    },
+    "onPay": {
+      "type": "function",
+      "required": false,
+      "note": "Issued or overdue, the customer's view: Pay {total}, the solid primary. Wins over onRecordPayment."
     },
     "loading": {
       "type": "boolean",
@@ -158,7 +170,9 @@
       "bill-to, dates and totals are description lists",
       "lines are a kit Table",
       "the footnote states paid, overdue or voided in words",
-      "void dims the lines and strikes through the total; the badge and footnote say Void"
+      "void dims the lines and strikes through the total; the badge and footnote say Void",
+      "below 30rem of width the Table keeps its four columns for screen readers; Qty and Unit show as one line under the description",
+      "Pay is named with the amount (Pay $889.68)"
     ]
   },
   "doNot": [

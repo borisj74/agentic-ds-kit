@@ -5,7 +5,7 @@
   "summary": "The main allowance, other limits, recent invoices and the plan with Upgrade.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+  "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade and Manage payment, then the next invoice as an estimate (InvoiceDocument) beside the other limits (UsageList), then recent invoices (ListView, a Download action per row). Upgrade is the solid primary only once the allowance reaches its warnAt.",
   "useWhen": [
     "the billing or usage area of a SaaS settings page",
     "show how close an account is to its limits next to the plan that sets them",
@@ -23,18 +23,24 @@
     "listview",
     "badge",
     "usagelist",
-    "usagemeter"
+    "usagemeter",
+    "invoicedocument"
   ],
   "props": {
     "plan": {
       "type": "object",
       "required": true,
-      "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\"."
+      "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo?, fit? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\". fit is one line on whether the upgrade plan covers this period, with a check icon."
     },
     "allowance": {
       "type": "object",
       "required": true,
-      "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote? }."
+      "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote?, overage? }."
+    },
+    "upcoming": {
+      "type": "object",
+      "required": false,
+      "note": "The next invoice: InvoiceDocument props { number, to, from?, issuedOn, period?, lines, subtotal, taxLabel?, tax?, total, footnote? }, drawn with status \"estimate\" beside the other limits."
     },
     "limits": {
       "type": "array",
@@ -44,7 +50,7 @@
     "invoices": {
       "type": "array",
       "required": false,
-      "note": "{ id, number, date, amount, status: \"paid\" | \"open\" | \"overdue\" | \"void\" }[], newest first."
+      "note": "{ id, number, date, amount, status: \"paid\" | \"issued\" | \"overdue\" | \"void\" }[], newest first. Status words match InvoiceDocument; \"open\" is kept as an alias of \"issued\"."
     },
     "invoiceLimit": {
       "type": "number",
@@ -54,7 +60,7 @@
     "onUpgrade": {
       "type": "function",
       "required": false,
-      "note": "() => void. The one solid primary, on the plan card. Without it there is no Upgrade."
+      "note": "() => void. On the plan card: the solid primary once the allowance is at or past its warnAt, outline below it. Without it there is no Upgrade."
     },
     "onManagePayment": {
       "type": "function",
@@ -94,7 +100,8 @@
   },
   "layout": [
     "top: the UsageMeter beside the plan Card, in layout-split--primary",
-    "then the other limits Card beside the recent invoices Card, in layout-split",
+    "with upcoming: the estimate InvoiceDocument beside the other limits Card, in layout-split, then recent invoices full width",
+    "without upcoming: the other limits Card beside the recent invoices Card, in layout-split",
     "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width each row stacks"
   ],
   "tokens": [
@@ -109,15 +116,20 @@
     "type.family.heading",
     "line",
     "layout.gutter.md",
-    "grid.breakpoint.md"
+    "grid.breakpoint.md",
+    "status.successText",
+    "icon.success",
+    "line.default"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
       "the plan facts are a description list (price, next charge, payment method)",
-      "Upgrade and Manage payment are kit Buttons; Upgrade is the only solid primary (the UsageMeter's own Upgrade is off)",
+      "Upgrade and Manage payment are kit Buttons; Upgrade is the only solid primary, and only at or past warnAt (the UsageMeter's own Upgrade is off)",
       "the invoices list is named with its count (Recent invoices, 4 of 12); each Download action is named with the invoice number",
+      "the next invoice is an InvoiceDocument whose Estimate badge says it can still change",
+      "the plan fit line has a check icon and words, not colour alone",
       "invoice status is a kit Badge with text, not colour alone",
       "no motion of its own"
     ]

@@ -107,3 +107,24 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Whether the upgrade plan covers this period: a check icon and the words, never colour alone. */
+.fit {
+  padding-top: var(--space-stack-md);
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.fitText {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--status-success-text);
+}
+
+.fitIcon {
+  flex: none;
+  margin-top: var(--space-px);
+  color: var(--icon-success);
+}

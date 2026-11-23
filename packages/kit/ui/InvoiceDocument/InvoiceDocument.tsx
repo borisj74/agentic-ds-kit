@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { CircleCheck, CircleX, FileText, ReceiptText, TriangleAlert } from "lucide-react";
+import { CircleCheck, CircleX, Clock, FileText, ReceiptText, TriangleAlert } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import type { BadgeTone } from "../Badge/Badge.types";
@@ -18,6 +18,7 @@ import { nisthaAttr } from "../shared/inspect";
 export type { InvoiceDocumentProps, InvoiceLine, InvoiceKind, InvoiceStatus } from "./InvoiceDocument.types";
 
 const STATUS: Record<InvoiceStatus, { tone: BadgeTone; label: string }> = {
+  estimate: { tone: "neutral", label: "Estimate" },
   draft: { tone: "neutral", label: "Draft" },
   issued: { tone: "info", label: "Issued" },
   paid: { tone: "success", label: "Paid" },
@@ -45,6 +46,7 @@ export function InvoiceDocument({
   to,
   issuedOn,
   dueOn,
+  period,
   relatedInvoiceId,
   lines,
   subtotal,
@@ -56,6 +58,7 @@ export function InvoiceDocument({
   onSend,
   onIssue,
   onRecordPayment,
+  onPay,
   loading = false,
   error,
   onRetry,
@@ -97,14 +100,29 @@ export function InvoiceDocument({
     );
   }
 
+  const payable = !credit && (status === "issued" || status === "overdue");
+  const estimate = !credit && status === "estimate";
   const primary =
     !credit && status === "draft" && onIssue
       ? { label: "Issue invoice", onClick: onIssue }
-      : !credit && (status === "issued" || status === "overdue") && onRecordPayment
-        ? { label: "Record payment", onClick: onRecordPayment }
-        : null;
+      : payable && onPay
+        ? { label: `Pay ${total}`, onClick: onPay }
+        : payable && onRecordPayment
+          ? { label: "Record payment", onClick: onRecordPayment }
+          : null;
 
-  const FootIcon = credit ? ReceiptText : status === "paid" ? CircleCheck : status === "overdue" ? TriangleAlert : CircleX;
+  // The footnote icon follows the status: paid done, issued waiting, overdue late, void cancelled, draft not sent.
+  const FootIcon = credit
+    ? ReceiptText
+    : status === "paid"
+      ? CircleCheck
+      : status === "overdue"
+        ? TriangleAlert
+        : status === "issued" || status === "estimate"
+          ? Clock
+          : status === "void"
+            ? CircleX
+            : FileText;
 
   return (
     <article {...rest} {...nisthaAttr("invoicedocument", rest)} ref={ref} className={cx(styles.card, voided && styles.voided, className)} aria-labelledby={titleId}>
@@ -143,7 +161,7 @@ export function InvoiceDocument({
           <dd>{to}</dd>
         </div>
         <div className={styles.metaItem}>
-          <dt>Issued</dt>
+          <dt>{estimate ? "Issues on" : "Issued"}</dt>
           <dd>{issuedOn}</dd>
         </div>
         {credit && relatedInvoiceId ? (
@@ -155,6 +173,12 @@ export function InvoiceDocument({
           <div className={styles.metaItem}>
             <dt>Due</dt>
             <dd>{dueOn}</dd>
+          </div>
+        ) : null}
+        {period ? (
+          <div className={styles.metaItem}>
+            <dt>Period</dt>
+            <dd>{period}</dd>
           </div>
         ) : null}
       </dl>
@@ -169,7 +193,16 @@ export function InvoiceDocument({
             size="sm"
             columns={COLUMNS}
             rows={lines.map((line) => ({
-              description: line.description,
+              // Below 30rem the Qty and Unit cells leave the visual grid (they stay in the table for screen
+              // readers) and this second line shows them under the description instead.
+              description: (
+                <span className={styles.lineText}>
+                  {line.description}
+                  <span className={cx(styles.mono, styles.muted, styles.lineQty)} aria-hidden="true">
+                    {line.quantity} × {line.unitPrice}
+                  </span>
+                </span>
+              ),
               quantity: <span className={styles.mono}>{line.quantity}</span>,
               unit: <span className={cx(styles.mono, styles.muted)}>{line.unitPrice}</span>,
               amount: <span className={cx(styles.mono, styles.strong)}>{line.amount}</span>,
@@ -187,7 +220,7 @@ export function InvoiceDocument({
               </div>
             ) : null}
             <div className={cx(styles.totalRow, styles.grand)}>
-              <dt>Total</dt>
+              <dt>{estimate ? "Estimated total" : "Total"}</dt>
               <dd>{total}</dd>
             </div>
           </dl>

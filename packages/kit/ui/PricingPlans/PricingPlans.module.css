@@ -149,3 +149,25 @@
   flex-shrink: 0;
   color: var(--text-fg-muted);
 }
+
+.fit {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg);
+}
+
+/* The plans and the footnote, measured to pick cards or the narrow TileGroup. */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Narrow (under 30rem): one TileGroup and one button. */
+.compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}

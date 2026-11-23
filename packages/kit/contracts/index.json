@@ -1040,7 +1040,7 @@
   },
   {
     "id": "pricingplans",
-    "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+    "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Only the recommended plan is highlighted; Recommended and Current plan are words. Below 30rem the cards become a kit TileGroup with one button. Built on kit SegmentedControl, Badge, Button, NumberTransition and TileGroup.",
     "group": "component",
     "path": "contracts/pricingplans.json",
     "status": "stable",
@@ -1201,7 +1201,7 @@
   {
     "id": "usagebilling",
     "kind": "block",
-    "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+    "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade and Manage payment, then the next invoice as an estimate (InvoiceDocument) beside the other limits (UsageList), then recent invoices (ListView, a Download action per row). Upgrade is the solid primary only once the allowance reaches its warnAt.",
     "group": "component",
     "path": "contracts/usagebilling.json",
     "status": "stable",

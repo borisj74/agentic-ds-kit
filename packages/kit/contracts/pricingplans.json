@@ -2,7 +2,7 @@
   "id": "pricingplans",
   "status": "stable",
   "level": "organism",
-  "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+  "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Only the recommended plan is highlighted; Recommended and Current plan are words. Below 30rem the cards become a kit TileGroup with one button. Built on kit SegmentedControl, Badge, Button, NumberTransition and TileGroup.",
   "useWhen": [
     "upgrade or change plan inside the product",
     "compare a few plans side by side with their features",
@@ -18,13 +18,14 @@
     "button",
     "numbertransition",
     "segmentedcontrol",
-    "skeleton"
+    "skeleton",
+    "tilegroup"
   ],
   "props": {
     "plans": {
       "type": "array",
       "required": true,
-      "note": "{ id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]"
+      "note": "{ id, name, tagline?, fit?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. fit is one line on how the plan fits current usage."
     },
     "interval": {
       "type": "enum",
@@ -111,9 +112,10 @@
     "requirements": [
       "section aria-labelledby the h3 title; each plan name is an h4",
       "the interval is a kit SegmentedControl radio group",
-      "Recommended and Current plan are Badge words, not colour alone",
+      "Recommended and Current plan are Badge words, not colour alone; Current plan is a neutral Badge",
       "prices roll with NumberTransition and have a full spoken label",
-      "each CTA is described by its plan name; the current plan's CTA is disabled"
+      "each CTA is described by its plan name; the current plan's CTA is disabled",
+      "below 30rem the plans are a kit TileGroup radio group named Plans; the current plan's tile is disabled, not hidden"
     ]
   },
   "doNot": [

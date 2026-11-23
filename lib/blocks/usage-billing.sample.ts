@@ -1,47 +1,68 @@
-import type { UsageBillingAllowance, UsageBillingInvoice, UsageBillingPlan, UsageListItem } from "agentic-ds-kit";
+import type {
+  UsageBillingAllowance,
+  UsageBillingInvoice,
+  UsageBillingPlan,
+  UsageBillingUpcoming,
+  UsageListItem,
+} from "agentic-ds-kit";
 
-/** Sample account for the UsageBilling docs: a Pro workspace late in its billing period. */
+/** Sample account for the UsageBilling docs: Northwind on Business, over its AI credit limit late in November. */
 export const USAGE_PLAN: UsageBillingPlan = {
-  name: "Pro",
-  price: "$49",
-  priceNote: "per month · billed monthly · 5 seats",
-  nextCharge: "$49.00 on 1 Dec",
+  name: "Business",
+  price: "$702.00",
+  priceNote: "a month · 18 seats × $39.00",
+  nextCharge: "$901.92 on 1 Dec",
   paymentMethod: "Visa ending 4242",
-  upgradeTo: "Team",
+  upgradeTo: "Scale",
+  fit: "Scale covers this month with 13,760 credits spare, for $360.00 more a month",
 };
 
-const DAILY = [210, 260, 240, 310, 290, 180, 150, 330, 360, 340, 410, 390, 220, 190];
+const DAILY = [310, 360, 420, 390, 450, 280, 240, 470, 510, 490, 560, 530, 330, 300, 520, 580, 610, 590, 540, 620, 640];
 
 export const USAGE_ALLOWANCE: UsageBillingAllowance = {
-  title: "AI credits · Pro plan",
-  used: 8120,
+  title: "AI credits · Business plan",
+  used: 11240,
   limit: 10000,
   unit: "credits",
-  periodStart: "Nov 1",
-  resetLabel: "resets Dec 1",
+  periodStart: "1 Nov",
+  resetLabel: "resets 1 Dec",
   categories: [
-    { id: "agents", label: "Agent runs", value: 4870 },
-    { id: "chat", label: "Chat", value: 2140 },
-    { id: "search", label: "Search and embeddings", value: 1110 },
+    { id: "chat", label: "Chat", value: 6120 },
+    { id: "agents", label: "Agents", value: 3880 },
+    { id: "search", label: "Search", value: 1240 },
   ],
   daily: DAILY,
-  dailyLabels: DAILY.map((_, i) => `Nov ${i + 1}`),
-  warnAt: 0.8,
-  paceNote: "At this pace you reach the limit around Nov 20, 11 days before it resets.",
+  dailyLabels: DAILY.map((_, i) => `${i + 1} Nov`),
+  overage: { rateLabel: "$4.00 per 100 credits", amount: "$49.60" },
+};
+
+/** The next invoice, shown as an estimate until the period closes. */
+export const USAGE_UPCOMING: UsageBillingUpcoming = {
+  number: "INV-1886",
+  to: "Northwind Traders",
+  issuedOn: "1 Dec 2026",
+  period: "1–30 Nov 2026",
+  lines: [
+    { id: "plan", description: "Business plan · Nov 2026", quantity: 18, unitPrice: "$39.00", amount: "$702.00" },
+    { id: "overage", description: "AI credits over allowance", quantity: 1240, unitPrice: "$0.04", amount: "$49.60" },
+  ],
+  subtotal: "$751.60",
+  taxLabel: "VAT 20%",
+  tax: "$150.32",
+  total: "$901.92",
+  footnote: "Estimate as of 21 Nov, changes with usage until 30 Nov",
 };
 
 export const USAGE_LIMITS: UsageListItem[] = [
-  { id: "seats", label: "Seats", used: 5, limit: 5, note: "Add seats on Team" },
-  { id: "projects", label: "Projects", used: 14, limit: 25 },
-  { id: "storage", label: "File storage", used: 42.5, limit: 50, unit: "GB" },
-  { id: "runs", label: "Concurrent agent runs", used: 2, limit: 5 },
+  { id: "api", label: "API calls", used: 84200, limit: 100000 },
+  { id: "seats", label: "Seats", used: 18, limit: 20 },
+  { id: "storage", label: "Storage", used: 32, limit: 50, unit: "GB" },
 ];
 
 export const USAGE_INVOICES: UsageBillingInvoice[] = [
-  { id: "inv-0117", number: "INV-2026-0117", date: "1 Nov 2026", amount: "$49.00", status: "open" },
-  { id: "inv-0102", number: "INV-2026-0102", date: "1 Oct 2026", amount: "$49.00", status: "paid" },
-  { id: "inv-0088", number: "INV-2026-0088", date: "1 Sep 2026", amount: "$63.40", status: "paid" },
-  { id: "inv-0071", number: "INV-2026-0071", date: "1 Aug 2026", amount: "$49.00", status: "paid" },
-  { id: "inv-0056", number: "INV-2026-0056", date: "1 Jul 2026", amount: "$29.00", status: "paid" },
-  { id: "inv-0040", number: "INV-2026-0040", date: "1 Jun 2026", amount: "$29.00", status: "paid" },
+  { id: "inv-1842", number: "INV-1842", date: "1 Nov 2026", amount: "$889.68", status: "issued" },
+  { id: "inv-1797", number: "INV-1797", date: "1 Oct 2026", amount: "$842.40", status: "paid" },
+  { id: "inv-1751", number: "INV-1751", date: "1 Sep 2026", amount: "$842.40", status: "paid" },
+  { id: "inv-1706", number: "INV-1706", date: "1 Aug 2026", amount: "$842.40", status: "paid" },
+  { id: "inv-1660", number: "INV-1660", date: "1 Jul 2026", amount: "$795.60", status: "paid" },
 ];

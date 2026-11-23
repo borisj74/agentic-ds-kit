@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { UsageListItem } from "../UsageList/UsageList.types";
 import type { UsageMeterProps } from "../UsageMeter/UsageMeter.types";
+import type { InvoiceDocumentProps } from "../InvoiceDocument/InvoiceDocument.types";
 
 /** The plan the account is on. Prices are pre-formatted: currency stays with the caller. */
 export interface UsageBillingPlan {
@@ -16,15 +17,24 @@ export interface UsageBillingPlan {
   paymentMethod?: string;
   /** The plan Upgrade moves to, e.g. "Team": the button reads "Upgrade to Team". */
   upgradeTo?: string;
+  /** Whether the upgrade plan covers this period, e.g. "Scale covers this month with 13,760 credits spare, for $360.00 more a month". */
+  fit?: string;
 }
 
 /** The main allowance, drawn by a kit UsageMeter (its own Upgrade stays off: the plan card has it). */
 export type UsageBillingAllowance = Pick<
   UsageMeterProps,
-  "title" | "used" | "limit" | "unit" | "categories" | "periodStart" | "resetLabel" | "daily" | "dailyLabels" | "dailyCap" | "warnAt" | "paceNote"
+  "title" | "used" | "limit" | "unit" | "categories" | "periodStart" | "resetLabel" | "daily" | "dailyLabels" | "dailyCap" | "warnAt" | "paceNote" | "overage"
 >;
 
-export type UsageBillingInvoiceStatus = "paid" | "open" | "overdue" | "void";
+/** The next invoice, drawn by a kit InvoiceDocument with status "estimate" (no actions: it cannot be paid yet). */
+export type UsageBillingUpcoming = Pick<
+  InvoiceDocumentProps,
+  "number" | "to" | "from" | "issuedOn" | "period" | "lines" | "subtotal" | "taxLabel" | "tax" | "total" | "footnote"
+>;
+
+/** The same words as InvoiceDocument. `open` is kept as an alias of `issued` and also reads Issued. */
+export type UsageBillingInvoiceStatus = "paid" | "issued" | "open" | "overdue" | "void";
 
 /** A recent invoice: one ListView row with a Download action. */
 export interface UsageBillingInvoice {
@@ -45,6 +55,8 @@ type UsageBillingOwnedKeys = "children" | "title";
 export interface UsageBillingProps extends Omit<ComponentPropsWithoutRef<"section">, UsageBillingOwnedKeys> {
   plan: UsageBillingPlan;
   allowance: UsageBillingAllowance;
+  /** The next invoice as an estimate, beside the other limits. */
+  upcoming?: UsageBillingUpcoming;
   /** The plan's other limits (seats, projects, storage …), as kit UsageList rows. */
   limits?: UsageListItem[];
   /** Newest first. The block shows up to `invoiceLimit`. */

@@ -71,15 +71,30 @@ export function UsageMeterDoc() {
         },
         {
           title: "Warning — near limit",
-          about: "From warnAt (0.9) the Meter turns warning, an Alert says what is left and Upgrade plan appears.",
+          about: "From warnAt (0.8, the same line as UsageList) the Meter turns warning, an Alert says what is left and Upgrade plan appears.",
           code: `<UsageMeter … used={9240} paceNote="At this pace you hit the limit in ~2 days." onUpgrade={upgrade} onViewUsage={viewUsage} />`,
           render: <UsageMeter {...BASE} {...WARNING} paceNote="At this pace you hit the limit in ~2 days." onUpgrade={noop} onViewUsage={noop} />,
         },
         {
           title: "Limit reached",
-          about: "At or over the limit the Meter and Alert switch to danger.",
+          about: "At the limit the Meter and Alert switch to danger.",
           code: `<UsageMeter … used={10000} onUpgrade={upgrade} />`,
           render: <UsageMeter {...BASE} {...WARNING} used={10000} onUpgrade={noop} onViewUsage={noop} />,
+        },
+        {
+          title: "Over limit — billed overage",
+          about: "Past the limit the Badge reads Over limit and, with overage, the Alert and the meter's name say the rate and the amount so far.",
+          code: `<UsageMeter … used={11240} overage={{ rateLabel: "$4.00 per 100 credits", amount: "$49.60" }} onUpgrade={upgrade} />`,
+          render: (
+            <UsageMeter
+              {...BASE}
+              {...WARNING}
+              used={11240}
+              overage={{ rateLabel: "$4.00 per 100 credits", amount: "$49.60" }}
+              onUpgrade={noop}
+              onViewUsage={noop}
+            />
+          ),
         },
         {
           title: "Loading and error",
