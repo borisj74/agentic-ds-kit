@@ -136,6 +136,20 @@
   max-width: 85%;
 }
 
+/* Assistant answers take the full width so tables, figures and charts have room. */
+.bodyAssistant {
+  flex: 1;
+  gap: var(--space-3);
+  max-width: none;
+}
+
+/* The user's message sits in a soft bubble. */
+.bubble {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-xl);
+  background: var(--surface-muted);
+}
+
 .copy {
   margin: 0;
   font-family: var(--font-sans);
@@ -144,8 +158,30 @@
   color: var(--text-primary);
 }
 
-.messageUser .copy {
-  text-align: right;
+.messageUser .body {
+  justify-items: end;
+}
+
+/* Typing caret on a streaming answer. */
+.caret {
+  display: inline-block;
+  inline-size: var(--space-2);
+  block-size: 1em;
+  margin-inline-start: var(--space-1);
+  vertical-align: text-bottom;
+  background: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .caret {
+    animation: chatCaret 1s steps(2, start) infinite;
+  }
+}
+
+@keyframes chatCaret {
+  to {
+    visibility: hidden;
+  }
 }
 
 .timestamp {
@@ -173,8 +209,8 @@
   padding: 0 var(--space-4) var(--space-3);
 }
 
-/* Read by the composer's aria-describedby; the Tag shows the same text. */
-.contextLabel {
+/* Read by screen readers only: the composer's context description and step status words. */
+.visuallyHidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -190,4 +226,226 @@
   align-items: center;
   padding: var(--space-3) var(--space-4) var(--space-4);
   border-top: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* Guided empty state: greeting, context, suggested rows, then recents at the foot. */
+.guided {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-5);
+}
+
+.threadGuided {
+  display: flex;
+  flex-direction: column;
+}
+
+.greetingBlock {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.greeting {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-ui-xl);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-primary);
+}
+
+.intro {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.contextGuided {
+  padding: 0;
+}
+
+.group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.groupLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-overline-xs);
+  font-weight: var(--type-weight-overline);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Recents sit at the bottom of the empty panel. */
+.recent {
+  margin-block-start: auto;
+}
+
+/* Answer parts */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--space-16) * 2)), 1fr));
+  gap: var(--space-2);
+}
+
+.table,
+.chart {
+  min-width: 0;
+}
+
+.sources {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding-block-start: var(--space-2);
+  border-top: var(--border-width-thin) solid var(--border-faint);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  color: var(--text-muted);
+}
+
+.sourcesIcon {
+  flex: none;
+  color: var(--icon-muted);
+}
+
+.followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Steps: a live list while thinking, collapsed on the answer. */
+.stepCard {
+  padding: var(--space-3);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-lg);
+  background: var(--surface-muted);
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  color: var(--text-secondary);
+}
+
+.stepActive {
+  color: var(--text-primary);
+  font-weight: var(--type-weight-label);
+}
+
+.stepPending {
+  color: var(--text-muted);
+}
+
+.stepIcon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  color: var(--icon-muted);
+}
+
+.stepDone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--fill-subtle);
+  color: var(--icon-secondary);
+}
+
+.stepSpinner {
+  display: inline-flex;
+  color: var(--icon-brand);
+}
+
+.stepLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepTime {
+  flex: none;
+  font-size: var(--type-size-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Pull the ghost Button to the text edge by its sm inline padding. */
+.stepSummary {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  margin-inline-start: calc(var(--space-2) * -1);
+}
+
+.stepPanel {
+  padding-inline-start: var(--space-2);
+}
+
+/* Error part: icon and title carry the status, not colour alone. */
+.error {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+}
+
+.errorHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.errorIcon {
+  flex: none;
+  color: var(--icon-danger);
+}
+
+.errorTitle {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+}
+
+.errorText {
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.errorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-start: var(--space-2);
 }
