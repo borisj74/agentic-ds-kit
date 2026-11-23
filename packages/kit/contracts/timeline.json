@@ -16,7 +16,7 @@
     "items": {
       "type": "array",
       "required": false,
-      "note": "{ id?, title?, body?, phase?, status?: now|next|later }[]"
+      "note": "{ id?, title?, body?, phase?, status?: now|next|later }[]. The phase line always starts with the status word (Now, Next, Later), then the phase if it says something else."
     },
     "label": { "type": "string", "required": false },
     "headingLevel": {
@@ -38,14 +38,16 @@
     "border.faint",
     "fill.brand",
     "border.strong",
-    "border.subtle"
+    "border.subtle",
+    "bg.surface"
   ],
   "a11y": {
     "element": "ol",
     "requirements": [
       "Ordered list semantics",
       "Optional aria-label on the list",
-      "One now step at a time in content"
+      "One now step at a time in content",
+      "Each step names its status as a word, not only by dot colour"
     ]
   },
   "doNot": [

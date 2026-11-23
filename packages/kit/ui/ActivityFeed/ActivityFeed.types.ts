@@ -39,6 +39,10 @@ export interface ActivityFeedFilters {
   people: string[];
 }
 
+/** feed: workspace activity with Avatars, Type and Person filters, Open and Reply. history: one record's
+ *  events on a rail with a time column and a status word, like an invoice's history. */
+export type ActivityFeedVariant = "feed" | "history";
+
 /** Root attributes the block sets itself. */
 type ActivityFeedOwnedKeys = "children" | "aria-labelledby" | "title";
 
@@ -69,5 +73,16 @@ export interface ActivityFeedProps extends Omit<ComponentPropsWithoutRef<"sectio
   title?: string;
   /** Line under the title. Default: how many events show. */
   description?: string;
+  /** feed (default) or history. */
+  variant?: ActivityFeedVariant;
+  /** Status words to filter on, like Created, Sent, Paid. Shows All plus one chip each (kit SegmentedControl, sm). */
+  statusChips?: string[];
+  /** Controlled chip: a status word, or null for All. Matches event.status.label. */
+  statusChip?: string | null;
+  onStatusChipChange?: (chip: string | null) => void;
+  /** The events could not load: the reason, shown under "Couldn't load activity". */
+  error?: string;
+  /** Retry after an error. Shows an outline Retry button. */
+  onRetry?: () => void;
   ref?: Ref<HTMLElement>;
 }

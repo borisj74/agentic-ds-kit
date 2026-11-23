@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { CircleAlert } from "lucide-react";
 import { Avatar } from "../Avatar";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -8,6 +9,7 @@ import { Checkbox } from "../Checkbox";
 import { Empty } from "../Empty";
 import { FilterButton } from "../FilterButton";
 import { Popover } from "../Popover";
+import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import {
@@ -38,6 +40,7 @@ export type {
   ActivityEventType,
   ActivityFeedFilters,
   ActivityFeedProps,
+  ActivityFeedVariant,
 } from "./ActivityFeed.types";
 
 type OpenFilter = "type" | "person" | null;
@@ -78,6 +81,12 @@ export function ActivityFeed(props: ActivityFeedProps) {
     timeZone,
     title = "Activity",
     description,
+    variant = "feed",
+    statusChips,
+    statusChip: chipProp,
+    onStatusChipChange,
+    error,
+    onRetry,
     className,
     ref,
     ...rest
@@ -89,23 +98,53 @@ export function ActivityFeed(props: ActivityFeedProps) {
   const now = nowProp ?? renderedAt;
   const [innerFilters, setInnerFilters] = useState<ActivityFeedFilters>(defaultFilters);
   const filters = filtersProp ?? innerFilters;
-  const filtered = isFiltered(filters);
+  const [innerChip, setInnerChip] = useState<string | null>(null);
+  const chip = chipProp !== undefined ? chipProp : innerChip;
+  const history = variant === "history";
+  const filtered = isFiltered(filters) || chip !== null;
   const [openFilter, setOpenFilter] = useState<OpenFilter>(null);
   const [announcement, setAnnouncement] = useState("");
   const pending = useRef<Set<string> | null>(null);
   const eventRefs = useRef(new Map<string, HTMLLIElement>());
 
-  const shown = useMemo(() => visibleEvents(events, filters), [events, filters]);
+  const shown = useMemo(() => visibleEvents(events, filters, chip), [events, filters, chip]);
   const days = useMemo(() => groupByDay(shown, now, locale, timeZone), [shown, now, locale, timeZone]);
   const actors = useMemo(() => actorsOf(events), [events]);
   const counts = useMemo(() => typeCounts(events), [events]);
   const nameOf = (id: string) => actors.find((actor) => actor.id === id)?.name ?? id;
 
+  function announce(nextFilters: ActivityFeedFilters, nextChip: string | null) {
+    const count = visibleEvents(events, nextFilters, nextChip).length;
+    setAnnouncement(
+      isFiltered(nextFilters) || nextChip !== null
+        ? `${summaryLine(events.length, count, true, history)}.`
+        : "Filters cleared. Showing all activity.",
+    );
+  }
+
   function setFilters(next: ActivityFeedFilters) {
     if (filtersProp === undefined) setInnerFilters(next);
     onFiltersChange?.(next);
-    const count = visibleEvents(events, next).length;
-    setAnnouncement(isFiltered(next) ? `${summaryLine(events.length, count, true)}.` : "Filters cleared. Showing all activity.");
+    announce(next, chip);
+  }
+
+  function setChip(next: string | null) {
+    if (chipProp === undefined) setInnerChip(next);
+    onStatusChipChange?.(next);
+    announce(filters, next);
+  }
+
+  // Clear filters resets the Type and Person filters and the status chip.
+  function clearAll() {
+    if (isFiltered(filters)) {
+      if (filtersProp === undefined) setInnerFilters(NO_FILTERS);
+      onFiltersChange?.(NO_FILTERS);
+    }
+    if (chip !== null) {
+      if (chipProp === undefined) setInnerChip(null);
+      onStatusChipChange?.(null);
+    }
+    setAnnouncement("Filters cleared. Showing all activity.");
   }
 
   function loadMore() {
@@ -135,10 +174,69 @@ export function ActivityFeed(props: ActivityFeedProps) {
   const showMore = Boolean(onLoadMore && hasMore);
 
   const clearButton = (
-    <Button size="sm" appearance="ghost" mode="neutral" onClick={() => setFilters(NO_FILTERS)}>
+    <Button size="sm" appearance="ghost" mode="neutral" onClick={clearAll}>
       Clear filters
     </Button>
   );
+
+  // history: a time column, the shared rail (12px dot, 1px line to the next event of the same day),
+  // the sentence and detail, and the status word at the end. Narrow, time and status join a meta line.
+  function renderHistoryEvent(event: ActivityEvent, index: number, dayEvents: ActivityEvent[]) {
+    const id = `${uid}-${event.id}`;
+    const time = timeOf(event);
+    const clock = timeLabel(time, locale, timeZone);
+    const agent = event.actor.kind === "agent";
+    const last = index === dayEvents.length - 1;
+    const tone = event.status?.tone;
+    return (
+      <li
+        key={event.id}
+        ref={(el) => {
+          if (el) eventRefs.current.set(event.id, el);
+          else eventRefs.current.delete(event.id);
+        }}
+        className={cx(styles.event, styles.historyEvent)}
+        tabIndex={-1}
+      >
+        <p id={`${id}-sentence`} className={styles.srOnly}>
+          {eventSentence(event, now, locale, timeZone)}
+        </p>
+        <div className={styles.historyRow} aria-hidden="true">
+          <time className={styles.historyTime} dateTime={new Date(time).toISOString()}>
+            {clock}
+          </time>
+          <span className={styles.rail}>
+            <span className={styles.dot} />
+            {last ? null : <span className={styles.railLine} />}
+          </span>
+          <div className={cx(styles.historyBody, last && styles.historyBodyLast)}>
+            <div className={styles.copy}>
+              <p className={styles.line}>
+                <span className={styles.actor}>{event.actor.name}</span>
+                {agent ? (
+                  <>
+                    {" "}
+                    <Badge size="sm" appearance="soft" tone="neutral">
+                      Agent
+                    </Badge>
+                  </>
+                ) : null}{" "}
+                {event.verb} <span className={styles.object}>{event.object}</span>
+              </p>
+              {event.detail ? <p className={styles.historyDetail}>{event.detail}</p> : null}
+              <p className={styles.historyMeta}>
+                {clock}
+                {event.status ? ` · ${event.status.label}` : null}
+              </p>
+            </div>
+            {event.status ? (
+              <span className={cx(styles.historyStatus, tone && styles[`tone-${tone}`])}>{event.status.label}</span>
+            ) : null}
+          </div>
+        </div>
+      </li>
+    );
+  }
 
   function renderEvent(event: ActivityEvent) {
     const id = `${uid}-${event.id}`;
@@ -236,8 +334,26 @@ export function ActivityFeed(props: ActivityFeedProps) {
     );
   }
 
+  const errorState = error ? (
+    <Empty
+      outlined
+      icon={CircleAlert}
+      title="Couldn't load activity"
+      description={error}
+      actions={
+        onRetry ? (
+          <Button size="md" appearance="outline" mode="neutral" onClick={onRetry}>
+            Retry
+          </Button>
+        ) : undefined
+      }
+    />
+  ) : null;
+
   let body;
-  if (!events.length && loading) {
+  if (!events.length && errorState) {
+    body = errorState;
+  } else if (!events.length && loading) {
     body = <SkeletonRows count={4} label="Loading activity" />;
   } else if (!events.length) {
     body = (
@@ -245,7 +361,11 @@ export function ActivityFeed(props: ActivityFeedProps) {
         outlined
         icon="Activity"
         title="No activity yet"
-        description="Comments, changes, agent runs, members and billing show here as they happen."
+        description={
+          history
+            ? "Events show here as they happen."
+            : "Comments, changes, agent runs, members and billing show here as they happen."
+        }
       />
     );
   } else if (!shown.length) {
@@ -260,7 +380,7 @@ export function ActivityFeed(props: ActivityFeedProps) {
             : "Try another type or person, or clear the filters."
         }
         actions={
-          <Button size="md" appearance="outline" mode="neutral" onClick={() => setFilters(NO_FILTERS)}>
+          <Button size="md" appearance="outline" mode="neutral" onClick={clearAll}>
             Clear filters
           </Button>
         }
@@ -268,14 +388,16 @@ export function ActivityFeed(props: ActivityFeedProps) {
     );
   } else {
     body = (
-      <div className={styles.days}>
+      <div className={cx(styles.days, history && styles.historyDays)}>
         {days.map((day) => (
           <section key={day.key} className={styles.day} aria-labelledby={`${uid}-day-${day.key}`}>
             <h3 id={`${uid}-day-${day.key}`} className={styles.dayTitle}>
               {day.label}
               <span className={styles.srOnly}>, {day.events.length === 1 ? "1 event" : `${day.events.length} events`}</span>
             </h3>
-            <ol className={styles.list}>{day.events.map(renderEvent)}</ol>
+            <ol className={cx(styles.list, history && styles.historyList)}>
+              {history ? day.events.map(renderHistoryEvent) : day.events.map(renderEvent)}
+            </ol>
           </section>
         ))}
       </div>
@@ -283,17 +405,33 @@ export function ActivityFeed(props: ActivityFeedProps) {
   }
 
   return (
-    <section {...rest} {...nisthaAttr("activityfeed", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("activityfeed", rest)} ref={ref} className={cx(styles.root, history && styles.history, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>
             {title}
           </h2>
           <p id={leadId} className={styles.lead}>
-            {description ?? (loading && !events.length ? "Loading…" : summaryLine(events.length, shown.length, filtered))}
+            {description ??
+              (loading && !events.length
+                ? "Loading…"
+                : error && !events.length
+                  ? "Couldn't load events"
+                  : summaryLine(events.length, shown.length, filtered, history))}
           </p>
         </div>
-        {events.length ? (
+        {events.length && statusChips?.length ? (
+          <div className={styles.chips}>
+            <SegmentedControl
+              size="sm"
+              ariaLabel="Filter activity"
+              items={[{ value: "", label: "All" }, ...statusChips.map((word) => ({ value: word, label: word }))]}
+              value={chip ?? ""}
+              onChange={(value) => setChip(value === "" ? null : value)}
+            />
+          </div>
+        ) : null}
+        {events.length && !history ? (
           <div className={styles.filters} role="group" aria-label="Filter activity">
             <Popover
               label="Filter by type"
@@ -352,7 +490,9 @@ export function ActivityFeed(props: ActivityFeedProps) {
 
       {loading && events.length ? <SkeletonRows count={2} label="Loading more activity" /> : null}
 
-      {showMore ? (
+      {events.length && errorState ? errorState : null}
+
+      {showMore && !error ? (
         <div className={styles.more}>
           <Button
             size="md"

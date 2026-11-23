@@ -221,6 +221,159 @@
   white-space: nowrap;
 }
 
+/* Status chips (kit SegmentedControl) sit on their own row under the title. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* history: one record's events on a card. The rail matches Timeline and AgentTrail:
+   16px rail, 12px dot, 1px line in --line-strong. */
+.history {
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--border-width-thin) solid var(--border-faint);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+}
+
+.history .head {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+}
+
+.history .title {
+  font-size: var(--type-size-ui-lg);
+  line-height: var(--type-line-ui-lg);
+  letter-spacing: var(--type-tracking-heading);
+}
+
+.historyDays {
+  gap: 0;
+}
+
+.history .day {
+  gap: 0;
+}
+
+.history .dayTitle {
+  padding-inline: 0;
+}
+
+.historyList {
+  border: 0;
+  border-radius: 0;
+  background: var(--surface-card);
+  overflow: visible;
+}
+
+.historyEvent {
+  display: block;
+  padding: 0;
+  border-block-start: 0;
+}
+
+.historyRow {
+  display: flex;
+  align-items: start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.historyTime {
+  flex: none;
+  width: var(--space-12);
+  padding-block-start: var(--space-px);
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  width: var(--space-4);
+}
+
+.dot {
+  flex: none;
+  width: var(--space-3);
+  height: var(--space-3);
+  /* Centred on the sentence's first line. */
+  margin-block-start: calc((var(--type-line-body-sm) - var(--space-3)) / 2);
+  border-radius: var(--radius-full);
+  background: var(--text-fg);
+}
+
+.railLine {
+  flex: 1;
+  width: var(--border-width-thin);
+  min-height: var(--space-3);
+  background: var(--line-strong);
+}
+
+.historyBody {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+  padding-block-end: var(--space-4);
+}
+
+.historyBodyLast {
+  padding-block-end: 0;
+}
+
+.history .copy {
+  gap: var(--space-px);
+}
+
+.historyDetail {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.historyStatus {
+  flex: none;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+/* The word carries the status; tone only adds colour. */
+.tone-success {
+  color: var(--success-fg);
+}
+
+.tone-danger {
+  color: var(--danger-fg);
+}
+
+/* Time and status sit in their own columns when wide; this line takes over when narrow. */
+.historyMeta {
+  display: none;
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 /* Narrow: labelled actions move under the copy, with the first label lined up with the text past the
    Avatar (Avatar sm + gap, less the sm Button's inline padding).
    40rem is --grid-breakpoint-sm (container queries cannot read var()). */
@@ -234,5 +387,38 @@
   .event:not(:has(.open:only-of-type)) .actions {
     justify-content: start;
     padding-inline-start: var(--space-8);
+  }
+}
+
+/* history, narrow: no time column; time and status join the meta line, detail turns fg, Load more
+   fills the width. 40rem is --grid-breakpoint-sm. */
+@container activityfeed (max-width: 40rem) {
+  .historyTime,
+  .historyStatus {
+    display: none;
+  }
+
+  .historyMeta {
+    display: block;
+  }
+
+  .history .copy {
+    gap: var(--space-1);
+  }
+
+  .history .historyDetail {
+    color: var(--text-fg);
+  }
+
+  .history .more > * {
+    flex: 1;
+  }
+}
+
+/* The card padding steps down on a phone. The container cannot query itself, so this reads the
+   viewport. 40rem is --grid-breakpoint-sm. */
+@media (max-width: 40rem) {
+  .history {
+    padding: var(--space-4);
   }
 }

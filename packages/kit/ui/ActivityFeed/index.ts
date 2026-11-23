@@ -5,4 +5,5 @@ export type {
   ActivityEventType,
   ActivityFeedFilters,
   ActivityFeedProps,
+  ActivityFeedVariant,
 } from "./ActivityFeed.types";

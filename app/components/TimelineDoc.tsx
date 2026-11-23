@@ -41,7 +41,7 @@ export function TimelineDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Filled node is current. Hollow is next. Muted is later.
+            Filled node is current. Hollow is next. Muted is later. Each step also says Now, Next or Later.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>

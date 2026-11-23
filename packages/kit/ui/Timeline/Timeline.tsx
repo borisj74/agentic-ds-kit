@@ -7,6 +7,16 @@ export type { TimelineItem, TimelineProps, TimelineStatus } from "./Timeline.typ
 
 const STATUSES = ["now", "next", "later"] as const;
 
+const STATUS_WORD = { now: "Now", next: "Next", later: "Later" } as const;
+
+// The status is a word as well as a dot, so colour never stands alone. A phase that already says
+// it ("Now") is not repeated.
+function phaseLine(status: (typeof STATUSES)[number], phase?: string): string {
+  const word = STATUS_WORD[status];
+  if (!phase || phase.trim().toLowerCase() === word.toLowerCase()) return word;
+  return `${word} · ${phase}`;
+}
+
 function headingTag(level: 2 | 3 | 4): "h2" | "h3" | "h4" {
   if (level === 2) return "h2";
   if (level === 4) return "h4";
@@ -39,7 +49,7 @@ export function Timeline({
               {index < items.length - 1 ? <span className={styles.line} /> : null}
             </span>
             <div className={styles.copy}>
-              {item.phase ? <p className={styles.phase}>{item.phase}</p> : null}
+              <p className={styles.phase}>{phaseLine(status, item.phase)}</p>
               {item.title ? <TitleTag className={styles.title}>{item.title}</TitleTag> : null}
               {item.body ? <p className={styles.body}>{item.body}</p> : null}
             </div>
