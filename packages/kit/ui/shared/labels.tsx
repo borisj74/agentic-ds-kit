@@ -59,6 +59,14 @@ export interface KitLabels {
   removeFile: (fileName: string) => string;
   /** TagInput: the suggestion list. */
   suggestions: string;
+  /** TagInput: a typed tag that is already in the list. */
+  tagExists: (tag: string) => string;
+  /** TagInput: maxTags is reached. */
+  tagLimit: (max: number) => string;
+  /** TagInput: count for screen readers when maxTags is set. */
+  tagCount: (count: number, max: number) => string;
+  /** TagInput: first Backspace on an empty query highlights the last tag. */
+  removeTagHint: (tag: string) => string;
   /** DropdownMenu: the search field. */
   searchOptions: string;
   /** Command: the key footer ("↑↓ Navigate", "↵ Open"; Esc uses `close`). */
@@ -145,6 +153,10 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   retryFile: (fileName) => `Retry ${fileName}`,
   removeFile: (fileName) => `Remove ${fileName}`,
   suggestions: "Suggestions",
+  tagExists: (tag) => `${tag} is already added`,
+  tagLimit: (max) => `Up to ${max} tags. Remove one to add another`,
+  tagCount: (count, max) => `${count} of ${max} tags`,
+  removeTagHint: (tag) => `Press Backspace to remove ${tag}`,
   searchOptions: "Search options",
   navigate: "Navigate",
   openItem: "Open",

@@ -12,6 +12,75 @@
   width: 100%;
 }
 
+/* Same 32 / 36 / 40 frame as Input and Button. Tags sit inside it, so the block padding is the 2px inset. */
+.root .shell {
+  min-height: var(--space-8);
+  padding-block: var(--space-px);
+}
+
+.root .shell[data-size="md"] {
+  min-height: calc(var(--space-8) + var(--space-1));
+}
+
+.root .shell[data-size="lg"] {
+  min-height: var(--space-10);
+}
+
+/* First Backspace highlights the tag the second one removes. */
+.pendingTag {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-px);
+}
+
+.count {
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.count[data-full] {
+  color: var(--text-secondary);
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.note:not(:empty) {
+  margin-top: var(--space-1);
+}
+
+.note[data-kind="warning"] {
+  color: var(--text-warning);
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  color: var(--icon-warning);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .shell:hover:not([data-disabled]) {
   border-color: var(--border-strong);
 }

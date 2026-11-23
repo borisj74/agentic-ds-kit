@@ -2,7 +2,7 @@
   "id": "taginput",
   "status": "stable",
   "level": "molecule",
-  "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+  "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions and an optional maximum with a visible count.",
   "useWhen": [
     "Free-form labels such as keywords the person creates",
     "A short list of suggestions while they type, without a fixed option set"
@@ -14,7 +14,7 @@
   "contains": ["tag"],
   "props": {
     "id": { "type": "string", "required": true },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["lg", "md", "sm"], "default": "md", "note": "Same 32 / 36 / 40 frame as Input and Button. lg uses md tags." },
     "value": { "type": "string[]", "required": false },
     "defaultValue": { "type": "string[]", "required": false },
     "onChange": { "type": "function", "required": false, "note": "(value: string[]) => void" },
@@ -23,6 +23,7 @@
     "error": { "type": "boolean", "default": false },
     "suggestions": { "type": "string[]", "required": false, "note": "Shown while typing. Picking one adds a tag." },
     "delimiters": { "type": "string[]", "default": [","], "note": "Single-character keys that commit a tag, besides Enter." },
+    "maxTags": { "type": "number", "required": false, "note": "Most tags allowed. Shows a count such as 3/8 at the end of the field. Adds past it are blocked with a message." },
     "name": { "type": "string", "required": false },
     "ariaLabel": { "type": "string", "required": false },
     "describedBy": { "type": "string", "required": false }
@@ -35,7 +36,12 @@
     "surface.muted",
     "border.faint",
     "border.focus",
-    "status.danger"
+    "status.danger",
+    "text.secondary",
+    "text.warning",
+    "icon.warning",
+    "focus.ring",
+    "radius.controlMd"
   ],
   "a11y": {
     "element": "input",
@@ -43,11 +49,12 @@
       "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Input is role=combobox when suggestions are open",
       "Enter or a delimiter adds the typed text. Arrow keys move through suggestions",
-      "Backspace on an empty query removes the last tag",
-      "Duplicate tags, compared case-insensitively, are ignored",
+      "Backspace on an empty query highlights the last tag and says 'Press Backspace to remove {tag}'; a second Backspace removes it. Any other key clears the highlight",
+      "A duplicate tag, compared case-insensitively, is not added; '{tag} is already added' is shown with an icon and announced (aria-live polite)",
+      "With maxTags, the count is in the input's aria-describedby ('3 of 8 tags'); an add past the limit is announced, not silently dropped",
       "Escape closes suggestions. Each tag remove button removes that tag",
       "Must have a Field label or ariaLabel",
-      "built-in labels (suggestions) come from KitLabelsProvider; English by default"
+      "built-in labels (suggestions, tagExists, tagLimit, tagCount, removeTagHint) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
@@ -55,5 +62,5 @@
     "Do not invent a local chip — tags are kit Tag",
     "Do not use raw hex"
   ],
-  "snippet": "<Field label=\"Keywords\" htmlFor=\"keywords\"><TagInput id=\"keywords\" placeholder=\"Add a keyword\" suggestions={keywords} /></Field>"
+  "snippet": "<Field label=\"Invoice labels\" htmlFor=\"labels\"><TagInput id=\"labels\" placeholder=\"Add a label\" maxTags={8} suggestions={labels} /></Field>"
 }

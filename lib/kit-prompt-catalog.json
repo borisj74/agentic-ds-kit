@@ -4715,7 +4715,7 @@
     {
       "id": "fileupload",
       "group": "component",
-      "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
+      "intent": "Choose files Button in a dashed drop zone (or a compact Button-only row) plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
       "useWhen": [
         "Attaching files to a form, message, or record",
         "Showing per-file upload progress, completion, and failures with retry",
@@ -4733,13 +4733,23 @@
         "Do not use a native progress element — rows compose kit Progress",
         "Do not show a raw input type=file as the control",
         "Do not use raw hex",
-        "Do not rely on color alone for done or error"
+        "Do not rely on color alone for done or error",
+        "Do not make the zone itself a button or put a link-styled 'Click to upload' in it — the action is the kit Choose files Button"
       ],
       "props": {
         "onFilesSelected": {
           "type": "function",
           "required": true,
           "note": "(files: File[]) => void. Called after a pick or a drop. Dropped files are filtered by accept; multiple=false keeps the first."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "zone",
+            "compact"
+          ],
+          "default": "zone",
+          "note": "zone is the dashed drop area with a neutral sm Choose files Button, 'or drag and drop' and the limits line. compact is the Button and the limits line on one row, for drawers and tight forms. Both accept dropped files."
         },
         "files": {
           "type": "array",
@@ -4755,7 +4765,7 @@
         "onRetry": {
           "type": "function",
           "required": false,
-          "note": "(id) => void. When set, error rows show a retry Button."
+          "note": "(id) => void. When set, error rows show a labelled sm Retry Button."
         },
         "accept": {
           "type": "string",
@@ -4769,7 +4779,7 @@
         "maxSizeLabel": {
           "type": "string",
           "required": false,
-          "note": "Hint under the drop zone text, e.g. 'SVG, PNG or PDF, max 10 MB'. Text only; the app enforces limits and reports them as row errors."
+          "note": "Limits line beside or under the Choose files Button, e.g. 'PDF or PNG, max 10 MB, up to 5 files'. Show it up front. Text only; the app enforces limits and reports them as row errors."
         },
         "disabled": {
           "type": "boolean",
@@ -4778,7 +4788,7 @@
         "id": {
           "type": "string",
           "required": false,
-          "note": "Drop zone button id. Inside Field, pass the same value as htmlFor."
+          "note": "Choose files Button id. Inside Field, pass the same value as htmlFor."
         },
         "describedBy": {
           "type": "string",
@@ -4788,7 +4798,7 @@
         "error": {
           "type": "boolean",
           "default": false,
-          "note": "Set by Field when it has an error. Danger border on the drop zone, like Input."
+          "note": "Set by Field when it has an error. Danger border on the zone, like Input. Field's error text carries the message."
         }
       }
     },
@@ -5088,7 +5098,7 @@
     {
       "id": "taginput",
       "group": "component",
-      "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions.",
+      "intent": "Tags the person types. Enter or a delimiter adds one. Optional suggestions and an optional maximum with a visible count.",
       "useWhen": [
         "Free-form labels such as keywords the person creates",
         "A short list of suggestions while they type, without a fixed option set"
@@ -5110,10 +5120,12 @@
         "size": {
           "type": "enum",
           "values": [
+            "lg",
             "md",
             "sm"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Same 32 / 36 / 40 frame as Input and Button. lg uses md tags."
         },
         "value": {
           "type": "string[]",
@@ -5151,6 +5163,11 @@
             ","
           ],
           "note": "Single-character keys that commit a tag, besides Enter."
+        },
+        "maxTags": {
+          "type": "number",
+          "required": false,
+          "note": "Most tags allowed. Shows a count such as 3/8 at the end of the field. Adds past it are blocked with a message."
         },
         "name": {
           "type": "string",

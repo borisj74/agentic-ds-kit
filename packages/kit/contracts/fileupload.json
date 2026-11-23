@@ -2,7 +2,7 @@
   "id": "fileupload",
   "status": "stable",
   "level": "molecule",
-  "intent": "Drop zone plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
+  "intent": "Choose files Button in a dashed drop zone (or a compact Button-only row) plus a list of file rows with progress, done, and error states. Presentational: the app does the upload; FileUpload reports picked files and renders the state it is given.",
   "useWhen": [
     "Attaching files to a form, message, or record",
     "Showing per-file upload progress, completion, and failures with retry",
@@ -24,6 +24,15 @@
       "required": true,
       "note": "(files: File[]) => void. Called after a pick or a drop. Dropped files are filtered by accept; multiple=false keeps the first."
     },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "zone",
+        "compact"
+      ],
+      "default": "zone",
+      "note": "zone is the dashed drop area with a neutral sm Choose files Button, 'or drag and drop' and the limits line. compact is the Button and the limits line on one row, for drawers and tight forms. Both accept dropped files."
+    },
     "files": {
       "type": "array",
       "required": false,
@@ -38,7 +47,7 @@
     "onRetry": {
       "type": "function",
       "required": false,
-      "note": "(id) => void. When set, error rows show a retry Button."
+      "note": "(id) => void. When set, error rows show a labelled sm Retry Button."
     },
     "accept": {
       "type": "string",
@@ -52,7 +61,7 @@
     "maxSizeLabel": {
       "type": "string",
       "required": false,
-      "note": "Hint under the drop zone text, e.g. 'SVG, PNG or PDF, max 10 MB'. Text only; the app enforces limits and reports them as row errors."
+      "note": "Limits line beside or under the Choose files Button, e.g. 'PDF or PNG, max 10 MB, up to 5 files'. Show it up front. Text only; the app enforces limits and reports them as row errors."
     },
     "disabled": {
       "type": "boolean",
@@ -61,7 +70,7 @@
     "id": {
       "type": "string",
       "required": false,
-      "note": "Drop zone button id. Inside Field, pass the same value as htmlFor."
+      "note": "Choose files Button id. Inside Field, pass the same value as htmlFor."
     },
     "describedBy": {
       "type": "string",
@@ -71,26 +80,23 @@
     "error": {
       "type": "boolean",
       "default": false,
-      "note": "Set by Field when it has an error. Danger border on the drop zone, like Input."
+      "note": "Set by Field when it has an error. Danger border on the zone, like Input. Field's error text carries the message."
     }
   },
   "passthrough": {
     "root": "div",
-    "ref": "drop zone button",
+    "ref": "Choose files button",
     "className": "root",
-    "rest": "drop zone button"
+    "rest": "Choose files button"
   },
   "tokens": [
     "surface.card",
     "surface.muted",
-    "surface.disabled",
     "border.strong",
     "border.brand",
     "border.faint",
     "border.disabled",
     "border.width.thin",
-    "border.focusWidth",
-    "focus.ring",
     "status.danger",
     "text.primary",
     "text.secondary",
@@ -98,12 +104,9 @@
     "text.brand",
     "text.danger",
     "text.disabled",
-    "icon.default",
     "icon.muted",
     "icon.success",
     "icon.danger",
-    "icon.disabled",
-    "radius.surfaceSm",
     "space.inset.lg",
     "space.inset.md",
     "space.inset.sm",
@@ -119,21 +122,24 @@
     "type.line.body",
     "type.line.heading",
     "motion.interactionDuration",
-    "motion.interactionEasing"
+    "motion.interactionEasing",
+    "radius.controlMd",
+    "surface.disabled"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
+      "The focusable control is the kit Choose files Button, in both variants. It opens the hidden file input; Enter and Space work. Drag and drop is an enhancement, not the only path.",
+      "The limits line (maxSizeLabel) is linked to the Button with aria-describedby, plus Field's hint or error id",
+      "While files are dragged over, the zone reads 'Drop files here' in text and a brand border, not the border alone",
       "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
-      "Drop zone is a button that opens the hidden file input; Enter and Space work. Drag and drop is an enhancement.",
       "The file input is hidden and out of the tab order",
-      "Drop zone hint (maxSizeLabel) is linked with aria-describedby, plus Field's hint or error id",
       "Each row's status text (Uploading, Complete, or the error) sits in aria-live=polite; the percent does not, so ticks are not announced",
       "Uploading rows use Progress with ariaLabel 'Uploading {name}'",
-      "Remove Button has aria-label 'Remove {name}'; retry Button has aria-label 'Retry {name}'",
+      "Remove Button has aria-label 'Remove {name}'; the Retry Button shows the word Retry (labels.retry) and is named 'Retry {name}' with aria-labelledby on its own id plus the file name",
       "Status is never color alone: icon plus text",
-      "Focus ring uses --focus-ring at --border-focus-width, like Button",
-      "built-in labels (files, uploading, retryFile, removeFile) come from KitLabelsProvider; English by default"
+      "built-in labels (files, uploading, retry, removeFile) come from KitLabelsProvider; English by default",
+      "Error rows lead with an alert icon and show the size and message in text"
     ]
   },
   "doNot": [
@@ -142,7 +148,8 @@
     "Do not use a native progress element — rows compose kit Progress",
     "Do not show a raw input type=file as the control",
     "Do not use raw hex",
-    "Do not rely on color alone for done or error"
+    "Do not rely on color alone for done or error",
+    "Do not make the zone itself a button or put a link-styled 'Click to upload' in it — the action is the kit Choose files Button"
   ],
-  "snippet": "<Field label=\"Attachments\" htmlFor=\"attachments\" hint=\"Up to 5 files.\">\n  <FileUpload\n    id=\"attachments\"\n    accept=\".pdf,image/*\"\n    maxSizeLabel=\"SVG, PNG or PDF, max 10 MB\"\n    files={files}\n    onFilesSelected={startUploads}\n    onRemove={removeFile}\n    onRetry={retryFile}\n  />\n</Field>"
+  "snippet": "<Field label=\"Attachments\" htmlFor=\"attachments\">\n  <FileUpload\n    id=\"attachments\"\n    accept=\".pdf,image/png\"\n    maxSizeLabel=\"PDF or PNG, max 10 MB, up to 5 files\"\n    files={files}\n    onFilesSelected={startUploads}\n    onRemove={removeFile}\n    onRetry={retryFile}\n  />\n</Field>"
 }

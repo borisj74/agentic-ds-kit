@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Field, FileUpload, Switch } from "agentic-ds-kit";
-import type { FileUploadItem } from "agentic-ds-kit";
+import type { FileUploadItem, FileUploadVariant } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -11,21 +11,24 @@ import { DocNotes } from "./DocNotes";
 const PREVIEW_FILL = { maxWidth: "28rem" } as const;
 const TICK_MS = 400;
 
+const VARIANTS: FileUploadVariant[] = ["zone", "compact"];
+const LIMITS = "PDF or PNG, max 10 MB, up to 5 files";
+
 const SEED: FileUploadItem[] = [
-  { id: "seed-done", name: "brand-guidelines.pdf", size: 2_480_000, status: "done" },
+  { id: "seed-done", name: "invoice-nov-2026.pdf", size: 1_890_000, status: "done" },
   {
     id: "seed-error",
-    name: "dashboard-export.png",
-    size: 860_000,
+    name: "statement-q3.csv",
+    size: 12_600_000,
     status: "error",
-    error: "Upload failed. Check your connection and retry.",
+    error: "Over the 10 MB limit",
   },
 ];
 
 const STATES: FileUploadItem[] = [
-  { id: "s1", name: "contract-signed.pdf", size: 1_120_000, progress: 40, status: "uploading" },
-  { id: "s2", name: "logo.svg", size: 18_000, status: "done" },
-  { id: "s3", name: "raw-footage.mov", size: 48_000_000, status: "error", error: "File is over 10 MB." },
+  { id: "s1", name: "invoice-nov-2026.pdf", size: 1_890_000, status: "done" },
+  { id: "s2", name: "northwind-logo.png", size: 240_000, progress: 40, status: "uploading" },
+  { id: "s3", name: "statement-q3.csv", size: 12_600_000, status: "error", error: "Over the 10 MB limit" },
 ];
 
 /** Fake upload loop for the docs only: a timer moves progress. No network. */
@@ -78,12 +81,10 @@ function useFakeUploads(initial: FileUploadItem[]) {
   return { files, add, remove, retry };
 }
 
-function masterCode(multiple: boolean, disabled: boolean) {
-  const lines = [
-    "<FileUpload",
-    '  accept=".pdf,image/*"',
-    '  maxSizeLabel="SVG, PNG or PDF, max 10 MB"',
-  ];
+function masterCode(variant: FileUploadVariant, multiple: boolean, disabled: boolean) {
+  const lines = ["<FileUpload"];
+  if (variant !== "zone") lines.push(`  variant="${variant}"`);
+  lines.push('  accept=".pdf,image/png"', `  maxSizeLabel="${LIMITS}"`);
   if (!multiple) lines.push("  multiple={false}");
   if (disabled) lines.push("  disabled");
   lines.push(
@@ -98,6 +99,7 @@ function masterCode(multiple: boolean, disabled: boolean) {
 
 export function FileUploadDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
+  const [variant, setVariant] = useState<FileUploadVariant>("zone");
   const [multiple, setMultiple] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const master = useFakeUploads(SEED);
@@ -108,9 +110,9 @@ export function FileUploadDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>FileUpload</h2>
         <p className={styles.lede}>
-          Drop zone plus file rows with progress, done, and error. Presentational: the app does the
-          upload and passes the state back. Rows compose kit Progress and Button. Not Dropzone or
-          FileInput.
+          A Choose files Button in a dashed drop zone, or on its own in the compact variant, plus
+          file rows with progress, done, and error. Presentational: the app does the upload and
+          passes the state back. Rows compose kit Progress and Button. Not Dropzone or FileInput.
         </p>
       </header>
 
@@ -132,8 +134,9 @@ export function FileUploadDoc() {
               <div className={styles.canvas}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <FileUpload
-                    accept=".pdf,image/*"
-                    maxSizeLabel="SVG, PNG or PDF, max 10 MB"
+                    variant={variant}
+                    accept=".pdf,image/png"
+                    maxSizeLabel={LIMITS}
                     multiple={multiple}
                     disabled={disabled}
                     files={master.files}
@@ -145,6 +148,22 @@ export function FileUploadDoc() {
               </div>
               <aside className={styles.panel} aria-label="Controls">
                 <div className={styles.panelGroup}>
+                  <span className={styles.panelLabel}>Variant</span>
+                  <div className={styles.sizeGroup} role="group" aria-label="Variant">
+                    {VARIANTS.map((step) => (
+                      <button
+                        key={step}
+                        type="button"
+                        className={`${styles.sizeTab} ${variant === step ? styles.sizeTabActive : ""}`}
+                        aria-pressed={variant === step}
+                        onClick={() => setVariant(step)}
+                      >
+                        {step}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.panelGroup}>
                   <Switch label="Multiple" size="sm" checked={multiple} onChange={setMultiple} />
                   <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
@@ -155,11 +174,12 @@ export function FileUploadDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   onFilesSelected hands you File objects; start the upload, then feed progress,
-                  status, and errors back through files. The drop zone is a button, so Tab and
-                  Enter open the picker. Drag and drop is an extra.
+                  status, and errors back through files. Choose files is a kit Button, so Tab and
+                  Enter open the picker. Drag and drop is an extra. Put the limits in
+                  maxSizeLabel so people see them before they pick.
                 </p>
               </div>
-              <CodeBlock code={masterCode(multiple, disabled)} />
+              <CodeBlock code={masterCode(variant, multiple, disabled)} />
             </DocNotes>
           </div>
         ) : (
@@ -169,7 +189,7 @@ export function FileUploadDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <FileUpload
-                    maxSizeLabel="Any file, max 10 MB"
+                    maxSizeLabel={LIMITS}
                     files={STATES}
                     onFilesSelected={() => undefined}
                     onRemove={() => undefined}
@@ -180,15 +200,38 @@ export function FileUploadDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  uploading shows a Progress bar and percent. done shows a check. error shows the
-                  message, and a retry Button when onRetry is set. Icon plus text, never color
-                  alone.
+                  uploading shows a Progress bar, Uploading and the percent. done shows a check and
+                  Complete. error leads with an alert icon and shows the size and message, plus a
+                  Retry Button when onRetry is set. Icon plus text, never color alone.
                 </p>
               </div>
               <CodeBlock
                 code={
-                  'files={[\n  { id: "1", name: "contract-signed.pdf", size: 1120000, progress: 40, status: "uploading" },\n  { id: "2", name: "logo.svg", size: 18000, status: "done" },\n  { id: "3", name: "raw-footage.mov", size: 48000000, status: "error", error: "File is over 10 MB." },\n]}'
+                  'files={[\n  { id: "1", name: "invoice-nov-2026.pdf", size: 1890000, status: "done" },\n  { id: "2", name: "northwind-logo.png", size: 240000, progress: 40, status: "uploading" },\n  { id: "3", name: "statement-q3.csv", size: 12600000, status: "error", error: "Over the 10 MB limit" },\n]}'
                 }
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Compact</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <FileUpload
+                    variant="compact"
+                    accept=".pdf,image/png"
+                    maxSizeLabel={LIMITS}
+                    onFilesSelected={() => undefined}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  For drawers and tight forms: the Choose files Button and the limits line on one
+                  row. Files dropped on the row still land. Rows render below, the same as zone.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<FileUpload variant="compact" maxSizeLabel="${LIMITS}" files={files} onFilesSelected={startUploads} />`}
               />
             </section>
             <section className={styles.example}>
@@ -198,13 +241,13 @@ export function FileUploadDoc() {
                   <Field
                     label="Attachments"
                     htmlFor="doc-attachments"
-                    hint="Add receipts for this expense."
-                    error={inField.files.length === 0 ? "Add at least one receipt." : undefined}
+                    hint="Files for the November Northwind invoice."
+                    error={inField.files.length === 0 ? "Add at least one file" : undefined}
                   >
                     <FileUpload
                       id="doc-attachments"
-                      accept=".pdf,image/*"
-                      maxSizeLabel="PNG, JPG or PDF, max 10 MB"
+                      accept=".pdf,image/png"
+                      maxSizeLabel={LIMITS}
                       files={inField.files}
                       onFilesSelected={inField.add}
                       onRemove={inField.remove}
@@ -221,7 +264,7 @@ export function FileUploadDoc() {
               </div>
               <CodeBlock
                 code={
-                  '<Field label="Attachments" htmlFor="attachments" error="Add at least one receipt.">\n  <FileUpload id="attachments" files={files} onFilesSelected={startUploads} onRemove={removeFile} />\n</Field>'
+                  '<Field label="Attachments" htmlFor="attachments" error="Add at least one file">\n  <FileUpload id="attachments" files={files} onFilesSelected={startUploads} onRemove={removeFile} />\n</Field>'
                 }
               />
             </section>
@@ -239,7 +282,7 @@ export function FileUploadDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  No picker, no drop. Row actions are disabled too.
+                  No picker, no drop. The Choose files Button and row actions are disabled too.
                 </p>
               </div>
               <CodeBlock code={"<FileUpload disabled onFilesSelected={startUploads} />"} />
