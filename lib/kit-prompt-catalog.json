@@ -1508,7 +1508,9 @@
         "Parts of a total over time, like usage by plan by month — variant area with stack stacked",
         "Each part's share of the total over time — variant area with stack percent",
         "This period against the last — a second series with dashed true",
-        "Showing a target or average — referenceLine, with highlight to mark points past it"
+        "Showing a target or average — referenceLine, with highlight to mark points past it",
+        "A headline value with how it moved each day — highlightLast with a changeStrip",
+        "This period against the last on demand — a Compare Button in actions that adds a dashed series"
       ],
       "doNotUseWhen": [
         "Comparing unrelated magnitudes at one moment — use BarChart",
@@ -1525,7 +1527,11 @@
         "Do not draw a reference line or threshold with a second flat series — use referenceLine",
         "Do not overlay a second chart to show the previous period — use a dashed series",
         "Do not use status colours for highlighted points; the accent dot means past the line, the label says which way",
-        "Do not wrap a chart in a Card only to get a header button — pass actions"
+        "Do not wrap a chart in a Card only to get a header button — pass actions",
+        "Do not draw a change strip as a second chart under the first — use changeStrip so labels, crosshair and tooltip stay shared",
+        "Do not colour strip bars green and red; a loss is a negative bar and its sign says so",
+        "Do not keep the comparison series on by default when it is only context — put a Compare Button in actions",
+        "Do not round line ends; the kit draws square ends and joins"
       ],
       "props": {
         "data": {
@@ -1545,6 +1551,16 @@
           "type": "object",
           "required": false,
           "note": "One dashed horizontal guide (text.muted) at value, with its label at the line's right end. The value axis widens to include it. highlight marks points of solid series above (or below) it with an accent dot (fill.brand); not with stack (the edges are running totals). The table gets a caption with the label and value, and each point's name says when it is past the line. Ignored with stack percent."
+        },
+        "highlightLast": {
+          "type": "boolean",
+          "default": false,
+          "note": "A dot and a value chip on the latest point of the first solid series, like today's MRR. Ignored with stack."
+        },
+        "changeStrip": {
+          "type": "object",
+          "required": false,
+          "note": "A short bar strip under the plot on the same labels, like net change per day. Bars go up from zero for gains and down for losses, square, in the first solid series' colour, on their own scale with two axis labels. It shares the crosshair and tooltip, adds a legend item and a table column, and joins each point's accessible name. format defaults to a signed compact number with a real minus sign (+1,200, −1,600)."
         },
         "title": {
           "type": "string",
@@ -1605,6 +1621,16 @@
           "type": "boolean",
           "default": false
         },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "When set, the plot is replaced by the kit's \"Couldn't load\" row (role=alert) with this message. Say what failed and that data is safe, like \"Stripe didn't answer in time.\""
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Shows an outline Retry Button on the error row."
+        },
         "tickInterval": {
           "type": "number",
           "required": false,
@@ -1614,6 +1640,11 @@
           "type": "function",
           "required": false,
           "note": "(label, index) => string for the painted axis label; return '' to hide one (turns off automatic thinning). Table and accessible names keep the raw label"
+        },
+        "tooltipNote": {
+          "type": "function",
+          "required": false,
+          "note": "(index) => string | undefined. One sentence under the tooltip rows for that sample, like \"The largest drop in 30 days.\" Read with the tooltip; keep it short and plain."
         },
         "animate": {
           "type": "boolean",
@@ -5474,7 +5505,8 @@
         "An amount and a rate or average over the same periods, like revenue with month-over-month growth",
         "Volumes with a running target or moving average drawn across them",
         "Two measures people read together per column, where two separate charts would make them line up by eye",
-        "Gains and losses per period with the net as a line — stack stacked, losses as negative values"
+        "Gains and losses per period with the net as a line — stack stacked, losses as negative values",
+        "Net change per period that can go below zero, with the running total as the line on axis dual — one bar series, stack none"
       ],
       "doNotUseWhen": [
         "Only amounts compared across categories — use BarChart",
@@ -5492,7 +5524,8 @@
         "Do not use raw hex or primitive --color-* ramps",
         "Do not stack values that do not add up, like rates; use stack none",
         "Do not pass losses as positive values with a status colour; make them negative so they pile below zero",
-        "Do not wrap a chart in a Card only to get a header button — pass actions"
+        "Do not wrap a chart in a Card only to get a header button — pass actions",
+        "Do not round bar corners or line ends; bars and line ends are square"
       ],
       "props": {
         "data": {
@@ -5508,7 +5541,7 @@
         "line": {
           "type": "object",
           "required": true,
-          "note": "One line series, drawn smooth in --chart-3 with no area fill."
+          "note": "One line series, drawn smooth in --chart-3 with no area fill and square ends."
         },
         "axis": {
           "type": "enum",
@@ -5517,7 +5550,7 @@
             "dual"
           ],
           "default": "shared",
-          "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines."
+          "note": "shared puts bars and line on one left axis, for the same unit. dual gives the line its own axis on the right, for a different unit like a percent; its ticks line up with the left gridlines. With dual, the right axis fits the line's own range and does not force zero, so a running total like MRR keeps its shape."
         },
         "stack": {
           "type": "enum",
@@ -5526,7 +5559,7 @@
             "stacked"
           ],
           "default": "none",
-          "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net."
+          "note": "stacked draws one bar per column: positive values pile up from zero and negative values pile down, in series order, with a hairline (surface.card) between segments. Use it for movements that add up, like gains and losses in a period, with the line as the net. With none, a single bar series still goes below zero for negative values, in one colour: use it for a daily net change with the running total as the line."
         },
         "valueFormatter": {
           "type": "object",
@@ -5545,6 +5578,30 @@
         "height": {
           "type": "number",
           "default": 240
+        },
+        "isLoading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Dims the plot and sets aria-busy while new data loads."
+        },
+        "emptyLabel": {
+          "type": "string",
+          "default": "No data for this range"
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "When set, the plot is replaced by the kit's \"Couldn't load\" row (role=alert) with this message. Say what failed and that data is safe, like \"Stripe didn't answer in time.\""
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Shows an outline Retry Button on the error row."
+        },
+        "tooltipNote": {
+          "type": "function",
+          "required": false,
+          "note": "(index) => string | undefined. One sentence under the tooltip rows for that column, like \"The largest one-day drop in this period.\" Read with the tooltip; keep it short and plain."
         },
         "actions": {
           "type": "slot",

@@ -1,4 +1,4 @@
-import type { ChartSeries } from "../shared/chartMath";
+import { formatValue, type ChartSeries } from "../shared/chartMath";
 import type { LineChartStack } from "./LineChart.types";
 
 /** One series as a band: where it starts (`lower`) and ends (`upper`) at each label, in axis units. */
@@ -79,4 +79,21 @@ export function warnStackMisuse(stack: LineChartStack, isArea: boolean, series: 
     warned.add("negative");
     console.warn('[agentic-ds-kit] LineChart stacks negative values as 0. Use stack="none" for series that can go negative.');
   }
+}
+
+/** A signed compact number with a real minus sign, so +1,200 and −1,600 line up: the strip's default format. */
+export function formatSigned(value: number): string {
+  if (!Number.isFinite(value)) return "—";
+  if (value > 0) return `+${formatValue(value)}`;
+  if (value < 0) return `\u2212${formatValue(-value)}`;
+  return formatValue(0);
+}
+
+/** Index of the last finite value, or -1. */
+export function lastFiniteIndex(data: readonly (number | undefined)[]): number {
+  for (let index = data.length - 1; index >= 0; index -= 1) {
+    const value = data[index];
+    if (value !== undefined && Number.isFinite(value)) return index;
+  }
+  return -1;
 }

@@ -27,6 +27,19 @@ const GOAL_SERIES = [
   { label: "Previous period", data: [281, 296, 305, 300, 318, 322, 315, 331], dashed: true },
 ];
 
+// Daily MRR for the last 30 days (Oct 22 to Nov 20) with the net change each day, and the 30 days before.
+const MRR_DAYS = [
+  ...Array.from({ length: 10 }, (_, index) => `Oct ${22 + index}`),
+  ...Array.from({ length: 20 }, (_, index) => `Nov ${1 + index}`),
+];
+const MRR_NET = [
+  -1100, -2500, 1700, -400, -200, 1900, 2700, -900, 1000, -2800, -1000, -200, 2700, 800, -1100,
+  2200, 400, 2300, -1600, -700, -1700, 400, 200, 2000, 2900, -1500, 2100, 1500, 700, 4600,
+];
+const MRR = MRR_NET.reduce<number[]>((totals, change) => [...totals, (totals.at(-1) ?? 398200) + change], []);
+const MRR_PREVIOUS = MRR.map((value, index) => value - 6200 + ((index * 7) % 5) * 300);
+const MRR_WORST_DAY = MRR_NET.indexOf(Math.min(...MRR_NET));
+
 const YOY_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 
 const YOY_SERIES = [
@@ -66,6 +79,7 @@ export function LineChartDoc() {
   const [replay, setReplay] = useState(0);
   const [variant, setVariant] = useState<LineChartVariant>("area");
   const [showGrid, setShowGrid] = useState(true);
+  const [compare, setCompare] = useState(false);
 
   return (
     <div>
@@ -333,6 +347,95 @@ export function LineChartDoc() {
     { label: "Previous period", data: lastPeriod, dashed: true },
   ]}
   referenceLine={{ value: 350, label: "Goal 350", highlight: "above" }}
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Latest value, change strip and compare</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="MRR"
+                    description="Last 30 days, Oct 22 to Nov 20"
+                    labels={MRR_DAYS}
+                    series={[
+                      { label: "MRR", data: MRR },
+                      ...(compare ? [{ label: "Previous 30 days", data: MRR_PREVIOUS, dashed: true }] : []),
+                    ]}
+                    referenceLine={{ value: 405000, label: "Target $405k" }}
+                    highlightLast
+                    changeStrip={{ label: "Net change per day", data: MRR_NET }}
+                    tooltipNote={(index) =>
+                      index === MRR_WORST_DAY ? "The largest one-day drop in 30 days." : undefined
+                    }
+                    actions={
+                      <Button appearance="outline" mode="neutral" size="sm" onClick={() => setCompare((on) => !on)} aria-pressed={compare}>
+                        Compare to last period
+                      </Button>
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  highlightLast puts a dot and the value on the latest point. changeStrip adds square bars
+                  under the plot for each day&apos;s change, up for gains and down for losses, on the same
+                  labels and tooltip. tooltipNote adds one sentence for a day worth explaining. Keep the
+                  previous period off by default and let a Compare Button add it as a dashed series, so the
+                  card stays calm.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="MRR"
+  labels={days}
+  series={[
+    { label: "MRR", data: mrr },
+    ...(compare ? [{ label: "Previous 30 days", data: previous, dashed: true }] : []),
+  ]}
+  referenceLine={{ value: 405000, label: "Target $405k" }}
+  highlightLast
+  changeStrip={{ label: "Net change per day", data: netChange }}
+  tooltipNote={(index) => (index === worstDay ? "The largest one-day drop in 30 days." : undefined)}
+  actions={
+    <Button appearance="outline" mode="neutral" size="sm" aria-pressed={compare} onClick={toggleCompare}>
+      Compare to last period
+    </Button>
+  }
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Error</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <LineChart
+                    title="MRR"
+                    description="Last 30 days"
+                    labels={MRR_DAYS}
+                    series={[{ label: "MRR", data: MRR }]}
+                    error="Stripe didn't answer in time. Your data is safe. The last value we have is $408.0k from Nov 19."
+                    onRetry={() => undefined}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  error swaps the plot for the kit&apos;s Couldn&apos;t load row. Say what failed and that data
+                  is safe. onRetry adds a Retry Button.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<LineChart
+  title="MRR"
+  labels={days}
+  series={series}
+  error="Stripe didn't answer in time. Your data is safe."
+  onRetry={refetch}
 />`}
               />
             </section>

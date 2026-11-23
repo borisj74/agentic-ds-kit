@@ -37,6 +37,21 @@ const euro = (value: number) =>
   value.toLocaleString("en-US", { style: "currency", currency: "EUR", notation: "compact", maximumFractionDigits: 1 });
 const percent = (value: number) => `${value}%`;
 
+// Net MRR change per day for the last 30 days (Oct 22 to Nov 20), with MRR on the right axis.
+const MRR_NET = [
+  -1100, -2500, 1700, -400, -200, 1900, 2700, -900, 1000, -2800, -1000, -200, 2700, 800, -1100,
+  2200, 400, 2300, -1600, -700, -1700, 400, 200, 2000, 2900, -1500, 2100, 1500, 700, 4600,
+];
+const MRR_DAILY = MRR_NET.reduce<{ label: string; change: number; mrr: number }[]>((rows, change, index) => {
+  const label = index < 10 ? `Oct ${22 + index}` : `Nov ${index - 9}`;
+  const mrr = (rows.at(-1)?.mrr ?? 398200) + change;
+  return [...rows, { label, change, mrr }];
+}, []);
+const MRR_WORST_DAY = MRR_NET.indexOf(Math.min(...MRR_NET));
+const signedDollars = (value: number) =>
+  `${value > 0 ? "+" : value < 0 ? "\u2212" : ""}$${Math.abs(value).toLocaleString("en-US")}`;
+const dollarsK = (value: number) => `$${(value / 1000).toFixed(1)}k`;
+
 const CODE = `<ComboChart
   title="Revenue and growth"
   description="2026, by month"
@@ -187,6 +202,90 @@ export function ComboChartDoc() {
               />
             </section>
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Daily change below zero</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ComboChart
+                    title="MRR movement"
+                    description="Net change per day, MRR on the right axis"
+                    axis="dual"
+                    data={MRR_DAILY}
+                    bars={[{ key: "change", label: "Net change per day" }]}
+                    line={{ key: "mrr", label: "MRR" }}
+                    valueFormatter={{ bars: signedDollars, line: dollarsK }}
+                    tooltipNote={(index) =>
+                      index === MRR_WORST_DAY ? "The largest one-day drop in this period." : undefined
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  With one bar series and stack none, negative values go below zero in the same colour:
+                  the sign says gain or loss, not the colour. tooltipNote adds one sentence for a day
+                  worth explaining.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ComboChart
+  title="MRR movement"
+  axis="dual"
+  data={daily}
+  bars={[{ key: "change", label: "Net change per day" }]}
+  line={{ key: "mrr", label: "MRR" }}
+  valueFormatter={{ bars: signedDollars, line: dollarsK }}
+  tooltipNote={(index) => (index === worstDay ? "The largest one-day drop in this period." : undefined)}
+/>`}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Loading and error</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ComboChart
+                    title="MRR movement"
+                    isLoading
+                    data={MRR_DAILY}
+                    bars={[{ key: "change", label: "Net change per day" }]}
+                    line={{ key: "mrr", label: "MRR" }}
+                    axis="dual"
+                  />
+                </div>
+              </div>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ComboChart
+                    title="MRR movement"
+                    error="Stripe didn't answer in time. Your data is safe. The last day we have is Nov 19."
+                    onRetry={() => undefined}
+                    data={MRR_DAILY}
+                    bars={[{ key: "change", label: "Net change per day" }]}
+                    line={{ key: "mrr", label: "MRR" }}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  isLoading dims the chart while new data loads. error swaps the plot for the kit&apos;s
+                  Couldn&apos;t load row; onRetry adds a Retry Button. emptyLabel sets the empty text.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ComboChart title="MRR movement" isLoading={isFetching} data={daily} bars={bars} line={line} />
+
+<ComboChart
+  title="MRR movement"
+  error="Stripe didn't answer in time. Your data is safe."
+  onRetry={refetch}
+  data={daily}
+  bars={bars}
+  line={line}
+/>`}
+              />
+            </section>
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Empty</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
@@ -195,6 +294,7 @@ export function ComboChartDoc() {
                     data={[]}
                     bars={[{ key: "revenue", label: "Revenue" }]}
                     line={{ key: "growth", label: "Growth" }}
+                    emptyLabel="No revenue yet. Bars show up after the first paid invoice."
                   />
                 </div>
               </div>
@@ -202,7 +302,7 @@ export function ComboChartDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>With no values, the frame shows the chart empty state.</p>
               </div>
-              <CodeBlock code={`<ComboChart title="Revenue and growth" data={[]} bars={bars} line={line} />`} />
+              <CodeBlock code={`<ComboChart title="Revenue and growth" data={[]} bars={bars} line={line} emptyLabel="No revenue yet. Bars show up after the first paid invoice." />`} />
             </section>
           </div>
         )}
