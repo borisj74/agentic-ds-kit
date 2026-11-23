@@ -89,7 +89,7 @@ describe("UsageBilling logic", () => {
   test("invoices become ListView rows with a status badge and a named Download", () => {
     const rows = logic.invoiceItems(invoices, 4);
     assert.equal(rows.length, 4);
-    assert.deepEqual(rows.map((r) => r.badge), ["Open", "Paid", "Paid", "Overdue"]);
+    assert.deepEqual(rows.map((r) => r.badge), ["Issued", "Paid", "Paid", "Overdue"]);
     assert.equal(rows[3].badgeTone, "danger");
     assert.equal(rows[0].secondary, "1 Nov 2026 · $49.00");
     assert.equal(rows[0].actions[0].label, "Download INV-0005");
@@ -120,6 +120,35 @@ describe("UsageBilling rendered", () => {
     assert.equal(findAll(node, UsageMeter)[0].props.onUpgrade, undefined);
     // Over the meter's warn line, the meter would have drawn its own Upgrade plan.
     assert.ok(!render({ onUpgrade() {} }).includes("Upgrade plan"));
+  });
+
+  test("below warnAt Upgrade is outline, so there is no solid primary", () => {
+    const node = tree({ allowance: { ...allowance, used: 5000 }, onUpgrade() {} });
+    const upgrade = findAll(node, Card)[0].props.actions.find((a) => a.label === "Upgrade to Team");
+    assert.equal(upgrade.appearance, "outline");
+    assert.equal(logic.upgradeIsPrimary(8000, 10000, 0.8), true);
+    assert.equal(logic.upgradeIsPrimary(7999, 10000, 0.8), false);
+  });
+
+  test("issued and the open alias both read Issued", () => {
+    const rows = logic.invoiceItems([{ ...invoices[0], status: "issued" }, invoices[0]], 4);
+    assert.deepEqual(rows.map((r) => r.badge), ["Issued", "Issued"]);
+  });
+
+  test("upcoming renders an estimate InvoiceDocument and plan.fit a line with words", () => {
+    const upcoming = {
+      number: "INV-1886",
+      to: "Northwind Traders",
+      issuedOn: "1 Dec 2026",
+      period: "1–30 Nov 2026",
+      lines: [{ id: "a", description: "Business plan", quantity: 18, unitPrice: "$39.00", amount: "$702.00" }],
+      subtotal: "$702.00",
+      total: "$842.40",
+    };
+    const html = render({ upcoming, plan: { ...plan, fit: "Team covers this month" } });
+    for (const text of ["INV-1886", "Estimate", "Estimated total", "1–30 Nov 2026", "Team covers this month"]) {
+      assert.ok(html.includes(text), text);
+    }
   });
 
   test("without onUpgrade there is no Upgrade", () => {

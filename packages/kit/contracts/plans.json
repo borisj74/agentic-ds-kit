@@ -23,13 +23,14 @@
     "segmentedcontrol",
     "badge",
     "button",
-    "numbertransition"
+    "numbertransition",
+    "tilegroup"
   ],
   "props": {
     "plans": {
       "type": "array",
       "required": true,
-      "note": "PricingPlans plans: { id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
+      "note": "PricingPlans plans: { id, name, tagline?, fit?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
     },
     "interval": {
       "type": "enum",
@@ -110,7 +111,7 @@
   },
   "layout": [
     "one column: heading and lead, PricingPlans, the FAQ",
-    "PricingPlans' cards wrap to one per row in a narrow block",
+    "PricingPlans' cards wrap to one per row in a narrow block, and become a TileGroup with one button below 30rem",
     "the block is its own inline-size container, so it works the same in a page column or full width"
   ],
   "tokens": [

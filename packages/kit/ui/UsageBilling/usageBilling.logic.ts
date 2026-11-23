@@ -8,7 +8,8 @@ export const NEAR_LIMIT = 0.8;
 
 export const INVOICE_STATUS: Record<UsageBillingInvoiceStatus, { label: string; tone: BadgeTone }> = {
   paid: { label: "Paid", tone: "success" },
-  open: { label: "Open", tone: "info" },
+  issued: { label: "Issued", tone: "info" },
+  open: { label: "Issued", tone: "info" },
   overdue: { label: "Overdue", tone: "danger" },
   void: { label: "Void", tone: "neutral" },
 };
@@ -36,6 +37,11 @@ export function invoiceItems(invoices: UsageBillingInvoice[], limit: number): Li
     badgeTone: INVOICE_STATUS[invoice.status].tone,
     actions: [{ id: "download", label: `Download ${invoice.number}`, icon: "Download" }],
   }));
+}
+
+/** Upgrade is solid only once the main allowance reaches its warning share; below that it is outline. */
+export function upgradeIsPrimary(used: number, limit: number, warnAt: number): boolean {
+  return limit > 0 ? used / limit >= warnAt : used > 0;
 }
 
 /** The plan card's Upgrade label. */

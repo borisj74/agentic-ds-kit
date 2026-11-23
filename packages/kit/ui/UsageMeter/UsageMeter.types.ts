@@ -6,6 +6,14 @@ export interface UsageCategory {
   value: number;
 }
 
+/** What usage past the limit costs. Pre-formatted: currency stays with the caller. */
+export interface UsageOverage {
+  /** e.g. "$4.00 per 100 credits". */
+  rateLabel: string;
+  /** Billed so far, e.g. "$49.60". */
+  amount: string;
+}
+
 /** Native section attributes the kit sets itself (or replaces with its own prop). */
 type UsageMeterOwnedKeys = "children" | "title" | "aria-labelledby";
 
@@ -29,10 +37,12 @@ export interface UsageMeterProps extends Omit<ComponentPropsWithoutRef<"section"
   dailyLabels?: string[];
   /** Daily cap; drawn as a second series. */
   dailyCap?: number;
-  /** Warning from this share of the limit. Default 0.9. */
+  /** Warning from this share of the limit. Default 0.8, the same as UsageList. */
   warnAt?: number;
   /** Second line of the warning, e.g. "At this pace you hit the limit in ~2 days." */
   paceNote?: string;
+  /** Usage past the limit keeps running and is billed: the rate and the amount so far, said in the warning and the meter's name. */
+  overage?: UsageOverage;
   /** The one primary action. */
   onUpgrade?: () => void;
   onViewUsage?: () => void;

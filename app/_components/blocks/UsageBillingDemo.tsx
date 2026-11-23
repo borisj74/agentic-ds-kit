@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { UsageBilling } from "agentic-ds-kit";
 import styles from "./BlockDemo.module.css";
-import { USAGE_ALLOWANCE, USAGE_INVOICES, USAGE_LIMITS, USAGE_PLAN } from "@/lib/blocks/usage-billing.sample";
+import { USAGE_ALLOWANCE, USAGE_INVOICES, USAGE_LIMITS, USAGE_PLAN, USAGE_UPCOMING } from "@/lib/blocks/usage-billing.sample";
 
 /**
- * UsageBilling with a sample Pro workspace late in its period. The actions have nowhere to go in
+ * UsageBilling with Northwind on Business, over its credit limit late in the period. The actions have nowhere to go in
  * the docs, so each one says what it would do in the live status line.
  */
 export function UsageBillingDemo() {
@@ -17,9 +17,10 @@ export function UsageBillingDemo() {
       <UsageBilling
         plan={USAGE_PLAN}
         allowance={USAGE_ALLOWANCE}
+        upcoming={USAGE_UPCOMING}
         limits={USAGE_LIMITS}
         invoices={USAGE_INVOICES}
-        onUpgrade={() => setStatus("Would open checkout for the Team plan")}
+        onUpgrade={() => setStatus("Would open checkout for the Scale plan")}
         onManagePayment={() => setStatus("Would open the payment method settings")}
         onDownloadInvoice={(id) => {
           const invoice = USAGE_INVOICES.find((item) => item.id === id);

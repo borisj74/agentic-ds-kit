@@ -1,2 +1,2 @@
 export { UsageMeter } from "./UsageMeter";
-export type { UsageMeterProps, UsageCategory } from "./UsageMeter.types";
+export type { UsageMeterProps, UsageCategory, UsageOverage } from "./UsageMeter.types";

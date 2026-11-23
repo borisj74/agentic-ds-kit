@@ -65,6 +65,28 @@ export function InvoiceDocumentDoc() {
           render: <InvoiceDocument {...BASE} {...actions} status="draft" />,
         },
         {
+          title: "Estimate — the next invoice",
+          about: "status=\"estimate\": an Estimate Badge, Estimated total, the billing period and no pay or record action. The clock footnote says it can still change.",
+          code: `<InvoiceDocument … status="estimate" issuedOn="01 Dec 2026" period="1–30 Nov 2026" footnote="Estimate as of 21 Nov, changes with usage until 30 Nov" />`,
+          render: <InvoiceDocument {...BASE} status="estimate" issuedOn="01 Dec 2026" dueOn={undefined} period="1–30 Nov 2026" footnote="Estimate as of 21 Nov, changes with usage until 30 Nov" />,
+        },
+        {
+          title: "Issued — the customer pays",
+          about: "onPay makes Pay {total} the solid primary, for the customer's own view. It wins over onRecordPayment.",
+          code: `<InvoiceDocument … status="issued" footnote="Not paid yet · Visa ending 4242 is charged on 15 Nov" onPay={pay} onDownload={download} />`,
+          render: <InvoiceDocument {...BASE} status="issued" footnote="Not paid yet · Visa ending 4242 is charged on 15 Nov" onPay={noop} onDownload={noop} />,
+        },
+        {
+          title: "Narrow — lines stack",
+          about: "Below 30rem Qty × Unit moves under each description; the Table keeps its four columns for screen readers.",
+          code: `<div className="narrow-column"><InvoiceDocument … onPay={pay} /></div>`,
+          render: (
+            <div className={agentDoc.narrow}>
+              <InvoiceDocument {...BASE} status="issued" onPay={noop} onDownload={noop} />
+            </div>
+          ),
+        },
+        {
           title: "Paid",
           about: "No primary; the footnote says when and how it was paid.",
           code: `<InvoiceDocument … status="paid" footnote="Paid 09 Nov 2026 · Visa 4242 · example" />`,

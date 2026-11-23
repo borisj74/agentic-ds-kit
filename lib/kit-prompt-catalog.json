@@ -10353,11 +10353,17 @@
         },
         "warnAt": {
           "type": "number",
-          "default": 0.9
+          "default": 0.8,
+          "note": "Same 80% threshold as UsageList."
         },
         "paceNote": {
           "type": "string",
           "required": false
+        },
+        "overage": {
+          "type": "object",
+          "required": false,
+          "note": "{ rateLabel, amount }, pre-formatted. Usage past the limit keeps running and is billed: the warning and the meter's name say the rate and the amount so far."
         },
         "onUpgrade": {
           "type": "function",
@@ -11051,7 +11057,7 @@
     {
       "id": "pricingplans",
       "group": "component",
-      "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Recommended and current are words; the recommended plan's CTA is the one solid primary. Built on kit SegmentedControl, Badge, Button and NumberTransition.",
+      "intent": "An in-product plan comparison for upgrades, not a marketing page: a Monthly / Yearly switch, one card per plan with price, features and one CTA. Only the recommended plan is highlighted; Recommended and Current plan are words. Below 30rem the cards become a kit TileGroup with one button. Built on kit SegmentedControl, Badge, Button, NumberTransition and TileGroup.",
       "useWhen": [
         "upgrade or change plan inside the product",
         "compare a few plans side by side with their features",
@@ -11072,7 +11078,7 @@
         "plans": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]"
+          "note": "{ id, name, tagline?, fit?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. fit is one line on how the plan fits current usage."
         },
         "interval": {
           "type": "enum",
@@ -11164,13 +11170,15 @@
         "status": {
           "type": "enum",
           "values": [
+            "estimate",
             "draft",
             "issued",
             "paid",
             "overdue",
             "void"
           ],
-          "default": "draft"
+          "default": "draft",
+          "note": "estimate: the next invoice before the period closes. Badge Estimate, total reads Estimated total, no pay or record action."
         },
         "from": {
           "type": "string",
@@ -11187,6 +11195,11 @@
         "dueOn": {
           "type": "string",
           "required": false
+        },
+        "period": {
+          "type": "string",
+          "required": false,
+          "note": "Billing period, e.g. \"1–30 Nov 2026\"."
         },
         "relatedInvoiceId": {
           "type": "string",
@@ -11217,7 +11230,7 @@
         "footnote": {
           "type": "string",
           "required": false,
-          "note": "Paid on, overdue reminder, voided, or what the credit note reduces; icon and colour follow the status."
+          "note": "Paid on, overdue reminder, voided, estimate as of, or what the credit note reduces; the icon follows the status (paid check, issued and estimate clock, overdue warning, void cross)."
         },
         "onDownload": {
           "type": "function",
@@ -11236,6 +11249,11 @@
           "type": "function",
           "required": false,
           "note": "Issued or overdue: Record payment, the solid primary."
+        },
+        "onPay": {
+          "type": "function",
+          "required": false,
+          "note": "Issued or overdue, the customer's view: Pay {total}, the solid primary. Wins over onRecordPayment."
         },
         "loading": {
           "type": "boolean",
@@ -11828,7 +11846,7 @@
         "plans": {
           "type": "array",
           "required": true,
-          "note": "PricingPlans plans: { id, name, tagline?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
+          "note": "PricingPlans plans: { id, name, tagline?, fit?, price, yearlyPrice?, features, ctaLabel?, recommended?, current? }[]. Mark one recommended: its CTA is the one solid primary."
         },
         "interval": {
           "type": "enum",
@@ -12419,7 +12437,7 @@
     {
       "id": "usagebilling",
       "group": "component",
-      "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade as the one solid primary and Manage payment, then the other limits (UsageList) beside recent invoices (ListView, a Download action per row).",
+      "intent": "Block: plan usage and what it costs. The main allowance (UsageMeter) beside the plan card with Upgrade and Manage payment, then the next invoice as an estimate (InvoiceDocument) beside the other limits (UsageList), then recent invoices (ListView, a Download action per row). Upgrade is the solid primary only once the allowance reaches its warnAt.",
       "useWhen": [
         "the billing or usage area of a SaaS settings page",
         "show how close an account is to its limits next to the plan that sets them",
@@ -12441,12 +12459,17 @@
         "plan": {
           "type": "object",
           "required": true,
-          "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\"."
+          "note": "{ name, price, priceNote?, nextCharge?, paymentMethod?, upgradeTo?, fit? }. Pre-formatted strings; Upgrade reads \"Upgrade to {upgradeTo}\". fit is one line on whether the upgrade plan covers this period, with a check icon."
         },
         "allowance": {
           "type": "object",
           "required": true,
-          "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote? }."
+          "note": "UsageMeter props without its actions: { title, used, limit, unit?, categories?, periodStart?, resetLabel?, daily?, dailyLabels?, dailyCap?, warnAt?, paceNote?, overage? }."
+        },
+        "upcoming": {
+          "type": "object",
+          "required": false,
+          "note": "The next invoice: InvoiceDocument props { number, to, from?, issuedOn, period?, lines, subtotal, taxLabel?, tax?, total, footnote? }, drawn with status \"estimate\" beside the other limits."
         },
         "limits": {
           "type": "array",
@@ -12456,7 +12479,7 @@
         "invoices": {
           "type": "array",
           "required": false,
-          "note": "{ id, number, date, amount, status: \"paid\" | \"open\" | \"overdue\" | \"void\" }[], newest first."
+          "note": "{ id, number, date, amount, status: \"paid\" | \"issued\" | \"overdue\" | \"void\" }[], newest first. Status words match InvoiceDocument; \"open\" is kept as an alias of \"issued\"."
         },
         "invoiceLimit": {
           "type": "number",
@@ -12466,7 +12489,7 @@
         "onUpgrade": {
           "type": "function",
           "required": false,
-          "note": "() => void. The one solid primary, on the plan card. Without it there is no Upgrade."
+          "note": "() => void. On the plan card: the solid primary once the allowance is at or past its warnAt, outline below it. Without it there is no Upgrade."
         },
         "onManagePayment": {
           "type": "function",

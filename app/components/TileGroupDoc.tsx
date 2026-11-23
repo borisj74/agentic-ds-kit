@@ -112,7 +112,8 @@ export function TileGroupDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Single select is a radiogroup. Multi select is a checkbox group. meta is the
-                  price slot. A disabled item stays visible and cannot be checked.
+                  price slot. A disabled item stays visible and cannot be checked. Focus shows the
+                  shared canvas-plus-ring, the same as Button and Input.
                 </p>
               </div>
               <CodeBlock code={code} />

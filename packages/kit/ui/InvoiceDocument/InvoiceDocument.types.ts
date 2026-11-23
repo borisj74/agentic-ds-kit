@@ -1,7 +1,8 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type InvoiceKind = "invoice" | "creditNote";
-export type InvoiceStatus = "draft" | "issued" | "paid" | "overdue" | "void";
+/** `estimate`: the next invoice before the period closes; it can still change and cannot be paid. */
+export type InvoiceStatus = "estimate" | "draft" | "issued" | "paid" | "overdue" | "void";
 
 export interface InvoiceLine {
   id: string;
@@ -29,6 +30,8 @@ export interface InvoiceDocumentProps extends Omit<ComponentPropsWithoutRef<"art
   to: string;
   issuedOn: string;
   dueOn?: string;
+  /** Billing period, e.g. "1–30 Nov 2026". */
+  period?: string;
   /** Credit notes: the invoice this one reduces. */
   relatedInvoiceId?: string;
   lines: InvoiceLine[];
@@ -44,8 +47,10 @@ export interface InvoiceDocumentProps extends Omit<ComponentPropsWithoutRef<"art
   onSend?: () => void;
   /** Draft: Issue invoice, the solid primary. */
   onIssue?: () => void;
-  /** Issued or overdue: Record payment, the solid primary. */
+  /** Issued or overdue: Record payment, the solid primary (the seller's view). */
   onRecordPayment?: () => void;
+  /** Issued or overdue: Pay {total}, the solid primary (the customer's view). Wins over onRecordPayment. */
+  onPay?: () => void;
   loading?: boolean;
   error?: string;
   onRetry?: () => void;

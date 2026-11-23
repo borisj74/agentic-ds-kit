@@ -15,9 +15,12 @@ import type { UsageMeterProps } from "./UsageMeter.types";
 import styles from "./UsageMeter.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { UsageMeterProps, UsageCategory } from "./UsageMeter.types";
+export type { UsageMeterProps, UsageCategory, UsageOverage } from "./UsageMeter.types";
 
 const num = (value: number) => value.toLocaleString("en-US");
+
+/** Default share of the limit where the warning starts. */
+export const USAGE_WARN_AT = 0.8;
 
 /**
  * Plan usage and AI credits: total against the limit, usage by category, a daily line, and a warning
@@ -34,8 +37,9 @@ export function UsageMeter({
   daily = [],
   dailyLabels,
   dailyCap,
-  warnAt = 0.9,
+  warnAt = USAGE_WARN_AT,
   paceNote,
+  overage,
   onUpgrade,
   onViewUsage,
   loading = false,
@@ -51,6 +55,10 @@ export function UsageMeter({
   const state = share >= 1 ? "exceeded" : share >= warnAt ? "warning" : "normal";
   const intent = state === "exceeded" ? "danger" : state === "warning" ? "warning" : "info";
   const left = Math.max(0, limit - used);
+  const over = Math.max(0, used - limit);
+  const meterLabel = over
+    ? `${title}: ${num(used)} of ${num(limit)} ${unit}, ${num(over)} over the limit${overage ? `, ${overage.amount} overage so far` : ""}`
+    : `${title}: ${num(used)} of ${num(limit)} ${unit}, ${percent}% used`;
   const labels = dailyLabels ?? daily.map((_, index) => String(index + 1));
   const today = daily.length ? daily[daily.length - 1] : undefined;
 
@@ -62,7 +70,7 @@ export function UsageMeter({
         </h3>
         {!loading && !error ? (
           <Badge tone={state === "normal" ? "neutral" : state === "warning" ? "warning" : "danger"} size="sm">
-            {state === "normal" ? `${percent}% used` : state === "warning" ? "Near limit" : "Limit reached"}
+            {state === "normal" ? `${percent}% used` : state === "warning" ? "Near limit" : over ? "Over limit" : "Limit reached"}
           </Badge>
         ) : null}
       </header>
@@ -93,7 +101,7 @@ export function UsageMeter({
             </span>
           </p>
           <div className={styles.meterBlock}>
-            <Meter value={Math.min(100, percent)} intent={intent} size="md" label={`${title}: ${num(used)} of ${num(limit)} ${unit}, ${percent}% used`} />
+            <Meter value={Math.min(100, percent)} intent={intent} size="md" label={meterLabel} />
             {periodStart || resetLabel ? (
               <div className={styles.axis}>
                 <span>{periodStart}</span>
@@ -135,8 +143,13 @@ export function UsageMeter({
           ) : null}
 
           {state !== "normal" ? (
-            <Alert variant={state === "exceeded" ? "danger" : "warning"} title={state === "exceeded" ? "Limit reached" : `${num(left)} ${unit} left`}>
-              {paceNote ?? (state === "exceeded" ? "New requests wait until the limit resets or you upgrade." : "You are close to this period's limit.")}
+            <Alert variant={state === "exceeded" ? "danger" : "warning"} title={state === "exceeded" ? (over ? `${num(over)} ${unit} over the limit` : "Limit reached") : `${num(left)} ${unit} left`}>
+              {paceNote ??
+                (state === "exceeded"
+                  ? over && overage
+                    ? `Requests keep running. Overage is billed at ${overage.rateLabel}: ${overage.amount} so far on the next invoice.`
+                    : "New requests wait until the limit resets or you upgrade."
+                  : "You are close to this period's limit.")}
             </Alert>
           ) : null}
 
