@@ -29,6 +29,49 @@ const MASTER_GROUPS: CommandGroup[] = [
   },
 ];
 
+// Billing example data: a Recent group, pages with descriptions and keywords, chord and sequence shortcuts.
+const PALETTE_GROUPS: CommandGroup[] = [
+  {
+    heading: "Recent",
+    items: [{ id: "inv-1842", label: "INV-1842", description: "Northwind Labs · $4,280.00", icon: "FileText" }],
+  },
+  {
+    heading: "Go to",
+    items: [
+      { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
+      { id: "invoices", label: "Invoices", description: "Billing", icon: "FileText", shortcut: "G I", keywords: ["bill", "payment"] },
+      { id: "plans", label: "Plans", description: "Billing", icon: "CreditCard", keywords: ["pricing", "upgrade"] },
+    ],
+  },
+  {
+    heading: "Actions",
+    items: [{ id: "new-invoice", label: "New invoice", icon: "Plus", shortcut: "N" }],
+  },
+];
+
+const PALETTE_CODE = `<Command
+  placeholder="Search pages and actions"
+  groups={[
+    { heading: "Recent", items: [{ id: "inv-1842", label: "INV-1842", description: "Northwind Labs · $4,280.00", icon: "FileText" }] },
+    {
+      heading: "Go to",
+      items: [
+        { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
+        { id: "invoices", label: "Invoices", description: "Billing", icon: "FileText", shortcut: "G I", keywords: ["bill", "payment"] },
+      ],
+    },
+    { heading: "Actions", items: [{ id: "new-invoice", label: "New invoice", icon: "Plus", shortcut: "N" }] },
+  ]}
+  onSelect={(id) => {}}
+  onAsk={(query) => openChat(query)}
+/>`;
+
+const LOADING_CODE = `<Command
+  groups={results}
+  loading={isFetching}
+  onSelect={(id) => {}}
+/>`;
+
 const DISABLED_GROUPS: CommandGroup[] = [
   {
     heading: "Suggestions",
@@ -53,7 +96,12 @@ const MASTER_CODE = `<>
     Open command
   </Button>
   <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
-    <Command groups={groups} onSelect={() => setOpen(false)} />
+    <Command
+      placeholder="Search pages and actions"
+      groups={groups}
+      onSelect={() => setOpen(false)}
+      onAsk={() => setOpen(false)}
+    />
   </Modal>
 </>`;
 
@@ -142,7 +190,12 @@ export function CommandDoc() {
                   Open command
                 </Button>
                 <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
-                  <Command groups={MASTER_GROUPS} onSelect={() => setOpen(false)} />
+                  <Command
+                    placeholder="Search pages and actions"
+                    groups={PALETTE_GROUPS}
+                    onSelect={() => setOpen(false)}
+                    onAsk={() => setOpen(false)}
+                  />
                 </Modal>
               </div>
             </div>
@@ -150,8 +203,10 @@ export function CommandDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Command is the list. A kit Button opens it. Kit Modal is the overlay. Select stays
-                  the short Field dropdown.
+                  Command is the list. A kit Button or ⌘K opens it in a kit Modal, so it never flips
+                  or floats. Rows are 40px with the same anatomy as DropdownMenu. If people type to
+                  find it, use Command. If they act on one thing, use DropdownMenu. If they pick a
+                  value to save, use Select.
                 </p>
               </div>
               <CodeBlock code={MASTER_CODE} />
@@ -173,6 +228,41 @@ export function CommandDoc() {
                 </p>
               </div>
               <CodeBlock code={INLINE_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Recent, search and Ask</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_MAX}>
+                  <Command placeholder="Search pages and actions" groups={PALETTE_GROUPS} onAsk={() => {}} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Recent is a plain group. Search matches labels, descriptions and keywords, so
+                  &quot;bill&quot; finds Invoices. onAsk adds an Ask Chat row at the foot of the
+                  list, and it stays when nothing matches. The result count is read after each search.
+                </p>
+              </div>
+              <CodeBlock code={PALETTE_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Loading</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_MAX}>
+                  <Command groups={PALETTE_GROUPS.slice(0, 1)} loading />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  While async results load, a Spinner row shows under what is already there and the
+                  list is aria-busy.
+                </p>
+              </div>
+              <CodeBlock code={LOADING_CODE} />
             </section>
 
             <section className={styles.example}>
@@ -201,8 +291,9 @@ export function CommandDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Icons are Lucide catalog names. Shortcuts stay a string, typically a modifier plus
-                  key.
+                  Icons are Lucide catalog names. Shortcuts are a string shown as one Geist Mono chip
+                  per key: modifiers first (⇧⌘P), a sequence with a space (G I), named keys spelled
+                  out (Esc, Ctrl K). The item sets aria-keyshortcuts so the shortcut is read once.
                 </p>
               </div>
               <CodeBlock code={INLINE_CODE} />
@@ -231,7 +322,12 @@ export function CommandDoc() {
                   Open command
                 </Button>
                 <Modal open={open} title="Command menu" onClose={() => setOpen(false)}>
-                  <Command groups={MASTER_GROUPS} onSelect={() => setOpen(false)} />
+                  <Command
+                    placeholder="Search pages and actions"
+                    groups={PALETTE_GROUPS}
+                    onSelect={() => setOpen(false)}
+                    onAsk={() => setOpen(false)}
+                  />
                 </Modal>
               </div>
               <div>

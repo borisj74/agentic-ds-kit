@@ -4,20 +4,33 @@
   "level": "molecule",
   "intent": "Actions or value menu from a button, field, or nav trigger.",
   "useWhen": [
-    "A button that opens a short list of actions",
+    "A button, ⋯ or nav item that opens a short list of actions on one thing (up to about ten)",
     "Row actions in a DataTable via Cell type=actionMenu",
-    "Select composes this with triggerStyle=field"
+    "Select composes this with triggerStyle=field",
+    "Which one: if people type to find it, use Command. If they act on one thing, use DropdownMenu. If they pick a value to save, use Select."
   ],
   "doNotUseWhen": [
-    "Choosing one value in a form \u2014 use Select (it composes this with triggerStyle=field)",
-    "Searchable commands \u2014 use Command in a Modal",
-    "Must-choose confirm \u2014 use AlertDialog",
-    "Top-of-page site nav with dropdowns \u2014 use NavigationMenu (it composes this with triggerStyle=nav)"
+    "Choosing one value in a form — use Select (it composes this with triggerStyle=field)",
+    "Searchable commands — use Command in a Modal",
+    "Must-choose confirm — use AlertDialog",
+    "Top-of-page site nav with dropdowns — use NavigationMenu (it composes this with triggerStyle=nav)"
   ],
   "props": {
-    "triggerDraggable": {"type": "boolean", "required": false, "note": "Makes the trigger button a drag source (TreeView rows use it)."},
-    "onTriggerDragStart": {"type": "function", "required": false, "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."},
-    "onTriggerDragEnd": {"type": "function", "required": false, "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."},
+    "triggerDraggable": {
+      "type": "boolean",
+      "required": false,
+      "note": "Makes the trigger button a drag source (TreeView rows use it)."
+    },
+    "onTriggerDragStart": {
+      "type": "function",
+      "required": false,
+      "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."
+    },
+    "onTriggerDragEnd": {
+      "type": "function",
+      "required": false,
+      "note": "(event: DragEvent<HTMLButtonElement>) => void on the trigger."
+    },
     "id": {
       "type": "string",
       "required": false,
@@ -54,12 +67,21 @@
     },
     "appearance": {
       "type": "enum",
-      "values": ["solid", "outline", "soft", "ghost"],
+      "values": [
+        "solid",
+        "outline",
+        "soft",
+        "ghost"
+      ],
       "default": "outline"
     },
     "mode": {
       "type": "enum",
-      "values": ["primary", "neutral", "danger"],
+      "values": [
+        "primary",
+        "neutral",
+        "danger"
+      ],
       "default": "neutral"
     },
     "size": {
@@ -84,6 +106,7 @@
       "required": true,
       "itemShape": {
         "heading": "string?",
+        "selection": "\"radio\"? items are menuitemradio with aria-checked; selected marks the one chosen",
         "items": [
           {
             "id": "string",
@@ -189,20 +212,28 @@
   },
   "tokens": [
     "type.line.uiXs",
+    "type.line.uiSm",
     "surface.card",
-    "surface.muted",
+    "bg.tray",
     "border.faint",
     "border.focus",
     "radius.surface.sm",
+    "radius.sm",
+    "radius.xs",
     "text.primary",
     "text.secondary",
     "text.muted",
     "text.danger",
+    "icon.secondary",
+    "icon.danger",
     "icon.muted",
+    "font.mono",
     "type.size.caption",
     "type.weight.label",
     "radius.control.md",
-    "focus.ring"
+    "focus.ring",
+    "space.1",
+    "space.2"
   ],
   "a11y": {
     "element": "div",
@@ -212,19 +243,27 @@
       "Trigger has aria-haspopup=menu, aria-expanded, aria-controls. button is kit Button; field is a field control; nav is a ghost text control",
       "With triggerTags, each Tag remove is a sibling button before the trigger in Tab order; the trigger keeps aria-haspopup, aria-expanded, aria-controls",
       "Panel is role=menu",
-      "Items are role=menuitem, or menuitemcheckbox when checkbox is set. aria-disabled when disabled. With href and not disabled, the item is an a",
+      "Items are role=menuitem, menuitemcheckbox when checkbox is set, or menuitemradio in a selection=\"radio\" group (aria-checked from selected). aria-disabled when disabled. With href and not disabled, the item is an a",
       "Escape and outside click close; Escape closes only the menu, not a parent Modal, Drawer or AlertDialog; arrows move; Tab closes. Search Input is focused first when searchable",
       "Icon-only trigger needs ariaLabel",
       "Item with submenu has aria-haspopup=menu and ChevronRight; ArrowRight opens. In a submenu, Escape or ArrowLeft closes only the submenu and focuses its parent item; Escape again closes the menu and focuses the trigger",
-      "built-in labels (searchOptions) come from KitLabelsProvider; English by default"
+      "built-in labels (searchOptions) come from KitLabelsProvider; English by default",
+      "Rows follow size: sm 28px (dense tables and toolbars), md 32px (default, Select), lg 40px. Type, gaps and chips stay the same; the highlight is bg tray with a 4px radius and keyboard focus adds the focus ring",
+      "An item with a shortcut sets aria-keyshortcuts for a chord; chips are Geist Mono, one per key, and aria-hidden. A sequence such as G I is read as \"G then I\"",
+      "Typeahead: typing letters moves to the next item whose label starts with them (500ms buffer); a repeated letter cycles through matches",
+      "Placement: below the trigger by default, 4px away; align start, or end for row and account menus",
+      "Placement: if the panel does not fit below and there is more room above, it opens above",
+      "Placement: max height is the screen minus 16px; the list scrolls inside the panel",
+      "Placement: submenus open to the right; with less than 168px to the right they open left; near the bottom they line up with their row",
+      "Group separators run the full panel width"
     ]
   },
   "doNot": [
     "Do not invent DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuGroup, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuSub, or DropdownMenuPortal",
     "Do not use Select for actions from a button",
     "Do not use Command or Modal for a small action menu",
-    "Do not invent DropdownMenuSub \u2014 nest groups on the item, one level",
-    "Do not invent CheckboxItem or RadioItem cousins \u2014 compose kit Checkbox on the item",
+    "Do not invent DropdownMenuSub — nest groups on the item, one level",
+    "Do not invent CheckboxItem or RadioItem cousins — compose kit Checkbox on the item",
     "Do not use radix, cmdk, or @base-ui/react",
     "Do not use raw hex"
   ],
@@ -235,5 +274,5 @@
     "badge",
     "tag"
   ],
-  "snippet": "<DropdownMenu\n  trigger=\"Open\"\n  groups={[{\n    heading: \"My Account\",\n    items: [\n      { id: \"profile\", label: \"Profile\", shortcut: \"\u21e7\u2318P\" },\n      { id: \"invite\", label: \"Invite users\", submenu: [{ items: [{ id: \"email\", label: \"Email\" }] }] },\n    ],\n  }]}\n  onSelect={(id) => {}}\n/>"
+  "snippet": "<DropdownMenu\n  trigger=\"Open\"\n  groups={[{\n    heading: \"My Account\",\n    items: [\n      { id: \"profile\", label: \"Profile\", shortcut: \"⇧⌘P\" },\n      { id: \"invite\", label: \"Invite users\", submenu: [{ items: [{ id: \"email\", label: \"Email\" }] }] },\n    ],\n  }]}\n  onSelect={(id) => {}}\n/>"
 }
