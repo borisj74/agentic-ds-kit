@@ -3,6 +3,11 @@
   min-width: 0;
 }
 
+/* Horizontal steps switch to the compact layout (step n of m, label, Progress bar) in a narrow container. */
+.horizontal {
+  container: progresssteps / inline-size;
+}
+
 .list {
   display: flex;
   width: 100%;
@@ -23,18 +28,52 @@
 .step {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   flex: 1;
   min-width: 0;
 }
 
 .vertical .step {
+  flex: none;
+}
+
+.stepBody,
+.stepButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.vertical .stepBody,
+.vertical .stepButton {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   column-gap: var(--space-4);
   align-items: stretch;
-  flex: none;
+}
+
+/* Completed steps are buttons when onStepClick is set. Same look as the static step, plus a focus ring. */
+.stepButton {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.stepButton:hover .label {
+  color: var(--text-brand);
+}
+
+.stepButton:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .markerRow {
@@ -124,6 +163,10 @@
   color: var(--text-muted);
 }
 
+.optional .marker {
+  border-style: dashed;
+}
+
 .error .marker {
   border: var(--border-width-medium) solid var(--fill-danger);
   background: var(--fill-danger);
@@ -137,6 +180,7 @@
 
 .copy {
   display: grid;
+  justify-items: center;
   gap: var(--space-1);
   margin-top: var(--space-3);
   padding-inline: var(--space-2);
@@ -147,6 +191,7 @@
 }
 
 .vertical .copy {
+  justify-items: start;
   margin-top: 0;
   padding-inline: 0;
   padding-block-end: var(--space-6);
@@ -179,6 +224,22 @@
   color: var(--text-danger);
 }
 
+.status {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.current .status {
+  color: var(--text-brand);
+}
+
+.error .status {
+  color: var(--text-danger);
+}
+
 .description {
   font-family: var(--font-sans);
   font-size: var(--type-size-caption);
@@ -192,16 +253,54 @@
   color: var(--text-muted);
 }
 
+.compact {
+  display: none;
+  gap: var(--space-1);
+}
+
+.compactPosition {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.compactLabel {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.compactNext {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+@container progresssteps (max-width: 30rem) {
+  .list {
+    display: none;
+  }
+
+  .compact {
+    display: grid;
+  }
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
   height: 1px;
-  padding: 0;
-  margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
-  border: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

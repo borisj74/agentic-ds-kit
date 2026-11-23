@@ -9,6 +9,8 @@ export interface ProgressStepsItem {
   label: string;
   description?: string;
   status?: ProgressStepsStatus;
+  /** Marks a step people may skip. An upcoming optional step gets a dashed marker and the word Optional. */
+  optional?: boolean;
 }
 
 /** Native nav attributes the kit sets itself (or replaces with its own prop). */
@@ -21,6 +23,8 @@ export interface ProgressStepsProps extends Omit<ComponentPropsWithoutRef<"nav">
   orientation?: ProgressStepsOrientation;
   size?: ProgressStepsSize;
   ariaLabel?: string;
+  /** When set, completed steps become buttons that call this with the step's index and item. Upcoming steps stay inert. */
+  onStepClick?: (index: number, step: ProgressStepsItem) => void;
   className?: string;
   ref?: Ref<HTMLElement>;
 }

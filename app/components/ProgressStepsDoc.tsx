@@ -13,21 +13,24 @@ const ORIENTATIONS: ProgressStepsOrientation[] = ["horizontal", "vertical"];
 const CURRENTS = [0, 1, 2, 3, 4] as const;
 
 const STEPS = [
-  { id: "details", label: "Your details", description: "Name and email" },
-  { id: "company", label: "Company details", description: "Website and location" },
-  { id: "team", label: "Invite your team", description: "Start collaborating" },
-  { id: "socials", label: "Add your socials", description: "Automatic sharing" },
+  { id: "plan", label: "Plan", description: "Starter to Growth" },
+  { id: "billing", label: "Billing", description: "Visa ending 4242" },
+  { id: "addons", label: "Add-ons", description: "Extra seats", optional: true },
+  { id: "review", label: "Review", description: "$48/mo from Dec 1" },
 ];
 
-const LABELS_ONLY = STEPS.map(({ id, label }) => ({ id, label }));
+const LABELS_ONLY = STEPS.map(({ id, label, optional }) => ({ id, label, optional }));
 
 function masterCode(current: number, size: ProgressStepsSize, orientation: ProgressStepsOrientation) {
   const lines = ["<ProgressSteps", `  current={${current}}`];
   if (size !== "md") lines.push(`  size="${size}"`);
   if (orientation !== "horizontal") lines.push(`  orientation="${orientation}"`);
+  lines.push("  onStepClick={(index) => setCurrent(index)}");
   lines.push("  steps={[");
-  lines.push('    { id: "details", label: "Your details", description: "Name and email" },');
-  lines.push('    { id: "company", label: "Company details", description: "Website and location" },');
+  lines.push('    { id: "plan", label: "Plan", description: "Starter to Growth" },');
+  lines.push('    { id: "billing", label: "Billing", description: "Visa ending 4242" },');
+  lines.push('    { id: "addons", label: "Add-ons", description: "Extra seats", optional: true },');
+  lines.push('    { id: "review", label: "Review", description: "$48/mo from Dec 1" },');
   lines.push("  ]}");
   lines.push("/>");
   return lines.join("\n");
@@ -44,8 +47,9 @@ export function ProgressStepsDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>ProgressSteps</h2>
         <p className={styles.lede}>
-          Ordered wizard steps: numbered circles, labels, and a connecting line. Complete, current,
-          and upcoming. One piece. Not Progress. Not Timeline.
+          Ordered steps for a required sequence, like a plan change or checkout. Each step shows a
+          marker and a word: Done, Current, Upcoming, Error or Optional. Not Progress, Timeline or
+          SetupGuide.
         </p>
       </header>
 
@@ -55,8 +59,8 @@ export function ProgressStepsDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Step 2 of 4 current. Size, orientation, and current live in the panel. Checkmarks are
-            complete. Brand ring is current.
+            Northwind changing from Starter to Growth, step 2 of 4. Click a Done step to go back.
+            Add-ons is optional, so its marker is dashed.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -71,6 +75,7 @@ export function ProgressStepsDoc() {
                     current={current}
                     size={size}
                     orientation={orientation}
+                    onStepClick={(index) => setCurrent(index)}
                   />
                 </div>
               </div>
@@ -129,8 +134,10 @@ export function ProgressStepsDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Checkout, onboarding, and multi-step forms. Do not use Progress (0–100) or
-                  Timeline (now/next/later). Do not invent StepItem or Stepper cousins.
+                  A required sequence such as a plan change, checkout or a multi-step form. Done steps
+                  are buttons when you pass onStepClick. Upcoming steps are not. Put Back and Continue
+                  under it with kit Button: Back neutral, Continue the one primary. For a skippable
+                  first-run checklist use SetupGuide.
                 </p>
               </div>
               <CodeBlock code={masterCode(current, size, orientation)} />
@@ -153,9 +160,25 @@ export function ProgressStepsDoc() {
               </div>
               <CodeBlock
                 code={
-                  '<ProgressSteps current={1} steps={[{ id: "details", label: "Your details" }, { id: "company", label: "Company details" }]} />'
+                  '<ProgressSteps current={1} steps={[{ id: "plan", label: "Plan" }, { id: "billing", label: "Billing" }]} />'
                 }
               />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Compact</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewNarrow}>
+                  <ProgressSteps steps={STEPS} current={1} />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Same props. When the container is narrower than 30rem, horizontal steps show Step n
+                  of m, the current label, and a Progress bar with the next step in words.
+                </p>
+              </div>
+              <CodeBlock code={'<ProgressSteps current={1} steps={[...]} />'} />
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Vertical</h2>
@@ -167,8 +190,8 @@ export function ProgressStepsDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use vertical in a narrow column or sidebar. Timeline is still for now/next/later
-                  roadmaps, not numbered wizards.
+                  Use vertical in a side column or a drawer. Timeline is still for now/next/later
+                  roadmaps, not numbered steps.
                 </p>
               </div>
               <CodeBlock
@@ -182,14 +205,14 @@ export function ProgressStepsDoc() {
                   <ProgressSteps
                     current={1}
                     steps={[
-                      { id: "details", label: "Your details", description: "Name and email" },
+                      { id: "plan", label: "Plan", description: "Starter to Growth" },
                       {
-                        id: "company",
-                        label: "Company details",
-                        description: "Fix the required fields",
+                        id: "billing",
+                        label: "Billing",
+                        description: "Card declined",
                         status: "error",
                       },
-                      { id: "team", label: "Invite your team", description: "Start collaborating" },
+                      { id: "review", label: "Review", description: "$48/mo from Dec 1" },
                     ]}
                   />
                 </div>
@@ -197,12 +220,13 @@ export function ProgressStepsDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Override status on a step for error. Do not invent an ErrorStep cousin.
+                  Set status to error on a step. It keeps the X and shows the word Error. Do not invent
+                  an ErrorStep cousin.
                 </p>
               </div>
               <CodeBlock
                 code={
-                  '<ProgressSteps current={1} steps={[{ id: "company", label: "Company details", status: "error" }]} />'
+                  '<ProgressSteps current={1} steps={[{ id: "billing", label: "Billing", status: "error" }]} />'
                 }
               />
             </section>
