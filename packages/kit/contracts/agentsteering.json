@@ -86,11 +86,17 @@
     },
     "suggestions": {
       "type": "string[]",
-      "required": false
+      "required": false,
+      "note": "Quick steers: outline sm Buttons that fill the composer; they stay after a steer is applied."
     },
     "onPause": {
       "type": "function",
       "required": false
+    },
+    "pauseNote": {
+      "type": "string",
+      "required": false,
+      "note": "Footer hint for what Pause does, e.g. \"Pause finishes the draft, sends nothing\". Describes the Pause button."
     },
     "onResume": {
       "type": "function",
@@ -165,6 +171,7 @@
     "Do not invent a local SteerBox, AgentControls, or RunControls",
     "Stop is never the solid primary Button",
     "Do not stop without AlertDialog when work can't be undone",
+    "Do not stop without stopConfirm when the agent can send messages",
     "Do not use raw hex"
   ],
   "snippet": "<AgentSteering name=\"Billing refactor\" meta=\"step 6 · editing invoice.ts\" elapsed=\"02:14\" value={text} onValueChange={setText} onSteer={steer} suggestions={[\"Focus on refunds\", \"Skip the docs\"]} onPause={pause} onStop={stop} stopConfirm={{ title: \"Stop this run?\", description: \"2 files are half-edited.\" }} />"

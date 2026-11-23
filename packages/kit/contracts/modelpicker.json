@@ -19,7 +19,7 @@
     "models": {
       "type": "array",
       "required": true,
-      "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[]"
+      "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[] costTier is a word: \"Low\", \"Standard\" or \"High\" (\"$\" marks are optional and show as those words)."
     },
     "value": {
       "type": "string",

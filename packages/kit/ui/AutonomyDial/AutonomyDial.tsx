@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { Gauge, LoaderCircle, Lock } from "lucide-react";
+import { Check, Gauge, LoaderCircle, Lock } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { LucideByName } from "../Button/lucideName";
@@ -36,6 +36,7 @@ export function AutonomyDial({
   disabled = false,
   disabledReason,
   saving = false,
+  savedAt,
   size = "md",
   className,
   ref,
@@ -95,6 +96,11 @@ export function AutonomyDial({
               <span className={styles.note}>
                 <Lock size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
                 {disabledReason}
+              </span>
+            ) : savedAt ? (
+              <span className={styles.note}>
+                <Check size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                Saved {savedAt}
               </span>
             ) : null}
           </p>

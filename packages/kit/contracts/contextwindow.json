@@ -33,7 +33,7 @@
     "segments": {
       "type": "array",
       "required": false,
-      "note": "{ id, label, tokens }[] in display order; up to five categorical fills from existing roles."
+      "note": "{ id, label, tokens }[] in display order; the first is neutral, the rest use the chart ramp (--chart-1, --chart-2, --chart-4, --chart-5)."
     },
     "warningAt": {
       "type": "number",
@@ -73,8 +73,6 @@
     "rest": "section"
   },
   "tokens": [
-    "surface.card",
-    "fill.strong",
     "bg.surface",
     "bg.subtle",
     "line.default",
@@ -90,13 +88,14 @@
     "type.family.mono",
     "motion.fast",
     "bg.tray",
-    "primary.base",
-    "status.success",
-    "highlight.base",
     "status.warningText",
     "status.dangerText",
     "status.dangerSubtle",
-    "type.size.heading5"
+    "type.size.heading5",
+    "chart.1",
+    "chart.2",
+    "chart.4",
+    "chart.5"
   ],
   "a11y": {
     "element": "section",

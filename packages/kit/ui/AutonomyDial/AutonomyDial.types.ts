@@ -29,6 +29,8 @@ export interface AutonomyDialProps extends Omit<ComponentPropsWithoutRef<"sectio
   disabledReason?: string;
   /** Saving a new stop: the description shows "Saving…". */
   saving?: boolean;
+  /** When the current stop was last saved, e.g. "14:01". The panel note reads "Saved 14:01". */
+  savedAt?: string;
   size?: "sm" | "md";
   ref?: Ref<HTMLElement>;
 }

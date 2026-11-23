@@ -108,9 +108,13 @@
   outline-offset: calc(-1 * var(--border-focus-width));
 }
 
+/* A disabled item dims only its label; the description (often the reason) and the icon stay readable. */
 .itemDisabled {
-  opacity: var(--opacity-disabled);
   cursor: not-allowed;
+}
+
+.itemDisabled .itemLabel {
+  color: var(--text-disabled);
 }
 
 .itemDanger {
@@ -144,6 +148,11 @@
 
 .itemDanger .itemLabel {
   color: var(--text-danger);
+}
+
+/* After the danger rule, so a disabled destructive item dims too instead of staying full red. */
+.itemDisabled.itemDanger .itemLabel {
+  color: var(--text-disabled);
 }
 
 .itemDescription {

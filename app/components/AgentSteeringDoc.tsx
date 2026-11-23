@@ -43,6 +43,7 @@ export function AgentSteeringDoc() {
           applied={applied}
           suggestions={SUGGESTIONS}
           onPause={() => setStatus("paused")}
+          pauseNote="Pause finishes the current step, starts nothing new"
           onResume={() => setStatus("running")}
           onStop={() => setStatus("stopped")}
           stopConfirm={CONFIRM}
@@ -71,13 +72,14 @@ export function AgentSteeringDoc() {
   onSteer={steer}
   suggestions={["Focus on refunds", "Skip the docs", "Smaller PRs"]}
   onPause={pause}
+  pauseNote="Pause finishes the current step, starts nothing new"
   onStop={stop}
   stopConfirm={{ title: "Stop this run?", description: "2 files are half-edited." }}
 />`}
       variants={[
         {
           title: "Running — composer ready",
-          about: "Quick steers fill the composer. Send stays off until there is text.",
+          about: "Quick steers are outline sm Buttons that fill the composer. Send stays off until there is text.",
           code: `<AgentSteering … suggestions={suggestions} onSteer={steer} />`,
           render: <AgentSteering {...BASE} suggestions={SUGGESTIONS} onSteer={noop} onValueChange={noop} onPause={noop} onStop={noop} />,
         },
@@ -89,9 +91,29 @@ export function AgentSteeringDoc() {
         },
         {
           title: "Steering applied",
-          about: "applied confirms what landed and when.",
+          about: "applied confirms what landed and when. Quick steers stay so the next steer is one click.",
           code: `<AgentSteering … applied="focus on refunds · 14:03" />`,
-          render: <AgentSteering {...BASE} applied="focus on refunds · 14:03" onSteer={noop} onPause={noop} onStop={noop} />,
+          render: <AgentSteering {...BASE} applied="focus on refunds · 14:03" suggestions={SUGGESTIONS} onSteer={noop} onValueChange={noop} onPause={noop} onStop={noop} />,
+        },
+        {
+          title: "Pause note — the agent can send messages",
+          about:
+            "pauseNote says what Pause does and describes the Pause button. When the agent can send messages, always pass stopConfirm so Stop asks first.",
+          code: `<AgentSteering name="Dunning agent" … pauseNote="Pause finishes the draft, sends nothing" stopConfirm={{ title: "Stop this run?", description: "2 reminders are already sent and stay sent." }} />`,
+          render: (
+            <AgentSteering
+              name="Dunning agent"
+              meta="Step 4 of 7 · drafting a reminder for INV-1842"
+              elapsed="02:14"
+              suggestions={["Email only, no calls", "Hold refunds for today", "Softer tone"]}
+              pauseNote="Pause finishes the draft, sends nothing"
+              stopConfirm={{ title: "Stop this run?", description: "2 reminders are already sent and stay sent. The draft for INV-1842 is discarded." }}
+              onSteer={noop}
+              onValueChange={noop}
+              onPause={noop}
+              onStop={noop}
+            />
+          ),
         },
         {
           title: "Paused",

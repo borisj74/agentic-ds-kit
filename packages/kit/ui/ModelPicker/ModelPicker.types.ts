@@ -8,7 +8,7 @@ export interface PickerModel {
   description?: string;
   /** e.g. "200K" */
   contextWindow?: string;
-  /** e.g. "$$" */
+  /** A word: "Low", "Standard" or "High". "$", "$$" and "$$$" also work and show as those words. */
   costTier?: string;
   /** Short word on the trigger, e.g. "balanced". */
   tagline?: string;

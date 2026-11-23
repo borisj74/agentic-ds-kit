@@ -159,34 +159,7 @@
   list-style: none;
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  height: var(--space-6);
-  margin: 0;
-  padding-inline: var(--space-3);
-  background-color: var(--bg-subtle);
-  border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-control-md);
-  color: var(--text-fg);
-  font: inherit;
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  cursor: pointer;
-}
-
-.chip:hover:not(:disabled) {
-  border-color: var(--line-strong);
-}
-
-.chip:disabled,
-.chipOff {
-  color: var(--text-fg-subtle);
-  cursor: default;
-}
-
-.retry:focus-visible,
-.chip:focus-visible {
+.retry:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
 }

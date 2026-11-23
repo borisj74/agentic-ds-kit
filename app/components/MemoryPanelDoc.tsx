@@ -52,6 +52,12 @@ export function MemoryPanelDoc() {
           render: <MemoryPanel items={ITEMS} onQueryChange={noop} onAdd={noop} onEdit={noop} onPin={noop} onDelete={noop} />,
         },
         {
+          title: "Custom used label",
+          about: "usedLabel names how this thread used a fact. Default \"Used here\".",
+          code: `<MemoryPanel items={memories} usedLabel="Used for this reminder" />`,
+          render: <MemoryPanel items={ITEMS} usedLabel="Used for this reminder" onQueryChange={noop} onAdd={noop} onEdit={noop} onPin={noop} onDelete={noop} />,
+        },
+        {
           title: "Filtered to none",
           about: "A search with no match says so and suggests adding it.",
           code: `<MemoryPanel items={memories} query="stripe" onQueryChange={setQuery} />`,

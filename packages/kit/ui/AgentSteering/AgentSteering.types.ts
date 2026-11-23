@@ -31,9 +31,11 @@ export interface AgentSteeringProps extends Omit<ComponentPropsWithoutRef<"secti
   /** Steer not delivered, e.g. "Couldn't reach the agent. Your text is kept." */
   error?: string;
   onRetry?: () => void;
-  /** Quick steers shown as chips while running. */
+  /** Quick steers: outline sm Buttons that fill the composer. They stay after a steer is applied. */
   suggestions?: string[];
   onPause?: () => void;
+  /** Footer hint for what Pause does, e.g. "Pause finishes the draft, sends nothing". Describes the Pause button. */
+  pauseNote?: string;
   onResume?: () => void;
   onStop?: () => void;
   /** When set, Stop opens a kit AlertDialog with this text before calling onStop. */
