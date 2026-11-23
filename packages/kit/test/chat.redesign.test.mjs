@@ -175,3 +175,27 @@ describe("Chat streaming while thinking", () => {
     assert.ok(!html.includes(">Thinking<"));
   });
 });
+
+describe("Chat review fixes", () => {
+  test("an error message can carry the failed step as its text, with no step row", () => {
+    const html = render({
+      messages: [
+        {
+          role: "assistant",
+          status: "error",
+          content: "Reading MRR movements · failed at step 1",
+          error: { title: "Couldn’t read MRR movements", onRetry: () => {} },
+        },
+      ],
+    });
+    assert.ok(html.includes("Reading MRR movements · failed at step 1"));
+    assert.ok(!/\d+ steps? ·/.test(html), "no collapsed step row");
+    assert.ok(html.indexOf("failed at step 1") < html.indexOf('role="alert"'));
+  });
+
+  test("the in-chat chart has no Table toggle", () => {
+    const html = render({ messages: [ANSWER] });
+    assert.ok(html.includes("MRR · weekly"));
+    assert.ok(!/<button[^>]*aria-expanded="false"[^>]*>(?:(?!<\/button>).)*Table/s.test(html), "no Table toggle button");
+  });
+});

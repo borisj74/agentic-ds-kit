@@ -152,9 +152,8 @@ const ERROR: ChatMessage[] = [
   {
     role: "assistant",
     status: "error",
-    content: "",
+    content: "Reading MRR movements · failed at step 1",
     timestamp: "09:42",
-    steps: [{ label: "Reading MRR movements", status: "done", durationMs: 10000 }],
     error: {
       title: "Couldn’t read MRR movements",
       description: "The data source timed out after 10s. Nothing was changed.",
@@ -366,7 +365,8 @@ export function ChatDoc() {
                 <p className={styles.usageBody}>
                   greeting and intro open the empty panel. With context, the Tag sits under the
                   intro. Suggestions with a hint become rows (kit LinkList); recent lists past
-                  questions at the foot (kit ListView).
+                  questions at the foot (kit ListView). Picking a recent sends it again, like a
+                  suggestion, unless it has its own onSelect.
                 </p>
               </div>
               <CodeBlock
@@ -375,7 +375,7 @@ export function ChatDoc() {
   intro="Ask about this dashboard. I answer from the data on screen."
   context={{ label: "Revenue overview · Last 3 months", onRemove: clearContext }}
   suggestions={[{ label: "What drove MRR this period?", hint: "Looks at MRR movements · 3 months", icon: "TrendingUp" }]}
-  recent={[{ label: "Compare ARPA by plan", meta: "Yesterday", onSelect: reopen }]}
+  recent={[{ label: "Compare ARPA by plan", meta: "Yesterday" }]}
   messages={[]}
   onSend={handleSend}
 />`}
@@ -415,7 +415,7 @@ export function ChatDoc() {
 
 { role: "assistant", status: "streaming", content: partialText, parts }
 
-{ role: "assistant", status: "error", content: "", error: {
+{ role: "assistant", status: "error", content: "Reading MRR movements · failed at step 1", error: {
   title: "Couldn’t read MRR movements",
   description: "The data source timed out after 10s. Nothing was changed.",
   onRetry: retry,

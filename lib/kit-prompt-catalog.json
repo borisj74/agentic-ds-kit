@@ -4340,7 +4340,7 @@
         "messages": {
           "type": "array",
           "required": false,
-          "note": "ChatMessage[] with role user | assistant, content, optional id and timestamp. Type only — not a ChatMessage component. Assistant messages may add parts (ChatPart[], drawn in order under the text: metrics → kit Scorecard sm, table → kit Table sm with footer, chart → kit LineChart area, sources → footer line, followups → kit Button sm outline pill that sends its text), steps (ChatStep[], collapsed into one \"3 steps · 2.4s\" row that opens the list), status (streaming | error) and error ({ title, description?, onRetry?, onCopyDetails? }). streaming shows a caret and a Skeleton for parts still coming; error shows a card with a warning icon, a soft primary Retry and an outline Copy details."
+          "note": "ChatMessage[] with role user | assistant, content, optional id and timestamp. Type only — not a ChatMessage component. Assistant messages may add parts (ChatPart[], drawn in order under the text: metrics → kit Scorecard sm, table → kit Table sm with footer, chart → kit LineChart area as a sparkline (no Table toggle), sources → footer line, followups → kit Button sm outline pill that sends its text), steps (ChatStep[], collapsed into one \"3 steps · 2.4s\" row that opens the list), status (streaming | error) and error ({ title, description?, onRetry?, onCopyDetails? }). streaming shows a caret and a Skeleton for parts still coming; error shows a card with a warning icon, a soft primary Retry and an outline Copy details."
         },
         "suggestions": {
           "type": "array",
@@ -4374,7 +4374,7 @@
         "recent": {
           "type": "array",
           "required": false,
-          "note": "Recent questions at the foot of the empty state. kit ListView sm."
+          "note": "Recent questions at the foot of the empty state. kit ListView sm. Picking a row runs onSelect, or sends its label through onSend when onSelect is unset, like a suggestion."
         },
         "recentEmptyLabel": {
           "type": "string",

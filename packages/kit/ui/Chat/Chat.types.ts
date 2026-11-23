@@ -80,6 +80,7 @@ export interface ChatRecent {
   label: string;
   /** Short text at the row's end, like "Yesterday". */
   meta?: string;
+  /** Runs when the row is picked. Without it, the row sends `label` through onSend, like a suggestion. */
   onSelect?: () => void;
 }
 

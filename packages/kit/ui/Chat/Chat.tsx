@@ -178,6 +178,7 @@ function Part({ part, disabled, onFollowup }: { part: ChatPart; disabled: boolea
           data={part.data}
           height={112}
           showGrid={false}
+          showTable={false}
         />
       );
     case "sources":
@@ -389,7 +390,10 @@ export function Chat({
                     }))}
                     onOpen={(id) => {
                       const item = recent.find((entry, index) => (entry.id ?? `${entry.label}-${index}`) === id);
-                      item?.onSelect?.();
+                      if (!item) return;
+                      // Like a suggestion: with no onSelect, a recent sends its question again.
+                      if (item.onSelect) item.onSelect();
+                      else sendMessage(item.label);
                     }}
                   />
                 ) : recentEmptyLabel ? (
