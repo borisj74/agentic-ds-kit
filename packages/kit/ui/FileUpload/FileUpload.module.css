@@ -46,6 +46,18 @@
   border-color: var(--border-brand);
 }
 
+/* One ring around the whole zone while the Choose files Button has keyboard focus. The Button stays
+   the only focusable control; its own ring is hidden here so there are not two. :has(:focus-visible)
+   keeps mouse clicks ring-free, like Button. */
+.zone:focus-within:has(:focus-visible) {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.zone:focus-within :focus-visible {
+  outline: none;
+}
+
 .zone[data-disabled] {
   background-color: var(--surface-disabled);
   border-color: var(--border-disabled);
