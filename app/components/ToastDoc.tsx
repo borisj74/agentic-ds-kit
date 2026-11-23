@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "agentic-ds-kit";
 import { Toast } from "agentic-ds-kit";
-import type { ToastStatus } from "agentic-ds-kit";
+import type { ToastSize, ToastStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
 const STATUSES: ToastStatus[] = ["info", "success", "warning", "danger"];
+const SIZES: ToastSize[] = ["sm", "md", "lg"];
 
 const COPY: Record<
   ToastStatus,
@@ -25,7 +26,7 @@ const COPY: Record<
   success: {
     heading: "Success",
     title: "Invoice sent",
-    description: "INV-1042 went to billing@acme.com.",
+    description: "INV-1842 went to billing@northwind.com.",
     about: "Success counts down 5 seconds. Point at the toast to pause.",
   },
   warning: {
@@ -36,12 +37,19 @@ const COPY: Record<
   },
   danger: {
     heading: "Danger",
-    title: "Couldn't delete",
-    description: "The account still has open invoices.",
+    title: "Couldn't send reminders",
+    description: "2 of 5 failed. The other 3 went out.",
     actionLabel: "Try again",
-    about: "Danger counts down 5 seconds. role=alert. Try again still runs before it closes.",
+    about: "Danger stays open until it is closed, with no countdown bar. role=alert.",
   },
 };
+
+const PROGRESS = {
+  heading: "Progress",
+  title: "Exporting invoices",
+  description: "Northwind, Q3. You can keep working.",
+  about: "progress (0 to 100) shows a bar and keeps the toast open. When the work ends, clear progress and switch status to success; the 5 second countdown starts then.",
+} as const;
 
 const STAYS_OPEN = {
   heading: "Stays open",
@@ -55,6 +63,7 @@ function toastCode(
   current: { title: string; description: string; actionLabel?: string },
   status: ToastStatus,
   durationNull = false,
+  extra: { size?: ToastSize; timestamp?: string } = {},
 ) {
   const lines = [
     "<Toast",
@@ -64,6 +73,8 @@ function toastCode(
     `  description="${current.description}"`,
   ];
   if (status !== "info") lines.push(`  status="${status}"`);
+  if (extra.size && extra.size !== "md") lines.push(`  size="${extra.size}"`);
+  if (extra.timestamp) lines.push(`  timestamp="${extra.timestamp}"`);
   if (current.actionLabel) {
     lines.push(`  actionLabel="${current.actionLabel}"`);
     lines.push("  onAction={onAction}");
@@ -76,9 +87,23 @@ function toastCode(
 export function ToastDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [status, setStatus] = useState<ToastStatus>("info");
+  const [size, setSize] = useState<ToastSize>("md");
+  const [progress, setProgress] = useState<number | undefined>(undefined);
   const [masterOpen, setMasterOpen] = useState(false);
-  const [variantOpen, setVariantOpen] = useState<Partial<Record<ToastStatus | "stays", boolean>>>({});
+  const [variantOpen, setVariantOpen] = useState<Partial<Record<ToastStatus | "stays" | "progress", boolean>>>({});
   const current = COPY[status];
+
+  // Demo only: advance the export, then hand over to a success countdown.
+  useEffect(() => {
+    if (progress === undefined) return undefined;
+    const timer = window.setTimeout(() => setProgress(progress >= 100 ? undefined : progress + 20), 600);
+    return () => window.clearTimeout(timer);
+  }, [progress]);
+
+  function showProgress() {
+    setProgress(0);
+    setVariantOpen((prev) => ({ ...prev, progress: true }));
+  }
 
   function closeAll() {
     setMasterOpen(false);
@@ -101,8 +126,8 @@ export function ToastDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Every status counts down 5 seconds. Point at the toast to pause. Pass duration null when
-            it must stay until closed.
+            Info, success and warning count down 5 seconds. Danger stays until closed. Point at the
+            toast to pause. The stack shows at most three.
           </p>
           <DocTabList
             value={tab}
@@ -141,6 +166,23 @@ export function ToastDoc() {
                     ))}
                   </div>
                 </div>
+                <div className={styles.panelGroup}>
+                  <span className={styles.panelLabel}>Size</span>
+                  <div className={styles.radioList} role="radiogroup" aria-label="Size">
+                    {SIZES.map((option) => (
+                      <label key={option} className={styles.radio}>
+                        <input
+                          type="radio"
+                          name="toast-size"
+                          value={option}
+                          checked={size === option}
+                          onChange={() => setSize(option)}
+                        />
+                        {option}
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </aside>
             </div>
             <DocNotes>
@@ -153,7 +195,7 @@ export function ToastDoc() {
                   must stay on the page, use Alert.
                 </p>
               </div>
-              <CodeBlock code={toastCode(current, status)} />
+              <CodeBlock code={toastCode(current, status, false, { size, timestamp: "Now" })} />
             </DocNotes>
           </div>
         ) : (
@@ -179,6 +221,24 @@ export function ToastDoc() {
                 <CodeBlock code={toastCode(COPY[option], option)} />
               </section>
             ))}
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>{PROGRESS.heading}</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Button appearance="outline" mode="neutral" size="md" onClick={showProgress}>
+                    Start export
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>{PROGRESS.about}</p>
+              </div>
+              <CodeBlock
+                code={`<Toast\n  open={open}\n  onClose={() => setOpen(false)}\n  title={done ? "Export ready" : "${PROGRESS.title}"}\n  status={done ? "success" : "info"}\n  progress={done ? undefined : percent}\n/>`}
+              />
+            </section>
 
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>{STAYS_OPEN.heading}</h2>
@@ -210,6 +270,8 @@ export function ToastDoc() {
         title={current.title}
         description={current.description}
         status={status}
+        size={size}
+        timestamp="Now"
         actionLabel={current.actionLabel}
         onAction={current.actionLabel ? () => setMasterOpen(false) : undefined}
       />
@@ -229,6 +291,17 @@ export function ToastDoc() {
           }
         />
       ))}
+      <Toast
+        open={Boolean(variantOpen.progress)}
+        onClose={() => {
+          setProgress(undefined);
+          setVariantOpen((prev) => ({ ...prev, progress: false }));
+        }}
+        title={progress === undefined ? "Export ready" : PROGRESS.title}
+        description={progress === undefined ? "invoices-q3.csv is in Downloads." : PROGRESS.description}
+        status={progress === undefined ? "success" : "info"}
+        progress={progress}
+      />
       <Toast
         open={Boolean(variantOpen.stays)}
         onClose={() => setVariantOpen((prev) => ({ ...prev, stays: false }))}

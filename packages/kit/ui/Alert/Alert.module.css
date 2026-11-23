@@ -34,8 +34,13 @@
 }
 
 .icon {
-  margin-top: 0.1rem;
+  margin-top: var(--space-stack-2xs);
   color: var(--alert-icon);
+}
+
+/* Header row: context on the left, time and Dismiss on the right. The icon lines up with it. */
+.withMeta .icon {
+  margin-top: var(--space-1);
 }
 
 .copy {
@@ -65,4 +70,60 @@
 .warning .body,
 .danger .body {
   color: var(--text-primary);
+}
+
+/* inline: neutral card surface; the icon carries the status, the copy stays neutral. */
+.inline,
+.inline.success,
+.inline.warning,
+.inline.danger {
+  border-color: var(--border-faint);
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
+
+.inline {
+  padding: var(--space-4);
+}
+
+.inline .title {
+  font-weight: var(--type-weight-heading);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  min-height: var(--space-8);
+  margin-top: calc(var(--space-1) * -1);
+}
+
+.eyebrow {
+  min-width: 0;
+  margin-right: auto;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: inherit;
+}
+
+.timestamp {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+.inline .eyebrow {
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }

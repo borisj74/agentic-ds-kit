@@ -7340,7 +7340,7 @@
         "Do not pass action as a ReactNode slot — use actionLabel",
         "Do not put more than one action in a toast",
         "Do not use appearance=solid mode=primary inside the toast",
-        "Do not use status=default, size, onOpenChange, density, HelpPopover, or Icon",
+        "Do not use status=default, onOpenChange, density, HelpPopover, or Icon",
         "Do not make duration shorter than people need to read it and reach the action",
         "Do not use raw hex",
         "Do not use glass, color-mix, or backdrop-blur"
@@ -7390,7 +7390,27 @@
         "duration": {
           "type": "number|null",
           "default": 5000,
-          "note": "How long it stays, in ms, while the bar counts down. Default 5000 for every status. null keeps it until closed, with no bar."
+          "note": "How long it stays, in ms, while the bar counts down. Default 5000 for info, success and warning. danger defaults to null: it stays until closed, with no bar. null keeps any status open."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "note": "Padding and title size. sm for a short confirmation, lg for a toast with a description and an action."
+        },
+        "progress": {
+          "type": "number",
+          "required": false,
+          "note": "0 to 100. Shows a progress bar instead of the countdown and keeps the toast open. When the work ends, clear progress and set status=success."
+        },
+        "timestamp": {
+          "type": "string",
+          "required": false,
+          "note": "Preformatted time on the right of the header, like Now or 09:41."
         }
       }
     },
@@ -7592,7 +7612,9 @@
       "doNot": [
         "Do not invent local Alert, Banner, or Callout",
         "Do not use raw hex",
-        "Do not use Alert for toast-style popups"
+        "Do not use Alert for toast-style popups",
+        "Do not pass actions as ReactNode slots — use action and secondaryAction",
+        "Do not use more than two actions in one Alert"
       ],
       "props": {
         "variant": {
@@ -7612,6 +7634,40 @@
         "children": {
           "type": "string",
           "required": true
+        },
+        "placement": {
+          "type": "enum",
+          "values": [
+            "inline",
+            "page"
+          ],
+          "default": "page",
+          "note": "page: tinted fill, for a problem that affects the whole page or account; put it above the content it is about. inline: neutral card surface with the status shown by the icon, for something in one part of the page."
+        },
+        "eyebrow": {
+          "type": "string",
+          "required": false,
+          "note": "Short context word in the header, like Billing."
+        },
+        "timestamp": {
+          "type": "string",
+          "required": false,
+          "note": "Preformatted time on the right of the header, like Nov 20 or 09:41."
+        },
+        "action": {
+          "type": "object",
+          "required": false,
+          "note": "One kit Button under the text. page: solid primary (counts as the view's one primary). inline: outline neutral."
+        },
+        "secondaryAction": {
+          "type": "object",
+          "required": false,
+          "note": "kit Button outline neutral, after action."
+        },
+        "onDismiss": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Shows a Dismiss kit Button on the right of the header. Leave it out while the problem is still real."
         }
       }
     },

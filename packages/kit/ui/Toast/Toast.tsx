@@ -13,7 +13,7 @@ import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { ToastProps, ToastStatus } from "./Toast.types";
+export type { ToastProps, ToastSize, ToastStatus } from "./Toast.types";
 
 const ICONS: Record<ToastStatus, typeof Info> = {
   info: Info,
@@ -63,16 +63,22 @@ function ToastCard({
   actionLabel,
   onAction,
   duration: durationProp,
+  size = "md",
+  progress,
+  timestamp,
   className,
   ref,
   ...rest
 }: Omit<ToastProps, "open">) {
   const labels = useKitLabels();
-  const duration = durationProp === undefined ? 5000 : durationProp;
+  const hasProgress = progress !== undefined;
+  const duration = hasProgress ? null : durationProp === undefined ? (status === "danger" ? null : 5000) : durationProp;
+  const progressValue = hasProgress ? Math.min(Math.max(progress, 0), 100) : 0;
   const titleId = useId();
   const descriptionId = useId();
   const [paused, setPaused] = useState(false);
   const remaining = useRef(duration ?? 0);
+  const timedFor = useRef(duration);
   const onCloseRef = useRef(onClose);
   const Icon = ICONS[status];
   const isDanger = status === "danger";
@@ -82,6 +88,11 @@ function ToastCard({
   });
 
   useEffect(() => {
+    if (timedFor.current !== duration) {
+      // Duration changed (e.g. progress cleared): start a fresh countdown.
+      timedFor.current = duration;
+      remaining.current = duration ?? 0;
+    }
     if (duration == null || duration <= 0 || paused) return undefined;
 
     const started = Date.now();
@@ -109,7 +120,7 @@ function ToastCard({
       {...rest}
       {...nisthaAttr("toast", rest)}
       ref={ref}
-      className={cx(styles.toast, styles[status], className)}
+      className={cx(styles.toast, styles[status], styles[size], className)}
       role={isDanger ? "alert" : "status"}
       aria-live={isDanger ? undefined : "polite"}
       aria-atomic="true"
@@ -120,7 +131,18 @@ function ToastCard({
       onFocus={() => setPaused(true)}
       onBlur={handleBlur}
     >
-      {duration != null && duration > 0 ? (
+      {hasProgress ? (
+        <span
+          className={styles.bar}
+          role="progressbar"
+          aria-labelledby={titleId}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(progressValue)}
+        >
+          <span className={styles.progressFill} style={{ width: `${progressValue}%` }} />
+        </span>
+      ) : duration != null && duration > 0 ? (
         <span className={styles.bar} aria-hidden="true">
           <span
             className={`${styles.fill} ${paused ? styles.paused : ""}`}
@@ -149,7 +171,10 @@ function ToastCard({
             </div>
           ) : null}
         </div>
-        <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={labels.dismiss} onClick={onClose} />
+        <div className={styles.end}>
+          {timestamp ? <span className={styles.timestamp}>{timestamp}</span> : null}
+          <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={labels.dismiss} onClick={onClose} />
+        </div>
       </div>
     </div>
   );

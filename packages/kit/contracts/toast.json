@@ -60,7 +60,27 @@
     "duration": {
       "type": "number|null",
       "default": 5000,
-      "note": "How long it stays, in ms, while the bar counts down. Default 5000 for every status. null keeps it until closed, with no bar."
+      "note": "How long it stays, in ms, while the bar counts down. Default 5000 for info, success and warning. danger defaults to null: it stays until closed, with no bar. null keeps any status open."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "Padding and title size. sm for a short confirmation, lg for a toast with a description and an action."
+    },
+    "progress": {
+      "type": "number",
+      "required": false,
+      "note": "0 to 100. Shows a progress bar instead of the countdown and keeps the toast open. When the work ends, clear progress and set status=success."
+    },
+    "timestamp": {
+      "type": "string",
+      "required": false,
+      "note": "Preformatted time on the right of the header, like Now or 09:41."
     }
   },
   "passthrough": {
@@ -87,7 +107,7 @@
     "status.warningSubtle",
     "status.dangerSubtle",
     "border.faint",
-    "radius.controlSm",
+    "radius.surfaceSm",
     "shadow.raisedDepth",
     "z.toast",
     "space.1",
@@ -96,19 +116,25 @@
     "space.6",
     "type.size.label",
     "type.size.caption",
-    "motion.overlay"
+    "motion.overlay",
+    "space.2",
+    "space.5",
+    "type.size.uiLg",
+    "type.size.bodySm"
   ],
   "a11y": {
     "element": "div[role=status]",
     "requirements": [
       "Every open Toast portals into one shared stack at the bottom right. Create the stack if missing (role=status, aria-live=polite). Newest at the bottom. No Toaster.",
+      "The stack shows at most three toasts; older ones are hidden until a newer one closes.",
       "info, success, and warning use role=status with aria-live=polite. danger uses role=alert (assertive).",
       "The countdown pauses while the pointer is over the toast or focus is inside it.",
       "Hover or focus pauses the timer so people can reach Dismiss or the action.",
       "Dismiss is a kit Button named Dismiss. The icon and the bar are decorative.",
       "The action is at least 24px tall (WCAG 2.5.8).",
       "It fades in unless the person prefers reduced motion.",
-      "built-in labels (dismiss) come from KitLabelsProvider; English by default"
+      "built-in labels (dismiss) come from KitLabelsProvider; English by default",
+      "With progress the bar is a progressbar with aria-valuenow and the toast's title as its name."
     ]
   },
   "doNot": [
@@ -117,7 +143,7 @@
     "Do not pass action as a ReactNode slot — use actionLabel",
     "Do not put more than one action in a toast",
     "Do not use appearance=solid mode=primary inside the toast",
-    "Do not use status=default, size, onOpenChange, density, HelpPopover, or Icon",
+    "Do not use status=default, onOpenChange, density, HelpPopover, or Icon",
     "Do not make duration shorter than people need to read it and reach the action",
     "Do not use raw hex",
     "Do not use glass, color-mix, or backdrop-blur"
