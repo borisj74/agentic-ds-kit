@@ -2,7 +2,7 @@
   "id": "barlist",
   "status": "stable",
   "level": "molecule",
-  "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+  "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value or the total. Rows can add an icon, a meta line and the change from last period. Top rows first, with Show all for the rest.",
   "useWhen": [
     "Top items by one measure in a side column or card, like top pages by views or top customers by revenue",
     "A short ranking where people read the exact value of each row, and rows may open the item they name",
@@ -34,6 +34,21 @@
           "type": "string",
           "required": false,
           "note": "Makes the label a link to the item it names."
+        },
+        "previous": {
+          "type": "number",
+          "required": false,
+          "note": "The value last period. Adds a change Badge under the value that says Up 12.2%, Down 3.8% or No change, toned success, danger or neutral. Left out, zero or below, no Badge."
+        },
+        "media": {
+          "type": "node",
+          "required": false,
+          "note": "A small icon or avatar before the label, in a 24px tray tile. Hidden from screen readers: the label names the row."
+        },
+        "meta": {
+          "type": "string",
+          "required": false,
+          "note": "A muted second line under the label, like 1,012 accounts. With scale=\"total\" it follows the share."
         }
       },
       "note": "One row per item, in any order: sort decides the order shown. An empty array shows No data."
@@ -47,6 +62,15 @@
       ],
       "default": "descending",
       "note": "descending puts the largest first; none keeps the order of data."
+    },
+    "scale": {
+      "type": "enum",
+      "values": [
+        "max",
+        "total"
+      ],
+      "default": "max",
+      "note": "max sizes bars against the largest value. total sizes each bar as its share of the sum of all values and writes the share, like 33.0% of total, at the start of the meta line."
     },
     "maxRows": {
       "type": "number",
@@ -88,13 +112,22 @@
     "space.3",
     "space.4",
     "space.8",
-    "space.inset2xs"
+    "space.inset2xs",
+    "bg.tray",
+    "icon.secondary",
+    "radius.md",
+    "type.size.caption",
+    "type.line.uiSm",
+    "type.line.uiXs",
+    "space.6",
+    "space.12"
   ],
   "a11y": {
     "element": "ol",
     "requirements": [
       "An ordered list named by label, so the rank and the number of rows are read",
       "Each row reads its label and its value as text; the bar is decoration and hidden from screen readers",
+      "The change Badge says Up, Down or No change in words with the percent, so its tone is never the only signal; media is hidden from screen readers and the meta line is read as text",
       "A row with href is one link, reachable with Tab, with a visible focus ring",
       "Show all is a kit Button with aria-expanded and aria-controls pointing at the list, and focus stays on it when rows open or close"
     ]
@@ -103,10 +136,11 @@
     "Do not use it for several series or an axis — use BarChart",
     "Do not use it for usage against a limit — use UsageList",
     "Do not build ranked rows from ListView, Table or loose bars and text — use BarList",
-    "Do not colour single rows to mean good or bad; it is one measure in one colour",
+    "Do not colour single bars to mean good or bad; it is one measure in one colour. Direction goes in the change Badge from previous",
+    "Do not put buttons or menus in media or meta; a row's only action is its href link",
     "Do not pass negative values; bars start at zero",
     "Do not put it in a Card and a Section at once, or draw a box around it yourself. The title comes from a parent Section or Card",
     "Do not use raw hex or primitive --color-* ramps"
   ],
-  "snippet": "<Section title=\"Top pages\">\n  <BarList\n    label=\"Top pages by views\"\n    maxRows={5}\n    data={[\n      { label: \"/pricing\", value: 4820, href: \"/analytics/pricing\" },\n      { label: \"/docs/install\", value: 3110 },\n      { label: \"/blog/launch\", value: 1960 },\n    ]}\n  />\n</Section>"
+  "snippet": "<Section title=\"Top plans\">\n  <BarList\n    label=\"Top plans by MRR\"\n    scale=\"total\"\n    maxRows={3}\n    valueFormatter={usd}\n    data={[\n      { label: \"Growth\", value: 136240, previous: 121420, meta: \"1,012 accounts\", media: <TrendingUp /> },\n      { label: \"Scale\", value: 127480, previous: 109800, meta: \"412 accounts\", media: <Layers /> },\n      { label: \"Enterprise\", value: 95310, previous: 85170, meta: \"38 accounts\", media: <Building2 /> },\n    ]}\n  />\n</Section>"
 }

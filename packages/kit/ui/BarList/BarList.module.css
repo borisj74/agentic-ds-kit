@@ -30,6 +30,11 @@
   min-height: var(--space-8);
 }
 
+/* A row with a meta line is two lines tall. */
+.tall .track {
+  min-height: var(--space-12);
+}
+
 /* A quiet tint of the first chart colour, so the label on top keeps its full text contrast. */
 .bar {
   position: absolute;
@@ -41,10 +46,45 @@
   pointer-events: none;
 }
 
+/* Media, label and meta sit on top of the bar, inset from its start edge. */
+.lead {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+}
+
+.media {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-tray);
+  color: var(--icon-secondary);
+}
+
+.media > svg {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.text {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .label {
   position: relative;
   min-width: 0;
-  padding-inline: var(--space-2);
   overflow: hidden;
   color: var(--text-primary);
   font-size: var(--type-size-body-sm);
@@ -52,6 +92,31 @@
   line-height: var(--type-line-body);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tall .label {
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+}
+
+.meta {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The value, with its change Badge under it. */
+.end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
 }
 
 .link {

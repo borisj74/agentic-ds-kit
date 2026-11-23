@@ -1,2 +1,2 @@
 export { BarList } from "./BarList";
-export type { BarListDatum, BarListProps, BarListSort } from "./BarList.types";
+export type { BarListDatum, BarListProps, BarListScale, BarListSort } from "./BarList.types";

@@ -464,7 +464,7 @@
   },
   {
     "id": "barlist",
-    "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value. Top rows first, with Show all for the rest.",
+    "intent": "A ranked list: each row shows a label and its value, with a quiet horizontal bar behind the label sized against the largest value or the total. Rows can add an icon, a meta line and the change from last period. Top rows first, with Show all for the rest.",
     "group": "component",
     "path": "contracts/barlist.json",
     "status": "stable",

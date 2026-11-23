@@ -58,6 +58,22 @@ describe("BarList logic", () => {
     assert.equal(logic.barPercent(10, 0), 0);
   });
 
+  test("scale total sums the values; the share reads as a percent of total", () => {
+    assert.equal(logic.scaleBase(pages), 4820);
+    assert.equal(logic.scaleBase(pages, "total"), 12490);
+    assert.equal(logic.shareText(136240, 412600), "33.0% of total");
+    assert.equal(logic.shareText(5, 0), "0.0% of total");
+  });
+
+  test("change from previous is worded; no usable previous means no badge", () => {
+    assert.deepEqual(logic.changeFrom(136240, 121420), { direction: "up", text: "Up 12.2%" });
+    assert.deepEqual(logic.changeFrom(53570, 55690), { direction: "down", text: "Down 3.8%" });
+    assert.deepEqual(logic.changeFrom(100, 100), { direction: "flat", text: "No change" });
+    assert.equal(logic.changeFrom(100, undefined), null);
+    assert.equal(logic.changeFrom(100, 0), null);
+    assert.equal(logic.changeFrom(100, Number.NaN), null);
+  });
+
   test("rows shown: maxRows until open, everything without maxRows", () => {
     assert.equal(logic.visibleCount(8, 5, false), 5);
     assert.equal(logic.visibleCount(8, 5, true), 8);
@@ -99,5 +115,26 @@ describe("BarList render", () => {
     const empty = render({ data: [] });
     assert.ok(empty.includes("No data"));
     assert.ok(!empty.includes("<ol"));
+  });
+
+  test("scale total, meta, media and previous: share first in the meta line, media hidden, worded change Badge", () => {
+    const plans = [
+      { label: "Growth", value: 136240, previous: 121420, meta: "1,012 accounts", media: React.createElement("svg", { "data-icon": "growth" }) },
+      { label: "Starter", value: 53570, previous: 55690 },
+      { label: "Scale", value: 127480, previous: 127480 },
+    ];
+    const html = render({ data: plans, scale: "total" });
+    assert.deepEqual(labelsIn(html), ["Growth", "Scale", "Starter"]);
+    assert.ok(html.includes("42.9% of total · 1,012 accounts"));
+    assert.ok(html.includes("16.9% of total"));
+    assert.match(html, /<span class="[^"]*media[^"]*" aria-hidden="true"><svg data-icon="growth">/);
+    for (const text of ["Up 12.2%", "Down 3.8%", "No change"]) assert.ok(html.includes(text), text);
+    assert.match(html, /--barlist-length:42\.9/);
+  });
+
+  test("without scale, meta or previous a row has no meta line and no badge", () => {
+    const html = render();
+    assert.ok(!html.includes("of total"));
+    assert.ok(!/Up |Down |No change/.test(html));
   });
 });
