@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { Check, ChevronDown, ChevronRight, Layers, LoaderCircle, TriangleAlert } from "lucide-react";
+import { ChevronDown, ChevronRight, CircleCheck, CircleX, Layers, LoaderCircle } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -12,12 +12,12 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { ToolCallCardProps, ToolCall, ToolCallStatus } from "./ToolCallCard.types";
 
-const STATUS_TEXT: Record<ToolCallStatus, string> = { running: "Running", done: "Done", error: "Error" };
+const STATUS_TEXT: Record<ToolCallStatus, string> = { running: "Running", done: "Done", error: "Failed" };
 
 function StatusIcon({ status }: { status: ToolCallStatus }) {
   if (status === "running") return <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={cx(styles.icon, styles.spin)} aria-hidden="true" />;
-  if (status === "error") return <TriangleAlert size={16} strokeWidth={ICON_STROKE} className={cx(styles.icon, styles.iconError)} aria-hidden="true" />;
-  return <Check size={16} strokeWidth={ICON_STROKE} className={cx(styles.icon, styles.iconDone)} aria-hidden="true" />;
+  if (status === "error") return <CircleX size={16} strokeWidth={ICON_STROKE} className={cx(styles.icon, styles.iconError)} aria-hidden="true" />;
+  return <CircleCheck size={16} strokeWidth={ICON_STROKE} className={cx(styles.icon, styles.iconDone)} aria-hidden="true" />;
 }
 
 function lines(value: unknown): string[] {
@@ -139,7 +139,7 @@ export function ToolCallCard({
       ) : null}
       {!group && status === "error" ? (
         <Badge tone="danger" size="sm" className={styles.badge}>
-          Error
+          Failed
         </Badge>
       ) : null}
       {headDuration ? (

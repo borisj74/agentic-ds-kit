@@ -36,7 +36,8 @@
         "done",
         "error"
       ],
-      "default": "done"
+      "default": "done",
+      "note": "error shows the word \"Failed\" with the CircleX icon, the same status words as the other run components."
     },
     "duration": {
       "type": "string",

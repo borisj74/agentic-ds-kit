@@ -8329,7 +8329,7 @@
         "steps": {
           "type": "array",
           "required": true,
-          "note": "{ id, label, tool?, target?, note?, needsApproval?, error? }[]"
+          "note": "{ id, label, tool?, target?, note?, needsApproval?, error?, calls?: ToolCall[] }[]. calls render under the step as one ToolCallCard group row, open on the current or failed step."
         },
         "status": {
           "type": "enum",
@@ -8358,6 +8358,11 @@
           "type": "string",
           "required": false,
           "note": "Mono note in the footer, e.g. \"accepted 14:02\" or \"3 of 5 · 1m 48s\"."
+        },
+        "trace": {
+          "type": "ReactNode",
+          "required": false,
+          "note": "Header slot under the summary for a compact TraceWaterfall: time and cost so far."
         },
         "waitingLabel": {
           "type": "string",
@@ -8525,7 +8530,8 @@
             "done",
             "error"
           ],
-          "default": "done"
+          "default": "done",
+          "note": "error shows the word \"Failed\" with the CircleX icon, the same status words as the other run components."
         },
         "duration": {
           "type": "string",
@@ -8818,6 +8824,11 @@
           "type": "function",
           "required": false,
           "note": "The overflow control."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Running and waiting items get an icon-only Stop named \"Stop <name>\", beside the item, never inside its button."
         },
         "loading": {
           "type": "boolean",
@@ -9454,7 +9465,7 @@
         "onOverride": {
           "type": "function",
           "required": false,
-          "note": "(id, \"met\" | \"not_met\") => void. Row buttons Mark met / Mark not met; set setBy \"person\" to show \"set by you\"."
+          "note": "(id, \"met\" | \"not_met\") => void. Mark met / Mark not met sit in the row's More actions menu, so each row has one visible action; set setBy \"person\" to show \"set by you\"."
         },
         "onRecheck": {
           "type": "function",
@@ -10182,7 +10193,8 @@
         "Do not invent a local Waterfall, TraceChart, or SpanList",
         "Do not use BarChart or Meter for a run trace",
         "Do not encode failed or running by colour alone",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not round the bars; bars and legend marks are square"
       ],
       "props": {
         "title": {
@@ -10192,7 +10204,7 @@
         "spans": {
           "type": "array",
           "required": true,
-          "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, detail? }[]; offsets from the run start; open spans draw dashed to now."
+          "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, stepId?, detail? }[]; offsets from the run start; open spans draw dashed to now. stepId groups spans under a step heading, shown as written (e.g. \"1 · Fetch Stripe charges\")."
         },
         "status": {
           "type": "enum",

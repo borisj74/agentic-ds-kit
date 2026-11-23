@@ -23,7 +23,9 @@
     "input",
     "skeleton",
     "spinner",
-    "textarea"
+    "textarea",
+    "toolcallcard",
+    "tracewaterfall"
   ],
   "props": {
     "title": {
@@ -33,7 +35,7 @@
     "steps": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, tool?, target?, note?, needsApproval?, error? }[]"
+      "note": "{ id, label, tool?, target?, note?, needsApproval?, error?, calls?: ToolCall[] }[]. calls render under the step as one ToolCallCard group row, open on the current or failed step."
     },
     "status": {
       "type": "enum",
@@ -62,6 +64,11 @@
       "type": "string",
       "required": false,
       "note": "Mono note in the footer, e.g. \"accepted 14:02\" or \"3 of 5 · 1m 48s\"."
+    },
+    "trace": {
+      "type": "ReactNode",
+      "required": false,
+      "note": "Header slot under the summary for a compact TraceWaterfall: time and cost so far."
     },
     "waitingLabel": {
       "type": "string",
@@ -170,6 +177,8 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "steps are an ordered list; the current or failed step has aria-current=step",
+      "during a run each step shows its status as a visible word: Queued, Running, Needs you, Done, Failed",
+      "step changes and failures are announced in one polite live region",
       "Edit and Remove are icon-only kit Buttons named with the step",
       "the step form is a form named \"Edit step N\"; Escape cancels, Enter saves",
       "⌘/Ctrl+Enter accepts a draft or runs an accepted plan while focus is in the card",

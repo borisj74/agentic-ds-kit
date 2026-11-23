@@ -29,6 +29,7 @@ let React;
 let renderToStaticMarkup;
 let DoneCheck;
 let Button;
+let DropdownMenu;
 
 before(async () => {
   logic = await import("../dist/ui/DoneCheck/doneCheck.logic.js");
@@ -36,6 +37,7 @@ before(async () => {
   ({ renderToStaticMarkup } = await import("react-dom/server"));
   ({ DoneCheck } = await import("../dist/ui/DoneCheck/DoneCheck.js"));
   ({ Button } = await import("../dist/ui/Button/Button.js"));
+  ({ DropdownMenu } = await import("../dist/ui/DropdownMenu/DropdownMenu.js"));
 });
 
 function render(props) {
@@ -86,7 +88,7 @@ describe("DoneCheck render", () => {
   test("a labelled Card with verdict, ordered rows, status words and evidence", () => {
     const html = render(handlers);
     assert.match(html, /<article[^>]*aria-labelledby="[^"]+"[^>]*>.*<h2[^>]*>EU prices<\/h2>/s);
-    for (const text of ["2 of 4 met", "Not met", "Unverified", "Met", "Agent says:", "Garden is €412 under.", "set by you", "Evidence for check 1", "Sheet diff"]) {
+    for (const text of ["2 of 4 met", "Not met", "Unverified", "Met", "Agent says:", "Garden is €412 under.", "set by you", "compare for check 2", "Sheet diff", "More actions for check 2"]) {
       assert.ok(html.includes(text), text);
     }
     assert.match(html, /<ol/);
@@ -119,7 +121,11 @@ describe("DoneCheck callbacks", () => {
       onSendBack: () => calls.push(["back"]),
     });
     const buttons = findAll(node, Button);
-    buttons.find((b) => b.props.children === "Mark met").props.onClick();
+    // One visible action per row; Mark met / Mark not met live in the row menu.
+    assert.ok(!buttons.some((b) => b.props.children === "Mark met"));
+    const menu = findAll(node, DropdownMenu).find((m) => m.props.ariaLabel === "More actions for check 2");
+    assert.deepEqual(menu.props.groups[0].items.map((item) => item.label), ["Mark met"]);
+    menu.props.onSelect("met");
     buttons.find((b) => b.props.children === "Re-check").props.onClick();
     buttons.find((b) => b.props.children === "Send back to agent").props.onClick();
     assert.deepEqual(calls, [["override", "b", "met"], ["recheck", "b"], ["back"]]);

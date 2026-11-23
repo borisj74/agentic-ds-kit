@@ -1,4 +1,5 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { ToolCall } from "../ToolCallCard/ToolCallCard.types";
 
 export type AgentPlanStatus = "drafting" | "draft" | "accepted" | "running" | "complete" | "failed";
 
@@ -15,6 +16,8 @@ export interface AgentPlanStep {
   needsApproval?: boolean;
   /** Failure detail for the current step when status is failed, e.g. "3 tests failed · exit code 1". */
   error?: string;
+  /** Tool calls this step made, shown under it as one ToolCallCard group row. */
+  calls?: ToolCall[];
 }
 
 /** Native section attributes the kit sets itself (or replaces with its own prop). */
@@ -31,6 +34,8 @@ export interface AgentPlanProps extends Omit<ComponentPropsWithoutRef<"section">
   summary?: string;
   /** Mono note at the start of the footer, e.g. "accepted 14:02" or "3 of 5 · 1m 48s". */
   footerNote?: string;
+  /** Header slot under the summary, for a compact TraceWaterfall: time and cost so far. */
+  trace?: ReactNode;
   /** Under a current step that needs approval. */
   waitingLabel?: string;
   /** Draft only: per-step Edit and Remove, plus Add step. Needs onChange. Default true. */

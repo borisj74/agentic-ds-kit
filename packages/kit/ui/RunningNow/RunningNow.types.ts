@@ -29,6 +29,8 @@ export interface RunningNowProps extends Omit<ComponentPropsWithoutRef<"section"
   onSelect?: (id: string) => void;
   /** The "+N" / "View all" overflow. */
   onShowAll?: () => void;
+  /** Stop a running or waiting item. Adds an icon-only Stop named "Stop <name>" to the item. */
+  onStop?: (id: string) => void;
   loading?: boolean;
   /** Empty text. Default "Nothing running right now". */
   emptyText?: string;

@@ -30,9 +30,20 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "One awaiting approval — row",
-    about: "A waiting item says why in caution text; status is always text plus color.",
+    about: "A waiting item says Needs you in caution text, then why. Status is always a word plus colour.",
     code: `<RunningNow items={items} onSelect={openAgent} />`,
     render: <RunningNow className={agentDoc.full} items={WAITING} onSelect={noop} />,
+  },
+  {
+    title: "With Stop",
+    about: "onStop adds an icon-only Stop to running and waiting items, named \"Stop <name>\". It sits beside the item, not inside its button.",
+    code: `<RunningNow items={items} onSelect={openAgent} onStop={stopAgent} />`,
+    render: (
+      <div className={agentDoc.row}>
+        <RunningNow className={agentDoc.full} items={MIXED} onSelect={noop} onStop={noop} />
+        <RunningNow layout="stack" items={WAITING} onSelect={noop} onStop={noop} />
+      </div>
+    ),
   },
   {
     title: "Mixed running and failed — stack",

@@ -38,9 +38,10 @@ button.head:hover {
   background-color: var(--bg-control-hover);
 }
 
+/* The card clips its corners, so the shared ring is drawn inset here. */
 button.head:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: calc(var(--border-focus-width) * -1);
+  outline: none;
+  box-shadow: inset 0 0 0 var(--border-focus-width) var(--focus-ring);
 }
 
 .icon {

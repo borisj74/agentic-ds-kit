@@ -17,7 +17,7 @@ export type { AgentTreeProps, AgentTreeNode, AgentTreeStatus } from "./AgentTree
 const STATUS_TEXT: Record<AgentTreeStatus, string> = {
   queued: "Queued",
   running: "Running",
-  waiting: "Waiting for you",
+  waiting: "Needs you",
   done: "Done",
   failed: "Failed",
 };
@@ -85,7 +85,7 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
                 aria-label={`${isFolded ? "Show" : "Hide"} ${node.name}`}
                 onClick={() => ctx.toggle?.(node.id)}
               >
-                <Chevron size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                <Chevron size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
               </button>
             ) : null}
           </span>
@@ -116,12 +116,12 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
           <div className={styles.noteRow}>
             <span className={styles.note}>{node.note}</span>
             {node.status === "waiting" && ctx.onApprove ? (
-              <Button size="sm" appearance="soft" mode="neutral" shortcut="⏎" onClick={() => ctx.onApprove?.(node.id)} aria-label={`Approve ${node.name}`}>
+              <Button size="sm" appearance="outline" mode="neutral" iconStart="Check" onClick={() => ctx.onApprove?.(node.id)} aria-label={`Approve ${node.name}`}>
                 Approve
               </Button>
             ) : null}
             {node.status === "failed" && ctx.onRetry ? (
-              <Button size="sm" appearance="ghost" mode="danger" iconStart="RotateCcw" onClick={() => ctx.onRetry?.(node.id)} aria-label={`Retry ${node.name}`}>
+              <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => ctx.onRetry?.(node.id)} aria-label={`Retry ${node.name}`}>
                 Retry
               </Button>
             ) : null}
