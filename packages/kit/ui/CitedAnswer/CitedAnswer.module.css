@@ -41,6 +41,7 @@
 
 /* A raised, small mark that reads past the sentence instead of breaking it; still a real link. */
 .mark {
+  position: relative;
   margin-inline-start: var(--space-px);
   border-radius: var(--radius-control-sm);
   font-size: var(--type-size-caption);
@@ -62,6 +63,16 @@
 .source:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+/* 24px hit area around the small mark, without moving the line. */
+.mark::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: max(100%, var(--space-6));
+  height: var(--space-6);
+  transform: translate(-50%, -50%);
 }
 
 .markMissing {
@@ -174,6 +185,26 @@
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
+}
+
+.missingTitle svg {
+  flex-shrink: 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: var(--border-width-thin) solid var(--line-default);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.empty svg {
+  flex-shrink: 0;
 }
 
 .link {

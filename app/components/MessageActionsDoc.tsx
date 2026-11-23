@@ -94,6 +94,25 @@ export function MessageActionsDoc() {
           ),
         },
         {
+          title: "Reason picked",
+          about: "selectedReason presses its toggle Button and the thanks line names it.",
+          code: `<MessageActions … feedback="down" reasons={reasons} selectedReason="Source is wrong" onReason={setReason} />`,
+          render: (
+            <Message>
+              <MessageActions
+                onCopy={noop}
+                onRetry={noop}
+                onFeedback={noop}
+                feedback="down"
+                reasons={["Wrong amount", "Wrong invoice", "Source is wrong", "Too long"]}
+                selectedReason="Source is wrong"
+                onReason={noop}
+                moreItems={MORE}
+              />
+            </Message>
+          ),
+        },
+        {
           title: "Disabled — message still streaming",
           about: "disabled dims and disables the row until the message completes.",
           code: `<MessageActions … disabled />`,

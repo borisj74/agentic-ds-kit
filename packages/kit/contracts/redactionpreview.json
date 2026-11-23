@@ -74,7 +74,7 @@
     "onSend": {
       "type": "function",
       "required": false,
-      "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\"."
+      "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\", or \"[Label •••• tail]\" with keepLast."
     },
     "onCancel": {
       "type": "function",
@@ -86,10 +86,35 @@
       "values": [
         "pending",
         "sent",
-        "cancelled"
+        "cancelled",
+        "error"
       ],
       "default": "pending",
-      "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"."
+      "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"; error keeps the card with a danger Alert (\"Couldn't send. Nothing left the product.\") and Send becomes Try again."
+    },
+    "errorText": {
+      "type": "string",
+      "required": false,
+      "note": "status error: why it failed, the Alert body."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "status error: Try again, the solid primary. Falls back to onSend."
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "inline",
+        "split"
+      ],
+      "default": "inline",
+      "note": "split: Before (only you see it; secrets stay masked) and After (exactly what is sent) side by side; on a narrow card After shows first and Before sits behind \"Show before\"."
+    },
+    "keepLast": {
+      "type": "object",
+      "required": false,
+      "note": "{ [type]: number } characters kept at the end of a masked value, e.g. { card: 4 } sends \"[Card number •••• 4242]\". Never applies to lockedTypes."
     }
   },
   "passthrough": {
@@ -130,7 +155,9 @@
       "each mask rule is a labelled Switch; locked Switches are disabled and described by the reason",
       "anything going out unmasked raises a warning Alert",
       "the resolved row is named with what was sent and how many values were masked",
-      "motion is opacity and transform only, off under prefers-reduced-motion"
+      "motion is opacity and transform only, off under prefers-reduced-motion",
+      "status error is a danger Alert (role=alert) and focus moves to Try again",
+      "split: Before and After are labelled regions; locked types stay masked in both"
     ]
   },
   "doNot": [

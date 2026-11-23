@@ -27,7 +27,7 @@
     "citations": {
       "type": "array",
       "required": true,
-      "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark."
+      "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark. A missing mark reads \"[n] missing\" and the list opens on first render."
     },
     "author": {
       "type": "string",
@@ -67,6 +67,11 @@
     "onRetry": {
       "type": "function",
       "required": false
+    },
+    "emptyText": {
+      "type": "string",
+      "default": "No sources. Check before you act on this.",
+      "note": "Shown when citations is []. \"\" hides it."
     }
   },
   "passthrough": {
@@ -102,10 +107,10 @@
   "a11y": {
     "element": "article",
     "requirements": [
-      "marks are links named \"Source N: title\" and move focus to the source",
+      "marks are links named \"Source N: title\" (\"Source N: missing, title\" when missing) and move focus to the source; each has a 24px hit area",
       "the sources toggle is a button with aria-expanded and aria-controls",
       "external source links say they open a new tab",
-      "a missing source is said in text, not colour alone",
+      "a missing source is said in text (\"[n] missing\", \"Missing: title\"), not colour alone",
       "loading uses kit ShimmerText; error is role=alert",
       "the highlight fades on opacity, off under prefers-reduced-motion"
     ]

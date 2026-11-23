@@ -8296,7 +8296,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "{ id, text, confidence: 0–1, source?, steps?: string[], status: \"open\" | \"confirmed\" | \"corrected\", correction? }[]. Confidence below 0.5 is Low, below 0.8 Medium, else High. Open rows sort weakest first."
+          "note": "{ id, text, confidence: 0–1, source?, steps?: string[], status: \"open\" | \"confirmed\" | \"corrected\", correction? }[]. Confidence below 0.5 is Low, below 0.8 Medium, else High. Open rows sort weakest first. Confidence shows the word and the percent (\"Low 46%\")."
         },
         "title": {
           "type": "string",
@@ -8331,6 +8331,11 @@
           "type": "boolean",
           "default": false,
           "note": "One line: open count Badge, the weakest open assumption and its confidence."
+        },
+        "limit": {
+          "type": "number",
+          "default": 5,
+          "note": "Rows shown before a \"Show n more\" ghost Button; 0 shows every row."
         }
       }
     },
@@ -8848,7 +8853,7 @@
         "onSend": {
           "type": "function",
           "required": false,
-          "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\"."
+          "note": "(maskedPayload) => void. Send, the one solid primary. Masked values are replaced by \"[type]\", or \"[Label •••• tail]\" with keepLast."
         },
         "onCancel": {
           "type": "function",
@@ -8860,10 +8865,35 @@
           "values": [
             "pending",
             "sent",
-            "cancelled"
+            "cancelled",
+            "error"
           ],
           "default": "pending",
-          "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"."
+          "note": "sent folds to one line (\"Sent to … with 10 values masked\"); cancelled to \"Not sent\"; error keeps the card with a danger Alert (\"Couldn't send. Nothing left the product.\") and Send becomes Try again."
+        },
+        "errorText": {
+          "type": "string",
+          "required": false,
+          "note": "status error: why it failed, the Alert body."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "status error: Try again, the solid primary. Falls back to onSend."
+        },
+        "layout": {
+          "type": "enum",
+          "values": [
+            "inline",
+            "split"
+          ],
+          "default": "inline",
+          "note": "split: Before (only you see it; secrets stay masked) and After (exactly what is sent) side by side; on a narrow card After shows first and Before sits behind \"Show before\"."
+        },
+        "keepLast": {
+          "type": "object",
+          "required": false,
+          "note": "{ [type]: number } characters kept at the end of a masked value, e.g. { card: 4 } sends \"[Card number •••• 4242]\". Never applies to lockedTypes."
         }
       }
     },
@@ -9368,7 +9398,7 @@
         "events": {
           "type": "array",
           "required": true,
-          "note": "Newest first. { id, verdict: \"blocked\" | \"rewritten\" | \"flagged\", rule: { name, text, owner }, agent: { name, src? } (the Avatar shows only with src), attempted, sentInstead?, at, runHref? }[]. sentInstead shows for rewritten."
+          "note": "Newest first. { id, verdict: \"blocked\" | \"rewritten\" | \"flagged\", rule: { name, text, owner }, agent: { name, src? } (the Avatar shows only with src), attempted, sentInstead?, at, runHref?, summary? }[]. sentInstead shows for rewritten. summary (\"Blocked a $5,000 refund on INV-1842, over the $500 cap\") is the row title when given; rule, agent and time drop to the caption."
         },
         "title": {
           "type": "string",
@@ -9952,7 +9982,7 @@
         "citations": {
           "type": "array",
           "required": true,
-          "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark."
+          "note": "{ id, title, href?, origin?, snippet?, missing?, missingReason? }[]; id matches the mark. A missing mark reads \"[n] missing\" and the list opens on first render."
         },
         "author": {
           "type": "string",
@@ -9992,6 +10022,11 @@
         "onRetry": {
           "type": "function",
           "required": false
+        },
+        "emptyText": {
+          "type": "string",
+          "default": "No sources. Check before you act on this.",
+          "note": "Shown when citations is []. \"\" hides it."
         }
       }
     },
@@ -10057,17 +10092,23 @@
         },
         "thanksText": {
           "type": "string",
-          "default": "Thanks, noted"
+          "default": "Thanks, noted",
+          "note": "After a thumbs up, or after a reason is picked: \"Thanks, noted: <reason>\"."
         },
         "reasons": {
           "type": "string[]",
           "required": false,
-          "note": "Chips after a thumbs down."
+          "note": "Toggle Buttons (sm) after a thumbs down, in a group named \"What went wrong?\"."
         },
         "onReason": {
           "type": "function",
           "required": false,
           "note": "(reason) => void"
+        },
+        "selectedReason": {
+          "type": "string",
+          "required": false,
+          "note": "The picked reason (controlled). Its Button is pressed."
         },
         "moreItems": {
           "type": "array",

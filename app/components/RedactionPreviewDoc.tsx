@@ -82,6 +82,43 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     ),
   },
   {
+    title: "Split — Before and After",
+    about:
+      "layout=\"split\" puts what only you see beside exactly what is sent. keepLast={{ card: 4 }} sends the card as its label and last four digits. On a narrow card After shows first and Before sits behind Show before.",
+    code: `<RedactionPreview layout="split" keepLast={{ card: 4 }} … />`,
+    render: (
+      <RedactionPreview
+        destination="Claude (Anthropic API)"
+        region="EU"
+        payload={TICKET}
+        spans={TICKET_SPANS}
+        layout="split"
+        keepLast={{ card: 4 }}
+        onSend={noop}
+        onCancel={noop}
+      />
+    ),
+  },
+  {
+    title: "Send failed — Try again",
+    about: "status error keeps the card, says nothing left the product in a danger Alert, and turns Send into Try again with focus on it.",
+    code: `<RedactionPreview status="error" errorText="Claude didn't answer in 30 seconds. Your mask rules are kept." onRetry={retry} … />`,
+    render: (
+      <RedactionPreview
+        destination="Claude (Anthropic API)"
+        region="EU"
+        payload={TICKET}
+        spans={TICKET_SPANS}
+        layout="split"
+        keepLast={{ card: 4 }}
+        status="error"
+        errorText="Claude didn't answer in 30 seconds. Your mask rules are kept."
+        onRetry={noop}
+        onCancel={noop}
+      />
+    ),
+  },
+  {
     title: "Sent — one line",
     about: "status sent folds to one line with how many values left masked.",
     code: `<RedactionPreview status="sent" … />`,

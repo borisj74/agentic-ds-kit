@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { CircleX, ShieldCheck } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Alert } from "../Alert";
@@ -18,6 +18,7 @@ import {
   DEFAULT_LOCKED,
   isMasked,
   maskedCount,
+  maskText,
   maskedPayload,
   plural,
   segments,
@@ -27,7 +28,7 @@ import {
 import type { RedactionPreviewProps } from "./RedactionPreview.types";
 import styles from "./RedactionPreview.module.css";
 
-export type { RedactionPreviewProps, RedactionSpan, RedactionRules, RedactionStatus } from "./RedactionPreview.types";
+export type { RedactionPreviewProps, RedactionSpan, RedactionRules, RedactionStatus, RedactionLayout } from "./RedactionPreview.types";
 
 /**
  * Exactly what is about to leave the product for a model or outside tool, with sensitive values
@@ -46,6 +47,10 @@ export function RedactionPreview({
   onSend,
   onCancel,
   status = "pending",
+  errorText,
+  onRetry,
+  layout = "inline",
+  keepLast = {},
   className,
   ref,
   ...rest
@@ -60,6 +65,16 @@ export function RedactionPreview({
   const total = counts.reduce((sum, c) => sum + c.count, 0);
   const unmasked = total - masked;
   const label = (type: string) => typeLabel(type, typeLabels);
+  const [showBefore, setShowBefore] = useState(false);
+  const retryRef = useRef<HTMLButtonElement | null>(null);
+  const failed = status === "error";
+
+  // A send that fails moves focus to Try again (not when the card first renders failed).
+  const wasFailed = useRef(failed);
+  useEffect(() => {
+    if (failed && !wasFailed.current) retryRef.current?.focus();
+    wasFailed.current = failed;
+  }, [failed]);
 
   if (resolved) {
     const sent = status === "sent";
@@ -97,6 +112,68 @@ export function RedactionPreview({
   }
 
   const lockedHintId = `${base}-locked`;
+  const send = () => onSend?.(maskedPayload(payload, spans, rules, lockedTypes, keepLast, typeLabels));
+  const mask = (type: string, value: string) => maskText(type, value, keepLast, typeLabels, lockedTypes);
+
+  const inlinePayload = segments(payload, spans).map((seg, i) => {
+    if (seg.kind === "text") return <span key={i}>{seg.text}</span>;
+    const name = label(seg.span.type);
+    if (!isMasked(seg.span.type, rules, lockedTypes)) {
+      return (
+        <mark key={i} className={styles.unmasked}>
+          <span className={styles.srOnly}>{`unmasked ${name.toLowerCase()}: `}</span>
+          {seg.text}
+        </mark>
+      );
+    }
+    const shown = revealed.has(seg.key);
+    return (
+      <Tooltip key={seg.key} content={shown ? `${name}, shown to you only. It is still masked when sent.` : `${name}, masked. Select to show it to you only.`}>
+        <button
+          type="button"
+          className={cx(styles.chip, shown && styles.chipShown)}
+          aria-pressed={shown}
+          aria-label={shown ? `masked ${name.toLowerCase()}, shown to you: ${seg.text}` : `masked ${name.toLowerCase()}`}
+          onClick={() => toggleReveal(seg.key)}
+        >
+          {shown ? seg.text : mask(seg.span.type, seg.text)}
+        </button>
+      </Tooltip>
+    );
+  });
+
+  // Before: the data as written, for the viewer only. Secrets stay masked here too.
+  const beforePayload = segments(payload, spans).map((seg, i) => {
+    if (seg.kind === "text") return <span key={i}>{seg.text}</span>;
+    if (lockedTypes.includes(seg.span.type)) {
+      return (
+        <span key={i} className={styles.masked}>
+          {`[${label(seg.span.type)}]`}
+        </span>
+      );
+    }
+    return <span key={i}>{seg.text}</span>;
+  });
+
+  // After: exactly what leaves.
+  const afterPayload = segments(payload, spans).map((seg, i) => {
+    if (seg.kind === "text") return <span key={i}>{seg.text}</span>;
+    const name = label(seg.span.type);
+    if (!isMasked(seg.span.type, rules, lockedTypes)) {
+      return (
+        <mark key={i} className={styles.unmasked}>
+          <span className={styles.srOnly}>{`unmasked ${name.toLowerCase()}: `}</span>
+          {seg.text}
+        </mark>
+      );
+    }
+    return (
+      <span key={i} className={styles.masked}>
+        <span className={styles.srOnly}>{`masked ${name.toLowerCase()}: `}</span>
+        {mask(seg.span.type, seg.text)}
+      </span>
+    );
+  });
 
   return (
     <Card
@@ -130,39 +207,46 @@ export function RedactionPreview({
           )}
         </div>
 
-        <div className={styles.payloadWrap}>
-          <p className={styles.payloadLabel} id={`${base}-payload`}>
-            What will be sent
-          </p>
-          <pre className={styles.payload} aria-labelledby={`${base}-payload`} tabIndex={0}>
-            {segments(payload, spans).map((seg, i) => {
-              if (seg.kind === "text") return <span key={i}>{seg.text}</span>;
-              const name = label(seg.span.type);
-              if (!isMasked(seg.span.type, rules, lockedTypes)) {
-                return (
-                  <mark key={i} className={styles.unmasked}>
-                    <span className={styles.srOnly}>{`unmasked ${name.toLowerCase()}: `}</span>
-                    {seg.text}
-                  </mark>
-                );
-              }
-              const shown = revealed.has(seg.key);
-              return (
-                <Tooltip key={seg.key}content={shown ? `${name}, shown to you only. It is still masked when sent.` : `${name}, masked. Select to show it to you only.`}>
-                  <button
-                    type="button"
-                    className={cx(styles.chip, shown && styles.chipShown)}
-                    aria-pressed={shown}
-                    aria-label={shown ? `masked ${name.toLowerCase()}, shown to you: ${seg.text}` : `masked ${name.toLowerCase()}`}
-                    onClick={() => toggleReveal(seg.key)}
-                  >
-                    {shown ? seg.text : `[${seg.span.type}]`}
-                  </button>
-                </Tooltip>
-              );
-            })}
-          </pre>
-        </div>
+        {failed ? (
+          <Alert variant="danger" title="Couldn't send. Nothing left the product.">
+            {errorText ?? "Your mask rules are kept. Try again when you're ready."}
+          </Alert>
+        ) : null}
+
+        {layout === "split" ? (
+          <div className={cx(styles.split, showBefore && styles.splitBefore)}>
+            <section className={cx(styles.payloadWrap, styles.before)} aria-labelledby={`${base}-before`}>
+              <p className={styles.payloadLabel} id={`${base}-before`}>
+                Before · only you see this
+              </p>
+              <pre className={styles.payload} tabIndex={0} aria-labelledby={`${base}-before`}>
+                {beforePayload}
+              </pre>
+            </section>
+            <section className={cx(styles.payloadWrap, styles.after)} aria-labelledby={`${base}-after`}>
+              <p className={styles.payloadLabel} id={`${base}-after`}>
+                {`After · what ${destination} receives`}
+              </p>
+              <pre className={styles.payload} tabIndex={0} aria-labelledby={`${base}-after`}>
+                {afterPayload}
+              </pre>
+            </section>
+            <span className={styles.beforeToggle}>
+              <Button size="sm" appearance="ghost" mode="neutral" iconStart={showBefore ? "EyeOff" : "Eye"} aria-expanded={showBefore} onClick={() => setShowBefore(!showBefore)}>
+                {showBefore ? "Hide before" : "Show before"}
+              </Button>
+            </span>
+          </div>
+        ) : (
+          <div className={styles.payloadWrap}>
+            <p className={styles.payloadLabel} id={`${base}-payload`}>
+              What will be sent
+            </p>
+            <pre className={styles.payload} aria-labelledby={`${base}-payload`} tabIndex={0}>
+              {inlinePayload}
+            </pre>
+          </div>
+        )}
 
         {counts.length > 0 ? (
           <fieldset className={styles.rules}>
@@ -200,16 +284,22 @@ export function RedactionPreview({
         ) : null}
 
         <footer className={styles.footer}>
-          <span className={styles.footerNote}>{`${plural(masked, "value")} masked`}</span>
+          <span className={styles.footerNote}>{failed ? "Nothing left the product" : `${plural(masked, "value")} masked`}</span>
           <span className={styles.actions}>
             {onCancel ? (
               <Button appearance="outline" mode="neutral" onClick={onCancel}>
                 Cancel
               </Button>
             ) : null}
-            <Button appearance="solid" mode="primary" onClick={() => onSend?.(maskedPayload(payload, spans, rules, lockedTypes))}>
-              Send
-            </Button>
+            {failed ? (
+              <Button ref={retryRef} appearance="solid" mode="primary" iconStart="RotateCcw" onClick={() => (onRetry ? onRetry() : send())}>
+                Try again
+              </Button>
+            ) : (
+              <Button appearance="solid" mode="primary" onClick={send}>
+                Send
+              </Button>
+            )}
           </span>
         </footer>
       </div>

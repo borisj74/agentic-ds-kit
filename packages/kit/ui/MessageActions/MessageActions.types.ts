@@ -20,11 +20,13 @@ export interface MessageActionsProps extends Omit<ComponentPropsWithoutRef<"div"
   /** Thumbs up / down. Omit to hide feedback. */
   onFeedback?: (value: MessageFeedback) => void;
   feedback?: MessageFeedback;
-  /** After a thumbs up, e.g. "Thanks, noted". */
+  /** After a thumbs up, or after a reason is picked ("Thanks, noted: Source is wrong"). */
   thanksText?: string;
-  /** After a thumbs down: quick reasons as chips. */
+  /** After a thumbs down: quick reasons as toggle Buttons in a group named "What went wrong?". */
   reasons?: string[];
   onReason?: (reason: string) => void;
+  /** The picked reason (controlled). Its Button is pressed and the thanks line names it. */
+  selectedReason?: string | null;
   /** More menu items. */
   moreItems?: DropdownMenuItem[];
   onAction?: (id: string) => void;

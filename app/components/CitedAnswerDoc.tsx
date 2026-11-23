@@ -42,20 +42,38 @@ export function CitedAnswerDoc() {
         },
         {
           title: "One source",
-          about: "The toggle reads Used 1 source.",
+          about: "The toggle reads 1 source.",
           code: `<CitedAnswer content="Use half-even rounding for invoice totals[1]." citations={[billingApi]} openSources />`,
           render: <CitedAnswer time="14:02" content="Use half-even rounding for invoice totals[1]." citations={[CITES[0]]} openSources />,
         },
         {
-          title: "Missing source — broken cite",
-          about: "missing marks the cite in danger and says why in the list.",
-          code: `<CitedAnswer … citations={[…, { id: "4", title: "Legacy helper", missing: true }]} openSources />`,
+          title: "Missing source",
+          about: "The mark reads [n] missing, the toggle counts it, and the list opens on first render with the reason.",
+          code: `<CitedAnswer … citations={[…, { id: "3", title: "Northwind contract, grace period", missing: true, missingReason: "Moved or removed after this answer. Don't charge the late fee until it's checked." }]} />`,
           render: (
             <CitedAnswer
+              author="Billing agent"
               time="14:02"
-              content={`${TEXT} The old helper is documented elsewhere[4].`}
-              citations={[...CITES, { id: "4", title: "Legacy helper", missing: true }]}
-              openSources
+              content="Northwind's overdue balance is $2,400, all on INV-1842[1]. Two reminders went out[2]. Their contract allows a 10-day grace period, so a late fee applies from 14 November[3]."
+              citations={[
+                { id: "1", title: "INV-1842 · Northwind Traders", href: "https://app.example.com/invoices/INV-1842", origin: "app.example.com/invoices/INV-1842" },
+                { id: "2", title: "Dunning log · Northwind", snippet: "Reminders sent 7 Nov and 12 Nov." },
+                { id: "3", title: "Northwind contract, grace period", missing: true, missingReason: "Moved or removed after this answer. Don't charge the late fee until it's checked." },
+              ]}
+            />
+          ),
+        },
+        {
+          title: "No sources",
+          about: "citations={[]} shows emptyText under the answer. Pass emptyText=\"\" to hide it.",
+          code: `<CitedAnswer content="…" citations={[]} emptyText="No sources. This is the agent's estimate; check before you act on it." />`,
+          render: (
+            <CitedAnswer
+              author="Billing agent"
+              time="14:05"
+              content="Northwind usually pays within 12 days of a second reminder, so INV-1842 should clear by 24 November."
+              citations={[]}
+              emptyText="No sources. This is the agent's estimate; check before you act on it."
             />
           ),
         },

@@ -8,7 +8,7 @@ export interface Citation {
   /** Where it came from, e.g. "docs.example.com/billing/rounding" or "repo · src/billing". */
   origin?: string;
   snippet?: string;
-  /** The source could not be found: the mark shows as a broken cite. */
+  /** The source could not be found: the mark reads "[n] missing" and the list opens on first render. */
   missing?: boolean;
   /** Why it is missing. */
   missingReason?: string;
@@ -36,5 +36,7 @@ export interface CitedAnswerProps extends Omit<ComponentPropsWithoutRef<"article
   loadingText?: string;
   error?: string;
   onRetry?: () => void;
+  /** Shown when citations is []. Default "No sources. Check before you act on this."; "" hides it. */
+  emptyText?: string;
   ref?: Ref<HTMLElement>;
 }

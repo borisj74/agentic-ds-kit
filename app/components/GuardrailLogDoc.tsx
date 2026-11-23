@@ -65,6 +65,13 @@ const EVENTS: GuardrailEvent[] = [
   },
 ];
 
+const SUMMARIES: Record<string, string> = {
+  e1: "Blocked a €740 refund on order 48213, over the €500 cap",
+  e2: "Rewrote a reply to Marta, it promised a date",
+  e3: "Sent Q3 margins to a freight partner, sent for a second look",
+};
+const SUMMARY_EVENTS: GuardrailEvent[] = EVENTS.slice(0, 3).map((event) => ({ ...event, summary: SUMMARIES[event.id] }));
+
 const noop = () => {};
 
 const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactNode }[] = [
@@ -73,6 +80,12 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     about: "Newest first. Each row names the verdict in words, the rule, what the agent tried, the agent and when. Up and Down move between rows; a row opens the Drawer.",
     code: `<GuardrailLog events={events} filters={{ time: "This week" }} onRequestOverride={request} />`,
     render: <GuardrailLog events={EVENTS} filters={{ time: "This week" }} onRequestOverride={noop} />,
+  },
+  {
+    title: "With summaries",
+    about: "summary leads each row with what happened and why; rule, agent and time drop to the caption. The exact attempt stays in the Drawer. Flagged is an outline Badge.",
+    code: `<GuardrailLog events={[{ …, summary: "Blocked a €740 refund on order 48213, over the €500 cap" }]} onRequestOverride={request} />`,
+    render: <GuardrailLog events={SUMMARY_EVENTS} filters={{ time: "This week" }} onRequestOverride={noop} />,
   },
   {
     title: "Compact — for a header",

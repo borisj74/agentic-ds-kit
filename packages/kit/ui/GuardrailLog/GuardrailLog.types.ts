@@ -23,6 +23,8 @@ export interface GuardrailEvent {
   verdict: GuardrailVerdict;
   rule: GuardrailRule;
   agent: GuardrailAgent;
+  /** What happened and why in one line, e.g. "Blocked a $5,000 refund on INV-1842, over the $500 cap". The row title; rule, agent and time drop to the caption. */
+  summary?: string;
   /** What the agent tried, exactly (a command, call or message). */
   attempted: string;
   /** For rewritten: what ran instead. */

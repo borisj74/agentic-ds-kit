@@ -60,17 +60,23 @@
     },
     "thanksText": {
       "type": "string",
-      "default": "Thanks, noted"
+      "default": "Thanks, noted",
+      "note": "After a thumbs up, or after a reason is picked: \"Thanks, noted: <reason>\"."
     },
     "reasons": {
       "type": "string[]",
       "required": false,
-      "note": "Chips after a thumbs down."
+      "note": "Toggle Buttons (sm) after a thumbs down, in a group named \"What went wrong?\"."
     },
     "onReason": {
       "type": "function",
       "required": false,
       "note": "(reason) => void"
+    },
+    "selectedReason": {
+      "type": "string",
+      "required": false,
+      "note": "The picked reason (controlled). Its Button is pressed."
     },
     "moreItems": {
       "type": "array",
@@ -122,6 +128,7 @@
       "the buttons sit in role=toolbar named by label",
       "every icon Button has an accessible name and a Tooltip",
       "thumbs are toggle buttons with aria-pressed",
+      "reasons are toggle Buttons with aria-pressed in a group named \"What went wrong?\"",
       "thanks text is role=status",
       "hover-only rows still show on keyboard focus and always show under prefers-reduced-motion",
       "More is the kit DropdownMenu",

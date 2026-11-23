@@ -12,7 +12,7 @@ export interface Assumption {
   confidence: number;
   /** Where the guess came from, e.g. "file", "earlier chat", "default". A kit Tag. */
   source?: string;
-  /** Steps that depend on it. "used in n steps" opens them in a Popover. */
+  /** Steps that depend on it. "n steps" opens them in a Popover. */
   steps?: string[];
   status: AssumptionStatus;
   /** The person's fix when status is "corrected". */
@@ -34,5 +34,7 @@ export interface AssumptionLogProps extends Omit<ComponentPropsWithoutRef<"artic
   onCorrect?: (id: string, correction: string) => void;
   /** One line for a run header: open count plus the weakest open assumption. */
   compact?: boolean;
+  /** Rows shown before "Show n more". Default 5; 0 shows every row. */
+  limit?: number;
   ref?: Ref<HTMLElement>;
 }
