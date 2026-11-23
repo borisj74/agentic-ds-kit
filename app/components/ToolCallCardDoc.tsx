@@ -57,8 +57,8 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     ),
   },
   {
-    title: "Error — retry",
-    about: "An error opens by default with the failure in mono and Retry. attempt says how many tries are left.",
+    title: "Failed — retry",
+    about: "A failed call says Failed with the CircleX icon and opens by default with the failure in mono and Retry. attempt says how many tries are left.",
     code: `<ToolCallCard name="run_tests" summary="3 failed · exit code 1" status="error" duration="8.1s" error={lines} onRetry={retry} attempt={{ n: 1, max: 3 }} />`,
     render: (
       <ToolCallCard

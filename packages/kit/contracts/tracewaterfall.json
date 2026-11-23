@@ -28,7 +28,7 @@
     "spans": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, detail? }[]; offsets from the run start; open spans draw dashed to now."
+      "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, stepId?, detail? }[]; offsets from the run start; open spans draw dashed to now. stepId groups spans under a step heading, shown as written (e.g. \"1 · Fetch Stripe charges\")."
     },
     "status": {
       "type": "enum",
@@ -104,20 +104,22 @@
     "type.family.mono",
     "motion.fast",
     "primary.base",
-    "status.success",
     "status.warning",
     "status.danger",
     "status.dangerSubtle",
     "status.dangerText",
     "action.selected",
     "type.size.uiLg",
-    "motion.normal"
+    "motion.normal",
+    "icon.danger"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
       "each span is a button (or group) named with label, kind, duration, cost and failed",
+      "a failed span shows an icon and the word Failed beside its label",
+      "with stepId, each step's spans are a group named by the step",
       "the open span has aria-expanded and controls a named detail region",
       "totals use kit NumberTransition",
       "bars and axis are aria-hidden; the legend names the kinds",
@@ -128,7 +130,8 @@
     "Do not invent a local Waterfall, TraceChart, or SpanList",
     "Do not use BarChart or Meter for a run trace",
     "Do not encode failed or running by colour alone",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not round the bars; bars and legend marks are square"
   ],
   "snippet": "<TraceWaterfall title=\"Run trace · Billing refactor\" spans={spans} selectedId={spanId} onSpanClick={setSpanId} />"
 }

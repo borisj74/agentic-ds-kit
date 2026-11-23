@@ -8,6 +8,7 @@ import { Button } from "../Button";
 import { Card } from "../Card";
 import { CodeSnippet } from "../CodeSnippet";
 import { Collapsible } from "../Collapsible";
+import { DropdownMenu } from "../DropdownMenu";
 import { Empty } from "../Empty";
 import { Link } from "../Link";
 import { Progress } from "../Progress";
@@ -117,38 +118,48 @@ export function DoneCheck({
                     ) : null}
                     {item.setBy === "person" ? <span className={styles.setBy}>set by you</span> : null}
                     {hasEvidence(item) ? (
-                      <Collapsible trigger={`Evidence for check ${n}`} className={styles.evidence}>
-                        <div className={styles.evidenceBody}>
-                          {item.evidence?.note ? <p className={styles.note}>{item.evidence.note}</p> : null}
-                          {item.evidence?.href ? (
-                            <Link href={item.evidence.href} variant="standalone">
-                              {item.evidence.hrefLabel ?? item.evidence.href}
-                            </Link>
-                          ) : null}
-                          {item.evidence?.output ? (
+                      <div className={styles.evidenceBody}>
+                        {item.evidence?.note ? <p className={styles.note}>{item.evidence.note}</p> : null}
+                        {item.evidence?.href ? (
+                          <Link href={item.evidence.href} variant="standalone">
+                            {item.evidence.hrefLabel ?? item.evidence.href}
+                          </Link>
+                        ) : null}
+                        {item.evidence?.output ? (
+                          <Collapsible trigger={`${item.evidence.outputLabel ?? "Output"} for check ${n}`} className={styles.evidence}>
                             <CodeSnippet code={item.evidence.output} title={item.evidence.outputLabel ?? "Output"} />
-                          ) : null}
-                        </div>
-                      </Collapsible>
+                          </Collapsible>
+                        ) : null}
+                      </div>
                     ) : item.status !== "checking" ? (
                       <p className={styles.noEvidence}>No evidence attached.</p>
                     ) : null}
                     {onOverride || onRecheck ? (
                       <div className={styles.rowActions}>
-                        {onOverride && item.status !== "met" ? (
-                          <Button size="sm" appearance="outline" mode="neutral" disabled={busy} onClick={() => onOverride(item.id, "met")}>
-                            Mark met
-                          </Button>
-                        ) : null}
-                        {onOverride && item.status !== "not_met" ? (
-                          <Button size="sm" appearance="outline" mode="neutral" disabled={busy} onClick={() => onOverride(item.id, "not_met")}>
-                            Mark not met
-                          </Button>
-                        ) : null}
                         {onRecheck ? (
                           <Button size="sm" appearance="ghost" mode="neutral" iconStart="RotateCcw" disabled={busy} onClick={() => onRecheck(item.id)}>
                             Re-check
                           </Button>
+                        ) : null}
+                        {onOverride ? (
+                          <DropdownMenu
+                            size="sm"
+                            appearance="ghost"
+                            mode="neutral"
+                            iconStart="Ellipsis"
+                            ariaLabel={`More actions for check ${n}`}
+                            align="end"
+                            disabled={busy}
+                            groups={[
+                              {
+                                items: [
+                                  ...(item.status !== "met" ? [{ id: "met", label: "Mark met", icon: "CircleCheck" as const }] : []),
+                                  ...(item.status !== "not_met" ? [{ id: "not_met", label: "Mark not met", icon: "CircleX" as const }] : []),
+                                ],
+                              },
+                            ]}
+                            onSelect={(id) => onOverride(item.id, id as "met" | "not_met")}
+                          />
                         ) : null}
                       </div>
                     ) : null}

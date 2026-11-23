@@ -81,8 +81,8 @@
 }
 
 .expand:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
+  outline: none;
+  box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin), var(--focus-ring) 0 0 0 calc(var(--border-width-thin) * 3);
 }
 
 .expandOpen {
@@ -122,6 +122,10 @@
 .marker {
   display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-5);
+  height: var(--type-line-ui-sm);
   animation: plan-fade var(--motion-duration-200) var(--motion-ease-out);
 }
 
@@ -170,6 +174,42 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--type-line-ui-sm);
+}
+
+.stepStatus {
+  flex-shrink: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.word-current {
+  color: var(--text-fg);
+}
+
+.word-failed {
+  color: var(--status-danger-text);
+}
+
+.trace {
+  min-width: 0;
+  padding-top: var(--space-2);
+}
+
+/* Tool calls sit under the step that made them, full width of the step text. */
+.stepBody .calls {
+  --toolcall-width: 100%;
+  margin-top: var(--space-2);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .label {

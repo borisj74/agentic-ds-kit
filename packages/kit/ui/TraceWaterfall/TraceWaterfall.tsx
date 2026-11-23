@@ -95,7 +95,7 @@ export function TraceWaterfall({
   if (compact) {
     return (
       <section {...rest} {...nisthaAttr("tracewaterfall", rest)} ref={ref} className={cx(styles.compact, className)} aria-label={`${title}: ${seconds(end)}, ${money(cost)}${running ? ", running" : ""}`}>
-        <History size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
+        <History size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         <span className={styles.compactBar} aria-hidden="true">
           {spans.map((span) => (
             <span key={span.id} className={cx(styles.compactSeg, kindClass(span))} style={{ flexGrow: Math.max(1, (span.endMs ?? end) - span.startMs) }} />
@@ -114,6 +114,67 @@ export function TraceWaterfall({
   }
 
   const ticks = niceTicks(end);
+
+  // With stepId, spans group under their plan step in first-seen order; spans without one come first.
+  let groups: { key: string; spans: TraceSpan[] }[] | null = null;
+  if (spans.some((span) => span.stepId)) {
+    const map = new Map<string, TraceSpan[]>();
+    for (const span of spans) {
+      const key = span.stepId ?? "";
+      map.set(key, [...(map.get(key) ?? []), span]);
+    }
+    groups = Array.from(map, ([key, list]) => ({ key, spans: list })).sort((a, b) => (a.key === "" ? -1 : b.key === "" ? 1 : 0));
+  }
+
+  const renderSpan = (span: TraceSpan) => {
+    const open = span.endMs === undefined;
+    const left = pct(span.startMs);
+    const solidEnd = open ? Math.min(end, span.startMs + (end - span.startMs) * 0.4) : (span.endMs as number);
+    const width = Math.max(0.8, pct(solidEnd) - left);
+    const dashed = open ? Math.max(0, 100 - left - width) : 0;
+    const duration = open ? "running" : seconds((span.endMs as number) - span.startMs);
+    const isSelected = span.id === selectedId;
+    const name = `${span.label}, ${KIND_LABEL[span.kind]}, ${duration}${span.cost !== undefined ? `, ${money(span.cost)}` : ""}${span.failed ? ", failed" : ""}`;
+    const inner = (
+      <>
+        <span className={styles.label}>
+          {span.failed ? <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.failedIcon} aria-hidden="true" /> : null}
+          <span className={styles.labelText}>{span.label}</span>
+          {span.failed ? (
+            <span className={styles.failedWord} aria-hidden="true">
+              Failed
+            </span>
+          ) : null}
+        </span>
+        <span className={styles.track} aria-hidden="true">
+          <span className={cx(styles.bar, kindClass(span))} style={{ insetInlineStart: `${left}%`, width: `${width}%` }} />
+          {dashed ? <span className={styles.pending} style={{ insetInlineStart: `${left + width}%`, width: `${dashed}%` }} /> : null}
+        </span>
+        <span className={styles.num}>{duration}</span>
+        <span className={styles.num}>{span.cost !== undefined ? money(span.cost) : "–"}</span>
+      </>
+    );
+    return (
+      <li key={span.id} className={cx(styles.row, span.failed && styles.failed, isSelected && styles.selected)}>
+        {onSpanClick ? (
+          <button
+            type="button"
+            className={styles.rowButton}
+            aria-label={name}
+            aria-expanded={isSelected}
+            aria-controls={isSelected ? detailId : undefined}
+            onClick={() => onSpanClick(isSelected ? null : span.id)}
+          >
+            {inner}
+          </button>
+        ) : (
+          <div className={styles.rowButton} role="group" aria-label={name}>
+            {inner}
+          </div>
+        )}
+      </li>
+    );
+  };
 
   let body;
   if (loading) {
@@ -180,51 +241,20 @@ export function TraceWaterfall({
             <span />
             <span />
           </div>
-          <ol className={styles.rows}>
-            {spans.map((span) => {
-              const open = span.endMs === undefined;
-              const left = pct(span.startMs);
-              const solidEnd = open ? Math.min(end, span.startMs + (end - span.startMs) * 0.4) : (span.endMs as number);
-              const width = Math.max(0.8, pct(solidEnd) - left);
-              const dashed = open ? Math.max(0, 100 - left - width) : 0;
-              const duration = open ? "running" : seconds((span.endMs as number) - span.startMs);
-              const isSelected = span.id === selectedId;
-              const name = `${span.label}, ${KIND_LABEL[span.kind]}, ${duration}${span.cost !== undefined ? `, ${money(span.cost)}` : ""}${span.failed ? ", failed" : ""}`;
-              const inner = (
-                <>
-                  <span className={styles.label}>
-                    <span className={styles.labelText}>{span.label}</span>
-                  </span>
-                  <span className={styles.track} aria-hidden="true">
-                    <span className={cx(styles.bar, kindClass(span))} style={{ insetInlineStart: `${left}%`, width: `${width}%` }} />
-                    {dashed ? <span className={styles.pending} style={{ insetInlineStart: `${left + width}%`, width: `${dashed}%` }} /> : null}
-                  </span>
-                  <span className={styles.num}>{duration}</span>
-                  <span className={styles.num}>{span.cost !== undefined ? money(span.cost) : "–"}</span>
-                </>
-              );
-              return (
-                <li key={span.id} className={cx(styles.row, span.failed && styles.failed, isSelected && styles.selected)}>
-                  {onSpanClick ? (
-                    <button
-                      type="button"
-                      className={styles.rowButton}
-                      aria-label={name}
-                      aria-expanded={isSelected}
-                      aria-controls={isSelected ? detailId : undefined}
-                      onClick={() => onSpanClick(isSelected ? null : span.id)}
-                    >
-                      {inner}
-                    </button>
-                  ) : (
-                    <div className={styles.rowButton} role="group" aria-label={name}>
-                      {inner}
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
+          {groups ? (
+            groups.map((group) => (
+              <div key={group.key} className={styles.group} role="group" aria-label={group.key || undefined}>
+                {group.key ? (
+                  <p className={styles.groupHead} aria-hidden="true">
+                    {group.key}
+                  </p>
+                ) : null}
+                <ol className={styles.rows}>{group.spans.map(renderSpan)}</ol>
+              </div>
+            ))
+          ) : (
+            <ol className={styles.rows}>{spans.map(renderSpan)}</ol>
+          )}
         </div>
 
         {status === "failed" && error ? (
@@ -244,7 +274,7 @@ export function TraceWaterfall({
               </Badge>
               {onSpanClick ? (
                 <button type="button" className={styles.close} aria-label="Close span detail" onClick={() => onSpanClick(null)}>
-                  <X size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                  <X size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
                 </button>
               ) : null}
             </p>

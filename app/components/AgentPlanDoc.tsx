@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AgentPlan } from "agentic-ds-kit";
-import type { AgentPlanStatus, AgentPlanStep } from "agentic-ds-kit";
+import { AgentPlan, TraceWaterfall } from "agentic-ds-kit";
+import type { AgentPlanStatus, AgentPlanStep, TraceSpan } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -40,6 +40,30 @@ const FOOTER: Record<AgentPlanStatus, string | undefined> = {
 
 const CURRENT: Partial<Record<AgentPlanStatus, string>> = { running: "patch", failed: "test" };
 
+const RUN_STEPS: AgentPlanStep[] = [
+  {
+    id: "fetch",
+    label: "Fetch Stripe charges",
+    calls: [{ id: "c1", name: "stripe.charges.list", summary: "3 charges for Northwind", status: "done", duration: "0.9s" }],
+  },
+  {
+    id: "match",
+    label: "Match payments to INV-1842",
+    calls: [
+      { id: "c2", name: "ledger.read", summary: "INV-1842 open, $2,418.00 due", status: "done", duration: "0.9s" },
+      { id: "c3", name: "match_payments", summary: "3 charges against INV-1842", status: "running" },
+    ],
+  },
+  { id: "update", label: "Update ledger", tool: "ledger.update", needsApproval: true },
+];
+
+const RUN_SPANS: TraceSpan[] = [
+  { id: "s1", label: "Plan the run", kind: "model", startMs: 0, endMs: 6200, cost: 0.04 },
+  { id: "s2", label: "stripe.charges.list", kind: "tool", startMs: 6200, endMs: 7100 },
+  { id: "s3", label: "Read 3 charges", kind: "model", startMs: 7100, endMs: 19400, cost: 0.13 },
+  { id: "s4", label: "match_payments", kind: "tool", startMs: 19400 },
+];
+
 const noop = () => {};
 
 const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactNode }[] = [
@@ -70,6 +94,32 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
         currentStepId="patch"
         steps={STEPS}
         footerNote="3 of 5 · 1m 48s"
+        onSkipStep={noop}
+        onStop={noop}
+      />
+    ),
+  },
+  {
+    title: "In progress — tool calls under each step, trace in the header",
+    about:
+      "calls puts each step's tool calls under it as one ToolCallCard group row, open on the current step. trace takes a compact TraceWaterfall for time and cost so far.",
+    code: `<AgentPlan
+  title="Reconcile INV-1842"
+  status="running"
+  currentStepId="match"
+  steps={steps}
+  trace={<TraceWaterfall title="Run trace" spans={spans} status="running" totalMs={31000} compact />}
+  onSkipStep={skip}
+  onStop={stop}
+/>`,
+    render: (
+      <AgentPlan
+        title="Reconcile INV-1842"
+        status="running"
+        currentStepId="match"
+        steps={RUN_STEPS}
+        trace={<TraceWaterfall title="Run trace" spans={RUN_SPANS} status="running" totalMs={31000} compact />}
+        footerNote="Step 3 asks you before it writes to the ledger."
         onSkipStep={noop}
         onStop={noop}
       />

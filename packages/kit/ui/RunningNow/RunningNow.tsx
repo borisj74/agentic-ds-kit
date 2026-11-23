@@ -3,6 +3,7 @@
 import { useId } from "react";
 import { CirclePause, CircleX, Clock, LoaderCircle } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
+import { Button } from "../Button";
 import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import type { RunningNowItem, RunningNowProps, RunningNowStatus } from "./RunningNow.types";
@@ -12,39 +13,61 @@ import { nisthaAttr } from "../shared/inspect";
 export type { RunningNowProps, RunningNowItem, RunningNowStatus, RunningNowLayout } from "./RunningNow.types";
 
 const STATUS_ICON = { running: LoaderCircle, waiting: CirclePause, failed: CircleX } as const;
-const STATUS_TEXT: Record<RunningNowStatus, string> = { running: "running", waiting: "waiting for you", failed: "failed" };
+const STATUS_TEXT: Record<RunningNowStatus, string> = { running: "Running", waiting: "Needs you", failed: "Failed" };
 
 function Item({
   item,
   layout,
   onSelect,
+  onStop,
 }: {
   item: RunningNowItem;
   layout: "row" | "stack";
   onSelect?: (id: string) => void;
+  onStop?: (id: string) => void;
 }) {
   const Icon = STATUS_ICON[item.status];
+  // Waiting and failed say so in words; a running item's activity already says what it does.
+  const word = item.status === "running" ? null : <span className={styles.status}>{STATUS_TEXT[item.status]}</span>;
   const body = (
     <>
-      <Icon size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
+      <Icon size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
       <span className={styles.text}>
         <span className={styles.name}>{item.name}</span>
-        {item.activity ? <span className={styles.activity}>{item.activity}</span> : null}
+        {word || item.activity ? (
+          <span className={styles.sub}>
+            {word}
+            {item.activity ? <span className={styles.activity}>{item.activity}</span> : null}
+          </span>
+        ) : null}
       </span>
       {item.elapsed ? <span className={styles.elapsed}>{item.elapsed}</span> : null}
-      <span className={styles.srOnly}>, {STATUS_TEXT[item.status]}</span>
+      {item.status === "running" ? <span className={styles.srOnly}>, {STATUS_TEXT.running}</span> : null}
     </>
   );
-  const className = cx(styles.item, styles[layout === "row" ? "chip" : "line"], styles[item.status]);
+  const canStop = Boolean(onStop) && item.status !== "failed";
   return (
     <li className={styles.cell}>
-      {onSelect ? (
-        <button type="button" className={cx(className, styles.button)} onClick={() => onSelect(item.id)}>
-          {body}
-        </button>
-      ) : (
-        <span className={className}>{body}</span>
-      )}
+      <span className={cx(styles.item, styles[layout === "row" ? "chip" : "line"], styles[item.status], canStop && styles.withStop)}>
+        {onSelect ? (
+          <button type="button" className={cx(styles.main, styles.button)} onClick={() => onSelect(item.id)}>
+            {body}
+          </button>
+        ) : (
+          <span className={styles.main}>{body}</span>
+        )}
+        {canStop ? (
+          <Button
+            size="sm"
+            appearance="ghost"
+            mode="neutral"
+            iconStart="Square"
+            className={styles.stop}
+            ariaLabel={`Stop ${item.name}`}
+            onClick={() => onStop?.(item.id)}
+          />
+        ) : null}
+      </span>
     </li>
   );
 }
@@ -57,6 +80,7 @@ export function RunningNow({
   label = "Running now",
   onSelect,
   onShowAll,
+  onStop,
   loading = false,
   emptyText = "Nothing running right now",
   className,
@@ -112,13 +136,13 @@ export function RunningNow({
         </div>
       ) : items.length === 0 ? (
         <p className={styles.empty}>
-          <Clock size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+          <Clock size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           {emptyText}
         </p>
       ) : (
         <ul className={styles.list}>
           {visible.map((item) => (
-            <Item key={item.id} item={item} layout={layout} onSelect={onSelect} />
+            <Item key={item.id} item={item} layout={layout} onSelect={onSelect} onStop={onStop} />
           ))}
           {hidden > 0 && layout === "stack" ? (
             <li className={styles.cell}>

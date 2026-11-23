@@ -14,7 +14,8 @@
     "a notification feed — Toast"
   ],
   "contains": [
-    "skeleton"
+    "skeleton",
+    "button"
   ],
   "props": {
     "items": {
@@ -48,6 +49,11 @@
       "type": "function",
       "required": false,
       "note": "The overflow control."
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Running and waiting items get an icon-only Stop named \"Stop <name>\", beside the item, never inside its button."
     },
     "loading": {
       "type": "boolean",
@@ -90,8 +96,9 @@
     "element": "section",
     "requirements": [
       "section named by its heading (label plus count)",
-      "items are a list; each names its status in text",
+      "items are a list; waiting and failed items say their status as visible text (Needs you, Failed), running is named for screen readers",
       "with onSelect each item is a button",
+      "with onStop, Stop is a separate kit Button named \"Stop <name>\"",
       "the overflow says how many more in words",
       "aria-busy while loading",
       "spinner and entry motion use transform and opacity, off under prefers-reduced-motion"

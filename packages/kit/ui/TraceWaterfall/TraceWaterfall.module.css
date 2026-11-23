@@ -108,6 +108,25 @@
   list-style: none;
 }
 
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
+}
+
+.group + .group {
+  margin-top: var(--space-2);
+}
+
+.groupHead {
+  margin: 0;
+  padding: var(--space-1) var(--space-2) 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
 .row {
   border-radius: var(--radius-surface-md);
 }
@@ -134,10 +153,13 @@ button.rowButton:hover {
   background-color: var(--bg-control-hover);
 }
 
+/* Shared kit focus ring; lifted so the next row doesn't cover it. */
 button.rowButton:focus-visible,
 .close:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: calc(var(--border-focus-width) * -1);
+  position: relative;
+  z-index: 1;
+  outline: none;
+  box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin), var(--focus-ring) 0 0 0 calc(var(--border-width-thin) * 3);
 }
 
 .selected,
@@ -156,6 +178,18 @@ button.rowButton:focus-visible,
   min-width: 0;
 }
 
+.failedIcon {
+  flex-shrink: 0;
+  color: var(--icon-danger);
+}
+
+.failedWord {
+  flex-shrink: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--status-danger-text);
+}
+
 .labelText {
   overflow: hidden;
   font-size: var(--type-size-caption);
@@ -168,9 +202,9 @@ button.rowButton:focus-visible,
 
 .dot {
   flex-shrink: 0;
-  width: var(--space-1);
-  height: var(--space-1);
-  border-radius: var(--radius-pill);
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-0);
 }
 
 .track {
@@ -183,15 +217,13 @@ button.rowButton:focus-visible,
   position: absolute;
   top: 0;
   height: 100%;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-0);
 }
 
 .pending {
   box-sizing: border-box;
   border: var(--border-width-thin) dashed var(--primary);
   border-inline-start: 0;
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
 }
 
 .bar {
@@ -199,13 +231,14 @@ button.rowButton:focus-visible,
   animation: trace-grow var(--motion-duration-300) var(--motion-ease-out);
 }
 
-/* Span kinds on existing roles: model = primary, tool = success, wait and approval = caution. */
+/* Span kinds on existing roles: model = primary, tool = neutral line, wait and approval = caution.
+   Success green is kept for status, so a tool bar never reads as "passed". */
 .kind-model {
   background-color: var(--primary);
 }
 
 .kind-tool {
-  background-color: var(--status-success);
+  background-color: var(--line-strong);
 }
 
 .kind-wait,
@@ -214,7 +247,7 @@ button.rowButton:focus-visible,
 }
 
 .kind-other {
-  background-color: var(--line-strong);
+  background-color: var(--text-fg-subtle);
 }
 
 .kindFailed {
@@ -384,7 +417,7 @@ button.rowButton:focus-visible,
   min-width: var(--space-16);
   height: var(--space-1);
   overflow: hidden;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-0);
 }
 
 .compactSeg {

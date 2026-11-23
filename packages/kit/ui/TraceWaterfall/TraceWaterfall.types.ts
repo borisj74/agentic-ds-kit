@@ -16,6 +16,8 @@ export interface TraceSpan {
   tokensIn?: number;
   tokensOut?: number;
   failed?: boolean;
+  /** Groups the span under its plan step. Spans with the same value share one heading, shown as written, e.g. "1 · Fetch Stripe charges". */
+  stepId?: string;
   /** Extra detail rows, e.g. [{ label: "Model", value: "Claude Sonnet 5.5" }]. */
   detail?: { label: string; value: string }[];
 }

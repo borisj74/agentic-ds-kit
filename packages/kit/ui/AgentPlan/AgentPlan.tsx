@@ -12,6 +12,7 @@ import { Input } from "../Input";
 import { Skeleton } from "../Skeleton";
 import { Spinner } from "../Spinner";
 import { Textarea } from "../Textarea";
+import { ToolCallCard } from "../ToolCallCard";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AgentPlanProps, AgentPlanStatus, AgentPlanStep } from "./AgentPlan.types";
@@ -60,9 +61,28 @@ function defaultSummary(status: AgentPlanStatus, steps: AgentPlanStep[], current
   return approvals ? `${total} · ${approvals} need approval` : total;
 }
 
+/** One status set across the run components: Queued, Running, Needs you, Done, Failed. */
+function stepWord(state: RowState, needsApproval?: boolean): string | undefined {
+  if (state === "done") return "Done";
+  if (state === "failed") return "Failed";
+  if (state === "current") return needsApproval ? "Needs you" : "Running";
+  if (state === "pending") return "Queued";
+  return undefined;
+}
+
+function liveText(status: AgentPlanStatus, steps: AgentPlanStep[], currentIndex: number): string {
+  const current = steps[currentIndex];
+  if (status === "complete") return "Plan complete";
+  if (!current) return "";
+  const where = `Step ${currentIndex + 1} of ${steps.length}`;
+  if (status === "failed") return `${where} failed: ${current.label}`;
+  if (status === "running") return `${where} ${current.needsApproval ? "needs you" : "running"}: ${current.label}`;
+  return "";
+}
+
 function Marker({ state, index }: { state: RowState; index: number }) {
-  if (state === "done") return <CircleCheck size={20} strokeWidth={ICON_STROKE} className={styles.markDone} aria-hidden="true" />;
-  if (state === "failed") return <CircleX size={20} strokeWidth={ICON_STROKE} className={styles.markFailed} aria-hidden="true" />;
+  if (state === "done") return <CircleCheck size={16} strokeWidth={ICON_STROKE} className={styles.markDone} aria-hidden="true" />;
+  if (state === "failed") return <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.markFailed} aria-hidden="true" />;
   return (
     <span className={cx(styles.number, state === "current" && styles.numberCurrent)} aria-hidden="true">
       {index + 1}
@@ -150,6 +170,7 @@ export function AgentPlan({
   currentStepId,
   summary,
   footerNote,
+  trace,
   waitingLabel = "Waiting for your OK",
   editable = true,
   onChange,
@@ -213,6 +234,7 @@ export function AgentPlan({
         ) : null}
       </div>
       <p className={styles.summary}>{line}</p>
+      {trace ? <div className={styles.trace}>{trace}</div> : null}
     </header>
   );
 
@@ -300,6 +322,8 @@ export function AgentPlan({
             }
             const state = rowState(status, index, currentIndex);
             const waiting = state === "current" && step.needsApproval;
+            const word = stepWord(state, step.needsApproval);
+            const calls = step.calls ?? [];
             return (
               <li
                 key={step.id}
@@ -316,6 +340,12 @@ export function AgentPlan({
                       <Badge tone="warning" size="sm" className={styles.approval}>
                         Approval
                       </Badge>
+                    ) : null}
+                    {word ? (
+                      <span className={cx(styles.stepStatus, styles[`word-${state}`])}>
+                        {word}
+                        {calls.length ? ` · ${plural(calls.length, "call")}` : ""}
+                      </span>
                     ) : null}
                     {canEdit ? (
                       <span className={styles.rowActions}>
@@ -351,11 +381,19 @@ export function AgentPlan({
                   ) : null}
                   {waiting ? (
                     <p className={styles.waiting}>
-                      <CirclePause size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                      <CirclePause size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
                       {waitingLabel}
                     </p>
                   ) : null}
                   {state === "failed" && step.error ? <p className={styles.error}>{step.error}</p> : null}
+                  {calls.length ? (
+                    <ToolCallCard
+                      className={styles.calls}
+                      calls={calls}
+                      groupTitle={`Step ${index + 1} tools`}
+                      defaultExpanded={state === "current" || state === "failed"}
+                    />
+                  ) : null}
                 </div>
               </li>
             );
@@ -442,7 +480,7 @@ export function AgentPlan({
                   </Button>
                 ) : null}
                 {status === "failed" && current && onRetryStep ? (
-                  <Button size="md" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => onRetryStep(current.id)}>
+                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => onRetryStep(current.id)}>
                     Retry step
                   </Button>
                 ) : null}
@@ -456,6 +494,10 @@ export function AgentPlan({
           )}
         </footer>
       ) : null}
+
+      <p className={styles.srOnly} aria-live="polite">
+        {liveText(status, steps, currentIndex)}
+      </p>
 
       {status === "drafting" ? (
         <footer className={styles.footer}>

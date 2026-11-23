@@ -22,8 +22,8 @@ const STATUS_ICON = {
 const STATUS_TEXT: Record<AgentTrailStepStatus, string> = {
   done: "Done",
   running: "Running",
-  approval: "Awaiting approval",
-  pending: "Pending",
+  approval: "Needs you",
+  pending: "Queued",
   failed: "Failed",
 };
 

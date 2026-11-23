@@ -22,7 +22,8 @@
     "link",
     "button",
     "blurcrossfade",
-    "empty"
+    "empty",
+    "dropdownmenu"
   ],
   "props": {
     "title": {
@@ -38,7 +39,7 @@
     "onOverride": {
       "type": "function",
       "required": false,
-      "note": "(id, \"met\" | \"not_met\") => void. Row buttons Mark met / Mark not met; set setBy \"person\" to show \"set by you\"."
+      "note": "(id, \"met\" | \"not_met\") => void. Mark met / Mark not met sit in the row's More actions menu, so each row has one visible action; set setBy \"person\" to show \"set by you\"."
     },
     "onRecheck": {
       "type": "function",
@@ -90,7 +91,8 @@
     "requirements": [
       "the Card is aria-labelledby the task title",
       "checks are an ordered list; each status is a word beside its icon, never colour alone",
-      "evidence is a kit Collapsible named \"Evidence for check <n>\", opened from the keyboard",
+      "evidence notes and links show inline; long output is a kit Collapsible named \"<output label> for check <n>\"",
+      "the row menu trigger is named \"More actions for check <n>\"",
       "the met-over-total bar has an accessible name (\"2 of 5 checks met\")",
       "verdict changes are announced in a polite live region; checking sets aria-busy",
       "motion is opacity and transform only, off under prefers-reduced-motion"
