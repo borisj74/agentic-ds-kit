@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { Check } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Tag } from "../Tag";
@@ -107,20 +107,21 @@ export function MultiSelect({
     }
   }
 
-  const sizeClass = size === "sm" ? controlStyles.controlSm : controlStyles.controlMd;
+  const sizeClass = size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd;
+  const shellSize = size === "sm" ? styles.shellSm : size === "lg" ? styles.shellLg : styles.shellMd;
 
   return (
     <div {...nisthaAttr("multiselect")} ref={rootRef} className={cx(styles.root, className)}>
       {name ? <input type="hidden" name={name} value={values.join(",")} /> : null}
       <div
-        className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell, size === "sm" ? styles.shellSm : styles.shellMd)}
+        className={cx(controlStyles.control, sizeClass, error && controlStyles.controlError, styles.shell, shellSize)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
       >
         {visible.map((option) => (
           <Tag
             key={option.value}
-            size={size === "sm" ? "sm" : "md"}
+            size={size === "lg" ? "md" : "sm"}
             removable
             onRemove={(event) => {
               event.preventDefault();
@@ -158,6 +159,21 @@ export function MultiSelect({
           }}
           onKeyDown={onKeyDown}
         />
+        <button
+          type="button"
+          className={styles.toggle}
+          aria-label={open ? "Hide options" : "Show options"}
+          aria-expanded={open}
+          aria-controls={open ? listId : undefined}
+          disabled={disabled}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => {
+            setOpen((was) => !was);
+            inputRef.current?.focus();
+          }}
+        >
+          <ChevronDown size={size === "lg" ? 18 : 16} strokeWidth={ICON_STROKE} aria-hidden />
+        </button>
       </div>
       {open ? (
         <div className={styles.popup}>

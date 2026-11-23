@@ -27,9 +27,46 @@
 }
 
 .shell[data-disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
-  background-color: var(--surface-muted);
+  border-color: var(--border-disabled);
+  background-color: var(--surface-disabled);
+  color: var(--text-disabled);
+}
+
+.shell[data-disabled] .toggle {
+  color: var(--icon-disabled);
+}
+
+/* Shared control scale with Button and Input: sm 32, md 36. Height is fixed, so the
+   padding is inline only and the text line sits in the middle. */
+.shellSm,
+.shellMd {
+  padding-block: 0;
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.shellSm {
+  height: var(--space-8);
+}
+
+.shellMd {
+  height: calc(var(--space-8) + var(--space-1));
+}
+
+.shellLg {
+  height: var(--space-10);
+  padding-block: 0;
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
+}
+
+.native::placeholder {
+  color: var(--text-muted);
+}
+
+.native:disabled::placeholder {
+  color: var(--text-disabled);
 }
 
 .native {
@@ -94,6 +131,8 @@
 }
 
 .status {
+  display: flex;
+  align-items: center;
   margin: 0;
   padding: var(--space-2) var(--space-3);
   color: var(--text-muted);

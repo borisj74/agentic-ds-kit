@@ -14,9 +14,10 @@
     "Tags the person types — use TagInput",
     "A command palette — use Command"
   ],
+  "contains": ["spinner"],
   "props": {
     "id": { "type": "string", "required": true },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Heights 32 / 36 / 40, the shared Button and Input scale." },
     "options": {
       "type": "array",
       "itemShape": { "value": "string", "label": "string", "disabled": "boolean?" },
@@ -34,7 +35,13 @@
       "note": "When set, options are not filtered locally. Parent replaces options as the query changes."
     },
     "loading": { "type": "boolean", "default": false },
-    "emptyLabel": { "type": "string", "default": "No results" },
+    "loadingLabel": { "type": "string", "default": "Loading", "note": "Shown with a kit Spinner while loading." },
+    "startLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Shown in place of the list until the person types, like Start typing to find a customer. For async search."
+    },
+    "emptyLabel": { "type": "string", "default": "No results", "note": "Shown when a query matches nothing." },
     "allowCustomValue": {
       "type": "boolean",
       "default": false,
@@ -55,6 +62,9 @@
     "surface.muted",
     "border.faint",
     "border.focus",
+    "border.disabled",
+    "surface.disabled",
+    "icon.disabled",
     "status.danger"
   ],
   "a11y": {
@@ -64,6 +74,7 @@
       "Input is role=combobox, aria-autocomplete=list, aria-expanded, aria-controls, aria-activedescendant",
       "Suggestions are role=listbox and each row is role=option with aria-selected",
       "Arrow keys, Home, and End move the active option. Enter selects it. Escape closes and returns focus to the input",
+      "The popup shows one state at a time: loading (kit Spinner), the start hint, no results, or the list",
       "Must have a Field label or ariaLabel"
     ]
   },

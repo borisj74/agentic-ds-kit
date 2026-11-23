@@ -1,6 +1,43 @@
 .root {
+  display: block;
+}
+
+.bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+}
+
+/* A leading search takes the room it needs and gives way first when the row wraps. */
+.leading {
+  flex: 0 1 calc(var(--space-16) * 4);
+  min-width: 0;
+}
+
+.compact {
+  display: none;
+}
+
+/* The stacked fields in the sheet: one column, the same gap as Field groups. */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* With renderSheet, a bar narrower than --grid-breakpoint-sm (40rem; container queries cannot
+   read var()) swaps the chip row for one Filters chip that opens the sheet. */
+.collapsible {
+  container: filterbar / inline-size;
+}
+
+@container filterbar (width < 40rem) {
+  .bar {
+    display: none;
+  }
+
+  .compact {
+    display: flex;
+  }
 }

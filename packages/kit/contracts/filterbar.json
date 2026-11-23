@@ -13,7 +13,7 @@
     "Page actions — use Button"
   ],
   "contains": ["filterbutton", "dropdownmenu",
-    "popover", "button"],
+    "popover", "button", "drawer"],
   "props": {
     "filters": {
       "type": "array",
@@ -32,7 +32,19 @@
     "addLabel": { "type": "string", "default": "Add filter" },
     "clearLabel": { "type": "string", "default": "Clear all" },
     "maxVisible": { "type": "number", "required": false, "note": "Extra chips collapse into a +N menu." },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Chips and buttons share the 32 / 36 / 40 control scale." },
+    "leading": {
+      "type": "slot",
+      "required": false,
+      "note": "First in the row, before the chips. A kit Combobox or search Input."
+    },
+    "renderSheet": {
+      "type": "function",
+      "required": false,
+      "note": "() => ReactNode. The same fields stacked for a narrow screen. When set, a bar narrower than --grid-breakpoint-sm shows one Filters chip with the applied count; it opens these in a bottom kit Drawer with Clear all and Apply."
+    },
+    "onApply": { "type": "function", "required": false, "note": "Apply in the sheet. The sheet closes after it." },
+    "applyLabel": { "type": "string", "default": "Apply" },
     "ariaLabel": { "type": "string", "default": "Filters" }
   },
   "passthrough": { "root": "div", "ref": "none", "className": "root", "rest": "none" },
@@ -42,15 +54,17 @@
     "requirements": [
       "The row is a group labelled Filters, or ariaLabel",
       "Each chip is a kit FilterButton",
-      "Overflow is a menu of the hidden filters",
+      "Overflow is a menu of the hidden filters, opened from a +N trigger with a chevron like the chips",
       "With renderOptions, a chip opens a kit Popover (aria-haspopup=dialog) that Escape and a click outside close",
-      "Clear all is a button, present only when a filter is set"
+      "Clear all is a button, present only when a filter is set",
+      "With renderSheet on a narrow bar, the Filters chip names the applied count (never colour alone) and opens a Drawer labelled Filters, or ariaLabel. Escape and Close dismiss it. Apply is the only primary"
     ]
   },
   "doNot": [
     "Do not invent a local chip — chips are FilterButton",
     "Do not invent an overflow chip — overflow is kit DropdownMenu",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not build a local filter sheet — renderSheet opens kit Drawer"
   ],
   "snippet": "<FilterBar filters={filters} onFilterClick={openFilter} onAdd={addFilter} onClear={clearFilters} maxVisible={3} />"
 }

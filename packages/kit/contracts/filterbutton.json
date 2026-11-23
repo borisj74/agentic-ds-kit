@@ -23,7 +23,7 @@
       "type": "enum",
       "values": ["sm", "md", "lg"],
       "default": "md",
-      "note": "Heights space-8 / space-10 / space-12. The chevron part is square."
+      "note": "Heights 32 / 36 / 40, the shared Button and Input scale. The chevron part is square."
     },
     "open": {
       "type": "boolean",
@@ -48,7 +48,7 @@
       "type": "enum",
       "values": ["on", "off"],
       "required": false,
-      "note": "On or off once a filter is set. Leave it out and a set filter is on. Off keeps the selection but does not apply it: dashed outline, muted count."
+      "note": "On or off once a filter is set. Leave it out and a set filter is on. Off keeps the selection but does not apply it: dashed outline on the page canvas fill, muted count."
     },
     "onToggle": {
       "type": "function",
@@ -75,22 +75,25 @@
   "tokens": [
     "surface.card",
     "surface.muted",
+    "surface.page",
+    "surface.disabled",
     "text.primary",
     "text.secondary",
     "icon.muted",
     "border.faint",
     "border.strong",
-    "border.focus",
+    "border.disabled",
+    "text.disabled",
+    "focus.ring",
     "radius.controlMd",
-    "opacity.disabled",
+    "space.1",
     "space.8",
     "space.10",
-    "space.12",
-    "type.size.caption",
-    "type.size.bodySm",
-    "type.size.body",
+    "type.size.uiSm",
+    "type.size.uiMd",
     "type.weight.label",
-    "type.line.heading",
+    "type.line.uiSm",
+    "type.line.uiMd",
     "motion.interactionDuration",
     "motion.expandDuration"
   ],
