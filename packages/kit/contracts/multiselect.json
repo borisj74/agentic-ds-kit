@@ -15,7 +15,7 @@
   "contains": ["tag", "badge"],
   "props": {
     "id": { "type": "string", "required": true },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Heights 32 / 36 / 40 on one row; wrapped tags grow it." },
     "options": {
       "type": "array",
       "itemShape": { "value": "string", "label": "string", "disabled": "boolean?" },
@@ -39,6 +39,10 @@
     "text.muted",
     "text.disabled",
     "icon.primary",
+    "icon.muted",
+    "icon.disabled",
+    "surface.disabled",
+    "border.disabled",
     "surface.card",
     "surface.muted",
     "border.faint",
@@ -52,6 +56,7 @@
       "The filter input is role=combobox. The popup is role=listbox aria-multiselectable=true",
       "Each option is role=option with aria-selected. Enter toggles the active option. The list stays open",
       "Backspace on an empty query removes the last tag. Each tag remove button removes that value",
+      "One trailing chevron button, named Show options or Hide options, opens and closes the list",
       "Escape closes and returns focus to the input",
       "Must have a Field label or ariaLabel"
     ]

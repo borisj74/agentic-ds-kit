@@ -8,7 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: ComboboxSize[] = ["sm", "md"];
+const SIZES: ComboboxSize[] = ["sm", "md", "lg"];
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
 const CITIES = [
   { value: "amsterdam", label: "Amsterdam" },
@@ -25,7 +25,7 @@ export function ComboboxDoc() {
   const [size, setSize] = useState<ComboboxSize>("md");
   const [city, setCity] = useState("");
   const [asyncCity, setAsyncCity] = useState("");
-  const [options, setOptions] = useState(CITIES);
+  const [options, setOptions] = useState<typeof CITIES>([]);
   const [loading, setLoading] = useState(false);
   const [custom, setCustom] = useState("");
   const timer = useRef<number | null>(null);
@@ -116,11 +116,19 @@ export function ComboboxDoc() {
                       placeholder="Search cities"
                       options={options}
                       loading={loading}
+                      startLabel="Start typing to find a city"
+                      loadingLabel="Loading cities"
+                      emptyLabel="No city matches"
                       value={asyncCity}
                       onChange={setAsyncCity}
                       onQueryChange={(query) => {
-                        setLoading(true);
                         if (timer.current) window.clearTimeout(timer.current);
+                        if (!query.trim()) {
+                          setOptions([]);
+                          setLoading(false);
+                          return;
+                        }
+                        setLoading(true);
                         timer.current = window.setTimeout(() => {
                           const needle = query.trim().toLowerCase();
                           setOptions(
@@ -136,12 +144,13 @@ export function ComboboxDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  onQueryChange means the parent owns the list. Set loading while the request is in
-                  flight, then replace options.
+                  onQueryChange means the parent owns the list. The popup shows one state at a time:
+                  startLabel before any query, loadingLabel with a Spinner while the request is in
+                  flight, emptyLabel when nothing matches, then the options.
                 </p>
               </div>
               <CodeBlock
-                code={'<Combobox id="city" options={cities} loading={loading} onQueryChange={loadCities} />'}
+                code={'<Combobox id="city" options={cities} loading={loading} onQueryChange={loadCities}\n  startLabel="Start typing to find a city" loadingLabel="Loading cities" emptyLabel="No city matches" />'}
               />
             </section>
             <section className={styles.example}>

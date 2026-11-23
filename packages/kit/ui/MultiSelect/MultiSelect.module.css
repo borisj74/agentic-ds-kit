@@ -15,14 +15,28 @@
 
 /* Tags are taller than the text line, so the shell trims its vertical padding and holds the same
    height as an Input of its size (line + control padding + border); wrapped rows still grow it. */
+.shellMd,
+.shellSm {
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+/* Shared control scale with Button and Input: md 36, sm 32. Wrapped rows still grow it. */
 .shellMd {
   padding-block: var(--space-1);
-  min-height: calc(var(--type-line-body) + var(--space-2) * 2 + var(--border-width-thin) * 2);
+  min-height: calc(var(--space-8) + var(--space-1));
 }
 
 .shellSm {
   padding-block: var(--space-px);
-  min-height: calc(var(--type-line-body) + var(--space-1) * 2 + var(--border-width-thin) * 2);
+  min-height: var(--space-8);
+}
+
+.shellLg {
+  padding-block: var(--space-1);
+  min-height: var(--space-10);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
 }
 
 .shell:hover:not([data-disabled]) {
@@ -41,9 +55,46 @@
 }
 
 .shell[data-disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
-  background-color: var(--surface-muted);
+  border-color: var(--border-disabled);
+  background-color: var(--surface-disabled);
+  color: var(--text-disabled);
+}
+
+.shell[data-disabled] .toggle {
+  color: var(--icon-disabled);
+}
+
+.native::placeholder {
+  color: var(--text-muted);
+}
+
+.native:disabled::placeholder {
+  color: var(--text-disabled);
+}
+
+/* One trailing chevron, like Combobox and Select. It sits at the end of the last row. */
+.toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--icon-muted);
+  cursor: pointer;
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+}
+
+.toggle:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+  border-radius: var(--radius-control-sm);
 }
 
 /* Narrow enough to stay on the tags' row on a phone-width field; it still grows to fill the row. */

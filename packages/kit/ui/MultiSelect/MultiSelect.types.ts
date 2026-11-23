@@ -1,7 +1,7 @@
 import type { Ref } from "react";
 import type { OptionItem } from "../shared/options";
 
-export type MultiSelectSize = "sm" | "md";
+export type MultiSelectSize = "sm" | "md" | "lg";
 
 export interface MultiSelectOption extends OptionItem {
   value: string;

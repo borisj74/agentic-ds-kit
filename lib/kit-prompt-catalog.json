@@ -2288,9 +2288,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Heights 32 / 36 / 40, the shared Button and Input scale."
         },
         "options": {
           "type": "array",
@@ -2331,9 +2333,20 @@
           "type": "boolean",
           "default": false
         },
+        "loadingLabel": {
+          "type": "string",
+          "default": "Loading",
+          "note": "Shown with a kit Spinner while loading."
+        },
+        "startLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Shown in place of the list until the person types, like Start typing to find a customer. For async search."
+        },
         "emptyLabel": {
           "type": "string",
-          "default": "No results"
+          "default": "No results",
+          "note": "Shown when a query matches nothing."
         },
         "allowCustomValue": {
           "type": "boolean",
@@ -2382,9 +2395,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Heights 32 / 36 / 40 on one row; wrapped tags grow it."
         },
         "options": {
           "type": "array",
@@ -4861,7 +4876,7 @@
             "lg"
           ],
           "default": "md",
-          "note": "Heights space-8 / space-10 / space-12. The chevron part is square."
+          "note": "Heights 32 / 36 / 40, the shared Button and Input scale. The chevron part is square."
         },
         "open": {
           "type": "boolean",
@@ -4889,7 +4904,7 @@
             "off"
           ],
           "required": false,
-          "note": "On or off once a filter is set. Leave it out and a set filter is on. Off keeps the selection but does not apply it: dashed outline, muted count."
+          "note": "On or off once a filter is set. Leave it out and a set filter is on. Off keeps the selection but does not apply it: dashed outline on the page canvas fill, muted count."
         },
         "onToggle": {
           "type": "function",
@@ -4924,7 +4939,8 @@
       "doNot": [
         "Do not invent a local chip — chips are FilterButton",
         "Do not invent an overflow chip — overflow is kit DropdownMenu",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not build a local filter sheet — renderSheet opens kit Drawer"
       ],
       "props": {
         "filters": {
@@ -4974,9 +4990,30 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Chips and buttons share the 32 / 36 / 40 control scale."
+        },
+        "leading": {
+          "type": "slot",
+          "required": false,
+          "note": "First in the row, before the chips. A kit Combobox or search Input."
+        },
+        "renderSheet": {
+          "type": "function",
+          "required": false,
+          "note": "() => ReactNode. The same fields stacked for a narrow screen. When set, a bar narrower than --grid-breakpoint-sm shows one Filters chip with the applied count; it opens these in a bottom kit Drawer with Clear all and Apply."
+        },
+        "onApply": {
+          "type": "function",
+          "required": false,
+          "note": "Apply in the sheet. The sheet closes after it."
+        },
+        "applyLabel": {
+          "type": "string",
+          "default": "Apply"
         },
         "ariaLabel": {
           "type": "string",

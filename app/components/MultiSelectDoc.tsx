@@ -8,7 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: MultiSelectSize[] = ["sm", "md"];
+const SIZES: MultiSelectSize[] = ["sm", "md", "lg"];
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
 const TEAMS = [
   { value: "design", label: "Design" },

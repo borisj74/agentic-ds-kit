@@ -1,5 +1,6 @@
 .filter {
-  --h: var(--space-10);
+  /* Shared control scale with Button and Input: sm 32, md 36, lg 40. */
+  --h: calc(var(--space-8) + var(--space-1));
   --line: var(--border-faint);
   appearance: none;
   margin: 0;
@@ -22,20 +23,20 @@
 
 .sm {
   --h: var(--space-8);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-heading);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
 }
 
 .md {
-  --h: var(--space-10);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-heading);
+  --h: calc(var(--space-8) + var(--space-1));
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
 }
 
 .lg {
-  --h: var(--space-12);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-heading);
+  --h: var(--space-10);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
 }
 
 .main {
@@ -73,7 +74,8 @@
 
 .applied .chevron,
 .off .chevron {
-  width: var(--space-8);
+  /* The chevron half is square at the chip's height (inside the border). */
+  width: calc(var(--h) - var(--border-control) * 2);
   margin: 0;
   padding: 0;
   border-left: var(--border-control) solid var(--line);
@@ -100,17 +102,23 @@
 .off {
   --line: var(--border-strong);
   border-style: dashed;
-  background: transparent;
+  background: var(--surface-page);
 }
 
 .off .chevron {
   border-left-style: dashed;
 }
 
-.split,
-.split:hover {
-  background: transparent;
+.split {
   cursor: default;
+}
+
+.split:hover:not(:disabled) {
+  background: var(--surface-card);
+}
+
+.off.split:hover:not(:disabled) {
+  background: var(--surface-page);
 }
 
 .part {
@@ -151,8 +159,17 @@
 
 .filter:disabled,
 .split:has(.part:disabled) {
+  --line: var(--border-disabled);
   cursor: not-allowed;
-  opacity: var(--opacity-disabled);
+  background: var(--surface-disabled);
+  color: var(--text-disabled);
+}
+
+.filter:disabled .name,
+.filter:disabled .chevron,
+.split:has(.part:disabled) .name,
+.split:has(.part:disabled) .chevron {
+  color: var(--text-disabled);
 }
 
 @media (prefers-reduced-motion: reduce) {
