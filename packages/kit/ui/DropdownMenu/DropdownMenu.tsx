@@ -542,12 +542,6 @@ export function DropdownMenu({
                     onChange={() => {}}
                   />
                 </span>
-              ) : showCheck ? (
-                item.selected ? (
-                  <LucideByName name="Check" size={16} className={styles.itemCheck} />
-                ) : (
-                  <span className={styles.itemCheck} />
-                )
               ) : item.icon ? (
                 <LucideByName name={item.icon} size={16} className={styles.itemIcon} />
               ) : null}
@@ -558,6 +552,14 @@ export function DropdownMenu({
                 ) : null}
               </span>
               {item.shortcut ? <Keycaps shortcut={item.shortcut} /> : null}
+              {/* End slot: the selected / radio check, or a 16px spacer so labels and chips line up. */}
+              {showCheck && !hasSub ? (
+                item.selected ? (
+                  <LucideByName name="Check" size={16} className={styles.itemCheck} />
+                ) : (
+                  <span className={styles.itemCheck} aria-hidden />
+                )
+              ) : null}
               {hasSub ? <LucideByName name="ChevronRight" size={16} className={styles.itemChevron} /> : null}
             </>
           );

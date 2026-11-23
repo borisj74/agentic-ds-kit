@@ -198,6 +198,29 @@ describe("DropdownMenu radio groups, keycaps and typeahead", { skip }, () => {
     assert.equal(radios[1].getAttribute("aria-checked"), "false");
   });
 
+  test("a selected item keeps its start icon and puts the check in the end slot", async () => {
+    const panel = await openMenu([
+      {
+        selection: "radio",
+        items: [
+          { id: "a", label: "Agentix", icon: "LayoutGrid", selected: true },
+          { id: "n", label: "Northwind Labs", icon: "LayoutGrid", selected: false },
+        ],
+      },
+    ]);
+    const [on, off] = panel.querySelectorAll('[role="menuitemradio"]');
+    const kids = (el) => [...el.children];
+    const labelIndex = (el) => kids(el).findIndex((child) => child.textContent.includes(el === on ? "Agentix" : "Northwind"));
+    assert.equal(kids(on)[0].tagName.toLowerCase(), "svg", "start icon first");
+    assert.ok(labelIndex(on) > 0);
+    const onEnd = kids(on).at(-1);
+    const offEnd = kids(off).at(-1);
+    assert.equal(onEnd.tagName.toLowerCase(), "svg", "check after the label");
+    assert.ok(kids(on).indexOf(onEnd) > labelIndex(on));
+    assert.equal(offEnd.tagName.toLowerCase(), "span", "16px spacer when unselected");
+    assert.equal(offEnd.textContent, "");
+  });
+
   test("shortcut chips and aria-keyshortcuts on menu items", async () => {
     const panel = await openMenu([{ items: [{ id: "p", label: "Profile", shortcut: "⇧⌘P" }] }]);
     const item = panel.querySelector('[role="menuitem"]');

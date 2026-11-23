@@ -292,8 +292,8 @@
 
 .itemCheck {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: var(--space-4);
+  height: var(--space-4);
   color: var(--text-primary);
 }
 

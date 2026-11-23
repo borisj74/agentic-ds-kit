@@ -131,23 +131,38 @@ const DESTRUCTIVE_CODE = `<DropdownMenu
   ]}
 />`;
 
-// Account menu: a radio group for the workspace, a sequence-free chord per row, a full-width separator per group.
+// Account menu from the board: start icons stay, the radio check sits in the end slot, Theme opens a submenu.
 const WORKSPACE_GROUPS: DropdownMenuGroup[] = [
   {
     heading: "Boris Jovanovic",
     items: [
       { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
       { id: "settings", label: "Settings", icon: "Settings", shortcut: "⌘," },
+      {
+        id: "theme",
+        label: "Theme",
+        icon: "Eye",
+        submenu: [
+          {
+            selection: "radio",
+            items: [
+              { id: "theme-light", label: "Light", icon: "Sun", selected: true },
+              { id: "theme-dark", label: "Dark", icon: "Moon", selected: false },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     heading: "Workspaces",
     selection: "radio",
     items: [
-      { id: "agentix", label: "Agentix", selected: true },
-      { id: "northwind", label: "Northwind Labs", selected: false },
+      { id: "agentix", label: "Agentix", icon: "LayoutGrid", selected: true },
+      { id: "northwind", label: "Northwind Labs", icon: "LayoutGrid", selected: false },
     ],
   },
+  { items: [{ id: "create-workspace", label: "Create workspace", icon: "Plus" }] },
   { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
 ];
 
@@ -157,15 +172,31 @@ const WORKSPACE_CODE = `<DropdownMenu
   appearance="ghost" mode="neutral"
   align="end"
   groups={[
-    { heading: "Boris Jovanovic", items: [{ id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" }] },
+    {
+      heading: "Boris Jovanovic",
+      items: [
+        { id: "profile", label: "Profile", icon: "User", shortcut: "⇧⌘P" },
+        { id: "settings", label: "Settings", icon: "Settings", shortcut: "⌘," },
+        {
+          id: "theme",
+          label: "Theme",
+          icon: "Eye",
+          submenu: [{ selection: "radio", items: [
+            { id: "theme-light", label: "Light", icon: "Sun", selected: theme === "light" },
+            { id: "theme-dark", label: "Dark", icon: "Moon", selected: theme === "dark" },
+          ] }],
+        },
+      ],
+    },
     {
       heading: "Workspaces",
       selection: "radio",
       items: [
-        { id: "agentix", label: "Agentix", selected: workspace === "agentix" },
-        { id: "northwind", label: "Northwind Labs", selected: workspace === "northwind" },
+        { id: "agentix", label: "Agentix", icon: "LayoutGrid", selected: workspace === "agentix" },
+        { id: "northwind", label: "Northwind Labs", icon: "LayoutGrid", selected: workspace === "northwind" },
       ],
     },
+    { items: [{ id: "create-workspace", label: "Create workspace", icon: "Plus" }] },
     { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] },
   ]}
   onSelect={(id) => {}}
@@ -322,7 +353,10 @@ export function DropdownMenuDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   selection=&quot;radio&quot; makes the group menuitemradio rows; selected marks the
-                  one chosen. Checkbox rows stay per item. Align end for account and row menus.
+                  one chosen with a check in the end slot, and the start icon stays. Theme opens a
+                  submenu with its own radio group. Create workspace is an action, so it sits in its
+                  own group rather than the radio group. Checkbox rows stay per item. Align end for
+                  account and row menus.
                 </p>
               </div>
               <CodeBlock code={WORKSPACE_CODE} />

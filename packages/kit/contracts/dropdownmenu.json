@@ -106,7 +106,7 @@
       "required": true,
       "itemShape": {
         "heading": "string?",
-        "selection": "\"radio\"? items are menuitemradio with aria-checked; selected marks the one chosen",
+        "selection": "\"radio\"? items are menuitemradio with aria-checked; selected marks the one chosen with a check in the end slot (icon stays at the start)",
         "items": [
           {
             "id": "string",
@@ -121,7 +121,8 @@
             "selected": "boolean? Check when true unless checkbox is set.",
             "checkbox": "boolean? Compose kit Checkbox (visual, inert). Not DropdownMenuCheckboxItem."
           }
-        ]
+        ],
+        "selected": "boolean? Check in the end slot when true (a 16px spacer when false) unless checkbox is set. The item icon stays at the start."
       }
     },
     "open": {
