@@ -11,9 +11,10 @@ import styles from "./Toast.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
+import { mergeRefs } from "../shared/mergeRefs";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { ToastProps, ToastStatus } from "./Toast.types";
+export type { ToastProps, ToastSize, ToastStatus } from "./Toast.types";
 
 const ICONS: Record<ToastStatus, typeof Info> = {
   info: Info,
@@ -23,6 +24,30 @@ const ICONS: Record<ToastStatus, typeof Info> = {
 };
 
 const STACK_ID = "agentic-ds-kit-toasts";
+/** The stack shows the newest three; older ones wait hidden, paused and silent. */
+const MAX_VISIBLE = 3;
+
+/** True while this card sits behind the newest MAX_VISIBLE in the shared stack. */
+function useOverflowed() {
+  const [overflowed, setOverflowed] = useState(false);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const wrapper = cardRef.current?.parentElement;
+    const stack = wrapper?.parentElement;
+    if (!wrapper || !stack) return undefined;
+    const update = () => {
+      const index = Array.prototype.indexOf.call(stack.children, wrapper);
+      setOverflowed(index >= 0 && stack.children.length - index > MAX_VISIBLE);
+    };
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(stack, { childList: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return [overflowed, cardRef] as const;
+}
 
 function getStack(): HTMLElement {
   let el = document.getElementById(STACK_ID);
@@ -63,16 +88,24 @@ function ToastCard({
   actionLabel,
   onAction,
   duration: durationProp,
+  size = "md",
+  progress,
+  timestamp,
   className,
   ref,
   ...rest
 }: Omit<ToastProps, "open">) {
   const labels = useKitLabels();
-  const duration = durationProp === undefined ? 5000 : durationProp;
+  const hasProgress = progress !== undefined;
+  const duration = hasProgress ? null : durationProp === undefined ? (status === "danger" ? null : 5000) : durationProp;
+  const progressValue = hasProgress ? Math.min(Math.max(progress, 0), 100) : 0;
   const titleId = useId();
   const descriptionId = useId();
-  const [paused, setPaused] = useState(false);
+  const [hoverPaused, setPaused] = useState(false);
+  const [overflowed, cardRef] = useOverflowed();
+  const paused = hoverPaused || overflowed;
   const remaining = useRef(duration ?? 0);
+  const timedFor = useRef(duration);
   const onCloseRef = useRef(onClose);
   const Icon = ICONS[status];
   const isDanger = status === "danger";
@@ -82,6 +115,11 @@ function ToastCard({
   });
 
   useEffect(() => {
+    if (timedFor.current !== duration) {
+      // Duration changed (e.g. progress cleared): start a fresh countdown.
+      timedFor.current = duration;
+      remaining.current = duration ?? 0;
+    }
     if (duration == null || duration <= 0 || paused) return undefined;
 
     const started = Date.now();
@@ -108,10 +146,11 @@ function ToastCard({
     <div
       {...rest}
       {...nisthaAttr("toast", rest)}
-      ref={ref}
-      className={cx(styles.toast, styles[status], className)}
-      role={isDanger ? "alert" : "status"}
-      aria-live={isDanger ? undefined : "polite"}
+      ref={mergeRefs(cardRef, ref)}
+      className={cx(styles.toast, styles[status], styles[size], className)}
+      hidden={overflowed || undefined}
+      role={overflowed ? undefined : isDanger ? "alert" : "status"}
+      aria-live={overflowed || isDanger ? undefined : "polite"}
       aria-atomic="true"
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
@@ -120,7 +159,18 @@ function ToastCard({
       onFocus={() => setPaused(true)}
       onBlur={handleBlur}
     >
-      {duration != null && duration > 0 ? (
+      {hasProgress ? (
+        <span
+          className={styles.bar}
+          role="progressbar"
+          aria-labelledby={titleId}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(progressValue)}
+        >
+          <span className={styles.progressFill} style={{ width: `${progressValue}%` }} />
+        </span>
+      ) : duration != null && duration > 0 ? (
         <span className={styles.bar} aria-hidden="true">
           <span
             className={`${styles.fill} ${paused ? styles.paused : ""}`}
@@ -149,7 +199,10 @@ function ToastCard({
             </div>
           ) : null}
         </div>
-        <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={labels.dismiss} onClick={onClose} />
+        <div className={styles.end}>
+          {timestamp ? <span className={styles.timestamp}>{timestamp}</span> : null}
+          <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={labels.dismiss} onClick={onClose} />
+        </div>
       </div>
     </div>
   );
