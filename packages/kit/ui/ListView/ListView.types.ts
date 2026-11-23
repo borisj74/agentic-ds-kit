@@ -2,7 +2,12 @@ import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 
-export type ListViewSize = "sm" | "md";
+/** xs: compact 40px rows for dense cards (e.g. a dashboard "Needs attention" list). */
+export type ListViewSize = "xs" | "sm" | "md";
+/** Row priority. Drives the leading bar marker and starts the secondary line with its word. */
+export type ListViewPriority = "high" | "medium" | "low";
+/** none keeps the items order; priority orders rows high, medium, low, then unset, keeping input order within each. */
+export type ListViewSort = "none" | "priority";
 export type ListViewSelection = "none" | "single" | "multiple";
 export type ListViewInteraction = "none" | "drill";
 /** Which lines clip to one line with an ellipsis instead of wrapping. */
@@ -29,6 +34,11 @@ export interface ListViewItem {
   icon?: KitIcon;
   /** Leading status dot when there is no avatar or icon. */
   dot?: ListViewDotTone;
+  /**
+   * high | medium | low. Shows a three-bar marker in the leading slot (when there is no avatar or icon)
+   * and starts the secondary line with the word (High, Medium, Low), so the marker is never the only signal.
+   */
+  priority?: ListViewPriority;
   /** Short muted text at the row's end, like a relative time ("2h ago"). Read after the secondary line. */
   meta?: string;
   badge?: string;
@@ -36,6 +46,11 @@ export interface ListViewItem {
   disabled?: boolean;
   group?: string;
   actions?: ListViewAction[];
+  /**
+   * The row's one verb, shown as an outline kit Button in a fixed-width slot so verbs line up across rows.
+   * When set, every entry in actions goes in the kit DropdownMenu after it.
+   */
+  primaryAction?: ListViewAction;
 }
 
 export interface ListViewGroup {
@@ -78,5 +93,7 @@ export interface ListViewProps extends Omit<ComponentPropsWithoutRef<"div">, Lis
    * wrapping mid-word. The full text stays in the row's accessible name and the hover title. Default none.
    */
   truncate?: ListViewTruncate;
+  /** Row order. priority sorts by item.priority within each group. Default none. */
+  sort?: ListViewSort;
   ref?: Ref<HTMLDivElement>;
 }

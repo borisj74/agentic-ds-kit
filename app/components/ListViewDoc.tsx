@@ -75,6 +75,14 @@ const OVERFLOW: ListViewItem[] = [
   },
 ];
 
+const NEEDS_ATTENTION: ListViewItem[] = [
+  { id: "fernway", primary: "Fernway Tours", secondary: "$310 · Low funds", priority: "medium", primaryAction: { id: "retry", label: "Retry" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "marlow", primary: "Marlow Dental", secondary: "$1,450 · Expires Nov 30", priority: "high", primaryAction: { id: "link", label: "Send link" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "hollis", primary: "Hollis & Grey", secondary: "$720 · Bank verification", priority: "high", primaryAction: { id: "email", label: "Email" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "quarry", primary: "Quarry Coffee", secondary: "$260 · Expires Dec 4", priority: "medium", primaryAction: { id: "link", label: "Send link" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "brightline", primary: "Brightline Studio", secondary: "$640 · Declined twice", priority: "high", primaryAction: { id: "retry", label: "Retry" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+];
+
 const CODE = `<ListView
   label="People"
   items={[
@@ -257,8 +265,50 @@ export function ListViewDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>sm and md only. This kit has no Density.</p>
+                <p className={styles.usageBody}>xs, sm and md only. This kit has no Density.</p>
               </div>
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Size xs · priority · one verb</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ListView
+                    label="Needs attention"
+                    size="xs"
+                    sort="priority"
+                    truncate="both"
+                    items={NEEDS_ATTENTION}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  xs rows are 40px tall, for dense cards like a dashboard Needs attention list. priority puts a
+                  bar marker in the leading slot and starts the secondary line with High, Medium or Low, so the
+                  marker is never the only signal. sort=&quot;priority&quot; orders high first and keeps your order
+                  within each level. primaryAction is the row&apos;s one verb in a fixed-width slot so verbs line
+                  up; the other actions go in the menu. Keep the card&apos;s primary button off the rows.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ListView
+  label="Needs attention"
+  size="xs"
+  sort="priority"
+  truncate="both"
+  items={[
+    {
+      id: "marlow",
+      primary: "Marlow Dental",
+      secondary: "$1,450 · Expires Nov 30",
+      priority: "high",
+      primaryAction: { id: "link", label: "Send link" },
+      actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }],
+    },
+  ]}
+/>`}
+              />
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Empty</h2>

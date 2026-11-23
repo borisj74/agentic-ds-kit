@@ -1752,13 +1752,14 @@
         "Do not use more than two inline row actions — overflow is kit DropdownMenu",
         "Do not place appearance=solid mode=primary Button on a row",
         "Do not use raw hex or primitive --color-* ramps",
-        "Do not use dot as the only sign of a status; say it in primary or secondary"
+        "Do not use dot as the only sign of a status; say it in primary or secondary",
+        "Do not write the priority word in secondary; the kit adds High, Medium or Low"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu."
         },
         "label": {
           "type": "string",
@@ -1768,10 +1769,12 @@
         "size": {
           "type": "enum",
           "values": [
+            "xs",
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "xs is a compact 40px row for dense cards, like a dashboard Needs attention list."
         },
         "selection": {
           "type": "enum",
@@ -1836,6 +1839,15 @@
           ],
           "default": "none",
           "note": "Clip lines to one line with an ellipsis instead of wrapping (e.g. long emails in a narrow rail wrap mid-word otherwise). secondary clips the secondary line; both also the primary. The full text stays in the row's accessible name and the hover title."
+        },
+        "sort": {
+          "type": "enum",
+          "values": [
+            "none",
+            "priority"
+          ],
+          "default": "none",
+          "note": "priority orders rows high, medium, low, then rows without priority, within each group. Input order is kept within a level."
         },
         "empty": {
           "type": "object",

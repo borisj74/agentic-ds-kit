@@ -10,4 +10,6 @@ export type {
   ListViewTruncate,
   ListViewSize,
   ListViewDotTone,
+  ListViewPriority,
+  ListViewSort,
 } from "./ListView.types";
