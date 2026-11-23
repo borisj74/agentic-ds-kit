@@ -74,9 +74,13 @@ describe("FilterButton", () => {
 
   test("heights sit on the shared scale: sm 32, md 36, lg 40", () => {
     const source = css("FilterButton");
-    assert.match(source, /\.sm \{\s*--h: var\(--space-8\);/);
-    assert.match(source, /\.md \{\s*--h: calc\(var\(--space-8\) \+ var\(--space-1\)\);/);
-    assert.match(source, /\.lg \{\s*--h: var\(--space-10\);/);
+    assert.match(source, /\.sm \{\s*--h: var\(--control-height-sm\);/);
+    assert.match(source, /\.md \{\s*--h: var\(--control-height-md\);/);
+    assert.match(source, /\.lg \{\s*--h: var\(--control-height-lg\);/);
+    const tokens = readFileSync(new URL("../lib/tokens.css", import.meta.url), "utf8");
+    assert.match(tokens, /--control-height-sm: var\(--space-8\);/);
+    assert.match(tokens, /--control-height-md: 36px;/);
+    assert.match(tokens, /--control-height-lg: var\(--space-10\);/);
   });
 
   test("off uses the page canvas fill and disabled uses surface-disabled, not opacity", () => {

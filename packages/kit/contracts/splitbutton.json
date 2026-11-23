@@ -1,0 +1,127 @@
+{
+  "id": "splitbutton",
+  "status": "stable",
+  "level": "molecule",
+  "intent": "A main action joined to a chevron that opens a menu of related actions.",
+  "useWhen": [
+    "One action is the usual choice and a few others are close to it, like Save invoice with Save and send, or Save as draft",
+    "A card footer or page header where the other actions would crowd the row as separate Buttons"
+  ],
+  "doNotUseWhen": [
+    "Filters above a table or list — use FilterButton",
+    "A menu with no main action — use DropdownMenu",
+    "Two or three equal actions — use separate Buttons or a ButtonGroup",
+    "Choosing a value to save — use Select"
+  ],
+  "contains": ["button", "dropdownmenu"],
+  "props": {
+    "children": {
+      "type": "string",
+      "required": true,
+      "note": "Label of the main action, like Save invoice."
+    },
+    "onClick": {
+      "type": "function",
+      "required": false,
+      "note": "Runs the main action."
+    },
+    "groups": {
+      "type": "DropdownMenuGroup[]",
+      "required": true,
+      "note": "The other actions, as kit DropdownMenu groups: [{ heading?, items: [{ id, label, icon?, danger?, disabled? }] }]."
+    },
+    "onSelect": {
+      "type": "function",
+      "required": false,
+      "note": "(id: string) => void. A menu action was picked."
+    },
+    "menuLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Accessible name of the chevron button. Default: the label plus options, like Save invoice options."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["lg", "md", "sm"],
+      "default": "md",
+      "note": "Both parts use control-height: sm 32, md 36, lg 40. The chevron part is a square."
+    },
+    "appearance": {
+      "type": "enum",
+      "values": ["solid", "outline", "soft", "ghost"],
+      "default": "solid"
+    },
+    "mode": {
+      "type": "enum",
+      "values": ["primary", "neutral", "danger"],
+      "default": "primary"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Disables both parts."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "The main action is running. Same as Button loading. The menu still opens."
+    },
+    "iconStart": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Leading icon on the main action."
+    },
+    "type": {
+      "type": "enum",
+      "values": ["button", "submit", "reset"],
+      "default": "button",
+      "note": "Type of the main action button."
+    },
+    "align": {
+      "type": "enum",
+      "values": ["start", "end"],
+      "default": "end",
+      "note": "Which edge of the chevron the menu lines up with."
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled menu state. Leave it out and the menu keeps its own."
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void."
+    }
+  },
+  "passthrough": {
+    "root": "span",
+    "ref": "main action button",
+    "className": "root",
+    "rest": "main action button"
+  },
+  "tokens": [
+    "controlHeight.sm",
+    "controlHeight.md",
+    "controlHeight.lg",
+    "radius.controlMd",
+    "border.control"
+  ],
+  "a11y": {
+    "element": "span",
+    "requirements": [
+      "Two native buttons: the main action, named by its label, and the chevron, named by menuLabel",
+      "The chevron has aria-haspopup=menu and aria-expanded",
+      "The menu follows DropdownMenu: arrow keys move, Enter picks, Escape closes and returns focus to the chevron",
+      "Each button has its own focus ring"
+    ]
+  },
+  "doNot": [
+    "Do not build a local split button from two Buttons and a popover",
+    "Do not use SplitButton for filters — FilterButton is the split control for filters",
+    "Do not put the main action in the menu as well",
+    "Do not use more than one appearance=solid mode=primary SplitButton or Button in a view",
+    "Do not use raw hex"
+  ],
+  "snippet": "<SplitButton onClick={() => {}} onSelect={(id) => {}} groups={[{ items: [{ id: \"send\", label: \"Save and send\" }, { id: \"draft\", label: \"Save as draft\" }] }]}>Save invoice</SplitButton>"
+}

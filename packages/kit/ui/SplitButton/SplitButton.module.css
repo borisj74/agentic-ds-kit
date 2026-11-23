@@ -1,0 +1,26 @@
+.split {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/* The two kit Buttons share one edge: square inner corners, and the chevron sits over the main
+   button's end border so the pair reads as one control. */
+.split > .main {
+  position: relative;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.split > .menu > button {
+  position: relative;
+  margin-inline-start: calc(var(--border-control) * -1);
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.split > .main:hover,
+.split > .main:focus-visible,
+.split > .menu > button:hover,
+.split > .menu > button:focus-visible {
+  z-index: 1;
+}

@@ -35,6 +35,8 @@ export * from "../ui/BarList";
 export * from "../ui/Breadcrumb";
 export * from "../ui/Button";
 export * from "../ui/ButtonGroup";
+export * from "../ui/IconButton";
+export * from "../ui/SplitButton";
 export * from "../ui/Calendar";
 export * from "../ui/Card";
 export * from "../ui/Carousel";

@@ -1,16 +1,21 @@
 .button {
+  --button-pad: var(--space-4);
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  min-height: var(--control-height-md);
+  padding: 0 var(--button-pad);
   border-radius: var(--radius-control-md);
   font-family: var(--font-sans);
   font-weight: var(--type-weight-label);
   font-size: var(--type-size-ui-sm);
   line-height: var(--type-line-ui-sm);
   cursor: pointer;
-  border: var(--border-control) solid transparent;
-  background-color: transparent;
+  /* Every appearance sets its own fill and edge below; the default is the control surface. */
+  border: var(--border-control) solid var(--bg-control);
+  background-color: var(--bg-control);
   color: var(--text-fg);
   box-shadow: none;
   /* A link wearing the Button look (Card header action with href) is not underlined. */
@@ -27,25 +32,24 @@
   outline-offset: var(--space-inset-2xs);
 }
 
-.button:disabled {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
-}
-
+/* Heights come from --control-height-*, shared with Input, Select and FilterButton. */
 .lg {
-  padding: var(--space-3) var(--space-5);
+  --button-pad: var(--space-5);
+  min-height: var(--control-height-lg);
   font-size: var(--type-size-ui-md);
   line-height: var(--type-line-ui-md);
 }
 
 .md {
-  padding: var(--space-2) var(--space-4);
+  --button-pad: var(--space-4);
+  min-height: var(--control-height-md);
   font-size: var(--type-size-ui-sm);
   line-height: var(--type-line-ui-sm);
 }
 
 .sm {
-  padding: var(--space-1) var(--space-3);
+  --button-pad: var(--space-3);
+  min-height: var(--control-height-sm);
   font-size: var(--type-size-ui-xs);
   line-height: var(--type-line-ui-xs);
 }
@@ -53,16 +57,19 @@
 /* Solid × mode */
 .solid.primary {
   background-color: var(--primary);
+  border-color: var(--primary);
   color: var(--action-on-primary);
   box-shadow: var(--shadow-xs);
 }
 
 .solid.primary:hover:not(:disabled) {
   background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .solid.primary:active:not(:disabled) {
   background-color: var(--primary-active);
+  border-color: var(--primary-active);
 }
 
 .solid.neutral {
@@ -78,16 +85,19 @@
 
 .solid.danger {
   background-color: var(--danger-base);
+  border-color: var(--danger-base);
   color: var(--text-fg-inverse);
   box-shadow: var(--shadow-xs);
 }
 
 .solid.danger:hover:not(:disabled) {
   background-color: var(--action-danger-hover);
+  border-color: var(--action-danger-hover);
 }
 
 .solid.danger:active:not(:disabled) {
   background-color: var(--action-danger-pressed);
+  border-color: var(--action-danger-pressed);
 }
 
 /* Outline × mode */
@@ -127,32 +137,45 @@
 /* Soft × mode */
 .soft.primary {
   background-color: var(--primary-subtle);
+  border-color: var(--primary-subtle);
   color: var(--primary);
 }
 
 .soft.primary:hover:not(:disabled) {
   background-color: var(--primary-subtle-strong);
+  border-color: var(--primary-subtle-strong);
 }
 
 .soft.neutral {
   background-color: var(--bg-subtle);
+  border-color: var(--bg-subtle);
   color: var(--text-fg);
 }
 
 .soft.neutral:hover:not(:disabled) {
   background-color: var(--bg-tray);
+  border-color: var(--bg-tray);
 }
 
 .soft.danger {
   background-color: var(--danger-subtle);
+  border-color: var(--danger-subtle);
   color: var(--danger-fg);
 }
 
 .soft.danger:hover:not(:disabled) {
   background-color: var(--danger-line);
+  border-color: var(--danger-line);
 }
 
-/* Ghost × mode */
+/* Ghost × mode. No fill and no edge at rest; the padding takes up the missing border so a ghost
+   button is as wide as the same label in any other appearance. */
+.ghost {
+  padding-inline: calc(var(--button-pad) + var(--border-control));
+  border-width: 0;
+  background: none;
+}
+
 .ghost.primary {
   color: var(--primary);
 }
@@ -205,16 +228,41 @@
   white-space: nowrap;
 }
 
+/* Icon-only is a square of the control height. */
+.iconOnly {
+  padding: 0;
+}
+
 .iconOnly.lg {
-  padding: var(--space-3);
+  width: var(--control-height-lg);
 }
 
 .iconOnly.md {
-  padding: var(--space-2);
+  width: var(--control-height-md);
 }
 
 .iconOnly.sm {
-  padding: var(--space-2);
+  width: var(--control-height-sm);
+}
+
+.loading {
+  cursor: progress;
+}
+
+.spinner {
+  animation: button-spin calc(var(--motion-duration-600) * 2) var(--motion-ease-linear) infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
 }
 
 .pill {
@@ -223,4 +271,18 @@
 
 .block {
   width: 100%;
+}
+
+/* Disabled: its own text, edge and fill tokens, not a faded copy of the live button. Last, so it
+   wins over every appearance × mode above. */
+.button:disabled {
+  color: var(--text-fg-disabled);
+  border-color: var(--border-disabled);
+  background-color: var(--surface-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.ghost:disabled {
+  background: none;
 }

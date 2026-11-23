@@ -322,6 +322,11 @@
   --radius-control-md: var(--radius-md);
   --radius-control-lg: var(--radius-lg);
 
+  /* Control height - Button, IconButton, Input, Select, FilterButton share one scale */
+  --control-height-sm: var(--space-8);
+  --control-height-md: 36px;
+  --control-height-lg: var(--space-10);
+
   /* Surface - cards, panels, dialogs */
   --radius-surface-sm: var(--radius-lg);
   --radius-surface-md: var(--radius-xl);

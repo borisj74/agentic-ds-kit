@@ -26,6 +26,8 @@ export const COMPONENT_ITEMS = [
   "breadcrumb",
   "button",
   "buttongroup",
+  "iconbutton",
+  "splitbutton",
   "calendar",
   "card",
   "carousel",
@@ -184,6 +186,8 @@ export function componentLabel(id: string): string {
   if (id === "pageheader") return "PageHeader";
   if (id === "radiogroup") return "RadioGroup";
   if (id === "buttongroup") return "ButtonGroup";
+  if (id === "iconbutton") return "IconButton";
+  if (id === "splitbutton") return "SplitButton";
   if (id === "alertdialog") return "AlertDialog";
   if (id === "avatar") return "Avatar";
   if (id === "avatargroup") return "AvatarGroup";
@@ -258,6 +262,8 @@ export const COMPONENT_GROUPS = [
     ids: [
       "button",
       "buttongroup",
+      "iconbutton",
+      "splitbutton",
       "checkbox",
       "colorpicker",
       "combobox",

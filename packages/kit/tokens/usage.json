@@ -80,6 +80,11 @@
       "useWhen": "Padding, gaps, and section rhythm",
       "doNot": "Do not use magic pixel spacing in components"
     },
+    "--control-height-": {
+      "note": "Height of a one-line control: sm 32px, md 36px, lg 40px.",
+      "useWhen": "Button, IconButton, Input, Select and FilterButton heights, so controls in one row line up. An icon-only control is a square of the same step",
+      "doNot": "Do not set a control height from padding or a raw length"
+    },
     "--radius-": {
       "note": "Fixed radius scale on 2 and 4px steps (2, 4, 6, 8, 12, 16, 24).",
       "useWhen": "control/surface/media/pill roles",

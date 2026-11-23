@@ -5,6 +5,22 @@
   width: 100%;
 }
 
+/* Heights come from --control-height-*, shared with Button, Select and FilterButton. */
+.shell.sm {
+  height: var(--control-height-sm);
+  padding-block: 0;
+}
+
+.shell.md {
+  height: var(--control-height-md);
+  padding-block: 0;
+}
+
+.shell.lg {
+  height: var(--control-height-lg);
+  padding-block: 0;
+}
+
 .shell:hover:not([data-disabled]),
 .shell[data-demo="hover"]:not([data-disabled]) {
   border-color: var(--border-strong);
