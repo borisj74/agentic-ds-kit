@@ -51,3 +51,17 @@ export const ACTIVITY_PAGES: ActivityEvent[][] = [
     { id: "c04", type: "run", actor: scout, verb: "started", object: "Competitor price scan", at: ago(8 * DAY), status: { label: "Scheduled", tone: "neutral" } },
   ],
 ];
+
+const northwind: ActivityActor = { id: "northwind", name: "Northwind Ltd" };
+const billingAgent: ActivityActor = { id: "billing-agent", name: "Billing agent", kind: "agent", initials: "BA" };
+
+/** One record's history for variant="history": invoice INV-1842 for Northwind, newest first. */
+export const INVOICE_STATUS_CHIPS = ["Created", "Sent", "Viewed", "Paid", "Refunded"];
+
+export const INVOICE_HISTORY: ActivityEvent[] = [
+  { id: "i5", type: "billing", actor: maya, verb: "refunded", object: "INV-1842", at: Date.UTC(2026, 10, 12, 14, 12), detail: "€420.00 credit on the overage line", status: { label: "Refunded" } },
+  { id: "i4", type: "billing", actor: northwind, verb: "viewed", object: "INV-1842", at: Date.UTC(2026, 10, 12, 9, 4), status: { label: "Viewed" } },
+  { id: "i3", type: "billing", actor: maya, verb: "marked", object: "INV-1842 paid", at: Date.UTC(2026, 10, 11, 16, 40), detail: "€2,400.00, Pro plan", status: { label: "Paid", tone: "success" } },
+  { id: "i2", type: "billing", actor: billingAgent, verb: "sent", object: "INV-1842", at: Date.UTC(2026, 10, 11, 11, 18), detail: "to finance@northwind.example", status: { label: "Sent" } },
+  { id: "i1", type: "billing", actor: maya, verb: "created", object: "INV-1842", at: Date.UTC(2026, 10, 9, 10, 2), detail: "Pro plan, Nov 2026", status: { label: "Created" } },
+];

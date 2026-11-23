@@ -163,6 +163,39 @@ describe("ActivityFeed render", () => {
   });
 });
 
+describe("ActivityFeed history variant", () => {
+  test("status chip filters on status.label; summary drops 'across the workspace'", () => {
+    assert.deepEqual(logic.visibleEvents(events, logic.NO_FILTERS, "Paid").map((e) => e.id), ["e5"]);
+    assert.equal(logic.summaryLine(5, 5, false, true), "5 events");
+    assert.equal(logic.summaryLine(5, 1, true, true), "1 of 5 events match the filters");
+  });
+
+  test("rail rows: no Avatars or actions, time and status word, one sentence each", () => {
+    const html = render({ variant: "history" });
+    assert.ok(!html.includes('aria-label="Open"') && !html.includes(">Reply<"));
+    assert.ok(!html.includes("Filter activity"));
+    assert.ok(html.includes("5 events") && !html.includes("across the workspace"));
+    assert.ok(html.includes(">Paid<") && html.includes("Relay, an agent, finished a run on Weekly churn report: Failed."));
+    assert.ok(html.includes(">13:00<"));
+  });
+
+  test("status chips are a SegmentedControl named Filter activity; a chip narrows the feed", () => {
+    const html = render({ variant: "history", statusChips: ["Failed", "Paid"], statusChip: "Paid" });
+    assert.match(html, /role="radiogroup"[^>]*aria-label="Filter activity"/);
+    assert.ok(html.includes(">All<"));
+    assert.ok(html.includes("1 of 5 events match the filters"));
+    assert.ok(!html.includes("Weekly churn report"));
+  });
+
+  test("error: Couldn't load activity with Retry; with events it replaces Load more", () => {
+    const empty = render({ events: [], error: "Check the connection, then try again.", onRetry() {} });
+    assert.ok(empty.includes("Couldn&#x27;t load activity") || empty.includes("Couldn't load activity"));
+    assert.ok(empty.includes(">Retry<") && !empty.includes("No activity yet"));
+    const more = render({ error: "Check the connection, then try again.", hasMore: true, onLoadMore() {} });
+    assert.ok(!more.includes("Load more") && more.includes("load activity"));
+  });
+});
+
 describe("ActivityFeed in the catalog (MCP)", () => {
   test("list_components and get_component return it as a block", async () => {
     const { getComponent, listComponents } = await import("../bin/catalog.mjs");

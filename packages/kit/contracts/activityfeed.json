@@ -5,11 +5,12 @@
   "summary": "See what people and agents did across the workspace, by day, filtered by type or person.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
+  "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word.",
   "useWhen": [
     "a workspace or project activity page",
     "catch up on what people and agents did since yesterday",
-    "jump from an event to the thing it happened to, or reply to a comment"
+    "jump from an event to the thing it happened to, or reply to a comment",
+    "one record's history, like an invoice created, sent, viewed and paid — variant=\"history\""
   ],
   "doNotUseWhen": [
     "the steps of one agent run — AgentTrail or RunDetail",
@@ -26,6 +27,7 @@
     "empty",
     "filterbutton",
     "popover",
+    "segmentedcontrol",
     "skeleton"
   ],
   "props": {
@@ -96,6 +98,40 @@
       "type": "string",
       "required": false,
       "note": "Line under the title. Default: how many events show, and how many match the filters."
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "feed",
+        "history"
+      ],
+      "default": "feed",
+      "note": "feed: Avatars, Type and Person filters, Open and Reply. history: one record's events on the rail Timeline and AgentTrail share (16px rail, 12px dot, 1px line), a time column when wide and the status word at the row end; no Avatars, filters or actions."
+    },
+    "statusChips": {
+      "type": "array",
+      "required": false,
+      "note": "string[] of status words, like [\"Created\", \"Sent\", \"Paid\"]. Shows All plus one chip each as a kit SegmentedControl (sm); a chip matches event.status.label."
+    },
+    "statusChip": {
+      "type": "string",
+      "required": false,
+      "note": "Controlled chip: a status word, or null for All. Leave it out for uncontrolled (starts on All)."
+    },
+    "onStatusChipChange": {
+      "type": "function",
+      "required": false,
+      "note": "(chip: string | null) => void"
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "The events could not load: the reason, shown under \"Couldn't load activity\". With no events it replaces the feed; with events it replaces Load more."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Shows an outline Retry button in the error state."
     }
   },
   "passthrough": {
@@ -108,7 +144,8 @@
     "head: h2 and count line, with the filter group (Type, Person, Clear filters) at the end; it wraps under the title when narrow",
     "one section per day, labelled by its h3 (Today, Yesterday, Mon 9 Nov), over a card-surface ordered list of events",
     "an event row is Avatar, the copy (verb line, optional detail, time with Badges) and its actions at the end",
-    "the block is its own inline-size container; below --grid-breakpoint-sm (40rem) of block width the actions move under the copy"
+    "the block is its own inline-size container; below --grid-breakpoint-sm (40rem) of block width the actions move under the copy",
+    "history: the block is one card (surface-card, border-faint, radius-xl). Each event is a time column (space-12, mono), the rail and the copy with the status word at the end; the rail line runs only to the next event of the same day. Below --grid-breakpoint-sm the time column goes and time and status join a meta line under the copy, and Load more fills the width"
   ],
   "tokens": [
     "text.fg",
@@ -125,7 +162,18 @@
     "type.weight.label",
     "layout.gutter.md",
     "layout.gutter.sm",
-    "grid.breakpoint.sm"
+    "grid.breakpoint.sm",
+    "border.faint",
+    "radius.xl",
+    "line.strong",
+    "success.fg",
+    "danger.fg",
+    "type.size.uiLg",
+    "type.family.mono",
+    "space.3",
+    "space.4",
+    "space.5",
+    "space.12"
   ],
   "a11y": {
     "element": "section",
@@ -138,7 +186,10 @@
       "Load more is a real button described by the count line; while loading it stays focusable and says Loading…",
       "what Load more brings in is announced in a polite status region (\"5 more events loaded, 2 match the filters.\"); filter changes are announced there too",
       "when the last page arrives and Load more goes away, focus moves to the first new event that shows",
-      "no motion of its own; Skeleton's shimmer stops under prefers-reduced-motion"
+      "no motion of its own; Skeleton's shimmer stops under prefers-reduced-motion",
+      "history keeps the one-sentence list items; time, rail and status columns are hidden from screen readers, and the status word is part of the sentence, so colour never stands alone",
+      "status chips are a SegmentedControl radiogroup named Filter activity; a chip change is announced in the status region",
+      "the error state is a kit Empty with a real Retry button"
     ]
   },
   "doNot": [
@@ -146,7 +197,8 @@
     "Do not put a solid primary in the feed; Open and Reply are ghost, Load more is outline",
     "Do not put a sentence in verb; verb is the phrase between the actor and the object",
     "Do not use Badge for people; Avatar is the person or agent, the Agent Badge only says it is an agent",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not show status by colour alone; the status word is always there, tone only tints it"
   ],
-  "snippet": "<ActivityFeed events={events} onOpen={openEvent} onReply={replyTo} onLoadMore={loadNextPage} hasMore={hasMore} loading={loading} />"
+  "snippet": "<ActivityFeed events={events} onOpen={openEvent} onReply={replyTo} onLoadMore={loadNextPage} hasMore={hasMore} loading={loading} />\n<ActivityFeed variant=\"history\" title=\"INV-1842 history\" description=\"5 events · Northwind Ltd · €2,400.00\" events={events} statusChips={[\"Created\", \"Sent\", \"Viewed\", \"Paid\", \"Refunded\"]} onLoadMore={loadNextPage} hasMore={hasMore} />"
 }

@@ -26,8 +26,9 @@
   height: var(--space-3);
   border: var(--border-width-thin) solid var(--border-strong);
   border-radius: var(--radius-full);
-  background: transparent;
-  /* Centre the dot on the phase line (line height minus dot, halved). */
+  background: var(--bg-surface);
+  /* Hollow dots fill with the surface so the line never shows through. Centre the dot on the
+     phase line (line height minus dot, halved). */
   margin-block-start: calc((var(--type-line-body-xs) - var(--space-3)) / 2);
 }
 
@@ -52,12 +53,12 @@
 
 .next .dot {
   border-color: var(--border-strong);
-  background: transparent;
+  background: var(--bg-surface);
 }
 
 .later .dot {
   border-color: var(--border-faint);
-  background: transparent;
+  background: var(--bg-surface);
 }
 
 .later .line {

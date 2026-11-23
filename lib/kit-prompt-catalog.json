@@ -7482,7 +7482,7 @@
         "items": {
           "type": "array",
           "required": false,
-          "note": "{ id?, title?, body?, phase?, status?: now|next|later }[]"
+          "note": "{ id?, title?, body?, phase?, status?: now|next|later }[]. The phase line always starts with the status word (Now, Next, Later), then the phase if it says something else."
         },
         "label": {
           "type": "string",
@@ -12599,11 +12599,12 @@
     {
       "id": "activityfeed",
       "group": "component",
-      "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
+      "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word.",
       "useWhen": [
         "a workspace or project activity page",
         "catch up on what people and agents did since yesterday",
-        "jump from an event to the thing it happened to, or reply to a comment"
+        "jump from an event to the thing it happened to, or reply to a comment",
+        "one record's history, like an invoice created, sent, viewed and paid — variant=\"history\""
       ],
       "doNotUseWhen": [
         "the steps of one agent run — AgentTrail or RunDetail",
@@ -12617,7 +12618,8 @@
         "Do not put a solid primary in the feed; Open and Reply are ghost, Load more is outline",
         "Do not put a sentence in verb; verb is the phrase between the actor and the object",
         "Do not use Badge for people; Avatar is the person or agent, the Agent Badge only says it is an agent",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not show status by colour alone; the status word is always there, tone only tints it"
       ],
       "props": {
         "events": {
@@ -12687,6 +12689,40 @@
           "type": "string",
           "required": false,
           "note": "Line under the title. Default: how many events show, and how many match the filters."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "feed",
+            "history"
+          ],
+          "default": "feed",
+          "note": "feed: Avatars, Type and Person filters, Open and Reply. history: one record's events on the rail Timeline and AgentTrail share (16px rail, 12px dot, 1px line), a time column when wide and the status word at the row end; no Avatars, filters or actions."
+        },
+        "statusChips": {
+          "type": "array",
+          "required": false,
+          "note": "string[] of status words, like [\"Created\", \"Sent\", \"Paid\"]. Shows All plus one chip each as a kit SegmentedControl (sm); a chip matches event.status.label."
+        },
+        "statusChip": {
+          "type": "string",
+          "required": false,
+          "note": "Controlled chip: a status word, or null for All. Leave it out for uncontrolled (starts on All)."
+        },
+        "onStatusChipChange": {
+          "type": "function",
+          "required": false,
+          "note": "(chip: string | null) => void"
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "The events could not load: the reason, shown under \"Couldn't load activity\". With no events it replaces the feed; with events it replaces Load more."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Shows an outline Retry button in the error state."
         }
       }
     },

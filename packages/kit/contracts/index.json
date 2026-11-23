@@ -1212,7 +1212,7 @@
   {
     "id": "activityfeed",
     "kind": "block",
-    "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end.",
+    "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word.",
     "group": "component",
     "path": "contracts/activityfeed.json",
     "status": "stable",

@@ -36,17 +36,23 @@ export function isFiltered(filters: ActivityFeedFilters): boolean {
   return filters.types.length > 0 || filters.people.length > 0;
 }
 
-export function matches(event: ActivityEvent, filters: ActivityFeedFilters): boolean {
+/** chip is a status word (matched against event.status.label) or null for All. */
+export function matches(event: ActivityEvent, filters: ActivityFeedFilters, chip: string | null = null): boolean {
   if (filters.types.length && !filters.types.includes(event.type)) return false;
   if (filters.people.length && !filters.people.includes(event.actor.id)) return false;
+  if (chip !== null && event.status?.label !== chip) return false;
   return true;
 }
 
 /** Newest first, filtered. Ties keep their given order. */
-export function visibleEvents(events: ActivityEvent[], filters: ActivityFeedFilters): ActivityEvent[] {
+export function visibleEvents(
+  events: ActivityEvent[],
+  filters: ActivityFeedFilters,
+  chip: string | null = null,
+): ActivityEvent[] {
   return events
     .map((event, index) => ({ event, index }))
-    .filter(({ event }) => matches(event, filters))
+    .filter(({ event }) => matches(event, filters, chip))
     .sort((a, b) => timeOf(b.event) - timeOf(a.event) || a.index - b.index)
     .map(({ event }) => event);
 }
@@ -135,10 +141,10 @@ export function toggle<T>(list: T[], item: T): T[] {
   return list.includes(item) ? list.filter((entry) => entry !== item) : [...list, item];
 }
 
-/** The line under the title. */
-export function summaryLine(loaded: number, shown: number, filtered: boolean): string {
+/** The line under the title. history drops "across the workspace": it is one record's events. */
+export function summaryLine(loaded: number, shown: number, filtered: boolean, history = false): string {
   if (!loaded) return "No activity yet";
-  if (!filtered) return `${plural(loaded, "event")} across the workspace`;
+  if (!filtered) return history ? plural(loaded, "event") : `${plural(loaded, "event")} across the workspace`;
   return `${shown} of ${plural(loaded, "event")} match the filters`;
 }
 
