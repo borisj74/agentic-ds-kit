@@ -9580,6 +9580,11 @@
           "default": false,
           "note": "The selected stop's icon spins; the panel shows Saving…"
         },
+        "savedAt": {
+          "type": "string",
+          "required": false,
+          "note": "When the current stop was saved, e.g. \"14:01\". The panel note reads \"Saved 14:01\" with a check."
+        },
         "size": {
           "type": "enum",
           "values": [
@@ -9608,6 +9613,7 @@
         "Do not invent a local SteerBox, AgentControls, or RunControls",
         "Stop is never the solid primary Button",
         "Do not stop without AlertDialog when work can't be undone",
+        "Do not stop without stopConfirm when the agent can send messages",
         "Do not use raw hex"
       ],
       "props": {
@@ -9677,11 +9683,17 @@
         },
         "suggestions": {
           "type": "string[]",
-          "required": false
+          "required": false,
+          "note": "Quick steers: outline sm Buttons that fill the composer; they stay after a steer is applied."
         },
         "onPause": {
           "type": "function",
           "required": false
+        },
+        "pauseNote": {
+          "type": "string",
+          "required": false,
+          "note": "Footer hint for what Pause does, e.g. \"Pause finishes the draft, sends nothing\". Describes the Pause button."
         },
         "onResume": {
           "type": "function",
@@ -9732,7 +9744,7 @@
         "models": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[]"
+          "note": "{ id, name, vendor?, description?, contextWindow?, costTier?, tagline?, disabled?, disabledReason?, recommended? }[] costTier is a word: \"Low\", \"Standard\" or \"High\" (\"$\" marks are optional and show as those words)."
         },
         "value": {
           "type": "string",
@@ -9811,7 +9823,7 @@
         "segments": {
           "type": "array",
           "required": false,
-          "note": "{ id, label, tokens }[] in display order; up to five categorical fills from existing roles."
+          "note": "{ id, label, tokens }[] in display order; the first is neutral, the rest use the chart ramp (--chart-1, --chart-2, --chart-4, --chart-5)."
         },
         "warningAt": {
           "type": "number",
@@ -10200,6 +10212,11 @@
           "type": "string",
           "required": false,
           "note": "Always visible."
+        },
+        "usedLabel": {
+          "type": "string",
+          "default": "Used here",
+          "note": "Badge on items this thread used, e.g. \"Used for this reminder\"."
         }
       }
     },

@@ -37,6 +37,7 @@ export function AgentSteering({
   onRetry,
   suggestions = [],
   onPause,
+  pauseNote,
   onResume,
   onStop,
   stopConfirm,
@@ -49,6 +50,7 @@ export function AgentSteering({
 }: AgentSteeringProps) {
   const nameId = useId();
   const inputId = useId();
+  const pauseNoteId = useId();
   const [confirming, setConfirming] = useState(false);
   const finished = status === "done";
 
@@ -171,27 +173,19 @@ export function AgentSteering({
         </p>
       ) : null}
 
-      {suggestions.length && status === "running" && !applied ? (
+      {suggestions.length && !finished ? (
         <ul className={styles.suggestions} aria-label="Quick steers">
           {suggestions.map((suggestion) => (
             <li key={suggestion}>
-              <button
-                type="button"
-                className={styles.chip}
-                disabled={finished || sending}
+              <Button
+                size="sm"
+                appearance="outline"
+                mode="neutral"
+                disabled={status !== "running" || sending}
                 onClick={() => onValueChange?.(suggestion)}
               >
                 {suggestion}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {suggestions.length && finished ? (
-        <ul className={styles.suggestions} aria-hidden="true">
-          {suggestions.map((suggestion) => (
-            <li key={suggestion}>
-              <span className={cx(styles.chip, styles.chipOff)}>{suggestion}</span>
+              </Button>
             </li>
           ))}
         </ul>
@@ -203,16 +197,30 @@ export function AgentSteering({
             Resume
           </Button>
         ) : (
-          <Button size="sm" appearance="outline" mode="neutral" iconStart="Pause" disabled={finished} onClick={onPause}>
+          <Button
+            size="sm"
+            appearance="outline"
+            mode="neutral"
+            iconStart="Pause"
+            disabled={finished}
+            aria-describedby={pauseNote && !finished ? pauseNoteId : undefined}
+            onClick={onPause}
+          >
             Pause
           </Button>
         )}
         <Button size="sm" appearance="outline" mode="danger" iconStart="Square" disabled={finished} onClick={stop}>
           Stop
         </Button>
-        <span className={styles.hint} aria-hidden="true">
-          Enter to steer
-        </span>
+        {pauseNote && status === "running" ? (
+          <span id={pauseNoteId} className={styles.hint}>
+            {pauseNote}
+          </span>
+        ) : (
+          <span className={styles.hint} aria-hidden="true">
+            Enter to steer
+          </span>
+        )}
       </footer>
 
       {stopConfirm ? (

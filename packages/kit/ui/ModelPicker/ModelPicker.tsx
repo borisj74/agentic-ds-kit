@@ -12,6 +12,14 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { ModelPickerProps, PickerModel } from "./ModelPicker.types";
 
+const COST_WORDS: Record<string, string> = { $: "Low", $$: "Standard", $$$: "High" };
+
+/** Cost tier as a word: "$" marks become Low, Standard or High; any other text shows as given. */
+function costWord(costTier: string | undefined): string | undefined {
+  if (!costTier) return undefined;
+  return COST_WORDS[costTier.trim()] ?? costTier;
+}
+
 function groupsOf(models: PickerModel[], value: string | undefined): DropdownMenuGroup[] {
   const order: string[] = [];
   const byVendor = new Map<string, PickerModel[]>();
@@ -33,7 +41,7 @@ function groupsOf(models: PickerModel[], value: string | undefined): DropdownMen
         id: model.id,
         label: model.name,
         description: description || undefined,
-        shortcut: [model.contextWindow, model.costTier].filter(Boolean).join(" · ") || undefined,
+        shortcut: [model.contextWindow, costWord(model.costTier)].filter(Boolean).join(" · ") || undefined,
         selected: model.id === value,
         disabled: model.disabled,
         icon: model.disabled ? "Lock" : undefined,
@@ -67,7 +75,7 @@ export function ModelPicker({
     : empty
       ? "No model"
       : current
-        ? [current.name, current.costTier, current.tagline].filter(Boolean).join(" · ")
+        ? [current.name, costWord(current.costTier), current.tagline].filter(Boolean).join(" · ")
         : "Choose a model";
 
   return (

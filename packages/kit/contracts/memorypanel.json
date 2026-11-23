@@ -78,6 +78,11 @@
       "type": "string",
       "required": false,
       "note": "Always visible."
+    },
+    "usedLabel": {
+      "type": "string",
+      "default": "Used here",
+      "note": "Badge on items this thread used, e.g. \"Used for this reminder\"."
     }
   },
   "passthrough": {

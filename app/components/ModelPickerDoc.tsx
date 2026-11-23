@@ -7,9 +7,9 @@ import { AgentDocFrame } from "./AgentDocFrame";
 import agentDoc from "./AgentDoc.module.css";
 
 const MODELS: PickerModel[] = [
-  { id: "opus", name: "Claude Opus 5.5", vendor: "Anthropic", description: "Deepest reasoning", contextWindow: "200K", costTier: "$$$", tagline: "deepest" },
-  { id: "sonnet", name: "Claude Sonnet 5.5", vendor: "Anthropic", description: "Balanced default", contextWindow: "200K", costTier: "$$", tagline: "balanced", recommended: true },
-  { id: "haiku", name: "Claude Haiku 5.5", vendor: "Anthropic", description: "Fastest, lowest cost", contextWindow: "200K", costTier: "$", tagline: "fastest" },
+  { id: "opus", name: "Claude Opus 5.5", vendor: "Anthropic", description: "Deepest reasoning", contextWindow: "200K", costTier: "High", tagline: "deepest" },
+  { id: "sonnet", name: "Claude Sonnet 5.5", vendor: "Anthropic", description: "Balanced default", contextWindow: "200K", costTier: "Standard", tagline: "balanced", recommended: true },
+  { id: "haiku", name: "Claude Haiku 5.5", vendor: "Anthropic", description: "Fastest, lowest cost", contextWindow: "200K", costTier: "Low", tagline: "fastest" },
   { id: "nw70", name: "Northwind 70B", vendor: "Example vendor", description: "Open weights · example data", contextWindow: "128K", costTier: "$" },
   { id: "nw405", name: "Northwind 405B", vendor: "Example vendor", contextWindow: "128K", costTier: "$$$", disabled: true, disabledReason: "Needs the Pro plan" },
 ];
@@ -34,7 +34,7 @@ export function ModelPickerDoc() {
       variants={[
         {
           title: "Closed — md and sm",
-          about: "The trigger shows the name, cost tier and tagline.",
+          about: "The trigger shows the name, cost tier and tagline. Cost tier is a word: Low, Standard or High (\"$\" marks show as those words).",
           code: `<ModelPicker models={models} value="sonnet" />
 <ModelPicker models={models} value="sonnet" size="sm" />`,
           render: (

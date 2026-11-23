@@ -32,5 +32,7 @@ export interface MemoryPanelProps extends Omit<ComponentPropsWithoutRef<"section
   onRetry?: () => void;
   /** Always visible. Default "Only you and this workspace's agents can read these." */
   privacyNote?: string;
+  /** Badge on items this thread used. Default "Used here", e.g. "Used for this reminder". */
+  usedLabel?: string;
   ref?: Ref<HTMLElement>;
 }

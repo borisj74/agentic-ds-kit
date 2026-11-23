@@ -60,6 +60,11 @@
       "default": false,
       "note": "The selected stop's icon spins; the panel shows Saving…"
     },
+    "savedAt": {
+      "type": "string",
+      "required": false,
+      "note": "When the current stop was saved, e.g. \"14:01\". The panel note reads \"Saved 14:01\" with a check."
+    },
     "size": {
       "type": "enum",
       "values": [

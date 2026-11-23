@@ -57,8 +57,18 @@ export function ContextWindow({
           label={`${label}: ${loading ? "loading" : limit ? `${percent}% used` : "limit unknown"}`}
         />
         <span className={styles.compactValue}>{loading ? "– / –" : limit ? `${short(used)} / ${short(limit)}` : short(used)}</span>
-        {state === "warn" && !loading ? <TriangleAlert size={16} strokeWidth={ICON_STROKE} aria-label="Near limit" /> : null}
-        {state === "full" && !loading ? <CircleX size={16} strokeWidth={ICON_STROKE} aria-label="Full" /> : null}
+        {state === "warn" && !loading ? (
+          <span className={styles.compactState}>
+            <TriangleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            Near limit
+          </span>
+        ) : null}
+        {state === "full" && !loading ? (
+          <span className={styles.compactState}>
+            <CircleX size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            Full
+          </span>
+        ) : null}
       </section>
     );
   }
@@ -145,7 +155,7 @@ export function ContextWindow({
           {state === "warn" ? (
             <p className={cx(styles.notice, styles.noticeWarn)}>
               <TriangleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-              Oldest messages will be trimmed soon. Trim now to keep control.
+              Near the limit. The oldest messages drop first. Trim now to choose what goes.
             </p>
           ) : null}
           {state === "full" ? (

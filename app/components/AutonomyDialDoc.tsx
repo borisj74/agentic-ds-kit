@@ -1,22 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { AutonomyDial, Switch } from "agentic-ds-kit";
+import { AutonomyDial, Switch, type AutonomyStop } from "agentic-ds-kit";
 import { AgentDocFrame } from "./AgentDocFrame";
 import agentDoc from "./AgentDoc.module.css";
 import styles from "./ComponentDoc.module.css";
 
 const APPLIES = "Research agent · acme/ledger";
 
+/** An example options set: the same four steps in billing words, with a money limit. Not the default. */
+const BILLING_STOPS: AutonomyStop[] = [
+  { id: "ask", label: "Ask every time", icon: "Hand", description: "Drafts each reminder and waits for your OK before it sends." },
+  { id: "remind", label: "Reminders only", icon: "Mail", description: "Sends payment reminders on its own. Asks before any refund or write-off." },
+  {
+    id: "refunds",
+    label: "Refunds up to $500",
+    icon: "Shield",
+    description: "Sends reminders and refunds up to $500 on its own. Asks before larger refunds, write-offs, or a phone call.",
+  },
+  { id: "report", label: "Act, then report", icon: "Bell", description: "Does everything it is allowed to, then posts a summary of each action." },
+];
+
 export function AutonomyDialDoc() {
   const [value, setValue] = useState("risk");
   const [saving, setSaving] = useState(false);
+  const [savedAt, setSavedAt] = useState<string | undefined>(undefined);
   const [locked, setLocked] = useState(false);
 
   function change(next: string) {
     setValue(next);
     setSaving(true);
-    window.setTimeout(() => setSaving(false), 900);
+    window.setTimeout(() => {
+      setSaving(false);
+      setSavedAt(new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }));
+    }, 900);
   }
 
   return (
@@ -31,6 +48,7 @@ export function AutonomyDialDoc() {
           value={value}
           onValueChange={change}
           saving={saving}
+          savedAt={savedAt}
           appliesTo={APPLIES}
           disabled={locked}
           disabledReason="Set by workspace policy"
@@ -48,6 +66,7 @@ export function AutonomyDialDoc() {
   onValueChange={setLevel}
   appliesTo="${APPLIES}"
   saving={saving}
+  savedAt={savedAt}
 />`}
       variants={[
         {
@@ -79,6 +98,23 @@ export function AutonomyDialDoc() {
           about: "disabled with disabledReason shows a lock and why.",
           code: `<AutonomyDial value="risk" disabled disabledReason="Set by workspace policy" />`,
           render: <AutonomyDial className={agentDoc.trail} value="risk" appliesTo={APPLIES} disabled disabledReason="Set by workspace policy" />,
+        },
+        {
+          title: "Saved — with the time",
+          about: "savedAt shows when the stop was saved, as \"Saved 14:01\" in the panel.",
+          code: `<AutonomyDial value="risk" savedAt="14:01" />`,
+          render: <AutonomyDial className={agentDoc.trail} value="risk" appliesTo={APPLIES} savedAt="14:01" />,
+        },
+        {
+          title: "Your own stops — billing words, narrow column",
+          about:
+            "options takes your own four stops, here billing words with a money limit. In a narrow column the stops stack as rows; the selected row gets a check and the end labels hide.",
+          code: `<AutonomyDial options={billingStops} value="refunds" defaultValue="remind" appliesTo="Dunning agent" savedAt="14:01" />`,
+          render: (
+            <div className={styles.previewNarrow}>
+              <AutonomyDial options={BILLING_STOPS} value="refunds" defaultValue="remind" appliesTo="Dunning agent" savedAt="14:01" />
+            </div>
+          ),
         },
         {
           title: "Loading — saving a new stop",

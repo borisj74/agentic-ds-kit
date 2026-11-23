@@ -87,6 +87,7 @@ export function MemoryPanel({
   error,
   onRetry,
   privacyNote = "Only you and this workspace's agents can read these.",
+  usedLabel = "Used here",
   className,
   ref,
   ...rest
@@ -128,7 +129,7 @@ export function MemoryPanel({
             {[item.source, item.age].filter(Boolean).join(" · ")}
             {item.usedHere ? (
               <Badge tone="neutral" size="sm">
-                Used here
+                {usedLabel}
               </Badge>
             ) : null}
           </span>

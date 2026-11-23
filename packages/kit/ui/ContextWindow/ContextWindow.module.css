@@ -83,26 +83,25 @@
   flex-basis: 0;
 }
 
-/* Categorical fills from existing roles: no new colours. */
+/* Categorical fills: a neutral first segment, then the chart ramp. No status roles, so a fill never reads as a state. */
 .seg0 {
   background-color: var(--line-strong);
 }
 
 .seg1 {
-  background-color: var(--status-success);
+  background-color: var(--chart-1);
 }
 
 .seg2 {
-  background-color: var(--highlight-base);
+  background-color: var(--chart-2);
 }
 
 .seg3 {
-  background-color: var(--primary);
+  background-color: var(--chart-4);
 }
 
-/* A solid mid grey (as Meter's neutral value), darker than seg0 and the empty track, so it reads as filled. */
 .seg4 {
-  background-color: color-mix(in srgb, var(--fill-strong) 45%, var(--surface-card));
+  background-color: var(--chart-5);
 }
 
 .unknownBar {
@@ -249,12 +248,26 @@
   color: var(--text-fg);
 }
 
+/* Near limit and Full are a word and an icon, not colour alone. */
+.compactState {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  white-space: nowrap;
+}
+
 .compact.warn .compactValue,
+.compact.warn .compactState,
 .compact.warn svg {
   color: var(--status-warning-text);
 }
 
 .compact.full .compactValue,
+.compact.full .compactState,
 .compact.full svg {
   color: var(--status-danger-text);
 }
