@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
-export type RedactionStatus = "pending" | "sent" | "cancelled";
+export type RedactionStatus = "pending" | "sent" | "cancelled" | "error";
+export type RedactionLayout = "inline" | "split";
 
 /** A sensitive value in the payload: characters [start, end) and its type, e.g. "email", "card", "apiKey". */
 export interface RedactionSpan {
@@ -35,7 +36,15 @@ export interface RedactionPreviewProps extends Omit<ComponentPropsWithoutRef<"ar
   /** Send, the one solid primary. Gets the payload with masked values replaced by "[type]". */
   onSend?: (maskedPayload: string) => void;
   onCancel?: () => void;
-  /** sent and cancelled fold to one line. */
+  /** sent and cancelled fold to one line. error keeps the card, shows a danger Alert and turns Send into Try again. */
   status?: RedactionStatus;
+  /** status "error": why it failed, under "Couldn't send. Nothing left the product." */
+  errorText?: string;
+  /** status "error": Try again. Falls back to onSend when omitted. */
+  onRetry?: () => void;
+  /** inline (default): one payload with mask chips. split: Before (only you see it) and After (what is sent) side by side; on a narrow card After shows first and Before sits behind "Show before". */
+  layout?: RedactionLayout;
+  /** Characters kept at the end of masked values per type, e.g. { card: 4 } sends "[Card number •••• 4242]". Never applies to lockedTypes. */
+  keepLast?: Record<string, number>;
   ref?: Ref<HTMLElement>;
 }

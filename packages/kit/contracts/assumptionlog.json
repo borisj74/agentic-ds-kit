@@ -28,7 +28,7 @@
     "items": {
       "type": "array",
       "required": true,
-      "note": "{ id, text, confidence: 0–1, source?, steps?: string[], status: \"open\" | \"confirmed\" | \"corrected\", correction? }[]. Confidence below 0.5 is Low, below 0.8 Medium, else High. Open rows sort weakest first."
+      "note": "{ id, text, confidence: 0–1, source?, steps?: string[], status: \"open\" | \"confirmed\" | \"corrected\", correction? }[]. Confidence below 0.5 is Low, below 0.8 Medium, else High. Open rows sort weakest first. Confidence shows the word and the percent (\"Low 46%\")."
     },
     "title": {
       "type": "string",
@@ -63,6 +63,11 @@
       "type": "boolean",
       "default": false,
       "note": "One line: open count Badge, the weakest open assumption and its confidence."
+    },
+    "limit": {
+      "type": "number",
+      "default": 5,
+      "note": "Rows shown before a \"Show n more\" ghost Button; 0 shows every row."
     }
   },
   "passthrough": {
@@ -92,7 +97,8 @@
       "the Card is aria-labelledby its title; compact is a section named by the title",
       "confidence is a Meter with an accessible name plus the word Low, Medium or High, never colour alone",
       "the filter is a kit SegmentedControl named \"Show assumptions\"",
-      "\"used in n steps\" is a Button that opens a kit Popover listing the steps",
+      "\"n steps\" is a Button that opens a kit Popover named \"Steps that use this assumption\"",
+      "\"Show n more\" moves focus to the first new row",
       "Correct focuses a labelled Input; Enter saves, Escape cancels, and focus returns to the row",
       "corrected text uses del and ins with hidden \"Was\" / \"Now\" words",
       "motion is opacity and transform only, off under prefers-reduced-motion"

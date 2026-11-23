@@ -32,8 +32,9 @@ export type {
   GuardrailOverrideStatus,
 } from "./GuardrailLog.types";
 
-// Flagged is the mildest verdict: a neutral badge, so red and amber carry the ones that changed the action.
+// Flagged is the mildest verdict: a neutral outline badge, so red and amber carry the ones that changed the action.
 const VERDICT_TONE: Record<GuardrailVerdict, "danger" | "warning" | "neutral"> = { blocked: "danger", rewritten: "warning", flagged: "neutral" };
+const VERDICT_APPEARANCE: Record<GuardrailVerdict, "soft" | "outline"> = { blocked: "soft", rewritten: "soft", flagged: "outline" };
 const DEFAULT_TIMES = ["Today", "This week", "This month"];
 const ANY = "__any";
 
@@ -87,11 +88,11 @@ export function GuardrailLog({
         <span className={styles.compactSummary}>{summaryLine(events, filters.time)}</span>
         {latest ? (
           <span className={styles.compactLatest}>
-            <Badge tone={VERDICT_TONE[latest.verdict]} appearance="soft" size="sm">
+            <Badge tone={VERDICT_TONE[latest.verdict]} appearance={VERDICT_APPEARANCE[latest.verdict]} size="sm">
               {VERDICT_LABEL[latest.verdict]}
             </Badge>
             <span className={styles.compactText}>
-              {latest.rule.name} · {latest.agent.name} · {latest.at}
+              {latest.summary ?? latest.rule.name} · {latest.agent.name} · {latest.at}
             </span>
           </span>
         ) : null}
@@ -193,19 +194,31 @@ export function GuardrailLog({
                 onClick={() => select(event.id)}
                 onKeyDown={(e) => handleRowKey(e, index)}
               >
-                <Badge tone={VERDICT_TONE[event.verdict]} appearance="soft" size="sm" className={styles.verdict}>
+                <Badge tone={VERDICT_TONE[event.verdict]} appearance={VERDICT_APPEARANCE[event.verdict]} size="sm" className={styles.verdict}>
                   {VERDICT_LABEL[event.verdict]}
                 </Badge>
-                <span className={styles.rowMain}>
-                  <span className={styles.rule}>{event.rule.name}</span>
-                  <span className={styles.attempt}>{event.attempted}</span>
-                </span>
-                <span className={styles.who}>
-                  {/* Initials would repeat the name beside them; show a face only when there is one. */}
-                  {event.agent.src ? <Avatar name={event.agent.name} src={event.agent.src} size="sm" /> : null}
-                  <span className={styles.agent}>{event.agent.name}</span>
-                </span>
-                <span className={styles.at}>{event.at}</span>
+                {event.summary ? (
+                  // What happened and why leads; rule, agent and time drop to the caption. The raw call stays in the Drawer.
+                  <span className={cx(styles.rowMain, styles.rowWide)}>
+                    <span className={styles.rule}>{event.summary}</span>
+                    <span className={styles.caption}>
+                      {event.rule.name} · {event.agent.name} · {event.at}
+                    </span>
+                  </span>
+                ) : (
+                  <>
+                    <span className={styles.rowMain}>
+                      <span className={styles.rule}>{event.rule.name}</span>
+                      <span className={styles.attempt}>{event.attempted}</span>
+                    </span>
+                    <span className={styles.who}>
+                      {/* Initials would repeat the name beside them; show a face only when there is one. */}
+                      {event.agent.src ? <Avatar name={event.agent.name} src={event.agent.src} size="sm" /> : null}
+                      <span className={styles.agent}>{event.agent.name}</span>
+                    </span>
+                    <span className={styles.at}>{event.at}</span>
+                  </>
+                )}
               </button>
             </li>
           ))}

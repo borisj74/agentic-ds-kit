@@ -84,7 +84,7 @@ describe("AssumptionLog render", () => {
   test("a labelled Card with count, filter, confidence words, source and steps", () => {
     const html = render({ onConfirm() {}, onCorrect() {} });
     assert.match(html, /<article[^>]*aria-labelledby="[^"]+"[^>]*>.*<h2[^>]*>Assumptions<\/h2>/s);
-    for (const text of ["2 open", "Show assumptions", "Low", "Medium", "default", "earlier chat", "used in 3 steps", "Confirm", "Correct"]) {
+    for (const text of ["2 open", "Show assumptions", "Low", "Medium", "default", "earlier chat", "3 steps", "Confirm", "Correct"]) {
       assert.ok(html.includes(text), text);
     }
     assert.match(html, /aria-label="Confidence 42%, Low"/);

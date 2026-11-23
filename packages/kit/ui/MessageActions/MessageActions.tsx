@@ -1,5 +1,8 @@
 "use client";
 
+import { useId } from "react";
+import { Check } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { DropdownMenu } from "../DropdownMenu";
 import { Tooltip } from "../Tooltip";
@@ -24,6 +27,7 @@ export function MessageActions({
   thanksText = "Thanks, noted",
   reasons = [],
   onReason,
+  selectedReason = null,
   moreItems,
   onAction,
   visible = "always",
@@ -33,7 +37,10 @@ export function MessageActions({
   ...rest
 }: MessageActionsProps) {
   const labels = useKitLabels();
+  const reasonsId = useId().replace(/:/g, "");
   const hasFeedback = Boolean(onFeedback);
+  const picked = feedback === "down" && selectedReason ? selectedReason : null;
+  const thanks = feedback === "up" ? thanksText : picked && thanksText ? `${thanksText}: ${picked}` : "";
 
   return (
     <div {...rest} {...nisthaAttr("messageactions", rest)} ref={ref} className={cx(styles.wrap, visible === "hover" && styles.hover, className)}>
@@ -110,22 +117,38 @@ export function MessageActions({
             />
           ) : null}
         </div>
-        {feedback === "up" && thanksText ? (
-          <span className={styles.thanks} role="status">
-            {thanksText}
-          </span>
-        ) : null}
+        <span className={styles.thanks} role="status">
+          {thanks ? (
+            <>
+              <Check size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+              {thanks}
+            </>
+          ) : null}
+        </span>
       </div>
       {feedback === "down" && reasons.length ? (
-        <ul className={styles.reasons} aria-label={labels.whatWentWrong}>
-          {reasons.map((reason) => (
-            <li key={reason}>
-              <button type="button" className={styles.reason} onClick={() => onReason?.(reason)}>
+        <div className={styles.reasons} role="group" aria-labelledby={`${reasonsId}-label`}>
+          <span id={`${reasonsId}-label`} className={styles.reasonsLabel}>
+            {labels.whatWentWrong}
+          </span>
+          {reasons.map((reason) => {
+            const on = reason === selectedReason;
+            return (
+              <Button
+                key={reason}
+                size="sm"
+                appearance={on ? "soft" : "outline"}
+                mode={on ? "primary" : "neutral"}
+                iconStart={on ? "Check" : undefined}
+                aria-pressed={on}
+                onClick={() => onReason?.(reason)}
+                disabled={disabled}
+              >
                 {reason}
-              </button>
-            </li>
-          ))}
-        </ul>
+              </Button>
+            );
+          })}
+        </div>
       ) : null}
     </div>
   );

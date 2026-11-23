@@ -73,6 +73,12 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: <AssumptionLog items={MIXED} filter="all" onConfirm={noop} onCorrect={noop} />,
   },
   {
+    title: "Long list — limit",
+    about: "Only the weakest few show; \"Show n more\" reveals the rest and moves focus to the first new row. limit={0} shows every row.",
+    code: `<AssumptionLog items={items} limit={2} onConfirm={confirm} onCorrect={correct} />`,
+    render: <AssumptionLog items={OPEN} limit={2} onConfirm={noop} onCorrect={noop} />,
+  },
+  {
     title: "Compact — for a run header",
     about: "compact is one line: the open count and the weakest open assumption with its confidence.",
     code: `<AssumptionLog compact items={items} />`,

@@ -70,10 +70,39 @@ export function segments(payload: string, spans: RedactionSpan[]): Segment[] {
   return out;
 }
 
-/** What actually leaves: masked spans replaced by "[type]". */
-export function maskedPayload(payload: string, spans: RedactionSpan[], rules: RedactionRules = {}, locked: string[] = DEFAULT_LOCKED): string {
+/** Characters kept at the end of a masked value, per type, e.g. { card: 4 }. */
+export type KeepLast = Record<string, number>;
+
+/**
+ * The mask that replaces a value: "[type]", or "[Label •••• 4242]" when keepLast keeps its tail.
+ * Locked types (secrets) never keep any characters.
+ */
+export function maskText(
+  type: string,
+  value: string,
+  keepLast: KeepLast = {},
+  labels: Record<string, string> = {},
+  locked: string[] = DEFAULT_LOCKED,
+): string {
+  const keep = locked.includes(type) ? 0 : Math.floor(keepLast[type] ?? 0);
+  if (keep <= 0) return `[${type}]`;
+  const tail = value.replace(/\s+/g, "").slice(-keep);
+  return `[${typeLabel(type, labels)} •••• ${tail}]`;
+}
+
+/** What actually leaves: masked spans replaced by their mask (see maskText). */
+export function maskedPayload(
+  payload: string,
+  spans: RedactionSpan[],
+  rules: RedactionRules = {},
+  locked: string[] = DEFAULT_LOCKED,
+  keepLast: KeepLast = {},
+  labels: Record<string, string> = {},
+): string {
   return segments(payload, spans)
-    .map((seg) => (seg.kind === "span" && isMasked(seg.span.type, rules, locked) ? `[${seg.span.type}]` : seg.text))
+    .map((seg) =>
+      seg.kind === "span" && isMasked(seg.span.type, rules, locked) ? maskText(seg.span.type, seg.text, keepLast, labels, locked) : seg.text,
+    )
     .join("");
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { ChevronDown, CircleX, ExternalLink, Layers } from "lucide-react";
+import { ChevronDown, CircleX, ExternalLink, Info, Layers } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { ShimmerText } from "../ShimmerText";
@@ -26,13 +26,16 @@ export function CitedAnswer({
   loadingText = "Reading sources…",
   error,
   onRetry,
+  emptyText = "No sources. Check before you act on this.",
   className,
   ref,
   ...rest
 }: CitedAnswerProps) {
   const base = useId().replace(/:/g, "");
   const listId = `${base}-sources`;
-  const [innerOpen, setInnerOpen] = useState(false);
+  const missingCount = citations.filter((citation) => citation.missing).length;
+  // A missing source opens the list on first render, so the warning is never one click away.
+  const [innerOpen, setInnerOpen] = useState(() => missingCount > 0);
   const [highlight, setHighlight] = useState<string | null>(null);
   const open = openSources ?? innerOpen;
   const byId = new Map(citations.map((citation) => [citation.id, citation]));
@@ -63,7 +66,7 @@ export function CitedAnswer({
         key={`${id}-${match.index}`}
         href={`#${base}-cite-${id}`}
         className={cx(styles.mark, source?.missing && styles.markMissing)}
-        aria-label={source ? `Source ${id}: ${source.missing ? "not found" : source.title}` : `Source ${id}`}
+        aria-label={source ? `Source ${id}: ${source.missing ? `missing, ${source.title}` : source.title}` : `Source ${id}`}
         onClick={(event) => {
           event.preventDefault();
           cite(id);
@@ -71,6 +74,7 @@ export function CitedAnswer({
         }}
       >
         [{id}]
+        {source?.missing ? <span aria-hidden="true"> missing</span> : null}
       </a>,
     );
     last = match.index + match[0].length;
@@ -108,7 +112,8 @@ export function CitedAnswer({
             <div className={styles.sources}>
               <button type="button" className={styles.toggle} aria-expanded={open} aria-controls={listId} onClick={() => setOpen(!open)}>
                 <Layers size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
-                Used {citations.length} {citations.length === 1 ? "source" : "sources"}
+                {citations.length} {citations.length === 1 ? "source" : "sources"}
+                {missingCount > 0 ? ` · ${missingCount} missing` : null}
                 <ChevronDown size={14} strokeWidth={ICON_STROKE} className={cx(styles.chevron, open && styles.chevronOpen)} aria-hidden="true" />
               </button>
               {open ? (
@@ -124,8 +129,11 @@ export function CitedAnswer({
                       <div className={styles.sourceBody}>
                         {citation.missing ? (
                           <>
-                            <span className={styles.title}>Source not found</span>
-                            <span className={styles.snippet}>{citation.missingReason ?? "The page was moved or removed after the answer was written."}</span>
+                            <span className={cx(styles.title, styles.missingTitle)}>
+                              <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+                              Missing: {citation.title}
+                            </span>
+                            <span className={styles.snippet}>{citation.missingReason ?? "Moved or removed after this answer was written."}</span>
                           </>
                         ) : (
                           <>
@@ -148,6 +156,11 @@ export function CitedAnswer({
                 </ol>
               ) : null}
             </div>
+          ) : emptyText ? (
+            <p className={styles.empty}>
+              <Info size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+              {emptyText}
+            </p>
           ) : null}
         </>
       )}

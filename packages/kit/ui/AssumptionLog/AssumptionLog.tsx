@@ -51,7 +51,7 @@ function Confidence({ value }: { value: number }) {
   return (
     <span className={cx(styles.confidence, styles[level])}>
       <Meter className={styles.meter} size="sm" value={percent} intent={LEVEL_INTENT[level]} label={`Confidence ${percent}%, ${LEVEL_LABEL[level]}`} />
-      <span className={styles.level}>{LEVEL_LABEL[level]}</span>
+      <span className={styles.level}>{`${LEVEL_LABEL[level]} ${percent}%`}</span>
     </span>
   );
 }
@@ -62,7 +62,7 @@ function StepsPopover({ steps }: { steps: string[] }) {
       label="Steps that use this assumption"
       trigger={
         <Button size="sm" appearance="ghost" mode="neutral" iconStart={ListTree}>
-          {`used in ${plural(steps.length, "step")}`}
+          {plural(steps.length, "step")}
         </Button>
       }
     >
@@ -87,6 +87,7 @@ export function AssumptionLog({
   onConfirm,
   onCorrect,
   compact = false,
+  limit = 5,
   className,
   ref,
   ...rest
@@ -103,6 +104,15 @@ export function AssumptionLog({
   const listRef = useRef<HTMLUListElement | null>(null);
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const open = openCount(items);
+  const [expanded, setExpanded] = useState(false);
+  const focusFrom = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (focusFrom.current === null) return;
+    const row = listRef.current?.children[focusFrom.current] as HTMLElement | undefined;
+    row?.focus();
+    focusFrom.current = null;
+  }, [expanded]);
 
   useEffect(() => {
     if (editing) {
@@ -145,6 +155,7 @@ export function AssumptionLog({
 
   function setFilter(next: AssumptionFilter) {
     if (filterProp === undefined) setInnerFilter(next);
+    setExpanded(false);
     onFilterChange?.(next);
   }
 
@@ -179,6 +190,14 @@ export function AssumptionLog({
   }
 
   const rows = filterAssumptions(sortAssumptions(items), filter);
+  const capped = !expanded && limit > 0 && rows.length > limit;
+  const visibleRows = capped ? rows.slice(0, limit) : rows;
+  const hidden = rows.length - visibleRows.length;
+
+  function showMore() {
+    focusFrom.current = visibleRows.length;
+    setExpanded(true);
+  }
 
   return (
     <Card {...rest} {...nisthaAttr("assumptionlog", rest)} ref={ref} title={title} className={cx(styles.root, className)}>
@@ -200,7 +219,7 @@ export function AssumptionLog({
           <Empty icon={Lightbulb} title={emptyTitle(filter)} description={filter === "open" ? "Every guess is confirmed or corrected." : undefined} />
         ) : (
           <ul ref={listRef} className={styles.list}>
-            {rows.map((item, index) => {
+            {visibleRows.map((item, index) => {
               const isEditing = editing?.id === item.id;
               const steps = item.steps ?? [];
               const inputId = `${base}-${item.id}`;
@@ -295,6 +314,14 @@ export function AssumptionLog({
             })}
           </ul>
         )}
+        {hidden > 0 ? (
+          <div className={styles.more}>
+            <span className={styles.moreText}>{`Showing ${visibleRows.length} of ${rows.length}${filter === "open" ? ", weakest first" : ""}`}</span>
+            <Button size="sm" appearance="ghost" mode="neutral" onClick={showMore}>
+              {`Show ${hidden} more`}
+            </Button>
+          </div>
+        ) : null}
       </div>
     </Card>
   );
