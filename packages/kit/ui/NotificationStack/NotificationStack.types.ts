@@ -7,13 +7,22 @@ export interface NotificationItem {
   id: string;
   title: string;
   body?: string;
-  /** Display time, e.g. "5m", "1d". */
+  /** Display time, shown in mono, e.g. "09:42" under a Today group. */
   createdAt: string;
   read: boolean;
   /** Icon colour role; each tone has a default icon. */
   tone?: NotificationTone;
   /** Overrides the tone's icon, e.g. "CreditCard". */
   icon?: KitIcon;
+  /** Section heading, e.g. "Today" or "Yesterday". Items with the same group sit together under it, in the order given. */
+  group?: string;
+  /** One outline sm Button under the row, only when the event needs a decision, e.g. Retry payment. */
+  action?: NotificationAction;
+}
+
+export interface NotificationAction {
+  label: string;
+  onClick: () => void;
 }
 
 /** Native div attributes the kit sets itself (or replaces with its own prop). */

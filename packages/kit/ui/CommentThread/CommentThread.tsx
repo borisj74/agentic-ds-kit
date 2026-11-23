@@ -1,22 +1,24 @@
 "use client";
 
-import { useId, useRef, useState, type KeyboardEvent } from "react";
-import { MessageCircle } from "lucide-react";
+import { Fragment, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { CornerDownRight, MessageCircle } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Avatar } from "../Avatar";
 import { Button } from "../Button";
+import { DropdownMenu } from "../DropdownMenu";
 import { Empty } from "../Empty";
+import { Kbd } from "../Kbd";
 import { Skeleton } from "../Skeleton";
 import { Textarea } from "../Textarea";
 import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
-import type { CommentThreadProps, ThreadComment } from "./CommentThread.types";
+import type { CommentMember, CommentThreadProps, ThreadComment } from "./CommentThread.types";
 import styles from "./CommentThread.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { CommentThreadProps, ThreadComment, CommentAuthor } from "./CommentThread.types";
+export type { CommentThreadProps, ThreadComment, CommentAuthor, CommentMember } from "./CommentThread.types";
 
 const initialsOf = (name: string) =>
   name
@@ -26,6 +28,46 @@ const initialsOf = (name: string) =>
     .map((part) => part[0]?.toUpperCase())
     .join("");
 
+const escapeRe = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Splits a body into text and `@Full Name` mentions of people the thread knows. */
+export function splitMentions(body: string, names: string[]): Array<{ text: string; mention: boolean }> {
+  const known = [...new Set(names.filter(Boolean))].sort((a, b) => b.length - a.length);
+  if (!known.length || !body.includes("@")) return [{ text: body, mention: false }];
+  const pattern = new RegExp(`@(?:${known.map(escapeRe).join("|")})(?![\\p{L}\\p{N}])`, "gu");
+  const parts: Array<{ text: string; mention: boolean }> = [];
+  let last = 0;
+  for (const match of body.matchAll(pattern)) {
+    const start = match.index ?? 0;
+    if (start > last) parts.push({ text: body.slice(last, start), mention: false });
+    parts.push({ text: match[0], mention: true });
+    last = start + match[0].length;
+  }
+  if (last < body.length) parts.push({ text: body.slice(last), mention: false });
+  return parts;
+}
+
+/** The "@query" being typed just before the caret, or null. Stops at a newline or a second space. */
+export function mentionQuery(text: string, caret: number): { start: number; query: string } | null {
+  const before = text.slice(0, caret);
+  const at = before.lastIndexOf("@");
+  if (at < 0) return null;
+  if (at > 0 && !/\s/.test(before[at - 1])) return null;
+  const query = before.slice(at + 1);
+  if (/\n/.test(query) || (query.match(/ /g)?.length ?? 0) > 1 || query.startsWith(" ")) return null;
+  return { start: at, query };
+}
+
+/** Members whose name starts with the query, or has a word that does. */
+export function matchMembers(members: CommentMember[], query: string): CommentMember[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return members;
+  return members.filter((member) => {
+    const name = member.name.toLowerCase();
+    return name.startsWith(q) || name.split(/\s+/).some((word) => word.startsWith(q));
+  });
+}
+
 /**
  * One conversation on a document, invoice or task: comments, one level of replies, in-place edit, and a
  * composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.
@@ -34,6 +76,7 @@ export function CommentThread({
   title,
   comments,
   currentUserId,
+  members,
   value,
   onValueChange,
   onSubmit,
@@ -55,6 +98,7 @@ export function CommentThread({
 }: CommentThreadProps) {
   const titleId = useId();
   const composerId = useId();
+  const hintId = useId();
   const rootRef = useRef<HTMLElement | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -63,10 +107,45 @@ export function CommentThread({
   const roots = comments.filter((comment) => !comment.parentId || !comments.some((c) => c.id === comment.parentId));
   const repliesOf = (id: string) => comments.filter((comment) => comment.parentId === id);
   const canPost = value.trim().length > 0 && !submitting;
+  const knownNames = [...comments.map((comment) => comment.author.name), ...(members ?? []).map((member) => member.name)];
+  const listId = useId();
+  const [mention, setMention] = useState<{ start: number; query: string } | null>(null);
+  const [active, setActive] = useState(0);
+  const suggestions = mention && members?.length ? matchMembers(members, mention.query).slice(0, 6) : [];
+  const listOpen = suggestions.length > 0;
+  const activeIndex = Math.min(active, Math.max(suggestions.length - 1, 0));
+  const readMention = (text: string, caret: number) => {
+    setMention(members?.length ? mentionQuery(text, caret) : null);
+    setActive(0);
+  };
+  const insertMention = (member: CommentMember) => {
+    if (!mention) return;
+    const end = mention.start + 1 + mention.query.length;
+    const insert = `@${member.name} `;
+    onValueChange(value.slice(0, mention.start) + insert + value.slice(end));
+    setMention(null);
+    const caret = mention.start + insert.length;
+    requestAnimationFrame(() => {
+      const field = rootRef.current?.querySelector<HTMLTextAreaElement>(`textarea[id="${CSS.escape(composerId)}"]`);
+      field?.focus();
+      field?.setSelectionRange(caret, caret);
+    });
+  };
+  const renderBody = (body: string): ReactNode =>
+    splitMentions(body, knownNames).map((part, index) =>
+      part.mention ? (
+        <span key={index} className={styles.mention}>
+          {part.text}
+        </span>
+      ) : (
+        <Fragment key={index}>{part.text}</Fragment>
+      ),
+    );
 
   const focusComposer = () => rootRef.current?.querySelector<HTMLTextAreaElement>(`textarea[id="${CSS.escape(composerId)}"]`)?.focus();
-  const focusAction = (id: string, action: string) =>
-    requestAnimationFrame(() => rootRef.current?.querySelector<HTMLElement>(`[data-comment="${CSS.escape(id)}"] [data-action="${action}"]`)?.focus());
+  // Edit and Delete live in the comment's More menu: focus returns to its trigger.
+  const focusAction = (id: string) =>
+    requestAnimationFrame(() => rootRef.current?.querySelector<HTMLElement>(`[data-comment="${CSS.escape(id)}"] [data-action="menu"] button`)?.focus());
 
   const startEdit = (comment: ThreadComment) => {
     setEditingId(comment.id);
@@ -75,7 +154,7 @@ export function CommentThread({
   const cancelEdit = () => {
     const id = editingId;
     setEditingId(null);
-    if (id) focusAction(id, "edit");
+    if (id) focusAction(id);
   };
   const saveEdit = () => {
     if (!editingId || !draft.trim()) return;
@@ -84,6 +163,25 @@ export function CommentThread({
   };
 
   const composerKeys = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (listOpen) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        setActive((activeIndex + step + suggestions.length) % suggestions.length);
+        return;
+      }
+      if ((event.key === "Enter" || event.key === "Tab") && !event.metaKey && !event.ctrlKey) {
+        event.preventDefault();
+        insertMention(suggestions[activeIndex]);
+        return;
+      }
+      if (event.key === "Escape") {
+        // Close the list and keep the typed text.
+        event.preventDefault();
+        setMention(null);
+        return;
+      }
+    }
     if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       if (canPost) onSubmit();
@@ -102,6 +200,16 @@ export function CommentThread({
   const renderComment = (comment: ThreadComment, reply: boolean) => {
     const own = Boolean(currentUserId) && comment.author.id === currentUserId;
     const editing = editingId === comment.id;
+    const replies = reply ? [] : repliesOf(comment.id);
+    const menuGroups = [
+      {
+        items: [
+          ...(own && onEdit ? [{ id: "edit", label: "Edit", icon: "Pencil" as const }] : []),
+          ...(own && onDelete ? [{ id: "delete", label: "Delete", icon: "Trash2" as const, danger: true }] : []),
+        ],
+      },
+    ];
+    const hasMenu = menuGroups[0].items.length > 0 && !editing;
     return (
       <li key={comment.id} className={cx(styles.comment, reply && styles.reply)} data-comment={comment.id}>
         <Avatar
@@ -112,11 +220,34 @@ export function CommentThread({
           src={comment.author.avatarSrc}
         />
         <div className={styles.content}>
-          <p className={styles.meta}>
-            <span className={styles.author}>{comment.author.name}</span>
-            <span className={styles.time}>{comment.createdAt}</span>
-            {comment.edited ? <span className={styles.edited}>· edited</span> : null}
-          </p>
+          <div className={styles.metaRow}>
+            <p className={styles.meta}>
+              <span id={`${composerId}-author-${comment.id}`} className={styles.author}>
+                {comment.author.name}
+              </span>
+              <span className={styles.time}>
+                {comment.createdAt}
+                {comment.edited ? " · edited" : null}
+              </span>
+            </p>
+            {hasMenu ? (
+              <span data-action="menu" className={styles.menu}>
+                <DropdownMenu
+                  size="sm"
+                  appearance="ghost"
+                  mode="neutral"
+                  iconStart="Ellipsis"
+                  ariaLabel={`More actions on your comment`}
+                  align="end"
+                  groups={menuGroups}
+                  onSelect={(id) => {
+                    if (id === "edit") startEdit(comment);
+                    if (id === "delete") setDeleteId(comment.id);
+                  }}
+                />
+              </span>
+            ) : null}
+          </div>
           {editing ? (
             <div className={styles.editor}>
               <Textarea
@@ -138,54 +269,30 @@ export function CommentThread({
               </div>
             </div>
           ) : (
-            <>
-              <p className={styles.body}>{comment.body}</p>
-              <div className={styles.actions}>
-                {onReply && !reply ? (
-                  <button
-                    type="button"
-                    className={styles.textButton}
-                    data-action="reply"
-                    aria-label={`Reply to ${comment.author.name}`}
-                    onClick={() => {
-                      onReply(comment.id);
-                      focusComposer();
-                    }}
-                  >
-                    Reply
-                  </button>
-                ) : null}
-                {onReply && reply ? (
-                  <button
-                    type="button"
-                    className={styles.textButton}
-                    data-action="reply"
-                    aria-label={`Reply to ${comment.author.name}`}
-                    onClick={() => {
-                      onReply(comment.parentId ?? comment.id);
-                      focusComposer();
-                    }}
-                  >
-                    Reply
-                  </button>
-                ) : null}
-                {own && onEdit ? (
-                  <button type="button" className={styles.textButton} data-action="edit" onClick={() => startEdit(comment)}>
-                    Edit
-                  </button>
-                ) : null}
-                {own && onDelete ? (
-                  <button type="button" className={styles.textButton} data-action="delete" onClick={() => setDeleteId(comment.id)}>
-                    Delete
-                  </button>
-                ) : null}
-              </div>
-            </>
+            <p className={styles.body}>{renderBody(comment.body)}</p>
           )}
-          {!reply && repliesOf(comment.id).length ? (
+          {replies.length ? (
             <ul className={styles.replies} aria-label={`Replies to ${comment.author.name}`}>
-              {repliesOf(comment.id).map((child) => renderComment(child, true))}
+              {replies.map((child) => renderComment(child, true))}
             </ul>
+          ) : null}
+          {onReply && !reply ? (
+            <div className={styles.actions}>
+              <Button
+                size="sm"
+                appearance="ghost"
+                mode="neutral"
+                iconStart={CornerDownRight}
+                data-action="reply"
+                aria-describedby={`${composerId}-author-${comment.id}`}
+                onClick={() => {
+                  onReply(comment.id);
+                  focusComposer();
+                }}
+              >
+                Reply
+              </Button>
+            </div>
           ) : null}
         </div>
       </li>
@@ -236,25 +343,56 @@ export function CommentThread({
           )}
 
           <div className={styles.composer}>
-            <Textarea
-              id={composerId}
-              className={styles.composerField}
-              aria-label={`${label}: write a comment`}
-              rows={2}
-              placeholder={placeholder}
-              value={value}
-              onChange={onValueChange}
-              onKeyDown={composerKeys}
-              disabled={submitting}
-            />
-            <div className={styles.composerBar}>
-              <span className={styles.spacer} />
+            {listOpen ? (
+              <ul id={listId} role="listbox" aria-label="Mention someone" className={styles.mentionList}>
+                {suggestions.map((member, index) => (
+                  <li
+                    key={member.id}
+                    id={`${listId}-${member.id}`}
+                    role="option"
+                    aria-selected={index === activeIndex}
+                    className={cx(styles.mentionOption, index === activeIndex && styles.mentionActive)}
+                    onMouseDown={(event) => event.preventDefault()}
+                    onMouseEnter={() => setActive(index)}
+                    onClick={() => insertMention(member)}
+                  >
+                    <Avatar size="sm" name={member.name} initials={member.initials ?? initialsOf(member.name)} src={member.avatarSrc} />
+                    <span className={styles.mentionName}>{member.name}</span>
+                    {member.role ? <span className={styles.mentionRole}>{member.role}</span> : null}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <div className={styles.composerRow}>
+              <Textarea
+                id={composerId}
+                size="md"
+                className={styles.composerField}
+                aria-label={`${label}: write a comment`}
+                aria-keyshortcuts="Meta+Enter Control+Enter"
+                describedBy={hintId}
+                rows={1}
+                placeholder={placeholder}
+                value={value}
+                onChange={(next) => {
+                  onValueChange(next);
+                  const field = rootRef.current?.querySelector<HTMLTextAreaElement>(`textarea[id="${CSS.escape(composerId)}"]`);
+                  readMention(next, field?.selectionStart ?? next.length);
+                }}
+                onKeyDown={composerKeys}
+                onBlur={() => setMention(null)}
+                role={members?.length ? "combobox" : undefined}
+                aria-autocomplete={members?.length ? "list" : undefined}
+                aria-expanded={members?.length ? listOpen : undefined}
+                aria-controls={listOpen ? listId : undefined}
+                aria-activedescendant={listOpen ? `${listId}-${suggestions[activeIndex].id}` : undefined}
+                disabled={submitting}
+              />
               <Button
-                size="sm"
+                size="md"
                 appearance={submitAppearance}
-                iconStart={submitting ? "LoaderCircle" : "Send"}
+                iconStart={submitting ? "LoaderCircle" : undefined}
                 className={submitting ? styles.sending : undefined}
-                shortcut={submitting ? undefined : "⌘⏎"}
                 aria-keyshortcuts="Meta+Enter Control+Enter"
                 disabled={!submitting && !canPost}
                 onClick={submitting ? undefined : onSubmit}
@@ -262,6 +400,9 @@ export function CommentThread({
                 {submitting ? "Sending…" : "Comment"}
               </Button>
             </div>
+            <p id={hintId} className={styles.hint}>
+              <Kbd>⌘ Enter</Kbd> to send
+            </p>
             <span className={styles.srOnly} role="status">
               {submitting ? "Sending your comment" : ""}
             </span>
@@ -280,7 +421,7 @@ export function CommentThread({
           onCancel={() => {
             const id = deleteId;
             setDeleteId(null);
-            if (id) focusAction(id, "delete");
+            if (id) focusAction(id);
           }}
           onAction={() => {
             const id = deleteId;

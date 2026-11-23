@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CommentThread, CommentsPanel, type CommentThreadSummary } from "agentic-ds-kit";
 import { AgentDocFrame } from "./AgentDocFrame";
 import agentDoc from "./AgentDoc.module.css";
-import { THREAD, THREADS } from "./saasDemoData";
+import { MEMBERS, THREAD, THREADS } from "./saasDemoData";
 
 const noop = () => {};
 const pageComposer = <CommentThread comments={[]} value="" onValueChange={noop} onSubmit={noop} placeholder="Comment on this page…" emptyTitle="" label="Page comment" className={agentDoc.full} />;
@@ -14,7 +14,7 @@ export function CommentsPanelDoc() {
   const [selected, setSelected] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState("");
-  const thread = <CommentThread comments={THREAD} value={draft} onValueChange={setDraft} onSubmit={() => setDraft("")} onReply={noop} />;
+  const thread = <CommentThread comments={THREAD} value={draft} onValueChange={setDraft} onSubmit={() => setDraft("")} onReply={noop} members={MEMBERS} submitAppearance="soft" />;
   const resolve = (id: string) => {
     setThreads((current) => current.map((t) => (t.id === id ? { ...t, resolved: true } : t)));
     setSelected(null);
@@ -24,7 +24,7 @@ export function CommentsPanelDoc() {
       id="commentspanel"
       name="CommentsPanel"
       lede="A side panel hosting a page's comment threads."
-      summary="The button opens the Drawer; the inline panel below works the same. Open a thread, Resolve it, or go back to All threads."
+      summary="The button opens the Drawer; the inline panel below works the same and docks beside a page at 24rem. Open a thread, Resolve it, or go back to All threads. On a phone, Close, Back and Resolve grow to md (36)."
       preview={
         <div className={agentDoc.stack}>
           <CommentsPanel threads={threads} open={open} onOpenChange={setOpen} selectedId={selected} onSelect={setSelected} onResolve={resolve}>
@@ -55,7 +55,7 @@ export function CommentsPanelDoc() {
         },
         {
           title: "One selected — thread open",
-          about: "All threads goes back; Resolve marks the thread resolved. The thread itself is a CommentThread.",
+          about: "All threads (ghost) goes back; Resolve (outline) marks the thread resolved. The title line says the count and Open or Resolved in words. The thread itself is a CommentThread.",
           code: `<CommentsPanel inline … selectedId="t1" onResolve={resolve}>
   <CommentThread … />
 </CommentsPanel>`,
@@ -68,8 +68,8 @@ export function CommentsPanelDoc() {
         {
           title: "Empty — comment on this page",
           about: "No threads: a kit Empty and a page-level composer.",
-          code: `<CommentsPanel inline threads={[]} … emptyTitle="No comments on this invoice" composer={<CommentThread comments={[]} … />} />`,
-          render: <CommentsPanel inline threads={[]} open onOpenChange={noop} onSelect={noop} emptyTitle="No comments on this invoice" composer={pageComposer} />,
+          code: `<CommentsPanel inline threads={[]} … emptyTitle="No comments on INV-1842" composer={<CommentThread comments={[]} … />} />`,
+          render: <CommentsPanel inline threads={[]} open onOpenChange={noop} onSelect={noop} emptyTitle="No comments on INV-1842" composer={pageComposer} />,
         },
         {
           title: "Filtered to none — Resolved",

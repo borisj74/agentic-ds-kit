@@ -8,6 +8,12 @@ export interface CommentAuthor {
   avatarSrc?: string;
 }
 
+/** Someone who can be @mentioned: shown in the composer's member list with their role. */
+export interface CommentMember extends CommentAuthor {
+  /** Short role shown at the row's end, e.g. "Billing ops". */
+  role?: string;
+}
+
 export interface ThreadComment {
   id: string;
   author: CommentAuthor;
@@ -29,6 +35,8 @@ export interface CommentThreadProps extends Omit<ComponentPropsWithoutRef<"secti
   comments: ThreadComment[];
   /** The signed-in user: their comments get Edit and Delete. */
   currentUserId?: string;
+  /** People who can be @mentioned. Typing @ in the composer opens this list above the field; picking one inserts "@Full Name ". */
+  members?: CommentMember[];
   /** Composer text (controlled). */
   value: string;
   onValueChange: (value: string) => void;

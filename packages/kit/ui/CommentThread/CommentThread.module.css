@@ -1,4 +1,3 @@
-/* Paper frames are 370px; same custom-width pattern as InsightCard (--insight-width). */
 .thread {
   box-sizing: border-box;
   display: flex;
@@ -84,30 +83,41 @@
   min-width: 0;
 }
 
+.metaRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
 .meta {
   display: flex;
+  flex: 1 1 0;
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-2);
+  min-width: 0;
   margin: 0;
   line-height: var(--type-line-ui-sm);
 }
 
 .author {
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   color: var(--text-fg);
 }
 
+/* One date format everywhere: mono "Nov 20, 10:03", "· edited" in the same run. */
 .time {
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   color: var(--text-fg-subtle);
 }
 
-.edited {
-  font-size: var(--type-size-caption);
-  color: var(--text-fg-subtle);
+/* The More menu sits on the name line and never pushes it taller. */
+.menu {
+  flex-shrink: 0;
+  margin-block: calc(var(--space-1) * -1.5);
 }
 
 .body {
@@ -118,32 +128,16 @@
   overflow-wrap: anywhere;
 }
 
+/* Mentions read as brand text at heading weight; no chip, no underline. */
+.mention {
+  font-weight: var(--type-weight-heading);
+  color: var(--text-brand);
+}
+
+/* Reply is a ghost sm Button; pull it left so its icon lines up with the body text. */
 .actions {
   display: flex;
-  gap: var(--space-3);
-}
-
-.textButton {
-  padding: 0;
-  font: inherit;
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
-  background: none;
-  border: 0;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.textButton:hover {
-  color: var(--text-fg);
-  text-decoration: underline;
-}
-
-.textButton:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+  margin-inline-start: calc(var(--space-2) * -1);
 }
 
 .editor {
@@ -164,14 +158,81 @@
   gap: var(--space-2);
 }
 
-.composerField {
-  width: 100%;
+/* @ member list: opens upward, above the field, so a phone keyboard never hides it. Rows are 40 high. */
+.composer {
+  position: relative;
 }
 
-.composerBar {
+.mentionList {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(100% + var(--space-1));
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background-color: var(--surface-card);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.mentionOption {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  min-height: var(--space-10);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-control-md);
+  cursor: pointer;
+}
+
+.mentionActive {
+  background-color: var(--bg-subtle);
+}
+
+.mentionName {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.mentionRole {
+  flex-shrink: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+/* Textarea md and the Comment button share one 36 row; the field grows to 4 lines. */
+.composerRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.composerField.composerField {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  resize: none;
+  field-sizing: content;
+  max-block-size: calc(var(--type-line-body-sm) * 4 + var(--space-4));
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
 }
 
 .spacer {

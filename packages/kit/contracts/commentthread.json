@@ -2,7 +2,7 @@
   "id": "commentthread",
   "status": "stable",
   "level": "organism",
-  "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
+  "intent": "One conversation on a document, invoice or task: comments, one level of replies, @mentions shown as brand text, in-place edit and delete for your own comments (in a More menu), and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button, DropdownMenu, Kbd and AlertDialog.",
   "useWhen": [
     "people discuss a record (invoice, document, task) with replies and @mentions",
     "show the thread for one line or the whole page",
@@ -17,7 +17,9 @@
     "alertdialog",
     "avatar",
     "button",
+    "dropdownmenu",
     "empty",
+    "kbd",
     "skeleton",
     "textarea"
   ],
@@ -30,12 +32,17 @@
     "comments": {
       "type": "array",
       "required": true,
-      "note": "{ id, author: { id, name, initials?, avatarSrc? }, createdAt, body, edited?, parentId? }[]; replies nest one level."
+      "note": "{ id, author: { id, name, initials?, avatarSrc? }, createdAt, body, edited?, parentId? }[]; replies nest one level. createdAt is shown in mono as given: use one format, e.g. \"Nov 20, 10:03\". \"@Full Name\" of anyone in the thread renders as a mention."
     },
     "currentUserId": {
       "type": "string",
       "required": false,
       "note": "Your comments get Edit and Delete."
+    },
+    "members": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, name, initials?, avatarSrc?, role? }[]. Typing @ in the composer opens this list above the field (a combobox listbox): arrows move, Enter inserts \"@Full Name \", Escape closes and keeps the text."
     },
     "value": {
       "type": "string",
@@ -48,7 +55,7 @@
     "onSubmit": {
       "type": "function",
       "required": true,
-      "note": "Comment, the solid primary; ⌘/Ctrl+Enter posts."
+      "note": "Comment, an md Button on the composer row; ⌘/Ctrl+Enter posts."
     },
     "submitAppearance": {
       "type": "enum",
@@ -66,12 +73,12 @@
     "onReply": {
       "type": "function",
       "required": false,
-      "note": "(id) => void; focus moves to the composer."
+      "note": "(id) => void; one ghost sm Reply under each top-level thread; focus moves to the composer."
     },
     "onEdit": {
       "type": "function",
       "required": false,
-      "note": "(id, body) => void. Enter saves, Escape cancels."
+      "note": "(id, body) => void. From the More menu. Enter saves, Escape cancels; focus returns to More."
     },
     "onDelete": {
       "type": "function",
@@ -129,15 +136,19 @@
     "status.dangerSubtle",
     "status.dangerText",
     "motion.duration200",
-    "type.line.bodySm"
+    "type.line.bodySm",
+    "text.brand"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title (or aria-label when untitled)",
       "comments and replies are nested lists",
-      "Reply buttons say whom they reply to",
-      "the composer and the edit field are labelled Textareas; ⌘/Ctrl+Enter posts, Enter saves an edit, Escape cancels and focus returns to Edit",
+      "Reply buttons say whom they reply to (described by the author name)",
+      "mentions are brand text at heading weight, inside the sentence, so they read in order",
+      "with members, the composer is a combobox: @ opens a listbox above it, arrow keys move, Enter inserts, Escape closes and keeps the typed text; each option reads name and role",
+      "Edit and Delete sit in a kit DropdownMenu named \"More actions on your comment\"",
+      "the composer and the edit field are labelled Textareas; the composer is described by its \"⌘ Enter to send\" hint; ⌘/Ctrl+Enter posts, Enter saves an edit, Escape cancels and focus returns to More",
       "Delete confirms with a kit AlertDialog",
       "Sending is announced in a status region; aria-busy while sending or loading",
       "new comments fade and rise in on transform and opacity, off under prefers-reduced-motion"
@@ -146,8 +157,9 @@
   "doNot": [
     "Do not use Chat for people commenting on a record",
     "Do not nest replies more than one level",
+    "Do not style Reply, Edit or Delete as text links: Reply is a ghost sm Button, Edit and Delete live in the More menu",
     "Do not show more than one solid primary; Comment is it unless submitAppearance is soft",
     "Do not use raw hex"
   ],
-  "snippet": "<CommentThread title=\"Invoice INV-2026-0117\" comments={comments} currentUserId={me.id} value={draft} onValueChange={setDraft} onSubmit={post} onReply={reply} onEdit={edit} onDelete={remove} />"
+  "snippet": "<CommentThread title=\"Invoice INV-1842\" comments={comments} members={team} currentUserId={me.id} value={draft} onValueChange={setDraft} onSubmit={post} onReply={reply} onEdit={edit} onDelete={remove} />"
 }

@@ -992,7 +992,7 @@
   },
   {
     "id": "notificationstack",
-    "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
+    "intent": "The durable in-app inbox of product notifications: an sm bell with the unread count opens a 24rem kit Popover (a full-height Drawer below --grid-breakpoint-sm) with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
     "group": "component",
     "path": "contracts/notificationstack.json",
     "status": "stable",
@@ -1016,7 +1016,7 @@
   },
   {
     "id": "commentthread",
-    "intent": "One conversation on a document, invoice or task: comments, one level of replies, in-place edit and delete for your own comments, and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button and AlertDialog.",
+    "intent": "One conversation on a document, invoice or task: comments, one level of replies, @mentions shown as brand text, in-place edit and delete for your own comments (in a More menu), and a composer. Not the assistant Chat. Built on kit Avatar, Textarea, Button, DropdownMenu, Kbd and AlertDialog.",
     "group": "component",
     "path": "contracts/commentthread.json",
     "status": "stable",

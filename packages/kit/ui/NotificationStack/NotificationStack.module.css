@@ -1,4 +1,3 @@
-/* Paper panel is 340px; same custom-width pattern as InsightCard (--insight-width). */
 .root {
   position: relative;
   display: inline-flex;
@@ -30,19 +29,27 @@
 
 /* Beats the Popover's own padding and max-width (same element, higher specificity). */
 .popoverPanel.popoverPanel {
+  width: max-content;
+  min-width: 0;
   max-width: none;
   padding: 0;
   overflow: hidden;
 }
 
 .panel {
-  --notifications-width: 21.25rem;
+  /* D: the bell Popover is 24rem wide. */
+  --notifications-width: 24rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: min(100%, var(--notifications-width));
   min-width: 0;
   font-family: var(--font-sans);
+}
+
+/* In the Popover the panel sets the width; keep a 16px gutter on small windows. */
+.popoverPanel .panel {
+  width: min(var(--notifications-width), calc(100vw - var(--space-8)));
 }
 
 .inline {
@@ -52,11 +59,23 @@
   overflow: hidden;
 }
 
+/* Inside the narrow Drawer: full width, the Drawer owns title, close and View all. */
+.sheet {
+  width: 100%;
+}
+
+.sheetBar {
+  display: flex;
+  justify-content: flex-end;
+  padding-block-end: var(--space-2);
+}
+
 .header {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  box-sizing: border-box;
   border-block-end: var(--border-width-thin) solid var(--line-default);
 }
 
@@ -69,44 +88,19 @@
   color: var(--text-fg);
 }
 
+.unreadCount {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
 .spacer {
   flex: 1 1 0;
 }
 
-.textButton,
-.footerLink {
-  padding: 0;
-  font: inherit;
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-xs);
-  color: var(--primary-fg);
-  background: none;
-  border: 0;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.textButton:disabled {
-  color: var(--text-fg-subtle);
-  cursor: default;
-}
-
-.footerLink {
-  color: var(--text-fg-muted);
-}
-
-.textButton:not(:disabled):hover,
-.footerLink:hover {
-  text-decoration: underline;
-}
-
-.textButton:focus-visible,
-.footerLink:focus-visible,
 .rowButton:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+  outline: none;
+  box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin), var(--focus-ring) 0 0 0 calc(var(--border-width-thin) * 3);
 }
 
 .body {
@@ -122,15 +116,35 @@
   list-style: none;
 }
 
+.group {
+  display: flex;
+  flex-direction: column;
+  padding-block-start: var(--space-2);
+}
+
+.groupDivided {
+  border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+.groupHeading {
+  margin: 0;
+  padding-inline: var(--space-4);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
 .item {
   display: flex;
+  flex-direction: column;
   animation: itemIn var(--motion-duration-200) var(--motion-ease-out);
 }
 
 .row {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-3);
   width: 100%;
   padding: var(--space-3) var(--space-4);
   font: inherit;
@@ -150,8 +164,36 @@
   background-color: var(--bg-subtle);
 }
 
-.rowButton:focus-visible {
-  outline-offset: calc(var(--border-focus-width) * -1);
+/* Rail marker shared with Timeline: 12px, filled brand when unread, hollow when read. Centred on the title line. */
+.marker {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--space-3);
+  height: var(--space-3);
+  margin-block-start: calc((var(--type-line-ui-sm) - var(--space-3)) / 2);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-strong);
+  border-radius: var(--radius-full);
+}
+
+.markerUnread {
+  background-color: var(--fill-brand);
+  border-color: var(--fill-brand);
+}
+
+.text {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.titleLine {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .icon {
@@ -166,7 +208,10 @@
 }
 
 /* Only tones that need attention keep their colour; the rest read as plain icons. */
-.toneSuccess,
+.toneSuccess {
+  color: var(--status-success);
+}
+
 .toneInfo {
   color: var(--text-fg-muted);
 }
@@ -179,25 +224,9 @@
   color: var(--status-danger);
 }
 
-/* Unread dot: trails the text next to the time, centred on the title line, so every row keeps the 16px start edge. */
-.unreadDot {
-  flex-shrink: 0;
-  margin-block-start: calc((var(--type-line-ui-sm) - var(--space-1) * 1.5) / 2);
-  width: calc(var(--space-1) * 1.5);
-  height: calc(var(--space-1) * 1.5);
-  background-color: var(--primary);
-  border-radius: var(--radius-full);
-}
-
-.text {
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: var(--space-stack-2xs);
-  min-width: 0;
-}
-
 .itemTitle {
+  flex: 1 1 0;
+  min-width: 0;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
@@ -205,9 +234,24 @@
   color: var(--text-fg);
 }
 
-/* Unread titles are bold (as in AgentInbox); read ones drop to body weight. */
+/* Unread titles are 550; read ones drop to body weight. The marker and New badge carry unread, not the weight. */
 .itemTitleRead {
   font-weight: var(--type-weight-body);
+}
+
+.newBadge {
+  flex-shrink: 0;
+}
+
+/* Mono clock time in a fixed 40px column so times line up down the list. */
+.time {
+  flex-shrink: 0;
+  width: var(--space-10);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  text-align: end;
+  color: var(--text-fg-subtle);
 }
 
 .itemBody {
@@ -216,17 +260,20 @@
   color: var(--text-fg-muted);
 }
 
-.time {
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg-subtle);
-}
-
 .footer {
   padding: var(--space-3) var(--space-4);
   border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+/* The row action lines up with the title text: past the 12px marker and the 12px gap. */
+.action {
+  display: flex;
+  padding: 0 var(--space-4) var(--space-3) calc(var(--space-4) + var(--space-3) * 2);
+  margin-block-start: calc(var(--space-1) * -1);
+}
+
+.viewAll {
+  width: 100%;
 }
 
 .error {
