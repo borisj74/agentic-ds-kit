@@ -1,2 +1,2 @@
 export { NotificationStack } from "./NotificationStack";
-export type { NotificationStackProps, NotificationItem, NotificationTone } from "./NotificationStack.types";
+export type { NotificationStackProps, NotificationItem, NotificationTone, NotificationAction } from "./NotificationStack.types";

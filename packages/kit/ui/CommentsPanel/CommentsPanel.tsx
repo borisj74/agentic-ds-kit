@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useLayoutEffect, useRef, useState } from "react";
-import { ChevronLeft, MessageCircle, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -11,6 +11,7 @@ import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
 import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
+import { NARROW_QUERY, useMediaQuery } from "../shared/useMediaQuery";
 import type { CommentsFilter, CommentsPanelProps, CommentThreadSummary } from "./CommentsPanel.types";
 import styles from "./CommentsPanel.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -55,6 +56,8 @@ export function CommentsPanel({
   const openCount = threads.filter((thread) => !thread.resolved).length;
   const resolvedCount = threads.length - openCount;
   const selected = selectedId ? threads.find((thread) => thread.id === selectedId) : undefined;
+  // On a phone, Close, Back and Resolve grow to md (36) for touch.
+  const narrow = useMediaQuery(NARROW_QUERY);
 
   const body = (
     <Body
@@ -64,6 +67,7 @@ export function CommentsPanel({
       openCount={openCount}
       resolvedCount={resolvedCount}
       selected={selected}
+      controlSize={narrow ? "md" : "sm"}
       onSelect={onSelect}
       onResolve={onResolve}
       composer={composer}
@@ -83,9 +87,9 @@ export function CommentsPanel({
         <header className={styles.inlineHeader}>
           <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.inlineHeaderIcon} />
           <h2 className={styles.inlineTitle}>{label}</h2>
-          <span className={styles.inlineCount}>{loading ? "…" : error ? "—" : String(threads.length)}</span>
+          <span className={styles.inlineCount}>{loading ? "…" : error ? "—" : `${openCount} open`}</span>
           <span className={styles.spacer} />
-          <Button size="sm" appearance="ghost" mode="neutral" iconStart={X} ariaLabel={`Close ${label.toLowerCase()}`} onClick={() => onOpenChange(false)} />
+          <Button size={narrow ? "md" : "sm"} appearance="ghost" mode="neutral" iconStart={X} ariaLabel={`Close ${label.toLowerCase()}`} onClick={() => onOpenChange(false)} />
         </header>
         <div className={styles.inlineBody}>{body}</div>
       </div>
@@ -142,6 +146,7 @@ function Body({
   openCount,
   resolvedCount,
   selected,
+  controlSize,
   onSelect,
   onResolve,
   composer,
@@ -158,6 +163,7 @@ function Body({
   openCount: number;
   resolvedCount: number;
   selected?: CommentThreadSummary;
+  controlSize: "sm" | "md";
   onSelect: (id: string | null) => void;
   onResolve?: (id: string) => void;
   composer?: CommentsPanelProps["composer"];
@@ -200,20 +206,21 @@ function Body({
     return (
       <div className={styles.detail}>
         <div className={styles.detailBar}>
-          <button
-            type="button"
-            className={styles.back}
+          <Button
+            size={controlSize}
+            appearance="ghost"
+            mode="neutral"
+            iconStart={ArrowLeft}
             autoFocus
             onClick={() => {
               pendingBack.current = true;
               onSelect(null);
             }}
           >
-            <ChevronLeft size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
             All threads
-          </button>
+          </Button>
           {onResolve && !selected.resolved ? (
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="Check" onClick={() => onResolve(selected.id)}>
+            <Button size={controlSize} appearance="outline" mode="neutral" iconStart="Check" onClick={() => onResolve(selected.id)}>
               Resolve
             </Button>
           ) : selected.resolved ? (
@@ -225,6 +232,9 @@ function Body({
         <h3 id={titleId} className={styles.detailTitle}>
           {selected.title}
         </h3>
+        <p className={styles.detailMeta}>
+          {selected.count} {selected.count === 1 ? "comment" : "comments"} · {selected.resolved ? "Resolved" : "Open"}
+        </p>
         <div className={styles.detailThread} role="group" aria-labelledby={titleId}>
           {children}
         </div>

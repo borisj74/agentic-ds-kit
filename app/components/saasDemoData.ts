@@ -1,17 +1,23 @@
-import type { CommentThreadSummary, ThreadComment } from "agentic-ds-kit";
+import type { CommentMember, CommentThreadSummary, ThreadComment } from "agentic-ds-kit";
 
 /** Example data shared by the CommentThread and CommentsPanel docs. People and numbers are examples. */
 export const PRIYA = { id: "priya", name: "Priya Shah", initials: "PS" };
-export const MARCO = { id: "marco", name: "Marco Li", initials: "ML" };
+export const DANIEL = { id: "daniel", name: "Daniel Okafor", initials: "DO" };
 
 export const THREAD: ThreadComment[] = [
-  { id: "c1", author: PRIYA, createdAt: "2h", body: "Can we confirm the 20% tax rate before this goes out?" },
-  { id: "c2", author: MARCO, createdAt: "1h", body: "Confirmed with finance, 20% is right for UK customers.", edited: true, parentId: "c1" },
-  { id: "c3", author: PRIYA, createdAt: "45m", body: "Thanks, marking it ready", parentId: "c1" },
+  { id: "c1", author: PRIYA, createdAt: "Nov 20, 09:12", body: "@Daniel Okafor the card on file was declined twice. Can you check with Northwind AP before we retry on Nov 23?" },
+  { id: "c2", author: DANIEL, createdAt: "Nov 20, 10:03", body: "Spoke to Mara in AP. A new Visa goes on file today. @Priya Shah hold the retry.", parentId: "c1" },
+  { id: "c3", author: PRIYA, createdAt: "Nov 20, 10:26", body: "Holding. I'll retry once the new card is in.", edited: true, parentId: "c1" },
 ];
 
 export const THREADS: CommentThreadSummary[] = [
-  { id: "t1", title: "Tax rate for UK customers", preview: "Thanks, marking it ready", count: 3, updatedAt: "45m" },
-  { id: "t2", title: "Line 2 · seat price", preview: "Should this be $22 after the discount?", count: 2, updatedAt: "3h" },
-  { id: "t3", title: "Due date", preview: "Moved to 15 Nov.", count: 1, updatedAt: "1d", resolved: true },
+  { id: "t1", title: "Card declined", preview: "Holding. I'll retry once the new card is in.", count: 3, updatedAt: "10:26" },
+  { id: "t2", title: "Line 2 · API calls over 2M", preview: "Should this be $0.11 per 1K after the tier?", count: 2, updatedAt: "Nov 19" },
+  { id: "t3", title: "Due date", preview: "Moved to Nov 20.", count: 1, updatedAt: "Nov 14", resolved: true },
+];
+
+export const MEMBERS: CommentMember[] = [
+  { ...PRIYA, role: "Billing ops" },
+  { ...DANIEL, role: "Finance" },
+  { id: "paul", name: "Paul Nguyen", initials: "PN", role: "Support" },
 ];

@@ -2,7 +2,7 @@
   "id": "notificationstack",
   "status": "stable",
   "level": "organism",
-  "intent": "The durable in-app inbox of product notifications: a bell with the unread count opens a kit Popover with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
+  "intent": "The durable in-app inbox of product notifications: an sm bell with the unread count opens a 24rem kit Popover (a full-height Drawer below --grid-breakpoint-sm) with the list, Mark all read and View all. Toasts stay for instant feedback; agent approvals live in AgentInbox.",
   "useWhen": [
     "show payments, sign-ins and billing updates people can read later",
     "an app header needs a bell with an unread count",
@@ -16,6 +16,7 @@
   "contains": [
     "badge",
     "button",
+    "drawer",
     "empty",
     "popover",
     "skeleton"
@@ -24,7 +25,7 @@
     "items": {
       "type": "array",
       "required": true,
-      "note": "{ id, title, body?, createdAt, read, tone?: 'neutral'|'success'|'info'|'warning'|'danger', icon? }[]"
+      "note": "{ id, title, body?, createdAt, read, tone?: 'neutral'|'success'|'info'|'warning'|'danger', icon?, group?, action?: { label, onClick } }[]. group (\"Today\", \"Yesterday\") gathers items under a heading; action is one outline sm Button, only when the event needs a decision. createdAt shows in mono."
     },
     "label": {
       "type": "string",
@@ -113,14 +114,18 @@
     "status.warning",
     "status.danger",
     "motion.duration200",
-    "radius.full"
+    "radius.full",
+    "fill.brand",
+    "line.strong",
+    "status.success"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
-      "the bell is a kit Button named \"Notifications, 2 unread\"; the count chip is aria-hidden",
-      "the panel is the kit Popover dialog, named by label; Escape closes and returns focus to the bell",
-      "unread items say \"Unread:\" to screen readers, not just a bold title",
+      "the bell is an sm kit Button named \"Notifications, 3 unread\"; the count chip is aria-hidden",
+      "the panel is the kit Popover dialog, named by label; Escape closes and returns focus to the bell. Below --grid-breakpoint-sm it is a kit Drawer with the same rows",
+      "unread is a filled rail marker plus a New badge, never colour or weight alone; each row reads \"New. Payment failed. … 09:42.\" and the marker is aria-hidden",
+      "Mark all read is announced in a polite status region and focus stays on it",
       "no count chip at zero",
       "new items fade and drop in on transform and opacity, off under prefers-reduced-motion"
     ]
@@ -128,6 +133,8 @@
   "doNot": [
     "Do not invent a local NotificationBell or NotificationList",
     "Do not restyle Toast as an inbox",
+    "Do not show unread by colour or bold alone: keep the marker and the New badge",
+    "Do not style Mark all read or View all as text links: they are ghost and outline sm Buttons",
     "Do not route agent approvals here — AgentInbox",
     "Do not use raw hex"
   ],

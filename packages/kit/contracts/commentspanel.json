@@ -133,10 +133,11 @@
     "element": "div",
     "requirements": [
       "the trigger is a kit Button described by the open count Badge",
-      "the panel is the kit Drawer dialog (focus trap, Escape closes, focus returns to the trigger)",
+      "the panel is the kit Drawer dialog (focus trap, Escape closes, focus returns to the trigger); inline it is a region labelled by label",
       "the filter is a kit SegmentedControl radio group",
-      "threads are buttons; resolved threads say so to screen readers",
-      "All threads returns focus to the thread that was opened",
+      "threads are buttons; resolved threads say so to screen readers; the open thread says \"3 comments · Open\" in words",
+      "All threads (ghost) returns focus to the thread that was opened",
+      "below --grid-breakpoint-sm Close, All threads and Resolve grow to md (36) for touch",
       "list and thread crossfade on opacity, off under prefers-reduced-motion"
     ]
   },

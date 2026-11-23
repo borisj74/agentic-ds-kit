@@ -108,8 +108,7 @@
   background-color: var(--bg-subtle);
 }
 
-.thread:focus-visible,
-.back:focus-visible {
+.thread:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: calc(var(--border-focus-width) * -1);
 }
@@ -162,24 +161,9 @@
   gap: var(--space-2);
 }
 
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1);
-  margin-inline-start: calc(var(--space-1) * -1);
-  font: inherit;
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
-  color: var(--text-fg-muted);
-  background: none;
-  border: 0;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.back:hover {
-  color: var(--text-fg);
+/* Ghost Back: pull it left so its arrow lines up with the title. */
+.detailBar > :first-child {
+  margin-inline-start: calc(var(--space-2) * -1);
 }
 
 .detailTitle {
@@ -189,6 +173,14 @@
   letter-spacing: var(--type-tracking-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
+}
+
+/* "3 comments · Open": the state is a word, not only the Resolve button. */
+.detailMeta {
+  margin: calc(var(--space-1) * -1) 0 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
 }
 
 .detailThread {
