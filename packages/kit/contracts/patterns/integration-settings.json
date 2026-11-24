@@ -8,7 +8,7 @@
   "add": "npx agentic-ds-kit add integration-settings",
   "import": "import { IntegrationSettingsPattern } from \"@/components/patterns/integration-settings\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/integration-settings/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+  "intent": "Settings for one connected integration: a Section head (provider, account, Ask) over a Connection Card (status Badge, last sync with numbers, the sync error with Retry inside it) and a Sync settings Card (the form, Save), in layout-container-sm. Disconnect sits in its own Section below, behind a danger AlertDialog.",
   "contains": [
     "section",
     "badge",
@@ -16,8 +16,7 @@
     "fieldset",
     "field",
     "select",
-    "switch",
-    "tag",
+    "checkbox",
     "button",
     "card",
     "alertdialog",
@@ -29,19 +28,24 @@
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
     "At most one appearance=\"solid\" mode=\"primary\" Button per view",
     "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Options that wait for Save are Checkboxes; use Switch only for settings that apply at once",
     "Wrap every setting in Field (label, hint and control wiring); group them in a FieldSet",
     "Disable the FieldSet while saving and while access needs reauth",
+    "Disconnect sits outside the settings form, in its own Section below it",
     "Disconnect is a danger action and confirms with a kit AlertDialog; Cancel returns focus to Disconnect",
     "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
     "When access expires, Reconnect is the solid primary and Save steps down to outline",
     "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
   ],
   "defaults": [
-    "Section with the provider name, last sync as its description, and the status Badge plus Sync now in its actions",
-    "Settings rows use Field labelPosition=\"start\" (label left, control right)",
+    "Section with the provider name, the account as its description, and Ask in its actions",
+    "Connection Card: status Badge (word plus icon), last sync, synced counts and next sync as plain text, Sync now in the header",
+    "A sync error is an Alert that names what failed, with Retry and View invoices as its actions",
+    "Sync settings Card: labels on top, Selects at md 36, two columns that stack in a narrow column",
     "Save changes submits the form; ⌘/Ctrl+S saves too",
-    "Scopes are kit Tags; Disconnect sits in a small Card at the end",
+    "Scopes are one plain sentence under the options",
+    "Disconnect sits --space-10 below the settings Card; the AlertDialog opens on Keep connected",
     "Not connected shows a kit Empty with Connect"
   ],
-  "snippet": "<IntegrationSettingsPattern status=\"connected\" onSave={save} onCancel={reset} onSyncNow={sync} onDisconnect={disconnect} />"
+  "snippet": "<IntegrationSettingsPattern status=\"error\" lastSync={{ at: \"Today 09:42\", invoices: 128, payments: 41, next: \"09:57\" }} onRetry={retry} onSave={save} onCancel={reset} onSyncNow={sync} onViewErrors={openInvoices} onDisconnect={disconnect} />"
 }

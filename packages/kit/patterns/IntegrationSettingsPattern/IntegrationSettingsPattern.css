@@ -1,63 +1,135 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The integration-settings-pattern__ prefix keeps names unique. */
 
+/* One column at layout-container-sm (640). Container queries below follow its width, not the viewport. */
 .integration-settings-pattern {
+  width: min(100%, var(--layout-container-sm));
+  container-type: inline-size;
+}
+
+/* Connection and Sync settings 24 apart; Disconnect 40 below them, outside the form. */
+.integration-settings-pattern__body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  max-width: var(--layout-container-sm);
+  gap: var(--space-10);
 }
 
-.integration-settings-pattern__head-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.integration-settings-pattern__notice {
+.integration-settings-pattern__blocks {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-6);
 }
 
-.integration-settings-pattern__notice > :first-child {
-  align-self: stretch;
+.integration-settings-pattern__status {
+  display: flex;
 }
 
-.integration-settings-pattern__rows {
+/* Last sync, Synced, Next sync: plain text in three columns, two rows under 30rem. */
+.integration-settings-pattern__stats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr);
+  grid-template-areas: "at synced next";
+  gap: var(--space-6);
+  margin: 0;
+}
+
+.integration-settings-pattern__stat[data-stat="at"] {
+  grid-area: at;
+}
+
+.integration-settings-pattern__stat[data-stat="synced"] {
+  grid-area: synced;
+}
+
+.integration-settings-pattern__stat[data-stat="next"] {
+  grid-area: next;
+}
+
+.integration-settings-pattern__stat {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-1);
+  min-width: 0;
 }
 
-.integration-settings-pattern__scopes {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.integration-settings-pattern__caption {
+.integration-settings-pattern__stat dt {
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-muted);
 }
 
-.integration-settings-pattern__scope-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+.integration-settings-pattern__stat dd {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-ui-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.integration-settings-pattern__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.integration-settings-pattern__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.integration-settings-pattern__checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.integration-settings-pattern__check {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Lines the hint up with the Checkbox label: box 16 plus its 8 gap. */
+.integration-settings-pattern__check-hint {
+  padding-inline-start: var(--space-6);
+}
+
+.integration-settings-pattern__caption {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
 }
 
 .integration-settings-pattern__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  padding-block-start: var(--space-4);
+  border-top: var(--border-divider) solid var(--border-faint);
 }
 
 .integration-settings-pattern__loading {
   padding-block: var(--space-2);
+}
+
+/* 30rem: where three stat columns and two Selects stop fitting at md 36 without truncating. */
+@container (max-width: 30rem) {
+  .integration-settings-pattern__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "at next"
+      "synced synced";
+    column-gap: var(--space-4);
+    row-gap: var(--space-3);
+  }
+
+  .integration-settings-pattern__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.integration-settings-pattern__disconnect {
+  display: flex;
 }

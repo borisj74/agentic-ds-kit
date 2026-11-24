@@ -116,7 +116,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "app-shell": "Side nav with a workspace switcher, quick actions and a Notifications panel around the page, inset or flat, with a narrow drawer.",
   layouts: "Top bar and side nav, composed from kit components.",
   "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",
-  "integration-settings": "One integration's status, sync settings, scopes, and a confirmed disconnect.",
+  "integration-settings": "One integration's status and last sync, the sync error with Retry, sync settings, and Disconnect kept away from Save.",
   settings: "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
   onboarding: "Four guided setup steps with progress, a validation error and a submitting state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",

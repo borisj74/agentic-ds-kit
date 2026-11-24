@@ -14621,14 +14621,16 @@
     {
       "id": "integration-settings",
       "group": "pattern",
-      "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+      "intent": "Settings for one connected integration: a Section head (provider, account, Ask) over a Connection Card (status Badge, last sync with numbers, the sync error with Retry inside it) and a Sync settings Card (the form, Save), in layout-container-sm. Disconnect sits in its own Section below, behind a danger AlertDialog.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",
         "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Options that wait for Save are Checkboxes; use Switch only for settings that apply at once",
         "Wrap every setting in Field (label, hint and control wiring); group them in a FieldSet",
         "Disable the FieldSet while saving and while access needs reauth",
+        "Disconnect sits outside the settings form, in its own Section below it",
         "Disconnect is a danger action and confirms with a kit AlertDialog; Cancel returns focus to Disconnect",
         "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
         "When access expires, Reconnect is the solid primary and Save steps down to outline",
