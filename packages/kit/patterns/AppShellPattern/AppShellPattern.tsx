@@ -24,6 +24,7 @@ import { Command } from "../../ui/Command";
 import type { CommandGroup } from "../../ui/Command";
 import { Input } from "../../ui/Input";
 import { Modal } from "../../ui/Modal";
+import { ModalCard } from "../../ui/ModalCard";
 import type { KitIcon } from "../../ui/Button";
 import { Empty } from "../../ui/Empty";
 import { ListView } from "../../ui/ListView";
@@ -850,36 +851,16 @@ function DefaultNarrowHeader({ title, mark, markIcon }: Pick<AppShellNav, "mark"
   );
 }
 
-/** Work panel content: a close row and kit Tabs. */
-function WorkPanelBody({
-  panel,
-  tab,
-  onTab,
-  onClose,
-}: {
-  panel: AppShellWorkPanel;
-  tab: string;
-  onTab: (id: string) => void;
-  onClose?: () => void;
-}) {
-  return (
-    <>
-      {onClose ? (
-        <div className="app-shell-pattern__panel-head">
-          <p className="app-shell-pattern__panel-title">{panel.title}</p>
-          <Button appearance="ghost" mode="neutral" size="sm" iconStart="X" ariaLabel={`Close ${panel.title}`} onClick={onClose} />
-        </div>
-      ) : null}
-      <Tabs className="app-shell-pattern__panel-tabs" size="sm" fill ariaLabel={panel.title} items={panel.tabs} value={tab} onChange={onTab} />
-    </>
-  );
+/** Work panel content: kit Tabs. The header (h2 title, Close) is ModalCard's, or the Drawer's when narrow. */
+function WorkPanelBody({ panel, tab, onTab }: { panel: AppShellWorkPanel; tab: string; onTab: (id: string) => void }) {
+  return <Tabs className="app-shell-pattern__panel-tabs" size="sm" fill ariaLabel={panel.title} items={panel.tabs} value={tab} onChange={onTab} />;
 }
 
 /**
  * Product chrome at every width. Wide: AppHeader over SideNav + content (layout-shell /
  * layout-app), in a flat or inset look; the rail collapses to icons and an optional work
  * panel sits on the right. Narrow: no SideNav; a Menu Button opens the nav in a left Drawer
- * and the work panel opens in a right Drawer.
+ * and the work panel opens in a right Drawer, which is a bottom sheet below 30rem.
  */
 function AppShellPatternRoot({
   header,
@@ -1061,8 +1042,20 @@ function AppShellPatternRoot({
     <div className="app-shell-pattern__main" data-panel={!narrow && panelOpen ? "open" : undefined}>
       {children}
       {!narrow && panelOpen ? (
-        <aside id={panelId} className="app-shell-pattern__panel" aria-label={workPanel.title}>
-          <WorkPanelBody panel={workPanel} tab={tab} onTab={setTab} onClose={closePanel} />
+        <aside
+          id={panelId}
+          className="app-shell-pattern__panel"
+          aria-label={workPanel.title}
+          onKeyDown={(event) => {
+            // No focus trap: Escape closes the panel only while focus is inside it.
+            if (event.key !== "Escape" || event.defaultPrevented) return;
+            event.preventDefault();
+            closePanel();
+          }}
+        >
+          <ModalCard className="app-shell-pattern__panel-card" title={workPanel.title} onClose={closePanel}>
+            <WorkPanelBody panel={workPanel} tab={tab} onTab={setTab} />
+          </ModalCard>
         </aside>
       ) : null}
     </div>

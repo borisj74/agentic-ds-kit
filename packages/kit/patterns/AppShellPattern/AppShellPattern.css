@@ -304,11 +304,22 @@
 .app-shell-pattern__panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-stack-sm);
   overflow: auto;
-  padding: var(--space-inset-md);
   border-inline-start: var(--border-width-thin) solid var(--border-faint);
   background: var(--surface-card);
+}
+
+/* The kit ModalCard header (h2 title, Close), docked: no float, no gap, 16 inside, the shell card frames it.
+   aside + class outranks ModalCard's own size class. */
+aside.app-shell-pattern__panel > .app-shell-pattern__panel-card {
+  flex: 1 1 auto;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-inset-lg);
+  background: var(--surface-card);
+  border-radius: var(--radius-0);
+  box-shadow: none;
 }
 
 /* The Tabs take the panel's remaining height (Tabs fill), so a full-height tab such as Chat embedded reaches the bottom. */

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertDialog } from "agentic-ds-kit";
-import type { AlertDialogActionVariant, AlertDialogSize } from "agentic-ds-kit";
+import type { AlertDialogActionVariant, AlertDialogSize, ModalCardTone } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -11,52 +11,78 @@ import { DocNotes } from "./DocNotes";
 
 const SIZES: AlertDialogSize[] = ["sm", "md"];
 const ACTION_VARIANTS: AlertDialogActionVariant[] = ["primary", "danger"];
+type Example = AlertDialogActionVariant | "typed";
+const EXAMPLES: Example[] = ["primary", "danger", "typed"];
 
-const COPY: Record<
-  AlertDialogActionVariant,
-  { title: string; description: string; actionLabel: string; about: string; heading: string }
-> = {
+interface Copy {
+  heading: string;
+  title: string;
+  description: string;
+  actionLabel: string;
+  actionVariant: AlertDialogActionVariant;
+  about: string;
+  tone?: ModalCardTone;
+  eyebrow?: string;
+  cancelLabel?: string;
+  consequences?: string[];
+  confirmText?: string;
+}
+
+const COPY: Record<Example, Copy> = {
   primary: {
     heading: "Confirm",
     title: "Leave this page?",
-    description: "You have unsaved changes. Continue without saving?",
-    actionLabel: "Continue",
-    about: "Use primary Continue when the choice is not destructive — they must still pick Cancel or Continue.",
+    description: "You have unsaved changes to INV-2042.",
+    actionLabel: "Leave page",
+    actionVariant: "primary",
+    eyebrow: "Invoices",
+    about: "Use primary when the choice is not destructive. They still pick Cancel or the action.",
   },
   danger: {
     heading: "Destructive",
-    title: "Delete project?",
-    description: "This cannot be undone.",
-    actionLabel: "Delete",
-    about: "Use danger Delete for irreversible actions. Cancel stays secondary. Overlay does not close it.",
+    title: "Disconnect Stripe?",
+    description: "Syncing stops right away. Invoices already in the ledger stay. You can reconnect later.",
+    actionLabel: "Disconnect",
+    actionVariant: "danger",
+    tone: "warning",
+    eyebrow: "Integrations",
+    cancelLabel: "Keep connected",
+    about: "danger replaces the primary. The tone shows as an icon and a word. Focus starts on Keep connected; the overlay does not close it.",
+  },
+  typed: {
+    heading: "Type to confirm",
+    title: "Delete workspace?",
+    description: "Northwind and its 1,284 invoices are removed for everyone.",
+    actionLabel: "Delete workspace",
+    actionVariant: "danger",
+    tone: "warning",
+    eyebrow: "Workspace",
+    consequences: ["Stripe and QuickBooks disconnect.", "Exports you already downloaded stay on your computer."],
+    confirmText: "northwind",
+    about: "consequences list what happens. confirmText keeps the action off until it is typed; focus starts in that field.",
   },
 };
 
-function dialogCode(variant: AlertDialogActionVariant, size: AlertDialogSize) {
-  const current = COPY[variant];
-  return [
-    "<AlertDialog",
-    "  open={open}",
-    `  title="${current.title}"`,
-    `  description="${current.description}"`,
-    `  actionLabel="${current.actionLabel}"`,
-    `  actionVariant="${variant}"`,
-    `  size="${size}"`,
-    "  onCancel={close}",
-    "  onAction={confirm}",
-    "/>",
-  ].join("\n");
+function dialogCode(example: Example, size: AlertDialogSize) {
+  const current = COPY[example];
+  const lines = ["<AlertDialog", "  open={open}", `  size="${size}"`];
+  if (current.tone) lines.push(`  tone="${current.tone}"`);
+  if (current.eyebrow) lines.push(`  eyebrow="${current.eyebrow}"`);
+  lines.push(`  title="${current.title}"`, `  description="${current.description}"`);
+  if (current.consequences) lines.push(`  consequences={${JSON.stringify(current.consequences)}}`);
+  if (current.confirmText) lines.push(`  confirmText="${current.confirmText}"`);
+  if (current.cancelLabel) lines.push(`  cancelLabel="${current.cancelLabel}"`);
+  lines.push(`  actionLabel="${current.actionLabel}"`, `  actionVariant="${current.actionVariant}"`, "  onCancel={close}", "  onAction={confirm}", "/>");
+  return lines.join("\n");
 }
 
 export function AlertDialogDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
-  const [size, setSize] = useState<AlertDialogSize>("md");
-  const [actionVariant, setActionVariant] = useState<AlertDialogActionVariant>("primary");
+  const [size, setSize] = useState<AlertDialogSize>("sm");
+  const [actionVariant, setActionVariant] = useState<AlertDialogActionVariant>("danger");
   const [open, setOpen] = useState(false);
-  const [variantOpen, setVariantOpen] = useState<AlertDialogActionVariant | null>(null);
-  const current = COPY[actionVariant];
-  const live = variantOpen ? COPY[variantOpen] : current;
-  const liveVariant = variantOpen ?? actionVariant;
+  const [variantOpen, setVariantOpen] = useState<Example | null>(null);
+  const live = COPY[variantOpen ?? actionVariant];
   const liveOpen = tab === "preview" ? open : variantOpen !== null;
 
   return (
@@ -143,14 +169,14 @@ export function AlertDialogDoc() {
           </div>
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
-            {ACTION_VARIANTS.map((option) => (
+            {EXAMPLES.map((option) => (
               <section key={option} className={styles.example}>
                 <h2 className={styles.exampleTitle}>{COPY[option].heading}</h2>
                 <div className={styles.exampleCanvas}>
                   <div className={styles.previewRow}>
                     <Button
                       appearance="solid"
-                      mode={option === "danger" ? "danger" : "primary"}
+                      mode={COPY[option].actionVariant}
                       size="md"
                       onClick={() => setVariantOpen(option)}
                     >
@@ -162,7 +188,7 @@ export function AlertDialogDoc() {
                   <h3 className={styles.usageTitle}>Usage</h3>
                   <p className={styles.usageBody}>{COPY[option].about}</p>
                 </div>
-                <CodeBlock code={dialogCode(option, "md")} />
+                <CodeBlock code={dialogCode(option, option === "typed" ? "md" : "sm")} />
               </section>
             ))}
           </div>
@@ -173,9 +199,14 @@ export function AlertDialogDoc() {
         open={liveOpen}
         title={live.title}
         description={live.description}
+        tone={live.tone}
+        eyebrow={live.eyebrow}
+        consequences={live.consequences}
+        confirmText={live.confirmText}
+        cancelLabel={live.cancelLabel}
         actionLabel={live.actionLabel}
-        actionVariant={liveVariant}
-        size={size}
+        actionVariant={live.actionVariant}
+        size={variantOpen === "typed" ? "md" : variantOpen ? "sm" : size}
         onCancel={() => {
           setOpen(false);
           setVariantOpen(null);

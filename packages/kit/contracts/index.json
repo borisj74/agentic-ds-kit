@@ -544,7 +544,7 @@
   },
   {
     "id": "modalcard",
-    "intent": "The panel chrome for a modal (title, body, footer). Use inside Modal, or standalone in docs. Not a page Card.",
+    "intent": "The panel chrome for a modal: one shared header (tone icon + eyebrow, Close, h2 title, description) and footer (footerStart left, actions right). Modal, AlertDialog and the AppShell work panel render it; Drawer uses the same header and footer. Not a page Card.",
     "group": "component",
     "path": "contracts/modalcard.json",
     "status": "stable",
@@ -752,7 +752,7 @@
   },
   {
     "id": "alertdialog",
-    "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
+    "intent": "Must-choose overlay that interrupts until the user cancels or confirms. Composes ModalCard (same header and footer as Modal), with no Close.",
     "group": "component",
     "path": "contracts/alertdialog.json",
     "status": "stable",
@@ -1330,7 +1330,7 @@
   },
   {
     "id": "app-shell",
-    "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+    "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer (a bottom sheet below 30rem). header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
     "group": "pattern",
     "path": "contracts/patterns/app-shell.json",
     "status": "stable",

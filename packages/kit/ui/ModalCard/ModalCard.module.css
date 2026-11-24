@@ -15,7 +15,6 @@
 
 .sm {
   width: min(100%, 22rem);
-  gap: var(--space-stack-md);
   padding: var(--space-inset-lg);
 }
 
@@ -26,10 +25,11 @@
 
 .lg {
   width: min(100%, 36rem);
-  padding: var(--space-inset-2xl);
+  padding: var(--space-inset-xl);
 }
 
-.card[role="dialog"] {
+/* Inside Modal or AlertDialog: header and footer stay put, the body scrolls. */
+.card[aria-modal="true"] {
   max-height: min(90vh, 40rem, 100%);
   min-height: 0;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -37,12 +37,65 @@
   animation: cardEnter var(--motion-modal-duration) var(--motion-modal-easing);
 }
 
+/* ---- Shared header: tone icon + eyebrow and Close, then the title and description ---- */
+
 .header {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  min-width: 0;
+}
+
+.top,
+.titleRow {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: var(--space-inline-md);
+  min-width: 0;
+}
+
+/* Close shares the title's first line when there is no eyebrow row. */
+.titleRow {
+  align-items: flex-start;
+}
+
+.top {
+  min-height: var(--control-height-sm);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
   gap: var(--space-inline-sm);
   min-width: 0;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+.toneIcon {
+  flex-shrink: 0;
+  color: var(--icon-secondary);
+}
+
+.eyebrow[data-tone="info"] .toneIcon {
+  color: var(--icon-info);
+}
+
+.eyebrow[data-tone="success"] .toneIcon {
+  color: var(--icon-success);
+}
+
+.eyebrow[data-tone="warning"] .toneIcon {
+  color: var(--icon-warning);
+}
+
+.eyebrow[data-tone="danger"] .toneIcon {
+  color: var(--icon-danger);
 }
 
 .copy {
@@ -56,58 +109,19 @@
 .title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-heading);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading-5);
-  line-height: var(--type-line-heading);
+  letter-spacing: var(--type-tracking-heading);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-primary);
-}
-
-.sm .title {
-  font-size: var(--type-size-body);
-  letter-spacing: normal;
-  line-height: var(--type-line-body);
 }
 
 .description {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
   color: var(--text-muted);
-}
-
-.close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  margin: 0;
-  padding: 0;
-  color: var(--icon-muted);
-  background: transparent;
-  border: none;
-  /* Pull the box out so the X icon sits on the padding edge. */
-  margin-inline-end: calc(var(--space-inset-sm) * -1);
-  border-radius: var(--radius-control-sm);
-  cursor: pointer;
-}
-
-/* sm title uses the body line height, so lift the X onto its center. */
-.sm .close {
-  margin-block-start: calc(var(--space-inset-xs) * -1);
-}
-
-.close:hover {
-  background-color: var(--surface-muted);
-  color: var(--icon-primary);
-}
-
-.close:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
 }
 
 .body {
@@ -118,23 +132,56 @@
   color: var(--text-primary);
 }
 
-.card[role="dialog"] .body {
+.card[aria-modal="true"] .body {
   min-height: 0;
   overflow: auto;
 }
 
+/* ---- Shared footer: footerStart (Ask or a count) left, actions right ---- */
+
 .footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-inline-sm);
+  min-width: 0;
+}
+
+/* Card gap (16) + this (8) = 24 above the actions. */
+.card > .footer {
+  padding-block-start: var(--space-stack-sm);
+}
+
+.sm > .footer {
+  padding-block-start: 0;
+}
+
+/* While the body scrolls, a divider marks where it ends. */
+.card[data-scrolls] > .footer {
+  padding-block-start: var(--space-stack-md);
+  border-block-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.footerStart {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline-sm);
+  min-width: 0;
+  margin-inline-end: auto;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-muted);
+}
+
+.footerEnd {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-inline-sm);
   min-width: 0;
-  /* Card gap (16) + this (8) = 24 above the actions. */
-  padding-block-start: var(--space-stack-sm);
-}
-
-.sm .footer {
-  padding-block-start: 0;
+  margin-inline-start: auto;
 }
 
 @keyframes cardEnter {
@@ -147,7 +194,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card[role="dialog"] {
+  .card[aria-modal="true"] {
     animation: none;
   }
 }

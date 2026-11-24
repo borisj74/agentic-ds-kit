@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "../Button";
 import { ButtonGroup } from "../ButtonGroup";
+import { Field } from "../Field";
+import { Input } from "../Input";
+import { ModalCard } from "../ModalCard";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { AlertDialogProps } from "./AlertDialog.types";
@@ -12,6 +15,7 @@ import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
+import { FOCUSABLE, lockPage, restoreFocus } from "../shared/overlayLock";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
 
@@ -19,10 +23,15 @@ export function AlertDialog({
   open,
   title,
   description,
+  eyebrow,
+  tone,
+  consequences,
+  confirmText,
   cancelLabel = "Cancel",
   actionLabel,
   actionVariant = "primary",
   size = "md",
+  footerStart,
   onCancel,
   onAction,
   className,
@@ -30,19 +39,30 @@ export function AlertDialog({
   ...rest
 }: AlertDialogProps) {
   const labels = useKitLabels();
-  const titleId = useId();
-  const descriptionId = useId();
+  const confirmId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const setDialogRef = useMemo(() => mergeRefs(dialogRef, ref), [ref]);
-  const cancelRef = useRef<HTMLButtonElement | null>(null);
   const onCancelRef = useRef(onCancel);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const mounted = useIsClient();
   const scope = useThemeScopeMarker();
+  const [typed, setTyped] = useState("");
+  const needsTyping = Boolean(confirmText);
+  const matches = !needsTyping || typed === confirmText;
+  // A typo shows an error; a correct start (or nothing yet) only shows the hint.
+  const mistyped = needsTyping && typed !== "" && !confirmText!.startsWith(typed);
 
   useLayoutEffect(() => {
     onCancelRef.current = onCancel;
   });
+
+  // Each opening starts with an empty field (adjusted during render, not in an effect).
+  const [wasOpen, setWasOpen] = useState(open);
+  if (wasOpen !== open) {
+    setWasOpen(open);
+    if (open) setTyped("");
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -52,9 +72,10 @@ export function AlertDialog({
     const root = dialogRef.current;
     if (!root) return;
 
-    const cancelButton = root.querySelector<HTMLButtonElement>("button");
-    cancelRef.current = cancelButton;
-    cancelButton?.focus();
+    // The type-to-confirm field when there is one, else Cancel: never the destructive action.
+    const field = document.getElementById(confirmId);
+    const start = (field && root.contains(field) ? field : null) ?? root.querySelector<HTMLElement>("[data-alert-cancel]");
+    (start ?? root).focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -67,11 +88,11 @@ export function AlertDialog({
 
       if (event.key !== "Tab") return;
 
-      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("button"));
-      if (buttons.length === 0) return;
+      const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (items.length === 0) return;
 
-      const first = buttons[0];
-      const last = buttons[buttons.length - 1];
+      const first = items[0];
+      const last = items[items.length - 1];
       const active = document.activeElement;
       const inside = active instanceof Node && root.contains(active);
 
@@ -87,57 +108,79 @@ export function AlertDialog({
     };
 
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockPage(overlayRef.current);
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      previousFocusRef.current?.focus();
+      unlock();
+      restoreFocus(previousFocusRef.current);
     };
-  }, [open, mounted]);
+  }, [open, mounted, confirmId]);
 
   if (!open) return null;
   if (!mounted) return null;
 
+  const hasBody = Boolean(consequences?.length) || needsTyping;
+
   return createPortal(
     <div
+      ref={overlayRef}
       className={[styles.overlay, scope.fontClassName].filter(Boolean).join(" ")}
       data-theme-scope={scope.id}
       data-theme={scope.mode === "dark" ? "dark" : undefined}
       role="presentation"
       onMouseDown={(event) => {
+        // The overlay does not dismiss: a must-choose dialog waits for Cancel or the action.
         if (event.target === event.currentTarget) event.preventDefault();
       }}
     >
-      <div
+      <ModalCard
         {...rest}
         {...nisthaAttr("alertdialog", rest)}
         ref={setDialogRef}
         role="alertdialog"
         aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={descriptionId}
-        className={cx(styles.dialog, styles[size], className)}
         tabIndex={-1}
-      >
-        <h2 id={titleId} className={styles.title}>
-          {title}
-        </h2>
-        <p id={descriptionId} className={styles.description}>
-          {description}
-        </p>
-        <div className={styles.footer}>
+        title={title}
+        description={description}
+        eyebrow={eyebrow}
+        tone={tone}
+        size={size}
+        className={cx(styles.dialog, className)}
+        footerStart={footerStart}
+        footer={
           <ButtonGroup ariaLabel={labels.dialogActions}>
-            <Button appearance="outline" mode="neutral" size="md" onClick={onCancel}>
+            <Button appearance="outline" mode="neutral" size="sm" onClick={onCancel} data-alert-cancel="">
               {cancelLabel}
             </Button>
-            <Button appearance="solid" mode={actionVariant} size="md" onClick={onAction}>
+            <Button appearance="solid" mode={actionVariant} size="sm" onClick={onAction} disabled={!matches}>
               {actionLabel}
             </Button>
           </ButtonGroup>
-        </div>
-      </div>
+        }
+      >
+        {hasBody ? (
+          <div className={styles.content}>
+            {consequences?.length ? (
+              <ul className={styles.consequences}>
+                {consequences.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            ) : null}
+            {needsTyping ? (
+              <Field
+                label={`Type ${confirmText} to confirm`}
+                htmlFor={confirmId}
+                hint={matches ? undefined : `${actionLabel} turns on when this matches.`}
+                error={mistyped ? `This does not match ${confirmText}.` : undefined}
+              >
+                <Input id={confirmId} size="sm" value={typed} onChange={setTyped} />
+              </Field>
+            ) : null}
+          </div>
+        ) : null}
+      </ModalCard>
     </div>,
     document.body,
   );

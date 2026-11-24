@@ -2,15 +2,15 @@
   "id": "alertdialog",
   "status": "stable",
   "level": "organism",
-  "intent": "Must-choose overlay that interrupts until the user cancels or confirms.",
+  "intent": "Must-choose overlay that interrupts until the user cancels or confirms. Composes ModalCard (same header and footer as Modal), with no Close.",
   "useWhen": [
     "Confirming a destructive or irreversible action",
     "A decision that must be answered before the page continues"
   ],
   "doNotUseWhen": [
-    "Inline status on the page \u2014 use Alert",
-    "Dismissible short tasks or forms \u2014 use Modal",
-    "Passive help \u2014 use Tooltip"
+    "Inline status on the page — use Alert",
+    "Dismissible short tasks or forms — use Modal",
+    "Passive help — use Tooltip"
   ],
   "props": {
     "open": {
@@ -24,6 +24,34 @@
     "description": {
       "type": "string",
       "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Short area name in the header row, 12px, like Billing · Invoices. Caller-provided."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "default": "neutral",
+      "required": false,
+      "note": "Tone icon (16px, aria-hidden) and status word from KitLabels (info, success, warning, danger) before the eyebrow, so status is never colour alone. neutral shows the eyebrow only."
+    },
+    "consequences": {
+      "type": "string[]",
+      "required": false,
+      "note": "Outcome lines under the description, as visible text, like Invoices already in the ledger stay."
+    },
+    "confirmText": {
+      "type": "string",
+      "required": false,
+      "note": "The person types this (a name) to turn on the action. The field is labelled Type <confirmText> to confirm; the action stays disabled until it matches, and focus starts in the field."
     },
     "cancelLabel": {
       "type": "string",
@@ -40,7 +68,8 @@
         "primary",
         "danger"
       ],
-      "default": "primary"
+      "default": "primary",
+      "note": "danger replaces the primary. Buttons are size sm."
     },
     "size": {
       "type": "enum",
@@ -48,7 +77,13 @@
         "sm",
         "md"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "Modal sizes: sm 352 (16 padding) or md 448 (24). Radius 16."
+    },
+    "footerStart": {
+      "type": "slot",
+      "required": false,
+      "note": "Left of Cancel and the action, first in the footer tab order: an optional Ask Button (appearance outline, mode neutral, size sm, iconStart MessageCircle). Caller-provided label."
     },
     "onCancel": {
       "type": "function",
@@ -69,31 +104,41 @@
   "tokens": [
     "text.primary",
     "text.muted",
+    "text.secondary",
     "surface.overlay",
-    "surface.elevated",
-    "shadow.md",
-    "border.faint",
+    "bg.floating",
+    "shadow.lg",
+    "radius.surfaceLg",
     "motion.overlay",
-    "type.tracking.heading5"
+    "motion.modal",
+    "type.size.uiLg",
+    "type.size.uiSm",
+    "type.tracking.heading",
+    "icon.warning",
+    "icon.danger"
   ],
   "a11y": {
     "element": "alertdialog",
     "requirements": [
-      "role=alertdialog and aria-modal",
-      "Title is the accessible name, description is aria-describedby",
-      "Focus moves to Cancel when opened",
-      "Focus is trapped while open",
+      "Composes ModalCard with role=alertdialog and aria-modal",
+      "Title (h2) is the accessible name, description is aria-describedby",
+      "Focus starts on Cancel, or in the confirmText field when set; never on the action",
+      "confirmText field is labelled, described by a hint until it matches, and aria-invalid on a typo; the action is disabled until it matches",
+      "consequences are visible text",
+      "Focus is trapped while open and the page behind is inert",
       "Escape cancels, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Overlay click does not dismiss",
-      "built-in labels (dialogActions) come from KitLabelsProvider; English by default"
+      "Scroll lock keeps the scrollbar gutter",
+      "Focus returns to the opener on close; if the opener is gone, to the page heading (or main)",
+      "built-in labels (dialogActions, warning, danger, info, success) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
     "Do not invent a local confirm dialog or use window.confirm",
     "Do not use raw hex",
-    "Do not put forms, tables, or extra actions in AlertDialog \u2014 use Modal",
+    "Do not put forms, tables, or extra actions in AlertDialog — use Modal",
     "Do not add a close X or dismiss on overlay",
     "Do not use more than one primary/danger action (the action button is the one)"
   ],
-  "snippet": "<AlertDialog open={open} title=\"Delete project?\" description=\"This cannot be undone.\" actionLabel=\"Delete\" actionVariant=\"danger\" onCancel={close} onAction={remove} />"
+  "snippet": "<AlertDialog open={open} size=\"sm\" tone=\"warning\" eyebrow=\"Integrations\" title=\"Disconnect Stripe?\" description=\"Syncing stops right away. Invoices already in the ledger stay. You can reconnect later.\" cancelLabel=\"Keep connected\" actionLabel=\"Disconnect\" actionVariant=\"danger\" onCancel={close} onAction={disconnect} />"
 }

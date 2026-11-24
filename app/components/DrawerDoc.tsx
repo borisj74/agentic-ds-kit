@@ -117,26 +117,13 @@ function Actions({
 }) {
   return (
     <ButtonGroup ariaLabel={ariaLabel}>
-      <Button appearance="outline" mode="neutral" onClick={onClose}>
+      <Button appearance="outline" mode="neutral" size="sm" onClick={onClose}>
         Cancel
       </Button>
-      <Button appearance="solid" mode="primary" onClick={onClose}>
+      <Button appearance="solid" mode="primary" size="sm" onClick={onClose}>
         Save
       </Button>
     </ButtonGroup>
-  );
-}
-
-function ProfileFields({ nameId, emailId }: { nameId: string; emailId: string }) {
-  return (
-    <div style={{ display: "grid", gap: "var(--space-4)" }}>
-      <Field label="Name" htmlFor={nameId}>
-        <Input id={nameId} placeholder="Boris Jovanovic" />
-      </Field>
-      <Field label="Email" htmlFor={emailId}>
-        <Input id={emailId} type="email" placeholder="you@example.com" />
-      </Field>
-    </div>
   );
 }
 
@@ -370,18 +357,31 @@ export function DrawerDoc() {
 
             <Variant
               title="With footer"
-              usage="Title, description, and footer actions. Overlay click and Escape still close."
-              code={`<Drawer\n  open={open}\n  title="Edit profile"\n  description="Make changes to your profile here."\n  onClose={close}\n  footer={\n    <ButtonGroup ariaLabel="Drawer actions">\n      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Drawer>`}
+              usage="Drawer md for an invoice. The header has the eyebrow and Close; the footer is one row, Ask on the left, Cancel then Save on the right. Below 480px it opens as the bottom sheet and the footer stacks: actions first, then Ask. Focus starts on the first field."
+              code={`<Drawer\n  open={open}\n  eyebrow="Billing · Invoices"\n  title="INV-2042"\n  description="Northwind, due Dec 4, 2026."\n  onClose={close}\n  footerStart={<Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle" onClick={ask}>Ask about this</Button>}\n  footer={\n    <ButtonGroup ariaLabel="Drawer actions">\n      <Button appearance="outline" mode="neutral" size="sm" onClick={close}>Cancel</Button>\n      <Button appearance="solid" mode="primary" size="sm" onClick={save}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  ...\n</Drawer>`}
               onOpen={() => setVariantOpen("footer")}
             >
               <Drawer
                 open={variantOpen === "footer"}
-                title="Edit profile"
-                description="Make changes to your profile here."
+                eyebrow="Billing · Invoices"
+                title="INV-2042"
+                description="Northwind, due Dec 4, 2026."
                 onClose={close}
+                footerStart={
+                  <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
+                    Ask about this
+                  </Button>
+                }
                 footer={<Actions onClose={close} />}
               >
-                <ProfileFields nameId="drawer-footer-name" emailId="drawer-footer-email" />
+                <div style={{ display: "grid", gap: "var(--space-4)" }}>
+                  <Field label="Due date" htmlFor="drawer-footer-due">
+                    <Input id="drawer-footer-due" defaultValue="Dec 4, 2026" />
+                  </Field>
+                  <Field label="Amount" htmlFor="drawer-footer-amount">
+                    <Input id="drawer-footer-amount" defaultValue="$4,200.00" />
+                  </Field>
+                </div>
               </Drawer>
             </Variant>
 

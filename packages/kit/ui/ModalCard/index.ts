@@ -1,2 +1,2 @@
 export { ModalCard } from "./ModalCard";
-export type { ModalCardProps, ModalCardSize } from "./ModalCard.types";
+export type { ModalCardProps, ModalCardSize, ModalCardTone } from "./ModalCard.types";
