@@ -93,6 +93,13 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
   ],
   settings: SETTINGS_SCREENS.map(({ id, label }) => ({ id, label })),
   onboarding: ONBOARDING_SCREENS.map(({ id, label }) => ({ id, label })),
+  "insight-stack": [
+    { id: "specimens", label: "Ranked, loading, all clear" },
+    { id: "ranked", label: "Ranked · sm, md, lg" },
+    { id: "loading", label: "Loading · sm, md, lg" },
+    { id: "all-clear", label: "All clear · sm, md, lg" },
+    { id: "mobile", label: "Mobile 390", device: "mobile" },
+  ],
 };
 
 export function isScreenSlug(slug: string): slug is ScreenSlug {
@@ -112,6 +119,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "integration-settings": "One integration's status, sync settings, scopes, and a confirmed disconnect.",
   settings: "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
   onboarding: "Four guided setup steps with progress, a validation error and a submitting state.",
+  "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
 };
 
 /** Each screen pattern's add command. Docs slugs are the pattern ids. */
@@ -126,4 +134,5 @@ export const PATTERN_ADD: Record<ScreenSlug, string> = {
   "integration-settings": "npx agentic-ds-kit add integration-settings",
   settings: "npx agentic-ds-kit add settings",
   onboarding: "npx agentic-ds-kit add onboarding",
+  "insight-stack": "npx agentic-ds-kit add insight-stack",
 };

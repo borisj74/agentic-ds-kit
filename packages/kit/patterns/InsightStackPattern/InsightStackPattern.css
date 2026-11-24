@@ -1,0 +1,334 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The insight-stack-pattern__ prefix keeps names unique. */
+
+/* Same shell as kit InsightCard: card surface, faint border, surface radius. */
+.insight-stack-pattern {
+  --insight-stack-padding: var(--space-6);
+  --insight-stack-gap: var(--space-4);
+  --insight-stack-width: 24rem;
+  --insight-stack-title: var(--type-size-ui-lg);
+  --insight-stack-title-line: var(--type-line-ui-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--insight-stack-gap);
+  width: min(100%, var(--insight-stack-width));
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--insight-stack-padding);
+  background-color: var(--surface-card);
+  border: var(--border-highlight) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+/* sm 320, md 384, lg 448. A small card does not carry a 16/24 title. */
+.insight-stack-pattern--sm {
+  --insight-stack-padding: var(--space-4);
+  --insight-stack-gap: var(--space-3);
+  --insight-stack-width: 20rem;
+  --insight-stack-title: var(--type-size-body);
+  --insight-stack-title-line: var(--type-line-ui-md);
+}
+
+.insight-stack-pattern--lg {
+  --insight-stack-width: 28rem;
+}
+
+.insight-stack-pattern__glyph {
+  display: block;
+  flex-shrink: 0;
+  stroke-width: var(--icon-stroke);
+}
+
+.insight-stack-pattern__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.insight-stack-pattern__lead,
+.insight-stack-pattern__trail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.insight-stack-pattern__trail {
+  flex-shrink: 0;
+}
+
+/* Keep the header row as tall as the X when there is no X. */
+.insight-stack-pattern__header {
+  min-height: var(--control-height-sm);
+}
+
+.insight-stack-pattern__icon {
+  color: var(--icon-brand);
+}
+
+.insight-stack-pattern__icon--success {
+  color: var(--icon-success);
+}
+
+.insight-stack-pattern__eyebrow {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+.insight-stack-pattern__meta,
+.insight-stack-pattern__source {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-muted);
+}
+
+.insight-stack-pattern__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.insight-stack-pattern__title {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--insight-stack-title);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
+  line-height: var(--insight-stack-title-line);
+  color: var(--text-primary);
+}
+
+.insight-stack-pattern__caption {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-secondary);
+}
+
+.insight-stack-pattern__source {
+  margin: 0;
+}
+
+/* All clear: the source sits apart from the title and caption, as on the board. */
+.insight-stack-pattern--empty .insight-stack-pattern__source {
+  margin-block-start: var(--space-2);
+}
+
+.insight-stack-pattern__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--insight-stack-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.insight-stack-pattern__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.insight-stack-pattern__item > hr {
+  margin-block-end: var(--space-2);
+}
+
+.insight-stack-pattern__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.insight-stack-pattern__rank {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.insight-stack-pattern__finding,
+.insight-stack-pattern__skeleton-lines {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.insight-stack-pattern__skeleton-lines {
+  gap: var(--space-2);
+}
+
+.insight-stack-pattern__finding-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.insight-stack-pattern__finding-title {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-primary);
+}
+
+/* The change never truncates; the title wraps instead. */
+.insight-stack-pattern__change {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* An unsigned amount ($1,360): tone-coloured text, no arrow, no fill. */
+.insight-stack-pattern__amount {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--type-line-ui-xs);
+  white-space: nowrap;
+}
+
+.insight-stack-pattern__amount--success {
+  color: var(--text-success);
+}
+
+.insight-stack-pattern__amount--danger {
+  color: var(--text-danger);
+}
+
+.insight-stack-pattern__amount--warning {
+  color: var(--text-warning);
+}
+
+.insight-stack-pattern__amount--neutral {
+  color: var(--text-secondary);
+}
+
+.insight-stack-pattern__detail {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+/* Why?: a compact text toggle under the finding (Collapsible's aria-expanded / aria-controls / region). */
+.insight-stack-pattern__why {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control-sm);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.insight-stack-pattern__why:hover {
+  color: var(--text-primary);
+}
+
+.insight-stack-pattern__why .insight-stack-pattern__glyph {
+  color: var(--icon-secondary);
+}
+
+.insight-stack-pattern__why:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+/* The open panel lines up with the finding text: rank width (24) + row gap (12). */
+.insight-stack-pattern__panel {
+  padding-inline-start: calc(var(--space-6) + var(--space-3));
+}
+
+.insight-stack-pattern__panel[hidden] {
+  display: none;
+}
+
+.insight-stack-pattern__evidence {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--surface-muted);
+  border: var(--border-highlight) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+}
+
+.insight-stack-pattern__confidence {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+.insight-stack-pattern__confidence-value {
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}
+
+.insight-stack-pattern__sources {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
+}
+
+.insight-stack-pattern__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.insight-stack-pattern__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
