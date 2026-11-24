@@ -52,6 +52,23 @@ describe("Delta", () => {
   });
 });
 
+describe("Delta goodWhen", () => {
+  test("judges up and down in words with status icons; only Worse is coloured; flat is not judged", () => {
+    const worse = render(h(kit.Delta, { value: "+17%", direction: "up", goodWhen: "down" }));
+    assert.match(worse, /Worse · \+17%/);
+    assert.match(worse, /lucide-triangle-alert/);
+    assert.match(worse, /_danger_/);
+    const better = render(h(kit.Delta, { value: "+6.3 pts", direction: "up", goodWhen: "up" }));
+    assert.match(better, /Better · \+6\.3 pts/);
+    assert.match(better, /lucide-circle-check/);
+    assert.match(better, /_neutral_/);
+    assert.doesNotMatch(better, /_success_/);
+    assert.ok(!/aria-hidden="true"[^>]*lucide-arrow/.test(better));
+    const flat = render(h(kit.Delta, { value: "0%", direction: "flat", goodWhen: "down" }));
+    assert.doesNotMatch(flat, /Better|Worse/);
+  });
+});
+
 describe("Avatar", () => {
   test("presence word joins the accessible name", () => {
     const html = render(h(kit.Avatar, { name: "Ana Ruiz", presence: "online" }));

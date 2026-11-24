@@ -1,6 +1,6 @@
 ### Added
 
-- **Delta atom.** How a value moved: an arrow and the signed change (`+$600`, `−$90`, `No change`) in success, danger or neutral text, with no fill. `direction` up, down or flat; `tone` overrides the colour when a rise is bad news.
+- **Delta atom.** How a value moved: an arrow and the signed change (`+$600`, `−$90`, `No change`) in success, danger or neutral text, with no fill. `direction` up, down or flat; `tone` overrides the colour when a rise is bad news. `goodWhen` (up or down) judges the move: the text reads `Better · +6.3 pts` with CircleCheck or `Worse · +17%` with TriangleAlert, and only Worse is coloured. New KitLabels keys `better` and `worse`.
 - **Avatar `shape` and `presence`.** `shape="square"` for organisations (customers, workspaces). `presence` online, away or offline draws a corner mark with its own shape and adds the word to the accessible name; the words come from new KitLabels keys `online`, `away`, `offline`.
 - **Avatar and AvatarGroup sizes `xs` (20) and `xl` (48).**
 - **Count `prefix="+"`** for overflow counts (+3). Visual only; screen readers hear the count and label.
@@ -15,6 +15,6 @@
 - **Tag corner is 4px**, matching Badge.
 - **AvatarGroup** rings each face with `--surface-card` (2px) and gives the +N a proper accessible name (role img, "3 more").
 - **Cell `trendPositive` / `trendNegative` render a kit Delta** (arrow and signed value) instead of a chevron. Same props; put the sign in the value.
-- **Scorecard `delta` renders a kit Delta** (arrow from `trend`, colour from `trend` or `deltaTone`). Trend `neutral` with a `deltaTone` still shows the tone's status icon.
+- **Scorecard `delta` renders a kit Delta** (arrow from `trend`, colour from `trend` or `deltaTone`). Trend `neutral` with a `deltaTone` still shows the tone's status icon. Scorecard `goodWhen` now passes through to Delta, so a judged Better delta is neutral instead of green.
 - **MultiSelect overflow is a kit Count `+N`** (neutral, subtle) instead of a Badge.
 - **Contracts name which mark to use.** Badge, Tag, Count, Delta, Avatar, AvatarGroup and ListView each say their one job.

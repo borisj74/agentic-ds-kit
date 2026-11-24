@@ -5,7 +5,7 @@
   "summary": "Failed runs across all agents grouped by likely cause, so ops fixes causes, not single runs.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed), affected agents and the trend in words; beside it the selected cluster's first and last seen, a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Open issue is the one solid primary.",
+  "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed) and the trend as counts in muted text (\"4 more than the previous period\"); beside it the selected cluster: status, count, affected agents as text, first and last seen, the cause in a sentence (sample.summary), a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Mute, Mark known and Open issue close the detail, after the evidence; Open issue is the one solid primary.",
   "useWhen": [
     "ops needs to see which causes break agent runs across many agents",
     "a person decides whether a failure is known, should be muted or needs an issue",
@@ -20,7 +20,6 @@
     "filterbar",
     "radiogroup",
     "badge",
-    "avatargroup",
     "numbertransition",
     "linechart",
     "toolcallcard",
@@ -33,7 +32,7 @@
     "clusters": {
       "type": "array",
       "required": true,
-      "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[], trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary?, args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
+      "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[] (named as text; src is unused), trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary? (the cause in one sentence, shown under the h3), args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
     },
     "title": {
       "type": "string",
@@ -101,36 +100,36 @@
     "radius.surfaceMd",
     "type.family.heading",
     "type.family.mono",
-    "type.size.uiXl",
     "type.size.body",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.heading",
     "type.weight.label",
-    "type.tracking.heading",
     "layout.gutter.md",
     "motion.fast",
-    "status.dangerText",
-    "status.successText",
-    "action.selectedBorder"
+    "action.selectedBorder",
+    "type.size.uiMd",
+    "border.widthThin"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
       "the clusters are a listbox; each option has aria-selected, Up / Down / Home / End move the selection and focus with it",
-      "status is a word in a Badge and the trend is words with an icon, never colour alone",
+      "status is a word in a Badge and the trend is counts in words in muted text, with an aria-hidden icon; status colour comes only from the Badge",
       "counts use NumberTransition with a spoken label (\"12 failed runs\")",
       "the selected cluster is a section labelled by its h3 cause",
       "the sample call is a ToolCallCard opened to its error; recent runs are a captioned kit Table",
-      "motion is off under prefers-reduced-motion"
+      "motion is off under prefers-reduced-motion",
+      "Mute, Mark known and Open issue follow the detail content in reading and tab order"
     ]
   },
   "doNot": [
     "Do not invent a local ErrorGroups, IncidentList or FailureTable",
     "Do not list single runs as clusters (AgentInbox)",
     "Open issue is the one solid primary; Mark known is outline and Mute ghost",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not colour the trend with status tones; the Badge says whether it is a problem"
   ],
   "snippet": "<FailureClusters clusters={clusters} filters={{ time: \"Last 24 hours\" }} onMarkKnown={markKnown} onMute={mute} onOpenIssue={openIssue} />"
 }

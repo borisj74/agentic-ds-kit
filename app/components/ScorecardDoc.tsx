@@ -327,6 +327,30 @@ export function ScorecardDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Good direction</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Scorecard label="Pass rate" value="91.7%" delta="+6.3 pts" trend="up" goodWhen="up" hint="vs v2 85.4%" />
+                  <Scorecard label="Average cost per case" value="$0.021" delta="+17%" trend="up" goodWhen="down" hint="vs v2 $0.018" />
+                  <Scorecard label="p50 latency" value="1.8 s" delta="−14%" trend="down" goodWhen="down" hint="vs v2 2.1 s" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  goodWhen says which way is good. The delta then starts with Better or Worse, with
+                  CircleCheck or TriangleAlert, so a rising cost never reads as good news. Only Worse is coloured. Use up for
+                  pass rate or revenue and down for cost, latency or churn.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Scorecard label="Pass rate" value="91.7%" delta="+6.3 pts" trend="up" goodWhen="up" hint="vs v2 85.4%" />
+<Scorecard label="Average cost per case" value="$0.021" delta="+17%" trend="up" goodWhen="down" hint="vs v2 $0.018" />
+<Scorecard label="p50 latency" value="1.8 s" delta="−14%" trend="down" goodWhen="down" hint="vs v2 2.1 s" />`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Interactive</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>

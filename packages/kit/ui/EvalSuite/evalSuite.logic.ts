@@ -17,6 +17,16 @@ export function isReviewed(c: EvalCase): boolean {
   return Boolean(c.accepted || c.flagged);
 }
 
+export function improvements(cases: EvalCase[]): EvalCase[] {
+  return cases.filter(isImprovement);
+}
+
+/** Review column: only regressions need a review; accepted wins over flagged. */
+export function reviewState(c: EvalCase): "review" | "accepted" | "flagged" | null {
+  if (!isRegression(c)) return null;
+  return c.accepted ? "accepted" : c.flagged ? "flagged" : "review";
+}
+
 export function regressions(cases: EvalCase[]): EvalCase[] {
   return cases.filter(isRegression);
 }
@@ -67,8 +77,15 @@ export function money(value: number, currency = "USD", locale = "en"): string {
   }
 }
 
+/** A signed money change with three decimals, e.g. "+$0.004" or "−$0.002". */
+export function signedMoney(value: number, currency = "USD", locale = "en"): string {
+  const abs = money(Math.abs(value), currency, locale);
+  if (Number(Math.abs(value).toFixed(3)) === 0) return money(0, currency, locale);
+  return `${value > 0 ? "+" : "−"}${abs}`;
+}
+
 export function ms(value: number): string {
-  return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
+  return value >= 1000 ? `${(value / 1000).toFixed(1)} s` : `${Math.round(value)} ms`;
 }
 
 /** Line diff (LCS) from the baseline output to the candidate output, for InlineDiff. */

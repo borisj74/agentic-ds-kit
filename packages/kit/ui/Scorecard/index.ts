@@ -4,6 +4,7 @@ export type {
   ScorecardTrend,
   ScorecardSize,
   ScorecardDeltaTone,
+  ScorecardGoodWhen,
   ScorecardAppearance,
   ScorecardSelectionRole,
   ScorecardSparklineVariant,

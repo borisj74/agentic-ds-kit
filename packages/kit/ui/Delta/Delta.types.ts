@@ -8,6 +8,9 @@ export type DeltaTone = "success" | "danger" | "warning" | "neutral";
 
 export type DeltaSize = "sm" | "md";
 
+/** Which way a change is good: up (pass rate, revenue) or down (cost, latency). */
+export type DeltaGoodWhen = "up" | "down";
+
 /** Native span attributes the kit sets itself (or replaces with its own prop). */
 type DeltaOwnedKeys = "children";
 
@@ -18,6 +21,12 @@ export interface DeltaProps extends Omit<ComponentPropsWithoutRef<"span">, Delta
   direction: DeltaDirection;
   /** Override the colour when up is bad (costs, churn) or down is good. */
   tone?: DeltaTone;
+  /**
+   * Which way is good. With direction up or down the text reads "Better · +6.3 pts" (CircleCheck,
+   * neutral) or "Worse · +17%" (TriangleAlert, danger) in place of the arrow. Only Worse carries
+   * colour; `tone` still overrides it. Flat is not judged.
+   */
+  goodWhen?: DeltaGoodWhen;
   size?: DeltaSize;
   ref?: Ref<HTMLSpanElement>;
 }

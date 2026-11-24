@@ -17,6 +17,7 @@ export type {
   ScorecardTrend,
   ScorecardSize,
   ScorecardDeltaTone,
+  ScorecardGoodWhen,
   ScorecardAppearance,
   ScorecardSelectionRole,
   ScorecardSparklineVariant,
@@ -78,6 +79,7 @@ export function Scorecard({
   delta,
   trend = "neutral",
   deltaTone,
+  goodWhen,
   hint,
   size = "md",
   badge,
@@ -166,7 +168,7 @@ export function Scorecard({
               {delta}
             </span>
           ) : delta ? (
-            <Delta value={delta} direction={TREND_DIRECTION[trend]} tone={deltaTone} size="sm" />
+            <Delta value={delta} direction={TREND_DIRECTION[trend]} tone={deltaTone} goodWhen={goodWhen} size="sm" />
           ) : null}
           {hint ? <span className={styles.hint}>{hint}</span> : null}
         </span>

@@ -49,6 +49,15 @@
       "required": false,
       "note": "Override the delta colour (default from trend: up success, down danger, flat and neutral neutral), e.g. danger when costs go up. With trend neutral the delta is a status, not a change: warning (text-warning) for an amber count such as '3 urgent', and the tone's status icon replaces the arrow (TriangleAlert, CircleX, CircleCheck)."
     },
+    "goodWhen": {
+      "type": "enum",
+      "values": [
+        "up",
+        "down"
+      ],
+      "required": false,
+      "note": "Which way a change is good: up (pass rate, revenue) or down (cost, latency). Passed through to kit Delta. With trend up or down the delta reads 'Better · +6.3 pts' with CircleCheck or 'Worse · +17%' with TriangleAlert in place of the arrow, so the word carries the meaning. Only Worse carries colour (danger); Better stays neutral. deltaTone still overrides the colour. Flat and neutral are not judged."
+    },
     "hint": {
       "type": "string",
       "required": false,
@@ -228,7 +237,8 @@
       "sparkline is aria-hidden and not focusable",
       "with selectionRole radio, the button has role radio and aria-checked instead of aria-pressed",
       "reference and expressive drawings, dates and legend are aria-hidden; delta and hint carry the meaning",
-      "meter composes kit Meter: role progressbar named by the card label and meter label; the percent and label text under it are aria-hidden"
+      "meter composes kit Meter: role progressbar named by the card label and meter label; the percent and label text under it are aria-hidden",
+      "with goodWhen the visible delta starts with Better or Worse (from kit Delta); the icons are aria-hidden and only repeat the word"
     ]
   },
   "doNot": [
@@ -242,7 +252,8 @@
     "Do not use sparkline as the only sign of change; keep delta or hint",
     "Do not draw a local meter or bar beside Scorecard — pass meter",
     "Do not color the sparkline or meter with brand; brand is only for the selected card",
-    "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
+    "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored",
+    "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse"
   ],
   "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" delta=\"+3.1%\" trend=\"up\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
   "contains": [

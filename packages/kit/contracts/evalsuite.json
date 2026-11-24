@@ -5,7 +5,7 @@
   "summary": "Test a candidate agent version against the baseline on fixed cases before it ships: pass rate, cost and latency, regressions first.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost, p50 latency and regressions; a SegmentedControl (Regressions / Improvements / All) and FilterBar (tag, dataset) over a DataTable of cases; a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled with a reason while regressions are unreviewed.",
+  "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost per case and p50 latency, each delta in words (Better / Worse via Scorecard goodWhen); a SegmentedControl with counts (Regressions n / Improvements n / All n) and FilterBar (tag, dataset) over a DataTable of cases (Case, baseline, candidate, Score change, Cost change, Review); a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled while regressions are unreviewed, with the reason in the footer bar beside it.",
   "useWhen": [
     "a new prompt, model or tool change must not break cases that passed before",
     "a person decides whether to promote a candidate agent version",
@@ -33,7 +33,8 @@
   "props": {
     "title": {
       "type": "string",
-      "default": "Eval run"
+      "default": "Eval run",
+      "note": "Pass a real title, e.g. \"Dunning agent: v3 vs v2\"; the default is a fallback."
     },
     "baseline": {
       "type": "object",
@@ -48,7 +49,7 @@
     "cases": {
       "type": "array",
       "required": true,
-      "note": "{ id, name, tags?, dataset?, input, baseline: { result: \"pass\" | \"fail\" | \"error\", output, score?, cost? }, candidate: same, graderNote?, accepted?, flagged? }[]. A regression passed in baseline and not in candidate; accepted or flagged counts it as reviewed."
+      "note": "{ id, name, tags?, dataset?, input, baseline: { result: \"pass\" | \"fail\" | \"error\", output, score?, cost? }, candidate: same, graderNote?, accepted?, flagged? }[]. A regression passed in baseline and not in candidate; accepted or flagged counts it as reviewed. Rows show Score change as \"−0.42 of 1\" (scores are 0–1), Cost change in currency and a Review column (To review / Accepted / Flagged) for regressions. Tags filter and show in the Drawer, not as a column."
     },
     "view": {
       "type": "enum",
@@ -58,7 +59,7 @@
         "all"
       ],
       "required": false,
-      "note": "Uncontrolled (starts on regressions) when omitted. Rows sort regressions, errors, improvements, rest."
+      "note": "Uncontrolled (starts on regressions) when omitted. Each view label carries its count. Rows sort regressions, errors, improvements, rest."
     },
     "onViewChange": {
       "type": "function",
@@ -67,7 +68,7 @@
     "onPromote": {
       "type": "function",
       "required": false,
-      "note": "Promote <candidate>, the one solid primary; disabled with the reason beside it while running, after an error or while regressions are unreviewed."
+      "note": "Promote <candidate>, the one solid primary; disabled while running, after an error or while regressions are unreviewed, with the reason as the footer text beside it (\"3 cases that passed in v2 don't pass in v3. Accept the new output or flag each one to promote.\")."
     },
     "onRerun": {
       "type": "function",
@@ -125,20 +126,19 @@
     "radius.surfaceMd",
     "type.family.heading",
     "type.family.mono",
-    "type.size.uiXl",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.heading",
     "type.weight.label",
     "layout.gutter.md",
     "layout.gutter.sm",
-    "type.tracking.heading5"
+    "type.size.uiMd"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
-      "results are words in Badges (Pass / Fail / Error), never colour alone",
+      "results, reviews and deltas are words (Pass / Fail / Error, To review / Accepted / Flagged, Better / Worse), never colour alone",
       "each row has an Open button in a group named \"Details for <case>\", so rows are reached and opened from the keyboard",
       "the case Drawer keeps focus and returns it to the Open button on close",
       "Promote is disabled with its reason as text, linked with aria-describedby",
@@ -150,7 +150,8 @@
     "Do not invent a local EvalTable, RegressionList or VersionCompare",
     "Do not let Promote run while regressions are unreviewed",
     "Promote is the one solid primary; Re-run is outline",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not add a separate Regressions tile; the view tabs carry the counts"
   ],
   "snippet": "<EvalSuite baseline={{ label: \"v12\", metrics: v12 }} candidate={{ label: \"v13\", metrics: v13 }} cases={cases} onPromote={promote} onRerun={rerun} onAcceptExpected={accept} onFlag={flag} />"
 }

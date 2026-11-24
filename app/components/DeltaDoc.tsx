@@ -168,6 +168,27 @@ export function DeltaDoc() {
               />
             </section>
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Better or worse</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Delta value="+6.3 pts" direction="up" goodWhen="up" />
+                  <Delta value="+17%" direction="up" goodWhen="down" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Pass goodWhen when a rise can be bad news, like cost or latency. The text starts with Better or
+                  Worse and only Worse is coloured.
+                </p>
+              </div>
+              <CodeBlock
+                code={
+                  '<Delta value="+6.3 pts" direction="up" goodWhen="up" />\n<Delta value="+17%" direction="up" goodWhen="down" />'
+                }
+              />
+            </section>
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Sizes</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewRow}>

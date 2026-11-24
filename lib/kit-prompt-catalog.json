@@ -1015,7 +1015,8 @@
         "Do not use sparkline as the only sign of change; keep delta or hint",
         "Do not draw a local meter or bar beside Scorecard — pass meter",
         "Do not color the sparkline or meter with brand; brand is only for the selected card",
-        "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
+        "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored",
+        "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse"
       ],
       "props": {
         "label": {
@@ -1052,6 +1053,15 @@
           ],
           "required": false,
           "note": "Override the delta colour (default from trend: up success, down danger, flat and neutral neutral), e.g. danger when costs go up. With trend neutral the delta is a status, not a change: warning (text-warning) for an amber count such as '3 urgent', and the tone's status icon replaces the arrow (TriangleAlert, CircleX, CircleCheck)."
+        },
+        "goodWhen": {
+          "type": "enum",
+          "values": [
+            "up",
+            "down"
+          ],
+          "required": false,
+          "note": "Which way a change is good: up (pass rate, revenue) or down (cost, latency). Passed through to kit Delta. With trend up or down the delta reads 'Better · +6.3 pts' with CircleCheck or 'Worse · +17%' with TriangleAlert in place of the arrow, so the word carries the meaning. Only Worse carries colour (danger); Better stays neutral. deltaTone still overrides the colour. Flat and neutral are not judged."
         },
         "hint": {
           "type": "string",
@@ -4628,7 +4638,8 @@
         "Which mark: Delta is how a value moved (arrow and sign, no fill, success or danger text). A money change is a Delta, never a Badge.",
         "A money or metric change next to a value, like +$600 vs October",
         "The change column in a table (kit Cell trendPositive / trendNegative)",
-        "The delta line on a KPI (kit Scorecard delta)"
+        "The delta line on a KPI (kit Scorecard delta)",
+        "A change where up is bad, like cost or latency: pass goodWhen so the text says Better or Worse"
       ],
       "doNotUseWhen": [
         "Status the system sets (Paid, Overdue) — use Badge",
@@ -4641,6 +4652,7 @@
         "Do not use Badge for a money or metric change",
         "Do not put a fill or border behind a Delta",
         "Do not drop the sign from value; write +$600 or −$90, or No change",
+        "Do not add a second Better or Worse prefix to value; pass goodWhen",
         "Do not use raw hex or primitive --color-* ramps"
       ],
       "props": {
@@ -4669,6 +4681,15 @@
           ],
           "required": false,
           "note": "Default from direction: up success, down danger, flat neutral. Override when up is bad (costs, churn) or down is good."
+        },
+        "goodWhen": {
+          "type": "enum",
+          "values": [
+            "up",
+            "down"
+          ],
+          "required": false,
+          "note": "Which way a change is good: up (pass rate, revenue) or down (cost, latency). With direction up or down the text reads 'Better · +6.3 pts' with CircleCheck or 'Worse · +17%' with TriangleAlert, in place of the arrow. Only Worse carries colour (text-danger); Better stays neutral. tone still overrides the colour. flat is not judged. Words come from KitLabels better and worse."
         },
         "size": {
           "type": "enum",
@@ -11136,7 +11157,7 @@
     {
       "id": "experimentcard",
       "group": "component",
-      "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
+      "intent": "A compact A/B or A/B/n experiment: status in words, the metric and traffic split under each variant's value (\"paid within 7 days · 50%\"), a confidence note in plain words and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
       "useWhen": [
         "show a running or finished experiment in a product or growth view",
         "let someone ship the winner or stop a test with a confirmation",
@@ -11160,7 +11181,8 @@
         },
         "metricLabel": {
           "type": "string",
-          "required": true
+          "required": true,
+          "note": "Shown in the meta line and, lowercased, under each value with the traffic share."
         },
         "status": {
           "type": "enum",
@@ -11184,7 +11206,8 @@
         },
         "confidenceNote": {
           "type": "string",
-          "required": false
+          "required": false,
+          "note": "Plain words, e.g. \"88% sure B is better. 95% in about 3 days.\" Body-sm in muted text."
         },
         "onView": {
           "type": "function",
@@ -13366,7 +13389,7 @@
     {
       "id": "evalsuite",
       "group": "component",
-      "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost, p50 latency and regressions; a SegmentedControl (Regressions / Improvements / All) and FilterBar (tag, dataset) over a DataTable of cases; a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled with a reason while regressions are unreviewed.",
+      "intent": "Block: offline regression testing of a candidate agent version against the baseline on a fixed set of cases. A Scoreboard of pass rate, average cost per case and p50 latency, each delta in words (Better / Worse via Scorecard goodWhen); a SegmentedControl with counts (Regressions n / Improvements n / All n) and FilterBar (tag, dataset) over a DataTable of cases (Case, baseline, candidate, Score change, Cost change, Review); a case opens a Drawer with the input, both outputs as a split InlineDiff and the grader's note. Promote candidate is the one solid primary, disabled while regressions are unreviewed, with the reason in the footer bar beside it.",
       "useWhen": [
         "a new prompt, model or tool change must not break cases that passed before",
         "a person decides whether to promote a candidate agent version",
@@ -13381,12 +13404,14 @@
         "Do not invent a local EvalTable, RegressionList or VersionCompare",
         "Do not let Promote run while regressions are unreviewed",
         "Promote is the one solid primary; Re-run is outline",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not add a separate Regressions tile; the view tabs carry the counts"
       ],
       "props": {
         "title": {
           "type": "string",
-          "default": "Eval run"
+          "default": "Eval run",
+          "note": "Pass a real title, e.g. \"Dunning agent: v3 vs v2\"; the default is a fallback."
         },
         "baseline": {
           "type": "object",
@@ -13401,7 +13426,7 @@
         "cases": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, tags?, dataset?, input, baseline: { result: \"pass\" | \"fail\" | \"error\", output, score?, cost? }, candidate: same, graderNote?, accepted?, flagged? }[]. A regression passed in baseline and not in candidate; accepted or flagged counts it as reviewed."
+          "note": "{ id, name, tags?, dataset?, input, baseline: { result: \"pass\" | \"fail\" | \"error\", output, score?, cost? }, candidate: same, graderNote?, accepted?, flagged? }[]. A regression passed in baseline and not in candidate; accepted or flagged counts it as reviewed. Rows show Score change as \"−0.42 of 1\" (scores are 0–1), Cost change in currency and a Review column (To review / Accepted / Flagged) for regressions. Tags filter and show in the Drawer, not as a column."
         },
         "view": {
           "type": "enum",
@@ -13411,7 +13436,7 @@
             "all"
           ],
           "required": false,
-          "note": "Uncontrolled (starts on regressions) when omitted. Rows sort regressions, errors, improvements, rest."
+          "note": "Uncontrolled (starts on regressions) when omitted. Each view label carries its count. Rows sort regressions, errors, improvements, rest."
         },
         "onViewChange": {
           "type": "function",
@@ -13420,7 +13445,7 @@
         "onPromote": {
           "type": "function",
           "required": false,
-          "note": "Promote <candidate>, the one solid primary; disabled with the reason beside it while running, after an error or while regressions are unreviewed."
+          "note": "Promote <candidate>, the one solid primary; disabled while running, after an error or while regressions are unreviewed, with the reason as the footer text beside it (\"3 cases that passed in v2 don't pass in v3. Accept the new output or flag each one to promote.\")."
         },
         "onRerun": {
           "type": "function",
@@ -13465,7 +13490,7 @@
     {
       "id": "failureclusters",
       "group": "component",
-      "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed), affected agents and the trend in words; beside it the selected cluster's first and last seen, a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Open issue is the one solid primary.",
+      "intent": "Block: failed agent runs grouped by likely cause. A FilterBar (time, agent, status) over a listbox of clusters, largest first, each with its cause, count, status Badge (New / Known / Fixed / Regressed) and the trend as counts in muted text (\"4 more than the previous period\"); beside it the selected cluster: status, count, affected agents as text, first and last seen, the cause in a sentence (sample.summary), a LineChart over time, a sample failing call in a ToolCallCard opened to its error and a Table of recent runs. Mute, Mark known and Open issue close the detail, after the evidence; Open issue is the one solid primary.",
       "useWhen": [
         "ops needs to see which causes break agent runs across many agents",
         "a person decides whether a failure is known, should be muted or needs an issue",
@@ -13480,13 +13505,14 @@
         "Do not invent a local ErrorGroups, IncidentList or FailureTable",
         "Do not list single runs as clusters (AgentInbox)",
         "Open issue is the one solid primary; Mark known is outline and Mute ghost",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not colour the trend with status tones; the Badge says whether it is a problem"
       ],
       "props": {
         "clusters": {
           "type": "array",
           "required": true,
-          "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[], trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary?, args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
+          "note": "{ id, title, status: \"new\" | \"known\" | \"fixed\" | \"regressed\", count, agents: { name, src? }[] (named as text; src is unused), trend: number[] (oldest first), trendLabels?, firstSeen, lastSeen, sample: { name, summary? (the cause in one sentence, shown under the h3), args?, error, duration? }, runs: { id, label, href?, agent, when, step }[], mutedUntil? }[]. Sorted largest first. A fixed cluster that comes back should be passed as regressed."
         },
         "title": {
           "type": "string",

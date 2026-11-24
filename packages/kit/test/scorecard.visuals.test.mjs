@@ -161,3 +161,23 @@ describe("Scoreboard passes looks through", () => {
     assert.match(html, /<polyline/);
   });
 });
+
+describe("Scorecard goodWhen", () => {
+  test("passes goodWhen to Delta: up and down moves judged in words, only Worse in colour", async () => {
+    const { judgeDelta } = await import("../dist/ui/Delta/Delta.js");
+    assert.equal(judgeDelta("up", "up"), "better");
+    assert.equal(judgeDelta("up", "down"), "worse");
+    assert.equal(judgeDelta("flat", "down"), null);
+    assert.equal(judgeDelta("down", undefined), null);
+    const worse = h(Scorecard, { label: "Average cost", value: "$0.021", delta: "+17%", trend: "up", goodWhen: "down" });
+    assert.ok(worse.includes("Worse · +17%"));
+    assert.match(worse, /_danger_/, "danger tone");
+    assert.match(worse, /lucide-triangle-alert/);
+    const better = h(Scorecard, { label: "Pass rate", value: "91.7%", delta: "+6.3 pts", trend: "up", goodWhen: "up" });
+    assert.ok(better.includes("Better · +6.3 pts"));
+    assert.match(better, /_neutral_/, "Better carries no colour");
+    assert.doesNotMatch(better, /_success_/);
+    assert.match(better, /lucide-circle-check/);
+    assert.ok(!h(Scorecard, { label: "Cost", value: "$1", delta: "0%", trend: "flat", goodWhen: "down" }).includes("Better"));
+  });
+});

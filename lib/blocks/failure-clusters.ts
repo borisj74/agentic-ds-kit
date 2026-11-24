@@ -7,7 +7,7 @@ export const failureClustersDoc: BlockDoc = {
   name: "FailureClusters",
   contract,
   lead:
-    "Failed runs across every agent, grouped by likely cause, so ops fixes causes instead of single runs. The largest clusters lead, each with its status, the agents it hits and its trend in words; the selected cluster shows when it started, a chart over time, a sample failing call opened to its error and the recent runs. Arrow keys move through the list.",
+    "Failed runs across every agent, grouped by likely cause, so ops fixes causes instead of single runs. The largest clusters lead, each with its status and its trend as counts; the selected cluster names the agents it hits, says the cause in a sentence, and shows when it started, a chart over time, a sample failing call opened to its error and the recent runs, with the actions last. Arrow keys move through the list.",
   usage: `import { FailureClusters } from "agentic-ds-kit";
 
 export function FailuresPage({ clusters, window }) {

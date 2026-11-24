@@ -76,10 +76,11 @@ describe("FailureClusters logic", () => {
   });
 
   test("trend in words", () => {
-    assert.deepEqual(logic.trendWords([2, 6, 18]), { direction: "up", text: "3× vs previous" });
+    assert.deepEqual(logic.trendWords([2, 6, 18]), { direction: "up", text: "12 more than the previous period" });
     assert.deepEqual(logic.trendWords([0, 9]), { direction: "new", text: "New this period" });
-    assert.deepEqual(logic.trendWords([10, 6]), { direction: "down", text: "Down 40% vs previous" });
-    assert.deepEqual(logic.trendWords([10, 10]), { direction: "flat", text: "Steady" });
+    assert.deepEqual(logic.trendWords([10, 6]), { direction: "down", text: "4 fewer than the previous period" });
+    assert.deepEqual(logic.trendWords([10, 10]), { direction: "flat", text: "Same as the previous period" });
+    assert.equal(logic.listWords(["Billing agent", "Support agent", "Email agent"]), "Billing agent, Support agent and Email agent");
     assert.deepEqual(logic.trendWords([1, 0]), { direction: "down", text: "None this period" });
   });
 });
@@ -91,7 +92,7 @@ describe("FailureClusters render", () => {
     assert.ok(html.includes("67 failed runs in 3 causes · last 24 hours"));
     assert.match(html, /role="listbox"/);
     assert.match(html, /role="option" aria-selected="true" tabindex="0"/);
-    for (const text of ["New", "Regressed", "Known", "3× vs previous", "New this period", "42 failed runs", "Filter failures"]) {
+    for (const text of ["New", "Regressed", "Known", "12 more than the previous period", "New this period", "42 failed runs", "Filter failures"]) {
       assert.ok(html.includes(text), text);
     }
     assert.ok(html.indexOf("Stripe 429 rate limit") < html.indexOf("SMTP 550"), "largest first");
@@ -103,6 +104,8 @@ describe("FailureClusters render", () => {
       assert.ok(html.includes(text), text);
     }
     assert.equal(solidPrimaries(html), 1);
+    assert.ok(html.includes("Billing agent and Support agent"), "agents are named as text");
+    assert.ok(html.indexOf("Recent runs") < html.indexOf("Open issue"), "actions follow the evidence");
   });
 
   test("filtered to nothing shows Empty", () => {

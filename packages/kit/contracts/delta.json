@@ -7,7 +7,8 @@
     "Which mark: Delta is how a value moved (arrow and sign, no fill, success or danger text). A money change is a Delta, never a Badge.",
     "A money or metric change next to a value, like +$600 vs October",
     "The change column in a table (kit Cell trendPositive / trendNegative)",
-    "The delta line on a KPI (kit Scorecard delta)"
+    "The delta line on a KPI (kit Scorecard delta)",
+    "A change where up is bad, like cost or latency: pass goodWhen so the text says Better or Worse"
   ],
   "doNotUseWhen": [
     "Status the system sets (Paid, Overdue) — use Badge",
@@ -42,6 +43,15 @@
       "required": false,
       "note": "Default from direction: up success, down danger, flat neutral. Override when up is bad (costs, churn) or down is good."
     },
+    "goodWhen": {
+      "type": "enum",
+      "values": [
+        "up",
+        "down"
+      ],
+      "required": false,
+      "note": "Which way a change is good: up (pass rate, revenue) or down (cost, latency). With direction up or down the text reads 'Better · +6.3 pts' with CircleCheck or 'Worse · +17%' with TriangleAlert, in place of the arrow. Only Worse carries colour (text-danger); Better stays neutral. tone still overrides the colour. flat is not judged. Words come from KitLabels better and worse."
+    },
     "size": {
       "type": "enum",
       "values": [
@@ -73,7 +83,8 @@
   "a11y": {
     "element": "span",
     "requirements": [
-      "The arrow is aria-hidden; the value text says the change and its sign",
+      "The arrow and the Better/Worse icons are aria-hidden; the value text says the change and its sign",
+      "With goodWhen the Better or Worse word is in the visible text, so the icon and colour only repeat it",
       "Colour is never the only signal: the arrow shape and the sign or word carry the direction",
       "Amounts use tabular numbers so columns line up"
     ]
@@ -83,7 +94,8 @@
     "Do not use Badge for a money or metric change",
     "Do not put a fill or border behind a Delta",
     "Do not drop the sign from value; write +$600 or −$90, or No change",
+    "Do not add a second Better or Worse prefix to value; pass goodWhen",
     "Do not use raw hex or primitive --color-* ramps"
   ],
-  "snippet": "<Delta value=\"+$600\" direction=\"up\" />\n<Delta value=\"−$90\" direction=\"down\" />\n<Delta value=\"No change\" direction=\"flat\" />\n<Delta value=\"+$1,240\" direction=\"up\" tone=\"danger\" />"
+  "snippet": "<Delta value=\"+$600\" direction=\"up\" />\n<Delta value=\"−$90\" direction=\"down\" />\n<Delta value=\"No change\" direction=\"flat\" />\n<Delta value=\"+$1,240\" direction=\"up\" tone=\"danger\" />\n<Delta value=\"+17%\" direction=\"up\" goodWhen=\"down\" />"
 }

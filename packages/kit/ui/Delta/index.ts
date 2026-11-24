@@ -1,2 +1,2 @@
 export { Delta } from "./Delta";
-export type { DeltaProps, DeltaDirection, DeltaTone, DeltaSize } from "./Delta.types";
+export type { DeltaProps, DeltaDirection, DeltaTone, DeltaSize, DeltaGoodWhen } from "./Delta.types";
