@@ -70,7 +70,8 @@
         "md",
         "lg"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "Value 18/24 on sm, 24/32 on md, 32/40 on lg. Padding space.4 on sm and md, space.6 on lg, the same scale as Card."
     },
     "badge": {
       "type": "string",
@@ -143,7 +144,7 @@
         "plain"
       ],
       "default": "card",
-      "note": "card is the framed tile. plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw."
+      "note": "card is the framed tile (surface.card, border.faint, radius.surfaceMd, like Card). plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw, selected as an inset border.brand edge."
     },
     "onClick": {
       "type": "function",
@@ -178,7 +179,6 @@
   },
   "tokens": [
     "surface.card",
-    "border.highlight",
     "border.faint",
     "border.strong",
     "radius.surfaceMd",
@@ -189,15 +189,10 @@
     "text.danger",
     "text.warning",
     "type.size.caption",
-    "type.size.heading",
     "type.size.title",
-    "type.size.metric",
     "type.weight.caption",
     "type.weight.metric",
     "space.stack.sm",
-    "space.inset.sm",
-    "space.inset.lg",
-    "space.inset.xl",
     "motion.interaction",
     "border.focus",
     "icon.size.sm",
@@ -222,7 +217,10 @@
     "opacity.muted",
     "radius.xs",
     "radius.pill",
-    "border.widthThin"
+    "border.widthThin",
+    "type.size.uiLg",
+    "type.size.uiXl",
+    "type.size.heading4"
   ],
   "a11y": {
     "element": "article",
@@ -253,7 +251,8 @@
     "Do not draw a local meter or bar beside Scorecard — pass meter",
     "Do not color the sparkline or meter with brand; brand is only for the selected card",
     "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored",
-    "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse"
+    "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse",
+    "Do not put Ask or a footer on a Scorecard; for a KPI with actions, put a Scoreboard in a Card and use the Card footer"
   ],
   "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" delta=\"+3.1%\" trend=\"up\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
   "contains": [

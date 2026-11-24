@@ -1016,7 +1016,8 @@
         "Do not draw a local meter or bar beside Scorecard — pass meter",
         "Do not color the sparkline or meter with brand; brand is only for the selected card",
         "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored",
-        "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse"
+        "Do not colour a cost or latency rise green or red alone; pass goodWhen down so the delta says Worse",
+        "Do not put Ask or a footer on a Scorecard; for a KPI with actions, put a Scoreboard in a Card and use the Card footer"
       ],
       "props": {
         "label": {
@@ -1075,7 +1076,8 @@
             "md",
             "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Value 18/24 on sm, 24/32 on md, 32/40 on lg. Padding space.4 on sm and md, space.6 on lg, the same scale as Card."
         },
         "badge": {
           "type": "string",
@@ -1145,7 +1147,7 @@
             "plain"
           ],
           "default": "card",
-          "note": "card is the framed tile. plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw."
+          "note": "card is the framed tile (surface.card, border.faint, radius.surfaceMd, like Card). plain drops the border and background for a divided strip (Scoreboard appearance divided passes it); hover and selected states still draw, selected as an inset border.brand edge."
         },
         "onClick": {
           "type": "function",
@@ -4357,8 +4359,9 @@
         "Login or settings tiles",
         "Feature summaries",
         "Grouped content that should sit on a card surface",
-        "A table card: title + View all link over a DataTable (flush)",
-        "A compact table card: size sm + flush over a DataTable"
+        "A table card: title over a DataTable (flush), with View all as a footer action",
+        "A compact table card: size sm + flush over a DataTable",
+        "A data tile with a header row (icon, eyebrow, time, X), a source line and a footer with Ask and one primary"
       ],
       "doNotUseWhen": [
         "Page-level grouping — use Section",
@@ -4378,7 +4381,9 @@
         "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel",
         "Do not put more than two header actions; move the rest to the footer or a DropdownMenu",
         "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
-        "Do not style a header link as underlined text next to header Buttons; pass href and let Card give it the Button look"
+        "Do not use headerAction href for new work; it is deprecated. Put View all in the footer actions",
+        "Do not make Ask a primary Button, or put a second solid-primary in the footer",
+        "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source"
       ],
       "props": {
         "title": {
@@ -4402,12 +4407,12 @@
             "md"
           ],
           "default": "md",
-          "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
+          "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. The footer's block padding is space.4 on md and space.3 on sm. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
         },
         "headerAction": {
           "type": "object | array",
           "required": false,
-          "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. With href it stays a real link (<a>, or linkAs) but looks like the same sm Button (neutral ghost by default), never an underlined text link. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development."
+          "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. href is deprecated: it still renders a real link with the sm Button look, but prefer a footer action. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development."
         },
         "flush": {
           "type": "boolean",
@@ -4417,7 +4422,42 @@
         "actions": {
           "type": "array",
           "required": false,
-          "note": "Footer kit Buttons, max 2, still one solid-primary per view"
+          "note": "Footer kit Buttons (md), max 2, right-aligned after Ask, still one solid-primary per view. The footer sits under a divider."
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "Header row: a small icon tile (surface.muted, icon.muted) before the eyebrow. aria-hidden."
+        },
+        "eyebrow": {
+          "type": "string",
+          "required": false,
+          "note": "Header row: short grey label, e.g. 'Analytics'. Caller copy, not a heading."
+        },
+        "meta": {
+          "type": "string",
+          "required": false,
+          "note": "Header row: timestamp on the right, e.g. '12:04', tabular numbers. Not a heading."
+        },
+        "onDismiss": {
+          "type": "function",
+          "required": false,
+          "note": "Header row: X IconButton sm (32), ghost neutral, named by KitLabels dismiss."
+        },
+        "source": {
+          "type": "string",
+          "required": false,
+          "note": "Grey caption under the body naming where the data comes from, e.g. 'Stripe · last 30 days'. Describes the article (aria-describedby)."
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "Footer: neutral ghost Button sm with MessageCircle (aria-hidden) on the left. Shown only with askLabel."
+        },
+        "askLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Caller label for Ask, e.g. 'Ask' or 'Ask in Chat'."
         },
         "imageSrc": {
           "type": "string",

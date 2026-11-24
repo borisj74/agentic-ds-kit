@@ -7,8 +7,9 @@
     "Login or settings tiles",
     "Feature summaries",
     "Grouped content that should sit on a card surface",
-    "A table card: title + View all link over a DataTable (flush)",
-    "A compact table card: size sm + flush over a DataTable"
+    "A table card: title over a DataTable (flush), with View all as a footer action",
+    "A compact table card: size sm + flush over a DataTable",
+    "A data tile with a header row (icon, eyebrow, time, X), a source line and a footer with Ask and one primary"
   ],
   "doNotUseWhen": [
     "Page-level grouping — use Section",
@@ -38,12 +39,12 @@
         "md"
       ],
       "default": "md",
-      "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
+      "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. The footer's block padding is space.4 on md and space.3 on sm. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
     },
     "headerAction": {
       "type": "object | array",
       "required": false,
-      "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. With href it stays a real link (<a>, or linkAs) but looks like the same sm Button (neutral ghost by default), never an underlined text link. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development.",
+      "note": "Header kit Button, or up to two (an array), e.g. an icon-only Ask and View all. Ghost or outline, not a second solid-primary. href is deprecated: it still renders a real link with the sm Button look, but prefer a footer action. iconStart adds a leading icon; iconOnly with iconStart makes it icon-only, named by label. More than two: the rest are ignored, with a warning in development.",
       "label": {
         "type": "string",
         "required": true,
@@ -85,12 +86,12 @@
       "href": {
         "type": "string",
         "required": false,
-        "note": "Renders a real link (<a href>, or linkAs) with the sm Button look, so it navigates and can open in a new tab"
+        "note": "Deprecated: still renders a real link (<a href>, or linkAs) with the sm Button look. Prefer a footer action or a header Button with onClick."
       },
       "linkAs": {
         "type": "KitLinkComponent",
         "required": false,
-        "note": "With href: router link to render instead of <a>, e.g. Next.js Link. Receives href, className, onClick, children"
+        "note": "Deprecated with href: router link to render instead of <a>, e.g. Next.js Link. Receives href, className, onClick, children"
       }
     },
     "flush": {
@@ -101,7 +102,7 @@
     "actions": {
       "type": "array",
       "required": false,
-      "note": "Footer kit Buttons, max 2, still one solid-primary per view",
+      "note": "Footer kit Buttons (md), max 2, right-aligned after Ask, still one solid-primary per view. The footer sits under a divider.",
       "items": {
         "label": {
           "type": "string",
@@ -131,6 +132,41 @@
           "required": false
         }
       }
+    },
+    "icon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Header row: a small icon tile (surface.muted, icon.muted) before the eyebrow. aria-hidden."
+    },
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Header row: short grey label, e.g. 'Analytics'. Caller copy, not a heading."
+    },
+    "meta": {
+      "type": "string",
+      "required": false,
+      "note": "Header row: timestamp on the right, e.g. '12:04', tabular numbers. Not a heading."
+    },
+    "onDismiss": {
+      "type": "function",
+      "required": false,
+      "note": "Header row: X IconButton sm (32), ghost neutral, named by KitLabels dismiss."
+    },
+    "source": {
+      "type": "string",
+      "required": false,
+      "note": "Grey caption under the body naming where the data comes from, e.g. 'Stripe · last 30 days'. Describes the article (aria-describedby)."
+    },
+    "onAsk": {
+      "type": "function",
+      "required": false,
+      "note": "Footer: neutral ghost Button sm with MessageCircle (aria-hidden) on the left. Shown only with askLabel."
+    },
+    "askLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Caller label for Ask, e.g. 'Ask' or 'Ask in Chat'."
     },
     "imageSrc": {
       "type": "string",
@@ -164,16 +200,27 @@
     "type.line.uiMd",
     "type.size.body",
     "type.weight.heading",
-    "type.tracking.heading"
+    "type.tracking.heading",
+    "surface.muted",
+    "icon.muted",
+    "text.muted",
+    "type.size.caption",
+    "type.weight.caption",
+    "control.height.sm",
+    "space.3",
+    "icon.stroke"
   ],
   "a11y": {
     "element": "article",
     "requirements": [
       "title is heading when set (use useId)",
       "aria-labelledby when title exists",
-      "headerAction with href is a real link (<a> or linkAs) named by its label",
       "An icon-only headerAction is a Button named by its label",
-      "A header action with href is a link (role link) named by its label, not a button"
+      "A header action with href is a link (role link) named by its label, not a button",
+      "With icon, eyebrow, meta or onDismiss the header row comes before the title; eyebrow and meta are text, not headings; the icon tile is aria-hidden",
+      "The X is an IconButton named by KitLabels dismiss",
+      "source is referenced by aria-describedby on the article",
+      "Ask is a Button with a visible label; its MessageCircle icon is aria-hidden"
     ]
   },
   "doNot": [
@@ -188,7 +235,9 @@
     "Do not repeat the Card title as the DataTable caption — use DataTable ariaLabel",
     "Do not put more than two header actions; move the rest to the footer or a DropdownMenu",
     "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
-    "Do not style a header link as underlined text next to header Buttons; pass href and let Card give it the Button look"
+    "Do not use headerAction href for new work; it is deprecated. Put View all in the footer actions",
+    "Do not make Ask a primary Button, or put a second solid-primary in the footer",
+    "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source"
   ],
   "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", appearance: \"ghost\", mode: \"neutral\" }}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field><Button appearance=\"solid\" mode=\"primary\" block>Login</Button><Divider label=\"Or continue with\" /><div className=\"layout-split\"><Button appearance=\"outline\" mode=\"neutral\" block>Google</Button><Button appearance=\"outline\" mode=\"neutral\" block>Apple</Button></div></Card>"
 }

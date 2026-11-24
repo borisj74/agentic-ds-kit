@@ -15,6 +15,11 @@
 
 .sm {
   --card-spacing: var(--space-4);
+  --card-footer-block: var(--space-3);
+}
+
+.md {
+  --card-footer-block: var(--space-4);
 }
 
 .image {
@@ -85,15 +90,92 @@
   min-width: 0;
 }
 
-.footer {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--space-2);
+/* With a footer the content ends on the footer's block inset, so the gap above the divider matches the one below it. */
+.withFooter {
+  padding-block-end: var(--card-footer-block);
 }
 
-.footer button {
-  width: 100%;
+/* Header row: icon tile and eyebrow on the left; time, header actions and X on the right. */
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: var(--control-height-sm);
+}
+
+.lead,
+.trail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.trail {
+  flex-shrink: 0;
+}
+
+.iconTile {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-control-sm);
+  background-color: var(--surface-muted);
+  color: var(--icon-muted);
+}
+
+.glyph {
+  display: block;
+  stroke-width: var(--icon-stroke);
+}
+
+.eyebrow,
+.meta,
+.source {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-muted);
+}
+
+.meta {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Footer: a divider, then Ask on the left and the actions (one primary at most) on the right. */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--card-footer-block) var(--card-spacing);
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+.footerActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-inline-start: auto;
 }
 
 .headerActions {
@@ -115,15 +197,16 @@
 }
 
 .flush .header,
-.flush .footer {
+.flush .head {
   padding: var(--card-spacing);
 }
 
-.flush .header + .body {
-  border-top: var(--border-divider) solid var(--border-faint);
+.flush .source {
+  padding: var(--space-3) var(--card-spacing);
 }
 
-.flush .footer {
+.flush .header + .body,
+.flush .head + .body {
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
@@ -141,7 +224,7 @@
   border-top-right-radius: var(--card-inner-radius);
 }
 
-.flush .body:last-child > [data-kit-frame] {
+.flush > .content:last-child > .body:last-child > [data-kit-frame] {
   border-bottom-left-radius: var(--card-inner-radius);
   border-bottom-right-radius: var(--card-inner-radius);
 }
