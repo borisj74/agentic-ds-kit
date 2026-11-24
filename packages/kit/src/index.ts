@@ -67,6 +67,7 @@ export * from "../ui/DoneCheck";
 export * from "../ui/Drawer";
 export * from "../ui/DropdownMenu";
 export * from "../ui/Empty";
+export * from "../ui/LoadError";
 export * from "../ui/Field";
 export * from "../ui/FieldSet";
 export * from "../ui/FileUpload";

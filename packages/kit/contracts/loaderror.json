@@ -1,0 +1,88 @@
+{
+  "id": "loaderror",
+  "status": "stable",
+  "level": "molecule",
+  "intent": "What a list, card, chart or page shows when its data failed to load: an icon, what failed, a reference and Try again.",
+  "useWhen": [
+    "A request for a region's data failed",
+    "A Skeleton is replaced by the failure in the same space",
+    "A support reference should be copyable"
+  ],
+  "doNotUseWhen": [
+    "Nothing to show but nothing failed — use Empty",
+    "A page-level notice or a failed save — use Alert or Toast",
+    "A form field is invalid — use Field error"
+  ],
+  "props": {
+    "message": {
+      "type": "string",
+      "required": true,
+      "note": "What failed, named, like \"Couldn't load invoices.\" Not \"Something went wrong\"."
+    },
+    "reference": {
+      "type": "string",
+      "required": false,
+      "note": "Text people can copy for support, rendered as given in mono under the message, like \"Ref 7F3A-91C2\"."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Shows a neutral sm \"Try again\" Button (KitLabels tryAgain). If a retry fails again and focus was lost with the old button, the new LoadError focuses Try again; otherwise focus stays put."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "sm",
+      "note": "Same scale as Empty. sm: in a chart, list or table cell, bare 16px icon. md: a card body, 32px danger tile. lg: a page, 40px tile and a larger message."
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "icon.danger",
+    "status.danger.subtle",
+    "text.primary",
+    "text.muted",
+    "radius.md",
+    "space.1",
+    "space.3",
+    "space.4",
+    "space.6",
+    "space.8",
+    "space.10",
+    "type.size.bodySm",
+    "type.size.caption",
+    "type.size.uiLg",
+    "type.line.bodySm",
+    "type.line.uiXs",
+    "type.line.uiLg",
+    "type.weight.label",
+    "type.weight.heading",
+    "font.mono"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "role=alert, so the failure is read when it appears",
+      "The CircleX icon is aria-hidden; the message says what failed, so colour is never the only signal",
+      "Focus stays put when the error replaces a Skeleton; it returns to Try again only after the person pressed it",
+      "Try again is a kit Button with one verb"
+    ]
+  },
+  "doNot": [
+    "Do not build a local error row or banner for failed data — use LoadError",
+    "Do not label the button Retry or Reload — the label is Try again (KitLabels tryAgain)",
+    "Do not show the failure with colour alone",
+    "Do not leave the Skeleton on screen after a failure",
+    "Do not use raw hex or primitive --color-* ramps"
+  ],
+  "snippet": "<LoadError message=\"Couldn't load invoices.\" reference=\"Ref 7F3A-91C2\" onRetry={reload} />"
+}

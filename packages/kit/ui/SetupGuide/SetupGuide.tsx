@@ -10,7 +10,7 @@ import { IntegrationTile } from "../IntegrationPicker/IntegrationTile";
 import { tileState } from "../IntegrationPicker/integrationPicker.logic";
 import { Progress } from "../Progress";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { SetupGuideProps, SetupTask } from "./SetupGuide.types";

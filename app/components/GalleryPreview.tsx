@@ -85,6 +85,7 @@ import { DateTimePicker } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
 import { DropdownMenu } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
+import { LoadError } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { FieldSet } from "agentic-ds-kit";
 import { HeaderCell } from "agentic-ds-kit";
@@ -966,7 +967,13 @@ export function GalleryPreview({ id }: { id: string }) {
     case "empty":
       return (
         <Stage variant="wide">
-          <Empty title="No tasks" icon="Inbox" />
+          <Empty kind="no-results" title="No invoice matches these filters." />
+        </Stage>
+      );
+    case "loaderror":
+      return (
+        <Stage variant="wide">
+          <LoadError message="Couldn’t load invoices." reference="Ref 7F3A-91C2" />
         </Stage>
       );
     case "field":

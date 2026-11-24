@@ -10,7 +10,7 @@ import { Drawer } from "../Drawer";
 import { Empty } from "../Empty";
 import { Popover } from "../Popover";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { NARROW_QUERY, useMediaQuery } from "../shared/useMediaQuery";
 import type { NotificationItem, NotificationStackProps, NotificationTone } from "./NotificationStack.types";
