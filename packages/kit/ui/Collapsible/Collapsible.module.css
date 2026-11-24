@@ -1,57 +1,70 @@
+/* One framed block. The whole header row is the button; the body sits under it, lined up with the title. */
 .root {
   display: flex;
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
-  padding: var(--space-4);
-  gap: var(--space-3);
   background-color: var(--surface-muted);
   border: var(--border-width-thin) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
 }
 
+/* md control height (36) plus the frame's inset. */
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  width: 100%;
   min-width: 0;
-}
-
-.title {
-  min-width: 0;
+  min-height: calc(var(--control-height-md) + var(--space-4));
   margin: 0;
-  overflow-wrap: anywhere;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading);
+  padding: var(--space-2) var(--space-4);
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--radius-surface-md);
+  background: none;
   color: var(--text-primary);
-}
-
-.toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin: 0;
-  padding: var(--space-2);
-  color: var(--icon-muted);
-  background-color: var(--surface-card);
-  border: var(--border-width-thin) solid var(--border-faint);
-  /* Same corners as a md Button and the rows a Collapsible usually holds. */
-  border-radius: var(--radius-control-md);
   cursor: pointer;
+  text-align: left;
 }
 
-.toggle:focus-visible {
+.header:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
 }
 
+.chevron {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+  transition:
+    transform var(--motion-interaction-duration) var(--motion-interaction-easing),
+    color var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.header:hover .chevron,
+.chevronOpen {
+  color: var(--icon-default);
+}
+
+/* ChevronRight turns a quarter to point down when open. */
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-body-sm);
+  letter-spacing: var(--type-tracking-heading);
+}
+
 .panel {
   min-width: 0;
+  padding: 0 var(--space-4) var(--space-4) calc(var(--space-4) + var(--icon-size-sm) + var(--space-2));
 }
 
 .body {
@@ -68,4 +81,10 @@
 
 .body p {
   margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
 }

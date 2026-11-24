@@ -5,6 +5,7 @@ type CollapsibleOwnedKeys = "children";
 
 /** `ref`, `className` and other native attributes go to the root `<div>`. */
 export interface CollapsibleProps extends Omit<ComponentPropsWithoutRef<"div">, CollapsibleOwnedKeys> {
+  /** Title. The whole header row is the toggle button and this is its name. */
   trigger: string;
   children: ReactNode;
   defaultOpen?: boolean;

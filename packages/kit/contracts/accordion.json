@@ -2,10 +2,10 @@
   "id": "accordion",
   "status": "stable",
   "level": "molecule",
-  "intent": "One-open disclosure list for short related sections.",
+  "intent": "Disclosure list for short related sections: one open at a time, or several with type multiple.",
   "useWhen": [
     "FAQ or help copy grouped under short titles",
-    "Settings or detail blocks the user opens one at a time"
+    "Settings or detail blocks the user opens one at a time, or several side by side with type multiple"
   ],
   "doNotUseWhen": [
     "In-page peer views — use Tabs",
@@ -16,11 +16,32 @@
   "props": {
     "items": {
       "type": "array",
-      "itemShape": { "id": "string", "title": "string", "content": "string" },
+      "itemShape": {
+        "id": "string",
+        "title": "string",
+        "content": "slot",
+        "meta": "string?",
+        "count": "number?",
+        "disabled": "boolean?"
+      },
       "required": true,
-      "minItems": 2
+      "minItems": 2,
+      "note": "content is the panel body: a string or kit pieces such as a Field or Table. meta is short secondary text at the end of the header. count renders a neutral kit Count after the title. disabled shows the header but it cannot toggle. Header: md control height (36); ChevronRight 16px first, turning down when open; 14/20 title at 550; then Count; meta at the end. The body lines up with the title."
     },
-    "defaultOpen": { "type": "string", "required": false, "note": "Item id that starts open. Omit to start all closed." }
+    "type": {
+      "type": "enum",
+      "values": [
+        "single",
+        "multiple"
+      ],
+      "default": "single",
+      "note": "single keeps one item open; opening another closes it. multiple lets any number stay open."
+    },
+    "defaultOpen": {
+      "type": "string | string[]",
+      "required": false,
+      "note": "Item id (or ids with type multiple) that start open. Omit to start all closed. With type single only the first id opens."
+    }
   },
   "passthrough": {
     "root": "div",
@@ -28,19 +49,31 @@
     "className": "root",
     "rest": "div"
   },
-  "tokens": ["text.primary", "text.secondary", "surface.card", "border.faint", "icon.muted", "icon.default"],
+  "tokens": [
+    "text.primary",
+    "text.secondary",
+    "text.disabled",
+    "border.faint",
+    "icon.muted",
+    "icon.default",
+    "icon.disabled",
+    "control.height.md",
+    "type.size.bodySm"
+  ],
   "a11y": {
     "element": "div",
     "requirements": [
       "Each header is a button with aria-expanded",
       "Button aria-controls the matching panel",
-      "Closed panels are hidden from AT"
+      "Panel is role=region, aria-labelledby its header",
+      "Closed panels are hidden from AT",
+      "Down and Up move focus between headers (Home and End jump to the ends); Right opens, Left closes",
+      "Disabled items set aria-disabled, cannot toggle, and are skipped by Tab and arrow keys"
     ]
   },
   "doNot": [
     "Do not invent local Accordion or Collapse — use Collapsible for one block",
-    "Do not use raw hex",
-    "Do not open more than one item at a time"
+    "Do not use raw hex"
   ],
   "snippet": "<Accordion items={[{ id: 'hours', title: 'Hours', content: 'Weekdays 9–5.' }, { id: 'address', title: 'Address', content: 'Knez Mihailova 1.' }]} defaultOpen=\"hours\" />"
 }

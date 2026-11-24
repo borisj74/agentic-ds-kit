@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Accordion } from "agentic-ds-kit";
+import { Accordion, Field, Input } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
@@ -14,10 +14,30 @@ const FAQ_ITEMS = [
 ];
 
 const SETTINGS_ITEMS = [
-  { id: "profile", title: "Profile", content: "Name, email, and how you show up to clients." },
-  { id: "billing", title: "Billing", content: "Plan, invoices, and payment method." },
-  { id: "team", title: "Team", content: "Who can edit this workspace." },
+  {
+    id: "billing-contact",
+    title: "Billing contact",
+    meta: "Updated 2 days ago",
+    content: (
+      <Field label="Invoice email" htmlFor="accordion-invoice-email" hint="Northwind sends INV-1842 and later invoices here">
+        <Input id="accordion-invoice-email" type="email" defaultValue="billing@northwind.com" />
+      </Field>
+    ),
+  },
+  { id: "invoices", title: "Invoices", count: 12, content: "Twelve invoices this year. The last one, INV-1842, was $1,240.00." },
+  { id: "team", title: "Team seats", count: 8, content: "Eight of ten seats on the Growth plan are in use." },
+  { id: "sso", title: "Single sign-on", meta: "Enterprise plan", disabled: true, content: "Available on the Enterprise plan." },
 ];
+
+const MULTIPLE_CODE = `<Accordion
+  type="multiple"
+  defaultOpen={["billing-contact", "invoices"]}
+  items={[
+    { id: "billing-contact", title: "Billing contact", meta: "Updated 2 days ago", content: <Field …><Input … /></Field> },
+    { id: "invoices", title: "Invoices", count: 12, content: "Twelve invoices this year." },
+    { id: "sso", title: "Single sign-on", meta: "Enterprise plan", disabled: true, content: "…" },
+  ]}
+/>`;
 
 const CODE = `<Accordion
   defaultOpen="hours"
@@ -34,7 +54,7 @@ export function AccordionDoc() {
     <div>
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>Accordion</h2>
-        <p className={styles.lede}>One-open disclosure list for short related sections.</p>
+        <p className={styles.lede}>Disclosure list for short related sections.</p>
       </header>
 
       <section className={styles.master} aria-labelledby="accordion-master">
@@ -42,7 +62,7 @@ export function AccordionDoc() {
           <h2 id="accordion-master" className={styles.masterTitle}>
             Master
           </h2>
-          <p className={styles.masterSummary}>Open one item at a time. Closing the open item leaves them all shut.</p>
+          <p className={styles.masterSummary}>One item open at a time by default. Down and Up move between headers, Right opens, Left closes.</p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
 
@@ -80,16 +100,20 @@ export function AccordionDoc() {
               </div>
             </section>
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Settings groups</h2>
+              <h2 className={styles.exampleTitle}>Settings groups, several open</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>
-                  <Accordion items={SETTINGS_ITEMS} />
+                  <Accordion type="multiple" items={SETTINGS_ITEMS} defaultOpen={["billing-contact", "invoices"]} />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Cluster related settings. Do not put a full form in every panel.</p>
+                <p className={styles.usageBody}>
+                  type multiple keeps several panels open. Panels can hold kit pieces such as a Field. meta and count
+                  sit in the header; a disabled item shows but does not open, and Tab skips it.
+                </p>
               </div>
+              <CodeBlock code={MULTIPLE_CODE} />
             </section>
           </div>
         )}

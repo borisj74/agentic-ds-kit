@@ -12,16 +12,18 @@
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
+/* md control height (36) with a 14/20 title: the chevron leads, meta sits at the end. */
 .trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
+  min-height: var(--control-height-md);
   margin: 0;
-  padding: var(--space-4) 0;
+  padding: var(--space-2) 0;
+  box-sizing: border-box;
   border: 0;
-  background: transparent;
+  background: none;
   color: var(--text-primary);
   cursor: pointer;
   text-align: left;
@@ -32,15 +34,38 @@
   outline-offset: var(--space-inset-2xs);
 }
 
+.triggerDisabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
 .title {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
+  font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-body-sm);
   letter-spacing: var(--type-tracking-heading);
 }
 
+.meta {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-secondary);
+}
+
+.triggerDisabled .meta {
+  color: var(--text-disabled);
+}
+
 /* Opening runs 680ms: the longest duration token plus one short step, since the scale stops at 500ms.
-   The chevron turns with a soft spring, so it settles a hair past the half turn and back. */
+   The chevron turns with a soft spring, so it settles a hair past the quarter turn and back. */
 .chevron {
   flex-shrink: 0;
   color: var(--icon-muted);
@@ -49,13 +74,18 @@
     color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
-.trigger:hover .chevron,
+.trigger:not(.triggerDisabled):hover .chevron,
 .chevronOpen {
   color: var(--icon-default);
 }
 
+/* ChevronRight turns a quarter to point down when open. */
 .chevronOpen {
-  transform: rotate(180deg);
+  transform: rotate(90deg);
+}
+
+.triggerDisabled .chevron {
+  color: var(--icon-disabled);
 }
 
 /*
@@ -85,9 +115,14 @@
   overflow: hidden;
 }
 
+/* The body lines up with the title, past the chevron and its gap. */
 .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
   margin: 0;
-  padding: var(--space-1) 0 var(--space-4);
+  padding: 0 0 var(--space-4) calc(var(--icon-size-sm) + var(--space-2));
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
@@ -97,6 +132,10 @@
   transition:
     opacity var(--motion-duration-200) var(--motion-overlay-exit-easing),
     transform var(--motion-duration-200) var(--motion-overlay-exit-easing);
+}
+
+.body > p {
+  margin: 0;
 }
 
 .panelOpen .body {

@@ -3062,7 +3062,7 @@
     {
       "id": "collapsible",
       "group": "component",
-      "intent": "Single show/hide panel with a title and a toggle.",
+      "intent": "Single show/hide panel. The whole header row is the toggle.",
       "useWhen": [
         "One disclosure whose body composes kit pieces",
         "Order, product, or extra spec the user can hide"
@@ -3075,14 +3075,13 @@
       "doNot": [
         "Do not invent CollapsibleTrigger or CollapsibleContent cousins",
         "Do not use Accordion for a single block",
-        "Do not make the whole header row the button",
         "Do not use raw hex"
       ],
       "props": {
         "trigger": {
           "type": "string",
           "required": true,
-          "note": "Title on the left. Toggle is a ChevronsUpDown button, not the whole row"
+          "note": "Title. The whole header row is the button, with a ChevronRight before the title that turns down when open"
         },
         "children": {
           "type": "slot",
@@ -8146,10 +8145,10 @@
     {
       "id": "accordion",
       "group": "component",
-      "intent": "One-open disclosure list for short related sections.",
+      "intent": "Disclosure list for short related sections: one open at a time, or several with type multiple.",
       "useWhen": [
         "FAQ or help copy grouped under short titles",
-        "Settings or detail blocks the user opens one at a time"
+        "Settings or detail blocks the user opens one at a time, or several side by side with type multiple"
       ],
       "doNotUseWhen": [
         "In-page peer views — use Tabs",
@@ -8159,18 +8158,27 @@
       ],
       "doNot": [
         "Do not invent local Accordion or Collapse — use Collapsible for one block",
-        "Do not use raw hex",
-        "Do not open more than one item at a time"
+        "Do not use raw hex"
       ],
       "props": {
         "items": {
           "type": "array",
-          "required": true
+          "required": true,
+          "note": "content is the panel body: a string or kit pieces such as a Field or Table. meta is short secondary text at the end of the header. count renders a neutral kit Count after the title. disabled shows the header but it cannot toggle. Header: md control height (36); ChevronRight 16px first, turning down when open; 14/20 title at 550; then Count; meta at the end. The body lines up with the title."
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "single",
+            "multiple"
+          ],
+          "default": "single",
+          "note": "single keeps one item open; opening another closes it. multiple lets any number stay open."
         },
         "defaultOpen": {
-          "type": "string",
+          "type": "string | string[]",
           "required": false,
-          "note": "Item id that starts open. Omit to start all closed."
+          "note": "Item id (or ids with type multiple) that start open. Omit to start all closed. With type single only the first id opens."
         }
       }
     },

@@ -2,7 +2,7 @@
   "id": "collapsible",
   "status": "stable",
   "level": "molecule",
-  "intent": "Single show/hide panel with a title and a toggle.",
+  "intent": "Single show/hide panel. The whole header row is the toggle.",
   "useWhen": [
     "One disclosure whose body composes kit pieces",
     "Order, product, or extra spec the user can hide"
@@ -16,7 +16,7 @@
     "trigger": {
       "type": "string",
       "required": true,
-      "note": "Title on the left. Toggle is a ChevronsUpDown button, not the whole row"
+      "note": "Title. The whole header row is the button, with a ChevronRight before the title that turns down when open"
     },
     "children": {
       "type": "slot",
@@ -47,28 +47,26 @@
   "tokens": [
     "text.primary",
     "icon.muted",
+    "icon.default",
     "surface.muted",
-    "surface.card",
     "border.faint",
     "border.focus",
     "radius.surface.md",
-    "radius.control.sm",
+    "control.height.md",
     "type.size.bodySm"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
-      "Title is not the toggle",
-      "Toggle is a button with aria-expanded and aria-label Toggle {trigger}",
+      "The header row is one button with aria-expanded; its accessible name is the title",
       "Button aria-controls the panel",
-      "Panel is role=region, aria-labelledby the title",
+      "Panel is role=region, aria-labelledby the header button",
       "Closed panel is hidden from AT"
     ]
   },
   "doNot": [
     "Do not invent CollapsibleTrigger or CollapsibleContent cousins",
     "Do not use Accordion for a single block",
-    "Do not make the whole header row the button",
     "Do not use raw hex"
   ],
   "snippet": "<Collapsible trigger=\"Order #4189\" defaultOpen>\n  {children}\n</Collapsible>"
