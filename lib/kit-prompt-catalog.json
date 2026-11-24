@@ -1998,7 +1998,7 @@
     {
       "id": "listview",
       "group": "component",
-      "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
+      "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing value, badge, actions, or chevron.",
       "useWhen": [
         "Which mark: the row dot is the leading 8px mark in a ListView row; the row text still says the status. Do not add a separate Dot.",
         "People, files, or other records shown one per row",
@@ -2034,13 +2034,14 @@
         "Do not place appearance=solid mode=primary Button on a row",
         "Do not use raw hex or primitive --color-* ramps",
         "Do not use dot as the only sign of a status; say it in primary or secondary",
-        "Do not write the priority word in secondary; the kit adds High, Medium or Low"
+        "Do not write the priority word in secondary; the kit adds High, Medium or Low",
+        "Do not put an amount in meta or badge; use value"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units)."
         },
         "label": {
           "type": "string",
@@ -2104,7 +2105,7 @@
         "groups": {
           "type": "array",
           "required": false,
-          "note": "Optional section headers. item.group selects the section."
+          "note": "Optional section headers. item.group selects the section. total is the group's sum, like a month's amount, on the right of the header in tabular figures and part of the group's name."
         },
         "collapsibleGroups": {
           "type": "boolean",

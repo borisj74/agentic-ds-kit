@@ -44,6 +44,11 @@ export interface ListViewItem {
    * and starts the secondary line with the word (High, Medium, Low), so the marker is never the only signal.
    */
   priority?: ListViewPriority;
+  /**
+   * The row's value, like an amount ("$2,418.00"), on the right of the primary line in tabular figures.
+   * When set, meta and badge sit under it. Read after the secondary line.
+   */
+  value?: string;
   /** Short muted text at the row's end, like a relative time ("2h ago"). Read after the secondary line. */
   meta?: string;
   badge?: string;
@@ -61,6 +66,8 @@ export interface ListViewItem {
 export interface ListViewGroup {
   id: string;
   label: string;
+  /** A total for the group, like a month's amount ("$3,738.00"), on the right of the header in tabular figures. */
+  total?: string;
 }
 
 export interface ListViewEmpty {
