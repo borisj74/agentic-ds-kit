@@ -1,38 +1,51 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { AgentInbox } from "../AgentInbox";
+import { ActivityFeed } from "../ActivityFeed";
 import { AgentLanes } from "../AgentLanes";
-import { BarChart } from "../BarChart";
-import { Empty } from "../Empty";
-import { Scoreboard } from "../Scoreboard";
+import { ApprovalCard } from "../ApprovalCard";
+import { Button } from "../Button";
+import { DecisionCard } from "../DecisionCard";
+import { ListView } from "../ListView";
 import { SegmentedControl } from "../SegmentedControl";
+import { AgentStatusIcon, AgentStatusMark } from "../shared/agentStatus";
 import { cx } from "../shared/cx";
 import {
-  FILTER_LABEL,
+  ACTION_ASK,
+  ACTION_REVIEW,
   AGENT_OVERVIEW_FILTERS,
-  activityFor,
+  DECISION_APPROVE,
+  DECISION_REJECT,
+  FILTER_LABEL,
   filterCounts,
-  formatAgo,
-  inboxHandlers,
-  inboxItemsFor,
+  formatClock,
   lanesFor,
-  summaryCounts,
+  leadLine,
+  railFor,
+  requestsFor,
+  rowsFor,
 } from "./agentOverview.logic";
-import type { AgentOverviewFilter, AgentOverviewProps } from "./AgentOverview.types";
+import type { AgentOverviewFilter, AgentOverviewProps, AgentOverviewView } from "./AgentOverview.types";
 import styles from "./AgentOverview.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { AgentOverviewProps, AgentOverviewAgent, AgentOverviewEvent, AgentOverviewFilter } from "./AgentOverview.types";
+export type {
+  AgentOverviewProps,
+  AgentOverviewAgent,
+  AgentOverviewEvent,
+  AgentOverviewFilter,
+  AgentOverviewSubAgent,
+  AgentOverviewView,
+} from "./AgentOverview.types";
 
 const MINUTE = 60_000;
 const LANE_SPANS = [10 * MINUTE, 30 * MINUTE];
 
-const LANES_EMPTY: Record<AgentOverviewFilter, { title: string; description: string }> = {
-  all: { title: "No agents yet", description: "Each agent gets a lane here once it starts work." },
-  running: { title: "No agents running", description: "Running agents show here on the shared time axis." },
-  "needs-you": { title: "No agent is waiting on you", description: "Agents that need an approval or an answer show here." },
-  failed: { title: "No failed runs", description: "Runs that fail since your last look show here." },
+const LIST_EMPTY: Record<AgentOverviewFilter, { title: string; description: string }> = {
+  all: { title: "No agents yet", description: "Agents show here once they start work." },
+  running: { title: "No agents running", description: "Running agents show here." },
+  "needs-you": { title: "No agent is waiting on you", description: "Agents that need an approval show here." },
+  failed: { title: "No failed runs", description: "Agents whose run failed show here." },
 };
 
 function useClock(controlled: number | undefined) {
@@ -46,8 +59,9 @@ function useClock(controlled: number | undefined) {
 }
 
 /**
- * Block: a home for a fleet of agents. A since-you-last-looked summary with an activity bar,
- * every agent on one time axis (AgentLanes), and what needs you (AgentInbox), under one filter.
+ * Block: the agent home. What needs you (one request, the rest counted), every agent with an
+ * icon-and-word status and one action, and what happened since the last visit on the shared rail.
+ * A Timeline view shows the same agents on one time axis (AgentLanes) on wide screens.
  */
 export function AgentOverview(props: AgentOverviewProps) {
   const {
@@ -58,35 +72,50 @@ export function AgentOverview(props: AgentOverviewProps) {
     filter: filterProp,
     defaultFilter = "all",
     onFilterChange,
+    view: viewProp,
+    defaultView = "list",
+    onViewChange,
     onApprove,
     onReject,
-    onRetry,
-    title = "Agent overview",
+    // Kept in the props for older apps; taken out so it does not land on the section.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onRetry: _onRetry,
+    onReview,
+    onAsk,
+    onNewTask,
+    title = "Agents",
     className,
     ref,
     ...rest
   } = props;
   const titleId = useId();
-  const summaryId = useId();
+  const needsId = useId();
+  const listId = useId();
   const now = useClock(nowProp);
   const [innerFilter, setInnerFilter] = useState<AgentOverviewFilter>(defaultFilter);
   const filter = filterProp ?? innerFilter;
+  const [innerView, setInnerView] = useState<AgentOverviewView>(defaultView);
+  const view = viewProp ?? innerView;
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [pickedSpan, setPickedSpan] = useState<number | null>(null);
+  const [decision, setDecision] = useState<string | undefined>(undefined);
 
-  // Minute resolution is enough for counts and the bar; it keeps them still between ticks.
+  // Minute resolution is enough for the rail; it keeps it still between ticks.
   const minute = Math.floor(now / MINUTE) * MINUTE;
-  const counts = useMemo(() => filterCounts(events, since, minute), [events, since, minute]);
-  const summary = useMemo(() => summaryCounts(events, since, minute), [events, since, minute]);
-  const activity = useMemo(() => activityFor(events, filter, since, minute), [events, filter, since, minute]);
+  const counts = useMemo(() => filterCounts(agents, events), [agents, events]);
+  const requests = useMemo(() => requestsFor(events), [events]);
+  const request = requests[0];
+  const rows = useMemo(
+    () => rowsFor(agents, events, filter, request?.agentId, { review: Boolean(onReview), ask: Boolean(onAsk) }),
+    [agents, events, filter, request?.agentId, onReview, onAsk],
+  );
+  const rail = useMemo(() => railFor(agents, events, since, minute), [agents, events, since, minute]);
   const lanes = useMemo(() => lanesFor(agents, events, filter), [agents, events, filter]);
-  const inbox = useMemo(() => inboxItemsFor(agents, events, filter, since, minute), [agents, events, filter, since, minute]);
-
-  // AgentLanes ticks every 2 minutes, so windows past 30 minutes crowd its axis: 10m and 30m only.
+  const doneCount = rail.filter((event) => event.status?.label === "Done").length;
+  const requestAgent = request ? (agents.find((agent) => agent.id === request.agentId)?.name ?? request.agentId) : "";
+  const more = requests.length - 1;
   const span = pickedSpan ?? LANE_SPANS[1];
-  const ago = formatAgo(now - since);
-  const sinceText = ago === "just now" ? "since just now" : `in the last ${ago}`;
+  const timeline = view === "timeline";
 
   function changeFilter(next: AgentOverviewFilter) {
     if (filterProp === undefined) setInnerFilter(next);
@@ -94,7 +123,26 @@ export function AgentOverview(props: AgentOverviewProps) {
     onFilterChange?.(next);
   }
 
-  const handlers = inboxHandlers({ onApprove, onReject, onRetry });
+  function changeView(next: AgentOverviewView) {
+    if (viewProp === undefined) setInnerView(next);
+    setOpenTaskId(null);
+    onViewChange?.(next);
+  }
+
+  function rowAction(agentId: string, actionId: string) {
+    if (actionId === ACTION_REVIEW) onReview?.(agentId);
+    else if (actionId === ACTION_ASK) onAsk?.(agentId);
+  }
+
+  const list = (
+    <ListView
+      label="All agents"
+      size="sm"
+      items={rows.map(({ item, status }) => ({ ...item, icon: <AgentStatusIcon status={status} size={16} /> }))}
+      onAction={rowAction}
+      empty={{ ...LIST_EMPTY[filter], icon: "Filter" }}
+    />
+  );
 
   return (
     <section {...rest} {...nisthaAttr("agentoverview", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
@@ -103,80 +151,125 @@ export function AgentOverview(props: AgentOverviewProps) {
           <h2 id={titleId} className={styles.title}>
             {title}
           </h2>
-          <p className={styles.lead}>Your agents {sinceText}</p>
+          <p className={styles.lead}>{leadLine(agents, since)}</p>
         </div>
-        <SegmentedControl
-          size="sm"
-          ariaLabel="Show agents"
-          value={filter}
-          onChange={(value) => changeFilter(value as AgentOverviewFilter)}
-          items={AGENT_OVERVIEW_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
-        />
+        <div className={styles.headActions}>
+          <SegmentedControl
+            className={styles.viewToggle}
+            size="sm"
+            ariaLabel="View"
+            value={view}
+            onChange={(value) => changeView(value as AgentOverviewView)}
+            items={[
+              { value: "list", label: "List" },
+              { value: "timeline", label: "Timeline" },
+            ]}
+          />
+          {onNewTask ? (
+            <Button size="md" appearance="outline" mode="neutral" iconStart="Plus" onClick={onNewTask}>
+              New task
+            </Button>
+          ) : null}
+        </div>
       </header>
 
-      {/* Two columns, each a stack: summary over lanes, activity over inbox. Separate rows would
-          stretch the short summary to the chart's height and leave a band above the lanes. Below
-          the stack point the columns unfold into summary, activity, lanes, inbox. */}
+      {/* New requests are announced politely; focus never jumps to them. */}
+      <p className={styles.srOnly} aria-live="polite">
+        {requests.length ? `${requests.length} ${requests.length === 1 ? "request needs" : "requests need"} you` : ""}
+      </p>
+
       <div className={cx("layout-split--primary", styles.columns)}>
         <div className={styles.column}>
-          <section className={cx(styles.summary, styles.areaSummary)} aria-labelledby={summaryId}>
-            {/* Named for screen readers only, so the cards start level with the Activity chart. */}
-            <h3 id={summaryId} className={styles.srOnly}>
-              Since you last looked
-            </h3>
-            <Scoreboard
-              aria-label="Since you last looked"
-              items={[
-                { label: "Done", value: String(summary.done), hint: sinceText, size: "sm" },
-                { label: "Needs you", value: String(summary.needsYou), hint: "waiting now", size: "sm" },
-                { label: "Failed", value: String(summary.failed), hint: sinceText, size: "sm" },
-              ]}
-            />
-          </section>
-          <div className={styles.areaLanes}>
-            {lanes.agents.length ? (
-              <AgentLanes
-                agents={lanes.agents}
-                tasks={lanes.tasks}
-                now={now}
-                span={span}
-                spans={LANE_SPANS}
-                onSpanChange={setPickedSpan}
-                openTaskId={openTaskId}
-                onOpenTaskChange={setOpenTaskId}
-                onApprove={(id) => {
-                  setOpenTaskId(null);
-                  onApprove?.(id);
-                }}
-                onReject={(id) => {
-                  setOpenTaskId(null);
-                  onReject?.(id);
-                }}
+          {request ? (
+            <section className={styles.needs} aria-labelledby={needsId}>
+              <h3 id={needsId} className={styles.srOnly}>
+                {`${requestAgent} asks`}
+              </h3>
+              <p className={styles.needsMeta}>
+                <AgentStatusMark status="needs-you" />
+                <span>{`${requestAgent} · ${formatClock(request.start)}`}</span>
+              </p>
+              {request.action ? (
+                <ApprovalCard
+                  key={request.id}
+                  title={request.ask ?? request.title}
+                  description={request.ask && request.ask !== request.title ? request.title : undefined}
+                  risk={request.risk}
+                  action={request.action}
+                  onApprove={() => onApprove?.(request.id)}
+                  onDeny={() => onReject?.(request.id)}
+                />
+              ) : (
+                <DecisionCard
+                  key={request.id}
+                  title={`${requestAgent} asks`}
+                  question={request.ask ?? request.title}
+                  meta={request.ask && request.ask !== request.title ? request.title : undefined}
+                  options={[
+                    { id: DECISION_APPROVE, label: "Approve" },
+                    { id: DECISION_REJECT, label: "Deny" },
+                  ]}
+                  value={decision}
+                  onValueChange={setDecision}
+                  onConfirm={() => {
+                    if (decision === DECISION_APPROVE) onApprove?.(request.id);
+                    else if (decision === DECISION_REJECT) onReject?.(request.id);
+                    setDecision(undefined);
+                  }}
+                />
+              )}
+              {more > 0 ? <p className={styles.more}>{`${more} more ${more === 1 ? "request" : "requests"} waiting`}</p> : null}
+            </section>
+          ) : null}
+
+          <section className={styles.agents} aria-labelledby={listId}>
+            <header className={styles.agentsHead}>
+              <h3 id={listId} className={styles.agentsTitle}>
+                All agents
+              </h3>
+              <SegmentedControl
+                size="sm"
+                ariaLabel="Show agents"
+                value={filter}
+                onChange={(value) => changeFilter(value as AgentOverviewFilter)}
+                items={AGENT_OVERVIEW_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
               />
-            ) : (
-              <Empty outlined icon="Filter" {...LANES_EMPTY[filter]} />
-            )}
-          </div>
+            </header>
+            {/* Timeline needs width: below the small breakpoint the list shows instead. */}
+            <div className={cx(styles.list, timeline && styles.listUnderTimeline)}>{list}</div>
+            {timeline ? (
+              <div className={styles.lanes}>
+                <AgentLanes
+                  agents={lanes.agents}
+                  tasks={lanes.tasks}
+                  now={now}
+                  span={span}
+                  spans={LANE_SPANS}
+                  onSpanChange={setPickedSpan}
+                  openTaskId={openTaskId}
+                  onOpenTaskChange={setOpenTaskId}
+                  onApprove={(id) => {
+                    setOpenTaskId(null);
+                    onApprove?.(id);
+                  }}
+                  onReject={(id) => {
+                    setOpenTaskId(null);
+                    onReject?.(id);
+                  }}
+                />
+              </div>
+            ) : null}
+          </section>
         </div>
+
         <div className={styles.column}>
-          <BarChart
-            className={cx(styles.activity, styles.areaActivity)}
-            title={filter === "all" ? "Activity" : `Activity · ${FILTER_LABEL[filter]}`}
-            description={`Agent work started ${sinceText}`}
-            data={activity}
-            height={120}
-            showGrid={false}
-            emptyLabel="No activity in this range"
+          <ActivityFeed
+            variant="history"
+            title={`Since ${formatClock(since)}`}
+            description={`${doneCount} done`}
+            events={rail}
+            now={now}
           />
-          <div className={styles.areaInbox}>
-            <AgentInbox
-              title="Needs you"
-              items={inbox}
-              selectedId={selectedId}
-              onSelect={(id) => setSelectedId((current) => (current === id ? null : id))}
-              {...handlers}
-            />
-          </div>
         </div>
       </div>
     </section>

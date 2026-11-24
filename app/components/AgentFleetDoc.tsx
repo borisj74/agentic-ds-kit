@@ -123,7 +123,7 @@ export function AgentFleetDoc() {
     <div>
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>AgentFleet</h2>
-        <p className={styles.lede}>Several agents side by side. Not Scoreboard. Not DataTable.</p>
+        <p className={styles.lede}>Deprecated: use AgentOverview, whose rows carry status, now, cost and subAgents. Several agents side by side. Not Scoreboard. Not DataTable.</p>
       </header>
 
       <section className={styles.master} aria-labelledby="agentfleet-master">

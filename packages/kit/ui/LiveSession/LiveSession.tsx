@@ -16,6 +16,7 @@ export type { LiveSessionProps, LiveSessionAgent, LiveSessionAgentStatus, LiveSe
 /**
  * Block: work alongside agents while they run. The conversation (Chat) beside who is working
  * (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).
+ * @deprecated Use RunDetail with messages and onSend (its Ask panel), and AgentOverview for who is working and what needs you.
  */
 export function LiveSession(props: LiveSessionProps) {
   const {

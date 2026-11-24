@@ -42,14 +42,14 @@
         "badgeTone": "neutral | brand | success | warning | danger | info?",
         "disabled": "boolean?",
         "group": "string?",
-        "actions": "{ id, label, icon?, danger?, disabled? }[]?",
+        "actions": "{ id, label, actionLabel?, icon?, danger?, disabled? }[]?",
         "dot": "\"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\"?",
         "meta": "string?",
         "priority": "\"high\" | \"medium\" | \"low\"?",
-        "primaryAction": "{ id, label, icon?, danger?, disabled? }?"
+        "primaryAction": "{ id, label, actionLabel?, icon?, danger?, disabled? }?"
       },
       "required": true,
-      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu."
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text."
     },
     "label": {
       "type": "string",
@@ -194,7 +194,8 @@
       "Keyboard: Up/Down move among visible rows and collapsible headers; Home/End; Space/Enter activate; trailing actions and checkboxes are not in the tab order",
       "truncate clips visually only: the row's accessible name and the title attribute keep the full primary and secondary text",
       "dot is aria-hidden and its tone (Note, Good, Warning, Problem, Info) joins the row name; meta is part of the row name",
-      "priority bars are aria-hidden; the priority word is visible at the start of the secondary line and in the row name"
+      "priority bars are aria-hidden; the priority word is visible at the start of the secondary line and in the row name",
+      "A row action with actionLabel is named by it (aria-labelledby a hidden span); without it the button's name is its visible label. actionLabel starts with the visible label so speech input still matches"
     ]
   },
   "doNot": [
@@ -218,5 +219,5 @@
     "Do not use dot as the only sign of a status; say it in primary or secondary",
     "Do not write the priority word in secondary; the kit adds High, Medium or Low"
   ],
-  "snippet": "<ListView label=\"People\" items={[{ id: 'maya', primary: 'Maya Chen', secondary: 'maya@acme.com', name: 'Maya Chen', badge: 'Admin', badgeTone: 'info' }]} />"
+  "snippet": "<ListView label=\"Agents\" items={[{ id: 'tax', primary: 'Tax checker', secondary: 'Failed · 3 of 44 timed out', primaryAction: { id: 'review', label: 'Review', actionLabel: 'Review Tax checker' } }]} onAction={(id, action) => open(id, action)} />"
 }

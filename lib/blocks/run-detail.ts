@@ -7,7 +7,7 @@ export const runDetailDoc: BlockDoc = {
   name: "RunDetail",
   contract,
   lead:
-    "One agent run on one screen. The live clock, cost and pending approval lead; beside them sit who started whom and every step. Pick a step anywhere and the strip, the tree, the trail and the tool call all follow it.",
+    "One agent run on one screen. The live clock, cost and pending approval lead; beside them sit who started whom and every step. Pick a step anywhere and the strip, the tree, the trail and the tool call all follow it. Pass messages and onSend for the Ask panel, where you ask or steer the agent. It replaces LiveSession.",
   usage: `import { RunDetail } from "agentic-ds-kit";
 
 export function RunPage({ run, steps, tree }) {
@@ -23,6 +23,8 @@ export function RunPage({ run, steps, tree }) {
         onResume={() => resume(run.id)}
         onCancel={() => cancel(run.id)}
         onRetry={(stepId) => retry(run.id, stepId)}
+        messages={messages}      // Ask panel: Chat messages
+        onSend={(text) => askOrSteer(run.id, text)}
       />
     </main>
   );

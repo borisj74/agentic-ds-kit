@@ -305,7 +305,10 @@ function ExpandedCard({
   );
 }
 
-/** Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree. */
+/**
+ * Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree.
+ * @deprecated Use AgentOverview: its All agents list carries status, now, cost and subAgents per agent.
+ */
 export function AgentFleet({
   agents,
   expandedId,

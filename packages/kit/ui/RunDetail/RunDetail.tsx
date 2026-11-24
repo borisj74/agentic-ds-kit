@@ -4,6 +4,7 @@ import { useId, useMemo, useState } from "react";
 import { AgentMonitor } from "../AgentMonitor";
 import { AgentTrail } from "../AgentTrail";
 import { AgentTree } from "../AgentTree";
+import { Chat } from "../Chat";
 import { Empty } from "../Empty";
 import { ToolCallCard } from "../ToolCallCard";
 import { cx } from "../shared/cx";
@@ -17,7 +18,8 @@ export type { RunDetailProps, RunDetailRun, RunDetailStep, RunDetailStepStatus }
 /**
  * Block: one agent run on one screen. AgentMonitor (clock, cost, step strip, pending approval),
  * the selected step's ToolCallCard, AgentTree (who started whom) and AgentTrail (the step log),
- * all on one selected step.
+ * all on one selected step. With messages or onSend, an Ask panel (kit Chat) to ask or steer the
+ * agent sits under the trail; it replaces LiveSession.
  */
 export function RunDetail(props: RunDetailProps) {
   const {
@@ -33,6 +35,9 @@ export function RunDetail(props: RunDetailProps) {
     onResume,
     onCancel,
     onRetry,
+    messages,
+    onSend,
+    thinking = false,
     title = "Run detail",
     className,
     ref,
@@ -40,6 +45,8 @@ export function RunDetail(props: RunDetailProps) {
   } = props;
   const titleId = useId();
   const callId = useId();
+  const askId = useId();
+  const showAsk = messages !== undefined || onSend !== undefined;
   const [innerSelected, setInnerSelected] = useState<string | null>(defaultSelectedStepId);
   const selectedId = selectedProp !== undefined ? selectedProp : innerSelected;
 
@@ -147,6 +154,21 @@ export function RunDetail(props: RunDetailProps) {
             selectedStepId={selectedId}
             onSelectStep={select}
           />
+          {showAsk ? (
+            <aside className={styles.ask} aria-labelledby={askId}>
+              <h3 id={askId} className={styles.srOnly}>
+                {`Ask ${run.name}`}
+              </h3>
+              <Chat
+                title="Ask"
+                messages={messages ?? []}
+                onSend={onSend}
+                isThinking={thinking}
+                placeholder={`Ask or steer ${run.name}`}
+                sendAppearance={run.pendingAction || run.status === "paused" ? "soft" : "solid"}
+              />
+            </aside>
+          ) : null}
         </div>
       </div>
     </section>

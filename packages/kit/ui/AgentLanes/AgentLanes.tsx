@@ -47,7 +47,10 @@ function useClock(controlled: number | undefined, fallback: number) {
   return controlled ?? tick ?? fallback;
 }
 
-/** Where every agent is right now: one lane per agent, blocks growing into now, handoffs, and decisions on the block. */
+/**
+ * Where every agent is right now: one lane per agent, blocks growing into now, handoffs, and decisions on the block.
+ * @deprecated Use AgentOverview with view="timeline", which renders these lanes on wide screens.
+ */
 export function AgentLanes({
   agents,
   tasks,

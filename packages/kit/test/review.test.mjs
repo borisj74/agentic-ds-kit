@@ -139,9 +139,9 @@ describe("review rules", () => {
     const kit = loadKit();
     const overview = kit.byId.get("agentoverview").contains;
     const used = (ids) => new Set(ids);
-    assert.ok(shareMatch(kit, overview, used(["agentlanes", "agentinbox", "barchart", "scoreboard", "segmentedcontrol"])));
-    assert.equal(shareMatch(kit, overview, used(["agentlanes", "agentinbox", "barchart", "scoreboard"])), null, "4 of 7 is under two thirds");
-    assert.equal(shareMatch(kit, overview, used(["agentlanes", "empty", "segmentedcontrol", "scorecard"])), null);
+    assert.ok(shareMatch(kit, overview, used(["activityfeed", "agentlanes", "approvalcard", "listview", "segmentedcontrol"])));
+    assert.equal(shareMatch(kit, overview, used(["activityfeed", "agentlanes", "approvalcard", "listview"])), null, "4 of 7 is under two thirds");
+    assert.equal(shareMatch(kit, overview, used(["agentlanes", "button", "segmentedcontrol", "listview"])), null);
     const signIn = kit.patterns.find((p) => p.id === "sign-in").contains;
     assert.equal(shareMatch(kit, signIn, used(signIn.slice(1)), { allowSmall: true }), null);
     assert.ok(shareMatch(kit, signIn, used(signIn), { allowSmall: true }));

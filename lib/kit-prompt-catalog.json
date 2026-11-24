@@ -2038,7 +2038,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text."
         },
         "label": {
           "type": "string",
@@ -4371,7 +4371,8 @@
       "props": {
         "title": {
           "type": "string",
-          "required": false
+          "required": false,
+          "note": "16/24 at heading weight in both sizes: the smallest of three title sizes (page 24, section 18, card 16)."
         },
         "description": {
           "type": "string",
@@ -4389,7 +4390,7 @@
             "md"
           ],
           "default": "md",
-          "note": "sm = compact padding (space.4) and a body-sized title; md = space.6 and a heading title. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
+          "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
         },
         "headerAction": {
           "type": "object | array",
@@ -6124,11 +6125,12 @@
     {
       "id": "tabs",
       "group": "component",
-      "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
+      "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don't fit.",
       "useWhen": [
         "Grouped settings or detail sections on one page",
         "Two to five peer views sharing one context",
-        "Compact local switching such as preview and code"
+        "Compact local switching such as preview and code",
+        "Page views joined to PageHeader through its tabs slot (size md, line)"
       ],
       "doNotUseWhen": [
         "Top-level app routes — use AppNav",
@@ -6139,12 +6141,15 @@
         "Do not invent TabsList, TabsTrigger, or TabsContent cousins",
         "Do not use raw hex",
         "Do not use Tabs for main app navigation — use AppNav",
-        "Do not nest tabs inside tabs"
+        "Do not nest tabs inside tabs",
+        "Do not colour a tab or its count to show status; the number says it",
+        "Do not use Tabs to change a value inside one view — use SegmentedControl"
       ],
       "props": {
         "items": {
           "type": "array",
-          "required": true
+          "required": true,
+          "note": "icon sits before the label. count renders as a neutral kit Count after the label and is part of the tab's name; never show a count by colour alone."
         },
         "value": {
           "type": "string",
@@ -6173,7 +6178,26 @@
             "line",
             "segmented"
           ],
-          "default": "line"
+          "default": "line",
+          "note": "segmented uses the SegmentedControl track: tray fill, 2px inset, thumb radius nested inside the track. Use segmented for values that change data inside one view; line for page or panel views."
+        },
+        "overflow": {
+          "type": "enum",
+          "values": [
+            "scroll",
+            "more"
+          ],
+          "default": "scroll",
+          "note": "scroll: one line that scrolls sideways when the tabs don't fit (touch, trackpad and arrow keys). more: the tabs that fit, then a More menu (kit DropdownMenu, KitLabels moreTabs) with the rest. The selected tab always stays in the row."
+        },
+        "activation": {
+          "type": "enum",
+          "values": [
+            "automatic",
+            "manual"
+          ],
+          "default": "automatic",
+          "note": "automatic: arrow keys select the tab they land on. manual: arrow keys move focus, Enter or Space selects. Use manual when a panel is slow to load."
         },
         "ariaLabel": {
           "type": "string",
@@ -6733,7 +6757,7 @@
     {
       "id": "pageheader",
       "group": "component",
-      "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+      "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, actions, and page Tabs.",
       "useWhen": [
         "Product page title with optional Breadcrumb trail and actions",
         "Placing primary/secondary Buttons aligned to the page title",
@@ -6751,12 +6775,15 @@
         "Do not invent BreadcrumbItem or BreadcrumbLink cousins — compose kit Breadcrumb",
         "Do not restyle Breadcrumb internals from PageHeader",
         "Do not use raw hex",
-        "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)"
+        "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)",
+        "Do not put page Tabs under PageHeader by hand — pass them to tabs",
+        "Do not uppercase the eyebrow"
       ],
       "props": {
         "title": {
           "type": "string",
-          "required": true
+          "required": true,
+          "note": "24/32 at heading weight: the largest of three title sizes (page 24, section 18, card 16)."
         },
         "subtitle": {
           "type": "string",
@@ -6765,17 +6792,27 @@
         "eyebrow": {
           "type": "string",
           "required": false,
-          "note": "Kept for existing call sites. Breadcrumbs replace eyebrow as the default where-am-I."
+          "note": "Kept for existing call sites. Sentence case, 12/16 at weight 500, never uppercase. Breadcrumbs replace eyebrow as the default where-am-I."
         },
         "actions": {
           "type": "slot",
           "required": false,
-          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+        },
+        "overflowActions": {
+          "type": "array",
+          "required": false,
+          "note": "Secondary actions. When the header is wider than 40rem they render as outline neutral Buttons before actions; narrower, they fold into one ⋯ kit DropdownMenu (KitLabels moreActions) after actions, so the labelled primary stays."
+        },
+        "tabs": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Tabs, size md, line variant, for the page's views. Rendered under the title row inside the header, so a sticky header keeps them in view."
         },
         "breadcrumbs": {
           "type": "array",
           "required": false,
-          "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb."
+          "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb. When the header is narrower than 40rem, the trail shrinks to one back step to the crumb before the current page (if it has href or onClick)."
         },
         "breadcrumbSeparator": {
           "type": "enum",
@@ -7230,12 +7267,34 @@
         "Do not use Section as the page title — that is PageHeader",
         "Do not embed one-off metric flex rows — use Scoreboard",
         "Actions must be kit Buttons",
-        "Do not compose Accordion or Collapsible for page sections — Section owns collapse"
+        "Do not compose Accordion or Collapsible for page sections — Section owns collapse",
+        "Do not use more than one title size per level: page 24 (PageHeader), section 18, card 16"
       ],
       "props": {
+        "eyebrow": {
+          "type": "string",
+          "required": false,
+          "note": "Short sentence-case line above the title, 12/16 at weight 500. Never uppercase."
+        },
         "title": {
           "type": "string",
-          "required": false
+          "required": false,
+          "note": "18/24 at heading weight: the middle of three title sizes (page 24, section 18, card 16)."
+        },
+        "count": {
+          "type": "number",
+          "required": false,
+          "note": "A neutral kit Count beside the title, like the number of overdue invoices."
+        },
+        "headingLevel": {
+          "type": "enum",
+          "values": [
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "note": "The title's heading element. Use 3 or 4 when the Section sits under another heading so the outline stays in order. Looks the same at every level."
         },
         "description": {
           "type": "string",
@@ -7251,6 +7310,16 @@
           "default": "md",
           "note": "Controls gap under the heading and between stacked sections via space-section tokens. Does not add box padding."
         },
+        "divider": {
+          "type": "boolean",
+          "default": false,
+          "note": "A hairline (border.faint) under the header."
+        },
+        "sticky": {
+          "type": "boolean",
+          "default": false,
+          "note": "The header sticks to the top of its scroll container while the body scrolls. It takes --section-sticky-bg, default surface.page; set it to the surface behind the Section (surface.card inside a Card)."
+        },
         "actions": {
           "type": "slot",
           "required": false,
@@ -7263,7 +7332,7 @@
         "collapsible": {
           "type": "boolean",
           "default": false,
-          "note": "Default false: static heading, no chevron. True: chevron before the title toggles the body. Requires title."
+          "note": "Default false: static heading, no chevron. True: a 16px chevron before the title toggles the body. Requires title."
         },
         "defaultOpen": {
           "type": "boolean",
@@ -8719,7 +8788,7 @@
     {
       "id": "agenttrail",
       "group": "component",
-      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
+      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps. Becomes an internal part of RunDetail after the next release; prefer RunDetail.",
       "useWhen": [
         "show what an agent already did and is doing now",
         "a run log next to a chat or an ApprovalCard",
@@ -8908,7 +8977,7 @@
     {
       "id": "agentfleet",
       "group": "component",
-      "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+      "intent": "Deprecated: use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent. Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
       "useWhen": [
         "monitor several running agents or orchestrators at once",
         "show sub-agent progress, cost, and time per agent",
@@ -8920,6 +8989,7 @@
         "a plain table of jobs — DataTable"
       ],
       "doNot": [
+        "Do not use in new screens; use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent.",
         "Do not invent a local AgentFleet, AgentGrid, or AgentCard",
         "Do not color status without the text label",
         "Do not use raw hex; waiting uses caution tokens",
@@ -9344,7 +9414,7 @@
     {
       "id": "agentmonitor",
       "group": "component",
-      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
+      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard. Becomes an internal part of RunDetail (its header) after the next release; prefer RunDetail.",
       "useWhen": [
         "watch one agent run in detail",
         "inspect a step's duration, tokens and cost",
@@ -9564,7 +9634,7 @@
     {
       "id": "agentlanes",
       "group": "component",
-      "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+      "intent": "Deprecated: use AgentOverview with view=\"timeline\", which renders these lanes on wide screens. Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
       "useWhen": [
         "watch several agents work in parallel over the last minutes",
         "see who handed work to whom",
@@ -9576,6 +9646,7 @@
         "a calendar of events — Calendar"
       ],
       "doNot": [
+        "Do not use in new screens; use AgentOverview with view=\"timeline\", which renders these lanes on wide screens.",
         "Do not invent a local AgentLanes, Gantt, or AgentTimeline",
         "Do not encode status by color only; blocks and lanes carry text",
         "Do not use raw hex",
@@ -9646,7 +9717,7 @@
     {
       "id": "agentinbox",
       "group": "component",
-      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
+      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail. Becomes an internal part of AgentOverview (Needs you) after the next release; prefer AgentOverview.",
       "useWhen": [
         "collect every agent request in one place",
         "act on approvals and questions without leaving the list",
@@ -11775,7 +11846,7 @@
     {
       "id": "taskboard",
       "group": "component",
-      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
       "useWhen": [
         "a small board of tasks by status inside a product",
         "let people move cards between columns with mouse or keyboard",
@@ -12175,39 +12246,40 @@
     {
       "id": "agentoverview",
       "group": "component",
-      "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+      "intent": "Block: the home for a group of agents. Needs you (the oldest open request as one ApprovalCard, the rest counted), All agents (an icon-and-word status, one fact, cost and one action per row, under one filter) and a Since rail of what happened after the last visit. A Timeline view shows the same agents on one time axis on wide screens. Replaces AgentFleet, AgentLanes and the AgentInbox list.",
       "useWhen": [
         "the first screen of an agent workspace",
-        "come back after a while and see what changed",
-        "approve, reject or retry agent work from one place"
+        "come back after a while and see what changed and what needs you",
+        "approve the open request, review a failed agent or ask a running one from one place"
       ],
       "doNotUseWhen": [
-        "one agent in detail — AgentMonitor",
-        "only the time axis — AgentLanes",
-        "only the request queue — AgentInbox",
-        "agents with sub-agents — AgentFleet"
+        "one run in detail — RunDetail",
+        "people's tasks — WorkBoard",
+        "starting a run — TaskBrief"
       ],
       "doNot": [
         "Do not rebuild AgentOverview from a local dashboard; import the block",
-        "Do not add a second filter to one area; the one filter drives all three",
+        "Do not repeat a request: it lives in Needs you only; the row and the rail point to it",
+        "Do not show status by colour alone; use the icon and the word",
+        "Do not add a second filter; the one filter drives the list and the lanes",
         "Do not use raw hex",
-        "Only one solid primary in the view: the approve in the open inbox card"
+        "Only one solid primary in the view: the approve in the Needs you card"
       ],
       "props": {
         "agents": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, model?, icon? }[]. Same shape as AgentLanes agents: one lane each."
+          "note": "{ id, name, model?, icon?, status?, now?, cost?, subAgents? }[]. status is AgentStatus (queued | running | needs-you | paused | done | failed; older waiting and approval map to needs-you, idle to queued); default from the agent's latest event. now is one line on what it is doing. cost like \"$0.42\"; when every agent has one the lead line adds the total spent. subAgents { id, name, status, elapsed?, cost? }[] are counted on the row."
         },
         "events": {
           "type": "array",
           "required": true,
-          "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Waiting and failed events since `since` fill the inbox."
+          "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Open waiting events fill Needs you, oldest first; events since `since` fill the Since rail."
         },
         "since": {
           "type": "number",
           "required": true,
-          "note": "Epoch ms of the last visit. The summary and the filter counts cover what was active after it."
+          "note": "Epoch ms of the last visit. The lead line and the Since rail start from it."
         },
         "now": {
           "type": "number",
@@ -12223,7 +12295,7 @@
             "failed"
           ],
           "required": false,
-          "note": "Controlled filter for the activity bar, lanes and inbox."
+          "note": "Controlled filter for the All agents list and the Timeline lanes, by agent status."
         },
         "defaultFilter": {
           "type": "enum",
@@ -12241,24 +12313,62 @@
           "required": false,
           "note": "(filter) => void"
         },
+        "view": {
+          "type": "enum",
+          "values": [
+            "list",
+            "timeline"
+          ],
+          "required": false,
+          "note": "Controlled view. timeline renders AgentLanes in place of the list; below --grid-breakpoint-sm (40rem) of block width only the list shows and the toggle hides."
+        },
+        "defaultView": {
+          "type": "enum",
+          "values": [
+            "list",
+            "timeline"
+          ],
+          "default": "list",
+          "note": "Uncontrolled starting view."
+        },
+        "onViewChange": {
+          "type": "function",
+          "required": false,
+          "note": "(view) => void"
+        },
         "onApprove": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void. From the lane block's decision or the inbox card."
+          "note": "(eventId) => void. From the Needs you card or a lane block."
         },
         "onReject": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void"
+          "note": "(eventId) => void. Deny on the Needs you card."
         },
         "onRetry": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void. A failed event's Retry run."
+          "note": "(eventId) => void. Kept for older apps; the row action for a failed agent is Review (onReview)."
+        },
+        "onReview": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. Review on a failed agent's row."
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. Ask on a running agent's row."
+        },
+        "onNewTask": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. New task in the header: open TaskBrief."
         },
         "title": {
           "type": "string",
-          "default": "Agent overview"
+          "default": "Agents"
         }
       }
     },
@@ -12426,7 +12536,7 @@
     {
       "id": "livesession",
       "group": "component",
-      "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+      "intent": "Deprecated: use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you. Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
       "useWhen": [
         "a workspace where people chat with agents as they work",
         "redirect or pause an agent mid-run without leaving the conversation",
@@ -12439,6 +12549,7 @@
         "only steering — AgentSteering"
       ],
       "doNot": [
+        "Do not use in new screens; use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you.",
         "Do not rebuild LiveSession from local panels; import the block",
         "Do not show every open request at once; one inline approval, the rest counted",
         "Do not use raw hex",
@@ -12533,24 +12644,24 @@
     {
       "id": "rundetail",
       "group": "component",
-      "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+      "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession.",
       "useWhen": [
         "open one run from a list or an overview",
         "see why a step failed and retry it",
         "approve the run's next action with the full step history in view",
+        "ask or steer the agent while it runs",
         "pause, resume or cancel a run"
       ],
       "doNotUseWhen": [
         "many agents at a glance — AgentOverview",
-        "talk to agents while they work — LiveSession",
-        "only the live card — AgentMonitor",
-        "only the step log — AgentTrail"
+        "starting a run — TaskBrief"
       ],
       "doNot": [
         "Do not rebuild RunDetail from local cards; import the block",
         "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+        "Do not add a LiveSession beside RunDetail; pass messages and onSend",
         "Do not use raw hex",
-        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused"
+        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused, else the Ask send"
       ],
       "props": {
         "run": {
@@ -12612,6 +12723,21 @@
           "type": "function",
           "required": false,
           "note": "(stepId) => void. A failed step, from the run, the tree or the tool call."
+        },
+        "messages": {
+          "type": "array",
+          "required": false,
+          "note": "Chat messages { id?, role: \"user\" | \"assistant\", content, timestamp? }[] for the Ask panel. The panel shows when messages or onSend is set."
+        },
+        "onSend": {
+          "type": "function",
+          "required": false,
+          "note": "(text) => void. The one Ask or steer box."
+        },
+        "thinking": {
+          "type": "boolean",
+          "default": false,
+          "note": "The Ask panel shows the kit thinking state."
         },
         "title": {
           "type": "string",

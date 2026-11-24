@@ -19,7 +19,8 @@
   "props": {
     "title": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "16/24 at heading weight in both sizes: the smallest of three title sizes (page 24, section 18, card 16)."
     },
     "description": {
       "type": "string",
@@ -37,7 +38,7 @@
         "md"
       ],
       "default": "md",
-      "note": "sm = compact padding (space.4) and a body-sized title; md = space.6 and a heading title. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
+      "note": "sm = compact padding (space.4); md = space.6. Both use the 16/24 card title (md type.size.uiMd / type.line.uiMd, sm type.size.body); only padding differs. Size never sets width: the card fills its container, so width comes from the layout (wrap it, e.g. max-width 24rem, for a narrow tile)."
     },
     "headerAction": {
       "type": "object | array",
@@ -159,7 +160,11 @@
     "space.2",
     "border.divider",
     "radius.controlSm",
-    "type.tracking.heading5"
+    "type.size.uiMd",
+    "type.line.uiMd",
+    "type.size.body",
+    "type.weight.heading",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "article",

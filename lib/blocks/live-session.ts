@@ -7,7 +7,7 @@ export const liveSessionDoc: BlockDoc = {
   name: "LiveSession",
   contract,
   lead:
-    "Work alongside agents while they run. Talk to them in the conversation, see who is working, steer or pause one of them, and approve what an agent asks right where it asks.",
+    "Deprecated: use RunDetail with messages and onSend, and AgentOverview for who is working and what needs you. Work alongside agents while they run. Talk to them in the conversation, see who is working, steer or pause one of them, and approve what an agent asks right where it asks.",
   usage: `import { LiveSession } from "agentic-ds-kit";
 
 export function Session({ messages, agents, requests }) {

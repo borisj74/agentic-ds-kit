@@ -1,4 +1,4 @@
-import type { AgentTreeNode, RunDetailRun, RunDetailStep } from "agentic-ds-kit";
+import type { AgentTreeNode, ChatMessage, RunDetailRun, RunDetailStep } from "agentic-ds-kit";
 
 /** Sample run for the RunDetail docs: an orchestrator refactoring a billing service. */
 export const RUN_DETAIL_RUN: RunDetailRun = {
@@ -132,4 +132,14 @@ export const RUN_DETAIL_STEPS: RunDetailStep[] = [
   },
   { id: "s7", agentId: "editor", tool: "git", label: "Commit and push the branch", status: "pending" },
   { id: "s8", agentId: "reviewer", tool: "open_pr", label: "Open the pull request", status: "pending" },
+];
+
+/** The Ask panel's conversation so far. */
+export const RUN_DETAIL_MESSAGES: ChatMessage[] = [
+  { id: "m1", role: "user", content: "Why does the migration need approval?" },
+  {
+    id: "m2",
+    role: "assistant",
+    content: "It drops three columns on staging. The new totals no longer read them, but the drop can't be undone without a restore.",
+  },
 ];

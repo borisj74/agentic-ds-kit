@@ -528,7 +528,7 @@
   },
   {
     "id": "tabs",
-    "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
+    "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don't fit.",
     "group": "component",
     "path": "contracts/tabs.json",
     "status": "stable",
@@ -592,7 +592,7 @@
   },
   {
     "id": "pageheader",
-    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, actions, and page Tabs.",
     "group": "component",
     "path": "contracts/pageheader.json",
     "status": "stable",
@@ -816,7 +816,7 @@
   },
   {
     "id": "agenttrail",
-    "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
+    "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps. Becomes an internal part of RunDetail after the next release; prefer RunDetail.",
     "group": "component",
     "path": "contracts/agenttrail.json",
     "status": "stable",
@@ -832,10 +832,10 @@
   },
   {
     "id": "agentfleet",
-    "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+    "intent": "Deprecated: use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent. Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
     "group": "component",
     "path": "contracts/agentfleet.json",
-    "status": "stable",
+    "status": "deprecated",
     "level": "organism"
   },
   {
@@ -872,7 +872,7 @@
   },
   {
     "id": "agentmonitor",
-    "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
+    "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard. Becomes an internal part of RunDetail (its header) after the next release; prefer RunDetail.",
     "group": "component",
     "path": "contracts/agentmonitor.json",
     "status": "stable",
@@ -888,15 +888,15 @@
   },
   {
     "id": "agentlanes",
-    "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+    "intent": "Deprecated: use AgentOverview with view=\"timeline\", which renders these lanes on wide screens. Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
     "group": "component",
     "path": "contracts/agentlanes.json",
-    "status": "stable",
+    "status": "deprecated",
     "level": "organism"
   },
   {
     "id": "agentinbox",
-    "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
+    "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail. Becomes an internal part of AgentOverview (Needs you) after the next release; prefer AgentOverview.",
     "group": "component",
     "path": "contracts/agentinbox.json",
     "status": "stable",
@@ -1080,7 +1080,7 @@
   },
   {
     "id": "taskboard",
-    "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+    "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
     "group": "component",
     "path": "contracts/taskboard.json",
     "status": "stable",
@@ -1137,13 +1137,13 @@
   {
     "id": "agentoverview",
     "kind": "block",
-    "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+    "intent": "Block: the home for a group of agents. Needs you (the oldest open request as one ApprovalCard, the rest counted), All agents (an icon-and-word status, one fact, cost and one action per row, under one filter) and a Since rail of what happened after the last visit. A Timeline view shows the same agents on one time axis on wide screens. Replaces AgentFleet, AgentLanes and the AgentInbox list.",
     "group": "component",
     "path": "contracts/agentoverview.json",
     "status": "stable",
     "level": "block",
     "category": "Agents",
-    "summary": "See what your agents did since you last looked, what is running, and what needs you."
+    "summary": "The agent home: what needs you, every agent's status and one action, and what happened since you last looked."
   },
   {
     "id": "logostrip",
@@ -1170,10 +1170,10 @@
   {
     "id": "livesession",
     "kind": "block",
-    "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+    "intent": "Deprecated: use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you. Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
     "group": "component",
     "path": "contracts/livesession.json",
-    "status": "stable",
+    "status": "deprecated",
     "level": "block",
     "category": "Agents",
     "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask."
@@ -1181,13 +1181,13 @@
   {
     "id": "rundetail",
     "kind": "block",
-    "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+    "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession.",
     "group": "component",
     "path": "contracts/rundetail.json",
     "status": "stable",
     "level": "block",
     "category": "Agents",
-    "summary": "One agent run on one screen: clock and cost, every step, who started whom, and the selected step's tool call."
+    "summary": "One agent run on one screen: clock and cost, every step, who started whom, the selected step's tool call, and Ask."
   },
   {
     "id": "appdirectory",

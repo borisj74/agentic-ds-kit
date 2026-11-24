@@ -67,6 +67,22 @@
   color: var(--text-fg);
 }
 
+/* Ask: kit Chat to ask or steer the agent. Last in reading order, so on one column it sits at
+   the bottom, under the trail. */
+.ask {
+  display: grid;
+  min-width: 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* The tree and trail stack under the monitor. 64rem is --grid-breakpoint-md (container queries
    cannot read var()), the same stack point as AgentOverview. */
 @container rundetail (max-width: 64rem) {

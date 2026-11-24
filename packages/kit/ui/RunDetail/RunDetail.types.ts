@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { AgentMonitorPendingAction, AgentMonitorStatus, AgentMonitorStep } from "../AgentMonitor/AgentMonitor.types";
 import type { AgentTreeNode } from "../AgentTree/AgentTree.types";
+import type { ChatMessage } from "../Chat/Chat.types";
 
 /** A step's status. "pending" steps are planned: they show in the trail, not in the time strip. */
 export type RunDetailStepStatus = "done" | "running" | "waiting" | "failed" | "pending";
@@ -74,6 +75,12 @@ export interface RunDetailProps extends Omit<ComponentPropsWithoutRef<"section">
   onCancel?: () => void;
   /** Retry a failed step (from the run, the tree or the tool call). */
   onRetry?: (stepId: string) => void;
+  /** Ask panel: the conversation with the agent on this run (kit Chat). Shows with messages or onSend. */
+  messages?: ChatMessage[];
+  /** (text) => void. One box to ask or steer the agent; replaces LiveSession's chat and steering. */
+  onSend?: (text: string) => void;
+  /** The agent is answering: the Ask panel shows the kit thinking state. */
+  thinking?: boolean;
   /** Block heading. Default "Run detail". */
   title?: string;
   ref?: Ref<HTMLElement>;

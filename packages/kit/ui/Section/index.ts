@@ -1,2 +1,2 @@
 export { Section } from "./Section";
-export type { SectionProps, SectionSize } from "./Section.types";
+export type { SectionProps, SectionSize, SectionHeadingLevel } from "./Section.types";

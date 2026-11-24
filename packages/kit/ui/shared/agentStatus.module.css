@@ -1,0 +1,72 @@
+/* AgentStatus: icon plus word. Colour backs the word up; the word always shows. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.word {
+  min-width: 0;
+}
+
+.queued {
+  color: var(--text-fg-muted);
+}
+
+.running {
+  color: var(--status-info-text);
+}
+
+.running.icon {
+  color: var(--icon-brand);
+  animation: agent-status-spin 1s linear infinite;
+}
+
+.needs-you {
+  color: var(--status-warning-text);
+}
+
+.needs-you.icon {
+  color: var(--icon-warning);
+}
+
+.paused {
+  color: var(--text-fg-muted);
+}
+
+.done {
+  color: var(--status-success-text);
+}
+
+.done.icon {
+  color: var(--icon-success);
+}
+
+.failed {
+  color: var(--status-danger-text);
+}
+
+.failed.icon {
+  color: var(--icon-danger);
+}
+
+@keyframes agent-status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reduced motion: the running mark stays a static ring. */
+@media (prefers-reduced-motion: reduce) {
+  .running.icon {
+    animation: none;
+  }
+}

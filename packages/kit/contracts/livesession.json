@@ -3,9 +3,9 @@
   "kind": "block",
   "category": "Agents",
   "summary": "Work alongside agents while they run: talk, see who is working, steer one, and approve what they ask.",
-  "status": "stable",
+  "status": "deprecated",
   "level": "block",
-  "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+  "intent": "Deprecated: use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you. Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
   "useWhen": [
     "a workspace where people chat with agents as they work",
     "redirect or pause an agent mid-run without leaving the conversation",
@@ -144,6 +144,7 @@
     ]
   },
   "doNot": [
+    "Do not use in new screens; use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you.",
     "Do not rebuild LiveSession from local panels; import the block",
     "Do not show every open request at once; one inline approval, the rest counted",
     "Do not use raw hex",

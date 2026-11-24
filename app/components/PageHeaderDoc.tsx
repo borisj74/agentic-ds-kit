@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { BreadcrumbItem } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
+import type { PageHeaderProps } from "agentic-ds-kit";
+import { Tabs } from "agentic-ds-kit";
 import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -26,6 +28,30 @@ const COLLAPSED_BREADCRUMBS: BreadcrumbItem[] = [
   { label: "Campaigns", href: "#" },
   { label: "Aurora" },
 ];
+
+const INVOICES_HEADER: PageHeaderProps = {
+  title: "Invoices",
+  subtitle: "Bills sent to customers this quarter.",
+  breadcrumbs: [
+    { label: "Billing", href: "#" },
+    { label: "Invoices" },
+  ],
+  overflowActions: [{ id: "export", label: "Export", icon: "Download", onSelect: () => {} }],
+  actions: <Button iconStart="Plus">New invoice</Button>,
+  tabs: (
+    <Tabs
+      ariaLabel="Invoice views"
+      overflow="more"
+      defaultValue="all"
+      items={[
+        { id: "all", label: "All" },
+        { id: "overdue", label: "Overdue", count: 3 },
+        { id: "drafts", label: "Drafts", count: 5 },
+        { id: "paid", label: "Paid" },
+      ]}
+    />
+  ),
+};
 
 function itemsCode(items: BreadcrumbItem[]): string {
   const inner = items
@@ -85,7 +111,7 @@ export function PageHeaderDoc() {
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
               <div className={styles.canvas}>
-                <div className={styles.previewFill}>
+                <div className={styles.previewPage}>
                   <PageHeader
                     title={MASTER_TITLE}
                     subtitle={MASTER_SUBTITLE}
@@ -133,9 +159,51 @@ export function PageHeaderDoc() {
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Tabs and overflow actions</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewPage}>
+                  <div className={styles.previewPage}>
+                    <PageHeader {...INVOICES_HEADER} />
+                  </div>
+                  <div className={styles.previewPage} style={{ maxWidth: "24rem" }}>
+                    <PageHeader {...INVOICES_HEADER} />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Pass page Tabs to tabs so they sit in the header region. Secondary actions go in
+                  overflowActions: outline Buttons when there is room, one ⋯ menu when the header is
+                  narrower than 40rem. The labelled primary stays, and the trail shrinks to one back step.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<PageHeader
+  title="Invoices"
+  subtitle="Bills sent to customers this quarter."
+  breadcrumbs={[{ label: "Billing", href: "#" }, { label: "Invoices" }]}
+  overflowActions={[{ id: "export", label: "Export", icon: "Download", onSelect: exportCsv }]}
+  actions={<Button iconStart="Plus">New invoice</Button>}
+  tabs={
+    <Tabs
+      overflow="more"
+      items={[
+        { id: "all", label: "All" },
+        { id: "overdue", label: "Overdue", count: 3 },
+        { id: "drafts", label: "Drafts", count: 5 },
+        { id: "paid", label: "Paid" },
+      ]}
+    />
+  }
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Title only</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewFill}>
+                <div className={styles.previewPage}>
                   <PageHeader title={MASTER_TITLE} />
                 </div>
               </div>
@@ -152,7 +220,7 @@ export function PageHeaderDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Collapsed trail</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewFill}>
+                <div className={styles.previewPage}>
                   <PageHeader
                     title={MASTER_TITLE}
                     subtitle={MASTER_SUBTITLE}
@@ -187,7 +255,7 @@ export function PageHeaderDoc() {
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Slash separator</h2>
               <div className={styles.exampleCanvas}>
-                <div className={styles.previewFill}>
+                <div className={styles.previewPage}>
                   <PageHeader
                     title={MASTER_TITLE}
                     breadcrumbs={MASTER_BREADCRUMBS}

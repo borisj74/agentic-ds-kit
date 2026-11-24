@@ -2,11 +2,12 @@
   "id": "tabs",
   "status": "stable",
   "level": "molecule",
-  "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
+  "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don't fit.",
   "useWhen": [
     "Grouped settings or detail sections on one page",
     "Two to five peer views sharing one context",
-    "Compact local switching such as preview and code"
+    "Compact local switching such as preview and code",
+    "Page views joined to PageHeader through its tabs slot (size md, line)"
   ],
   "doNotUseWhen": [
     "Top-level app routes — use AppNav",
@@ -19,11 +20,14 @@
       "itemShape": {
         "id": "string",
         "label": "string",
+        "icon": "KitIcon (Lucide name, component, or element)",
+        "count": "number",
         "content": "node",
         "disabled": "boolean"
       },
       "required": true,
-      "minItems": 2
+      "minItems": 2,
+      "note": "icon sits before the label. count renders as a neutral kit Count after the label and is part of the tab's name; never show a count by colour alone."
     },
     "value": {
       "type": "string",
@@ -52,7 +56,26 @@
         "line",
         "segmented"
       ],
-      "default": "line"
+      "default": "line",
+      "note": "segmented uses the SegmentedControl track: tray fill, 2px inset, thumb radius nested inside the track. Use segmented for values that change data inside one view; line for page or panel views."
+    },
+    "overflow": {
+      "type": "enum",
+      "values": [
+        "scroll",
+        "more"
+      ],
+      "default": "scroll",
+      "note": "scroll: one line that scrolls sideways when the tabs don't fit (touch, trackpad and arrow keys). more: the tabs that fit, then a More menu (kit DropdownMenu, KitLabels moreTabs) with the rest. The selected tab always stays in the row."
+    },
+    "activation": {
+      "type": "enum",
+      "values": [
+        "automatic",
+        "manual"
+      ],
+      "default": "automatic",
+      "note": "automatic: arrow keys select the tab they land on. manual: arrow keys move focus, Enter or Space selects. Use manual when a panel is slow to load."
     },
     "ariaLabel": {
       "type": "string",
@@ -82,7 +105,8 @@
     "radius.control",
     "shadow.raisedSm",
     "focus.ring",
-    "bg.tray"
+    "bg.tray",
+    "icon.muted"
   ],
   "a11y": {
     "element": "tablist",
@@ -90,14 +114,22 @@
       "Tab buttons control tabpanels",
       "Active tab indicated visually and with aria-selected",
       "Roving tabindex with arrow keys",
-      "Disabled tabs stay visible and are not selectable"
+      "Disabled tabs stay visible and are not selectable",
+      "A count is read as part of the tab's name",
+      "The More menu trigger sits outside the tablist and lists hidden tabs as menu items"
     ]
   },
   "doNot": [
     "Do not invent TabsList, TabsTrigger, or TabsContent cousins",
     "Do not use raw hex",
     "Do not use Tabs for main app navigation — use AppNav",
-    "Do not nest tabs inside tabs"
+    "Do not nest tabs inside tabs",
+    "Do not colour a tab or its count to show status; the number says it",
+    "Do not use Tabs to change a value inside one view — use SegmentedControl"
   ],
-  "snippet": "<Tabs defaultValue=\"overview\" variant=\"line\" items={[{ id: 'overview', label: 'Overview', content: '…' }, { id: 'docs', label: 'Docs', content: '…' }]} />"
+  "snippet": "<Tabs defaultValue=\"overview\" variant=\"line\" items={[{ id: 'overview', label: 'Overview', content: '…' }, { id: 'docs', label: 'Docs', content: '…' }]} />",
+  "contains": [
+    "count",
+    "dropdownmenu"
+  ]
 }

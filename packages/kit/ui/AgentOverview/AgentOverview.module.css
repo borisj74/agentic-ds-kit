@@ -40,16 +40,22 @@
   color: var(--text-fg-muted);
 }
 
-.columns {
-  min-width: 0;
+.headActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-/* Each column stacks its parts with the block's own gap, so the lanes start right under the
-   summary cards and the inbox right under the activity chart. */
+.columns {
+  min-width: 0;
+  align-items: start;
+}
+
 .column {
   display: grid;
   align-content: start;
-  gap: var(--layout-gutter-md);
+  gap: var(--layout-gutter-sm);
   min-width: 0;
 }
 
@@ -57,10 +63,66 @@
   min-width: 0;
 }
 
-.summary {
+/* Needs you: the open request, its agent and time, and how many more wait. */
+.needs {
   display: grid;
   gap: var(--space-2);
   min-width: 0;
+}
+
+.needsMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.more {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+/* All agents: a surface with its own heading and the filter. */
+.agents {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-lg);
+}
+
+.agentsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.agentsTitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.list,
+.lanes {
+  min-width: 0;
+}
+
+/* With Timeline picked the lanes replace the list; the list stays for narrow blocks. */
+.listUnderTimeline {
+  display: none;
 }
 
 .srOnly {
@@ -72,33 +134,21 @@
   white-space: nowrap;
 }
 
-.activity {
-  min-width: 0;
+/* One column below md. 64rem is --grid-breakpoint-md (container queries cannot read var()). */
+@container agentoverview (max-width: 64rem) {
+  .root .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-/* Below the stack point everything is one column. 64rem is --grid-breakpoint-md
-   (container queries cannot read var()). No breakpoint token sits nearer the ~860px the
-   brief asked for; below md the inbox column is under the width its cards need. */
-@container agentoverview (max-width: 64rem) {
-  /* One column in reading order: the columns step aside and their parts join the root grid. */
-  .root .columns,
-  .root .column {
-    display: contents;
+/* Timeline is desktop only: below 40rem (--grid-breakpoint-sm) the List view is the only one. */
+@container agentoverview (max-width: 40rem) {
+  .viewToggle,
+  .lanes {
+    display: none;
   }
 
-  .areaSummary {
-    order: 1;
-  }
-
-  .areaActivity {
-    order: 2;
-  }
-
-  .areaLanes {
-    order: 3;
-  }
-
-  .areaInbox {
-    order: 4;
+  .listUnderTimeline {
+    display: block;
   }
 }

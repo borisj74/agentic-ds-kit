@@ -112,6 +112,8 @@ export interface KitLabels {
   goodResponse: string;
   badResponse: string;
   moreActions: string;
+  /** Tabs overflow="more": the trigger that holds the tabs that don't fit. */
+  moreTabs: string;
   whatWentWrong: string;
   /** Alert: the tone word in the header, e.g. "Warning · Billing". */
   info: string;
@@ -198,6 +200,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   goodResponse: "Good response",
   badResponse: "Bad response",
   moreActions: "More actions",
+  moreTabs: "More",
   whatWentWrong: "What went wrong?",
   info: "Info",
   success: "Success",
