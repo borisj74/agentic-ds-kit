@@ -139,6 +139,8 @@ export interface KitLabels {
   why: string;
   /** insight-stack pattern: the word beside the confidence value, and the confidence Meter's name. */
   confidence: string;
+  /** app-shell pattern: the skip link, first in the tab order, that jumps to the page's main content. */
+  skipToMain: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -226,6 +228,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   worse: "Worse",
   why: "Why?",
   confidence: "Confidence",
+  skipToMain: "Skip to main content",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

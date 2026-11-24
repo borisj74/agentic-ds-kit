@@ -23,6 +23,7 @@ import type { DropdownMenuGroup } from "../../ui/DropdownMenu";
 import { Command } from "../../ui/Command";
 import type { CommandGroup } from "../../ui/Command";
 import { Input } from "../../ui/Input";
+import { Link } from "../../ui/Link";
 import { Modal } from "../../ui/Modal";
 import { ModalCard } from "../../ui/ModalCard";
 import type { KitIcon } from "../../ui/Button";
@@ -47,6 +48,7 @@ import type { SideNavGroup, SideNavItemData, SideNavProps } from "../../ui/SideN
 import { Tabs } from "../../ui/Tabs";
 import type { TabItem } from "../../ui/Tabs";
 import { Tooltip } from "../../ui/Tooltip";
+import { useKitLabels } from "../../ui/shared/labels";
 import "./AppShellPattern.css";
 
 /** AppHeader props. The shell owns `radius` (always none). */
@@ -85,7 +87,7 @@ export interface AppShellAccount {
   menuLabel?: string;
 }
 
-/** Sidebar quick actions: a field that opens the kit command menu (Command in a Modal), with a search Button beside it. */
+/** Sidebar quick actions: a field that opens the kit command menu (Command in a Modal); with onSearch, a search Button beside it. */
 export interface AppShellSearch {
   /** Command groups and items. */
   groups: CommandGroup[];
@@ -95,7 +97,7 @@ export interface AppShellSearch {
   placeholder?: string;
   /** Name of the icon-only search Button beside the field. Default "Search". */
   searchLabel?: string;
-  /** Runs when the search Button is used. Default: opens the command menu. */
+  /** Adds an icon-only search Button beside the field that runs this (e.g. a full search page). Without it the field alone opens the command menu. */
   onSearch?: () => void;
   /** Placeholder inside the command menu. Default "Search pages and actions". */
   commandPlaceholder?: string;
@@ -128,7 +130,7 @@ export interface AppShellNotificationTab {
 }
 
 /**
- * Notifications as the first main nav row (icon, label, unread count Badge), opening a panel at the
+ * Notifications as the first main nav row (icon, label, unread Count), opening a panel at the
  * sidebar's edge: title, kit Tabs with counts, a list, or kit Empty with a settings Button.
  */
 export interface AppShellNotifications {
@@ -492,8 +494,8 @@ function navGroups(nav: AppShellNav, projects?: AppShellProjects): SideNavGroup[
 }
 
 /**
- * Quick actions row: a read-only field with a ⌘K hint that opens the command menu, and an icon-only
- * search Button beside it. On the collapsed rail: one SideNav row (icon, with the rail tooltip).
+ * Quick actions row: a read-only field with a ⌘K hint that opens the command menu, and (with onSearch) an
+ * icon-only search Button beside it. On the collapsed rail: one SideNav row (icon, with the rail tooltip).
  */
 function SearchSlot({ search }: { search: AppShellSearch }) {
   const shell = useContext(AppShellContext);
@@ -524,8 +526,8 @@ function SearchSlot({ search }: { search: AppShellSearch }) {
         id={id}
         className="app-shell-pattern__search"
         type="search"
-        size="sm"
-        iconStart="Zap"
+        size="md"
+        iconStart="Search"
         placeholder={label}
         ariaLabel={label}
         end={shortcut ? "⌘K" : undefined}
@@ -541,17 +543,18 @@ function SearchSlot({ search }: { search: AppShellSearch }) {
           }
         }}
       />
-      <Tooltip content={searchLabel} placement="bottom">
-        <Button
-          appearance="ghost"
-          mode="neutral"
-          size="sm"
-          iconStart="Search"
-          ariaLabel={searchLabel}
-          aria-haspopup={search.onSearch ? undefined : "dialog"}
-          onClick={search.onSearch ?? open}
-        />
-      </Tooltip>
+      {search.onSearch ? (
+        <Tooltip content={searchLabel} placement="bottom">
+          <Button
+            appearance="ghost"
+            mode="neutral"
+            size="md"
+            iconStart="Search"
+            ariaLabel={searchLabel}
+            onClick={search.onSearch}
+          />
+        </Tooltip>
+      ) : null}
     </div>
   );
 }
@@ -577,27 +580,12 @@ function WorkspaceSwitcher({ workspace }: { workspace: AppShellWorkspace }) {
 const unreadCount = (items: NotificationItem[]) => items.filter((item) => !item.read).length;
 const NOTIFICATIONS_ROW = "app-shell-notifications";
 
-/** Panel content: title with a settings Button, then kit Tabs (each with its unread count) of lists or kit Empty. */
-function NotificationsPanel({ notifications, titled = true }: { notifications: AppShellNotifications; titled?: boolean }) {
+/** Panel content: kit Tabs (each with its unread Count) of lists, or kit Empty. The title and settings live in the overlay frame. */
+function NotificationsPanel({ notifications }: { notifications: AppShellNotifications }) {
   const label = notifications.label ?? "Notifications";
   const settingsLabel = notifications.settingsLabel ?? "Notification settings";
   return (
     <div className="app-shell-pattern__notify-panel">
-      {titled ? (
-        <div className="app-shell-pattern__panel-head">
-          <p className="app-shell-pattern__panel-title">{label}</p>
-          {notifications.onSettings ? (
-            <Button
-              appearance="ghost"
-              mode="neutral"
-              size="sm"
-              iconStart="Settings"
-              ariaLabel={settingsLabel}
-              onClick={notifications.onSettings}
-            />
-          ) : null}
-        </div>
-      ) : null}
       <Tabs
         size="sm"
         ariaLabel={label}
@@ -605,7 +593,8 @@ function NotificationsPanel({ notifications, titled = true }: { notifications: A
           const count = unreadCount(tab.items);
           return {
             id: tab.id,
-            label: count > 0 ? `${tab.label} (${count})` : tab.label,
+            label: tab.label,
+            count: count > 0 ? count : undefined,
             content:
               tab.items.length > 0 ? (
                 <ListView
@@ -618,8 +607,7 @@ function NotificationsPanel({ notifications, titled = true }: { notifications: A
                     primary: item.title,
                     secondary: [item.body, item.createdAt].filter(Boolean).join(" · "),
                     icon: item.icon ?? "Bell",
-                    badge: item.read ? undefined : "New",
-                    badgeTone: "info" as const,
+                    meta: item.read ? undefined : "Unread",
                   }))}
                 />
               ) : (
@@ -646,7 +634,7 @@ function NotificationsPanel({ notifications, titled = true }: { notifications: A
 /**
  * The Notifications nav row. Wide: its control anchors a kit Popover (placement right) at the
  * sidebar's edge, over the content; the row reads as active while it is open. Collapsed rail: the
- * count becomes a dot on the icon. In the Drawer: the row opens the full-height notifications Drawer.
+ * bell icon, with the count in its tooltip. In the Drawer: the row opens the full-height notifications Drawer.
  */
 function NotificationsRow({ notifications, placement }: { notifications: AppShellNotifications; placement: AppShellNavPlacement }) {
   const shell = useContext(AppShellContext);
@@ -654,10 +642,10 @@ function NotificationsRow({ notifications, placement }: { notifications: AppShel
   const label = notifications.label ?? "Notifications";
   const total = notifications.tabs.reduce((sum, tab) => sum + unreadCount(tab.items), 0);
   const open = Boolean(shell?.notificationsOpen);
+  const settingsLabel = notifications.settingsLabel ?? "Notification settings";
   const className = [
     open ? "app-shell-pattern__nav-open" : "",
     open && rail ? "app-shell-pattern__nav-open--rail" : "",
-    rail && total > 0 ? "app-shell-pattern__nav-dot" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -682,12 +670,53 @@ function NotificationsRow({ notifications, placement }: { notifications: AppShel
       aria-expanded={open}
       renderControl={(control) => (
         <span className={rail ? "app-shell-pattern__row-anchor app-shell-pattern__row-anchor--rail" : "app-shell-pattern__row-anchor"}>
-          <Popover label={label} placement="right" open={open} onOpenChange={(next) => shell?.setNotificationsOpen(next)} trigger={control}>
+          <Popover
+            label={label}
+            title={label}
+            placement="right"
+            open={open}
+            onOpenChange={(next) => shell?.setNotificationsOpen(next)}
+            trigger={control}
+            footer={
+              notifications.onSettings ? (
+                <Button appearance="outline" mode="neutral" size="sm" iconStart="Settings" onClick={notifications.onSettings}>
+                  {settingsLabel}
+                </Button>
+              ) : undefined
+            }
+          >
             <NotificationsPanel notifications={notifications} />
           </Popover>
         </span>
       )}
     />
+  );
+}
+
+/**
+ * Skip link: the first focusable control, hidden until it has keyboard focus. It moves focus to the
+ * page's `<main>` (inside the shell, else the document's), which gets tabindex -1 if it has none.
+ */
+function SkipToMain({ shellRef }: { shellRef: RefObject<HTMLDivElement | null> }) {
+  const labels = useKitLabels();
+  return (
+    <span className="app-shell-pattern__skip">
+      <Link
+        href="#main"
+        variant="standalone"
+        onClick={(event) => {
+          const main =
+            shellRef.current?.querySelector<HTMLElement>("main, [role='main']") ??
+            document.querySelector<HTMLElement>("main, [role='main']");
+          if (!main) return;
+          event.preventDefault();
+          if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+          main.focus();
+        }}
+      >
+        {labels.skipToMain}
+      </Link>
+    </span>
   );
 }
 
@@ -884,6 +913,7 @@ function AppShellPatternRoot({
   className = "",
 }: AppShellPatternProps) {
   const narrow = useNarrow();
+  const shellRef = useRef<HTMLDivElement>(null);
   const railId = useId();
   const panelId = useId();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1067,7 +1097,9 @@ function AppShellPatternRoot({
     <AppShellContext.Provider value={shell}>
       <MenuSlotContext.Provider value={menuSlot}>
         <PanelToggleRef.Provider value={panelToggleRef}>
-          <div className={`layout-shell ${layoutClass} ${className}`.trim()} data-layout={layout}>
+          {/* Before the shell, not in it: layout-shell is a grid and reads its first child as the top bar. */}
+          <SkipToMain shellRef={shellRef} />
+          <div ref={shellRef} className={`layout-shell ${layoutClass} ${className}`.trim()} data-layout={layout}>
             {headerProps ? (
               <AppHeader
                 {...headerProps}
@@ -1163,7 +1195,7 @@ function AppShellPatternRoot({
                   ) : undefined
                 }
               >
-                <NotificationsPanel notifications={notifications} titled={false} />
+                <NotificationsPanel notifications={notifications} />
               </Drawer>
             ) : null}
             {narrow && workPanel ? (

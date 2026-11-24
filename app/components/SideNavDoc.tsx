@@ -364,7 +364,7 @@ export function SideNavDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>SideNav</h2>
         <p className={styles.lede}>
-          Product app chrome side navigation. AppNav is the catalog list. Drawer is the overlay panel.
+          Product app chrome side navigation. AppNav is the docs catalog nav only. Drawer is the overlay panel.
         </p>
       </header>
 
@@ -374,7 +374,7 @@ export function SideNavDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Brand mark, icon items, badges, and a closeable rail. Stays in the layout.
+            Brand mark, icon items, counts, and a closeable rail. Stays in the layout.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -446,6 +446,12 @@ export function SideNavDoc() {
                   <code>radius=&quot;none&quot;</code> so the column sits flush. Use AppNav for a docs
                   catalog. Use Drawer for a temporary overlay panel.
                 </p>
+                <p className={styles.usageBody}>
+                  A badge of digits renders as a kit Count. A parent with children is a disclosure
+                  with a chevron and never takes the page-active fill; the current leaf does. Pass{" "}
+                  <code>expanded</code> and <code>onExpandedChange</code> to control it. Arrow Down
+                  and Up move through the visible rows, Right opens a parent and Left closes it.
+                </p>
               </div>
               <CodeBlock code={masterCode()} />
             </DocNotes>
@@ -466,7 +472,9 @@ export function SideNavDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Starts as a compact rail. The brand mark opens it. Icons stay; labels are
-                  clipped. The slot stays in the layout.
+                  clipped and each row names itself in a tooltip, with its count. A parent icon
+                  opens a flyout of its children; Escape or Left closes it. The slot stays in the
+                  layout.
                 </p>
               </div>
               <CodeBlock code={CLOSED_CODE} />

@@ -34,7 +34,8 @@
     "modalcard",
     "popover",
     "listview",
-    "empty"
+    "empty",
+    "link"
   ],
   "props": {
     "header": {
@@ -108,13 +109,13 @@
       "type": "object",
       "required": false,
       "shape": "{ groups: CommandGroup[], onSelect?: (id: string) => void, placeholder?: string (default Quick actions), searchLabel?: string (default Search), onSearch?: () => void, commandPlaceholder?: string (default Search pages and actions), title?: string (default Search), shortcut?: boolean (default true) }",
-      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+      "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size md (36px), with a Search icon, the Quick actions placeholder and a ⌘K hint, then, only when onSearch is set, an icon-only ghost md search Button (Tooltip searchLabel) that runs onSearch. Without onSearch the field alone opens the command menu, so there is no duplicate control. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
     },
     "notifications": {
       "type": "object",
       "required": false,
       "shape": "{ tabs: { id: string, label: string, items: NotificationItem[], emptyTitle?: string (default Nothing new), emptyDescription?: string }[], label?: string (default Notifications), onItemClick?: (tabId: string, id: string) => void, settingsLabel?: string (default Notification settings), onSettings?: () => void }",
-      "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel: title with an icon-only settings Button, kit Tabs (one per tab, label with its unread count), each a kit ListView (size sm, drill; title, body · time, New badge for unread) or kit Empty (with an outline settings Button) when empty. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon with a dot for unread, same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
+      "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge, which SideNav renders as a kit Count (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel is the Popover's shared overlay frame: the label as its 18px title, kit Tabs (one per tab, its unread count in the tab's count, a kit Count), each a kit ListView (size sm, drill; title, body · time, the word Unread as meta on unread rows) or kit Empty (with an outline settings Button) when empty, and an outline sm settings Button (Settings icon) in the footer when onSettings is set. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon, its tooltip the label plus the count (no dot), same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
     },
     "workPanel": {
       "type": "object",
@@ -183,6 +184,7 @@
   },
   "a11y": {
     "requirements": [
+      "Skip link: the first focusable control, before the shell (layout-shell reads its first child as the top bar). A kit Link labelled by KitLabels skipToMain (default Skip to main content), off screen until it has keyboard focus, then pinned at the top start corner. It moves focus to the page's <main> (inside the shell, else the document's), adding tabindex -1 when the main has none",
       "Menu Button is a kit Button with ariaLabel \"Open navigation\"",
       "The Drawer is the kit dialog: aria-modal, focus trapped, Escape and scrim close, focus restored to the trigger",
       "Parent nav items (disclosures) do not close the Drawer; leaves do",
@@ -200,8 +202,9 @@
       "The command menu is the kit Modal (aria-modal, focus trap, Escape and scrim close, focus restored to the opener) with kit Command inside (combobox input, listbox); focus starts in the command input",
       "Collapsed rail: the search slot is a SideNav.Item named by the placeholder (Quick actions) with aria-keyshortcuts and the rail Tooltip on hover and focus",
       "Notifications row: a SideNav.Item button named by its label and count, with aria-haspopup=dialog and aria-expanded; it never takes aria-current for the open panel",
-      "The notifications panel is the kit Popover dialog named by label: Escape and an outside click close it and focus returns to the Notifications row; Tab reaches the tabs, list and settings Button",
-      "Collapsed rail: the row keeps its kit Tooltip; the unread dot is decorative (the count stays in the row's name)",
+      "The notifications panel is the kit Popover dialog named by label, with label as its heading: Escape and an outside click close it and focus returns to the Notifications row; Tab reaches the tabs, list and settings Button",
+      "Unread rows say Unread in words (ListView meta), so unread is never shown by colour alone",
+      "Collapsed rail: the row keeps its kit Tooltip, which reads the label plus the unread count; there is no unread dot",
       "Narrow: the panel is a kit Drawer (aria-modal, focus trap, Escape and scrim close)",
       "Workspace switcher: kit DropdownMenu (aria-haspopup=menu, arrows, Escape returns focus to the trigger)"
     ]
