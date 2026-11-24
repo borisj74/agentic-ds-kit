@@ -1,27 +1,35 @@
 "use client";
 
 import { useId, useState } from "react";
-import { CircleCheck, Plug } from "lucide-react";
-import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
+import { Drawer } from "../Drawer";
 import { Empty } from "../Empty";
 import { Input } from "../Input";
 import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
 import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
-import type { IntegrationItem, IntegrationPickerProps } from "./IntegrationPicker.types";
+import { CONNECTED_CATEGORY, connectedCount, drawerState, filterItems, tileState } from "./integrationPicker.logic";
+import { IntegrationTile } from "./IntegrationTile";
+import type { IntegrationPickerProps } from "./IntegrationPicker.types";
 import styles from "./IntegrationPicker.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { IntegrationPickerProps, IntegrationItem, IntegrationStatus } from "./IntegrationPicker.types";
+export type {
+  IntegrationPickerProps,
+  IntegrationItem,
+  IntegrationStatus,
+  IntegrationConnectFlow,
+  IntegrationTileSize,
+} from "./IntegrationPicker.types";
 
 /**
- * A filterable catalogue of integrations: search, a category filter and one tile per provider with one
- * action (Connect, Manage, or a disabled Connect for coming soon). Built on kit Input, SegmentedControl,
- * Button, Badge and Empty.
+ * A filterable catalogue of integrations: search, a category filter (with an optional Connected segment)
+ * and one tile per provider. Every tile ends in a status word and at most one action: Connect or Manage.
+ * connectFlow "detail" opens a Drawer with the item's detail, what it can access, and Connect or Disconnect.
+ * Built on kit Input, SegmentedControl, Button, Badge, Drawer and Empty.
  */
 export function IntegrationPicker({
   items,
@@ -32,8 +40,15 @@ export function IntegrationPicker({
   category: categoryProp,
   onCategoryChange,
   categories,
+  showConnected = false,
+  connectFlow = "direct",
+  tileSize = "default",
   onConnect,
   onManage,
+  onDisconnect,
+  selectedId: selectedProp,
+  defaultSelectedId = null,
+  onSelectedChange,
   connectingId,
   onRequest,
   loading = false,
@@ -47,8 +62,10 @@ export function IntegrationPicker({
   const searchId = useId();
   const [ownQuery, setOwnQuery] = useState("");
   const [ownCategory, setOwnCategory] = useState("all");
+  const [ownSelected, setOwnSelected] = useState<string | null>(defaultSelectedId);
   const query = queryProp ?? ownQuery;
   const category = categoryProp ?? ownCategory;
+  const selectedId = selectedProp === undefined ? ownSelected : selectedProp;
   const setQuery = (next: string) => {
     if (queryProp === undefined) setOwnQuery(next);
     onQueryChange?.(next);
@@ -57,24 +74,33 @@ export function IntegrationPicker({
     if (categoryProp === undefined) setOwnCategory(next);
     onCategoryChange?.(next);
   };
+  const select = (id: string | null) => {
+    if (selectedProp === undefined) setOwnSelected(id);
+    onSelectedChange?.(id);
+  };
 
+  const detail = connectFlow === "detail";
   const allCategories =
     categories ?? items.reduce<string[]>((list, item) => (item.category && !list.includes(item.category) ? [...list, item.category] : list), []);
-  const needle = query.trim().toLowerCase();
-  const shown = items.filter(
-    (item) =>
-      (category === "all" || item.category === category) &&
-      (!needle || `${item.name} ${item.description} ${item.category ?? ""}`.toLowerCase().includes(needle)),
-  );
+  const connected = connectedCount(items);
+  const segments = [
+    { value: "all", label: "All" },
+    ...(showConnected ? [{ value: CONNECTED_CATEGORY, label: `Connected ${connected}` }] : []),
+    ...allCategories.map((name) => ({ value: name, label: name })),
+  ];
+  const shown = filterItems(items, category, query);
+  const needle = query.trim();
+  const selected = detail && selectedId ? items.find((item) => item.id === selectedId) : undefined;
+  const drawer = selected ? drawerState(selected, connectingId) : undefined;
+  const lead = [connected ? `${connected} connected` : null, note].filter(Boolean).join(" · ");
 
   return (
     <section {...rest} {...nisthaAttr("integrationpicker", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
-        <Plug size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.headerIcon} />
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
-        {note ? <span className={styles.note}>· {note}</span> : null}
+        {lead ? <span className={styles.note}>{lead}</span> : null}
       </header>
 
       <div className={styles.controls}>
@@ -84,22 +110,15 @@ export function IntegrationPicker({
           type="search"
           size="sm"
           iconStart="Search"
-          placeholder="Search"
+          placeholder={`Search ${title.toLowerCase()}`}
           ariaLabel={`Search ${title.toLowerCase()}`}
           value={query}
           onChange={setQuery}
         />
-        {allCategories.length ? (
+        {segments.length > 1 ? (
           // One row of categories; on a narrow card the row scrolls instead of wrapping.
           <div className={styles.categories}>
-            <SegmentedControl
-              className={styles.segments}
-              size="sm"
-              ariaLabel="Category"
-              value={category}
-              onChange={setCategory}
-              items={[{ value: "all", label: "All" }, ...allCategories.map((name) => ({ value: name, label: name }))]}
-            />
+            <SegmentedControl className={styles.segments} size="sm" ariaLabel="Category" value={category} onChange={setCategory} items={segments} />
           </div>
         ) : null}
       </div>
@@ -115,9 +134,15 @@ export function IntegrationPicker({
       ) : shown.length === 0 ? (
         <Empty
           className={styles.empty}
-          title={needle ? `No integrations match “${query.trim()}”` : "No integrations in this category"}
-          description="Try a category, or request one and we’ll let you know when it’s ready."
-          icon="Search"
+          title={
+            needle
+              ? `No integrations match “${needle}”`
+              : category === CONNECTED_CATEGORY
+                ? "Nothing connected yet"
+                : "No integrations in this category"
+          }
+          description={category === CONNECTED_CATEGORY && !needle ? "Connect one and it shows here." : "Try a category, or request one and we’ll let you know when it’s ready."}
+          icon={category === CONNECTED_CATEGORY && !needle ? "Unplug" : "Search"}
           actions={
             onRequest ? (
               <Button size="md" appearance="outline" mode="neutral" onClick={onRequest}>
@@ -127,84 +152,83 @@ export function IntegrationPicker({
           }
         />
       ) : (
-        <ul key={`${category}|${needle}`} className={styles.grid} aria-label={`${title}: ${shown.length} shown`}>
+        <ul key={`${category}|${needle}`} className={cx(styles.grid, tileSize === "compact" && styles.gridCompact)} aria-label={`${title}: ${shown.length} shown`}>
           {shown.map((item) => (
-            <Tile key={item.id} item={item} connecting={connectingId === item.id} onConnect={onConnect} onManage={onManage} />
+            <IntegrationTile
+              key={item.id}
+              item={item}
+              // The open drawer owns Connecting…, so the tile behind it keeps its plain state.
+              state={tileState(item, selected?.id === item.id ? undefined : connectingId)}
+              size={tileSize}
+              onConnect={detail ? select : onConnect}
+              onManage={detail ? select : onManage}
+            />
           ))}
         </ul>
       )}
-    </section>
-  );
-}
 
-function Tile({
-  item,
-  connecting,
-  onConnect,
-  onManage,
-}: {
-  item: IntegrationItem;
-  connecting: boolean;
-  onConnect: (id: string) => void;
-  onManage?: (id: string) => void;
-}) {
-  const nameId = useId();
-  const soon = item.status === "comingSoon";
-  return (
-    <li className={cx(styles.tile, soon && styles.tileSoon)}>
-      <div className={styles.tileHead}>
-        <span className={styles.logo} aria-hidden="true">
-          <LucideByName name={item.icon ?? "Plug"} size={16} />
-        </span>
-        <span className={styles.tileTitle}>
-          <span id={nameId} className={styles.name}>
-            {item.name}
-          </span>
-          {item.category ? <span className={styles.category}>{item.category}</span> : null}
-        </span>
-      </div>
-      <p className={styles.description}>{item.description}</p>
-      <div className={styles.tileFoot}>
-        {item.status === "connected" ? (
-          <>
-            <span className={styles.connected}>
-              <CircleCheck size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-              Connected
-            </span>
-            {onManage ? (
-              <Button size="sm" appearance="ghost" mode="neutral" aria-describedby={nameId} onClick={() => onManage(item.id)}>
-                Manage
-              </Button>
-            ) : null}
-          </>
-        ) : soon ? (
-          <>
-            <Badge tone="neutral" size="sm" appearance="outline">
-              Coming soon
-            </Badge>
-            <Button size="sm" appearance="outline" mode="neutral" disabled aria-describedby={nameId}>
-              Connect
-            </Button>
-          </>
-        ) : connecting ? (
-          <>
+      {detail ? (
+        <Drawer
+          open={Boolean(selected)}
+          title={selected?.name ?? title}
+          description={selected ? [selected.category, selected.publisher].filter(Boolean).join(" · ") || undefined : undefined}
+          onClose={() => select(null)}
+          footer={
+            selected && drawer ? (
+              <>
+                {drawer.action === "disconnect" && onDisconnect ? (
+                  <Button appearance="outline" mode="danger" onClick={() => onDisconnect(selected.id)}>
+                    Disconnect
+                  </Button>
+                ) : drawer.action === "connect" || drawer.action === "connecting" ? (
+                  <Button
+                    appearance="solid"
+                    mode="primary"
+                    disabled={drawer.action === "connecting"}
+                    iconStart={drawer.action === "connecting" ? "LoaderCircle" : undefined}
+                    onClick={() => onConnect(selected.id)}
+                  >
+                    {drawer.action === "connecting" ? "Connecting…" : `Connect ${selected.name}`}
+                  </Button>
+                ) : null}
+                <Button appearance="outline" mode="neutral" onClick={() => select(null)}>
+                  Close
+                </Button>
+              </>
+            ) : undefined
+          }
+        >
+          {selected && drawer ? (
+            <div className={styles.detail}>
+              <div className={styles.identity}>
+                <span className={styles.detailLogo} aria-hidden="true">
+                  <LucideByName name={selected.icon ?? "Plug"} size={20} />
+                </span>
+                <Badge tone={drawer.tone} size="sm" appearance="soft">
+                  {drawer.label}
+                </Badge>
+              </div>
+              <p className={styles.about}>{selected.about ?? selected.description}</p>
+              {selected.connectedNote && selected.status === "connected" ? <p className={styles.meta}>{selected.connectedNote}</p> : null}
+              {selected.permissions?.length ? (
+                <div className={styles.permissions}>
+                  <h4 className={styles.subtitle}>{selected.status === "connected" ? "It can" : "Once connected, it can"}</h4>
+                  <ul className={styles.permissionList}>
+                    {selected.permissions.map((permission) => (
+                      <li key={permission}>{permission}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              <p role="status" className={styles.srOnly}>
+                {drawer.action === "connecting" ? `Connecting ${selected.name}` : ""}
+              </p>
+            </div>
+          ) : (
             <span />
-            <Button size="sm" iconStart="LoaderCircle" className={styles.connecting} aria-describedby={nameId}>
-              Connecting…
-            </Button>
-            <span className={styles.srOnly} role="status">
-              Connecting {item.name}
-            </span>
-          </>
-        ) : (
-          <>
-            <span />
-            <Button size="sm" appearance="outline" mode="neutral" aria-describedby={nameId} onClick={() => onConnect(item.id)}>
-              Connect
-            </Button>
-          </>
-        )}
-      </div>
-    </li>
+          )}
+        </Drawer>
+      ) : null}
+    </section>
   );
 }

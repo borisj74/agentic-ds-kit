@@ -2,11 +2,12 @@
   "id": "setupguide",
   "status": "stable",
   "level": "organism",
-  "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+  "intent": "A first-run checklist with overall progress, each task's status as an icon and a word (Done, Current, To do, Blocked, Skipped) and at most one action per task. The current task's action, or its suggested provider's Connect, is the one solid primary. Built on kit Progress, Badge, Button and Empty, with IntegrationPicker's compact tile. Not a wizard stepper and not a bare Progress bar.",
   "useWhen": [
     "onboard a new workspace with a short list of setup tasks",
     "show how far setup is and what to do next",
-    "let people skip optional tasks and undo the skip"
+    "let people skip optional tasks and undo the skip",
+    "connect a provider straight from the task that needs it"
   ],
   "doNotUseWhen": [
     "a linear multi-page wizard — ProgressSteps",
@@ -17,6 +18,7 @@
     "badge",
     "button",
     "empty",
+    "integrationpicker",
     "progress",
     "skeleton"
   ],
@@ -32,17 +34,27 @@
     "tasks": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped', actionLabel? }[]"
+      "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped'|'blocked', actionLabel?, dependsOn?: id[], blockedReason?, integrations?: IntegrationItem[] }[]. A blocked task whose dependsOn tasks are all done shows as To do. integrations show as compact tiles under the row while it is current, and the row then has no button."
     },
     "onTaskAction": {
       "type": "function",
       "required": false,
-      "note": "(id) => void. Continue on the current task (outline), Start on todo tasks (ghost)."
+      "note": "(id) => void. The current task's action is the solid primary (default Continue); todo tasks get an outline Start. Blocked rows have no button."
+    },
+    "onIntegrationConnect": {
+      "type": "function",
+      "required": false,
+      "note": "(integrationId, taskId) => void. Connect on a provider tile under the current task. The first available tile is the solid primary; the rest are outline."
+    },
+    "connectingId": {
+      "type": "string",
+      "required": false,
+      "note": "That provider tile reads Connecting…, with no button, and is announced."
     },
     "onUndoSkip": {
       "type": "function",
       "required": false,
-      "note": "(id) => void. \"Skipped · Undo\"."
+      "note": "(id) => void. A ghost \"Undo skip\" Button on the skipped row."
     },
     "onComplete": {
       "type": "function",
@@ -112,21 +124,24 @@
     "status.dangerSubtle",
     "status.dangerText",
     "primary",
-    "bg.subtle",
     "primary.fg",
     "line.strong",
     "status.success",
     "motion.duration300",
-    "motion.easeSpringSoft"
+    "motion.easeSpringSoft",
+    "status.successText",
+    "grid.gutter.sm"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
       "tasks are an ordered list; the current task has aria-current=step",
-      "done and skipped are words next to the icon, not colour alone",
-      "each action button is described by its task label",
-      "overall progress is a kit Progress with a text label (\"2 of 5 done\")",
+      "each row reads its name and a status word (Done, Current, To do, Blocked, Skipped); icons are aria-hidden, never colour alone",
+      "a blocked row has no button, so nothing disabled sits in the tab order; its reason is the row's description",
+      "each action button is described by its task label; provider tiles' Connect is described by the provider name",
+      "overall progress is a kit Progress with a text label (\"1 of 4 done · 1 skipped\")",
+      "Connecting is announced in a status region",
       "the check scales and fades in (transform and opacity), off under prefers-reduced-motion",
       "aria-busy while loading; the error is role=alert"
     ]
@@ -134,8 +149,9 @@
   "doNot": [
     "Do not invent a local Checklist, OnboardingCard or SetupSteps",
     "Do not use ProgressSteps for a checklist people can do in any order",
-    "Do not show more than one solid primary; Continue stays outline",
+    "Do not show more than one solid primary: the current task's action, or its suggested provider's Connect when tiles show",
+    "Do not put a disabled Start on a blocked task; say what unlocks it",
     "Do not use raw hex"
   ],
-  "snippet": "<SetupGuide title=\"Get Northwind ready\" tasks={tasks} onTaskAction={openTask} onUndoSkip={undoSkip} onComplete={goToDashboard} onDismiss={dismiss} />"
+  "snippet": "<SetupGuide title=\"Set up billing\" tasks={tasks} onTaskAction={openTask} onIntegrationConnect={connect} connectingId={connecting} onUndoSkip={undoSkip} onComplete={goToDashboard} onDismiss={dismiss} />"
 }

@@ -5,8 +5,8 @@ import { IntegrationPicker, type IntegrationItem } from "agentic-ds-kit";
 import { AgentDocFrame } from "./AgentDocFrame";
 
 const ITEMS: IntegrationItem[] = [
-  { id: "ledger", name: "Northwind Ledger", description: "Sync invoices and payments", category: "Accounting", status: "connected", icon: "FileText" },
-  { id: "bank", name: "Ledgerline Bank", description: "Match bank feeds to invoices", category: "Banking", status: "available", icon: "Landmark" },
+  { id: "ledger", name: "Northwind Ledger", description: "Sync invoices and payments", category: "Accounting", status: "connected", icon: "FileText", publisher: "Example Inc.", permissions: ["Read invoices and payments", "Post paid invoices to the ledger"], connectedNote: "Connected by Maya Chen · 3 Nov" },
+  { id: "bank", name: "Ledgerline Bank", description: "Match bank feeds to invoices", category: "Banking", status: "available", icon: "Landmark", publisher: "Example Inc.", permissions: ["Read bank transactions", "Match payments to invoices"] },
   { id: "mail", name: "Mailroom", description: "Send invoices from your domain", category: "Email", status: "available", icon: "Mail" },
   { id: "chat", name: "Team Chat", description: "Post payment alerts to a channel", category: "Messaging", status: "connected", icon: "Hash" },
   { id: "db", name: "Warehouse DB", description: "Nightly export of billing data", category: "Data", status: "available", icon: "Database" },
@@ -31,9 +31,20 @@ export function IntegrationPickerDoc() {
       id="integrationpicker"
       name="IntegrationPicker"
       lede="A filterable catalogue of integrations. Providers here are examples."
-      summary="Search, pick a category, and Connect a tile: it shows Connecting…, then Connected with Manage."
-      preview={<IntegrationPicker note="example providers" items={items} categories={CATEGORIES} onConnect={connect} onManage={noop} connectingId={connecting} onRequest={noop} />}
-      usage="One action per tile. Connected and Coming soon are words; coming soon keeps a disabled Connect. Search with no match offers Request an integration. Use the integration-settings pattern for one connected integration."
+      summary="Search, pick a category or Connected, and Connect a tile: it reads Connecting…, then Connected with Manage."
+      preview={
+        <IntegrationPicker
+          note="example providers"
+          items={items}
+          categories={CATEGORIES}
+          showConnected
+          onConnect={connect}
+          onManage={noop}
+          connectingId={connecting}
+          onRequest={noop}
+        />
+      }
+      usage="Every tile ends in a status word (Not connected, Connected, Connecting…, Coming soon) and at most one action, Connect or Manage. Connecting and Coming soon have no button. showConnected adds a Connected segment with its count. connectFlow detail opens a Drawer with what the app can access and Connect or Disconnect; it replaces AppDirectory. tileSize compact puts each tile on one row. Use the integration-settings pattern for one connected integration."
       code={`<IntegrationPicker
   note="example providers"
   items={integrations}
@@ -51,9 +62,27 @@ export function IntegrationPickerDoc() {
         },
         {
           title: "Filtered — Accounting, connect in progress",
-          about: "The category filter narrows the grid; the tile being connected shows Connecting… as the solid primary.",
+          about: "The category filter narrows the grid; the tile being connected reads Connecting… with no button.",
           code: `<IntegrationPicker … category="Accounting" connectingId="books" />`,
           render: <IntegrationPicker note="example providers" items={ITEMS} categories={CATEGORIES} category="Accounting" onConnect={noop} onManage={noop} connectingId="books" />,
+        },
+        {
+          title: "Connected segment",
+          about: "showConnected adds Connected with its count after All; here it is selected.",
+          code: `<IntegrationPicker … showConnected category="connected" />`,
+          render: <IntegrationPicker note="example providers" items={ITEMS} categories={CATEGORIES} showConnected category="connected" onConnect={noop} onManage={noop} />,
+        },
+        {
+          title: "Detail flow (replaces AppDirectory)",
+          about: "Connect and Manage open a Drawer with the app's detail, what it can access, and Connect or Disconnect. The drawer's Connect is the one solid primary.",
+          code: `<IntegrationPicker title="Apps" items={apps} showConnected connectFlow="detail" onConnect={connect} onDisconnect={disconnect} />`,
+          render: <IntegrationPicker title="Apps" note="example providers" items={ITEMS.slice(0, 4)} categories={CATEGORIES} showConnected connectFlow="detail" onConnect={noop} onDisconnect={noop} />,
+        },
+        {
+          title: "Compact tiles",
+          about: "Name, description and the word or action on one row. SetupGuide uses the same tile under its current task.",
+          code: `<IntegrationPicker … tileSize="compact" />`,
+          render: <IntegrationPicker note="example providers" items={ITEMS.slice(0, 4)} categories={CATEGORIES} tileSize="compact" onConnect={noop} onManage={noop} />,
         },
         {
           title: "Search empty",

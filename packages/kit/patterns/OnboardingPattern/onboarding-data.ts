@@ -64,6 +64,7 @@ export const TEAM_SIZE_OPTIONS = [
 
 export const SETUP_TASKS: SetupTask[] = [
   { id: "company", label: "Add company details", description: "Name, address and tax ID", status: "done" },
-  { id: "payments", label: "Connect a payment method", description: "So customers can pay online", status: "current", actionLabel: "Connect" },
+  // All To do here: the step footer holds this step's one solid primary (Continue), so no task is Current.
+  { id: "payments", label: "Connect a payment method", description: "So customers can pay online", status: "todo", actionLabel: "Connect" },
   { id: "customers", label: "Import customers", description: "CSV or connect your CRM", status: "todo", actionLabel: "Import" },
 ];
