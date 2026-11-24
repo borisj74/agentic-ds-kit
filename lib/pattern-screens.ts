@@ -66,6 +66,8 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
   "empty-first-run": [{ id: "default", label: "First run" }],
   "sign-in": [
     { id: "sign-in", label: "Sign in" },
+    { id: "error", label: "Wrong password" },
+    { id: "code", label: "Code step" },
     { id: "sign-up", label: "Sign up" },
   ],
   "app-shell": [
@@ -112,7 +114,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "settings-form": "Grouped settings fields with save and cancel.",
   "list-detail": "A list of records beside the one you selected.",
   "empty-first-run": "First-run empty state with one primary action.",
-  "sign-in": "Centered sign-in card with email, password, and SSO.",
+  "sign-in": "Centered sign-in card: SSO, email and password, then a one-time code step.",
   "app-shell": "Side nav with a workspace switcher, quick actions and a Notifications panel around the page, inset or flat, with a narrow drawer.",
   layouts: "Top bar and side nav, composed from kit components.",
   "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",

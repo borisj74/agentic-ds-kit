@@ -15,8 +15,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  width: 100%;
-  max-width: 26rem;
+  /* The board's 400 card. No layout-container token is this narrow (sm is 40rem), so it stays a
+     named width here until the kit has one. */
+  width: min(100%, 25rem);
 }
 
 .sign-in-pattern__brand {
@@ -49,6 +50,11 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
+}
+
+.sign-in-pattern__center {
+  display: flex;
+  justify-content: center;
 }
 
 .sign-in-pattern__providers {

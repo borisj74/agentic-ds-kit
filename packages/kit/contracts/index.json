@@ -1356,7 +1356,7 @@
   },
   {
     "id": "sign-in",
-    "intent": "Sign-in / sign-up page example: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
+    "intent": "Sign-in / sign-up page example: centred Card (title is the page h1) with SSO on top, a Divider \"or use email\", Field-wrapped email and password, one primary submit, and a one-time code step on InputOTP. Presentational: the app passes callbacks and moves the step.",
     "group": "pattern",
     "path": "contracts/patterns/sign-in.json",
     "status": "stable",
