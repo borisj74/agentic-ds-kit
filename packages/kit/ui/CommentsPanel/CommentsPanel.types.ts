@@ -6,10 +6,12 @@ export interface CommentThreadSummary {
   title: string;
   /** Latest comment, one line. */
   preview: string;
+  /** The record the thread is on, e.g. "INV-1842 · Northwind". Leads the open thread's meta line. */
+  context?: string;
   /** Number of comments in the thread. */
   count: number;
   resolved?: boolean;
-  /** Display time, e.g. "45m". */
+  /** Display time in one format with the thread, e.g. "Nov 20, 10:26". */
   updatedAt: string;
 }
 
@@ -41,8 +43,11 @@ export interface CommentsPanelProps extends Omit<ComponentPropsWithoutRef<"div">
   /** Empty state, e.g. "No comments on this invoice". */
   emptyTitle?: string;
   emptyDescription?: string;
-  /** Render the panel in place instead of a kit Drawer (page sections, docs). */
-  inline?: boolean;
+  /**
+   * true renders the panel in place instead of a kit Drawer (page sections, docs). "auto" docks it beside
+   * the page from --grid-breakpoint-lg while open, and uses the Drawer below that.
+   */
+  inline?: boolean | "auto";
   /** Show the "Comments · N open" trigger button. Default true unless inline. */
   showTrigger?: boolean;
   loading?: boolean;

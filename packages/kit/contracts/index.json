@@ -1048,7 +1048,7 @@
   },
   {
     "id": "commentspanel",
-    "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+    "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place, and inline=\"auto\" docks it beside the page from --grid-breakpoint-lg.",
     "group": "component",
     "path": "contracts/commentspanel.json",
     "status": "stable",

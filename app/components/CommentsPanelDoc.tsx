@@ -55,7 +55,7 @@ export function CommentsPanelDoc() {
         },
         {
           title: "One selected — thread open",
-          about: "All threads (ghost) goes back; Resolve (outline) marks the thread resolved. The title line says the count and Open or Resolved in words. The thread itself is a CommentThread.",
+          about: "All threads (ghost) goes back; Resolve (outline) marks the thread resolved. The meta line names the record, the count and Open or Resolved in words, e.g. INV-1842 · 3 comments · Open. The thread itself is a CommentThread.",
           code: `<CommentsPanel inline … selectedId="t1" onResolve={resolve}>
   <CommentThread … />
 </CommentsPanel>`,
@@ -90,6 +90,14 @@ export function CommentsPanelDoc() {
           ),
         },
         {
+          title: "Docked on wide screens — inline=\"auto\"",
+          about: "From --grid-breakpoint-lg (80rem) the open panel docks beside the page as a complementary region; Close swaps it for the trigger. Narrower, the same trigger opens the Drawer. On a phone the back button reads Threads.",
+          code: `<CommentsPanel inline="auto" threads={threads} open={open} onOpenChange={setOpen} selectedId={selected} onSelect={setSelected} onResolve={resolve}>
+  <CommentThread … submitAppearance="soft" />
+</CommentsPanel>`,
+          render: <AutoDockDemo />,
+        },
+        {
           title: "Closed — trigger with count",
           about: "The trigger is a kit Button described by the open count; the Drawer slides in from the right.",
           code: `<CommentsPanel threads={threads} open={open} onOpenChange={setOpen} onSelect={setSelected} />`,
@@ -97,5 +105,15 @@ export function CommentsPanelDoc() {
         },
       ]}
     />
+  );
+}
+
+function AutoDockDemo() {
+  const [open, setOpen] = useState(true);
+  const [selected, setSelected] = useState<string | null>("t1");
+  return (
+    <CommentsPanel inline="auto" threads={THREADS} open={open} onOpenChange={setOpen} selectedId={selected} onSelect={setSelected} onResolve={noop}>
+      <CommentThread comments={THREAD} value="" onValueChange={noop} onSubmit={noop} onReply={noop} submitAppearance="soft" />
+    </CommentsPanel>
   );
 }

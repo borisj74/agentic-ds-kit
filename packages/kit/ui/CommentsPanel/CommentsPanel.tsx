@@ -11,7 +11,8 @@ import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
 import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
-import { NARROW_QUERY, useMediaQuery } from "../shared/useMediaQuery";
+import { NARROW_QUERY, WIDE_QUERY, useMediaQuery } from "../shared/useMediaQuery";
+import { useIsClient } from "../shared/useIsClient";
 import type { CommentsFilter, CommentsPanelProps, CommentThreadSummary } from "./CommentsPanel.types";
 import styles from "./CommentsPanel.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -58,6 +59,11 @@ export function CommentsPanel({
   const selected = selectedId ? threads.find((thread) => thread.id === selectedId) : undefined;
   // On a phone, Close, Back and Resolve grow to md (36) for touch.
   const narrow = useMediaQuery(NARROW_QUERY);
+  // "auto": docked beside the page from --grid-breakpoint-lg while open, the Drawer below that.
+  // The 80rem query reads false on the server and during hydration, so wait for the client before choosing.
+  const wide = useMediaQuery(WIDE_QUERY);
+  const ready = useIsClient();
+  const { docked, drawer: useDrawer } = panelPlacement({ inline, open, wide, ready });
 
   const body = (
     <Body
@@ -81,15 +87,20 @@ export function CommentsPanel({
     </Body>
   );
 
-  if (inline) {
+  if (docked) {
+    const close = () => {
+      onOpenChange(false);
+      // Auto mode swaps the docked panel for its trigger: hand focus to it.
+      if (inline === "auto") requestAnimationFrame(() => triggerRef.current?.focus());
+    };
     return (
-      <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.inline, className)} role="region" aria-label={label} aria-busy={loading || undefined}>
+      <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.inline, className)} role="complementary" aria-label={label} aria-busy={loading || undefined}>
         <header className={styles.inlineHeader}>
           <MessageCircle size={16} strokeWidth={ICON_STROKE} aria-hidden="true" className={styles.inlineHeaderIcon} />
           <h2 className={styles.inlineTitle}>{label}</h2>
           <span className={styles.inlineCount}>{loading ? "…" : error ? "—" : `${openCount} open`}</span>
           <span className={styles.spacer} />
-          <Button size={narrow ? "md" : "sm"} appearance="ghost" mode="neutral" iconStart={X} ariaLabel={`Close ${label.toLowerCase()}`} onClick={() => onOpenChange(false)} />
+          <Button size={narrow ? "md" : "sm"} appearance="ghost" mode="neutral" iconStart={X} ariaLabel={`Close ${label.toLowerCase()}`} onClick={close} />
         </header>
         <div className={styles.inlineBody}>{body}</div>
       </div>
@@ -120,23 +131,47 @@ export function CommentsPanel({
           ) : null}
         </span>
       ) : null}
-      <Drawer
-        open={open}
-        title={label}
-        description={loading ? undefined : `${openCount} open · ${resolvedCount} resolved`}
-        side="right"
-        size="sm"
-        onClose={() => {
-          onOpenChange(false);
-          requestAnimationFrame(() => triggerRef.current?.focus());
-        }}
-      >
-        <div className={styles.drawerBody} aria-busy={loading || undefined}>
-          {body}
-        </div>
-      </Drawer>
+      {useDrawer ? (
+        <Drawer
+          open={open}
+          title={label}
+          description={loading ? undefined : `${openCount} open · ${resolvedCount} resolved`}
+          side="right"
+          size="sm"
+          onClose={() => {
+            onOpenChange(false);
+            requestAnimationFrame(() => triggerRef.current?.focus());
+          }}
+        >
+          <div className={styles.drawerBody} aria-busy={loading || undefined}>
+            {body}
+          </div>
+        </Drawer>
+      ) : null}
     </div>
   );
+}
+
+/**
+ * Where the panel renders. inline={true} is always docked. inline="auto" docks from --grid-breakpoint-lg while
+ * open and uses the Drawer below that, but only once the client has resolved the query: until then (server
+ * markup, hydration) it renders the trigger alone, so a wide first paint never flashes the Drawer.
+ */
+export function panelPlacement({
+  inline,
+  open,
+  wide,
+  ready,
+}: {
+  inline: boolean | "auto";
+  open: boolean;
+  wide: boolean;
+  ready: boolean;
+}): { docked: boolean; drawer: boolean } {
+  if (inline === true) return { docked: true, drawer: false };
+  if (inline !== "auto") return { docked: false, drawer: true };
+  if (!ready) return { docked: false, drawer: false };
+  return { docked: wide && open, drawer: !wide };
 }
 
 function Body({
@@ -217,7 +252,7 @@ function Body({
               onSelect(null);
             }}
           >
-            All threads
+            {controlSize === "md" ? "Threads" : "All threads"}
           </Button>
           {onResolve && !selected.resolved ? (
             <Button size={controlSize} appearance="outline" mode="neutral" iconStart="Check" onClick={() => onResolve(selected.id)}>
@@ -233,7 +268,7 @@ function Body({
           {selected.title}
         </h3>
         <p className={styles.detailMeta}>
-          {selected.count} {selected.count === 1 ? "comment" : "comments"} · {selected.resolved ? "Resolved" : "Open"}
+          {[selected.context, `${selected.count} ${selected.count === 1 ? "comment" : "comments"}`, selected.resolved ? "Resolved" : "Open"].filter(Boolean).join(" · ")}
         </p>
         <div className={styles.detailThread} role="group" aria-labelledby={titleId}>
           {children}

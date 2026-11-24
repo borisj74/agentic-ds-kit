@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { Bell } from "lucide-react";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
+import { IconButton } from "../IconButton";
 import { LucideByName, type KitIcon } from "../Button/lucideName";
 import { Drawer } from "../Drawer";
 import { Empty } from "../Empty";
@@ -93,7 +94,7 @@ export function NotificationStack({
   }
 
   const triggerName = unread > 0 ? `${label}, ${unread} unread` : label;
-  const bell = <Button size="sm" appearance="outline" mode="neutral" iconStart={Bell} ariaLabel={triggerName} aria-expanded={narrow ? open : undefined} onClick={narrow ? () => setOpen(!open) : undefined} />;
+  const bell = <IconButton size="sm" appearance="outline" mode="neutral" icon={Bell} ariaLabel={triggerName} aria-expanded={narrow ? open : undefined} onClick={narrow ? () => setOpen(!open) : undefined} />;
   return (
     <div {...rest} {...nisthaAttr("notificationstack", rest)} ref={ref} className={cx(styles.root, className)}>
       {narrow ? (
