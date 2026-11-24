@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
+import { mergeRefs } from "../shared/mergeRefs";
+import { useNarrow } from "../shared/useNarrow";
 import { DataTable } from "../DataTable";
 import { LineChart } from "../LineChart";
 import { Scoreboard } from "../Scoreboard";
@@ -10,6 +12,9 @@ import { cardsFor, resolveMetric, resolveRange, seriesFor, topRows } from "./kpi
 import type { KpiBoardProps } from "./KpiBoard.types";
 import styles from "./KpiBoard.module.css";
 import { nisthaAttr } from "../shared/inspect";
+
+/** Block width (rem) below which the strip turns divided: --grid-breakpoint-sm. */
+const NARROW_REM = 40;
 
 export type { KpiBoardProps, KpiBoardMetric, KpiBoardRange, KpiBoardValue } from "./KpiBoard.types";
 
@@ -37,6 +42,9 @@ export function KpiBoard(props: KpiBoardProps) {
     ...rest
   } = props;
   const titleId = useId();
+  // Below --grid-breakpoint-sm (40rem) of block width the strip turns divided and goes 2×2.
+  const { ref: measureRef, narrow } = useNarrow<HTMLElement>(NARROW_REM);
+  const rootRef = useMemo(() => mergeRefs<HTMLElement>(measureRef, ref), [measureRef, ref]);
   const [innerRange, setInnerRange] = useState(defaultRange);
   const [innerSelected, setInnerSelected] = useState(defaultSelectedMetric);
   const range = resolveRange(ranges, rangeProp ?? innerRange);
@@ -60,7 +68,7 @@ export function KpiBoard(props: KpiBoardProps) {
   const rowsTitle = metric?.rowsTitle ?? "Top rows";
 
   return (
-    <section {...rest} {...nisthaAttr("kpiboard", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
+    <section {...rest} {...nisthaAttr("kpiboard", rest)} ref={rootRef} className={cx(styles.root, className)} aria-labelledby={titleId}>
       <header className={styles.head}>
         <div className={styles.heading}>
           <h2 id={titleId} className={styles.title}>
@@ -81,7 +89,14 @@ export function KpiBoard(props: KpiBoardProps) {
 
       <Scoreboard
         aria-label={`${title}, pick one to chart`}
-        items={cards.map(({ id, ...card }) => ({ ...card, onClick: () => select(id) }))}
+        appearance={narrow ? "divided" : "cards"}
+        selectable
+        value={metric?.id}
+        onValueChange={select}
+        items={cards.map(({ selected: _selected, badge, ...card }) => {
+          void _selected;
+          return badge ? { ...card, badge, badgeTone: "brand" as const } : card;
+        })}
       />
 
       {metric ? (

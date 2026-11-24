@@ -4,6 +4,7 @@ import {
   useEffect,
   useId,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -16,8 +17,23 @@ import { HeaderCell } from "../HeaderCell";
 import { Input } from "../Input";
 import { Select } from "../Select";
 import { Tooltip } from "../Tooltip";
+import { CircleAlert } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import type { DataGridColumn, DataGridProps, DataGridRow } from "./DataGrid.types";
+import {
+  cellErrors,
+  cellMessage,
+  cellText,
+  columnType,
+  errorSummaryText,
+  isComputed,
+  isNumeric,
+  isTextLike,
+} from "./dataGrid.logic";
+import { DataGridStack, DataGridStackTotals } from "./DataGridStack";
 import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
+import { useNarrow } from "../shared/useNarrow";
 import styles from "./DataGrid.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
@@ -27,7 +43,11 @@ export type {
   DataGridRow,
   DataGridColumnType,
   DataGridSize,
+  DataGridTotal,
 } from "./DataGrid.types";
+
+/** Below this width (rem) the grid stacks: one row per line that opens to edit. */
+const STACK_BELOW_REM = 30;
 
 type Spot = { row: string; key: string };
 
@@ -37,39 +57,6 @@ const EMPTY_ROWS: DataGridRow[] = [];
 
 function classNames(...parts: Array<string | false | undefined>): string {
   return parts.filter(Boolean).join(" ");
-}
-
-function columnType(column: DataGridColumn): NonNullable<DataGridColumn["type"]> {
-  return column.type ?? "text";
-}
-
-function parseISODate(iso: string): Date | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-  if (!match) return null;
-  const year = Number(match[1]);
-  const month = Number(match[2]) - 1;
-  const day = Number(match[3]);
-  const date = new Date(year, month, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
-    return null;
-  }
-  return date;
-}
-
-function formatDate(iso: string): string {
-  const date = parseISODate(iso);
-  if (!date) return iso;
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-}
-
-function displayValue(column: DataGridColumn, value: string): string {
-  if (!value) return "";
-  const type = columnType(column);
-  if (type === "select") {
-    return column.options?.find((option) => option.value === value)?.label ?? value;
-  }
-  if (type === "date") return formatDate(value);
-  return value;
 }
 
 function overlayOpen(): boolean {
@@ -119,6 +106,8 @@ export function DataGrid({
   emptyLabel = DEFAULT_EMPTY,
   rowNumbers = false,
   stickyFirstColumn = false,
+  totals,
+  errorSummary = false,
   className,
   ref,
   ...rest
@@ -132,12 +121,25 @@ export function DataGrid({
   const [innerRows, setInnerRows] = useState<DataGridRow[]>(defaultRows ?? EMPTY_ROWS);
   const [editing, setEditing] = useState<Spot | null>(null);
   const [draft, setDraft] = useState("");
+  const [lastAdded, setLastAdded] = useState<string | undefined>(undefined);
   const [measuredIndexWidth, setIndexWidth] = useState(0);
   const indexWidth = stickyFirstColumn && rowNumbers ? measuredIndexWidth : 0;
   const rows = rowsProp ?? innerRows;
   const firstKey = columns[0]?.key;
+  const editable = useMemo(() => columns.filter((column) => !isComputed(column)), [columns]);
   const colSpan = columns.length + (rowNumbers ? 1 : 0) + (canRemoveRows ? 1 : 0);
   const empty = rows.length === 0;
+  const errorsByRow = useMemo(
+    () => new Map(rows.map((row) => [row.id, cellErrors(columns, row)])),
+    [rows, columns],
+  );
+  const valid = rows.filter((row) => Object.keys(errorsByRow.get(row.id) ?? {}).length === 0);
+  const invalidCount = rows.length - valid.length;
+  const totalLines = totals ? totals(valid) : [];
+  const withTotals = Boolean(totals);
+  const summaryId = `${uid}-summary`;
+  const { ref: measureRef, narrow } = useNarrow<HTMLDivElement>(STACK_BELOW_REM);
+  const rootRef = useMemo(() => mergeRefs<HTMLDivElement>(measureRef, ref), [measureRef, ref]);
 
   function commit(next: DataGridRow[]) {
     if (rowsProp === undefined) setInnerRows(next);
@@ -186,11 +188,12 @@ export function DataGrid({
     added.current += 1;
     const row = {
       id: `${uid}-new-${added.current}`,
-      ...Object.fromEntries(columns.map((column) => [column.key, ""])),
+      ...Object.fromEntries(editable.map((column) => [column.key, ""])),
     } as DataGridRow;
     commit([...rows, row]);
-    const first = columns[0];
-    if (first) {
+    setLastAdded(row.id);
+    const first = editable[0];
+    if (first && !narrow) {
       setDraft("");
       setEditing({ row: row.id, key: first.key });
     }
@@ -216,7 +219,7 @@ export function DataGrid({
   useEffect(() => {
     if (!editing) return;
     const column = columns.find((item) => item.key === editing.key);
-    if (!column || columnType(column) === "text") return;
+    if (!column || isTextLike(column)) return;
     const spot = editing;
     function onPointerDown(event: PointerEvent) {
       const target = event.target;
@@ -260,13 +263,13 @@ export function DataGrid({
         close(false, true);
         return;
       }
-      if (event.key === "Enter" && columnType(column) === "text") {
+      if (event.key === "Enter" && isTextLike(column)) {
         event.preventDefault();
         close(true, true);
         return;
       }
       if (event.key !== "Tab" || !editing) return;
-      const next = neighbor(rows, columns, editing.row, editing.key, event.shiftKey ? -1 : 1);
+      const next = neighbor(rows, editable, editing.row, editing.key, event.shiftKey ? -1 : 1);
       if (!next) {
         event.preventDefault();
         close(true, false);
@@ -282,7 +285,7 @@ export function DataGrid({
 
   function onEditorBlur(column: DataGridColumn) {
     return (event: FocusEvent<HTMLTableCellElement>) => {
-      if (columnType(column) !== "text") return;
+      if (!isTextLike(column)) return;
       if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
       close(true, false);
     };
@@ -292,8 +295,62 @@ export function DataGrid({
     "--datagrid-index-width": `${indexWidth}px`,
   } as CSSProperties;
 
+  const summary = errorSummary ? (
+    <p id={summaryId} role="status" className={styles.summary}>
+      {invalidCount > 0 ? (
+        <>
+          <CircleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden className={styles.summaryIcon} />
+          {errorSummaryText(invalidCount)}
+        </>
+      ) : null}
+    </p>
+  ) : null;
+
+  const addRowBar = canAddRows ? (
+    <div ref={addRef} className={styles.add}>
+      <Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus" onClick={addRow}>
+        Add row
+      </Button>
+    </div>
+  ) : null;
+
+  if (narrow) {
+    return (
+      <div
+        {...rest}
+        {...nisthaAttr("datagrid", rest)}
+        ref={rootRef}
+        className={cx(styles.root, styles.stacked, className)}
+        data-size={size}
+      >
+        {summary}
+        <DataGridStack
+          uid={uid}
+          label={label}
+          columns={columns}
+          rows={rows}
+          errorsByRow={errorsByRow}
+          withTotals={withTotals}
+          emptyLabel={emptyLabel}
+          canRemoveRows={canRemoveRows}
+          openRow={lastAdded}
+          onCellChange={setCell}
+          onRemoveRow={removeRow}
+        />
+        {addRowBar}
+        {totalLines.length ? <DataGridStackTotals totals={totalLines} /> : null}
+      </div>
+    );
+  }
+
+  // Totals sit under the last number or money column (Amount), labels end-aligned before it.
+  const lastNumeric = columns.reduce((found, column, index) => (isNumeric(column) ? index : found), -1);
+  const valueIndex = (lastNumeric >= 0 ? lastNumeric : columns.length - 1) + (rowNumbers ? 1 : 0);
+  const trailing = colSpan - valueIndex - 1;
+
   return (
-    <div {...rest} {...nisthaAttr("datagrid", rest)} ref={ref} className={cx(styles.root, className)} data-size={size}>
+    <div {...rest} {...nisthaAttr("datagrid", rest)} ref={rootRef} className={cx(styles.root, className)} data-size={size}>
+      {summary}
       <div className={styles.scroller} tabIndex={0} role="region" aria-label={label}>
         <table ref={tableRef} className={styles.table} aria-label={label} style={stickyStyle}>
           <thead>
@@ -317,7 +374,7 @@ export function DataGrid({
                   )}
                   style={column.width ? { width: column.width, minWidth: column.width } : undefined}
                 >
-                  <HeaderCell label={column.header} size={size} />
+                  <HeaderCell label={column.header} size={size} align={isNumeric(column) ? "end" : "start"} />
                 </th>
               ))}
               {canRemoveRows ? (
@@ -335,10 +392,14 @@ export function DataGrid({
                 </td>
               </tr>
             ) : (
-              rows.map((row, index) => {
+              rows.flatMap((row, index) => {
                 const n = index + 1;
-                return (
-                  <tr key={row.id} className={styles.tr}>
+                const errors = errorsByRow.get(row.id) ?? {};
+                const errorKeys = Object.keys(errors);
+                const rowValid = errorKeys.length === 0;
+                const messageId = (key: string) => `${uid}-${row.id}-${key}-error`;
+                const line = (
+                  <tr key={row.id} className={classNames(styles.tr, !rowValid && styles.trInvalid)}>
                     {rowNumbers ? (
                       <td
                         className={classNames(
@@ -352,9 +413,25 @@ export function DataGrid({
                     ) : null}
                     {columns.map((column) => {
                       const type = columnType(column);
+                      const numeric = isNumeric(column);
+                      const sticky = stickyFirstColumn && column.key === firstKey && styles.stickyFirst;
+                      const width = column.width ? { width: column.width, minWidth: column.width } : undefined;
+                      if (isComputed(column)) {
+                        return (
+                          <td
+                            key={column.key}
+                            className={classNames(styles.td, styles.end, styles.computed, sticky)}
+                            style={width}
+                          >
+                            <span className={styles.value}>{cellText(column, row, rowValid)}</span>
+                          </td>
+                        );
+                      }
                       const value = row[column.key] ?? "";
                       const name = `${column.header}, row ${n}`;
-                      const shown = displayValue(column, value);
+                      const shown = cellText(column, row, rowValid);
+                      const error = errors[column.key];
+                      const describedBy = error ? messageId(column.key) : undefined;
                       const isEditing = editing?.row === row.id && editing.key === column.key;
                       const editorId = `${uid}-${row.id}-${column.key}`;
                       return (
@@ -364,11 +441,13 @@ export function DataGrid({
                           data-key={column.key}
                           className={classNames(
                             styles.td,
+                            numeric && styles.end,
                             isEditing && styles.editing,
                             type === "date" && styles.date,
-                            stickyFirstColumn && column.key === firstKey && styles.stickyFirst,
+                            error && styles.invalid,
+                            sticky,
                           )}
-                          style={column.width ? { width: column.width, minWidth: column.width } : undefined}
+                          style={width}
                           onKeyDown={isEditing ? onEditorKey(column) : undefined}
                           onBlur={isEditing ? onEditorBlur(column) : undefined}
                         >
@@ -380,6 +459,8 @@ export function DataGrid({
                                 options={column.options ?? []}
                                 placeholder={column.placeholder}
                                 value={value}
+                                error={Boolean(error)}
+                                describedBy={describedBy}
                                 onChange={(next) => {
                                   const picked = Array.isArray(next) ? (next[0] ?? "") : next;
                                   setCell(row.id, column.key, picked);
@@ -397,11 +478,13 @@ export function DataGrid({
                                 size="sm"
                                 placeholder={column.placeholder}
                                 value={value}
+                                error={Boolean(error)}
+                                describedBy={describedBy}
                                 onValueChange={(next) => setCell(row.id, column.key, next)}
                               />
                             </span>
                           ) : isEditing ? (
-                            <span className={styles.editor}>
+                            <span className={classNames(styles.editor, numeric && styles.editorEnd)}>
                               <Input
                                 id={editorId}
                                 size="sm"
@@ -409,15 +492,26 @@ export function DataGrid({
                                 value={draft}
                                 onChange={setDraft}
                                 ariaLabel={name}
+                                error={Boolean(error)}
+                                describedBy={describedBy}
+                                inputMode={numeric ? "decimal" : undefined}
                               />
                             </span>
                           ) : (
+                            // aria-invalid on the idle cell button so the error is announced
+                            // before it opens; the editor Input carries it too.
+                            // eslint-disable-next-line jsx-a11y/role-supports-aria-props
                             <button
                               type="button"
                               className={styles.cellButton}
                               aria-label={`${name}: ${shown || "empty"}`}
+                              aria-invalid={error ? true : undefined}
+                              aria-describedby={describedBy}
                               onClick={() => open({ row: row.id, key: column.key })}
                             >
+                              {error ? (
+                                <CircleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden className={styles.errorIcon} />
+                              ) : null}
                               <span className={shown ? styles.value : styles.placeholder}>
                                 {shown || column.placeholder || ""}
                               </span>
@@ -445,18 +539,41 @@ export function DataGrid({
                     ) : null}
                   </tr>
                 );
+                if (rowValid) return [line];
+                return [
+                  line,
+                  <tr key={`${row.id}-errors`} className={styles.messageRow}>
+                    <td className={classNames(styles.td, styles.message)} colSpan={Math.max(colSpan, 1)}>
+                      {errorKeys.map((key) => {
+                        const column = columns.find((item) => item.key === key);
+                        return (
+                          <span key={key} id={messageId(key)} className={styles.messageLine}>
+                            {cellMessage(`${column?.header ?? key}, row ${n}`, errors[key] ?? "", withTotals)}
+                          </span>
+                        );
+                      })}
+                    </td>
+                  </tr>,
+                ];
               })
             )}
           </tbody>
+          {totalLines.length ? (
+            <tfoot className={styles.foot}>
+              {totalLines.map((total) => (
+                <tr key={total.label} className={classNames(total.emphasis && styles.footEmphasis)}>
+                  <th scope="row" colSpan={Math.max(valueIndex, 1)} className={classNames(styles.footLabel)}>
+                    {total.label}
+                  </th>
+                  <td className={classNames(styles.footValue, styles.end)}>{total.value}</td>
+                  {trailing > 0 ? <td colSpan={trailing} className={styles.footRest} /> : null}
+                </tr>
+              ))}
+            </tfoot>
+          ) : null}
         </table>
       </div>
-      {canAddRows ? (
-        <div ref={addRef} className={styles.add}>
-          <Button appearance="ghost" mode="neutral" size="sm" iconStart="Plus" onClick={addRow}>
-            Add row
-          </Button>
-        </div>
-      ) : null}
+      {addRowBar}
     </div>
   );
 }

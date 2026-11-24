@@ -4,14 +4,15 @@
   "level": "organism",
   "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
   "useWhen": [
-    "A row of Scorecards, chips, or cards that runs past the edge",
+    "A row of chips or cards that runs past the edge",
     "A row of Badge chips that runs past the edge",
     "A tall list in a narrow column, scrolled up and down"
   ],
   "doNotUseWhen": [
     "Paged slides or a gallery with Slide N of M — use Carousel",
     "Paging a table — use Pagination",
-    "A second scrolling box inside the run — turn that one's scrolling off"
+    "A second scrolling box inside the run — turn that one's scrolling off",
+    "KPIs or a metric picker — use Scoreboard, which wraps"
   ],
   "contains": [
     "button"
@@ -20,7 +21,7 @@
     "children": {
       "type": "ReactNode",
       "required": true,
-      "note": "The run that scrolls (Scoreboard, a row of Badge chips, a stack of cards). Not an items[] of slides."
+      "note": "The run that scrolls (a row of Badge chips, a stack of cards). Not an items[] of slides, and not a Scoreboard."
     },
     "orientation": {
       "type": "enum",
@@ -40,7 +41,7 @@
       "type": "string",
       "required": false,
       "default": "Content",
-      "note": "Names the group and the arrows (“Scroll key metrics right”). Scoreboard passes its aria-label."
+      "note": "Names the group and the arrows (“Scroll filters right”)."
     }
   },
   "passthrough": {
@@ -70,13 +71,14 @@
   "doNot": [
     "Do not use Conveyor for paged slides or a gallery — use Carousel",
     "Do not use Conveyor to page a table — use Pagination",
-    "Do not put a second scrolling box inside it; pass scroll={false} on Scoreboard",
+    "Do not put a second scrolling box inside it",
     "Do not nest two Conveyors",
     "Do not invent ScrollArea, Overflow, Marquee, or a local scroller (a moving logo wall is the LogoStrip block)",
     "Do not use embla or Carousel internals",
     "Do not add loop, showIndex, or slidesPerView",
     "Do not use appearance=solid mode=primary on the arrows — ghost icon-only only",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not put Scoreboard or KPIs in it; Scoreboard wraps"
   ],
-  "snippet": "<Conveyor label=\"Key metrics\">\n  <Scoreboard scroll={false} items={[{ label: 'Revenue', value: '$48.2k' }, { label: 'Churn', value: '1.2%' }, { label: 'Users', value: '12.4k' }, { label: 'NPS', value: '64' }, { label: 'Tickets', value: '38' }]} />\n</Conveyor>"
+  "snippet": "<Conveyor label=\"Filters\">\n  <div style={{ display: \"flex\", gap: \"var(--space-2)\" }}>\n    {filters.map((f) => <Badge key={f}>{f}</Badge>)}\n  </div>\n</Conveyor>"
 }

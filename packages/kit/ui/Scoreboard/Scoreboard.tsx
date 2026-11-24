@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
-import { Conveyor } from "../Conveyor";
 import { Scorecard } from "../Scorecard";
 import type { ScoreboardItem, ScoreboardProps } from "./Scoreboard.types";
 import { cx } from "../shared/cx";
@@ -10,7 +9,12 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { ScoreboardProps, ScoreboardItem, ScoreboardAppearance } from "./Scoreboard.types";
 
-const STRIP_MAX = 4;
+/** Grid class by count: one row up to six, more wrap on --layout-metrics-min columns. */
+function countClass(count: number): string | undefined {
+  if (count <= 1) return styles.count1;
+  if (count <= 6) return styles[`count${count}`];
+  return styles.countMany;
+}
 
 const keyOf = (item: ScoreboardItem) => item.id ?? item.label;
 
@@ -35,7 +39,7 @@ export function scoreboardKeyTarget(key: string, index: number, count: number): 
 
 export function Scoreboard({
   items,
-  scroll = true,
+  scroll: _scroll,
   appearance = "cards",
   selectable = false,
   value,
@@ -51,6 +55,7 @@ export function Scoreboard({
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const checkedIndex = Math.max(0, items.findIndex((item) => keyOf(item) === checked));
   const divided = appearance === "divided";
+  void _scroll;
 
   function choose(index: number) {
     const item = items[index];
@@ -97,39 +102,6 @@ export function Scoreboard({
 
   const groupProps = selectable ? { role: "radiogroup", "aria-label": ariaLabel } : {};
 
-  if (items.length > STRIP_MAX) {
-    const strip = (
-      <section
-        {...rest}
-        {...nisthaAttr("scoreboard", rest)}
-        ref={ref}
-        className={cx(styles.scoreboard, styles.overflowStrip, divided && styles.divided, className)}
-        aria-label={ariaLabel}
-      >
-        <div className={styles.overflowRow} {...groupProps}>
-          {items.map((item, index) => (
-            <div key={keyOf(item)} className={styles.overflowItem}>
-              {card(item, index)}
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-
-    if (!scroll) return strip;
-
-    return <Conveyor label={ariaLabel}>{strip}</Conveyor>;
-  }
-
-  const countClass =
-    items.length <= 1
-      ? styles.count1
-      : items.length === 2
-        ? styles.count2
-        : items.length === 3
-          ? styles.count3
-          : styles.count4;
-
   return (
     <section
       {...rest}
@@ -138,7 +110,7 @@ export function Scoreboard({
       className={cx(styles.scoreboard, divided && styles.divided, className)}
       aria-label={ariaLabel}
     >
-      <div className={cx(styles.grid, countClass)} {...groupProps}>
+      <div className={cx(styles.grid, countClass(items.length))} {...groupProps}>
         {items.map((item, index) => (
           <div key={keyOf(item)} className={styles.cell}>
             {card(item, index)}

@@ -74,7 +74,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  /* One header height with CommentsPanel: a 32 control plus 12 above and below. */
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
   box-sizing: border-box;
   border-block-end: var(--border-width-thin) solid var(--line-default);
 }

@@ -17,7 +17,7 @@ export interface CommentMember extends CommentAuthor {
 export interface ThreadComment {
   id: string;
   author: CommentAuthor;
-  /** Display time, e.g. "2h". */
+  /** Display time, shown in mono as given. Use one format, e.g. "Nov 20, 10:03". */
   createdAt: string;
   body: string;
   edited?: boolean;

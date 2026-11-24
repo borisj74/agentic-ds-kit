@@ -7,14 +7,14 @@ export const kpiBoardDoc: BlockDoc = {
   name: "KpiBoard",
   contract,
   lead:
-    "The top of a dashboard. Three to six KPIs sit in one row and double as the picker (five or six scroll sideways): the chart and the table of top rows follow the one you pick. One range control changes all of them.",
+    "The top of a dashboard. Three to six KPIs sit in a selectable Scoreboard, the only picker (five or six wrap; on a phone they go two by two): the chart and the table of top rows follow the one marked Charted. Deltas read Better or Worse. One range control changes all of them.",
   usage: `import { KpiBoard } from "agentic-ds-kit";
 
 export function Dashboard({ metrics, series, rows }) {
   return (
     <main className="layout-content">
       <KpiBoard
-        metrics={metrics}        // { id, label, values: { [range]: { value, delta? } }, columns }[]
+        metrics={metrics}        // { id, label, goodWhen?, values: { [range]: { value, delta?, hint? } }, columns }[]
         series={series}          // series[metricId][range]: { label, value }[]
         rows={rows}              // rows[metricId][range]: DataTable rows, each with an id
         ranges={[

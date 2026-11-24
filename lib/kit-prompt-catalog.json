@@ -1080,7 +1080,7 @@
         "badge": {
           "type": "string",
           "required": false,
-          "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (In chart, Beta); a change goes in delta, never in badge."
+          "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (Charted, Beta); a change goes in delta, never in badge."
         },
         "badgeTone": {
           "type": "enum",
@@ -1176,7 +1176,7 @@
     {
       "id": "scoreboard",
       "group": "component",
-      "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
+      "intent": "Metrics strip of kit Scorecards: two to six figures, and the only metric picker. Up to six sit in one row; more wrap, and four or more go two by two when the strip is narrow. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
       "useWhen": [
         "Showing two or more KPIs side by side at the top of a dashboard",
         "Replacing ad-hoc flex rows of metric boxes",
@@ -1192,27 +1192,27 @@
         "Do not fake dividers with CSS borders between items — use appearance divided",
         "Do not restyle Scorecard padding or borders inside Scoreboard",
         "Do not inline Scorecard markup — import from ui/Scorecard",
-        "More than four items — Scoreboard composes kit Conveyor, do not invent a local scroller",
-        "Do not wrap a scrolling Scoreboard in Conveyor — pass scroll={false}",
         "Do not build a metric picker from Scorecard toggles by hand — use selectable",
-        "Do not use selectable for actions; each card picks a view, it does not navigate"
+        "Do not use selectable for actions; each card picks a view, it does not navigate",
+        "Do not wrap Scoreboard in Conveyor or scroll it sideways — more figures wrap",
+        "Do not use Conveyor as a metric picker — use selectable"
       ],
       "props": {
         "aria-label": {
           "type": "string",
           "default": "Key metrics",
           "required": false,
-          "note": "Names the section (and the Conveyor when scroll is on)."
+          "note": "Names the section, and the radiogroup when selectable."
         },
         "items": {
           "type": "array",
           "required": true,
-          "note": "2–4 fill equal columns. Four stay four-up until the strip narrows. More than 4 compose kit Conveyor: the cards share the strip's width (12rem minimum, layout.metricsMin) and scroll once that no longer fits. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
+          "note": "2–6 sit in one row of equal columns (five or six go three to a row below 64rem of strip width). More than six wrap four to a row. Below about 38rem, four or more go two by two; three stack. With selectable, each item's id (or label) is its value. Each item passes its own Scorecard look through (goodWhen, sparklineVariant, reference, compare, highlightLast, sparklineDates, meter), so a strip can mix them."
         },
         "scroll": {
           "type": "boolean",
-          "default": true,
-          "note": "false renders the overflow strip without Conveyor so a page can wrap Scoreboard in its own Conveyor."
+          "required": false,
+          "note": "Deprecated, no effect. Scoreboard no longer composes Conveyor: more figures wrap instead of scrolling."
         },
         "appearance": {
           "type": "enum",
@@ -1221,7 +1221,7 @@
             "divided"
           ],
           "default": "cards",
-          "note": "cards: framed Scorecards with a gap. divided: plain Scorecards in one row with a thin border.faint rule between them; below about 38rem they stack and the rules turn horizontal."
+          "note": "cards: framed Scorecards with a gap. divided: plain Scorecards with thin border.faint rules between them; when the strip wraps the rules run both ways (two by two on a phone), and three stack with horizontal rules below about 38rem."
         },
         "selectable": {
           "type": "boolean",
@@ -3284,7 +3284,7 @@
     {
       "id": "datagrid",
       "group": "component",
-      "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
+      "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings. It validates cells, can total the valid rows, and stacks below 30rem.",
       "useWhen": [
         "People build or change rows in place: rule conditions, price tiers, field mappings, line items",
         "Short editable lists where a form per row would be slow"
@@ -3302,15 +3302,17 @@
         "Short read-only text rows — use Table",
         "One primary/secondary line — use ListView",
         "Do not use Cell for editable body cells — Cell is display content for DataTable",
-        "Do not add type formula. This kit has no FormulaEditor. Stop and ask.",
-        "Do not add Density, expandable row detail, or a primary Add row Button",
-        "Do not use raw hex"
+        "Do not add type formula. A computed column (compute) is allowed; there is no FormulaEditor. Stop and ask for anything more.",
+        "Do not use raw hex",
+        "Do not add Density or expandable row detail. Rows open only when the grid stacks below 30rem, to edit that row",
+        "Do not make Add row a primary Button",
+        "Do not colour a whole row for one invalid cell; mark the cell"
       ],
       "props": {
         "columns": {
           "type": "array",
           "required": true,
-          "note": "type defaults to text. select needs options. date is kit DatePicker; value is YYYY-MM-DD. Do not add type formula — this kit has no FormulaEditor; stop and ask."
+          "note": "type defaults to text. select needs options. date is kit DatePicker; value is YYYY-MM-DD. number and money are end-aligned with tabular figures and hold decimal strings (\"18\", \"39.00\"); money shows them in currency (default USD). compute makes a derived, read-only column such as Amount = Qty × Unit price; it is not a formula editor. validate returns a short fix (\"enter 1 or more\") or undefined. Do not add type formula: there is no FormulaEditor; a computed column is the only derived value."
         },
         "rows": {
           "type": "array",
@@ -3344,7 +3346,7 @@
         "canAddRows": {
           "type": "boolean",
           "default": false,
-          "note": "Add row button under the grid. Not primary. New row starts empty; first cell opens for editing."
+          "note": "Add row button under the grid. Not primary. New row starts empty; first cell opens for editing (when stacked, the row opens)."
         },
         "canRemoveRows": {
           "type": "boolean",
@@ -3365,6 +3367,16 @@
           "type": "boolean",
           "default": false,
           "note": "The # column (if shown) and the first data column stay in place while the grid scrolls sideways."
+        },
+        "totals": {
+          "type": "function",
+          "required": false,
+          "note": "(validRows) => { label, value, emphasis?, narrowLabel? }[]. Footer lines worked out from rows with no invalid cell, e.g. Subtotal, VAT 20%, Total. Values are pre-formatted. The emphasised line is the grand total and the only one shown when the grid stacks, with narrowLabel (\"Total incl. VAT\")."
+        },
+        "errorSummary": {
+          "type": "boolean",
+          "default": false,
+          "note": "A status line above the grid: \"1 line needs a fix\" / \"3 lines need a fix\". Empty when every row is valid."
         }
       }
     },
@@ -4503,31 +4515,33 @@
       "group": "component",
       "intent": "Arrows at both ends of a row or column that is too long to fit, so people can move it along without a scrollbar.",
       "useWhen": [
-        "A row of Scorecards, chips, or cards that runs past the edge",
+        "A row of chips or cards that runs past the edge",
         "A row of Badge chips that runs past the edge",
         "A tall list in a narrow column, scrolled up and down"
       ],
       "doNotUseWhen": [
         "Paged slides or a gallery with Slide N of M — use Carousel",
         "Paging a table — use Pagination",
-        "A second scrolling box inside the run — turn that one's scrolling off"
+        "A second scrolling box inside the run — turn that one's scrolling off",
+        "KPIs or a metric picker — use Scoreboard, which wraps"
       ],
       "doNot": [
         "Do not use Conveyor for paged slides or a gallery — use Carousel",
         "Do not use Conveyor to page a table — use Pagination",
-        "Do not put a second scrolling box inside it; pass scroll={false} on Scoreboard",
+        "Do not put a second scrolling box inside it",
         "Do not nest two Conveyors",
         "Do not invent ScrollArea, Overflow, Marquee, or a local scroller (a moving logo wall is the LogoStrip block)",
         "Do not use embla or Carousel internals",
         "Do not add loop, showIndex, or slidesPerView",
         "Do not use appearance=solid mode=primary on the arrows — ghost icon-only only",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not put Scoreboard or KPIs in it; Scoreboard wraps"
       ],
       "props": {
         "children": {
           "type": "ReactNode",
           "required": true,
-          "note": "The run that scrolls (Scoreboard, a row of Badge chips, a stack of cards). Not an items[] of slides."
+          "note": "The run that scrolls (a row of Badge chips, a stack of cards). Not an items[] of slides, and not a Scoreboard."
         },
         "orientation": {
           "type": "enum",
@@ -4547,7 +4561,7 @@
           "type": "string",
           "default": "Content",
           "required": false,
-          "note": "Names the group and the arrows (“Scroll key metrics right”). Scoreboard passes its aria-label."
+          "note": "Names the group and the arrows (“Scroll filters right”)."
         }
       }
     },
@@ -10964,11 +10978,12 @@
     {
       "id": "setupguide",
       "group": "component",
-      "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+      "intent": "A first-run checklist with overall progress, each task's status as an icon and a word (Done, Current, To do, Blocked, Skipped) and at most one action per task. The current task's action, or its suggested provider's Connect, is the one solid primary. Built on kit Progress, Badge, Button and Empty, with IntegrationPicker's compact tile. Not a wizard stepper and not a bare Progress bar.",
       "useWhen": [
         "onboard a new workspace with a short list of setup tasks",
         "show how far setup is and what to do next",
-        "let people skip optional tasks and undo the skip"
+        "let people skip optional tasks and undo the skip",
+        "connect a provider straight from the task that needs it"
       ],
       "doNotUseWhen": [
         "a linear multi-page wizard — ProgressSteps",
@@ -10978,7 +10993,8 @@
       "doNot": [
         "Do not invent a local Checklist, OnboardingCard or SetupSteps",
         "Do not use ProgressSteps for a checklist people can do in any order",
-        "Do not show more than one solid primary; Continue stays outline",
+        "Do not show more than one solid primary: the current task's action, or its suggested provider's Connect when tiles show",
+        "Do not put a disabled Start on a blocked task; say what unlocks it",
         "Do not use raw hex"
       ],
       "props": {
@@ -10993,17 +11009,27 @@
         "tasks": {
           "type": "array",
           "required": true,
-          "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped', actionLabel? }[]"
+          "note": "{ id, label, description?, status: 'todo'|'current'|'done'|'skipped'|'blocked', actionLabel?, dependsOn?: id[], blockedReason?, integrations?: IntegrationItem[] }[]. A blocked task whose dependsOn tasks are all done shows as To do. integrations show as compact tiles under the row while it is current, and the row then has no button."
         },
         "onTaskAction": {
           "type": "function",
           "required": false,
-          "note": "(id) => void. Continue on the current task (outline), Start on todo tasks (ghost)."
+          "note": "(id) => void. The current task's action is the solid primary (default Continue); todo tasks get an outline Start. Blocked rows have no button."
+        },
+        "onIntegrationConnect": {
+          "type": "function",
+          "required": false,
+          "note": "(integrationId, taskId) => void. Connect on a provider tile under the current task. The first available tile is the solid primary; the rest are outline."
+        },
+        "connectingId": {
+          "type": "string",
+          "required": false,
+          "note": "That provider tile reads Connecting…, with no button, and is announced."
         },
         "onUndoSkip": {
           "type": "function",
           "required": false,
-          "note": "(id) => void. \"Skipped · Undo\"."
+          "note": "(id) => void. A ghost \"Undo skip\" Button on the skipped row."
         },
         "onComplete": {
           "type": "function",
@@ -11440,11 +11466,12 @@
     {
       "id": "commentspanel",
       "group": "component",
-      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place, and inline=\"auto\" docks it beside the page from --grid-breakpoint-lg.",
       "useWhen": [
         "a page (invoice, document) has several comment threads",
         "people filter open and resolved threads and open one",
-        "a header needs a Comments button with the open count"
+        "a header needs a Comments button with the open count",
+        "a page docks its threads beside the content on wide screens (inline=\"auto\")"
       ],
       "doNotUseWhen": [
         "one conversation on its own — CommentThread",
@@ -11461,7 +11488,7 @@
         "threads": {
           "type": "array",
           "required": true,
-          "note": "{ id, title, preview, count, resolved?, updatedAt }[]"
+          "note": "{ id, title, preview, count, resolved?, updatedAt, context? }[]. context names the record (e.g. \"INV-1842 · Northwind\") and leads the open thread's meta line: \"INV-1842 · 3 comments · Open\". Use one date format for updatedAt, e.g. \"Nov 20, 10:26\"."
         },
         "open": {
           "type": "boolean",
@@ -11520,8 +11547,9 @@
           "required": false
         },
         "inline": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean | \"auto\"",
+          "default": false,
+          "note": "true renders the panel in place. \"auto\" docks it beside the page from --grid-breakpoint-lg while open (the trigger comes back when it closes) and uses the Drawer below that."
         },
         "showTrigger": {
           "type": "boolean",
@@ -11544,11 +11572,12 @@
     {
       "id": "integrationpicker",
       "group": "component",
-      "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+      "intent": "A filterable catalogue of integrations: search, a category filter with an optional Connected segment, and one tile per provider that ends in a status word (Not connected, Connected, Connecting…, Coming soon) and at most one action (Connect or Manage). connectFlow \"detail\" opens a Drawer with what it can access and Connect or Disconnect. Built on kit Input, SegmentedControl, Button, Badge, Drawer and Empty.",
       "useWhen": [
         "let people find and connect integrations in settings or onboarding",
         "show which integrations are connected",
-        "list providers that are coming soon"
+        "list providers that are coming soon",
+        "an Integrations or Apps area where people read what an app can access before connecting (connectFlow \"detail\")"
       ],
       "doNotUseWhen": [
         "settings for one connected integration — the integration-settings pattern",
@@ -11559,13 +11588,14 @@
         "Do not invent a local IntegrationGrid or AppDirectory",
         "Do not use a real provider's logo or name without labelling it an example",
         "Do not put more than one action on a tile",
+        "Do not put a disabled Connect on a coming-soon or connecting tile; the status word says it",
         "Do not use raw hex"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon? }[]"
+          "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon?, publisher?, about?, permissions?: string[], connectedNote? }[]. publisher, about, permissions and connectedNote show in the connectFlow \"detail\" drawer."
         },
         "title": {
           "type": "string",
@@ -11586,7 +11616,8 @@
         },
         "category": {
           "type": "string",
-          "default": "all"
+          "default": "all",
+          "note": "\"all\", \"connected\" (the Connected segment, with showConnected) or a category name."
         },
         "onCategoryChange": {
           "type": "function",
@@ -11596,18 +11627,62 @@
           "type": "string[]",
           "required": false
         },
+        "showConnected": {
+          "type": "boolean",
+          "default": false,
+          "note": "Adds a \"Connected n\" segment after All; its value is \"connected\"."
+        },
+        "connectFlow": {
+          "type": "enum",
+          "values": [
+            "direct",
+            "detail"
+          ],
+          "default": "direct",
+          "note": "detail: Connect and Manage open a Drawer with the item's detail, what it can access, and Connect or Disconnect."
+        },
+        "tileSize": {
+          "type": "enum",
+          "values": [
+            "default",
+            "compact"
+          ],
+          "default": "default",
+          "note": "compact: name, description and the word or action on one row."
+        },
         "onConnect": {
           "type": "function",
-          "required": true
+          "required": true,
+          "note": "(id) => void. Direct: the tile's Connect. Detail: the drawer's Connect."
         },
         "onManage": {
           "type": "function",
+          "required": false,
+          "note": "(id) => void. Direct: the tile's Manage on a connected item. Detail: Manage opens the drawer."
+        },
+        "onDisconnect": {
+          "type": "function",
+          "required": false,
+          "note": "(id) => void. Detail: Disconnect in a connected item's drawer."
+        },
+        "selectedId": {
+          "type": "string",
+          "required": false,
+          "note": "Detail, controlled: the item whose drawer is open, or null."
+        },
+        "defaultSelectedId": {
+          "type": "string",
           "required": false
+        },
+        "onSelectedChange": {
+          "type": "function",
+          "required": false,
+          "note": "(id | null) => void"
         },
         "connectingId": {
           "type": "string",
           "required": false,
-          "note": "That tile shows Connecting… (solid primary)."
+          "note": "That tile reads Connecting… as a status word, with no button, announced in a status region."
         },
         "onRequest": {
           "type": "function",
@@ -12748,7 +12823,7 @@
     {
       "id": "appdirectory",
       "group": "component",
-      "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
+      "intent": "Deprecated: use IntegrationPicker with connectFlow=\"detail\" and showConnected. AppDirectory now renders exactly that and will be removed in a later release. Block: an app directory with a Connected filter over the catalogue; a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
       "useWhen": [
         "an Integrations or Apps area where people find, connect and disconnect apps",
         "show which apps are connected and what each one can access",
@@ -12760,11 +12835,9 @@
         "choosing a plan — PricingPlans"
       ],
       "doNot": [
-        "Do not rebuild AppDirectory from a local grid of cards; import the block",
-        "Do not connect straight from a tile here; the tile opens the detail, the drawer connects",
+        "Do not use AppDirectory in new code; use IntegrationPicker connectFlow=\"detail\"",
         "Do not use a real provider's logo or name without labelling it an example",
-        "Do not use raw hex",
-        "Only one solid primary in the view: Connect in the open drawer"
+        "Do not use raw hex"
       ],
       "props": {
         "apps": {
@@ -12798,7 +12871,7 @@
         "connectedOnly": {
           "type": "boolean",
           "required": false,
-          "note": "Controlled Connected chip."
+          "note": "Controlled Connected filter (the picker's \"connected\" category)."
         },
         "defaultConnectedOnly": {
           "type": "boolean",
@@ -12977,7 +13050,7 @@
     {
       "id": "kpiboard",
       "group": "component",
-      "intent": "Block: the top of a dashboard. A Scoreboard of three to six KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+      "intent": "Block: the top of a dashboard. A selectable Scoreboard of three to six KPIs that is also the only picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them. It composes; it does not re-pick.",
       "useWhen": [
         "the first row of an analytics or reporting dashboard",
         "compare a few KPIs and drill into one without leaving the page",
@@ -12987,20 +13060,21 @@
         "only a strip of numbers: Scoreboard",
         "one chart on its own: LineChart or BarChart",
         "a full dataset to search and filter: DataTable",
-        "more than six KPIs: Scoreboard with Conveyor, and a separate chart"
+        "more than six KPIs: a Scoreboard (it wraps) and a separate chart"
       ],
       "doNot": [
         "Do not rebuild KpiBoard from a local dashboard; import the block",
         "Do not add a second range control; the one range drives cards, chart and table",
         "Do not put more than six KPIs in it",
         "Do not use raw hex",
-        "No solid primary Button in the block; leave it to the page"
+        "No solid primary Button in the block; leave it to the page",
+        "Do not hand-roll card onClick picking; the Scoreboard selectable strip is the picker"
       ],
       "props": {
         "metrics": {
           "type": "array",
           "required": true,
-          "note": "3–6 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+          "note": "3–6 of { id, label, goodWhen?, values: Record<range, { value, delta?, trend?, deltaTone?, hint? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash. goodWhen (up for MRR, down for overdue or churn) makes the delta read Better or Worse. hint is the muted text after the delta, e.g. \"vs Oct\"; default \"last <range label>\"."
         },
         "series": {
           "type": "object",
@@ -13015,7 +13089,7 @@
         "ranges": {
           "type": "array",
           "required": true,
-          "note": "{ value, label }[], two to four, e.g. 7d / 30d / 90d."
+          "note": "{ value, label }[], two to four, e.g. Month / Quarter / Year. Ranges are data, not an enum."
         },
         "range": {
           "type": "string",

@@ -19,3 +19,6 @@ export function useMediaQuery(query: string) {
 
 /** Media queries cannot read var(): 40rem is --grid-breakpoint-sm. */
 export const NARROW_QUERY = "(max-width: 40rem)";
+
+/** 80rem is --grid-breakpoint-lg: wide enough to dock a 24rem side panel beside the page. */
+export const WIDE_QUERY = "(min-width: 80rem)";

@@ -10,9 +10,10 @@ export type ScoreboardItem = ScorecardProps;
 /** `cards`: framed Scorecards with a gap. `divided`: one row of plain Scorecards split by thin rules. */
 export type ScoreboardAppearance = "cards" | "divided";
 
-/** `ref`, `className` and other native attributes land on the root `<section>` (inside the Conveyor when the strip scrolls). */
+/** `ref`, `className` and other native attributes land on the root `<section>`. */
 export interface ScoreboardProps extends Omit<ComponentPropsWithoutRef<"section">, ScoreboardOwnedKeys> {
   items: ScoreboardItem[];
+  /** @deprecated Has no effect. Scoreboard no longer scrolls: more than four figures wrap. */
   scroll?: boolean;
   appearance?: ScoreboardAppearance;
   /**

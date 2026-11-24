@@ -119,3 +119,54 @@ describe("CommentThread mentions", () => {
     assert.match(html, /to send/);
   });
 });
+
+describe("CommentsPanel follow-up", () => {
+  let CommentsPanel;
+  let panelPlacement;
+  const THREADS = [
+    { id: "t1", title: "Card declined", context: "INV-1842", preview: "Holding.", count: 3, updatedAt: "Nov 20, 10:26" },
+    { id: "t2", title: "Due date", preview: "Moved.", count: 1, updatedAt: "Nov 14, 11:05", resolved: true },
+  ];
+  before(async () => {
+    ({ CommentsPanel, panelPlacement } = await import("../dist/ui/CommentsPanel/CommentsPanel.js"));
+  });
+
+  test("the open thread's meta line leads with its context", () => {
+    const html = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, selectedId: "t1", onSelect: noop }));
+    assert.match(html, />INV-1842 · 3 comments · Open</);
+    const plain = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, selectedId: "t2", onSelect: noop }));
+    assert.match(plain, />1 comment · Resolved</);
+  });
+
+  test("inline is a complementary region named by label", () => {
+    const html = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, onSelect: noop }));
+    assert.match(html, /role="complementary"[^>]*aria-label="Comments"|aria-label="Comments"[^>]*role="complementary"/);
+  });
+
+  test("inline=\"auto\" renders the trigger and no docked panel on the server (narrow markup)", () => {
+    const html = render(h(CommentsPanel, { inline: "auto", threads: THREADS, open: true, onOpenChange: noop, onSelect: noop }));
+    assert.doesNotMatch(html, /role="complementary"/);
+    assert.match(html, />Comments</);
+    assert.match(html, />1 open</);
+  });
+
+  test("inline=\"auto\" with open={true} renders no Drawer or docked panel on the server", () => {
+    const html = render(h(CommentsPanel, { inline: "auto", threads: THREADS, open: true, onOpenChange: noop, selectedId: "t1", onSelect: noop }));
+    assert.doesNotMatch(html, /role="dialog"/);
+    assert.doesNotMatch(html, /role="complementary"/);
+    assert.doesNotMatch(html, /INV-1842 · 3 comments/, "the open thread is not rendered before the query resolves");
+  });
+
+  test("panelPlacement waits for the client in auto mode, then docks wide and drawers narrow", () => {
+    // Server and hydration (first client snapshot): trigger only, whatever the width.
+    assert.deepEqual(panelPlacement({ inline: "auto", open: true, wide: false, ready: false }), { docked: false, drawer: false });
+    assert.deepEqual(panelPlacement({ inline: "auto", open: true, wide: true, ready: false }), { docked: false, drawer: false });
+    // Resolved.
+    assert.deepEqual(panelPlacement({ inline: "auto", open: true, wide: true, ready: true }), { docked: true, drawer: false });
+    assert.deepEqual(panelPlacement({ inline: "auto", open: false, wide: true, ready: true }), { docked: false, drawer: false });
+    assert.deepEqual(panelPlacement({ inline: "auto", open: true, wide: false, ready: true }), { docked: false, drawer: true });
+    // The boolean paths do not wait.
+    assert.deepEqual(panelPlacement({ inline: true, open: false, wide: false, ready: false }), { docked: true, drawer: false });
+    assert.deepEqual(panelPlacement({ inline: false, open: true, wide: true, ready: false }), { docked: false, drawer: true });
+  });
+});

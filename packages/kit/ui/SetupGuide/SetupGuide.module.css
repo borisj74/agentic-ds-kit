@@ -1,11 +1,11 @@
-/* Paper frames are 370px; same custom-width pattern as InsightCard (--insight-width). */
+/* The guide fills its column (no width cap); it is its own container so rows reflow wherever it sits. */
 .card {
-  --setup-width: 24rem;
+  container: setupguide / inline-size;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  width: min(100%, var(--setup-width));
+  width: 100%;
   min-width: 0;
   padding: var(--space-4);
   background-color: var(--bg-surface);
@@ -19,11 +19,6 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--space-6);
-}
-
-.headerIcon {
-  flex-shrink: 0;
-  color: var(--text-fg-muted);
 }
 
 .title {
@@ -52,35 +47,33 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-stack-2xs);
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: var(--border-width-thin) solid var(--line-default);
 }
 
+/* Icon, task, a column of status words, then the one action. Tiles span under the task. */
 .row {
-  display: flex;
+  display: grid;
+  grid-template-areas:
+    "marker text word action"
+    ". tiles tiles tiles";
+  /* Fixed word and action columns so the status words line up from row to row. */
+  grid-template-columns: var(--space-5) minmax(0, 1fr) calc(var(--space-16) * 2) minmax(calc(var(--space-16) * 1.5), auto);
   align-items: center;
-  gap: var(--space-3);
+  column-gap: var(--space-3);
   min-height: var(--space-12);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-surface-md);
+  padding-block: var(--space-2);
 }
 
-.rowCurrent {
-  background-color: var(--bg-subtle);
-  animation: rowIn var(--motion-duration-200) var(--motion-ease-out);
-}
-
-/* Subtle text loses contrast on the current-row fill; use the muted role there. */
-.rowCurrent .rowDescription,
-.rowCurrent .skippedWord {
-  color: var(--text-fg-muted);
+.row + .row {
+  border-top: var(--border-width-thin) solid var(--line-default);
 }
 
 .marker {
+  grid-area: marker;
   display: inline-flex;
-  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: var(--space-5);
@@ -98,6 +91,7 @@
 .ringCurrent {
   border-width: calc(var(--space-1) + 1px);
   border-color: var(--primary);
+  animation: rowIn var(--motion-duration-200) var(--motion-ease-out);
 }
 
 .ringSkipped {
@@ -109,9 +103,13 @@
   animation: checkIn var(--motion-duration-300) var(--motion-ease-spring-soft);
 }
 
+.blockedIcon {
+  color: var(--text-fg-muted);
+}
+
 .text {
+  grid-area: text;
   display: flex;
-  flex: 1 1 0;
   flex-direction: column;
   gap: var(--space-stack-2xs);
   min-width: 0;
@@ -128,56 +126,42 @@
   color: var(--text-fg-muted);
 }
 
-.labelSkipped {
-  text-decoration: line-through;
-}
-
 .rowDescription {
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-}
-
-.trail {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-}
-
-/* Same inline padding and border as a kit sm Button, so the words line up with the Start / Continue labels. */
-.doneWord,
-.skippedWord {
-  padding-inline: calc(var(--space-3) + var(--border-width-thin));
-  font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-xs);
-}
-
-.doneWord {
   color: var(--text-fg-muted);
 }
 
-.skippedWord {
-  color: var(--text-fg-subtle);
+.word {
+  grid-area: word;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
 }
 
-.undo {
-  padding: 0;
-  font: inherit;
+.wordDone {
+  color: var(--status-success-text);
+}
+
+.wordCurrent {
   color: var(--primary-fg);
-  background: none;
-  border: 0;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
 }
 
-.undo:hover {
-  text-decoration: underline;
+.action {
+  grid-area: action;
+  display: inline-flex;
+  justify-content: flex-end;
 }
 
-.undo:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--focus-ring-offset);
+.tiles {
+  grid-area: tiles;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--space-16) * 4.5)), 1fr));
+  gap: var(--grid-gutter-sm);
+  margin: var(--space-3) 0 var(--space-1);
+  padding: 0;
+  list-style: none;
 }
 
 .complete {
@@ -259,10 +243,35 @@
   }
 }
 
+/* Narrow guide: a row with a button puts its status word under the task so the label keeps one line;
+   rows without one keep the word at the end. 30rem matches the kit's narrow card breakpoint
+   (container queries cannot read var()). */
+@container setupguide (max-width: 30rem) {
+  .row {
+    grid-template-areas:
+      "marker text word"
+      "tiles tiles tiles";
+    grid-template-columns: var(--space-5) minmax(0, 1fr) auto;
+  }
+
+  .rowHasAction {
+    grid-template-areas:
+      "marker text action"
+      "marker word action"
+      "tiles tiles tiles";
+    align-items: start;
+  }
+
+  .rowHasAction .marker,
+  .rowHasAction .action {
+    align-self: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .doneIcon,
   .completeIcon,
-  .rowCurrent {
+  .ringCurrent {
     animation: none;
   }
 }

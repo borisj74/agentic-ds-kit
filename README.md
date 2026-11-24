@@ -75,7 +75,7 @@ Blocks are larger kit components for a whole area of a screen (`"kind": "block"`
 - **Productivity** — WorkBoard, ActivityFeed
 - **Analytics** — KpiBoard
 - **Billing** — UsageBilling
-- **Integrations** — AppDirectory
+- **Integrations** — AppDirectory (deprecated: use IntegrationPicker `connectFlow="detail"`)
 - **Pricing** — Plans
 - **Social proof** — LogoStrip
 

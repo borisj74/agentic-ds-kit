@@ -70,7 +70,7 @@ export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">
   /**
    * With `onClick`: the card is a toggle in a picker (e.g. the metric a chart shows). Sets
    * `aria-pressed`, draws the selected style, and adds the badge to the button's name, so a
-   * badge such as "In chart" on the selected card is read with it. Leave undefined otherwise.
+   * badge such as "Charted" on the selected card is read with it. Leave undefined otherwise.
    */
   selected?: boolean;
   /**

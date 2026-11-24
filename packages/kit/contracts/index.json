@@ -48,7 +48,7 @@
   },
   {
     "id": "scoreboard",
-    "intent": "Metrics strip of kit Scorecards. Two to four fill the row; four stay in one row until the strip narrows. More than four compose Conveyor. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
+    "intent": "Metrics strip of kit Scorecards: two to six figures, and the only metric picker. Up to six sit in one row; more wrap, and four or more go two by two when the strip is narrow. Framed cards or a divided strip; selectable turns it into a radiogroup that picks what a chart shows.",
     "group": "component",
     "path": "contracts/scoreboard.json",
     "status": "stable",
@@ -256,7 +256,7 @@
   },
   {
     "id": "datagrid",
-    "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
+    "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings. It validates cells, can total the valid rows, and stacks below 30rem.",
     "group": "component",
     "path": "contracts/datagrid.json",
     "status": "stable",
@@ -1008,7 +1008,7 @@
   },
   {
     "id": "setupguide",
-    "intent": "A first-run checklist with overall progress, each task's status in words (Done, Skipped) and one action per task. Built on kit Progress, Badge, Button and Empty. Not a wizard stepper and not a bare Progress bar.",
+    "intent": "A first-run checklist with overall progress, each task's status as an icon and a word (Done, Current, To do, Blocked, Skipped) and at most one action per task. The current task's action, or its suggested provider's Connect, is the one solid primary. Built on kit Progress, Badge, Button and Empty, with IntegrationPicker's compact tile. Not a wizard stepper and not a bare Progress bar.",
     "group": "component",
     "path": "contracts/setupguide.json",
     "status": "stable",
@@ -1048,7 +1048,7 @@
   },
   {
     "id": "commentspanel",
-    "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+    "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place, and inline=\"auto\" docks it beside the page from --grid-breakpoint-lg.",
     "group": "component",
     "path": "contracts/commentspanel.json",
     "status": "stable",
@@ -1056,7 +1056,7 @@
   },
   {
     "id": "integrationpicker",
-    "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+    "intent": "A filterable catalogue of integrations: search, a category filter with an optional Connected segment, and one tile per provider that ends in a status word (Not connected, Connected, Connecting…, Coming soon) and at most one action (Connect or Manage). connectFlow \"detail\" opens a Drawer with what it can access and Connect or Disconnect. Built on kit Input, SegmentedControl, Button, Badge, Drawer and Empty.",
     "group": "component",
     "path": "contracts/integrationpicker.json",
     "status": "stable",
@@ -1192,10 +1192,10 @@
   {
     "id": "appdirectory",
     "kind": "block",
-    "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
+    "intent": "Deprecated: use IntegrationPicker with connectFlow=\"detail\" and showConnected. AppDirectory now renders exactly that and will be removed in a later release. Block: an app directory with a Connected filter over the catalogue; a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
     "group": "component",
     "path": "contracts/appdirectory.json",
-    "status": "stable",
+    "status": "deprecated",
     "level": "block",
     "category": "Integrations",
     "summary": "Browse, search and connect the apps your workspace works with."
@@ -1214,7 +1214,7 @@
   {
     "id": "kpiboard",
     "kind": "block",
-    "intent": "Block: the top of a dashboard. A Scoreboard of three to six KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+    "intent": "Block: the top of a dashboard. A selectable Scoreboard of three to six KPIs that is also the only picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them. It composes; it does not re-pick.",
     "group": "component",
     "path": "contracts/kpiboard.json",
     "status": "stable",

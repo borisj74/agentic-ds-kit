@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Badge, Conveyor, Scoreboard, Scorecard } from "agentic-ds-kit";
+import { Badge, Card, Conveyor } from "agentic-ds-kit";
 import type { ConveyorOrientation } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
@@ -10,81 +10,31 @@ import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
 const ORIENTATIONS: ConveyorOrientation[] = ["horizontal", "vertical"];
-const CONTENTS = ["scorecards", "chips"] as const;
+const CONTENTS = ["cards", "chips"] as const;
 
 type ContentKind = (typeof CONTENTS)[number];
 
-const METRICS = [
-  {
-    label: "Open invoices",
-    value: "128",
-    delta: "+12%",
-    trend: "up" as const,
-    hint: "MoM",
-    badge: "Month",
-    badgeTone: "info" as const,
-  },
-  {
-    label: "Overdue",
-    value: "$36,420",
-    delta: "+4.1%",
-    trend: "up" as const,
-    hint: "14 accounts",
-    badge: "Month",
-    badgeTone: "warning" as const,
-  },
-  {
-    label: "Days to pay",
-    value: "32 days",
-    delta: "0%",
-    trend: "flat" as const,
-    hint: "Average across accounts",
-  },
-  {
-    label: "Paid",
-    value: "$210,300",
-    delta: "+8.2%",
-    trend: "up" as const,
-    hint: "This month",
-    badge: "Live",
-    badgeTone: "success" as const,
-  },
-  {
-    label: "Disputed",
-    value: "6",
-    delta: "-2",
-    trend: "down" as const,
-    hint: "Needs review",
-    badge: "Watch",
-    badgeTone: "danger" as const,
-  },
-  {
-    label: "Credits",
-    value: "$4,800",
-    hint: "This month",
-  },
-  {
-    label: "Refunds",
-    value: "$1,240",
-    delta: "-0.3%",
-    trend: "down" as const,
-    hint: "This month",
-  },
-  {
-    label: "Trials",
-    value: "48",
-    hint: "12 converting",
-    badge: "Week",
-    badgeTone: "brand" as const,
-  },
-  {
-    label: "Metered usage",
-    value: "4.2M",
-    delta: "+6%",
-    trend: "up" as const,
-    hint: "Events billed",
-  },
+/** Draft invoices to move through: cards, not KPIs (KPIs belong in Scoreboard, which wraps). */
+const INVOICES = [
+  { id: "INV-1887", customer: "Northwind Traders", amount: "$1,088.40", due: "Due 1 Dec" },
+  { id: "INV-1886", customer: "Contoso Retail", amount: "$8,215.00", due: "Due 28 Nov" },
+  { id: "INV-1885", customer: "Fabrikam Labs", amount: "$7,630.00", due: "Due 27 Nov" },
+  { id: "INV-1884", customer: "Tailspin Freight", amount: "$6,905.00", due: "Due 26 Nov" },
+  { id: "INV-1883", customer: "Adatum Health", amount: "$6,120.00", due: "Due 25 Nov" },
+  { id: "INV-1882", customer: "Litware Inc.", amount: "$2,480.00", due: "Due 24 Nov" },
+  { id: "INV-1881", customer: "Proseware", amount: "$1,940.00", due: "Due 22 Nov" },
+  { id: "INV-1880", customer: "Woodgrove Bank", amount: "$12,300.00", due: "Due 20 Nov" },
 ];
+
+function invoiceCards(limit = INVOICES.length) {
+  return INVOICES.slice(0, limit).map((invoice) => (
+    <Card key={invoice.id} size="sm" title={invoice.id} description={invoice.customer}>
+      <p className={doc.cardFigure}>
+        {invoice.amount} · {invoice.due}
+      </p>
+    </Card>
+  ));
+}
 
 const CHIPS = [
   "Open",
@@ -106,14 +56,14 @@ const CHIPS = [
 function masterCode(orientation: ConveyorOrientation, content: ContentKind) {
   const lines = ["<Conveyor"];
   if (orientation !== "horizontal") lines.push(`  orientation="${orientation}"`);
-  lines.push(`  label="${content === "chips" ? "Filters" : "Key metrics"}"`);
+  lines.push(`  label="${content === "chips" ? "Filters" : "Draft invoices"}"`);
   if (content === "chips") {
     lines.push(">");
     lines.push("  {chips}");
     lines.push("</Conveyor>");
   } else {
     lines.push(">");
-    lines.push("  <Scoreboard scroll={false} items={metrics} />");
+    lines.push("  <div className=\"row\">{invoices.map((i) => <Card key={i.id} title={i.id} description={i.customer}>…</Card>)}</div>");
     lines.push("</Conveyor>");
   }
   return lines.join("\n");
@@ -122,14 +72,14 @@ function masterCode(orientation: ConveyorOrientation, content: ContentKind) {
 export function ConveyorDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
   const [orientation, setOrientation] = useState<ConveyorOrientation>("horizontal");
-  const [content, setContent] = useState<ContentKind>("scorecards");
+  const [content, setContent] = useState<ContentKind>("cards");
   const vertical = orientation === "vertical";
   const padClass = vertical
     ? `${doc.previewPad} ${doc.previewPadVertical}`
     : content === "chips"
       ? `${doc.previewPad} ${doc.previewPadChips}`
       : doc.previewPad;
-  const label = content === "chips" ? "Filters" : "Key metrics";
+  const label = content === "chips" ? "Filters" : "Draft invoices";
 
   const chips = CHIPS.map((chip) => (
     <Badge key={chip} tone="neutral">
@@ -140,14 +90,8 @@ export function ConveyorDoc() {
   const run =
     content === "chips" ? (
       <div className={vertical ? doc.chipCol : doc.chipRow}>{chips}</div>
-    ) : vertical ? (
-      <div className={doc.scoreStack}>
-        {METRICS.map((item) => (
-          <Scorecard key={item.label} {...item} />
-        ))}
-      </div>
     ) : (
-      <Scoreboard scroll={false} items={METRICS} />
+      <div className={vertical ? doc.scoreStack : doc.cardRow}>{invoiceCards()}</div>
     );
 
   return (
@@ -229,13 +173,13 @@ export function ConveyorDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Conveyor around a run that does not fit: eight Scorecards, a row of Badge
-                  chips, or a tall side list. One component — put the run inside it. Arrows show
+                  Use Conveyor around a run of chips or cards that does not fit: a row of Badge
+                  chips, draft invoices, or a tall side list. It is not for KPIs: Scoreboard wraps
+                  its figures and is the only metric picker. One component — put the run inside it. Arrows show
                   only when there is overflow, and each one disables at its end. A soft fade sits
                   where content passes under an arrow. A press moves most of a screenful, or the
                   step you set. Trackpad, wheel, and drag still work. Focus the run; arrow keys
-                  scroll it. A Scoreboard past four cards already puts itself in one, so wrap a
-                  Scoreboard by hand only when you want other settings, and pass it scroll off. For
+                  scroll it. For
                   paged slides with a Slide 2 of 5 caption, use Carousel. In a box narrower than
                   40rem (--grid-breakpoint-sm), the arrows give way to swipe: the track keeps the
                   whole width and comes to rest on a whole piece. It stays a focus stop, so the
@@ -251,8 +195,8 @@ export function ConveyorDoc() {
               <h2 className={styles.exampleTitle}>A row that does not fit</h2>
               <div className={styles.exampleCanvas}>
                 <div className={doc.previewPad}>
-                  <Conveyor label="Key metrics">
-                    <Scoreboard scroll={false} items={METRICS} />
+                  <Conveyor label="Draft invoices">
+                    <div className={doc.cardRow}>{invoiceCards()}</div>
                   </Conveyor>
                 </div>
               </div>
@@ -260,41 +204,13 @@ export function ConveyorDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   The arrows show only when there is something to scroll, and turn off at the ends.
-                  Pass scroll off when a page already wraps Scoreboard in Conveyor.
+                  Put chips or cards inside; KPIs go in Scoreboard, which wraps instead.
                 </p>
               </div>
               <CodeBlock
-                code={`<Conveyor label="Key metrics">
-  <Scoreboard scroll={false} items={metrics} />
+                code={`<Conveyor label="Draft invoices">
+  <div className="row">{invoiceCards}</div>
 </Conveyor>`}
-              />
-            </section>
-
-            <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Scoreboard past four cards</h2>
-              <div className={styles.exampleCanvas}>
-                <div className={doc.previewPad}>
-                  <Scoreboard items={METRICS} />
-                </div>
-              </div>
-              <div>
-                <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>
-                  More than four items compose kit Conveyor. Do not wrap this again, and do not
-                  invent a local scroller.
-                </p>
-              </div>
-              <CodeBlock
-                code={`<Scoreboard
-  items={[
-    { label: "Open invoices", value: "128" },
-    { label: "Overdue", value: "$36,420" },
-    { label: "Days to pay", value: "32 days" },
-    { label: "Paid", value: "$210,300" },
-    { label: "Disputed", value: "6" },
-    { label: "Credits", value: "$4,800" },
-  ]}
-/>`}
               />
             </section>
 
@@ -303,11 +219,9 @@ export function ConveyorDoc() {
               <div className={styles.exampleCanvas}>
                 <div className={`${doc.previewPad} ${doc.previewPadVertical}`}>
                   <div className={doc.verticalFrame}>
-                    <Conveyor orientation="vertical" label="Accounts">
+                    <Conveyor orientation="vertical" label="Draft invoices">
                       <div className={doc.scoreStack}>
-                        {METRICS.slice(0, 6).map((item) => (
-                          <Scorecard key={item.label} {...item} />
-                        ))}
+                        {invoiceCards(6)}
                       </div>
                     </Conveyor>
                   </div>
@@ -321,7 +235,7 @@ export function ConveyorDoc() {
                 </p>
               </div>
               <CodeBlock
-                code={`<Conveyor orientation="vertical" label="Accounts">
+                code={`<Conveyor orientation="vertical" label="Draft invoices">
   {cards}
 </Conveyor>`}
               />

@@ -110,6 +110,7 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "revenue",
     label: "Revenue",
+    goodWhen: "up",
     values: {
       "7d": { value: "$11.6k", delta: "+3.8%", trend: "up" },
       "30d": { value: "$48.2k", delta: "+12.4%", trend: "up" },
@@ -122,6 +123,7 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "users",
     label: "Active users",
+    goodWhen: "up",
     values: {
       "7d": { value: "4,912", delta: "+1.2%", trend: "up" },
       "30d": { value: "12.4k", delta: "+4.1%", trend: "up" },
@@ -138,6 +140,7 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "conversion",
     label: "Trial to paid",
+    goodWhen: "up",
     values: {
       "7d": { value: "4.6%", delta: "−0.3 pt", trend: "down" },
       "30d": { value: "5.1%", delta: "+0.4 pt", trend: "up" },
@@ -155,10 +158,11 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "churn",
     label: "Churn",
+    goodWhen: "down",
     values: {
-      "7d": { value: "0.4%", delta: "+0.1 pt", trend: "up", deltaTone: "danger" },
-      "30d": { value: "1.2%", delta: "−0.3 pt", trend: "down", deltaTone: "success" },
-      "90d": { value: "3.9%", delta: "−0.8 pt", trend: "down", deltaTone: "success" },
+      "7d": { value: "0.4%", delta: "+0.1 pt", trend: "up" },
+      "30d": { value: "1.2%", delta: "−0.3 pt", trend: "down" },
+      "90d": { value: "3.9%", delta: "−0.8 pt", trend: "down" },
     },
     columns: [
       { key: "plan", header: "Plan", wrap: true },
@@ -172,6 +176,7 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "nps",
     label: "NPS",
+    goodWhen: "up",
     values: {
       "7d": { value: "61", delta: "+3", trend: "up" },
       "30d": { value: "58", delta: "+1", trend: "up" },
@@ -189,10 +194,11 @@ export const KPI_METRICS: KpiBoardMetric[] = [
   {
     id: "tickets",
     label: "Support tickets",
+    goodWhen: "down",
     values: {
-      "7d": { value: "71", delta: "+9%", trend: "up", deltaTone: "danger" },
-      "30d": { value: "288", delta: "−4%", trend: "down", deltaTone: "success" },
-      "90d": { value: "902", delta: "+11%", trend: "up", deltaTone: "danger" },
+      "7d": { value: "71", delta: "+9%", trend: "up" },
+      "30d": { value: "288", delta: "−4%", trend: "down" },
+      "90d": { value: "902", delta: "+11%", trend: "up" },
     },
     columns: [
       { key: "topic", header: "Topic", wrap: true },
