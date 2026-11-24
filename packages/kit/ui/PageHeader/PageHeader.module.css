@@ -59,6 +59,18 @@
   color: var(--text-secondary);
 }
 
+/* A node subtitle can lead with a lucide icon: muted, 16px, centred on the first line box, and
+   inline so <strong> or a Link in the same line keeps flowing as text. */
+.subtitle > svg {
+  display: inline-block;
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  margin-block-start: calc((var(--type-line-body) - var(--icon-size-sm)) / 2);
+  margin-inline-end: var(--space-1);
+  vertical-align: top;
+  color: var(--icon-muted);
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
