@@ -61,6 +61,11 @@ export function SignInScreen({ view }: { view?: string }) {
           })
         }
         onVerifyCode={(code) => later(() => setError(code === "000000" ? EXPIRED_CODE : undefined))}
+        onBack={() => {
+          setError(undefined);
+          setStep("credentials");
+        }}
+        onBackupCode={() => {}}
         onProvider={() => {}}
         onForgotPassword={() => {}}
         onSwitchMode={view === "sign-up" ? setMode : undefined}

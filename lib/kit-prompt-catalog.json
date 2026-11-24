@@ -14590,6 +14590,16 @@
           "required": false,
           "note": "(code: string) => void. Called from the code step only after all 6 digits are entered."
         },
+        "onBack": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Code step: shows a ghost sm \"Back\" button with ChevronLeft, at the start of the row under Verify. Set step back to \"credentials\" in it; focus returns to Password."
+        },
+        "onBackupCode": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Code step: shows a ghost sm \"Use a backup code\" button at the end of the row under Verify."
+        },
         "onProvider": {
           "type": "function",
           "required": false,

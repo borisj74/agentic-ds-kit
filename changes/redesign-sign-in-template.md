@@ -6,3 +6,4 @@
 ### Added
 
 - Sign in template: `step` (`"credentials"` | `"code"`) and `onVerifyCode` for a one-time code step on InputOTP md (6 digits, groups 3 + 3, `autoComplete="one-time-code"`), with Verify as that step's one primary.
+- Sign in template: `onBack` and `onBackupCode` show ghost "Back" and "Use a backup code" buttons under Verify on the code step.

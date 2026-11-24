@@ -55,6 +55,10 @@ export interface SignInPatternProps {
   onSubmit?: (values: SignInValues) => void;
   /** Called with the 6-digit code when the code step is submitted. */
   onVerifyCode?: (code: string) => void;
+  /** Code step: shows a ghost "Back" button. Set step back to "credentials" in it; focus returns to Password. */
+  onBack?: () => void;
+  /** Code step: shows a ghost "Use a backup code" button. */
+  onBackupCode?: () => void;
   onProvider?: (id: string) => void;
   /** Shows "Forgot password?" in sign-in mode. */
   onForgotPassword?: () => void;
@@ -98,6 +102,8 @@ const CODE_COPY = {
   hint: "The code changes every 30 seconds.",
   submit: "Verify",
   busy: "Verifying…",
+  back: "Back",
+  backupCode: "Use a backup code",
 } as const;
 
 const INVITE = "No account? Ask your admin for an invite.";
@@ -147,6 +153,8 @@ export function SignInPattern({
   providers,
   onSubmit,
   onVerifyCode,
+  onBack,
+  onBackupCode,
   onProvider,
   onForgotPassword,
   onSwitchMode,
@@ -379,6 +387,22 @@ export function SignInPattern({
         />
       </Field>
       {primary}
+      {onBack || onBackupCode ? (
+        <div className="sign-in-pattern__row">
+          {onBack ? (
+            <Button appearance="ghost" mode="neutral" size="sm" iconStart="ChevronLeft" onClick={onBack}>
+              {CODE_COPY.back}
+            </Button>
+          ) : (
+            <span />
+          )}
+          {onBackupCode ? (
+            <Button appearance="ghost" mode="neutral" size="sm" onClick={onBackupCode}>
+              {CODE_COPY.backupCode}
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </form>
   );
 

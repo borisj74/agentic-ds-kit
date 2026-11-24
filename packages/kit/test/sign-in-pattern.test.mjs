@@ -202,6 +202,15 @@ describe("SignInPattern code step", () => {
     assert.ok(!html.includes(">Sign up<"), "no footer on the code step");
   });
 
+  test("Back and Use a backup code show only with their callbacks, as ghost buttons under Verify", () => {
+    const none = ssr({ step: "code" });
+    assert.ok(!none.includes(">Back<") && !none.includes("Use a backup code"));
+    const both = ssr({ step: "code", onBack() {}, onBackupCode() {} });
+    const verify = both.indexOf(">Verify<");
+    assert.ok(verify > 0 && verify < both.indexOf("Back<") && both.indexOf("Back<") < both.indexOf("Use a backup code"));
+    assert.equal((both.match(/type="submit"/g) ?? []).length, 1, "Back and backup code are not submit buttons");
+  });
+
   test("error on the code step is the Field error, not an Alert", () => {
     const html = ssr({ step: "code", error: { title: "That code expired.", detail: "Enter the new one from your app." } });
     assert.ok(!html.includes('role="alert"'), "no Alert on the code step");
@@ -231,6 +240,11 @@ describe("SignInPattern code step", () => {
     assert.equal(input.value, "", "the slots clear on a new error");
     assert.equal(document.activeElement, input);
 
+    let backs = 0;
+    await rerender({ ...props, step: "code", onBack: () => backs++ });
+    const back = [...container.querySelectorAll("button")].find((b) => b.textContent.includes("Back"));
+    await act(async () => back.click());
+    assert.equal(backs, 1);
     await rerender({ ...props, step: "credentials" });
     assert.equal(document.activeElement, container.querySelector("input[type=password]"), "back returns to Password");
   });

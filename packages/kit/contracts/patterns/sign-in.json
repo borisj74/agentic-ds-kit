@@ -62,6 +62,16 @@
       "required": false,
       "note": "(code: string) => void. Called from the code step only after all 6 digits are entered."
     },
+    "onBack": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Code step: shows a ghost sm \"Back\" button with ChevronLeft, at the start of the row under Verify. Set step back to \"credentials\" in it; focus returns to Password."
+    },
+    "onBackupCode": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. Code step: shows a ghost sm \"Use a backup code\" button at the end of the row under Verify."
+    },
     "onProvider": {
       "type": "function",
       "required": false,
@@ -91,7 +101,7 @@
   "a11y": {
     "requirements": [
       "Card headingLevel 1: the card title is the page's one h1 (\"Sign in\", then \"Enter your code\")",
-      "Tab order: SSO → (name) → email → password → remember → forgot → primary → footer button; below --grid-breakpoint-sm Forgot sits after the primary",
+      "Tab order: SSO → (name) → email → password → remember → forgot → primary → footer button; below --grid-breakpoint-sm Forgot sits after the primary; code step: code → Verify → Back → Use a backup code",
       "Enter in any input submits (form with a type=submit primary)",
       "Autocomplete: email username, password current-password (new-password on sign-up), code one-time-code with inputmode numeric",
       "Validation errors go through Field error; focus moves to the first invalid input",
