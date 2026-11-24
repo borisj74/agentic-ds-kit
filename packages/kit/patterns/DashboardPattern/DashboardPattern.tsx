@@ -24,6 +24,7 @@ import { Table } from "../../ui/Table";
 import type { TableColumn } from "../../ui/Table";
 import { Tabs } from "../../ui/Tabs";
 import { AppShellPattern, useAppShell } from "../AppShellPattern";
+import { largestDrop, mrrSteps } from "./mrrSteps";
 import type { AppShellPatternProps } from "../AppShellPattern";
 import {
   CHANGES,
@@ -416,21 +417,20 @@ export function DashboardPattern({
 
   // MRR only (a running total): how much it moved each bucket, as a strip under the area, and a
   // tooltip note on the largest drop. Flows and rates already show change, so they get neither.
-  const mrrSteps =
-    metric?.id === "mrr" ? metric.series.current.map((v, i, all) => (i === 0 ? 0 : v - (all[i - 1] ?? v))) : null;
+  const steps = metric?.id === "mrr" ? mrrSteps(metric, metrics) : null;
   const unit = granularity === "daily" ? "day" : granularity === "weekly" ? "week" : "month";
   const mainStrip =
-    metric && mrrSteps
+    metric && steps
       ? {
           label: `Net change per ${unit}`,
-          data: mrrSteps,
+          data: steps,
           format: (v: number) => (v > 0 ? `+${metric.format(v)}` : v < 0 ? `\u2212${metric.format(-v)}` : metric.format(0)),
         }
       : undefined;
-  const dropAt = mrrSteps ? mrrSteps.reduce((at, v, i) => (v < (mrrSteps[at] ?? 0) ? i : at), 0) : -1;
+  const dropAt = steps ? largestDrop(steps) : -1;
   const periodShort = PERIODS.find((p) => p.value === period)?.short ?? "this period";
   const mainNote =
-    mrrSteps && dropAt > 0 && (mrrSteps[dropAt] ?? 0) < 0
+    dropAt >= 0
       ? (index: number) => (index === dropAt ? `The largest drop in the ${periodShort}.` : undefined)
       : undefined;
 
