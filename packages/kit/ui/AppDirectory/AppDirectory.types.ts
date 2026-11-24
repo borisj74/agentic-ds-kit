@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { IntegrationItem } from "../IntegrationPicker/IntegrationPicker.types";
 
-/** One app in the directory: an IntegrationPicker item plus what its detail drawer shows. */
+/** One app in the directory. IntegrationItem now carries the drawer fields itself. */
 export interface AppDirectoryApp extends IntegrationItem {
   /** Who makes it, e.g. "Example Inc." Shown under the name in the drawer. */
   publisher?: string;

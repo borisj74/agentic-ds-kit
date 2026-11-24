@@ -2,11 +2,12 @@
   "id": "integrationpicker",
   "status": "stable",
   "level": "organism",
-  "intent": "A filterable catalogue of integrations: search, a category filter and one tile per provider with one action (Connect, Manage, or a disabled Connect with a Coming soon badge). Built on kit Input, SegmentedControl, Button, Badge and Empty.",
+  "intent": "A filterable catalogue of integrations: search, a category filter with an optional Connected segment, and one tile per provider that ends in a status word (Not connected, Connected, Connecting…, Coming soon) and at most one action (Connect or Manage). connectFlow \"detail\" opens a Drawer with what it can access and Connect or Disconnect. Built on kit Input, SegmentedControl, Button, Badge, Drawer and Empty.",
   "useWhen": [
     "let people find and connect integrations in settings or onboarding",
     "show which integrations are connected",
-    "list providers that are coming soon"
+    "list providers that are coming soon",
+    "an Integrations or Apps area where people read what an app can access before connecting (connectFlow \"detail\")"
   ],
   "doNotUseWhen": [
     "settings for one connected integration — the integration-settings pattern",
@@ -16,6 +17,7 @@
   "contains": [
     "badge",
     "button",
+    "drawer",
     "empty",
     "input",
     "segmentedcontrol",
@@ -25,7 +27,7 @@
     "items": {
       "type": "array",
       "required": true,
-      "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon? }[]"
+      "note": "{ id, name, description, category?, status: 'available'|'connected'|'comingSoon', icon?, publisher?, about?, permissions?: string[], connectedNote? }[]. publisher, about, permissions and connectedNote show in the connectFlow \"detail\" drawer."
     },
     "title": {
       "type": "string",
@@ -46,7 +48,8 @@
     },
     "category": {
       "type": "string",
-      "default": "all"
+      "default": "all",
+      "note": "\"all\", \"connected\" (the Connected segment, with showConnected) or a category name."
     },
     "onCategoryChange": {
       "type": "function",
@@ -56,18 +59,62 @@
       "type": "string[]",
       "required": false
     },
+    "showConnected": {
+      "type": "boolean",
+      "default": false,
+      "note": "Adds a \"Connected n\" segment after All; its value is \"connected\"."
+    },
+    "connectFlow": {
+      "type": "enum",
+      "values": [
+        "direct",
+        "detail"
+      ],
+      "default": "direct",
+      "note": "detail: Connect and Manage open a Drawer with the item's detail, what it can access, and Connect or Disconnect."
+    },
+    "tileSize": {
+      "type": "enum",
+      "values": [
+        "default",
+        "compact"
+      ],
+      "default": "default",
+      "note": "compact: name, description and the word or action on one row."
+    },
     "onConnect": {
       "type": "function",
-      "required": true
+      "required": true,
+      "note": "(id) => void. Direct: the tile's Connect. Detail: the drawer's Connect."
     },
     "onManage": {
       "type": "function",
+      "required": false,
+      "note": "(id) => void. Direct: the tile's Manage on a connected item. Detail: Manage opens the drawer."
+    },
+    "onDisconnect": {
+      "type": "function",
+      "required": false,
+      "note": "(id) => void. Detail: Disconnect in a connected item's drawer."
+    },
+    "selectedId": {
+      "type": "string",
+      "required": false,
+      "note": "Detail, controlled: the item whose drawer is open, or null."
+    },
+    "defaultSelectedId": {
+      "type": "string",
       "required": false
+    },
+    "onSelectedChange": {
+      "type": "function",
+      "required": false,
+      "note": "(id | null) => void"
     },
     "connectingId": {
       "type": "string",
       "required": false,
-      "note": "That tile shows Connecting… (solid primary)."
+      "note": "That tile reads Connecting… as a status word, with no button, announced in a status region."
     },
     "onRequest": {
       "type": "function",
@@ -112,16 +159,18 @@
     "status.success",
     "status.successText",
     "grid.gutter.sm",
-    "motion.duration200"
+    "motion.duration200",
+    "type.size.bodyMd"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
-      "search is a labelled kit Input; the category filter is a kit SegmentedControl radio group",
+      "search is a labelled kit Input; the category filter is a kit SegmentedControl radio group, and Connected is a radio in it with its count in the name",
       "each tile action is described by the provider name",
-      "Connected and Coming soon are words, not colour alone; coming soon has a disabled Connect",
+      "every tile ends in a status word, not colour alone; Connecting and Coming soon have no button, so nothing disabled sits in the tab order",
       "Connecting is announced in a status region",
+      "the detail drawer is a kit Drawer (dialog, focus trap, Escape, focus returns to the tile action)",
       "tiles fade and rise in when the filter changes, off under prefers-reduced-motion"
     ]
   },
@@ -129,7 +178,8 @@
     "Do not invent a local IntegrationGrid or AppDirectory",
     "Do not use a real provider's logo or name without labelling it an example",
     "Do not put more than one action on a tile",
+    "Do not put a disabled Connect on a coming-soon or connecting tile; the status word says it",
     "Do not use raw hex"
   ],
-  "snippet": "<IntegrationPicker note=\"example providers\" items={integrations} onConnect={connect} onManage={manage} connectingId={connecting} onRequest={request} />"
+  "snippet": "<IntegrationPicker note=\"example providers\" items={integrations} showConnected connectFlow=\"detail\" onConnect={connect} onDisconnect={disconnect} connectingId={connecting} onRequest={request} />"
 }

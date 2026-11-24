@@ -15,13 +15,9 @@
 
 .header {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: baseline;
   gap: var(--space-2);
-}
-
-.headerIcon {
-  flex-shrink: 0;
-  color: var(--text-fg-muted);
 }
 
 .title {
@@ -36,7 +32,7 @@
 .note {
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .controls {
@@ -141,21 +137,118 @@
   min-height: var(--space-8);
 }
 
-.connected {
+.status {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.statusConnected {
   color: var(--status-success-text);
 }
 
-.connected svg {
+.statusConnected svg {
   color: var(--status-success);
 }
 
-.connecting svg {
+.statusConnecting svg {
   animation: integrationSpin 1s linear infinite;
+}
+
+/* The action sits at the end even when there is no status word before it. */
+.tileFoot > :last-child {
+  margin-inline-start: auto;
+}
+
+/* Compact: logo, name and description, then the word or action on one row (SetupGuide uses this too). */
+.gridCompact {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--space-16) * 4.5)), 1fr));
+}
+
+/* Wraps the action under the name when the tile is too narrow for both. */
+.tileCompact {
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.tileCompact .tileHead {
+  flex: 1 1 calc(var(--space-16) * 2);
+  min-width: 0;
+}
+
+.tileCompact .tileFoot {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+/* Detail drawer (connectFlow "detail"). */
+.detail {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Logo and status read as one unit, so the Badge sits next to the logo, not at the far edge. */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Same as the tile logo, a size up. */
+.detailLogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-10);
+  height: var(--space-10);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-surface-md);
+  background-color: var(--bg-subtle);
+  color: var(--text-fg);
+}
+
+.about {
+  margin: 0;
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  color: var(--text-fg);
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+}
+
+.permissions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.permissionList {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
 }
 
 .empty {
@@ -201,7 +294,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .tile,
-  .connecting svg {
+  .statusConnecting svg {
     animation: none;
   }
 }

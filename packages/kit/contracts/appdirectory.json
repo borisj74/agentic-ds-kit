@@ -3,9 +3,9 @@
   "kind": "block",
   "category": "Integrations",
   "summary": "Browse, search and connect the apps your workspace works with.",
-  "status": "stable",
+  "status": "deprecated",
   "level": "block",
-  "intent": "Block: an app directory. A Connected filter chip over the IntegrationPicker catalogue (search, categories, one tile per app); a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
+  "intent": "Deprecated: use IntegrationPicker with connectFlow=\"detail\" and showConnected. AppDirectory now renders exactly that and will be removed in a later release. Block: an app directory with a Connected filter over the catalogue; a tile's Connect or Manage opens a Drawer with the app's detail, what it can access, and Connect or Disconnect.",
   "useWhen": [
     "an Integrations or Apps area where people find, connect and disconnect apps",
     "show which apps are connected and what each one can access",
@@ -17,11 +17,6 @@
     "choosing a plan — PricingPlans"
   ],
   "contains": [
-    "badge",
-    "button",
-    "drawer",
-    "empty",
-    "filterbutton",
     "integrationpicker"
   ],
   "props": {
@@ -56,7 +51,7 @@
     "connectedOnly": {
       "type": "boolean",
       "required": false,
-      "note": "Controlled Connected chip."
+      "note": "Controlled Connected filter (the picker's \"connected\" category)."
     },
     "defaultConnectedOnly": {
       "type": "boolean",
@@ -121,43 +116,21 @@
     "rest": "section"
   },
   "layout": [
-    "head: h2 title and the connected count, with the Connected FilterButton at the end; wraps on narrow blocks",
-    "body: IntegrationPicker, whose tiles fill the row at 14rem or more (one column at 390)",
-    "detail: a right Drawer (md); on narrow screens the kit Drawer's own sizing applies"
+    "renders IntegrationPicker connectFlow=\"detail\" showConnected: h3 title with the connected count, search, categories with Connected, tiles",
+    "detail: IntegrationPicker's right Drawer"
   ],
-  "tokens": [
-    "text.fg",
-    "text.fgMuted",
-    "bg.subtle",
-    "line.default",
-    "type.size.uiXl",
-    "type.size.bodyMd",
-    "type.size.bodySm",
-    "type.weight.label",
-    "type.weight.heading",
-    "type.tracking.heading",
-    "type.family.heading",
-    "layout.gutter.md",
-    "layout.gutter.sm",
-    "radius.surface.md"
-  ],
+  "tokens": [],
   "a11y": {
     "element": "section",
     "requirements": [
-      "section aria-labelledby the h2 title; place it inside the page's <main>",
-      "the Connected chip is a kit FilterButton toggle with aria-pressed, described by the connected count",
-      "search, category and tiles are IntegrationPicker's: a labelled Input, a SegmentedControl radio group, tile actions described by the app name",
-      "the detail is a kit Drawer (dialog, focus trap, Escape, focus returns to the tile action)",
-      "the drawer says the status in words (Badge), not colour alone; Connecting is announced in a status region",
-      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+      "the same as IntegrationPicker with connectFlow \"detail\": a labelled section, a SegmentedControl radio group with Connected, tile actions described by the app name, a kit Drawer that returns focus",
+      "place it inside the page's <main>"
     ]
   },
   "doNot": [
-    "Do not rebuild AppDirectory from a local grid of cards; import the block",
-    "Do not connect straight from a tile here; the tile opens the detail, the drawer connects",
+    "Do not use AppDirectory in new code; use IntegrationPicker connectFlow=\"detail\"",
     "Do not use a real provider's logo or name without labelling it an example",
-    "Do not use raw hex",
-    "Only one solid primary in the view: Connect in the open drawer"
+    "Do not use raw hex"
   ],
   "snippet": "<AppDirectory note=\"example providers\" apps={apps} onConnect={connect} onDisconnect={disconnect} connectingId={connecting} onRequest={request} />"
 }
