@@ -65,7 +65,7 @@
         "lg"
       ],
       "default": "md",
-      "note": "sm: in a chart, list or table cell. Bare 16px icon, title as one sentence with no heading, one neutral sm Button. md: a whole card body. 32px icon tile and a title; put card actions in the Card footer. lg: a page. 40px tile, heading-5 title, one primary and up to two neutral Buttons."
+      "note": "sm: in a chart, list or table cell. Bare 16px icon and the title as one sentence on one row with no heading, one neutral sm Button. md: a whole card body. 32px icon tile and a title; put card actions in the Card footer. lg: a page. 40px tile, heading-5 title, one primary and up to two neutral Buttons."
     }
   },
   "passthrough": {

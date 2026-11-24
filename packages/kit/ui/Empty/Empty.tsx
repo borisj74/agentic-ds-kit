@@ -47,19 +47,21 @@ export function Empty({
       data-kind={kind}
       className={cx(styles.root, styles[size], outlined && styles.outlined, className)}
     >
-      {showIcon ? (
-        <div className={cx(styles.mediaWell, kind === "first-use" && styles.brandWell)} aria-hidden>
-          {icon ? (
-            <LucideByName name={icon} size={iconSize} />
-          ) : KindIcon ? (
-            <KindIcon size={iconSize} strokeWidth={ICON_STROKE} aria-hidden />
-          ) : null}
+      <div className={styles.lead}>
+        {showIcon ? (
+          <div className={cx(styles.mediaWell, kind === "first-use" && styles.brandWell)} aria-hidden>
+            {icon ? (
+              <LucideByName name={icon} size={iconSize} />
+            ) : KindIcon ? (
+              <KindIcon size={iconSize} strokeWidth={ICON_STROKE} aria-hidden />
+            ) : null}
+          </div>
+        ) : null}
+        {showMedia ? <div className={styles.mediaSlot}>{media}</div> : null}
+        <div className={styles.copy}>
+          {size === "sm" ? <p className={styles.sentence}>{title}</p> : <h3 className={styles.title}>{title}</h3>}
+          {description ? <p className={styles.description}>{description}</p> : null}
         </div>
-      ) : null}
-      {showMedia ? <div className={styles.mediaSlot}>{media}</div> : null}
-      <div className={styles.copy}>
-        {size === "sm" ? <p className={styles.sentence}>{title}</p> : <h3 className={styles.title}>{title}</h3>}
-        {description ? <p className={styles.description}>{description}</p> : null}
       </div>
       {actions ? <div className={styles.actions}>{actions}</div> : null}
     </div>

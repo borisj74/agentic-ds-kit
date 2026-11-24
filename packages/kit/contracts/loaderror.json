@@ -37,7 +37,7 @@
         "lg"
       ],
       "default": "sm",
-      "note": "Same scale as Empty. sm: in a chart, list or table cell, bare 16px icon. md: a card body, 32px danger tile. lg: a page, 40px tile and a larger message."
+      "note": "Same scale as Empty. sm: in a chart, list or table cell, bare 16px icon and the message on one row. md: a card body, 32px danger tile. lg: a page, 40px tile and a heading-5 message, like Empty lg."
     }
   },
   "passthrough": {
@@ -60,13 +60,15 @@
     "space.10",
     "type.size.bodySm",
     "type.size.caption",
-    "type.size.uiLg",
     "type.line.bodySm",
     "type.line.uiXs",
-    "type.line.uiLg",
     "type.weight.label",
     "type.weight.heading",
-    "font.mono"
+    "font.mono",
+    "type.size.heading5",
+    "type.line.heading5",
+    "type.tracking.heading5",
+    "space.2"
   ],
   "a11y": {
     "element": "div",

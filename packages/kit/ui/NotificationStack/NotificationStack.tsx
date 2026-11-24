@@ -214,7 +214,7 @@ function Panel({
             ))}
           </div>
         ) : error ? (
-          <LoadError className={styles.error} message={error} onRetry={onRetry} />
+          <LoadError message={error} onRetry={onRetry} />
         ) : items.length === 0 ? (
           <Empty className={styles.empty} title={emptyTitle} description={emptyDescription} icon="Bell" />
         ) : (

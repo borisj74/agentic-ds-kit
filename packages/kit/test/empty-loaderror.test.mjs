@@ -127,6 +127,17 @@ describe("LoadError focus", { skip: JSDOM ? false : "jsdom is not installed" }, 
     assert.equal(container.querySelector("button"), null, "loading replaced the error");
     await React.act(async () => show("error"));
     assert.equal(document.activeElement?.textContent, "Try again", "focus is back on Try again");
+
+    // A retry on one error must not pull focus into a different error.
+    container.querySelector("button").click();
+    await React.act(async () => {});
+    document.activeElement?.blur();
+    const other = document.createElement("div");
+    document.body.appendChild(other);
+    const otherRoot = createRoot(other);
+    await React.act(async () => otherRoot.render(h(kit.LoadError, { message: "Couldn’t load invoices.", onRetry() {} })));
+    assert.notEqual(document.activeElement, other.querySelector("button"), "a different error does not take focus");
+    await React.act(async () => otherRoot.unmount());
     await React.act(async () => root.unmount());
     dom.window.close();
   });

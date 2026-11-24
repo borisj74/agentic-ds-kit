@@ -18,6 +18,21 @@
   padding: var(--space-8) var(--space-6);
 }
 
+/* md and lg stack the tile over the copy; sm puts the bare icon and the sentence on one row. */
+.lead {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.sm .lead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: start;
+}
+
 .outlined {
   border: var(--border-100) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);

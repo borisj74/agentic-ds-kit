@@ -277,10 +277,6 @@
   width: 100%;
 }
 
-.error {
-  margin: var(--space-3);
-}
-
 .empty {
   padding-block: var(--space-6);
 }
