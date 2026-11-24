@@ -2,7 +2,7 @@
   "id": "datagrid",
   "status": "stable",
   "level": "organism",
-  "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings.",
+  "intent": "An editable table: people click a cell to add or change its content, like rule conditions, line items, or mappings. It validates cells, can total the valid rows, and stacks below 30rem.",
   "useWhen": [
     "People build or change rows in place: rule conditions, price tiers, field mappings, line items",
     "Short editable lists where a form per row would be slow"
@@ -20,12 +20,15 @@
       "itemShape": {
         "key": "string",
         "header": "string",
-        "type": "text | select | date?",
+        "type": "text | select | date | number | money?",
         "options": "{ value: string, label: string }[]?",
         "placeholder": "string?",
-        "width": "string?"
+        "width": "string?",
+        "currency": "string?",
+        "compute": "(row) => string?",
+        "validate": "(value, row) => string | undefined?"
       },
-      "note": "type defaults to text. select needs options. date is kit DatePicker; value is YYYY-MM-DD. Do not add type formula \u2014 this kit has no FormulaEditor; stop and ask."
+      "note": "type defaults to text. select needs options. date is kit DatePicker; value is YYYY-MM-DD. number and money are end-aligned with tabular figures and hold decimal strings (\"18\", \"39.00\"); money shows them in currency (default USD). compute makes a derived, read-only column such as Amount = Qty \u00d7 Unit price; it is not a formula editor. validate returns a short fix (\"enter 1 or more\") or undefined. Do not add type formula: there is no FormulaEditor; a computed column is the only derived value."
     },
     "rows": {
       "type": "array",
@@ -61,7 +64,7 @@
     "canAddRows": {
       "type": "boolean",
       "default": false,
-      "note": "Add row button under the grid. Not primary. New row starts empty; first cell opens for editing."
+      "note": "Add row button under the grid. Not primary. New row starts empty; first cell opens for editing (when stacked, the row opens)."
     },
     "canRemoveRows": {
       "type": "boolean",
@@ -82,6 +85,16 @@
       "type": "boolean",
       "default": false,
       "note": "The # column (if shown) and the first data column stay in place while the grid scrolls sideways."
+    },
+    "totals": {
+      "type": "function",
+      "required": false,
+      "note": "(validRows) => { label, value, emphasis?, narrowLabel? }[]. Footer lines worked out from rows with no invalid cell, e.g. Subtotal, VAT 20%, Total. Values are pre-formatted. The emphasised line is the grand total and the only one shown when the grid stacks, with narrowLabel (\"Total incl. VAT\")."
+    },
+    "errorSummary": {
+      "type": "boolean",
+      "default": false,
+      "note": "A status line above the grid: \"1 line needs a fix\" / \"3 lines need a fix\". Empty when every row is valid."
     }
   },
   "passthrough": {
@@ -108,7 +121,14 @@
     "type.size.bodySm",
     "motion.interaction",
     "type.family.overline",
-    "type.tracking.overline"
+    "type.tracking.overline",
+    "status.dangerBorder",
+    "text.danger",
+    "icon.danger",
+    "radius.controlMd",
+    "focus.ring",
+    "type.size.bodyXs",
+    "type.weight.strong"
   ],
   "a11y": {
     "element": "table",
@@ -121,7 +141,14 @@
       "Remove row buttons are named Remove row 2 and show that in a Tooltip",
       "A date cell editor is a kit DatePicker named by its column and row, like Start date, row 2",
       "Empty state is one td with colSpan and emptyLabel",
-      "Narrow container keeps column min-width and scrolls horizontally; the scroller is a focusable region"
+      "Number and money cells are end-aligned with tabular figures",
+      "A computed cell is plain read-only text, not a button; on a row with an invalid cell it shows an em dash",
+      "An invalid cell gets a danger ring and an icon on that cell only, aria-invalid, and aria-describedby pointing at its message (\"Qty, row 3: enter 1 or more \u00b7 left out of the total\") in the row under it",
+      "Rows with an invalid cell are left out of totals; errorSummary is a role status line",
+      "Totals sit in tfoot with th scope=row labels",
+      "Below 30rem of grid width the grid stacks: each row is a button with aria-expanded that opens labelled fields; an invalid row starts open with its message under the field",
+      "Wider than that but still narrow, the table keeps column min-width and scrolls horizontally; the scroller is a focusable region",
+      "Focus uses the kit ring"
     ]
   },
   "doNot": [
@@ -131,11 +158,13 @@
     "Short read-only text rows \u2014 use Table",
     "One primary/secondary line \u2014 use ListView",
     "Do not use Cell for editable body cells \u2014 Cell is display content for DataTable",
-    "Do not add type formula. This kit has no FormulaEditor. Stop and ask.",
-    "Do not add Density, expandable row detail, or a primary Add row Button",
-    "Do not use raw hex"
+    "Do not add type formula. A computed column (compute) is allowed; there is no FormulaEditor. Stop and ask for anything more.",
+    "Do not use raw hex",
+    "Do not add Density or expandable row detail. Rows open only when the grid stacks below 30rem, to edit that row",
+    "Do not make Add row a primary Button",
+    "Do not colour a whole row for one invalid cell; mark the cell"
   ],
-  "snippet": "<DataGrid\n  label=\"Conditions\"\n  columns={[\n    { key: \"field\", header: \"Field\" },\n    { key: \"condition\", header: \"Condition\", type: \"select\", options: conditions, width: \"12rem\" },\n    { key: \"value\", header: \"Value\" },\n  ]}\n  rows={rules}\n  onRowsChange={setRules}\n  canAddRows\n  canRemoveRows\n/>",
+  "snippet": "<DataGrid\n  label=\"Conditions\"\n  columns={[\n    { key: \"field\", header: \"Field\" },\n    { key: \"condition\", header: \"Condition\", type: \"select\", options: conditions, width: \"12rem\" },\n    { key: \"value\", header: \"Value\" },\n  ]}\n  rows={rules}\n  onRowsChange={setRules}\n  canAddRows\n  canRemoveRows\n/>\n\n<DataGrid\n  label=\"Invoice INV-1887 lines\"\n  rowNumbers\n  canAddRows\n  canRemoveRows\n  errorSummary\n  columns={[\n    { key: \"description\", header: \"Description\" },\n    { key: \"qty\", header: \"Qty\", type: \"number\", width: \"6rem\", validate: (v) => (Number(v) >= 1 ? undefined : \"enter 1 or more\") },\n    { key: \"unit\", header: \"Unit price\", type: \"money\", width: \"8rem\" },\n    { key: \"tax\", header: \"Tax\", type: \"select\", options: taxRates, width: \"10rem\" },\n    { key: \"amount\", header: \"Amount\", type: \"money\", width: \"8rem\", compute: (row) => (Number(row.qty) * Number(row.unit)).toFixed(2) },\n  ]}\n  rows={lines}\n  onRowsChange={setLines}\n  totals={(valid) => invoiceTotals(valid)}\n/>",
   "contains": [
     "headercell",
     "input",

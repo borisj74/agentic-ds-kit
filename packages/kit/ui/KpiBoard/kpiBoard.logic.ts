@@ -3,7 +3,7 @@ import type { DataTableRow } from "../DataTable/DataTable.types";
 import type { KpiBoardMetric, KpiBoardRange, KpiBoardValue } from "./KpiBoard.types";
 
 /** Shown on the selected card; the card's accessible name reads it too. */
-export const SELECTED_BADGE = "In chart";
+export const SELECTED_BADGE = "Charted";
 
 const MISSING: KpiBoardValue = { value: "—" };
 
@@ -28,6 +28,7 @@ export interface KpiBoardCard {
   delta?: string;
   trend?: KpiBoardValue["trend"];
   deltaTone?: KpiBoardValue["deltaTone"];
+  goodWhen?: KpiBoardMetric["goodWhen"];
   hint?: string;
   selected: boolean;
   badge?: string;
@@ -45,7 +46,8 @@ export function cardsFor(metrics: KpiBoardMetric[], range: KpiBoardRange | undef
       delta: figures.delta,
       trend: figures.trend,
       deltaTone: figures.deltaTone,
-      hint: range ? `last ${range.label}` : undefined,
+      goodWhen: metric.goodWhen,
+      hint: figures.hint ?? (range ? `last ${range.label}` : undefined),
       selected,
       badge: selected ? SELECTED_BADGE : undefined,
     };
