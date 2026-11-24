@@ -145,6 +145,8 @@ export interface KitLabels {
   skipToMain: string;
   /** Field: the muted word after the label when `optional` is set. */
   optional: string;
+  /** Field: the word beside the label when `changed` is set (a value edited since the last save). */
+  edited: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -235,6 +237,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   confidence: "Confidence",
   skipToMain: "Skip to main content",
   optional: "Optional",
+  edited: "Edited",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

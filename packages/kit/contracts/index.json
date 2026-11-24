@@ -439,6 +439,14 @@
     "level": "molecule"
   },
   {
+    "id": "savebar",
+    "intent": "A save bar that sticks to the bottom of main on a form page. It says what is unsaved (\"2 unsaved changes\" and the field names), when it was last saved, or what stopped the save, and holds Discard and Save changes. Save is the page's one solid primary.",
+    "group": "component",
+    "path": "contracts/savebar.json",
+    "status": "stable",
+    "level": "molecule"
+  },
+  {
     "id": "filterbutton",
     "intent": "Filter chip for lists and tables: shows the filter name or its chosen value, opens its options, and turns an applied filter on or off.",
     "group": "component",

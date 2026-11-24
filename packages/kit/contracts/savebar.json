@@ -1,0 +1,109 @@
+{
+  "id": "savebar",
+  "status": "stable",
+  "level": "molecule",
+  "intent": "A save bar that sticks to the bottom of main on a form page. It says what is unsaved (\"2 unsaved changes\" and the field names), when it was last saved, or what stopped the save, and holds Discard and Save changes. Save is the page's one solid primary.",
+  "useWhen": [
+    "a settings or details form where edits stay unsaved until Save",
+    "say which fields changed and when the page was last saved",
+    "keep Save in reach on a long form, including on a phone"
+  ],
+  "doNotUseWhen": [
+    "a short form that ends in its own Buttons, like a Card or Modal footer — use Card actions or ModalCard",
+    "a setting that saves as soon as it changes (a Switch) — show a Toast instead",
+    "a page-level message about the whole workspace — use Alert"
+  ],
+  "contains": [
+    "button"
+  ],
+  "props": {
+    "state": {
+      "type": "enum",
+      "values": ["saved", "dirty", "error"],
+      "default": "dirty",
+      "note": "saved: CircleCheck (icon.success), Discard hidden, Save disabled. dirty: CircleAlert (icon.warning). error: CircleX (icon.danger), status in status.dangerText, top edge status.dangerBorder. The icon is aria-hidden; the words carry the state."
+    },
+    "changes": {
+      "type": "array",
+      "required": false,
+      "note": "string[] of changed field labels, e.g. [\"Legal name\", \"Invoice currency\"]. The count makes the dirty status (\"2 unsaved changes\"); the names make the muted line under it. Mark the same fields with Field changed."
+    },
+    "savedAt": {
+      "type": "string",
+      "required": false,
+      "note": "Pre-formatted, e.g. \"10:42\" or \"Nov 14 by Maya Chen\". Saved reads \"Saved at 10:42\"; dirty and error add \"last saved Nov 14 by Maya Chen\" to the muted line."
+    },
+    "message": {
+      "type": "string",
+      "required": false,
+      "note": "The status line in your words; replaces the default (\"2 unsaved changes\", \"Saved at 10:42\", \"Not saved\"). In the error state say what to fix: \"Not saved · 1 field to fix\". Also the way to translate."
+    },
+    "onDiscard": {
+      "type": "function",
+      "required": false,
+      "note": "Renders an outline neutral Discard Button. Hidden in the saved state. Ask with AlertDialog first when discarding loses a lot."
+    },
+    "onSave": {
+      "type": "function",
+      "required": true,
+      "note": "The solid primary Save Button, disabled in the saved state. On Save with field errors, focus an Alert summary (see Field) and set state error."
+    },
+    "saveLabel": {
+      "type": "string",
+      "default": "Save changes",
+      "note": "Also names the region."
+    },
+    "discardLabel": {
+      "type": "string",
+      "default": "Discard",
+      "note": "Cancel when leaving the page is the outcome."
+    },
+    "saving": {
+      "type": "boolean",
+      "default": false,
+      "note": "Save shows its spinner (Button loading) and Discard is disabled while the request runs."
+    }
+  },
+  "passthrough": {
+    "root": "div",
+    "ref": "div",
+    "className": "root",
+    "rest": "div"
+  },
+  "tokens": [
+    "bg.surface",
+    "line.strong",
+    "status.dangerBorder",
+    "status.dangerText",
+    "text.fg",
+    "text.fgMuted",
+    "icon.warning",
+    "icon.danger",
+    "icon.success",
+    "type.size.uiSm",
+    "type.size.caption",
+    "type.weight.heading",
+    "space.3",
+    "space.6",
+    "space.16"
+  ],
+  "a11y": {
+    "element": "div",
+    "requirements": [
+      "role=region named by saveLabel (\"Save changes\"); an aria-label you pass wins",
+      "The status line is role=status, aria-live polite: \"2 unsaved changes\", \"Saved at 10:42\", \"Not saved · 1 field to fix\"",
+      "Put it after the form in the DOM so it comes after the fields in tab order",
+      "Sticky to the bottom of its scroll container; the page sets scroll-padding-bottom to the bar height so a focused field is never hidden under it",
+      "Wide: one 64px row, md 36 Buttons. Under 30rem of bar width: the status on top, then Discard (one third) and Save (two thirds) at lg 40",
+      "Leaving with changes: the app opens AlertDialog for in-app navigation. Closing the tab can only use the browser's own beforeunload prompt"
+    ]
+  },
+  "doNot": [
+    "Do not add a second solid primary Button to the page: Save is the one",
+    "Do not invent a local FormFooter, StickyActions or UnsavedBanner",
+    "Do not show the unsaved state by colour alone: the status line says it in words",
+    "Do not put role=alert on the status line; the error summary Alert takes focus on Save",
+    "Do not use raw hex"
+  ],
+  "snippet": "<SaveBar state=\"dirty\" changes={[\"Legal name\", \"Invoice currency\"]} savedAt=\"Nov 14 by Maya Chen\" onDiscard={discard} onSave={save} />"
+}

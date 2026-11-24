@@ -1,7 +1,7 @@
 "use client";
 
 import { cloneElement, isValidElement, type ReactElement } from "react";
-import { CircleCheck, CircleX } from "lucide-react";
+import { CircleCheck, CircleX, Pencil } from "lucide-react";
 import { Button } from "../Button";
 import { HelpPopover } from "../HelpPopover";
 import type { FieldProps } from "./Field.types";
@@ -25,6 +25,7 @@ export function Field({
   success,
   optional = false,
   required = false,
+  changed = false,
   labelPosition = "top",
   children,
   className,
@@ -35,10 +36,11 @@ export function Field({
   // Error wins over success. The hint stays under the control either way.
   const message = error || success;
   const tone = error ? "error" : success ? "success" : undefined;
+  const changedId = changed ? `${htmlFor}-changed` : undefined;
   const hintId = hint ? `${htmlFor}-hint` : undefined;
   const messageId = message ? `${htmlFor}-${tone}` : undefined;
   const labelId = `${htmlFor}-label`;
-  const describedBy = [hintId, messageId].filter(Boolean).join(" ") || undefined;
+  const describedBy = [changedId, hintId, messageId].filter(Boolean).join(" ") || undefined;
   const flags = isValidElement(children) ? (children.type as FieldChildFlags) : undefined;
   const controlProps: {
     describedBy?: string;
@@ -65,6 +67,13 @@ export function Field({
     </label>
   );
 
+  const changedNode = changed ? (
+    <span id={changedId} className={styles.changed}>
+      <Pencil className={styles.changedIcon} size={12} strokeWidth={ICON_STROKE} aria-hidden="true" />
+      {labels.edited}
+    </span>
+  ) : null;
+
   const MessageIcon = error ? CircleX : CircleCheck;
 
   return (
@@ -74,13 +83,17 @@ export function Field({
       className={cx(styles.field, styles[labelPosition], className)}
       data-invalid={error ? "true" : undefined}
       data-success={!error && success ? "true" : undefined}
+      data-changed={changed ? "true" : undefined}
     >
-      {help ? (
+      {help || changed ? (
         <div className={styles.labelRow}>
           {labelNode}
-          <HelpPopover title={label} content={help} placement="right">
-            <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel={helpLabel} />
-          </HelpPopover>
+          {help ? (
+            <HelpPopover title={label} content={help} placement="right">
+              <Button appearance="ghost" mode="neutral" size="sm" iconStart="CircleHelp" ariaLabel={helpLabel} />
+            </HelpPopover>
+          ) : null}
+          {changedNode}
         </div>
       ) : (
         labelNode

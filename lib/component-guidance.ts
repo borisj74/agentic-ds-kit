@@ -62,6 +62,7 @@ import contract_empty from "../packages/kit/contracts/empty.json";
 import contract_loaderror from "../packages/kit/contracts/loaderror.json";
 import contract_field from "../packages/kit/contracts/field.json";
 import contract_fieldset from "../packages/kit/contracts/fieldset.json";
+import contract_savebar from "../packages/kit/contracts/savebar.json";
 import contract_fileupload from "../packages/kit/contracts/fileupload.json";
 import contract_filterbar from "../packages/kit/contracts/filterbar.json";
 import contract_filterbutton from "../packages/kit/contracts/filterbutton.json";
@@ -212,6 +213,7 @@ const contracts: Record<string, ContractNotes> = {
   "loaderror": contract_loaderror,
   "field": contract_field,
   "fieldset": contract_fieldset,
+  "savebar": contract_savebar,
   "fileupload": contract_fileupload,
   "filterbar": contract_filterbar,
   "filterbutton": contract_filterbutton,
