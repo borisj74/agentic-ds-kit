@@ -86,6 +86,21 @@ describe("review rules", () => {
     assert.match(bad.findings[3].message, /Icon-only Button without an aria label/);
   });
 
+  test("wrong-use: IconButton and SplitButton count as solid primary, and IconButton needs a name", () => {
+    assert.deepEqual(review("wrong-use/cousins-good.tsx").findings, []);
+    const bad = review("wrong-use/cousins-bad.tsx");
+    assert.deepEqual(
+      bad.findings.map((f) => [f.line, f.rule, f.contractId]),
+      [
+        [7, "wrong-use", "splitbutton"],
+        [8, "wrong-use", "iconbutton"],
+        [9, "wrong-use", "iconbutton"],
+      ],
+    );
+    assert.match(bad.findings[0].message, /More than one solid primary Button in this file \(3\)/);
+    assert.match(bad.findings[2].message, /IconButton without an aria label/);
+  });
+
   test("outside-kit: other UI libraries and local copies", () => {
     assert.deepEqual(review("outside-kit/good.tsx").findings, []);
     const bad = review("outside-kit/bad.tsx");

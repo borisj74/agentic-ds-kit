@@ -1,0 +1,103 @@
+{
+  "id": "iconbutton",
+  "status": "stable",
+  "level": "atom",
+  "intent": "Icon-only kit Button: a square action with an icon and a required accessible name.",
+  "useWhen": [
+    "A toolbar or row action where the icon is enough, like Download, More or Add",
+    "A compact action beside a field or a title, where a label would not fit",
+    "Icon actions joined in a ButtonGroup"
+  ],
+  "doNotUseWhen": [
+    "The action needs a visible label — use Button with iconStart",
+    "The icon alone could be misread — use Button with a label",
+    "Navigation to another page — use Link",
+    "A main action with a menu of other actions — use SplitButton"
+  ],
+  "contains": ["button"],
+  "props": {
+    "icon": {
+      "type": "KitIcon",
+      "required": true,
+      "note": "A curated Lucide name (PascalCase or kebab-case), a Lucide component, or an element. Same rules as Button iconStart."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": true,
+      "note": "Names the action, like Download. There is no visible label."
+    },
+    "size": {
+      "type": "enum",
+      "values": ["lg", "md", "sm"],
+      "default": "md",
+      "note": "A square of control-height: sm 32, md 36, lg 40. The same height as a labelled Button, Input and Select of that size."
+    },
+    "appearance": {
+      "type": "enum",
+      "values": ["solid", "outline", "soft", "ghost"],
+      "default": "solid",
+      "note": "Same as Button. Toolbars usually use outline or ghost with mode neutral."
+    },
+    "mode": {
+      "type": "enum",
+      "values": ["primary", "neutral", "danger"],
+      "default": "primary"
+    },
+    "flat": {
+      "type": "boolean",
+      "default": false
+    },
+    "shape": {
+      "type": "enum",
+      "values": ["default", "pill"],
+      "default": "default"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Same as Button loading. The spinner takes the place of the icon."
+    },
+    "onClick": {
+      "type": "function",
+      "required": false
+    },
+    "type": {
+      "type": "enum",
+      "values": ["button", "submit", "reset"],
+      "default": "button"
+    }
+  },
+  "passthrough": {
+    "root": "button",
+    "ref": "button",
+    "className": "root",
+    "rest": "button"
+  },
+  "tokens": [
+    "controlHeight.sm",
+    "controlHeight.md",
+    "controlHeight.lg",
+    "radius.controlMd"
+  ],
+  "a11y": {
+    "element": "button",
+    "requirements": [
+      "ariaLabel is required and names the action",
+      "The icon is aria-hidden",
+      "Add a kit Tooltip with the same words when the icon is not obvious",
+      "Everything else follows Button"
+    ]
+  },
+  "doNot": [
+    "Do not build a local icon button — IconButton renders the kit Button, so it has no look of its own",
+    "Do not ship without ariaLabel",
+    "Do not pass custom SVG markup — use a Lucide name or Lucide component",
+    "Do not use more than one appearance=solid mode=primary IconButton or Button in a view",
+    "Do not use raw hex"
+  ],
+  "snippet": "<IconButton icon=\"Download\" ariaLabel=\"Download\" appearance=\"outline\" mode=\"neutral\" />\n<ButtonGroup ariaLabel=\"Invoice actions\"><IconButton icon=\"Download\" ariaLabel=\"Download\" appearance=\"outline\" mode=\"neutral\" /><IconButton icon=\"Ellipsis\" ariaLabel=\"More\" appearance=\"outline\" mode=\"neutral\" /><IconButton icon=\"Plus\" ariaLabel=\"Add invoice\" appearance=\"outline\" mode=\"neutral\" /></ButtonGroup>"
+}

@@ -336,8 +336,8 @@ describe("mcp server", { timeout: 20_000 }, () => {
       const result = await client.callTool({ name, arguments: args });
       sizes[name] = JSON.stringify(result).length;
     }
-    // Summary rows carry level (about 3.5 KB for 141 rows), so the budget is 28 KB, not 25 KB.
-    assert.ok(sizes.list_components < 28_000, `list_components ${sizes.list_components}`);
+    // Summary rows carry level (about 3.5 KB for 143 rows), so the budget is 29 KB, not 25 KB.
+    assert.ok(sizes.list_components < 29_000, `list_components ${sizes.list_components}`);
     assert.ok(sizes.get_tokens < 30_000, `get_tokens ${sizes.get_tokens}`);
     assert.ok(sizes.questions < 15_000, `questions summary ${sizes.questions}`);
   });

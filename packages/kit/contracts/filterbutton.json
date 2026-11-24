@@ -8,7 +8,7 @@
     "A filter the user can keep but switch off for a moment, without losing what they picked"
   ],
   "doNotUseWhen": [
-    "Page actions or view switches — use Button or DropdownMenu",
+    "Page actions or view switches — use Button, SplitButton or DropdownMenu",
     "Status or category labels that are not filters — use Badge",
     "A number without a filter name — use Count"
   ],
@@ -23,7 +23,7 @@
       "type": "enum",
       "values": ["sm", "md", "lg"],
       "default": "md",
-      "note": "Heights 32 / 36 / 40, the shared Button and Input scale. The chevron part is square."
+      "note": "Heights from control-height: sm 32, md 36, lg 40, the same as Button, Input and Select. The chevron part is square."
     },
     "open": {
       "type": "boolean",
@@ -87,8 +87,9 @@
     "focus.ring",
     "radius.controlMd",
     "space.1",
-    "space.8",
-    "space.10",
+    "controlHeight.sm",
+    "controlHeight.md",
+    "controlHeight.lg",
     "type.size.uiSm",
     "type.size.uiMd",
     "type.weight.label",
@@ -107,11 +108,11 @@
     ]
   },
   "doNot": [
-    "Do not invent a local split button, filter chip, or dropdown trigger",
-    "Do not use for page actions or view switches — use Button or DropdownMenu",
+    "Do not invent a local split button, filter chip, or dropdown trigger — FilterButton is the split control for filters, and SplitButton is the one for actions",
+    "Do not use for page actions or view switches — use Button, SplitButton or DropdownMenu",
     "Do not put more than one word or two in the name",
     "Do not show the count as text in the label — pass count and compose kit Count",
-    "Do not invent FilterChip, SplitButton, or FilterTrigger",
+    "Do not invent FilterChip or FilterTrigger",
     "Do not use raw hex or primitive --color-* ramps"
   ],
   "snippet": "<FilterButton count={3} onClick={() => {}}>Status</FilterButton>"

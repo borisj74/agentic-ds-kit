@@ -15,6 +15,9 @@ export type {
 
 const ICON_SIZE = { sm: 14, md: 16, lg: 18 } as const;
 
+/** Leading icon a labelled solid, outline or soft danger Button gets when `iconStart` is empty, so danger is never colour alone. */
+const DANGER_ICON = "TriangleAlert";
+
 export function Button({
   children,
   size = "md",
@@ -24,6 +27,7 @@ export function Button({
   shape = "default",
   block = false,
   disabled = false,
+  loading = false,
   type = "button",
   onClick,
   iconStart,
@@ -41,17 +45,23 @@ export function Button({
   const iconOnly = !hasLabel && Boolean(iconStart || iconEnd);
   const iconPx = ICON_SIZE[size];
   const resolvedAppearance: ButtonAppearance = flat && appearance === "ghost" ? "soft" : appearance;
+  const busy = loading && !disabled;
+  const dangerIcon = hasLabel && mode === "danger" && resolvedAppearance !== "ghost" ? DANGER_ICON : undefined;
+  const start = iconStart || dangerIcon;
+  // The spinner takes the leading slot; on an icon-only button it takes the place of the one icon.
+  const spinner = busy ? <LucideByName name="LoaderCircle" size={iconPx} className={cx(styles.icon, styles.spinner)} /> : null;
 
   return (
     <button
       {...rest} {...nisthaAttr("button", rest)}
+      {...(busy ? { "aria-busy": true } : null)}
       ref={ref}
       type={type}
       disabled={disabled}
       draggable={draggable}
-      aria-disabled={disabled || undefined}
+      aria-disabled={disabled || busy || undefined}
       aria-label={hasLabel ? undefined : ariaLabel}
-      onClick={onClick}
+      onClick={busy ? (event) => event.preventDefault() : onClick}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       className={cx(
@@ -63,12 +73,13 @@ export function Button({
         shape === "pill" && styles.pill,
         block && styles.block,
         iconOnly && styles.iconOnly,
+        busy && styles.loading,
         className,
       )}
     >
-      <LucideByName name={iconStart} size={iconPx} className={styles.icon} />
+      {spinner ?? <LucideByName name={start} size={iconPx} className={styles.icon} />}
       {hasLabel ? <span>{children}</span> : null}
-      <LucideByName name={iconEnd} size={iconPx} className={styles.icon} />
+      {spinner && !hasLabel ? null : <LucideByName name={iconEnd} size={iconPx} className={styles.icon} />}
       {shortcut && hasLabel ? (
         <kbd className={styles.shortcut} aria-hidden="true">
           {shortcut}

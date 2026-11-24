@@ -160,6 +160,9 @@ function spaceTokens(tokens) {
       out.push({ name: `--space-${family}-${step}`, value: resolveRef(ref, tokens.primitive) });
     }
   }
+  for (const [step, ref] of Object.entries(tokens.semantic.controlHeight ?? {})) {
+    out.push({ name: `--control-height-${step}`, value: resolveRef(ref, tokens.primitive) });
+  }
   return out;
 }
 

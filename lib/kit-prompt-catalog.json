@@ -183,6 +183,11 @@
           "useWhen": "Padding, gaps, and section rhythm",
           "doNot": "Do not use magic pixel spacing in components"
         },
+        "--control-height-": {
+          "note": "Height of a one-line control: sm 32px, md 36px, lg 40px.",
+          "useWhen": "Button, IconButton, Input, Select and FilterButton heights, so controls in one row line up. An icon-only control is a square of the same step",
+          "doNot": "Do not set a control height from padding or a raw length"
+        },
         "--radius-": {
           "note": "Fixed radius scale on 2 and 4px steps (2, 4, 6, 8, 12, 16, 24).",
           "useWhen": "control/surface/media/pill roles",
@@ -598,7 +603,8 @@
         "Offering a quieter action alongside content (outline, soft, or ghost)",
         "Destructive actions that need explicit danger styling",
         "Toolbar or compact actions with a Lucide icon and a visible label",
-        "Icon-only actions when space is tight and ariaLabel names the action"
+        "Icon-only actions when space is tight — use IconButton, the typed export that requires an icon and ariaLabel",
+        "An Ask action that opens the assistant: appearance outline, mode neutral, size sm, iconStart MessageCircle, label Ask"
       ],
       "doNotUseWhen": [
         "Navigation to another page or site — use Link (inline, standalone or external)",
@@ -610,7 +616,9 @@
         "Do not use raw hex colors in styles",
         "Do not place more than one appearance=solid mode=primary Button in a single view",
         "Do not pass custom SVG markup as icons — use a Lucide name or Lucide component on iconStart/iconEnd",
-        "Do not ship icon-only without ariaLabel"
+        "Do not ship icon-only without ariaLabel",
+        "Do not build a local Ask button or IconButton — Ask is a neutral sm Button with a MessageCircle icon, and IconButton is the kit export",
+        "Do not swap the label for a spinner or disable the button while it works — set loading"
       ],
       "props": {
         "draggable": {
@@ -636,7 +644,7 @@
             "sm"
           ],
           "default": "md",
-          "note": "Kit sizes. md aligns to Cards medium, sm to small, lg to a larger control."
+          "note": "Heights from control-height: sm 32, md 36, lg 40, the same as Input, Select and FilterButton. Icon-only is a square of that height."
         },
         "appearance": {
           "type": "enum",
@@ -664,7 +672,13 @@
         },
         "disabled": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "note": "Uses text-fg-disabled, border-disabled and surface-muted. Ghost keeps no fill."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "The action is running. Sets aria-busy, shows a spinner in the leading icon slot, keeps the label and ignores clicks. The button stays focusable. disabled wins when both are set."
         },
         "children": {
           "type": "string",
@@ -674,7 +688,7 @@
         "iconStart": {
           "type": "KitIcon",
           "required": false,
-          "note": "A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+          "note": "A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. Left empty on a labelled solid, outline or soft danger Button, it defaults to TriangleAlert so danger is not colour alone; pass Trash2 for a delete."
         },
         "iconEnd": {
           "type": "KitIcon",
@@ -738,8 +752,8 @@
       "doNot": [
         "Do not invent a local button group / segmented control",
         "Do not mix sizes inside one group",
-        "Do not put more than one appearance=solid mode=primary Button in a group (or the view)",
-        "Do not wrap Input, Select, or anything except kit Button",
+        "Do not put more than one appearance=solid mode=primary Button, IconButton or SplitButton in a group (or the view)",
+        "Do not wrap Input, Select, or anything except kit Button, IconButton or SplitButton",
         "Do not use raw hex"
       ],
       "props": {
@@ -752,6 +766,227 @@
           "type": "string",
           "required": false,
           "note": "names the group"
+        }
+      }
+    },
+    {
+      "id": "iconbutton",
+      "group": "component",
+      "intent": "Icon-only kit Button: a square action with an icon and a required accessible name.",
+      "useWhen": [
+        "A toolbar or row action where the icon is enough, like Download, More or Add",
+        "A compact action beside a field or a title, where a label would not fit",
+        "Icon actions joined in a ButtonGroup"
+      ],
+      "doNotUseWhen": [
+        "The action needs a visible label — use Button with iconStart",
+        "The icon alone could be misread — use Button with a label",
+        "Navigation to another page — use Link",
+        "A main action with a menu of other actions — use SplitButton"
+      ],
+      "doNot": [
+        "Do not build a local icon button — IconButton renders the kit Button, so it has no look of its own",
+        "Do not ship without ariaLabel",
+        "Do not pass custom SVG markup — use a Lucide name or Lucide component",
+        "Do not use more than one appearance=solid mode=primary IconButton or Button in a view",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "icon": {
+          "type": "KitIcon",
+          "required": true,
+          "note": "A curated Lucide name (PascalCase or kebab-case), a Lucide component, or an element. Same rules as Button iconStart."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "required": true,
+          "note": "Names the action, like Download. There is no visible label."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "default": "md",
+          "note": "A square of control-height: sm 32, md 36, lg 40. The same height as a labelled Button, Input and Select of that size."
+        },
+        "appearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "outline",
+            "soft",
+            "ghost"
+          ],
+          "default": "solid",
+          "note": "Same as Button. Toolbars usually use outline or ghost with mode neutral."
+        },
+        "mode": {
+          "type": "enum",
+          "values": [
+            "primary",
+            "neutral",
+            "danger"
+          ],
+          "default": "primary"
+        },
+        "flat": {
+          "type": "boolean",
+          "default": false
+        },
+        "shape": {
+          "type": "enum",
+          "values": [
+            "default",
+            "pill"
+          ],
+          "default": "default"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Same as Button loading. The spinner takes the place of the icon."
+        },
+        "onClick": {
+          "type": "function",
+          "required": false
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "button",
+            "submit",
+            "reset"
+          ],
+          "default": "button"
+        }
+      }
+    },
+    {
+      "id": "splitbutton",
+      "group": "component",
+      "intent": "A main action joined to a chevron that opens a menu of related actions.",
+      "useWhen": [
+        "One action is the usual choice and a few others are close to it, like Save invoice with Save and send, or Save as draft",
+        "A card footer or page header where the other actions would crowd the row as separate Buttons"
+      ],
+      "doNotUseWhen": [
+        "Filters above a table or list — use FilterButton",
+        "A menu with no main action — use DropdownMenu",
+        "Two or three equal actions — use separate Buttons or a ButtonGroup",
+        "Choosing a value to save — use Select"
+      ],
+      "doNot": [
+        "Do not build a local split button from two Buttons and a popover",
+        "Do not use SplitButton for filters — FilterButton is the split control for filters",
+        "Do not put the main action in the menu as well",
+        "Do not use more than one appearance=solid mode=primary SplitButton or Button in a view",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "children": {
+          "type": "string",
+          "required": true,
+          "note": "Label of the main action, like Save invoice."
+        },
+        "onClick": {
+          "type": "function",
+          "required": false,
+          "note": "Runs the main action."
+        },
+        "groups": {
+          "type": "DropdownMenuGroup[]",
+          "required": true,
+          "note": "The other actions, as kit DropdownMenu groups: [{ heading?, items: [{ id, label, icon?, danger?, disabled? }] }]."
+        },
+        "onSelect": {
+          "type": "function",
+          "required": false,
+          "note": "(id: string) => void. A menu action was picked."
+        },
+        "menuLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Accessible name of the chevron button. Default: the label plus options, like Save invoice options."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "lg",
+            "md",
+            "sm"
+          ],
+          "default": "md",
+          "note": "Both parts use control-height: sm 32, md 36, lg 40. The chevron part is a square."
+        },
+        "appearance": {
+          "type": "enum",
+          "values": [
+            "solid",
+            "outline",
+            "soft",
+            "ghost"
+          ],
+          "default": "solid"
+        },
+        "mode": {
+          "type": "enum",
+          "values": [
+            "primary",
+            "neutral",
+            "danger"
+          ],
+          "default": "primary"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "note": "Disables both parts."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "The main action is running. Same as Button loading. The menu still opens."
+        },
+        "iconStart": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "Leading icon on the main action."
+        },
+        "type": {
+          "type": "enum",
+          "values": [
+            "button",
+            "submit",
+            "reset"
+          ],
+          "default": "button",
+          "note": "Type of the main action button."
+        },
+        "align": {
+          "type": "enum",
+          "values": [
+            "start",
+            "end"
+          ],
+          "default": "end",
+          "note": "Which edge of the chevron the menu lines up with."
+        },
+        "open": {
+          "type": "boolean",
+          "required": false,
+          "note": "Controlled menu state. Leave it out and the menu keeps its own."
+        },
+        "onOpenChange": {
+          "type": "function",
+          "required": false,
+          "note": "(open: boolean) => void."
         }
       }
     },
@@ -2620,7 +2855,7 @@
       "group": "component",
       "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
       "useWhen": [
-        "Button or inline action is processing",
+        "An inline action is processing (for a kit Button, set loading instead)",
         "Short indeterminate page or panel load",
         "Waiting state with no known percent"
       ],
@@ -4903,16 +5138,16 @@
         "A filter the user can keep but switch off for a moment, without losing what they picked"
       ],
       "doNotUseWhen": [
-        "Page actions or view switches — use Button or DropdownMenu",
+        "Page actions or view switches — use Button, SplitButton or DropdownMenu",
         "Status or category labels that are not filters — use Badge",
         "A number without a filter name — use Count"
       ],
       "doNot": [
-        "Do not invent a local split button, filter chip, or dropdown trigger",
-        "Do not use for page actions or view switches — use Button or DropdownMenu",
+        "Do not invent a local split button, filter chip, or dropdown trigger — FilterButton is the split control for filters, and SplitButton is the one for actions",
+        "Do not use for page actions or view switches — use Button, SplitButton or DropdownMenu",
         "Do not put more than one word or two in the name",
         "Do not show the count as text in the label — pass count and compose kit Count",
-        "Do not invent FilterChip, SplitButton, or FilterTrigger",
+        "Do not invent FilterChip or FilterTrigger",
         "Do not use raw hex or primitive --color-* ramps"
       ],
       "props": {
@@ -4929,7 +5164,7 @@
             "lg"
           ],
           "default": "md",
-          "note": "Heights 32 / 36 / 40, the shared Button and Input scale. The chevron part is square."
+          "note": "Heights from control-height: sm 32, md 36, lg 40, the same as Button, Input and Select. The chevron part is square."
         },
         "open": {
           "type": "boolean",
