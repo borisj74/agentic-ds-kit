@@ -2868,7 +2868,7 @@
     {
       "id": "spinner",
       "group": "component",
-      "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
+      "intent": "Spinning circular loader for short indeterminate waits. One piece. Sizes 12, 16, 20. inverse for a primary fill. Distinct from LoadingAnimation dot-grid.",
       "useWhen": [
         "An inline action is processing (for a kit Button, set loading instead)",
         "Short indeterminate page or panel load",
@@ -2885,7 +2885,8 @@
         "Do not invent SpinnerIcon or merge Spinner into LoadingAnimation",
         "Do not add Spinner as a LoadingAnimation variant",
         "Do not change Button to accept spinner children",
-        "Do not use raw hex"
+        "Do not use raw hex",
+        "Do not color a spinner by hand on a primary fill — set inverse"
       ],
       "props": {
         "size": {
@@ -2895,12 +2896,18 @@
             "md",
             "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "sm 12px, md 16px, lg 20px."
         },
         "label": {
           "type": "string",
           "required": false,
           "note": "Visible label beside the spinner. When omitted, aria-label is Loading."
+        },
+        "inverse": {
+          "type": "boolean",
+          "default": false,
+          "note": "On a primary fill: the mark and label use the on-primary ink. A kit Button with loading already draws its own spinner in the button ink."
         }
       }
     },
@@ -7363,36 +7370,38 @@
     {
       "id": "progress",
       "group": "component",
-      "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
+      "intent": "Task completion as a bar or circle from 0 to 100, or an indeterminate bar when the percent is not known. One piece. Optional name label. Percent overlay, end, or in the ring hole, in Geist Mono. Square bar ends. Tones brand, success, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
       "useWhen": [
         "Upload, import, or task completion",
         "A determinate percent in a form, card, or page",
         "A determinate percent as a ring or semicircle",
+        "Work is underway and the percent is not known: indeterminate bar",
         "DataTable Cell type=progress (Cell composes this)"
       ],
       "doNotUseWhen": [
-        "A spinner with no known percent — not this component",
+        "A short wait with no layout or percent, or a Button action — use Spinner or Button loading",
         "A rating out of 5 — that stays a Cell type",
         "A KPI number — use Scorecard",
         "Part-to-whole share across segments — use PieChart",
         "Numbered wizard or checkout steps — use ProgressSteps",
         "Usage against a plan limit — use UsageList",
-        "A measure against a range with red, amber, and green zones, a datatip, or indeterminate — use Meter"
+        "A measure against a range with red, amber, and green zones, a datatip, or reference lines — use Meter"
       ],
       "doNot": [
         "Do not invent ProgressLabel, ProgressValue, ProgressTrack, ProgressIndicator, or ProgressRoot",
         "Do not invent MeterCircle or ProgressCircle",
         "Do not use PieChart for a determinate percent ring",
         "Do not use img assets for the ring",
-        "Do not add threshold-zone rings, datatip, reference lines, or indeterminate — use Meter",
+        "Do not add threshold-zone rings, datatip, or reference lines — use Meter",
         "Do not use radix or @base-ui/react",
         "Do not use a native progress element",
         "Do not use raw hex",
-        "Do not add indeterminate",
         "Do not add a multi-segment status bar",
         "Do not use Progress for ordered wizard steps — use ProgressSteps",
         "Do not use Progress alone for usage against a plan limit — use UsageList",
-        "Do not skip prefers-reduced-motion on the load animation"
+        "Do not skip prefers-reduced-motion on the load animation",
+        "Do not round the bar ends",
+        "Do not use indeterminate on a ring — use Spinner for a short wait"
       ],
       "props": {
         "value": {
@@ -7408,7 +7417,7 @@
             "lg"
           ],
           "default": "md",
-          "note": "Bar track height: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
+          "note": "Bar track height, square ends: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
         },
         "shape": {
           "type": "enum",
@@ -7428,7 +7437,7 @@
         "showValue": {
           "type": "boolean",
           "default": false,
-          "note": "Shows the rounded percent. Overlay sits on the bar. End sits after the bar, or in meta when a name label is set. Circle puts it in the hole. Semicircle puts it in the bowl."
+          "note": "Shows the rounded percent. Overlay sits on the bar. End sits after the bar, or in meta when a name label is set. Circle puts it in the hole. Semicircle puts it in the bowl. Percent text is Geist Mono with tabular figures."
         },
         "valuePosition": {
           "type": "enum",
@@ -7443,13 +7452,19 @@
           "type": "enum",
           "values": [
             "brand",
+            "success",
             "warning",
             "danger",
             "muted",
             "neutral"
           ],
           "default": "brand",
-          "note": "muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
+          "note": "success is a finished or healthy result. muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
+        },
+        "indeterminate": {
+          "type": "boolean",
+          "default": false,
+          "note": "Bar only (a ring shape falls back to the bar). A third of the track slides across. value and showValue are ignored, and aria-valuenow and aria-valuetext are left off. Reduced motion: a faint still fill."
         },
         "ariaLabel": {
           "type": "string",
@@ -7872,12 +7887,13 @@
       ],
       "doNot": [
         "Do not invent Sidebar, SidebarHeader, SidebarNav, SidebarSection, SidebarItem, SidebarSubmenu, SidebarFooter, SidebarProvider, SidebarTrigger, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, or SidebarRail",
+        "Do not hand-build a closed-rail flyout or menu for a parent's children; nested SideNav.Item children already open one on the closed rail",
         "Do not hand-roll nav rows (a, button, li with your own active/hover styles) inside SideNav — use SideNav.Item, which carries aria-current, the disclosure attributes and the closed-rail tooltip",
         "Do not nest SideNav.Item deeper than one level, or put rows outside a SideNav.Section",
         "Do not use SideNav.Root without a SideNav.Toggle or SideNav.Brand in its header when the rail can close — nothing would reopen it",
         "Do not compose AppNav inside SideNav",
         "Do not use Drawer for persistent app chrome",
-        "Do not use AppNav as closeable product chrome",
+        "Do not use AppNav as closeable product chrome: SideNav is product chrome, AppNav is the docs catalog nav only",
         "Do not leave a gap between AppHeader and SideNav — radius none, showHeader false, layout-app with no gap",
         "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; on narrow screens render it inside kit Drawer",
         "Keep the nav reachable on narrow screens: a kit Button that opens it in kit Drawer (as app-shell does), not a hand-rolled overlay or menu",
@@ -7948,7 +7964,7 @@
         "items": {
           "type": "array",
           "required": false,
-          "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+          "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). badge: digits (e.g. \"3\") render as a kit Count (neutral subtle, brand subtle on the active row) and join the closed-rail tooltip; other text keeps the plain pill. icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
         },
         "footer": {
           "type": "slot",
@@ -7985,8 +8001,9 @@
     {
       "id": "skeleton",
       "group": "component",
-      "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
+      "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, or a whole table, card, or list layout, so the page keeps its shape until the data arrives.",
       "useWhen": [
+        "The first load of a table, card, or list: set layout",
         "Content with a known layout is loading: a card, a list, a table, a profile",
         "Keeping the page from jumping while data arrives"
       ],
@@ -8003,8 +8020,10 @@
         "Do not leave it up when the load failed — show Alert or Empty",
         "Do not draw loading bars with local gray divs — use Skeleton",
         "Do not invent SkeletonText, SkeletonCircle, or Pulse",
+        "Do not stack local Skeleton rows to fake a table, card, or list — use layout",
         "Do not skip prefers-reduced-motion",
-        "Do not use raw hex or primitive --color-* ramps"
+        "Do not use raw hex or primitive --color-* ramps",
+        "Do not add layouts beyond table, card, and list"
       ],
       "props": {
         "shape": {
@@ -8017,10 +8036,20 @@
           "default": "text",
           "note": "text: rounded lines as tall as the text. circle: an avatar or icon. rect: a block, like an image, chart, or card."
         },
+        "layout": {
+          "type": "enum",
+          "values": [
+            "table",
+            "card",
+            "list"
+          ],
+          "required": false,
+          "note": "A whole loading area in one piece, in place of shape. table: a header row and body rows at the 40px row height. card: an icon tile and title, then text lines (no frame; put it in a Card). list: an Avatar-sized circle and two lines per row."
+        },
         "lines": {
           "type": "number",
           "default": 1,
-          "note": "For text. With more than one, the last line is shorter, like the end of a paragraph."
+          "note": "For text, the line count; with more than one, the last line is shorter, like the end of a paragraph. With layout, the row count (table 5, list 3) or the card's text lines (3) by default."
         },
         "size": {
           "type": "enum",
@@ -14312,12 +14341,12 @@
         "search": {
           "type": "object",
           "required": false,
-          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size md (36px), with a Search icon, the Quick actions placeholder and a ⌘K hint, then, only when onSearch is set, an icon-only ghost md search Button (Tooltip searchLabel) that runs onSearch. Without onSearch the field alone opens the command menu, so there is no duplicate control. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
         },
         "notifications": {
           "type": "object",
           "required": false,
-          "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel: title with an icon-only settings Button, kit Tabs (one per tab, label with its unread count), each a kit ListView (size sm, drill; title, body · time, New badge for unread) or kit Empty (with an outline settings Button) when empty. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon with a dot for unread, same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
+          "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge, which SideNav renders as a kit Count (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel is the Popover's shared overlay frame: the label as its 18px title, kit Tabs (one per tab, its unread count in the tab's count, a kit Count), each a kit ListView (size sm, drill; title, body · time, the word Unread as meta on unread rows) or kit Empty (with an outline settings Button) when empty, and an outline sm settings Button (Settings icon) in the footer when onSettings is set. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon, its tooltip the label plus the count (no dot), same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
         },
         "workPanel": {
           "type": "object",

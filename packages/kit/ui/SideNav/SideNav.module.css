@@ -15,7 +15,6 @@
   color: var(--text-primary);
   overflow: hidden;
   border: 0;
-  background: transparent;
   transition: width var(--motion-expand-duration) var(--motion-expand-easing);
 }
 
@@ -275,10 +274,10 @@
   appearance: none;
   border: 0;
   border-radius: var(--sidenav-item-radius, var(--radius-control-md));
-  background: transparent;
+  background: none;
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
+  font-size: var(--type-size-body);
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-body);
   text-align: start;
@@ -297,7 +296,6 @@
   height: calc(var(--sidenav-item-padding, var(--space-inset-sm)) * 2 + var(--space-inset-lg));
   translate: 0 -50%;
   border-radius: var(--sidenav-item-radius, var(--radius-control-md));
-  background: transparent;
   pointer-events: none;
   z-index: 0;
 }
@@ -307,33 +305,40 @@
   z-index: 1;
 }
 
-.item:hover:not(:disabled):not(.itemDisabled) {
+/* Open rail (and the flyout): the row takes the fill. The closed rail paints its chip (::before) instead. */
+.root:not(.rootClosed) .item:hover:not(:disabled):not(.itemDisabled),
+.flyout .item:hover:not(:disabled):not(.itemDisabled) {
   background: var(--sidenav-item-hover-background, var(--surface-muted));
   color: var(--text-primary);
-}
-
-.rootClosed .item:hover:not(:disabled):not(.itemDisabled) {
-  background: transparent;
 }
 
 .rootClosed .item:hover:not(:disabled):not(.itemDisabled)::before {
   background: var(--sidenav-item-hover-background, var(--surface-muted));
 }
 
-.itemActive,
-.itemActive:hover:not(:disabled):not(.itemDisabled) {
+.itemActive {
+  color: var(--sidenav-item-active-text, var(--text-brand));
+}
+
+.root:not(.rootClosed) .itemActive,
+.root:not(.rootClosed) .itemActive:hover:not(:disabled):not(.itemDisabled),
+.flyout .itemActive,
+.flyout .itemActive:hover:not(:disabled):not(.itemDisabled) {
   background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
   color: var(--sidenav-item-active-text, var(--text-brand));
 }
 
-.rootClosed .itemActive,
-.rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled) {
-  background: transparent;
+/* Closed rail: the current page's chip. A parent row that holds the current page takes the same
+   soft chip (with aria-expanded and its flyout, so it is not marked by colour alone). */
+.rootClosed .itemActive::before,
+.rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled)::before,
+.rootClosed .itemHoldsCurrent::before,
+.rootClosed .itemHoldsCurrent:hover:not(:disabled):not(.itemDisabled)::before {
+  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
 }
 
-.rootClosed .itemActive::before,
-.rootClosed .itemActive:hover:not(:disabled):not(.itemDisabled)::before {
-  background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
+.rootClosed .itemHoldsCurrent .icon {
+  color: var(--sidenav-item-active-icon, var(--icon-brand));
 }
 
 .item:focus-visible {
@@ -350,21 +355,11 @@
   outline-offset: calc(-1 * var(--border-focus-width));
 }
 
+/* Disabled: faint text and icon, no fill. */
 .item:disabled,
 .itemDisabled {
-  background: var(--surface-disabled);
   color: var(--text-disabled);
   cursor: not-allowed;
-}
-
-.rootClosed .item:disabled,
-.rootClosed .itemDisabled {
-  background: transparent;
-}
-
-.rootClosed .item:disabled::before,
-.rootClosed .itemDisabled::before {
-  background: var(--surface-disabled);
 }
 
 .icon {
@@ -463,6 +458,36 @@
   min-height: 0;
 }
 
+/* Closed-rail flyout: a parent's nested rows in a panel just outside the rail edge (portaled). */
+.flyout {
+  position: fixed;
+  z-index: var(--z-overlay);
+  display: grid;
+  gap: var(--space-stack-2xs);
+  box-sizing: border-box;
+  width: var(--sidenav-width, var(--layout-sidebar));
+  max-width: calc(100vw - var(--space-2) * 2);
+  padding: var(--space-2);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-sm);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.flyoutLabel {
+  margin: 0;
+  padding: var(--space-inset-xs) var(--space-inset-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--sidenav-group-label-color, var(--text-secondary));
+}
+
 .footer {
   flex-shrink: 0;
   padding: var(--space-inset-md) var(--space-inset-sm);
@@ -544,7 +569,7 @@
   max-width: none;
   border: 0;
   border-radius: var(--radius-0);
-  background: transparent;
+  background: none;
 }
 
 .inDrawer .toggle {

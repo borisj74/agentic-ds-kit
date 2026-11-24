@@ -1,4 +1,5 @@
 .button {
+  --button-icon: 1rem;
   --button-pad: var(--space-4);
   --button-height: var(--control-height-md);
   box-sizing: border-box;
@@ -35,6 +36,7 @@
 
 /* Heights come from --control-height-*, shared with Input, Select and FilterButton. */
 .lg {
+  --button-icon: 1.125rem; /* ICON_SIZE in Button.tsx */
   --button-pad: var(--space-5);
   --button-height: var(--control-height-lg);
   font-size: var(--type-size-ui-md);
@@ -42,6 +44,7 @@
 }
 
 .md {
+  --button-icon: 1rem; /* ICON_SIZE in Button.tsx */
   --button-pad: var(--space-4);
   --button-height: var(--control-height-md);
   font-size: var(--type-size-ui-sm);
@@ -49,6 +52,7 @@
 }
 
 .sm {
+  --button-icon: 0.875rem; /* ICON_SIZE in Button.tsx */
   --button-pad: var(--space-3);
   --button-height: var(--control-height-sm);
   font-size: var(--type-size-ui-xs);
@@ -238,6 +242,16 @@
 
 .loading {
   cursor: progress;
+}
+
+/* Loading with no leading icon: the spinner takes space the label did not have, so the inline
+   padding gives up half the spinner and its gap on each side and the button keeps its width. */
+.keepWidth {
+  padding-inline: calc(var(--button-pad) - (var(--button-icon) + var(--space-2)) / 2);
+}
+
+.ghost.keepWidth {
+  padding-inline: calc(var(--button-pad) + var(--border-control) - (var(--button-icon) + var(--space-2)) / 2);
 }
 
 .spinner {

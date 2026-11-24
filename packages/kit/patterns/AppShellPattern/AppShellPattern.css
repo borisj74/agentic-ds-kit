@@ -233,23 +233,6 @@
   background: var(--sidenav-item-active-background, var(--surface-brand-subtle));
 }
 
-/* Collapsed rail: the unread count becomes a dot on the bell's top end corner. */
-.app-shell-pattern__nav-dot {
-  position: relative;
-}
-
-.app-shell-pattern__nav-dot::after {
-  content: "";
-  position: absolute;
-  inset-block-start: var(--space-1);
-  inset-inline-start: calc(var(--space-inset-sm) + var(--space-3));
-  width: var(--space-2);
-  height: var(--space-2);
-  border: var(--border-width-thin) solid var(--surface-card);
-  border-radius: var(--radius-full);
-  background: var(--status-danger);
-}
-
 /* Notifications panel in the Popover: the Popover's widest content box (space-16 x 5 less its
    space-3 padding); in the Drawer it fills the body. */
 .app-shell-pattern__notify-panel {
@@ -341,17 +324,27 @@ aside.app-shell-pattern__panel > .app-shell-pattern__panel-card > [data-part="bo
   overflow: auto;
 }
 
-.app-shell-pattern__panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-stack-xs);
+/* Skip link: out of the layout and off screen until it has keyboard focus, then pinned at the top start
+   corner over the chrome. The kit Link inside carries the focus ring. */
+.app-shell-pattern__skip {
+  position: fixed;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  z-index: var(--z-overlay);
+  padding: var(--space-inset-sm) var(--space-inset-md);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-control-md);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-md);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  translate: 0 calc(-100% - var(--space-4));
+  opacity: 0;
+  pointer-events: none;
 }
 
-.app-shell-pattern__panel-title {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: var(--type-size-label);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-md);
+.app-shell-pattern__skip:focus-within {
+  translate: none;
+  opacity: 1;
+  pointer-events: auto;
 }

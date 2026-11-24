@@ -2,7 +2,7 @@
   "id": "spinner",
   "status": "stable",
   "level": "atom",
-  "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
+  "intent": "Spinning circular loader for short indeterminate waits. One piece. Sizes 12, 16, 20. inverse for a primary fill. Distinct from LoadingAnimation dot-grid.",
   "useWhen": [
     "An inline action is processing (for a kit Button, set loading instead)",
     "Short indeterminate page or panel load",
@@ -18,13 +18,23 @@
   "props": {
     "size": {
       "type": "enum",
-      "values": ["sm", "md", "lg"],
-      "default": "md"
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "sm 12px, md 16px, lg 20px."
     },
     "label": {
       "type": "string",
       "required": false,
       "note": "Visible label beside the spinner. When omitted, aria-label is Loading."
+    },
+    "inverse": {
+      "type": "boolean",
+      "default": false,
+      "note": "On a primary fill: the mark and label use the on-primary ink. A kit Button with loading already draws its own spinner in the button ink."
     }
   },
   "passthrough": {
@@ -41,21 +51,24 @@
     "type.size.bodySm",
     "space.2",
     "motion.duration600",
-    "motion.easeLinear"
+    "motion.easeLinear",
+    "action.onPrimary"
   ],
   "a11y": {
     "element": "span[role=status]",
     "requirements": [
       "role=status with aria-live=polite",
       "aria-label Loading when label is omitted",
-      "Visible label is not duplicated in aria-label"
+      "Visible label is not duplicated in aria-label",
+      "Reduced motion: the mark stays still and the label stays"
     ]
   },
   "doNot": [
     "Do not invent SpinnerIcon or merge Spinner into LoadingAnimation",
     "Do not add Spinner as a LoadingAnimation variant",
     "Do not change Button to accept spinner children",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not color a spinner by hand on a primary fill — set inverse"
   ],
-  "snippet": "<Spinner />\n<Spinner size=\"lg\" label=\"Processing payment…\" />"
+  "snippet": "<Spinner />\n<Spinner size=\"lg\" label=\"Processing payment…\" />\n<Spinner inverse />"
 }

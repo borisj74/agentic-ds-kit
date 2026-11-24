@@ -75,7 +75,7 @@
     "items": {
       "type": "array",
       "required": false,
-      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+      "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). badge: digits (e.g. \"3\") render as a kit Count (neutral subtle, brand subtle on the active row) and join the closed-rail tooltip; other text keeps the plain pill. icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
     },
     "footer": {
       "type": "slot",
@@ -162,8 +162,8 @@
       "SideNav.Item": {
         "export": "SideNavItem",
         "element": "li > a | button",
-        "props": "label (string), icon (any Lucide name — curated instant, others on demand — a Lucide component, or a node; from a Server Component pass a name or element, not a component reference), badge, active, disabled, href, onClick, defaultExpanded, children, renderControl",
-        "note": "active \u2192 aria-current=page and the active fill. href \u2192 link; onClick \u2192 button. Nested SideNav.Item children \u2192 disclosure button with aria-expanded/aria-controls (one level). ref/className/rest go to the row control, not the li. On the closed rail the label shows in a kit Tooltip automatically. renderControl(control) wraps the row control inside the li (e.g. a kit Popover anchored on it), the compose twin of the preset's renderItem; keep control in the tree."
+        "props": "label (string), icon (any Lucide name — curated instant, others on demand — a Lucide component, or a node; from a Server Component pass a name or element, not a component reference), badge (a number or digits render as a kit Count; other nodes as given), active, disabled, href, onClick, defaultExpanded, expanded, onExpandedChange, children, renderControl",
+        "note": "Text is type-size-body with type-line-body (16/24), rows 40px at the default padding. active \u2192 aria-current=page and the soft active fill (surface-brand-subtle) on a leaf; a parent row never takes the page-active fill. href \u2192 link; onClick \u2192 button. Nested SideNav.Item children \u2192 disclosure button with aria-expanded/aria-controls and a chevron (one level); the closed submenu is inert. expanded + onExpandedChange control the disclosure (defaultExpanded, default true, when uncontrolled). Disabled rows use text-disabled with no fill. Closed rail: a parent row opens a flyout of its children (see a11y) instead of toggling, and takes the soft active chip when one of its children is active. ref/className/rest go to the row control, not the li. On the closed rail the label (plus the count when the badge is a number) shows in a kit Tooltip automatically; a parent's tooltip steps aside while its flyout is open. renderControl(control) wraps the row control inside the li (e.g. a kit Popover anchored on it), the compose twin of the preset's renderItem; keep control in the tree."
       },
       "SideNav.Footer": {
         "export": "SideNavFooter",
@@ -233,7 +233,6 @@
     "surface.card",
     "surface.muted",
     "surface.brandSubtle",
-    "surface.disabled",
     "border.subtle",
     "border.faint",
     "border.surface",
@@ -244,6 +243,9 @@
     "icon.brand",
     "icon.muted",
     "focus.ring",
+    "shadow.md",
+    "radius.surfaceSm",
+    "z.overlay",
     "space.stack.2xs",
     "layout.sidebar",
     "layout.sidebarCompact",
@@ -259,7 +261,10 @@
     "element": "aside",
     "requirements": [
       "In-flow aside, not a dialog and not position:fixed",
-      "No overlay, no focus trap, no Escape-to-close",
+      "No overlay, no focus trap, no Escape-to-close on the nav itself; the only overlay is the closed-rail flyout below",
+      "Arrow keys on rows: Down and Up move through visible rows (top level, open submenus, footer), Home and End jump to the first and last; Right on a parent opens it (or moves to its first child when open), Left closes it; Left on a nested row moves to its parent. Right and Left swap in rtl. Tab still moves between rows as usual",
+      "Closed-rail flyout: a parent row (aria-expanded, aria-controls) opens a panel of its children just outside the rail edge on click, Enter, Space or Right. The panel is a group named by a visible caption (the parent label), portaled, built on the shared overlay dismiss (useOverlayDismiss: Escape and an outside press close it, newest overlay first). Focus moves to its first row; Up, Down, Home and End move; Left (Right in a right-side nav) or Escape closes it and returns focus to the parent; Tab closes it and moves on from the parent; picking a row closes it. Opening the rail closes it",
+      "A parent that holds the current page shows the same soft chip on the closed rail as the current page, together with aria-expanded and the flyout, so it is not marked by colour alone",
       "Close is a kit Button with PanelLeftClose or PanelRightClose and ariaLabel Close",
       "Closed rail reopens via the brand mark button (SideNav.Brand) with ariaLabel Open (openLabel); while open the mark is disabled, aria-hidden and out of the tab order",
       "Title is visible in the header when open; clipped when closed",
@@ -286,12 +291,13 @@
   },
   "doNot": [
     "Do not invent Sidebar, SidebarHeader, SidebarNav, SidebarSection, SidebarItem, SidebarSubmenu, SidebarFooter, SidebarProvider, SidebarTrigger, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, or SidebarRail",
+    "Do not hand-build a closed-rail flyout or menu for a parent's children; nested SideNav.Item children already open one on the closed rail",
     "Do not hand-roll nav rows (a, button, li with your own active/hover styles) inside SideNav \u2014 use SideNav.Item, which carries aria-current, the disclosure attributes and the closed-rail tooltip",
     "Do not nest SideNav.Item deeper than one level, or put rows outside a SideNav.Section",
     "Do not use SideNav.Root without a SideNav.Toggle or SideNav.Brand in its header when the rail can close \u2014 nothing would reopen it",
     "Do not compose AppNav inside SideNav",
     "Do not use Drawer for persistent app chrome",
-    "Do not use AppNav as closeable product chrome",
+    "Do not use AppNav as closeable product chrome: SideNav is product chrome, AppNav is the docs catalog nav only",
     "Do not leave a gap between AppHeader and SideNav \u2014 radius none, showHeader false, layout-app with no gap",
     "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; on narrow screens render it inside kit Drawer",
     "Keep the nav reachable on narrow screens: a kit Button that opens it in kit Drawer (as app-shell does), not a hand-rolled overlay or menu",

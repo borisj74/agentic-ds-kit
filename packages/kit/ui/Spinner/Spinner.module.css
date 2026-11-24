@@ -13,8 +13,8 @@
 }
 
 .sm .icon {
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 .md .icon {
@@ -39,6 +39,12 @@
 
 .lg .label {
   font-size: var(--type-size-label);
+}
+
+/* On a primary fill (a solid primary surface or Button): on-primary ink for the mark and the label. */
+.inverse,
+.inverse .label {
+  color: var(--action-on-primary);
 }
 
 @keyframes spinner-spin {

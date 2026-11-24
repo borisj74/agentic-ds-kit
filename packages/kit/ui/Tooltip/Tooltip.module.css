@@ -11,7 +11,6 @@
   width: max-content;
   max-width: 16rem;
   padding: var(--space-1) var(--space-2);
-  border: var(--border-surface) solid var(--border-subtle);
   border-radius: var(--radius-control-md);
   background: var(--surface-inverse);
   box-shadow: var(--shadow-md);
@@ -39,7 +38,6 @@
   width: var(--tooltip-arrow-size);
   height: var(--tooltip-arrow-size);
   background: var(--surface-inverse);
-  border: var(--border-surface) solid var(--border-subtle);
   transform: rotate(45deg);
 }
 
@@ -47,32 +45,24 @@
   bottom: -0.28rem;
   left: var(--floating-arrow);
   margin-left: calc(var(--tooltip-arrow-size) / -2);
-  border-top: 0;
-  border-left: 0;
 }
 
 [data-placement="bottom"] > .arrow {
   top: -0.28rem;
   left: var(--floating-arrow);
   margin-left: calc(var(--tooltip-arrow-size) / -2);
-  border-bottom: 0;
-  border-right: 0;
 }
 
 [data-placement="left"] > .arrow {
   right: -0.28rem;
   top: var(--floating-arrow);
   margin-top: calc(var(--tooltip-arrow-size) / -2);
-  border-bottom: 0;
-  border-left: 0;
 }
 
 [data-placement="right"] > .arrow {
   left: -0.28rem;
   top: var(--floating-arrow);
   margin-top: calc(var(--tooltip-arrow-size) / -2);
-  border-top: 0;
-  border-right: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
