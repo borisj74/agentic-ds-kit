@@ -27,7 +27,10 @@ export function filterClusters(clusters: FailureCluster[], filters: FailureFilte
 
 export type TrendDirection = "up" | "down" | "flat" | "new";
 
-/** The trend in words, last bucket against the one before: "3× vs previous", "40% down", "Steady". */
+/**
+ * The trend in words, as counts: the last bucket against the one before, e.g. "4 more than the
+ * previous period". Words, not status colours: the status Badge says whether it is a problem.
+ */
 export function trendWords(trend: number[]): { direction: TrendDirection; text: string } {
   if (trend.length < 2) return { direction: "flat", text: "Not enough data" };
   const last = trend[trend.length - 1];
@@ -35,11 +38,17 @@ export function trendWords(trend: number[]): { direction: TrendDirection; text: 
   if (prev === 0 && last === 0) return { direction: "flat", text: "None lately" };
   if (prev === 0) return { direction: "new", text: "New this period" };
   if (last === 0) return { direction: "down", text: "None this period" };
-  const ratio = last / prev;
-  if (ratio >= 2) return { direction: "up", text: `${Math.round(ratio * 10) / 10}× vs previous` };
-  const change = Math.round((ratio - 1) * 100);
-  if (Math.abs(change) < 10) return { direction: "flat", text: "Steady" };
-  return change > 0 ? { direction: "up", text: `Up ${change}% vs previous` } : { direction: "down", text: `Down ${-change}% vs previous` };
+  const change = last - prev;
+  if (change === 0) return { direction: "flat", text: "Same as the previous period" };
+  return change > 0
+    ? { direction: "up", text: `${change} more than the previous period` }
+    : { direction: "down", text: `${-change} fewer than the previous period` };
+}
+
+/** "A", "A and B", "A, B and C". */
+export function listWords(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
 export function agentNames(clusters: FailureCluster[]): string[] {

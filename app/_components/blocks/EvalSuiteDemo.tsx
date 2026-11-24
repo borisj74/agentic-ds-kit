@@ -63,7 +63,7 @@ export function EvalSuiteDemo() {
         </Button>
       </div>
       <EvalSuite
-        title="Support reply agent"
+        title="Support reply agent: v13 vs v12"
         baseline={EVAL_BASELINE}
         candidate={EVAL_CANDIDATE}
         cases={cases}

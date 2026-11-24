@@ -2,7 +2,7 @@
   "id": "experimentcard",
   "status": "stable",
   "level": "organism",
-  "intent": "A compact A/B or A/B/n experiment: status in words, the traffic split and metric per variant, a confidence note and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
+  "intent": "A compact A/B or A/B/n experiment: status in words, the metric and traffic split under each variant's value (\"paid within 7 days · 50%\"), a confidence note in plain words and one decision (Ship winner, Stop, Extend, Start). Ship and Stop confirm with a kit AlertDialog.",
   "useWhen": [
     "show a running or finished experiment in a product or growth view",
     "let someone ship the winner or stop a test with a confirmation",
@@ -26,7 +26,8 @@
     },
     "metricLabel": {
       "type": "string",
-      "required": true
+      "required": true,
+      "note": "Shown in the meta line and, lowercased, under each value with the traffic share."
     },
     "status": {
       "type": "enum",
@@ -50,7 +51,8 @@
     },
     "confidenceNote": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "Plain words, e.g. \"88% sure B is better. 95% in about 3 days.\" Body-sm in muted text."
     },
     "onView": {
       "type": "function",
@@ -119,7 +121,8 @@
     "status.dangerSubtle",
     "status.dangerText",
     "primary.subtleStrong",
-    "motion.duration200"
+    "motion.duration200",
+    "type.size.uiMd"
   ],
   "a11y": {
     "element": "article",

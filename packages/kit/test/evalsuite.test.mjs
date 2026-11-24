@@ -93,6 +93,12 @@ describe("EvalSuite logic", () => {
     assert.deepEqual(lines.map((l) => l.type), ["context", "remove", "add", "context"]);
     assert.equal(logic.signed(-0.5, 1), "−0.5");
     assert.equal(logic.percent(0.875), "87.5%");
+    assert.equal(logic.signedMoney(0.004), "+$0.004");
+    assert.equal(logic.signedMoney(-0.002), "−$0.002");
+    assert.equal(logic.ms(1800), "1.8 s");
+    assert.equal(logic.reviewState(cases[2]), "review");
+    assert.equal(logic.reviewState({ ...cases[2], flagged: true }), "flagged");
+    assert.equal(logic.reviewState(cases[0]), null);
   });
 });
 
@@ -100,16 +106,17 @@ describe("EvalSuite render", () => {
   test("a labelled section with versions, metrics, view, filters and the cases table", () => {
     const html = render({ onPromote() {}, onRerun() {} });
     assert.match(html, /<section[^>]*aria-labelledby="[^"]+"[^>]*>.*<h2[^>]*>Eval run<\/h2>/s);
-    for (const text of ["v12 baseline · v13 candidate · 4 cases", "Pass rate", "50%", "Average cost", "p50 latency", "1.7s", "Regressions", "2 to review", "Show cases", "Filter cases", "Details for Broke"]) {
+    for (const text of ["v12 baseline · v13 candidate · 4 cases", "Pass rate", "50%", "Average cost per case", "p50 latency", "1.7 s", "Regressions 2", "Improvements 1", "All 4", "Worse · −25.0 pts", "Better · −19%", "vs v12 75%", "Score change", "−0.50 of 1", "+$0.002", "To review", "Show cases", "Filter cases", "Details for Broke"]) {
       assert.ok(html.includes(text), text);
     }
     assert.ok(!html.includes("Details for Same"), "regressions view hides unchanged cases");
+    assert.ok(!html.includes(">Tags<"), "tags are a filter, not a default column");
   });
 
   test("Promote is the one solid primary, disabled with a reason while regressions are unreviewed", () => {
     const html = render({ onPromote() {}, onRerun() {} });
     assert.equal(solidPrimaries(html), 1);
-    assert.ok(html.includes("Review 2 regressions first"));
+    assert.ok(html.includes("2 cases that passed in v12 don&#x27;t pass in v13. Accept the new output or flag each one to promote."));
     const promote = findAll(tree({ onPromote() {} }), Button).find((b) => b.props.children === "Promote v13");
     assert.equal(promote.props.disabled, true);
     assert.ok(promote.props["aria-describedby"]);

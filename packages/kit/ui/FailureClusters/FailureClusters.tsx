@@ -3,7 +3,6 @@
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { BellOff, CircleDot, Minus, Sparkles, TrendingDown, TrendingUp, type LucideIcon } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
-import { AvatarGroup } from "../AvatarGroup";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Empty } from "../Empty";
@@ -16,7 +15,7 @@ import { Table } from "../Table";
 import { ToolCallCard } from "../ToolCallCard";
 import { cx } from "../shared/cx";
 import { nisthaAttr } from "../shared/inspect";
-import { STATUSES, STATUS_LABEL, agentNames, filterClusters, plural, trendWords, type TrendDirection } from "./failureClusters.logic";
+import { STATUSES, STATUS_LABEL, agentNames, filterClusters, listWords, plural, trendWords, type TrendDirection } from "./failureClusters.logic";
 import type { FailureCluster, FailureClusterStatus, FailureClustersProps, FailureFilters } from "./FailureClusters.types";
 import styles from "./FailureClusters.module.css";
 
@@ -182,8 +181,7 @@ export function FailureClusters({
                       <Badge tone={STATUS_TONE[cluster.status]} appearance="soft" size="sm">
                         {STATUS_LABEL[cluster.status]}
                       </Badge>
-                      <AvatarGroup items={cluster.agents} size="sm" max={3} ariaLabel={`Agents: ${cluster.agents.map((a) => a.name).join(", ")}`} />
-                      <span className={cx(styles.trend, styles[`trend_${trend.direction}`])}>
+                      <span className={styles.trend}>
                         <TrendIcon size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
                         {trend.text}
                       </span>
@@ -230,29 +228,12 @@ function ClusterDetail({
               <NumberTransition value={cluster.count} label={plural(cluster.count, "failed run")} />
               <span aria-hidden="true">{cluster.count === 1 ? " failed run" : " failed runs"}</span>
             </span>
+            <span>{listWords(cluster.agents.map((a) => a.name))}</span>
             <span>First seen {cluster.firstSeen}</span>
             <span>Last seen {cluster.lastSeen}</span>
           </p>
+          {cluster.sample.summary ? <p className={styles.summary}>{cluster.sample.summary}</p> : null}
         </div>
-        {onMarkKnown || onMute || onOpenIssue ? (
-          <span className={styles.actions}>
-            {onMute ? (
-              <Button size="sm" appearance="ghost" mode="neutral" iconStart={BellOff} disabled={Boolean(cluster.mutedUntil)} onClick={() => onMute(cluster.id)}>
-                {cluster.mutedUntil ? `Muted ${cluster.mutedUntil}` : "Mute 24h"}
-              </Button>
-            ) : null}
-            {onMarkKnown && cluster.status !== "known" ? (
-              <Button size="sm" appearance="outline" mode="neutral" onClick={() => onMarkKnown(cluster.id)}>
-                Mark known
-              </Button>
-            ) : null}
-            {onOpenIssue ? (
-              <Button size="sm" appearance="solid" mode="primary" iconStart={CircleDot} onClick={() => onOpenIssue(cluster.id)}>
-                Open issue
-              </Button>
-            ) : null}
-          </span>
-        ) : null}
       </header>
 
       <LineChart
@@ -270,7 +251,6 @@ function ClusterDetail({
         <h4 className={styles.sectionTitle}>Sample failing call</h4>
         <ToolCallCard
           name={cluster.sample.name}
-          summary={cluster.sample.summary}
           status="error"
           duration={cluster.sample.duration}
           args={cluster.sample.args}
@@ -305,6 +285,27 @@ function ClusterDetail({
           emptyLabel="No runs in this window"
         />
       </div>
+
+      {/* Actions come after the evidence, in reading and tab order. */}
+      {onMarkKnown || onMute || onOpenIssue ? (
+        <span className={styles.actions}>
+          {onMute ? (
+            <Button size="sm" appearance="ghost" mode="neutral" iconStart={BellOff} disabled={Boolean(cluster.mutedUntil)} onClick={() => onMute(cluster.id)}>
+              {cluster.mutedUntil ? `Muted ${cluster.mutedUntil}` : "Mute 24h"}
+            </Button>
+          ) : null}
+          {onMarkKnown && cluster.status !== "known" ? (
+            <Button size="sm" appearance="outline" mode="neutral" onClick={() => onMarkKnown(cluster.id)}>
+              Mark known
+            </Button>
+          ) : null}
+          {onOpenIssue ? (
+            <Button size="sm" appearance="solid" mode="primary" iconStart={CircleDot} onClick={() => onOpenIssue(cluster.id)}>
+              Open issue
+            </Button>
+          ) : null}
+        </span>
+      ) : null}
     </section>
   );
 }

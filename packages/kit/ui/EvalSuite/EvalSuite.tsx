@@ -22,12 +22,15 @@ import {
   distinct,
   isImprovement,
   isRegression,
+  improvements,
   lineDiff,
   money,
   ms,
   percent,
   regressions,
+  reviewState,
   signed,
+  signedMoney,
   unreviewedRegressions,
   viewCases,
 } from "./evalSuite.logic";
@@ -51,6 +54,7 @@ const VIEWS: { value: EvalView; label: string }[] = [
   { value: "improvements", label: "Improvements" },
   { value: "all", label: "All" },
 ];
+const REVIEW_LABEL = { review: "To review", accepted: "Accepted", flagged: "Flagged" } as const;
 const ANY = "__any";
 
 type FilterKey = "tag" | "dataset";
@@ -108,74 +112,70 @@ export function EvalSuite({
   const passDelta = (c.passRate - b.passRate) * 100;
   const costDelta = c.avgCost - b.avgCost;
   const latencyDelta = c.p50LatencyMs - b.p50LatencyMs;
+  const direction = (d: number) => (d > 0 ? "up" : d < 0 ? "down" : "flat") as ScorecardProps["trend"];
+  // goodWhen makes Scorecard say Better or Worse, so a cost rise never reads as good news by colour.
   const metrics: ScorecardProps[] = [
     {
       label: "Pass rate",
       value: percent(c.passRate),
       delta: `${signed(passDelta, 1)} pts`,
-      trend: passDelta > 0 ? "up" : passDelta < 0 ? "down" : "flat",
-      deltaTone: passDelta > 0 ? "success" : passDelta < 0 ? "danger" : "neutral",
-      hint: `${baseline.label} ${percent(b.passRate)}`,
+      trend: direction(passDelta),
+      goodWhen: "up",
+      hint: `vs ${baseline.label} ${percent(b.passRate)}`,
       size: "sm",
     },
     {
-      label: "Average cost",
+      label: "Average cost per case",
       value: money(c.avgCost, currency),
       delta: `${signed((costDelta / (b.avgCost || 1)) * 100, 0)}%`,
-      trend: costDelta > 0 ? "up" : costDelta < 0 ? "down" : "flat",
-      deltaTone: costDelta > 0 ? "danger" : costDelta < 0 ? "success" : "neutral",
-      hint: `${baseline.label} ${money(b.avgCost, currency)}`,
+      trend: direction(costDelta),
+      goodWhen: "down",
+      hint: `vs ${baseline.label} ${money(b.avgCost, currency)}`,
       size: "sm",
     },
     {
       label: "p50 latency",
       value: ms(c.p50LatencyMs),
       delta: `${signed((latencyDelta / (b.p50LatencyMs || 1)) * 100, 0)}%`,
-      trend: latencyDelta > 0 ? "up" : latencyDelta < 0 ? "down" : "flat",
-      deltaTone: latencyDelta > 0 ? "danger" : latencyDelta < 0 ? "success" : "neutral",
-      hint: `${baseline.label} ${ms(b.p50LatencyMs)}`,
-      size: "sm",
-    },
-    {
-      label: "Regressions",
-      value: String(regressed.length),
-      delta: unreviewed.length > 0 ? `${unreviewed.length} to review` : "all reviewed",
-      trend: "neutral",
-      deltaTone: unreviewed.length > 0 ? "danger" : regressed.length > 0 ? "neutral" : "success",
-      hint: `pass in ${baseline.label}, not in ${candidate.label}`,
+      trend: direction(latencyDelta),
+      goodWhen: "down",
+      hint: `vs ${baseline.label} ${ms(b.p50LatencyMs)}`,
       size: "sm",
     },
   ];
+  // The view tabs carry the counts, so there is no separate Regressions tile.
+  const viewCount: Record<EvalView, number> = { regressions: regressed.length, improvements: improvements(cases).length, all: cases.length };
+  const viewItems = VIEWS.map((v) => ({ value: v.value, label: `${v.label} ${viewCount[v.value]}` }));
 
   const filterOptions: Record<FilterKey, { label: string; values: string[] }> = {
     tag: { label: "Tag", values: distinct(cases.flatMap((x) => x.tags ?? [])) },
     dataset: { label: "Dataset", values: distinct(cases.map((x) => x.dataset).filter((d): d is string => Boolean(d))) },
   };
 
+  // Tags stay a filter and show in the case Drawer, so the row keeps to the decision.
   const columns: DataTableColumn[] = [
     { key: "name", header: "Case" },
-    { key: "tags", header: "Tags" },
     { key: "baseline", header: baseline.label },
     { key: "candidate", header: candidate.label },
-    // The change columns say what they compare to in words, not with a Δ glyph.
-    { key: "score", header: `Score vs ${baseline.label}`, type: "number" },
-    { key: "cost", header: `Cost vs ${baseline.label}`, type: "number" },
+    // The change columns are candidate minus baseline; the score keeps its scale ("of 1").
+    { key: "score", header: "Score change", type: "number" },
+    { key: "cost", header: "Cost change", type: "number" },
+    { key: "review", header: "Review" },
     { key: "open", header: "Details" },
   ];
 
   const rows: DataTableRow[] = shown.map((x) => {
-    const scoreDelta = x.candidate.score !== undefined && x.baseline.score !== undefined ? signed(x.candidate.score - x.baseline.score) : "—";
-    const costDelta = x.candidate.cost !== undefined && x.baseline.cost !== undefined ? signed(x.candidate.cost - x.baseline.cost, 3) : "—";
-    const state = isRegression(x) ? (x.accepted ? " · accepted" : x.flagged ? " · flagged" : "") : "";
+    const scoreDelta = x.candidate.score !== undefined && x.baseline.score !== undefined ? `${signed(x.candidate.score - x.baseline.score)} of 1` : "No score";
+    const costDelta = x.candidate.cost !== undefined && x.baseline.cost !== undefined ? signedMoney(x.candidate.cost - x.baseline.cost, currency) : "—";
+    const review = reviewState(x);
     return {
       id: x.id,
-      name: `${x.name}${state}`,
-      // Tags are plain text, so the Pass / Fail badges are the only colour in the row.
-      tags: (x.tags ?? []).join(", ") || "—",
+      name: x.name,
       baseline: { type: "badge", label: RESULT_LABEL[x.baseline.result], tone: RESULT_TONE[x.baseline.result] },
       candidate: { type: "badge", label: RESULT_LABEL[x.candidate.result], tone: RESULT_TONE[x.candidate.result] },
       score: scoreDelta,
       cost: costDelta,
+      review: review ? REVIEW_LABEL[review] : "—",
       open: {
         type: "actions",
         label: `Details for ${x.name}`,
@@ -189,7 +189,7 @@ export function EvalSuite({
     : status === "error"
       ? "Re-run the suite first."
       : unreviewed.length > 0
-        ? `Review ${plural(unreviewed.length, "regression")} first: accept the new output or flag the case.`
+        ? `${plural(unreviewed.length, "case")} that passed in ${baseline.label} ${unreviewed.length === 1 ? "doesn't" : "don't"} pass in ${candidate.label}. Accept the new output or flag each one to promote.`
         : "";
 
   const emptyMessage =
@@ -230,7 +230,7 @@ export function EvalSuite({
       <Scoreboard items={metrics} aria-label={`${candidate.label} against ${baseline.label}`} />
 
       <div className={styles.controls}>
-        <SegmentedControl size="sm" ariaLabel="Show cases" items={VIEWS} value={view} onChange={(v) => setView(v as EvalView)} />
+        <SegmentedControl size="sm" ariaLabel="Show cases" items={viewItems} value={view} onChange={(v) => setView(v as EvalView)} />
         <FilterBar
           size="sm"
           ariaLabel="Filter cases"
