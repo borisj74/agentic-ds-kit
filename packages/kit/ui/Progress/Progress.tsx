@@ -32,6 +32,7 @@ export function Progress({
   showValue = false,
   valuePosition = "end",
   tone = "brand",
+  indeterminate = false,
   ariaLabel,
   className,
   ref,
@@ -41,28 +42,35 @@ export function Progress({
   const percent = clamp(value);
   const rounded = Math.round(percent);
   const labelId = label ? `${uid}-label` : undefined;
-  const isRing = shape === "circle" || shape === "semicircle";
-  const isSemi = shape === "semicircle";
-  const overlay = !isRing && showValue && valuePosition === "overlay";
-  const metaValue = !isRing && showValue && valuePosition === "end" && Boolean(label);
-  const endBeside = !isRing && showValue && valuePosition === "end" && !label;
-  const holeValue = isRing && showValue;
+  // Indeterminate is a bar only: a ring with no percent would read as a Spinner.
+  const resolvedShape = indeterminate ? "bar" : shape;
+  const isRing = resolvedShape === "circle" || resolvedShape === "semicircle";
+  const isSemi = resolvedShape === "semicircle";
+  const valueShown = showValue && !indeterminate;
+  const overlay = !isRing && valueShown && valuePosition === "overlay";
+  const metaValue = !isRing && valueShown && valuePosition === "end" && Boolean(label);
+  const endBeside = !isRing && valueShown && valuePosition === "end" && !label;
+  const holeValue = isRing && valueShown;
   const showMeta = Boolean(label) || metaValue;
-  const unnamed = ariaLabel || `${rounded}%`;
+  const unnamed = ariaLabel || (indeterminate ? "Loading" : `${rounded}%`);
 
   const a11y = {
     role: "progressbar" as const,
     "aria-valuemin": 0,
     "aria-valuemax": 100,
-    "aria-valuenow": rounded,
-    "aria-valuetext": `${rounded}%`,
+    "aria-valuenow": indeterminate ? undefined : rounded,
+    "aria-valuetext": indeterminate ? undefined : `${rounded}%`,
     "aria-labelledby": labelId,
     "aria-label": label ? undefined : unnamed,
   };
 
   const track = (
     <div className={styles.track} {...a11y}>
-      <div className={styles.fill} style={{ width: `${percent}%` }} />
+      {indeterminate ? (
+        <div className={cx(styles.fill, styles.slide)} />
+      ) : (
+        <div className={styles.fill} style={{ width: `${percent}%` }} />
+      )}
       {overlay ? <span className={styles.overlayValue}>{rounded}%</span> : null}
     </div>
   );
@@ -137,7 +145,7 @@ export function Progress({
     <div
       {...rest} {...nisthaAttr("progress", rest)}
       ref={ref}
-      className={cx(styles.root, styles[size], styles[tone], styles[shape], overlay && styles.overlay, className)}
+      className={cx(styles.root, styles[size], styles[tone], styles[resolvedShape], overlay && styles.overlay, indeterminate && styles.indeterminate, className)}
     >
       {showMeta ? (
         <div className={styles.meta}>

@@ -76,6 +76,109 @@
   border-radius: var(--radius-control-md);
 }
 
+/* Layouts: one piece for a whole loading area. Bones are text height (body-sm) unless named. */
+.layout {
+  width: 100%;
+  gap: 0;
+}
+
+.layout .bone {
+  width: 100%;
+  height: var(--type-size-body-sm);
+  border-radius: var(--radius-control-sm);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* Table: a header row and body rows at the md row height (40), split by the row rule. */
+.table .row {
+  min-height: var(--space-10);
+  padding-inline: var(--space-3);
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+.table .headRow {
+  border-top: 0;
+}
+
+.cell {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.cell:first-child {
+  flex: 2;
+}
+
+.table .boneHead {
+  width: 50%;
+  height: var(--type-size-caption);
+}
+
+.table .boneShort {
+  width: 60%;
+}
+
+/* List: an Avatar-sized circle (md, space-10) and two lines per row. */
+.list {
+  gap: var(--space-3);
+}
+
+.list .row {
+  gap: var(--space-3);
+  padding-block: var(--space-1);
+}
+
+.layout .boneAvatar {
+  flex: none;
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+}
+
+.layout .boneTitle {
+  width: 40%;
+}
+
+.layout .boneMeta {
+  width: 70%;
+  height: var(--type-size-caption);
+}
+
+/* Card: an icon tile and title, then text lines. Sits inside a Card; it draws no frame. */
+.card {
+  gap: var(--space-4);
+}
+
+.card .row {
+  gap: var(--space-2);
+}
+
+.layout .boneTile {
+  flex: none;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-control-md);
+}
+
+.layout .last {
+  width: 60%;
+}
+
 .shimmer .bone {
   background-image: linear-gradient(
     90deg,

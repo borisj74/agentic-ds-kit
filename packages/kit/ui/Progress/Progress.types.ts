@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressValuePosition = "overlay" | "end";
-export type ProgressTone = "brand" | "warning" | "danger" | "muted" | "neutral";
+export type ProgressTone = "brand" | "success" | "warning" | "danger" | "muted" | "neutral";
 export type ProgressShape = "bar" | "circle" | "semicircle";
 
 /** Native div attributes the kit sets itself (or replaces with its own prop). */
@@ -17,6 +17,8 @@ export interface ProgressProps extends Omit<ComponentPropsWithoutRef<"div">, Pro
   showValue?: boolean;
   valuePosition?: ProgressValuePosition;
   tone?: ProgressTone;
+  /** Bar only. Work is underway and the percent is not known: a segment slides along the track, and value, showValue and aria-valuenow are left off. */
+  indeterminate?: boolean;
   ariaLabel?: string;
   ref?: Ref<HTMLDivElement>;
 }
