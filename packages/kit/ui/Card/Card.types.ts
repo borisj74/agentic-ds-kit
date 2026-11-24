@@ -5,6 +5,9 @@ import type { KitLinkComponent } from "../shared/link";
 
 export type CardSize = "sm" | "md";
 
+/** Heading element for the title. Visual size never changes. */
+export type CardHeadingLevel = 1 | 2 | 3 | 4;
+
 export interface CardAction {
   /** Button text, or the accessible name when `iconOnly` is set. */
   label: string;
@@ -30,6 +33,11 @@ type CardOwnedKeys = "children" | "title" | "aria-labelledby";
 /** `ref`, `className` and other native attributes land on the root `<article>`. */
 export interface CardProps extends Omit<ComponentPropsWithoutRef<"article">, CardOwnedKeys> {
   title?: string;
+  /**
+   * Heading level of the title: h2 by default. Use 1 when the card title is the page heading
+   * (e.g. Sign in), 3 or 4 under a page or Section heading. The 16/24 look stays the same.
+   */
+  headingLevel?: CardHeadingLevel;
   description?: string;
   children: ReactNode;
   size?: CardSize;

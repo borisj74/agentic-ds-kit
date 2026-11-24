@@ -212,6 +212,9 @@ export function CardDoc() {
                 <p className={styles.usageBody}>
                   Login is the one primary, a block Button after the fields. Google and Apple sit
                   side by side in a layout-split under a Divider. Sign Up in the header is tertiary.
+                  When the card title is the page heading, as on a sign-in page, set headingLevel to 1
+                  so it renders as the h1. Use 3 or 4 under a page or Section heading. Default is 2,
+                  and the title looks the same at every level.
                 </p>
               </div>
               <CodeBlock
