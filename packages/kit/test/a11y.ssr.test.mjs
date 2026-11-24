@@ -232,5 +232,7 @@ describe("ListView priority, sort and primaryAction", () => {
       h(kit.ListView, { label: "L", items: [{ id: "x", primary: "Northwind", actions: [{ id: "open", label: "Open", actionLabel: "Open Northwind" }] }] }),
     );
     assert.match(inline, />Open Northwind</);
+    const inlineId = inline.match(/aria-labelledby="([^"]+)"/)[1];
+    assert.equal(inline.split(`id="${inlineId}"`).length - 1, 1, "one span per action id");
   });
 });

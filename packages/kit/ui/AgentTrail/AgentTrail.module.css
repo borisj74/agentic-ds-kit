@@ -96,30 +96,9 @@
   height: var(--type-line-ui-sm);
 }
 
-.icon {
-  display: block;
-}
 
-.done .icon {
-  color: var(--icon-success);
-}
 
-.running .icon {
-  color: var(--icon-brand);
-  animation: trail-spin 1s linear infinite;
-}
 
-.approval .icon {
-  color: var(--icon-warning);
-}
-
-.pending .icon {
-  color: var(--text-fg-subtle);
-}
-
-.failed .icon {
-  color: var(--icon-danger);
-}
 
 .line {
   flex: 1 1 0;
@@ -266,16 +245,4 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-@keyframes trail-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .running .icon {
-    animation: none;
-  }
 }

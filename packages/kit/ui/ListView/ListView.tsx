@@ -329,6 +329,25 @@ export function ListView({
     };
   }
 
+  // A text action: actionName() once, its props on the Button and its span after it.
+  function renderTextAction(item: ListViewItem, action: ListViewAction): ReactNode {
+    const name = actionName(item, action);
+    return (
+      <Fragment key={action.id}>
+        <Button
+          size="sm"
+          appearance="ghost" mode={action.danger ? "danger" : "neutral"}
+          disabled={item.disabled || action.disabled}
+          onClick={() => onAction?.(item.id, action.id)}
+          {...name.props}
+        >
+          {action.label}
+        </Button>
+        {name.node}
+      </Fragment>
+    );
+  }
+
   function renderActions(item: ListViewItem): ReactNode {
     const actions = item.actions ?? [];
     const stop = (event: MouseEvent) => event.stopPropagation();
@@ -377,18 +396,7 @@ export function ListView({
               onClick={() => onAction?.(item.id, action.id)}
             />
           ) : (
-            <Fragment key={action.id}>
-              <Button
-                size="sm"
-                appearance="ghost" mode={action.danger ? "danger" : "neutral"}
-                disabled={item.disabled || action.disabled}
-                onClick={() => onAction?.(item.id, action.id)}
-                {...actionName(item, action).props}
-              >
-                {action.label}
-              </Button>
-              {actionName(item, action).node}
-            </Fragment>
+            renderTextAction(item, action)
           ),
         )}
       </span>

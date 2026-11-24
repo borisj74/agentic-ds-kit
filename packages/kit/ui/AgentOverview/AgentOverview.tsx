@@ -138,7 +138,7 @@ export function AgentOverview(props: AgentOverviewProps) {
     <ListView
       label="All agents"
       size="sm"
-      items={rows.map(({ item, status }) => ({ ...item, icon: <AgentStatusIcon status={status} size={18} /> }))}
+      items={rows.map(({ item, status }) => ({ ...item, icon: <AgentStatusIcon status={status} size={16} /> }))}
       onAction={rowAction}
       empty={{ ...LIST_EMPTY[filter], icon: "Filter" }}
     />
