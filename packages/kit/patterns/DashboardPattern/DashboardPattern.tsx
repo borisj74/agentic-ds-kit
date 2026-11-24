@@ -26,21 +26,23 @@ import { Table } from "../../ui/Table";
 import type { TableColumn } from "../../ui/Table";
 import { Tabs } from "../../ui/Tabs";
 import { AppShellPattern, useAppShell } from "../AppShellPattern";
-import { largestDrop, mrrSteps } from "./mrrSteps";
 import type { AppShellPatternProps } from "../AppShellPattern";
 import {
   CHANGES,
-  CHURN_RISKS,
   GRANULARITIES,
   MOVEMENT_KEYS,
   NEEDS_ATTENTION,
+  NEEDS_ATTENTION_FOLDED,
   NEEDS_ATTENTION_GROUPS,
+  OVERDUE,
+  OVERDUE_INVOICES,
   PERIODS,
   RETENTION,
-  STATUS,
   SUGGESTIONS,
   answerFor,
+  cents,
   granularitiesFor,
+  hintFor,
   insightFor,
   metricsFor,
   money,
@@ -58,6 +60,9 @@ import "./DashboardPattern.css";
 /** The demo's last day (dashboard-data END) and the three periods as DateRangePicker presets. */
 const PERIOD_END = "2026-11-20";
 const PERIOD_DAYS: Record<DashboardPeriod, number> = { "30d": 30, "3m": 91, "12m": 364 };
+
+/** When the demo data last synced, for the subtitle, the card meta and the sources. */
+const SYNCED_AT = "09:42";
 
 function daysBefore(iso: string, days: number): string {
   const [year, month, day] = iso.split("-").map(Number);
@@ -105,7 +110,7 @@ export interface DashboardPanelOptions {
 }
 
 export interface DashboardPatternProps {
-  /** Metric tiles. Default: demo data for the period and granularity. An empty array shows the no-data state. */
+  /** KPI tiles. Default: demo data for the period and granularity. An empty array shows the no-data state. */
   metrics?: DashboardMetric[];
   /** Controlled metric shown in the main chart (a metric id). */
   selectedMetric?: string;
@@ -121,10 +126,10 @@ export interface DashboardPatternProps {
   granularity?: DashboardGranularity;
   defaultGranularity?: DashboardGranularity;
   onGranularityChange?: (granularity: DashboardGranularity) => void;
-  /** The one-sentence summary. Default: built from the data. null hides it. */
+  /** The one-sentence summary on the Revenue tab. Default: built from the data. null hides it. */
   insight?: ReactNode | null;
   onInsightDismiss?: () => void;
-  /** Needs attention beside the content on wide screens (under the table when narrow). Default true. */
+  /** Needs attention: the rail beside the chart on wide screens, the first card when narrow. Default true. */
   rail?: boolean;
   /** Skeletons in every card while data loads. */
   loading?: boolean;
@@ -136,26 +141,35 @@ export interface DashboardPatternProps {
 
 const ASK_ICON = "MessageCircle";
 
-/** Demo shell: the app-shell example's chrome (workspace, quick actions, Notifications, saved views, account) with rows for a billing product. Swap it through the shell prop, or edit it in your copy. */
+/** Demo shell: the app-shell example's chrome (workspace, quick actions, Notifications, account) with rows for a billing product. Swap it through the shell prop, or edit it in your copy. */
 export const DASHBOARD_DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
   layout: "inset",
   className: "layout-shell--viewport",
   workspace: {
-    name: "Agentix",
-    mark: "ChartLine",
+    name: "Northwind",
+    mark: "CreditCard",
     menu: [
-      { heading: "Workspaces", items: [{ id: "agentix", label: "Agentix", selected: true }, { id: "agentix-eu", label: "Agentix EU" }] },
+      { heading: "Workspaces", items: [{ id: "northwind", label: "Northwind", selected: true }, { id: "northwind-eu", label: "Northwind EU" }] },
       { items: [{ id: "new-workspace", label: "Create workspace", icon: "Plus" }] },
     ],
   },
   nav: {
-    title: "Agentix",
-    markIcon: "ChartLine",
+    title: "Northwind",
+    markIcon: "CreditCard",
     items: [
-      { id: "revenue", label: "Revenue", icon: "ChartLine", active: true },
-      { id: "customers", label: "Customers", icon: "Users", badge: "3,486" },
-      { id: "invoices", label: "Invoices", icon: "FileText", badge: "12" },
-      { id: "plans", label: "Plans", icon: "Layers" },
+      { id: "home", label: "Home", icon: "House", active: true },
+      { id: "customers", label: "Customers", icon: "Users" },
+      {
+        id: "billing",
+        label: "Billing",
+        icon: "CreditCard",
+        items: [
+          { id: "invoices", label: "Invoices", badge: "14" },
+          { id: "payments", label: "Payments" },
+          { id: "plans", label: "Plans" },
+        ],
+      },
+      { id: "reports", label: "Reports", icon: "ChartBar" },
     ],
   },
   search: {
@@ -163,13 +177,19 @@ export const DASHBOARD_DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
       {
         heading: "Go to",
         items: [
-          { id: "revenue", label: "Revenue", icon: "ChartLine" },
+          { id: "home", label: "Home", icon: "House" },
           { id: "customers", label: "Customers", icon: "Users" },
           { id: "invoices", label: "Invoices", icon: "FileText" },
-          { id: "plans", label: "Plans", icon: "Layers" },
+          { id: "reports", label: "Reports", icon: "ChartBar" },
         ],
       },
-      { heading: "Actions", items: [{ id: "export", label: "Export this view", icon: "Download" }] },
+      {
+        heading: "Actions",
+        items: [
+          { id: "new-invoice", label: "New invoice", icon: "Plus" },
+          { id: "export", label: "Export this view", icon: "Download" },
+        ],
+      },
     ],
   },
   notifications: {
@@ -178,37 +198,28 @@ export const DASHBOARD_DEMO_SHELL: Omit<AppShellPatternProps, "children"> = {
         id: "billing",
         label: "Billing",
         items: [
-          { id: "n1", title: "Three payments failed on Growth", body: "Retries run on Friday", createdAt: "Yesterday", read: false, icon: "CreditCard" },
-          { id: "n2", title: "Kettle Analytics asked to cancel", body: "$2,180 MRR", createdAt: "Tue", read: false, icon: "TriangleAlert" },
+          { id: "n1", title: "Three payments failed", body: "Retries run on Friday", createdAt: "Yesterday", read: false, icon: "CreditCard" },
+          { id: "n2", title: "INV-1821 is 20 days late", body: "Pinecrest Clinics, $14,700.00", createdAt: "Today", read: false, icon: "TriangleAlert" },
           { id: "n3", title: "October invoices sent", body: "3,412 invoices", createdAt: "Nov 1", read: true, icon: "FileText" },
         ],
       },
-      { id: "mentions", label: "Mentions", items: [], emptyTitle: "No mentions", emptyDescription: "When someone tags you on a report, it shows up here." },
-    ],
-  },
-  projects: {
-    label: "Saved views",
-    items: [
-      { id: "board-pack", label: "Q4 board pack", icon: "Folder" },
-      { id: "churn-review", label: "Churn review", icon: "Folder" },
+      { id: "mentions", label: "Mentions", items: [], emptyTitle: "No mentions", emptyDescription: "When someone tags you on an invoice, it shows up here." },
     ],
   },
   account: {
-    name: "Ada Brennan",
-    secondary: "Finance",
-    initials: "AB",
+    name: "Maya Chen",
+    secondary: "Owner",
+    initials: "MC",
     menu: [{ items: [{ id: "settings", label: "Settings", icon: "Settings" }] }, { items: [{ id: "sign-out", label: "Sign out", icon: "LogOut" }] }],
   },
 };
 
-const CHURN_COLUMNS: TableColumn[] = [
-  { key: "account", header: "Account", emphasis: true },
-  { key: "plan", header: "Plan" },
-  { key: "mrr", header: "MRR", numeric: true },
-  { key: "change", header: "Change", numeric: true },
-  { key: "chance", header: "Chance", numeric: true },
+const OVERDUE_COLUMNS: TableColumn[] = [
+  { key: "customer", header: "Customer", emphasis: true },
+  { key: "invoice", header: "Invoice" },
   { key: "status", header: "Status" },
-  { key: "next", header: "Next step" },
+  { key: "due", header: "Due", sortable: true, sortValue: (row) => Number(row.dueDay) },
+  { key: "amount", header: "Amount", numeric: true },
 ];
 
 /** A controlled-or-uncontrolled value. */
@@ -256,99 +267,58 @@ function StateCard({
   );
 }
 
-/** The panel toggle beside Export when wide; narrow, the shell's top bar already has one. */
+/** The panel toggle beside the header actions when wide; narrow, the shell's top bar already has one. */
 function PagePanelToggle() {
   const narrow = useAppShell()?.narrow ?? false;
   return narrow ? null : <AppShellPattern.PanelToggle ariaLabel="Assistant" />;
 }
 
-/**
- * Wide: the rail sits beside the charts and the table runs full width below, so its columns fit.
- * Narrow (the shell's --grid-breakpoint-md): one column, with the rail under the table.
- */
-function RailLayout({ main, table, rail, lead }: { main: ReactNode; table: ReactNode; rail: ReactNode; lead?: ReactNode }) {
+/** Renders children with the shell's width: narrow below its --grid-breakpoint-md. */
+function AtWidth({ children }: { children: (narrow: boolean) => ReactNode }) {
   const narrow = useAppShell()?.narrow ?? false;
-  if (!rail || narrow) {
-    return (
-      <>
-        {main}
-        {table}
-        {rail}
-      </>
-    );
-  }
-  return (
-    <>
-      <div className="layout-split--primary dashboard-pattern__split">
-        <div className="dashboard-pattern__stack">{main}</div>
-        <div className="dashboard-pattern__stack">
-          {lead}
-          {rail}
-        </div>
-      </div>
-      {table}
-    </>
-  );
+  return <>{children(narrow)}</>;
 }
 
-/** Renders its children only when the shell is narrow (or, with wide, only when it is wide). */
-function AtWidth({ wide = false, children }: { wide?: boolean; children: ReactNode }) {
-  const narrow = useAppShell()?.narrow ?? false;
-  return narrow === !wide ? <>{children}</> : null;
+/** "Overdue · 14 invoices" → "Overdue": the tile label without its count. */
+function shortName(label: string): string {
+  return label.split(" · ")[0];
 }
 
 /**
- * The Scorecard look for each demo metric, from data it already has:
- * MRR against its target (reference), Net new MRR as an expressive line (its latest bucket differs
- * from the period total; the previous period joins when compare is on), and subscribers and churn as
- * meters toward a target or under a ceiling. ARPA and any other id keep the plain sparkline: ARPA's
- * latest point is its headline value, and it sits above last period's average the whole time. A metric with another id keeps the plain sparkline.
+ * The chart card's title states the finding: how far the latest point sits from the reference,
+ * e.g. "MRR is $7.4k below the $420k target". The reference label's first word names it (Target,
+ * Goal, Limit).
  */
-export function metricLook(
-  m: DashboardMetric,
-  labels: string[],
-  compare: boolean,
-): Pick<ScorecardProps, "sparkline" | "sparklineVariant" | "reference" | "highlightLast" | "sparklineDates" | "compare" | "meter"> {
-  const current = m.series.current;
-  const latest = current[current.length - 1] ?? 0;
-  switch (m.id) {
-    case "mrr": {
-      // Dots on the trailing points past the target; none when the whole period is past it (nothing crossed).
-      const pastRef = (v: number) => (m.reference.highlight === "above" ? v > m.reference.value : v < m.reference.value);
-      let past = 0;
-      for (let i = current.length - 1; i >= 0 && pastRef(current[i]); i -= 1) past += 1;
-      return {
-        sparkline: current,
-        sparklineVariant: "reference",
-        reference: { value: m.reference.value, label: m.reference.label },
-        highlightLast: past < current.length ? past : 0,
-        sparklineDates: labels.length > 1 ? [labels[0], labels[labels.length - 1]] : undefined,
-      };
-    }
-    case "netNew":
-      // A flow: the latest bucket in the end tag differs from the period total on the card.
-      return {
-        sparkline: current,
-        sparklineVariant: "expressive",
-        compare: compare ? m.series.previous : undefined,
-      };
-    case "subscribers":
-      return { meter: { value: latest, max: m.reference.value, label: `of ${m.format(m.reference.value)} target` } };
-    case "churn":
-      return {
-        meter: { value: latest, max: m.reference.value, label: `of ${m.format(m.reference.value)} ceiling`, direction: "lower" },
-      };
-    default:
-      return { sparkline: m.sparkline };
-  }
+export function findingFor(m: DashboardMetric): string {
+  const latest = m.series.current[m.series.current.length - 1];
+  const name = shortName(m.label);
+  if (latest === undefined || !Number.isFinite(latest)) return name;
+  const [kind, ...rest] = m.reference.label.split(" ");
+  const what = rest.length ? `the ${m.format(m.reference.value)} ${kind.toLowerCase()}` : m.reference.label;
+  const gap = latest - m.reference.value;
+  const verb = /s$/.test(name) ? "are" : "is";
+  if (gap === 0) return `${name} ${verb} at ${what}`;
+  return `${name} ${verb} ${m.format(Math.abs(gap))} ${gap < 0 ? "below" : "above"} ${what}`;
+}
+
+/** Scorecard arrow from the delta text's sign, else from where the period's line went. */
+export function trendFor(m: DashboardMetric): NonNullable<ScorecardProps["trend"]> {
+  const sign = m.delta.trim()[0];
+  if (sign === "+") return "up";
+  if (sign === "-" || sign === "−") return "down";
+  const first = m.series.current[0];
+  const latest = m.series.current[m.series.current.length - 1];
+  if (first === undefined || latest === undefined || first === latest) return "flat";
+  return latest > first ? "up" : "down";
 }
 
 /**
- * Revenue overview for a subscription business, inside AppShellPattern (inset): title with Tabs
- * and Export, period / granularity / compare controls, a one-sentence summary, a metric strip that
- * picks the main chart's metric, MRR movements, revenue by plan, retention by signup month, top
- * plans, accounts that might churn, and a Needs attention rail. The work panel holds Ask (kit
- * Chat with a context chip per card) and What changed. Every card has an Ask button.
+ * Northwind's billing home inside AppShellPattern (inset). Overview: four KPIs that pick the
+ * revenue chart's metric, the chart, Needs attention and the oldest overdue invoices. Revenue:
+ * the period / granularity / compare controls, a one-sentence summary, MRR movements, revenue by
+ * plan, retention by signup month and top plans. The work panel holds Ask (kit Chat with a
+ * context chip per card) and What changed. Every card has a labelled Ask in its footer, or an
+ * Ask button in its chart header on the Revenue tab.
  */
 export function DashboardPattern({
   metrics: metricsProp,
@@ -376,6 +346,7 @@ export function DashboardPattern({
   const [selected, setSelected] = useControllable(selectedProp, defaultSelectedMetric, onSelectedMetricChange);
   const [compare, setCompare] = useControllable(compareProp, defaultCompare, onCompareChange);
   const [insightOpen, setInsightOpen] = useState(true);
+  const [tab, setTab] = useState("overview");
 
   // A granularity the period does not offer falls back to the period's first one.
   const allowed = granularitiesFor(period);
@@ -383,6 +354,7 @@ export function DashboardPattern({
   // A custom range from the period DateRangePicker; the demo data follows the nearest period.
   const [customRange, setCustomRange] = useState<DateRange | null>(null);
   const periodLabel = customRange ? rangeLabel(customRange) : (PERIODS.find((p) => p.value === period)?.label ?? "");
+  const periodShort = customRange ? periodLabel : (PERIODS.find((p) => p.value === period)?.short ?? "this period");
 
   const metrics = metricsProp ?? metricsFor(period, granularity);
   const hasData = metrics.length > 0;
@@ -417,10 +389,214 @@ export function DashboardPattern({
     }, 900);
   }
 
+  // Revenue tab: the chart cards keep their icon-only Ask in the chart header, as before.
   const askButton = (card: string) => (
     <Button appearance="ghost" mode="neutral" size="sm" iconStart={ASK_ICON} ariaLabel={`Ask about ${card}`} onClick={() => ask(card)} />
   );
   const askAction = (card: string) => ({ label: `Ask about ${card}`, iconStart: ASK_ICON, iconOnly: true, onClick: () => ask(card) });
+
+  const empty = !hasData;
+  const noDataCopy = { emptyTitle: "No revenue yet", emptyDescription: "This fills in after your first paid invoice." };
+
+  // ---------- Overview ----------
+
+  // Main chart: the picked metric, the previous period dashed, a labelled reference line.
+  const mainSeries = metric
+    ? [
+        { label: compare ? "This period" : shortName(metric.label), data: metric.series.current },
+        ...(compare ? [{ label: "Previous period", data: metric.series.previous, dashed: true }] : []),
+      ]
+    : [];
+  const latest = metric ? (metric.series.current[metric.series.current.length - 1] ?? 0) : 0;
+  const mainSummary = metric
+    ? `${shortName(metric.label)} went from ${metric.format(metric.series.current[0] ?? 0)} to ${metric.format(latest)}, ${metric.format(
+        Math.abs(latest - metric.reference.value),
+      )} ${latest < metric.reference.value ? "below" : "above"} ${metric.reference.label}.${
+        compare ? ` The previous period ended at ${metric.format(metric.series.previous[metric.series.previous.length - 1] ?? 0)}.` : ""
+      }`
+    : "";
+
+  const kpis = (narrow: boolean) =>
+    loading ? (
+      <Card size={narrow ? "sm" : "md"}>
+        <div className="layout-metrics layout-metrics--fixed-4">
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton key={i} lines={3} label={i === 0 ? "Loading metrics" : ""} />
+          ))}
+        </div>
+      </Card>
+    ) : empty ? (
+      <Card size={narrow ? "sm" : "md"}>
+        <Empty
+          title="No metrics yet"
+          description="MRR, collections and overdue invoices appear here after your first paid invoice. Connect billing to start."
+          icon="ChartLine"
+          actions={
+            <Button appearance="outline" mode="neutral" size="sm" iconStart="Settings">
+              Connect billing
+            </Button>
+          }
+        />
+      </Card>
+    ) : (
+      <Scoreboard
+        aria-label="Metric shown in the chart"
+        selectable
+        value={metric?.id}
+        onValueChange={setSelected}
+        items={metrics.map((m) => ({
+          id: m.id,
+          label: m.label,
+          value: m.value,
+          delta: m.delta,
+          trend: trendFor(m),
+          deltaTone: m.deltaTone === "success" || m.deltaTone === "warning" || m.deltaTone === "danger" ? m.deltaTone : "neutral",
+          // On a phone the tiles go two by two and drop what they compare to.
+          hint: narrow ? undefined : metricsProp ? `vs previous ${periodShort.replace(/^last /, "")}` : hintFor(m.id, period),
+          size: narrow ? "sm" : "md",
+        }))}
+      />
+    );
+
+  const chartCard = (narrow: boolean) => {
+    const size = narrow ? "sm" : "md";
+    if (loading || empty || !metric) {
+      return (
+        <Card size={size} icon="ChartLine" eyebrow="Revenue" title={metric ? shortName(metric.label) : "Revenue"}>
+          {loading ? (
+            <Skeleton shape="rect" height={narrow ? 120 : 280} label="Loading the revenue chart" />
+          ) : (
+            <Empty title={noDataCopy.emptyTitle} description={noDataCopy.emptyDescription} icon="ChartLine" />
+          )}
+        </Card>
+      );
+    }
+    const name = shortName(metric.label);
+    return (
+      <Card
+        size={size}
+        icon="ChartLine"
+        eyebrow={`Revenue · ${name} · ${granularity}`}
+        meta={SYNCED_AT}
+        title={findingFor(metric)}
+        source={`Stripe · ${periodShort}`}
+        askLabel="Ask"
+        onAsk={() => ask(name)}
+        actions={narrow ? undefined : [{ label: "Open revenue report", appearance: "outline", mode: "neutral", onClick: () => setTab("revenue") }]}
+      >
+        <div className="dashboard-pattern__chart">
+          <LineChart
+            key={`${metric.id}-${period}-${granularity}`}
+            variant="area"
+            labels={labels}
+            series={mainSeries}
+            referenceLine={metric.reference}
+            highlightLast={!narrow}
+            showTable={false}
+            showGrid={!narrow}
+            height={narrow ? 120 : 280}
+          />
+          <p className="dashboard-pattern__sr">{mainSummary}</p>
+        </div>
+      </Card>
+    );
+  };
+
+  const needsAttention = (narrow: boolean) => (
+    <Card
+      size={narrow ? "sm" : "md"}
+      icon="TriangleAlert"
+      eyebrow="Needs attention · today"
+      title={empty ? "Needs attention" : `${NEEDS_ATTENTION.length} accounts need a person`}
+      askLabel="Ask"
+      onAsk={() => ask("Needs attention")}
+      actions={empty ? undefined : [{ label: "Retry 3 payments", appearance: "outline", mode: "neutral" }]}
+    >
+      {loading ? (
+        <Skeleton lines={4} label="Loading Needs attention" />
+      ) : (
+        <ListView
+          label="Needs attention"
+          size="sm"
+          truncate="secondary"
+          groups={narrow ? undefined : NEEDS_ATTENTION_GROUPS}
+          items={empty ? [] : narrow ? NEEDS_ATTENTION_FOLDED : NEEDS_ATTENTION}
+          empty={{ title: "Nothing needs you", description: "Failed payments and expiring cards show up here." }}
+        />
+      )}
+    </Card>
+  );
+
+  const overdueRows = OVERDUE_INVOICES.map((row) => ({
+    customer: row.customer,
+    invoice: row.invoice,
+    status: (
+      <Badge size="sm" tone="danger" icon="CircleX">
+        Overdue
+      </Badge>
+    ),
+    due: `${row.due} · ${row.daysLate} days late`,
+    dueDay: row.dueDay,
+    amount: cents(row.amount),
+  }));
+
+  const overdueCard = (narrow: boolean) => (
+    <Card
+      size={narrow ? "sm" : "md"}
+      flush
+      icon="FileText"
+      eyebrow="Billing · Invoices"
+      meta={SYNCED_AT}
+      title={empty ? "Overdue invoices" : `${OVERDUE.count} invoices overdue, ${cents(OVERDUE.total)}`}
+      source={empty ? undefined : `Oldest first · ${OVERDUE_INVOICES.length} of ${OVERDUE.count} · Stripe, synced ${SYNCED_AT}`}
+      askLabel="Ask"
+      onAsk={() => ask("Overdue invoices")}
+      actions={empty ? undefined : [{ label: narrow ? `View all ${OVERDUE.count}` : `View all ${OVERDUE.count} invoices`, appearance: "outline", mode: "neutral" }]}
+    >
+      <Table
+        aria-label="Overdue invoices, oldest first"
+        columns={OVERDUE_COLUMNS}
+        rows={empty ? [] : overdueRows}
+        size="md"
+        stack
+        state={loading ? "loading" : empty ? "empty" : undefined}
+        emptyLabel="No overdue invoices. Invoices past their due date show up here."
+        rowActions={(row) => [
+          { label: "Send reminder", onClick: () => undefined },
+          { label: "Open invoice", onClick: () => undefined },
+          { label: `Ask about ${String(row.invoice)}`, onClick: () => ask(String(row.invoice)) },
+        ]}
+      />
+    </Card>
+  );
+
+  /**
+   * Needs attention leads the source, so it is the first card on a phone. Wide (the shell's
+   * --grid-breakpoint-md and up), the grid places it beside the chart, under the KPIs, with the
+   * overdue invoices full width below.
+   */
+  const overview = (
+    <AtWidth>
+      {(narrow) => (
+        <div
+          className={[
+            "dashboard-pattern__body",
+            "dashboard-pattern__home",
+            !narrow && rail ? "dashboard-pattern__home--rail" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          {rail ? <div className="dashboard-pattern__area-rail">{needsAttention(narrow)}</div> : null}
+          <div className="dashboard-pattern__area-kpis">{kpis(narrow)}</div>
+          <div className="dashboard-pattern__area-table">{overdueCard(narrow)}</div>
+          <div className="dashboard-pattern__area-chart">{chartCard(narrow)}</div>
+        </div>
+      )}
+    </AtWidth>
+  );
+
+  // ---------- Revenue: the controls and the four analysis cards, as they were on Overview ----------
 
   const numbers = insightFor(period);
   const insightContent =
@@ -435,103 +611,11 @@ export function DashboardPattern({
     );
   const showInsight = hasData && !loading && insight !== null && insightOpen;
 
-  // Main chart: the picked metric, the previous period dashed, a labelled reference line.
-  const mainSeries = metric
-    ? [
-        { label: compare ? "This period" : metric.label, data: metric.series.current },
-        ...(compare ? [{ label: "Previous period", data: metric.series.previous, dashed: true }] : []),
-      ]
-    : [];
-  const past = metric
-    ? metric.series.current.filter((v) => (metric.reference.highlight === "above" ? v > metric.reference.value : v < metric.reference.value)).length
-    : 0;
-  const mainSummary = metric
-    ? `${metric.label} went from ${metric.format(metric.series.current[0] ?? 0)} to ${metric.format(
-        metric.series.current[metric.series.current.length - 1] ?? 0,
-      )}. ${past} of ${metric.series.current.length} points are ${metric.reference.highlight} ${metric.reference.label}.${
-        compare ? ` The previous period ended at ${metric.format(metric.series.previous[metric.series.previous.length - 1] ?? 0)}.` : ""
-      }`
-    : "";
-
-  // MRR only (a running total): how much it moved each bucket, as a strip under the area, and a
-  // tooltip note on the largest drop. Flows and rates already show change, so they get neither.
-  const steps = metric?.id === "mrr" ? mrrSteps(metric, metrics) : null;
-  const unit = granularity === "daily" ? "day" : granularity === "weekly" ? "week" : "month";
-  const mainStrip =
-    metric && steps
-      ? {
-          label: `Net change per ${unit}`,
-          data: steps,
-          format: (v: number) => (v > 0 ? `+${metric.format(v)}` : v < 0 ? `\u2212${metric.format(-v)}` : metric.format(0)),
-        }
-      : undefined;
-  const dropAt = steps ? largestDrop(steps) : -1;
-  const periodShort = PERIODS.find((p) => p.value === period)?.short ?? "this period";
-  const mainNote =
-    dropAt >= 0
-      ? (index: number) => (index === dropAt ? `The largest drop in the ${periodShort}.` : undefined)
-      : undefined;
-
   const movements = movementsFor(period);
   const plans = planSeriesFor(period, granularity);
   const topPlans = topPlansFor(period, granularity);
-  const churnRows = CHURN_RISKS.map((row) => ({
-    account: row.account,
-    plan: row.plan,
-    mrr: moneyFull(row.mrr),
-    change:
-      row.change === 0 ? (
-        "—"
-      ) : (
-        <Badge size="sm" tone={row.change < 0 ? "danger" : "success"}>
-          {moneyFull(row.change)}
-        </Badge>
-      ),
-    chance: `${row.chance}%`,
-    status: (
-      <Badge size="sm" tone={STATUS[row.status].tone}>
-        {STATUS[row.status].label}
-      </Badge>
-    ),
-    next: row.next,
-  }));
 
-  const empty = !hasData;
-  const noDataCopy = { emptyTitle: "No revenue yet", emptyDescription: "This fills in after your first paid invoice." };
-
-  const insightCard = showInsight ? (
-    <InsightCard
-            tone="info"
-            size="lg"
-            title="In short"
-            description={insightContent}
-            onDismiss={() => {
-              setInsightOpen(false);
-              onInsightDismiss?.();
-            }}
-          />
-  ) : null;
-
-  const needsAttention = (
-    <Card title="Needs attention" description="Which payments and cards need a person today?" size="sm" flush headerAction={askAction("Needs attention")}>
-      {loading ? (
-        <div className="dashboard-pattern__pad">
-          <Skeleton lines={4} label="Loading Needs attention" />
-        </div>
-      ) : (
-        <ListView
-          label="Needs attention"
-          size="sm"
-          truncate="secondary"
-          groups={NEEDS_ATTENTION_GROUPS}
-          items={empty ? [] : NEEDS_ATTENTION}
-          empty={{ title: "Nothing needs you", description: "Failed payments and expiring cards show up here." }}
-        />
-      )}
-    </Card>
-  );
-
-  const overview = (
+  const revenue = (
     <div className="dashboard-pattern__body">
       <div className="dashboard-pattern__controls" role="group" aria-label="Chart controls">
         <div className="dashboard-pattern__period">
@@ -562,157 +646,72 @@ export function DashboardPattern({
         </div>
       </div>
 
-      {/* The summary: above the metrics when narrow; at the top of the rail, beside the main chart, when wide. */}
-      {rail ? <AtWidth>{insightCard}</AtWidth> : insightCard}
+      {showInsight ? (
+        <InsightCard
+          tone="info"
+          size="lg"
+          title="In short"
+          description={insightContent}
+          onDismiss={() => {
+            setInsightOpen(false);
+            onInsightDismiss?.();
+          }}
+        />
+      ) : null}
 
-      {loading ? (
-        <Card size="md">
-          <div className="layout-metrics">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} lines={3} label={i === 0 ? "Loading metrics" : ""} />
-            ))}
-          </div>
-        </Card>
-      ) : empty ? (
-        <Card size="md">
-          <Empty
-            title="No metrics yet"
-            description="MRR, subscribers and churn appear here after your first paid invoice. Connect billing to start."
-            icon="ChartLine"
-            actions={
-              <Button appearance="outline" mode="neutral" size="sm" iconStart="Settings">
-                Connect billing
-              </Button>
-            }
+      <StateCard title="MRR movements" description="Where did this period's change come from?" loading={loading} empty={empty} {...noDataCopy}>
+        <ComboChart
+          title="MRR movements"
+          description="Where did this period's change come from?"
+          stack="stacked"
+          data={movements}
+          bars={MOVEMENT_KEYS.map(({ key, label }) => ({ key, label }))}
+          line={{ key: "net", label: "Net new MRR" }}
+          valueFormatter={{ bars: money, line: money }}
+          actions={askButton("MRR movements")}
+        />
+      </StateCard>
+      <StateCard title="Revenue by plan" description="What share of MRR does each plan bring in?" loading={loading} empty={empty} height={160} {...noDataCopy}>
+        <LineChart
+          title="Revenue by plan"
+          description="What share of MRR does each plan bring in?"
+          variant="area"
+          stack="percent"
+          height={160}
+          labels={labels}
+          series={plans}
+          actions={askButton("Revenue by plan")}
+        />
+      </StateCard>
+
+      <div className="layout-split">
+        <StateCard
+          title="Retention by signup month"
+          description="How many accounts still pay, months after signing up?"
+          loading={loading}
+          empty={empty}
+          {...noDataCopy}
+        >
+          <Heatmap
+            title="Retention by signup month"
+            description="How many accounts still pay, months after signing up?"
+            rows={RETENTION.rows}
+            columns={RETENTION.columns}
+            data={RETENTION.data}
+            valueFormatter={(value) => `${value}%`}
+            actions={askButton("Retention by signup month")}
           />
+        </StateCard>
+        <Card title="Top plans" description="Which plans bring in the most MRR today?" size="sm" headerAction={askAction("Top plans")}>
+          {loading ? (
+            <Skeleton lines={4} label="Loading Top plans" />
+          ) : empty ? (
+            <Empty title="No plans billed yet" description="Plans show up here once someone pays for one." icon="Layers" />
+          ) : (
+            <BarList label="Top plans by MRR" data={topPlans} valueFormatter={moneyFull} />
+          )}
         </Card>
-      ) : (
-        <Scoreboard
-            aria-label="Metric shown in the chart"
-            selectable
-            value={metric?.id}
-            onValueChange={setSelected}
-            items={metrics.map((m) => ({
-              id: m.id,
-              label: m.label,
-              value: m.value,
-              badge: m.delta,
-              badgeTone: m.deltaTone,
-              hint: `vs previous ${period === "30d" ? "30 days" : period === "3m" ? "3 months" : "12 months"}`,
-              ...metricLook(m, labels, compare),
-            }))}
-          />
-      )}
-
-      <RailLayout
-        rail={rail ? needsAttention : null}
-        lead={insightCard}
-        main={
-          <>
-            <StateCard
-              title={metric?.label ?? "MRR"}
-              description={metric?.question ?? "Is recurring revenue on track for the target?"}
-              loading={loading}
-              empty={empty}
-              {...noDataCopy}
-            >
-              {metric ? (
-                <div className="dashboard-pattern__chart">
-                  <LineChart
-                    key={`${metric.id}-${period}-${granularity}`}
-                    title={metric.label}
-                    description={metric.question}
-                    variant="area"
-                    labels={labels}
-                    series={mainSeries}
-                    referenceLine={metric.reference}
-                    highlightLast
-                    changeStrip={mainStrip}
-                    tooltipNote={mainNote}
-                    actions={askButton(metric.label)}
-                  />
-                  <p className="dashboard-pattern__sr">{mainSummary}</p>
-                </div>
-              ) : null}
-            </StateCard>
-
-            <StateCard title="MRR movements" description="Where did this period's change come from?" loading={loading} empty={empty} {...noDataCopy}>
-              <ComboChart
-                title="MRR movements"
-                description="Where did this period's change come from?"
-                stack="stacked"
-                data={movements}
-                bars={MOVEMENT_KEYS.map(({ key, label }) => ({ key, label }))}
-                line={{ key: "net", label: "Net new MRR" }}
-                valueFormatter={{ bars: money, line: money }}
-                actions={askButton("MRR movements")}
-              />
-            </StateCard>
-            <StateCard title="Revenue by plan" description="What share of MRR does each plan bring in?" loading={loading} empty={empty} height={160} {...noDataCopy}>
-              <LineChart
-                title="Revenue by plan"
-                description="What share of MRR does each plan bring in?"
-                variant="area"
-                stack="percent"
-                height={160}
-                labels={labels}
-                series={plans}
-                actions={askButton("Revenue by plan")}
-              />
-            </StateCard>
-
-            <div className="layout-split">
-              <StateCard
-                title="Retention by signup month"
-                description="How many accounts still pay, months after signing up?"
-                loading={loading}
-                empty={empty}
-                {...noDataCopy}
-              >
-                <Heatmap
-                  title="Retention by signup month"
-                  description="How many accounts still pay, months after signing up?"
-                  rows={RETENTION.rows}
-                  columns={RETENTION.columns}
-                  data={RETENTION.data}
-                  valueFormatter={(value) => `${value}%`}
-                  actions={askButton("Retention by signup month")}
-                />
-              </StateCard>
-              <Card title="Top plans" description="Which plans bring in the most MRR today?" size="sm" headerAction={askAction("Top plans")}>
-                {loading ? (
-                  <Skeleton lines={4} label="Loading Top plans" />
-                ) : empty ? (
-                  <Empty title="No plans billed yet" description="Plans show up here once someone pays for one." icon="Layers" />
-                ) : (
-                  <BarList label="Top plans by MRR" data={topPlans} valueFormatter={moneyFull} />
-                )}
-              </Card>
-            </div>
-          </>
-        }
-        table={
-          <Card
-            title="Might churn this month"
-            description="Which paying accounts could leave, and what happens next?"
-            size="sm"
-            flush
-            headerAction={[askAction("Might churn this month"), { label: "View all", href: "#accounts" }]}
-          >
-            {loading ? (
-              <div className="dashboard-pattern__pad">
-                <Skeleton lines={5} label="Loading accounts" />
-              </div>
-            ) : empty ? (
-              <div className="dashboard-pattern__pad">
-                <Empty title="No accounts at risk" description="Accounts with failed payments, downgrades or low use show up here." icon="Users" />
-              </div>
-            ) : (
-              <Table columns={CHURN_COLUMNS} rows={churnRows} size="md" />
-            )}
-          </Card>
-        }
-      />
+      </div>
     </div>
   );
 
@@ -733,7 +732,7 @@ export function DashboardPattern({
             label: "Ask",
             content: (
               <Chat
-                title={`Ask about revenue, ${periodLabel.toLowerCase()}`}
+                title={`Ask about billing, ${periodLabel.toLowerCase()}`}
                 embedded
                 messages={messages}
                 isThinking={thinking}
@@ -757,12 +756,15 @@ export function DashboardPattern({
       <main className="layout-canvas layout-canvas--sticky-header dashboard-pattern">
         <div className="layout-header">
           <PageHeader
-            title="Revenue overview"
-            subtitle="Recurring revenue, subscribers and churn across every plan."
+            title="Billing"
+            subtitle={`November 2026 · synced from Stripe at ${SYNCED_AT}`}
             actions={
               <>
                 <Button appearance="outline" mode="neutral" size="md" iconStart="Download">
                   Export
+                </Button>
+                <Button appearance="solid" mode="primary" size="md" iconStart="Plus">
+                  New invoice
                 </Button>
                 <PagePanelToggle />
               </>
@@ -771,22 +773,12 @@ export function DashboardPattern({
         </div>
         <div className="layout-content">
           <Tabs
-            ariaLabel="Revenue views"
-            defaultValue="overview"
+            ariaLabel="Billing views"
+            value={tab}
+            onChange={setTab}
             items={[
               { id: "overview", label: "Overview", content: overview },
-              ...["Subscribers", "Churn", "Cohorts"].map((label) => ({
-                id: label.toLowerCase(),
-                label,
-                content: (
-                  <Empty
-                    title={`${label} goes here`}
-                    description="This example builds the Overview tab. Compose the others from the same cards."
-                    icon="ChartLine"
-                    outlined
-                  />
-                ),
-              })),
+              { id: "revenue", label: "Revenue", content: revenue },
             ]}
           />
         </div>

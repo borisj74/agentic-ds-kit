@@ -1306,7 +1306,7 @@
   },
   {
     "id": "dashboard",
-    "intent": "Revenue overview for a subscription business inside the app-shell example (inset): a title with Tabs and Export, period / granularity / compare controls, a dismissible one-sentence summary, a selectable metric strip that picks the main chart's metric, a main LineChart with a labelled reference line (and the previous period dashed when compare is on), MRR movements, revenue by plan, retention by signup month, top plans, accounts that might churn, and a Needs attention rail. Every card has an Ask button that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
+    "intent": "A billing home for a subscription business inside the app-shell example (inset): a title with Export and one solid New invoice, and two Tabs. Overview: four selectable KPIs (MRR, Collected, Overdue, Failed payments) that pick the revenue chart's metric, the revenue LineChart with a labelled reference line and a title that states the finding, a Needs attention rail, and the oldest overdue invoices. Revenue: the period / granularity / compare controls, a dismissible one-sentence summary, MRR movements, revenue by plan, retention by signup month and top plans. Every Overview card has a labelled Ask in its footer that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
     "group": "pattern",
     "path": "contracts/patterns/dashboard.json",
     "status": "stable",

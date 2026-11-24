@@ -1,7 +1,7 @@
 /**
- * Demo data for DashboardPattern: a made-up subscription business ("revenue overview"). Replace
- * it with your own. Every number on the screen comes from here, so the insight line, the tiles,
- * the charts and the sample chat answer always agree.
+ * Demo data for DashboardPattern: a made-up subscription business (Northwind's billing home).
+ * Replace it with your own. Every number on the screen comes from here, so the KPIs, the chart
+ * titles, Needs attention, the overdue invoices and the sample chat answer always agree.
  */
 import type { ChatMessage } from "../../ui/Chat";
 import type { BadgeTone } from "../../ui/Badge";
@@ -9,7 +9,7 @@ import type { ListViewItem } from "../../ui/ListView";
 
 export type DashboardPeriod = "30d" | "3m" | "12m";
 export type DashboardGranularity = "daily" | "weekly" | "monthly";
-export type DashboardMetricId = "mrr" | "netNew" | "subscribers" | "churn" | "arpa";
+export type DashboardMetricId = "mrr" | "collected" | "overdue" | "failed";
 
 export const PERIODS: { value: DashboardPeriod; label: string; short: string }[] = [
   { value: "30d", label: "Last 30 days", short: "last 30 days" },
@@ -81,27 +81,43 @@ export interface MetricSeries {
   previous: number[];
 }
 
-/** Every metric's series for a period and granularity. Net new MRR is the change per bucket. */
+/** MRR for a period and granularity (one point per label). The plan stack and top plans build on it. */
+function mrrSeriesFor(period: DashboardPeriod, granularity: DashboardGranularity): MetricSeries {
+  const n = labelsFor(period, granularity).length;
+  const span = SPANS[period].mrr;
+  return {
+    current: path(span.start, span.end, n, 0.06, 1).map((v) => round(v, 100)),
+    previous: path(span.prev, span.start, n, 0.06, 4).map((v) => round(v, 100)),
+  };
+}
+
+/**
+ * The four KPIs' headline numbers. Collected is the trailing 30 days of payments, Overdue the
+ * open overdue balance, Failed payments the amount still waiting on a retry. Fixed for every
+ * period: they are today's numbers, and the period only changes how far back the chart reaches.
+ */
+const KPI = {
+  collected: { start: 241800, end: 286400, prevStart: 228600, goal: 300000 },
+  overdue: { start: 36200, end: 48920, prevStart: 31400, limit: 40000, count: 14 },
+  failed: { start: 3900, end: 1670, prevStart: 2600, limit: 2500, count: 3 },
+};
+
+/** Every KPI's series for a period and granularity, oldest first, ending at today's number. */
 export function seriesFor(period: DashboardPeriod, granularity: DashboardGranularity): Record<DashboardMetricId, MetricSeries> {
   const n = labelsFor(period, granularity).length;
-  const span = SPANS[period];
-  // One extra point so net new (the change per bucket) has n values.
-  const mrrNow = path(span.mrr.start, span.mrr.end, n + 1, 0.06, 1).map((v) => round(v, 100));
-  const mrrPrev = path(span.mrr.prev, span.mrr.start, n + 1, 0.06, 4).map((v) => round(v, 100));
-  const subsNow = path(span.subscribers.start, span.subscribers.end, n, 0.05, 2).map(Math.round);
-  const subsPrev = path(span.subscribers.prev, span.subscribers.start, n, 0.05, 5).map(Math.round);
-  const churnNow = path(span.churn.start, span.churn.end, n, 0.35, 3).map((v) => round(v, 0.05));
-  const churnPrev = path(span.churn.prev, span.churn.start, n, 0.35, 6).map((v) => round(v, 0.05));
-  const diff = (values: number[]) => values.slice(1).map((v, i) => v - values[i]);
-  const mrr = { current: mrrNow.slice(1), previous: mrrPrev.slice(1) };
   return {
-    mrr,
-    netNew: { current: diff(mrrNow), previous: diff(mrrPrev) },
-    subscribers: { current: subsNow, previous: subsPrev },
-    churn: { current: churnNow, previous: churnPrev },
-    arpa: {
-      current: mrr.current.map((v, i) => Math.round(v / subsNow[i])),
-      previous: mrr.previous.map((v, i) => Math.round(v / subsPrev[i])),
+    mrr: mrrSeriesFor(period, granularity),
+    collected: {
+      current: path(KPI.collected.start, KPI.collected.end, n, 0.08, 2).map((v) => round(v, 100)),
+      previous: path(KPI.collected.prevStart, KPI.collected.start, n, 0.08, 5).map((v) => round(v, 100)),
+    },
+    overdue: {
+      current: path(KPI.overdue.start, KPI.overdue.end, n, 0.12, 3).map((v) => round(v, 10)),
+      previous: path(KPI.overdue.prevStart, KPI.overdue.start, n, 0.12, 6).map((v) => round(v, 10)),
+    },
+    failed: {
+      current: path(KPI.failed.start, KPI.failed.end, n, 0.2, 7).map((v) => round(v, 10)),
+      previous: path(KPI.failed.prevStart, KPI.failed.start, n, 0.2, 8).map((v) => round(v, 10)),
     },
   };
 }
@@ -138,33 +154,36 @@ export interface DashboardMetric {
   question: string;
 }
 
-const avg = (values: number[]) => values.reduce((a, b) => a + b, 0) / Math.max(values.length, 1);
 const last = (values: number[]) => values[values.length - 1] ?? 0;
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
 
-/** The five tiles for a period and granularity. */
+/** What each KPI's change compares to, per period (the Scorecard hint). */
+export function hintFor(id: DashboardMetricId, period: DashboardPeriod): string {
+  switch (id) {
+    case "mrr":
+      return period === "30d" ? "vs Oct 21" : period === "3m" ? "vs Aug–Oct" : "vs Nov 2025";
+    case "collected":
+      return "vs Oct, same day";
+    case "overdue":
+      return "vs Oct 31";
+    case "failed":
+      return "vs Oct";
+  }
+}
+
+/** The four KPI tiles for a period and granularity: MRR, Collected, Overdue and Failed payments. */
 export function metricsFor(period: DashboardPeriod, granularity: DashboardGranularity): DashboardMetric[] {
   const s = seriesFor(period, granularity);
   const span = SPANS[period];
-  const pct = (now: number, before: number) => ((now - before) / before) * 100;
-  const netNow = span.mrr.end - span.mrr.start;
-  const netBefore = span.mrr.start - span.mrr.prev;
-  const arpaNow = span.mrr.end / span.subscribers.end;
-  const arpaBefore = span.mrr.start / span.subscribers.start;
-  const churnDelta = span.churn.end - span.churn.start;
-  const mrrDelta = pct(span.mrr.end, span.mrr.start);
-  const netDelta = pct(netNow, netBefore);
-  const subsDelta = pct(span.subscribers.end, span.subscribers.start);
-  const arpaDelta = pct(arpaNow, arpaBefore);
-  const tone = (good: boolean, value: number): BadgeTone => (Math.abs(value) < 0.05 ? "neutral" : good ? "success" : "danger");
-  const mrrTarget = period === "12m" ? 400000 : period === "3m" ? 400000 : 405000;
+  const mrrDelta = ((span.mrr.end - span.mrr.start) / span.mrr.start) * 100;
+  const mrrTarget = 420000;
   return [
     {
       id: "mrr",
       label: "MRR",
       value: money(span.mrr.end),
       delta: signed(`${mrrDelta.toFixed(1)}%`, mrrDelta),
-      deltaTone: tone(mrrDelta > 0, mrrDelta),
+      deltaTone: mrrDelta >= 0 ? "success" : "danger",
       sparkline: s.mrr.current,
       series: s.mrr,
       reference: { value: mrrTarget, label: `Target ${money(mrrTarget)}`, highlight: "above" },
@@ -172,53 +191,42 @@ export function metricsFor(period: DashboardPeriod, granularity: DashboardGranul
       question: "Is recurring revenue on track for the target?",
     },
     {
-      id: "netNew",
-      label: "Net new MRR",
-      value: money(netNow),
-      delta: signed(`${netDelta.toFixed(1)}%`, netDelta),
-      deltaTone: tone(netDelta > 0, netDelta),
-      sparkline: s.netNew.current,
-      series: s.netNew,
-      reference: { value: Math.round(avg(s.netNew.previous)), label: `Last period avg ${money(avg(s.netNew.previous))}`, highlight: "above" },
+      id: "collected",
+      label: "Collected in November",
+      value: money(KPI.collected.end),
+      delta: "+4.2%",
+      deltaTone: "success",
+      sparkline: s.collected.current,
+      series: s.collected,
+      reference: { value: KPI.collected.goal, label: `Goal ${money(KPI.collected.goal)}`, highlight: "above" },
       format: money,
-      question: "Are we adding more revenue each period than before?",
+      question: "Are payments coming in as fast as last month?",
     },
     {
-      id: "subscribers",
-      label: "Subscribers",
-      value: count(span.subscribers.end),
-      delta: signed(`${subsDelta.toFixed(1)}%`, subsDelta),
-      deltaTone: tone(subsDelta > 0, subsDelta),
-      sparkline: s.subscribers.current,
-      series: s.subscribers,
-      reference: { value: 3450, label: "Target 3,450", highlight: "above" },
-      format: count,
-      question: "How many paying accounts do we have?",
+      id: "overdue",
+      label: `Overdue · ${KPI.overdue.count} invoices`,
+      value: money(KPI.overdue.end),
+      delta: "+$6.1k",
+      // More overdue is bad.
+      deltaTone: "danger",
+      sparkline: s.overdue.current,
+      series: s.overdue,
+      reference: { value: KPI.overdue.limit, label: `Limit ${money(KPI.overdue.limit)}`, highlight: "above" },
+      format: money,
+      question: "How much is past its due date?",
     },
     {
-      id: "churn",
-      label: "Churn rate",
-      value: percent(span.churn.end),
-      delta: `${churnDelta > 0 ? "+" : ""}${churnDelta.toFixed(1)} pt`,
-      // Churn going down is good.
-      deltaTone: tone(churnDelta < 0, churnDelta),
-      sparkline: s.churn.current,
-      series: s.churn,
-      reference: { value: 2.5, label: "Ceiling 2.5%", highlight: "above" },
-      format: percent,
-      question: "Are fewer accounts leaving than before?",
-    },
-    {
-      id: "arpa",
-      label: "ARPA",
-      value: moneyFull(arpaNow),
-      delta: signed(`${arpaDelta.toFixed(1)}%`, arpaDelta),
-      deltaTone: tone(arpaDelta > 0, arpaDelta),
-      sparkline: s.arpa.current,
-      series: s.arpa,
-      reference: { value: Math.round(avg(s.arpa.previous)), label: `Last period avg ${moneyFull(avg(s.arpa.previous))}`, highlight: "above" },
-      format: moneyFull,
-      question: "Is each account paying more over time?",
+      id: "failed",
+      label: `Failed payments · ${KPI.failed.count}`,
+      value: money(KPI.failed.end),
+      delta: "2 fewer",
+      // Fewer failed payments is good.
+      deltaTone: "success",
+      sparkline: s.failed.current,
+      series: s.failed,
+      reference: { value: KPI.failed.limit, label: `Limit ${money(KPI.failed.limit)}`, highlight: "above" },
+      format: money,
+      question: "How much is waiting on a payment retry?",
     },
   ];
 }
@@ -279,7 +287,7 @@ export const PLANS = ["Starter", "Growth", "Scale", "Enterprise"] as const;
 
 /** MRR by plan over the main chart's labels; the four add up to MRR. Scale gains share over time. */
 export function planSeriesFor(period: DashboardPeriod, granularity: DashboardGranularity) {
-  const mrr = seriesFor(period, granularity).mrr.current;
+  const mrr = mrrSeriesFor(period, granularity).current;
   return PLANS.map((plan, p) => ({
     label: plan,
     data: mrr.map((total, i) => {
@@ -311,46 +319,56 @@ export const RETENTION = (() => {
   return { rows, columns, data };
 })();
 
-export type ChurnStatus = "pastDue" | "downgrade" | "atRisk";
-
-export const STATUS: Record<ChurnStatus, { label: string; tone: BadgeTone }> = {
-  pastDue: { label: "Past due", tone: "danger" },
-  downgrade: { label: "Downgrade", tone: "warning" },
-  atRisk: { label: "At risk", tone: "warning" },
-};
-
-export interface ChurnRisk {
+export interface OverdueInvoice {
   id: string;
-  account: string;
-  plan: (typeof PLANS)[number];
-  mrr: number;
-  change: number;
-  chance: number;
-  status: ChurnStatus;
-  next: string;
+  customer: string;
+  invoice: string;
+  /** Due date as shown, e.g. Nov 1. */
+  due: string;
+  /** Sort key for Due: the day of November. */
+  dueDay: number;
+  daysLate: number;
+  amount: number;
 }
 
-export const CHURN_RISKS: ChurnRisk[] = [
-  { id: "kettle", account: "Kettle Analytics", plan: "Scale", mrr: 2180, change: 0, chance: 81, status: "atRisk", next: "Call on Mon" },
-  { id: "brightline", account: "Brightline Studio", plan: "Growth", mrr: 640, change: -160, chance: 74, status: "pastDue", next: "Retry on Fri" },
-  { id: "pinecrest", account: "Pinecrest Clinics", plan: "Enterprise", mrr: 4900, change: -1200, chance: 58, status: "downgrade", next: "Offer sent" },
-  { id: "hollis", account: "Hollis & Grey", plan: "Growth", mrr: 720, change: 0, chance: 46, status: "pastDue", next: "Retry on Sat" },
-  { id: "northbeam", account: "Northbeam Labs", plan: "Starter", mrr: 190, change: -40, chance: 33, status: "downgrade", next: "On track" },
+/** The overdue balance in total. The table shows its oldest invoices. */
+export const OVERDUE = { count: KPI.overdue.count, total: KPI.overdue.end };
+
+/** The oldest overdue invoices, oldest first. */
+export const OVERDUE_INVOICES: OverdueInvoice[] = [
+  { id: "inv-1821", customer: "Pinecrest Clinics", invoice: "INV-1821", due: "Nov 1", dueDay: 1, daysLate: 20, amount: 14700 },
+  { id: "inv-1842", customer: "Northwind Traders", invoice: "INV-1842", due: "Nov 4", dueDay: 4, daysLate: 17, amount: 2418 },
+  { id: "inv-1838", customer: "Kettle Analytics", invoice: "INV-1838", due: "Nov 8", dueDay: 8, daysLate: 13, amount: 6540 },
+  { id: "inv-1850", customer: "Brightline Studio", invoice: "INV-1850", due: "Nov 12", dueDay: 12, daysLate: 9, amount: 1920 },
+  { id: "inv-1853", customer: "Hollis & Grey", invoice: "INV-1853", due: "Nov 15", dueDay: 15, daysLate: 6, amount: 2160 },
 ];
 
-/** Rail: payments and cards that need a person. */
+/** Amounts to the cent, as invoices show them. */
+export const cents = (value: number) =>
+  `${value < 0 ? "-" : ""}$${Math.abs(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** Needs attention: payments and cards that need a person today. The icon and the reason carry the status. */
 export const NEEDS_ATTENTION: ListViewItem[] = [
-  { id: "f1", primary: "Brightline Studio", secondary: "Card declined twice", icon: "CreditCard", badge: "$640", badgeTone: "danger", group: "failed" },
-  { id: "f2", primary: "Hollis & Grey", secondary: "Bank asked for verification", icon: "CreditCard", badge: "$720", badgeTone: "danger", group: "failed" },
-  { id: "f3", primary: "Fernway Tours", secondary: "Insufficient funds", icon: "CreditCard", badge: "$310", badgeTone: "danger", group: "failed" },
-  { id: "e1", primary: "Marlow Dental", secondary: "Card expires Nov 30", icon: "Clock", badge: "$1,450", badgeTone: "warning", group: "expiring" },
-  { id: "e2", primary: "Quarry Coffee", secondary: "Card expires Dec 4", icon: "Clock", badge: "$260", badgeTone: "warning", group: "expiring" },
+  { id: "f1", primary: "Ostrava Bikes", secondary: "Declined twice", icon: "CircleX", value: cents(890), group: "failed" },
+  { id: "f2", primary: "Lumen Yoga", secondary: "Bank asked to verify", icon: "CircleX", value: cents(470), group: "failed" },
+  { id: "f3", primary: "Fernway Tours", secondary: "Insufficient funds", icon: "CircleX", value: cents(310), group: "failed" },
+  { id: "e1", primary: "Marlow Dental", secondary: "Expires Nov 30", icon: "Clock", value: cents(1450), group: "expiring" },
+  { id: "e2", primary: "Quarry Coffee", secondary: "Expires Dec 4", icon: "Clock", value: cents(260), group: "expiring" },
 ];
 
 export const NEEDS_ATTENTION_GROUPS = [
-  { id: "failed", label: "Failed payments" },
-  { id: "expiring", label: "Cards expiring soon" },
+  { id: "failed", label: "Failed payments · 3" },
+  { id: "expiring", label: "Cards expiring · 2" },
 ];
+
+/** On a phone the expiring cards fold into one row; failed payments stay as rows because each needs a decision. */
+export const NEEDS_ATTENTION_FOLDED: ListViewItem[] = [
+  ...NEEDS_ATTENTION.filter((item) => item.group === "failed").map((item) => ({ ...item, group: undefined })),
+  { id: "expiring", primary: "2 cards expiring", secondary: "Marlow Dental, Quarry Coffee", icon: "Clock", value: cents(1450 + 260) },
+];
+
+/** How many people Needs attention asks for today, for its title. */
+export const NEEDS_ATTENTION_COUNT = NEEDS_ATTENTION.length;
 
 /** Work panel: what changed since Monday, newest first. */
 export const CHANGES: ListViewItem[] = [
@@ -374,7 +392,7 @@ export function insightFor(period: DashboardPeriod) {
 }
 
 /** Three suggested questions for the empty chat. */
-export const SUGGESTIONS = ["What drove MRR this period?", "Which accounts might churn?", "How is retention trending?"];
+export const SUGGESTIONS = ["What drove MRR this period?", "Which invoices are overdue?", "How is retention trending?"];
 
 /** The answer to a suggested question, built from the same numbers the dashboard shows. */
 export function answerFor(question: string, period: DashboardPeriod): string {
@@ -385,8 +403,8 @@ export function answerFor(question: string, period: DashboardPeriod): string {
     return `MRR went from ${money(span.mrr.start)} to ${money(span.mrr.end)} over the ${i.periodLabel}, so net new MRR was ${i.netNew}. New subscriptions brought in ${money(totals.new)} and expansion ${money(totals.expansion)}, while churn took ${money(Math.abs(totals.churned))} and contraction ${money(Math.abs(totals.contraction))}.`;
   }
   if (question === SUGGESTIONS[1]) {
-    const top = CHURN_RISKS[0];
-    return `${CHURN_RISKS.length} accounts are on the list. The biggest is ${top.account} (${moneyFull(top.mrr)} MRR, ${top.chance}% chance), with a call on Monday. Two are past due and retry this week.`;
+    const top = OVERDUE_INVOICES[0];
+    return `${OVERDUE.count} invoices are overdue, ${cents(OVERDUE.total)} in all. The oldest is ${top.invoice} for ${top.customer}, ${cents(top.amount)} and ${top.daysLate} days late. Three failed payments retry on Friday.`;
   }
   if (question === SUGGESTIONS[2]) {
     return `Churn fell from ${i.churnFrom} to ${i.churnTo}. In the cohort table, accounts that signed up in June keep ${RETENTION.data.find((d) => d.row === "Jun" && d.column === "Month 5")?.value}% after five months.`;

@@ -6,7 +6,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The Overview tab: controls, summary, metric strip, then the cards. */
+/* Each tab's column of cards. */
 .dashboard-pattern__body {
   display: grid;
   gap: var(--space-gap-lg);
@@ -14,14 +14,36 @@
   min-width: 0;
 }
 
-.dashboard-pattern__stack {
-  display: grid;
-  gap: var(--space-gap-lg);
+/* Overview, narrow: one column in source order (Needs attention, KPIs, overdue invoices, chart). */
+.dashboard-pattern__home > * {
   min-width: 0;
 }
 
-.dashboard-pattern__split > * {
-  min-width: 0;
+/* Overview, wide: the grid places the rail beside the chart, under the KPIs, so the source order
+   (rail first) never has to change. */
+.dashboard-pattern__home--rail {
+  grid-template-columns: minmax(0, 1fr) var(--layout-rail);
+  grid-template-areas:
+    "kpis kpis"
+    "chart rail"
+    "table table";
+  align-items: start;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-rail {
+  grid-area: rail;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-kpis {
+  grid-area: kpis;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-chart {
+  grid-area: chart;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-table {
+  grid-area: table;
 }
 
 .dashboard-pattern__controls {

@@ -9,10 +9,10 @@
   "requires": ["app-shell"],
   "import": "import { DashboardPattern } from \"@/components/patterns/dashboard\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/dashboard/) with this contract beside it, and the app-shell example it renders into components/patterns/app-shell/ (kept if you already have it). You own the copies: replace the demo data in dashboard-data.ts, pass your nav through shell, drop the cards you don't need, and keep the `must` lines.",
-  "intent": "Revenue overview for a subscription business inside the app-shell example (inset): a title with Tabs and Export, period / granularity / compare controls, a dismissible one-sentence summary, a selectable metric strip that picks the main chart's metric, a main LineChart with a labelled reference line (and the previous period dashed when compare is on), MRR movements, revenue by plan, retention by signup month, top plans, accounts that might churn, and a Needs attention rail. Every card has an Ask button that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
+  "intent": "A billing home for a subscription business inside the app-shell example (inset): a title with Export and one solid New invoice, and two Tabs. Overview: four selectable KPIs (MRR, Collected, Overdue, Failed payments) that pick the revenue chart's metric, the revenue LineChart with a labelled reference line and a title that states the finding, a Needs attention rail, and the oldest overdue invoices. Revenue: the period / granularity / compare controls, a dismissible one-sentence summary, MRR movements, revenue by plan, retention by signup month and top plans. Every Overview card has a labelled Ask in its footer that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
   "useWhen": [
-    "An overview page where a few headline numbers each open a closer look in one main chart",
-    "Recurring revenue, subscriptions or any metric set with this period against the last",
+    "A home page where a few headline numbers each open a closer look in one main chart, next to the work that needs a person today",
+    "Billing, recurring revenue or any metric set with this period against the last",
     "A dashboard where people should be able to ask about one card without leaving the page"
   ],
   "doNotUseWhen": [
@@ -47,7 +47,7 @@
     "metrics": {
       "type": "array",
       "required": false,
-      "note": "DashboardMetric[]: { id, label, value, delta, deltaTone, sparkline, series: { current, previous }, reference: { value, label, highlight }, format, question }. Default: the demo data for period and granularity. An empty array is the no-data state: every card shows kit Empty."
+      "note": "DashboardMetric[]: { id, label, value, delta, deltaTone, sparkline, series: { current, previous }, reference: { value, label, highlight }, format, question }. Default: the demo KPIs for period and granularity (MRR, Collected in November, Overdue · 14 invoices, Failed payments · 3). The tiles show label, value and delta (the arrow follows the delta's sign) with what it compares to; sparkline is not drawn here. The chart card's title is built from the last point and reference (e.g. MRR is $7.4k below the $420k target), so name the reference with one word first: Target, Goal or Limit. An empty array is the no-data state: every card shows kit Empty."
     },
     "selectedMetric": {
       "type": "string",
@@ -57,13 +57,13 @@
     "compare": {
       "type": "boolean",
       "required": false,
-      "note": "Controlled: the previous period as a dashed series in the main chart. Uncontrolled with defaultCompare (default false); onCompareChange(compare) fires from the Switch."
+      "note": "Controlled: the previous period as a dashed series in the Overview chart. The Switch sits with the period and granularity controls on the Revenue tab. Uncontrolled with defaultCompare (default false); onCompareChange(compare) fires from the Switch."
     },
     "period": {
       "type": "enum",
       "values": ["30d", "3m", "12m"],
       "required": false,
-      "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
+      "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker on the Revenue tab. It sets how far back the Overview chart and the Revenue charts reach. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
     },
     "granularity": {
       "type": "enum",
@@ -74,17 +74,17 @@
     "insight": {
       "type": "node | null",
       "required": false,
-      "note": "The one-sentence summary in a kit InsightCard (tone info) with Dismiss. Default: built from the data, key numbers in <strong>. null hides it; onInsightDismiss fires on Dismiss."
+      "note": "The one-sentence summary at the top of the Revenue tab, in a kit InsightCard (tone info) with Dismiss. Default: built from the data, key numbers in <strong>. null hides it; onInsightDismiss fires on Dismiss."
     },
     "rail": {
       "type": "boolean",
       "default": true,
-      "note": "Needs attention (failed payments, expiring cards) as a kit ListView in a Card. Wide: beside the charts in layout-split--primary, with the accounts table full width below. Narrow (the shell's --grid-breakpoint-md): under the table."
+      "note": "Needs attention (failed payments, expiring cards) as a kit ListView in a Card. It leads the source order: the first card on a phone, and from the shell's --grid-breakpoint-md the grid places it beside the chart, under the KPIs, with the overdue invoices full width below. false: the chart runs full width."
     },
     "loading": {
       "type": "boolean",
       "default": false,
-      "note": "Every card shows kit Skeleton in its place; the summary hides."
+      "note": "Every card shows kit Skeleton in its place (the invoices Table its loading rows); the summary hides."
     },
     "panel": {
       "type": "object",
@@ -100,43 +100,54 @@
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts, sparklines, metric tiles)",
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-    "Chart series take the chart palette (--chart-1 to --chart-6, set by the charts); status colours only where they mean something (past due, churn, a bad delta)",
+    "Chart series take the chart palette (--chart-1 to --chart-6, set by the charts); status colours only where they mean something (overdue, a failed payment, a bad delta)",
     "Every number uses tabular figures (the page root sets font-variant-numeric: tabular-nums)",
-    "At most one appearance=\"solid\" mode=\"primary\" Button per view; this page has none (Export is outline), so Chat's send stays solid",
+    "Exactly one appearance=\"solid\" mode=\"primary\" Button per view: New invoice in the header. Export and every card action are outline",
     "Do not restyle kit components; change them through their props, slots, and tokens",
     "Render inside a main landmark; nav stays reachable on small screens (the app shell's Drawer) and the work panel opens as its right Drawer when narrow"
   ],
   "defaults": [
-    "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; workspace switcher, Quick actions (⌘K), Notifications, Revenue / Customers / Invoices / Plans, Saved views and the account menu; the work panel titled Assistant with Tabs Ask (Chat embedded: no header of its own, fills the panel) and What changed, closed",
-    "Header: PageHeader Revenue overview with Export (outline) and the panel toggle; Tabs Overview, Subscribers, Churn, Cohorts (only Overview is built)",
-    "Controls: period DateRangePicker (sm, in a Field labelled Period at the start) with the presets Last 30 days, Last 3 months and Last 12 months, or a custom range of days; granularity SegmentedControl; Compare to previous period Switch",
-    "Metric strip: Scoreboard selectable with five framed Scorecards (KPI cards), each with a delta Badge and what it compares to. Each tile uses the Scorecard look that fits its data: MRR the reference sparkline against its target (dots on the points past it, start and end dates), Net new MRR the expressive line (previous period dashed when compare is on), Subscribers a meter toward its target, Churn rate a meter under its ceiling (direction lower), ARPA the plain sparkline",
-    "Main chart: LineChart area with the metric's reference line (target or last period's average) and points past it in the accent colour",
-    "Summary: InsightCard at the top of the rail beside the main chart when wide, above the metric strip when narrow (or without the rail)",
-    "Chart hierarchy: the main chart leads; MRR movements (ComboChart stacked, net line) full width under it; Revenue by plan as a short percent stack (height 160); then a row of two in layout-split: Retention by signup month (Heatmap) and Top plans (BarList in a Card)",
-    "Might churn this month: Table in a flush Card with chance, a change Badge only for real losses (— when unchanged), a status Badge and the next step; Ask and View all in the header",
-    "Each card: a title plus one plain line saying what question it answers"
+    "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; Northwind workspace switcher, Quick actions (⌘K), Notifications, Home / Customers / Billing (Invoices, Payments, Plans) / Reports and the account menu; the work panel titled Assistant with Tabs Ask (Chat embedded: no header of its own, fills the panel) and What changed, closed",
+    "Header: PageHeader Billing with the sync line as subtitle, Export (outline), New invoice (solid primary) and the panel toggle; Tabs Overview and Revenue",
+    "Overview source order: Needs attention, KPIs, overdue invoices, revenue chart. Wide, the grid shows KPIs on top, the chart with the rail (--layout-rail) beside it, then the invoices full width; narrow, one column in source order",
+    "KPIs: Scoreboard selectable with four framed Scorecards, each with a delta (arrow and colour) and what it compares to; size sm and no comparison line on a phone, where they go two by two",
+    "Revenue chart: a Card with the eyebrow Revenue · metric · granularity, the sync time, a title that states the finding, a LineChart area with the metric's reference line (280 tall wide, 120 narrow), the source line, Ask and Open revenue report (outline, opens the Revenue tab)",
+    "Needs attention: a flush Card titled with how many accounts need a person, ListView rows with an icon, the reason in words and the amount as the row value, grouped Failed payments and Cards expiring; on a phone the expiring cards fold into one row. Ask and Retry 3 payments (outline) in the footer",
+    "Overdue invoices: a flush Card titled with the count and total, a Table (stack) oldest first with Customer, Invoice, an Overdue Badge with its icon, Due with days late (sortable) and Amount, a row menu, the source line, Ask and View all (outline)",
+    "Cards use Card size md wide and sm narrow",
+    "Revenue tab: the period DateRangePicker (sm, in a Field labelled Period at the start) with the presets Last 30 days, Last 3 months and Last 12 months, or a custom range of days; granularity SegmentedControl; Compare to previous period Switch; the InsightCard summary; MRR movements (ComboChart stacked, net line); Revenue by plan as a short percent stack (height 160); then a row of two in layout-split: Retention by signup month (Heatmap) and Top plans (BarList in a Card)"
   ],
   "states": {
     "data": ["ready", "loading (loading)", "no data yet (metrics={[]})"],
-    "chart": ["compare off", "compare on (dashed previous period)", "any selected metric"],
-    "panel": ["closed", "Ask open with a context chip and suggestions", "Ask with a finished exchange", "What changed"]
+    "chart": [
+      "compare off",
+      "compare on (dashed previous period)",
+      "any selected metric"
+    ],
+    "panel": [
+      "closed",
+      "Ask open with a context chip and suggestions",
+      "Ask with a finished exchange",
+      "What changed"
+    ]
   },
   "a11y": {
     "requirements": [
-      "Metric strip: Scoreboard selectable is a radiogroup named Metric shown in the chart; one tab stop, arrow keys move and pick, Home and End jump; the chart title follows the pick",
-      "Each chart has a title, a one-line question as its description, a Table view, and the main chart a visually hidden summary sentence (start, end, how many points are past the reference)",
-      "Ask buttons are icon-only kit Buttons named Ask about <card>; the Chat composer is described by the context chip (Asking about <card> · <period>)",
-      "Status Badges carry text (Past due, Downgrade, At risk); colour is never the only signal; ListView dots are aria-hidden",
+      "Reading order matches the phone layout: header, Needs attention, KPIs, overdue invoices, chart. The rail is placed by grid when wide, not moved in the source",
+      "KPIs: Scoreboard selectable is a radiogroup named Metric shown in the chart; one tab stop, arrow keys move and pick, Home and End jump; the chart card's title follows the pick",
+      "The chart card's title states the finding, the reference line has a text label, and a visually hidden sentence reads the start, the end and the distance to the reference",
+      "Ask is a labelled sm Button in each Overview card's footer (Card askLabel); the Revenue tab's charts keep an icon-only Ask named Ask about <card>. The Chat composer is described by the context chip (Asking about <card> · <period>)",
+      "Status reads in words: Needs attention rows say the reason, invoices carry an Overdue Badge and days late, deltas an arrow and what they compare to. Icons are aria-hidden; colour is never the only signal",
       "The Compare Switch and the period DateRangePicker have visible names; disabled granularity options stay in the group"
     ]
   },
   "doNot": [
-    "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, sparklineVariant and meter, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
+    "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
     "Do not colour chart series by status; losses in MRR movements are negative values, not red bars",
-    "Do not put more than five tiles in the metric strip",
-    "Do not add a second solid primary Button",
+    "Do not put more than five tiles in the KPI strip",
+    "Do not add a second solid primary Button; card actions are outline",
+    "Do not reorder the rail with CSS order or a second copy; it leads the source and the grid places it",
     "Do not open a Modal for Ask; use the work panel (a right Drawer when narrow)"
   ],
-  "snippet": "<DashboardPattern\n  shell={{ nav: { title: \"Acme\", items } }}\n  defaultPeriod=\"3m\"\n  selectedMetric={metric}\n  onSelectedMetricChange={setMetric}\n  compare={compare}\n  onCompareChange={setCompare}\n/>\n\n<DashboardPattern metrics={[]} />\n\n<DashboardPattern panel={{ defaultOpen: true, defaultTab: \"ask\", defaultContext: \"MRR · Last 3 months\" }} />"
+  "snippet": "<DashboardPattern\n  shell={{ nav: { title: \"Northwind\", items } }}\n  defaultPeriod=\"3m\"\n  selectedMetric={metric}\n  onSelectedMetricChange={setMetric}\n  compare={compare}\n  onCompareChange={setCompare}\n/>\n\n<DashboardPattern metrics={[]} />\n\n<DashboardPattern panel={{ defaultOpen: true, defaultTab: \"ask\", defaultContext: \"MRR · Last 3 months\" }} />"
 }
