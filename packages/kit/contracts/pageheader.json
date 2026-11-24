@@ -32,8 +32,9 @@
       "note": "24/32 at heading weight: the largest of three title sizes (page 24, section 18, card 16)."
     },
     "subtitle": {
-      "type": "string",
-      "required": false
+      "type": "string | node",
+      "required": false,
+      "note": "One line under the title, 14/20 secondary. Text, or inline nodes such as a lucide icon before a short scope line (\"Applies to everyone in Northwind\"): a leading svg is muted, 16px and centred on the text. Renders in a p, so no blocks, lists or buttons."
     },
     "eyebrow": {
       "type": "string",
@@ -130,7 +131,8 @@
     "space.1",
     "type.size.uiXs",
     "type.weight.label",
-    "icon.muted"
+    "icon.muted",
+    "icon.size.sm"
   ],
   "a11y": {
     "element": "header",
@@ -149,7 +151,8 @@
     "Do not use raw hex",
     "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)",
     "Do not put page Tabs under PageHeader by hand — pass them to tabs",
-    "Do not uppercase the eyebrow"
+    "Do not uppercase the eyebrow",
+    "Do not put blocks, lists or buttons in subtitle — it is one line of inline content"
   ],
   "snippet": "<PageHeader title=\"Invoices\" subtitle=\"Bills sent to customers this quarter.\" breadcrumbs={[{ label: \"Billing\", href: \"#\" }, { label: \"Invoices\" }]} overflowActions={[{ id: \"export\", label: \"Export\", icon: \"Download\", onSelect: () => {} }]} actions={<Button iconStart=\"Plus\">New invoice</Button>} tabs={<Tabs items={[{ id: \"all\", label: \"All\" }, { id: \"overdue\", label: \"Overdue\", count: 3 }]} />} />"
 }
