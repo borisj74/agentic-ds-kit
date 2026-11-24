@@ -84,6 +84,7 @@ describe("AgentOverview status and filter", () => {
     assert.equal(by.code.item.secondary, "Needs you · Waiting on you · request above");
     assert.equal(by.code.item.primaryAction, undefined);
     assert.equal(by.test.item.primaryAction.label, "Review");
+    assert.equal(by.test.item.primaryAction.actionLabel, "Review Tester");
     assert.equal(by.run.item.primaryAction.label, "Ask");
     assert.equal(by.run.item.secondary, "Running · Step 3 of 5");
     assert.equal(by.run.item.meta, "$0.42");
@@ -141,6 +142,7 @@ describe("AgentOverview rendered", () => {
     assert.ok(html.includes('aria-label="Tester, Failed"'), "the word is in the row name");
     assert.ok(html.includes(">Failed<"), "and visible");
     assert.ok(html.includes(">Review<"));
+    assert.ok(html.includes(">Review Tester<"), "the button is named for its agent");
     assert.ok(!html.includes(">Ask<"), "no running agent, no Ask");
   });
 

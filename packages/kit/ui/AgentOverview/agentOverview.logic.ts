@@ -123,9 +123,9 @@ export function rowsFor(
       const parts = [AGENT_STATUS_WORD[status], fact, subs ? `${subs} sub-${subs === 1 ? "agent" : "agents"}` : undefined];
       const action =
         status === "failed" && handlers.review
-          ? { id: ACTION_REVIEW, label: "Review" }
+          ? { id: ACTION_REVIEW, label: "Review", actionLabel: `Review ${agent.name}` }
           : status === "running" && handlers.ask
-            ? { id: ACTION_ASK, label: "Ask", icon: "MessageCircle" }
+            ? { id: ACTION_ASK, label: "Ask", actionLabel: `Ask ${agent.name}`, icon: "MessageCircle" }
             : undefined;
       return {
         status,

@@ -2,6 +2,7 @@
 
 - **`AgentStatus` and `toAgentStatus()`.** One status language for agents and runs: queued, running, needs-you, paused, done, failed, drawn as an icon plus the word. `toAgentStatus()` maps the older words (waiting and approval to needs-you, idle and pending to queued).
 - **AgentOverview: `view`, `defaultView`, `onViewChange`, `onReview`, `onAsk`, `onNewTask`, and `status`, `now`, `cost`, `subAgents` on each agent.** List is the default view; Timeline renders AgentLanes on wide blocks only.
+- **ListView: `actionLabel` on a row action.** The button's accessible name when the visible label is not enough, e.g. visible "Review", read as "Review Tax checker". Leave it out and the button keeps its visible text. AgentOverview rows use it.
 - **RunDetail: `messages`, `onSend` and `thinking`.** An Ask panel (kit Chat) under the trail to ask or steer the agent on the run.
 
 ### Changed

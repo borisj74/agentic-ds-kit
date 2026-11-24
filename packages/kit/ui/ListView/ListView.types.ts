@@ -16,6 +16,11 @@ export type ListViewTruncate = "none" | "secondary" | "both";
 export interface ListViewAction {
   id: string;
   label: string;
+  /**
+   * The button's accessible name when the visible label is not enough on its own, e.g. visible
+   * "Review", accessible name "Review Tax checker". Start it with the visible label. Default: label.
+   */
+  actionLabel?: string;
   icon?: KitIcon;
   danger?: boolean;
   disabled?: boolean;

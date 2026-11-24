@@ -76,11 +76,11 @@ const OVERFLOW: ListViewItem[] = [
 ];
 
 const NEEDS_ATTENTION: ListViewItem[] = [
-  { id: "fernway", primary: "Fernway Tours", secondary: "$310 · Low funds", priority: "medium", primaryAction: { id: "retry", label: "Retry" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
-  { id: "marlow", primary: "Marlow Dental", secondary: "$1,450 · Expires Nov 30", priority: "high", primaryAction: { id: "link", label: "Send link" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
-  { id: "hollis", primary: "Hollis & Grey", secondary: "$720 · Bank verification", priority: "high", primaryAction: { id: "email", label: "Email" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
-  { id: "quarry", primary: "Quarry Coffee", secondary: "$260 · Expires Dec 4", priority: "medium", primaryAction: { id: "link", label: "Send link" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
-  { id: "brightline", primary: "Brightline Studio", secondary: "$640 · Declined twice", priority: "high", primaryAction: { id: "retry", label: "Retry" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "fernway", primary: "Fernway Tours", secondary: "$310 · Low funds", priority: "medium", primaryAction: { id: "retry", label: "Retry", actionLabel: "Retry Fernway Tours" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "marlow", primary: "Marlow Dental", secondary: "$1,450 · Expires Nov 30", priority: "high", primaryAction: { id: "link", label: "Send link", actionLabel: "Send link Marlow Dental" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "hollis", primary: "Hollis & Grey", secondary: "$720 · Bank verification", priority: "high", primaryAction: { id: "email", label: "Email", actionLabel: "Email Hollis & Grey" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "quarry", primary: "Quarry Coffee", secondary: "$260 · Expires Dec 4", priority: "medium", primaryAction: { id: "link", label: "Send link", actionLabel: "Send link Quarry Coffee" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
+  { id: "brightline", primary: "Brightline Studio", secondary: "$640 · Declined twice", priority: "high", primaryAction: { id: "retry", label: "Retry", actionLabel: "Retry Brightline Studio" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
 ];
 
 const CODE = `<ListView
@@ -288,7 +288,8 @@ export function ListViewDoc() {
                   bar marker in the leading slot and starts the secondary line with High, Medium or Low, so the
                   marker is never the only signal. sort=&quot;priority&quot; orders high first and keeps your order
                   within each level. primaryAction is the row&apos;s one verb in a fixed-width slot so verbs line
-                  up; the other actions go in the menu. Keep the card&apos;s primary button off the rows.
+                  up; the other actions go in the menu. actionLabel names the button for screen readers when the
+                  verb alone is not enough: visible &quot;Send link&quot;, read as &quot;Send link Marlow Dental&quot;. Keep the card&apos;s primary button off the rows.
                 </p>
               </div>
               <CodeBlock
@@ -303,7 +304,7 @@ export function ListViewDoc() {
       primary: "Marlow Dental",
       secondary: "$1,450 · Expires Nov 30",
       priority: "high",
-      primaryAction: { id: "link", label: "Send link" },
+      primaryAction: { id: "link", label: "Send link", actionLabel: "Send link Marlow Dental" },
       actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }],
     },
   ]}
