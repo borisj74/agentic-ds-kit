@@ -154,7 +154,7 @@ function Finding({
             <span>{labels.confidence}</span>
             <span className="insight-stack-pattern__confidence-value">{item.why.confidence}</span>
           </div>
-          <Meter value={item.why.value} label={labels.confidence} size="sm" intent="info" />
+          <Meter value={item.why.value} label={labels.confidence} size="sm" />
           {item.why.evidence.length > 0 ? (
             <p className="insight-stack-pattern__sources">{item.why.evidence.join(" · ")}</p>
           ) : null}

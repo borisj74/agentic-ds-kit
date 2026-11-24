@@ -14160,7 +14160,7 @@
             "lg"
           ],
           "default": "md",
-          "note": "sm 20rem (320), md 24rem (384), lg 28rem (448). sm uses space-4 padding and a body-size title; md and lg use space-6 padding and a 16/24 title."
+          "note": "sm 20rem (320), md 24rem (384), lg 28rem (448). sm uses space-4 padding and a body-size title (type.size.body / type.line.uiMd); md and lg use space-6 padding and an 18/24 title (type.size.uiLg / type.line.uiLg)."
         },
         "loading": {
           "type": "boolean",
