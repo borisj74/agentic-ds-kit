@@ -4471,13 +4471,25 @@
         "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
         "Do not use headerAction href for new work; it is deprecated. Put View all in the footer actions",
         "Do not make Ask a primary Button, or put a second solid-primary in the footer",
-        "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source"
+        "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source",
+        "Do not skip heading levels: pick headingLevel from the headings above the card, and use 1 only when the card title is the page's only h1"
       ],
       "props": {
         "title": {
           "type": "string",
           "required": false,
           "note": "16/24 at heading weight in both sizes: the smallest of three title sizes (page 24, section 18, card 16)."
+        },
+        "headingLevel": {
+          "type": "enum",
+          "values": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "note": "Heading level of the title. Use 1 when the card title is the page heading (e.g. Sign in), 3 or 4 when the card sits under a page or Section heading. Only the element changes; the 16/24 title look stays the same."
         },
         "description": {
           "type": "string",
