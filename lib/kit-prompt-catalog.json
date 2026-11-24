@@ -6012,11 +6012,12 @@
     {
       "id": "tabs",
       "group": "component",
-      "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
+      "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don't fit.",
       "useWhen": [
         "Grouped settings or detail sections on one page",
         "Two to five peer views sharing one context",
-        "Compact local switching such as preview and code"
+        "Compact local switching such as preview and code",
+        "Page views joined to PageHeader through its tabs slot (size md, line)"
       ],
       "doNotUseWhen": [
         "Top-level app routes — use AppNav",
@@ -6027,12 +6028,15 @@
         "Do not invent TabsList, TabsTrigger, or TabsContent cousins",
         "Do not use raw hex",
         "Do not use Tabs for main app navigation — use AppNav",
-        "Do not nest tabs inside tabs"
+        "Do not nest tabs inside tabs",
+        "Do not colour a tab or its count to show status; the number says it",
+        "Do not use Tabs to change a value inside one view — use SegmentedControl"
       ],
       "props": {
         "items": {
           "type": "array",
-          "required": true
+          "required": true,
+          "note": "icon sits before the label. count renders as a neutral kit Count after the label and is part of the tab's name; never show a count by colour alone."
         },
         "value": {
           "type": "string",
@@ -6061,7 +6065,26 @@
             "line",
             "segmented"
           ],
-          "default": "line"
+          "default": "line",
+          "note": "segmented uses the SegmentedControl track: tray fill, 2px inset, thumb radius nested inside the track. Use segmented for values that change data inside one view; line for page or panel views."
+        },
+        "overflow": {
+          "type": "enum",
+          "values": [
+            "scroll",
+            "more"
+          ],
+          "default": "scroll",
+          "note": "scroll: one line that scrolls sideways when the tabs don't fit (touch, trackpad and arrow keys). more: the tabs that fit, then a More menu (kit DropdownMenu, KitLabels moreTabs) with the rest. The selected tab always stays in the row."
+        },
+        "activation": {
+          "type": "enum",
+          "values": [
+            "automatic",
+            "manual"
+          ],
+          "default": "automatic",
+          "note": "automatic: arrow keys select the tab they land on. manual: arrow keys move focus, Enter or Space selects. Use manual when a panel is slow to load."
         },
         "ariaLabel": {
           "type": "string",
@@ -6621,7 +6644,7 @@
     {
       "id": "pageheader",
       "group": "component",
-      "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+      "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, actions, and page Tabs.",
       "useWhen": [
         "Product page title with optional Breadcrumb trail and actions",
         "Placing primary/secondary Buttons aligned to the page title",
@@ -6639,12 +6662,15 @@
         "Do not invent BreadcrumbItem or BreadcrumbLink cousins — compose kit Breadcrumb",
         "Do not restyle Breadcrumb internals from PageHeader",
         "Do not use raw hex",
-        "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)"
+        "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)",
+        "Do not put page Tabs under PageHeader by hand — pass them to tabs",
+        "Do not uppercase the eyebrow"
       ],
       "props": {
         "title": {
           "type": "string",
-          "required": true
+          "required": true,
+          "note": "24/32 at heading weight: the largest of three title sizes (page 24, section 18, card 16)."
         },
         "subtitle": {
           "type": "string",
@@ -6653,17 +6679,27 @@
         "eyebrow": {
           "type": "string",
           "required": false,
-          "note": "Kept for existing call sites. Breadcrumbs replace eyebrow as the default where-am-I."
+          "note": "Kept for existing call sites. Sentence case, 12/16 at weight 500, never uppercase. Breadcrumbs replace eyebrow as the default where-am-I."
         },
         "actions": {
           "type": "slot",
           "required": false,
-          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+        },
+        "overflowActions": {
+          "type": "array",
+          "required": false,
+          "note": "Secondary actions. When the header is wider than 40rem they render as outline neutral Buttons before actions; narrower, they fold into one ⋯ kit DropdownMenu (KitLabels moreActions) after actions, so the labelled primary stays."
+        },
+        "tabs": {
+          "type": "slot",
+          "required": false,
+          "note": "Kit Tabs, size md, line variant, for the page's views. Rendered under the title row inside the header, so a sticky header keeps them in view."
         },
         "breadcrumbs": {
           "type": "array",
           "required": false,
-          "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb."
+          "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb. When the header is narrower than 40rem, the trail shrinks to one back step to the crumb before the current page (if it has href or onClick)."
         },
         "breadcrumbSeparator": {
           "type": "enum",
@@ -7118,12 +7154,34 @@
         "Do not use Section as the page title — that is PageHeader",
         "Do not embed one-off metric flex rows — use Scoreboard",
         "Actions must be kit Buttons",
-        "Do not compose Accordion or Collapsible for page sections — Section owns collapse"
+        "Do not compose Accordion or Collapsible for page sections — Section owns collapse",
+        "Do not use more than one title size per level: page 24 (PageHeader), section 18, card 16"
       ],
       "props": {
+        "eyebrow": {
+          "type": "string",
+          "required": false,
+          "note": "Short sentence-case line above the title, 12/16 at weight 500. Never uppercase."
+        },
         "title": {
           "type": "string",
-          "required": false
+          "required": false,
+          "note": "18/24 at heading weight: the middle of three title sizes (page 24, section 18, card 16)."
+        },
+        "count": {
+          "type": "number",
+          "required": false,
+          "note": "A neutral kit Count beside the title, like the number of overdue invoices."
+        },
+        "headingLevel": {
+          "type": "enum",
+          "values": [
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "note": "The title's heading element. Use 3 or 4 when the Section sits under another heading so the outline stays in order. Looks the same at every level."
         },
         "description": {
           "type": "string",
@@ -7139,6 +7197,16 @@
           "default": "md",
           "note": "Controls gap under the heading and between stacked sections via space-section tokens. Does not add box padding."
         },
+        "divider": {
+          "type": "boolean",
+          "default": false,
+          "note": "A hairline (border.faint) under the header."
+        },
+        "sticky": {
+          "type": "boolean",
+          "default": false,
+          "note": "The header sticks to the top of its scroll container while the body scrolls. It takes --section-sticky-bg, default surface.page; set it to the surface behind the Section (surface.card inside a Card)."
+        },
         "actions": {
           "type": "slot",
           "required": false,
@@ -7151,7 +7219,7 @@
         "collapsible": {
           "type": "boolean",
           "default": false,
-          "note": "Default false: static heading, no chevron. True: chevron before the title toggles the body. Requires title."
+          "note": "Default false: static heading, no chevron. True: a 16px chevron before the title toggles the body. Requires title."
         },
         "defaultOpen": {
           "type": "boolean",

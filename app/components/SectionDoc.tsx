@@ -219,6 +219,46 @@ export function SectionDoc() {
             </section>
 
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Eyebrow, count and divider</h2>
+              <div className={styles.exampleCanvas}>
+                <Section
+                  eyebrow="Billing"
+                  title="Overdue"
+                  count={3}
+                  description="Invoices past their due date."
+                  divider
+                  actions={
+                    <Button appearance="outline" mode="neutral" size="sm" iconStart="Send">
+                      Send reminders
+                    </Button>
+                  }
+                >
+                  <Table columns={COLUMNS} rows={ROWS} />
+                </Section>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  The title is 18px, between the page (24) and a card (16). The eyebrow is sentence case.
+                  The count is a neutral kit Count. Use headingLevel 3 or 4 when the Section sits under
+                  another heading, and sticky to keep the header in view while a long body scrolls.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Section
+  eyebrow="Billing"
+  title="Overdue"
+  count={3}
+  description="Invoices past their due date."
+  divider
+  actions={<Button appearance="outline" mode="neutral" size="sm" iconStart="Send">Send reminders</Button>}
+>
+  <Table columns={columns} rows={rows} />
+</Section>`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Collapsible</h2>
               <div className={styles.exampleCanvas}>
                 <Section

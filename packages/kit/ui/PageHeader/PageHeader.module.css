@@ -1,4 +1,6 @@
 .header {
+  /* Narrow-screen rules below respond to the header's own width, not the viewport. */
+  container: pageheader / inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -22,20 +24,24 @@
      space and the actions get under a layout pixel of it. */
   flex: 1000000 1 0%;
   min-width: 0;
+  /* Lines are spaced with gap, so a header without an eyebrow or subtitle leaves no empty space. */
+  display: grid;
+  gap: var(--space-1);
 }
 
+/* Sentence case, never uppercase. */
 .eyebrow {
-  margin: 0 0 var(--space-2);
-  font-family: var(--type-family-overline);
-  font-size: var(--type-size-overline-xs);
-  font-weight: var(--type-weight-overline);
-  letter-spacing: var(--type-tracking-overline);
-  text-transform: uppercase;
-  color: var(--text-fg-muted);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-ui-xs);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-secondary);
 }
 
+/* The page is the largest of three title sizes: page 24, section 18, card 16. */
 .title {
-  margin: 0 0 var(--space-2);
+  margin: 0;
   font-family: var(--font-display);
   font-size: var(--type-size-heading-5);
   font-weight: var(--type-weight-title);
@@ -73,4 +79,50 @@
    what the Buttons leave. */
 .actions:has(> :has(> input)) {
   flex-grow: 1;
+}
+
+/* Page tabs join the header: 16px under the title row, inside the same header region,
+   so a sticky header keeps them in view. */
+.tabs {
+  margin-top: var(--space-1);
+  min-width: 0;
+}
+
+.backLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.backIcon {
+  flex-shrink: 0;
+  color: var(--icon-muted);
+}
+
+.trailBack,
+.overflowMenu {
+  display: none;
+}
+
+/* Narrow: 40rem is --grid-breakpoint-sm (container queries can't read custom properties).
+   The trail shrinks to one back step, and secondary actions fold into one ⋯ menu so the
+   labelled primary stays in view. */
+@container pageheader (max-width: 40rem) {
+  /* The header stacks: actions move under the title. */
+  .content {
+    flex-basis: 100%;
+  }
+
+  .trail:has(> .trailBack) > .trailFull {
+    display: none;
+  }
+
+  .trailBack,
+  .overflowMenu {
+    display: block;
+  }
+
+  .actions > .overflowInline {
+    display: none;
+  }
 }

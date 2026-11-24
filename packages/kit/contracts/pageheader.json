@@ -2,7 +2,7 @@
   "id": "pageheader",
   "status": "stable",
   "level": "organism",
-  "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+  "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, actions, and page Tabs.",
   "useWhen": [
     "Product page title with optional Breadcrumb trail and actions",
     "Placing primary/secondary Buttons aligned to the page title",
@@ -17,7 +17,10 @@
   ],
   "contains": [
     "breadcrumb",
-    "button"
+    "button",
+    "dropdownmenu",
+    "link",
+    "tabs"
   ],
   "layout": {
     "note": "Inside layout-header, PageHeader (its root is a header) is a flex item with basis 20rem that takes the free space, so siblings such as a Menu Button or a toolbar sit on the same row and wrap below it only when the row is narrower than 20rem plus their width. Alone it fills the row. Override the flex with className if you want something else."
@@ -25,7 +28,8 @@
   "props": {
     "title": {
       "type": "string",
-      "required": true
+      "required": true,
+      "note": "24/32 at heading weight: the largest of three title sizes (page 24, section 18, card 16)."
     },
     "subtitle": {
       "type": "string",
@@ -34,12 +38,44 @@
     "eyebrow": {
       "type": "string",
       "required": false,
-      "note": "Kept for existing call sites. Breadcrumbs replace eyebrow as the default where-am-I."
+      "note": "Kept for existing call sites. Sentence case, 12/16 at weight 500, never uppercase. Breadcrumbs replace eyebrow as the default where-am-I."
     },
     "actions": {
       "type": "slot",
       "required": false,
-      "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+      "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one."
+    },
+    "overflowActions": {
+      "type": "array",
+      "required": false,
+      "itemShape": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "label": {
+          "type": "string",
+          "required": true
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false
+        },
+        "onSelect": {
+          "type": "function",
+          "required": true
+        },
+        "disabled": {
+          "type": "boolean",
+          "required": false
+        }
+      },
+      "note": "Secondary actions. When the header is wider than 40rem they render as outline neutral Buttons before actions; narrower, they fold into one ⋯ kit DropdownMenu (KitLabels moreActions) after actions, so the labelled primary stays."
+    },
+    "tabs": {
+      "type": "slot",
+      "required": false,
+      "note": "Kit Tabs, size md, line variant, for the page's views. Rendered under the title row inside the header, so a sticky header keeps them in view."
     },
     "breadcrumbs": {
       "type": "array",
@@ -59,7 +95,7 @@
           "note": "Passed through to kit Breadcrumb."
         }
       },
-      "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb."
+      "note": "Same shape as Breadcrumb items. Rendered only when length >= 2. Passed through to kit Breadcrumb. When the header is narrower than 40rem, the trail shrinks to one back step to the crumb before the current page (if it has href or onClick)."
     },
     "breadcrumbSeparator": {
       "type": "enum",
@@ -91,17 +127,19 @@
     "space.4",
     "type.weight.title",
     "type.tracking.heading5",
-    "type.family.overline",
-    "type.size.overline",
-    "type.weight.overline",
-    "type.tracking.overline"
+    "space.1",
+    "type.size.uiXs",
+    "type.weight.label",
+    "icon.muted"
   ],
   "a11y": {
     "element": "header",
     "requirements": [
       "Page title is h1",
       "Composed Breadcrumb keeps nav aria-label=Breadcrumb",
-      "Actions remain keyboard accessible"
+      "Actions remain keyboard accessible",
+      "The narrow back step is a nav named Breadcrumb with a link that names the parent page",
+      "The ⋯ menu trigger is named More actions"
     ]
   },
   "doNot": [
@@ -109,7 +147,9 @@
     "Do not invent BreadcrumbItem or BreadcrumbLink cousins — compose kit Breadcrumb",
     "Do not restyle Breadcrumb internals from PageHeader",
     "Do not use raw hex",
-    "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)"
+    "Do not put more than one primary Button in actions (an Input or other controls beside it are fine)",
+    "Do not put page Tabs under PageHeader by hand — pass them to tabs",
+    "Do not uppercase the eyebrow"
   ],
-  "snippet": "<PageHeader title=\"Aurora\" subtitle=\"Campaign settings and collaborators.\" breadcrumbs={[{ label: \"Home\", href: \"#\" }, { label: \"Projects\", href: \"#\" }, { label: \"Aurora\" }]} actions={<><Button appearance=\"outline\" mode=\"neutral\">Edit</Button><Button>Save</Button></>} />"
+  "snippet": "<PageHeader title=\"Invoices\" subtitle=\"Bills sent to customers this quarter.\" breadcrumbs={[{ label: \"Billing\", href: \"#\" }, { label: \"Invoices\" }]} overflowActions={[{ id: \"export\", label: \"Export\", icon: \"Download\", onSelect: () => {} }]} actions={<Button iconStart=\"Plus\">New invoice</Button>} tabs={<Tabs items={[{ id: \"all\", label: \"All\" }, { id: \"overdue\", label: \"Overdue\", count: 3 }]} />} />"
 }

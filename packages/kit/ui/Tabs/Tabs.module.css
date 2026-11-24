@@ -47,6 +47,10 @@
 .trigger {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
   appearance: none;
   margin: 0;
   border: 0;
@@ -70,6 +74,11 @@
 .trigger:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: currentColor;
 }
 
 .trigger:disabled {
@@ -98,15 +107,18 @@
   box-shadow: none;
 }
 
+/* The segmented variant is the SegmentedControl track: the thumb's radius nests inside the
+   track's (track radius minus its padding) and the label uses the UI line height. */
 .segmented > .list > .indicator {
-  border-radius: var(--radius-control-sm);
+  border-radius: calc(var(--radius-control-md) - var(--space-inset-2xs));
   background: var(--bg-control);
   box-shadow: var(--shadow-xs);
 }
 
 .segmented > .list > .trigger {
-  border-radius: var(--radius-control-sm);
+  border-radius: calc(var(--radius-control-md) - var(--space-inset-2xs));
   padding: var(--space-inset-sm) var(--space-inset-md);
+  line-height: var(--type-line-ui-sm);
 }
 
 /* On the tray, resting labels use muted text: subtle text on --bg-tray is below 4.5:1. */
@@ -178,3 +190,74 @@
   font-size: var(--type-size-body);
 }
 
+
+/* overflow="scroll" (default): one line that scrolls sideways when the tabs don't fit.
+   The scrollbar is hidden; touch, trackpad and arrow keys scroll it, and focus scrolls
+   the focused tab into view. Focus rings sit inside the tab so the scroll box doesn't clip them. */
+.scroll > .list {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.scroll > .list::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll > .list > .trigger,
+.more > .list > .trigger {
+  flex-shrink: 0;
+}
+
+.scroll > .list > .trigger:focus-visible,
+.more > .list > .trigger:focus-visible {
+  outline-offset: calc(-1 * var(--border-focus-width));
+}
+
+/* overflow="more": the tabs that fit, then a More menu with the rest. */
+.more {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.more.listOnly {
+  width: 100%;
+}
+
+.more > .list {
+  grid-column: 1;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.more > .moreSlot {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  margin-inline-start: var(--space-2);
+}
+
+.more > .moreSlotIdle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.more > .content {
+  grid-column: 1 / -1;
+}
+
+.line.more > .moreSlot {
+  margin-inline-start: 0;
+  padding-inline-start: var(--space-2);
+  border-bottom: var(--border-divider) solid var(--border-faint);
+}
+
+.segmented.more > .list {
+  width: fit-content;
+}

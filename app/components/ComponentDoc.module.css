@@ -159,6 +159,14 @@
 }
 
 /* A sidebar-wide column, for examples about narrow space (truncation). */
+/* Page-wide examples such as PageHeader, which changes layout under 40rem. */
+.previewPage {
+  display: grid;
+  gap: var(--space-8);
+  width: 100%;
+  min-width: 0;
+}
+
 .previewNarrow {
   width: min(100%, var(--layout-sidebar));
   min-width: 0;
