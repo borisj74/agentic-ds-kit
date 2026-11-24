@@ -23,11 +23,11 @@ import type {
   DataTableFilter,
   DataTableProps,
   DataTableRow,
-  DataTableSortValue,
 } from "./DataTable.types";
 import { cx } from "../shared/cx";
 import styles from "./DataTable.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { compareSortValues } from "../shared/sort";
 
 export type {
   DataTableProps,
@@ -66,21 +66,6 @@ function stringifyCell(value: DataTableCell | undefined): string {
     return cell.actions.map((item) => item.label || item.ariaLabel || "").join(" ");
   }
   return "";
-}
-
-function sortKeyOf(value: DataTableSortValue): number | string {
-  if (value instanceof Date) return value.getTime();
-  return value;
-}
-
-function compareSortValues(a: DataTableSortValue, b: DataTableSortValue): number {
-  const av = sortKeyOf(a);
-  const bv = sortKeyOf(b);
-  const aNum = typeof av === "number" && !Number.isNaN(av);
-  const bNum = typeof bv === "number" && !Number.isNaN(bv);
-  if (aNum && bNum) return (av as number) - (bv as number);
-  if (aNum !== bNum) return aNum ? -1 : 1;
-  return String(av).localeCompare(String(bv), undefined, { numeric: true, sensitivity: "base" });
 }
 
 function columnStyle(column: DataTableColumn): CSSProperties | undefined {

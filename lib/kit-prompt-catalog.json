@@ -3411,7 +3411,7 @@
         "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
         "Do not use raw hex",
         "Do not put a checkbox on every Cell — row selection stays on DataTable",
-        "Do not add pagination, loading, row actions, expandable rows, sticky header, density, or infinite scroll",
+        "Do not add pagination (Pagination sits below the table), loading or row actions here — Table has state and rowActions; no expandable rows, sticky header, density, or infinite scroll",
         "Do not invent FilterChip, a Tag-based filter summary, or a second filter summary — the dropdown trigger is the selected value; Reset filters and selection actions are kit Button",
         "Do not put a primary Button in bulkActions",
         "Do not invent a SortButton or use TanStack Table for sort",
@@ -8101,7 +8101,7 @@
     {
       "id": "table",
       "group": "component",
-      "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
+      "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header and loading, empty and error states. Search and filters belong on DataTable. One piece.",
       "useWhen": [
         "Listing invoices, products, or other short text rows",
         "Inside Section on dashboard or list-detail patterns"
@@ -8115,24 +8115,27 @@
       ],
       "doNot": [
         "Do not invent TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, or TableCaption cousins",
-        "Do not compose HeaderCell or Cell — those stay on DataTable",
+        "Do not compose HeaderCell — header cells stay on DataTable. Cell is fine in rows",
         "Search, filters, selection — use DataTable",
         "Editable in-place rows — use DataGrid",
         "Do not add @tanstack/react-table",
         "Do not squash columns to the container — overflow-x on the wrapper",
         "Do not use raw hex",
-        "Do not build usage rows from a Table with a Progress column — use UsageList"
+        "Do not build usage rows from a Table with a Progress column — use UsageList",
+        "Do not put a second menu or icon buttons in a row — one rowActions menu, last",
+        "Do not make stack the default — it is opt-in",
+        "Do not sort currency or date strings lexically — give the column sortValue"
       ],
       "props": {
         "columns": {
           "type": "array",
           "required": true,
-          "note": "numeric or align end right-aligns the column. emphasis or the first column is medium + text-primary."
+          "note": "numeric or align end right-aligns the column and its header (a sortable number header keeps its icon on the right). emphasis or the first column is medium + text-primary. sortable makes the header a button: ascending, descending, then off (local state only). sortValue returns what to sort by (numbers and Dates compare numerically, strings locale-aware); without it, a numeric column sorts by the digits in its text and others by text. sortValue is a function, so build the columns in a client component."
         },
         "rows": {
           "type": "array",
           "required": true,
-          "note": "Values render in native td. ReactNode allowed so Actions can put kit DropdownMenu in a cell."
+          "note": "Values render in native td. Plain strings and numbers, or ReactNode such as kit Cell (badge, avatar, link) or Badge. The first column's text (or its Cell label) names the row."
         },
         "caption": {
           "type": "string",
@@ -8147,17 +8150,57 @@
             "lg"
           ],
           "default": "md",
-          "note": "md is compact: th 2.5rem, td padding space-2. sm a hair tighter, lg a hair roomier. Do not recreate DataTable 3–4rem rows."
+          "note": "md rows and header are 40px, one line. sm a hair tighter, lg a hair roomier. Do not recreate DataTable 3–4rem rows."
         },
         "emptyLabel": {
           "type": "string",
           "default": "No results.",
-          "note": "Shown in one td with colSpan when rows is empty."
+          "note": "Shown as a small Empty (kind no-data) in one td with colSpan when rows is empty or state is empty. Say why it is empty."
         },
         "footer": {
           "type": "object",
           "required": false,
           "note": "Renders tfoot one row: label in a td colSpan={columns.length-1}, value in last td end-aligned."
+        },
+        "stickyHeader": {
+          "type": "boolean",
+          "default": false,
+          "note": "The header row stays in view while the body scrolls. Give the Table a height (style or className) so the region scrolls."
+        },
+        "rowActions": {
+          "type": "function",
+          "required": false,
+          "note": "(row, index) => CellAction[]. One row menu (Cell type actionMenu) in a last 56px column with no visible header text, named Actions for <first cell>. Return [] to leave a row without a menu."
+        },
+        "state": {
+          "type": "enum",
+          "values": [
+            "loading",
+            "empty",
+            "error"
+          ],
+          "required": false,
+          "note": "loading: header stays, rows are Skeleton bars, region aria-busy. empty: Empty with emptyLabel. error: LoadError with errorMessage and onRetry. Without state, rows render (and rows=[] is empty)."
+        },
+        "errorMessage": {
+          "type": "string",
+          "default": "Couldn’t load this table.",
+          "note": "state error: what failed, named, like Couldn’t load invoices."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. state error: shows the Try again Button."
+        },
+        "stack": {
+          "type": "boolean",
+          "default": false,
+          "note": "Opt-in. Below 480px (container width) each row stacks into two lines: the first column and the last number column on top, the other columns below in small muted text. Headers stay for screen readers."
+        },
+        "rowHref": {
+          "type": "function",
+          "required": false,
+          "note": "(row, index) => string. The first cell becomes a link to the row. With stack, the whole stacked row is the link target; the row menu stays its own control."
         }
       }
     },
