@@ -16,6 +16,7 @@ const BODY = "Update the name and email on this profile. Changes apply on save."
 function masterCode(size: ModalCardSize, showDescription: boolean, showClose: boolean) {
   const lines = [
     "<ModalCard",
+    '  eyebrow="Settings · Profile"',
     '  title="Edit profile"',
   ];
   if (showDescription) {
@@ -24,10 +25,11 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
   lines.push(`  size="${size}"`);
   if (showClose) lines.push("  onClose={close}");
   lines.push(
+    '  footerStart={<Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">Ask about this</Button>}',
     "  footer={",
     "    <>",
-    '      <Button appearance="outline" mode="neutral">Cancel</Button>',
-    '      <Button appearance="solid" mode="primary">Save</Button>',
+    '      <Button appearance="outline" mode="neutral" size="sm">Cancel</Button>',
+    '      <Button appearance="solid" mode="primary" size="sm">Save</Button>',
     "    </>",
     "  }",
     ">",
@@ -40,9 +42,17 @@ function masterCode(size: ModalCardSize, showDescription: boolean, showClose: bo
 function Footer() {
   return (
     <>
-      <Button appearance="outline" mode="neutral">Cancel</Button>
-      <Button appearance="solid" mode="primary">Save</Button>
+      <Button appearance="outline" mode="neutral" size="sm">Cancel</Button>
+      <Button appearance="solid" mode="primary" size="sm">Save</Button>
     </>
+  );
+}
+
+function Ask() {
+  return (
+    <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
+      Ask about this
+    </Button>
   );
 }
 
@@ -77,10 +87,12 @@ export function ModalCardDoc() {
             <div className={styles.layout}>
               <div className={styles.canvas}>
                 <ModalCard
+                  eyebrow="Settings · Profile"
                   title="Edit profile"
                   description={showDescription ? "Make changes to your profile here." : undefined}
                   size={size}
                   onClose={showClose ? () => {} : undefined}
+                  footerStart={<Ask />}
                   footer={<Footer />}
                 >
                   {BODY}

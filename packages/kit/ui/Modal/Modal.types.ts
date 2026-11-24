@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { ModalCardTone } from "../ModalCard/ModalCard.types";
 
 export type ModalSize = "sm" | "md" | "lg";
 
@@ -17,11 +18,17 @@ export interface ModalProps extends Omit<ComponentPropsWithoutRef<"div">, ModalO
   open: boolean;
   title: string;
   description?: string;
+  /** Short area name above the title, like "Billing · Invoices". */
+  eyebrow?: string;
+  /** Tone icon and status word before the eyebrow. Default neutral: no icon. */
+  tone?: ModalCardTone;
   size?: ModalSize;
   showClose?: boolean;
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  /** Left side of the footer: an Ask Button (outline neutral sm, MessageCircle) or a count. */
+  footerStart?: ReactNode;
   contained?: boolean;
   ref?: Ref<HTMLDivElement>;
 }

@@ -30,6 +30,24 @@
       "type": "string",
       "required": false
     },
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Short area name in the header row, 12px, like Billing · Invoices. Caller-provided."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "default": "neutral",
+      "required": false,
+      "note": "Tone icon (16px, aria-hidden) and status word from KitLabels (info, success, warning, danger) before the eyebrow, so status is never colour alone. neutral shows the eyebrow only."
+    },
     "size": {
       "type": "enum",
       "values": [
@@ -37,7 +55,8 @@
         "md",
         "lg"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "sm 352 or md 448 for a short form, lg 576 to review a list. Below 480px (30rem) lg fills the screen."
     },
     "showClose": {
       "type": "boolean",
@@ -55,7 +74,12 @@
     "footer": {
       "type": "slot",
       "required": false,
-      "note": "kit Buttons / ButtonGroup"
+      "note": "kit Buttons / ButtonGroup, size sm: Cancel, then one primary last."
+    },
+    "footerStart": {
+      "type": "slot",
+      "required": false,
+      "note": "Left of the footer actions, first in the footer tab order: an Ask Button (appearance outline, mode neutral, size sm, iconStart MessageCircle) or a count like 6 of 6 selected. Labels are caller-provided."
     },
     "contained": {
       "type": "boolean",
@@ -77,7 +101,7 @@
     "surface.page",
     "surface.muted",
     "shadow.modal",
-    "radius.controlLg",
+    "radius.surfaceLg",
     "border.focus",
     "motion.overlay",
     "motion.modal",
@@ -90,13 +114,15 @@
     "element": "dialog",
     "requirements": [
       "Composes ModalCard with role=dialog and aria-modal",
-      "Title is the accessible name, description is aria-describedby when present",
-      "Focus is trapped while open",
+      "Title (h2) is the accessible name, description is aria-describedby when present",
+      "Focus starts on the first field in the body, not Close; with no field the dialog itself takes focus",
+      "Focus is trapped while open and the page behind is inert",
       "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Scrim click closes",
-      "Focus restores to the previously focused element on close",
+      "Scroll lock keeps the scrollbar gutter, so the page does not shift",
+      "Focus returns to the opener on close; if the opener is gone, to the page heading (or main)",
       "Unique ids via useId — do not hardcode modal-title",
-      "built-in labels (closeDialog) come from KitLabelsProvider; English by default"
+      "built-in labels (close, closeDialog) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
@@ -105,5 +131,5 @@
     "Do not use AlertDialog for dismissible work",
     "Do not skip the close control unless showClose is false AND footer/body still provide a way out. Scrim click and Escape still close."
   ],
-  "snippet": "<Modal open={open} title=\"Edit profile\" description=\"Make changes to your profile.\" onClose={close} footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button appearance=\"outline\" mode=\"neutral\" onClick={close}>Cancel</Button><Button appearance=\"solid\" mode=\"primary\" onClick={save}>Save</Button></ButtonGroup>}>...</Modal>"
+  "snippet": "<Modal open={open} eyebrow=\"Billing · Invoices\" title=\"Edit invoice INV-2042\" description=\"Change the due date or the amount.\" onClose={close} footerStart={<Button appearance=\"outline\" mode=\"neutral\" size=\"sm\" iconStart=\"MessageCircle\" onClick={ask}>Ask about this</Button>} footer={<ButtonGroup ariaLabel=\"Modal actions\"><Button appearance=\"outline\" mode=\"neutral\" size=\"sm\" onClick={close}>Cancel</Button><Button appearance=\"solid\" mode=\"primary\" size=\"sm\" onClick={save}>Save changes</Button></ButtonGroup>}>...</Modal>"
 }

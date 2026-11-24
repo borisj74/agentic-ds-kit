@@ -10,28 +10,29 @@ import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
+import { FOCUSABLE, firstBodyFocusable, lockPage, restoreFocus } from "../shared/overlayLock";
 
 export type { ModalProps, ModalSize } from "./Modal.types";
-
-// Tabbable controls only: links with href, enabled form controls, and positive or zero tabindex.
-const FOCUSABLE =
-  "a[href], button:not(:disabled), input:not(:disabled):not([type='hidden']), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
 
 export function Modal({
   open,
   title,
   description,
+  eyebrow,
+  tone,
   size = "md",
   showClose = true,
   onClose,
   children,
   footer,
+  footerStart,
   contained = false,
   ref,
   ...rest
 }: ModalProps) {
   const labels = useKitLabels();
   const cardRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const setCardRef = useMemo(() => mergeRefs(cardRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -51,8 +52,8 @@ export function Modal({
     if (!root) return;
 
     const getFocusable = () => Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
-    const firstFocusable = getFocusable()[0];
-    (firstFocusable ?? root).focus();
+    // The first field in the body, not Close; with no field the dialog itself takes focus.
+    (firstBodyFocusable(root) ?? root).focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -85,17 +86,13 @@ export function Modal({
     };
 
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    if (!contained) {
-      document.body.style.overflow = "hidden";
-    }
+    // Contained (docs canvas) leaves the page alone; otherwise the page behind is inert and still.
+    const unlock = contained ? () => {} : lockPage(rootRef.current);
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      if (!contained) {
-        document.body.style.overflow = previousOverflow;
-      }
-      previousFocusRef.current?.focus();
+      unlock();
+      restoreFocus(previousFocusRef.current);
     };
   }, [open, contained, mounted]);
 
@@ -104,6 +101,8 @@ export function Modal({
 
   const node = (
     <div
+      ref={rootRef}
+      data-size={size}
       className={`${styles.root} ${contained ? styles.contained : ""} ${scope.fontClassName ?? ""}`.trim()}
       data-theme-scope={scope.id}
       data-theme={scope.mode === "dark" ? "dark" : undefined}
@@ -118,9 +117,12 @@ export function Modal({
         tabIndex={-1}
         title={title}
         description={description}
+        eyebrow={eyebrow}
+        tone={tone}
         size={size}
         onClose={showClose ? onClose : undefined}
         footer={footer}
+        footerStart={footerStart}
       >
         {children}
       </ModalCard>

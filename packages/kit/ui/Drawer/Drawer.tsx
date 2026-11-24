@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { LucideByName } from "../Button/lucideName";
+import { OverlayFooter, OverlayHeader } from "../ModalCard/ModalCardParts";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { DrawerProps } from "./Drawer.types";
@@ -10,14 +10,10 @@ import styles from "./Drawer.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { DrawerBodyContext } from "../shared/drawerContext";
-import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
+import { FOCUSABLE, firstBodyFocusable, lockPage, restoreFocus } from "../shared/overlayLock";
 
 export type { DrawerProps, DrawerSide, DrawerSize } from "./Drawer.types";
-
-// Tabbable controls only: links with href, enabled form controls, and positive or zero tabindex.
-const FOCUSABLE =
-  "a[href], button:not(:disabled), input:not(:disabled):not([type='hidden']), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
 
 const SIZE_CLASS = {
   sm: styles.sizeSm,
@@ -29,20 +25,23 @@ export function Drawer({
   open,
   title,
   description,
+  eyebrow,
+  tone,
   side = "right",
   size = "md",
   showClose = true,
   onClose,
   children,
   footer,
+  footerStart,
   className,
   ref,
   ...rest
 }: DrawerProps) {
-  const labels = useKitLabels();
   const titleId = useId();
   const descriptionId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const setPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
   const onCloseRef = useRef(onClose);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -62,8 +61,8 @@ export function Drawer({
     if (!root) return;
 
     const getFocusable = () => Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
-    const firstFocusable = getFocusable()[0];
-    (firstFocusable ?? root).focus();
+    // The first field in the body, not Close; with no field the panel itself takes focus.
+    (firstBodyFocusable(root) ?? root).focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -96,15 +95,13 @@ export function Drawer({
     };
 
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockPage(overlayRef.current);
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      // The opener may have unmounted while open; then focus stays where the browser puts it.
-      const previous = previousFocusRef.current;
-      if (previous?.isConnected) previous.focus();
+      unlock();
+      // The opener may have unmounted while open; then the page heading or main takes focus.
+      restoreFocus(previousFocusRef.current);
     };
   }, [open, mounted]);
 
@@ -113,6 +110,7 @@ export function Drawer({
 
   return createPortal(
     <div
+      ref={overlayRef}
       className={[styles.overlay, scope.fontClassName].filter(Boolean).join(" ")}
       data-theme-scope={scope.id}
       data-theme={scope.mode === "dark" ? "dark" : undefined}
@@ -135,27 +133,24 @@ export function Drawer({
         className={cx(styles.panel, styles[side], SIZE_CLASS[size], className)}
         tabIndex={-1}
       >
-        <header className={styles.header}>
-          <div className={styles.copy}>
-            <h2 id={titleId} className={styles.title}>
-              {title}
-            </h2>
-            {description ? (
-              <p id={descriptionId} className={styles.description}>
-                {description}
-              </p>
-            ) : null}
-          </div>
-          {showClose ? (
-            <button type="button" className={styles.close} onClick={onClose} aria-label={labels.close}>
-              <LucideByName name="X" size={16} />
-            </button>
-          ) : null}
-        </header>
-        <div className={styles.body}>
+        <OverlayHeader
+          className={styles.header}
+          title={title}
+          titleId={titleId}
+          description={description}
+          descriptionId={descriptionId}
+          eyebrow={eyebrow}
+          tone={tone}
+          onClose={showClose ? onClose : undefined}
+        />
+        <div className={styles.body} data-part="body">
           <DrawerBodyContext.Provider value>{children}</DrawerBodyContext.Provider>
         </div>
-        {footer ? <div className={styles.footer}>{footer}</div> : null}
+        {footer || footerStart ? (
+          <div className={styles.footer}>
+            <OverlayFooter footer={footer} footerStart={footerStart} />
+          </div>
+        ) : null}
       </div>
     </div>,
     document.body,

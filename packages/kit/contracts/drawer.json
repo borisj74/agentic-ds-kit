@@ -10,11 +10,11 @@
     "Mobile-style sheet from the bottom"
   ],
   "doNotUseWhen": [
-    "Centered short task \u2014 use Modal",
-    "Must-choose confirm \u2014 use AlertDialog",
-    "Persistent nav list \u2014 use AppNav",
-    "Closeable app chrome \u2014 use SideNav",
-    "Full page \u2014 use a route"
+    "Centered short task — use Modal",
+    "Must-choose confirm — use AlertDialog",
+    "Persistent nav list — use AppNav",
+    "Closeable app chrome — use SideNav",
+    "Full page — use a route"
   ],
   "props": {
     "open": {
@@ -29,6 +29,24 @@
       "type": "string",
       "required": false
     },
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Short area name in the header row, 12px, like Billing · Invoices. Caller-provided."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "default": "neutral",
+      "required": false,
+      "note": "Tone icon (16px, aria-hidden) and status word from KitLabels (info, success, warning, danger) before the eyebrow, so status is never colour alone. neutral shows the eyebrow only."
+    },
     "side": {
       "type": "enum",
       "values": [
@@ -38,7 +56,7 @@
         "top"
       ],
       "default": "right",
-      "note": "Floating sheet with radius-surface-lg. Right/left inset from top, bottom, and the opening edge. Bottom is centered. Top insets from top, left, and right. Not a flush full-bleed bar."
+      "note": "Floating sheet with radius-surface-lg. Right/left inset from top, bottom, and the opening edge. Bottom is centered. Top insets from top, left, and right. Not a flush full-bleed bar. Below 480px (30rem) left and right open as the bottom sheet (full width inside the 16px inset, no handle, no swipe)."
     },
     "size": {
       "type": "enum",
@@ -66,7 +84,12 @@
     "footer": {
       "type": "slot",
       "required": false,
-      "note": "kit Buttons. Bottom stacks them full width. Use shape=pill and block."
+      "note": "kit Buttons. Left/right: one row, actions on the right (Cancel, then one primary), size sm. Bottom and the 480px sheet stack them full width, actions first, then footerStart; on bottom use shape=pill and block."
+    },
+    "footerStart": {
+      "type": "slot",
+      "required": false,
+      "note": "Left of the footer actions, first in the footer tab order: an Ask Button (appearance outline, mode neutral, size sm, iconStart MessageCircle) or a count like 6 of 6 selected. Labels are caller-provided."
     }
   },
   "passthrough": {
@@ -92,17 +115,22 @@
     "layout.drawerSm",
     "layout.drawerMd",
     "layout.drawerLg",
-    "type.tracking.heading5"
+    "type.size.uiLg",
+    "type.tracking.heading",
+    "text.secondary",
+    "icon.secondary"
   ],
   "a11y": {
     "element": "dialog",
     "requirements": [
       "role=dialog and aria-modal",
-      "Title is the accessible name, description is aria-describedby when present",
-      "Focus is trapped while open",
+      "Title (h2, the shared ModalCard header) is the accessible name, description is aria-describedby when present",
+      "Focus starts on the first field in the body, not Close; with no field the panel itself takes focus",
+      "Focus is trapped while open and the page behind is inert",
       "Escape closes, unless an open panel inside it (Select, DatePicker) handles that Escape first",
       "Overlay click closes",
-      "Focus returns to the opener on close (Escape, Close or overlay click)",
+      "Scroll lock keeps the scrollbar gutter",
+      "Focus returns to the opener on close (Escape, Close or overlay click); if the opener is gone, to the page heading (or main)",
       "Unique ids via useId",
       "built-in labels (close) come from KitLabelsProvider; English by default"
     ]

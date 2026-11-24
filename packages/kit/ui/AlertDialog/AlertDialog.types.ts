@@ -1,4 +1,5 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { ModalCardTone } from "../ModalCard/ModalCard.types";
 
 export type AlertDialogSize = "sm" | "md";
 export type AlertDialogActionVariant = "primary" | "danger";
@@ -18,10 +19,20 @@ export interface AlertDialogProps extends Omit<ComponentPropsWithoutRef<"div">, 
   open: boolean;
   title: string;
   description: string;
+  /** Short area name above the title, like "Integrations". */
+  eyebrow?: string;
+  /** Tone icon and status word before the eyebrow (Warning · Integrations). Default neutral: no icon. */
+  tone?: ModalCardTone;
+  /** Outcome lines under the description, like "Invoices already in the ledger stay." */
+  consequences?: string[];
+  /** The person types this (a name) to turn on the action. Focus starts in that field. */
+  confirmText?: string;
   cancelLabel?: string;
   actionLabel: string;
   actionVariant?: AlertDialogActionVariant;
   size?: AlertDialogSize;
+  /** Left side of the footer: an Ask Button (outline neutral sm, MessageCircle). */
+  footerStart?: ReactNode;
   onCancel: () => void;
   onAction: () => void;
   ref?: Ref<HTMLDivElement>;

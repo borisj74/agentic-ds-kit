@@ -1,22 +1,25 @@
 "use client";
 
-import { useId } from "react";
-import { LucideByName } from "../Button/lucideName";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { ModalCardProps } from "./ModalCard.types";
+import { OverlayFooter, OverlayHeader } from "./ModalCardParts";
 import { cx } from "../shared/cx";
+import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./ModalCard.module.css";
-import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { ModalCardProps, ModalCardSize } from "./ModalCard.types";
+export type { ModalCardProps, ModalCardSize, ModalCardTone } from "./ModalCard.types";
 
 export function ModalCard({
   title,
   description,
+  eyebrow,
+  tone,
   size = "md",
   onClose,
   children,
   footer,
+  footerStart,
   role = "group",
   tabIndex,
   "aria-modal": ariaModal,
@@ -24,40 +27,52 @@ export function ModalCard({
   ref,
   ...rest
 }: ModalCardProps) {
-  const labels = useKitLabels();
   const titleId = useId();
   const descriptionId = useId();
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const setCardRef = useMemo(() => mergeRefs(cardRef, ref), [ref]);
+  // A footer divider shows only while the body scrolls.
+  const [scrolls, setScrolls] = useState(false);
+
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body || typeof ResizeObserver === "undefined") return undefined;
+    const update = () => setScrolls(body.scrollHeight > body.clientHeight);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(body);
+    if (body.firstElementChild) observer.observe(body.firstElementChild);
+    return () => observer.disconnect();
+  }, [children]);
 
   return (
     <div
       {...rest} {...nisthaAttr("modalcard", rest)}
-      ref={ref}
+      ref={setCardRef}
       role={role}
       tabIndex={tabIndex}
       aria-modal={ariaModal}
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
+      data-scrolls={scrolls ? "" : undefined}
       className={cx(styles.card, styles[size], className)}
     >
-      <header className={styles.header}>
-        <div className={styles.copy}>
-          <h2 id={titleId} className={styles.title}>
-            {title}
-          </h2>
-          {description ? (
-            <p id={descriptionId} className={styles.description}>
-              {description}
-            </p>
-          ) : null}
+      <OverlayHeader
+        title={title}
+        titleId={titleId}
+        description={description}
+        descriptionId={descriptionId}
+        eyebrow={eyebrow}
+        tone={tone}
+        onClose={onClose}
+      />
+      {children ? (
+        <div ref={bodyRef} className={styles.body} data-part="body">
+          {children}
         </div>
-        {onClose ? (
-          <button type="button" className={styles.close} onClick={onClose} aria-label={labels.close}>
-            <LucideByName name="X" size={16} />
-          </button>
-        ) : null}
-      </header>
-      {children ? <div className={styles.body}>{children}</div> : null}
-      {footer ? <div className={styles.footer}>{footer}</div> : null}
+      ) : null}
+      <OverlayFooter footer={footer} footerStart={footerStart} />
     </div>
   );
 }

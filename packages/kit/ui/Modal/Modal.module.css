@@ -50,3 +50,17 @@
     animation: none;
   }
 }
+
+/* Below 480px a large Modal fills the screen. 30rem: media queries cannot read var(). */
+@media (max-width: 30rem) {
+  .root[data-size="lg"] {
+    padding: 0;
+  }
+
+  .root[data-size="lg"] > :not(.scrim) {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: var(--radius-0);
+  }
+}

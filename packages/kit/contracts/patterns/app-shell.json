@@ -8,7 +8,7 @@
   "add": "npx agentic-ds-kit add app-shell",
   "import": "import { AppShellPattern } from \"@/components/patterns/app-shell\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/app-shell/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer. header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
+  "intent": "One layout option, as a copy-in example: AppHeader over SideNav + content when wide (>= --grid-breakpoint-md, 64rem; layout-shell / layout-app, radius none, no gap), in an inset (default) or flat look. The wide rail collapses to icons (labels in tooltips, remembered for the browser session); a props nav can carry a workspace switcher (or a brand with a subtitle), a quick actions field that opens the kit command menu (⌘K), Notifications as its first row with a panel at the sidebar's edge, a Projects group and an account menu at the bottom; an optional right work panel holds Tabs. Narrow, the SideNav moves into a left Drawer opened by a Menu Button at the start of AppHeader, and the work panel opens in a right Drawer (a bottom sheet below 30rem). header is optional: without it the shell is side nav only when wide (SideNav shows its brand header and toggle) and a minimal top bar (narrowHeader) holds the Menu Button only when narrow. Top bar only, side nav only, or neither are equally fine: compose AppHeader, SideNav, and Drawer yourself.",
   "useWhen": [
     "A product app needs persistent chrome: a top bar, a side nav, or both, that adapts to small screens",
     "The nav should collapse to an icon rail to give the page more room",
@@ -31,6 +31,7 @@
     "command",
     "input",
     "modal",
+    "modalcard",
     "popover",
     "listview",
     "empty"
@@ -119,7 +120,7 @@
       "type": "object",
       "required": false,
       "shape": "{ title: string, tabs: TabItem[] (min 2), open?: boolean, defaultOpen?: boolean (default false), onOpenChange?: (open: boolean) => void, tab?: string, defaultTab?: string, onTabChange?: (id: string) => void }",
-      "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, a close Button (X, Close <title>) and kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome). The Tabs fill the panel height (Tabs fill), so a tab can hold a full-height child such as Chat embedded."
+      "note": "Optional right work panel, off by default. Wide: an aside named title, fixed at --layout-rail beside the page with a hairline start border, the kit ModalCard header (h2 title, Close; 16 inside, docked with no gap) over kit Tabs size sm. Narrow: the same Tabs in a right kit Drawer titled title, a bottom sheet below 30rem. A props header gets a PanelToggle at the start of its actions (unless it sets end); otherwise place AppShellPattern.PanelToggle yourself. Fixed width only; resizing is not offered (kit Resizable is a framed card, not chrome). The Tabs fill the panel height (Tabs fill), so a tab can hold a full-height child such as Chat embedded."
     },
     "mark": {
       "type": "string | node",
@@ -176,7 +177,7 @@
       "Picking a leaf, Escape, or a scrim click closes the Drawer; focus returns to the Menu Button",
       "AppHeader search stays an Input; below 38rem AppHeader already stacks it under the brand row",
       "Widening past the breakpoint closes the Drawer and brings SideNav back without a reload",
-      "The work panel moves into a right Drawer (size md) opened by AppShellPattern.PanelToggle; the rail toggle hides",
+      "The work panel moves into a right Drawer (size md) opened by AppShellPattern.PanelToggle; the rail toggle hides. Below 30rem (480px) that Drawer opens as the bottom sheet (full width inside the 16px inset, no handle, no swipe)",
       "The 64rem switch follows the token; there is no separate 900px step"
     ]
   },
@@ -191,7 +192,7 @@
       "Rail toggle, Menu Button and PanelToggle are kit Buttons with aria-expanded; the rail toggle and PanelToggle also set aria-controls",
       "Collapsed rail: every row and the account avatar name themselves in a kit Tooltip on hover and focus; labels stay in the DOM",
       "Both Drawers (nav, work panel) trap focus, close on Escape and scrim click, and return focus to their trigger",
-      "The work panel close Button is named Close <title> and returns focus to the PanelToggle when there is one",
+      "The work panel uses the kit ModalCard header: its title is a real h2, and Close is the kit IconButton named Close (KitLabels close). Close returns focus to the PanelToggle when there is one", "The docked work panel does not trap focus; Escape closes it only while focus is inside, and focus returns to the PanelToggle",
       "The account menu is a kit DropdownMenu: aria-haspopup=menu, arrow keys, Escape closes it and returns focus to its trigger without closing a parent Drawer",
       "Collapsed rail with a props header: the expand toggle stays in the tab order under the logo, shows on hover and :focus-visible, and keeps focus after it is used; the title stays the header's accessible name",
       "Search field: kit Input type=search, read-only, named by placeholder (Search), aria-haspopup=dialog and aria-keyshortcuts=\"Meta+K Control+K\"; Enter or typing opens the command menu",

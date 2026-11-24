@@ -26,27 +26,29 @@ function masterCode(size: ModalSize, showDescription: boolean, showClose: boolea
   const lines = [
     "<Modal",
     "  open={open}",
-    '  title="Edit profile"',
+    '  eyebrow="Billing · Invoices"',
+    '  title="Edit invoice INV-2042"',
   ];
   if (showDescription) {
-    lines.push('  description="Make changes to your profile here."');
+    lines.push('  description="Change the due date or the amount."');
   }
   lines.push(`  size="${size}"`);
   if (!showClose) lines.push("  showClose={false}");
   lines.push(
     "  onClose={close}",
+    '  footerStart={<Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle" onClick={ask}>Ask about this</Button>}',
     "  footer={",
     "    <>",
-    '      <Button appearance="outline" mode="neutral" onClick={close}>Cancel</Button>',
-    '      <Button appearance="solid" mode="primary" onClick={save}>Save</Button>',
+    '      <Button appearance="outline" mode="neutral" size="sm" onClick={close}>Cancel</Button>',
+    '      <Button appearance="solid" mode="primary" size="sm" onClick={save}>Save changes</Button>',
     "    </>",
     "  }",
     ">",
-    '  <Field label="Name" htmlFor="name">',
-    '    <Input id="name" />',
+    '  <Field label="Due date" htmlFor="due">',
+    '    <Input id="due" />',
     "  </Field>",
-    '  <Field label="Email" htmlFor="email">',
-    '    <Input id="email" type="email" />',
+    '  <Field label="Amount" htmlFor="amount">',
+    '    <Input id="amount" />',
     "  </Field>",
     "</Modal>",
   );
@@ -56,13 +58,34 @@ function masterCode(size: ModalSize, showDescription: boolean, showClose: boolea
 function Actions({ onClose }: { onClose: () => void }) {
   return (
     <>
-      <Button appearance="outline" mode="neutral" onClick={onClose}>
+      <Button appearance="outline" mode="neutral" size="sm" onClick={onClose}>
         Cancel
       </Button>
-      <Button appearance="solid" mode="primary" onClick={onClose}>
-        Save
+      <Button appearance="solid" mode="primary" size="sm" onClick={onClose}>
+        Save changes
       </Button>
     </>
+  );
+}
+
+function Ask() {
+  return (
+    <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
+      Ask about this
+    </Button>
+  );
+}
+
+function InvoiceFields({ dateId, amountId }: { dateId: string; amountId: string }) {
+  return (
+    <div style={STACK}>
+      <Field label="Due date" htmlFor={dateId}>
+        <Input id={dateId} defaultValue="Dec 4, 2026" />
+      </Field>
+      <Field label="Amount" htmlFor={amountId}>
+        <Input id={amountId} defaultValue="$4,200.00" />
+      </Field>
+    </div>
   );
 }
 
@@ -117,8 +140,9 @@ export function ModalDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Open the modal in the preview frame, then switch size, description, and close. Scrim click
-            and Escape dismiss.
+            Open the modal in the preview frame, then switch size, description, and close. The header
+            has the eyebrow and Close; the footer has Ask on the left. Focus starts on the first field.
+            Scrim click and Escape dismiss.
           </p>
           <DocTabList
             value={tab}
@@ -143,14 +167,16 @@ export function ModalDoc() {
                   <Modal
                     contained
                     open={open}
-                    title="Edit profile"
-                    description={showDescription ? "Make changes to your profile here." : undefined}
+                    eyebrow="Billing · Invoices"
+                    title="Edit invoice INV-2042"
+                    description={showDescription ? "Change the due date or the amount." : undefined}
                     size={size}
                     showClose={showClose}
                     onClose={close}
+                    footerStart={<Ask />}
                     footer={<Actions onClose={close} />}
                   >
-                    <ProfileFields nameId="modal-name" emailId="modal-email" />
+                    <InvoiceFields dateId="modal-due" amountId="modal-amount" />
                   </Modal>
                 </div>
               </div>
@@ -228,7 +254,7 @@ export function ModalDoc() {
 
             <Variant
               title="Large"
-              usage="size lg. Use when the body needs more room than md."
+              usage="size lg, to review a list before you act. Below 480px it fills the screen."
               code={`<Modal open={open} title="Edit profile" size="lg" onClose={close}>\n  ...\n</Modal>`}
               onOpen={() => setVariantOpen("large")}
             >
@@ -246,7 +272,7 @@ export function ModalDoc() {
 
             <Variant
               title="Scrollable"
-              usage="Long body. Title and footer stay put. Body scrolls inside the panel."
+              usage="Long body. Title and footer stay put, the body scrolls, and a divider shows above the footer while it does."
               code={`<Modal open={open} title="Edit profile" onClose={close} footer={footer}>\n  {longBody}\n</Modal>`}
               onOpen={() => setVariantOpen("scrollable")}
             >

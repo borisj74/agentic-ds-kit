@@ -12,45 +12,24 @@
 
 .dialog {
   z-index: var(--z-modal);
-  width: 100%;
-  padding: var(--space-6);
-  background-color: var(--surface-elevated);
-  border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-surface-md);
-  box-shadow: var(--shadow-lg);
-  animation: dialogEnter var(--motion-modal-duration) var(--motion-modal-easing);
 }
 
-.sm {
-  max-width: 20rem;
-}
-
-.md {
-  max-width: 28rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--type-size-heading);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading-5);
-  line-height: var(--type-line-heading);
-  color: var(--text-primary);
-}
-
-.description {
-  margin: var(--space-3) 0 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
-  color: var(--text-muted);
-}
-
-.footer {
+.content {
   display: flex;
-  justify-content: flex-end;
-  margin-top: var(--space-6);
+  flex-direction: column;
+  gap: var(--space-stack-md);
+}
+
+.consequences {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-xs);
+  margin: 0;
+  padding-inline-start: var(--space-inset-lg);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-primary);
 }
 
 @keyframes overlayEnter {
@@ -62,18 +41,8 @@
   }
 }
 
-@keyframes dialogEnter {
-  from {
-    opacity: var(--opacity-0);
-  }
-  to {
-    opacity: var(--opacity-full);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .overlay,
-  .dialog {
+  .overlay {
     animation: none;
   }
 }
