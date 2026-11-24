@@ -21,7 +21,7 @@ export function blockedReason(task: SetupTask, tasks: SetupTask[]): string | und
   return labels.length ? `Unlocks after ${labels.join(", ")}` : task.description;
 }
 
-/** "1 of 4 done · 1 skipped". */
+/** "1 of 4 done · 1 skipped". `total` is the tasks that are not skipped. */
 export function progressLabel(done: number, total: number, skipped: number): string {
   return `${done} of ${total} done${skipped ? ` · ${skipped} skipped` : ""}`;
 }

@@ -79,8 +79,16 @@ describe("SetupGuide render", () => {
   test("every row has a status word; the progress label counts skipped", () => {
     const text = out();
     for (const word of [">Done<", ">Current<", ">To do<", ">Blocked<", ">Skipped<"]) assert.ok(text.includes(word), word);
-    assert.ok(text.includes("1 of 5 done · 1 skipped"));
+    assert.ok(text.includes("1 of 4 done · 1 skipped"));
+    assert.match(text, /aria-valuenow="25"/);
     assert.match(text, /aria-current="step"/);
+  });
+
+  test("skipped tasks leave the denominator: 4 done + 1 skipped is a full bar", () => {
+    const four = tasks.map((task) => (task.status === "skipped" ? task : { ...task, status: "done" }));
+    const text = html("SetupGuide", { title: "Set up billing", tasks: four, onComplete() {} });
+    assert.ok(text.includes("4 of 4 done · 1 skipped"));
+    assert.match(text, /aria-valuenow="100"/);
   });
 
   test("provider tiles sit under the current row, which has no button of its own", () => {

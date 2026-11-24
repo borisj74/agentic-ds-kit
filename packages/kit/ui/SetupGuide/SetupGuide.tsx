@@ -55,7 +55,9 @@ export function SetupGuide({
   const skippedCount = tasks.filter((task) => task.status === "skipped").length;
   const skipped = skippedCount > 0;
   const complete = total > 0 && tasks.every((task) => task.status === "done" || task.status === "skipped");
-  const percent = total ? Math.round((done / total) * 100) : 0;
+  // Skipped tasks don't count toward progress: the denominator is the tasks still in play.
+  const counted = total - skippedCount;
+  const percent = counted ? Math.round((done / counted) * 100) : total ? 100 : 0;
   const showProgress = !loading && !error && total > 0;
   const rootRef = useRef<HTMLElement | null>(null);
   const pendingFocus = useRef(false);
@@ -127,7 +129,7 @@ export function SetupGuide({
               className={styles.progress}
               size="sm"
               value={percent}
-              label={progressLabel(done, total, skippedCount)}
+              label={progressLabel(done, counted, skippedCount)}
               showValue
               valuePosition="end"
             />
