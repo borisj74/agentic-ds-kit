@@ -54,6 +54,7 @@ function HeaderAction({ action }: { action: CardAction }) {
 
 export function Card({
   title,
+  headingLevel = 2,
   description,
   children,
   size = "md",
@@ -74,6 +75,7 @@ export function Card({
   ...rest
 }: CardProps) {
   const titleId = useId();
+  const TitleTag = `h${headingLevel}` as "h1" | "h2" | "h3" | "h4";
   const sourceId = useId();
   const footerActions = (actions ?? []).slice(0, 2);
   const allHeaderActions = Array.isArray(headerAction) ? headerAction : headerAction ? [headerAction] : [];
@@ -99,9 +101,9 @@ export function Card({
     title || description ? (
       <div className={styles.copy}>
         {title ? (
-          <h2 id={titleId} className={styles.title}>
+          <TitleTag id={titleId} className={styles.title}>
             {title}
-          </h2>
+          </TitleTag>
         ) : null}
         {description ? <p className={styles.description}>{description}</p> : null}
       </div>
