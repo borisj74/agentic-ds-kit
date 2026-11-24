@@ -18,6 +18,7 @@
     "button",
     "drawer",
     "empty",
+    "iconbutton",
     "popover",
     "skeleton"
   ],
@@ -122,7 +123,7 @@
   "a11y": {
     "element": "div",
     "requirements": [
-      "the bell is an sm kit Button named \"Notifications, 3 unread\"; the count chip is aria-hidden",
+      "the bell is an sm kit IconButton named \"Notifications, 3 unread\"; the count chip is aria-hidden",
       "the panel is the kit Popover dialog, named by label; Escape closes and returns focus to the bell. Below --grid-breakpoint-sm it is a kit Drawer with the same rows",
       "unread is a filled rail marker plus a New badge, never colour or weight alone; each row reads \"New. Payment failed. … 09:42.\" and the marker is aria-hidden",
       "Mark all read is announced in a polite status region and focus stays on it",

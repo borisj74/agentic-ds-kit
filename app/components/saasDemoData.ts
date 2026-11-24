@@ -11,9 +11,9 @@ export const THREAD: ThreadComment[] = [
 ];
 
 export const THREADS: CommentThreadSummary[] = [
-  { id: "t1", title: "Card declined", preview: "Holding. I'll retry once the new card is in.", count: 3, updatedAt: "10:26" },
-  { id: "t2", title: "Line 2 · API calls over 2M", preview: "Should this be $0.11 per 1K after the tier?", count: 2, updatedAt: "Nov 19" },
-  { id: "t3", title: "Due date", preview: "Moved to Nov 20.", count: 1, updatedAt: "Nov 14", resolved: true },
+  { id: "t1", title: "Card declined", context: "INV-1842", preview: "Holding. I'll retry once the new card is in.", count: 3, updatedAt: "Nov 20, 10:26" },
+  { id: "t2", title: "Line 2 · API calls over 2M", context: "INV-1842", preview: "Should this be $0.11 per 1K after the tier?", count: 2, updatedAt: "Nov 19, 16:40" },
+  { id: "t3", title: "Due date", context: "INV-1842", preview: "Moved to Nov 20.", count: 1, updatedAt: "Nov 14, 11:05", resolved: true },
 ];
 
 export const MEMBERS: CommentMember[] = [

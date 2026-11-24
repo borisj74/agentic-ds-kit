@@ -50,11 +50,11 @@
 }
 
 .inlineCount {
-  font-family: var(--font-mono);
+  /* Same caption as NotificationStack's "3 unread", so both panel headers read alike. */
   font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
+  line-height: var(--type-line-ui-xs);
   font-variant-numeric: tabular-nums;
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .spacer {

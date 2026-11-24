@@ -119,3 +119,33 @@ describe("CommentThread mentions", () => {
     assert.match(html, /to send/);
   });
 });
+
+describe("CommentsPanel follow-up", () => {
+  let CommentsPanel;
+  const THREADS = [
+    { id: "t1", title: "Card declined", context: "INV-1842", preview: "Holding.", count: 3, updatedAt: "Nov 20, 10:26" },
+    { id: "t2", title: "Due date", preview: "Moved.", count: 1, updatedAt: "Nov 14, 11:05", resolved: true },
+  ];
+  before(async () => {
+    ({ CommentsPanel } = await import("../dist/ui/CommentsPanel/CommentsPanel.js"));
+  });
+
+  test("the open thread's meta line leads with its context", () => {
+    const html = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, selectedId: "t1", onSelect: noop }));
+    assert.match(html, />INV-1842 · 3 comments · Open</);
+    const plain = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, selectedId: "t2", onSelect: noop }));
+    assert.match(plain, />1 comment · Resolved</);
+  });
+
+  test("inline is a complementary region named by label", () => {
+    const html = render(h(CommentsPanel, { inline: true, threads: THREADS, open: true, onOpenChange: noop, onSelect: noop }));
+    assert.match(html, /role="complementary"[^>]*aria-label="Comments"|aria-label="Comments"[^>]*role="complementary"/);
+  });
+
+  test("inline=\"auto\" renders the trigger and no docked panel on the server (narrow markup)", () => {
+    const html = render(h(CommentsPanel, { inline: "auto", threads: THREADS, open: true, onOpenChange: noop, onSelect: noop }));
+    assert.doesNotMatch(html, /role="complementary"/);
+    assert.match(html, />Comments</);
+    assert.match(html, />1 open</);
+  });
+});

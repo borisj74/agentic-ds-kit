@@ -11440,11 +11440,12 @@
     {
       "id": "commentspanel",
       "group": "component",
-      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place.",
+      "intent": "A side panel hosting the comment threads for a page: an Open / Resolved / All filter, thread previews, and the selected thread (pass a kit CommentThread as children) with Resolve. Built on kit Drawer and SegmentedControl; inline renders it in place, and inline=\"auto\" docks it beside the page from --grid-breakpoint-lg.",
       "useWhen": [
         "a page (invoice, document) has several comment threads",
         "people filter open and resolved threads and open one",
-        "a header needs a Comments button with the open count"
+        "a header needs a Comments button with the open count",
+        "a page docks its threads beside the content on wide screens (inline=\"auto\")"
       ],
       "doNotUseWhen": [
         "one conversation on its own — CommentThread",
@@ -11461,7 +11462,7 @@
         "threads": {
           "type": "array",
           "required": true,
-          "note": "{ id, title, preview, count, resolved?, updatedAt }[]"
+          "note": "{ id, title, preview, count, resolved?, updatedAt, context? }[]. context names the record (e.g. \"INV-1842 · Northwind\") and leads the open thread's meta line: \"INV-1842 · 3 comments · Open\". Use one date format for updatedAt, e.g. \"Nov 20, 10:26\"."
         },
         "open": {
           "type": "boolean",
@@ -11520,8 +11521,9 @@
           "required": false
         },
         "inline": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean | \"auto\"",
+          "default": false,
+          "note": "true renders the panel in place. \"auto\" docks it beside the page from --grid-breakpoint-lg while open (the trigger comes back when it closes) and uses the Drawer below that."
         },
         "showTrigger": {
           "type": "boolean",
