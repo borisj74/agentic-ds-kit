@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
-export type SelectSize = "sm" | "md";
+export type SelectSize = "sm" | "md" | "lg";
 export type SelectItemCheck = "check" | "checkbox";
 export type SelectValueDisplay = "text" | "tags";
 

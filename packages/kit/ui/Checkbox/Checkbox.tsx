@@ -11,7 +11,7 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { CheckboxProps, CheckboxSize } from "./Checkbox.types";
 
-const ICON_SIZE = { sm: 12, md: 14, lg: 16 } as const;
+const ICON_SIZE = { sm: 12, md: 12, lg: 16 } as const;
 
 export function Checkbox({
   id,
@@ -79,3 +79,6 @@ export function Checkbox({
     </label>
   );
 }
+
+/** Field passes aria-required here when it is `required`: the named element takes it. */
+Checkbox.fieldRequired = true;

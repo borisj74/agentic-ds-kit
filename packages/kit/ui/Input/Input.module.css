@@ -24,9 +24,15 @@
 }
 
 .shell[data-disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
-  background-color: var(--surface-muted);
+  color: var(--text-disabled);
+  background-color: var(--surface-disabled);
+  border-color: var(--border-disabled);
+}
+
+/* Read-only keeps full contrast and stays selectable; only the fill changes. */
+.shell:not([data-disabled]):has(.native[readonly]) {
+  background-color: var(--bg-tray);
 }
 
 .native {

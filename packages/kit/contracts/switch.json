@@ -80,7 +80,9 @@
     "border.control",
     "radius.pill",
     "focus.ring",
-    "opacity.disabled",
+    "surface.disabled",
+    "border.disabled",
+    "text.disabled",
     "motion.modalDuration",
     "motion.easeSpring"
   ],

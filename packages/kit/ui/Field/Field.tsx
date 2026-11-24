@@ -1,12 +1,19 @@
+"use client";
+
 import { cloneElement, isValidElement, type ReactElement } from "react";
+import { CircleCheck, CircleX } from "lucide-react";
 import { Button } from "../Button";
 import { HelpPopover } from "../HelpPopover";
 import type { FieldProps } from "./Field.types";
 import { cx } from "../shared/cx";
+import { useKitLabels } from "../shared/labels";
+import { ICON_STROKE } from "../../lib/icon";
 import styles from "./Field.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
 export type { FieldProps, FieldLabelPosition } from "./Field.types";
+
+type FieldChildFlags = { fieldLabelledBy?: boolean; fieldRequired?: boolean };
 
 export function Field({
   label,
@@ -15,23 +22,36 @@ export function Field({
   help,
   helpLabel = "Help",
   error,
+  success,
+  optional = false,
+  required = false,
   labelPosition = "top",
   children,
   className,
   ref,
   ...rest
 }: FieldProps) {
-  const hintId = hint && !error ? `${htmlFor}-hint` : undefined;
-  const errorId = error ? `${htmlFor}-error` : undefined;
+  const labels = useKitLabels();
+  // Error wins over success. The hint stays under the control either way.
+  const message = error || success;
+  const tone = error ? "error" : success ? "success" : undefined;
+  const hintId = hint ? `${htmlFor}-hint` : undefined;
+  const messageId = message ? `${htmlFor}-${tone}` : undefined;
   const labelId = `${htmlFor}-label`;
-  const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
-  const controlProps: { describedBy?: string; error?: boolean; labelledBy?: string } = {};
+  const describedBy = [hintId, messageId].filter(Boolean).join(" ") || undefined;
+  const flags = isValidElement(children) ? (children.type as FieldChildFlags) : undefined;
+  const controlProps: {
+    describedBy?: string;
+    error?: boolean;
+    labelledBy?: string;
+    "aria-required"?: boolean;
+  } = {};
   if (describedBy) controlProps.describedBy = describedBy;
   if (error) controlProps.error = true;
   // Controls a <label for> cannot name (Slider's role="slider" thumbs) opt in to get the label id.
-  if (isValidElement(children) && (children.type as { fieldLabelledBy?: boolean }).fieldLabelledBy) {
-    controlProps.labelledBy = labelId;
-  }
+  if (flags?.fieldLabelledBy) controlProps.labelledBy = labelId;
+  // Only controls whose named element takes aria-required opt in. Button triggers (Select, the date pickers) do not.
+  if (required && flags?.fieldRequired) controlProps["aria-required"] = true;
 
   const control =
     Object.keys(controlProps).length > 0 && isValidElement(children)
@@ -41,8 +61,11 @@ export function Field({
   const labelNode = (
     <label id={labelId} className={styles.label} htmlFor={htmlFor}>
       {label}
+      {optional && !required ? <span className={styles.optional}> {labels.optional}</span> : null}
     </label>
   );
+
+  const MessageIcon = error ? CircleX : CircleCheck;
 
   return (
     <div
@@ -50,6 +73,7 @@ export function Field({
       ref={ref}
       className={cx(styles.field, styles[labelPosition], className)}
       data-invalid={error ? "true" : undefined}
+      data-success={!error && success ? "true" : undefined}
     >
       {help ? (
         <div className={styles.labelRow}>
@@ -62,14 +86,15 @@ export function Field({
         labelNode
       )}
       <div className={styles.body}>{control}</div>
-      {hint && !error ? (
+      {hint ? (
         <p id={hintId} className={styles.hint}>
           {hint}
         </p>
       ) : null}
-      {error ? (
-        <p id={errorId} className={styles.error} role="alert">
-          {error}
+      {message ? (
+        <p id={messageId} className={cx(styles.message, error ? styles.error : styles.success)}>
+          <MessageIcon className={styles.messageIcon} size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+          <span>{message}</span>
         </p>
       ) : null}
     </div>

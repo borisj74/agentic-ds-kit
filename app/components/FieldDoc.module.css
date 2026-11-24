@@ -15,3 +15,9 @@
   width: 100%;
   max-width: 28rem;
 }
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
