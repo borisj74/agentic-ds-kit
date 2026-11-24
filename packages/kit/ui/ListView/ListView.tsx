@@ -92,11 +92,11 @@ const DOT_NAME: Record<NonNullable<ListViewItem["dot"]>, string> = {
 };
 
 /**
- * A row's accessible name: primary, then secondary, then meta, then the badge, so a status shown only
- * as a Badge is read too. A dot adds its tone after the badge (the dot is aria-hidden).
+ * A row's accessible name: primary, then secondary, then value, then meta, then the badge, so a status
+ * shown only as a Badge is read too. A dot adds its tone after the badge (the dot is aria-hidden).
  */
 function rowName(item: ListViewItem): string {
-  return [item.primary, secondaryOf(item), item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
+  return [item.primary, secondaryOf(item), item.value, item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
     .filter(Boolean)
     .join(", ");
 }
@@ -403,6 +403,15 @@ export function ListView({
     );
   }
 
+  function renderBadge(item: ListViewItem): ReactNode {
+    if (!item.badge) return null;
+    return (
+      <Badge tone={item.badgeTone ?? "neutral"} size="sm">
+        {item.badge}
+      </Badge>
+    );
+  }
+
   function renderCopy(item: ListViewItem): ReactNode {
     const secondary = secondaryOf(item);
     return (
@@ -509,11 +518,13 @@ export function ListView({
                 <span className={styles.groupTwist} aria-hidden>
                   <LucideByName name="ChevronRight" size={14} className={styles.groupTwistIcon} />
                 </span>
-                {group.label}
+                <span className={styles.groupLabel}>{group.label}</span>
+                {group.total ? <span className={styles.groupTotal}>{group.total}</span> : null}
               </button>
             ) : group ? (
               <div id={`${uid}-${group.id}-label`} className={styles.groupHeader}>
-                {group.label}
+                <span className={styles.groupLabel}>{group.label}</span>
+                {group.total ? <span className={styles.groupTotal}>{group.total}</span> : null}
               </div>
             ) : null}
             {open
@@ -567,12 +578,18 @@ export function ListView({
                         ) : null}
                         {renderBody(item)}
                         <span className={styles.trail} ref={bindInertControls}>
-                          {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
-                          {item.badge ? (
-                            <Badge tone={item.badgeTone ?? "neutral"} size="sm">
-                              {item.badge}
-                            </Badge>
-                          ) : null}
+                          {item.value ? (
+                            <span className={styles.valueStack}>
+                              <span className={styles.value}>{item.value}</span>
+                              {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
+                              {renderBadge(item)}
+                            </span>
+                          ) : (
+                            <>
+                              {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
+                              {renderBadge(item)}
+                            </>
+                          )}
                           {renderActions(item)}
                           {drill ? (
                             <span className={styles.chevron} aria-hidden>

@@ -48,6 +48,20 @@ button.groupHeader:focus-visible {
   outline-offset: calc(-1 * var(--border-focus-width));
 }
 
+.groupLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+/* group.total: the group's sum on the right of the header, quiet and in tabular figures. */
+.groupTotal {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .groupTwist {
   display: inline-flex;
   flex-shrink: 0;
@@ -86,8 +100,18 @@ button.groupHeader:focus-visible {
   background-color: var(--surface-muted);
 }
 
+/* Selected: the fill, a 2px left edge and a heavier name. Focus keeps its outline ring. */
 .row[data-selected] {
   background-color: var(--action-selected);
+  box-shadow: inset var(--space-px) 0 0 var(--action-selected-border);
+}
+
+.row[data-selected] .primary {
+  font-weight: var(--type-weight-strong);
+}
+
+.row[data-selected] .value {
+  font-weight: var(--type-weight-label);
 }
 
 .item:focus-visible > .row {
@@ -288,6 +312,37 @@ button.body:focus {
   line-height: var(--type-line-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* item.value: the row's amount on the primary line, with meta and badge under it, right-aligned. */
+.valueStack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-px);
+  flex-shrink: 0;
+}
+
+.value {
+  color: var(--text-primary);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.xs .value {
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.sm .value {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+}
+
+.md .value {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
 }
 
 /* item.priority: three square bars in the leading slot; the word is in the secondary line. */

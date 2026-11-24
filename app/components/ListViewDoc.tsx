@@ -83,6 +83,13 @@ const NEEDS_ATTENTION: ListViewItem[] = [
   { id: "brightline", primary: "Brightline Studio", secondary: "$640 · Declined twice", priority: "high", primaryAction: { id: "retry", label: "Retry", actionLabel: "Retry Brightline Studio" }, actions: [{ id: "open", label: "Open in Stripe" }, { id: "snooze", label: "Snooze a week" }] },
 ];
 
+const INVOICES: ListViewItem[] = [
+  { id: "inv-1821", primary: "Pinecrest Clinics", secondary: "INV-1821 · due Nov 1", value: "$14,700.00", meta: "20 days late", group: "nov" },
+  { id: "inv-1842", primary: "Northwind Traders", secondary: "INV-1842 · due Nov 4", value: "$2,418.00", meta: "17 days late", group: "nov" },
+  { id: "inv-1871", primary: "Scale plan · 24 seats", secondary: "INV-1871 · due Dec 1", value: "$2,016.00", badge: "Scheduled", group: "dec" },
+  { id: "inv-1879", primary: "Onboarding 2 of 3", secondary: "INV-1879 · due Dec 15", value: "$1,500.00", badge: "Scheduled", group: "dec" },
+];
+
 const CODE = `<ListView
   label="People"
   items={[
@@ -168,6 +175,41 @@ export function ListViewDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>One row at a time. Space or click selects. Disabled rows stay visible.</p>
               </div>
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Value and group total</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <ListView
+                    label="Invoices"
+                    items={INVOICES}
+                    selection="single"
+                    defaultSelected={["inv-1842"]}
+                    groups={[
+                      { id: "nov", label: "November", total: "$17,118.00" },
+                      { id: "dec", label: "December", total: "$3,516.00" },
+                    ]}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  value puts an amount on the right of the name in tabular figures, with meta and the badge under
+                  it. A group&apos;s total sits on the right of its header. Format both yourself. The selected
+                  row gets a 2px edge and a heavier name on top of the fill.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<ListView
+  label="Invoices"
+  selection="single"
+  groups={[{ id: "nov", label: "November", total: "$17,118.00" }]}
+  items={[
+    { id: "inv-1842", primary: "Northwind Traders", secondary: "INV-1842 · due Nov 4", value: "$2,418.00", meta: "17 days late", group: "nov" },
+  ]}
+/>`}
+              />
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Multiple · check</h2>

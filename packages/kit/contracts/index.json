@@ -120,7 +120,7 @@
   },
   {
     "id": "listview",
-    "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
+    "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing value, badge, actions, or chevron.",
     "group": "component",
     "path": "contracts/listview.json",
     "status": "stable",
