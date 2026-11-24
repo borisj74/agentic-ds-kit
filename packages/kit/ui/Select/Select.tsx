@@ -94,7 +94,7 @@ export function Select({
           emit(values.filter((value) => optionId(value) !== tagId));
         }}
         iconEnd="ChevronsUpDown"
-        size={size === "sm" ? "sm" : "md"}
+        size={size}
         disabled={disabled}
         error={error}
         describedBy={describedBy}

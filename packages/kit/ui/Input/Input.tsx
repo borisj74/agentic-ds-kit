@@ -78,3 +78,6 @@ export function Input({
     </div>
   );
 }
+
+/** Field passes aria-required here when it is `required`: the named element takes it. */
+Input.fieldRequired = true;

@@ -2472,9 +2472,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Heights match Input and Button: sm 32, md 36, lg 40. Use one size per row; lg for forms below 480px."
         },
         "options": {
           "type": "array",
@@ -5181,7 +5183,7 @@
     {
       "id": "field",
       "group": "component",
-      "intent": "One labeled control with optional hint and error. Label on top or start (left).",
+      "intent": "One labeled control with optional hint and an error or success message. Label on top or start (left).",
       "useWhen": [
         "Any labeled Input, Textarea, Select, DatePicker, or Switch",
         "When helper text or a validation error sits with the control"
@@ -5198,6 +5200,8 @@
         "Do not wrap Button or layout components",
         "Do not use start on Field for prefix text — that is Input start",
         "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
+        "Do not add an asterisk for required — set required, and mark the rarer kind with optional",
+        "Do not build an error summary component — on submit, show an Alert (tone danger) with one Button per field that moves focus to it, and focus the Alert",
         "Do not use raw hex"
       ],
       "props": {
@@ -5212,7 +5216,7 @@
         "hint": {
           "type": "string",
           "required": false,
-          "note": "helper text. Hidden when error is set."
+          "note": "Helper text, 12/16 muted, 4px under the control. Stays when error or success shows; the message goes under it."
         },
         "help": {
           "type": "string",
@@ -5227,7 +5231,23 @@
         },
         "error": {
           "type": "string",
-          "required": false
+          "required": false,
+          "note": "Says what to do (Enter a postcode with 5 digits), not Invalid input. CircleX 16px icon plus text.danger words. No role=alert: an Alert error summary announces errors on submit. Wins over success."
+        },
+        "success": {
+          "type": "string",
+          "required": false,
+          "note": "Confirmation under the hint, e.g. Email verified. CircleCheck 16px icon plus text.success words, never colour alone. Hidden while error is set."
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "note": "Adds the muted word Optional (KitLabels optional) after the label. Mark the rarer kind: when most fields are required, the optional ones say Optional. Ignored when required is set."
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "note": "Sets aria-required on the control when its named element takes it (Input, Textarea, Checkbox, Switch, ColorPicker). No asterisk. Button triggers (Select, the date pickers) are left alone."
         },
         "labelPosition": {
           "type": "enum",

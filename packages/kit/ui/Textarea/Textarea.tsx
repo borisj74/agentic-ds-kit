@@ -49,3 +49,6 @@ export function Textarea({
     />
   );
 }
+
+/** Field passes aria-required here when it is `required`: the named element takes it. */
+Textarea.fieldRequired = true;

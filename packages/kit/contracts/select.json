@@ -31,9 +31,11 @@
       "type": "enum",
       "values": [
         "md",
-        "sm"
+        "sm",
+        "lg"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "Heights match Input and Button: sm 32, md 36, lg 40. Use one size per row; lg for forms below 480px."
     },
     "options": {
       "type": "array",
