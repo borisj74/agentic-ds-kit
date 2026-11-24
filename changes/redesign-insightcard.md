@@ -1,0 +1,4 @@
+### Added
+
+- **insight-stack pattern** (`npx agentic-ds-kit add insight-stack`). A ranked AI summary in one card, built from kit parts: an eyebrow, time and X, a title and source, then the findings as an ordered list. Each finding has a rank Count, a change and a one-line detail. A signed change uses Delta with `tone` and `goodWhen`, so churn reads `Worse · +2.4 pt`; an unsigned amount like `$1,360` is tone-coloured text. A Why? toggle opens a confidence Meter and the evidence. `loading` shows Skeleton rows with no X or footer. No findings gives the compact all-clear card. The footer has See all (`onSeeAll` or `seeAllHref`) and Ask (`onAsk`), both outline sm Buttons with your labels. Sizes sm 320, md 384 and lg 448. InsightCard stays as it is for one finding.
+- **KitLabels `why` and `confidence`** ("Why?", "Confidence") for the insight-stack toggle and its Meter.
