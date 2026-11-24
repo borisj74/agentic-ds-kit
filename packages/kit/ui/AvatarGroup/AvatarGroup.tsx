@@ -1,12 +1,16 @@
+"use client";
+
 import { Avatar } from "../Avatar";
 import type { AvatarGroupProps } from "./AvatarGroup.types";
 import { cx } from "../shared/cx";
 import styles from "./AvatarGroup.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { useKitLabels } from "../shared/labels";
 
 export type { AvatarGroupItem, AvatarGroupProps, AvatarGroupSize } from "./AvatarGroup.types";
 
 export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className, ref, ...rest }: AvatarGroupProps) {
+  const labels = useKitLabels();
   const visible = items.slice(0, max);
   const leftover = items.length - max;
 
@@ -22,7 +26,7 @@ export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className,
           className={`${styles.item} ${styles.count} ${styles[size]}`}
           style={{ zIndex: visible.length + 1 }}
           role="img"
-          aria-label={`${leftover} more`}
+          aria-label={labels.moreAvatars(leftover)}
         >
           +{leftover}
         </span>

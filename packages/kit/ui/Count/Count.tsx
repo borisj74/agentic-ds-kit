@@ -13,11 +13,12 @@ export function Count({
   count,
   max = 99,
   label,
+  prefix,
   className,
   ref,
   ...rest
 }: CountProps) {
-  const shown = count > max ? `${max}+` : String(count);
+  const shown = `${prefix ?? ""}${count > max ? `${max}+` : String(count)}`;
   return (
     <span
       {...rest} {...nisthaAttr("count", rest)}

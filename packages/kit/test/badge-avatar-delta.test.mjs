@@ -91,6 +91,28 @@ describe("AvatarGroup", () => {
   });
 });
 
+describe("KitLabels for overflow counts", () => {
+  test("AvatarGroup +N uses moreAvatars", () => {
+    const items = ["A B", "C D", "E F", "G H"].map((name) => ({ name }));
+    const html = render(
+      h(kit.KitLabelsProvider, { labels: { moreAvatars: (n) => `${n} weitere` } }, h(kit.AvatarGroup, { items, max: 2 })),
+    );
+    assert.match(html, /aria-label="2 weitere"/);
+  });
+
+  test("MultiSelect overflow uses moreSelected", () => {
+    const options = ["Design", "Finance", "Legal"].map((v) => ({ value: v, label: v }));
+    const html = render(
+      h(
+        kit.KitLabelsProvider,
+        { labels: { moreSelected: "weitere ausgewählt" } },
+        h(kit.MultiSelect, { id: "t", options, defaultValue: ["Design", "Finance", "Legal"], maxVisible: 1 }),
+      ),
+    );
+    assert.match(html, /2 weitere ausgewählt/);
+  });
+});
+
 describe("Badge", () => {
   test("tone icon is aria-hidden and the word stays", () => {
     const html = render(h(kit.Badge, { tone: "danger", icon: "CircleX" }, "Overdue"));
@@ -135,6 +157,6 @@ describe("MultiSelect", () => {
       h(kit.MultiSelect, { id: "teams", options, defaultValue: ["Design", "Finance", "Legal", "Sales"], maxVisible: 2 }),
     );
     assert.match(html, /2 more selected/);
-    assert.doesNotMatch(html, /\+2/);
+    assert.match(html, /aria-hidden="true">\+2</);
   });
 });

@@ -13,6 +13,7 @@ import controlStyles from "../shared/controls.module.css";
 import type { MultiSelectProps } from "./MultiSelect.types";
 import styles from "./MultiSelect.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { useKitLabels } from "../shared/labels";
 
 export type { MultiSelectOption, MultiSelectProps, MultiSelectSize } from "./MultiSelect.types";
 
@@ -34,6 +35,7 @@ export function MultiSelect({
   className,
   ref,
 }: MultiSelectProps) {
+  const labels = useKitLabels();
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -132,7 +134,7 @@ export function MultiSelect({
             {option.label}
           </Tag>
         ))}
-        {overflow > 0 ? <Count count={overflow} intent="neutral" subtle size="md" label="more selected" /> : null}
+        {overflow > 0 ? <Count count={overflow} prefix="+" intent="neutral" subtle size="md" label={labels.moreSelected} /> : null}
         <input
           ref={setInputRef}
           id={id}

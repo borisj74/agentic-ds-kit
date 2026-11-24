@@ -27,7 +27,7 @@
     "placeholder": { "type": "string", "default": "Select" },
     "disabled": { "type": "boolean", "default": false },
     "error": { "type": "boolean", "default": false },
-    "maxVisible": { "type": "number", "required": false, "note": "Extra selections collapse into a kit Count (neutral, subtle, md) after the visible Tags; screen readers hear N more selected." },
+    "maxVisible": { "type": "number", "required": false, "note": "Extra selections collapse into a kit Count +N (prefix +, neutral, subtle, md) after the visible Tags; screen readers hear N more selected (KitLabels moreSelected)." },
     "name": { "type": "string", "required": false, "note": "Hidden input joins values with commas." },
     "ariaLabel": { "type": "string", "required": false },
     "describedBy": { "type": "string", "required": false },

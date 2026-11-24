@@ -62,7 +62,8 @@
   border-radius: var(--radius-lg);
 }
 
-/* Fallback tints come from the name. bg-tray, not surface-muted, for the neutral one: muted is
+/* Fallback tints come from the name. The plain subtle roles were too pale on canvas and cards,
+   so the coloured tints use the stronger washes Badge tint uses (primary-subtle-strong, *-line). bg-tray, not surface-muted, for the neutral one: muted is
    the same as --bg-canvas and --bg-subtle, so on those grounds the circle had no edge. */
 .tintNeutral {
   background: var(--bg-tray);
@@ -70,22 +71,22 @@
 }
 
 .tintPrimary {
-  background: var(--primary-subtle);
+  background: var(--primary-subtle-strong);
   color: var(--primary-fg);
 }
 
 .tintInfo {
-  background: var(--info-subtle);
+  background: var(--info-line);
   color: var(--info-fg);
 }
 
 .tintSuccess {
-  background: var(--success-subtle);
+  background: var(--success-line);
   color: var(--success-fg);
 }
 
 .tintHighlight {
-  background: var(--highlight-subtle);
+  background: var(--highlight-line);
   color: var(--highlight-fg);
 }
 

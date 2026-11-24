@@ -110,7 +110,7 @@ export function MultiSelectDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  maxVisible keeps the first tags and a kit Count with the number of the rest. The hidden values stay
+                  maxVisible keeps the first tags and a kit Count (+N) for the rest. The hidden values stay
                   selected and can be cleared from the list.
                 </p>
               </div>

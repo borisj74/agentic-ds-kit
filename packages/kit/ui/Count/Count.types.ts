@@ -15,5 +15,7 @@ export interface CountProps extends Omit<ComponentPropsWithoutRef<"span">, Count
   disabled?: boolean;
   max?: number;
   label?: string;
+  /** Shown before the number, e.g. "+" for an overflow count (+3). Visual only; screen readers hear the count and label. */
+  prefix?: "+";
   ref?: Ref<HTMLSpanElement>;
 }

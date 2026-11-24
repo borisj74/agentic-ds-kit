@@ -157,14 +157,18 @@ export function CountDoc() {
                   <Count size="lg" count={3} />
                   <Count count={150} />
                   <Count count={12} max={9} />
+                  <Count count={3} prefix="+" intent="neutral" subtle label="more selected" />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>Counts above max show max+. The default max is 99.</p>
+                <p className={styles.usageBody}>
+                  Counts above max show max+. The default max is 99. prefix=&quot;+&quot; marks an overflow count,
+                  like the +3 after the visible tags in MultiSelect.
+                </p>
               </div>
               <CodeBlock
-                code={'<Count size="sm" count={3} />\n<Count count={150} />\n<Count count={12} max={9} />'}
+                code={'<Count size="sm" count={3} />\n<Count count={150} />\n<Count count={12} max={9} />\n<Count count={3} prefix="+" intent="neutral" subtle label="more selected" />'}
               />
             </section>
             <section className={styles.example}>

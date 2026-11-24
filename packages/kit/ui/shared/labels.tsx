@@ -122,6 +122,10 @@ export interface KitLabels {
   online: string;
   away: string;
   offline: string;
+  /** AvatarGroup: the +N leftover count, e.g. "3 more". */
+  moreAvatars: (count: number) => string;
+  /** MultiSelect: what the +N overflow Count counts, read as "2 more selected". */
+  moreSelected: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -199,6 +203,8 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   online: "Online",
   away: "Away",
   offline: "Offline",
+  moreAvatars: (count) => `${count} more`,
+  moreSelected: "more selected",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

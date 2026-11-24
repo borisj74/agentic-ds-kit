@@ -2479,7 +2479,7 @@
         "maxVisible": {
           "type": "number",
           "required": false,
-          "note": "Extra selections collapse into a kit Count (neutral, subtle, md) after the visible Tags; screen readers hear N more selected."
+          "note": "Extra selections collapse into a kit Count +N (prefix +, neutral, subtle, md) after the visible Tags; screen readers hear N more selected (KitLabels moreSelected)."
         },
         "name": {
           "type": "string",
@@ -4314,7 +4314,7 @@
         "Unread or pending counts on nav items, tabs, and buttons",
         "A total next to a section title",
         "FilterButton applied-value counts",
-        "Overflow +N in a picker, like MultiSelect maxVisible"
+        "Overflow +N in a picker, like MultiSelect maxVisible (prefix \"+\")"
       ],
       "doNotUseWhen": [
         "Words or status labels — use Badge",
@@ -4325,6 +4325,7 @@
       "doNot": [
         "Do not invent a local counter or notification dot",
         "Do not put words in a Count — use Badge",
+        "Do not type a + into label or wrap the number in text; use prefix=\"+\" for overflow",
         "Do not use Count as a button",
         "Do not show more than one danger Count in a row",
         "Do not use raw hex or primitive --color-* ramps"
@@ -4373,6 +4374,14 @@
           "type": "string",
           "required": false,
           "note": "What is counted, for screen readers, like unread messages."
+        },
+        "prefix": {
+          "type": "enum",
+          "values": [
+            "+"
+          ],
+          "required": false,
+          "note": "Shown before the number for an overflow count, like +3 in MultiSelect. Visual only; screen readers hear the count and label (3 more selected)."
         }
       }
     },

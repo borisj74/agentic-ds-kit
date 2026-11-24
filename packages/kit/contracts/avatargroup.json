@@ -88,7 +88,7 @@
     "requirements": [
       "role=group",
       "optional aria-label names the group",
-      "leftover count is role=img with aria-label like \"3 more\"",
+      "leftover count is role=img with aria-label like \"3 more\" (KitLabels moreAvatars)",
       "each Avatar has a surface.card ring so faces stay apart on any ground"
     ]
   },
