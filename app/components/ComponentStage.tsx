@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { Button, CodeSnippet, SegmentedControl, Tabs } from "agentic-ds-kit";
+import { Button, CodeSnippet, Drawer, SegmentedControl, Tabs } from "agentic-ds-kit";
 import {
   componentPrompt,
   contractJson,
@@ -50,41 +50,74 @@ function CopyPrompt({ id }: { id: string }) {
 
 /**
  * Wraps a doc's master render. On small screens its Controls panel (the doc's
- * `aside[aria-label="Controls"]`) folds behind a toggle in its own row above the canvas, so the
- * toggle never covers the component; wide screens ignore it.
+ * `aside[aria-label="Controls"]`) hides behind a toggle in the canvas corner and opens in a kit
+ * Drawer from the bottom; wide screens ignore the toggle and show the panel in its own column.
+ * The doc owns the panel, so while the Drawer is open the panel's node is moved into the Drawer
+ * body and put back in place when it closes.
  */
 function ControlsHost({ children }: { children: ReactNode }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [hasControls, setHasControls] = useState(false);
   const [open, setOpen] = useState(false);
+  const [slot, setSlot] = useState<HTMLDivElement | null>(null);
 
   // Docs mount their panel on the client, so watch the subtree instead of checking once.
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return undefined;
-    const check = () => setHasControls(Boolean(host.querySelector('aside[aria-label="Controls"]')));
+    const check = () => {
+      if (!host.querySelector('aside[aria-label="Controls"]')) return;
+      setHasControls(true);
+    };
     check();
     const observer = new MutationObserver(check);
     observer.observe(host, { childList: true, subtree: true });
     return () => observer.disconnect();
   }, []);
 
+  // Lend the doc's panel to the Drawer body while it is open.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!open || !slot || !host) return undefined;
+    const panel = host.querySelector<HTMLElement>('aside[aria-label="Controls"]');
+    const home = panel?.parentNode;
+    if (!panel || !home) return undefined;
+    const next = panel.nextSibling;
+    slot.appendChild(panel);
+    return () => {
+      if (home.isConnected) home.insertBefore(panel, next && next.parentNode === home ? next : null);
+    };
+  }, [open, slot]);
+
+  // Back to wide: the panel has its own column again, so the Drawer closes.
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 860.02px)");
+    const close = () => {
+      if (wide.matches) setOpen(false);
+    };
+    wide.addEventListener("change", close);
+    return () => wide.removeEventListener("change", close);
+  }, []);
+
   return (
-    <div ref={hostRef} className={docStyles.controlsHost} data-controls-open={open ? "" : undefined}>
+    <div ref={hostRef} className={docStyles.controlsHost}>
       {hasControls ? (
-        <div className={docStyles.controlsBar}>
-          <Button
-            size="md"
-            appearance={open ? "soft" : "outline"}
-            mode="neutral"
-            iconStart={open ? "X" : "SlidersHorizontal"}
-            ariaLabel={open ? "Hide controls" : "Show controls"}
-            aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
-          />
-        </div>
+        <Button
+          size="md"
+          appearance="outline"
+          mode="neutral"
+          className={docStyles.controlsToggle}
+          iconStart="SlidersHorizontal"
+          ariaLabel="Show controls"
+          aria-expanded={open}
+          aria-haspopup="dialog"
+          onClick={() => setOpen(true)}
+        />
       ) : null}
       {children}
+      <Drawer open={open} side="bottom" title="Controls" onClose={() => setOpen(false)}>
+        <div ref={setSlot} className={docStyles.controlsDrawer} />
+      </Drawer>
     </div>
   );
 }

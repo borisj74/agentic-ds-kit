@@ -524,10 +524,24 @@
   border-radius: var(--radius-control-sm);
 }
 
-/* Wraps the master render in the Stage Preview tab. The Controls toggle row only shows on small
+/* Wraps the master render in the Stage Preview tab. The Controls toggle only shows on small
    screens. */
-.controlsBar {
+.controlsHost {
+  position: relative;
+}
+
+.controlsToggle {
   display: none;
+}
+
+/* The doc's panel inside the bottom Drawer: the Drawer is the frame, so the panel drops its own. */
+.controlsDrawer .panel {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
 }
 
 /* When the preview area itself is narrow (side nav or Theme panel open), the panel drops under
@@ -567,19 +581,25 @@
     margin-top: var(--space-4);
   }
 
-  /* In the Stage Preview tab the panel folds behind a toggle in its own row above the canvas;
-     open, it sits full width under the canvas. */
-  .controlsBar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: var(--space-3);
+  /* In the Stage Preview tab the panel opens in a bottom Drawer from a toggle in the canvas
+     corner. The canvas keeps a toggle-high band clear at the top so the toggle covers nothing. */
+  .controlsToggle {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: 2;
+    display: inline-flex;
+  }
+
+  .controlsHost .layout:has(> .panel) > :first-child {
+    padding-top: calc(var(--space-10) + var(--space-3));
   }
 
   .controlsHost .panel {
     display: none;
   }
 
-  .controlsHost[data-controls-open] .panel {
+  .controlsDrawer .panel {
     display: grid;
   }
 }
