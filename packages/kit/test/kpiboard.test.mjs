@@ -146,16 +146,29 @@ describe("KpiBoard rendered", () => {
     assert.match(html, /role="radiogroup"[^>]*aria-label="Range"/);
   });
 
-  test("Scorecards are toggle buttons; the selected one is pressed and named with its badge", () => {
+  test("the KPI strip is a radiogroup; the checked card is named with its Charted badge", () => {
     const html = render({ defaultSelectedMetric: "signups" });
-    const pressed = html.match(/aria-pressed="true"/g) ?? [];
-    const notPressed = html.match(/aria-pressed="false"/g) ?? [];
-    assert.equal(pressed.length, 1);
-    assert.equal(notPressed.length, 2);
-    const button = html.match(/<button[^>]*aria-pressed="true"[^>]*>/)[0];
+    assert.match(html, /role="radiogroup"[^>]*aria-label="Key metrics, pick one to chart"/);
+    const cards = html.match(/<button[^>]*aria-labelledby="[^"]*"[^>]*>/g) ?? [];
+    const checked = cards.filter((tag) => tag.includes('aria-checked="true"'));
+    const unchecked = cards.filter((tag) => tag.includes('aria-checked="false"'));
+    assert.equal(checked.length, 1);
+    assert.equal(unchecked.length, 2);
+    assert.equal((html.match(/aria-pressed=/g) ?? []).length, 0, "no toggle buttons");
+    const button = checked[0];
+    assert.match(button, /role="radio"/);
+    assert.match(button, /tabindex="0"/);
     const ids = button.match(/aria-labelledby="([^"]+)"/)[1].split(" ");
     assert.equal(ids.length, 3, "label, value and badge");
-    assert.ok(html.includes(logic.SELECTED_BADGE));
+    assert.equal(logic.SELECTED_BADGE, "Charted");
+    assert.ok(html.includes("Charted"));
+  });
+
+  test("goodWhen and a per-range hint reach the Delta", () => {
+    const withJudgement = metrics.map((m) => (m.id === "revenue" ? { ...m, goodWhen: "up", values: { ...m.values, "7d": { ...m.values["7d"], hint: "vs last week" } } } : m));
+    const html = render({ metrics: withJudgement });
+    assert.ok(html.includes("Better"));
+    assert.ok(html.includes("vs last week"));
   });
 
   test("the range changes the cards, the chart title and the table", () => {
@@ -180,7 +193,10 @@ describe("KpiBoard callbacks", () => {
   test("picking a card and a range reach the props", () => {
     const calls = [];
     const node = tree({ onSelectedMetricChange: (id) => calls.push(["metric", id]), onRangeChange: (r) => calls.push(["range", r]) });
-    find(node, Scoreboard).props.items[2].onClick();
+    const strip = find(node, Scoreboard).props;
+    assert.equal(strip.selectable, true);
+    assert.equal(strip.value, "revenue");
+    strip.onValueChange("churn");
     find(node, SegmentedControl).props.onChange("30d");
     assert.deepEqual(calls, [
       ["metric", "churn"],

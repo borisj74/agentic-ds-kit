@@ -5,7 +5,7 @@
   "summary": "Pick a KPI to chart it and list its top rows, with one range for all.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: the top of a dashboard. A Scoreboard of three to six KPIs that is also the picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them.",
+  "intent": "Block: the top of a dashboard. A selectable Scoreboard of three to six KPIs that is also the only picker, a LineChart of the picked KPI, a DataTable of the top rows behind it, and one range control (SegmentedControl) that changes all of them. It composes; it does not re-pick.",
   "useWhen": [
     "the first row of an analytics or reporting dashboard",
     "compare a few KPIs and drill into one without leaving the page",
@@ -15,7 +15,7 @@
     "only a strip of numbers: Scoreboard",
     "one chart on its own: LineChart or BarChart",
     "a full dataset to search and filter: DataTable",
-    "more than six KPIs: Scoreboard with Conveyor, and a separate chart"
+    "more than six KPIs: a Scoreboard (it wraps) and a separate chart"
   ],
   "contains": [
     "datatable",
@@ -28,7 +28,7 @@
     "metrics": {
       "type": "array",
       "required": true,
-      "note": "3\u20136 of { id, label, values: Record<range, { value, delta?, trend?, deltaTone? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash."
+      "note": "3\u20136 of { id, label, goodWhen?, values: Record<range, { value, delta?, trend?, deltaTone?, hint? }>, columns: DataTableColumn[], rowsTitle?, rankBy? }. Values are pre-formatted strings; a range with no entry shows a dash. goodWhen (up for MRR, down for overdue or churn) makes the delta read Better or Worse. hint is the muted text after the delta, e.g. \"vs Oct\"; default \"last <range label>\"."
     },
     "series": {
       "type": "object",
@@ -43,7 +43,7 @@
     "ranges": {
       "type": "array",
       "required": true,
-      "note": "{ value, label }[], two to four, e.g. 7d / 30d / 90d."
+      "note": "{ value, label }[], two to four, e.g. Month / Quarter / Year. Ranges are data, not an enum."
     },
     "range": {
       "type": "string",
@@ -98,7 +98,7 @@
   },
   "layout": [
     "top: heading beside the range SegmentedControl",
-    "then the Scoreboard of KPIs, one row; five or six scroll sideways in its Conveyor",
+    "then the selectable Scoreboard of KPIs: appearance cards; below --grid-breakpoint-sm (40rem) of block width it turns divided and four go two by two; five or six wrap",
     "then the LineChart beside the DataTable, in layout-split--primary",
     "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width the table stacks under the chart"
   ],
@@ -119,7 +119,9 @@
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
       "the range is a kit SegmentedControl (radio group) named Range",
-      "each KPI is a Scorecard button with aria-pressed; the selected one shows an In chart badge and its name includes it",
+      "the KPI strip is Scoreboard selectable: a radiogroup named \"<title>, pick one to chart\", each card role radio with aria-checked, roving tabindex, arrow keys move and check",
+      "the checked card shows a Charted badge and its name includes it",
+      "each delta reads Better or Worse with its signed value when goodWhen is set; icons are aria-hidden and colour is never the only signal",
       "the chart title and the table caption name the metric and the range",
       "the LineChart keeps its table view; the DataTable keeps its caption and scroll region",
       "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
@@ -130,7 +132,8 @@
     "Do not add a second range control; the one range drives cards, chart and table",
     "Do not put more than six KPIs in it",
     "Do not use raw hex",
-    "No solid primary Button in the block; leave it to the page"
+    "No solid primary Button in the block; leave it to the page",
+    "Do not hand-roll card onClick picking; the Scoreboard selectable strip is the picker"
   ],
   "snippet": "<KpiBoard metrics={metrics} series={series} rows={rows} ranges={[{ value: \"7d\", label: \"7 days\" }, { value: \"30d\", label: \"30 days\" }, { value: \"90d\", label: \"90 days\" }]} defaultRange=\"30d\" />"
 }

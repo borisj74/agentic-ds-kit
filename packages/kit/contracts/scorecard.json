@@ -75,7 +75,7 @@
     "badge": {
       "type": "string",
       "required": false,
-      "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (In chart, Beta); a change goes in delta, never in badge."
+      "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (Charted, Beta); a change goes in delta, never in badge."
     },
     "badgeTone": {
       "type": "enum",

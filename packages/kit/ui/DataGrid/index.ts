@@ -5,4 +5,5 @@ export type {
   DataGridRow,
   DataGridColumnType,
   DataGridSize,
+  DataGridTotal,
 } from "./DataGrid.types";

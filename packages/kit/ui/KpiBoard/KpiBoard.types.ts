@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { ChartDatum } from "../shared/chartMath";
 import type { DataTableColumn, DataTableRow } from "../DataTable/DataTable.types";
-import type { ScorecardDeltaTone, ScorecardTrend } from "../Scorecard/Scorecard.types";
+import type { ScorecardDeltaTone, ScorecardGoodWhen, ScorecardTrend } from "../Scorecard/Scorecard.types";
 
 /** A time range the whole board switches to, e.g. { value: "30d", label: "30 days" }. */
 export interface KpiBoardRange {
@@ -15,12 +15,19 @@ export interface KpiBoardValue {
   delta?: string;
   trend?: ScorecardTrend;
   deltaTone?: ScorecardDeltaTone;
+  /** Muted text after the delta for this range, e.g. "vs Oct". Default "last <range label>". */
+  hint?: string;
 }
 
 /** One KPI: a Scorecard in the strip, and when selected, the chart and the table. */
 export interface KpiBoardMetric {
   id: string;
   label: string;
+  /**
+   * Which way is good, passed through Scorecard to the kit Delta: "Better · +4.2%" or
+   * "Worse · +18.0%". Up for revenue, down for overdue or churn.
+   */
+  goodWhen?: ScorecardGoodWhen;
   /** Figures per range value. A range with no entry shows "—". */
   values: Record<string, KpiBoardValue>;
   /** Columns of the table behind this metric (e.g. Customer, Revenue, Change). */
@@ -36,7 +43,7 @@ type KpiBoardOwnedKeys = "children" | "title";
 
 /** `ref`, `className` and other native attributes land on the root `<section>`. */
 export interface KpiBoardProps extends Omit<ComponentPropsWithoutRef<"section">, KpiBoardOwnedKeys> {
-  /** Three to six KPIs. Five or six scroll sideways in the Scoreboard's Conveyor. */
+  /** Three to six KPIs. Five or six wrap in the Scoreboard. */
   metrics: KpiBoardMetric[];
   /** Chart samples by metric id, then range value: series[metricId][range]. */
   series: Record<string, Record<string, ChartDatum[]>>;

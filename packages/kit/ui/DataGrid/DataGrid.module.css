@@ -242,3 +242,296 @@
     transition: none;
   }
 }
+
+/* Number and money columns: end-aligned, tabular figures. */
+.end,
+.end .cellButton {
+  text-align: end;
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.editorEnd input {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Computed (read-only) cells: plain text, muted, never a button. */
+.computed {
+  padding-inline: var(--space-6);
+  color: var(--text-secondary);
+}
+
+.root[data-size="sm"] .computed {
+  padding-inline: var(--space-4);
+}
+
+/* An invalid cell: a danger ring and icon on that cell only. */
+.invalid .cellButton {
+  gap: var(--space-2);
+  border-radius: var(--radius-control-md);
+  box-shadow: inset 0 0 0 var(--border-width-thin) var(--status-danger-border);
+}
+
+.errorIcon {
+  flex: none;
+  color: var(--icon-danger);
+}
+
+.trInvalid .td {
+  border-bottom: none;
+}
+
+.td.message {
+  height: auto;
+  padding: 0 var(--space-6) var(--space-2);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-danger);
+}
+
+.messageRow:hover .td {
+  background-color: var(--surface-card);
+}
+
+.messageLine {
+  display: block;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-danger);
+  background-color: var(--surface-card);
+}
+
+.summary:empty {
+  display: none;
+}
+
+.summaryIcon {
+  flex: none;
+  color: var(--icon-danger);
+}
+
+/* Totals footer: labels end-aligned before the Amount column, the total ruled and bold. */
+.foot th,
+.foot td {
+  padding: var(--space-2) var(--space-6);
+  background-color: var(--surface-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.footLabel {
+  text-align: end;
+  font-weight: var(--type-weight-body);
+  color: var(--text-secondary);
+}
+
+.footValue {
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.footEmphasis th,
+.footEmphasis td {
+  border-top: var(--border-divider) solid var(--border-faint);
+  font-weight: var(--type-weight-strong);
+  color: var(--text-primary);
+}
+
+/* Stacked: below 30rem one row per line, opening to labelled fields. */
+.stack {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+  color: var(--text-primary);
+}
+
+.stackRow + .stackRow {
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+.stackRowOpen {
+  background-color: var(--surface-muted);
+}
+
+.stackToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.stackToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin) inset, var(--focus-ring) 0 0 0 var(--border-focus-width) inset;
+}
+
+.stackText {
+  display: grid;
+  flex: 1 1 auto;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.stackTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--type-weight-label);
+}
+
+.stackMeta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.stackFigure {
+  flex: none;
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.stackChevron {
+  flex: none;
+  color: var(--icon-muted);
+  transition: transform var(--motion-interaction-duration) var(--motion-interaction-easing);
+}
+
+.stackToggle[aria-expanded="true"] .stackChevron {
+  transform: rotate(180deg);
+}
+
+.stackPanel {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.stackFields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.stackField {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  min-width: 0;
+}
+
+.stackFieldWide {
+  grid-column: 1 / -1;
+}
+
+.stackLabel {
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  font-weight: var(--type-weight-label);
+  color: var(--text-secondary);
+}
+
+.stackInput {
+  display: flex;
+  min-width: 0;
+}
+
+.stackInput > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.stackError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-danger);
+}
+
+.stackPanelFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.stackPanelFigure {
+  display: flex;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.stackEmpty {
+  margin: 0;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  color: var(--text-secondary);
+}
+
+.stackTotals {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-divider) solid var(--border-faint);
+  background-color: var(--surface-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body);
+}
+
+.stackTotal {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.stackTotal dt {
+  color: var(--text-secondary);
+}
+
+.stackTotal dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.stackTotalEmphasis dt,
+.stackTotalEmphasis dd {
+  font-weight: var(--type-weight-strong);
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stackChevron {
+    transition: none;
+  }
+}

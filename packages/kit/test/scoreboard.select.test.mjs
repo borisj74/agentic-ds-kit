@@ -101,3 +101,24 @@ describe("Scoreboard selectable", () => {
     assert.match(html, /<article[^>]*id="seats"/);
   });
 });
+
+describe("Scoreboard with more than four figures", () => {
+  const six = ["MRR", "Collected", "Overdue", "Churn", "Seats", "NPS"].map((label) => ({ label, value: "1" }));
+
+  test("wraps in its own grid: no Conveyor, no scroll arrows", () => {
+    const html = h(Scoreboard, { items: six });
+    assert.ok(!html.includes('data-nistha="conveyor"'));
+    assert.ok(!/Scroll .* right/.test(html));
+    assert.equal((html.match(/<article/g) ?? []).length, 6);
+  });
+
+  test("selectable keeps one radiogroup across six cards", () => {
+    const html = h(Scoreboard, { items: six, selectable: true, "aria-label": "Chart metric" });
+    assert.equal((html.match(/role="radiogroup"/g) ?? []).length, 1);
+    assert.equal((html.match(/role="radio"/g) ?? []).length, 6);
+  });
+
+  test("scroll is accepted and ignored", () => {
+    assert.equal(h(Scoreboard, { items: six, scroll: false }), h(Scoreboard, { items: six }));
+  });
+});

@@ -51,3 +51,22 @@
 .scoreStack > * {
   scroll-snap-align: start;
 }
+
+.cardRow {
+  display: flex;
+  gap: var(--space-4);
+  width: max-content;
+  align-items: stretch;
+}
+
+.cardRow > * {
+  flex: none;
+  width: var(--layout-metrics-min);
+  scroll-snap-align: start;
+}
+
+.cardFigure {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}

@@ -22,7 +22,8 @@
   flex: 1 1 auto;
 }
 
-/* Divided: one row, no gap, a thin rule before every cell but the first. */
+/* Divided: no gap, thin rules between cells. One row: a rule before every cell but the first.
+   When the strip wraps, each layout below resets the rules for its column count. */
 .divided .grid {
   gap: 0;
 }
@@ -59,75 +60,136 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-/* Collapse as the strip narrows. Lengths match tokens: metrics-min 12rem, space-4 1rem. Container queries cannot use calc(var()).
-   Divided stacks to one column at the first step, with the rules turning horizontal. */
+.count5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.count6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* More than six: four to a row, wrapping. */
+.countMany {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Any divided strip that wraps: every cell padded alike, rules reset per layout below. */
+.divided .countMany .cell,
+.divided .countMany .cell:first-child,
+.divided .countMany .cell:last-child {
+  padding: var(--space-2);
+}
+
+.divided .countMany .cell {
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.divided .countMany .cell:nth-child(4n + 1) {
+  border-inline-start: 0;
+}
+
+.divided .countMany .cell:nth-child(n + 5) {
+  border-block-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* Lengths match tokens: --grid-breakpoint-md 64rem, metrics-min 12rem. Container queries cannot use var(). */
+@container scoreboard (max-width: 64rem) {
+  .count5,
+  .count6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .divided .count5 .cell,
+  .divided .count5 .cell:first-child,
+  .divided .count5 .cell:last-child,
+  .divided .count6 .cell,
+  .divided .count6 .cell:first-child,
+  .divided .count6 .cell:last-child {
+    padding: var(--space-2);
+  }
+
+  .divided .count5 .cell:nth-child(3n + 1),
+  .divided .count6 .cell:nth-child(3n + 1) {
+    border-inline-start: 0;
+  }
+
+  .divided .count5 .cell:nth-child(n + 4),
+  .divided .count6 .cell:nth-child(n + 4) {
+    border-block-start: var(--border-width-thin) solid var(--border-faint);
+  }
+}
+
+/* Narrow: three stack to one column; four or more go two by two, so a phone keeps a 2×2 grid. */
 @container scoreboard (max-width: 38rem) {
   .count3 {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .divided .grid {
-    grid-template-columns: minmax(0, 1fr);
+  .count4,
+  .count5,
+  .count6,
+  .countMany {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .divided .cell,
-  .divided .cell:first-child,
-  .divided .cell:last-child {
+  .divided .count3 .cell,
+  .divided .count3 .cell:first-child,
+  .divided .count3 .cell:last-child {
     padding-inline: 0;
     padding-block: var(--space-1);
   }
 
-  .divided .cell + .cell {
+  .divided .count3 .cell + .cell {
     border-inline-start: 0;
     border-block-start: var(--border-width-thin) solid var(--border-faint);
   }
 
-  .count4 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .divided .count4 .cell,
+  .divided .count4 .cell:first-child,
+  .divided .count4 .cell:last-child,
+  .divided .count5 .cell,
+  .divided .count6 .cell,
+  .divided .countMany .cell {
+    padding: var(--space-2);
+    border-block-start: 0;
+  }
+
+  .divided .count4 .cell:nth-child(even),
+  .divided .count5 .cell:nth-child(even),
+  .divided .count6 .cell:nth-child(even),
+  .divided .countMany .cell:nth-child(even) {
+    border-inline-start: var(--border-width-thin) solid var(--border-faint);
+  }
+
+  .divided .count4 .cell:nth-child(odd),
+  .divided .count5 .cell:nth-child(odd),
+  .divided .count6 .cell:nth-child(odd),
+  .divided .countMany .cell:nth-child(odd) {
+    border-inline-start: 0;
+  }
+
+  .divided .count4 .cell:nth-child(n + 3),
+  .divided .count5 .cell:nth-child(n + 3),
+  .divided .count6 .cell:nth-child(n + 3),
+  .divided .countMany .cell:nth-child(n + 3) {
+    border-block-start: var(--border-width-thin) solid var(--border-faint);
   }
 }
 
 @container scoreboard (max-width: 25rem) {
-  .count2,
-  .count4 {
+  .count2 {
     grid-template-columns: minmax(0, 1fr);
   }
-}
 
-/* More than four: cards keep the metrics-min width and scroll, but when the strip has room they
-   share it, so labels like "Active subscribers" stay on one line instead of leaving a gap at the end. */
-.overflowStrip {
-  width: max-content;
-  min-width: 100%;
-  max-width: none;
-}
+  .divided .count2 .cell,
+  .divided .count2 .cell:first-child,
+  .divided .count2 .cell:last-child {
+    padding-inline: 0;
+    padding-block: var(--space-1);
+  }
 
-.overflowRow {
-  display: flex;
-  align-items: stretch;
-  gap: var(--space-4);
-  width: max-content;
-  min-width: 100%;
-}
-
-.overflowItem {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 var(--layout-metrics-min);
-  min-width: var(--layout-metrics-min);
-  scroll-snap-align: start;
-}
-
-.divided .overflowRow {
-  gap: 0;
-}
-
-.divided .overflowItem + .overflowItem {
-  border-inline-start: var(--border-width-thin) solid var(--border-faint);
-  padding-inline-start: var(--space-2);
-}
-
-.overflowItem > * {
-  flex: 1 1 auto;
-  height: 100%;
+  .divided .count2 .cell + .cell {
+    border-inline-start: 0;
+    border-block-start: var(--border-width-thin) solid var(--border-faint);
+  }
 }
