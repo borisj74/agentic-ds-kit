@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 export type OverlayDismissReason = "escape" | "outside";
 
@@ -38,21 +38,33 @@ export function useOverlayDismiss(
     return pushOverlay(token);
   }, [open, token]);
 
+  // The latest onClose, read when an event fires. The listeners below stay bound from open to
+  // close, so a new onClose (a parent passing an inline callback) never re-registers them after
+  // a nested overlay's listeners.
+  const onCloseRef = useRef(onClose);
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
   useEffect(() => {
     if (!open) return undefined;
 
     function onPointerDown(event: PointerEvent) {
       const target = event.target as Node;
       if (rootRef.current?.contains(target) || panelRef?.current?.contains(target)) return;
-      onClose("outside");
+      onCloseRef.current("outside");
     }
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
+      // Another overlay already took this Escape (same rule as Modal, Drawer and AlertDialog).
+      if (event.defaultPrevented) return;
       // A nested overlay opened after this one owns this Escape.
       if (!isTopOverlay(token)) return;
       event.preventDefault();
-      onClose("escape");
+      // This overlay closes; no later listener may close the next one in the same keypress.
+      event.stopImmediatePropagation();
+      onCloseRef.current("escape");
     }
 
     document.addEventListener("pointerdown", onPointerDown);
@@ -62,5 +74,5 @@ export function useOverlayDismiss(
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown, true);
     };
-  }, [open, onClose, rootRef, panelRef, token]);
+  }, [open, rootRef, panelRef, token]);
 }

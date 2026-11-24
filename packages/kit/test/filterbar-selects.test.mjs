@@ -246,3 +246,112 @@ describe("Escape closes only the newest overlay", () => {
     assert.equal(isTopOverlay(popover), false);
   });
 });
+
+describe("Escape in a list inside a FilterBar chip Popover", { skip: JSDOM ? false : "jsdom is not installed" }, () => {
+  let act;
+  let useState;
+  let createRoot;
+  let Popover;
+
+  before(async () => {
+    const dom = new JSDOM("<!doctype html><html><body></body></html>", { pretendToBeVisual: true, url: "http://localhost/" });
+    const { window } = dom;
+    for (const [key, value] of Object.entries({
+      window,
+      document: window.document,
+      navigator: window.navigator,
+      HTMLElement: window.HTMLElement,
+      Node: window.Node,
+      Element: window.Element,
+      Event: window.Event,
+      KeyboardEvent: window.KeyboardEvent,
+      MouseEvent: window.MouseEvent,
+      PointerEvent: window.PointerEvent ?? window.MouseEvent,
+      getComputedStyle: window.getComputedStyle.bind(window),
+      requestAnimationFrame: window.requestAnimationFrame.bind(window),
+      cancelAnimationFrame: window.cancelAnimationFrame.bind(window),
+    })) {
+      Object.defineProperty(globalThis, key, { value, configurable: true, writable: true });
+    }
+    window.HTMLElement.prototype.scrollIntoView ??= () => {};
+    window.matchMedia ??= () => ({ matches: false, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
+    globalThis.matchMedia = window.matchMedia;
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+    const React = await import("react");
+    act = React.act;
+    useState = React.useState;
+    ({ createRoot } = await import("react-dom/client"));
+    ({ Popover } = await import("../dist/ui/Popover/Popover.js"));
+  });
+
+  // Like FilterBar: the Popover is controlled and gets a new inline onOpenChange on every render.
+  async function mount(List) {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    const controls = {};
+    function Harness() {
+      const [open, setOpen] = useState(true);
+      const [renders, setRenders] = useState(0);
+      controls.rerender = () => setRenders((n) => n + 1);
+      return h(
+        Popover,
+        {
+          label: "Status filter",
+          open,
+          onOpenChange: (next) => setOpen(next),
+          trigger: h("button", { type: "button", "data-renders": renders }, "Status"),
+        },
+        h(List, { id: "status-list", ariaLabel: "Status", options, value: List === MultiSelect ? [] : undefined, onChange: () => {} }),
+      );
+    }
+    await act(async () => root.render(h(Harness)));
+    const input = document.querySelector("[role=dialog] input[role=combobox]");
+    assert.ok(input, "the list's input is inside the Popover panel");
+    await act(async () => input.click());
+    assert.equal(input.getAttribute("aria-expanded"), "true", "the list is open");
+    // The inner list is open; now the parent re-renders and the Popover gets a new onClose.
+    // That must not re-bind the Popover's keydown listener behind the list's.
+    const added = [];
+    const addEventListener = document.addEventListener;
+    document.addEventListener = function (type, ...rest) {
+      added.push(type);
+      return addEventListener.call(this, type, ...rest);
+    };
+    try {
+      await act(async () => controls.rerender());
+    } finally {
+      document.addEventListener = addEventListener;
+    }
+    assert.deepEqual(added.filter((type) => type === "keydown"), [], "a new onClose does not re-bind the Escape listener");
+    const escape = async () =>
+      act(async () => {
+        input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
+      });
+    return { root, container, input, escape };
+  }
+
+  for (const [name, List] of [
+    ["Combobox", () => Combobox],
+    ["MultiSelect", () => MultiSelect],
+  ]) {
+    test(`${name}: the first Escape closes only the list, the second closes the Popover`, async () => {
+      const { root, container, input, escape } = await mount(List());
+      // A capture listener bound after both overlays: the overlay that handles Escape stops it.
+      let reachedLater = 0;
+      const later = (event) => {
+        if (event.key === "Escape") reachedLater += 1;
+      };
+      document.addEventListener("keydown", later, true);
+      await escape();
+      document.removeEventListener("keydown", later, true);
+      assert.equal(reachedLater, 0, "no later capture listener sees the handled Escape");
+      assert.equal(input.getAttribute("aria-expanded"), "false", "the list closed");
+      assert.ok(document.querySelector("[role=dialog]"), "the Popover is still open");
+      await escape();
+      assert.equal(document.querySelector("[role=dialog]"), null, "the second Escape closes the Popover");
+      await act(async () => root.unmount());
+      container.remove();
+    });
+  }
+});
