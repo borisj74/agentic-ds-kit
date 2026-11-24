@@ -48,34 +48,27 @@
   flex-shrink: 0;
   margin: 0;
   padding: 0;
-  width: 2.5rem;
-  height: 1.4rem;
+  /* md 36 by 20, sm 32 by 20, lg 40 by 24. The thumb fills the track less a 2px inset. */
+  width: calc(var(--space-8) + var(--space-1));
+  height: var(--space-5);
   border: var(--border-control) solid var(--border-faint);
   border-radius: var(--radius-pill);
   background: var(--action-secondary);
   cursor: pointer;
-  --switch-thumb-inset: 0.12rem;
-  --switch-thumb-size: 1rem;
-  --switch-thumb-stretch: 1.18rem;
-  --switch-thumb-squash: 0.92rem;
+  --switch-thumb-inset: var(--space-px);
+  --switch-thumb-size: calc(var(--space-5) - 2 * var(--border-control) - 2 * var(--space-px));
+  --switch-thumb-stretch: calc(var(--switch-thumb-size) * 1.18);
+  --switch-thumb-squash: calc(var(--switch-thumb-size) * 0.92);
 }
 
 .sm .control {
-  width: 2rem;
-  height: 1.15rem;
-  --switch-thumb-inset: 0.1rem;
-  --switch-thumb-size: 0.85rem;
-  --switch-thumb-stretch: 0.98rem;
-  --switch-thumb-squash: 0.78rem;
+  width: var(--space-8);
 }
 
 .lg .control {
-  width: 3rem;
-  height: 1.65rem;
-  --switch-thumb-inset: 0.14rem;
-  --switch-thumb-size: 1.2rem;
-  --switch-thumb-stretch: 1.38rem;
-  --switch-thumb-squash: 1.1rem;
+  width: var(--space-10);
+  height: var(--space-6);
+  --switch-thumb-size: calc(var(--space-6) - 2 * var(--border-control) - 2 * var(--space-px));
 }
 
 .control[aria-checked="true"] {
@@ -97,9 +90,15 @@
   outline-offset: var(--space-inset-2xs);
 }
 
-.control:disabled {
-  opacity: var(--opacity-disabled);
+.control:disabled,
+.control[aria-checked="true"]:disabled {
   cursor: not-allowed;
+  background: var(--surface-disabled);
+  border-color: var(--border-disabled);
+}
+
+.control:disabled .thumb {
+  background: var(--text-disabled);
 }
 
 .thumb {

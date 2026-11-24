@@ -9,7 +9,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: SelectSize[] = ["sm", "md"];
+const SIZES: SelectSize[] = ["sm", "md", "lg"];
 const DISPLAYS: SelectValueDisplay[] = ["text", "tags"];
 const FRUITS = [
   { value: "apple", label: "Apple" },

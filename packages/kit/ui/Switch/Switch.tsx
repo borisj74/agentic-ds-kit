@@ -72,3 +72,6 @@ export function Switch({
     </div>
   );
 }
+
+/** Field passes aria-required here when it is `required`: the named element takes it. */
+Switch.fieldRequired = true;

@@ -2,7 +2,7 @@
   "id": "field",
   "status": "stable",
   "level": "molecule",
-  "intent": "One labeled control with optional hint and error. Label on top or start (left).",
+  "intent": "One labeled control with optional hint and an error or success message. Label on top or start (left).",
   "useWhen": [
     "Any labeled Input, Textarea, Select, DatePicker, or Switch",
     "When helper text or a validation error sits with the control"
@@ -20,10 +20,13 @@
   "props": {
     "label": { "type": "string", "required": true },
     "htmlFor": { "type": "string", "required": true },
-    "hint": { "type": "string", "required": false, "note": "helper text. Hidden when error is set." },
+    "hint": { "type": "string", "required": false, "note": "Helper text, 12/16 muted, 4px under the control. Stays when error or success shows; the message goes under it." },
     "help": { "type": "string", "required": false, "note": "Extra explanation. Field puts HelpPopover beside the label (placement right). title is the Field label. content is help. Not a substitute for hint." },
     "helpLabel": { "type": "string", "required": false, "default": "Help", "note": "Name of the help button shown with help. Set it to translate." },
-    "error": { "type": "string", "required": false },
+    "error": { "type": "string", "required": false, "note": "Says what to do (Enter a postcode with 5 digits), not Invalid input. CircleX 16px icon plus text.danger words. No role=alert: an Alert error summary announces errors on submit. Wins over success." },
+    "success": { "type": "string", "required": false, "note": "Confirmation under the hint, e.g. Email verified. CircleCheck 16px icon plus text.success words, never colour alone. Hidden while error is set." },
+    "optional": { "type": "boolean", "default": false, "note": "Adds the muted word Optional (KitLabels optional) after the label. Mark the rarer kind: when most fields are required, the optional ones say Optional. Ignored when required is set." },
+    "required": { "type": "boolean", "default": false, "note": "Sets aria-required on the control when its named element takes it (Input, Textarea, Checkbox, Switch, ColorPicker). No asterisk. Button triggers (Select, the date pickers) are left alone." },
     "labelPosition": {
       "type": "enum",
       "values": ["top", "start"],
@@ -32,25 +35,28 @@
     },
     "children": {
       "type": "slot",
-      "allowedContracts": ["input", "textarea", "select", "datepicker", "daterangepicker", "datetimepicker", "switch", "checkbox", "fileupload", "colorpicker"],
+      "allowedContracts": ["input", "textarea", "select", "datepicker", "daterangepicker", "datetimepicker", "switch", "checkbox", "fileupload", "colorpicker", "numberinput", "currencyinput", "multiselect", "taginput"],
       "required": true
     }
   },
   "passthrough": {
-    "root": "div[role=group]",
-    "ref": "div[role=group]",
+    "root": "div",
+    "ref": "div",
     "className": "root",
-    "rest": "div[role=group]"
+    "rest": "div"
   },
-  "tokens": ["text.primary", "text.muted", "text.danger"],
+  "tokens": ["text.primary", "text.muted", "text.danger", "text.success"],
   "a11y": {
     "element": "div",
     "requirements": [
       "No role on the wrapper (a nameless group added nothing); the label has id {htmlFor}-label",
       "Label htmlFor matches child control id",
-      "Hint or error id is passed to the child as describedBy", "A Slider child gets labelledBy={htmlFor}-label, since a label for cannot name role=slider",
-      "When help is set, HelpPopover sits beside the label; hint and error stay under the control",
-      "data-invalid when error is set"
+      "Hint id, then the error or success id, is passed to the child as describedBy",
+      "Spacing: 8px from label to control, 4px from control to hint and from hint to message",
+      "required sets aria-required on controls that take it; there is no asterisk", "A Slider child gets labelledBy={htmlFor}-label, since a label for cannot name role=slider",
+      "When help is set, HelpPopover sits beside the label; hint and message stay under the control",
+      "data-invalid when error is set, data-success when success is set and error is not",
+      "The message icon is aria-hidden; the words carry the state"
     ]
   },
   "doNot": [
@@ -58,7 +64,9 @@
     "Do not wrap Button or layout components",
     "Do not use start on Field for prefix text — that is Input start",
     "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
+    "Do not add an asterisk for required — set required, and mark the rarer kind with optional",
+    "Do not build an error summary component — on submit, show an Alert (tone danger) with one Button per field that moves focus to it, and focus the Alert",
     "Do not use raw hex"
   ],
-  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\"><Input id=\"email\" type=\"email\" /></Field>"
+  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\" required><Input id=\"email\" type=\"email\" /></Field>\n<Field label=\"VAT number\" htmlFor=\"vat\" optional hint=\"Starts with a country code.\" error=\"It needs 9 digits after DE.\"><Input id=\"vat\" /></Field>"
 }

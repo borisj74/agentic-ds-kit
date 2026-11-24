@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Alert } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { Card } from "agentic-ds-kit";
 import { Checkbox } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
@@ -44,6 +46,90 @@ const MASTER_CODE = `<Card
     <Checkbox id="same" label="Same as shipping address" />
   </FieldSet>
 </Card>`;
+
+const STATES_CODE = `<Field label="Company name" htmlFor="company" required>
+  <Input id="company" defaultValue="Northwind GmbH" />
+</Field>
+<Field label="VAT number" htmlFor="vat" optional hint="Starts with a country code." error="It needs 9 digits after DE.">
+  <Input id="vat" defaultValue="DE12345678" />
+</Field>
+<Field label="Billing email" htmlFor="billing-email" required success="Email verified.">
+  <Input id="billing-email" type="email" defaultValue="billing@northwind.dev" />
+</Field>
+<Field label="Invoice currency" htmlFor="currency">
+  <Select id="currency" size="lg" options={currencies} />
+</Field>`;
+
+const SUMMARY_CODE = `const alertRef = useRef<HTMLDivElement>(null);
+
+function onSubmit() {
+  const next = postcode.length === 5 ? "" : "Enter a postcode with 5 digits, like 10119.";
+  setPostcodeError(next);
+  if (next) requestAnimationFrame(() => alertRef.current?.focus());
+}
+
+{postcodeError ? (
+  <Alert
+    ref={alertRef}
+    tabIndex={-1}
+    variant="danger"
+    placement="inline"
+    title="Fix 1 field to save"
+    action={{ label: "Go to Postcode", onClick: () => document.getElementById("postcode")?.focus() }}
+  >
+    Postcode needs 5 digits.
+  </Alert>
+) : null}
+<Field label="Postcode" htmlFor="postcode" required error={postcodeError}>
+  <Input id="postcode" value={postcode} onChange={setPostcode} />
+</Field>
+<Button appearance="outline" mode="neutral" onClick={onSubmit}>Save billing details</Button>`;
+
+const CURRENCIES = [
+  { value: "eur", label: "Euro · EUR" },
+  { value: "usd", label: "US dollar · USD" },
+  { value: "gbp", label: "Pound · GBP" },
+];
+
+function ErrorSummaryExample() {
+  const alertRef = useRef<HTMLDivElement>(null);
+  const [postcode, setPostcode] = useState("101");
+  const [postcodeError, setPostcodeError] = useState("");
+
+  function onSubmit() {
+    const next = /^\d{5}$/.test(postcode) ? "" : "Enter a postcode with 5 digits, like 10119.";
+    setPostcodeError(next);
+    if (next) requestAnimationFrame(() => alertRef.current?.focus());
+  }
+
+  return (
+    <div className={local.stack}>
+      {postcodeError ? (
+        <Alert
+          ref={alertRef}
+          tabIndex={-1}
+          variant="danger"
+          placement="inline"
+          title="Fix 1 field to save"
+          action={{
+            label: "Go to Postcode",
+            onClick: () => document.getElementById("field-summary-postcode")?.focus(),
+          }}
+        >
+          Postcode needs 5 digits.
+        </Alert>
+      ) : null}
+      <Field label="Postcode" htmlFor="field-summary-postcode" required error={postcodeError || undefined}>
+        <Input id="field-summary-postcode" value={postcode} onChange={setPostcode} />
+      </Field>
+      <div>
+        <Button appearance="outline" mode="neutral" onClick={onSubmit}>
+          Save billing details
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export function FieldDoc() {
   const [tab, setTab] = useState<"preview" | "variants">("preview");
@@ -194,6 +280,62 @@ export function FieldDoc() {
               <CodeBlock
                 code={'<Field label="Username" htmlFor="username" error="Choose another username."><Input id="username" error /></Field>'}
               />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Optional, required, success</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={`${styles.previewFill} ${local.stack}`} style={{ maxWidth: "20rem" }}>
+                  <Field label="Company name" htmlFor="field-state-company" required>
+                    <Input id="field-state-company" defaultValue="Northwind GmbH" />
+                  </Field>
+                  <Field
+                    label="VAT number"
+                    htmlFor="field-state-vat"
+                    optional
+                    hint="Starts with a country code."
+                    error="It needs 9 digits after DE."
+                  >
+                    <Input id="field-state-vat" defaultValue="DE12345678" />
+                  </Field>
+                  <Field label="Billing email" htmlFor="field-state-email" required success="Email verified.">
+                    <Input id="field-state-email" type="email" defaultValue="billing@northwind.dev" />
+                  </Field>
+                  <Field label="Invoice currency" htmlFor="field-state-currency">
+                    <Select id="field-state-currency" size="lg" options={CURRENCIES} />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Mark the rarer kind. Most billing fields are required, so the optional ones say Optional, and
+                  required sets aria-required with no asterisk. The hint stays when an error shows, and the
+                  message goes under it with an icon. Say what to do: Enter a postcode with 5 digits, not Invalid
+                  input. Check on blur and on submit, never while the person is typing. Read-only keeps full
+                  contrast; disabled uses the disabled tokens. One size per row: a field, a Select and a Button
+                  in one row share sm, md or lg.
+                </p>
+              </div>
+              <CodeBlock code={STATES_CODE} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Error summary</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
+                  <ErrorSummaryExample />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  A recipe, not a component. On submit, show an Alert (danger) above the form that says how many
+                  fields to fix, with one Button per field (action and secondaryAction) that moves focus to it,
+                  and move focus to the Alert. Field errors are not announced on their own.
+                </p>
+              </div>
+              <CodeBlock code={SUMMARY_CODE} />
             </section>
 
             <section className={styles.example}>

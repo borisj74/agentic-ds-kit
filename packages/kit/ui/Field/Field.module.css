@@ -6,7 +6,16 @@
 .top {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+}
+
+/* 8px from label to control, 4px from control to hint and from hint to message. */
+.top .body {
+  margin-top: var(--space-2);
+}
+
+.top .hint,
+.top .message {
+  margin-top: var(--space-1);
 }
 
 .start {
@@ -41,7 +50,7 @@
   grid-row: 2;
 }
 
-.start .error {
+.start .message {
   grid-column: 2;
   grid-row: 3;
 }
@@ -57,18 +66,42 @@
   min-width: 0;
 }
 
-.hint {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+.optional {
+  font-weight: var(--type-weight-body);
   color: var(--text-muted);
 }
 
-.error {
+.hint {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-muted);
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+}
+
+.messageIcon {
+  flex-shrink: 0;
+}
+
+.error {
   color: var(--text-danger);
+}
+
+.success {
+  color: var(--text-success);
+}
+
+/* With no hint, the message takes row 2 so the gap stays 4px. */
+.start .body + .message {
+  grid-row: 2;
 }

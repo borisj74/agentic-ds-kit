@@ -90,6 +90,9 @@
     "border.faint",
     "border.focus",
     "status.danger",
+    "surface.disabled",
+    "border.disabled",
+    "text.disabled",
     "radius.controlSm"
   ],
   "a11y": {

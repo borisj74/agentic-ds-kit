@@ -143,6 +143,8 @@ export interface KitLabels {
   confidence: string;
   /** app-shell pattern: the skip link, first in the tab order, that jumps to the page's main content. */
   skipToMain: string;
+  /** Field: the muted word after the label when `optional` is set. */
+  optional: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -232,6 +234,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   why: "Why?",
   confidence: "Confidence",
   skipToMain: "Skip to main content",
+  optional: "Optional",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);
