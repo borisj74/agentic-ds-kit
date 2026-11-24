@@ -1,6 +1,6 @@
 /**
- * AgentOverview: the one filter drives all three areas (summary activity, lanes, inbox), and the
- * approve / reject / retry callbacks reach the block's props. Runs against the built kit (dist):
+ * AgentOverview: agent status (icon plus word), Needs you, the All agents rows and filter, the
+ * Since rail and the Timeline view. Runs against the built kit (dist):
  * build first (npm run build -w agentic-ds-kit). CSS imports are stubbed so the block renders
  * on the server with react-dom/server.
  */
@@ -50,111 +50,115 @@ let logic;
 let React;
 let renderToStaticMarkup;
 let AgentOverview;
+let toAgentStatus;
 
 before(async () => {
   logic = await import("../dist/ui/AgentOverview/agentOverview.logic.js");
   React = await import("react");
   ({ renderToStaticMarkup } = await import("react-dom/server"));
   ({ AgentOverview } = await import("../dist/ui/AgentOverview/AgentOverview.js"));
+  ({ toAgentStatus } = await import("../dist/ui/shared/agentStatus.js"));
 });
 
 function render(props) {
   return renderToStaticMarkup(React.createElement(AgentOverview, { agents, events, since: SINCE, now: NOW, ...props }));
 }
 
-describe("AgentOverview filter", () => {
-  test("counts cover what was active since the last visit", () => {
-    assert.deepEqual(logic.summaryCounts(events, SINCE, NOW), { done: 1, needsYou: 2, failed: 1 });
-    assert.deepEqual(logic.filterCounts(events, SINCE, NOW), { all: 5, running: 1, "needs-you": 2, failed: 1 });
+describe("AgentOverview status and filter", () => {
+  test("agent status comes from the agent, else its latest event, else queued", () => {
+    assert.equal(logic.statusOf({ id: "x", name: "X", status: "waiting" }, events), "needs-you");
+    assert.equal(logic.statusOf({ id: "x", name: "X", status: "idle" }, events), "queued");
+    assert.equal(logic.statusOf(agents[1], events), "needs-you");
+    assert.equal(logic.statusOf(agents[2], events), "failed");
+    assert.equal(logic.statusOf({ id: "none", name: "None" }, events), "queued");
   });
 
-  test("lanes keep only agents with matching work", () => {
-    assert.deepEqual(logic.lanesFor(agents, events, "all").agents.map((a) => a.id), ["plan", "code", "test", "docs"]);
-    const waiting = logic.lanesFor(agents, events, "needs-you");
-    assert.deepEqual(waiting.agents.map((a) => a.id), ["code", "docs"]);
-    assert.deepEqual(waiting.tasks.map((t) => t.id), ["e3", "e4"]);
-    assert.deepEqual(logic.lanesFor(agents, events, "failed").agents.map((a) => a.id), ["test"]);
+  test("filter counts are per agent", () => {
+    assert.deepEqual(logic.filterCounts(agents, events), { all: 4, running: 0, "needs-you": 2, failed: 1 });
   });
 
-  test("inbox lists waiting and failed work, per filter", () => {
-    const all = logic.inboxItemsFor(agents, events, "all", SINCE, NOW);
-    assert.deepEqual(all.map((i) => i.id).sort(), ["e3", "e4", "e5"]);
-    assert.equal(all.find((i) => i.id === "e3").type, "approval");
-    assert.equal(all.find((i) => i.id === "e4").type, "question");
-    assert.equal(all.find((i) => i.id === "e5").type, "failure");
-    assert.deepEqual(logic.inboxItemsFor(agents, events, "failed", SINCE, NOW).map((i) => i.id), ["e5"]);
-    assert.deepEqual(logic.inboxItemsFor(agents, events, "running", SINCE, NOW), []);
+  test("rows: status word plus one fact, one action from the status", () => {
+    const withNow = [...agents, { id: "run", name: "Runner", status: "running", now: "Step 3 of 5", cost: "$0.42" }];
+    const rows = logic.rowsFor(withNow, events, "all", "code", { review: true, ask: true });
+    const by = Object.fromEntries(rows.map((row) => [row.item.id, row]));
+    assert.equal(by.code.item.secondary, "Needs you · Waiting on you · request above");
+    assert.equal(by.code.item.primaryAction, undefined);
+    assert.equal(by.test.item.primaryAction.label, "Review");
+    assert.equal(by.run.item.primaryAction.label, "Ask");
+    assert.equal(by.run.item.secondary, "Running · Step 3 of 5");
+    assert.equal(by.run.item.meta, "$0.42");
+    assert.equal(by.plan.item.primaryAction, undefined);
+    assert.deepEqual(
+      logic.rowsFor(agents, events, "failed", undefined, { review: true, ask: true }).map((row) => row.item.id),
+      ["test"],
+    );
+    // No handler, no button.
+    assert.equal(logic.rowsFor(agents, events, "failed", undefined, { review: false, ask: false })[0].item.primaryAction, undefined);
   });
 
-  test("activity bar counts only matching work", () => {
-    const sum = (filter) => logic.activityFor(events, filter, SINCE, NOW).reduce((n, d) => n + d.value, 0);
-    assert.equal(sum("all"), 5);
-    assert.equal(sum("running"), 1);
-    assert.equal(sum("needs-you"), 2);
-    assert.equal(sum("failed"), 1);
+  test("requests: open waiting events, oldest first", () => {
+    assert.deepEqual(logic.requestsFor(events).map((e) => e.id), ["e3", "e4"]);
   });
 
-  test("the rendered block: one radio group with counts in the names", () => {
-    const html = render();
-    assert.match(html, /role="radiogroup"[^>]*aria-label="Show agents"/);
-    for (const label of ["All 5", "Running 1", "Needs you 2", "Failed 1"]) assert.ok(html.includes(label), label);
+  test("total spent only when every agent has a dollar cost", () => {
+    assert.equal(logic.totalSpent([{ id: "a", name: "A", cost: "$0.18" }, { id: "b", name: "B", cost: "$0.82" }]), "$1.00 spent");
+    assert.equal(logic.totalSpent([{ id: "a", name: "A", cost: "$0.18" }, { id: "b", name: "B" }]), undefined);
   });
 
-  test("all three areas respond to the filter when rendered", () => {
-    const all = render();
-    const failed = render({ filter: "failed" });
-    const running = render({ defaultFilter: "running" });
-
-    // Summary: the activity chart is titled with the filter.
-    assert.ok(all.includes(">Activity<"));
-    assert.ok(failed.includes("Activity · Failed"));
-    // Lanes: only the failing agent keeps a lane.
-    assert.ok(all.includes("Docs writer") && all.includes("Planner"));
-    assert.ok(failed.includes("Tester"));
-    assert.ok(!failed.includes("Planner") && !failed.includes("Refactor invoice totals"));
-    // Inbox: the failure only; running has nothing waiting on you.
-    assert.ok(all.includes("Run 0042_drop_legacy.sql on staging?"));
-    assert.ok(failed.includes("E2E checkout suite") && !failed.includes("Publish the 0.19 changelog?"));
-    assert.ok(running.includes("All caught up") && running.includes("Refactor invoice totals"));
+  test("the Since rail lists events since the last visit, newest first, with status words", () => {
+    const rail = logic.railFor(agents, events, SINCE, NOW);
+    assert.ok(!rail.some((e) => e.id === "old"));
+    assert.equal(rail[0].id, "e4");
+    assert.deepEqual(rail.find((e) => e.id === "e5").status, { label: "Failed", tone: "danger" });
+    assert.equal(rail.find((e) => e.id === "e3").object, "Run 0042_drop_legacy.sql on staging?");
   });
 
-  test("inbox rows are buttons with aria-expanded", () => {
-    const html = render();
-    assert.match(html, /<button[^>]*aria-expanded="false"[^>]*aria-controls="[^"]+"/);
+  test("toAgentStatus maps the older words", () => {
+    for (const [from, to] of [["waiting", "needs-you"], ["approval", "needs-you"], ["idle", "queued"], ["pending", "queued"], ["done", "done"]]) {
+      assert.equal(toAgentStatus(from), to);
+    }
   });
 });
 
-describe("AgentOverview callbacks", () => {
-  test("approve, reject and retry reach the block's props", () => {
-    const calls = [];
-    const handlers = logic.inboxHandlers({
-      onApprove: (id) => calls.push(["approve", id]),
-      onReject: (id) => calls.push(["reject", id]),
-      onRetry: (id) => calls.push(["retry", id]),
-    });
-    handlers.onApprove("e3");
-    handlers.onDeny("e3");
-    handlers.onAnswer("e4", logic.DECISION_APPROVE);
-    handlers.onAnswer("e4", logic.DECISION_REJECT);
-    handlers.onAnswer("e4", "something else");
-    handlers.onRetryItem("e5");
-    assert.deepEqual(calls, [
-      ["approve", "e3"],
-      ["reject", "e3"],
-      ["approve", "e4"],
-      ["reject", "e4"],
-      ["retry", "e5"],
-    ]);
+describe("AgentOverview rendered", () => {
+  test("one filter radio group with counts in the names", () => {
+    const html = render();
+    assert.match(html, /role="radiogroup"[^>]*aria-label="Show agents"/);
+    for (const label of ["All 4", "Running 0", "Needs you 2", "Failed 1"]) assert.ok(html.includes(label), label);
   });
 
-  test("missing callbacks are safe", () => {
-    const handlers = logic.inboxHandlers({});
-    assert.doesNotThrow(() => {
-      handlers.onApprove("e3");
-      handlers.onDeny("e3");
-      handlers.onAnswer("e4", logic.DECISION_APPROVE);
-      handlers.onRetryItem("e5");
-    });
+  test("Needs you: one ApprovalCard for the oldest request, the rest counted, announced politely", () => {
+    const html = render();
+    assert.ok(html.includes("Coder asks"));
+    assert.ok(html.includes("Run 0042_drop_legacy.sql on staging?"));
+    assert.equal((html.match(/<span>Approve<\/span>/g) ?? []).length, 1, "the second request is counted, not shown as a card");
+    assert.ok(html.includes("1 more request waiting"));
+    assert.match(html, /aria-live="polite"[^>]*>2 requests need you/);
+  });
+
+  test("status is an icon plus the word; one solid primary", () => {
+    const html = render({ onReview: () => {} });
+    assert.ok(html.includes('aria-label="Tester, Failed"'), "the word is in the row name");
+    assert.ok(html.includes(">Failed<"), "and visible");
+    assert.ok(html.includes(">Review<"));
+    assert.ok(!html.includes(">Ask<"), "no running agent, no Ask");
+  });
+
+  test("the filter narrows the list", () => {
+    const failed = render({ filter: "failed" });
+    assert.ok(failed.includes('aria-label="Tester, Failed"'));
+    assert.ok(!failed.includes('aria-label="Planner'));
+  });
+
+  test("Timeline view renders the lanes; list stays for narrow blocks", () => {
+    const html = render({ defaultView: "timeline" });
+    assert.ok(html.includes("E2E checkout suite"));
+    assert.match(html, /aria-label="View"/);
+  });
+
+  test("New task shows only with onNewTask", () => {
+    assert.ok(!render().includes("New task"));
+    assert.ok(render({ onNewTask: () => {} }).includes("New task"));
   });
 });
 

@@ -2,45 +2,44 @@
   "id": "agentoverview",
   "kind": "block",
   "category": "Agents",
-  "summary": "See what your agents did since you last looked, what is running, and what needs you.",
+  "summary": "The agent home: what needs you, every agent's status and one action, and what happened since you last looked.",
   "status": "stable",
   "level": "block",
-  "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+  "intent": "Block: the home for a group of agents. Needs you (the oldest open request as one ApprovalCard, the rest counted), All agents (an icon-and-word status, one fact, cost and one action per row, under one filter) and a Since rail of what happened after the last visit. A Timeline view shows the same agents on one time axis on wide screens. Replaces AgentFleet, AgentLanes and the AgentInbox list.",
   "useWhen": [
     "the first screen of an agent workspace",
-    "come back after a while and see what changed",
-    "approve, reject or retry agent work from one place"
+    "come back after a while and see what changed and what needs you",
+    "approve the open request, review a failed agent or ask a running one from one place"
   ],
   "doNotUseWhen": [
-    "one agent in detail — AgentMonitor",
-    "only the time axis — AgentLanes",
-    "only the request queue — AgentInbox",
-    "agents with sub-agents — AgentFleet"
+    "one run in detail — RunDetail",
+    "people's tasks — WorkBoard",
+    "starting a run — TaskBrief"
   ],
   "contains": [
+    "activityfeed",
     "agentlanes",
-    "agentinbox",
-    "barchart",
-    "empty",
-    "scoreboard",
-    "scorecard",
+    "approvalcard",
+    "button",
+    "decisioncard",
+    "listview",
     "segmentedcontrol"
   ],
   "props": {
     "agents": {
       "type": "array",
       "required": true,
-      "note": "{ id, name, model?, icon? }[]. Same shape as AgentLanes agents: one lane each."
+      "note": "{ id, name, model?, icon?, status?, now?, cost?, subAgents? }[]. status is AgentStatus (queued | running | needs-you | paused | done | failed; older waiting and approval map to needs-you, idle to queued); default from the agent's latest event. now is one line on what it is doing. cost like \"$0.42\"; when every agent has one the lead line adds the total spent. subAgents { id, name, status, elapsed?, cost? }[] are counted on the row."
     },
     "events": {
       "type": "array",
       "required": true,
-      "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Waiting and failed events since `since` fill the inbox."
+      "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Open waiting events fill Needs you, oldest first; events since `since` fill the Since rail."
     },
     "since": {
       "type": "number",
       "required": true,
-      "note": "Epoch ms of the last visit. The summary and the filter counts cover what was active after it."
+      "note": "Epoch ms of the last visit. The lead line and the Since rail start from it."
     },
     "now": {
       "type": "number",
@@ -56,7 +55,7 @@
         "failed"
       ],
       "required": false,
-      "note": "Controlled filter for the activity bar, lanes and inbox."
+      "note": "Controlled filter for the All agents list and the Timeline lanes, by agent status."
     },
     "defaultFilter": {
       "type": "enum",
@@ -74,24 +73,62 @@
       "required": false,
       "note": "(filter) => void"
     },
+    "view": {
+      "type": "enum",
+      "values": [
+        "list",
+        "timeline"
+      ],
+      "required": false,
+      "note": "Controlled view. timeline renders AgentLanes in place of the list; below --grid-breakpoint-sm (40rem) of block width only the list shows and the toggle hides."
+    },
+    "defaultView": {
+      "type": "enum",
+      "values": [
+        "list",
+        "timeline"
+      ],
+      "default": "list",
+      "note": "Uncontrolled starting view."
+    },
+    "onViewChange": {
+      "type": "function",
+      "required": false,
+      "note": "(view) => void"
+    },
     "onApprove": {
       "type": "function",
       "required": false,
-      "note": "(eventId) => void. From the lane block's decision or the inbox card."
+      "note": "(eventId) => void. From the Needs you card or a lane block."
     },
     "onReject": {
       "type": "function",
       "required": false,
-      "note": "(eventId) => void"
+      "note": "(eventId) => void. Deny on the Needs you card."
     },
     "onRetry": {
       "type": "function",
       "required": false,
-      "note": "(eventId) => void. A failed event's Retry run."
+      "note": "(eventId) => void. Kept for older apps; the row action for a failed agent is Review (onReview)."
+    },
+    "onReview": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void. Review on a failed agent's row."
+    },
+    "onAsk": {
+      "type": "function",
+      "required": false,
+      "note": "(agentId) => void. Ask on a running agent's row."
+    },
+    "onNewTask": {
+      "type": "function",
+      "required": false,
+      "note": "() => void. New task in the header: open TaskBrief."
     },
     "title": {
       "type": "string",
-      "default": "Agent overview"
+      "default": "Agents"
     }
   },
   "passthrough": {
@@ -101,37 +138,57 @@
     "rest": "section"
   },
   "layout": [
-    "two columns in layout-split--primary, each a stack with the block gutter: the summary Scoreboard over AgentLanes, the activity BarChart over AgentInbox, so the lanes start right under the cards",
-    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width it is one column in reading order: summary, activity, lanes, inbox"
+    "header: title and lead line (since time · agents, spent); the List / Timeline toggle and New task at the end",
+    "layout-split--primary: Needs you over All agents in the wide column, the Since rail (ActivityFeed history) in the narrow one",
+    "the block is its own inline-size container; below --grid-breakpoint-md (64rem) of block width it is one column in reading order: Needs you, All agents, Since rail; below --grid-breakpoint-sm (40rem) Timeline hides and the list shows"
   ],
   "tokens": [
     "text.fg",
     "text.fgMuted",
+    "bg.surface",
+    "line.default",
+    "radius.surfaceLg",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4",
     "type.size.uiXl",
     "type.size.bodySm",
     "type.weight.heading",
+    "type.weight.label",
     "type.tracking.heading5",
     "type.family.heading",
     "layout.gutter.md",
     "layout.gutter.sm",
-    "grid.breakpoint.md"
+    "grid.breakpoint.md",
+    "grid.breakpoint.sm",
+    "status.successText",
+    "status.infoText",
+    "status.warningText",
+    "status.dangerText",
+    "icon.success",
+    "icon.brand",
+    "icon.warning",
+    "icon.danger"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
       "section aria-labelledby the h2 title; place it inside the page's <main>",
+      "status is an icon plus the word: icons are aria-hidden, the word is visible text; the running icon stops under prefers-reduced-motion",
+      "Needs you is a section named \"<agent> asks\"; new requests are announced in a polite live region and focus never jumps to them",
       "the filter is a kit SegmentedControl (radio group) named Show agents; each segment's name includes its count",
-      "the summary is a section labelled by its h3; the Scoreboard is labelled too",
-      "inbox rows are buttons with aria-expanded and aria-controls on the detail; selecting the open row again closes it",
-      "lane blocks and inbox actions are the AgentLanes and AgentInbox controls, keyboard reachable with the kit focus ring",
-      "no motion of its own; the parts' motion is transform and opacity and off under prefers-reduced-motion"
+      "row actions are kit Buttons from ListView (Review, Ask); the Since rail is ActivityFeed history, an ordered list",
+      "no motion of its own besides the status spinner"
     ]
   },
   "doNot": [
     "Do not rebuild AgentOverview from a local dashboard; import the block",
-    "Do not add a second filter to one area; the one filter drives all three",
+    "Do not repeat a request: it lives in Needs you only; the row and the rail point to it",
+    "Do not show status by colour alone; use the icon and the word",
+    "Do not add a second filter; the one filter drives the list and the lanes",
     "Do not use raw hex",
-    "Only one solid primary in the view: the approve in the open inbox card"
+    "Only one solid primary in the view: the approve in the Needs you card"
   ],
-  "snippet": "<AgentOverview agents={agents} events={events} since={lastVisit} defaultFilter=\"all\" onApprove={approve} onReject={reject} onRetry={retry} />"
+  "snippet": "<AgentOverview agents={agents} events={events} since={lastVisit} onApprove={approve} onReject={deny} onReview={openRun} onAsk={askAgent} onNewTask={openBrief} />"
 }

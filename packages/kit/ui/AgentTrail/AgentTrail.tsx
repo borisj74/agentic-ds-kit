@@ -55,6 +55,9 @@ export function AgentTrail({
   const titleId = useId();
   const counter = progress ?? defaultProgress(steps);
   const firstOpen = steps.findIndex((step) => step.status !== "done");
+  // The current step is the live one (running or waiting on you), else the failed one.
+  const live = steps.find((step) => step.status === "running" || step.status === "approval");
+  const currentId = (live ?? steps.find((step) => step.status === "failed"))?.id;
 
   return (
     <section {...rest} {...nisthaAttr("agenttrail", rest)} ref={ref} className={cx(styles.trail, className)} aria-labelledby={titleId}>
@@ -81,7 +84,7 @@ export function AgentTrail({
             <li
               key={step.id}
               className={cx(styles.step, styles[step.status])}
-              aria-current={step.status === "running" || step.status === "approval" ? "step" : undefined}
+              aria-current={step.id === currentId ? "step" : undefined}
             >
               <div className={styles.rail} aria-hidden="true">
                 <span className={styles.marker}>
@@ -98,11 +101,12 @@ export function AgentTrail({
                     onClick={() => onSelectStep(step.id === selectedStepId ? null : step.id)}
                   >
                     <span className={styles.row}>
-                      <span className={styles.label}>
-                        {step.label}
-                        <span className={styles.srOnly}>, {STATUS_TEXT[step.status]}</span>
-                      </span>
+                      <span className={styles.label}>{step.label}</span>
                       {value ? <span className={styles.meta}>{value}</span> : null}
+                    </span>
+                    <span className={cx(styles.status, styles.statusBlock)}>
+                      <span className={styles.srOnly}>, </span>
+                      {STATUS_TEXT[step.status]}
                     </span>
                     {step.sublabel ? <span className={cx(styles.sublabel, styles.sublabelBlock)}>{step.sublabel}</span> : null}
                   </button>
@@ -110,12 +114,10 @@ export function AgentTrail({
               ) : (
                 <div className={cx(styles.body, last && styles.bodyLast)}>
                   <div className={styles.row}>
-                    <span className={styles.label}>
-                      {step.label}
-                      <span className={styles.srOnly}>, {STATUS_TEXT[step.status]}</span>
-                    </span>
+                    <span className={styles.label}>{step.label}</span>
                     {value ? <span className={styles.meta}>{value}</span> : null}
                   </div>
+                  <p className={styles.status}>{STATUS_TEXT[step.status]}</p>
                   {step.sublabel ? <p className={styles.sublabel}>{step.sublabel}</p> : null}
                 </div>
               )}

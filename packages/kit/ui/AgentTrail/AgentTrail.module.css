@@ -183,6 +183,34 @@
   color: var(--status-danger-text);
 }
 
+/* The status word is visible text; the marker icon only backs it up. */
+.status {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.statusBlock {
+  display: block;
+}
+
+.done .status {
+  color: var(--status-success-text);
+}
+
+.running .status {
+  color: var(--status-info-text);
+}
+
+.approval .status {
+  color: var(--status-warning-text);
+}
+
+.failed .status {
+  color: var(--status-danger-text);
+}
+
 .sublabel {
   margin: 0;
   padding-block: var(--space-1) var(--space-2);

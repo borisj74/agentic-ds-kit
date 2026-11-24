@@ -1,8 +1,8 @@
 {
   "id": "agentfleet",
-  "status": "stable",
+  "status": "deprecated",
   "level": "organism",
-  "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+  "intent": "Deprecated: use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent. Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
   "useWhen": [
     "monitor several running agents or orchestrators at once",
     "show sub-agent progress, cost, and time per agent",
@@ -116,6 +116,7 @@
     ]
   },
   "doNot": [
+    "Do not use in new screens; use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent.",
     "Do not invent a local AgentFleet, AgentGrid, or AgentCard",
     "Do not color status without the text label",
     "Do not use raw hex; waiting uses caution tokens",

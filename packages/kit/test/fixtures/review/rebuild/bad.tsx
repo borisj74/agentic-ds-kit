@@ -1,13 +1,13 @@
-import { AgentInbox, AgentLanes, BarChart, Scoreboard, SegmentedControl } from "agentic-ds-kit";
+import { ActivityFeed, AgentLanes, ApprovalCard, ListView, SegmentedControl } from "agentic-ds-kit";
 
 export function Bad() {
   return (
     <main>
+      <ApprovalCard title="" action={{ kind: "command", command: "" }} />
       <SegmentedControl items={[]} />
-      <Scoreboard items={[]} />
-      <BarChart data={[]} />
+      <ListView label="" items={[]} />
       <AgentLanes lanes={[]} />
-      <AgentInbox items={[]} />
+      <ActivityFeed events={[]} />
     </main>
   );
 }

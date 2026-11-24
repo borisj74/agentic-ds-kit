@@ -1,8 +1,8 @@
 {
   "id": "agentlanes",
-  "status": "stable",
+  "status": "deprecated",
   "level": "organism",
-  "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+  "intent": "Deprecated: use AgentOverview with view=\"timeline\", which renders these lanes on wide screens. Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
   "useWhen": [
     "watch several agents work in parallel over the last minutes",
     "see who handed work to whom",
@@ -129,6 +129,7 @@
     ]
   },
   "doNot": [
+    "Do not use in new screens; use AgentOverview with view=\"timeline\", which renders these lanes on wide screens.",
     "Do not invent a local AgentLanes, Gantt, or AgentTimeline",
     "Do not encode status by color only; blocks and lanes carry text",
     "Do not use raw hex",
