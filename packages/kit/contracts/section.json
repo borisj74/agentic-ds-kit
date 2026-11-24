@@ -103,7 +103,6 @@
   "tokens": [
     "text.primary",
     "text.secondary",
-    "type.size.heading",
     "type.size.bodySm",
     "space.section.sm",
     "space.section.md",
@@ -112,13 +111,14 @@
     "space.stack.md",
     "space.stack.lg",
     "type.weight.heading",
-    "type.tracking.heading5",
     "type.size.uiLg",
     "type.size.uiXs",
     "type.weight.label",
     "border.faint",
     "surface.page",
-    "icon.muted"
+    "icon.muted",
+    "type.line.uiLg",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "section",
