@@ -8,6 +8,8 @@ import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
 
+/** Room under the field so the open panel shows in full. */
+const OVERLAY_CANVAS = { minHeight: "36rem", alignItems: "start", overflow: "visible" } as const;
 const SIZES: DateTimePickerSize[] = ["sm", "md", "lg"];
 const FILL = { maxWidth: "20rem" } as const;
 
@@ -35,7 +37,7 @@ export function DateTimePickerDoc() {
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
-              <div className={styles.canvas}>
+              <div className={`${styles.canvas} ${styles.canvasMenu}`}>
                 <div className={styles.previewFill} style={FILL}>
                   <Field label="Starts" htmlFor="starts">
                     <DateTimePicker id="starts" size={size} hourCycle={cycle} value={value} onValueChange={setValue} />
@@ -73,7 +75,7 @@ export function DateTimePickerDoc() {
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Empty</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewFill} style={FILL}>
                   <Field label="Deadline" htmlFor="deadline">
                     <DateTimePicker id="deadline" placeholder="Pick a date and time" />
@@ -88,7 +90,7 @@ export function DateTimePickerDoc() {
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Min and max</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewFill} style={FILL}>
                   <Field label="Call back" htmlFor="callback" hint="Within the next two weeks">
                     <DateTimePicker id="callback" defaultValue={{ date: "2026-11-26", time: "14:30" }} minDate="2026-11-24" maxDate="2026-12-08" />

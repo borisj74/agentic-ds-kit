@@ -8,6 +8,8 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
+/** Room under the field so the open panel shows in full. */
+const OVERLAY_CANVAS = { minHeight: "36rem", alignItems: "start", overflow: "visible" } as const;
 const SIZES: DateRangePickerSize[] = ["sm", "md", "lg"];
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
 const QUARTERS = [
@@ -47,7 +49,7 @@ export function DateRangePickerDoc() {
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
-              <div className={styles.canvas}>
+              <div className={`${styles.canvas} ${styles.canvasMenu}`}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <Field label="Period" htmlFor="range-period">
                     <DateRangePicker id="range-period" size={size} value={range} onValueChange={setRange} />
@@ -88,7 +90,7 @@ export function DateRangePickerDoc() {
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Custom presets</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <Field label="Quarter" htmlFor="range-quarter">
                     <DateRangePicker
@@ -111,7 +113,7 @@ export function DateRangePickerDoc() {
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>No presets, unavailable days</h2>
-              <div className={styles.exampleCanvas}>
+              <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <Field label="Stay" htmlFor="range-stay" hint="Booked nights are unavailable">
                     <DateRangePicker

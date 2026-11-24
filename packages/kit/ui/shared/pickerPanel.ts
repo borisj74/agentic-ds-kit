@@ -9,14 +9,14 @@ import { FOCUSABLE, firstBodyFocusable } from "./overlayLock";
  * then keep Tab inside the panel. Internal: not exported from the package.
  */
 export function usePickerFocus(open: boolean, panelRef: RefObject<HTMLElement | null>) {
-  // The panel grows from the trigger's end toward the start. When that would cross the window's
-  // start edge (a field near the start of the page), it anchors to the trigger's start instead.
+  // The panel grows from the trigger's end toward the start. When that would cross the start edge
+  // of the window or of a clipping container, it anchors to the trigger's start instead.
   useLayoutEffect(() => {
     if (!open) return;
     const panel = panelRef.current;
     if (!panel) return;
     delete panel.dataset.align;
-    if (panel.getBoundingClientRect().left < 0) panel.dataset.align = "start";
+    if (panel.getBoundingClientRect().left < clipStart(panel)) panel.dataset.align = "start";
   }, [open, panelRef]);
 
   useEffect(() => {
@@ -50,6 +50,15 @@ export function usePickerFocus(open: boolean, panelRef: RefObject<HTMLElement | 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, panelRef]);
+}
+
+/** The left edge the panel must stay right of: the window, or the nearest container that clips. */
+function clipStart(panel: HTMLElement): number {
+  let edge = 0;
+  for (let node = panel.parentElement; node && node !== document.body; node = node.parentElement) {
+    if (getComputedStyle(node).overflowX !== "visible") edge = Math.max(edge, node.getBoundingClientRect().left);
+  }
+  return edge;
 }
 
 /** YYYY-MM-DD that is a real calendar day. */

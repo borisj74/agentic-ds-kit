@@ -61,7 +61,7 @@ export function DatePickerDoc() {
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
-              <div className={styles.canvas}>
+              <div className={`${styles.canvas} ${styles.canvasMenu}`}>
                 <div className={styles.previewRow}>
                   <DatePicker
                     id="datepicker-master"

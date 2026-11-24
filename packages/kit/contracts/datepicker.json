@@ -127,7 +127,7 @@
       "Today has a short bar under the number and is named today. Unavailable days are struck through, not only faded, and named unavailable",
       "Range: first click sets start, second click sets end and closes. Escape discards an in-progress range",
       "Tab stays in the overlay; Escape, Close and pointer down outside close and return focus to the trigger. Escape closes only the newest open overlay (the shared Escape stack), not a parent Modal, Drawer or AlertDialog",
-      "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll. When that would cross the window's start edge it anchors to the trigger's start instead",
+      "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll. When that would cross the start edge of the window or of a clipping container it anchors to the trigger's start instead",
       "Must have associated label via Field or a visible label pointing at id",
       "error described by Field via describedBy",
       "built-in labels (previousMonth, nextMonth, chooseDate, chooseDates, close) come from KitLabelsProvider; English by default"
