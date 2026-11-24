@@ -230,3 +230,19 @@ describe("Combobox popup states", { skip: JSDOM ? false : "jsdom is not installe
     assert.equal(el.querySelectorAll("[role=option]").length, 3);
   });
 });
+
+describe("Escape closes only the newest overlay", () => {
+  test("a Combobox open inside a FilterBar Popover takes the Escape, then the Popover does", async () => {
+    const { pushOverlay, isTopOverlay } = await import("../dist/ui/shared/useOverlayDismiss.js");
+    const popover = {};
+    const combobox = {};
+    const popPopover = pushOverlay(popover);
+    const popCombobox = pushOverlay(combobox);
+    assert.equal(isTopOverlay(combobox), true);
+    assert.equal(isTopOverlay(popover), false, "the Popover leaves this Escape to the Combobox list");
+    popCombobox();
+    assert.equal(isTopOverlay(popover), true, "the next Escape closes the Popover");
+    popPopover();
+    assert.equal(isTopOverlay(popover), false);
+  });
+});
