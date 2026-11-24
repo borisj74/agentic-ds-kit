@@ -4,12 +4,15 @@
   "level": "atom",
   "intent": "Small number badge for counts, like unread items on a nav link or tab.",
   "useWhen": [
+    "Which mark: Count is how many (a number only, neutral unless action is due). If it is a number, it is a Count, never a Badge.",
     "Unread or pending counts on nav items, tabs, and buttons",
     "A total next to a section title",
-    "FilterButton applied-value counts"
+    "FilterButton applied-value counts",
+    "Overflow +N in a picker, like MultiSelect maxVisible"
   ],
   "doNotUseWhen": [
     "Words or status labels — use Badge",
+    "Money or metric changes — use Delta",
     "A clickable control — use Button",
     "A KPI or metric tile — use Scorecard"
   ],
@@ -20,13 +23,21 @@
     },
     "intent": {
       "type": "enum",
-      "values": ["info", "danger", "neutral"],
+      "values": [
+        "info",
+        "danger",
+        "neutral"
+      ],
       "default": "info",
       "note": "info is the default brand (ink) fill. danger for items that need action now. neutral for plain totals."
     },
     "size": {
       "type": "enum",
-      "values": ["sm", "md", "lg"],
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "default": "md",
       "note": "Heights space-4 / space-5 / space-6. sm and md are the standard counts; lg is for larger controls."
     },

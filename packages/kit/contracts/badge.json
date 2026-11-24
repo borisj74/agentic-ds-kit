@@ -4,10 +4,13 @@
   "level": "atom",
   "intent": "Compact read-only status or category pill set by the system.",
   "useWhen": [
+    "Which mark: Badge is status the system sets (tone icon and word, subtle fill, 4px corner). If it is a number, it is never a Badge.",
     "Status badges on table rows or cards",
     "Category markers set by the system (user-managed labels use Tag)"
   ],
   "doNotUseWhen": [
+    "Money or metric changes — use Delta",
+    "Counts and +N overflow — use Count",
     "Primary actions — use Button",
     "Clickable navigation — use AppNav links",
     "People or faces — use Avatar",
@@ -21,19 +24,44 @@
     },
     "appearance": {
       "type": "enum",
-      "values": ["soft", "tint", "solid", "outline"],
-      "default": "soft"
+      "values": [
+        "soft",
+        "tint",
+        "solid",
+        "outline"
+      ],
+      "default": "soft",
+      "note": "soft is the subtle look (default) for status in tables and lists. solid fills use the tone's fg ink token for the one mark that must stand out. outline is a hairline."
     },
     "tone": {
       "type": "enum",
-      "values": ["neutral", "primary", "brand", "success", "warning", "danger", "info", "highlight"],
+      "values": [
+        "neutral",
+        "primary",
+        "brand",
+        "success",
+        "warning",
+        "danger",
+        "info",
+        "highlight"
+      ],
       "default": "neutral",
       "note": "brand is an alias of primary. highlight is a gold marker, not a warning."
     },
     "size": {
       "type": "enum",
-      "values": ["sm", "md", "lg"],
-      "default": "md"
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "Heights sm 20 (space-5) and md 24 (space-6) share a row with Count; lg 28. No border, so the height is exact. Radius --radius-sm."
+    },
+    "icon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "Leading tone icon, aria-hidden; the word carries the meaning. Suggested: success CircleCheck (Paid), danger CircleX (Overdue), warning TriangleAlert (Due soon), info Info (Sent) or Clock (Invited), neutral Circle (Draft). Leave it off for plain role labels (Admin, Member)."
     },
     "removable": {
       "type": "boolean",
@@ -87,12 +115,23 @@
     "highlight.base",
     "highlight.line",
     "highlight.subtle",
-    "radius.controlMd"
+    "radius.sm",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.5",
+    "space.6",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.line.uiXs",
+    "type.line.uiSm",
+    "border.control"
   ],
   "a11y": {
     "element": "span",
     "requirements": [
       "Text content must be readable",
+      "The tone icon is aria-hidden and never the only signal; the word says the status",
       "disabled sets aria-disabled and prevents interaction",
       "When removable, the X control is a button with aria-label Remove {children}",
       "If removable and disabled, the remove control does not fire",
@@ -102,8 +141,9 @@
   },
   "doNot": [
     "Do not invent a local Badge; for user-managed labels use kit Tag",
+    "Do not put numbers or money changes in a Badge — use Count or Delta",
     "Do not use raw hex",
     "Do not use Badge as a button except the remove control"
   ],
-  "snippet": "<Badge appearance=\"soft\" tone=\"success\" size=\"md\">Active</Badge>"
+  "snippet": "<Badge appearance=\"soft\" tone=\"success\" size=\"md\">Active</Badge>\n<Badge tone=\"danger\" size=\"sm\" icon=\"CircleX\">Overdue</Badge>"
 }

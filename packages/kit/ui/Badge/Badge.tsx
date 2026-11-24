@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
+import { LucideByName } from "../Button/lucideName";
 import type { BadgeProps, BadgeTone } from "./Badge.types";
 import { cx } from "../shared/cx";
 import styles from "./Badge.module.css";
@@ -21,6 +22,7 @@ export function Badge({
   tone = "neutral",
   appearance = "soft",
   size = "md",
+  icon,
   removable = false,
   disabled = false,
   onRemove,
@@ -41,11 +43,13 @@ export function Badge({
         styles[appearance],
         styles[toneClass],
         styles[size],
+        icon && styles.withIcon,
         disabled && styles.disabled,
         className,
       )}
       aria-disabled={disabled || undefined}
     >
+      {icon ? <LucideByName name={icon} size={iconPx} className={styles.icon} /> : null}
       {children}
       {removable ? (
         <button

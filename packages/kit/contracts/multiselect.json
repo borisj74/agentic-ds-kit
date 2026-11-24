@@ -12,7 +12,7 @@
     "A short list in a menu — use Select multiple",
     "Tags the person types — use TagInput"
   ],
-  "contains": ["tag", "badge"],
+  "contains": ["tag", "count"],
   "props": {
     "id": { "type": "string", "required": true },
     "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Heights 32 / 36 / 40 on one row; wrapped tags grow it." },
@@ -27,7 +27,7 @@
     "placeholder": { "type": "string", "default": "Select" },
     "disabled": { "type": "boolean", "default": false },
     "error": { "type": "boolean", "default": false },
-    "maxVisible": { "type": "number", "required": false, "note": "Extra selections collapse into a kit Badge +N." },
+    "maxVisible": { "type": "number", "required": false, "note": "Extra selections collapse into a kit Count (neutral, subtle, md) after the visible Tags; screen readers hear N more selected." },
     "name": { "type": "string", "required": false, "note": "Hidden input joins values with commas." },
     "ariaLabel": { "type": "string", "required": false },
     "describedBy": { "type": "string", "required": false },
@@ -63,7 +63,7 @@
   },
   "doNot": [
     "Do not invent a local chip list — selected values are kit Tag",
-    "Do not invent an overflow chip — the overflow count is kit Badge",
+    "Do not invent an overflow chip or use Badge for it — the overflow count is kit Count",
     "Do not use Select valueDisplay=tags when the filter must live in the field",
     "Do not use raw hex"
   ],

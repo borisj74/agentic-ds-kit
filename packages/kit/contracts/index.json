@@ -367,6 +367,14 @@
     "level": "atom"
   },
   {
+    "id": "delta",
+    "intent": "How a value moved: an arrow and the signed change in success, danger or neutral text, with no fill.",
+    "group": "component",
+    "path": "contracts/delta.json",
+    "status": "stable",
+    "level": "atom"
+  },
+  {
     "id": "chat",
     "intent": "Assistant panel with a header, a thread, and a composer. Answers can carry figures, a table, a chart, sources and follow-ups. One piece.",
     "group": "component",
@@ -736,7 +744,7 @@
   },
   {
     "id": "avatar",
-    "intent": "Face or initials for a person. Not a status chip and not a button.",
+    "intent": "Face or initials for a person (circle) or an organisation (square). Not a status chip and not a button.",
     "group": "component",
     "path": "contracts/avatar.json",
     "status": "stable",

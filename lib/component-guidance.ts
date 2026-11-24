@@ -44,6 +44,7 @@ import contract_contextmenu from "../packages/kit/contracts/contextmenu.json";
 import contract_contextwindow from "../packages/kit/contracts/contextwindow.json";
 import contract_conveyor from "../packages/kit/contracts/conveyor.json";
 import contract_count from "../packages/kit/contracts/count.json";
+import contract_delta from "../packages/kit/contracts/delta.json";
 import contract_currencyinput from "../packages/kit/contracts/currencyinput.json";
 import contract_datagrid from "../packages/kit/contracts/datagrid.json";
 import contract_datatable from "../packages/kit/contracts/datatable.json";
@@ -190,6 +191,7 @@ const contracts: Record<string, ContractNotes> = {
   "contextwindow": contract_contextwindow,
   "conveyor": contract_conveyor,
   "count": contract_count,
+  "delta": contract_delta,
   "currencyinput": contract_currencyinput,
   "datagrid": contract_datagrid,
   "datatable": contract_datatable,

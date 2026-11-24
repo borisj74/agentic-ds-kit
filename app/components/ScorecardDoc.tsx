@@ -24,13 +24,13 @@ const NET_NEW = [2100, 3400, 2600, 4800, 2200, 3900, 5100, 2400, 3000, 2800, 460
 const NET_NEW_PREVIOUS = [1800, 2400, 2900, 2200, 3100, 2600, 2800, 3300, 2500, 2900, 3200, 2700, 3000];
 
 const LOOKS: ScorecardProps[] = [
-  { id: "looks-plain", label: "MRR", value: "$412.6k", badge: "+10.9%", badgeTone: "success", hint: "vs previous 3 months", sparkline: MRR },
+  { id: "looks-plain", label: "MRR", value: "$412.6k", delta: "+10.9%", trend: "up", hint: "vs previous 3 months", sparkline: MRR },
   {
     id: "looks-reference",
     label: "MRR",
     value: "$412.6k",
-    badge: "+10.9%",
-    badgeTone: "success",
+    delta: "+10.9%",
+    trend: "up",
     hint: "vs previous 3 months",
     sparkline: MRR,
     sparklineVariant: "reference",
@@ -42,8 +42,9 @@ const LOOKS: ScorecardProps[] = [
     id: "looks-meter",
     label: "Churn rate",
     value: "2.1%",
-    badge: "-0.5 pt",
-    badgeTone: "success",
+    delta: "−0.5 pt",
+    trend: "down",
+    deltaTone: "success",
     hint: "vs previous 3 months",
     meter: { value: 2.1, max: 3, label: "of 3.0% limit", direction: "lower" },
   },
@@ -51,8 +52,8 @@ const LOOKS: ScorecardProps[] = [
     id: "looks-expressive",
     label: "Net new MRR",
     value: "$40.7k",
-    badge: "+20.8%",
-    badgeTone: "success",
+    delta: "+20.8%",
+    trend: "up",
     sparkline: NET_NEW,
     sparklineVariant: "expressive",
     compare: NET_NEW_PREVIOUS,
@@ -312,10 +313,10 @@ export function ScorecardDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  deltaTone colors the delta when trend color would mislead: an amber count of urgent
-                  items, or a rise that is bad news. The card keeps the same height as its neighbours,
-                  unlike a badge. With trend neutral the delta shows the tone&apos;s status icon. The
-                  delta text carries the meaning; color only supports it.
+                  The delta renders as a kit Delta: arrow from trend, colour from trend or deltaTone.
+                  Use deltaTone when the trend colour would mislead, like a rise that is bad news.
+                  With trend neutral the delta is a status, like an amber count of urgent items, and
+                  shows the tone&apos;s status icon. Put changes in delta, never in badge.
                 </p>
               </div>
               <CodeBlock

@@ -95,6 +95,7 @@ import { ListViewDoc } from "./ListViewDoc";
 import { LoadingAnimationDoc } from "./LoadingAnimationDoc";
 import { MeterDoc } from "./MeterDoc";
 import { CountDoc } from "./CountDoc";
+import { DeltaDoc } from "./DeltaDoc";
 import { CurrencyInputDoc } from "./CurrencyInputDoc";
 import { ModalCardDoc } from "./ModalCardDoc";
 import { ModalDoc } from "./ModalDoc";
@@ -213,6 +214,7 @@ const TITLES: Record<string, string> = {
   contextmenu: "ContextMenu",
   conveyor: "Conveyor",
   count: "Count",
+  delta: "Delta",
   currencyinput: "CurrencyInput",
   datagrid: "DataGrid",
   datatable: "DataTable",
@@ -437,6 +439,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "contextmenu") return <ContextMenuDoc />;
   if (resolved === "conveyor") return <ConveyorDoc />;
   if (resolved === "count") return <CountDoc />;
+  if (resolved === "delta") return <DeltaDoc />;
   if (resolved === "currencyinput") return <CurrencyInputDoc />;
   if (resolved === "datagrid") return <DataGridDoc />;
   if (resolved === "datatable") return <DataTableDoc />;

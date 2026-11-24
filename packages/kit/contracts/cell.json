@@ -5,7 +5,8 @@
   "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
   "useWhen": [
     "DataTable body cells",
-    "Mixed visual and label content in a row"
+    "Mixed visual and label content in a row",
+    "A money or metric change in a row — type trendPositive or trendNegative renders a kit Delta"
   ],
   "doNotUseWhen": [
     "A full searchable dataset — use DataTable, which composes Cell",
@@ -16,6 +17,7 @@
     "avatar",
     "avatargroup",
     "badge",
+    "delta",
     "buttongroup",
     "button",
     "checkbox",
@@ -43,7 +45,8 @@
         "actionIcons",
         "actionMenu"
       ],
-      "default": "text"
+      "default": "text",
+      "note": "trendPositive and trendNegative render a kit Delta (direction up or down, value from label or value, default success or danger tone); put the sign in the value, e.g. +$600 or −$90. With text false they show the arrow only and the cell aria-label says Up or Down and the value."
     },
     "size": {
       "type": "enum",
@@ -52,7 +55,7 @@
         "md"
       ],
       "default": "md",
-      "note": "Avatar, AvatarGroup, and Badge map sm/md. Checkbox is always sm."
+      "note": "Avatar, AvatarGroup, Badge and Delta map sm/md (Avatar sm 24, md 32). Checkbox is always sm."
     },
     "text": {
       "type": "boolean",
@@ -189,8 +192,8 @@
     "text.secondary",
     "icon.muted",
     "icon.warning",
-    "status.success",
-    "status.danger",
+    "text.success",
+    "text.danger",
     "fill.brand",
     "surface.muted",
     "space.1",
@@ -222,7 +225,7 @@
   "doNot": [
     "Do not invent DataTableCell, a local Tag, Trend, FileIcon, PaymentMethod, or a second Badge — status stays Badge; user labels use kit Tag",
     "Do not use raw hex",
-    "Do not use Badge for trends",
+    "Do not use Badge for trends or money changes — they render through kit Delta",
     "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox — compose the kit pieces",
     "Do not render a separate Lucide icon beside it — pass a Lucide name or component to the icon props",
     "Do not invent a local progress bar — type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",

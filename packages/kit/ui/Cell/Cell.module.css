@@ -77,15 +77,11 @@
 }
 
 .trendPositive {
-  color: var(--status-success);
+  color: var(--text-success);
 }
 
 .trendNegative {
-  color: var(--status-danger);
-}
-
-.trend .label {
-  color: inherit;
+  color: var(--text-danger);
 }
 
 .badges {

@@ -4,6 +4,9 @@ import { useId, type MouseEvent, type ReactNode } from "react";
 import { Avatar } from "../Avatar";
 import { AvatarGroup } from "../AvatarGroup";
 import { Badge } from "../Badge";
+import { Delta } from "../Delta";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { DropdownMenu } from "../DropdownMenu";
 import { Progress } from "../Progress";
@@ -173,13 +176,19 @@ export function Cell({
       </span>
     );
   } else if (type === "trendPositive" || type === "trendNegative") {
+    // A money or metric change is a kit Delta. Icon-only (text false) keeps the same arrow and the
+    // root aria-label says the direction and value.
     const positive = type === "trendPositive";
-    visual = (
-      <span className={`${styles.trend} ${positive ? styles.trendPositive : styles.trendNegative}`}>
-        <LucideByName name={positive ? "ChevronUp" : "ChevronDown"} size={iconPx} />
-        {text && shown ? <span className={styles.label}>{shown}</span> : null}
-      </span>
-    );
+    if (text && shown) {
+      visual = <Delta value={shown} direction={positive ? "up" : "down"} size={size} />;
+    } else {
+      const Arrow = positive ? ArrowUp : ArrowDown;
+      visual = (
+        <span className={`${styles.trend} ${positive ? styles.trendPositive : styles.trendNegative}`}>
+          <Arrow size={iconPx} strokeWidth={ICON_STROKE} aria-hidden />
+        </span>
+      );
+    }
   } else if (type === "select" && options && options.length > 0) {
     const selected = value !== undefined && value !== "" ? String(value) : options[0].value;
     visual = (

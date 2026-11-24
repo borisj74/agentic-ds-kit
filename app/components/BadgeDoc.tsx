@@ -13,6 +13,18 @@ const SIZES: BadgeSize[] = ["sm", "md", "lg"];
 const APPEARANCES: BadgeAppearance[] = ["soft", "tint", "solid", "outline"];
 const TONES: BadgeTone[] = ["neutral", "primary", "success", "warning", "danger", "info", "highlight"];
 
+/** Suggested tone icons. Plain role labels (Admin, Member) leave the icon off. */
+const TONE_ICON: Record<BadgeTone, string> = {
+  neutral: "Circle",
+  primary: "Info",
+  brand: "Info",
+  success: "CircleCheck",
+  warning: "TriangleAlert",
+  danger: "CircleX",
+  info: "Info",
+  highlight: "Info",
+};
+
 const MASTER_LABEL: Record<BadgeTone, string> = {
   neutral: "Draft",
   primary: "Beta",
@@ -28,11 +40,13 @@ function masterCode(
   appearance: BadgeAppearance,
   tone: BadgeTone,
   size: BadgeSize,
+  withIcon: boolean,
   removable: boolean,
   disabled: boolean,
   label: string,
 ) {
   const lines = ["<Badge", `  appearance="${appearance}"`, `  tone="${tone}"`, `  size="${size}"`];
+  if (withIcon) lines.push(`  icon="${TONE_ICON[tone]}"`);
   if (removable) {
     lines.push("  removable");
     lines.push("  onRemove={() => {}}");
@@ -47,6 +61,7 @@ export function BadgeDoc() {
   const [size, setSize] = useState<BadgeSize>("md");
   const [appearance, setAppearance] = useState<BadgeAppearance>("soft");
   const [tone, setTone] = useState<BadgeTone>("success");
+  const [withIcon, setWithIcon] = useState(true);
   const [removable, setRemovable] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const label = MASTER_LABEL[tone];
@@ -56,7 +71,8 @@ export function BadgeDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>Badges</h2>
         <p className={styles.lede}>
-          Appearance × tone: soft, tint, solid, outline across status colors. Not Avatar. Not a button.
+          Status the system sets. sm 20 and md 24, no border, 4px corner, optional tone icon. Not a number
+          (Count), not a change (Delta), not a person (Avatar), not a button.
         </p>
       </header>
 
@@ -66,7 +82,7 @@ export function BadgeDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle appearance, tone, size, removable, and disabled to preview every Badge combination.
+            Toggle appearance, tone, size, tone icon, removable, and disabled to preview every Badge combination.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -80,6 +96,7 @@ export function BadgeDoc() {
                     appearance={appearance}
                     tone={tone}
                     size={size}
+                    icon={withIcon ? TONE_ICON[tone] : undefined}
                     removable={removable}
                     disabled={disabled}
                     onRemove={removable ? () => {} : undefined}
@@ -141,6 +158,7 @@ export function BadgeDoc() {
                 </div>
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
+                  <Switch label="Tone icon" size="sm" checked={withIcon} onChange={setWithIcon} />
                   <Switch label="Removable" size="sm" checked={removable} onChange={setRemovable} />
                   <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
@@ -155,6 +173,13 @@ export function BadgeDoc() {
                 </p>
               </div>
               <div>
+                <h3 className={styles.usageTitle}>Which mark to use</h3>
+                <p className={styles.usageBody}>
+                  Badge is status. Tag is a label the user adds. Count is how many. Delta is how a value moved.
+                  Avatar is a person or an organisation. If it is a number, it is never a Badge.
+                </p>
+              </div>
+              <div>
                 <h3 className={styles.usageTitle}>Badge or Tag?</h3>
                 <p className={styles.usageBody}>
                   Badge is read-only status or category the system sets, like Paid, Overdue, or Beta. Tag is a label
@@ -162,7 +187,7 @@ export function BadgeDoc() {
                   select it, use Tag.
                 </p>
               </div>
-              <CodeBlock code={masterCode(appearance, tone, size, removable, disabled, label)} />
+              <CodeBlock code={masterCode(appearance, tone, size, withIcon, removable, disabled, label)} />
             </DocNotes>
           </div>
         ) : (
@@ -182,8 +207,8 @@ export function BadgeDoc() {
                 <div>
                   <h3 className={styles.usageTitle}>Usage</h3>
                   <p className={styles.usageBody}>
-                    Soft is the default wash. Tint is stronger. Solid fills. Outline is a hairline on the control
-                    surface.
+                    Soft is the default subtle wash. Tint is stronger. Solid fills with the tone&apos;s ink. Outline
+                    is a hairline on the control surface.
                   </p>
                 </div>
                 <CodeBlock
@@ -194,6 +219,30 @@ export function BadgeDoc() {
                 />
               </section>
             ))}
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Tone icon</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Badge tone="success" size="sm" icon="CircleCheck">Paid</Badge>
+                  <Badge tone="danger" size="sm" icon="CircleX">Overdue</Badge>
+                  <Badge tone="warning" size="sm" icon="TriangleAlert">Due soon</Badge>
+                  <Badge tone="info" size="sm" icon="Info">Sent</Badge>
+                  <Badge tone="neutral" size="sm" icon="Circle">Draft</Badge>
+                  <Badge size="sm">Admin</Badge>
+                  <Badge size="sm">Member</Badge>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Invoice and run status gets a tone icon so it never relies on colour. Plain role labels like
+                  Admin and Member stay without one. The icon is hidden from screen readers; the word says it.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Badge tone="success" size="sm" icon="CircleCheck">Paid</Badge>\n<Badge tone="danger" size="sm" icon="CircleX">Overdue</Badge>\n<Badge size="sm">Admin</Badge>'}
+              />
+            </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Removable</h2>
               <div className={styles.exampleCanvas}>

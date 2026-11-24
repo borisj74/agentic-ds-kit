@@ -118,6 +118,10 @@ export interface KitLabels {
   success: string;
   warning: string;
   danger: string;
+  /** Avatar presence: the word added to the avatar name, e.g. "Ana Ruiz, Online". */
+  online: string;
+  away: string;
+  offline: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -192,6 +196,9 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   success: "Success",
   warning: "Warning",
   danger: "Error",
+  online: "Online",
+  away: "Away",
+  offline: "Offline",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

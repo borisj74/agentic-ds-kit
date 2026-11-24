@@ -11,7 +11,7 @@ export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className,
   const leftover = items.length - max;
 
   return (
-    <div {...rest} {...nisthaAttr("avatargroup", rest)} ref={ref} className={cx(styles.group, className)} role="group" aria-label={ariaLabel}>
+    <div {...rest} {...nisthaAttr("avatargroup", rest)} ref={ref} className={cx(styles.group, styles[size], className)} role="group" aria-label={ariaLabel}>
       {visible.map((item, index) => (
         <span key={`${item.name}-${index}`} className={styles.item} style={{ zIndex: index + 1 }}>
           <Avatar name={item.name} src={item.src} initials={item.initials} size={size} />
@@ -21,6 +21,7 @@ export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className,
         <span
           className={`${styles.item} ${styles.count} ${styles[size]}`}
           style={{ zIndex: visible.length + 1 }}
+          role="img"
           aria-label={`${leftover} more`}
         >
           +{leftover}

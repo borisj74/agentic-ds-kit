@@ -4,7 +4,7 @@
   gap: var(--space-1);
   box-sizing: border-box;
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-control-lg);
+  border-radius: var(--radius-sm);
   background-color: var(--surface-muted);
   color: var(--text-secondary);
   font-family: var(--font-sans);
@@ -137,7 +137,7 @@ label.text {
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-control-lg);
+  border-radius: var(--radius-sm);
   background: transparent;
   color: inherit;
   cursor: pointer;

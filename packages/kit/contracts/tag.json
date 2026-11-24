@@ -4,6 +4,7 @@
   "level": "atom",
   "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
   "useWhen": [
+    "Which mark: Tag is a label the user adds, picks or removes (hairline border with X or checkbox, 4px corner like Badge).",
     "Filter chips the user picks or clears",
     "Keywords, topics, or labels the user adds to a record",
     "Assigned people or teams shown as removable labels",
@@ -11,7 +12,8 @@
   ],
   "doNotUseWhen": [
     "Read-only status or category set by the system (Paid, Overdue, Beta) — use Badge",
-    "Overflow +N counts — use Badge (Select) or Count",
+    "Money or metric changes — use Delta",
+    "Overflow +N counts — use Count (MultiSelect shows its +N as kit Count)",
     "Primary or secondary actions — use Button",
     "A person on their own — use Avatar",
     "Single-choice segmented options — use ButtonGroup or Tabs"
@@ -109,7 +111,7 @@
     "status.warning",
     "status.danger",
     "status.info",
-    "radius.controlLg",
+    "radius.sm",
     "radius.pill",
     "space.1",
     "space.2",

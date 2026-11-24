@@ -2,6 +2,8 @@
 
 import { useId, type Ref } from "react";
 import { Badge } from "../Badge";
+import { Delta } from "../Delta";
+import type { DeltaDirection } from "../Delta";
 import { LucideByName } from "../Button/lucideName";
 import type { ScorecardDeltaTone, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
 import { cx } from "../shared/cx";
@@ -44,18 +46,12 @@ export function sparklinePoints(values: number[] | undefined): string | null {
     .join(" ");
 }
 
-const TREND_ICON: Record<ScorecardTrend, string> = {
-  up: "TrendingUp",
-  down: "TrendingDown",
-  flat: "Minus",
-  neutral: "Minus",
-};
-
-const TREND_CLASS: Record<ScorecardTrend, string> = {
-  up: styles.up,
-  down: styles.down,
-  flat: styles.flat,
-  neutral: styles.neutral,
+/** Trend to kit Delta direction. `neutral` has no direction and reads as no change. */
+const TREND_DIRECTION: Record<ScorecardTrend, DeltaDirection> = {
+  up: "up",
+  down: "down",
+  flat: "flat",
+  neutral: "flat",
 };
 
 const DELTA_TONE_CLASS: Record<ScorecardDeltaTone, string> = {
@@ -65,7 +61,10 @@ const DELTA_TONE_CLASS: Record<ScorecardDeltaTone, string> = {
   neutral: styles.neutral,
 };
 
-/** Trend `neutral` has no direction, so a toned delta shows the tone's status icon instead of the dash. */
+/**
+ * Trend `neutral` with a deltaTone is a status, not a change (e.g. an amber "3 urgent"), so it
+ * shows the tone's status icon instead of a Delta arrow.
+ */
 const DELTA_TONE_ICON: Record<ScorecardDeltaTone, string> = {
   success: "CircleCheck",
   warning: "TriangleAlert",
@@ -104,8 +103,7 @@ export function Scorecard({
   const badgeId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
   const toggle = onClick && selected !== undefined;
-  const deltaClass = deltaTone ? DELTA_TONE_CLASS[deltaTone] : TREND_CLASS[trend];
-  const deltaIcon = deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
+  const deltaIsStatus = Boolean(deltaTone) && trend === "neutral";
   const radio = toggle && selectionRole === "radio";
   // A meter replaces the sparkline. The reference and expressive looks move the chart to the card's foot.
   const showMeter = meterState(meter) !== null;
@@ -162,11 +160,13 @@ export function Scorecard({
       ) : null}
       {delta || hint ? (
         <span className={styles.footer}>
-          {delta ? (
-            <span className={`${styles.delta} ${deltaClass}`}>
-              <LucideByName name={deltaIcon} size={16} className={styles.icon} />
+          {delta && deltaIsStatus && deltaTone ? (
+            <span className={`${styles.delta} ${DELTA_TONE_CLASS[deltaTone]}`}>
+              <LucideByName name={DELTA_TONE_ICON[deltaTone]} size={16} className={styles.icon} />
               {delta}
             </span>
+          ) : delta ? (
+            <Delta value={delta} direction={TREND_DIRECTION[trend]} tone={deltaTone} size="sm" />
           ) : null}
           {hint ? <span className={styles.hint}>{hint}</span> : null}
         </span>

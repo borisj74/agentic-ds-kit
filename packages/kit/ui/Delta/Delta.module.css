@@ -1,0 +1,47 @@
+/* No fill: an arrow and the signed value in status text. */
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sm {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.md {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.success {
+  color: var(--text-success);
+}
+
+.danger {
+  color: var(--text-danger);
+}
+
+.warning {
+  color: var(--text-warning);
+}
+
+.neutral {
+  color: var(--text-secondary);
+}

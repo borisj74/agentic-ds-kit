@@ -25,7 +25,7 @@
     "delta": {
       "type": "string",
       "required": false,
-      "note": "Visible change text, e.g. '+12.4%'"
+      "note": "Visible change text with its sign, e.g. '+12.4%'. Renders as a kit Delta (size sm): the arrow comes from trend and the colour from trend or deltaTone."
     },
     "trend": {
       "type": "enum",
@@ -35,7 +35,8 @@
         "flat",
         "neutral"
       ],
-      "default": "neutral"
+      "default": "neutral",
+      "note": "Delta direction: up ArrowUp, down ArrowDown, flat and neutral ArrowRight (no change)."
     },
     "deltaTone": {
       "type": "enum",
@@ -46,7 +47,7 @@
         "neutral"
       ],
       "required": false,
-      "note": "Override the delta color (default from trend: up success, down danger). warning (text-warning) for an amber count such as '3 urgent' without a badge that makes the card taller than its neighbours. The icon follows trend; with trend neutral the tone's status icon replaces the dash (TriangleAlert, CircleX, CircleCheck)."
+      "note": "Override the delta colour (default from trend: up success, down danger, flat and neutral neutral), e.g. danger when costs go up. With trend neutral the delta is a status, not a change: warning (text-warning) for an amber count such as '3 urgent', and the tone's status icon replaces the arrow (TriangleAlert, CircleX, CircleCheck)."
     },
     "hint": {
       "type": "string",
@@ -65,7 +66,7 @@
     "badge": {
       "type": "string",
       "required": false,
-      "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag."
+      "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (In chart, Beta); a change goes in delta, never in badge."
     },
     "badgeTone": {
       "type": "enum",
@@ -219,7 +220,7 @@
     "requirements": [
       "useId for label and value",
       "aria-labelledby when both exist",
-      "trend icon is aria-hidden",
+      "Delta arrow is aria-hidden",
       "delta text is the visible change",
       "deltaTone is color only; the delta text carries the meaning",
       "root is a button when onClick is set",
@@ -236,15 +237,17 @@
     "Do not pack multiple KPIs into one Scorecard",
     "Do not put buttons or links inside Scorecard besides the whole-card onClick",
     "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
+    "Do not put a change like +3.1% in badge — pass delta, which renders kit Delta",
     "Do not draw a local sparkline beside Scorecard — pass sparkline",
     "Do not use sparkline as the only sign of change; keep delta or hint",
     "Do not draw a local meter or bar beside Scorecard — pass meter",
     "Do not color the sparkline or meter with brand; brand is only for the selected card",
     "Do not pass reference, highlightLast or sparklineDates without sparklineVariant reference, or compare without expressive; they are ignored"
   ],
-  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" badge=\"+3.1%\" badgeTone=\"success\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
+  "snippet": "<Scorecard label=\"Revenue\" value=\"$48.2k\" delta=\"+12.4%\" trend=\"up\" hint=\"vs last 30 days\" />\n\n<Scorecard label=\"Active users\" value=\"12,480\" delta=\"+3.1%\" trend=\"up\" sparkline={[11.2, 11.6, 11.9, 12.1, 12.48]} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" hint=\"vs previous 3 months\" sparkline={mrr} sparklineVariant=\"reference\" reference={{ value: 400, label: \"Target $400k\" }} highlightLast={4} sparklineDates={[\"Aug 28\", \"Nov 20\"]} />\n\n<Scorecard label=\"Churn rate\" value=\"2.1%\" hint=\"vs previous 3 months\" meter={{ value: 2.1, max: 3, label: \"of 3.0% limit\", direction: \"lower\" }} />\n\n<Scorecard label=\"MRR\" value=\"$412.6k\" sparkline={mrr} sparklineVariant=\"expressive\" compare={mrrPrevious} />",
   "contains": [
     "badge",
+    "delta",
     "meter"
   ]
 }

@@ -775,6 +775,7 @@
         "Do not pack multiple KPIs into one Scorecard",
         "Do not put buttons or links inside Scorecard besides the whole-card onClick",
         "Do not invent a local Tag or Status on Scorecard — status uses kit Badge via badge",
+        "Do not put a change like +3.1% in badge — pass delta, which renders kit Delta",
         "Do not draw a local sparkline beside Scorecard — pass sparkline",
         "Do not use sparkline as the only sign of change; keep delta or hint",
         "Do not draw a local meter or bar beside Scorecard — pass meter",
@@ -793,7 +794,7 @@
         "delta": {
           "type": "string",
           "required": false,
-          "note": "Visible change text, e.g. '+12.4%'"
+          "note": "Visible change text with its sign, e.g. '+12.4%'. Renders as a kit Delta (size sm): the arrow comes from trend and the colour from trend or deltaTone."
         },
         "trend": {
           "type": "enum",
@@ -803,7 +804,8 @@
             "flat",
             "neutral"
           ],
-          "default": "neutral"
+          "default": "neutral",
+          "note": "Delta direction: up ArrowUp, down ArrowDown, flat and neutral ArrowRight (no change)."
         },
         "deltaTone": {
           "type": "enum",
@@ -814,7 +816,7 @@
             "neutral"
           ],
           "required": false,
-          "note": "Override the delta color (default from trend: up success, down danger). warning (text-warning) for an amber count such as '3 urgent' without a badge that makes the card taller than its neighbours. The icon follows trend; with trend neutral the tone's status icon replaces the dash (TriangleAlert, CircleX, CircleCheck)."
+          "note": "Override the delta colour (default from trend: up success, down danger, flat and neutral neutral), e.g. danger when costs go up. With trend neutral the delta is a status, not a change: warning (text-warning) for an amber count such as '3 urgent', and the tone's status icon replaces the arrow (TriangleAlert, CircleX, CircleCheck)."
         },
         "hint": {
           "type": "string",
@@ -833,7 +835,7 @@
         "badge": {
           "type": "string",
           "required": false,
-          "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag."
+          "note": "kit Badge on the header, aligned with label. Compose Badge; status is not a Tag. Status words only (In chart, Beta); a change goes in delta, never in badge."
         },
         "badgeTone": {
           "type": "enum",
@@ -1751,6 +1753,7 @@
       "group": "component",
       "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
       "useWhen": [
+        "Which mark: the row dot is the leading 8px mark in a ListView row; the row text still says the status. Do not add a separate Dot.",
         "People, files, or other records shown one per row",
         "Pick one, check several, or open a row without comparing columns"
       ],
@@ -2425,7 +2428,7 @@
       ],
       "doNot": [
         "Do not invent a local chip list — selected values are kit Tag",
-        "Do not invent an overflow chip — the overflow count is kit Badge",
+        "Do not invent an overflow chip or use Badge for it — the overflow count is kit Count",
         "Do not use Select valueDisplay=tags when the filter must live in the field",
         "Do not use raw hex"
       ],
@@ -2476,7 +2479,7 @@
         "maxVisible": {
           "type": "number",
           "required": false,
-          "note": "Extra selections collapse into a kit Badge +N."
+          "note": "Extra selections collapse into a kit Count (neutral, subtle, md) after the visible Tags; screen readers hear N more selected."
         },
         "name": {
           "type": "string",
@@ -3709,7 +3712,8 @@
       "intent": "Inline cell content for datasets: text, link, avatar, file, payment, badge, trend, avatar group, select, progress, rating, or row actions, with optional checkbox.",
       "useWhen": [
         "DataTable body cells",
-        "Mixed visual and label content in a row"
+        "Mixed visual and label content in a row",
+        "A money or metric change in a row — type trendPositive or trendNegative renders a kit Delta"
       ],
       "doNotUseWhen": [
         "A full searchable dataset — use DataTable, which composes Cell",
@@ -3719,7 +3723,7 @@
       "doNot": [
         "Do not invent DataTableCell, a local Tag, Trend, FileIcon, PaymentMethod, or a second Badge — status stays Badge; user labels use kit Tag",
         "Do not use raw hex",
-        "Do not use Badge for trends",
+        "Do not use Badge for trends or money changes — they render through kit Delta",
         "Do not invent local Avatar, AvatarGroup, Badge, or Checkbox — compose the kit pieces",
         "Do not render a separate Lucide icon beside it — pass a Lucide name or component to the icon props",
         "Do not invent a local progress bar — type=progress composes kit Progress. Do not invent Rating, StarRating, ActionCell",
@@ -3748,7 +3752,8 @@
             "actionIcons",
             "actionMenu"
           ],
-          "default": "text"
+          "default": "text",
+          "note": "trendPositive and trendNegative render a kit Delta (direction up or down, value from label or value, default success or danger tone); put the sign in the value, e.g. +$600 or −$90. With text false they show the arrow only and the cell aria-label says Up or Down and the value."
         },
         "size": {
           "type": "enum",
@@ -3757,7 +3762,7 @@
             "md"
           ],
           "default": "md",
-          "note": "Avatar, AvatarGroup, and Badge map sm/md. Checkbox is always sm."
+          "note": "Avatar, AvatarGroup, Badge and Delta map sm/md (Avatar sm 24, md 32). Checkbox is always sm."
         },
         "text": {
           "type": "boolean",
@@ -4305,12 +4310,15 @@
       "group": "component",
       "intent": "Small number badge for counts, like unread items on a nav link or tab.",
       "useWhen": [
+        "Which mark: Count is how many (a number only, neutral unless action is due). If it is a number, it is a Count, never a Badge.",
         "Unread or pending counts on nav items, tabs, and buttons",
         "A total next to a section title",
-        "FilterButton applied-value counts"
+        "FilterButton applied-value counts",
+        "Overflow +N in a picker, like MultiSelect maxVisible"
       ],
       "doNotUseWhen": [
         "Words or status labels — use Badge",
+        "Money or metric changes — use Delta",
         "A clickable control — use Button",
         "A KPI or metric tile — use Scorecard"
       ],
@@ -4365,6 +4373,67 @@
           "type": "string",
           "required": false,
           "note": "What is counted, for screen readers, like unread messages."
+        }
+      }
+    },
+    {
+      "id": "delta",
+      "group": "component",
+      "intent": "How a value moved: an arrow and the signed change in success, danger or neutral text, with no fill.",
+      "useWhen": [
+        "Which mark: Delta is how a value moved (arrow and sign, no fill, success or danger text). A money change is a Delta, never a Badge.",
+        "A money or metric change next to a value, like +$600 vs October",
+        "The change column in a table (kit Cell trendPositive / trendNegative)",
+        "The delta line on a KPI (kit Scorecard delta)"
+      ],
+      "doNotUseWhen": [
+        "Status the system sets (Paid, Overdue) — use Badge",
+        "How many items — use Count",
+        "A label the user adds — use Tag",
+        "A whole KPI tile — use Scorecard"
+      ],
+      "doNot": [
+        "Do not invent a local trend chip or coloured number",
+        "Do not use Badge for a money or metric change",
+        "Do not put a fill or border behind a Delta",
+        "Do not drop the sign from value; write +$600 or −$90, or No change",
+        "Do not use raw hex or primitive --color-* ramps"
+      ],
+      "props": {
+        "value": {
+          "type": "string",
+          "required": true,
+          "note": "The visible change with its sign, e.g. +$600, −$90, +12.4% or No change. The sign or word carries the direction, so the arrow and colour are never the only signal."
+        },
+        "direction": {
+          "type": "enum",
+          "values": [
+            "up",
+            "down",
+            "flat"
+          ],
+          "required": true,
+          "note": "ArrowUp, ArrowDown or ArrowRight. flat is no change."
+        },
+        "tone": {
+          "type": "enum",
+          "values": [
+            "success",
+            "danger",
+            "warning",
+            "neutral"
+          ],
+          "required": false,
+          "note": "Default from direction: up success, down danger, flat neutral. Override when up is bad (costs, churn) or down is good."
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "note": "sm is 12/16 caption with a 12px arrow, for dense rows. md is 14/20 with a 14px arrow."
         }
       }
     },
@@ -5079,6 +5148,7 @@
       "group": "component",
       "intent": "Label the user applies or manages: removable, selectable, with optional count, status dot, or avatar.",
       "useWhen": [
+        "Which mark: Tag is a label the user adds, picks or removes (hairline border with X or checkbox, 4px corner like Badge).",
         "Filter chips the user picks or clears",
         "Keywords, topics, or labels the user adds to a record",
         "Assigned people or teams shown as removable labels",
@@ -5086,7 +5156,8 @@
       ],
       "doNotUseWhen": [
         "Read-only status or category set by the system (Paid, Overdue, Beta) — use Badge",
-        "Overflow +N counts — use Badge (Select) or Count",
+        "Money or metric changes — use Delta",
+        "Overflow +N counts — use Count (MultiSelect shows its +N as kit Count)",
         "Primary or secondary actions — use Button",
         "A person on their own — use Avatar",
         "Single-choice segmented options — use ButtonGroup or Tabs"
@@ -5268,10 +5339,13 @@
       "group": "component",
       "intent": "Compact read-only status or category pill set by the system.",
       "useWhen": [
+        "Which mark: Badge is status the system sets (tone icon and word, subtle fill, 4px corner). If it is a number, it is never a Badge.",
         "Status badges on table rows or cards",
         "Category markers set by the system (user-managed labels use Tag)"
       ],
       "doNotUseWhen": [
+        "Money or metric changes — use Delta",
+        "Counts and +N overflow — use Count",
         "Primary actions — use Button",
         "Clickable navigation — use AppNav links",
         "People or faces — use Avatar",
@@ -5280,6 +5354,7 @@
       ],
       "doNot": [
         "Do not invent a local Badge; for user-managed labels use kit Tag",
+        "Do not put numbers or money changes in a Badge — use Count or Delta",
         "Do not use raw hex",
         "Do not use Badge as a button except the remove control"
       ],
@@ -5296,7 +5371,8 @@
             "solid",
             "outline"
           ],
-          "default": "soft"
+          "default": "soft",
+          "note": "soft is the subtle look (default) for status in tables and lists. solid fills use the tone's fg ink token for the one mark that must stand out. outline is a hairline."
         },
         "tone": {
           "type": "enum",
@@ -5320,7 +5396,13 @@
             "md",
             "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Heights sm 20 (space-5) and md 24 (space-6) share a row with Count; lg 28. No border, so the height is exact. Radius --radius-sm."
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "Leading tone icon, aria-hidden; the word carries the meaning. Suggested: success CircleCheck (Paid), danger CircleX (Overdue), warning TriangleAlert (Due soon), info Info (Sent) or Clock (Invited), neutral Circle (Draft). Leave it off for plain role labels (Admin, Member)."
         },
         "removable": {
           "type": "boolean",
@@ -7929,24 +8011,28 @@
     {
       "id": "avatar",
       "group": "component",
-      "intent": "Face or initials for a person. Not a status chip and not a button.",
+      "intent": "Face or initials for a person (circle) or an organisation (square). Not a status chip and not a button.",
       "useWhen": [
+        "Which mark: Avatar is a person or an organisation. Circle for people, square for organisations.",
         "user menus",
         "table assignee",
         "comment authors",
-        "profile headers"
+        "profile headers",
+        "customer or workspace in a table row — shape square"
       ],
       "doNotUseWhen": [
         "status or category chips — use Badge",
         "actions — use Button",
-        "logos/brands — ask first"
+        "brand logos from a file — use LogoStrip or ask first"
       ],
       "doNot": [
         "do not invent local Avatar",
         "do not use raw hex",
         "do not make Avatar clickable without a new contract",
-        "do not add AvatarGroup or a status badge on Avatar in this contract",
-        "do not use Badge for people"
+        "do not add a count or status Badge on Avatar; presence is the only corner mark",
+        "do not show presence by colour alone; keep the word in visible text nearby",
+        "do not use Badge for people",
+        "do not use a circle for an organisation or a square for a person"
       ],
       "props": {
         "name": {
@@ -7964,11 +8050,33 @@
         "size": {
           "type": "enum",
           "values": [
+            "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "xs 20 (12/16 caption, dense table), sm 24 (14/20 table row), md 32 (two-line list), lg 40 (card or page header), xl 48 (profile header). Breaking: sm, md and lg were 32, 40 and 48; use md, lg and xl for the old sizes."
+        },
+        "shape": {
+          "type": "enum",
+          "values": [
+            "circle",
+            "square"
+          ],
+          "default": "circle",
+          "note": "circle for people, square for organisations (customers, vendors, workspaces). Square corners: xs and sm radius.sm, md radius.md, lg and xl radius.lg."
+        },
+        "presence": {
+          "type": "enum",
+          "values": [
+            "online",
+            "away",
+            "offline"
+          ],
+          "required": false,
+          "note": "A corner mark with its own shape (solid, half, hollow) and a surface.card ring. The word (KitLabels online, away, offline) joins the accessible name, e.g. Ana Ruiz, Online. Also say it in visible text nearby, e.g. Online · ana@acme.com."
         }
       }
     },
@@ -7977,6 +8085,7 @@
       "group": "component",
       "intent": "Overlapping row of kit Avatars with an optional leftover count.",
       "useWhen": [
+        "Which mark: AvatarGroup is several people. One person is an Avatar; a number of items is a Count.",
         "several people on a row, card, or table cell"
       ],
       "doNotUseWhen": [
@@ -7999,11 +8108,14 @@
         "size": {
           "type": "enum",
           "values": [
+            "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Same scale as Avatar: xs 20, sm 24, md 32, lg 40, xl 48. Breaking: sm, md and lg were 32, 40 and 48."
         },
         "max": {
           "type": "number",

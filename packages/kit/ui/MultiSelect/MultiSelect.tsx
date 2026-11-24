@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
-import { Badge } from "../Badge";
+import { Count } from "../Count";
 import { Tag } from "../Tag";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
@@ -132,7 +132,7 @@ export function MultiSelect({
             {option.label}
           </Tag>
         ))}
-        {overflow > 0 ? <Badge size="sm">{`+${overflow}`}</Badge> : null}
+        {overflow > 0 ? <Count count={overflow} intent="neutral" subtle size="md" label="more selected" /> : null}
         <input
           ref={setInputRef}
           id={id}

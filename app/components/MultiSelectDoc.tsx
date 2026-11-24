@@ -82,7 +82,7 @@ export function MultiSelectDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Wrap with Field. Tags are kit Tag. Overflow is kit Badge. Tags the person types,
+                  Wrap with Field. Tags are kit Tag. Overflow +N is kit Count. Tags the person types,
                   rather than picks, are TagInput.
                 </p>
               </div>
@@ -110,7 +110,7 @@ export function MultiSelectDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  maxVisible keeps the first tags and a Badge with the rest. The hidden values stay
+                  maxVisible keeps the first tags and a kit Count with the number of the rest. The hidden values stay
                   selected and can be cleared from the list.
                 </p>
               </div>

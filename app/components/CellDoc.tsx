@@ -227,30 +227,31 @@ export function CellDoc() {
               <h2 className={styles.exampleTitle}>Trend positive</h2>
               <div className={styles.exampleCanvas}>
                 <div className={`${styles.previewRow} ${styles.previewCell}`}>
-                    <Cell type="trendPositive" size="md" value="12%" />
+                    <Cell type="trendPositive" size="md" value="+$600" />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  ChevronUp with status.success. Do not use Badge for trends.
+                  Renders a kit Delta: up arrow and the signed value in success text, no fill. Put the sign in
+                  the value. Money changes are a Delta, never a Badge.
                 </p>
               </div>
-              <CodeBlock code={'<Cell type="trendPositive" size="md" value="12%" />'} />
+              <CodeBlock code={'<Cell type="trendPositive" size="md" value="+$600" />'} />
             </section>
 
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Trend negative</h2>
               <div className={styles.exampleCanvas}>
                 <div className={`${styles.previewRow} ${styles.previewCell}`}>
-                    <Cell type="trendNegative" size="md" value="4%" />
+                    <Cell type="trendNegative" size="md" value="−$90" />
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>ChevronDown with status.danger.</p>
+                <p className={styles.usageBody}>A kit Delta with a down arrow in danger text.</p>
               </div>
-              <CodeBlock code={'<Cell type="trendNegative" size="md" value="4%" />'} />
+              <CodeBlock code={'<Cell type="trendNegative" size="md" value="−$90" />'} />
             </section>
 
             <section className={styles.example}>
