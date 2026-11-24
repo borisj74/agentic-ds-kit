@@ -1387,5 +1387,15 @@
     "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add onboarding"
+  },
+  {
+    "id": "insight-stack",
+    "intent": "A ranked AI summary in one card: an icon, eyebrow and time with an X, a title and source, then the findings as an ordered list. Each finding has a rank Count, a title with its change (kit Delta, or a tone-coloured amount), a one-line detail and a Why? toggle that opens a confidence Meter and the evidence. Loading shows Skeleton rows; no findings is a compact all-clear card. Footer: See all and Ask in Chat, outline sm.",
+    "group": "pattern",
+    "path": "contracts/patterns/insight-stack.json",
+    "status": "stable",
+    "level": "template",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add insight-stack"
   }
 ]

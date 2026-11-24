@@ -1,0 +1,7 @@
+/* The insight-stack specimens side by side, top-aligned, wrapping on narrow frames. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+}

@@ -131,6 +131,10 @@ export interface KitLabels {
   /** Delta goodWhen: the word before a judged change, e.g. "Better · +6.3 pts". */
   better: string;
   worse: string;
+  /** insight-stack pattern: the toggle under each finding that shows its evidence. */
+  why: string;
+  /** insight-stack pattern: the word beside the confidence value, and the confidence Meter's name. */
+  confidence: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -213,6 +217,8 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   moreSelected: "more selected",
   better: "Better",
   worse: "Worse",
+  why: "Why?",
+  confidence: "Confidence",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);
