@@ -120,6 +120,17 @@ export interface KitLabels {
   success: string;
   warning: string;
   danger: string;
+  /** Avatar presence: the word added to the avatar name, e.g. "Ana Ruiz, Online". */
+  online: string;
+  away: string;
+  offline: string;
+  /** AvatarGroup: the +N leftover count, e.g. "3 more". */
+  moreAvatars: (count: number) => string;
+  /** MultiSelect: what the +N overflow Count counts, read as "2 more selected". */
+  moreSelected: string;
+  /** Delta goodWhen: the word before a judged change, e.g. "Better · +6.3 pts". */
+  better: string;
+  worse: string;
 }
 
 export const DEFAULT_KIT_LABELS: KitLabels = {
@@ -195,6 +206,13 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   success: "Success",
   warning: "Warning",
   danger: "Error",
+  online: "Online",
+  away: "Away",
+  offline: "Offline",
+  moreAvatars: (count) => `${count} more`,
+  moreSelected: "more selected",
+  better: "Better",
+  worse: "Worse",
 };
 
 const KitLabelsContext = createContext<KitLabels>(DEFAULT_KIT_LABELS);

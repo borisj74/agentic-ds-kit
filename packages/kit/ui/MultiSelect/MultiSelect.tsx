@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
-import { Badge } from "../Badge";
+import { Count } from "../Count";
 import { Tag } from "../Tag";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
@@ -13,6 +13,7 @@ import controlStyles from "../shared/controls.module.css";
 import type { MultiSelectProps } from "./MultiSelect.types";
 import styles from "./MultiSelect.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { useKitLabels } from "../shared/labels";
 
 export type { MultiSelectOption, MultiSelectProps, MultiSelectSize } from "./MultiSelect.types";
 
@@ -34,6 +35,7 @@ export function MultiSelect({
   className,
   ref,
 }: MultiSelectProps) {
+  const labels = useKitLabels();
   const listId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -132,7 +134,7 @@ export function MultiSelect({
             {option.label}
           </Tag>
         ))}
-        {overflow > 0 ? <Badge size="sm">{`+${overflow}`}</Badge> : null}
+        {overflow > 0 ? <Count count={overflow} prefix="+" intent="neutral" subtle size="md" label={labels.moreSelected} /> : null}
         <input
           ref={setInputRef}
           id={id}

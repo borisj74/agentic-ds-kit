@@ -69,6 +69,7 @@ import { Command } from "agentic-ds-kit";
 import { ContextMenu } from "agentic-ds-kit";
 import { Conveyor } from "agentic-ds-kit";
 import { Count } from "agentic-ds-kit";
+import { Delta } from "agentic-ds-kit";
 import { CurrencyInput } from "agentic-ds-kit";
 import { FileUpload } from "agentic-ds-kit";
 import { FilterBar } from "agentic-ds-kit";
@@ -809,6 +810,14 @@ export function GalleryPreview({ id }: { id: string }) {
         <div className={previewStyles.chipRow}>
           <Count count={3} label="unread" />
           <Count count={12} label="tasks" />
+        </div>
+      );
+    case "delta":
+      return (
+        <div className={previewStyles.chipRow}>
+          <Delta value="+$600" direction="up" />
+          <Delta value="−$90" direction="down" />
+          <Delta value="No change" direction="flat" />
         </div>
       );
     case "fileupload":

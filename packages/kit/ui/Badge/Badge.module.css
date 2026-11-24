@@ -1,34 +1,55 @@
+/* Sizes follow the text line: sm 20 and md 24 share a row with Count; no border, so the height
+   is exact. Outline draws its hairline as an inset shadow for the same reason. */
 .badge {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  border-radius: var(--radius-control-md);
-  border: var(--border-control) solid transparent;
+  border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-weight: var(--type-weight-label);
-  font-size: var(--type-size-overline-xs);
-  line-height: var(--type-line-overline-xs);
   white-space: nowrap;
 }
 
 .sm {
+  height: var(--space-5);
   padding: 0 var(--space-2);
-  min-height: var(--space-5);
-}
-
-.md {
-  padding: var(--space-1) var(--space-2);
-}
-
-.lg {
-  padding: var(--space-1) var(--space-3);
-  font-size: var(--type-size-ui-xs);
+  font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
 }
 
+.md {
+  height: var(--space-6);
+  padding: 0 var(--space-2);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.lg {
+  height: calc(var(--space-6) + var(--space-1));
+  padding: 0 var(--space-3);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+/* A leading tone icon sits closer to the edge than the text does. */
+.withIcon.sm,
+.withIcon.md {
+  padding-inline-start: var(--space-1);
+}
+
+.withIcon.lg {
+  padding-inline-start: var(--space-2);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
 /* Soft: muted wash */
+/* bg-tray, not bg-subtle: subtle is the canvas colour, so a neutral Badge on a page had no fill. */
 .soft.neutral {
-  background-color: var(--bg-subtle);
+  background-color: var(--bg-tray);
   color: var(--text-fg-muted);
 }
 
@@ -110,27 +131,27 @@
 }
 
 .solid.success {
-  background-color: var(--success-base);
+  background-color: var(--success-fg);
   color: var(--text-fg-inverse);
 }
 
 .solid.warning {
-  background-color: var(--caution-base);
+  background-color: var(--caution-fg);
   color: var(--text-fg-inverse);
 }
 
 .solid.danger {
-  background-color: var(--danger-base);
+  background-color: var(--danger-fg);
   color: var(--text-fg-inverse);
 }
 
 .solid.info {
-  background-color: var(--info-base);
+  background-color: var(--info-fg);
   color: var(--text-fg-inverse);
 }
 
 .solid.highlight {
-  background-color: var(--highlight-base);
+  background-color: var(--highlight-fg);
   color: var(--text-fg-inverse);
 }
 
@@ -138,43 +159,43 @@
 .outline.neutral {
   background-color: var(--bg-control);
   color: var(--text-fg-muted);
-  border-color: var(--line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--line);
 }
 
 .outline.primary {
   background-color: var(--bg-control);
   color: var(--primary);
-  border-color: var(--primary);
+  box-shadow: inset 0 0 0 var(--border-control) var(--primary);
 }
 
 .outline.success {
   background-color: var(--bg-control);
   color: var(--success-fg);
-  border-color: var(--success-line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--success-line);
 }
 
 .outline.warning {
   background-color: var(--bg-control);
   color: var(--caution-fg);
-  border-color: var(--caution-line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--caution-line);
 }
 
 .outline.danger {
   background-color: var(--bg-control);
   color: var(--danger-fg);
-  border-color: var(--danger-line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--danger-line);
 }
 
 .outline.info {
   background-color: var(--bg-control);
   color: var(--info-fg);
-  border-color: var(--info-line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--info-line);
 }
 
 .outline.highlight {
   background-color: var(--bg-control);
   color: var(--highlight-fg);
-  border-color: var(--highlight-line);
+  box-shadow: inset 0 0 0 var(--border-control) var(--highlight-line);
 }
 
 .disabled {
@@ -191,7 +212,7 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-control-md);
-  background: transparent;
+  background: none;
   color: inherit;
   cursor: pointer;
   line-height: 0;

@@ -4,6 +4,7 @@
   "level": "molecule",
   "intent": "Overlapping row of kit Avatars with an optional leftover count.",
   "useWhen": [
+    "Which mark: AvatarGroup is several people. One person is an Avatar; a number of items is a Count.",
     "several people on a row, card, or table cell"
   ],
   "doNotUseWhen": [
@@ -37,11 +38,14 @@
     "size": {
       "type": "enum",
       "values": [
+        "xs",
         "sm",
         "md",
-        "lg"
+        "lg",
+        "xl"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "Same scale as Avatar: xs 20, sm 24, md 32, lg 40, xl 48. Breaking: sm, md and lg were 32, 40 and 48."
     },
     "max": {
       "type": "number",
@@ -63,20 +67,29 @@
   "tokens": [
     "bg.tray",
     "text.secondary",
-    "surface.page",
     "radius.full",
-    "space.px",
     "space.2",
     "space.8",
     "space.10",
-    "space.12"
+    "space.12",
+    "surface.card",
+    "border.widthMedium",
+    "space.1",
+    "space.3",
+    "space.5",
+    "space.6",
+    "type.size.overlineXs",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.size.body"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
       "role=group",
       "optional aria-label names the group",
-      "leftover count uses aria-label like \"3 more\""
+      "leftover count is role=img with aria-label like \"3 more\" (KitLabels moreAvatars)",
+      "each Avatar has a surface.card ring so faces stay apart on any ground"
     ]
   },
   "doNot": [

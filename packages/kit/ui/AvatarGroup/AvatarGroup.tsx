@@ -1,17 +1,21 @@
+"use client";
+
 import { Avatar } from "../Avatar";
 import type { AvatarGroupProps } from "./AvatarGroup.types";
 import { cx } from "../shared/cx";
 import styles from "./AvatarGroup.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { useKitLabels } from "../shared/labels";
 
 export type { AvatarGroupItem, AvatarGroupProps, AvatarGroupSize } from "./AvatarGroup.types";
 
 export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className, ref, ...rest }: AvatarGroupProps) {
+  const labels = useKitLabels();
   const visible = items.slice(0, max);
   const leftover = items.length - max;
 
   return (
-    <div {...rest} {...nisthaAttr("avatargroup", rest)} ref={ref} className={cx(styles.group, className)} role="group" aria-label={ariaLabel}>
+    <div {...rest} {...nisthaAttr("avatargroup", rest)} ref={ref} className={cx(styles.group, styles[size], className)} role="group" aria-label={ariaLabel}>
       {visible.map((item, index) => (
         <span key={`${item.name}-${index}`} className={styles.item} style={{ zIndex: index + 1 }}>
           <Avatar name={item.name} src={item.src} initials={item.initials} size={size} />
@@ -21,7 +25,8 @@ export function AvatarGroup({ items, size = "md", max = 3, ariaLabel, className,
         <span
           className={`${styles.item} ${styles.count} ${styles[size]}`}
           style={{ zIndex: visible.length + 1 }}
-          aria-label={`${leftover} more`}
+          role="img"
+          aria-label={labels.moreAvatars(leftover)}
         >
           +{leftover}
         </span>

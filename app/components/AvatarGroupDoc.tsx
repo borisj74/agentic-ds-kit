@@ -9,7 +9,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: AvatarGroupSize[] = ["sm", "md", "lg"];
+const SIZES: AvatarGroupSize[] = ["xs", "sm", "md", "lg", "xl"];
 
 const MIXED = [
   { name: "Maya Chen", src: FACES["Maya Chen"] },
@@ -98,7 +98,8 @@ export function AvatarGroupDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Only kit Avatars. One person is Avatar. Badge is not for people. Extra people collapse to +N,
-                  not another face.
+                  not another face; screen readers hear it as 3 more. Each face has a card-coloured ring. Sizes
+                  match Avatar, xs 20 to xl 48.
                 </p>
               </div>
               <CodeBlock code={masterCode(size)} />

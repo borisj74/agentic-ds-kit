@@ -4,6 +4,7 @@
   "level": "organism",
   "intent": "A list of records, one row each: primary and optional secondary line, leading avatar or icon, trailing badge, actions, or chevron.",
   "useWhen": [
+    "Which mark: the row dot is the leading 8px mark in a ListView row; the row text still says the status. Do not add a separate Dot.",
     "People, files, or other records shown one per row",
     "Pick one, check several, or open a row without comparing columns"
   ],

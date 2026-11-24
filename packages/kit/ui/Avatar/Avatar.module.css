@@ -1,8 +1,10 @@
+/* No overflow clip on the root, so the presence mark can sit on the corner; the image rounds itself. */
 .avatar {
+  position: relative;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   flex-shrink: 0;
   align-self: center;
   aspect-ratio: 1 / 1;
@@ -13,36 +15,86 @@
   user-select: none;
 }
 
-/* bg-tray, not surface-muted: muted is slate-50, the same as --bg-canvas and --bg-subtle, so on
-   a canvas or subtle ground the initials circle had no edge. Tray reads on white and on canvas,
-   in light and dark. */
-.fallback {
-  background: var(--bg-tray);
-  color: var(--text-primary);
+/* Sizes follow the text line: xs 20 dense rows, sm 24 table rows, md 32 two-line lists,
+   lg 40 card headers, xl 48 profile headers. */
+.xs {
+  width: var(--space-5);
+  height: var(--space-5);
+  font-size: var(--type-size-overline-xs);
 }
 
 .sm {
+  width: var(--space-6);
+  height: var(--space-6);
+  font-size: var(--type-size-caption);
+}
+
+.md {
   width: var(--space-8);
   height: var(--space-8);
   font-size: var(--type-size-caption);
 }
 
-.md {
+.lg {
   width: var(--space-10);
   height: var(--space-10);
   font-size: var(--type-size-body-sm);
 }
 
-.lg {
+.xl {
   width: var(--space-12);
   height: var(--space-12);
   font-size: var(--type-size-body);
+}
+
+/* Organisations are square; the corner grows with the size. */
+.square.xs,
+.square.sm {
+  border-radius: var(--radius-sm);
+}
+
+.square.md {
+  border-radius: var(--radius-md);
+}
+
+.square.lg,
+.square.xl {
+  border-radius: var(--radius-lg);
+}
+
+/* Fallback tints come from the name. The plain subtle roles were too pale on canvas and cards,
+   so the coloured tints use the stronger washes Badge tint uses (primary-subtle-strong, *-line). bg-tray, not surface-muted, for the neutral one: muted is
+   the same as --bg-canvas and --bg-subtle, so on those grounds the circle had no edge. */
+.tintNeutral {
+  background: var(--bg-tray);
+  color: var(--text-primary);
+}
+
+.tintPrimary {
+  background: var(--primary-subtle-strong);
+  color: var(--primary-fg);
+}
+
+.tintInfo {
+  background: var(--info-line);
+  color: var(--info-fg);
+}
+
+.tintSuccess {
+  background: var(--success-line);
+  color: var(--success-fg);
+}
+
+.tintHighlight {
+  background: var(--highlight-line);
+  color: var(--highlight-fg);
 }
 
 .image {
   display: block;
   width: 100%;
   height: 100%;
+  border-radius: inherit;
   object-fit: cover;
   object-position: center 20%;
   aspect-ratio: 1 / 1;
@@ -52,4 +104,47 @@
   width: 50%;
   height: 50%;
   color: inherit;
+}
+
+/* Presence: a mark at the bottom-right corner with a card-coloured ring. Each state has its own
+   shape (solid, half, hollow), and the word joins the accessible name. */
+.presence {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  box-sizing: border-box;
+  width: var(--space-2);
+  height: var(--space-2);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 var(--border-width-medium) var(--surface-card);
+}
+
+.lg .presence,
+.xl .presence {
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+.online {
+  background: var(--status-success);
+}
+
+.away {
+  background: var(--surface-card);
+  border: var(--border-width-medium) solid var(--status-warning);
+}
+
+.away::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 50%;
+  background: var(--status-warning);
+}
+
+.offline {
+  background: var(--surface-card);
+  border: var(--border-width-medium) solid var(--text-fg-subtle);
 }

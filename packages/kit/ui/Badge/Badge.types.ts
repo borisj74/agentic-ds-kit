@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
 
 export type BadgeTone =
   | "neutral"
@@ -21,6 +22,11 @@ export interface BadgeProps extends Omit<ComponentPropsWithoutRef<"span">, Badge
   tone?: BadgeTone;
   appearance?: BadgeAppearance;
   size?: BadgeSize;
+  /**
+   * Leading tone icon, aria-hidden; the word carries the meaning. Pass a Lucide name or component,
+   * e.g. CircleCheck for Paid, CircleX for Overdue. Leave it off for plain labels (Admin, Member).
+   */
+  icon?: KitIcon;
   removable?: boolean;
   disabled?: boolean;
   onRemove?: () => void;

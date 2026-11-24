@@ -106,9 +106,9 @@ const SNIPPET = `<Scoreboard
 />`;
 
 const PICKER = [
-  { id: "seats", label: "Paid seats", value: "1,204", badge: "+6.2%", badgeTone: "success" as const, sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
-  { id: "trials", label: "Open trials", value: "88", badge: "-4", badgeTone: "neutral" as const, sparkline: [97, 95, 93, 90, 91, 88] },
-  { id: "refunds", label: "Refunds", value: "6", badge: "+2", badgeTone: "danger" as const, sparkline: [3, 4, 4, 5, 4, 6] },
+  { id: "seats", label: "Paid seats", value: "1,204", delta: "+6.2%", trend: "up" as const, sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
+  { id: "trials", label: "Open trials", value: "88", delta: "−4", trend: "down" as const, deltaTone: "neutral" as const, sparkline: [97, 95, 93, 90, 91, 88] },
+  { id: "refunds", label: "Refunds", value: "6", delta: "+2", trend: "up" as const, deltaTone: "danger" as const, sparkline: [3, 4, 4, 5, 4, 6] },
 ];
 
 const PICKER_CODE = `const [metric, setMetric] = useState("seats");
@@ -120,9 +120,9 @@ const PICKER_CODE = `const [metric, setMetric] = useState("seats");
   value={metric}
   onValueChange={setMetric}
   items={[
-    { id: "seats", label: "Paid seats", value: "1,204", badge: "+6.2%", badgeTone: "success", sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
-    { id: "trials", label: "Open trials", value: "88", badge: "-4", sparkline: [97, 95, 93, 90, 91, 88] },
-    { id: "refunds", label: "Refunds", value: "6", badge: "+2", badgeTone: "danger", sparkline: [3, 4, 4, 5, 4, 6] },
+    { id: "seats", label: "Paid seats", value: "1,204", delta: "+6.2%", trend: "up", sparkline: [1080, 1102, 1131, 1150, 1176, 1204] },
+    { id: "trials", label: "Open trials", value: "88", delta: "−4", trend: "down", deltaTone: "neutral", sparkline: [97, 95, 93, 90, 91, 88] },
+    { id: "refunds", label: "Refunds", value: "6", delta: "+2", trend: "up", deltaTone: "danger", sparkline: [3, 4, 4, 5, 4, 6] },
   ]}
 />`;
 

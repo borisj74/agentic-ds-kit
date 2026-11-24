@@ -44,6 +44,7 @@ export * from "../ui/CitedAnswer";
 export * from "../ui/ContextWindow";
 export * from "../ui/Conveyor";
 export * from "../ui/Count";
+export * from "../ui/Delta";
 export * from "../ui/CurrencyInput";
 export * from "../ui/Cell";
 export * from "../ui/Chat";

@@ -8,11 +8,20 @@
   position: relative;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  box-shadow: 0 0 0 var(--space-px) var(--surface-page);
+  /* A card-coloured ring separates the faces on cards, rows and pages alike. */
+  box-shadow: 0 0 0 var(--border-width-medium) var(--surface-card);
 }
 
 .item:not(:first-child) {
   margin-inline-start: calc(-1 * var(--space-2));
+}
+
+.group.xs .item:not(:first-child) {
+  margin-inline-start: calc(-1 * var(--space-1));
+}
+
+.group.xl .item:not(:first-child) {
+  margin-inline-start: calc(-1 * var(--space-3));
 }
 
 .count {
@@ -31,19 +40,31 @@
   color: var(--text-secondary);
 }
 
-.sm {
+.count.xs {
+  width: var(--space-5);
+  height: var(--space-5);
+  font-size: var(--type-size-overline-xs);
+}
+
+.count.sm {
+  width: var(--space-6);
+  height: var(--space-6);
+  font-size: var(--type-size-caption);
+}
+
+.count.md {
   width: var(--space-8);
   height: var(--space-8);
   font-size: var(--type-size-caption);
 }
 
-.md {
+.count.lg {
   width: var(--space-10);
   height: var(--space-10);
   font-size: var(--type-size-body-sm);
 }
 
-.lg {
+.count.xl {
   width: var(--space-12);
   height: var(--space-12);
   font-size: var(--type-size-body);

@@ -2,17 +2,19 @@
   "id": "avatar",
   "status": "stable",
   "level": "atom",
-  "intent": "Face or initials for a person. Not a status chip and not a button.",
+  "intent": "Face or initials for a person (circle) or an organisation (square). Not a status chip and not a button.",
   "useWhen": [
+    "Which mark: Avatar is a person or an organisation. Circle for people, square for organisations.",
     "user menus",
     "table assignee",
     "comment authors",
-    "profile headers"
+    "profile headers",
+    "customer or workspace in a table row — shape square"
   ],
   "doNotUseWhen": [
     "status or category chips — use Badge",
     "actions — use Button",
-    "logos/brands — ask first"
+    "brand logos from a file — use LogoStrip or ask first"
   ],
   "props": {
     "name": {
@@ -30,11 +32,33 @@
     "size": {
       "type": "enum",
       "values": [
+        "xs",
         "sm",
         "md",
-        "lg"
+        "lg",
+        "xl"
       ],
-      "default": "md"
+      "default": "md",
+      "note": "xs 20 (12/16 caption, dense table), sm 24 (14/20 table row), md 32 (two-line list), lg 40 (card or page header), xl 48 (profile header). Breaking: sm, md and lg were 32, 40 and 48; use md, lg and xl for the old sizes."
+    },
+    "shape": {
+      "type": "enum",
+      "values": [
+        "circle",
+        "square"
+      ],
+      "default": "circle",
+      "note": "circle for people, square for organisations (customers, vendors, workspaces). Square corners: xs and sm radius.sm, md radius.md, lg and xl radius.lg."
+    },
+    "presence": {
+      "type": "enum",
+      "values": [
+        "online",
+        "away",
+        "offline"
+      ],
+      "required": false,
+      "note": "A corner mark with its own shape (solid, half, hollow) and a surface.card ring. The word (KitLabels online, away, offline) joins the accessible name, e.g. Ana Ruiz, Online. Also say it in visible text nearby, e.g. Online · ana@acme.com."
     }
   },
   "passthrough": {
@@ -46,25 +70,53 @@
   "tokens": [
     "bg.tray",
     "text.primary",
+    "primary.subtle",
+    "primary.fg",
+    "info.subtle",
+    "info.fg",
+    "success.subtle",
+    "success.fg",
+    "highlight.subtle",
+    "highlight.fg",
+    "status.success",
+    "status.warning",
+    "text.fgSubtle",
+    "surface.card",
+    "border.widthMedium",
     "radius.full",
+    "radius.sm",
+    "radius.md",
+    "radius.lg",
+    "space.2",
+    "space.3",
+    "space.5",
+    "space.6",
     "space.8",
     "space.10",
-    "space.12"
+    "space.12",
+    "type.size.overlineXs",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.size.body"
   ],
   "a11y": {
     "element": "span",
     "requirements": [
-      "when image shows, img alt=name",
-      "when fallback, role=img and aria-label=name",
-      "Decorative User icon is aria-hidden"
+      "when image shows, img alt=name (plus the presence word when set)",
+      "when fallback, role=img and aria-label=name (plus the presence word when set)",
+      "Decorative User icon is aria-hidden",
+      "Presence mark is aria-hidden; its word is in the name and its shape differs per state, so colour is never the only signal",
+      "presence words come from KitLabelsProvider (online, away, offline); English by default"
     ]
   },
   "doNot": [
     "do not invent local Avatar",
     "do not use raw hex",
     "do not make Avatar clickable without a new contract",
-    "do not add AvatarGroup or a status badge on Avatar in this contract",
-    "do not use Badge for people"
+    "do not add a count or status Badge on Avatar; presence is the only corner mark",
+    "do not show presence by colour alone; keep the word in visible text nearby",
+    "do not use Badge for people",
+    "do not use a circle for an organisation or a square for a person"
   ],
-  "snippet": "<Avatar name=\"Boris Jovanovic\" size=\"md\" />"
+  "snippet": "<Avatar name=\"Boris Jovanovic\" size=\"md\" />\n<Avatar name=\"Ana Ruiz\" size=\"md\" presence=\"online\" />\n<Avatar name=\"Northwind Traders\" size=\"sm\" shape=\"square\" />"
 }

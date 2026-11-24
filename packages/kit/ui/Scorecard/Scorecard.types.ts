@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, MouseEventHandler, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
+import type { DeltaGoodWhen } from "../Delta/Delta.types";
 
 export type ScorecardTrend = "up" | "down" | "flat" | "neutral";
 
@@ -9,7 +10,7 @@ export type ScorecardSize = "sm" | "md" | "lg";
 export type ScorecardDeltaTone = "success" | "warning" | "danger" | "neutral";
 
 /** Which way a change is good: `up` (pass rate, revenue) or `down` (cost, latency, churn). */
-export type ScorecardGoodWhen = "up" | "down";
+export type ScorecardGoodWhen = DeltaGoodWhen;
 
 /** `card` is the framed tile. `plain` drops the frame for a divided strip (Scoreboard appearance divided). */
 export type ScorecardAppearance = "card" | "plain";
@@ -55,9 +56,10 @@ export interface ScorecardProps extends Omit<ComponentPropsWithoutRef<"article">
    */
   deltaTone?: ScorecardDeltaTone;
   /**
-   * Which way is good. With trend up or down the delta reads "Better · +6.3 pts" or
-   * "Worse · +17%", with CircleCheck (success) or TriangleAlert (danger), so a rising cost never
-   * reads as good news. `deltaTone` still overrides the colour. Flat and neutral are not judged.
+   * Which way is good, passed to the kit Delta. With trend up or down the delta reads
+   * "Better · +6.3 pts" (CircleCheck, neutral) or "Worse · +17%" (TriangleAlert, danger), so a
+   * rising cost never reads as good news. `deltaTone` still overrides the colour. Flat and
+   * neutral are not judged.
    */
   goodWhen?: ScorecardGoodWhen;
   hint?: string;

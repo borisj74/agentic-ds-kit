@@ -7,8 +7,18 @@ import type { AvatarProps } from "./Avatar.types";
 import { cx } from "../shared/cx";
 import styles from "./Avatar.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { useKitLabels } from "../shared/labels";
 
-export type { AvatarProps, AvatarSize } from "./Avatar.types";
+export type { AvatarProps, AvatarSize, AvatarShape, AvatarPresence } from "./Avatar.types";
+
+/** Fallback tints, picked from the name so the same person always gets the same one. */
+const TINTS = ["tintPrimary", "tintInfo", "tintSuccess", "tintHighlight", "tintNeutral"] as const;
+
+function tintFor(name: string): (typeof TINTS)[number] {
+  let hash = 0;
+  for (const ch of name.trim().toLowerCase()) hash = (hash * 31 + (ch.codePointAt(0) ?? 0)) >>> 0;
+  return TINTS[hash % TINTS.length];
+}
 
 function lettersOf(value: string): string {
   return Array.from(value)
@@ -39,7 +49,18 @@ function resolveInitials(name: string, initials?: string): string {
   return deriveInitials(name);
 }
 
-export function Avatar({ name, src, initials, size = "md", className, ref, ...rest }: AvatarProps) {
+export function Avatar({
+  name,
+  src,
+  initials,
+  size = "md",
+  shape = "circle",
+  presence,
+  className,
+  ref,
+  ...rest
+}: AvatarProps) {
+  const labels = useKitLabels();
   const [failed, setFailed] = useState(false);
   const [prevSrc, setPrevSrc] = useState(src);
 
@@ -50,11 +71,15 @@ export function Avatar({ name, src, initials, size = "md", className, ref, ...re
 
   const label = resolveInitials(name, initials);
   const showImage = Boolean(src) && !failed;
+  const spoken = presence ? `${name}, ${labels[presence]}` : name;
+  const rootClass = cx(styles.avatar, styles[size], shape === "square" && styles.square, className);
+  const mark = presence ? <span className={cx(styles.presence, styles[presence])} aria-hidden /> : null;
 
   if (showImage) {
     return (
-      <span {...rest} {...nisthaAttr("avatar", rest)} ref={ref} className={cx(styles.avatar, styles[size], className)}>
-        <img className={styles.image} src={src} alt={name} onError={() => setFailed(true)} />
+      <span {...rest} {...nisthaAttr("avatar", rest)} ref={ref} className={rootClass}>
+        <img className={styles.image} src={src} alt={spoken} onError={() => setFailed(true)} />
+        {mark}
       </span>
     );
   }
@@ -63,11 +88,12 @@ export function Avatar({ name, src, initials, size = "md", className, ref, ...re
     <span
       {...rest} {...nisthaAttr("avatar", rest)}
       ref={ref}
-      className={cx(styles.avatar, styles[size], styles.fallback, className)}
+      className={cx(rootClass, label ? styles[tintFor(name)] : styles.tintNeutral)}
       role="img"
-      aria-label={name}
+      aria-label={spoken}
     >
       {label ? label : <User className={styles.icon} strokeWidth={ICON_STROKE} aria-hidden />}
+      {mark}
     </span>
   );
 }
