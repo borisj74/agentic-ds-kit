@@ -25,8 +25,13 @@
   color: var(--icon-muted);
 }
 
+/* The picked date and time read as data: Geist Mono. */
 .value {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
   color: var(--text-primary);
 }
 
@@ -35,20 +40,15 @@
   color: var(--text-muted);
 }
 
-.panel {
-  position: absolute;
-  z-index: var(--z-overlay);
-  top: calc(100% + var(--space-1));
-  right: 0;
-  left: auto;
+.body {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.bodySm {
   padding: var(--space-2);
-  background-color: var(--surface-card);
-  border: var(--border-surface) solid var(--border-faint);
-  border-radius: var(--radius-surface-sm);
-  box-shadow: var(--shadow-md);
 }
 
 .time {

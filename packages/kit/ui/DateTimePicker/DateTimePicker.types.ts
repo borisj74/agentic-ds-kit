@@ -1,6 +1,6 @@
 import type { HourCycle } from "../TimePicker/time";
 
-export type DateTimePickerSize = "sm" | "md";
+export type DateTimePickerSize = "sm" | "md" | "lg";
 
 export interface DateTimeValue {
   /** YYYY-MM-DD */
@@ -18,6 +18,10 @@ export interface DateTimePickerProps {
   hourCycle?: HourCycle;
   disabled?: boolean;
   error?: boolean;
+  /** Earliest day the grid offers, YYYY-MM-DD. Days before it are struck through and unavailable. */
+  minDate?: string;
+  /** Latest day the grid offers, YYYY-MM-DD. */
+  maxDate?: string;
   name?: string;
   describedBy?: string;
   placeholder?: string;

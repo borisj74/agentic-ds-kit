@@ -8,7 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
 
-const SIZES: DateTimePickerSize[] = ["sm", "md"];
+const SIZES: DateTimePickerSize[] = ["sm", "md", "lg"];
 const FILL = { maxWidth: "20rem" } as const;
 
 export function DateTimePickerDoc() {
@@ -22,8 +22,8 @@ export function DateTimePickerDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>DateTimePicker</h2>
         <p className={styles.lede}>
-          One field for a day and a time. The dialog keeps the month grid and the time together
-          until Done or Escape.
+          One field for a day and a time. The dialog has the shared header with Close, and keeps the
+          month grid and the time together until Done, Close or Escape.
         </p>
       </header>
       <section className={styles.master} aria-labelledby="datetimepicker-master">
@@ -85,6 +85,21 @@ export function DateTimePickerDoc() {
                 <p className={styles.usageBody}>Leave value empty until the person picks a day and a time. The hidden input submits YYYY-MM-DDTHH:mm once both are set.</p>
               </div>
               <CodeBlock code={'<DateTimePicker id="deadline" />'} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Min and max</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={FILL}>
+                  <Field label="Call back" htmlFor="callback" hint="Within the next two weeks">
+                    <DateTimePicker id="callback" defaultValue={{ date: "2026-11-26", time: "14:30" }} minDate="2026-11-24" maxDate="2026-12-08" />
+                  </Field>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>minDate and maxDate bound the month grid. Days outside are struck through and cannot be picked.</p>
+              </div>
+              <CodeBlock code={'<DateTimePicker id="callback" minDate="2026-11-24" maxDate="2026-12-08" />'} />
             </section>
           </div>
         )}

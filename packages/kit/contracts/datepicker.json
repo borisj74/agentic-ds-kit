@@ -2,15 +2,14 @@
   "id": "datepicker",
   "status": "stable",
   "level": "molecule",
-  "intent": "Form field that opens a month grid to pick one date or a date range.",
+  "intent": "Form field that opens a month grid to pick one date.",
   "useWhen": [
     "A date in a form or filter",
-    "Need a typed-looking field whose overlay is a month grid",
-    "A period between two dates (mode range), like invoice due vs last month for a report"
+    "Need a typed-looking field whose overlay is a month grid"
   ],
   "doNotUseWhen": [
     "A schedule of events — use Calendar",
-    "A range with named presets such as This month — use DateRangePicker",
+    "A range of dates, with or without presets — use DateRangePicker (mode range is deprecated)",
     "Time-only — ask first"
   ],
   "props": {
@@ -26,7 +25,7 @@
         "range"
       ],
       "default": "single",
-      "note": "single is one YYYY-MM-DD. range is { start, end? }. Named presets are DateRangePicker."
+      "note": "single is one YYYY-MM-DD. range ({ start, end? }) is deprecated: it still works, with a warning in development. Use DateRangePicker, with presets={[]} for the month grid only."
     },
     "value": {
       "type": "string | { start: string, end?: string }",
@@ -47,10 +46,11 @@
       "type": "enum",
       "values": [
         "md",
-        "sm"
+        "sm",
+        "lg"
       ],
       "default": "md",
-      "note": "Trigger size; overlay month grid is sm when size is sm, else md. No lg on the field."
+      "note": "Trigger height sm 32, md 36, lg 40, like Input. The overlay month grid is sm when size is sm, else md."
     },
     "placeholder": {
       "type": "string",
@@ -75,6 +75,17 @@
       "required": false,
       "note": "Passed to the overlay month grid"
     },
+    "weekStart": {
+      "type": "enum",
+      "values": [0, 1],
+      "default": 0,
+      "note": "First day of the week: 0 Sunday, 1 Monday. Moves the weekday row and Home/End."
+    },
+    "isDateDisabled": {
+      "type": "function",
+      "required": false,
+      "note": "(date: string) => boolean. Turns single days off, like holidays or weekends. Those days, and days outside minDate/maxDate, are struck through and named unavailable."
+    },
     "name": {
       "type": "string",
       "required": false,
@@ -95,6 +106,8 @@
   "tokens": [
     "text.primary",
     "text.muted",
+    "text.disabled",
+    "font.mono",
     "icon.muted",
     "surface.card",
     "border.faint",
@@ -109,22 +122,25 @@
       "error shows the danger border and Field's error text via aria-describedby; no aria-invalid on the trigger button (button does not support it)",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose date (or Choose dates in range) and contains DatePicker’s own month grid",
+      "Overlay header is the shared overlay header: CalendarDays icon and the picked date (or the placeholder) as the eyebrow, the Choose date title, and a Close button named by the close label",
+      "Opening focuses the picked day (else today), not Close. Arrows move by day and week, Home and End to the week's first and last day (weekStart), Page Up and Page Down by month",
+      "Today has a short bar under the number and is named today. Unavailable days are struck through, not only faded, and named unavailable",
       "Range: first click sets start, second click sets end and closes. Escape discards an in-progress range",
-      "Tab stays in the overlay; Escape and pointer down outside close and return focus to the trigger. Escape closes only this overlay, not a parent Modal, Drawer or AlertDialog",
-      "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll",
+      "Tab stays in the overlay; Escape, Close and pointer down outside close and return focus to the trigger. Escape closes only the newest open overlay (the shared Escape stack), not a parent Modal, Drawer or AlertDialog",
+      "Month-grid overlay is at least as wide as the trigger and anchors to its end, growing toward the start edge when the trigger is narrower than the grid, so it fits in drawers without horizontal scroll. When that would cross the window's start edge it anchors to the trigger's start instead",
       "Must have associated label via Field or a visible label pointing at id",
       "error described by Field via describedBy",
-      "built-in labels (previousMonth, nextMonth, chooseDate, chooseDates) come from KitLabelsProvider; English by default"
+      "built-in labels (previousMonth, nextMonth, chooseDate, chooseDates, close) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
     "Do not wrap DatePicker in Popover. The field owns its overlay. Do not invent a local calendar, DatePickerDialog, PeriodPicker, DualCalendar, or native input type=date",
     "Named presets such as This month or Last 30 days — use DateRangePicker",
-    "Do not use two DatePickers for start and end — use mode=range",
+    "Do not use two DatePickers for start and end, and do not use mode=range for new work (deprecated) — use DateRangePicker",
     "Do not use the event Calendar as a date field",
     "Do not add built-in label, hint, error text, help, or hideLabel — wrap with Field",
-    "Do not add time, Density, or a third field size",
+    "Do not add time or Density, and no size past lg",
     "Do not use raw hex"
   ],
-  "snippet": "<Field label=\"Start date\" htmlFor=\"start-date\"><DatePicker id=\"start-date\" value={date} onValueChange={setDate} /></Field>\n<Field label=\"Report period\" htmlFor=\"period\"><DatePicker id=\"period\" mode=\"range\" value={range} onValueChange={setRange} /></Field>"
+  "snippet": "<Field label=\"Start date\" htmlFor=\"start-date\"><DatePicker id=\"start-date\" value={date} onValueChange={setDate} /></Field>\n<Field label=\"Due date\" htmlFor=\"due\"><DatePicker id=\"due\" size=\"lg\" weekStart={1} minDate=\"2026-11-24\" isDateDisabled={isHoliday} /></Field>"
 }

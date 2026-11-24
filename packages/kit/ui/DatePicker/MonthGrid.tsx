@@ -49,9 +49,14 @@ function monthFromISO(iso?: string): Date {
   return startOfMonth(base);
 }
 
-function buildWeeks(view: Date): Date[][] {
+/** Days since the week's first day (0 Sunday or 1 Monday). */
+function weekOffset(date: Date, weekStart: 0 | 1): number {
+  return (date.getDay() - weekStart + 7) % 7;
+}
+
+function buildWeeks(view: Date, weekStart: 0 | 1): Date[][] {
   const first = new Date(view.getFullYear(), view.getMonth(), 1);
-  const start = new Date(view.getFullYear(), view.getMonth(), 1 - first.getDay());
+  const start = new Date(view.getFullYear(), view.getMonth(), 1 - weekOffset(first, weekStart));
   const weeks: Date[][] = [];
   for (let weekIndex = 0; weekIndex < 6; weekIndex += 1) {
     const week: Date[] = [];
@@ -71,12 +76,17 @@ function isSameDay(a: Date, b: Date): boolean {
   );
 }
 
-function dayIsDisabled(date: Date, minDate?: string, maxDate?: string, calendarDisabled?: boolean): boolean {
-  if (calendarDisabled) return true;
+/** A day outside minDate/maxDate or turned off by isDateDisabled: struck through and named unavailable. */
+function dayIsUnavailable(
+  date: Date,
+  minDate?: string,
+  maxDate?: string,
+  isDateDisabled?: (iso: string) => boolean,
+): boolean {
   const iso = toISODate(date);
   if (minDate && iso < minDate) return true;
   if (maxDate && iso > maxDate) return true;
-  return false;
+  return Boolean(isDateDisabled?.(iso));
 }
 
 function orderedSpan(from: string, to: string): { start: string; end: string } {
@@ -90,6 +100,7 @@ function dayName(
   rangeStart: boolean,
   rangeEnd: boolean,
   inRange: boolean,
+  unavailable: boolean,
 ): string {
   const label = date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -103,6 +114,7 @@ function dayName(
   if (rangeEnd && !rangeStart) extras.push("end of range");
   if (inRange) extras.push("in range");
   if (isSelected && !rangeStart && !rangeEnd) extras.push("selected");
+  if (unavailable) extras.push("unavailable");
   return extras.join(", ");
 }
 
@@ -116,6 +128,8 @@ export function MonthGrid({
   disabled = false,
   minDate,
   maxDate,
+  weekStart = 0,
+  isDateDisabled,
   view: viewProp,
   onViewChange,
   nav = "both",
@@ -166,7 +180,8 @@ export function MonthGrid({
 
   const today = new Date();
   const todayISO = toISODate(today);
-  const weeks = buildWeeks(view);
+  const weeks = buildWeeks(view, weekStart);
+  const weekdays = weekStart === 1 ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : WEEKDAYS;
   const monthLabel = view.toLocaleString("en-US", { month: "long", year: "numeric" });
 
   // With a shared hover (two grids), the preview follows the pointer only, not this grid's focus.
@@ -190,7 +205,7 @@ export function MonthGrid({
   }, [focusedISO, view]);
 
   function commit(date: Date) {
-    if (dayIsDisabled(date, minDate, maxDate, disabled)) return;
+    if (disabled || dayIsUnavailable(date, minDate, maxDate, isDateDisabled)) return;
     const iso = toISODate(date);
     if (!rangeMode && !isControlled) setUncontrolledValue(iso);
     onValueChange?.(iso);
@@ -232,10 +247,10 @@ export function MonthGrid({
         next = addDays(current, 7);
         break;
       case "Home":
-        next = addDays(current, -current.getDay());
+        next = addDays(current, -weekOffset(current, weekStart));
         break;
       case "End":
-        next = addDays(current, 6 - current.getDay());
+        next = addDays(current, 6 - weekOffset(current, weekStart));
         break;
       case "PageUp":
         next = addMonths(current, -1);
@@ -299,7 +314,7 @@ export function MonthGrid({
         onMouseLeave={() => setHoverISO(null)}
       >
         <div role="row" className={styles.weekdays}>
-          {WEEKDAYS.map((label) => (
+          {weekdays.map((label) => (
             <div key={label} role="columnheader" className={styles.weekday}>
               {label}
             </div>
@@ -318,7 +333,8 @@ export function MonthGrid({
                 ? isRangeStart || iso === span?.end
                 : Boolean(selectedDate && isSameDay(date, selectedDate));
               const isFocused = iso === focusedISO;
-              const dayDisabled = dayIsDisabled(date, minDate, maxDate, disabled);
+              const unavailable = dayIsUnavailable(date, minDate, maxDate, isDateDisabled);
+              const dayDisabled = disabled || unavailable;
 
               return (
                 <div
@@ -335,10 +351,11 @@ export function MonthGrid({
                     type="button"
                     className={styles.day}
                     tabIndex={isFocused ? 0 : -1}
-                    aria-label={dayName(date, isToday, isSelected, isRangeStart, isRangeEnd, isInRange)}
+                    aria-label={dayName(date, isToday, isSelected, isRangeStart, isRangeEnd, isInRange, unavailable)}
                     aria-disabled={dayDisabled || undefined}
                     data-outside={outside || undefined}
                     data-today={isToday || undefined}
+                    data-unavailable={unavailable || undefined}
                     data-selected={isSelected || undefined}
                     data-in-range={isInRange || undefined}
                     data-range-start={isRangeStart || undefined}

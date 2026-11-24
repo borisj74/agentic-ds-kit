@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { MonthGrid } from "./MonthGrid";
+import { OverlayHeader } from "../ModalCard/ModalCardParts";
 import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import controlStyles from "../shared/controls.module.css";
+import panelStyles from "../shared/pickerPanel.module.css";
+import { usePickerFocus } from "../shared/pickerPanel";
+import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import type { DatePickerProps, DatePickerRange } from "./DatePicker.types";
 import styles from "./DatePicker.module.css";
 import { useKitLabels } from "../shared/labels";
@@ -19,9 +23,6 @@ export type {
   DatePickerRangeProps,
   DatePickerSingleProps,
 } from "./DatePicker.types";
-
-const FOCUSABLE =
-  "a, button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
 
 function parseISODate(iso?: string): Date | null {
   if (!iso) return null;
@@ -54,6 +55,11 @@ function isRangeValue(value: string | DatePickerRange | undefined): value is Dat
   return typeof value === "object" && value !== null;
 }
 
+const CONTROL_SIZE = { sm: controlStyles.controlSm, md: controlStyles.controlMd, lg: controlStyles.controlLg } as const;
+const ICON_PX = { sm: 14, md: 16, lg: 18 } as const;
+
+let warnedRange = false;
+
 function nextRange(current: DatePickerRange | undefined, iso: string): DatePickerRange {
   if (!current?.start || current.end) return { start: iso };
   return iso < current.start ? { start: iso, end: current.start } : { start: current.start, end: iso };
@@ -69,6 +75,8 @@ export function DatePicker(props: DatePickerProps) {
     error = false,
     minDate,
     maxDate,
+    weekStart,
+    isDateDisabled,
     name,
     describedBy,
     className,
@@ -83,6 +91,7 @@ export function DatePicker(props: DatePickerProps) {
   const fallbackId = useId();
   const triggerId = id || fallbackId;
   const panelId = `${triggerId}-calendar`;
+  const titleId = `${triggerId}-calendar-title`;
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = useState<string | DatePickerRange | undefined>(defaultValue);
   const selected = isControlled ? value : uncontrolled;
@@ -96,7 +105,7 @@ export function DatePicker(props: DatePickerProps) {
   const display = isRange
     ? formatRange(isRangeValue(selected) ? selected : undefined)
     : formatDisplay(typeof selected === "string" ? selected : undefined);
-  const iconPx = size === "sm" ? 14 : 16;
+  const iconPx = ICON_PX[size];
   const picking = isRange ? (draft ?? (isRangeValue(selected) ? selected : undefined)) : undefined;
   const hiddenValue = isRange
     ? isRangeValue(selected)
@@ -108,81 +117,27 @@ export function DatePicker(props: DatePickerProps) {
       ? selected
       : "";
 
-  function closeOverlay() {
+  const closeOverlay = useCallback(() => {
     setOpen(false);
     setDraft(null);
     triggerRef.current?.focus();
-  }
+  }, []);
 
   function openOverlay() {
     setDraft(isRange && isRangeValue(selected) ? selected : null);
     setOpen(true);
   }
 
-  useEffect(() => {
-    if (!open) return undefined;
-
-    function onPointerDown(event: PointerEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-        setDraft(null);
-        triggerRef.current?.focus();
-      }
-    }
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setOpen(false);
-        setDraft(null);
-        triggerRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("pointerdown", onPointerDown);
-    // Capture phase: runs before a parent Modal/Drawer listener, which then skips the prevented Escape.
-    document.addEventListener("keydown", onKeyDown, true);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown, true);
-    };
-  }, [open]);
+  // Escape (only when this is the newest open overlay) and a pointer down outside close the panel.
+  useOverlayDismiss(open, rootRef, closeOverlay);
+  usePickerFocus(open, panelRef);
 
   useEffect(() => {
-    if (!open) return undefined;
-
-    const root = panelRef.current;
-    if (!root) return undefined;
-
-    const getFocusable = () => Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
-    const firstFocusable = getFocusable()[0];
-    (firstFocusable ?? root).focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") return;
-
-      const items = getFocusable();
-      if (items.length === 0) return;
-
-      const first = items[0];
-      const last = items[items.length - 1];
-      const active = document.activeElement;
-      const inside = active instanceof Node && root.contains(active);
-
-      if (event.shiftKey) {
-        if (!inside || active === first) {
-          event.preventDefault();
-          last.focus();
-        }
-      } else if (!inside || active === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+    if (isRange && !warnedRange && process.env.NODE_ENV !== "production") {
+      warnedRange = true;
+      console.warn("DatePicker mode=\"range\" is deprecated. Use DateRangePicker (presets={[]} for the month grid only).");
+    }
+  }, [isRange]);
 
   function commitSingle(iso: string) {
     if (!isControlled) setUncontrolled(iso);
@@ -226,7 +181,7 @@ export function DatePicker(props: DatePickerProps) {
         aria-describedby={describedBy}
         className={cx(
           controlStyles.control,
-          size === "sm" ? controlStyles.controlSm : controlStyles.controlMd,
+          CONTROL_SIZE[size],
           error && controlStyles.controlError,
           styles.trigger,
         )}
@@ -244,19 +199,30 @@ export function DatePicker(props: DatePickerProps) {
         <div
           ref={panelRef}
           id={panelId}
-          className={styles.panel}
+          className={cx(panelStyles.panel, size === "sm" && panelStyles.sm)}
           role="dialog"
           aria-modal="true"
           aria-label={isRange ? labels.chooseDates : labels.chooseDate}
           data-kit-date-panel=""
           tabIndex={-1}
         >
+          <OverlayHeader
+            className={panelStyles.header}
+            icon="CalendarDays"
+            eyebrow={isRange ? rangeStatus : display || resolvedPlaceholder}
+            title={isRange ? labels.chooseDates : labels.chooseDate}
+            titleId={titleId}
+            descriptionId={`${titleId}-description`}
+            onClose={closeOverlay}
+          />
           {isRange ? (
-            <span className={styles.srOnly} aria-live="polite">
+            <span className={panelStyles.srOnly} aria-live="polite">
               {rangeStatus}
             </span>
           ) : null}
+          <div className={cx(styles.body, size === "sm" && styles.bodySm)} data-part="body" data-autofocus="">
           <MonthGrid
+            bare
             size={size === "sm" ? "sm" : "md"}
             value={isRange ? undefined : typeof selected === "string" ? selected : undefined}
             start={picking?.start}
@@ -265,7 +231,10 @@ export function DatePicker(props: DatePickerProps) {
             disabled={disabled}
             minDate={minDate}
             maxDate={maxDate}
+            weekStart={weekStart}
+            isDateDisabled={isDateDisabled}
           />
+          </div>
         </div>
       ) : null}
     </div>

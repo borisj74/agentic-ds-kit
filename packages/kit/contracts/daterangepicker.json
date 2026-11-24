@@ -2,20 +2,20 @@
   "id": "daterangepicker",
   "status": "stable",
   "level": "molecule",
-  "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
+  "intent": "Pick a date range from named presets such as This month or Last 30 days, from two months side by side, or by typing the start and end, then Apply.",
   "useWhen": [
     "A report or filter period with presets like This month or Last 30 days",
-    "A start and end date in one field"
+    "A start and end date in one field",
+    "A range with no presets — pass presets={[]}"
   ],
   "doNotUseWhen": [
     "One date — use DatePicker",
-    "A range with no named presets — use DatePicker mode=range",
     "A schedule of events — use Calendar"
   ],
   "contains": ["datepicker"],
   "props": {
     "id": { "type": "string", "required": true },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Trigger height sm 32, md 36, lg 40, like Input." },
     "value": {
       "type": "{ start: string, end?: string }",
       "required": false,
@@ -33,6 +33,12 @@
     "error": { "type": "boolean", "default": false },
     "minDate": { "type": "string", "required": false },
     "maxDate": { "type": "string", "required": false },
+    "weekStart": { "type": "enum", "values": [0, 1], "default": 0, "note": "First day of the week: 0 Sunday, 1 Monday." },
+    "isDateDisabled": {
+      "type": "function",
+      "required": false,
+      "note": "(date: string) => boolean. Turns single days off. Those days, and days outside minDate/maxDate, are struck through, named unavailable, and refused by the typed fields."
+    },
     "name": { "type": "string", "required": false, "note": "Hidden input submits start/end, like 2026-10-01/2026-10-31" },
     "describedBy": { "type": "string", "required": false }
   },
@@ -40,6 +46,8 @@
   "tokens": [
     "text.primary",
     "text.muted",
+    "text.disabled",
+    "font.mono",
     "icon.muted",
     "surface.card",
     "surface.muted",
@@ -53,10 +61,13 @@
       "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, and aria-controls",
       "Overlay is role=dialog aria-modal labelled Choose dates and contains the month grid",
-      "Presets sit on the start and two months side by side (one below 40rem). A preset, or a first and second day click, sets a pending range; Apply commits it and closes. Cancel, Escape, or a click outside leave the value as it was",
+      "Presets sit on the start and two months side by side. A preset, a first and second day click, or a valid typed start and end sets a pending range; Apply commits it and closes. Cancel, Close, Escape, or a click outside leave the value as it was",
+      "Header is the shared overlay header: CalendarDays icon, the pending range status as the eyebrow (Pick a start date, Pick an end date, or the range), the Choose dates title, and Close",
+      "Footer: typed start and end fields (YYYY-MM-DD, named by the startDate and endDate labels, with the rangeTo word between them), then Cancel and Apply. A typed day outside minDate/maxDate or turned off by isDateDisabled shows the field error and does not change the range",
+      "Below 40rem the panel opens as the kit Drawer bottom sheet: presets, one month and the typed fields in the body, Cancel and Apply in the sheet footer",
       "Escape closes and returns focus to the trigger. Tab stays inside the dialog",
       "Must have a Field label pointing at id",
-      "built-in labels (previousMonth, nextMonth, chooseDates, presets) come from KitLabelsProvider; English by default"
+      "built-in labels (previousMonth, nextMonth, chooseDates, presets, startDate, endDate, rangeTo, close) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [

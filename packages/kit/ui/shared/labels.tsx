@@ -36,6 +36,10 @@ export interface KitLabels {
   chooseDateAndTime: string;
   /** DateRangePicker: the preset buttons group. */
   presets: string;
+  /** DateRangePicker footer: the typed start and end fields, and the word between them. */
+  startDate: string;
+  endDate: string;
+  rangeTo: string;
   /** DateTimePicker: the time field. */
   time: string;
   /** TimePicker segments. */
@@ -154,6 +158,9 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   chooseDates: "Choose dates",
   chooseDateAndTime: "Choose date and time",
   presets: "Presets",
+  startDate: "Start date",
+  endDate: "End date",
+  rangeTo: "to",
   time: "Time",
   hour: "Hour",
   minute: "Minute",

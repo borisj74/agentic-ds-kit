@@ -17,7 +17,9 @@ import { PageHeader } from "../../ui/PageHeader";
 import { Scoreboard } from "../../ui/Scoreboard";
 import type { ScorecardProps } from "../../ui/Scorecard";
 import { SegmentedControl } from "../../ui/SegmentedControl";
-import { Select } from "../../ui/Select";
+import { DateRangePicker } from "../../ui/DateRangePicker";
+import type { DateRange } from "../../ui/DateRangePicker";
+import { Field } from "../../ui/Field";
 import { Skeleton } from "../../ui/Skeleton";
 import { Switch } from "../../ui/Switch";
 import { Table } from "../../ui/Table";
@@ -52,6 +54,40 @@ import {
   type DashboardPeriod,
 } from "./dashboard-data";
 import "./DashboardPattern.css";
+
+/** The demo's last day (dashboard-data END) and the three periods as DateRangePicker presets. */
+const PERIOD_END = "2026-11-20";
+const PERIOD_DAYS: Record<DashboardPeriod, number> = { "30d": 30, "3m": 91, "12m": 364 };
+
+function daysBefore(iso: string, days: number): string {
+  const [year, month, day] = iso.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day - days + 1)).toISOString().slice(0, 10);
+}
+
+function rangeLabel(range: DateRange): string {
+  const fmt = (iso: string) => {
+    const [year, month, day] = iso.split("-").map(Number);
+    return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  };
+  return range.end ? `${fmt(range.start)} – ${fmt(range.end)}` : fmt(range.start);
+}
+
+const PERIOD_PRESETS = PERIODS.map(({ value, label }) => ({
+  id: value,
+  label,
+  start: daysBefore(PERIOD_END, PERIOD_DAYS[value]),
+  end: PERIOD_END,
+}));
+
+/** A custom range shows the demo data of the period closest to its length. */
+function nearestPeriod(range: DateRange): DashboardPeriod {
+  const [sy, sm, sd] = range.start.split("-").map(Number);
+  const [ey, em, ed] = (range.end ?? range.start).split("-").map(Number);
+  const days = Math.round((Date.UTC(ey, em - 1, ed) - Date.UTC(sy, sm - 1, sd)) / 86400000) + 1;
+  if (days <= 60) return "30d";
+  if (days <= 182) return "3m";
+  return "12m";
+}
 
 export type { DashboardGranularity, DashboardMetric, DashboardMetricId, DashboardPeriod } from "./dashboard-data";
 
@@ -344,7 +380,9 @@ export function DashboardPattern({
   // A granularity the period does not offer falls back to the period's first one.
   const allowed = granularitiesFor(period);
   const granularity = allowed.includes(granularityRaw) ? granularityRaw : allowed[allowed.length - 1];
-  const periodLabel = PERIODS.find((p) => p.value === period)?.label ?? "";
+  // A custom range from the period DateRangePicker; the demo data follows the nearest period.
+  const [customRange, setCustomRange] = useState<DateRange | null>(null);
+  const periodLabel = customRange ? rangeLabel(customRange) : (PERIODS.find((p) => p.value === period)?.label ?? "");
 
   const metrics = metricsProp ?? metricsFor(period, granularity);
   const hasData = metrics.length > 0;
@@ -497,14 +535,20 @@ export function DashboardPattern({
     <div className="dashboard-pattern__body">
       <div className="dashboard-pattern__controls" role="group" aria-label="Chart controls">
         <div className="dashboard-pattern__period">
-          <Select
-            id="dashboard-period"
-            size="sm"
-            ariaLabel="Period"
-            value={period}
-            onChange={(value) => setPeriod(value as DashboardPeriod)}
-            options={PERIODS.map(({ value, label }) => ({ value, label }))}
-          />
+          <Field label="Period" htmlFor="dashboard-period" labelPosition="start">
+            <DateRangePicker
+              id="dashboard-period"
+              size="sm"
+              presets={PERIOD_PRESETS}
+              maxDate={PERIOD_END}
+              value={customRange ?? PERIOD_PRESETS.find((p) => p.id === period)}
+              onValueChange={(range) => {
+                const preset = PERIOD_PRESETS.find((p) => p.start === range.start && p.end === range.end);
+                setCustomRange(preset ? null : range);
+                setPeriod(preset ? (preset.id as DashboardPeriod) : nearestPeriod(range));
+              }}
+            />
+          </Field>
         </div>
         <SegmentedControl
           size="sm"
