@@ -72,7 +72,7 @@ export function CollapsibleDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Title on the left. ChevronsUpDown toggles the body. Not Accordion.
+            The whole header row is the button. The chevron turns down when open. Not Accordion.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -115,8 +115,8 @@ export function CollapsibleDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  One panel. The title is not the button. Use Accordion when two or more related
-                  sections open one at a time. Compose kit pieces in children — never a local cousin.
+                  One panel. Click anywhere on the header row to toggle it. Use Accordion when two or more related
+                  sections fold together. Compose kit pieces in children — never a local cousin.
                 </p>
               </div>
               <CodeBlock code={masterCode()} />

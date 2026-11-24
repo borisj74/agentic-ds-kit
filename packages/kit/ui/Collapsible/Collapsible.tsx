@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import type { CollapsibleProps } from "./Collapsible.types";
 import { cx } from "../shared/cx";
@@ -24,7 +24,6 @@ export function Collapsible({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const open = isControlled ? openProp : uncontrolledOpen;
   const uid = useId();
-  const titleId = `${uid}-title`;
   const buttonId = `${uid}-trigger`;
   const panelId = `${uid}-panel`;
 
@@ -35,26 +34,26 @@ export function Collapsible({
 
   return (
     <div {...rest} {...nisthaAttr("collapsible", rest)} ref={ref} className={cx(styles.root, className)}>
-      <div className={styles.header}>
-        <p id={titleId} className={styles.title}>
-          {trigger}
-        </p>
-        <button
-          type="button"
-          id={buttonId}
-          className={styles.toggle}
-          aria-expanded={open}
-          aria-controls={panelId}
-          aria-label={`Toggle ${trigger}`}
-          onClick={() => setOpen(!open)}
-        >
-          <ChevronsUpDown size={16} strokeWidth={ICON_STROKE} aria-hidden />
-        </button>
-      </div>
+      <button
+        type="button"
+        id={buttonId}
+        className={styles.header}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen(!open)}
+      >
+        <ChevronRight
+          className={cx(styles.chevron, open && styles.chevronOpen)}
+          size={16}
+          strokeWidth={ICON_STROKE}
+          aria-hidden
+        />
+        <span className={styles.title}>{trigger}</span>
+      </button>
       <div
         id={panelId}
         role="region"
-        aria-labelledby={titleId}
+        aria-labelledby={buttonId}
         className={styles.panel}
         hidden={!open}
       >

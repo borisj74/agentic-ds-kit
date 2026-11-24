@@ -224,7 +224,7 @@
   },
   {
     "id": "collapsible",
-    "intent": "Single show/hide panel with a title and a toggle.",
+    "intent": "Single show/hide panel. The whole header row is the toggle.",
     "group": "component",
     "path": "contracts/collapsible.json",
     "status": "stable",
@@ -720,7 +720,7 @@
   },
   {
     "id": "accordion",
-    "intent": "One-open disclosure list for short related sections.",
+    "intent": "Disclosure list for short related sections: one open at a time, or several with type multiple.",
     "group": "component",
     "path": "contracts/accordion.json",
     "status": "stable",
