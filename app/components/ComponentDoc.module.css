@@ -524,6 +524,12 @@
   border-radius: var(--radius-control-sm);
 }
 
+/* Wraps the master render in the Stage Preview tab. The Controls toggle row only shows on small
+   screens. */
+.controlsBar {
+  display: none;
+}
+
 /* When the preview area itself is narrow (side nav or Theme panel open), the panel drops under
    the canvas instead of squeezing it. */
 @container (max-width: 48rem) {
@@ -559,6 +565,22 @@
     align-self: stretch;
     width: auto;
     margin-top: var(--space-4);
+  }
+
+  /* In the Stage Preview tab the panel folds behind a toggle in its own row above the canvas;
+     open, it sits full width under the canvas. */
+  .controlsBar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--space-3);
+  }
+
+  .controlsHost .panel {
+    display: none;
+  }
+
+  .controlsHost[data-controls-open] .panel {
+    display: grid;
   }
 }
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { CodeSnippet, SegmentedControl, Tabs } from "agentic-ds-kit";
+import { Button, CodeSnippet, SegmentedControl, Tabs } from "agentic-ds-kit";
 import {
   componentPrompt,
   contractJson,
@@ -48,6 +48,47 @@ function CopyPrompt({ id }: { id: string }) {
   );
 }
 
+/**
+ * Wraps a doc's master render. On small screens its Controls panel (the doc's
+ * `aside[aria-label="Controls"]`) folds behind a toggle in its own row above the canvas, so the
+ * toggle never covers the component; wide screens ignore it.
+ */
+function ControlsHost({ children }: { children: ReactNode }) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [hasControls, setHasControls] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // Docs mount their panel on the client, so watch the subtree instead of checking once.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return undefined;
+    const check = () => setHasControls(Boolean(host.querySelector('aside[aria-label="Controls"]')));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(host, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={hostRef} className={docStyles.controlsHost} data-controls-open={open ? "" : undefined}>
+      {hasControls ? (
+        <div className={docStyles.controlsBar}>
+          <Button
+            size="md"
+            appearance={open ? "soft" : "outline"}
+            mode="neutral"
+            iconStart={open ? "X" : "SlidersHorizontal"}
+            ariaLabel={open ? "Hide controls" : "Show controls"}
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          />
+        </div>
+      ) : null}
+      {children}
+    </div>
+  );
+}
+
 const VIEW_ICONS: Record<StageTab, string> = {
   preview: "Eye",
   variants: "LayoutGrid",
@@ -74,7 +115,9 @@ export function ComponentStage({ id, doc }: { id: string; doc?: ReactNode }) {
         // The doc's own master render, the same view the Variants tab uses.
         <PreviewScope className={`${docStyles.examplesHost} ${docStyles.previewHost}`}>
           <StageThemeLabel />
-          <DocViewProvider mode="preview">{doc}</DocViewProvider>
+          <ControlsHost>
+            <DocViewProvider mode="preview">{doc}</DocViewProvider>
+          </ControlsHost>
         </PreviewScope>
       ) : (
         <PreviewScope className={styles.stage}>
