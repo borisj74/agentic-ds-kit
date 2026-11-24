@@ -181,8 +181,7 @@
     "status.info",
     "text.muted",
     "radius.pill",
-    "bg.track",
-    "action.selected.border"
+    "bg.track"
   ],
   "a11y": {
     "element": "div[role=list|listbox]",
@@ -200,7 +199,7 @@
       "priority bars are aria-hidden; the priority word is visible at the start of the secondary line and in the row name",
       "A row action with actionLabel is named by it (aria-labelledby a hidden span); without it the button's name is its visible label. actionLabel starts with the visible label so speech input still matches",
       "value is part of the row name, after the secondary line; a group total is part of the group's name",
-      "A selected row shows the fill, a 2px left edge and a heavier name, and still sets aria-selected; focus keeps the outline ring"
+      "A selected row shows the fill and a heavier name, and still sets aria-selected; focus keeps the outline ring"
     ]
   },
   "doNot": [

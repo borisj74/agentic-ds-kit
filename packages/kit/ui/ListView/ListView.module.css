@@ -100,10 +100,9 @@ button.groupHeader:focus-visible {
   background-color: var(--surface-muted);
 }
 
-/* Selected: the fill, a 2px left edge and a heavier name. Focus keeps its outline ring. */
+/* Selected: the fill plus a heavier name, so the state never rests on colour alone. Focus keeps its outline ring. */
 .row[data-selected] {
   background-color: var(--action-selected);
-  box-shadow: inset var(--space-px) 0 0 var(--action-selected-border);
 }
 
 .row[data-selected] .primary {

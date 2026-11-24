@@ -5,4 +5,4 @@
 
 ### Changed
 
-- A selected ListView row now shows a 2px left edge and a heavier name on top of the selected fill. Focus keeps its outline ring.
+- A selected ListView row now shows a heavier name on top of the selected fill. Focus keeps its outline ring.

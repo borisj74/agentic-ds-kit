@@ -197,7 +197,7 @@ export function ListViewDoc() {
                 <p className={styles.usageBody}>
                   value puts an amount on the right of the name in tabular figures, with meta and the badge under
                   it. A group&apos;s total sits on the right of its header. Format both yourself. The selected
-                  row gets a 2px edge and a heavier name on top of the fill.
+                  row gets a heavier name on top of the fill.
                 </p>
               </div>
               <CodeBlock
