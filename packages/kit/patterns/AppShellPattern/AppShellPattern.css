@@ -316,16 +316,29 @@ aside.app-shell-pattern__panel > .app-shell-pattern__panel-card {
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
   min-height: 0;
+  /* The header stays put; only the tab panel scrolls. */
+  overflow: hidden;
   padding: var(--space-inset-lg);
   background: var(--surface-card);
   border-radius: var(--radius-0);
   box-shadow: none;
 }
 
+/* ModalCard's body is a plain block: make it a stretching column so the Tabs below can fill it. */
+aside.app-shell-pattern__panel > .app-shell-pattern__panel-card > [data-part="body"] {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 /* The Tabs take the panel's remaining height (Tabs fill), so a full-height tab such as Chat embedded reaches the bottom. */
 .app-shell-pattern__panel-tabs {
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.app-shell-pattern__panel-tabs > [role="tabpanel"] {
+  overflow: auto;
 }
 
 .app-shell-pattern__panel-head {
