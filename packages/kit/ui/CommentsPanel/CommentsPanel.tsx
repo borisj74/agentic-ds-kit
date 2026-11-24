@@ -12,6 +12,7 @@ import { Skeleton } from "../Skeleton";
 import { LoadError } from "../shared/LoadError";
 import { cx } from "../shared/cx";
 import { NARROW_QUERY, WIDE_QUERY, useMediaQuery } from "../shared/useMediaQuery";
+import { useIsClient } from "../shared/useIsClient";
 import type { CommentsFilter, CommentsPanelProps, CommentThreadSummary } from "./CommentsPanel.types";
 import styles from "./CommentsPanel.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -59,8 +60,10 @@ export function CommentsPanel({
   // On a phone, Close, Back and Resolve grow to md (36) for touch.
   const narrow = useMediaQuery(NARROW_QUERY);
   // "auto": docked beside the page from --grid-breakpoint-lg while open, the Drawer below that.
+  // The 80rem query reads false on the server and during hydration, so wait for the client before choosing.
   const wide = useMediaQuery(WIDE_QUERY);
-  const docked = inline === true || (inline === "auto" && wide && open);
+  const ready = useIsClient();
+  const { docked, drawer: useDrawer } = panelPlacement({ inline, open, wide, ready });
 
   const body = (
     <Body
@@ -105,7 +108,6 @@ export function CommentsPanel({
   }
 
   const trigger = showTrigger ?? true;
-  const useDrawer = !(inline === "auto" && wide);
   return (
     <div {...rest} {...nisthaAttr("commentspanel", rest)} ref={ref} className={cx(styles.root, className)}>
       {trigger ? (
@@ -148,6 +150,28 @@ export function CommentsPanel({
       ) : null}
     </div>
   );
+}
+
+/**
+ * Where the panel renders. inline={true} is always docked. inline="auto" docks from --grid-breakpoint-lg while
+ * open and uses the Drawer below that, but only once the client has resolved the query: until then (server
+ * markup, hydration) it renders the trigger alone, so a wide first paint never flashes the Drawer.
+ */
+export function panelPlacement({
+  inline,
+  open,
+  wide,
+  ready,
+}: {
+  inline: boolean | "auto";
+  open: boolean;
+  wide: boolean;
+  ready: boolean;
+}): { docked: boolean; drawer: boolean } {
+  if (inline === true) return { docked: true, drawer: false };
+  if (inline !== "auto") return { docked: false, drawer: true };
+  if (!ready) return { docked: false, drawer: false };
+  return { docked: wide && open, drawer: !wide };
 }
 
 function Body({
