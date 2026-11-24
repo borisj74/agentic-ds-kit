@@ -57,6 +57,12 @@
   min-width: 0;
 }
 
+/* Wide: the sm tab list (32) sits centred on the md Copy buttons (40) that share its row, so the
+   row is as tall as the buttons and the panel starts a full gap below them. */
+.tabs [role="tablist"] {
+  margin-block: var(--space-1);
+}
+
 .stage {
   position: relative;
   display: flex;

@@ -135,8 +135,10 @@
 }
 
 .canvas {
-  grid-area: 1 / 1;
+  grid-column: 1;
+  grid-row: 1;
   display: grid;
+  min-width: 0;
   place-items: center;
   min-height: calc(var(--space-16) * 5);
   padding: var(--space-6);
@@ -148,8 +150,18 @@
   min-height: calc(var(--space-16) * 9);
 }
 
+/* With a Controls panel the canvas takes the remaining width and the panel gets its own
+   sidebar-wide column, so the panel never covers the component. */
+.layout:has(.panel) {
+  grid-template-columns: minmax(0, 1fr) var(--layout-sidebar);
+  column-gap: var(--space-6);
+  container-type: inline-size;
+}
+
+/* One track that can shrink below its content, so wide content (Table) scrolls inside its own
+   wrapper instead of spilling into the panel column. */
 .layout:has(.panel) .canvas {
-  padding-right: calc(var(--layout-sidebar) + var(--space-6));
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .previewFill {
@@ -197,8 +209,8 @@
 }
 
 .panel {
-  grid-area: 1 / 1;
-  justify-self: end;
+  grid-column: 2;
+  grid-row: 1;
   align-self: start;
   z-index: 1;
   display: grid;
@@ -512,13 +524,39 @@
   border-radius: var(--radius-control-sm);
 }
 
-/* Wraps the master render in the Stage Preview tab. The toggle only shows on small screens. */
+/* Wraps the master render in the Stage Preview tab. The Controls toggle only shows on small
+   screens. */
 .controlsHost {
   position: relative;
 }
 
 .controlsToggle {
   display: none;
+}
+
+/* The doc's panel inside the bottom Drawer: the Drawer is the frame, so the panel drops its own. */
+.controlsDrawer .panel {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+/* When the preview area itself is narrow (side nav or Theme panel open), the panel drops under
+   the canvas instead of squeezing it. */
+@container (max-width: 48rem) {
+  .canvas {
+    grid-column: 1 / -1;
+  }
+
+  .panel {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: auto;
+    margin-top: var(--space-4);
+  }
 }
 
 @media (max-width: 860px) {
@@ -532,44 +570,36 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .layout:has(.panel) .canvas {
-    padding-right: var(--space-6);
-  }
-
   .canvas {
-    grid-area: auto;
     min-height: calc(var(--space-16) * 3);
-    padding-inline-end: var(--space-6);
   }
 
-  /* .layout is a flex column here, so the panel stretches with align-self (justify-self does nothing). */
+  /* .layout is a flex column here: the panel sits full width under the canvas. */
   .panel {
-    grid-area: auto;
     align-self: stretch;
-    justify-self: stretch;
     width: auto;
-    margin: var(--space-3);
+    margin-top: var(--space-4);
   }
 
-  /* In the Stage Preview tab the panel folds behind a toggle in the canvas corner; open, it sits
-     full width under the canvas. */
+  /* In the Stage Preview tab the panel opens in a bottom Drawer from a toggle in the canvas
+     corner. The canvas keeps a toggle-high band clear at the top so the toggle covers nothing. */
   .controlsToggle {
     position: absolute;
     top: var(--space-3);
     right: var(--space-3);
-    z-index: 3;
+    z-index: 2;
     display: inline-flex;
-    inline-size: calc(var(--space-10) + var(--space-1));
-    block-size: calc(var(--space-10) + var(--space-1));
-    padding: 0;
-    justify-content: center;
+  }
+
+  .controlsHost .layout:has(> .panel) > :first-child {
+    padding-top: calc(var(--space-10) + var(--space-3));
   }
 
   .controlsHost .panel {
     display: none;
   }
 
-  .controlsHost[data-controls-open] .panel {
+  .controlsDrawer .panel {
     display: grid;
   }
 }
