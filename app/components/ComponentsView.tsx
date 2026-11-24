@@ -42,6 +42,7 @@ import { DividerDoc } from "./DividerDoc";
 import { DrawerDoc } from "./DrawerDoc";
 import { DropdownMenuDoc } from "./DropdownMenuDoc";
 import { EmptyDoc } from "./EmptyDoc";
+import { LoadErrorDoc } from "./LoadErrorDoc";
 import { FieldDoc } from "./FieldDoc";
 import { FieldSetDoc } from "./FieldSetDoc";
 import { FileUploadDoc } from "./FileUploadDoc";
@@ -254,6 +255,7 @@ const TITLES: Record<string, string> = {
   drawer: "Drawer",
   dropdownmenu: "DropdownMenu",
   empty: "Empty",
+  loaderror: "LoadError",
   pageheader: "PageHeader",
   pagination: "Pagination",
   piechart: "Pie",
@@ -461,6 +463,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "drawer") return <DrawerDoc />;
   if (resolved === "dropdownmenu") return <DropdownMenuDoc />;
   if (resolved === "empty") return <EmptyDoc />;
+  if (resolved === "loaderror") return <LoadErrorDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "fieldset") return <FieldSetDoc />;
   if (resolved === "filterbar") return <FilterBarDoc />;

@@ -4,7 +4,7 @@ import { BarChart3, Table2 } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { useId, useState, type ComponentPropsWithoutRef, type ReactNode, type Ref } from "react";
 import { cx } from "./cx";
-import { LoadError } from "./LoadError";
+import { LoadError } from "../LoadError";
 import styles from "./ChartFrame.module.css";
 
 /** Figure attributes the frame sets itself (`title` is the chart heading, not a tooltip). */

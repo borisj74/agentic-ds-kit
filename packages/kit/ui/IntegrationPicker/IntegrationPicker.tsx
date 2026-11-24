@@ -9,7 +9,7 @@ import { Empty } from "../Empty";
 import { Input } from "../Input";
 import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { CONNECTED_CATEGORY, connectedCount, drawerState, filterItems, tileState } from "./integrationPicker.logic";
 import { IntegrationTile } from "./IntegrationTile";

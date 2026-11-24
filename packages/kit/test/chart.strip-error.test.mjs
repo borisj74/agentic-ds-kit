@@ -63,11 +63,11 @@ describe("LineChart frame", () => {
     assert.match(render(), /height="240"/);
   });
 
-  test("error replaces the plot with an alert and Retry", () => {
+  test("error replaces the plot with an alert and Try again", () => {
     const html = render({ error: "Stripe didn't answer in time.", onRetry: () => undefined });
     assert.match(html, /role="alert"/);
     assert.match(html, /Stripe didn(&#x27;|')t answer in time\./);
-    assert.match(html, /Retry/);
+    assert.match(html, /Try again/);
     assert.doesNotMatch(html, /<svg[^>]*role="group"/);
   });
 
@@ -99,10 +99,10 @@ describe("ComboChart frame states", () => {
       }),
     );
 
-  test("error shows the alert row with Retry", () => {
+  test("error shows the alert row with Try again", () => {
     const html = render({ error: "Stripe didn't answer in time.", onRetry: () => undefined });
     assert.match(html, /role="alert"/);
-    assert.match(html, /Retry/);
+    assert.match(html, /Try again/);
   });
 
   test("loading sets aria-busy; emptyLabel replaces the default text", () => {

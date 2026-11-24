@@ -8,7 +8,7 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Empty } from "../Empty";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import type { TaskBoardCard, TaskBoardColumn, TaskBoardProps } from "./TaskBoard.types";
 import styles from "./TaskBoard.module.css";

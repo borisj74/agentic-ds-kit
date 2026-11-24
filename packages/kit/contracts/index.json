@@ -575,6 +575,14 @@
     "level": "molecule"
   },
   {
+    "id": "loaderror",
+    "intent": "What a list, card, chart or page shows when its data failed to load: an icon, what failed, a reference and Try again.",
+    "group": "component",
+    "path": "contracts/loaderror.json",
+    "status": "stable",
+    "level": "molecule"
+  },
+  {
     "id": "navigationmenu",
     "intent": "Horizontal site nav. Dropdowns are kit DropdownMenu. Not SideNav. Not AppNav.",
     "group": "component",

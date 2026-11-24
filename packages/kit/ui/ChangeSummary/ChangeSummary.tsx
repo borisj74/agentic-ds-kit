@@ -7,7 +7,7 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Empty } from "../Empty";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import type { ChangeItem, ChangeSummaryProps } from "./ChangeSummary.types";
 import { groupBySentiment } from "./changeSummary.logic";

@@ -59,6 +59,8 @@ export interface KitLabels {
   files: string;
   uploading: (fileName: string) => string;
   retry: string;
+  /** LoadError (and every kit piece that shows one): the retry Button. */
+  tryAgain: string;
   retryFile: (fileName: string) => string;
   removeFile: (fileName: string) => string;
   /** TagInput: the suggestion list. */
@@ -176,6 +178,7 @@ export const DEFAULT_KIT_LABELS: KitLabels = {
   files: "Files",
   uploading: (fileName) => `Uploading ${fileName}`,
   retry: "Retry",
+  tryAgain: "Try again",
   retryFile: (fileName) => `Retry ${fileName}`,
   removeFile: (fileName) => `Remove ${fileName}`,
   suggestions: "Suggestions",

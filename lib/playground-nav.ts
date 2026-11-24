@@ -60,6 +60,7 @@ export const COMPONENT_ITEMS = [
   "drawer",
   "dropdownmenu",
   "empty",
+  "loaderror",
   "experimentcard",
   "field",
   "fieldset",
@@ -218,6 +219,7 @@ export function componentLabel(id: string): string {
   if (id === "navigationmenu") return "NavigationMenu";
   if (id === "piechart") return "Pie";
   if (id === "progresssteps") return "ProgressSteps";
+  if (id === "loaderror") return "LoadError";
   if (id === "scorecard") return "Scorecard";
   if (id === "scoreboard") return "Scoreboard";
   if (id === "sidenav") return "SideNav";
@@ -350,6 +352,7 @@ export const COMPONENT_GROUPS = [
       "delta",
       "kbd",
       "empty",
+      "loaderror",
       "progress",
       "progresssteps",
       "skeleton",
