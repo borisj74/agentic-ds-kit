@@ -7887,12 +7887,13 @@
       ],
       "doNot": [
         "Do not invent Sidebar, SidebarHeader, SidebarNav, SidebarSection, SidebarItem, SidebarSubmenu, SidebarFooter, SidebarProvider, SidebarTrigger, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, or SidebarRail",
+        "Do not hand-build a closed-rail flyout or menu for a parent's children; nested SideNav.Item children already open one on the closed rail",
         "Do not hand-roll nav rows (a, button, li with your own active/hover styles) inside SideNav — use SideNav.Item, which carries aria-current, the disclosure attributes and the closed-rail tooltip",
         "Do not nest SideNav.Item deeper than one level, or put rows outside a SideNav.Section",
         "Do not use SideNav.Root without a SideNav.Toggle or SideNav.Brand in its header when the rail can close — nothing would reopen it",
         "Do not compose AppNav inside SideNav",
         "Do not use Drawer for persistent app chrome",
-        "Do not use AppNav as closeable product chrome",
+        "Do not use AppNav as closeable product chrome: SideNav is product chrome, AppNav is the docs catalog nav only",
         "Do not leave a gap between AppHeader and SideNav — radius none, showHeader false, layout-app with no gap",
         "Do not give SideNav itself position:fixed, an overlay, a focus trap, or Escape-to-close; on narrow screens render it inside kit Drawer",
         "Keep the nav reachable on narrow screens: a kit Button that opens it in kit Drawer (as app-shell does), not a hand-rolled overlay or menu",
@@ -7963,7 +7964,7 @@
         "items": {
           "type": "array",
           "required": false,
-          "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
+          "note": "SideNavItemData[] (id, label, href, onClick, icon, active, disabled, badge, items). badge: digits (e.g. \"3\") render as a kit Count (neutral subtle, brand subtle on the active row) and join the closed-rail tooltip; other text keeps the plain pill. icon: a curated Lucide name (any other name needs import \"agentic-ds-kit/icons-on-demand\") or a Lucide component (client code only; from a Server Component use a name). Flat list when groups is omitted. Leaf onClick is in-app select; href is a link when onClick is omitted."
         },
         "footer": {
           "type": "slot",
@@ -14340,12 +14341,12 @@
         "search": {
           "type": "object",
           "required": false,
-          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size sm, with a Zap icon, the Quick actions placeholder and a ⌘K hint, then an icon-only ghost sm search Button (Tooltip searchLabel; runs onSearch, else opens the command menu). Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
+          "note": "Props nav only; same API in both layouts. A slot directly under the brand (or at the top of the nav when a top bar holds the brand): one row: a read-only kit Input type=search, size md (36px), with a Search icon, the Quick actions placeholder and a ⌘K hint, then, only when onSearch is set, an icon-only ghost md search Button (Tooltip searchLabel) that runs onSearch. Without onSearch the field alone opens the command menu, so there is no duplicate control. Clicking it, Enter, typing in it, or ⌘K / Ctrl+K anywhere opens the kit command menu: Command inside a Modal titled title (default Search), with focus in the command input. Picking a command closes the menu, then calls onSelect. On the collapsed rail the slot stays (SideNavSlot keepOnRail) as a SideNav.Item row (Search icon), so it gets the rail chip and the same kit Tooltip outside the rail edge as the nav rows. In the narrow Drawer the field opens the menu after closing the Drawer. With shortcut false there is no hint and no key listener."
         },
         "notifications": {
           "type": "object",
           "required": false,
-          "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel: title with an icon-only settings Button, kit Tabs (one per tab, label with its unread count), each a kit ListView (size sm, drill; title, body · time, New badge for unread) or kit Empty (with an outline settings Button) when empty. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon with a dot for unread, same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
+          "note": "Props nav only; same in both layouts. Notifications is the first row of the main nav: SideNav.Item with the Bell icon, label and the total unread count as its badge, which SideNav renders as a kit Count (no bell in any top bar). Wide: the row's control anchors a kit Popover (placement right, via SideNav.Item renderControl) at the sidebar's edge, over the content, not pushing it. The panel is the Popover's shared overlay frame: the label as its 18px title, kit Tabs (one per tab, its unread count in the tab's count, a kit Count), each a kit ListView (size sm, drill; title, body · time, the word Unread as meta on unread rows) or kit Empty (with an outline settings Button) when empty, and an outline sm settings Button (Settings icon) in the footer when onSettings is set. While open the row shows SideNav's active fill (aria-expanded, not aria-current). Collapsed rail: the row is the bell icon, its tooltip the label plus the count (no dot), same Popover. Narrow: the row in the nav Drawer closes it and opens a left full-height kit Drawer titled label with the same Tabs and a full-width settings Button in its footer."
         },
         "workPanel": {
           "type": "object",

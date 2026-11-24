@@ -23,6 +23,7 @@ export interface SideNavItemData {
   icon?: KitIcon;
   active?: boolean;
   disabled?: boolean;
+  /** Digits render as a kit Count (e.g. "3"); other text keeps the plain pill. */
   badge?: string;
   /** One nested submenu level. */
   items?: SideNavItemData[];
@@ -134,8 +135,9 @@ export interface SideNavItemProps extends Omit<HTMLAttributes<HTMLElement>, Side
   label: string;
   /** Lucide name (e.g. "House"), a Lucide component, or your own icon node. */
   icon?: KitIcon | ReactNode;
+  /** A number (or a string of digits) renders as a kit Count and joins the closed-rail tooltip; other nodes render as given. */
   badge?: ReactNode;
-  /** Current page: `aria-current="page"` and the active fill. */
+  /** Current page: `aria-current="page"` and the active fill. Parent rows (with nested items) take no fill. */
   active?: boolean;
   disabled?: boolean;
   /** Link row. Ignored when `onClick` is set or the row has nested items. */
@@ -146,6 +148,10 @@ export interface SideNavItemProps extends Omit<HTMLAttributes<HTMLElement>, Side
   children?: ReactNode;
   /** Disclosure starts open. Default true. */
   defaultExpanded?: boolean;
+  /** Controlled disclosure state of a parent row. Pair with `onExpandedChange`. */
+  expanded?: boolean;
+  /** (expanded: boolean) => void when the parent row opens or closes its nested rows (click, Right or Left). */
+  onExpandedChange?: (expanded: boolean) => void;
   /**
    * Wrap the row control (the link or button, with the closed-rail Tooltip when closed) inside the
    * `li`, e.g. to anchor a kit Popover on it. Compose twin of the preset's `renderItem`. Keep `control` in the tree.

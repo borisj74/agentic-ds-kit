@@ -41,8 +41,8 @@ export function AppNavDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>AppNav</h2>
         <p className={styles.lede}>
-          Vertical sidebar for playground and product shells. Grouped catalog or a flat list. Not
-          SideNav. Not AppHeader.
+          Vertical sidebar for the docs catalog. Grouped catalog or a flat list. For product
+          chrome use SideNav. Not AppHeader.
         </p>
       </header>
 
@@ -70,7 +70,7 @@ export function AppNavDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use for a persistent left sidebar. Use SideNav when chrome can close. Use
+                  Use for a docs or catalog sidebar only. Product app chrome is SideNav. Use
                   NavigationMenu for horizontal site nav. Use Tabs for in-page panels.
                 </p>
               </div>

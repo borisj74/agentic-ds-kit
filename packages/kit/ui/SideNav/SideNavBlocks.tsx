@@ -2,22 +2,31 @@
 
 import {
   Children,
+  isValidElement,
   useContext,
   useId,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  type KeyboardEvent as ReactKeyboardEvent,
   type ReactElement,
   type ReactNode,
+  type RefObject,
 } from "react";
+import { createPortal } from "react-dom";
 import { Avatar } from "../Avatar";
 import { Button } from "../Button";
+import { Count } from "../Count";
 import { LucideByName, isKitIcon, type KitIcon } from "../Button/lucideName";
 import { Tooltip } from "../Tooltip";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useInDrawer } from "../shared/drawerContext";
+import { placeFloating, tokenPx } from "../shared/placeFloating";
+import { useThemeScopeMarker } from "../shared/themeScope";
+import { useIsClient } from "../shared/useIsClient";
+import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 import { SideNavContext, useSideNav, type SideNavContextValue } from "./SideNavContext";
 import type {
   SideNavAccountProps,
@@ -165,6 +174,10 @@ export function SideNavRoot({
           className,
         )}
         data-side={side}
+        onKeyDown={(event) => {
+          rest.onKeyDown?.(event);
+          onRowKeyDown(event, rootRef.current);
+        }}
       >
         <div className={styles.panel}>{children}</div>
       </aside>
@@ -343,19 +356,33 @@ export function SideNavFooter({ className, children, ref, ...rest }: SideNavFoot
 
 /* ---------- Item ---------- */
 
+/** A badge that is a count: a number, or a string of digits. */
+function badgeCount(badge: ReactNode): number | null {
+  if (typeof badge === "number" && Number.isFinite(badge)) return badge;
+  if (typeof badge === "string" && /^\d+$/.test(badge.trim())) return Number(badge.trim());
+  return null;
+}
+
 function ItemBody({
   label,
   icon,
   badge,
   nested,
   expanded,
+  current,
+  disabled,
 }: {
   label: string;
   icon?: KitIcon | ReactNode;
   badge?: ReactNode;
   nested: boolean;
   expanded?: boolean;
+  /** The row shows the page-active fill: its Count takes the brand tint. */
+  current?: boolean;
+  disabled?: boolean;
 }) {
+  const count = badgeCount(badge);
+  const hasBadge = badge !== undefined && badge !== null && badge !== false && badge !== "";
   return (
     <>
       {icon ? (
@@ -364,9 +391,13 @@ function ItemBody({
         </span>
       ) : null}
       <span className={styles.label}>{label}</span>
-      {badge || nested ? (
+      {hasBadge || nested ? (
         <span className={styles.meta}>
-          {badge ? <span className={styles.badge}>{badge}</span> : null}
+          {count !== null ? (
+            <Count count={count} intent={current ? "info" : "neutral"} size="md" subtle disabled={disabled} />
+          ) : hasBadge ? (
+            <span className={styles.badge}>{badge}</span>
+          ) : null}
           {nested ? (
             <span className={`${styles.chevron} ${expanded ? styles.chevronOpen : ""}`}>
               <LucideByName name="ChevronRight" size={ICON_SIZE} />
@@ -375,6 +406,156 @@ function ItemBody({
         </span>
       ) : null}
     </>
+  );
+}
+
+/** Row controls a key can move to: in the tree, not disabled, not in an inert or closed submenu. */
+function visibleRows(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(`.${styles.item}`)).filter(
+    (row) =>
+      !(row as HTMLButtonElement).disabled &&
+      !row.closest("[inert]") &&
+      !row.closest(`.${styles.submenuSlotClosed}`),
+  );
+}
+
+/** Up, Down, Home and End move focus through `rows`. Returns true when it handled the key. */
+function moveFocus(key: string, rows: HTMLElement[], current: Element | null): boolean {
+  if (rows.length === 0) return false;
+  const index = rows.indexOf(current as HTMLElement);
+  let next: HTMLElement | undefined;
+  if (key === "ArrowDown") next = rows[index < 0 ? 0 : Math.min(index + 1, rows.length - 1)];
+  else if (key === "ArrowUp") next = rows[index < 0 ? 0 : Math.max(index - 1, 0)];
+  else if (key === "Home") next = rows[0];
+  else if (key === "End") next = rows[rows.length - 1];
+  else return false;
+  next?.focus();
+  return true;
+}
+
+/**
+ * Arrow keys on the rows of a SideNav.Root: Up and Down move through visible rows (top level, open
+ * submenus, footer), Home and End jump to the ends, Left on a nested row goes to its parent. A parent
+ * row handles Right and Left itself (open, close, first child) before this runs.
+ */
+function onRowKeyDown(event: ReactKeyboardEvent<HTMLElement>, root: HTMLElement | null) {
+  if (event.defaultPrevented || !root || event.altKey || event.ctrlKey || event.metaKey) return;
+  const target = event.target as HTMLElement;
+  // Keys inside a portaled flyout bubble through React to here; the flyout handles its own.
+  if (!root.contains(target) || !target.classList.contains(styles.item)) return;
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    const back = (event.key === "ArrowLeft") !== (getComputedStyle(root).direction === "rtl");
+    const submenu = target.closest(`.${styles.submenu}`);
+    if (back && submenu) {
+      const parent = submenu.closest(`.${styles.entry}`)?.querySelector<HTMLElement>(`.${styles.item}`);
+      if (parent) {
+        event.preventDefault();
+        parent.focus();
+      }
+    }
+    return;
+  }
+  if (moveFocus(event.key, visibleRows(root), target)) event.preventDefault();
+}
+
+/**
+ * Closed-rail flyout: a parent row's nested rows in a panel just outside the rail edge, built on
+ * useOverlayDismiss (Escape and outside press close it, newest overlay first). Opens on click or
+ * Right, focuses the first row; Up/Down/Home/End move, Left or Escape close it and return focus to
+ * the parent; Tab closes it and moves on from the parent; picking a row closes it.
+ */
+function RailFlyout({
+  id,
+  label,
+  anchorRef,
+  controlRef,
+  onClose,
+  children,
+}: {
+  id: string;
+  label: string;
+  anchorRef: RefObject<HTMLLIElement | null>;
+  controlRef: RefObject<HTMLElement | null>;
+  onClose: () => void;
+  children: ReactNode;
+}) {
+  const context = useSideNav();
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const headingId = useId();
+  const scope = useThemeScopeMarker();
+  const placement = context.side === "right" ? ("left" as const) : ("right" as const);
+
+  const close = (focusParent: boolean) => {
+    onClose();
+    if (focusParent) controlRef.current?.focus();
+  };
+
+  useOverlayDismiss(true, anchorRef, (reason) => close(reason === "escape"), panelRef);
+
+  useLayoutEffect(() => {
+    const anchor = controlRef.current;
+    const panel = panelRef.current;
+    if (!anchor || !panel) return;
+    // Next to the parent's icon chip (the rail's visible edge), not the clipped full-width row.
+    const rail = context.rootRef.current?.getBoundingClientRect();
+    const row = anchor.getBoundingClientRect();
+    const space = tokenPx("--space-2", 8);
+    const trigger = rail
+      ? { top: row.top, bottom: row.bottom, height: row.height, left: rail.left, right: rail.right, width: rail.width }
+      : row;
+    const box = placeFloating(placement, trigger, { width: panel.offsetWidth, height: panel.offsetHeight }, {
+      align: "start",
+      gap: space,
+      margin: space,
+    });
+    panel.style.top = `${box.top}px`;
+    panel.style.left = `${box.left}px`;
+    panel.querySelector<HTMLElement>(`.${styles.item}:not(:disabled)`)?.focus();
+    // Placed and focused once when it opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const flyoutContext = useMemo<SideNavContextValue>(
+    () => ({ ...context, open: true, rail: false }),
+    [context],
+  );
+
+  return createPortal(
+    <div
+      ref={panelRef}
+      id={id}
+      role="group"
+      aria-labelledby={headingId}
+      data-theme-scope={scope.id}
+      data-theme={scope.mode === "dark" ? "dark" : undefined}
+      className={cx(styles.flyout, scope.fontClassName)}
+      onKeyDown={(event) => {
+        const panel = panelRef.current;
+        if (!panel || event.defaultPrevented) return;
+        const back = context.side === "right" ? "ArrowRight" : "ArrowLeft";
+        if (event.key === back) {
+          event.preventDefault();
+          close(true);
+        } else if (event.key === "Tab") {
+          // Focus goes back to the parent first, so Tab carries on from there in the rail.
+          close(true);
+        } else if (moveFocus(event.key, visibleRows(panel), document.activeElement)) {
+          event.preventDefault();
+        }
+      }}
+      onClick={(event) => {
+        const control = (event.target as HTMLElement).closest("a[href], button:not(:disabled)");
+        if (control && panelRef.current?.contains(control)) close(true);
+      }}
+    >
+      <p id={headingId} className={styles.flyoutLabel}>
+        {label}
+      </p>
+      <SideNavContext.Provider value={flyoutContext}>
+        <ul className={styles.list}>{children}</ul>
+      </SideNavContext.Provider>
+    </div>,
+    document.body,
   );
 }
 
@@ -393,28 +574,68 @@ export function SideNavItemImpl({
   onClick,
   children,
   defaultExpanded = true,
+  expanded: expandedProp,
+  onExpandedChange,
   wrap,
   className: userClassName,
+  onKeyDown: userKeyDown,
   ref,
   ...rest
 }: ItemImplProps) {
   const { rail } = useSideNav();
   const nested = Children.toArray(children).length > 0;
   const submenuId = useId();
-  const [expanded, setExpanded] = useState(nested && defaultExpanded);
+  const flyoutId = useId();
+  const isControlled = typeof expandedProp === "boolean";
+  const [expandedState, setExpandedState] = useState(nested && defaultExpanded);
+  const expanded = isControlled ? expandedProp : expandedState;
+  const [flyoutOpen, setFlyoutOpen] = useState(false);
+  const mounted = useIsClient();
   const submenuOpen = expanded && !rail;
+  const showFlyout = nested && rail && flyoutOpen && mounted && !disabled;
   const controlRef = useRef<HTMLElement | null>(null);
+  const entryRef = useRef<HTMLLIElement | null>(null);
   const { placement } = useRailTip();
+
+  // A parent row holds the current page when one of its nested rows is active.
+  const holdsCurrent =
+    nested &&
+    Children.toArray(children).some(
+      (child) => isValidElement<{ active?: boolean }>(child) && Boolean(child.props.active),
+    );
+
+  // The flyout belongs to the closed rail: opening the rail closes it.
+  const [wasRail, setWasRail] = useState(rail);
+  if (wasRail !== rail) {
+    setWasRail(rail);
+    if (!rail && flyoutOpen) setFlyoutOpen(false);
+  }
+
+  function setExpanded(next: boolean) {
+    if (!isControlled) setExpandedState(next);
+    onExpandedChange?.(next);
+  }
 
   const className = cx(
     styles.item,
-    active && styles.itemActive,
+    active && !nested && styles.itemActive,
+    holdsCurrent && styles.itemHoldsCurrent,
     disabled && styles.itemDisabled,
     userClassName,
   );
   const current = active ? ("page" as const) : undefined;
   const controlRefs = mergeRefs<HTMLElement>(controlRef, ref);
-  const body = <ItemBody label={label} icon={icon} badge={badge} nested={nested} expanded={submenuOpen} />;
+  const body = (
+    <ItemBody
+      label={label}
+      icon={icon}
+      badge={badge}
+      nested={nested}
+      expanded={submenuOpen}
+      current={Boolean(active) && !nested}
+      disabled={disabled}
+    />
+  );
 
   let control: ReactElement;
 
@@ -426,11 +647,29 @@ export function SideNavItemImpl({
         type="button"
         className={className}
         disabled={disabled}
-        aria-expanded={submenuOpen}
-        aria-controls={submenuId}
+        aria-expanded={rail ? showFlyout : submenuOpen}
+        aria-controls={rail ? (showFlyout ? flyoutId : undefined) : submenuId}
         aria-current={current}
         onClick={() => {
-          if (!rail) setExpanded((value) => !value);
+          if (rail) setFlyoutOpen((value) => !value);
+          else setExpanded(!expanded);
+        }}
+        onKeyDown={(event) => {
+          userKeyDown?.(event);
+          if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+          const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+          const forward = rtl ? "ArrowLeft" : "ArrowRight";
+          const back = rtl ? "ArrowRight" : "ArrowLeft";
+          if (event.key === forward) {
+            event.preventDefault();
+            if (rail) setFlyoutOpen(true);
+            else if (!expanded) setExpanded(true);
+            else entryRef.current?.querySelector<HTMLElement>(`.${styles.submenu} .${styles.item}:not(:disabled)`)?.focus();
+          } else if (event.key === back) {
+            event.preventDefault();
+            if (rail) setFlyoutOpen(false);
+            else if (expanded) setExpanded(false);
+          }
         }}
       >
         {body}
@@ -438,13 +677,21 @@ export function SideNavItemImpl({
     );
   } else if (onClick && !disabled) {
     control = (
-      <button {...rest} ref={controlRefs} type="button" className={className} aria-current={current} onClick={onClick}>
+      <button
+        {...rest}
+        ref={controlRefs}
+        type="button"
+        className={className}
+        aria-current={current}
+        onClick={onClick}
+        onKeyDown={userKeyDown}
+      >
         {body}
       </button>
     );
   } else if (href && !disabled) {
     control = (
-      <a {...rest} ref={controlRefs} href={href} className={className} aria-current={current}>
+      <a {...rest} ref={controlRefs} href={href} className={className} aria-current={current} onKeyDown={userKeyDown}>
         {body}
       </a>
     );
@@ -457,14 +704,19 @@ export function SideNavItemImpl({
         className={className}
         disabled={disabled}
         aria-current={current}
+        onKeyDown={userKeyDown}
       >
         {body}
       </button>
     );
   }
 
+  const count = badgeCount(badge);
+  const tip = count !== null && count > 0 ? `${label}, ${count}` : label;
+  // The open flyout already names the parent, so its tooltip steps aside (disabled, not unmounted,
+  // so the parent control keeps focus).
   const row = rail ? (
-    <Tooltip content={label} placement={placement}>
+    <Tooltip content={tip} placement={placement} disabled={showFlyout}>
       {control}
     </Tooltip>
   ) : (
@@ -472,16 +724,28 @@ export function SideNavItemImpl({
   );
 
   return (
-    <li
-      className={styles.entry}
-    >
+    <li ref={entryRef} className={styles.entry}>
       {wrap ? wrap(row as ReactElement) : row}
       {nested ? (
-        <div className={`${styles.submenuSlot} ${submenuOpen ? "" : styles.submenuSlotClosed}`.trim()}>
+        <div
+          className={`${styles.submenuSlot} ${submenuOpen ? "" : styles.submenuSlotClosed}`.trim()}
+          {...(submenuOpen ? {} : { inert: true })}
+        >
           <ul className={styles.submenu} id={submenuId}>
             {children}
           </ul>
         </div>
+      ) : null}
+      {showFlyout ? (
+        <RailFlyout
+          id={flyoutId}
+          label={label}
+          anchorRef={entryRef}
+          controlRef={controlRef}
+          onClose={() => setFlyoutOpen(false)}
+        >
+          {children}
+        </RailFlyout>
       ) : null}
     </li>
   );
