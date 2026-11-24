@@ -59,6 +59,7 @@ import contract_divider from "../packages/kit/contracts/divider.json";
 import contract_drawer from "../packages/kit/contracts/drawer.json";
 import contract_dropdownmenu from "../packages/kit/contracts/dropdownmenu.json";
 import contract_empty from "../packages/kit/contracts/empty.json";
+import contract_loaderror from "../packages/kit/contracts/loaderror.json";
 import contract_field from "../packages/kit/contracts/field.json";
 import contract_fieldset from "../packages/kit/contracts/fieldset.json";
 import contract_fileupload from "../packages/kit/contracts/fileupload.json";
@@ -208,6 +209,7 @@ const contracts: Record<string, ContractNotes> = {
   "drawer": contract_drawer,
   "dropdownmenu": contract_dropdownmenu,
   "empty": contract_empty,
+  "loaderror": contract_loaderror,
   "field": contract_field,
   "fieldset": contract_fieldset,
   "fileupload": contract_fileupload,

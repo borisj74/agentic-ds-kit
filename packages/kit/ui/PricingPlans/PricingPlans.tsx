@@ -10,7 +10,7 @@ import { NumberTransition } from "../NumberTransition";
 import { SegmentedControl } from "../SegmentedControl";
 import { TileGroup } from "../TileGroup";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import type { PricingPlan, PricingPlansProps } from "./PricingPlans.types";
 import styles from "./PricingPlans.module.css";

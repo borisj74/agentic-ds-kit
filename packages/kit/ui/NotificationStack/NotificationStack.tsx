@@ -10,7 +10,7 @@ import { Drawer } from "../Drawer";
 import { Empty } from "../Empty";
 import { Popover } from "../Popover";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { NARROW_QUERY, useMediaQuery } from "../shared/useMediaQuery";
 import type { NotificationItem, NotificationStackProps, NotificationTone } from "./NotificationStack.types";
@@ -214,7 +214,7 @@ function Panel({
             ))}
           </div>
         ) : error ? (
-          <LoadError className={styles.error} message={error} onRetry={onRetry} />
+          <LoadError message={error} onRetry={onRetry} />
         ) : items.length === 0 ? (
           <Empty className={styles.empty} title={emptyTitle} description={emptyDescription} icon="Bell" />
         ) : (
