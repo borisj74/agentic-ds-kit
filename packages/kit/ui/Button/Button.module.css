@@ -63,12 +63,12 @@
   box-shadow: var(--shadow-xs);
 }
 
-.solid.primary:hover:not(:disabled) {
+.solid.primary:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
 }
 
-.solid.primary:active:not(:disabled) {
+.solid.primary:active:not(:disabled):not([aria-busy='true']) {
   background-color: var(--primary-active);
   border-color: var(--primary-active);
 }
@@ -80,7 +80,7 @@
   box-shadow: var(--shadow-xs);
 }
 
-.solid.neutral:hover:not(:disabled) {
+.solid.neutral:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--bg-control-hover);
 }
 
@@ -91,12 +91,12 @@
   box-shadow: var(--shadow-xs);
 }
 
-.solid.danger:hover:not(:disabled) {
+.solid.danger:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--action-danger-hover);
   border-color: var(--action-danger-hover);
 }
 
-.solid.danger:active:not(:disabled) {
+.solid.danger:active:not(:disabled):not([aria-busy='true']) {
   background-color: var(--action-danger-pressed);
   border-color: var(--action-danger-pressed);
 }
@@ -109,7 +109,7 @@
   box-shadow: var(--shadow-xs);
 }
 
-.outline.primary:hover:not(:disabled) {
+.outline.primary:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--primary-subtle);
 }
 
@@ -120,7 +120,7 @@
   box-shadow: var(--shadow-xs);
 }
 
-.outline.neutral:hover:not(:disabled) {
+.outline.neutral:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--bg-control-hover);
 }
 
@@ -131,7 +131,7 @@
   box-shadow: var(--shadow-xs);
 }
 
-.outline.danger:hover:not(:disabled) {
+.outline.danger:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--danger-subtle);
 }
 
@@ -142,7 +142,7 @@
   color: var(--primary);
 }
 
-.soft.primary:hover:not(:disabled) {
+.soft.primary:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--primary-subtle-strong);
   border-color: var(--primary-subtle-strong);
 }
@@ -153,7 +153,7 @@
   color: var(--text-fg);
 }
 
-.soft.neutral:hover:not(:disabled) {
+.soft.neutral:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--bg-tray);
   border-color: var(--bg-tray);
 }
@@ -164,7 +164,7 @@
   color: var(--danger-fg);
 }
 
-.soft.danger:hover:not(:disabled) {
+.soft.danger:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--danger-line);
   border-color: var(--danger-line);
 }
@@ -181,7 +181,7 @@
   color: var(--primary);
 }
 
-.ghost.primary:hover:not(:disabled) {
+.ghost.primary:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--primary-subtle);
 }
 
@@ -189,7 +189,7 @@
   color: var(--text-fg-muted);
 }
 
-.ghost.neutral:hover:not(:disabled) {
+.ghost.neutral:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--bg-subtle);
   color: var(--text-fg);
 }
@@ -198,7 +198,7 @@
   color: var(--danger-fg);
 }
 
-.ghost.danger:hover:not(:disabled) {
+.ghost.danger:hover:not(:disabled):not([aria-busy='true']) {
   background-color: var(--danger-subtle);
 }
 

@@ -752,8 +752,8 @@
       "doNot": [
         "Do not invent a local button group / segmented control",
         "Do not mix sizes inside one group",
-        "Do not put more than one appearance=solid mode=primary Button in a group (or the view)",
-        "Do not wrap Input, Select, or anything except kit Button",
+        "Do not put more than one appearance=solid mode=primary Button, IconButton or SplitButton in a group (or the view)",
+        "Do not wrap Input, Select, or anything except kit Button, IconButton or SplitButton",
         "Do not use raw hex"
       ],
       "props": {
