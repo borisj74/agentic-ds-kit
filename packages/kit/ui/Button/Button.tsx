@@ -74,6 +74,7 @@ export function Button({
         block && styles.block,
         iconOnly && styles.iconOnly,
         busy && styles.loading,
+        busy && hasLabel && !start && styles.keepWidth,
         className,
       )}
     >

@@ -7,12 +7,12 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { SpinnerProps, SpinnerSize } from "./Spinner.types";
 
-export function Spinner({ size = "md", label, className, ref, ...rest }: SpinnerProps) {
+export function Spinner({ size = "md", label, inverse = false, className, ref, ...rest }: SpinnerProps) {
   return (
     <span
       {...rest} {...nisthaAttr("spinner", rest)}
       ref={ref}
-      className={cx(styles.root, styles[size], className)}
+      className={cx(styles.root, styles[size], inverse && styles.inverse, className)}
       role="status"
       aria-live="polite"
       aria-label={label ? undefined : "Loading"}

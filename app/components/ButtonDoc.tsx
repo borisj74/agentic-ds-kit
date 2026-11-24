@@ -203,7 +203,7 @@ export function ButtonDoc() {
                   alternate paths, ghost for toolbars, danger only for irreversible work. Flat drops the resting
                   shadow so a white control still reads on a white card. Pass Lucide export names on iconStart and
                   iconEnd. Icon-only omits children and must set ariaLabel. Set loading while the action runs:
-                  the label stays, a spinner takes the leading icon slot, and clicks are ignored.
+                  the label stays, a spinner takes the leading icon slot, the width holds, and clicks are ignored.
                 </p>
               </div>
               <CodeBlock code={masterCode(appearance, mode, size, flat, disabled, loading, label, icon)} />
@@ -286,8 +286,8 @@ export function ButtonDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   loading sets aria-busy and ignores clicks. The label stays and a spinner takes the leading icon
-                  slot, so a button with an icon keeps its width. The button stays focusable; do not also disable
-                  it.
+                  slot. Every loading button keeps its width: with no leading icon, the padding makes room for
+                  the spinner. The button stays focusable; do not also disable it.
                 </p>
               </div>
               <CodeBlock

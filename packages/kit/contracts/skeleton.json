@@ -2,8 +2,9 @@
   "id": "skeleton",
   "status": "stable",
   "level": "atom",
-  "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
+  "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, or a whole table, card, or list layout, so the page keeps its shape until the data arrives.",
   "useWhen": [
+    "The first load of a table, card, or list: set layout",
     "Content with a known layout is loading: a card, a list, a table, a profile",
     "Keeping the page from jumping while data arrives"
   ],
@@ -17,18 +18,36 @@
   "props": {
     "shape": {
       "type": "enum",
-      "values": ["text", "circle", "rect"],
+      "values": [
+        "text",
+        "circle",
+        "rect"
+      ],
       "default": "text",
       "note": "text: rounded lines as tall as the text. circle: an avatar or icon. rect: a block, like an image, chart, or card."
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "table",
+        "card",
+        "list"
+      ],
+      "required": false,
+      "note": "A whole loading area in one piece, in place of shape. table: a header row and body rows at the 40px row height. card: an icon tile and title, then text lines (no frame; put it in a Card). list: an Avatar-sized circle and two lines per row."
     },
     "lines": {
       "type": "number",
       "default": 1,
-      "note": "For text. With more than one, the last line is shorter, like the end of a paragraph."
+      "note": "For text, the line count; with more than one, the last line is shorter, like the end of a paragraph. With layout, the row count (table 5, list 3) or the card's text lines (3) by default."
     },
     "size": {
       "type": "enum",
-      "values": ["sm", "md", "lg"],
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "default": "md",
       "note": "text: line height like caption, body-sm, or body. circle: space-8, space-10, or space-12, like Avatar."
     },
@@ -44,7 +63,11 @@
     },
     "animation": {
       "type": "enum",
-      "values": ["shimmer", "pulse", "none"],
+      "values": [
+        "shimmer",
+        "pulse",
+        "none"
+      ],
       "default": "shimmer",
       "note": "shimmer: a band of light moves across, in step on every skeleton. pulse: a slow fade. none: still gray."
     },
@@ -85,7 +108,12 @@
     "motion.duration600",
     "motion.easeLinear",
     "opacity.full",
-    "opacity.400"
+    "opacity.400",
+    "border.faint",
+    "space.1",
+    "space.2",
+    "space.3",
+    "space.4"
   ],
   "a11y": {
     "element": "span",
@@ -101,8 +129,10 @@
     "Do not leave it up when the load failed — show Alert or Empty",
     "Do not draw loading bars with local gray divs — use Skeleton",
     "Do not invent SkeletonText, SkeletonCircle, or Pulse",
+    "Do not stack local Skeleton rows to fake a table, card, or list — use layout",
     "Do not skip prefers-reduced-motion",
-    "Do not use raw hex or primitive --color-* ramps"
+    "Do not use raw hex or primitive --color-* ramps",
+    "Do not add layouts beyond table, card, and list"
   ],
-  "snippet": "<Skeleton loading={!data} lines={3}>\n  <p>{data?.summary}</p>\n</Skeleton>"
+  "snippet": "<Skeleton loading={!data} lines={3}>\n  <p>{data?.summary}</p>\n</Skeleton>\n<Skeleton layout=\"table\" lines={5} label=\"Loading invoices\" />"
 }
