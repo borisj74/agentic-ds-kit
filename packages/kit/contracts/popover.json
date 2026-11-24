@@ -5,7 +5,8 @@
   "intent": "A panel anchored to a trigger. Click opens it. Escape and a click outside close it.",
   "useWhen": [
     "A small panel of content or actions anchored to a button",
-    "Something that should not take over the page the way a Modal does"
+    "Something that should not take over the page the way a Modal does",
+    "Which one: Tooltip names a control in a few words; HelpPopover explains it in one to three sentences; Popover holds fields or actions and takes focus. None of them is a menu or a blocking decision."
   ],
   "doNotUseWhen": [
     "One or two sentences of help — use HelpPopover",
@@ -14,16 +15,93 @@
     "A blocking decision — use Modal"
   ],
   "props": {
-    "trigger": { "type": "element", "required": true, "note": "One focusable control. Click toggles the panel." },
-    "children": { "type": "slot", "required": true, "note": "Panel content." },
-    "label": { "type": "string", "required": true, "note": "Names the dialog." },
-    "placement": { "type": "enum", "values": ["bottom", "top", "left", "right"], "default": "bottom" },
-    "open": { "type": "boolean", "required": false, "note": "Controlled visibility." },
-    "defaultOpen": { "type": "boolean", "default": false },
-    "onOpenChange": { "type": "function", "required": false, "note": "(open: boolean) => void" }
+    "trigger": {
+      "type": "element",
+      "required": true,
+      "note": "One focusable control. Click toggles the panel."
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "Panel content."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "note": "Names the dialog."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "note": "Heading at the top of the panel, 18px at heading weight. eyebrow and tone show only with a title. label still names the dialog."
+    },
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Short area name above the title, 12px, like Billing · Invoices. Caller-provided."
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "info",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "default": "neutral",
+      "note": "Tone icon (16px, aria-hidden) and status word from KitLabels before the eyebrow, so status is never colour alone. Same header as Modal."
+    },
+    "footer": {
+      "type": "slot",
+      "required": false,
+      "note": "kit Buttons, size sm, bottom right. At most one appearance=solid mode=primary."
+    },
+    "footerStart": {
+      "type": "slot",
+      "required": false,
+      "note": "Left of the footer actions: an Ask Button (outline neutral sm, MessageCircle) or a count. Labels are caller-provided."
+    },
+    "placement": {
+      "type": "enum",
+      "values": [
+        "bottom",
+        "top",
+        "left",
+        "right"
+      ],
+      "default": "bottom",
+      "note": "Preferred side. Lines up with the trigger's start edge, flips when there is no room and stays inside the viewport."
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "note": "Controlled visibility."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "default": false
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "note": "(open: boolean) => void"
+    }
   },
-  "passthrough": { "root": "span", "ref": "none", "className": "panel", "rest": "none" },
-  "tokens": ["text.primary", "surface.card", "border.faint", "shadow.md"],
+  "passthrough": {
+    "root": "span",
+    "ref": "none",
+    "className": "panel",
+    "rest": "none"
+  },
+  "tokens": [
+    "text.primary",
+    "surface.card",
+    "border.faint",
+    "radius.surfaceSm",
+    "shadow.md",
+    "z.overlay"
+  ],
   "a11y": {
     "element": "span",
     "requirements": [
@@ -32,13 +110,14 @@
       "Panel is role=dialog and labelled by label",
       "Escape closes and returns focus to the trigger",
       "A pointer down outside the trigger and the panel closes it",
-      "Tab can reach the controls inside the panel"
+      "Focus moves to the first field on open; Tab and Shift+Tab stay inside the panel until Escape or a click outside"
     ]
   },
   "doNot": [
     "Do not use Popover for help text — use HelpPopover",
     "Do not use Popover as a date or select menu — use DatePicker, DateRangePicker, or Select",
-    "Do not use raw hex"
+    "Do not use raw hex",
+    "Do not add a Close button, scrim or page lock — Escape and a click outside close it; use Modal for a blocking decision"
   ],
   "snippet": "<Popover label=\"Share\" trigger={<Button appearance=\"outline\" mode=\"neutral\">Share</Button>}>Copy the link.</Popover>"
 }

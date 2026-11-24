@@ -5,7 +5,8 @@
   "intent": "Brief supplementary text on hover or focus of a trigger element.",
   "useWhen": [
     "Explaining an icon or abbreviated label",
-    "Non-critical context that should not clutter the layout"
+    "Non-critical context that should not clutter the layout",
+    "Which one: Tooltip names a control in a few words; HelpPopover explains it in one to three sentences; Popover holds fields or actions and takes focus. None of them is a menu or a blocking decision."
   ],
   "doNotUseWhen": [
     "Essential instructions \u2014 put them in visible hint text via Field",
@@ -26,11 +27,13 @@
         "left",
         "right"
       ],
-      "default": "top"
+      "default": "top",
+      "note": "Preferred side. Flips to the other side when there is no room and stays inside the viewport."
     },
     "delay": {
       "type": "number",
-      "default": 150
+      "default": 150,
+      "note": "Hover waits; focus shows at once. Leaving waits 100ms so the pointer can reach the bubble."
     },
     "open": {
       "type": "boolean",
@@ -48,29 +51,38 @@
   },
   "passthrough": {
     "root": "span",
-    "ref": "tooltip bubble (role=tooltip)",
+    "ref": "tooltip bubble (role=tooltip). Portaled and mounted only while open, so ref is null while closed.",
     "className": "root",
     "rest": "tooltip bubble",
-    "note": "className keeps its original meaning: the wrapper around the trigger."
+    "note": "className keeps its original meaning: the wrapper around the trigger. style is kit-owned (positioning)."
   },
   "tokens": [
     "text.inverse",
-    "surface.elevated",
+    "surface.inverse",
+    "border.surface",
+    "border.subtle",
+    "radius.control.md",
     "shadow.md",
-    "motion.fast"
+    "z.tooltip",
+    "motion.overlay",
+    "motion.overlayExit"
   ],
   "a11y": {
     "element": "span",
     "requirements": [
       "Escape hides an uncontrolled tooltip without closing a parent Modal, Drawer or AlertDialog",
       "Trigger must be focusable",
-      "Tooltip content available to assistive tech on focus"
+      "Tooltip content available to assistive tech on focus",
+      "Hover after delay; focus shows at once; on touch a tap pins it and a tap elsewhere closes it",
+      "Pointer can move onto the bubble without it closing (100ms hide grace)",
+      "Portal the bubble to document.body so overflow never clips it"
     ]
   },
   "doNot": [
     "Do not invent local Tooltip",
     "Do not use raw hex",
-    "Do not hide required form labels in tooltips"
+    "Do not hide required form labels in tooltips",
+    "Do not put links, buttons, or more than one short line in a Tooltip \u2014 use HelpPopover or Popover"
   ],
   "snippet": "<Tooltip content=\"Export includes all projects\"><Button appearance=\"outline\" mode=\"neutral\" size=\"sm\">Export</Button></Tooltip>"
 }

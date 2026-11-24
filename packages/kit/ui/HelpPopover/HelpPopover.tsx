@@ -11,135 +11,21 @@ import {
   type FocusEvent as ReactFocusEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import type { HelpPopoverPlacement, HelpPopoverProps } from "./HelpPopover.types";
+import type { HelpPopoverProps } from "./HelpPopover.types";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import styles from "./HelpPopover.module.css";
 import { useIsClient } from "../shared/useIsClient";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { nisthaAttr } from "../shared/inspect";
+import { measureFloating } from "../shared/placeFloating";
+import { useOverlayDismiss } from "../shared/useOverlayDismiss";
 
 export type { HelpPopoverProps, HelpPopoverPlacement } from "./HelpPopover.types";
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const HIDE_GRACE_MS = 100;
-const ARROW_PX = 8;
-
-function opposite(placement: HelpPopoverPlacement): HelpPopoverPlacement {
-  if (placement === "top") return "bottom";
-  if (placement === "bottom") return "top";
-  if (placement === "left") return "right";
-  return "left";
-}
-
-function tokenPx(name: string, fallback: number): number {
-  if (typeof window === "undefined") return fallback;
-  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const value = Number.parseFloat(raw);
-  return Number.isFinite(value) ? value : fallback;
-}
-
-function fits(
-  placement: HelpPopoverPlacement,
-  trigger: DOMRect,
-  panel: { width: number; height: number },
-  gap: number,
-  vw: number,
-  vh: number,
-): boolean {
-  if (placement === "bottom") return trigger.bottom + gap + panel.height <= vh;
-  if (placement === "top") return trigger.top - gap - panel.height >= 0;
-  if (placement === "right") return trigger.right + gap + panel.width <= vw;
-  return trigger.left - gap - panel.width >= 0;
-}
-
-function choosePlacement(
-  preferred: HelpPopoverPlacement,
-  trigger: DOMRect,
-  panel: { width: number; height: number },
-  gap: number,
-  vw: number,
-  vh: number,
-): HelpPopoverPlacement {
-  if (fits(preferred, trigger, panel, gap, vw, vh)) return preferred;
-  const alt = opposite(preferred);
-  if (fits(alt, trigger, panel, gap, vw, vh)) return alt;
-  const verticalRoom = { top: trigger.top, bottom: vh - trigger.bottom };
-  const horizontalRoom = { left: trigger.left, right: vw - trigger.right };
-  if (preferred === "top" || preferred === "bottom") {
-    return verticalRoom.top >= verticalRoom.bottom ? "top" : "bottom";
-  }
-  return horizontalRoom.left >= horizontalRoom.right ? "left" : "right";
-}
-
-function placePanel(
-  preferred: HelpPopoverPlacement,
-  trigger: DOMRect,
-  panel: { width: number; height: number },
-  gap: number,
-  margin: number,
-  vw: number,
-  vh: number,
-): { top: number; left: number; placement: HelpPopoverPlacement; arrow: number } {
-  const placement = choosePlacement(preferred, trigger, panel, gap, vw, vh);
-  let top = 0;
-  let left = 0;
-  if (placement === "bottom") {
-    top = trigger.bottom + gap;
-    left = trigger.left + trigger.width / 2 - panel.width / 2;
-  } else if (placement === "top") {
-    top = trigger.top - gap - panel.height;
-    left = trigger.left + trigger.width / 2 - panel.width / 2;
-  } else if (placement === "right") {
-    left = trigger.right + gap;
-    top = trigger.top + trigger.height / 2 - panel.height / 2;
-  } else {
-    left = trigger.left - gap - panel.width;
-    top = trigger.top + trigger.height / 2 - panel.height / 2;
-  }
-
-  const maxLeft = Math.max(margin, vw - panel.width - margin);
-  const maxTop = Math.max(margin, vh - panel.height - margin);
-  left = Math.min(Math.max(left, margin), maxLeft);
-  top = Math.min(Math.max(top, margin), maxTop);
-
-  let arrow =
-    placement === "top" || placement === "bottom"
-      ? trigger.left + trigger.width / 2 - left
-      : trigger.top + trigger.height / 2 - top;
-  const edge =
-    placement === "top" || placement === "bottom" ? panel.width : panel.height;
-  arrow = Math.min(Math.max(arrow, ARROW_PX), Math.max(ARROW_PX, edge - ARROW_PX));
-
-  return { top, left, placement, arrow };
-}
-
-function measure(
-  preferred: HelpPopoverPlacement,
-  trigger: HTMLElement,
-  panel: HTMLElement,
-): { placement: HelpPopoverPlacement; style: CSSProperties } {
-  const gap = tokenPx("--space-2", 8);
-  const margin = tokenPx("--space-2", 8);
-  const next = placePanel(
-    preferred,
-    trigger.getBoundingClientRect(),
-    { width: panel.offsetWidth, height: panel.offsetHeight },
-    gap,
-    margin,
-    window.innerWidth,
-    window.innerHeight,
-  );
-  return {
-    placement: next.placement,
-    style: {
-      top: next.top,
-      left: next.left,
-      ["--help-arrow" as string]: `${next.arrow}px`,
-    },
-  };
-}
 
 export function HelpPopover({
   title,
@@ -231,7 +117,7 @@ export function HelpPopover({
     const trigger = wrapperRef.current;
     const panel = panelRef.current;
     if (!trigger || !panel) return;
-    const next = measure(placement, trigger, panel);
+    const next = measureFloating(placement, trigger, panel);
     setResolvedPlacement(next.placement);
     setCoords(next.style);
   }
@@ -257,41 +143,25 @@ export function HelpPopover({
     const trigger = wrapperRef.current;
     const panel = panelRef.current;
     if (!trigger || !panel) return;
-    const next = measure(placement, trigger, panel);
+    const next = measureFloating(placement, trigger, panel);
     setResolvedPlacement(next.placement);
     setCoords(next.style);
   }, [open, placement, title, content]);
 
+  // Escape and a click outside close it. On the shared overlay stack, so Escape closes only the
+  // newest overlay and never a parent Modal or Drawer. A controlled panel is left to its owner.
+  useOverlayDismiss(open && !isControlled, wrapperRef, () => hide(), panelRef);
+
   useEffect(() => {
     if (!open || disabled) return undefined;
-
-    function onPointerDown(event: PointerEvent) {
-      const target = event.target as Node;
-      if (wrapperRef.current?.contains(target) || panelRef.current?.contains(target)) return;
-      hide();
-    }
-
-    function onDocumentKey(event: KeyboardEvent) {
-      if (event.key !== "Escape") return;
-      if (isControlled) return;
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      hide();
-    }
-
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onDocumentKey, true);
     window.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition, true);
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onDocumentKey, true);
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- hide/updatePosition are render-scope helpers; their inputs are listed.
-  }, [open, disabled, isControlled, placement, title, content]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- updatePosition is a render-scope helper; its inputs are listed.
+  }, [open, disabled, placement, title, content]);
 
   function onBlur(event: ReactFocusEvent<HTMLSpanElement>) {
     const next = event.relatedTarget;

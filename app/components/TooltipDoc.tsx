@@ -26,8 +26,8 @@ export function TooltipDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>Tooltip</h2>
         <p className={styles.lede}>
-          Brief supplementary text on hover or focus. Keep copy short and non-essential. One
-          piece. Not a Popover cousin.
+          A short name for a control on hover or focus. On touch a tap pins it. It flips to the
+          other side when there is no room and stays on screen.
         </p>
       </header>
 
@@ -75,8 +75,9 @@ export function TooltipDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Use Tooltip for brief, non-essential help on hover or focus. Keep copy short. Use
-                  HelpPopover for a sentence or two. Do not put actions in it.
+                  Tooltip names a control in a few words. HelpPopover explains it in one to three
+                  sentences. Popover holds fields or actions. Do not put links or buttons in a
+                  Tooltip.
                 </p>
               </div>
               <CodeBlock code={masterCode(placement)} />

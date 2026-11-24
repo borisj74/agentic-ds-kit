@@ -79,7 +79,8 @@ export function HelpPopoverDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Use HelpPopover for a sentence or two of optional explanation. Tooltip is a
-                  one-line name. Field hint stays visible. Do not put actions in the panel.
+                  one-line name. Popover holds fields or actions. Field hint stays visible. Escape
+                  closes only the help panel, never the Popover or Modal it sits in.
                 </p>
               </div>
               <CodeBlock code={masterCode(placement)} />

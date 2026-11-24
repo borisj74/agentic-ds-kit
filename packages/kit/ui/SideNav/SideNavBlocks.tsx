@@ -8,7 +8,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
   type ReactElement,
   type ReactNode,
 } from "react";
@@ -66,24 +65,12 @@ function hiddenOnRail(element: Element): boolean {
 }
 
 /**
- * Closed rail: labels are clipped, so the kit Tooltip names the row. The rail clips
- * overflow, so the bubble is fixed to the viewport just outside the rail's edge.
+ * Closed rail: labels are clipped, so the kit Tooltip names the row. Tooltip is portaled and
+ * placed by the shared helper, so the rail's overflow never clips it; it opens on the outer side.
  */
-function useRailTip(anchor: { current: HTMLElement | null }) {
-  const { side, rootRef } = useSideNav();
-  const [tipStyle, setTipStyle] = useState<CSSProperties | undefined>(undefined);
-  function placeTip() {
-    const root = rootRef.current?.getBoundingClientRect();
-    const row = anchor.current?.getBoundingClientRect();
-    if (!root || !row) return;
-    const top = row.top + row.height / 2;
-    setTipStyle(
-      side === "right"
-        ? { position: "fixed", top, left: "auto", right: `calc(${window.innerWidth - root.left}px + var(--space-inline-sm))` }
-        : { position: "fixed", top, left: `calc(${root.right}px + var(--space-inline-sm))` },
-    );
-  }
-  return { tipStyle, placeTip, placement: side === "right" ? ("left" as const) : ("right" as const) };
+function useRailTip() {
+  const { side } = useSideNav();
+  return { placement: side === "right" ? ("left" as const) : ("right" as const) };
 }
 
 /* ---------- Root ---------- */
@@ -417,7 +404,7 @@ export function SideNavItemImpl({
   const [expanded, setExpanded] = useState(nested && defaultExpanded);
   const submenuOpen = expanded && !rail;
   const controlRef = useRef<HTMLElement | null>(null);
-  const { tipStyle, placeTip, placement } = useRailTip(controlRef);
+  const { placement } = useRailTip();
 
   const className = cx(
     styles.item,
@@ -477,7 +464,7 @@ export function SideNavItemImpl({
   }
 
   const row = rail ? (
-    <Tooltip content={label} placement={placement} style={tipStyle}>
+    <Tooltip content={label} placement={placement}>
       {control}
     </Tooltip>
   ) : (
@@ -487,8 +474,6 @@ export function SideNavItemImpl({
   return (
     <li
       className={styles.entry}
-      onPointerEnter={rail ? placeTip : undefined}
-      onFocus={rail ? placeTip : undefined}
     >
       {wrap ? wrap(row as ReactElement) : row}
       {nested ? (
@@ -526,7 +511,7 @@ export function SideNavAccount({
 }: SideNavAccountProps) {
   const { rail } = useSideNav();
   const avatarRef = useRef<HTMLSpanElement | null>(null);
-  const { tipStyle, placeTip, placement } = useRailTip(avatarRef);
+  const { placement } = useRailTip();
   // The visible name (kept in the tree on the rail) names the block, so the avatar is decorative.
   const avatar = (
     <span ref={avatarRef} className={styles.accountAvatar} aria-hidden>
@@ -538,10 +523,9 @@ export function SideNavAccount({
       {...rest}
       ref={ref}
       className={cx(styles.account, className)}
-      onPointerEnter={rail ? placeTip : undefined}
     >
       {rail ? (
-        <Tooltip content={name} placement={placement} style={tipStyle}>
+        <Tooltip content={name} placement={placement}>
           {avatar}
         </Tooltip>
       ) : (
