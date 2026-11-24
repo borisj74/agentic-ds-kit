@@ -15,7 +15,10 @@ export interface CardAction {
   appearance?: ButtonAppearance;
   mode?: ButtonMode;
   onClick?: () => void;
-  /** headerAction only: render a text link (e.g. "View all") instead of a Button. */
+  /**
+   * headerAction only, deprecated: a real link with the sm Button look. Still works; prefer a
+   * footer action or a header Button with onClick.
+   */
   href?: string;
   /** headerAction only, with href: router link to render instead of `<a>`, e.g. Next.js `Link`. */
   linkAs?: KitLinkComponent;
@@ -35,6 +38,20 @@ export interface CardProps extends Omit<ComponentPropsWithoutRef<"article">, Car
   headerAction?: CardAction | CardAction[];
   /** Body runs edge to edge with no padding, for a DataTable (which drops its own frame) or a list. */
   flush?: boolean;
+  /** Header row: a small icon tile before the eyebrow. Decorative (aria-hidden). */
+  icon?: KitIcon;
+  /** Header row: short grey label, e.g. "Analytics". Your copy, not a heading. */
+  eyebrow?: string;
+  /** Header row: timestamp on the right, e.g. "12:04". Tabular numbers. */
+  meta?: string;
+  /** Header row: shows an X IconButton sm, named by KitLabels `dismiss`. */
+  onDismiss?: () => void;
+  /** Grey line under the body naming where the data comes from, e.g. "Stripe · last 30 days". Describes the card. */
+  source?: string;
+  /** Footer: neutral ghost Button sm with MessageCircle on the left. Needs askLabel. */
+  onAsk?: () => void;
+  /** Caller label for the Ask button, e.g. "Ask" or "Ask in Chat". */
+  askLabel?: string;
   imageSrc?: string;
   /** Required when imageSrc is set. */
   imageAlt?: string;

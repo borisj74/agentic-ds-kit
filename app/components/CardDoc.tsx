@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BarList } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { Card } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
@@ -103,6 +104,18 @@ function LoginCard({ idPrefix, size }: { idPrefix: string; size?: CardSize }) {
       </div>
     </Card>
   );
+}
+
+const PLAN_MIX = [
+  { label: "Growth", value: 41 },
+  { label: "Starter", value: 32 },
+  { label: "Scale", value: 27 },
+];
+
+const percent = (value: number) => `${value}%`;
+
+function PlanRows() {
+  return <BarList label="Revenue by plan" scale="total" valueFormatter={percent} data={PLAN_MIX} />;
 }
 
 export function CardDoc() {
@@ -306,7 +319,7 @@ export function CardDoc() {
                 <p className={styles.usageBody}>
                   flush runs the body edge to edge for a DataTable, which drops its own frame. Its
                   first and last columns take the card&apos;s inline padding at any size, whatever the
-                  table&apos;s cellSize. A headerAction with href is a text link, like View all.
+                  table&apos;s cellSize. headerAction href still works here but is deprecated; prefer View all as a footer action.
                 </p>
               </div>
               <CodeBlock code={TABLE_CARD_CODE} />
@@ -354,6 +367,88 @@ export function CardDoc() {
               <CodeBlock code={SMALL_TABLE_CARD_CODE} />
             </section>
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Header row, source and Ask</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <Card
+                    title="Revenue by plan"
+                    icon="ChartBar"
+                    eyebrow="Analytics"
+                    meta="12:04"
+                    onDismiss={() => {}}
+                    source="Stripe · last 30 days"
+                    askLabel="Ask"
+                    onAsk={() => {}}
+                    actions={[
+                      { label: "Export" },
+                      { label: "Open report", appearance: "solid", mode: "primary" },
+                    ]}
+                  >
+                    <PlanRows />
+                  </Card>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  icon, eyebrow, meta and onDismiss add a header row above the title: an icon tile
+                  and a grey label on the left, the time and an X on the right. source is a grey line
+                  under the body that names where the data comes from. The footer sits under a
+                  divider: Ask on the left, then the actions, with one primary at most.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Card
+  title="Revenue by plan"
+  icon="ChartBar"
+  eyebrow="Analytics"
+  meta="12:04"
+  onDismiss={hide}
+  source="Stripe · last 30 days"
+  askLabel="Ask"
+  onAsk={openChat}
+  actions={[
+    { label: "Export", onClick: exportCsv },
+    { label: "Open report", appearance: "solid", mode: "primary", onClick: openReport },
+  ]}
+>
+  …
+</Card>`}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Header row, small</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={{ maxWidth: "24rem" }}>
+                  <Card
+                    size="sm"
+                    title="Revenue by plan"
+                    icon="ChartBar"
+                    eyebrow="Analytics"
+                    meta="12:04"
+                    onDismiss={() => {}}
+                    source="Stripe · last 30 days"
+                    askLabel="Ask"
+                    onAsk={() => {}}
+                    actions={[{ label: "Open report", appearance: "solid", mode: "primary" }]}
+                  >
+                    <PlanRows />
+                  </Card>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  sm uses space-4 padding. On a narrow screen keep Ask and the one primary in the footer.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Card size="sm" title="Revenue by plan" icon="ChartBar" eyebrow="Analytics" meta="12:04" onDismiss={hide} source="Stripe · last 30 days" askLabel="Ask" onAsk={openChat} actions={[{ label: "Open report", appearance: "solid", mode: "primary" }]}>
+  …
+</Card>`}
+              />
+            </section>
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Two header actions</h2>
               <div className={styles.exampleCanvas}>
                 <Card
@@ -372,8 +467,8 @@ export function CardDoc() {
                 <p className={styles.usageBody}>
                   headerAction takes up to two actions; more are ignored, with a warning in
                   development. iconOnly with iconStart makes an icon-only Button named by its label.
-                  With href the action stays a real link but looks like the same sm Button, so View all
-                  sits beside Ask as an equal.
+                  href still renders a real link with the sm Button look, but it is deprecated: for new
+                  cards, use the footer for View all and Ask.
                 </p>
               </div>
               <CodeBlock
