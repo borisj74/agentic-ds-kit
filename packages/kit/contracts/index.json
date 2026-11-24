@@ -200,7 +200,7 @@
   },
   {
     "id": "spinner",
-    "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
+    "intent": "Spinning circular loader for short indeterminate waits. One piece. Sizes 12, 16, 20. inverse for a primary fill. Distinct from LoadingAnimation dot-grid.",
     "group": "component",
     "path": "contracts/spinner.json",
     "status": "stable",
@@ -624,7 +624,7 @@
   },
   {
     "id": "progress",
-    "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
+    "intent": "Task completion as a bar or circle from 0 to 100, or an indeterminate bar when the percent is not known. One piece. Optional name label. Percent overlay, end, or in the ring hole, in Geist Mono. Square bar ends. Tones brand, success, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
     "group": "component",
     "path": "contracts/progress.json",
     "status": "stable",
@@ -680,7 +680,7 @@
   },
   {
     "id": "skeleton",
-    "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, so the page keeps its shape until the data arrives.",
+    "intent": "Gray placeholder shapes in the layout of content that is still loading, like lines of text, an avatar, or an image, or a whole table, card, or list layout, so the page keeps its shape until the data arrives.",
     "group": "component",
     "path": "contracts/skeleton.json",
     "status": "stable",

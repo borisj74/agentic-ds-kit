@@ -171,6 +171,7 @@ export function ProgressDoc() {
                 <div className={styles.previewFill} style={PREVIEW_FILL}>
                   <div style={STACK}>
                     <Progress value={50} showValue valuePosition="overlay" tone="brand" />
+                    <Progress value={50} showValue valuePosition="overlay" tone="success" />
                     <Progress value={50} showValue valuePosition="overlay" tone="warning" />
                     <Progress value={50} showValue valuePosition="overlay" tone="danger" />
                     <Progress value={50} showValue valuePosition="overlay" tone="muted" />
@@ -180,12 +181,12 @@ export function ProgressDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  brand, warning, danger, and muted on the same piece. No extra tones.
+                  brand, success, warning, danger, and muted on the same piece. success is a finished or healthy result. No extra tones.
                 </p>
               </div>
               <CodeBlock
                 code={
-                  '<Progress value={50} showValue valuePosition="overlay" tone="brand" />\n<Progress value={50} showValue valuePosition="overlay" tone="warning" />\n<Progress value={50} showValue valuePosition="overlay" tone="danger" />\n<Progress value={50} showValue valuePosition="overlay" tone="muted" />'
+                  '<Progress value={50} showValue valuePosition="overlay" tone="brand" />\n<Progress value={50} showValue valuePosition="overlay" tone="success" />\n<Progress value={50} showValue valuePosition="overlay" tone="warning" />\n<Progress value={50} showValue valuePosition="overlay" tone="danger" />\n<Progress value={50} showValue valuePosition="overlay" tone="muted" />'
                 }
               />
             </section>
@@ -224,6 +225,33 @@ export function ProgressDoc() {
                 </p>
               </div>
               <CodeBlock code={'<Progress value={56} label="Upload progress" showValue />'} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Indeterminate</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill} style={PREVIEW_FILL}>
+                  <Progress indeterminate label="Importing invoices" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Work is underway and the percent is not known. Bar only. A third of the track slides
+                  across; with reduced motion it is a faint still fill. No aria-valuenow.
+                </p>
+              </div>
+              <CodeBlock code={'<Progress indeterminate label="Importing invoices" />'} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>When to use which</h2>
+              <div>
+                <p className={styles.usageBody}>
+                  Skeleton for the first load of a known layout. Spinner for a short wait, and Button
+                  loading for a button action. Progress when the percent is known, and indeterminate
+                  Progress when work is underway and the percent is not. Empty or LoadError when it fails
+                  or there is nothing. Keep Meter for zones, a datatip and reference lines.
+                </p>
+              </div>
             </section>
           </div>
         )}

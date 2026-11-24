@@ -194,6 +194,41 @@ export function SkeletonDoc() {
 </Skeleton>`}
               />
             </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Layouts</h2>
+              <div className={styles.exampleCanvas}>
+                <div style={{ display: "grid", gap: "var(--space-6)", width: "100%" }}>
+                  <Skeleton layout="table" lines={4} label="Loading invoices" />
+                  <div className={styles.previewFill} style={{ maxWidth: "20rem" }}>
+                    <Card title="Plan">
+                      <Skeleton layout="card" label="Loading plan" />
+                    </Card>
+                  </div>
+                  <Skeleton layout="list" label="Loading people" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  table, card and list in one piece, with one label for the group. lines sets the rows.
+                  Card draws no frame: put it inside a kit Card.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Skeleton layout="table" lines={4} label="Loading invoices" />\n<Card title="Plan">\n  <Skeleton layout="card" label="Loading plan" />\n</Card>\n<Skeleton layout="list" label="Loading people" />'}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>When to use which</h2>
+              <div>
+                <p className={styles.usageBody}>
+                  Skeleton for the first load of a known layout. Spinner for a short wait, and Button
+                  loading for a button action. Progress when the percent is known, and indeterminate
+                  Progress when work is underway and the percent is not. Empty or LoadError when it fails
+                  or there is nothing. Keep Meter for zones, a datatip and reference lines.
+                </p>
+              </div>
+            </section>
           </div>
         )}
       </section>

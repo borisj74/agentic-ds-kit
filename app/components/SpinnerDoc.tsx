@@ -87,7 +87,7 @@ export function SpinnerDoc() {
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
-                <p className={styles.usageBody}>sm, md, and lg on one piece.</p>
+                <p className={styles.usageBody}>sm 12, md 16, and lg 20 on one piece.</p>
               </div>
               <CodeBlock
                 code={[
@@ -118,7 +118,7 @@ export function SpinnerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  A kit Button has its own spinner: set loading. Keep Spinner for waits outside a button.
+                  A kit Button has its own spinner: set loading. The button keeps its width. Keep Spinner for waits outside a button.
                 </p>
               </div>
               <CodeBlock
@@ -126,6 +126,37 @@ export function SpinnerDoc() {
 
 <Button loading>Saving…</Button>`}
               />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Inverse</h2>
+              <div className={styles.exampleCanvas}>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    padding: "var(--space-3) var(--space-4)",
+                    borderRadius: "var(--radius-control-md)",
+                    background: "var(--primary)",
+                  }}
+                >
+                  <Spinner inverse label="Syncing" />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>On a primary fill, set inverse for the on-primary ink.</p>
+              </div>
+              <CodeBlock code={"<Spinner inverse label=\"Syncing\" />"} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>When to use which</h2>
+              <div>
+                <p className={styles.usageBody}>
+                  Skeleton for the first load of a known layout. Spinner for a short wait, and Button
+                  loading for a button action. Progress when the percent is known, and indeterminate
+                  Progress when work is underway and the percent is not. Empty or LoadError when it fails
+                  or there is nothing. Keep Meter for zones, a datatip and reference lines.
+                </p>
+              </div>
             </section>
           </div>
         )}

@@ -2,21 +2,22 @@
   "id": "progress",
   "status": "stable",
   "level": "atom",
-  "intent": "Task completion as a bar or circle from 0 to 100. One piece. Optional name label. Percent overlay, end, or in the ring hole. Tones brand, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
+  "intent": "Task completion as a bar or circle from 0 to 100, or an indeterminate bar when the percent is not known. One piece. Optional name label. Percent overlay, end, or in the ring hole, in Geist Mono. Square bar ends. Tones brand, success, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
   "useWhen": [
     "Upload, import, or task completion",
     "A determinate percent in a form, card, or page",
     "A determinate percent as a ring or semicircle",
+    "Work is underway and the percent is not known: indeterminate bar",
     "DataTable Cell type=progress (Cell composes this)"
   ],
   "doNotUseWhen": [
-    "A spinner with no known percent \u2014 not this component",
-    "A rating out of 5 \u2014 that stays a Cell type",
-    "A KPI number \u2014 use Scorecard",
-    "Part-to-whole share across segments \u2014 use PieChart",
-    "Numbered wizard or checkout steps \u2014 use ProgressSteps",
-    "Usage against a plan limit \u2014 use UsageList",
-    "A measure against a range with red, amber, and green zones, a datatip, or indeterminate \u2014 use Meter"
+    "A short wait with no layout or percent, or a Button action — use Spinner or Button loading",
+    "A rating out of 5 — that stays a Cell type",
+    "A KPI number — use Scorecard",
+    "Part-to-whole share across segments — use PieChart",
+    "Numbered wizard or checkout steps — use ProgressSteps",
+    "Usage against a plan limit — use UsageList",
+    "A measure against a range with red, amber, and green zones, a datatip, or reference lines — use Meter"
   ],
   "props": {
     "value": {
@@ -32,7 +33,7 @@
         "lg"
       ],
       "default": "md",
-      "note": "Bar track height: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
+      "note": "Bar track height, square ends: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
     },
     "shape": {
       "type": "enum",
@@ -52,7 +53,7 @@
     "showValue": {
       "type": "boolean",
       "default": false,
-      "note": "Shows the rounded percent. Overlay sits on the bar. End sits after the bar, or in meta when a name label is set. Circle puts it in the hole. Semicircle puts it in the bowl."
+      "note": "Shows the rounded percent. Overlay sits on the bar. End sits after the bar, or in meta when a name label is set. Circle puts it in the hole. Semicircle puts it in the bowl. Percent text is Geist Mono with tabular figures."
     },
     "valuePosition": {
       "type": "enum",
@@ -67,13 +68,19 @@
       "type": "enum",
       "values": [
         "brand",
+        "success",
         "warning",
         "danger",
         "muted",
         "neutral"
       ],
       "default": "brand",
-      "note": "muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
+      "note": "success is a finished or healthy result. muted is an ink fill; neutral is a mid grey for a value that carries no judgement."
+    },
+    "indeterminate": {
+      "type": "boolean",
+      "default": false,
+      "note": "Bar only (a ring shape falls back to the bar). A third of the track slides across. value and showValue are ignored, and aria-valuenow and aria-valuetext are left off. Reduced motion: a faint still fill."
     },
     "ariaLabel": {
       "type": "string",
@@ -98,7 +105,6 @@
     "fill.strong",
     "text.primary",
     "surface.card",
-    "radius.full",
     "radius.controlSm",
     "space.1",
     "space.2",
@@ -109,15 +115,23 @@
     "type.weight.label",
     "motion.interactionDuration",
     "motion.duration400",
-    "motion.easeOut"
+    "motion.easeOut",
+    "fill.success",
+    "fill.successSubtle",
+    "radius.0",
+    "font.mono",
+    "opacity.400",
+    "motion.duration600",
+    "motion.easeInOut"
   ],
   "a11y": {
     "element": "div[role=progressbar]",
     "requirements": [
       "role=progressbar on the track or ring",
-      "aria-valuemin 0, aria-valuemax 100, aria-valuenow rounded percent",
-      "aria-valuetext is '{n}%'",
-      "Visible label uses aria-labelledby; unlabeled needs ariaLabel"
+      "Determinate: aria-valuemin 0, aria-valuemax 100, aria-valuenow rounded percent, aria-valuetext '{n}%'",
+      "Indeterminate: aria-valuemin and aria-valuemax only, no aria-valuenow; the unnamed default is Loading",
+      "Visible label uses aria-labelledby; unlabeled needs ariaLabel",
+      "Reduced motion: no grow-in and no slide; the indeterminate bar is a faint still fill"
     ]
   },
   "doNot": [
@@ -125,15 +139,16 @@
     "Do not invent MeterCircle or ProgressCircle",
     "Do not use PieChart for a determinate percent ring",
     "Do not use img assets for the ring",
-    "Do not add threshold-zone rings, datatip, reference lines, or indeterminate — use Meter",
+    "Do not add threshold-zone rings, datatip, or reference lines — use Meter",
     "Do not use radix or @base-ui/react",
     "Do not use a native progress element",
     "Do not use raw hex",
-    "Do not add indeterminate",
     "Do not add a multi-segment status bar",
     "Do not use Progress for ordered wizard steps — use ProgressSteps",
     "Do not use Progress alone for usage against a plan limit — use UsageList",
-    "Do not skip prefers-reduced-motion on the load animation"
+    "Do not skip prefers-reduced-motion on the load animation",
+    "Do not round the bar ends",
+    "Do not use indeterminate on a ring — use Spinner for a short wait"
   ],
-  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />\n<Progress value={50} showValue valuePosition=\"overlay\" />\n<Progress value={50} showValue tone=\"warning\" />\n<Progress value={50} showValue tone=\"danger\" />\n<Progress value={50} shape=\"circle\" showValue />"
+  "snippet": "<Progress value={33} />\n<Progress value={56} label=\"Upload progress\" showValue />\n<Progress value={50} showValue valuePosition=\"overlay\" />\n<Progress value={50} showValue tone=\"warning\" />\n<Progress value={50} showValue tone=\"danger\" />\n<Progress value={50} shape=\"circle\" showValue />\n<Progress value={100} showValue tone=\"success\" />\n<Progress indeterminate label=\"Importing invoices\" />"
 }

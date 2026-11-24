@@ -9,5 +9,7 @@ type SpinnerOwnedKeys = "children" | "role" | "aria-live" | "aria-label";
 export interface SpinnerProps extends Omit<ComponentPropsWithoutRef<"span">, SpinnerOwnedKeys> {
   size?: SpinnerSize;
   label?: string;
+  /** On a primary fill: the mark and label use the on-primary ink. */
+  inverse?: boolean;
   ref?: Ref<HTMLSpanElement>;
 }
