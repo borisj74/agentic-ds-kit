@@ -2855,7 +2855,7 @@
       "group": "component",
       "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
       "useWhen": [
-        "Button or inline action is processing",
+        "An inline action is processing (for a kit Button, set loading instead)",
         "Short indeterminate page or panel load",
         "Waiting state with no known percent"
       ],

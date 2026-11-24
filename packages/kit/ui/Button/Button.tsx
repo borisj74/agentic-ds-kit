@@ -47,7 +47,7 @@ export function Button({
   const resolvedAppearance: ButtonAppearance = flat && appearance === "ghost" ? "soft" : appearance;
   const busy = loading && !disabled;
   const dangerIcon = hasLabel && mode === "danger" && resolvedAppearance !== "ghost" ? DANGER_ICON : undefined;
-  const start = iconStart ?? dangerIcon;
+  const start = iconStart || dangerIcon;
   // The spinner takes the leading slot; on an icon-only button it takes the place of the one icon.
   const spinner = busy ? <LucideByName name="LoaderCircle" size={iconPx} className={cx(styles.icon, styles.spinner)} /> : null;
 

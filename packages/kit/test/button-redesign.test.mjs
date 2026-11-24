@@ -49,10 +49,10 @@ describe("control-height tokens", () => {
     assert.match(css, /--control-height-lg: var\(--space-10\);/);
   });
 
-  test("Button, Input, Select's field trigger and FilterButton read them", () => {
+  test("Button, the shared field classes, Select's field trigger and FilterButton read them", () => {
     for (const path of [
       "ui/Button/Button.module.css",
-      "ui/Input/Input.module.css",
+      "ui/shared/controls.module.css",
       "ui/DropdownMenu/DropdownMenu.module.css",
       "ui/FilterButton/FilterButton.module.css",
     ]) {
@@ -64,9 +64,13 @@ describe("control-height tokens", () => {
   test("an icon-only Button is a square of the control height", () => {
     const css = read("ui/Button/Button.module.css");
     for (const step of ["sm", "md", "lg"]) {
-      assert.match(css, new RegExp(`\\.${step} \\{[^}]*min-height: var\\(--control-height-${step}\\);`));
-      assert.match(css, new RegExp(`\\.iconOnly\\.${step} \\{\\s*width: var\\(--control-height-${step}\\);`));
+      assert.match(css, new RegExp(`\\.${step} \\{[^}]*--button-height: var\\(--control-height-${step}\\);`));
     }
+    assert.match(css, /^\.button \{[^}]*min-height: var\(--button-height\);/);
+    // One class only: `block` and a parent's width rule (Card footer) must still win.
+    assert.match(css, /\n\.iconOnly \{\s*width: var\(--button-height\);\s*padding: 0;/);
+    assert.doesNotMatch(css, /\.iconOnly\.(sm|md|lg)/);
+    assert.ok(css.indexOf("\n.iconOnly {") < css.indexOf("\n.block {"));
   });
 });
 

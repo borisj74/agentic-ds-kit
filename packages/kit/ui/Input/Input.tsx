@@ -42,7 +42,6 @@ export function Input({
         size === "sm" ? controlStyles.controlSm : size === "lg" ? controlStyles.controlLg : controlStyles.controlMd,
         error && controlStyles.controlError,
         styles.shell,
-        styles[size],
         className,
       )}
       data-disabled={disabled || undefined}

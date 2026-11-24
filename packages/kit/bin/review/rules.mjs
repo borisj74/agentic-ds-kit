@@ -353,10 +353,33 @@ function reviewScript(kit, { file, absPath, text }) {
 
   // wrong-use: Button checked against the Button and Link contracts
   const buttonNames = [...fromKit].filter(([, v]) => v.component.id === "button").map(([local]) => local);
+  // IconButton and SplitButton render the kit Button with its defaults, so they count as solid primary too.
+  const buttonCousins = new Map(
+    [...fromKit]
+      .filter(([, v]) => v.component.id === "iconbutton" || v.component.id === "splitbutton")
+      .map(([local, v]) => [local, v.component.id]),
+  );
   const link = kit.byId.get("link");
   const solidPrimary = [];
   const slots = tags.flatMap((t) => [...t.attrs.values()].filter((a) => a.kind === "expr").map((a) => [a.offset, a.offset + a.value.length]));
   for (const tag of tags) {
+    const cousin = buttonCousins.get(tag.name);
+    if (cousin) {
+      const solid = literal(tag, "appearance", "solid") === "solid" && literal(tag, "mode", "primary") === "primary";
+      if (solid && rendersWithTheRest(code, tag, slots)) solidPrimary.push(tag);
+      const named = ["ariaLabel", "aria-label", "aria-labelledby"].some((name) => tag.attrs.has(name));
+      if (cousin === "iconbutton" && !named && !tag.spread) {
+        findings.push({
+          rule: "wrong-use",
+          severity: RULES["wrong-use"],
+          offset: tag.offset,
+          contractId: "iconbutton",
+          message: "IconButton without an aria label. Screen readers cannot name it.",
+          fix: 'Add ariaLabel="…" that names the action.',
+        });
+      }
+      continue;
+    }
     if (!buttonNames.includes(tag.name)) continue;
     const as = tag.attrs.get("as");
     const nav = ["href", "to"].find((name) => tag.attrs.has(name)) ?? (as?.kind === "string" && as.value === "a" ? 'as="a"' : null);
@@ -397,8 +420,8 @@ function reviewScript(kit, { file, absPath, text }) {
         rule: "wrong-use",
         severity: RULES["wrong-use"],
         offset: tag.offset,
-        contractId: "button",
-        message: `More than one solid primary Button in this file (${solidPrimary.length}). A missing appearance or mode counts as solid and primary.`,
+        contractId: buttonCousins.get(tag.name) ?? "button",
+        message: `More than one solid primary Button in this file (${solidPrimary.length}). A missing appearance or mode counts as solid and primary, on IconButton and SplitButton too.`,
         fix: 'Keep one appearance="solid" mode="primary" Button per view. Make the others outline, soft or ghost, or mode="neutral".',
       });
     }

@@ -111,33 +111,20 @@ export function SpinnerDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>In a button row</h2>
+              <h2 className={styles.exampleTitle}>In a button</h2>
               <div className={styles.exampleCanvas}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "var(--space-2)",
-                  }}
-                >
-                  <Spinner size="sm" />
-                  <Button disabled>Loading…</Button>
-                </div>
+                <Button loading>Saving…</Button>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  Flex Spinner beside a kit Button. Button children stay a string.
+                  A kit Button has its own spinner: set loading. Keep Spinner for waits outside a button.
                 </p>
               </div>
               <CodeBlock
                 code={`import { Button } from "agentic-ds-kit";
-import { Spinner } from "agentic-ds-kit";
 
-<div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-  <Spinner size="sm" />
-  <Button disabled>Loading…</Button>
-</div>`}
+<Button loading>Saving…</Button>`}
               />
             </section>
           </div>

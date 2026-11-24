@@ -1,11 +1,12 @@
 .button {
   --button-pad: var(--space-4);
+  --button-height: var(--control-height-md);
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: var(--control-height-md);
+  min-height: var(--button-height);
   padding: 0 var(--button-pad);
   border-radius: var(--radius-control-md);
   font-family: var(--font-sans);
@@ -35,21 +36,21 @@
 /* Heights come from --control-height-*, shared with Input, Select and FilterButton. */
 .lg {
   --button-pad: var(--space-5);
-  min-height: var(--control-height-lg);
+  --button-height: var(--control-height-lg);
   font-size: var(--type-size-ui-md);
   line-height: var(--type-line-ui-md);
 }
 
 .md {
   --button-pad: var(--space-4);
-  min-height: var(--control-height-md);
+  --button-height: var(--control-height-md);
   font-size: var(--type-size-ui-sm);
   line-height: var(--type-line-ui-sm);
 }
 
 .sm {
   --button-pad: var(--space-3);
-  min-height: var(--control-height-sm);
+  --button-height: var(--control-height-sm);
   font-size: var(--type-size-ui-xs);
   line-height: var(--type-line-ui-xs);
 }
@@ -228,21 +229,11 @@
   white-space: nowrap;
 }
 
-/* Icon-only is a square of the control height. */
+/* Icon-only is a square of the control height. One class, so `block` below and a parent's width
+   rule (Card footer) still win, as they did when the size came from padding. */
 .iconOnly {
+  width: var(--button-height);
   padding: 0;
-}
-
-.iconOnly.lg {
-  width: var(--control-height-lg);
-}
-
-.iconOnly.md {
-  width: var(--control-height-md);
-}
-
-.iconOnly.sm {
-  width: var(--control-height-sm);
 }
 
 .loading {
