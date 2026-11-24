@@ -88,6 +88,7 @@ import { Empty } from "agentic-ds-kit";
 import { LoadError } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { FieldSet } from "agentic-ds-kit";
+import { SaveBar } from "agentic-ds-kit";
 import { HeaderCell } from "agentic-ds-kit";
 import { HelpPopover } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
@@ -990,6 +991,12 @@ export function GalleryPreview({ id }: { id: string }) {
           <FieldSet legend="Profile">
             <Input id="gallery-fieldset" placeholder="Email" />
           </FieldSet>
+        </Stage>
+      );
+    case "savebar":
+      return (
+        <Stage variant="wide">
+          <SaveBar changes={["Legal name", "Invoice currency"]} onDiscard={() => {}} onSave={() => {}} />
         </Stage>
       );
     case "headercell":

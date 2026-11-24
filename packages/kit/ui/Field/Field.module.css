@@ -66,6 +66,23 @@
   min-width: 0;
 }
 
+/* changed: "Edited" beside the label, 12/16 brand text with a 12px Pencil. */
+.changed {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-inline-start: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  font-weight: var(--type-weight-body);
+  color: var(--text-brand);
+}
+
+.changedIcon {
+  flex-shrink: 0;
+}
+
 .optional {
   font-weight: var(--type-weight-body);
   color: var(--text-muted);

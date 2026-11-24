@@ -21,6 +21,11 @@ export interface FieldProps extends Omit<ComponentPropsWithoutRef<"div">, FieldO
   optional?: boolean;
   /** Sets aria-required on controls that take it. No asterisk. */
   required?: boolean;
+  /**
+   * The value differs from the last save. Adds the word "Edited" (KitLabels `edited`) with a Pencil icon beside the label;
+   * screen readers hear it with the control's description. Put the old value in `hint`, e.g. Was "Northwind Traders Ltd".
+   */
+  changed?: boolean;
   labelPosition?: FieldLabelPosition;
   children: ReactNode;
   ref?: Ref<HTMLDivElement>;

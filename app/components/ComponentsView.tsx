@@ -45,6 +45,7 @@ import { EmptyDoc } from "./EmptyDoc";
 import { LoadErrorDoc } from "./LoadErrorDoc";
 import { FieldDoc } from "./FieldDoc";
 import { FieldSetDoc } from "./FieldSetDoc";
+import { SaveBarDoc } from "./SaveBarDoc";
 import { FileUploadDoc } from "./FileUploadDoc";
 import { FilterBarDoc } from "./FilterBarDoc";
 import { FilterButtonDoc } from "./FilterButtonDoc";
@@ -233,6 +234,7 @@ const TITLES: Record<string, string> = {
   resizable: "Resizable",
   field: "Field",
   fieldset: "FieldSet",
+  savebar: "SaveBar",
   filterbar: "FilterBar",
   filterbutton: "FilterButton",
   fileupload: "FileUpload",
@@ -466,6 +468,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "loaderror") return <LoadErrorDoc />;
   if (resolved === "field") return <FieldDoc />;
   if (resolved === "fieldset") return <FieldSetDoc />;
+  if (resolved === "savebar") return <SaveBarDoc />;
   if (resolved === "filterbar") return <FilterBarDoc />;
   if (resolved === "filterbutton") return <FilterButtonDoc />;
   if (resolved === "fileupload") return <FileUploadDoc />;

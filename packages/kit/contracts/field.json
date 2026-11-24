@@ -27,6 +27,7 @@
     "success": { "type": "string", "required": false, "note": "Confirmation under the hint, e.g. Email verified. CircleCheck 16px icon plus text.success words, never colour alone. Hidden while error is set." },
     "optional": { "type": "boolean", "default": false, "note": "Adds the muted word Optional (KitLabels optional) after the label. Mark the rarer kind: when most fields are required, the optional ones say Optional. Ignored when required is set." },
     "required": { "type": "boolean", "default": false, "note": "Sets aria-required on the control when its named element takes it (Input, Textarea, Checkbox, Switch, ColorPicker). No asterisk. Button triggers (Select, the date pickers) are left alone." },
+    "changed": { "type": "boolean", "default": false, "note": "The value differs from the last save. Adds the word Edited (KitLabels edited), 12/16 text.brand with a 12px Pencil, beside the label and outside it, so the label stays the control's name. Its id ({htmlFor}-changed) leads describedBy. Put the old value in hint (Was \"Northwind Traders Ltd\"). Pair with SaveBar, which lists the changed fields." },
     "labelPosition": {
       "type": "enum",
       "values": ["top", "start"],
@@ -45,7 +46,7 @@
     "className": "root",
     "rest": "div"
   },
-  "tokens": ["text.primary", "text.muted", "text.danger", "text.success"],
+  "tokens": ["text.primary", "text.muted", "text.danger", "text.success", "text.brand"],
   "a11y": {
     "element": "div",
     "requirements": [
@@ -56,7 +57,8 @@
       "required sets aria-required on controls that take it; there is no asterisk", "A Slider child gets labelledBy={htmlFor}-label, since a label for cannot name role=slider",
       "When help is set, HelpPopover sits beside the label; hint and message stay under the control",
       "data-invalid when error is set, data-success when success is set and error is not",
-      "The message icon is aria-hidden; the words carry the state"
+      "The message icon is aria-hidden; the words carry the state",
+      "changed adds Edited outside the label with id {htmlFor}-changed, first in describedBy; its Pencil is aria-hidden"
     ]
   },
   "doNot": [
@@ -66,7 +68,8 @@
     "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
     "Do not add an asterisk for required — set required, and mark the rarer kind with optional",
     "Do not build an error summary component — on submit, show an Alert (tone danger) with one Button per field that moves focus to it, and focus the Alert",
+    "Do not add a previous-value prop or a Badge for changed fields — set changed and put the old value in hint",
     "Do not use raw hex"
   ],
-  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\" required><Input id=\"email\" type=\"email\" /></Field>\n<Field label=\"VAT number\" htmlFor=\"vat\" optional hint=\"Starts with a country code.\" error=\"It needs 9 digits after DE.\"><Input id=\"vat\" /></Field>"
+  "snippet": "<Field label=\"Email\" htmlFor=\"email\" hint=\"We never share your email.\" required><Input id=\"email\" type=\"email\" /></Field>\n<Field label=\"VAT number\" htmlFor=\"vat\" optional hint=\"Starts with a country code.\" error=\"It needs 9 digits after DE.\"><Input id=\"vat\" /></Field>\n<Field label=\"Legal name\" htmlFor=\"legal-name\" changed hint=\"Was “Northwind Traders Ltd”.\"><Input id=\"legal-name\" defaultValue=\"Northwind Traders Limited\" /></Field>"
 }

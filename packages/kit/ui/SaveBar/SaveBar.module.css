@@ -1,0 +1,109 @@
+/* Sticky to the bottom of its scroll container (put it last inside main). The page sets
+   scroll-padding-bottom to the bar height so focused fields never hide under it. */
+.root {
+  container: savebar / inline-size;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: var(--bg-surface);
+  border-top: var(--border-width-thin) solid var(--line-strong);
+  font-family: var(--font-sans);
+}
+
+.root[data-state="error"] {
+  border-top-color: var(--status-danger-border);
+}
+
+/* Wide: one 64px row. Status on the left, Discard and Save on the right. */
+.bar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-16);
+  padding: var(--space-3) var(--space-6);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--icon-warning);
+}
+
+.root[data-state="error"] .icon {
+  color: var(--icon-danger);
+}
+
+.root[data-state="saved"] .icon {
+  color: var(--icon-success);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-size-ui-sm);
+  line-height: var(--type-line-ui-sm);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-fg);
+}
+
+.root[data-state="error"] .title {
+  color: var(--status-danger-text);
+}
+
+.detail {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  font-weight: var(--type-weight-body);
+  color: var(--text-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* Narrow (under 30rem, 480px): the status line on top, then Discard and Save in one row.
+   Save takes two thirds and Discard one third; Save alone takes the row. The buttons go to lg 40 in JS. */
+@container savebar (max-width: 30rem) {
+  .bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-6) var(--space-6);
+  }
+
+  .status {
+    gap: var(--space-2);
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .discard {
+    flex: 1 1 0;
+  }
+
+  .save {
+    flex: 2 1 0;
+  }
+}

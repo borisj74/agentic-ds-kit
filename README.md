@@ -57,7 +57,7 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 ### Components
 
 - **Actions** — Button, ButtonGroup, DropdownMenu, FilterButton, FilterBar
-- **Forms** — Input, Textarea, Select, SegmentedControl, TileGroup, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, DatePicker, DateRangePicker, DateTimePicker, TimePicker, NumberInput, CurrencyInput, Combobox, MultiSelect, TagInput, ColorPicker, FileUpload
+- **Forms** — Input, Textarea, Select, SegmentedControl, TileGroup, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, SaveBar, DatePicker, DateRangePicker, DateTimePicker, TimePicker, NumberInput, CurrencyInput, Combobox, MultiSelect, TagInput, ColorPicker, FileUpload
 - **Data & charts** — Table, DataTable, DataGrid, Cell, HeaderCell, ListView, LinkList, TreeView, UsageList, Scorecard, Scoreboard, LineChart, BarChart, BarList, ComboChart, Heatmap, PieChart, ScatterChart, NumberTransition, InsightCard, Calendar, Meter
 - **Feedback** — Alert, Badge, Tag, Count, Delta, Kbd, Tooltip, Toast, Empty, LoadError, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText, Skeleton
 - **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command, HelpPopover, Popover, ContextMenu

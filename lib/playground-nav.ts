@@ -105,6 +105,7 @@ export const COMPONENT_ITEMS = [
   "radiogroup",
   "resizable",
   "runningnow",
+  "savebar",
   "scorecard",
   "scoreboard",
   "section",
@@ -226,6 +227,7 @@ export function componentLabel(id: string): string {
   if (id === "inputotp") return "InputOTP";
   if (id === "dropdownmenu") return "DropdownMenu";
   if (id === "fieldset") return "FieldSet";
+  if (id === "savebar") return "SaveBar";
   if (id === "filterbutton") return "FilterButton";
   if (id === "fileupload") return "FileUpload";
   if (id === "filterbar") return "FilterBar";
@@ -284,6 +286,7 @@ export const COMPONENT_GROUPS = [
       "multiselect",
       "numberinput",
       "radiogroup",
+      "savebar",
       "select",
       "segmentedcontrol",
       "taginput",

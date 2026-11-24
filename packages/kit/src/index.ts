@@ -70,6 +70,7 @@ export * from "../ui/Empty";
 export * from "../ui/LoadError";
 export * from "../ui/Field";
 export * from "../ui/FieldSet";
+export * from "../ui/SaveBar";
 export * from "../ui/FileUpload";
 export * from "../ui/FilterButton";
 export * from "../ui/FilterBar";

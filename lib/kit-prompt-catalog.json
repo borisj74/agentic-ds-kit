@@ -5202,6 +5202,7 @@
         "Do not put help on Input, Textarea, Select, or DatePicker — Field owns it",
         "Do not add an asterisk for required — set required, and mark the rarer kind with optional",
         "Do not build an error summary component — on submit, show an Alert (tone danger) with one Button per field that moves focus to it, and focus the Alert",
+        "Do not add a previous-value prop or a Badge for changed fields — set changed and put the old value in hint",
         "Do not use raw hex"
       ],
       "props": {
@@ -5248,6 +5249,11 @@
           "type": "boolean",
           "default": false,
           "note": "Sets aria-required on the control when its named element takes it (Input, Textarea, Checkbox, Switch, ColorPicker). No asterisk. Button triggers (Select, the date pickers) are left alone."
+        },
+        "changed": {
+          "type": "boolean",
+          "default": false,
+          "note": "The value differs from the last save. Adds the word Edited (KitLabels edited), 12/16 text.brand with a 12px Pencil, beside the label and outside it, so the label stays the control's name. Its id ({htmlFor}-changed) leads describedBy. Put the old value in hint (Was \"Northwind Traders Ltd\"). Pair with SaveBar, which lists the changed fields."
         },
         "labelPosition": {
           "type": "enum",
@@ -5385,6 +5391,80 @@
           "type": "slot",
           "required": true,
           "note": "kit Field, Checkbox, Switch, or RadioGroup"
+        }
+      }
+    },
+    {
+      "id": "savebar",
+      "group": "component",
+      "intent": "A save bar that sticks to the bottom of main on a form page. It says what is unsaved (\"2 unsaved changes\" and the field names), when it was last saved, or what stopped the save, and holds Discard and Save changes. Save is the page's one solid primary.",
+      "useWhen": [
+        "a settings or details form where edits stay unsaved until Save",
+        "say which fields changed and when the page was last saved",
+        "keep Save in reach on a long form, including on a phone"
+      ],
+      "doNotUseWhen": [
+        "a short form that ends in its own Buttons, like a Card or Modal footer — use Card actions or ModalCard",
+        "a setting that saves as soon as it changes (a Switch) — show a Toast instead",
+        "a page-level message about the whole workspace — use Alert"
+      ],
+      "doNot": [
+        "Do not add a second solid primary Button to the page: Save is the one",
+        "Do not invent a local FormFooter, StickyActions or UnsavedBanner",
+        "Do not show the unsaved state by colour alone: the status line says it in words",
+        "Do not put role=alert on the status line; the error summary Alert takes focus on Save",
+        "Do not use raw hex"
+      ],
+      "props": {
+        "state": {
+          "type": "enum",
+          "values": [
+            "saved",
+            "dirty",
+            "error"
+          ],
+          "default": "dirty",
+          "note": "saved: CircleCheck (icon.success), Discard hidden, Save disabled. dirty: CircleAlert (icon.warning). error: CircleX (icon.danger), status in status.dangerText, top edge status.dangerBorder. The icon is aria-hidden; the words carry the state."
+        },
+        "changes": {
+          "type": "array",
+          "required": false,
+          "note": "string[] of changed field labels, e.g. [\"Legal name\", \"Invoice currency\"]. The count makes the dirty status (\"2 unsaved changes\"); the names make the muted line under it. Mark the same fields with Field changed."
+        },
+        "savedAt": {
+          "type": "string",
+          "required": false,
+          "note": "Pre-formatted, e.g. \"10:42\" or \"Nov 14 by Maya Chen\". Saved reads \"Saved at 10:42\"; dirty and error add \"last saved Nov 14 by Maya Chen\" to the muted line."
+        },
+        "message": {
+          "type": "string",
+          "required": false,
+          "note": "The status line in your words; replaces the default (\"2 unsaved changes\", \"Saved at 10:42\", \"Not saved\"). In the error state say what to fix: \"Not saved · 1 field to fix\". Also the way to translate."
+        },
+        "onDiscard": {
+          "type": "function",
+          "required": false,
+          "note": "Renders an outline neutral Discard Button. Hidden in the saved state. Ask with AlertDialog first when discarding loses a lot."
+        },
+        "onSave": {
+          "type": "function",
+          "required": true,
+          "note": "The solid primary Save Button, disabled in the saved state. On Save with field errors, focus an Alert summary (see Field) and set state error."
+        },
+        "saveLabel": {
+          "type": "string",
+          "default": "Save changes",
+          "note": "Also names the region."
+        },
+        "discardLabel": {
+          "type": "string",
+          "default": "Discard",
+          "note": "Cancel when leaving the page is the outcome."
+        },
+        "saving": {
+          "type": "boolean",
+          "default": false,
+          "note": "Save shows its spinner (Button loading) and Discard is disabled while the request runs."
         }
       }
     },

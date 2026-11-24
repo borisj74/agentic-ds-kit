@@ -58,6 +58,9 @@ const STATES_CODE = `<Field label="Company name" htmlFor="company" required>
 </Field>
 <Field label="Invoice currency" htmlFor="currency">
   <Select id="currency" size="lg" options={currencies} />
+</Field>
+<Field label="Legal name" htmlFor="legal-name" changed hint="Was “Northwind Traders Ltd”.">
+  <Input id="legal-name" defaultValue="Northwind Traders Limited" />
 </Field>`;
 
 const SUMMARY_CODE = `const alertRef = useRef<HTMLDivElement>(null);
@@ -283,7 +286,7 @@ export function FieldDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Optional, required, success</h2>
+              <h2 className={styles.exampleTitle}>Optional, required, success, changed</h2>
               <div className={styles.exampleCanvas}>
                 <div className={`${styles.previewFill} ${local.stack}`} style={{ maxWidth: "20rem" }}>
                   <Field label="Company name" htmlFor="field-state-company" required>
@@ -304,6 +307,14 @@ export function FieldDoc() {
                   <Field label="Invoice currency" htmlFor="field-state-currency">
                     <Select id="field-state-currency" size="lg" options={CURRENCIES} />
                   </Field>
+                  <Field
+                    label="Legal name"
+                    htmlFor="field-state-legal-name"
+                    changed
+                    hint="Was “Northwind Traders Ltd”."
+                  >
+                    <Input id="field-state-legal-name" defaultValue="Northwind Traders Limited" />
+                  </Field>
                 </div>
               </div>
               <div>
@@ -314,7 +325,8 @@ export function FieldDoc() {
                   message goes under it with an icon. Say what to do: Enter a postcode with 5 digits, not Invalid
                   input. Check on blur and on submit, never while the person is typing. Read-only keeps full
                   contrast; disabled uses the disabled tokens. One size per row: a field, a Select and a Button
-                  in one row share sm, md or lg.
+                  in one row share sm, md or lg. changed says Edited beside the label for a value not saved yet;
+                  put the old value in hint and list the field in SaveBar.
                 </p>
               </div>
               <CodeBlock code={STATES_CODE} />
