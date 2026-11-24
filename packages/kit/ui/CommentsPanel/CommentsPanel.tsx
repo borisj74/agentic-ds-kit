@@ -9,7 +9,7 @@ import { Drawer } from "../Drawer";
 import { Empty } from "../Empty";
 import { SegmentedControl } from "../SegmentedControl";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { NARROW_QUERY, WIDE_QUERY, useMediaQuery } from "../shared/useMediaQuery";
 import { useIsClient } from "../shared/useIsClient";

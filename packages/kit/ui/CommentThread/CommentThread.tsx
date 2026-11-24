@@ -11,7 +11,7 @@ import { Empty } from "../Empty";
 import { Kbd } from "../Kbd";
 import { Skeleton } from "../Skeleton";
 import { Textarea } from "../Textarea";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import type { CommentMember, CommentThreadProps, ThreadComment } from "./CommentThread.types";

@@ -9,6 +9,30 @@
   min-width: 0;
 }
 
+.sm {
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+.lg {
+  padding: var(--space-8) var(--space-6);
+}
+
+/* md and lg stack the tile over the copy; sm puts the bare icon and the sentence on one row. */
+.lead {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.sm .lead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: start;
+}
+
 .outlined {
   border: var(--border-100) solid var(--border-faint);
   border-radius: var(--radius-surface-sm);
@@ -21,15 +45,38 @@
   justify-content: center;
 }
 
+/* md: 32px tile. lg: 40px tile. sm: the bare 16px icon, no tile. */
 .mediaWell {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: var(--radius-full);
-  background: var(--surface-muted);
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-md);
+  background: var(--bg-tray);
   color: var(--icon-secondary);
+}
+
+.lg .mediaWell {
+  width: var(--space-10);
+  height: var(--space-10);
+}
+
+.sm .mediaWell {
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--icon-muted);
+}
+
+.brandWell {
+  background: var(--surface-brand-subtle);
+  color: var(--icon-brand);
+}
+
+.sm .brandWell {
+  background: none;
+  color: var(--icon-brand);
 }
 
 .mediaWell svg {
@@ -38,26 +85,38 @@
 
 .copy {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   max-width: 24rem;
   min-width: 0;
+}
+
+.lg .copy {
+  gap: var(--space-2);
 }
 
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--type-size-heading);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading-5);
-  line-height: var(--type-line-body);
+  letter-spacing: var(--type-tracking-heading);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-primary);
 }
 
+.lg .title {
+  font-size: var(--type-size-heading-5);
+  letter-spacing: var(--type-tracking-heading-5);
+  line-height: var(--type-line-heading-5);
+}
+
+.sentence,
 .description {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-body-sm);
   color: var(--text-secondary);
 }
 

@@ -8,7 +8,7 @@ import { Badge } from "../Badge";
 import type { BadgeTone } from "../Badge/Badge.types";
 import { Button } from "../Button";
 import { Skeleton } from "../Skeleton";
-import { LoadError } from "../shared/LoadError";
+import { LoadError } from "../LoadError";
 import { cx } from "../shared/cx";
 import type { ExperimentCardProps, ExperimentVariant } from "./ExperimentCard.types";
 import styles from "./ExperimentCard.module.css";

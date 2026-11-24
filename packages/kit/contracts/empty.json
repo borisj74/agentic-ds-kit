@@ -6,18 +6,20 @@
   "useWhen": [
     "A list or table has no rows",
     "A page section has no content yet",
-    "A panel needs a centered placeholder with optional actions"
+    "A panel needs a centered placeholder with optional actions",
+    "Pick a kind: no-data (nothing in the range), no-results (a filter or search found nothing), first-use (nothing set up yet), permission (the person can't see it)"
   ],
   "doNotUseWhen": [
     "Inline page status — use Alert",
     "Chart with no data — charts use their own emptyLabel",
-    "Loading with no content — use Spinner or LoadingAnimation"
+    "Loading with no content — use Spinner or LoadingAnimation",
+    "Something failed to load — use LoadError"
   ],
   "props": {
     "title": {
       "type": "string",
       "required": true,
-      "note": "Primary heading for the empty state."
+      "note": "The one sentence that says what happened, like \"No invoice matches these filters.\" A heading at md and lg; plain text at sm."
     },
     "description": {
       "type": "string",
@@ -27,7 +29,7 @@
     "icon": {
       "type": "KitIcon",
       "required": false,
-      "note": "Shown in a circular media well. Not EmptyMedia. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+      "note": "Overrides the kind's icon. Shown in the media tile (md, lg) or bare (sm). Not EmptyMedia. A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
     },
     "media": {
       "type": "slot",
@@ -37,12 +39,33 @@
     "actions": {
       "type": "slot",
       "required": false,
-      "note": "Action row. Compose kit Buttons only. Not EmptyContent."
+      "note": "Action row. Compose kit Buttons only. Not EmptyContent. Neutral sm Buttons, one verb each (Clear filters, Show 12 months, Request access). Only kind first-use may hold one primary Button; at lg, one primary and up to two neutral."
     },
     "outlined": {
       "type": "boolean",
       "default": false,
       "note": "Bordered empty state with surface-card background."
+    },
+    "kind": {
+      "type": "enum",
+      "values": [
+        "no-data",
+        "no-results",
+        "first-use",
+        "permission"
+      ],
+      "required": false,
+      "note": "Why it is empty. Sets the default icon (ChartLine, SearchX, Plug, Lock) and the role: role=status for no-data, no-results and permission, so it is read once; no role for first-use. first-use gets the brand tile. Errors are not a kind: use LoadError. Leave it out for a plain placeholder with no role."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "note": "sm: in a chart, list or table cell. Bare 16px icon and the title as one sentence on one row with no heading, one neutral sm Button. md: a whole card body. 32px icon tile and a title; put card actions in the Card footer. lg: a page. 40px tile, heading-5 title, one primary and up to two neutral Buttons."
     }
   },
   "passthrough": {
@@ -53,35 +76,51 @@
   },
   "tokens": [
     "surface.card",
-    "surface.muted",
+    "surface.brandSubtle",
+    "bg.tray",
     "text.primary",
     "text.secondary",
     "icon.secondary",
+    "icon.muted",
+    "icon.brand",
     "border.faint",
     "radius.surfaceSm",
-    "radius.full",
+    "radius.md",
+    "space.1",
     "space.2",
     "space.3",
     "space.4",
     "space.6",
-    "type.size.heading",
+    "space.8",
+    "space.10",
+    "type.size.uiLg",
+    "type.size.heading5",
     "type.size.bodySm",
+    "type.line.uiLg",
+    "type.line.heading5",
+    "type.line.bodySm",
     "type.weight.heading",
     "type.weight.body",
+    "type.tracking.heading",
     "type.tracking.heading5"
   ],
   "a11y": {
     "element": "div",
     "requirements": [
-      "Title uses a heading element",
+      "Title uses a heading element at md and lg; at sm it is a sentence",
       "Icon media is aria-hidden",
+      "kind no-data, no-results and permission set role=status so the change is read once; first-use has no role",
+      "When it replaces a Skeleton it takes the same space and focus does not move",
       "Actions are regular interactive controls"
     ]
   },
   "doNot": [
     "Do not invent EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, or EmptyContent",
+    "Do not show a failure with Empty — use LoadError",
+    "Do not put a primary Button in Empty unless kind is first-use (or size lg on a page)",
+    "Do not write vague copy like Something went wrong or Nothing here — say what happened, then what to do",
     "Do not use raw hex",
     "Do not use glass, color-mix, or backdrop-blur"
   ],
-  "snippet": "<Empty title=\"No projects yet\" description=\"You haven't created any projects yet.\" icon=\"Folder\" actions={<><Button>Create</Button><Button appearance=\"outline\" mode=\"neutral\">Import</Button></>} />"
+  "snippet": "<Empty kind=\"no-results\" title=\"No invoice matches these filters.\" actions={<Button size=\"sm\" appearance=\"outline\" mode=\"neutral\">Clear filters</Button>} />\n<Empty kind=\"first-use\" title=\"Connect billing\" description=\"Connect Stripe to see revenue.\" actions={<Button size=\"sm\">Connect Stripe</Button>} />"
 }
