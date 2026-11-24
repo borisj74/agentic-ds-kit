@@ -5,4 +5,8 @@ export type {
   TableSize,
   TableAlign,
   TableFooter,
+  TableState,
+  TableRow,
+  TableRowAction,
+  TableSortValue,
 } from "./Table.types";

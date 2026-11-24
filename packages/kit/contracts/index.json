@@ -696,7 +696,7 @@
   },
   {
     "id": "table",
-    "intent": "Simple semantic table for invoices, lists, and text rows. Search and filters belong on DataTable. One piece.",
+    "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header and loading, empty and error states. Search and filters belong on DataTable. One piece.",
     "group": "component",
     "path": "contracts/table.json",
     "status": "stable",

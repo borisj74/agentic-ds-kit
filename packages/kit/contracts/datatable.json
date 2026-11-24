@@ -153,7 +153,7 @@
     "Do not use TanStack Table, cmdk, Storybook, Figma, or extra dependencies",
     "Do not use raw hex",
     "Do not put a checkbox on every Cell \u2014 row selection stays on DataTable",
-    "Do not add pagination, loading, row actions, expandable rows, sticky header, density, or infinite scroll",
+    "Do not add pagination (Pagination sits below the table), loading or row actions here \u2014 Table has state and rowActions; no expandable rows, sticky header, density, or infinite scroll",
     "Do not invent FilterChip, a Tag-based filter summary, or a second filter summary — the dropdown trigger is the selected value; Reset filters and selection actions are kit Button",
     "Do not put a primary Button in bulkActions",
     "Do not invent a SortButton or use TanStack Table for sort",
