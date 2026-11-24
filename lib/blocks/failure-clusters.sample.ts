@@ -23,7 +23,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     lastSeen: "4 min ago",
     sample: {
       name: "stripe.refunds.create",
-      summary: "charge ch_48213",
+      summary: "Refunds hit the Stripe rate limit when the Billing and Support agents retry at the same time, e.g. charge ch_48213.",
       args: { charge: "ch_48213", amount: 7400, currency: "eur" },
       error: ["429 Too Many Requests", "Request rate limit exceeded. Retry after 2s."],
       duration: "0.3s",
@@ -46,7 +46,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     lastSeen: "18 min ago",
     sample: {
       name: "model.generate",
-      summary: "thread t_5521, 214 messages",
+      summary: "Long support threads go past the model context, e.g. thread t_5521 with 214 messages.",
       args: { thread: "t_5521", messages: 214 },
       error: "context_length_exceeded: 212,488 tokens > 200,000",
       duration: "1.1s",
@@ -68,7 +68,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     lastSeen: "9 min ago",
     sample: {
       name: "sheets.values.get",
-      summary: "EU price list!A1:F900",
+      summary: "The Google Sheets token expired, so the EU price list sync cannot read its range.",
       args: { spreadsheet: "1Bx…eU", range: "EU price list!A1:F900" },
       error: ["401 Unauthorized", "invalid_grant: Token has been expired or revoked."],
       duration: "0.2s",
@@ -90,7 +90,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     lastSeen: "1 h ago",
     sample: {
       name: "web.search",
-      summary: "\"EU VAT rates 2027\"",
+      summary: "Web search gives up after 30 s on broad queries such as \"EU VAT rates 2027\".",
       args: { query: "EU VAT rates 2027", results: 10 },
       error: "TimeoutError: no response after 30000ms",
       duration: "30.0s",
@@ -110,7 +110,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     mutedUntil: "until 09:00",
     sample: {
       name: "email.send",
-      summary: "to ops@freight-partner.example",
+      summary: "Mail to ops@freight-partner.example bounces: the mailbox does not exist.",
       args: { to: "ops@freight-partner.example", subject: "Q3 freight rates" },
       error: "550 5.1.1 Recipient address rejected: mailbox unavailable",
       duration: "0.9s",
@@ -129,7 +129,7 @@ export const FAILURE_CLUSTERS: FailureCluster[] = [
     lastSeen: "Today 03:05",
     sample: {
       name: "invoices.parse",
-      summary: "invoice_7781.pdf",
+      summary: "The invoice parser returns fields the schema does not allow, e.g. invoice_7781.pdf.",
       args: { file: "invoice_7781.pdf" },
       error: "ValidationError: total must be number, got string \"1.204,50\"",
       duration: "0.6s",

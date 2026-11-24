@@ -161,3 +161,20 @@ describe("Scoreboard passes looks through", () => {
     assert.match(html, /<polyline/);
   });
 });
+
+describe("Scorecard goodWhen", () => {
+  test("judges up and down moves in words, with the status icon and tone", async () => {
+    const { judgeDelta } = await import("../dist/ui/Scorecard/Scorecard.js");
+    assert.equal(judgeDelta("up", "up"), "better");
+    assert.equal(judgeDelta("up", "down"), "worse");
+    assert.equal(judgeDelta("flat", "down"), null);
+    assert.equal(judgeDelta("down", undefined), null);
+    const worse = h(Scorecard, { label: "Average cost", value: "$0.021", delta: "+17%", trend: "up", goodWhen: "down" });
+    assert.ok(worse.includes("Worse · +17%"));
+    assert.match(worse, /_down_/, "danger tone");
+    const better = h(Scorecard, { label: "Pass rate", value: "91.7%", delta: "+6.3 pts", trend: "up", goodWhen: "up" });
+    assert.ok(better.includes("Better · +6.3 pts"));
+    assert.match(better, /_up_/, "success tone");
+    assert.ok(!h(Scorecard, { label: "Cost", value: "$1", delta: "0%", trend: "flat", goodWhen: "down" }).includes("Better"));
+  });
+});

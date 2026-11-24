@@ -3,7 +3,7 @@
 import { useId, type Ref } from "react";
 import { Badge } from "../Badge";
 import { LucideByName } from "../Button/lucideName";
-import type { ScorecardDeltaTone, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
+import type { ScorecardDeltaTone, ScorecardGoodWhen, ScorecardProps, ScorecardTrend } from "./Scorecard.types";
 import { cx } from "../shared/cx";
 import styles from "./Scorecard.module.css";
 import { ScorecardMeterBar, ScorecardSparkline } from "./ScorecardVisual";
@@ -15,6 +15,7 @@ export type {
   ScorecardTrend,
   ScorecardSize,
   ScorecardDeltaTone,
+  ScorecardGoodWhen,
   ScorecardAppearance,
   ScorecardSelectionRole,
   ScorecardSparklineVariant,
@@ -73,12 +74,27 @@ const DELTA_TONE_ICON: Record<ScorecardDeltaTone, string> = {
   neutral: "Minus",
 };
 
+/**
+ * With `goodWhen`, an up or down move is judged: the word says Better or Worse, the status icon
+ * repeats it and the tone follows it. Flat and neutral moves are not judged.
+ */
+export function judgeDelta(trend: ScorecardTrend, goodWhen: ScorecardGoodWhen | undefined): "better" | "worse" | null {
+  if (!goodWhen || (trend !== "up" && trend !== "down")) return null;
+  return trend === goodWhen ? "better" : "worse";
+}
+
+const JUDGED: Record<"better" | "worse", { word: string; icon: string; tone: ScorecardDeltaTone }> = {
+  better: { word: "Better", icon: "CircleCheck", tone: "success" },
+  worse: { word: "Worse", icon: "TriangleAlert", tone: "danger" },
+};
+
 export function Scorecard({
   label,
   value,
   delta,
   trend = "neutral",
   deltaTone,
+  goodWhen,
   hint,
   size = "md",
   badge,
@@ -104,8 +120,12 @@ export function Scorecard({
   const badgeId = useId();
   const labelledBy = label ? `${labelId} ${valueId}` : valueId;
   const toggle = onClick && selected !== undefined;
-  const deltaClass = deltaTone ? DELTA_TONE_CLASS[deltaTone] : TREND_CLASS[trend];
-  const deltaIcon = deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
+  const judged = judgeDelta(trend, goodWhen);
+  const judge = judged ? JUDGED[judged] : null;
+  const tone = deltaTone ?? judge?.tone;
+  const deltaClass = tone ? DELTA_TONE_CLASS[tone] : TREND_CLASS[trend];
+  const deltaIcon = judge ? judge.icon : deltaTone && trend === "neutral" ? DELTA_TONE_ICON[deltaTone] : TREND_ICON[trend];
+  const deltaText = judge && delta ? `${judge.word} · ${delta}` : delta;
   const radio = toggle && selectionRole === "radio";
   // A meter replaces the sparkline. The reference and expressive looks move the chart to the card's foot.
   const showMeter = meterState(meter) !== null;
@@ -165,7 +185,7 @@ export function Scorecard({
           {delta ? (
             <span className={`${styles.delta} ${deltaClass}`}>
               <LucideByName name={deltaIcon} size={16} className={styles.icon} />
-              {delta}
+              {deltaText}
             </span>
           ) : null}
           {hint ? <span className={styles.hint}>{hint}</span> : null}

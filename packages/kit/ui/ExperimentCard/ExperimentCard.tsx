@@ -107,7 +107,7 @@ export function ExperimentCard({
 
           <ul className={styles.variants} aria-label={`${metricLabel} by variant`}>
             {variants.map((variant, index) => (
-              <VariantRow key={variant.id} variant={variant} letter={LETTERS[index] ?? String(index + 1)} running={status === "running"} />
+              <VariantRow key={variant.id} variant={variant} letter={LETTERS[index] ?? String(index + 1)} running={status === "running"} metricLabel={metricLabel} />
             ))}
           </ul>
 
@@ -212,7 +212,12 @@ export function ExperimentCard({
   );
 }
 
-function VariantRow({ variant, letter, running }: { variant: ExperimentVariant; letter: string; running: boolean }) {
+/** "Paid within 7 days" reads "paid within 7 days" under a value. */
+function lowerFirst(text: string): string {
+  return text ? text.charAt(0).toLowerCase() + text.slice(1) : text;
+}
+
+function VariantRow({ variant, letter, running, metricLabel }: { variant: ExperimentVariant; letter: string; running: boolean; metricLabel: string }) {
   return (
     <li className={cx(styles.variant, variant.isWinner && styles.variantWinner)}>
       <span className={styles.letter} aria-hidden="true">
@@ -232,15 +237,21 @@ function VariantRow({ variant, letter, running }: { variant: ExperimentVariant; 
             </Badge>
           ) : null}
         </span>
-        <span className={styles.traffic}>{variant.traffic}% of traffic</span>
       </span>
-      <span className={styles.value}>
-        {variant.value ?? (
-          <>
-            <span aria-hidden="true">–</span>
-            <span className={styles.srOnly}>no data yet</span>
-          </>
-        )}
+      {/* The metric sits under each value, so a number never stands without what it measures. */}
+      <span className={styles.result}>
+        <span className={styles.value}>
+          {variant.value ?? (
+            <>
+              <span aria-hidden="true">–</span>
+              <span className={styles.srOnly}>no data yet</span>
+            </>
+          )}
+        </span>
+        <span className={styles.traffic}>
+          {`${lowerFirst(metricLabel)} · ${variant.traffic}%`}
+          <span className={styles.srOnly}> of traffic</span>
+        </span>
       </span>
     </li>
   );
