@@ -23,7 +23,7 @@
   max-width: 20rem;
   padding: var(--space-3);
   border: var(--border-surface) solid var(--border-faint);
-  border-radius: var(--radius-control-md);
+  border-radius: var(--radius-surface-sm);
   background: var(--surface-elevated);
   box-shadow: var(--shadow-md);
   color: var(--text-primary);
@@ -47,10 +47,10 @@
 
 .title {
   margin: 0 0 var(--space-1);
-  font-size: var(--type-size-label);
+  font-size: var(--type-size-ui-lg);
   font-weight: var(--type-weight-heading);
   letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-heading);
+  line-height: var(--type-line-ui-lg);
   color: var(--text-primary);
 }
 
@@ -74,7 +74,7 @@
 
 .top .arrow {
   bottom: -0.28rem;
-  left: var(--help-arrow);
+  left: var(--floating-arrow);
   margin-left: calc(var(--help-arrow-size) / -2);
   border-top: 0;
   border-left: 0;
@@ -82,7 +82,7 @@
 
 .bottom .arrow {
   top: -0.28rem;
-  left: var(--help-arrow);
+  left: var(--floating-arrow);
   margin-left: calc(var(--help-arrow-size) / -2);
   border-bottom: 0;
   border-right: 0;
@@ -90,7 +90,7 @@
 
 .left .arrow {
   right: -0.28rem;
-  top: var(--help-arrow);
+  top: var(--floating-arrow);
   margin-top: calc(var(--help-arrow-size) / -2);
   border-bottom: 0;
   border-left: 0;
@@ -98,7 +98,7 @@
 
 .right .arrow {
   left: -0.28rem;
-  top: var(--help-arrow);
+  top: var(--floating-arrow);
   margin-top: calc(var(--help-arrow-size) / -2);
   border-top: 0;
   border-right: 0;

@@ -1,15 +1,17 @@
 .wrapper {
-  position: relative;
   display: inline-flex;
 }
 
+/* Portaled to document.body; top and left come from the shared placement helper. */
 .bubble {
-  --tooltip-offset: calc(100% + 0.5rem);
-  position: absolute;
+  --tooltip-arrow-size: 0.5rem;
+  position: fixed;
   z-index: var(--z-tooltip);
+  box-sizing: border-box;
   width: max-content;
   max-width: 16rem;
   padding: var(--space-1) var(--space-2);
+  border: var(--border-surface) solid var(--border-subtle);
   border-radius: var(--radius-control-md);
   background: var(--surface-inverse);
   box-shadow: var(--shadow-md);
@@ -19,15 +21,11 @@
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-body);
   text-align: center;
-  pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity var(--motion-overlay-exit-duration) var(--motion-overlay-exit-easing),
-    transform var(--motion-overlay-exit-duration) var(--motion-overlay-exit-easing),
-    visibility 0s linear var(--motion-overlay-exit-duration);
 }
 
+/* Shown once placed, so it never flashes at the corner of the page. */
 .open {
   opacity: 1;
   visibility: visible;
@@ -38,74 +36,47 @@
 
 .arrow {
   position: absolute;
-  width: 0.5rem;
-  height: 0.5rem;
+  width: var(--tooltip-arrow-size);
+  height: var(--tooltip-arrow-size);
   background: var(--surface-inverse);
+  border: var(--border-surface) solid var(--border-subtle);
   transform: rotate(45deg);
 }
 
-.top {
-  bottom: var(--tooltip-offset);
-  left: 50%;
-  transform: translate(-50%, 0.25rem) scale(0.96);
+[data-placement="top"] > .arrow {
+  bottom: -0.28rem;
+  left: var(--floating-arrow);
+  margin-left: calc(var(--tooltip-arrow-size) / -2);
+  border-top: 0;
+  border-left: 0;
 }
 
-.top.open {
-  transform: translate(-50%, 0) scale(1);
+[data-placement="bottom"] > .arrow {
+  top: -0.28rem;
+  left: var(--floating-arrow);
+  margin-left: calc(var(--tooltip-arrow-size) / -2);
+  border-bottom: 0;
+  border-right: 0;
 }
 
-.top .arrow {
-  bottom: -0.2rem;
-  left: calc(50% - 0.25rem);
+[data-placement="left"] > .arrow {
+  right: -0.28rem;
+  top: var(--floating-arrow);
+  margin-top: calc(var(--tooltip-arrow-size) / -2);
+  border-bottom: 0;
+  border-left: 0;
 }
 
-.bottom {
-  top: var(--tooltip-offset);
-  left: 50%;
-  transform: translate(-50%, -0.25rem) scale(0.96);
-}
-
-.bottom.open {
-  transform: translate(-50%, 0) scale(1);
-}
-
-.bottom .arrow {
-  top: -0.2rem;
-  left: calc(50% - 0.25rem);
-}
-
-.left {
-  right: var(--tooltip-offset);
-  top: 50%;
-  transform: translate(0.25rem, -50%) scale(0.96);
-}
-
-.left.open {
-  transform: translate(0, -50%) scale(1);
-}
-
-.left .arrow {
-  right: -0.2rem;
-  top: calc(50% - 0.25rem);
-}
-
-.right {
-  left: var(--tooltip-offset);
-  top: 50%;
-  transform: translate(-0.25rem, -50%) scale(0.96);
-}
-
-.right.open {
-  transform: translate(0, -50%) scale(1);
-}
-
-.right .arrow {
-  left: -0.2rem;
-  top: calc(50% - 0.25rem);
+[data-placement="right"] > .arrow {
+  left: -0.28rem;
+  top: var(--floating-arrow);
+  margin-top: calc(var(--tooltip-arrow-size) / -2);
+  border-top: 0;
+  border-right: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bubble {
+  .open {
     transition: none;
   }
 }

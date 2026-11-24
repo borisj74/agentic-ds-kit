@@ -8,6 +8,9 @@
 
 .panel {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
   z-index: var(--z-overlay);
   min-width: calc(var(--space-16) * 3);
   max-width: calc(var(--space-16) * 5);
@@ -25,4 +28,17 @@
 .panel:focus {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-inset-2xs);
+}
+
+/* Header (eyebrow, tone, title) and footer come from the shared overlay parts in ModalCard. */
+.header {
+  min-width: 0;
+}
+
+.body {
+  min-width: 0;
+}
+
+.footer {
+  padding-block-start: var(--space-stack-xs);
 }

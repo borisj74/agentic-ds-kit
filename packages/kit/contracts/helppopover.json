@@ -5,7 +5,8 @@
   "intent": "Small help panel: optional title plus one to three short sentences.",
   "useWhen": [
     "Extra explanation beside a Field label or a setting",
-    "Copy that is longer than a Tooltip name but not always-visible hint"
+    "Copy that is longer than a Tooltip name but not always-visible hint",
+    "Which one: Tooltip names a control in a few words; HelpPopover explains it in one to three sentences; Popover holds fields or actions and takes focus. None of them is a menu or a blocking decision."
   ],
   "doNotUseWhen": [
     "One-line name on an icon — use Tooltip",
@@ -20,7 +21,7 @@
     "title": {
       "type": "string",
       "required": false,
-      "note": "Bold header. Omit for body only."
+      "note": "Header, 18px at heading weight. Omit for body only."
     },
     "content": {
       "type": "string",
@@ -35,7 +36,8 @@
         "left",
         "right"
       ],
-      "default": "bottom"
+      "default": "bottom",
+      "note": "Preferred side. Flips to the other side when there is no room and stays inside the viewport."
     },
     "delay": {
       "type": "number",
@@ -70,9 +72,10 @@
     "text.muted",
     "surface.elevated",
     "border.faint",
+    "radius.surfaceSm",
     "shadow.md",
     "z.tooltip",
-    "motion.fast"
+    "motion.overlay"
   ],
   "a11y": {
     "element": "span",
@@ -81,7 +84,7 @@
       "Title and content stay in the DOM as the trigger description (aria-describedby) so AT gets them on focus",
       "Hover after delay; focus shows immediately; Enter, Space, click, or tap pins",
       "Escape, click outside, or moving focus away closes",
-      "Escape must not close an enclosing Modal",
+      "Escape closes only the newest open overlay (shared Escape stack): not an enclosing Popover, Modal or Drawer",
       "Pointer can move onto the panel to read it",
       "Portal the panel to document.body so Field overflow never clips it"
     ]
