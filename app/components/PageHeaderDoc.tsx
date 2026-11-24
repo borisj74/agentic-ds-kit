@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Users } from "lucide-react";
 import type { BreadcrumbItem } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
@@ -215,6 +216,41 @@ export function PageHeaderDoc() {
                 </p>
               </div>
               <CodeBlock code={'<PageHeader title="Aurora" />'} />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Scope line with an icon</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewPage}>
+                  <PageHeader
+                    title="General"
+                    subtitle={
+                      <>
+                        <Users aria-hidden strokeWidth={1.5} />
+                        Applies to everyone in Northwind
+                      </>
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  subtitle takes a string or inline nodes. A leading lucide icon is muted, 16px and
+                  centred on the text. Keep it to one line: no blocks, lists or buttons.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<PageHeader
+  title="General"
+  subtitle={
+    <>
+      <Users aria-hidden strokeWidth={1.5} />
+      Applies to everyone in Northwind
+    </>
+  }
+/>`}
+              />
             </section>
 
             <section className={styles.example}>

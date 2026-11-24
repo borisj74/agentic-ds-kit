@@ -17,7 +17,11 @@ type PageHeaderOwnedKeys = "children" | "title";
 /** `ref`, `className` and other native attributes land on the root `<header>`. */
 export interface PageHeaderProps extends Omit<ComponentPropsWithoutRef<"header">, PageHeaderOwnedKeys> {
   title: string;
-  subtitle?: string;
+  /**
+   * One line under the title. A string, or inline nodes such as a lucide icon (strokeWidth 1.5)
+   * before a short scope line. It renders inside a `<p>`, so no blocks, lists or buttons.
+   */
+  subtitle?: ReactNode;
   /** Short sentence-case line above the title. Breadcrumbs are the default where-am-I. */
   eyebrow?: string;
   /** Any node in a wrapping row on the right: Buttons, a search Input, a Select. At most one primary Button. It stays in view on narrow screens. */
