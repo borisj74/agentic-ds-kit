@@ -23,6 +23,17 @@
       "required": false,
       "note": "16/24 at heading weight in both sizes: the smallest of three title sizes (page 24, section 18, card 16)."
     },
+    "headingLevel": {
+      "type": "enum",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "default": 2,
+      "note": "Heading level of the title. Use 1 when the card title is the page heading (e.g. Sign in), 3 or 4 when the card sits under a page or Section heading. Only the element changes; the 16/24 title look stays the same."
+    },
     "description": {
       "type": "string",
       "required": false
@@ -213,7 +224,7 @@
   "a11y": {
     "element": "article",
     "requirements": [
-      "title is heading when set (use useId)",
+      "title is a heading when set (h2 by default, headingLevel 1, 3 or 4) with useId",
       "aria-labelledby when title exists",
       "An icon-only headerAction is a Button named by its label",
       "A header action with href is a link (role link) named by its label, not a button",
@@ -237,7 +248,8 @@
     "Do not make an icon-only header action without a label that names what it does, e.g. Ask about Plan mix",
     "Do not use headerAction href for new work; it is deprecated. Put View all in the footer actions",
     "Do not make Ask a primary Button, or put a second solid-primary in the footer",
-    "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source"
+    "Do not draw a local eyebrow, timestamp, close button or source line; pass eyebrow, meta, onDismiss and source",
+    "Do not skip heading levels: pick headingLevel from the headings above the card, and use 1 only when the card title is the page's only h1"
   ],
   "snippet": "<Card title=\"Login to your account\" description=\"Enter your email below to login to your account.\" headerAction={{ label: \"Sign Up\", appearance: \"ghost\", mode: \"neutral\" }}><Field label=\"Name\" htmlFor=\"name\"><Input id=\"name\" placeholder=\"Boris Jovanovic\" /></Field><Field label=\"Email\" htmlFor=\"email\"><Input id=\"email\" type=\"email\" /></Field><Field label=\"Password\" htmlFor=\"password\" hint=\"Forgot your password?\"><Input id=\"password\" type=\"password\" /></Field><Field label=\"Workspace\" htmlFor=\"workspace\"><Input id=\"workspace\" placeholder=\"Studio\" /></Field><Button appearance=\"solid\" mode=\"primary\" block>Login</Button><Divider label=\"Or continue with\" /><div className=\"layout-split\"><Button appearance=\"outline\" mode=\"neutral\" block>Google</Button><Button appearance=\"outline\" mode=\"neutral\" block>Apple</Button></div></Card>"
 }
