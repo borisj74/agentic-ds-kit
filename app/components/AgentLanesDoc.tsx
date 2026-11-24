@@ -50,7 +50,7 @@ export function AgentLanesDoc() {
     <AgentDocFrame
       id="agentlanes"
       name="AgentLanes"
-      lede="Where every agent is right now. Not RunningNow. Not Calendar."
+      lede="Deprecated: use AgentOverview with the Timeline view. Where every agent is right now. Not RunningNow. Not Calendar."
       summary="Open a block for what it did; open a Needs you block to decide on it. Switch the window to zoom."
       preview={
         <AgentLanes

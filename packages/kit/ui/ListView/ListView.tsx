@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { Fragment, useId, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { Avatar } from "../Avatar";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -8,7 +8,7 @@ import { LucideByName } from "../Button/lucideName";
 import { Checkbox } from "../Checkbox";
 import { DropdownMenu } from "../DropdownMenu";
 import { Empty } from "../Empty";
-import type { ListViewGroup, ListViewItem, ListViewProps } from "./ListView.types";
+import type { ListViewAction, ListViewGroup, ListViewItem, ListViewProps } from "./ListView.types";
 import { cx } from "../shared/cx";
 import styles from "./ListView.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -314,11 +314,46 @@ export function ListView({
     );
   }
 
+  // actionLabel names the button through a hidden span (Button keeps its visible text as the name
+  // otherwise). The id is unique per list, row and action.
+  function actionName(item: ListViewItem, action: ListViewAction) {
+    if (!action.actionLabel) return { props: {}, node: null };
+    const id = `${uid}-${item.id}-${action.id}-name`;
+    return {
+      props: { "aria-labelledby": id },
+      node: (
+        <span key={`${action.id}-name`} id={id} className={styles.srOnly}>
+          {action.actionLabel}
+        </span>
+      ),
+    };
+  }
+
+  // A text action: actionName() once, its props on the Button and its span after it.
+  function renderTextAction(item: ListViewItem, action: ListViewAction): ReactNode {
+    const name = actionName(item, action);
+    return (
+      <Fragment key={action.id}>
+        <Button
+          size="sm"
+          appearance="ghost" mode={action.danger ? "danger" : "neutral"}
+          disabled={item.disabled || action.disabled}
+          onClick={() => onAction?.(item.id, action.id)}
+          {...name.props}
+        >
+          {action.label}
+        </Button>
+        {name.node}
+      </Fragment>
+    );
+  }
+
   function renderActions(item: ListViewItem): ReactNode {
     const actions = item.actions ?? [];
     const stop = (event: MouseEvent) => event.stopPropagation();
     const primary = item.primaryAction;
     if (primary) {
+      const primaryName = actionName(item, primary);
       return (
         <span className={styles.actions} onClick={stop}>
           <span className={styles.primaryActionSlot}>
@@ -329,9 +364,11 @@ export function ListView({
               iconStart={primary.icon}
               disabled={item.disabled || primary.disabled}
               onClick={() => onAction?.(item.id, primary.id)}
+              {...primaryName.props}
             >
               {primary.label}
             </Button>
+            {primaryName.node}
           </span>
           {actions.length > 0 ? renderMenu(item, actions) : null}
         </span>
@@ -354,20 +391,12 @@ export function ListView({
               size="sm"
               appearance="ghost" mode={action.danger ? "danger" : "neutral"}
               iconStart={action.icon}
-              ariaLabel={action.label}
+              ariaLabel={action.actionLabel ?? action.label}
               disabled={item.disabled || action.disabled}
               onClick={() => onAction?.(item.id, action.id)}
             />
           ) : (
-            <Button
-              key={action.id}
-              size="sm"
-              appearance="ghost" mode={action.danger ? "danger" : "neutral"}
-              disabled={item.disabled || action.disabled}
-              onClick={() => onAction?.(item.id, action.id)}
-            >
-              {action.label}
-            </Button>
+            renderTextAction(item, action)
           ),
         )}
       </span>

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RunDetail, type AgentTreeNode, type RunDetailRun, type RunDetailStep } from "agentic-ds-kit";
+import { RunDetail, type AgentTreeNode, type ChatMessage, type RunDetailRun, type RunDetailStep } from "agentic-ds-kit";
 import styles from "./BlockDemo.module.css";
-import { RUN_DETAIL_AGENTS, RUN_DETAIL_RUN, RUN_DETAIL_STEPS } from "@/lib/blocks/run-detail.sample";
+import { RUN_DETAIL_AGENTS, RUN_DETAIL_MESSAGES, RUN_DETAIL_RUN, RUN_DETAIL_STEPS } from "@/lib/blocks/run-detail.sample";
 
 const START_SECONDS = 4 * 60 + 12;
 
@@ -20,7 +20,8 @@ function setNode(node: AgentTreeNode, id: string, change: Partial<AgentTreeNode>
 /**
  * RunDetail with the sample run. Approve runs the migration and starts the next step, Deny
  * fails it, Pause / Resume stop and start the clock, Retry reruns a failed step and Cancel
- * ends a paused run, so every part of the block moves as you use it.
+ * ends a paused run, and Ask takes a message and answers it, so every part of the block moves as
+ * you use it.
  */
 export function RunDetailDemo() {
   const [run, setRun] = useState<RunDetailRun>(RUN_DETAIL_RUN);
@@ -28,6 +29,8 @@ export function RunDetailDemo() {
   const [agents, setAgents] = useState<AgentTreeNode>(RUN_DETAIL_AGENTS);
   const [seconds, setSeconds] = useState(START_SECONDS);
   const [status, setStatus] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>(RUN_DETAIL_MESSAGES);
+  const [thinking, setThinking] = useState(false);
   const ticking = run.status === "running" || run.status === "waiting";
 
   useEffect(() => {
@@ -70,6 +73,19 @@ export function RunDetailDemo() {
         onCancel={() => {
           setRun((current) => ({ ...current, status: "failed", error: "Cancelled by you" }));
           setStatus("Cancelled");
+        }}
+        messages={messages}
+        thinking={thinking}
+        onSend={(text) => {
+          setMessages((list) => [...list, { id: `u${list.length}`, role: "user", content: text }]);
+          setThinking(true);
+          window.setTimeout(() => {
+            setThinking(false);
+            setMessages((list) => [
+              ...list,
+              { id: `a${list.length}`, role: "assistant", content: "Noted. I'll apply that after the staging migration step." },
+            ]);
+          }, 900);
         }}
         onRetry={(id) => {
           step(id, { status: "running", error: undefined, timer: "0:01" });

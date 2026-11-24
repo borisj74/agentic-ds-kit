@@ -2035,7 +2035,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text."
         },
         "label": {
           "type": "string",
@@ -8656,7 +8656,7 @@
     {
       "id": "agenttrail",
       "group": "component",
-      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
+      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps. Becomes an internal part of RunDetail after the next release; prefer RunDetail.",
       "useWhen": [
         "show what an agent already did and is doing now",
         "a run log next to a chat or an ApprovalCard",
@@ -8845,7 +8845,7 @@
     {
       "id": "agentfleet",
       "group": "component",
-      "intent": "Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
+      "intent": "Deprecated: use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent. Several agents side by side. Each card sums up its sub-agents; one card can open into its sub-agent tree while the others shrink to a compact column.",
       "useWhen": [
         "monitor several running agents or orchestrators at once",
         "show sub-agent progress, cost, and time per agent",
@@ -8857,6 +8857,7 @@
         "a plain table of jobs — DataTable"
       ],
       "doNot": [
+        "Do not use in new screens; use AgentOverview. Its All agents list carries status, now, cost and subAgents per agent.",
         "Do not invent a local AgentFleet, AgentGrid, or AgentCard",
         "Do not color status without the text label",
         "Do not use raw hex; waiting uses caution tokens",
@@ -9281,7 +9282,7 @@
     {
       "id": "agentmonitor",
       "group": "component",
-      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
+      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard. Becomes an internal part of RunDetail (its header) after the next release; prefer RunDetail.",
       "useWhen": [
         "watch one agent run in detail",
         "inspect a step's duration, tokens and cost",
@@ -9501,7 +9502,7 @@
     {
       "id": "agentlanes",
       "group": "component",
-      "intent": "Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
+      "intent": "Deprecated: use AgentOverview with view=\"timeline\", which renders these lanes on wide screens. Where every agent is right now: one lane per agent over a time window, blocks growing into now, handoffs drawn between lanes, and decisions on the block.",
       "useWhen": [
         "watch several agents work in parallel over the last minutes",
         "see who handed work to whom",
@@ -9513,6 +9514,7 @@
         "a calendar of events — Calendar"
       ],
       "doNot": [
+        "Do not use in new screens; use AgentOverview with view=\"timeline\", which renders these lanes on wide screens.",
         "Do not invent a local AgentLanes, Gantt, or AgentTimeline",
         "Do not encode status by color only; blocks and lanes carry text",
         "Do not use raw hex",
@@ -9583,7 +9585,7 @@
     {
       "id": "agentinbox",
       "group": "component",
-      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
+      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail. Becomes an internal part of AgentOverview (Needs you) after the next release; prefer AgentOverview.",
       "useWhen": [
         "collect every agent request in one place",
         "act on approvals and questions without leaving the list",
@@ -11712,7 +11714,7 @@
     {
       "id": "taskboard",
       "group": "component",
-      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
+      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
       "useWhen": [
         "a small board of tasks by status inside a product",
         "let people move cards between columns with mouse or keyboard",
@@ -12112,39 +12114,40 @@
     {
       "id": "agentoverview",
       "group": "component",
-      "intent": "Block: the home screen for a group of agents. What happened since you last looked (done, needs you, failed, an activity bar), every agent on one time axis, and an inbox of what waits on you, under one filter.",
+      "intent": "Block: the home for a group of agents. Needs you (the oldest open request as one ApprovalCard, the rest counted), All agents (an icon-and-word status, one fact, cost and one action per row, under one filter) and a Since rail of what happened after the last visit. A Timeline view shows the same agents on one time axis on wide screens. Replaces AgentFleet, AgentLanes and the AgentInbox list.",
       "useWhen": [
         "the first screen of an agent workspace",
-        "come back after a while and see what changed",
-        "approve, reject or retry agent work from one place"
+        "come back after a while and see what changed and what needs you",
+        "approve the open request, review a failed agent or ask a running one from one place"
       ],
       "doNotUseWhen": [
-        "one agent in detail — AgentMonitor",
-        "only the time axis — AgentLanes",
-        "only the request queue — AgentInbox",
-        "agents with sub-agents — AgentFleet"
+        "one run in detail — RunDetail",
+        "people's tasks — WorkBoard",
+        "starting a run — TaskBrief"
       ],
       "doNot": [
         "Do not rebuild AgentOverview from a local dashboard; import the block",
-        "Do not add a second filter to one area; the one filter drives all three",
+        "Do not repeat a request: it lives in Needs you only; the row and the rail point to it",
+        "Do not show status by colour alone; use the icon and the word",
+        "Do not add a second filter; the one filter drives the list and the lanes",
         "Do not use raw hex",
-        "Only one solid primary in the view: the approve in the open inbox card"
+        "Only one solid primary in the view: the approve in the Needs you card"
       ],
       "props": {
         "agents": {
           "type": "array",
           "required": true,
-          "note": "{ id, name, model?, icon? }[]. Same shape as AgentLanes agents: one lane each."
+          "note": "{ id, name, model?, icon?, status?, now?, cost?, subAgents? }[]. status is AgentStatus (queued | running | needs-you | paused | done | failed; older waiting and approval map to needs-you, idle to queued); default from the agent's latest event. now is one line on what it is doing. cost like \"$0.42\"; when every agent has one the lead line adds the total spent. subAgents { id, name, status, elapsed?, cost? }[] are counted on the row."
         },
         "events": {
           "type": "array",
           "required": true,
-          "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Waiting and failed events since `since` fill the inbox."
+          "note": "AgentLanes tasks plus action? (ApprovalCard action) and risk?: { id, agentId, title, status: \"done\" | \"running\" | \"waiting\" | \"failed\", start, end?, ask?, summary?, handoffTo?, action?, risk? }[]. Open waiting events fill Needs you, oldest first; events since `since` fill the Since rail."
         },
         "since": {
           "type": "number",
           "required": true,
-          "note": "Epoch ms of the last visit. The summary and the filter counts cover what was active after it."
+          "note": "Epoch ms of the last visit. The lead line and the Since rail start from it."
         },
         "now": {
           "type": "number",
@@ -12160,7 +12163,7 @@
             "failed"
           ],
           "required": false,
-          "note": "Controlled filter for the activity bar, lanes and inbox."
+          "note": "Controlled filter for the All agents list and the Timeline lanes, by agent status."
         },
         "defaultFilter": {
           "type": "enum",
@@ -12178,24 +12181,62 @@
           "required": false,
           "note": "(filter) => void"
         },
+        "view": {
+          "type": "enum",
+          "values": [
+            "list",
+            "timeline"
+          ],
+          "required": false,
+          "note": "Controlled view. timeline renders AgentLanes in place of the list; below --grid-breakpoint-sm (40rem) of block width only the list shows and the toggle hides."
+        },
+        "defaultView": {
+          "type": "enum",
+          "values": [
+            "list",
+            "timeline"
+          ],
+          "default": "list",
+          "note": "Uncontrolled starting view."
+        },
+        "onViewChange": {
+          "type": "function",
+          "required": false,
+          "note": "(view) => void"
+        },
         "onApprove": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void. From the lane block's decision or the inbox card."
+          "note": "(eventId) => void. From the Needs you card or a lane block."
         },
         "onReject": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void"
+          "note": "(eventId) => void. Deny on the Needs you card."
         },
         "onRetry": {
           "type": "function",
           "required": false,
-          "note": "(eventId) => void. A failed event's Retry run."
+          "note": "(eventId) => void. Kept for older apps; the row action for a failed agent is Review (onReview)."
+        },
+        "onReview": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. Review on a failed agent's row."
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "(agentId) => void. Ask on a running agent's row."
+        },
+        "onNewTask": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. New task in the header: open TaskBrief."
         },
         "title": {
           "type": "string",
-          "default": "Agent overview"
+          "default": "Agents"
         }
       }
     },
@@ -12363,7 +12404,7 @@
     {
       "id": "livesession",
       "group": "component",
-      "intent": "Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
+      "intent": "Deprecated: use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you. Block: a live session with running agents. The conversation (Chat) beside who is working (RunningNow), the oldest open approval (ApprovalCard) and steering for one agent (AgentSteering).",
       "useWhen": [
         "a workspace where people chat with agents as they work",
         "redirect or pause an agent mid-run without leaving the conversation",
@@ -12376,6 +12417,7 @@
         "only steering — AgentSteering"
       ],
       "doNot": [
+        "Do not use in new screens; use RunDetail with messages and onSend for the Ask panel, and AgentOverview for who is working and what needs you.",
         "Do not rebuild LiveSession from local panels; import the block",
         "Do not show every open request at once; one inline approval, the rest counted",
         "Do not use raw hex",
@@ -12470,24 +12512,24 @@
     {
       "id": "rundetail",
       "group": "component",
-      "intent": "Block: one agent run in detail. AgentMonitor (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom) and AgentTrail (the step log). One selected step drives all four.",
+      "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession.",
       "useWhen": [
         "open one run from a list or an overview",
         "see why a step failed and retry it",
         "approve the run's next action with the full step history in view",
+        "ask or steer the agent while it runs",
         "pause, resume or cancel a run"
       ],
       "doNotUseWhen": [
         "many agents at a glance — AgentOverview",
-        "talk to agents while they work — LiveSession",
-        "only the live card — AgentMonitor",
-        "only the step log — AgentTrail"
+        "starting a run — TaskBrief"
       ],
       "doNot": [
         "Do not rebuild RunDetail from local cards; import the block",
         "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+        "Do not add a LiveSession beside RunDetail; pass messages and onSend",
         "Do not use raw hex",
-        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused"
+        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused, else the Ask send"
       ],
       "props": {
         "run": {
@@ -12549,6 +12591,21 @@
           "type": "function",
           "required": false,
           "note": "(stepId) => void. A failed step, from the run, the tree or the tool call."
+        },
+        "messages": {
+          "type": "array",
+          "required": false,
+          "note": "Chat messages { id?, role: \"user\" | \"assistant\", content, timestamp? }[] for the Ask panel. The panel shows when messages or onSend is set."
+        },
+        "onSend": {
+          "type": "function",
+          "required": false,
+          "note": "(text) => void. The one Ask or steer box."
+        },
+        "thinking": {
+          "type": "boolean",
+          "default": false,
+          "note": "The Ask panel shows the kit thinking state."
         },
         "title": {
           "type": "string",

@@ -219,4 +219,20 @@ describe("ListView priority, sort and primaryAction", () => {
     assert.match(html, />Send link</);
     assert.match(html, /aria-label="Actions for Marlow Dental"/);
   });
+
+  test("actionLabel names the action button; without it the visible label is the name", () => {
+    const named = [{ id: "t", primary: "Tax checker", primaryAction: { id: "review", label: "Review", actionLabel: "Review Tax checker" } }];
+    const html = render(h(kit.ListView, { label: "Agents", items: named }));
+    const id = html.match(/<button[^>]*aria-labelledby="([^"]+)"[^>]*>(?:(?!<\/button>).)*Review<\/span><\/button>/s)?.[1];
+    assert.ok(id, "the button is labelled by an id");
+    assert.match(html, new RegExp(`id="${id.replace(/[:]/g, "\\$&")}"[^>]*>Review Tax checker<`));
+    const plain = render(h(kit.ListView, { label: "L", items }));
+    assert.doesNotMatch(plain, /aria-labelledby="[^"]*-link-name"/);
+    const inline = render(
+      h(kit.ListView, { label: "L", items: [{ id: "x", primary: "Northwind", actions: [{ id: "open", label: "Open", actionLabel: "Open Northwind" }] }] }),
+    );
+    assert.match(inline, />Open Northwind</);
+    const inlineId = inline.match(/aria-labelledby="([^"]+)"/)[1];
+    assert.equal(inline.split(`id="${inlineId}"`).length - 1, 1, "one span per action id");
+  });
 });

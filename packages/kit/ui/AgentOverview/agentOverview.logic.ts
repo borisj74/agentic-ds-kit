@@ -1,13 +1,15 @@
-import type { AgentInboxItem } from "../AgentInbox/AgentInbox.types";
-import type { AgentLanesTaskStatus } from "../AgentLanes/AgentLanes.types";
+import type { ActivityEvent } from "../ActivityFeed/ActivityFeed.types";
+import type { BadgeTone } from "../Badge/Badge.types";
+import type { ListViewItem } from "../ListView/ListView.types";
+import { AGENT_STATUS_WORD, toAgentStatus, type AgentStatus } from "../shared/agentStatus";
 import type { AgentOverviewAgent, AgentOverviewEvent, AgentOverviewFilter } from "./AgentOverview.types";
 
-/** Pure helpers behind AgentOverview: what each area shows for a filter. No React here. */
+/** Pure helpers behind AgentOverview: what each area shows. No React here. */
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 
-export const AGENT_OVERVIEW_FILTERS: AgentOverviewFilter[] = ["all", "running", "needs-you", "failed"];
+export const AGENT_OVERVIEW_FILTERS: AgentOverviewFilter[] = ["all", "needs-you", "running", "failed"];
 
 export const FILTER_LABEL: Record<AgentOverviewFilter, string> = {
   all: "All",
@@ -16,20 +18,13 @@ export const FILTER_LABEL: Record<AgentOverviewFilter, string> = {
   failed: "Failed",
 };
 
-const FILTER_STATUS: Record<Exclude<AgentOverviewFilter, "all">, AgentLanesTaskStatus> = {
-  running: "running",
-  "needs-you": "waiting",
-  failed: "failed",
-};
-
 /** The approve / reject choices for a waiting event that has no exact action. */
 export const DECISION_APPROVE = "approve";
 export const DECISION_REJECT = "reject";
 
-/** Does an event pass the filter? */
-export function matchesFilter(event: AgentOverviewEvent, filter: AgentOverviewFilter): boolean {
-  return filter === "all" || event.status === FILTER_STATUS[filter];
-}
+/** Row action ids (ListView primaryAction). */
+export const ACTION_REVIEW = "review";
+export const ACTION_ASK = "ask";
 
 /** Events that were active after `since`: open ones, or ones that ended after it. */
 export function eventsSince(events: AgentOverviewEvent[], since: number, now: number): AgentOverviewEvent[] {
@@ -45,134 +40,154 @@ export function formatAgo(ms: number): string {
   return minutes ? `${hours}h ${minutes}m` : `${hours}h`;
 }
 
-/** Summary counts since the last visit. Needs you is what is waiting now. */
-export function summaryCounts(events: AgentOverviewEvent[], since: number, now: number) {
-  const recent = eventsSince(events, since, now);
-  return {
-    done: recent.filter((event) => event.status === "done").length,
-    needsYou: recent.filter((event) => event.status === "waiting").length,
-    failed: recent.filter((event) => event.status === "failed").length,
-  };
+/** "07:30": 24-hour clock in the viewer's zone. */
+export function formatClock(at: number): string {
+  return new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(at);
+}
+
+/** The agent's status: its own, else from its latest event, else queued. */
+export function statusOf(agent: AgentOverviewAgent, events: AgentOverviewEvent[]): AgentStatus {
+  if (agent.status) return toAgentStatus(agent.status);
+  let latest: AgentOverviewEvent | undefined;
+  for (const event of events) {
+    if (event.agentId !== agent.id) continue;
+    if (!latest || event.start >= latest.start) latest = event;
+  }
+  return latest ? toAgentStatus(latest.status) : "queued";
+}
+
+export function matchesFilter(status: AgentStatus, filter: AgentOverviewFilter): boolean {
+  return filter === "all" || status === filter;
 }
 
 /** Counts shown in the filter's segment labels (and so in their accessible names). */
-export function filterCounts(events: AgentOverviewEvent[], since: number, now: number): Record<AgentOverviewFilter, number> {
-  const recent = eventsSince(events, since, now);
-  return {
-    all: recent.length,
-    running: recent.filter((event) => matchesFilter(event, "running")).length,
-    "needs-you": recent.filter((event) => matchesFilter(event, "needs-you")).length,
-    failed: recent.filter((event) => matchesFilter(event, "failed")).length,
-  };
+export function filterCounts(agents: AgentOverviewAgent[], events: AgentOverviewEvent[]): Record<AgentOverviewFilter, number> {
+  const statuses = agents.map((agent) => statusOf(agent, events));
+  const count = (filter: AgentOverviewFilter) => statuses.filter((status) => matchesFilter(status, filter)).length;
+  return { all: agents.length, running: count("running"), "needs-you": count("needs-you"), failed: count("failed") };
 }
 
-/** Lanes area: under a filter, only agents with a matching event keep a lane. */
+/** Open waiting events, oldest first. The first is the Needs you card; the rest are counted. */
+export function requestsFor(events: AgentOverviewEvent[]): AgentOverviewEvent[] {
+  return events.filter((event) => event.status === "waiting" && event.end === undefined).sort((a, b) => a.start - b.start);
+}
+
+/** "$1.00 spent" when every agent has a dollar cost; else undefined. */
+export function totalSpent(agents: AgentOverviewAgent[]): string | undefined {
+  if (!agents.length) return undefined;
+  let cents = 0;
+  for (const agent of agents) {
+    const match = agent.cost?.trim().match(/^\$(\d[\d,]*(?:\.\d+)?)$/);
+    if (!match) return undefined;
+    cents += Math.round(Number(match[1].replace(/,/g, "")) * 100);
+  }
+  return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} spent`;
+}
+
+/** Lead line: "Since 07:30 · 4 agents, $1.00 spent". */
+export function leadLine(agents: AgentOverviewAgent[], since: number): string {
+  const count = `${agents.length} ${agents.length === 1 ? "agent" : "agents"}`;
+  const spent = totalSpent(agents);
+  return `Since ${formatClock(since)} · ${spent ? `${count}, ${spent}` : count}`;
+}
+
+/** What a row says after the status word when the agent has no `now` line. */
+function fallbackNow(status: AgentStatus, openRequestAgent: boolean): string | undefined {
+  if (status === "needs-you") return openRequestAgent ? "Waiting on you · request above" : "Waiting on you";
+  return undefined;
+}
+
+export interface AgentOverviewRow {
+  item: Omit<ListViewItem, "icon">;
+  status: AgentStatus;
+}
+
+/**
+ * All agents rows as ListView items: the status icon, the name, the status word with one fact,
+ * the cost, and one action from the status (Review for failed, Ask for running, none otherwise;
+ * a waiting agent points to the Needs you card instead of repeating Approve).
+ */
+export function rowsFor(
+  agents: AgentOverviewAgent[],
+  events: AgentOverviewEvent[],
+  filter: AgentOverviewFilter,
+  openRequestAgentId: string | undefined,
+  handlers: { review: boolean; ask: boolean },
+): AgentOverviewRow[] {
+  return agents
+    .map((agent) => ({ agent, status: statusOf(agent, events) }))
+    .filter(({ status }) => matchesFilter(status, filter))
+    .map(({ agent, status }) => {
+      const subs = agent.subAgents?.length;
+      const fact = agent.now ?? fallbackNow(status, agent.id === openRequestAgentId);
+      const parts = [AGENT_STATUS_WORD[status], fact, subs ? `${subs} sub-${subs === 1 ? "agent" : "agents"}` : undefined];
+      const action =
+        status === "failed" && handlers.review
+          ? { id: ACTION_REVIEW, label: "Review", actionLabel: `Review ${agent.name}` }
+          : status === "running" && handlers.ask
+            ? { id: ACTION_ASK, label: "Ask", actionLabel: `Ask ${agent.name}`, icon: "MessageCircle" }
+            : undefined;
+      return {
+        status,
+        item: {
+          id: agent.id,
+          primary: agent.name,
+          secondary: parts.filter(Boolean).join(" · "),
+          meta: agent.cost,
+          primaryAction: action,
+        },
+      };
+    });
+}
+
+const RAIL_VERB: Record<AgentStatus, string> = {
+  queued: "queued",
+  running: "is running",
+  "needs-you": "asks:",
+  paused: "paused",
+  done: "finished",
+  failed: "failed on",
+};
+
+const RAIL_TONE: Record<AgentStatus, BadgeTone> = {
+  queued: "neutral",
+  running: "info",
+  "needs-you": "warning",
+  paused: "neutral",
+  done: "success",
+  failed: "danger",
+};
+
+/** The Since rail: events since the last visit as ActivityFeed history rows, newest first. */
+export function railFor(agents: AgentOverviewAgent[], events: AgentOverviewEvent[], since: number, now: number): ActivityEvent[] {
+  const name = new Map(agents.map((agent) => [agent.id, agent.name]));
+  return eventsSince(events, since, now)
+    .slice()
+    .sort((a, b) => (b.end ?? b.start) - (a.end ?? a.start))
+    .map((event): ActivityEvent => {
+      const status = toAgentStatus(event.status);
+      const object = status === "needs-you" ? (event.ask ?? event.title) : event.title;
+      return {
+        id: event.id,
+        type: "run",
+        actor: { id: event.agentId, name: name.get(event.agentId) ?? event.agentId },
+        verb: RAIL_VERB[status],
+        object,
+        at: event.end ?? event.start,
+        detail: event.summary?.[0],
+        status: { label: AGENT_STATUS_WORD[status], tone: RAIL_TONE[status] },
+      };
+    });
+}
+
+/** Lanes for the Timeline view: under a filter, only agents with that status keep a lane. */
 export function lanesFor(
   agents: AgentOverviewAgent[],
   events: AgentOverviewEvent[],
   filter: AgentOverviewFilter,
 ): { agents: AgentOverviewAgent[]; tasks: AgentOverviewEvent[] } {
   if (filter === "all") return { agents, tasks: events };
-  const tasks = events.filter((event) => matchesFilter(event, filter));
-  const busy = new Set(tasks.map((task) => task.agentId));
-  return { agents: agents.filter((agent) => busy.has(agent.id)), tasks };
-}
-
-/**
- * Inbox area: waiting and failed events since the last visit, as AgentInbox items. A waiting
- * event with an action is an approval (ApprovalCard); without one it is an Approve / Reject
- * question (DecisionCard). A failed event is a failure with its summary lines and Retry run.
- */
-export function inboxItemsFor(
-  agents: AgentOverviewAgent[],
-  events: AgentOverviewEvent[],
-  filter: AgentOverviewFilter,
-  since: number,
-  now: number,
-): AgentInboxItem[] {
-  if (filter === "running") return [];
-  const name = new Map(agents.map((agent) => [agent.id, agent.name]));
-  return eventsSince(events, since, now)
-    .filter((event) => (event.status === "waiting" || event.status === "failed") && matchesFilter(event, filter))
-    .sort((a, b) => (b.end ?? now) - (a.end ?? now) || b.start - a.start)
-    .map((event): AgentInboxItem => {
-      const agentName = name.get(event.agentId) ?? event.agentId;
-      const time = formatAgo(now - (event.end ?? event.start));
-      if (event.status === "failed") {
-        return {
-          id: event.id,
-          agentName,
-          type: "failure",
-          preview: event.title,
-          time,
-          detail: { heading: `${event.title} failed`, meta: agentName, lines: event.summary },
-        };
-      }
-      const ask = event.ask ?? event.title;
-      if (event.action) {
-        return {
-          id: event.id,
-          agentName,
-          type: "approval",
-          preview: ask,
-          time,
-          approval: { title: ask, description: event.title === ask ? undefined : event.title, risk: event.risk, action: event.action },
-        };
-      }
-      return {
-        id: event.id,
-        agentName,
-        type: "question",
-        preview: ask,
-        time,
-        question: {
-          question: ask,
-          meta: event.title === ask ? undefined : event.title,
-          options: [
-            { id: DECISION_APPROVE, label: "Approve" },
-            { id: DECISION_REJECT, label: "Reject" },
-          ],
-        },
-      };
-    });
-}
-
-/** Activity bar: matching events per time slice from `since` to `now`, by when they started. */
-export function activityFor(
-  events: AgentOverviewEvent[],
-  filter: AgentOverviewFilter,
-  since: number,
-  now: number,
-  slices = 12,
-): { label: string; value: number }[] {
-  const width = Math.max(MINUTE, (now - since) / slices);
-  // Labels round to 5 minutes so the axis reads "1h 30m ago", not "1h 29m ago".
-  const step = 5 * MINUTE;
-  const out = Array.from({ length: slices }, (_, index) => {
-    const ago = Math.round((now - (since + width * index)) / step) * step;
-    return { label: ago < MINUTE ? "now" : `${formatAgo(ago)} ago`, value: 0 };
-  });
-  for (const event of eventsSince(events, since, now)) {
-    if (!matchesFilter(event, filter)) continue;
-    const slot = Math.min(slices - 1, Math.max(0, Math.floor((event.start - since) / width)));
-    out[slot].value += 1;
-  }
-  return out;
-}
-
-/** Inbox callbacks mapped onto the block's onApprove / onReject / onRetry. */
-export function inboxHandlers(handlers: {
-  onApprove?: (eventId: string) => void;
-  onReject?: (eventId: string) => void;
-  onRetry?: (eventId: string) => void;
-}) {
-  return {
-    onApprove: (id: string) => handlers.onApprove?.(id),
-    onDeny: (id: string) => handlers.onReject?.(id),
-    onAnswer: (id: string, value: string) => {
-      if (value === DECISION_APPROVE) handlers.onApprove?.(id);
-      else if (value === DECISION_REJECT) handlers.onReject?.(id);
-    },
-    onRetryItem: (id: string) => handlers.onRetry?.(id),
-  };
+  const kept = agents.filter((agent) => matchesFilter(statusOf(agent, events), filter));
+  const ids = new Set(kept.map((agent) => agent.id));
+  return { agents: kept, tasks: events.filter((event) => ids.has(event.agentId)) };
 }
