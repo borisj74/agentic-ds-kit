@@ -28,6 +28,8 @@ import contract_heatmap from "../packages/kit/contracts/heatmap.json";
 import contract_breadcrumb from "../packages/kit/contracts/breadcrumb.json";
 import contract_button from "../packages/kit/contracts/button.json";
 import contract_buttongroup from "../packages/kit/contracts/buttongroup.json";
+import contract_iconbutton from "../packages/kit/contracts/iconbutton.json";
+import contract_splitbutton from "../packages/kit/contracts/splitbutton.json";
 import contract_calendar from "../packages/kit/contracts/calendar.json";
 import contract_card from "../packages/kit/contracts/card.json";
 import contract_carousel from "../packages/kit/contracts/carousel.json";
@@ -175,6 +177,8 @@ const contracts: Record<string, ContractNotes> = {
   "breadcrumb": contract_breadcrumb,
   "button": contract_button,
   "buttongroup": contract_buttongroup,
+  "iconbutton": contract_iconbutton,
+  "splitbutton": contract_splitbutton,
   "calendar": contract_calendar,
   "card": contract_card,
   "carousel": contract_carousel,

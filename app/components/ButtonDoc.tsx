@@ -28,6 +28,7 @@ function masterCode(
   size: ButtonSize,
   flat: boolean,
   disabled: boolean,
+  loading: boolean,
   label: string,
   icon: IconMode,
 ) {
@@ -38,6 +39,7 @@ function masterCode(
     `  size="${size}"`,
     flat ? "  flat" : null,
     disabled ? "  disabled" : null,
+    loading ? "  loading" : null,
   ];
   if (icon === "start" || icon === "both" || icon === "only") lines.push('  iconStart="Plus"');
   if (icon === "end" || icon === "both") lines.push('  iconEnd="ArrowRight"');
@@ -56,6 +58,7 @@ export function ButtonDoc() {
   const [mode, setMode] = useState<ButtonMode>("primary");
   const [flat, setFlat] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [icon, setIcon] = useState<IconMode>("none");
   const label = MODE_LABEL[mode];
   const start = icon === "start" || icon === "both" || icon === "only" ? "Plus" : undefined;
@@ -67,8 +70,9 @@ export function ButtonDoc() {
         <h2 className={styles.heroTitle}>Buttons</h2>
         <p className={styles.lede}>
           Appearance × mode: solid, outline, soft, ghost across primary, neutral, and danger. Optional flat set
-          drops elevation. One solid-primary CTA per view. Lucide icon slots via iconStart and iconEnd. Icon-only
-          needs aria-label.
+          drops elevation. One solid-primary CTA per view. Lucide icon slots via iconStart and iconEnd. Heights are
+          32, 36 and 40, the same as Input, Select and FilterButton. Icon-only is a square of that height and
+          needs aria-label; IconButton is the typed export for it.
         </p>
       </header>
 
@@ -78,7 +82,7 @@ export function ButtonDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Toggle appearance, mode, size, flat, icon, and disabled to preview every Button combination.
+            Toggle appearance, mode, size, flat, icon, loading, and disabled to preview every Button combination.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -95,6 +99,7 @@ export function ButtonDoc() {
                       flat={flat}
                       size={size}
                       disabled={disabled}
+                      loading={loading}
                       iconStart="Plus"
                       ariaLabel={label}
                     />
@@ -105,6 +110,7 @@ export function ButtonDoc() {
                       flat={flat}
                       size={size}
                       disabled={disabled}
+                      loading={loading}
                       iconStart={start}
                       iconEnd={end}
                     >
@@ -184,6 +190,7 @@ export function ButtonDoc() {
                 <div className={styles.panelGroup}>
                   <span className={styles.panelLabel}>States</span>
                   <Switch label="Flat" size="sm" checked={flat} onChange={setFlat} />
+                  <Switch label="Loading" size="sm" checked={loading} onChange={setLoading} />
                   <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
                 </div>
               </aside>
@@ -195,10 +202,11 @@ export function ButtonDoc() {
                   One appearance=&quot;solid&quot; mode=&quot;primary&quot; Button per view. Neutral outline for cancel and
                   alternate paths, ghost for toolbars, danger only for irreversible work. Flat drops the resting
                   shadow so a white control still reads on a white card. Pass Lucide export names on iconStart and
-                  iconEnd. Icon-only omits children and must set ariaLabel.
+                  iconEnd. Icon-only omits children and must set ariaLabel. Set loading while the action runs:
+                  the label stays, a spinner takes the leading icon slot, and clicks are ignored.
                 </p>
               </div>
-              <CodeBlock code={masterCode(appearance, mode, size, flat, disabled, label, icon)} />
+              <CodeBlock code={masterCode(appearance, mode, size, flat, disabled, loading, label, icon)} />
             </DocNotes>
           </div>
         ) : (
@@ -222,7 +230,7 @@ export function ButtonDoc() {
                       ? "Solid primary is the view CTA. Outline, soft, and ghost primary stay on-theme without competing."
                       : rowMode === "neutral"
                         ? "White outline/solid keeps an edge on the grey canvas and on white cards. Ghost is the quiet toolbar look."
-                        : "Danger is for irreversible actions only. Prefer outline or ghost until the user confirms."}
+                        : "Danger is for irreversible actions only. Prefer outline or ghost until the user confirms. Solid, outline and soft danger get a warning icon when iconStart is empty, so danger is never colour alone; pass Trash2 for a delete."}
                   </p>
                 </div>
                 <CodeBlock
@@ -261,6 +269,98 @@ export function ButtonDoc() {
               </div>
               <CodeBlock
                 code={'<Button appearance="outline" mode="neutral" flat>Cancel</Button>'}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Loading</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Button loading>Save invoice</Button>
+                  <Button appearance="outline" mode="neutral" iconStart="Download" loading>
+                    Export
+                  </Button>
+                  <Button appearance="outline" mode="neutral" iconStart="Download" ariaLabel="Download" loading />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  loading sets aria-busy and ignores clicks. The label stays and a spinner takes the leading icon
+                  slot, so a button with an icon keeps its width. The button stays focusable; do not also disable
+                  it.
+                </p>
+              </div>
+              <CodeBlock
+                code={[
+                  "<Button loading>Save invoice</Button>",
+                  '<Button appearance="outline" mode="neutral" iconStart="Download" loading>Export</Button>',
+                ].join("\n")}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Disabled</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  {APPEARANCES.map((rowAppearance) => (
+                    <Button key={rowAppearance} appearance={rowAppearance} mode="neutral" disabled>
+                      {rowAppearance}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Disabled has its own text, border and fill tokens in every mode, not a faded copy of the live
+                  button. Ghost keeps no fill.
+                </p>
+              </div>
+              <CodeBlock code={"<Button disabled>Save invoice</Button>"} />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Danger</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Button appearance="outline" mode="danger">
+                    Revoke access
+                  </Button>
+                  <Button appearance="outline" mode="danger" iconStart="Trash2">
+                    Delete invoice
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  With iconStart empty, a solid, outline or soft danger Button shows a warning icon. Pass Trash2
+                  when the action deletes something.
+                </p>
+              </div>
+              <CodeBlock
+                code={[
+                  '<Button appearance="outline" mode="danger">Revoke access</Button>',
+                  '<Button appearance="outline" mode="danger" iconStart="Trash2">Delete invoice</Button>',
+                ].join("\n")}
+              />
+            </section>
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Ask</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewRow}>
+                  <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
+                    Ask
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Ask opens the assistant about the thing it sits on, like an invoice card. It is a neutral sm
+                  Button with a MessageCircle icon, not a component of its own.
+                </p>
+              </div>
+              <CodeBlock
+                code={'<Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">Ask</Button>'}
               />
             </section>
             <section className={styles.example}>

@@ -18,6 +18,8 @@ import { HeatmapDoc } from "./HeatmapDoc";
 import { BreadcrumbDoc } from "./BreadcrumbDoc";
 import { ButtonDoc } from "./ButtonDoc";
 import { ButtonGroupDoc } from "./ButtonGroupDoc";
+import { IconButtonDoc } from "./IconButtonDoc";
+import { SplitButtonDoc } from "./SplitButtonDoc";
 import { CalendarDoc } from "./CalendarDoc";
 import { CardDoc } from "./CardDoc";
 import { CarouselDoc } from "./CarouselDoc";
@@ -147,6 +149,8 @@ import playground from "../playground.module.css";
 const TITLES: Record<string, string> = {
   button: "Buttons",
   buttongroup: "ButtonGroup",
+  iconbutton: "IconButton",
+  splitbutton: "SplitButton",
   calendar: "Calendar",
   card: "Cards",
   carousel: "Carousel",
@@ -417,6 +421,8 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "breadcrumb") return <BreadcrumbDoc />;
   if (resolved === "button") return <ButtonDoc />;
   if (resolved === "buttongroup") return <ButtonGroupDoc />;
+  if (resolved === "iconbutton") return <IconButtonDoc />;
+  if (resolved === "splitbutton") return <SplitButtonDoc />;
   if (resolved === "accordion") return <AccordionDoc />;
   if (resolved === "alert") return <AlertDoc />;
   if (resolved === "alertdialog") return <AlertDialogDoc />;

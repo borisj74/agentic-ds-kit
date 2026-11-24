@@ -162,6 +162,12 @@ function gridVars() {
 
 
 
+/** A space step (`primitive.space.8`) becomes its variable; a plain length (36px, not on the space scale) stays as written. */
+function controlHeightValue(ref) {
+  const value = String(ref);
+  return value.startsWith("primitive.space.") ? `var(--space-${value.slice("primitive.space.".length)})` : value;
+}
+
 function radiusVars() {
   return [
     "  /* Radius: fixed scale on a 4px grid with 2px steps. --radius-base is 8px and generates nothing. */",
@@ -181,6 +187,11 @@ function radiusVars() {
     "  --radius-control-sm: var(--radius-xs);",
     "  --radius-control-md: var(--radius-md);",
     "  --radius-control-lg: var(--radius-lg);",
+    "",
+    "  /* Control height - Button, IconButton, Input, Select, FilterButton share one scale */",
+    ...["sm", "md", "lg"].map(
+      (step) => `  --control-height-${step}: ${controlHeightValue(tokens.semantic.controlHeight[step])};`,
+    ),
     "",
     "  /* Surface - cards, panels, dialogs */",
     "  --radius-surface-sm: var(--radius-lg);",

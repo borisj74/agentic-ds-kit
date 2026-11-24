@@ -1,6 +1,6 @@
 .filter {
-  /* Shared control scale with Button and Input: sm 32, md 36, lg 40. */
-  --h: calc(var(--space-8) + var(--space-1));
+  /* Shared control scale with Button, Input and Select: sm 32, md 36, lg 40. */
+  --h: var(--control-height-md);
   --line: var(--border-faint);
   appearance: none;
   margin: 0;
@@ -22,19 +22,19 @@
 }
 
 .sm {
-  --h: var(--space-8);
+  --h: var(--control-height-sm);
   font-size: var(--type-size-ui-sm);
   line-height: var(--type-line-ui-sm);
 }
 
 .md {
-  --h: calc(var(--space-8) + var(--space-1));
+  --h: var(--control-height-md);
   font-size: var(--type-size-ui-sm);
   line-height: var(--type-line-ui-sm);
 }
 
 .lg {
-  --h: var(--space-10);
+  --h: var(--control-height-lg);
   font-size: var(--type-size-ui-md);
   line-height: var(--type-line-ui-md);
 }

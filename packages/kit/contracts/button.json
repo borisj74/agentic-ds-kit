@@ -8,7 +8,8 @@
     "Offering a quieter action alongside content (outline, soft, or ghost)",
     "Destructive actions that need explicit danger styling",
     "Toolbar or compact actions with a Lucide icon and a visible label",
-    "Icon-only actions when space is tight and ariaLabel names the action"
+    "Icon-only actions when space is tight — use IconButton, the typed export that requires an icon and ariaLabel",
+    "An Ask action that opens the assistant: appearance outline, mode neutral, size sm, iconStart MessageCircle, label Ask"
   ],
   "doNotUseWhen": [
     "Navigation to another page or site — use Link (inline, standalone or external)",
@@ -23,7 +24,7 @@
       "type": "enum",
       "values": ["lg", "md", "sm"],
       "default": "md",
-      "note": "Kit sizes. md aligns to Cards medium, sm to small, lg to a larger control."
+      "note": "Heights from control-height: sm 32, md 36, lg 40, the same as Input, Select and FilterButton. Icon-only is a square of that height."
     },
     "appearance": {
       "type": "enum",
@@ -42,7 +43,13 @@
     },
     "disabled": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "note": "Uses text-fg-disabled, border-disabled and surface-muted. Ghost keeps no fill."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "The action is running. Sets aria-busy, shows a spinner in the leading icon slot, keeps the label and ignores clicks. The button stays focusable. disabled wins when both are set."
     },
     "children": {
       "type": "string",
@@ -52,7 +59,7 @@
     "iconStart": {
       "type": "KitIcon",
       "required": false,
-      "note": "A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element."
+      "note": "A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. Left empty on a labelled solid, outline or soft danger Button, it defaults to TriangleAlert so danger is not colour alone; pass Trash2 for a delete."
     },
     "iconEnd": {
       "type": "KitIcon",
@@ -103,6 +110,12 @@
     "bg.tray",
     "text.fg",
     "text.fgMuted",
+    "text.fgDisabled",
+    "border.disabled",
+    "surface.muted",
+    "controlHeight.sm",
+    "controlHeight.md",
+    "controlHeight.lg",
     "text.fgInverse",
     "action.onPrimary",
     "line.default",
@@ -128,6 +141,8 @@
       "Visible label via children, OR aria-label for icon-only",
       "Decorative icons are aria-hidden",
       "disabled sets aria-disabled and prevents interaction",
+      "loading sets aria-busy and aria-disabled, keeps focus and the accessible name, and ignores clicks",
+      "Danger is never colour alone: a labelled solid, outline or soft danger Button always has a leading icon",
       "Focus ring must be visible on keyboard focus"
     ]
   },
@@ -136,7 +151,9 @@
     "Do not use raw hex colors in styles",
     "Do not place more than one appearance=solid mode=primary Button in a single view",
     "Do not pass custom SVG markup as icons — use a Lucide name or Lucide component on iconStart/iconEnd",
-    "Do not ship icon-only without ariaLabel"
+    "Do not ship icon-only without ariaLabel",
+    "Do not build a local Ask button or IconButton — Ask is a neutral sm Button with a MessageCircle icon, and IconButton is the kit export",
+    "Do not swap the label for a spinner or disable the button while it works — set loading"
   ],
-  "snippet": "<Button appearance=\"solid\" mode=\"primary\" size=\"md\">Save changes</Button>\n<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Plus\">Add</Button>"
+  "snippet": "<Button appearance=\"solid\" mode=\"primary\" size=\"md\">Save changes</Button>\n<Button appearance=\"outline\" mode=\"neutral\" iconStart=\"Plus\">Add</Button>\n<Button loading>Save invoice</Button>\n<Button appearance=\"outline\" mode=\"neutral\" size=\"sm\" iconStart=\"MessageCircle\">Ask</Button>"
 }

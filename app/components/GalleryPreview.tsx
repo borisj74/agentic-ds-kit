@@ -53,6 +53,8 @@ import { Heatmap } from "agentic-ds-kit";
 import { Breadcrumb } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { ButtonGroup } from "agentic-ds-kit";
+import { IconButton } from "agentic-ds-kit";
+import { SplitButton } from "agentic-ds-kit";
 import { Calendar } from "agentic-ds-kit";
 import { Card } from "agentic-ds-kit";
 import { Carousel } from "agentic-ds-kit";
@@ -662,6 +664,25 @@ export function GalleryPreview({ id }: { id: string }) {
             Board
           </Button>
         </ButtonGroup>
+      );
+    case "iconbutton":
+      return (
+        <ButtonGroup ariaLabel="Invoice actions">
+          <IconButton size="sm" appearance="outline" mode="neutral" icon="Download" ariaLabel="Download" />
+          <IconButton size="sm" appearance="outline" mode="neutral" icon="Ellipsis" ariaLabel="More" />
+          <IconButton size="sm" appearance="outline" mode="neutral" icon="Plus" ariaLabel="Add invoice" />
+        </ButtonGroup>
+      );
+    case "splitbutton":
+      return (
+        <SplitButton
+          size="sm"
+          appearance="outline"
+          mode="neutral"
+          groups={[{ items: [{ id: "send", label: "Save and send" }, { id: "draft", label: "Save as draft" }] }]}
+        >
+          Save invoice
+        </SplitButton>
       );
     case "calendar":
       return (

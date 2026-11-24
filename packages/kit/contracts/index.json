@@ -23,6 +23,22 @@
     "level": "molecule"
   },
   {
+    "id": "iconbutton",
+    "intent": "Icon-only kit Button: a square action with an icon and a required accessible name.",
+    "group": "component",
+    "path": "contracts/iconbutton.json",
+    "status": "stable",
+    "level": "atom"
+  },
+  {
+    "id": "splitbutton",
+    "intent": "A main action joined to a chevron that opens a menu of related actions.",
+    "group": "component",
+    "path": "contracts/splitbutton.json",
+    "status": "stable",
+    "level": "molecule"
+  },
+  {
     "id": "scorecard",
     "intent": "one KPI with label, value, optional delta/trend/hint/badge",
     "group": "component",

@@ -196,21 +196,25 @@
 }
 
 /* Every size keeps --radius-control-md, like Input and Select (shared controls), so a field
-   trigger has the same corners as the fields and buttons beside it. */
+   trigger has the same corners as the fields and buttons beside it. Heights come from
+   --control-height-*, the scale Button and Input use. */
 .fieldsm {
-  padding: var(--space-1) var(--space-2);
+  min-height: var(--control-height-sm);
+  padding: 0 var(--space-2);
   border-radius: var(--radius-control-md);
   font-size: var(--type-size-label);
 }
 
 .fieldmd {
-  padding: var(--space-2) var(--space-3);
+  min-height: var(--control-height-md);
+  padding: 0 var(--space-3);
   border-radius: var(--radius-control-md);
   font-size: var(--type-size-body-sm);
 }
 
 .fieldlg {
-  padding: var(--space-3) var(--space-4);
+  min-height: var(--control-height-lg);
+  padding: 0 var(--space-4);
   border-radius: var(--radius-control-md);
   font-size: var(--type-size-body);
 }
@@ -380,14 +384,14 @@
 }
 
 .tagsFieldsm .tagsLayer {
-  min-height: calc(var(--type-size-label) * var(--type-line-body) + 2 * var(--space-1) + 2 * var(--border-width-thin));
-  padding: var(--space-1) calc(var(--space-2) * 2 + var(--space-4)) var(--space-1) var(--space-2);
+  min-height: var(--control-height-sm);
+  padding: 0 calc(var(--space-2) * 2 + var(--space-4)) 0 var(--space-2);
   font-size: var(--type-size-label);
 }
 
 .tagsFieldmd .tagsLayer {
-  min-height: calc(var(--type-size-body-sm) * var(--type-line-body) + 2 * var(--space-2) + 2 * var(--border-width-thin));
-  padding: var(--space-2) calc(var(--space-3) + var(--space-2) + var(--space-4)) var(--space-2) var(--space-3);
+  min-height: var(--control-height-md);
+  padding: 0 calc(var(--space-3) + var(--space-2) + var(--space-4)) 0 var(--space-3);
   font-size: var(--type-size-body-sm);
 }
 

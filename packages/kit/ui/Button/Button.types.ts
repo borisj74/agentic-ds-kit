@@ -10,7 +10,7 @@ export type ButtonShape = "default" | "pill";
 /** Native button attributes the kit sets itself. */
 type ButtonOwnedKeys = "children" | "type" | "aria-label" | "aria-disabled" | "onClick";
 
-interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwnedKeys> {
+export interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwnedKeys> {
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   mode?: ButtonMode;
@@ -19,6 +19,11 @@ interface ButtonBase extends Omit<ComponentPropsWithoutRef<"button">, ButtonOwne
   shape?: ButtonShape;
   block?: boolean;
   disabled?: boolean;
+  /**
+   * The action is running. Sets `aria-busy`, shows a spinner in the leading icon slot, keeps the label,
+   * and ignores clicks. The button stays focusable. `disabled` wins when both are set.
+   */
+  loading?: boolean;
   type?: ButtonType;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   iconStart?: KitIcon;

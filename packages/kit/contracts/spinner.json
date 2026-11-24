@@ -4,7 +4,7 @@
   "level": "atom",
   "intent": "Spinning circular loader for indeterminate waits. One piece. Distinct from LoadingAnimation dot-grid.",
   "useWhen": [
-    "Button or inline action is processing",
+    "An inline action is processing (for a kit Button, set loading instead)",
     "Short indeterminate page or panel load",
     "Waiting state with no known percent"
   ],
@@ -57,5 +57,5 @@
     "Do not change Button to accept spinner children",
     "Do not use raw hex"
   ],
-  "snippet": "<Spinner />\n<Spinner size=\"lg\" label=\"Processing payment…\" />\n<div style={{ display: \"flex\", gap: \"var(--space-2)\", alignItems: \"center\" }}><Spinner size=\"sm\" /><Button disabled>Loading…</Button></div>"
+  "snippet": "<Spinner />\n<Spinner size=\"lg\" label=\"Processing payment…\" />"
 }
