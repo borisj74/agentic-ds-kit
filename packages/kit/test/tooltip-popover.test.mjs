@@ -158,7 +158,7 @@ describe("placeFloating", { skip }, () => {
 });
 
 describe("Tooltip", { skip }, () => {
-  test("bubble is portaled to body with a border-ready class and named by aria-describedby", async () => {
+  test("bubble is portaled to body and named by aria-describedby", async () => {
     const view = await render(h(kit.Tooltip, { content: "Copies the link" }, h("button", { id: "copy", type: "button" }, "Copy")));
     const button = document.getElementById("copy");
     assert.equal(document.querySelector('[role="tooltip"]'), null, "nothing mounted while closed");

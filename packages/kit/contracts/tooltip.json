@@ -59,8 +59,6 @@
   "tokens": [
     "text.inverse",
     "surface.inverse",
-    "border.surface",
-    "border.subtle",
     "radius.control.md",
     "shadow.md",
     "z.tooltip",
