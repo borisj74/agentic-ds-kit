@@ -39,7 +39,7 @@
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: transparent;
+  background: none;
   box-shadow: none;
 }
 
@@ -102,14 +102,15 @@
 }
 
 .day {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  border: var(--border-width-thin) solid transparent;
+  border: 0;
   border-radius: var(--radius-control-sm);
-  background: transparent;
+  background: none;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);
@@ -127,9 +128,21 @@
   background: var(--surface-muted);
 }
 
-.day[data-today]:not([data-selected]) {
-  border-color: var(--border-strong);
+/* Today: a short bar under the number, in the day's own text colour (also on a selected day). */
+.day[data-today] {
   font-weight: var(--type-weight-label);
+}
+
+.day[data-today]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--space-1);
+  width: var(--space-3);
+  height: var(--border-width-medium);
+  margin-inline: auto;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
 }
 
 .day[data-outside] {
@@ -150,14 +163,19 @@
 .day[data-selected] {
   background: var(--action-primary);
   color: var(--action-on-primary);
-  border-color: var(--action-primary);
   opacity: 1;
   font-weight: var(--type-weight-label);
 }
 
 .day[aria-disabled="true"] {
-  opacity: var(--opacity-disabled);
   cursor: not-allowed;
+}
+
+/* Unavailable (outside minDate/maxDate or isDateDisabled): struck through, not only faded. */
+.day[data-unavailable] {
+  color: var(--text-disabled);
+  text-decoration: line-through;
+  opacity: 1;
 }
 
 /* Two months side by side (bare): spill-over days from the neighbour month are tinted boxes and
@@ -165,7 +183,6 @@
 .bare .day[data-outside],
 .bare .day[data-outside][data-in-range],
 .bare .day[data-outside][data-selected] {
-  border-color: transparent;
   background: var(--surface-muted);
   color: var(--text-muted);
   font-weight: var(--type-weight-body);

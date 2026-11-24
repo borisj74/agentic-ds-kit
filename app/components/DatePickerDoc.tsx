@@ -2,16 +2,21 @@
 
 import { useState } from "react";
 import { DatePicker } from "agentic-ds-kit";
-import type { DatePickerRange, DatePickerSize } from "agentic-ds-kit";
+import type { DatePickerSize } from "agentic-ds-kit";
 import { Field } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
 
-const SIZES: DatePickerSize[] = ["sm", "md"];
+const SIZES: DatePickerSize[] = ["sm", "md", "lg"];
 const MASTER_DEFAULT = "2026-08-29";
-const RANGE_DEFAULT: DatePickerRange = { start: "2026-08-10", end: "2026-08-18" };
+/** Weekends off, for the unavailable-days example. */
+function isWeekend(iso: string) {
+  const [year, month, day] = iso.split("-").map(Number);
+  const weekday = new Date(year, month - 1, day).getDay();
+  return weekday === 0 || weekday === 6;
+}
 const OVERLAY_CANVAS = { minHeight: "28rem", overflow: "visible" } as const;
 
 function masterCode(size: DatePickerSize, disabled: boolean, value: string) {
@@ -28,15 +33,15 @@ export function DatePickerDoc() {
   const [disabled, setDisabled] = useState(false);
   const [value, setValue] = useState(MASTER_DEFAULT);
   const [fieldValue, setFieldValue] = useState(MASTER_DEFAULT);
-  const [range, setRange] = useState<DatePickerRange>(RANGE_DEFAULT);
 
   return (
     <div>
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>DatePicker</h2>
         <p className={styles.lede}>
-          Form field that opens a month grid. One date by default. mode range picks a start and an
-          end. Wrap with Field. Not a native date input. Not the event Calendar.
+          Form field that opens a month grid to pick one date. Sizes sm, md and lg match Input. Wrap
+          with Field. For a range use DateRangePicker. Not a native date input. Not the event
+          Calendar.
         </p>
       </header>
 
@@ -46,8 +51,9 @@ export function DatePickerDoc() {
             Master
           </h2>
           <p className={styles.masterSummary}>
-            Trigger shows the chosen day. Click to open the overlay month grid. Escape or a click
-            outside closes it.
+            Trigger shows the chosen day in Geist Mono. The overlay has the shared header (icon, the
+            picked day, Choose date, Close) above the month grid. Today has a bar under the number.
+            Escape, Close or a click outside closes it.
           </p>
           <DocTabList value={tab} onChange={(id) => setTab(id as "preview" | "variants")} />
         </div>
@@ -55,7 +61,7 @@ export function DatePickerDoc() {
         {tab === "preview" ? (
           <div role="tabpanel" aria-label="Preview">
             <div className={styles.layout}>
-              <div className={styles.canvas}>
+              <div className={`${styles.canvas} ${styles.canvasMenu}`}>
                 <div className={styles.previewRow}>
                   <DatePicker
                     id="datepicker-master"
@@ -100,8 +106,8 @@ export function DatePickerDoc() {
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
                   Use DatePicker in a form. Use Calendar for a schedule of events. Value is
-                  YYYY-MM-DD. Do not invent Popover or a native date input. Named presets are
-                  DateRangePicker.
+                  YYYY-MM-DD. Do not invent Popover or a native date input. A start and end date
+                  is DateRangePicker; mode=&quot;range&quot; is deprecated.
                 </p>
               </div>
               <CodeBlock code={masterCode(size, disabled, value)} />
@@ -124,33 +130,23 @@ export function DatePickerDoc() {
             </section>
 
             <section className={styles.example}>
-              <h2 className={styles.exampleTitle}>Range</h2>
+              <h2 className={styles.exampleTitle}>Week start and unavailable days</h2>
               <div className={styles.exampleCanvas} style={OVERLAY_CANVAS}>
                 <div className={styles.previewRow}>
-                  <Field label="Report period" htmlFor="datepicker-range" hint="First click start, second click end">
-                    <DatePicker
-                      id="datepicker-range"
-                      mode="range"
-                      value={range}
-                      onValueChange={setRange}
-                    />
+                  <Field label="Delivery date" htmlFor="datepicker-weekdays" hint="Weekdays only">
+                    <DatePicker id="datepicker-weekdays" defaultValue="2026-08-26" weekStart={1} isDateDisabled={isWeekend} />
                   </Field>
                 </div>
               </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  mode=&quot;range&quot; on one DatePicker. Not two fields. Named presets such as This
-                  month are DateRangePicker. Value is
-                  {" { start, end }"} as YYYY-MM-DD.
+                  weekStart=&#123;1&#125; starts the week on Monday. isDateDisabled turns single days off.
+                  They are struck through and read as unavailable, not only faded.
                 </p>
               </div>
               <CodeBlock
-                code={[
-                  '<Field label="Report period" htmlFor="period">',
-                  '  <DatePicker id="period" mode="range" value={range} onValueChange={setRange} />',
-                  "</Field>",
-                ].join("\n")}
+                code={'<DatePicker id="delivery" weekStart={1} isDateDisabled={(iso) => isWeekend(iso)} />'}
               />
             </section>
 
@@ -169,8 +165,8 @@ export function DatePickerDoc() {
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
-                  minDate and maxDate bound the overlay month grid. Days outside the window cannot
-                  be picked.
+                  minDate and maxDate bound the overlay month grid. Days outside the window are
+                  struck through and cannot be picked.
                 </p>
               </div>
               <CodeBlock

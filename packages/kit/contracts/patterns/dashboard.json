@@ -24,7 +24,8 @@
     "pageheader",
     "tabs",
     "button",
-    "select",
+    "field",
+    "daterangepicker",
     "segmentedcontrol",
     "switch",
     "insightcard",
@@ -62,7 +63,7 @@
       "type": "enum",
       "values": ["30d", "3m", "12m"],
       "required": false,
-      "note": "Controlled period (Last 30 days, 3 months, 12 months). Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period)."
+      "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
     },
     "granularity": {
       "type": "enum",
@@ -108,7 +109,7 @@
   "defaults": [
     "Shell: the app-shell example (DASHBOARD_DEMO_SHELL): layout inset, layout-shell--viewport, no top bar when wide; workspace switcher, Quick actions (⌘K), Notifications, Revenue / Customers / Invoices / Plans, Saved views and the account menu; the work panel titled Assistant with Tabs Ask (Chat embedded: no header of its own, fills the panel) and What changed, closed",
     "Header: PageHeader Revenue overview with Export (outline) and the panel toggle; Tabs Overview, Subscribers, Churn, Cohorts (only Overview is built)",
-    "Controls: period Select, granularity SegmentedControl, Compare to previous period Switch",
+    "Controls: period DateRangePicker (sm, in a Field labelled Period at the start) with the presets Last 30 days, Last 3 months and Last 12 months, or a custom range of days; granularity SegmentedControl; Compare to previous period Switch",
     "Metric strip: Scoreboard selectable with five framed Scorecards (KPI cards), each with a delta Badge and what it compares to. Each tile uses the Scorecard look that fits its data: MRR the reference sparkline against its target (dots on the points past it, start and end dates), Net new MRR the expressive line (previous period dashed when compare is on), Subscribers a meter toward its target, Churn rate a meter under its ceiling (direction lower), ARPA the plain sparkline",
     "Main chart: LineChart area with the metric's reference line (target or last period's average) and points past it in the accent colour",
     "Summary: InsightCard at the top of the rail beside the main chart when wide, above the metric strip when narrow (or without the rail)",
@@ -127,7 +128,7 @@
       "Each chart has a title, a one-line question as its description, a Table view, and the main chart a visually hidden summary sentence (start, end, how many points are past the reference)",
       "Ask buttons are icon-only kit Buttons named Ask about <card>; the Chat composer is described by the context chip (Asking about <card> · <period>)",
       "Status Badges carry text (Past due, Downgrade, At risk); colour is never the only signal; ListView dots are aria-hidden",
-      "The Compare Switch and the period Select have visible or accessible names; disabled granularity options stay in the group"
+      "The Compare Switch and the period DateRangePicker have visible names; disabled granularity options stay in the group"
     ]
   },
   "doNot": [

@@ -10,6 +10,10 @@ export interface MonthGridProps {
   disabled?: boolean;
   minDate?: string;
   maxDate?: string;
+  /** First day of the week: 0 Sunday (default) or 1 Monday. */
+  weekStart?: 0 | 1;
+  /** Turns single days off (holidays, weekends): they are struck through and named unavailable. */
+  isDateDisabled?: (date: string) => boolean;
   /** Controlled month shown, as YYYY-MM-01. Two grids side by side share one view this way. */
   view?: string;
   onViewChange?: (month: string) => void;

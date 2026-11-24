@@ -26,8 +26,13 @@
   color: var(--icon-muted);
 }
 
+/* The picked value reads as data: Geist Mono, like a typed date. */
 .value {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
   color: var(--text-primary);
 }
 
@@ -36,27 +41,11 @@
   color: var(--text-muted);
 }
 
-.panel {
-  position: absolute;
-  z-index: var(--z-overlay);
-  top: calc(100% + var(--space-1));
-  /* Grow toward the start edge so the month grid stays inside drawers and
-     other clipped panels when the field sits in a trailing column. */
-  right: 0;
-  left: auto;
-  /* At least as wide as the trigger; the month grid stretches to fill. */
+.body {
   display: grid;
-  min-width: 100%;
+  padding: var(--space-3) var(--space-4) var(--space-4);
 }
 
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.bodySm {
+  padding: var(--space-2);
 }

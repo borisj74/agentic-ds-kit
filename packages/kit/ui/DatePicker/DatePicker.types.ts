@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
 
-export type DatePickerSize = "sm" | "md";
+export type DatePickerSize = "sm" | "md" | "lg";
 export type DatePickerMode = "single" | "range";
 
 export interface DatePickerRange {
@@ -30,6 +30,10 @@ interface DatePickerShared extends Omit<ComponentPropsWithoutRef<"button">, Date
   error?: boolean;
   minDate?: string;
   maxDate?: string;
+  /** First day of the week: 0 Sunday (default) or 1 Monday. */
+  weekStart?: 0 | 1;
+  /** Turns single days off (holidays, weekends). Those days are struck through and named unavailable. */
+  isDateDisabled?: (date: string) => boolean;
   name?: string;
   describedBy?: string;
   ref?: Ref<HTMLButtonElement>;
@@ -42,6 +46,7 @@ export interface DatePickerSingleProps extends DatePickerShared {
   onValueChange?: (date: string) => void;
 }
 
+/** @deprecated Use DateRangePicker (presets={[]} for the month grid only). Still works. */
 export interface DatePickerRangeProps extends DatePickerShared {
   mode: "range";
   value?: DatePickerRange;

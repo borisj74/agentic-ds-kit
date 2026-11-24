@@ -3484,24 +3484,23 @@
     {
       "id": "datepicker",
       "group": "component",
-      "intent": "Form field that opens a month grid to pick one date or a date range.",
+      "intent": "Form field that opens a month grid to pick one date.",
       "useWhen": [
         "A date in a form or filter",
-        "Need a typed-looking field whose overlay is a month grid",
-        "A period between two dates (mode range), like invoice due vs last month for a report"
+        "Need a typed-looking field whose overlay is a month grid"
       ],
       "doNotUseWhen": [
         "A schedule of events — use Calendar",
-        "A range with named presets such as This month — use DateRangePicker",
+        "A range of dates, with or without presets — use DateRangePicker (mode range is deprecated)",
         "Time-only — ask first"
       ],
       "doNot": [
         "Do not wrap DatePicker in Popover. The field owns its overlay. Do not invent a local calendar, DatePickerDialog, PeriodPicker, DualCalendar, or native input type=date",
         "Named presets such as This month or Last 30 days — use DateRangePicker",
-        "Do not use two DatePickers for start and end — use mode=range",
+        "Do not use two DatePickers for start and end, and do not use mode=range for new work (deprecated) — use DateRangePicker",
         "Do not use the event Calendar as a date field",
         "Do not add built-in label, hint, error text, help, or hideLabel — wrap with Field",
-        "Do not add time, Density, or a third field size",
+        "Do not add time or Density, and no size past lg",
         "Do not use raw hex"
       ],
       "props": {
@@ -3517,7 +3516,7 @@
             "range"
           ],
           "default": "single",
-          "note": "single is one YYYY-MM-DD. range is { start, end? }. Named presets are DateRangePicker."
+          "note": "single is one YYYY-MM-DD. range ({ start, end? }) is deprecated: it still works, with a warning in development. Use DateRangePicker, with presets={[]} for the month grid only."
         },
         "value": {
           "type": "string | { start: string, end?: string }",
@@ -3538,10 +3537,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
           "default": "md",
-          "note": "Trigger size; overlay month grid is sm when size is sm, else md. No lg on the field."
+          "note": "Trigger height sm 32, md 36, lg 40, like Input. The overlay month grid is sm when size is sm, else md."
         },
         "placeholder": {
           "type": "string",
@@ -3566,6 +3566,20 @@
           "required": false,
           "note": "Passed to the overlay month grid"
         },
+        "weekStart": {
+          "type": "enum",
+          "values": [
+            0,
+            1
+          ],
+          "default": 0,
+          "note": "First day of the week: 0 Sunday, 1 Monday. Moves the weekday row and Home/End."
+        },
+        "isDateDisabled": {
+          "type": "function",
+          "required": false,
+          "note": "(date: string) => boolean. Turns single days off, like holidays or weekends. Those days, and days outside minDate/maxDate, are struck through and named unavailable."
+        },
         "name": {
           "type": "string",
           "required": false,
@@ -3581,14 +3595,14 @@
     {
       "id": "daterangepicker",
       "group": "component",
-      "intent": "Pick a date range from named presets such as This month or Last 30 days, or from two months side by side, then Apply.",
+      "intent": "Pick a date range from named presets such as This month or Last 30 days, from two months side by side, or by typing the start and end, then Apply.",
       "useWhen": [
         "A report or filter period with presets like This month or Last 30 days",
-        "A start and end date in one field"
+        "A start and end date in one field",
+        "A range with no presets — pass presets={[]}"
       ],
       "doNotUseWhen": [
         "One date — use DatePicker",
-        "A range with no named presets — use DatePicker mode=range",
         "A schedule of events — use Calendar"
       ],
       "doNot": [
@@ -3606,9 +3620,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Trigger height sm 32, md 36, lg 40, like Input."
         },
         "value": {
           "type": "{ start: string, end?: string }",
@@ -3649,6 +3665,20 @@
           "type": "string",
           "required": false
         },
+        "weekStart": {
+          "type": "enum",
+          "values": [
+            0,
+            1
+          ],
+          "default": 0,
+          "note": "First day of the week: 0 Sunday, 1 Monday."
+        },
+        "isDateDisabled": {
+          "type": "function",
+          "required": false,
+          "note": "(date: string) => boolean. Turns single days off. Those days, and days outside minDate/maxDate, are struck through, named unavailable, and refused by the typed fields."
+        },
         "name": {
           "type": "string",
           "required": false,
@@ -3686,9 +3716,11 @@
           "type": "enum",
           "values": [
             "md",
-            "sm"
+            "sm",
+            "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "note": "Trigger height sm 32, md 36, lg 40, like Input. The TimePicker in the panel is sm when size is sm, else md."
         },
         "value": {
           "type": "{ date?: string, time?: string }",
@@ -3719,6 +3751,16 @@
         "error": {
           "type": "boolean",
           "default": false
+        },
+        "minDate": {
+          "type": "string",
+          "required": false,
+          "note": "YYYY-MM-DD. Earlier days are struck through and unavailable."
+        },
+        "maxDate": {
+          "type": "string",
+          "required": false,
+          "note": "YYYY-MM-DD. Later days are struck through and unavailable."
         },
         "name": {
           "type": "string",
@@ -14004,7 +14046,7 @@
             "12m"
           ],
           "required": false,
-          "note": "Controlled period (Last 30 days, 3 months, 12 months). Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period)."
+          "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
         },
         "granularity": {
           "type": "enum",

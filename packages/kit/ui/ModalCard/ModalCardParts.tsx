@@ -29,14 +29,17 @@ export interface OverlayHeaderProps {
   eyebrow?: string;
   tone?: ModalCardTone;
   onClose?: () => void;
+  /** Lucide icon before the eyebrow when the tone has none (the date pickers' CalendarDays). */
+  icon?: string;
   className?: string;
 }
 
 /** Tone icon + eyebrow and Close on top, then the h2 title and the one-sentence description. */
-export function OverlayHeader({ title, titleId, description, descriptionId, eyebrow, tone = "neutral", onClose, className }: OverlayHeaderProps) {
+export function OverlayHeader({ title, titleId, description, descriptionId, eyebrow, tone = "neutral", onClose, icon, className }: OverlayHeaderProps) {
   const labels = useKitLabels();
   const status = tone === "neutral" ? null : tone;
-  const hasTop = Boolean(eyebrow || status);
+  const topIcon = status ? TONE_ICON[status] : icon;
+  const hasTop = Boolean(eyebrow || status || icon);
   const close = onClose ? (
     <IconButton appearance="ghost" mode="neutral" size="sm" icon="X" ariaLabel={labels.close} onClick={onClose} />
   ) : null;
@@ -46,7 +49,7 @@ export function OverlayHeader({ title, titleId, description, descriptionId, eyeb
       {hasTop ? (
         <div className={styles.top}>
           <p className={styles.eyebrow} data-tone={status ?? undefined}>
-            {status ? <LucideByName name={TONE_ICON[status]} size={16} className={styles.toneIcon} /> : null}
+            {topIcon ? <LucideByName name={topIcon} size={16} className={styles.toneIcon} /> : null}
             <span>{[status ? labels[status] : null, eyebrow].filter(Boolean).join(" · ")}</span>
           </p>
           {close}

@@ -14,29 +14,32 @@
   "contains": ["datepicker", "timepicker"],
   "props": {
     "id": { "type": "string", "required": true },
-    "size": { "type": "enum", "values": ["md", "sm"], "default": "md" },
+    "size": { "type": "enum", "values": ["md", "sm", "lg"], "default": "md", "note": "Trigger height sm 32, md 36, lg 40, like Input. The TimePicker in the panel is sm when size is sm, else md." },
     "value": { "type": "{ date?: string, time?: string }", "required": false, "note": "date is YYYY-MM-DD. time is HH:mm." },
     "defaultValue": { "type": "{ date?: string, time?: string }", "required": false },
     "onValueChange": { "type": "function", "required": false, "note": "(value: { date?, time? }) => void" },
     "hourCycle": { "type": "enum", "values": ["12", "24"], "default": "12" },
     "disabled": { "type": "boolean", "default": false },
     "error": { "type": "boolean", "default": false },
+    "minDate": { "type": "string", "required": false, "note": "YYYY-MM-DD. Earlier days are struck through and unavailable." },
+    "maxDate": { "type": "string", "required": false, "note": "YYYY-MM-DD. Later days are struck through and unavailable." },
     "name": { "type": "string", "required": false, "note": "Hidden input submits date and time as YYYY-MM-DDTHH:mm." },
     "describedBy": { "type": "string", "required": false },
     "placeholder": { "type": "string", "default": "Pick a date and time" }
   },
   "passthrough": { "root": "div", "ref": "trigger button", "className": "root", "rest": "none" },
-  "tokens": ["text.primary", "text.muted", "icon.muted", "surface.card", "border.faint", "border.focus", "status.danger"],
+  "tokens": ["text.primary", "text.muted", "text.disabled", "font.mono", "icon.muted", "surface.card", "border.faint", "border.focus", "status.danger"],
   "a11y": {
     "element": "button",
     "requirements": [
       "Escape closes only this panel, not a parent Modal, Drawer or AlertDialog",
       "Trigger is a button with aria-haspopup=dialog, aria-expanded, and aria-controls",
-      "The dialog contains the month grid and a TimePicker",
+      "The dialog (aria-modal) has the shared overlay header (CalendarDays icon, the picked date and time or the placeholder as the eyebrow, the Choose date and time title, Close), then the month grid and a TimePicker",
+      "Opening focuses the picked day (else today). Tab stays inside the dialog",
       "Choosing a day or a time updates the value and leaves the dialog open until Done or Escape",
-      "Escape closes and returns focus to the trigger",
+      "Escape, Close and Done close and return focus to the trigger",
       "Must have a Field label pointing at id",
-      "built-in labels (previousMonth, nextMonth, chooseDateAndTime, time) come from KitLabelsProvider; English by default"
+      "built-in labels (previousMonth, nextMonth, chooseDateAndTime, time, close) come from KitLabelsProvider; English by default"
     ]
   },
   "doNot": [
