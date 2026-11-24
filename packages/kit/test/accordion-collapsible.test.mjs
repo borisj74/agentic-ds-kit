@@ -103,6 +103,19 @@ describe("Accordion markup", () => {
     assert.match(html, /data-nistha="count"|>12</);
   });
 
+  test("count and meta sit together at the end of the header, count first", () => {
+    const html = renderToStaticMarkup(
+      h(Accordion, { items: [{ id: "a", title: "Invoices", count: 12, meta: "Updated today", content: "x" }, items[3]] }),
+    );
+    const button = html.match(/<button[^>]*>.*?<\/button>/)[0];
+    const title = button.indexOf("Invoices");
+    const count = button.indexOf(">12<");
+    const meta = button.indexOf("Updated today");
+    assert.ok(title < count && count < meta, "title, then count, then meta");
+    const end = button.match(/<span class="[^"]*end[^"]*">(.*)<\/span><\/button>/);
+    assert.ok(end && end[1].includes(">12<") && end[1].includes("Updated today"), "one trailing group holds both");
+  });
+
   test("disabled item sets aria-disabled and leaves the tab order", () => {
     const html = renderToStaticMarkup(h(Accordion, { items }));
     assert.match(html, /aria-disabled="true"[^>]*tabindex="-1"|tabindex="-1"[^>]*aria-disabled="true"/);

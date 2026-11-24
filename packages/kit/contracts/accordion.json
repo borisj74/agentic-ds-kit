@@ -26,7 +26,7 @@
       },
       "required": true,
       "minItems": 2,
-      "note": "content is the panel body: a string or kit pieces such as a Field or Table. meta is short secondary text at the end of the header. count renders a neutral kit Count after the title. disabled shows the header but it cannot toggle. Header: md control height (36); ChevronRight 16px first, turning down when open; 14/20 title at 550; then Count; meta at the end. The body lines up with the title."
+      "note": "content is the panel body: a string or kit pieces such as a Field or Table. meta is short secondary text at the end of the header. count renders a neutral kit Count at the end of the header, before meta. disabled shows the header but it cannot toggle. Header: md control height (36); ChevronRight 16px first, turning down when open; 14/20 title at 550; Count then meta grouped at the end. The body lines up with the title."
     },
     "type": {
       "type": "enum",

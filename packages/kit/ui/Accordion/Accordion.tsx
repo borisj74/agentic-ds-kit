@@ -101,10 +101,14 @@ export function Accordion({ items, type = "single", defaultOpen, className, ref,
                 aria-hidden
               />
               <span className={styles.title}>{item.title}</span>
-              {typeof item.count === "number" ? (
-                <Count count={item.count} intent="neutral" subtle size="sm" disabled={disabled} />
+              {typeof item.count === "number" || item.meta ? (
+                <span className={styles.end}>
+                  {typeof item.count === "number" ? (
+                    <Count count={item.count} intent="neutral" subtle size="sm" disabled={disabled} />
+                  ) : null}
+                  {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
+                </span>
               ) : null}
-              {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
             </button>
             <div
               id={panelId}

@@ -7,7 +7,7 @@ export interface AccordionItem {
   content: ReactNode;
   /** Short secondary text at the end of the header, e.g. "Updated 2 days ago". */
   meta?: string;
-  /** Neutral Count after the title, e.g. how many rows the panel holds. */
+  /** Neutral Count at the end of the header, before meta, e.g. how many rows the panel holds. */
   count?: number;
   /** Header is shown but cannot open or close, and Tab and arrow keys skip it. */
   disabled?: boolean;

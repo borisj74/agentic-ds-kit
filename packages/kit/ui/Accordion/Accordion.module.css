@@ -12,7 +12,7 @@
   border-top: var(--border-divider) solid var(--border-faint);
 }
 
-/* md control height (36) with a 14/20 title: the chevron leads, meta sits at the end. */
+/* md control height (36) with a 14/20 title: the chevron leads, count and meta sit at the end. */
 .trigger {
   display: flex;
   align-items: center;
@@ -49,10 +49,17 @@
   letter-spacing: var(--type-tracking-heading);
 }
 
-.meta {
+/* Count, then meta, pushed to the end of the header. */
+.end {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
+  gap: var(--space-2);
   margin-inline-start: auto;
   padding-inline-start: var(--space-3);
+}
+
+.meta {
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-body);
