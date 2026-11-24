@@ -16,9 +16,30 @@
     "Exclusive FAQ lists \u2014 use Accordion"
   ],
   "props": {
+    "eyebrow": {
+      "type": "string",
+      "required": false,
+      "note": "Short sentence-case line above the title, 12/16 at weight 500. Never uppercase."
+    },
     "title": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "18/24 at heading weight: the middle of three title sizes (page 24, section 18, card 16)."
+    },
+    "count": {
+      "type": "number",
+      "required": false,
+      "note": "A neutral kit Count beside the title, like the number of overdue invoices."
+    },
+    "headingLevel": {
+      "type": "enum",
+      "values": [
+        2,
+        3,
+        4
+      ],
+      "default": 2,
+      "note": "The title's heading element. Use 3 or 4 when the Section sits under another heading so the outline stays in order. Looks the same at every level."
     },
     "description": {
       "type": "string",
@@ -34,6 +55,16 @@
       "default": "md",
       "note": "Controls gap under the heading and between stacked sections via space-section tokens. Does not add box padding."
     },
+    "divider": {
+      "type": "boolean",
+      "default": false,
+      "note": "A hairline (border.faint) under the header."
+    },
+    "sticky": {
+      "type": "boolean",
+      "default": false,
+      "note": "The header sticks to the top of its scroll container while the body scrolls. It takes --section-sticky-bg, default surface.page; set it to the surface behind the Section (surface.card inside a Card)."
+    },
     "actions": {
       "type": "slot",
       "required": false,
@@ -46,7 +77,7 @@
     "collapsible": {
       "type": "boolean",
       "default": false,
-      "note": "Default false: static heading, no chevron. True: chevron before the title toggles the body. Requires title."
+      "note": "Default false: static heading, no chevron. True: a 16px chevron before the title toggles the body. Requires title."
     },
     "defaultOpen": {
       "type": "boolean",
@@ -72,7 +103,6 @@
   "tokens": [
     "text.primary",
     "text.secondary",
-    "type.size.heading",
     "type.size.bodySm",
     "space.section.sm",
     "space.section.md",
@@ -81,15 +111,23 @@
     "space.stack.md",
     "space.stack.lg",
     "type.weight.heading",
-    "type.tracking.heading5"
+    "type.size.uiLg",
+    "type.size.uiXs",
+    "type.weight.label",
+    "border.faint",
+    "surface.page",
+    "icon.muted",
+    "type.line.uiLg",
+    "type.tracking.heading"
   ],
   "a11y": {
     "element": "section",
     "requirements": [
-      "title is h2 with useId",
+      "title is a heading (h2 by default, headingLevel 3 or 4) with useId",
       "aria-labelledby when title is set",
       "When collapsible, the control is a button inside the h2 with aria-expanded and aria-controls",
-      "Body uses hidden when collapsed"
+      "Body uses hidden when collapsed",
+      "count sits outside the heading and is a number, never colour alone"
     ]
   },
   "doNot": [
@@ -100,8 +138,11 @@
     "Do not use Section as the page title \u2014 that is PageHeader",
     "Do not embed one-off metric flex rows \u2014 use Scoreboard",
     "Actions must be kit Buttons",
-    "Do not compose Accordion or Collapsible for page sections \u2014 Section owns collapse"
+    "Do not compose Accordion or Collapsible for page sections \u2014 Section owns collapse",
+    "Do not use more than one title size per level: page 24 (PageHeader), section 18, card 16"
   ],
   "snippet": "<Section title=\"Recent activity\" description=\"Last 30 days\"><Table ... /></Section>",
-  "contains": []
+  "contains": [
+    "count"
+  ]
 }

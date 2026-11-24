@@ -53,14 +53,15 @@
   flex: 1;
 }
 
+/* Card is the smallest of three title sizes: page 24, section 18, card 16. */
 .title {
   margin: 0;
   overflow-wrap: anywhere;
   font-family: var(--font-display);
-  font-size: var(--type-size-heading);
+  font-size: var(--type-size-ui-md);
   font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading-5);
-  line-height: var(--type-line-heading);
+  letter-spacing: var(--type-tracking-heading);
+  line-height: var(--type-line-ui-md);
   color: var(--text-primary);
 }
 

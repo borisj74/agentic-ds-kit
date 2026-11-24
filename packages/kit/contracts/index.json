@@ -520,7 +520,7 @@
   },
   {
     "id": "tabs",
-    "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm.",
+    "intent": "Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don't fit.",
     "group": "component",
     "path": "contracts/tabs.json",
     "status": "stable",
@@ -584,7 +584,7 @@
   },
   {
     "id": "pageheader",
-    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, and actions.",
+    "intent": "Top-of-page title with optional Breadcrumb trail, subtitle, actions, and page Tabs.",
     "group": "component",
     "path": "contracts/pageheader.json",
     "status": "stable",

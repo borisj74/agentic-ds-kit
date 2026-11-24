@@ -17,6 +17,16 @@ const MASTER_ITEMS: TabItem[] = [
   { id: "api", label: "API", content: "Props, callbacks, and a11y details." },
 ];
 
+const OVERFLOW_ITEMS: TabItem[] = [
+  { id: "all", label: "All" },
+  { id: "overdue", label: "Overdue", count: 3 },
+  { id: "drafts", label: "Drafts", count: 5 },
+  { id: "paid", label: "Paid" },
+  { id: "scheduled", label: "Scheduled" },
+  { id: "refunded", label: "Refunded" },
+  { id: "void", label: "Void" },
+];
+
 function itemsSnippet(entries: { id: string; label: string; content: string; disabled?: boolean }[]) {
   const inner = entries
     .map((item) => {
@@ -53,7 +63,7 @@ export function TabsDoc() {
       <header className={styles.hero}>
         <h2 className={styles.heroTitle}>Tabs</h2>
         <p className={styles.lede}>
-          Switch between related views in place. Line by default, or segmented, in lg, md, and sm. One piece.
+          Switch between related views in place. Line by default, or segmented, in lg, md, and sm. Tabs can carry an icon and a count, and scroll or fold into a More menu when they don’t fit. One piece.
           Not AppNav. Not RadioGroup. Not TabsList or TabsTrigger cousins.
         </p>
       </header>
@@ -228,6 +238,94 @@ export function TabsDoc() {
                       `<Tabs defaultValue="one" size="${step}" variant="line" items={[{ id: "one", label: "One", content: "…" }, { id: "two", label: "Two", content: "…" }]} />`,
                   )
                   .join("\n")}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Icon and count</h2>
+              <div className={styles.exampleCanvas}>
+                <Tabs
+                  defaultValue="all"
+                  items={[
+                    { id: "all", label: "All" },
+                    { id: "overdue", label: "Overdue", count: 3 },
+                    { id: "drafts", label: "Drafts", count: 5 },
+                    { id: "paid", label: "Paid" },
+                    { id: "disputed", label: "Disputed", icon: "Lock", disabled: true },
+                  ]}
+                />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  A count is a neutral kit Count and part of the tab’s name, so the number carries the
+                  meaning, never colour. An icon sits before the label.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Tabs
+  defaultValue="all"
+  items={[
+    { id: "all", label: "All" },
+    { id: "overdue", label: "Overdue", count: 3 },
+    { id: "drafts", label: "Drafts", count: 5 },
+    { id: "paid", label: "Paid" },
+    { id: "disputed", label: "Disputed", icon: "Lock", disabled: true },
+  ]}
+/>`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Overflow</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewStack} style={{ maxWidth: "24rem" }}>
+                  <Tabs
+                    ariaLabel="Invoices, scroll"
+                    defaultValue="all"
+                    items={OVERFLOW_ITEMS}
+                  />
+                  <Tabs
+                    ariaLabel="Invoices, more"
+                    defaultValue="all"
+                    overflow="more"
+                    items={OVERFLOW_ITEMS}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  By default the row stays on one line and scrolls sideways. With overflow=&quot;more&quot;,
+                  tabs that don’t fit move into a More menu; the selected tab always stays in the row.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Tabs defaultValue="all" items={items} />
+<Tabs defaultValue="all" overflow="more" items={items} />`}
+              />
+            </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Manual activation</h2>
+              <div className={styles.exampleCanvas}>
+                <Tabs
+                  defaultValue="timeline"
+                  activation="manual"
+                  items={[
+                    { id: "timeline", label: "Timeline", content: "Sent Nov 4, reminder Nov 18." },
+                    { id: "lines", label: "Lines", content: "Pro plan, 12 seats, $1,250." },
+                  ]}
+                />
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Arrow keys move focus and Enter or Space selects. Use it when a panel is slow to load.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Tabs defaultValue="timeline" activation="manual" items={[…]} />`}
               />
             </section>
 
