@@ -1,5 +1,6 @@
 "use client";
 
+import { Building2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
@@ -159,6 +160,48 @@ function dashboardViewProps(view?: string): DashboardPatternProps {
     default:
       return {};
   }
+}
+
+/* The list-detail board's shell: no top bar when wide, a Northwind SideNav with Work > Home and
+   Billing (Invoices, Payments, Plans) and the signed-in account at the foot. Below the breakpoint the
+   nav moves into the Drawer behind the same Agentix-style top bar the other screens use. */
+const LIST_DETAIL_NAV: SideNavItemData[] = [
+  { id: "home", label: "Home", icon: "House" },
+  {
+    id: "billing",
+    label: "Billing",
+    icon: "CreditCard",
+    items: [
+      { id: "invoices", label: "Invoices", badge: "48", active: true },
+      { id: "payments", label: "Payments" },
+      { id: "plans", label: "Plans" },
+    ],
+  },
+];
+
+export function ListDetailScreen({ view }: { view?: string }) {
+  const groups = [{ label: "Work", items: LIST_DETAIL_NAV }];
+  const account = { name: "Maya Chen", initials: "MC" };
+  return (
+    <AppShellPattern
+      className="layout-shell--viewport"
+      navLabel="Northwind"
+      markIcon={Building2}
+      nav={(placement) => (
+        <SideNav
+          title="Northwind"
+          markIcon={Building2}
+          showHeader={placement === "rail"}
+          radius={placement === "rail" ? "none" : "md"}
+          open
+          groups={groups}
+          account={account}
+        />
+      )}
+    >
+      <ListDetailPattern selectedId={listDetailSelectedId(view)} />
+    </AppShellPattern>
+  );
 }
 
 /** The four dashboard-family screens (its own variant names; the docs slugs are settings-form and empty-first-run). */

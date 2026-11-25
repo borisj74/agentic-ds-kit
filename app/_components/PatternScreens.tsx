@@ -2,7 +2,7 @@
 
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { AppShellScreen } from "./AppShellDemo";
-import { DashboardScreen } from "./DashboardDemo";
+import { DashboardScreen, ListDetailScreen } from "./DashboardDemo";
 import { InsightStackScreen } from "./InsightStackDemo";
 import { BillingScheduleScreen, IntegrationSettingsScreen } from "./SaasPatternDemo";
 import { OnboardingScreen, SettingsScreen } from "./ScreensPatternDemo";
@@ -14,8 +14,9 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
   const current = views.some((item) => item.id === view) ? view : views[0].id;
   switch (slug) {
     case "dashboard":
-    case "list-detail":
       return <DashboardScreen pattern={slug} view={current} />;
+    case "list-detail":
+      return <ListDetailScreen view={current} />;
     case "settings-form":
       return <DashboardScreen pattern="settings" />;
     case "empty-first-run":

@@ -4,7 +4,7 @@
 - **One URL per record.** `#INV-1842` opens that invoice and an empty hash is the list, so links, reloads and the browser's Back work. A hash on load wins over `selectedId`, and `selectedId` left out now starts with nothing open.
 - **Below 640 the list drills.** Rows get a chevron and open the invoice full page: a top bar with a ghost Invoices back button, then compact line item and payment rows, with Ask, Download PDF and a full-width Retry payment at lg in one row. Back returns focus to the row that was open. A polite live region says "INV-1842 open" when a row opens.
 - **list-detail contract:** `contains` is now pageheader, listview, empty, card, badge, button, iconbutton, table, input and segmentedcontrol (appnav and section go). The "Route-level sections are links (AppNav)" must is replaced by: single selection, one URL per record, detail beside the list at 640 and up with Empty when none is open, full-page detail with a back button below 640, and status in words.
-- **PageHeader keeps one icon-only action beside the title on narrow widths.** Below 40rem actions still move under the title, except a single IconButton (like a phone list's New invoice), which stays on the title's row.
+- **PageHeader keeps a single action beside the title on narrow widths.** Below 40rem (a phone, or a list column like list-detail's) actions still move under the title, except a single Button or IconButton, such as New invoice, which stays on the title's row.
 
 ### Fixed
 

@@ -9,6 +9,28 @@
   gap: 0;
 }
 
+/* At 640 and up the two panes meet the canvas edges: the list rows and the detail's grey run edge to edge,
+   and each pane brings its own 24 inset. */
+/* No header row at 640 and up: the content takes the whole canvas, so both panes run to the bottom. */
+.list-detail-pattern__canvas {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.list-detail-pattern__wide {
+  padding: 0;
+  align-content: stretch;
+}
+
+.list-detail-pattern__split > .list-detail-pattern__list {
+  padding-block: var(--space-6);
+}
+
+/* Rows sit 16 in from both pane edges, so their text lines up with the chrome at 24 and the selected
+   fill never runs into the rule beside the detail. */
+.list-detail-pattern__split .list-detail-pattern__rows {
+  padding-inline: var(--space-4);
+}
+
 /* The list pane's chrome (PageHeader, search, segments, notes) is inset 24; the rows run to its edges. */
 .list-detail-pattern__split .list-detail-pattern__chrome {
   padding-inline: var(--space-6);
@@ -38,9 +60,11 @@
 }
 
 /* At 640 and up the open record (or Empty) is a pane beside the list, split from it by a faint rule. */
+/* The open record (or Empty) sits on the page surface so its white cards stand out, as on the board. */
 .list-detail-pattern__pane {
   align-self: stretch;
-  padding-inline-start: var(--space-6);
+  padding: var(--space-6);
+  background: var(--surface-page);
   border-inline-start: var(--border-width-thin) solid var(--border-faint);
 }
 
