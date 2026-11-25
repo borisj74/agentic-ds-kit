@@ -197,6 +197,27 @@ describe("AlertDialog", { skip }, () => {
     await view.unmount();
   });
 
+  test("below 30rem it is a bottom sheet: Cancel then the action, stacked, not a joined ButtonGroup", async () => {
+    const saved = window.matchMedia;
+    window.matchMedia = (query) => ({ matches: query === "(max-width: 30rem)", media: query, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} });
+    globalThis.matchMedia = window.matchMedia;
+    try {
+      const view = await render(
+        h(Open, { kind: "AlertDialog", props: { title: "Leave without saving?", cancelLabel: "Keep editing", actionLabel: "Discard and leave", actionVariant: "danger" } }),
+      );
+      const dialog = document.querySelector('[role="alertdialog"]');
+      const group = dialog.querySelector('[data-part="footer"] [role="group"]');
+      assert.ok(group && group.getAttribute("data-nistha") !== "buttongroup", "plain group, not ButtonGroup");
+      assert.deepEqual([...group.querySelectorAll("button")].map((b) => b.textContent), ["Keep editing", "Discard and leave"]);
+      assert.ok(document.activeElement.textContent === "Keep editing", "focus starts on Cancel");
+      assert.ok(dialog.parentElement.className.split(" ").length > 1, "overlay carries the sheet class");
+      await view.unmount();
+    } finally {
+      window.matchMedia = saved;
+      globalThis.matchMedia = saved;
+    }
+  });
+
   test("confirmText: focus starts in the field and the action waits for a match", async () => {
     const view = await render(
       h(Open, {

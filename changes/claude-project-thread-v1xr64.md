@@ -2,6 +2,7 @@
 
 - **FieldSet `layout="side"`.** The legend and description sit in a fixed left column with the fields to their right, and stack when the FieldSet is under 40rem wide. The description is now linked to the group with `aria-describedby`.
 - **Alert `children` is optional, and `action` takes `appearance: "outline"`.** A page Alert keeps its tinted box with an outline action when the page already has its solid primary, like an error summary above a form with Save. Leave out `children` when the title says it all.
+- **AlertDialog is a bottom sheet below 480px.** It docks 40 from the bottom at full width, with Cancel and the action stacked full width at lg 40, Cancel on top. Focus still starts on Cancel.
 
 ### Changed
 
