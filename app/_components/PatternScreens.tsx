@@ -1,6 +1,7 @@
 "use client";
 
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
+import { AgentActivityScreen } from "./AgentActivityScreen";
 import { AgentPermissionsScreen } from "./AgentPermissionsScreen";
 import { AppShellScreen } from "./AppShellDemo";
 import { AssistantStartScreen } from "./AssistantStartScreen";
@@ -42,6 +43,8 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
       return <RunDetailScreen view={current} />;
     case "assistant-start":
       return <AssistantStartScreen view={current} />;
+    case "agent-activity":
+      return <AgentActivityScreen view={current} />;
     case "agent-permissions":
       return <AgentPermissionsScreen view={current} />;
   }

@@ -18,6 +18,7 @@ import emptyFirstRun from "../../packages/kit/contracts/patterns/empty-first-run
 import insightStack from "../../packages/kit/contracts/patterns/insight-stack.json";
 import assistantStart from "../../packages/kit/contracts/patterns/assistant-start.json";
 import runDetail from "../../packages/kit/contracts/patterns/run-detail.json";
+import agentActivity from "../../packages/kit/contracts/patterns/agent-activity.json";
 import agentPermissions from "../../packages/kit/contracts/patterns/agent-permissions.json";
 import integrationSettings from "../../packages/kit/contracts/patterns/integration-settings.json";
 import listDetail from "../../packages/kit/contracts/patterns/list-detail.json";
@@ -56,6 +57,7 @@ const CONTRACTS: Record<Exclude<PatternSlug, "layouts">, PatternContract> = {
   "insight-stack": insightStack,
   "run-detail": runDetail,
   "assistant-start": assistantStart,
+  "agent-activity": agentActivity,
   "agent-permissions": agentPermissions,
 };
 

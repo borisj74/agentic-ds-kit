@@ -13878,12 +13878,13 @@
     {
       "id": "activityfeed",
       "group": "component",
-      "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word.",
+      "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word. An agent variant shows an agent's steps on the same rail with Avatar markers: a sentence, a meta line and a reason per step, Undo with its deadline, Undone and Final steps, and no built-in filters (the page puts a FilterBar above it).",
       "useWhen": [
         "a workspace or project activity page",
         "catch up on what people and agents did since yesterday",
         "jump from an event to the thing it happened to, or reply to a comment",
-        "one record's history, like an invoice created, sent, viewed and paid — variant=\"history\""
+        "one record's history, like an invoice created, sent, viewed and paid — variant=\"history\"",
+        "an agent activity log where recent steps can be undone and the rest are final — variant=\"agent\" under a page FilterBar"
       ],
       "doNotUseWhen": [
         "the steps of one agent run — AgentTrail or RunDetail",
@@ -13898,13 +13899,15 @@
         "Do not put a sentence in verb; verb is the phrase between the actor and the object",
         "Do not use Badge for people; Avatar is the person or agent, the Agent Badge only says it is an agent",
         "Do not use raw hex",
-        "Do not show status by colour alone; the status word is always there, tone only tints it"
+        "Do not show status by colour alone; the status word is always there, tone only tints it",
+        "Do not build an agent step log from a local list; use variant=\"agent\"",
+        "Do not show Undo after its deadline; pass state=\"final\" with a note on what to do instead"
       ],
       "props": {
         "events": {
           "type": "array",
           "required": true,
-          "note": "{ id, type: \"comment\" | \"change\" | \"run\" | \"member\" | \"billing\", actor: { id, name, kind?: \"person\" | \"agent\", src?, initials? }, verb, object, at: epoch ms | ISO string, detail?, status?: { label, tone? }, canReply? }[]. Any order; shown newest first in day groups. verb is lower case (\"commented on\") so the line reads actor + verb + object."
+          "note": "{ id, type: \"comment\" | \"change\" | \"run\" | \"member\" | \"billing\", actor: { id, name, kind?: \"person\" | \"agent\", src?, initials? }, verb, object, at: epoch ms | ISO string, detail?, status?: { label, tone? }, canReply? }[]. Any order; shown newest first in day groups. verb is lower case (\"commented on\") so the line reads actor + verb + object. variant=\"agent\" takes { id, at: epoch ms | ISO string, actor: { id, name, initials? }, sentence: string | inline nodes, meta: string (agent · app · task · who allowed it), reason?: string, undo?: { until: epoch ms | ISO string, onUndo }, state?: \"undone\" | \"final\", note?: string }[] instead."
         },
         "filters": {
           "type": "object",
@@ -13973,10 +13976,11 @@
           "type": "enum",
           "values": [
             "feed",
-            "history"
+            "history",
+            "agent"
           ],
           "default": "feed",
-          "note": "feed: Avatars, Type and Person filters, Open and Reply. history: one record's events on the rail Timeline and AgentTrail share (16px rail, 12px dot, 1px line), a time column when wide and the status word at the row end; no Avatars, filters or actions."
+          "note": "feed: Avatars, Type and Person filters, Open and Reply. history: one record's events on the rail Timeline and AgentTrail share (16px rail, 12px dot, 1px line), a time column when wide and the status word at the row end; no Avatars, filters or actions. agent: an agent's steps on that rail with an Avatar sm marker in place of the dot, a time column (space-10, mono) when wide, the sentence (struck when undone), a meta line and a reason; at the row end an sm outline Undo (Undo2) with a mono deadline (\"14:22 · 8 min left\", only until undo.until), or a soft Badge Undone (Undo2) or Final (Lock). No frame, no visible heading and no built-in filters: put it in a Card under the page's PageHeader and FilterBar. filters, defaultFilters, onFiltersChange, onOpen, onReply and the status chip props don't apply. With no now prop it re-renders once a minute (or at the nearest deadline) while an Undo shows, so the deadline counts down and Undo goes at until; the timer stops when no Undo is left."
         },
         "statusChips": {
           "type": "array",
@@ -14904,6 +14908,21 @@
         "The run is one kit RunDetail with calls=\"all\": every started step's ToolCallCard, the failed one open; Retry only on that ToolCallCard",
         "Stop run asks once in the kit AlertDialog before it ends the run; Pause keeps it resumable",
         "Status is always an icon and a word (monitor Badge, trail, calls), never colour alone"
+      ]
+    },
+    {
+      "id": "agent-activity",
+      "group": "pattern",
+      "intent": "What your agents did, as a page: AppHeader, a PageHeader with an undo count and Ask, a FilterBar (Agent, Allowed by, App, Clear all) with the step count at the row end, then one Card holding the kit ActivityFeed with variant=\"agent\": day groups on the rail with Avatar markers, a sentence, meta and reason per step, Undo with its deadline, Undone and Final steps, and Load earlier days. Undo strikes the step and a kit Toast confirms it. Empty (filtered) and load-error states. Below 640 a Menu IconButton in AppHeader opens the app's nav in a Drawer, the FilterBar shows two chips and +1, and the feed folds its time and end columns into the copy.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (step rows, rails, undo buttons, badges, filter chips, toasts)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "No appearance=\"solid\" mode=\"primary\" Button on this page; Ask, Undo and Load earlier days are outline neutral",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 its Menu IconButton (Open navigation) opens the nav in a kit Drawer",
+        "The steps are one kit ActivityFeed with variant=\"agent\"; filter them in the page with a kit FilterBar and pass the filtered steps in",
+        "Undo is offered only until its deadline, which shows beside it; after Undo the step shows Undone and a Toast says what stopped",
+        "A step that can't be undone says Final and what to do instead; status is always a word (Undone, Final, On its own, Approved by), never colour alone"
       ]
     },
     {

@@ -134,6 +134,13 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "reconnect-error", label: "Reconnect failed" },
     { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
+  "agent-activity": [
+    { id: "default", label: "Steps with Undo" },
+    { id: "empty", label: "Empty · filtered" },
+    { id: "error", label: "Couldn't load" },
+    { id: "undone", label: "After Undo" },
+    { id: "mobile", label: "Mobile 390", device: "mobile" },
+  ],
   "agent-permissions": [
     { id: "default", label: "Request waiting" },
     { id: "edit-drawer", label: "Edit level" },
@@ -165,6 +172,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "assistant-start": "An assistant's start page: a greeting with the key figures, prompts that send, and the connected apps answers come from.",
   "agent-permissions": "What each agent may do on its own: a waiting request to Grant or Deny, a table of actions and levels with Edit, a switch to stop all agents, and the default for new actions.",
   "run-detail": "One agent run: a status bar with time and cost, the step trail and trace, and every tool call with Retry on the failed one.",
+  "agent-activity": "What your agents did, by day: filters, Undo before its deadline, and Undone and Final steps.",
 };
 
 /** Each screen pattern's add command. Docs slugs are the pattern ids. */
@@ -182,5 +190,6 @@ export const PATTERN_ADD: Record<ScreenSlug, string> = {
   "insight-stack": "npx agentic-ds-kit add insight-stack",
   "run-detail": "npx agentic-ds-kit add run-detail",
   "assistant-start": "npx agentic-ds-kit add assistant-start",
+  "agent-activity": "npx agentic-ds-kit add agent-activity",
   "agent-permissions": "npx agentic-ds-kit add agent-permissions",
 };

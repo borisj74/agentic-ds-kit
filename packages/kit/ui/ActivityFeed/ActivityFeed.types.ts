@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 
 /** What kind of thing happened. Drives the Type filter and the event's type Badge. */
@@ -39,17 +39,37 @@ export interface ActivityFeedFilters {
   people: string[];
 }
 
+/** One step an agent took, for variant="agent". The row is a sentence, a meta line and a reason. */
+export interface ActivityAgentEvent {
+  id: string;
+  /** When, as epoch ms or an ISO string. */
+  at: number | string;
+  /** The agent. Shows as the Avatar marker on the rail. */
+  actor: { id: string; name: string; initials?: string };
+  /** The step as one sentence: "Sent reminder for INV-1842 to Northwind". Text, or inline nodes (a mono id). */
+  sentence: ReactNode;
+  /** agent · app · task · who allowed it: "Collections agent · Gmail · Overdue follow-up · On its own". */
+  meta: string;
+  /** Why the agent did it, one plain line. */
+  reason?: string;
+  /** The step can still be undone until `until`: an sm Undo Button and a mono deadline. */
+  undo?: { until: number | string; onUndo: () => void };
+  /** undone: struck sentence and an Undone Badge. final: a Lock Badge Final. Pair either with note. */
+  state?: "undone" | "final";
+  /** With state: who undid it and what that changed, or what to do instead of undoing. */
+  note?: string;
+}
+
 /** feed: workspace activity with Avatars, Type and Person filters, Open and Reply. history: one record's
- *  events on a rail with a time column and a status word, like an invoice's history. */
-export type ActivityFeedVariant = "feed" | "history";
+ *  events on a rail with a time column and a status word, like an invoice's history. agent: an agent's
+ *  steps on the rail with Avatar markers, Undo, Undone and Final, and no built-in filters. */
+export type ActivityFeedVariant = "feed" | "history" | "agent";
 
 /** Root attributes the block sets itself. */
 type ActivityFeedOwnedKeys = "children" | "aria-labelledby" | "title";
 
-/** `ref`, `className` and other native attributes land on the root `<section>`. */
-export interface ActivityFeedProps extends Omit<ComponentPropsWithoutRef<"section">, ActivityFeedOwnedKeys> {
-  /** Loaded events, any order; the feed shows newest first, grouped by day. */
-  events: ActivityEvent[];
+/** Props every variant shares. `ref`, `className` and other native attributes land on the root `<section>`. */
+interface ActivityFeedBaseProps extends Omit<ComponentPropsWithoutRef<"section">, ActivityFeedOwnedKeys> {
   /** Controlled filters. */
   filters?: ActivityFeedFilters;
   /** Uncontrolled starting filters. */
@@ -73,8 +93,6 @@ export interface ActivityFeedProps extends Omit<ComponentPropsWithoutRef<"sectio
   title?: string;
   /** Line under the title. Default: how many events show. */
   description?: string;
-  /** feed (default) or history. */
-  variant?: ActivityFeedVariant;
   /** Status words to filter on, like Created, Sent, Paid. Shows All plus one chip each (kit SegmentedControl, sm). */
   statusChips?: string[];
   /** Controlled chip: a status word, or null for All. Matches event.status.label. */
@@ -86,3 +104,20 @@ export interface ActivityFeedProps extends Omit<ComponentPropsWithoutRef<"sectio
   onRetry?: () => void;
   ref?: Ref<HTMLElement>;
 }
+
+/** feed and history: workspace or record events. */
+export interface ActivityFeedEventProps extends ActivityFeedBaseProps {
+  /** feed (default) or history. */
+  variant?: "feed" | "history";
+  /** Loaded events, any order; the feed shows newest first, grouped by day. */
+  events: ActivityEvent[];
+}
+
+/** agent: an agent's steps. Filters, status chips, Open and Reply don't apply; the page supplies a FilterBar. */
+export interface ActivityFeedAgentProps extends ActivityFeedBaseProps {
+  variant: "agent";
+  /** Loaded steps, any order; shown newest first, grouped by day. */
+  events: ActivityAgentEvent[];
+}
+
+export type ActivityFeedProps = ActivityFeedEventProps | ActivityFeedAgentProps;
