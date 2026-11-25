@@ -9,3 +9,4 @@
 ### Fixed
 
 - **CurrencyInput and NumberInput keep the symbol beside the number** on pages that load the shared control styles after theirs.
+- **SideNav account avatar lines up with the nav icons.** SideNav.Account insets its 24px avatar by 4px, so its center sits on the same line as the 16px item icons, open or closed.

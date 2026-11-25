@@ -9,6 +9,7 @@ import {
   NotificationStack,
   SideNavAccount,
   SideNavBrand,
+  SideNavFooter,
   SideNavHeader,
   SideNavItem,
   SideNavNav,
@@ -68,7 +69,9 @@ function StageNav({ section, onPick }: { section: SettingsSection; onPick: (sect
           ))}
         </SideNavSection>
       </SideNavNav>
-      <SideNavAccount name="Priya Shah" secondary="Pro plan · 12 seats" initials="PS" />
+      <SideNavFooter>
+        <SideNavAccount name="Priya Shah" secondary="Pro plan · 12 seats" initials="PS" />
+      </SideNavFooter>
     </SideNavRoot>
   );
 }
