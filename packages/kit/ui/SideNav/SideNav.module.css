@@ -508,6 +508,9 @@
   align-items: center;
   gap: var(--space-inline-md);
   min-width: 0;
+  /* The sm avatar (24px) sits on the same center line as the 16px item icons, open or
+     closed: the footer insets like the nav, and 4px (half the size difference) does the rest. */
+  padding-inline: var(--space-1);
 }
 
 * + .account {

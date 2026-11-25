@@ -1366,7 +1366,7 @@
   },
   {
     "id": "billing-schedule",
-    "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+    "intent": "Billing schedule for one customer: the next charge as one figure with its lines, a failure Alert that says what happens next, and Upcoming and Billed as two kit Tables with status as icon and word. Scheduled charges open a kit Drawer to move the date, change the amount or skip the month.",
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",

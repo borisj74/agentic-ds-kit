@@ -41,7 +41,7 @@
   align-items: center;
   gap: var(--space-3);
   min-width: 0;
-  flex: 1;
+  flex: 1 1 calc(var(--grid-width-sm) / 2);
 }
 
 .iconTile {
@@ -61,11 +61,13 @@
   stroke-width: var(--icon-stroke);
 }
 
+/* Half a --grid-width-sm (20rem) as the basis: where the title and actions don't both fit,
+   the actions wrap below and the title and description take the full width. */
 .heading {
   display: grid;
   gap: var(--space-1);
   min-width: 0;
-  flex: 1;
+  flex: 1 1 calc(var(--grid-width-sm) / 2);
 }
 
 /* Sentence case, never uppercase. */

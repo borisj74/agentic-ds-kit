@@ -41,6 +41,8 @@ export interface TableProps extends Omit<ComponentPropsWithoutRef<"div">, TableO
   stickyHeader?: boolean;
   /** One row menu in a last 56px column, named "Actions for <first cell>". */
   rowActions?: (row: TableRow, index: number) => TableRowAction[];
+  /** How rowActions render: menu (one ellipsis menu, default) or icons (icon-only ghost Buttons, each named by its ariaLabel; up to 3). */
+  rowActionsAs?: "menu" | "icons";
   /** loading: header plus skeleton rows. empty: Empty with emptyLabel. error: LoadError with errorMessage. */
   state?: TableState;
   /** state="error": what failed, e.g. "Couldn’t load invoices." */

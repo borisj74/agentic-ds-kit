@@ -74,6 +74,15 @@
       "required": false,
       "note": "(row, index) => CellAction[]. One row menu (Cell type actionMenu) in a last 56px column with no visible header text, named Actions for <first cell>. Return [] to leave a row without a menu."
     },
+    "rowActionsAs": {
+      "type": "enum",
+      "values": [
+        "menu",
+        "icons"
+      ],
+      "default": "menu",
+      "note": "menu: one row menu (Cell actionMenu). icons: each action as an icon-only ghost Button (Cell actionIcons, up to 3), named by its ariaLabel, like Edit Onboarding part 2 of 3, 15 Dec. Use icons for one or two row actions the person scans for; the column stays 56px with no visible header text, so footer totals stay under their column."
+    },
     "state": {
       "type": "enum",
       "values": [
