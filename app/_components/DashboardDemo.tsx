@@ -21,7 +21,7 @@ import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPat
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
-  { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
+  { id: "projects", label: "Invoices", icon: "FileText", badge: "11" },
   { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
   { id: "resources", label: "Resources", icon: "Layers" },
   { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
@@ -131,9 +131,9 @@ function isListDetailPage(id: string) {
   return LIST_DETAIL_PAGES.has(id);
 }
 
-function selectedProjectId(page: string) {
-  if (page === "projects" || page === "list-detail") return "launch-brief";
-  return page;
+/** The list-detail screens (lib/pattern-screens PATTERN_VIEWS["list-detail"]) as the open invoice. */
+function listDetailSelectedId(view?: string): string | undefined {
+  return view === "none" || view === "mobile" ? undefined : "INV-1842";
 }
 
 /** The dashboard's screens (lib/pattern-screens PATTERN_VIEWS.dashboard) as pattern props. */
@@ -266,7 +266,7 @@ export function DashboardScreen({
         ) : page === "research" ? (
           <EmptyFirstRunPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (
-          <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
+          <ListDetailPattern breadcrumbs={trail} selectedId={listDetailSelectedId(pattern === "list-detail" ? view : undefined)} />
         ) : current ? (
           <PlaceholderPage item={current} breadcrumbs={trail} />
         ) : null}

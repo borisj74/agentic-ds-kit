@@ -133,6 +133,9 @@ describe("review rules", () => {
     const signIn = review("pattern-fits/sign-in-bad.tsx");
     assert.deepEqual(rules(signIn), ["pattern-fits"]);
     assert.equal(signIn.findings[0].fix, "npx agentic-ds-kit add sign-in");
+    const listDetail = review("pattern-fits/list-detail-bad.tsx");
+    assert.deepEqual(rules(listDetail), ["pattern-fits"]);
+    assert.equal(listDetail.findings[0].fix, "npx agentic-ds-kit add list-detail");
   });
 
   test("thresholds: two distinctive parts, two thirds of them and of the whole list", () => {

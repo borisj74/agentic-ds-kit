@@ -1,37 +1,103 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The list-detail-pattern__ prefix keeps names unique. */
 
-.list-detail-pattern__shell {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: var(--layout-gutter-md);
-  align-items: start;
+/* layout-split--secondary gives the list one part and the detail two. Below 640 the pattern renders one
+   column itself (list, or the full-page detail), so the split never has to stack. */
+.list-detail-pattern__split {
   min-width: 0;
 }
 
-.list-detail-pattern__main {
+.list-detail-pattern__list,
+.list-detail-pattern__detail,
+.list-detail-pattern__body {
   display: grid;
   gap: var(--space-stack-md);
+  align-content: start;
   min-width: 0;
-  overflow-x: auto;
 }
 
-.list-detail-pattern__main section {
-  margin-bottom: 0;
+.list-detail-pattern__list {
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__controls {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-end: var(--space-2);
 }
 
 .list-detail-pattern__detail {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  max-width: 36rem;
+  margin-bottom: 0;
 }
 
-.list-detail-pattern__body {
+.list-detail-pattern__status {
+  display: flex;
+}
+
+.list-detail-pattern__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__note {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-muted);
+}
+
+/* Amount due leads; the other cells are short facts, split by a faint rule. */
+.list-detail-pattern__summary {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  margin: 0;
+  padding-block: var(--space-4);
+}
+
+.list-detail-pattern__summary-cell {
+  display: grid;
+  gap: var(--space-1);
+  align-content: end;
+  min-width: 0;
+  padding-inline: var(--space-6);
+}
+
+.list-detail-pattern__summary-cell + .list-detail-pattern__summary-cell {
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__summary dt {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-secondary);
+}
+
+.list-detail-pattern__summary dd {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  font-weight: var(--type-weight-heading);
+  font-variant-numeric: tabular-nums;
   color: var(--text-primary);
+}
+
+.list-detail-pattern__summary dd[data-lead] {
+  font-size: var(--type-size-heading-5);
+  line-height: var(--type-line-heading-5);
+}
+
+/* Read by screen readers when a row opens: "INV-1842 open". */
+.list-detail-pattern__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

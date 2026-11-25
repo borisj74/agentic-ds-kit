@@ -14383,14 +14383,18 @@
     {
       "id": "list-detail",
       "group": "pattern",
-      "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
+      "intent": "List-detail page: a ListView of records beside the open one, with Empty when none is open; below 640 the list drills to a full-page detail.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",
         "Do not restyle kit components; change them through their props, slots, and tokens",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens",
-        "Route-level sections are links (AppNav), not Tabs; Tabs are for panels inside one view"
+        "The list is one kit ListView with selection=\"single\" at 640 and up; the open record is the selected row",
+        "One URL per record (here #INV-1842; /invoices/:id in an app). The list with nothing open is its own URL",
+        "At 640 and up the detail sits beside the list (layout-split); with nothing open it is kit Empty that says so and offers one neutral Button",
+        "Below 640 the list fills the page and rows drill (interaction=\"drill\"); the record opens full page with a PageHeader back link to the list, and Back returns focus to that row",
+        "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\"), never colour alone"
       ]
     },
     {

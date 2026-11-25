@@ -15,7 +15,7 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
   switch (slug) {
     case "dashboard":
     case "list-detail":
-      return <DashboardScreen pattern={slug} view={slug === "dashboard" ? current : undefined} />;
+      return <DashboardScreen pattern={slug} view={current} />;
     case "settings-form":
       return <DashboardScreen pattern="settings" />;
     case "empty-first-run":
