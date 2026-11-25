@@ -1316,7 +1316,7 @@
   },
   {
     "id": "settings-form",
-    "intent": "Settings form example: a PageHeader over grouped fields (FieldSets in one Card, legend left when wide), a sticky SaveBar that names unsaved changes, an error summary Alert, and an AlertDialog before changes are lost. The demo is company billing details.",
+    "intent": "Settings form example: a PageHeader over grouped fields (FieldSets in one Card, legend left when wide), a sticky SaveBar that names unsaved changes, an error summary Alert, and an AlertDialog before changes are lost. The demo is company billing details. header={false} drops the PageHeader so the form can be the body of a page with its own header, such as a settings section.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
@@ -1386,7 +1386,7 @@
   },
   {
     "id": "settings",
-    "intent": "Settings pages in the Stage look: Profile, Billing, Team, Notifications and Security, each under a Settings › section breadcrumb on the inset panel of a layout-shell--inset app shell whose SideNav lists the sections; with Billing overdue / loading / error, Team empty and invite Drawer, and Security 2FA off.",
+    "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations; You: Profile, Notifications, Security) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Billing, Team, Integrations and Security act per card. Billing overdue / loading / error, Team empty and invite Drawer, Security 2FA off.",
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",
