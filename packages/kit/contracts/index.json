@@ -1336,7 +1336,7 @@
   },
   {
     "id": "empty-first-run",
-    "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
+    "intent": "First run of a billing workspace inside the app-shell example (inset): PageHeader Invoices with no action, and one Card at layout-container-sm holding Empty (first-use, lg) with Create invoice (the one solid primary) and Try sample data (outline), then one setup line under a Divider: a count, what's left and Open setup (ghost) to the page with SetupGuide. Create invoice opens a Modal (md) that adds a new customer inline (Combobox allowCustomValue), with Plan (Select) and Due date (DatePicker); Create draft hands the draft to onCreate and shows a Toast. Try sample data swaps Empty for an info Alert (Sample data, Clear sample data) over the invoices Table, and Create invoice moves to PageHeader.",
     "group": "pattern",
     "path": "contracts/patterns/empty-first-run.json",
     "status": "stable",

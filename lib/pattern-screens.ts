@@ -63,7 +63,10 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
   ],
   "settings-form": [{ id: "default", label: "Settings form" }],
   "list-detail": [{ id: "default", label: "List detail" }],
-  "empty-first-run": [{ id: "default", label: "First run" }],
+  "empty-first-run": [
+    { id: "default", label: "First run" },
+    { id: "mobile", label: "Mobile 390", device: "mobile" },
+  ],
   "sign-in": [
     { id: "sign-in", label: "Sign in" },
     { id: "error", label: "Wrong password" },
@@ -113,7 +116,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   dashboard: "Billing home: four KPIs that drive the revenue chart, Needs attention, overdue invoices, a Revenue tab of analysis charts, and an Ask panel.",
   "settings-form": "Grouped settings fields with save and cancel.",
   "list-detail": "A list of records beside the one you selected.",
-  "empty-first-run": "First-run empty state with one primary action.",
+  "empty-first-run": "A new billing workspace with no invoices: one Create invoice, opt-in sample data and a one-line setup status.",
   "sign-in": "Centered sign-in card: SSO, email and password, then a one-time code step.",
   "app-shell": "Side nav with a workspace switcher, quick actions and a Notifications panel around the page, inset or flat, with a narrow drawer.",
   layouts: "Top bar and side nav, composed from kit components.",

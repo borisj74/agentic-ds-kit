@@ -15,7 +15,7 @@ import type { AppShellNav, AppShellWorkspace } from "../../packages/kit/patterns
 import { DemoLogo } from "./AppShellDemo";
 import type { DashboardPatternProps } from "../../packages/kit/patterns/DashboardPattern";
 import { sampleExchange } from "../../packages/kit/patterns/DashboardPattern/dashboard-data";
-import { EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
+import { EMPTY_FIRST_RUN_DEMO_SHELL, EmptyFirstRunPattern } from "../../packages/kit/patterns/EmptyFirstRunPattern";
 import { ListDetailPattern } from "../../packages/kit/patterns/ListDetailPattern";
 import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPattern";
 
@@ -224,6 +224,18 @@ export function DashboardScreen({
     );
   }
 
+  // Empty first run brings its own shell too (a new Northwind workspace, Invoices selected).
+  if (page === "research") {
+    return (
+      <EmptyFirstRunPattern
+        shell={{
+          workspace: { ...(EMPTY_FIRST_RUN_DEMO_SHELL.workspace as AppShellWorkspace), mark: <DemoLogo /> },
+          nav: { ...(EMPTY_FIRST_RUN_DEMO_SHELL.nav as AppShellNav), markIcon: <DemoLogo onBrand /> },
+        }}
+      />
+    );
+  }
+
   return (
     <>
       <AppShellPattern
@@ -263,8 +275,6 @@ export function DashboardScreen({
       >
         {page === "settings" ? (
           <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
-        ) : page === "research" ? (
-          <EmptyFirstRunPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (
           <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
         ) : current ? (
