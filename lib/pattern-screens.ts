@@ -1,5 +1,5 @@
 import type { PatternSlug } from "./playground-nav";
-import type { OnboardingStep, WorkspaceState } from "../packages/kit/patterns/OnboardingPattern";
+import type { ConfirmState, OnboardingStep } from "../packages/kit/patterns/OnboardingPattern";
 import type { BillingState, SettingsSection, TeamState } from "../packages/kit/patterns/SettingsPattern";
 
 /**
@@ -37,14 +37,14 @@ export const SETTINGS_SCREENS: {
   { id: "security-2fa-off", label: "Security · 2FA off", section: "security", twoFactor: false },
 ];
 
-/** The screens on Paper p-6-0 (Onboarding): each step, plus the workspace step's error and submitting states. */
-export const ONBOARDING_SCREENS: { id: string; label: string; step: OnboardingStep; workspace?: WorkspaceState }[] = [
-  { id: "welcome", label: "01 Welcome", step: "welcome" },
-  { id: "workspace", label: "02 Workspace", step: "workspace" },
-  { id: "workspace-error", label: "02b Workspace · validation error", step: "workspace", workspace: "error" },
-  { id: "workspace-submitting", label: "02c Workspace · submitting", step: "workspace", workspace: "submitting" },
-  { id: "connect", label: "03 Connect or choose", step: "connect" },
-  { id: "done", label: "04 Done", step: "done" },
+/** The Onboarding screens (Paper p-9-1, 4H05-0): each step, plus Review's error and submitting states. */
+export const ONBOARDING_SCREENS: { id: string; label: string; step: OnboardingStep; confirm?: ConfirmState }[] = [
+  { id: "business", label: "01 Business", step: "business" },
+  { id: "plan", label: "02 Plan", step: "plan" },
+  { id: "billing", label: "03 Billing", step: "billing" },
+  { id: "review", label: "04 Review", step: "review" },
+  { id: "review-error", label: "04b Review · business name missing", step: "review", confirm: "error" },
+  { id: "review-submitting", label: "04c Review · creating account", step: "review", confirm: "submitting" },
 ];
 
 /** Pattern pages shown as a full screen in a frame. Layouts is a page of its own. */
@@ -123,7 +123,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",
   "integration-settings": "One integration's status and last sync, the sync error with Retry, sync settings, and Disconnect kept away from Save.",
   settings: "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
-  onboarding: "Four guided setup steps with progress, a validation error and a submitting state.",
+  onboarding: "Four setup steps (business, plan, billing, review) with progress, a validation error and a creating state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
 };
 
