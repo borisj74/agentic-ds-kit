@@ -30,6 +30,11 @@ export type {
 
 const GROUP_PREFIX = "group:";
 
+/** metaTone, noteTone and iconTone: neutral adds nothing. */
+function toneClass(tone: ListViewItem["metaTone"]): string | undefined {
+  return tone === "danger" ? styles.danger : tone === "warning" ? styles.warning : undefined;
+}
+
 function hasAvatar(item: ListViewItem): boolean {
   return Boolean(item.name || item.src || item.initials);
 }
@@ -97,7 +102,7 @@ const DOT_NAME: Record<NonNullable<ListViewItem["dot"]>, string> = {
  * shown only as a Badge is read too. A dot adds its tone after the badge (the dot is aria-hidden).
  */
 function rowName(item: ListViewItem): string {
-  return [item.primary, secondaryOf(item), item.value, item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
+  return [item.primary, secondaryOf(item), item.note, item.value, item.meta, item.badge, item.dot ? DOT_NAME[item.dot] : undefined]
     .filter(Boolean)
     .join(", ");
 }
@@ -264,7 +269,7 @@ export function ListView({
     }
     if (item.icon) {
       return (
-        <span className={cx(styles.leading, item.iconTone === "danger" && styles.danger)} aria-hidden>
+        <span className={cx(styles.leading, toneClass(item.iconTone))} aria-hidden>
           <LucideByName name={item.icon} size={iconPx} />
         </span>
       );
@@ -429,6 +434,7 @@ export function ListView({
 
   function renderCopy(item: ListViewItem): ReactNode {
     const secondary = secondaryOf(item);
+    const note = item.note ? <span className={cx(styles.note, toneClass(item.noteTone))}>{item.note}</span> : null;
     return (
       <span className={styles.copy}>
         <span
@@ -437,12 +443,14 @@ export function ListView({
         >
           {item.primary}
         </span>
-        {secondary ? (
+        {secondary || note ? (
           <span
             className={cx(styles.secondary, truncateSecondary && styles.truncate)}
-            title={truncateSecondary ? secondary : undefined}
+            title={truncateSecondary ? [secondary, item.note].filter(Boolean).join(" · ") : undefined}
           >
             {secondary}
+            {secondary && note ? " · " : null}
+            {note}
           </span>
         ) : null}
       </span>
@@ -596,13 +604,20 @@ export function ListView({
                         <span className={styles.trail} ref={bindInertControls}>
                           {item.value ? (
                             <span className={styles.valueStack}>
-                              <span className={styles.value}>{item.value}</span>
-                              {item.meta ? <span className={cx(styles.meta, item.metaTone === "danger" && styles.danger)}>{item.meta}</span> : null}
+                              <span className={cx(styles.value, item.valueIcon && styles.valueWithIcon)}>
+                                {item.valueIcon ? (
+                                  <span className={styles.valueIcon} aria-hidden>
+                                    <LucideByName name={item.valueIcon} size={16} />
+                                  </span>
+                                ) : null}
+                                {item.value}
+                              </span>
+                              {item.meta ? <span className={cx(styles.meta, toneClass(item.metaTone))}>{item.meta}</span> : null}
                               {renderBadge(item)}
                             </span>
                           ) : (
                             <>
-                              {item.meta ? <span className={cx(styles.meta, item.metaTone === "danger" && styles.danger)}>{item.meta}</span> : null}
+                              {item.meta ? <span className={cx(styles.meta, toneClass(item.metaTone))}>{item.meta}</span> : null}
                               {renderBadge(item)}
                             </>
                           )}

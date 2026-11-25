@@ -1,0 +1,47 @@
+{
+  "id": "agent-permissions",
+  "status": "stable",
+  "level": "template",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add agent-permissions",
+  "import": "import { AgentPermissionsPattern } from \"@/components/patterns/agent-permissions\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/agent-permissions/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "What each agent may do on its own, as a page: AppHeader, a PageHeader with a count of waiting requests and Ask, the pending kit PermissionRequest first (Grant / Deny, then one line), a Table of actions with each level as an icon plus a word and a ghost Edit, a Card with a Switch that makes every action ask first, and an AutonomyDial for the default level of new actions. Edit opens a kit Drawer with a card RadioGroup and, for an amount, a CurrencyInput under the group. Below 640 the nav opens in a Drawer from a Menu button, the Table becomes a drill ListView, Edit opens from the bottom and the dial is left out.",
+  "contains": [
+    "appheader",
+    "avatar",
+    "iconbutton",
+    "drawer",
+    "sidenav",
+    "pageheader",
+    "button",
+    "permissionrequest",
+    "card",
+    "table",
+    "listview",
+    "switch",
+    "autonomydial",
+    "radiogroup",
+    "currencyinput"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (request cards, level pickers, autonomy sliders, edit panels)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view: Grant on the page, Save level in the Edit Drawer",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 the nav is reachable from a Menu button in a kit Drawer",
+    "A waiting request is the kit PermissionRequest, first on the page, with its own Grant / Deny wording and one-line result",
+    "A level is always an icon and a word, never the icon or colour alone; a level set by workspace policy has no Edit and no drill",
+    "The amount for \"Up to an amount\" is a kit CurrencyInput under the RadioGroup, not inside an option"
+  ],
+  "defaults": [
+    "Demo is Northwind's billing agents: Collections agent asks to refund up to $500 without asking (now $250, until 22 Dec), and 4 actions across 2 agents",
+    "The request maps onto one scope (Refunds, write, $500 per refund, 30 days until 22 Dec), names the agent in requestedAt, and the one-line result shows the time",
+    "Granting raises the refunds row to Up to $500; while it waits the row shows \"$500 requested\"",
+    "The switch card sits beside the dial, top-aligned and as tall as its content",
+    "Below 640 Last used drops, the list shows the level word as the row value, and the Default for new actions dial is left out"
+  ],
+  "snippet": "<AgentPermissionsPattern request=\"pending\" />"
+}

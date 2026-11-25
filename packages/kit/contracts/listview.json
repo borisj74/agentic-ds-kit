@@ -6,7 +6,9 @@
   "useWhen": [
     "Which mark: the row dot is the leading 8px mark in a ListView row; the row text still says the status. Do not add a separate Dot.",
     "People, files, or other records shown one per row",
-    "Pick one, check several, or open a row without comparing columns"
+    "Pick one, check several, or open a row without comparing columns",
+    "valueIcon: a value column people scan by kind, like a level icon next to \"On its own\" or \"Up to $250\"",
+    "note with noteTone warning: one part of the secondary line waits on someone, like \"Collections · $500 asked\""
   ],
   "doNotUseWhen": [
     "Values compared across columns — use Table or DataTable",
@@ -45,14 +47,17 @@
         "actions": "{ id, label, actionLabel?, icon?, danger?, disabled? }[]?",
         "dot": "\"neutral\" | \"success\" | \"warning\" | \"danger\" | \"info\"?",
         "value": "string?",
+        "valueIcon": "KitIcon?",
         "meta": "string?",
-        "metaTone": "\"neutral\" | \"danger\"?",
-        "iconTone": "\"neutral\" | \"danger\"?",
+        "metaTone": "\"neutral\" | \"warning\" | \"danger\"?",
+        "note": "string?",
+        "noteTone": "\"neutral\" | \"warning\" | \"danger\"?",
+        "iconTone": "\"neutral\" | \"warning\" | \"danger\"?",
         "priority": "\"high\" | \"medium\" | \"low\"?",
         "primaryAction": "{ id, label, actionLabel?, icon?, danger?, disabled? }?"
       },
       "required": true,
-      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed 96 lane at the row end; once any row has one, rows without one keep the empty lane, so badges, values and verbs line up across rows. When primaryAction is set, every entry in actions goes in the kit DropdownMenu. At size lg below --grid-breakpoint-sm the primaryAction drops to a full-width line under its row, and below --grid-breakpoint-sm the empty lane on rows without one is hidden at every size. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. Both default to neutral, and the words must still say the problem."
+      "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed 96 lane at the row end; once any row has one, rows without one keep the empty lane, so badges, values and verbs line up across rows. When primaryAction is set, every entry in actions goes in the kit DropdownMenu. At size lg below --grid-breakpoint-sm the primaryAction drops to a full-width line under its row, and below --grid-breakpoint-sm the empty lane on rows without one is hidden at every size. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. warning is for something waiting on someone. valueIcon is a quiet aria-hidden Lucide icon before value, like a level icon next to \"Up to $250\". note ends the secondary line after \" · \", like \"$500 asked\", and noteTone colours only that part. Tones default to neutral, and the words must still say it."
     },
     "label": {
       "type": "string",
@@ -212,7 +217,8 @@
       "A row action with actionLabel is named by it (aria-labelledby a hidden span); without it the button's name is its visible label. actionLabel starts with the visible label so speech input still matches",
       "value is part of the row name, after the secondary line; a group total is part of the group's name",
       "A selected row shows the fill and a heavier name (flush adds a 2px brand edge), and still sets aria-selected; focus keeps the outline ring",
-      "metaTone and iconTone danger are colour only; meta text and the row text must say the problem"
+      "metaTone and iconTone danger are colour only; meta text and the row text must say the problem",
+      "valueIcon is aria-hidden; note is part of the row name, after the secondary line, and noteTone is colour only"
     ]
   },
   "doNot": [
@@ -236,7 +242,9 @@
     "Do not use dot as the only sign of a status; say it in primary or secondary",
     "Do not write the priority word in secondary; the kit adds High, Medium or Low",
     "Do not put an amount in meta or badge; use value",
-    "Do not use metaTone or iconTone danger as the only sign of a problem; the words must say it"
+    "Do not use metaTone or iconTone danger as the only sign of a problem; the words must say it",
+    "Do not use valueIcon without value, or as the only way to tell values apart; the value words must say it",
+    "Do not use note for a time or a count at the row end (that is meta), or noteTone as the only sign; the note words must say it"
   ],
   "snippet": "<ListView label=\"Agents\" items={[{ id: 'tax', primary: 'Tax checker', secondary: 'Failed · 3 of 44 timed out', primaryAction: { id: 'review', label: 'Review', actionLabel: 'Review Tax checker' } }]} onAction={(id, action) => open(id, action)} />"
 }

@@ -1405,6 +1405,16 @@
     "add": "npx agentic-ds-kit add run-detail"
   },
   {
+    "id": "agent-permissions",
+    "intent": "What each agent may do on its own, as a page: AppHeader, a PageHeader with a count of waiting requests and Ask, the pending kit PermissionRequest first (Grant / Deny, then one line), a Table of actions with each level as an icon plus a word and a ghost Edit, a Card with a Switch that makes every action ask first, and an AutonomyDial for the default level of new actions. Edit opens a kit Drawer with a card RadioGroup and, for an amount, a CurrencyInput under the group. Below 640 the nav opens in a Drawer from a Menu button, the Table becomes a drill ListView, Edit opens from the bottom and the dial is left out.",
+    "group": "pattern",
+    "path": "contracts/patterns/agent-permissions.json",
+    "status": "stable",
+    "level": "template",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add agent-permissions"
+  },
+  {
     "id": "settings",
     "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations, Security; You: Profile, Notifications, Sign-in) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Security's sign-in rules (SSO, Require SSO, two-step for members) end in their own save row, then your sessions and a Danger zone with Delete workspace; Billing (plan, payment method, AI credits UsageMeter, invoices Table, billing schedule), Team (seats Meter, role filter, members Table) and Integrations act per card; Sign-in holds your password and two-factor. Billing overdue / loading / error, Team empty and invite Drawer, Sign-in 2FA off.",
     "group": "pattern",

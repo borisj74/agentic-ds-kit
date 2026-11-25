@@ -1,0 +1,106 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app) turns modules into
+   global CSS with no class map. The agent-permissions-pattern__ prefix keeps names unique. */
+
+.agent-permissions-pattern__content {
+  gap: var(--space-4);
+  padding: var(--layout-margin-md);
+}
+
+.agent-permissions-pattern__table-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  /* The same divider Card draws under its own header. */
+  border-bottom: var(--border-divider) solid var(--border-faint);
+  /* Card's body is a grid with a 16 gap; the table header meets the divider, as under Card's header. */
+  margin-bottom: calc(var(--space-4) * -1);
+}
+
+/* Two-line cells: 12 above and below, so a row is 64 like the board. */
+.agent-permissions-pattern__cell {
+  padding-block: var(--space-3);
+}
+
+/* The product name stays quiet, as in the app-shell example (AppHeader's own size token). */
+.agent-permissions-pattern__header {
+  --appheader-title-size: var(--type-size-body-sm);
+}
+
+.agent-permissions-pattern__two-line {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-2xs);
+  min-width: 0;
+}
+
+.agent-permissions-pattern__strong {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.agent-permissions-pattern__caption {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+/* Level: icon and word, with the requested limit under the word. */
+.agent-permissions-pattern__level {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.agent-permissions-pattern__level-icon {
+  flex-shrink: 0;
+  margin-top: calc((var(--type-line-ui-sm) - var(--icon-size-sm)) / 2);
+  color: var(--icon-muted);
+}
+
+.agent-permissions-pattern__requested {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--status-warning-text);
+}
+
+/* The switch card is top-aligned and as tall as its content, beside the taller dial. */
+.agent-permissions-pattern__switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.agent-permissions-pattern__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.agent-permissions-pattern__hint {
+  margin: var(--space-2) 0 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+/* The drill list and the locked row read as one list: no gap, the locked row under a rule. */
+.agent-permissions-pattern__lists {
+  display: grid;
+}
+
+.agent-permissions-pattern__lists > * + * {
+  border-top: var(--border-divider) solid var(--border-faint);
+}
+
+.agent-permissions-pattern__edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
