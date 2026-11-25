@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
 
 export type SectionSize = "sm" | "md" | "lg";
 export type SectionHeadingLevel = 2 | 3 | 4;
@@ -12,6 +13,8 @@ export interface SectionProps extends Omit<ComponentPropsWithoutRef<"section">, 
   description?: string;
   /** Short sentence-case line above the title, such as the area it belongs to. */
   eyebrow?: string;
+  /** A 40px tile with a 20px Lucide icon left of the heading, such as a provider mark. Decorative. */
+  icon?: KitIcon;
   /** A number beside the title, shown as a neutral kit Count. */
   count?: number;
   /** Heading element for the title. Default 2; use 3 or 4 when the Section sits under another heading. */

@@ -21,6 +21,11 @@
       "required": false,
       "note": "Short sentence-case line above the title, 12/16 at weight 500. Never uppercase."
     },
+    "icon": {
+      "type": "KitIcon",
+      "required": false,
+      "note": "A 40px tile (control-height-lg, radius-lg, bg-tray) with a 20px Lucide icon left of the heading, such as a provider mark on a settings page. Decorative: aria-hidden, the title names the section."
+    },
     "title": {
       "type": "string",
       "required": false,

@@ -62,6 +62,7 @@ export function Card({
   headerAction,
   flush = false,
   icon,
+  badge,
   eyebrow,
   meta,
   onDismiss,
@@ -105,6 +106,7 @@ export function Card({
             {title}
           </TitleTag>
         ) : null}
+        {badge ? <div className={styles.badge}>{badge}</div> : null}
         {description ? <p className={styles.description}>{description}</p> : null}
       </div>
     ) : null;

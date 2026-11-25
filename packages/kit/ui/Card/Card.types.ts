@@ -48,6 +48,8 @@ export interface CardProps extends Omit<ComponentPropsWithoutRef<"article">, Car
   flush?: boolean;
   /** Header row: a small icon tile before the eyebrow. Decorative (aria-hidden). */
   icon?: KitIcon;
+  /** A kit Badge right under the title, 4 below it, such as a connection status. */
+  badge?: ReactNode;
   /** Header row: short grey label, e.g. "Analytics". Your copy, not a heading. */
   eyebrow?: string;
   /** Header row: timestamp on the right, e.g. "12:04". Tabular numbers. */

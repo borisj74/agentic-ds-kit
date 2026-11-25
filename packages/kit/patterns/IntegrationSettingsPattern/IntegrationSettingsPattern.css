@@ -20,10 +20,6 @@
   gap: var(--space-6);
 }
 
-.integration-settings-pattern__status {
-  display: flex;
-}
-
 /* Last sync, Synced, Next sync: plain text in three columns, two rows under 30rem. */
 .integration-settings-pattern__stats {
   display: grid;

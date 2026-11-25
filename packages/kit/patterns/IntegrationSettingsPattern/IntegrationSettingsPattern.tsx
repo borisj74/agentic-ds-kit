@@ -15,6 +15,7 @@ import { Select } from "../../ui/Select";
 import { Skeleton } from "../../ui/Skeleton";
 import {
   ACCOUNT_OPTIONS,
+  FAILED_INVOICES,
   FREQUENCY_OPTIONS,
   LAST_SYNC,
   PROVIDER,
@@ -109,7 +110,7 @@ export function IntegrationSettingsPattern({
         placement="inline"
         title={copy.message.title}
         action={onRetry ? { label: "Retry", onClick: onRetry } : undefined}
-        secondaryAction={onViewErrors ? { label: "View 3 invoices", onClick: onViewErrors } : undefined}
+        secondaryAction={onViewErrors ? { label: `View ${FAILED_INVOICES.length} invoices`, onClick: onViewErrors } : undefined}
       >
         {copy.message.detail}
       </Alert>
@@ -123,6 +124,7 @@ export function IntegrationSettingsPattern({
     <Section
       title={PROVIDER.name}
       description={PROVIDER.account}
+      icon={PROVIDER.icon}
       size="sm"
       actions={ask}
       className="integration-settings-pattern"
@@ -157,12 +159,12 @@ export function IntegrationSettingsPattern({
               headingLevel={3}
               headerAction={onSyncNow && status !== "syncing" && !reauth ? { label: "Sync now", iconStart: "RefreshCw", appearance: "ghost", mode: "neutral", onClick: onSyncNow } : undefined}
               aria-busy={status === "syncing" || undefined}
-            >
-              <div className="integration-settings-pattern__status">
+              badge={
                 <Badge tone={copy.tone} size="sm" icon={copy.icon}>
                   {copy.badge}
                 </Badge>
-              </div>
+              }
+            >
               <dl className="integration-settings-pattern__stats">
                 <div className="integration-settings-pattern__stat" data-stat="at">
                   <dt>Last sync</dt>

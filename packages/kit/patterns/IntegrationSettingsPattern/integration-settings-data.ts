@@ -14,6 +14,7 @@ export interface IntegrationLastSync {
 
 export const PROVIDER = {
   name: "Stripe",
+  icon: "CreditCard",
   account: "Northwind Inc. · Live mode · account ending 4F2K",
   scopes: "Access granted: read and write invoices, read payments and customers",
 };
@@ -38,6 +39,14 @@ export const ACCOUNT_OPTIONS = [
   { value: "1000", label: "1000 · Operating account" },
 ];
 
+/** Invoices the last sync rejected. The error Alert's detail and its "View N invoices" action both come from this list. */
+export const FAILED_INVOICES = ["INV-1842", "INV-1847", "INV-1851"];
+
+/** "A, B and C" for a short list of ids. */
+export function listIds(ids: string[]): string {
+  return ids.length < 2 ? (ids[0] ?? "") : `${ids.slice(0, -1).join(", ")} and ${ids[ids.length - 1]}`;
+}
+
 /** Status word and tone for the Connection Badge, plus the Alert copy for states that need one. */
 export const STATUS_COPY: Record<
   ConnectionStatus,
@@ -49,7 +58,10 @@ export const STATUS_COPY: Record<
     badge: "Sync failed",
     tone: "danger",
     icon: "CircleX",
-    message: { title: "3 invoices didn’t sync", detail: "INV-1842, INV-1847 and INV-1851 have no tax code. Add one, then retry." },
+    message: {
+      title: `${FAILED_INVOICES.length} invoices didn’t sync`,
+      detail: `${listIds(FAILED_INVOICES)} have no tax code. Add one, then retry.`,
+    },
   },
   needsReauth: {
     badge: "Access expired",
