@@ -18,12 +18,81 @@
   padding: var(--space-6);
 }
 
+/* Collapsed is the one-row bar: status Badge, name and headline, then the clock, cost and the
+   running actions at the end. */
 .collapsed {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-4);
+}
+
+.barStatus {
+  flex-shrink: 0;
+}
+
+.barHeading {
+  display: flex;
+  flex: 1 1 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+  min-width: 0;
+}
+
+.barName {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.barHeadline {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+}
+
+.barClock {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+/* Value over its label; the label comes first in the DOM so it names the value. */
+.barFigure {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+}
+
+.barValue {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg);
+}
+
+.barLabel {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.barActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-2);
 }
 
 /* Collapsed, the step strip takes its own row at the bottom, as it does when open. */
@@ -476,6 +545,42 @@ button.selected:hover {
 /* Small screens: 44px touch targets (--space-10 + --space-1).
    Media queries cannot read var(): 40rem is --grid-breakpoint-sm. */
 @media (max-width: 40rem) {
+  /* The bar keeps status, headline and one mono "0:04 · $0.02"; Stop run takes a row of its own. */
+  .barName,
+  .barLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .barClock {
+    gap: var(--space-1);
+  }
+
+  .barFigure + .barFigure::before {
+    content: "·";
+    font-family: var(--font-mono);
+    font-size: var(--type-size-body-sm);
+    line-height: var(--type-line-ui-sm);
+    color: var(--text-fg);
+  }
+
+  .barFigure {
+    flex-direction: row;
+    gap: var(--space-1);
+  }
+
+  .barActions {
+    flex-basis: 100%;
+  }
+
+  .barActions > * {
+    flex: 1 1 0;
+  }
+
   .step {
     height: calc(var(--space-10) + var(--space-1));
   }

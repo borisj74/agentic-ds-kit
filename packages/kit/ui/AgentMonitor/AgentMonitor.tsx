@@ -1,9 +1,12 @@
 "use client";
 
-import { useId, useRef } from "react";
-import { ChevronDown, CircleCheck, CircleDot, CirclePause, CircleX, LoaderCircle, X } from "lucide-react";
+import { useId, useRef, useState } from "react";
+import { ChevronDown, CircleCheck, CircleDashed, CircleDot, CirclePause, CircleX, Hand, LoaderCircle, X, type LucideIcon } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
+import { AlertDialog } from "../AlertDialog";
 import { ApprovalCard } from "../ApprovalCard";
+import { Badge } from "../Badge";
+import type { BadgeTone } from "../Badge/Badge.types";
 import { Button } from "../Button";
 import { LucideByName, type KitIcon } from "../Button/lucideName";
 import { Empty } from "../Empty";
@@ -29,6 +32,16 @@ const STATUS_LABEL: Record<AgentMonitorStatus, string> = {
   paused: "Paused",
   done: "Done",
   failed: "Failed",
+};
+
+/** Collapsed bar: status as a Badge, icon plus word. */
+const STATUS_BADGE: Record<AgentMonitorStatus, { tone: BadgeTone; icon: LucideIcon }> = {
+  idle: { tone: "neutral", icon: CircleDashed },
+  running: { tone: "primary", icon: LoaderCircle },
+  waiting: { tone: "warning", icon: Hand },
+  paused: { tone: "warning", icon: CirclePause },
+  done: { tone: "success", icon: CircleCheck },
+  failed: { tone: "danger", icon: CircleX },
 };
 
 /** A Lucide icon for common tool names. */
@@ -82,6 +95,7 @@ export function AgentMonitor({
   onPause,
   onResume,
   onCancel,
+  onStop,
   onRetry,
   onViewDiff,
   onOpenTrail,
@@ -93,6 +107,7 @@ export function AgentMonitor({
   const nameId = useId();
   const detailId = useId();
   const rootRef = useRef<HTMLElement | null>(null);
+  const [confirmStop, setConfirmStop] = useState(false);
 
   // Close puts focus back on the step that opened the detail.
   function closeDetail() {
@@ -110,6 +125,30 @@ export function AgentMonitor({
       {STATUS_LABEL[status]}
     </span>
   );
+
+  // Stop run asks once in a kit AlertDialog; Pause keeps the run resumable.
+  const stopDialog = onStop ? (
+    <AlertDialog
+      open={confirmStop}
+      size="sm"
+      tone="danger"
+      title="Stop this run?"
+      description={`${name} stops at the current step. A stopped run can't resume; you start a new one.`}
+      actionLabel="Stop run"
+      actionVariant="danger"
+      cancelLabel="Keep running"
+      onCancel={() => setConfirmStop(false)}
+      onAction={() => {
+        setConfirmStop(false);
+        onStop();
+      }}
+    />
+  ) : null;
+  const stopButton = onStop ? (
+    <Button size="sm" appearance="outline" mode="danger" iconStart="Square" onClick={() => setConfirmStop(true)}>
+      Stop run
+    </Button>
+  ) : null;
 
   if (loading) {
     return (
@@ -135,15 +174,60 @@ export function AgentMonitor({
           onSelectStep?.(stepId);
         }
       : undefined;
+    const badge = STATUS_BADGE[status];
     return (
       <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={nameId}>
-        <div className={styles.heading}>
-          <h3 id={nameId} className={cx(styles.name, styles.nameSmall)}>
+        <Badge tone={badge.tone} icon={badge.icon} className={styles.barStatus}>
+          {STATUS_LABEL[status]}
+        </Badge>
+        <div className={styles.barHeading}>
+          <h3 id={nameId} className={styles.barName}>
             {name}
           </h3>
-          <p className={styles.meta}>{[elapsed, cost].filter(Boolean).join(" · ")}</p>
+          {headline ? <p className={styles.barHeadline}>{headline}</p> : null}
         </div>
-        {statusChip}
+        {elapsed || cost ? (
+          <dl className={styles.barClock}>
+            {elapsed ? (
+              <div className={styles.barFigure}>
+                <dt className={styles.barLabel}>elapsed</dt>
+                <dd className={styles.barValue} role="timer" aria-live="off">
+                  {elapsed}
+                </dd>
+              </div>
+            ) : null}
+            {cost ? (
+              <div className={styles.barFigure}>
+                <dt className={styles.barLabel}>cost</dt>
+                <dd className={styles.barValue}>{cost}</dd>
+              </div>
+            ) : null}
+          </dl>
+        ) : null}
+        {status === "running" && (onPause || onStop) ? (
+          <div className={styles.barActions}>
+            {onPause ? (
+              <Button size="sm" appearance="outline" mode="neutral" onClick={onPause}>
+                Pause
+              </Button>
+            ) : null}
+            {stopButton}
+          </div>
+        ) : null}
+        {status === "paused" && (onCancel || onResume) ? (
+          <div className={styles.barActions}>
+            {onCancel ? (
+              <Button size="sm" appearance="outline" mode="danger" iconStart="CircleX" onClick={onCancel}>
+                Cancel run
+              </Button>
+            ) : null}
+            {onResume ? (
+              <Button size="sm" iconStart="Play" onClick={onResume}>
+                Resume
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
         {onCollapsedChange ? (
           <button
             type="button"
@@ -180,6 +264,7 @@ export function AgentMonitor({
             })}
           </ol>
         ) : null}
+        {stopDialog}
       </section>
     );
   }
@@ -357,12 +442,14 @@ export function AgentMonitor({
           ) : null}
         </footer>
       ) : null}
-      {status === "running" && onPause ? (
+      {status === "running" && (onPause || onStop) ? (
         <footer className={styles.footer}>
-          <span />
-          <Button size="sm" appearance="outline" mode="neutral" iconStart="Pause" onClick={onPause}>
-            Pause
-          </Button>
+          {stopButton ?? <span />}
+          {onPause ? (
+            <Button size="sm" appearance="outline" mode="neutral" iconStart="Pause" onClick={onPause}>
+              Pause
+            </Button>
+          ) : null}
         </footer>
       ) : null}
       {status === "done" && (onViewDiff || onOpenTrail) ? (
@@ -395,6 +482,7 @@ export function AgentMonitor({
           ) : null}
         </footer>
       ) : null}
+      {stopDialog}
     </section>
   );
 }

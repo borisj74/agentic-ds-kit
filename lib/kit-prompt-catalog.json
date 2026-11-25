@@ -9976,7 +9976,7 @@
         "watch one agent run in detail",
         "inspect a step's duration, tokens and cost",
         "approve the agent's next action in place",
-        "pause, resume, cancel or retry a run"
+        "pause, resume, stop, cancel or retry a run"
       ],
       "doNotUseWhen": [
         "many agents at a glance — RunningNow",
@@ -9986,6 +9986,7 @@
       "doNot": [
         "Do not invent a local AgentMonitor, RunCard, or AgentStatusCard",
         "Do not rebuild the approval UI; pass pendingAction",
+        "Do not end a run without the Stop run confirmation; pass onStop",
         "Only one solid primary: Approve, Resume or Start run, never two",
         "Do not use raw hex"
       ],
@@ -10071,7 +10072,7 @@
         "collapsed": {
           "type": "boolean",
           "default": false,
-          "note": "A compact card: name, clock, cost and status in one row, the same step strip below. Picking a step opens the card on that step."
+          "note": "The one-row bar: status Badge (icon and word), name, headline, elapsed and cost (value over label), and while running Pause and Stop run; paused shows Cancel run and Resume. The step strip, when steps are passed, takes its own row below; picking a step opens the card on it. Below 40rem the name and labels hide, time and cost read \"0:04 · $0.02\", and the actions take a full row."
         },
         "onCollapsedChange": {
           "type": "function",
@@ -10085,7 +10086,7 @@
         "onPause": {
           "type": "function",
           "required": false,
-          "note": "Running footer."
+          "note": "Running: Pause, beside Stop run when onStop is set."
         },
         "onResume": {
           "type": "function",
@@ -10096,6 +10097,11 @@
           "type": "function",
           "required": false,
           "note": "Paused: Cancel run (outline danger)."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "Running: Stop run (sm, outline, danger) beside Pause. A kit AlertDialog confirms it once; confirming calls onStop."
         },
         "onRetry": {
           "type": "function",
@@ -13262,10 +13268,11 @@
     {
       "id": "rundetail",
       "group": "component",
-      "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession.",
+      "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession. With calls=\"all\" the monitor is the one-row AgentMonitor bar (collapsed) and every started step's ToolCallCard stacks beside the trail, the failed one open. trace renders TraceWaterfall compact in place of the step strip.",
       "useWhen": [
         "open one run from a list or an overview",
         "see why a step failed and retry it",
+        "stop a running run (confirmed once)",
         "approve the run's next action with the full step history in view",
         "ask or steer the agent while it runs",
         "pause, resume or cancel a run"
@@ -13276,10 +13283,10 @@
       ],
       "doNot": [
         "Do not rebuild RunDetail from local cards; import the block",
-        "Do not keep a second selection in one of the parts; the block's one selected step drives all four",
+        "Do not keep a second selection in one of the parts; the block's one selected step drives them all",
         "Do not add a LiveSession beside RunDetail; pass messages and onSend",
         "Do not use raw hex",
-        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused, else the Ask send"
+        "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused, else the Ask send; a failed or running calls=\"all\" run has none"
       ],
       "props": {
         "run": {
@@ -13290,12 +13297,26 @@
         "steps": {
           "type": "array",
           "required": true,
-          "note": "AgentMonitor steps plus { agentId, label?, timer?, args?, result?, resultMeta?, error? }; status adds \"pending\" (planned: in the trail, not in the strip)."
+          "note": "AgentMonitor steps plus { agentId, label?, timer?, args?, result?, resultMeta?, error?, attempt? }; status adds \"pending\" (planned: in the trail, not in the strip). attempt { n, max } shows \"Attempt 1 of 3\" beside Retry on a failed step's ToolCallCard."
         },
         "agents": {
           "type": "object",
-          "required": true,
-          "note": "AgentTree root: the orchestrator and its sub-agents. A step's agentId is a node id."
+          "required": false,
+          "note": "AgentTree root: the orchestrator and its sub-agents. A step's agentId is a node id. Leave it out for one agent: no AgentTree renders."
+        },
+        "calls": {
+          "type": "enum",
+          "values": [
+            "selected",
+            "all"
+          ],
+          "default": "selected",
+          "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call."
+        },
+        "trace": {
+          "type": "array",
+          "required": false,
+          "note": "TraceWaterfall spans { id, label, kind, startMs, endMs?, cost?, failed? }[]. Renders TraceWaterfall compact (\"Run trace\") in place of the monitor's step strip; hidden below 40rem of block width (time and cost stay in the monitor)."
         },
         "selectedStepId": {
           "type": "string",
@@ -13336,6 +13357,11 @@
           "type": "function",
           "required": false,
           "note": "() => void. Paused runs: Cancel run."
+        },
+        "onStop": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Running runs: Stop run (sm, outline, danger) beside Pause; a kit AlertDialog confirms it once."
         },
         "onRetry": {
           "type": "function",
@@ -14759,6 +14785,21 @@
         "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
         "When access expires, Reconnect is the solid primary and Save steps down to outline",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
+    },
+    {
+      "id": "run-detail",
+      "group": "pattern",
+      "intent": "One agent run as a page: AppHeader, a PageHeader with a Runs breadcrumb, the run's meta line and Ask, then the kit RunDetail block with calls=\"all\" and the run trace. The monitor is a one-row bar (status, agent, headline, elapsed, cost; Pause and Stop run while running), the step trail and compact trace sit beside every started step's ToolCallCard, the failed one open with its error, attempt and Retry. Below 640 a back bar (Runs, Ask) replaces AppHeader and the page is one column.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (monitors, step lists, call cards, traces, dialogs)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view; a failed or running run has none",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark) when wide and a nav named Back when narrow",
+        "The run is one kit RunDetail with calls=\"all\": every started step's ToolCallCard, the failed one open; Retry only on that ToolCallCard",
+        "Stop run asks once in the kit AlertDialog before it ends the run; Pause keeps it resumable",
+        "Status is always an icon and a word (monitor Badge, trail, calls), never colour alone"
       ]
     },
     {

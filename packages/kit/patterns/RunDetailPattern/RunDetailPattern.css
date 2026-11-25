@@ -1,0 +1,16 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app) turns modules into
+   global CSS with no class map. The run-detail-pattern__ prefix keeps names unique. */
+
+.run-detail-pattern__content {
+  gap: var(--space-4);
+  padding: var(--layout-margin-md);
+}
+
+/* Below 640: the back bar holds Runs and Ask on the card surface, over a rule. */
+.run-detail-pattern__topbar {
+  flex-wrap: nowrap;
+  padding-inline: var(--space-4);
+  padding-block: var(--space-2);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+  background: var(--surface-card);
+}

@@ -1,0 +1,36 @@
+{
+  "id": "run-detail",
+  "status": "stable",
+  "level": "template",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add run-detail",
+  "import": "import { RunDetailPattern } from \"@/components/patterns/run-detail\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/run-detail/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "One agent run as a page: AppHeader, a PageHeader with a Runs breadcrumb, the run's meta line and Ask, then the kit RunDetail block with calls=\"all\" and the run trace. The monitor is a one-row bar (status, agent, headline, elapsed, cost; Pause and Stop run while running), the step trail and compact trace sit beside every started step's ToolCallCard, the failed one open with its error, attempt and Retry. Below 640 a back bar (Runs, Ask) replaces AppHeader and the page is one column.",
+  "contains": [
+    "appheader",
+    "avatar",
+    "pageheader",
+    "button",
+    "rundetail"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (monitors, step lists, call cards, traces, dialogs)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view; a failed or running run has none",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark) when wide and a nav named Back when narrow",
+    "The run is one kit RunDetail with calls=\"all\": every started step's ToolCallCard, the failed one open; Retry only on that ToolCallCard",
+    "Stop run asks once in the kit AlertDialog before it ends the run; Pause keeps it resumable",
+    "Status is always an icon and a word (monitor Badge, trail, calls), never colour alone"
+  ],
+  "defaults": [
+    "Demo is Northwind's Invoice reconciler on INV-1842 (Halvorsen Freight): failed at Match payments, step 2 of 4; Running and Done states",
+    "One agent, so no agents prop and no AgentTree; trace passes TraceWaterfall spans and shows compact under the trail",
+    "Ask is a neutral sm outline Button with MessageCircle, in the PageHeader actions (wide) or the back bar (narrow)",
+    "Below 640 the headline shortens to the step count, the meta line drops \"today\", and the trace hides; time and cost stay in the monitor bar"
+  ],
+  "snippet": "<RunDetailPattern state=\"failed\" />"
+}

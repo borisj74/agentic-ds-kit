@@ -74,6 +74,10 @@ export function RunDetailDemo() {
           setRun((current) => ({ ...current, status: "failed", error: "Cancelled by you" }));
           setStatus("Cancelled");
         }}
+        onStop={() => {
+          setRun((current) => ({ ...current, status: "failed", error: "Stopped by you" }));
+          setStatus("Stopped");
+        }}
         messages={messages}
         thinking={thinking}
         onSend={(text) => {
