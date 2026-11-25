@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Checkbox, Divider, Field, Input } from "agentic-ds-kit";
+import { Alert, Button, Card, Checkbox, Divider, Field, Input, InputOTP } from "agentic-ds-kit";
 
 export function SignIn() {
   return (
@@ -9,6 +9,9 @@ export function SignIn() {
       </Field>
       <Checkbox label="Remember me" />
       <Divider />
+      <Field label="Code">
+        <InputOTP />
+      </Field>
       <Button type="submit">Sign in</Button>
     </Card>
   );

@@ -14536,15 +14536,16 @@
     {
       "id": "sign-in",
       "group": "pattern",
-      "intent": "Sign-in / sign-up page example: centred Card with Field-wrapped email and password, one primary submit, optional 'or' Divider and SSO buttons. Presentational: the app passes callbacks.",
+      "intent": "Sign-in / sign-up page example: centred Card (title is the page h1) with SSO on top, a Divider \"or use email\", Field-wrapped email and password, one primary submit, and a one-time code step on InputOTP. Presentational: the app passes callbacks and moves the step.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view (submit); SSO buttons are outline-neutral, forgot and switch are ghost-neutral",
+        "One appearance=\"solid\" mode=\"primary\" Button per step (Sign in, then Verify); SSO buttons are outline-neutral, forgot and switch are ghost-neutral",
         "Do not restyle kit components; change them through their props, slots, and tokens",
         "Wrap every labeled input in Field (label, hint, and error wiring)",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens",
-        "Submit is a type=submit Button inside the form (Enter submits), not a Card footer action"
+        "Submit is a type=submit Button inside the form (Enter submits), not a Card footer action",
+        "Providers render above the email form, separated by Divider label=\"or use email\""
       ],
       "props": {
         "mode": {
@@ -14555,6 +14556,15 @@
           ],
           "default": "sign-in",
           "note": "sign-up adds a Name field, drops Remember me and Forgot password, and swaps the copy."
+        },
+        "step": {
+          "type": "enum",
+          "values": [
+            "credentials",
+            "code"
+          ],
+          "default": "credentials",
+          "note": "credentials: SSO, email and password. code: a 6-digit one-time code on InputOTP md (groups [3, 3], autoComplete one-time-code) with Verify. The app sets it after onSubmit when the account needs a code."
         },
         "productName": {
           "type": "string",
@@ -14568,12 +14578,27 @@
         "providers": {
           "type": "array",
           "required": false,
-          "note": "{ id, label, icon? } — secondary block Buttons under Divider label=\"or\". icon is any Lucide name or a Lucide component (same as Button iconStart). Omit for email only."
+          "note": "{ id, label, icon? } — secondary block Buttons above the form, over Divider label=\"or use email\". icon is any Lucide name or a Lucide component (same as Button iconStart). Omit for email only."
         },
         "onSubmit": {
           "type": "function",
           "required": false,
           "note": "(values: { email, password, name?, remember? }) => void. Called only after required and email-format checks pass."
+        },
+        "onVerifyCode": {
+          "type": "function",
+          "required": false,
+          "note": "(code: string) => void. Called from the code step only after all 6 digits are entered."
+        },
+        "onBack": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Code step: shows a ghost sm \"Back\" button with ChevronLeft, at the start of the row under Verify. Set step back to \"credentials\" in it; focus returns to Password."
+        },
+        "onBackupCode": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Code step: shows a ghost sm \"Use a backup code\" button at the end of the row under Verify."
         },
         "onProvider": {
           "type": "function",
@@ -14588,17 +14613,17 @@
         "onSwitchMode": {
           "type": "function",
           "required": false,
-          "note": "(next: mode) => void. Shows the footer switch link."
+          "note": "(next: mode) => void. Shows the footer switch button. Left out, sign-in shows an invite line (\"No account? Ask your admin for an invite.\") instead of Sign up."
         },
         "error": {
-          "type": "string",
+          "type": "string | object",
           "required": false,
-          "note": "Server failure. Danger Alert above the form."
+          "note": "Server failure: { title, detail? } (what happened, what to do next) or a plain string. Credentials step: danger Alert (title + detail) above the form, the description hides, the password clears and focus moves to it, email stays. Code step: the code Field's error (title and detail joined), the slots clear and focus moves to them."
         },
         "loading": {
           "type": "boolean",
           "default": false,
-          "note": "Primary disabled with a busy label; SSO disabled; form aria-busy."
+          "note": "Primary disabled with a busy label (Signing in…, Verifying…); SSO and code slots disabled; form aria-busy."
         }
       }
     },
