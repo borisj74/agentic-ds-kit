@@ -14393,7 +14393,7 @@
         "The list is one kit ListView with selection=\"single\" at 640 and up; the open record is the selected row",
         "One URL per record (here #INV-1842; /invoices/:id in an app). The list with nothing open is its own URL",
         "At 640 and up the detail sits beside the list (layout-split); with nothing open it is kit Empty that says so and offers one neutral Button",
-        "Below 640 the list fills the page and rows drill (interaction=\"drill\"); the record opens full page with a PageHeader back link to the list, and Back returns focus to that row",
+        "Below 640 the list fills the page and rows drill (interaction=\"drill\"); the record opens full page under a bar with a ghost Invoices back button to the list, and Back returns focus to that row",
         "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\"), never colour alone"
       ]
     },

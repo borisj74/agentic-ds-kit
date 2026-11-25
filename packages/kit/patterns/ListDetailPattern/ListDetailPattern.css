@@ -2,9 +2,16 @@
    turns modules into global CSS with no class map. The list-detail-pattern__ prefix keeps names unique. */
 
 /* layout-split--secondary gives the list one part and the detail two. Below 640 the pattern renders one
-   column itself (list, or the full-page detail), so the split never has to stack. */
+   column itself (list, or the full-page detail), so the split never has to stack. The 24 between the
+   columns is padding inside each pane, not a gap, so the rule between them sits flush. */
 .list-detail-pattern__split {
   min-width: 0;
+  gap: 0;
+}
+
+/* The list pane's chrome (PageHeader, search, segments, notes) is inset 24; the rows run to its edges. */
+.list-detail-pattern__split .list-detail-pattern__chrome {
+  padding-inline: var(--space-6);
 }
 
 .list-detail-pattern__list,
@@ -33,7 +40,7 @@
 /* At 640 and up the open record (or Empty) is a pane beside the list, split from it by a faint rule. */
 .list-detail-pattern__pane {
   align-self: stretch;
-  padding-inline-start: var(--layout-gutter-md);
+  padding-inline-start: var(--space-6);
   border-inline-start: var(--border-width-thin) solid var(--border-faint);
 }
 
@@ -166,14 +173,6 @@
   padding-inline: var(--space-2);
   background: var(--surface-card);
   border-block-end: var(--border-width-thin) solid var(--border-faint);
-}
-
-.list-detail-pattern__topbar a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  min-block-size: var(--control-height-lg);
-  padding-inline: var(--space-2) var(--space-3);
 }
 
 /* The record page uses the narrow page margin (16), so Ask, Download and Retry payment fit one row at 390. */

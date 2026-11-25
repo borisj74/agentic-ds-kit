@@ -171,7 +171,7 @@ describe("ListDetailPattern", { skip }, () => {
   test("nothing open: Empty says so with the overdue count, and its button opens the oldest overdue", async () => {
     const view = await render();
     assert.match(view.container.textContent, /No invoice open/);
-    assert.match(view.container.textContent, /Pick one from the list\. 6 of 11 are overdue\./);
+    assert.match(view.container.textContent, /Pick one from the list\. 14 of 48 are overdue\./);
     assert.equal(view.container.querySelector('[aria-selected="true"]'), null);
     await click(button("Open oldest overdue"));
     assert.equal(window.location.hash, "#INV-1821");
@@ -196,11 +196,11 @@ describe("ListDetailPattern", { skip }, () => {
   test("filter and search: counts in the segments and the Showing line match the rows", async () => {
     const view = await render();
     assert.equal(rows(view.container).length, 6);
-    assert.match(view.container.textContent, /Showing 6 of 6 overdue/);
-    await click(button("Paid 2"));
+    assert.match(view.container.textContent, /Showing 6 of 14 overdue/);
+    await click(button("Paid 13"));
     assert.equal(rows(view.container).length, 2);
-    assert.match(view.container.textContent, /Showing 2 of 2 paid/);
-    await click(button("All 11"));
+    assert.match(view.container.textContent, /Showing 2 of 13 paid/);
+    await click(button("All 48"));
     const input = view.container.querySelector('input[type="search"]');
     await act(async () => {
       const set = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
@@ -220,10 +220,13 @@ describe("ListDetailPattern", { skip }, () => {
     assert.equal(window.location.hash, "#INV-1842");
     assert.equal(rows(view.container).length, 0, "the list is gone");
     assert.equal(view.container.querySelector("h1")?.textContent, "INV-1842");
-    const back = [...view.container.querySelectorAll("a")].find((a) => a.textContent.trim() === "Invoices");
-    assert.ok(back, "a real link back to Invoices");
-    assert.equal(back.getAttribute("href"), "#");
-    await goToHash("");
+    const back = [...view.container.querySelectorAll("button")].find((b) => b.textContent.trim() === "Invoices");
+    assert.ok(back, "a back button to Invoices");
+    assert.equal(back.querySelector("svg") !== null, true, "with a chevron");
+    await act(async () => {
+      back.click();
+      window.dispatchEvent(new window.HashChangeEvent("hashchange"));
+    });
     const again = row(view.container, "Northwind Traders");
     assert.ok(again, "the list is back");
     assert.ok(document.activeElement === again, `focus is on ${document.activeElement?.getAttribute("aria-label") ?? document.activeElement?.tagName}`);

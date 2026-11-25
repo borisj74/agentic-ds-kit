@@ -1,14 +1,12 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
-import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import { Empty } from "../../ui/Empty";
 import { IconButton } from "../../ui/IconButton";
 import { Input } from "../../ui/Input";
-import { Link } from "../../ui/Link";
 import { ListView } from "../../ui/ListView";
 import type { ListViewItem } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
@@ -33,6 +31,12 @@ const STATUS_BADGE: Record<InvoiceStatus, { tone: "danger" | "info" | "success";
   open: { tone: "info", icon: "Clock", label: "Open" },
   paid: { tone: "success", icon: "CircleCheck", label: "Paid" },
 };
+
+/*
+ * The demo stands for a bigger ledger: the segments and the Showing line count the whole book, while the list
+ * renders a page of it. Replace with your own totals (or counts from the server).
+ */
+const DEMO_TOTALS: Record<Filter, number> = { all: 48, overdue: 14, open: 21, paid: 13 };
 
 const LINE_COLUMNS = [
   { key: "item", header: "Item" },
@@ -196,11 +200,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
     row?.focus();
   }, [openId, narrow]);
 
-  const counts = useMemo(() => {
-    const result: Record<Filter, number> = { all: INVOICES.length, overdue: 0, open: 0, paid: 0 };
-    for (const item of INVOICES) result[item.status] += 1;
-    return result;
-  }, []);
+  const counts = DEMO_TOTALS;
 
   const needle = query.trim().toLowerCase();
   const inFilter = INVOICES.filter((item) => filter === "all" || item.status === filter);
@@ -269,10 +269,17 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
     return (
       <div className="layout-canvas">
         <nav className="layout-header list-detail-pattern__topbar" aria-label="Back">
-          <Link href="#" variant="standalone">
-            <ChevronLeft size={20} strokeWidth={1.5} aria-hidden />
+          <Button
+            size="lg"
+            appearance="ghost"
+            mode="neutral"
+            iconStart="ChevronLeft"
+            onClick={() => {
+              window.location.hash = "";
+            }}
+          >
             Invoices
-          </Link>
+          </Button>
         </nav>
         <div className="layout-content list-detail-pattern__page">
           <section className="list-detail-pattern__detail" aria-labelledby={headingId}>
@@ -298,8 +305,12 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
 
   const list = (
     <div className="list-detail-pattern__list" ref={listRef}>
-      {narrow ? null : <PageHeader title="Invoices" breadcrumbs={breadcrumbs} actions={newInvoice} />}
-      <div className="list-detail-pattern__controls">
+      {narrow ? null : (
+        <div className="list-detail-pattern__chrome">
+          <PageHeader title="Invoices" breadcrumbs={breadcrumbs} actions={newInvoice} />
+        </div>
+      )}
+      <div className="list-detail-pattern__controls list-detail-pattern__chrome">
         <Input
           id={searchId}
           type="search"
@@ -318,7 +329,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
           onChange={(value) => setFilter(value as Filter)}
         />
       </div>
-      {filter === "overdue" && !narrow ? <p className="list-detail-pattern__note">Overdue · oldest first</p> : null}
+      {filter === "overdue" && !narrow ? <p className="list-detail-pattern__note list-detail-pattern__chrome">Overdue · oldest first</p> : null}
       <ListView
         label="Invoices"
         size={narrow ? "md" : "sm"}
@@ -331,8 +342,8 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
         truncate="secondary"
         empty={{ title: "No invoice matches this search.", description: "Try a customer name or an invoice number." }}
       />
-      <p className="list-detail-pattern__note" hidden={narrow}>
-        Showing {shown.length} of {inFilter.length}
+      <p className="list-detail-pattern__note list-detail-pattern__chrome" hidden={narrow}>
+        Showing {shown.length} of {needle ? inFilter.length : counts[filter]}
         {filter === "all" ? "" : ` ${FILTER_LABEL[filter].toLowerCase()}`}
       </p>
     </div>
