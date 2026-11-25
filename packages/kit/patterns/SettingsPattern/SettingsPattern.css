@@ -1,41 +1,67 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The settings-pattern__ prefix keeps names unique. */
 
-/* The page is the inset card panel of layout-shell--inset (layout-app's last child). */
-.settings-pattern {
+/* The page: the inset card panel of the settings shell when wide, the whole screen when narrow.
+   Rows: header, body (grows so a SaveBar sits at the bottom of a short page), SaveBar if any.
+   The canvas scrolls, so it keeps a focused field clear of the 64px SaveBar plus a 16px breath. */
+.layout-canvas.settings-pattern {
+  grid-template-rows: max-content minmax(max-content, 1fr) max-content;
+  scroll-padding-block-end: calc(var(--space-16) + var(--space-4));
   min-width: 0;
   min-height: 0;
 }
 
-/* Breadcrumb and page-level actions (Help, bell) share the top row, as in Paper's Stage frames. */
-.settings-pattern > .layout-header > .settings-pattern__top {
+/* The workspace in the settings nav's brand: its name, then the plan in mono. */
+.settings-pattern__brand {
   display: flex;
-  flex: 1 0 100%;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-gap-sm);
+  flex-direction: column;
   min-width: 0;
 }
 
-/* Profile and Notifications: the form wraps the content and a save bar that sticks to the bottom of the page. */
-.settings-pattern__form {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+/* Our own node in SideNav.Brand's title, so it sets its own type. */
+.settings-pattern__brand-name,
+.settings-pattern__brand-plan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: normal;
+}
+
+.settings-pattern__brand-name {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+.settings-pattern__brand-plan {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+/* Narrow index page: the two lists, each under its own heading. */
+.settings-pattern__index {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-pattern__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
   min-width: 0;
 }
 
-.settings-pattern__savebar {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--space-gap-sm);
-  padding-block: var(--space-inset-md);
-  padding-inline: var(--layout-margin-md);
-  background: var(--surface-card);
-  border-block-start: var(--border-width-thin) solid var(--line-default);
+.settings-pattern__group-heading {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
 }
 
 .settings-pattern__stack,
@@ -164,4 +190,26 @@
 
 .settings-pattern__digest > .settings-pattern__inbox {
   justify-self: end;
+}
+
+/* Two short fields side by side (Default currency and Invoice prefix); a lone one takes the left half. */
+.settings-pattern__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.settings-pattern__title {
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-md);
+  color: var(--text-fg);
+}
+
+.settings-pattern__muted {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
 }

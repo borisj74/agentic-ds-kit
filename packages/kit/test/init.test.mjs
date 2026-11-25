@@ -82,15 +82,12 @@ describe("agentic-ds-kit init", () => {
     });
   }
 
-  test("--template settings hosts the pattern in the app-shell example, as its contract asks", () => {
+  test("--template settings renders the pattern as is: it brings its own settings nav and <main>", () => {
     const dir = join(root, "app-settings");
     const page = readFileSync(join(dir, "app/page.tsx"), "utf8");
-    assert.match(page, /import \{ AppShellPattern \} from "@\/components\/patterns\/app-shell";/);
-    assert.match(page, /import \{ SETTINGS_SECTIONS, SettingsPattern \} from "@\/components\/patterns\/settings";/);
-    assert.match(page, /className="layout-shell--inset layout-shell--viewport"/);
-    assert.match(page, /label: `Settings · \$\{SETTINGS_SECTIONS\.length\}`/);
-    assert.match(page, /active: item\.id === section/);
-    assert.ok(existsSync(join(dir, "components/patterns/app-shell/app-shell.contract.json")), "app-shell is copied too");
+    assert.match(page, /<SettingsPattern \/>/);
+    assert.doesNotMatch(page, /AppShellPattern/);
+    assert.ok(existsSync(join(dir, "components/patterns/integration-settings/integration-settings.contract.json")), "integration-settings is copied too");
   });
 
   test("accepts the same name forms as add", () => {

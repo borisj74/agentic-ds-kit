@@ -39,6 +39,11 @@ import "./SettingsFormPattern.css";
 
 export interface SettingsFormPatternProps {
   breadcrumbs?: PageHeaderProps["breadcrumbs"];
+  /**
+   * false drops the PageHeader (and the breadcrumbs), for use as the body of a page that has its
+   * own header, such as a settings section. Default true.
+   */
+  header?: boolean;
   /** Called after the user confirms Discard in the save bar's AlertDialog. The form is back to its saved values. */
   onCancel?: () => void;
   /** Called after a Save that passes the checks. */
@@ -87,7 +92,7 @@ function timeNow(): string {
  * through the page's breadcrumb with changes ask first in an AlertDialog; closing the tab gets the browser's
  * own prompt. Copy it in and replace the fields, the checks and the save call.
  */
-export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsFormPatternProps) {
+export function SettingsFormPattern({ breadcrumbs, header = true, onCancel, onSave }: SettingsFormPatternProps) {
   const uid = useId();
   const narrow = useNarrow();
   const size = narrow ? "lg" : "md";
@@ -278,17 +283,19 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
 
   return (
     <div
-      className={`layout-canvas layout-canvas--sticky-header settings-form-pattern${narrow ? " settings-form-pattern--narrow" : ""}`}
+      className={`layout-canvas layout-canvas--sticky-header settings-form-pattern${narrow ? " settings-form-pattern--narrow" : ""}${header ? "" : " settings-form-pattern--headerless"}`}
     >
-      <div className="layout-header" onClickCapture={guardLeave}>
-        <PageHeader
-          title="Billing details"
-          // A phone keeps the title only, so the form starts higher.
-          subtitle={narrow ? undefined : "Printed on every invoice Northwind sends. Changes apply from INV-1843, the next invoice."}
-          breadcrumbs={breadcrumbs}
-          eyebrow={breadcrumbs ? undefined : "Settings"}
-        />
-      </div>
+      {header ? (
+        <div className="layout-header" onClickCapture={guardLeave}>
+          <PageHeader
+            title="Billing details"
+            // A phone keeps the title only, so the form starts higher.
+            subtitle={narrow ? undefined : "Printed on every invoice Northwind sends. Changes apply from INV-1843, the next invoice."}
+            breadcrumbs={breadcrumbs}
+            eyebrow={breadcrumbs ? undefined : "Settings"}
+          />
+        </div>
+      ) : null}
       <form className="layout-content" id={`${uid}-form`} onSubmit={handleSubmit} noValidate>
         {/* The action is outline so Save stays the page's only solid primary. */}
         {firstError ? (

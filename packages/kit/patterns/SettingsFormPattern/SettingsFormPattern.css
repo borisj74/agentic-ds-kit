@@ -11,6 +11,11 @@
   background: var(--bg-canvas);
 }
 
+/* header={false}: no header row, so the form and the SaveBar are the only rows. */
+.layout-canvas.settings-form-pattern--headerless {
+  grid-template-rows: minmax(max-content, 1fr) max-content;
+}
+
 /* Company, Billing address, Currency and invoices: 24 between each group and its Divider. */
 .settings-form-pattern__groups {
   display: flex;
