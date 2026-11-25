@@ -13,6 +13,7 @@ import { Divider } from "../../ui/Divider";
 import { Drawer } from "../../ui/Drawer";
 import { Empty } from "../../ui/Empty";
 import { Field } from "../../ui/Field";
+import { ListView } from "../../ui/ListView";
 import { RadioGroup } from "../../ui/RadioGroup";
 import { Section } from "../../ui/Section";
 import { Skeleton } from "../../ui/Skeleton";
@@ -208,8 +209,14 @@ export function BillingSchedulePattern({
       const root = rootRef.current;
       if (!root) return;
       const charge = rows.find((item) => item.id === target);
-      const pencil = charge ? root.querySelector<HTMLElement>(`button[aria-label="${CSS.escape(editLabel(charge))}"]`) : null;
-      (pencil ?? root.querySelector<HTMLElement>("[data-charge-table='upcoming']"))?.focus();
+      // Both layouts are in the DOM and a container query shows one: take what is visible.
+      // Without layout (no rects anywhere) the first match wins.
+      const visible = (selector: string) => {
+        const nodes = [...root.querySelectorAll<HTMLElement>(selector)];
+        return nodes.find((node) => node.getClientRects().length > 0) ?? nodes[0];
+      };
+      const pencil = charge ? visible(`button[aria-label="${CSS.escape(editLabel(charge))}"]`) : undefined;
+      (pencil ?? visible("[data-charge-table='upcoming']"))?.focus();
     });
     return () => cancelAnimationFrame(frame);
   }, [editId, skipId, rows]);
@@ -312,50 +319,61 @@ export function BillingSchedulePattern({
 
             {!nextOnly ? (
               <>
-                <ScheduleTable
-                  kind="upcoming"
-                  heading="Upcoming"
-                  window={UPCOMING_WINDOW}
-                  charges={upcoming}
-                  footer={
-                    upcomingTotal
-                      ? {
-                          label: `Total, ${UPCOMING_WINDOW}${retryIncluded ? ", retry included" : ""}`,
-                          value: upcomingTotal,
-                        }
-                      : undefined
-                  }
-                  emptyLabel="Nothing scheduled in the next 60 days."
-                  actions={(charge) =>
-                    charge.status === "scheduled"
-                      ? [
-                          {
-                            icon: "Pencil",
-                            ariaLabel: editLabel(charge),
-                            onClick: () => setEditId(charge.id),
-                          },
-                        ]
-                      : []
-                  }
-                />
-                <ScheduleTable
-                  kind="billed"
-                  heading="Billed"
-                  window={BILLED_WINDOW}
-                  charges={billed}
-                  emptyLabel="Nothing billed in the last 60 days."
-                  actions={(charge) =>
-                    onDownloadInvoice
-                      ? [
-                          {
-                            icon: "Download",
-                            ariaLabel: `Download ${charge.invoice ?? charge.label}`,
-                            onClick: () => onDownloadInvoice(charge),
-                          },
-                        ]
-                      : []
-                  }
-                />
+                <div className="billing-schedule-pattern__wide">
+                  <ScheduleTable
+                    kind="upcoming"
+                    heading="Upcoming"
+                    window={UPCOMING_WINDOW}
+                    charges={upcoming}
+                    footer={
+                      upcomingTotal
+                        ? {
+                            label: `Total, ${UPCOMING_WINDOW}${retryIncluded ? ", retry included" : ""}`,
+                            value: upcomingTotal,
+                          }
+                        : undefined
+                    }
+                    emptyLabel="Nothing scheduled in the next 60 days."
+                    actions={(charge) =>
+                      charge.status === "scheduled"
+                        ? [
+                            {
+                              icon: "Pencil",
+                              ariaLabel: editLabel(charge),
+                              onClick: () => setEditId(charge.id),
+                            },
+                          ]
+                        : []
+                    }
+                  />
+                  <ScheduleTable
+                    kind="billed"
+                    heading="Billed"
+                    window={BILLED_WINDOW}
+                    charges={billed}
+                    emptyLabel="Nothing billed in the last 60 days."
+                    actions={(charge) =>
+                      onDownloadInvoice
+                        ? [
+                            {
+                              icon: "Download",
+                              ariaLabel: `Download ${charge.invoice ?? charge.label}`,
+                              onClick: () => onDownloadInvoice(charge),
+                            },
+                          ]
+                        : []
+                    }
+                  />
+                </div>
+                <div className="billing-schedule-pattern__narrow">
+                  <ScheduleList
+                    upcoming={upcoming}
+                    billed={billed}
+                    currency={currency}
+                    onEdit={setEditId}
+                    onDownloadInvoice={onDownloadInvoice}
+                  />
+                </div>
               </>
             ) : null}
           </>
@@ -480,12 +498,103 @@ function ScheduleTable({
           }))}
           rowActions={(_row, index) => actions(charges[index])}
           rowActionsAs="icons"
-          stack
           footer={footer}
           emptyLabel={emptyLabel}
         />
       </Card>
     </div>
+  );
+}
+
+const MONTH = new Intl.DateTimeFormat("en-GB", { month: "long", timeZone: "UTC" });
+
+type ListTone = "neutral" | "warning" | "info" | "success" | "danger";
+
+/**
+ * Below 40rem: Upcoming as a ListView grouped by month with month totals, then Billed. Amount and
+ * status sit on the right; the edit pencil and Download stay on the row, named like the desktop ones.
+ */
+function ScheduleList({
+  upcoming,
+  billed,
+  currency,
+  onEdit,
+  onDownloadInvoice,
+}: {
+  upcoming: Charge[];
+  billed: Charge[];
+  currency: string;
+  onEdit: (id: string) => void;
+  onDownloadInvoice?: (charge: Charge) => void;
+}) {
+  const months: { id: string; label: string; total?: string }[] = [];
+  for (const charge of upcoming) {
+    const id = charge.date.slice(0, 7);
+    if (months.some((month) => month.id === id)) continue;
+    const inMonth = upcoming.filter((item) => item.date.startsWith(id));
+    const parsed = parse(charge.date);
+    const priced = inMonth.every((item) => typeof item.value === "number");
+    months.push({
+      id,
+      label: parsed ? MONTH.format(parsed) : id,
+      total: priced ? money(inMonth.reduce((sum, item) => sum + (item.value ?? 0), 0), currency) : undefined,
+    });
+  }
+
+  const item = (charge: Charge, upcomingRow: boolean) => {
+    const edit = upcomingRow && charge.status === "scheduled";
+    const download = !upcomingRow && Boolean(onDownloadInvoice);
+    return {
+      id: charge.id,
+      primary: charge.label,
+      secondary: [`${weekday(charge.date)} ${day(charge.date)}`, charge.invoice].filter(Boolean).join(" · "),
+      value: charge.amount,
+      badge: STATUS[charge.status].label,
+      badgeTone: STATUS[charge.status].tone as ListTone,
+      group: upcomingRow ? charge.date.slice(0, 7) : undefined,
+      actions: edit
+        ? [{ id: "edit", label: "Edit", icon: "Pencil" as const, actionLabel: editLabel(charge) }]
+        : download
+          ? [{ id: "download", label: "Download", icon: "Download" as const, actionLabel: `Download ${charge.invoice ?? charge.label}` }]
+          : undefined,
+    };
+  };
+
+  return (
+    <>
+      <div className="billing-schedule-pattern__group">
+        <h3 className="billing-schedule-pattern__group-heading">
+          Upcoming
+          <span className="billing-schedule-pattern__group-window">{UPCOMING_WINDOW}</span>
+        </h3>
+        <Card size="sm" flush>
+          <ListView
+            label="Upcoming"
+            groups={months}
+            items={upcoming.map((charge) => item(charge, true))}
+            onAction={(id) => onEdit(id)}
+            empty={{ title: "Nothing scheduled in the next 60 days." }}
+          />
+        </Card>
+      </div>
+      <div className="billing-schedule-pattern__group">
+        <h3 className="billing-schedule-pattern__group-heading">
+          Billed
+          <span className="billing-schedule-pattern__group-window">{BILLED_WINDOW}</span>
+        </h3>
+        <Card size="sm" flush>
+          <ListView
+            label="Billed"
+            items={billed.map((charge) => item(charge, false))}
+            onAction={(id) => {
+              const charge = billed.find((entry) => entry.id === id);
+              if (charge) onDownloadInvoice?.(charge);
+            }}
+            empty={{ title: "Nothing billed in the last 60 days." }}
+          />
+        </Card>
+      </div>
+    </>
   );
 }
 

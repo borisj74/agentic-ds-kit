@@ -177,9 +177,25 @@
   gap: var(--space-4);
 }
 
+/* Tables at 40rem and up, the month-grouped ListView below (see the container query). */
+.billing-schedule-pattern__wide,
+.billing-schedule-pattern__narrow {
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.billing-schedule-pattern__wide {
+  display: flex;
+}
+
+.billing-schedule-pattern__narrow {
+  display: none;
+}
+
 /* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the Card and the
    failure Alert stack (layout-split does this itself only inside layout-content), and the
-   next-charge lines go under the figure without the vertical rule. The Tables stack their rows. */
+   next-charge lines go under the figure without the vertical rule. Tables give way to ListViews. */
 @container (max-width: 40rem) {
   .billing-schedule-pattern__summary.layout-split--primary {
     grid-template-columns: minmax(0, 1fr);
@@ -197,6 +213,14 @@
 
   .billing-schedule-pattern__lines {
     flex-basis: auto;
+  }
+
+  .billing-schedule-pattern__wide {
+    display: none;
+  }
+
+  .billing-schedule-pattern__narrow {
+    display: flex;
   }
 }
 

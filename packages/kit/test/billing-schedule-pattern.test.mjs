@@ -181,7 +181,10 @@ describe("BillingSchedulePattern desktop", () => {
   test("status is a word with an icon; pencil only on scheduled rows, Download names its invoice", () => {
     const html = ssr({ onDownloadInvoice: () => {} });
     for (const word of ["Scheduled", "Retrying", "Invoiced", "Failed", "Paid"]) assert.match(html, new RegExp(`>${word}<`));
-    assert.equal((html.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "four scheduled rows, no pencil on the retry");
+    const wide = html.slice(0, html.indexOf("billing-schedule-pattern__narrow"));
+    const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
+    assert.equal((wide.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "four scheduled rows, no pencil on the retry");
+    assert.equal((narrow.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "the phone list has the same four pencils");
     assert.match(html, /aria-label="Edit Onboarding part 2 of 3, 15 Dec"/);
     assert.ok(!html.includes('aria-label="Edit Retry'));
     assert.match(html, /aria-label="Download INV-1866"/);
@@ -197,6 +200,16 @@ describe("BillingSchedulePattern desktop", () => {
     assert.ok(!html.includes(">Change card<"), "Change card hides while Update card shows");
     const paid = ssr({ charges: [], onChangeCard: () => {} });
     assert.match(paid, /No charges yet/);
+  });
+
+  test("below 40rem the same charges are a ListView grouped by month with month totals, then Billed", () => {
+    const html = ssr({ onDownloadInvoice: () => {} });
+    const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
+    for (const text of ["November", "December", "January", "$2,418.00", "$3,738.00", "Tue 15 Dec · INV-1879", "Retrying"]) {
+      assert.ok(narrow.includes(text), text);
+    }
+    assert.ok(narrow.indexOf(">November<") < narrow.indexOf(">December<"));
+    assert.match(narrow, /aria-label="Download INV-1830"/);
   });
 
   test("next-charge Card shows the figure, its lines and the draft invoice", () => {
