@@ -158,6 +158,39 @@ describe("RunDetail calls=\"all\"", () => {
   });
 });
 
+describe("Run detail looks (approved variants)", () => {
+  test("calls=\"all\" uses AgentTrail list: no status line, Failed on the right, counter \"2 of 4\"-style", () => {
+    const html = renderToStaticMarkup(h(RunDetail, { run: failedRun, steps, calls: "all" }));
+    const trail = html.slice(html.indexOf(">Steps<"), html.indexOf('aria-label="Tool calls"'));
+    assert.match(trail, />2 of 3</);
+    assert.doesNotMatch(trail, /_line_/, "no rail line");
+    assert.doesNotMatch(trail, /_statusBlock_/, "no status line under the label");
+    assert.match(trail, /Failed/);
+    assert.match(trail, /Queued/);
+  });
+
+  test("calls=\"all\" uses ToolCallCard panel: no status Badge, Arguments and Result side by side, arrays on one line", () => {
+    const html = renderToStaticMarkup(
+      h(RunDetail, { run: failedRun, steps: [{ ...steps[0], args: { charges: ["a", "b"] } }, steps[1]], calls: "all", onRetry: () => {} }),
+    );
+    const calls = html.slice(html.indexOf('aria-label="Tool calls"'));
+    assert.doesNotMatch(calls, /_badge_/);
+    assert.match(calls, /_panelPair_/);
+    assert.match(calls, /&quot;charges&quot;: \[&quot;a&quot;, &quot;b&quot;\]/);
+    assert.ok(calls.indexOf("Attempt 1 of 3") < calls.indexOf(">Retry<"), "attempt before Retry");
+  });
+
+  test("the default looks stay: rail trail and Badge card outside calls=\"all\"", async () => {
+    const { AgentTrail } = await import("../dist/ui/AgentTrail/AgentTrail.js");
+    const { ToolCallCard } = await import("../dist/ui/ToolCallCard/ToolCallCard.js");
+    const trail = renderToStaticMarkup(h(AgentTrail, { title: "t", steps: [{ id: "a", label: "A", status: "done" }, { id: "b", label: "B", status: "failed" }] }));
+    assert.match(trail, /_line_/);
+    assert.match(trail, />2\/2</);
+    const card = renderToStaticMarkup(h(ToolCallCard, { name: "x", status: "error", error: "boom" }));
+    assert.match(card, /_badge_/);
+  });
+});
+
 describe("AgentMonitor Stop run", () => {
   test("running: Stop run (outline danger) beside Pause in the card and the bar", () => {
     for (const collapsed of [false, true]) {

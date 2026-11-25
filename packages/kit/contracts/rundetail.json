@@ -50,7 +50,7 @@
         "all"
       ],
       "default": "selected",
-      "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call."
+      "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call. The trail uses AgentTrail variant=\"list\" and the calls ToolCallCard variant=\"panel\"."
     },
     "trace": {
       "type": "array",

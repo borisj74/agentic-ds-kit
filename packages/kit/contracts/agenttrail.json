@@ -48,6 +48,15 @@
       "type": "function",
       "required": false,
       "note": "(id | null) => void. Makes each step a button; selecting the selected step again passes null."
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "rail",
+        "list"
+      ],
+      "default": "rail",
+      "note": "rail: steps on a connecting line with the status word under each label. list (RunDetail calls=\"all\"): plain rows 8 inside and 4 apart, no line and no status line; the done time or the status word sits on the right, the counter reads \"2 of 4\", the selected row fills with a strong hairline, and below 25rem of trail width the tool name hides."
     }
   },
   "passthrough": {

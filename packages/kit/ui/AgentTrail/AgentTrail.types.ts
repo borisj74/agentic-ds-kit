@@ -3,6 +3,9 @@ import type { KitIcon } from "../Button/lucideName";
 
 export type AgentTrailStepStatus = "done" | "running" | "approval" | "pending" | "failed";
 
+/** rail: steps on a connecting line, the status word under each label. list: plain rows, the time (done) or the status word on the right. */
+export type AgentTrailVariant = "rail" | "list";
+
 export interface AgentTrailStep {
   id: string;
   label: string;
@@ -33,5 +36,7 @@ export interface AgentTrailProps extends Omit<ComponentPropsWithoutRef<"section"
   selectedStepId?: string | null;
   /** Makes each step a button. Selecting the selected step again passes null. */
   onSelectStep?: (id: string | null) => void;
+  /** Default "rail". "list": no connecting line or status line; each row shows the done time or the status word on the right, and the counter reads "2 of 4". */
+  variant?: AgentTrailVariant;
   ref?: Ref<HTMLElement>;
 }

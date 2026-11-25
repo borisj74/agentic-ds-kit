@@ -2,6 +2,9 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type ToolCallStatus = "running" | "done" | "error";
 
+/** default: the chat look. panel: a grey body with white code boxes, Arguments and Result side by side, no status Badge, Retry on the right. */
+export type ToolCallCardVariant = "default" | "panel";
+
 /** One tool call in a group. */
 export interface ToolCall {
   id: string;
@@ -45,5 +48,7 @@ export interface ToolCallCardProps extends Omit<ComponentPropsWithoutRef<"div">,
   expanded?: boolean;
   defaultExpanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
+  /** Default "default". "panel" is the run-detail look (RunDetail calls="all"). */
+  variant?: ToolCallCardVariant;
   ref?: Ref<HTMLDivElement>;
 }

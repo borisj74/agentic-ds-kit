@@ -9397,6 +9397,15 @@
           "type": "function",
           "required": false,
           "note": "(id | null) => void. Makes each step a button; selecting the selected step again passes null."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "rail",
+            "list"
+          ],
+          "default": "rail",
+          "note": "rail: steps on a connecting line with the status word under each label. list (RunDetail calls=\"all\"): plain rows 8 inside and 4 apart, no line and no status line; the done time or the status word sits on the right, the counter reads \"2 of 4\", the selected row fills with a strong hairline, and below 25rem of trail width the tool name hides."
         }
       }
     },
@@ -9697,6 +9706,15 @@
           "type": "function",
           "required": false,
           "note": "(expanded) => void"
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "default",
+            "panel"
+          ],
+          "default": "default",
+          "note": "panel (RunDetail calls=\"all\"): a 44 head with no status Badge (running reads \"Running\"), a grey body with white code boxes, Arguments and Result side by side (stacked below 40rem of card width), arrays of plain values on one line, the error box under Arguments, and Attempt left with Retry right (full width below 25rem). Ignored with calls."
         }
       }
     },
@@ -13311,7 +13329,7 @@
             "all"
           ],
           "default": "selected",
-          "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call."
+          "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call. The trail uses AgentTrail variant=\"list\" and the calls ToolCallCard variant=\"panel\"."
         },
         "trace": {
           "type": "array",

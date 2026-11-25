@@ -247,3 +247,136 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* variant="list": plain rows, no rail line and no status line. The header sits 12 over the rows, rows are
+   4 apart with 8 inside, and the done time or the status word sits on the right. */
+.listTrail .header {
+  padding-bottom: var(--space-3);
+  border-bottom: 0;
+}
+
+.listTrail .title {
+  font-weight: var(--type-weight-heading);
+}
+
+.listTrail .counter {
+  font-weight: var(--type-weight-body);
+  color: var(--text-fg-subtle);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listStep {
+  display: flex;
+  min-width: 0;
+}
+
+.listRow {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control-md);
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  color: inherit;
+}
+
+.listButton {
+  cursor: pointer;
+}
+
+.listButton:hover {
+  background-color: var(--bg-subtle);
+}
+
+.listButton:focus-visible {
+  outline: none;
+  box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin), var(--focus-ring) 0 0 0 calc(var(--border-width-thin) * 3);
+}
+
+/* Selected row: the selected fill with a strong hairline. */
+.listButton.selected,
+.listButton.selected:hover {
+  background-color: var(--action-selected);
+  box-shadow: inset 0 0 0 var(--border-width-thin) var(--line-strong);
+}
+
+.listMarker {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: var(--type-line-ui-sm);
+}
+
+.listText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.listText .label {
+  font-weight: var(--type-weight-body);
+}
+
+.selected .listText .label {
+  font-weight: var(--type-weight-label);
+}
+
+.listSublabel {
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.listWord {
+  flex-shrink: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-subtle);
+}
+
+.listRow .meta {
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-subtle);
+}
+
+.running .listWord {
+  color: var(--status-info-text);
+}
+
+.approval .listWord {
+  color: var(--status-warning-text);
+}
+
+.failed .listWord {
+  color: var(--status-danger-text);
+}
+
+/* Phone width (25rem, the same narrow step layout.css uses): rows keep label, status word and time,
+   and drop the tool name. */
+.listTrail {
+  container: agenttrail / inline-size;
+}
+
+@container agenttrail (max-width: 25rem) {
+  .listSublabel {
+    display: none;
+  }
+}

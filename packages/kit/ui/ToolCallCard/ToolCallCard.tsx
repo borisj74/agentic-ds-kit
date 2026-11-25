@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { ChevronDown, ChevronRight, CircleCheck, CircleX, Layers, LoaderCircle } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp, CircleCheck, CircleX, Layers, LoaderCircle } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -10,7 +10,7 @@ import type { ToolCall, ToolCallCardProps, ToolCallStatus } from "./ToolCallCard
 import styles from "./ToolCallCard.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { ToolCallCardProps, ToolCall, ToolCallStatus } from "./ToolCallCard.types";
+export type { ToolCallCardProps, ToolCall, ToolCallStatus, ToolCallCardVariant } from "./ToolCallCard.types";
 
 const STATUS_TEXT: Record<ToolCallStatus, string> = { running: "Running", done: "Done", error: "Failed" };
 
@@ -25,6 +25,30 @@ function lines(value: unknown): string[] {
   if (Array.isArray(value) && value.every((item) => typeof item === "string")) return value as string[];
   if (typeof value === "string") return value.split("\n");
   return JSON.stringify(value, null, 2).split("\n");
+}
+
+/** Panel look: pretty JSON, but a list of plain values stays on one line ("charges": ["a", "b"]). */
+function compactLines(value: unknown): string[] {
+  if (value === undefined || value === null || typeof value === "string" || (Array.isArray(value) && value.every((item) => typeof item === "string"))) {
+    return lines(value);
+  }
+  const flat = (item: unknown) => Array.isArray(item) && item.every((entry) => entry === null || typeof entry !== "object");
+  const json = JSON.stringify(value, (_key, item) => (flat(item) ? `\u0000[${(item as unknown[]).map((entry) => JSON.stringify(entry)).join(", ")}]` : item), 2);
+  return json.replace(/"\\u0000(.*)"(,?)$/gm, (_match, inner: string, comma: string) => `${JSON.parse(`"${inner}"`)}${comma}`).split("\n");
+}
+
+function PanelBox({ label, meta, body }: { label: string; meta?: string; body: string[] }) {
+  return (
+    <div className={styles.panelPane}>
+      <div className={styles.panelLabel}>
+        <span>{label}</span>
+        {meta ? <span className={styles.paneMeta}>{meta}</span> : null}
+      </div>
+      <pre className={styles.panelCode} aria-label={label}>
+        {body.join("\n")}
+      </pre>
+    </div>
+  );
 }
 
 function useLiveDuration(running: boolean, startedAt: number | undefined, fallback: string | undefined) {
@@ -80,17 +104,19 @@ export function ToolCallCard({
   expanded,
   defaultExpanded,
   onExpandedChange,
+  variant = "default",
   className,
   ref,
   ...rest
 }: ToolCallCardProps) {
+  const panel = variant === "panel" && !Array.isArray(calls);
   const panelId = useId();
   const group = Array.isArray(calls);
   const [innerOpen, setInnerOpen] = useState(defaultExpanded ?? (status === "error" && !group));
   const open = expanded ?? innerOpen;
   const live = useLiveDuration(status === "running" && !group, startedAt, duration);
 
-  const argLines = lines(args);
+  const argLines = panel ? compactLines(args) : lines(args);
   const resultLines = lines(result);
   const errorLines = lines(error);
   const hasDetail = group ? (calls?.length ?? 0) > 0 : argLines.length > 0 || resultLines.length > 0 || errorLines.length > 0 || Boolean(onRetry);
@@ -126,18 +152,24 @@ export function ToolCallCard({
     headDuration = live;
   }
 
-  const Chevron = open ? ChevronDown : ChevronRight;
+  const Chevron = panel ? (open ? ChevronUp : ChevronDown) : open ? ChevronDown : ChevronRight;
   const headInner = (
     <>
       {headIcon}
       <span className={cx(styles.name, group && styles.groupName)}>{headName}</span>
-      {headSummary ? <span className={styles.summary}>{headSummary}</span> : <span className={styles.summary} />}
-      {!group && status === "running" ? (
+      {panel && status === "running" ? (
+        <span className={styles.summary}>Running</span>
+      ) : headSummary ? (
+        <span className={styles.summary}>{headSummary}</span>
+      ) : (
+        <span className={styles.summary} />
+      )}
+      {!panel && !group && status === "running" ? (
         <Badge tone="info" size="sm" className={styles.badge}>
           Running
         </Badge>
       ) : null}
-      {!group && status === "error" ? (
+      {!panel && !group && status === "error" ? (
         <Badge tone="danger" size="sm" className={styles.badge}>
           Failed
         </Badge>
@@ -148,12 +180,12 @@ export function ToolCallCard({
         </span>
       ) : null}
       {hasDetail ? <Chevron size={16} strokeWidth={ICON_STROKE} className={styles.chevron} aria-hidden="true" /> : null}
-      <span className={styles.srOnly}>, {STATUS_TEXT[headStatus]}</span>
+      {panel && status === "running" ? null : <span className={styles.srOnly}>, {STATUS_TEXT[headStatus]}</span>}
     </>
   );
 
   return (
-    <div {...rest} {...nisthaAttr("toolcallcard", rest)} ref={ref} className={cx(styles.card, styles[headStatus], className)}>
+    <div {...rest} {...nisthaAttr("toolcallcard", rest)} ref={ref} className={cx(styles.card, styles[headStatus], panel && styles.panel, className)}>
       {hasDetail ? (
         <button type="button" className={styles.head} aria-expanded={open} aria-controls={panelId} onClick={toggle}>
           {headInner}
@@ -175,6 +207,37 @@ export function ToolCallCard({
                 </li>
               ))}
             </ul>
+          ) : panel ? (
+            <>
+              {argLines.length && resultLines.length ? (
+                <div className={styles.panelPair}>
+                  <PanelBox label="Arguments" body={argLines} />
+                  <PanelBox label="Result" meta={resultMeta} body={resultLines} />
+                </div>
+              ) : (
+                <>
+                  {argLines.length ? <PanelBox label="Arguments" body={argLines} /> : null}
+                  {resultLines.length ? <PanelBox label="Result" meta={resultMeta} body={resultLines} /> : null}
+                </>
+              )}
+              {errorLines.length ? (
+                <div className={styles.panelError} role="group" aria-label="Error">
+                  {errorLines.map((line, index) => (
+                    <p key={index} className={styles.panelErrorLine}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              ) : null}
+              {onRetry ? (
+                <div className={styles.panelFooter}>
+                  <span className={styles.attempt}>{attempt ? `Attempt ${attempt.n} of ${attempt.max}` : null}</span>
+                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={onRetry}>
+                    Retry
+                  </Button>
+                </div>
+              ) : null}
+            </>
           ) : (
             <>
               {errorLines.length ? <Pane label="Error" body={errorLines} tone="error" /> : null}

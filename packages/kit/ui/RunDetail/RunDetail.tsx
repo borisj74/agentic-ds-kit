@@ -133,7 +133,7 @@ export function RunDetail(props: RunDetailProps) {
                 onApprove={onApprove ? () => onApprove() : undefined}
               />
             ) : null}
-            <AgentTrail title="Steps" tag={run.tag} steps={trail} selectedStepId={selectedId} onSelectStep={selectAndShow} />
+            <AgentTrail variant="list" title="Steps" tag={run.tag} steps={trail} selectedStepId={selectedId} onSelectStep={selectAndShow} />
             {traceNode}
           </div>
           <section className={cx(styles.column, styles.calls)} aria-label="Tool calls">
@@ -144,6 +144,7 @@ export function RunDetail(props: RunDetailProps) {
                 <ToolCallCard
                   key={`${step.id}-${done ? "done" : "open"}`}
                   id={cardId(step.id)}
+                  variant="panel"
                   {...props}
                   defaultExpanded={!done}
                   onRetry={retry && step.status === "failed" ? () => retry(step.id) : undefined}

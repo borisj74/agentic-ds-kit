@@ -5,6 +5,8 @@
 - **RunDetail `onStop` and AgentMonitor `onStop`.** While a run is running, "Stop run" (sm, outline, danger) sits beside Pause. A kit AlertDialog asks once ("Stop this run?") and confirming calls `onStop`.
 - **RunDetail step `attempt`** (`{ n, max }`) shows "Attempt 1 of 3" beside Retry on a failed step's ToolCallCard.
 - **`run-detail` pattern** (copy-in: `npx agentic-ds-kit add run-detail`). AppHeader, a PageHeader with a Runs breadcrumb, the meta line and Ask, then RunDetail with `calls="all"` and the trace. Northwind demo data with Failed, Running and Done states. Below 640 a back bar (Runs, Ask) replaces AppHeader.
+- **AgentTrail `variant="list"`** (default `"rail"`): plain rows without the rail line or the status line, the done time or the status word on the right, a "2 of 4" counter, and a filled selected row. RunDetail `calls="all"` uses it.
+- **ToolCallCard `variant="panel"`** (default `"default"`): a grey body with white code boxes, Arguments and Result side by side, arrays of plain values on one line, no status Badge in the head, and Attempt on the left with Retry on the right. RunDetail `calls="all"` uses it. Other ToolCallCards are unchanged.
 
 ### Changed
 
