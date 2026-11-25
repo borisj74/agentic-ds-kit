@@ -482,3 +482,18 @@ button.body:focus {
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body-sm);
 }
+
+/* flush md: 14/20 first line, 12/16 second line with 2 above it, so a two-line row is 62 like the list pane on the board. */
+.flush.md .copy {
+  gap: var(--space-px);
+}
+
+.flush.md .primary,
+.flush.md .value {
+  line-height: var(--type-line-body-sm);
+}
+
+.flush.md .secondary,
+.flush.md .meta {
+  line-height: var(--type-line-body-xs);
+}

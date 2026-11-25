@@ -2128,7 +2128,7 @@
         "flush": {
           "type": "boolean",
           "default": false,
-          "note": "Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 at xs, sm and lg and 24 at md, and a plain icon at its own size. A selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card; the Card head or your own rules close the ends."
+          "note": "Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 at xs, sm and lg and 24 at md (where the second line tightens to 12/16), and a plain icon at its own size. A selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card; the Card head or your own rules close the ends."
         },
         "sort": {
           "type": "enum",
