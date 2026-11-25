@@ -1,4 +1,6 @@
-.shell {
+/* Doubled class: wins over the shared .control display: block whatever order the two
+   stylesheets load in (a page that loads controls.module.css later stacked the symbol above the number). */
+.shell.shell {
   display: flex;
   align-items: center;
   gap: var(--space-2);

@@ -8,35 +8,45 @@
   "add": "npx agentic-ds-kit add billing-schedule",
   "import": "import { BillingSchedulePattern } from \"@/components/patterns/billing-schedule\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/billing-schedule/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+  "intent": "Billing schedule for one customer: the next charge as one figure with its lines, a failure Alert that says what happens next, and Upcoming and Billed as two kit Tables with status as icon and word. Scheduled charges open a kit Drawer to move the date, change the amount or skip the month.",
   "contains": [
     "section",
     "table",
     "badge",
     "alert",
+    "alertdialog",
     "button",
-    "empty",
-    "skeleton",
     "card",
-    "divider"
+    "divider",
+    "drawer",
+    "datepicker",
+    "currencyinput",
+    "radiogroup",
+    "field",
+    "empty",
+    "skeleton"
   ],
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
     "At most one appearance=\"solid\" mode=\"primary\" Button per view",
     "Do not restyle kit components; change them through their props, slots, and tokens",
-    "Status is a word in a kit Badge (Upcoming, Paid, Failed…), never colour alone",
-    "Charges are a kit Table; do not build a local charges list",
-    "A failed payment is a kit Alert (danger) that says the date, the amount and what happens next",
+    "Status is a word in a kit Badge with its icon (Scheduled, Retrying, Invoiced, Paid, Failed…), never colour alone",
+    "Upcoming and Billed are two kit Tables; do not build a local charges list",
+    "A failed payment is a kit Alert (danger) that names the invoice, the amount, the next and last retry, and what happens after",
+    "Edit is a kit Drawer on scheduled charges only (no pencil on retries or billed rows); Skip asks once in a kit AlertDialog",
     "Money arrives pre-formatted from your app; label example data as example",
     "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
   ],
   "defaults": [
-    "Section title \"Billing schedule\" with Download all as a ghost Button in its actions",
-    "Next-charge summary in a kit Card (size sm) with a vertical kit Divider between the amount and the date, above the table; nextOnly shows just the summary",
-    "summary is the overview card for a Billing page (the settings example uses it): no next-charge strip, the first `limit` charges (default 3) in two columns, charge with date and status, and amount, so it fits a half-width column, plus View all (ghost) via onViewAll",
-    "Update card is the one solid primary when a payment failed; Change card is outline",
-    "Loading uses Skeleton lines; empty uses a kit Empty; a load error uses a danger Alert and Retry"
+    "Section title \"Billing schedule\" with Ask (outline, MessageCircle) and Download all (ghost) in its actions",
+    "Next-charge Card shows the figure, the date, the card and due line, then its lines and the draft invoice; no Next charge badge in the rows",
+    "With a failed payment the Card sits beside the failure Alert (layout-split--primary); Update card in the Alert is the one solid primary and Change card hides until it is fixed",
+    "Upcoming (next 60 days, oldest first) ends with a total row; Billed (last 60 days, newest first) has Download per invoice. Row actions are icon Buttons (Table rowActionsAs=\"icons\") named with the charge and date",
+    "The edit Drawer is md on the right: Charge date (DatePicker), Amount (CurrencyInput), Apply to (RadioGroup, only for a split fee), Skip this month in footerStart, then Cancel and Save changes. After Save the row moves, focus returns to its pencil and a polite status says where it moved",
+    "nextOnly shows just the next-charge Card",
+    "summary is the overview card for a Billing page (the settings example uses it): no next-charge Card, the first `limit` charges (default 3) in two columns, charge with date and status, and amount, so it fits a half-width column, plus View all (ghost) via onViewAll",
+    "Loading uses Skeleton lines; empty uses a kit Empty; a load error uses a danger Alert with Retry"
   ],
-  "snippet": "<BillingSchedulePattern onDownloadAll={download} onChangeCard={changeCard} onUpdateCard={updateCard} />"
+  "snippet": "<BillingSchedulePattern onAsk={ask} onDownloadAll={download} onDownloadInvoice={downloadInvoice} onUpdateCard={updateCard} onSaveCharge={saveCharge} onSkipCharge={skipCharge} />"
 }

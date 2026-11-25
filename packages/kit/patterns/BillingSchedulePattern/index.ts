@@ -1,3 +1,3 @@
 export { BillingSchedulePattern } from "./BillingSchedulePattern";
-export type { BillingSchedulePatternProps } from "./BillingSchedulePattern";
-export type { Charge, ChargeStatus } from "./billing-schedule-data";
+export type { BillingSchedulePatternProps, ChargeEdit } from "./BillingSchedulePattern";
+export type { Charge, ChargeStatus, NextCharge } from "./billing-schedule-data";
