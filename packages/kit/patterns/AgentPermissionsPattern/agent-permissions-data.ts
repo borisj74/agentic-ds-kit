@@ -78,11 +78,26 @@ export const REQUEST = {
     },
   ] satisfies PermissionScope[],
   warning: "Change it any time in the table.",
+  /** The warning Badge above the title while the request waits. */
+  badge: "Needs you",
+  /** What changes, in the strip under the description. */
+  summary: [
+    { label: "Changes", value: "Refund limit goes from $250 to $500" },
+    { label: "For", value: "30 days, until 22 Dec" },
+    { label: "Still asks", value: "Refunds over $500" },
+  ],
+  /** The same strip below 640, as label and value rows. */
+  summaryShort: [
+    { label: "Refund limit", value: "$250 to $500" },
+    { label: "For", value: "30 days, until 22 Dec" },
+    { label: "Still asks", value: "Refunds over $500" },
+  ],
   requestedAt: "Collections agent · requested 09:41",
   requestedAtShort: "Collections agent · 09:41",
   requested: "$500 requested",
-  /** The refunds row's second line below 640 while the request waits. */
-  requestedSecondary: "Collections · $500 asked",
+  /** The refunds row's second line below 640 while the request waits, then the ask in the warning tone. */
+  requestedSecondary: "Collections",
+  requestedNote: "$500 asked",
   /** When the request was granted or denied, on the right of the one-line result. */
   resolvedAt: "09:52",
   errorMessage: "Stripe didn't answer. The limit is still $250.",

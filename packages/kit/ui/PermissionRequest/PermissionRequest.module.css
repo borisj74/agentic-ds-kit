@@ -43,6 +43,74 @@
   color: var(--text-fg-muted);
 }
 
+/* badge: the "Needs you" Badge and requestedAt on one row above the title. */
+.flagRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: calc(var(--space-2) * -1);
+}
+
+.flagNote {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+/* summary: what changes, in columns; label and value rows when the card is narrow. */
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-surface-md);
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.summaryLabel {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.summaryValue {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+}
+
+.narrow .summary {
+  flex-direction: column;
+}
+
+.narrow .summaryItem {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.narrow .summaryValue {
+  text-align: end;
+}
+
+/* Under 40rem: Grant then Deny, full width. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 .description {
   margin: 0;
   font-size: var(--type-size-body-sm);

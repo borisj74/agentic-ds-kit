@@ -181,7 +181,10 @@ export function AgentPermissionsPattern({
     id: action.id,
     primary: action.name,
     secondary: action.locked ? PERMISSIONS_PAGE.lockedShort : requestedFor(action) ? REQUEST.requestedSecondary : action.agent,
+    note: requestedFor(action) ? REQUEST.requestedNote : undefined,
+    noteTone: "warning" as const,
     value: levelWord(action),
+    valueIcon: LEVEL_ICON[action.level],
   });
 
   const ask = (
@@ -235,6 +238,8 @@ export function AgentPermissionsPattern({
           description={REQUEST.description}
           scopes={REQUEST.scopes}
           warning={REQUEST.warning}
+          badge={REQUEST.badge}
+          summary={narrow ? REQUEST.summaryShort : REQUEST.summary}
           requestedAt={narrow ? REQUEST.requestedAtShort : REQUEST.requestedAt}
           status={request}
           errorMessage={REQUEST.errorMessage}

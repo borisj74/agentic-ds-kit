@@ -9,6 +9,7 @@ import { Button } from "../Button";
 import { LucideByName } from "../Button/lucideName";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
+import { useNarrow } from "../shared/useNarrow";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
 import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
 import { handleReviewKeys } from "../shared/reviewKeys";
@@ -20,6 +21,7 @@ export type {
   PermissionRequestProps,
   PermissionRequestStatus,
   PermissionScope,
+  PermissionSummaryItem,
   PermissionAccess,
 } from "./PermissionRequest.types";
 
@@ -50,6 +52,8 @@ export function PermissionRequest({
   warning,
   errorMessage = "Couldn't save the grant.",
   requestedAt,
+  badge,
+  summary,
   resolvedNote,
   onGrant,
   onDeny,
@@ -61,6 +65,8 @@ export function PermissionRequest({
   const titleId = useId();
   const focus = useResolvedFocus(status === "granted" || status === "denied" || status === "expired");
   const busy = status === "granting";
+  // Under 40rem of card width, Grant and Deny stack full width (Grant first) and the summary strip turns into rows.
+  const { ref: sizeRef, narrow } = useNarrow<HTMLElement>(40);
 
   if (status === "granted" || status === "denied" || status === "expired") {
     const label = status === "granted" ? "Granted" : status === "denied" ? "Denied" : "Expired";
@@ -85,29 +91,79 @@ export function PermissionRequest({
   }
 
   const standing = warning ?? null;
+  const buttonSize = narrow ? "lg" : "md";
+
+  const denyButton = (
+    <Button
+      appearance="outline"
+      mode="neutral"
+      size={buttonSize}
+      block={narrow}
+      aria-keyshortcuts="Escape"
+      disabled={busy}
+      onClick={onDeny}
+    >
+      Deny
+    </Button>
+  );
+  const grantButton = (
+    <Button
+      appearance="solid"
+      mode="primary"
+      size={buttonSize}
+      block={narrow}
+      iconStart={busy ? "LoaderCircle" : "Check"}
+      aria-keyshortcuts="Meta+Enter Control+Enter"
+      className={busy ? styles.granting : undefined}
+      onClick={busy ? undefined : onGrant}
+    >
+      {busy ? "Granting…" : "Grant"}
+    </Button>
+  );
 
   return (
     <section
       {...rest} {...nisthaAttr("permissionrequest", rest)}
-      ref={ref}
+      ref={mergeRefs(sizeRef, ref)}
       tabIndex={-1}
-      className={cx(styles.card, reviewStyles.focusRing, busy && styles.busy, className)}
+      className={cx(styles.card, reviewStyles.focusRing, busy && styles.busy, narrow && styles.narrow, className)}
       onFocusCapture={focus.onFocusCapture}
       onBlurCapture={focus.onBlurCapture}
       aria-labelledby={titleId}
       aria-busy={busy || undefined}
       onKeyDown={handleKeyDown}
     >
+      {badge ? (
+        <div className={styles.flagRow}>
+          <Badge tone="warning" size="sm" appearance="soft" icon="Hand">
+            {badge}
+          </Badge>
+          {requestedAt ? <span className={styles.flagNote}>{requestedAt}</span> : null}
+        </div>
+      ) : null}
       <header className={styles.header}>
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
-        <span className={styles.count}>
-          {scopes.length} {scopes.length === 1 ? "scope" : "scopes"}
-          {requestedAt ? ` · ${requestedAt}` : ""}
-        </span>
+        {badge ? null : (
+          <span className={styles.count}>
+            {scopes.length} {scopes.length === 1 ? "scope" : "scopes"}
+            {requestedAt ? ` · ${requestedAt}` : ""}
+          </span>
+        )}
       </header>
       {description ? <p className={styles.description}>{description}</p> : null}
+
+      {summary?.length ? (
+        <dl className={styles.summary}>
+          {summary.map((item) => (
+            <div key={item.label} className={styles.summaryItem}>
+              <dt className={styles.summaryLabel}>{item.label}</dt>
+              <dd className={styles.summaryValue}>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
 
       <ul className={styles.scopes}>
         {scopes.map((scope) => (
@@ -146,23 +202,19 @@ export function PermissionRequest({
         <Alert variant="warning">{standing}</Alert>
       ) : null}
 
-      <footer className={reviewStyles.footer}>
-        <KeyHint>⌘⏎ grant · Esc deny</KeyHint>
-        <span className={reviewStyles.actions}>
-          <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={busy} onClick={onDeny}>
-            Deny
-          </Button>
-          <Button
-            appearance="solid"
-            mode="primary"
-            iconStart={busy ? "LoaderCircle" : "Check"}
-            aria-keyshortcuts="Meta+Enter Control+Enter"
-            className={busy ? styles.granting : undefined}
-            onClick={busy ? undefined : onGrant}
-          >
-            {busy ? "Granting…" : "Grant"}
-          </Button>
-        </span>
+      <footer className={narrow ? styles.stack : reviewStyles.footer}>
+        {narrow ? null : <KeyHint>⌘⏎ grant · Esc deny</KeyHint>}
+        {narrow ? (
+          <>
+            {grantButton}
+            {denyButton}
+          </>
+        ) : (
+          <span className={reviewStyles.actions}>
+            {denyButton}
+            {grantButton}
+          </span>
+        )}
       </footer>
       <span className={styles.srOnly} role="status">
         {busy ? "Granting access" : ""}

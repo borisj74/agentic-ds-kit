@@ -9,8 +9,11 @@ import type { BadgeTone } from "../Badge/Badge.types";
 export type ListViewSize = "xs" | "sm" | "md" | "lg";
 /** Row priority. Drives the leading bar marker and starts the secondary line with its word. */
 export type ListViewPriority = "high" | "medium" | "low";
-/** Tone for item.meta and the leading icon. danger is for a problem the words already name ("17 days late", "declined"). */
-export type ListViewTone = "neutral" | "danger";
+/**
+ * Tone for item.meta, item.note and the leading icon. warning is for something waiting on someone ("$500 asked");
+ * danger is for a problem the words already name ("17 days late", "declined").
+ */
+export type ListViewTone = "neutral" | "warning" | "danger";
 /** none keeps the items order; priority orders rows high, medium, low, then unset, keeping input order within each. */
 export type ListViewSort = "none" | "priority";
 export type ListViewSelection = "none" | "single" | "multiple";
@@ -54,10 +57,22 @@ export interface ListViewItem {
    * When set, meta and badge sit under it. Read after the secondary line.
    */
   value?: string;
+  /**
+   * A Lucide icon before value, aria-hidden, e.g. the level icon next to "Up to $250". The value words carry
+   * the meaning; the icon only helps scanning down the column.
+   */
+  valueIcon?: KitIcon;
   /** Short muted text at the row's end, like a relative time ("2h ago"). Read after the secondary line. */
   meta?: string;
   /** neutral (default) or danger, e.g. "17 days late". The words must still say the problem; colour is never the only signal. */
   metaTone?: ListViewTone;
+  /**
+   * Short text at the end of the secondary line, after " · ", e.g. "$500 asked". Read after the secondary line.
+   * Use it with noteTone when one part of the line needs weight.
+   */
+  note?: string;
+  /** neutral (default), warning or danger for note. The words must still say it. */
+  noteTone?: ListViewTone;
   /** neutral (default) or danger for the leading Lucide icon, e.g. a declined payment. The row text must still say it. */
   iconTone?: ListViewTone;
   badge?: string;

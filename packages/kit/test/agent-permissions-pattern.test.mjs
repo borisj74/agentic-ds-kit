@@ -174,7 +174,11 @@ describe("agent-permissions page", () => {
     assert.match(html, /30 days, until 22 Dec/);
     assert.match(html, /Collections agent · requested 09:41/);
     assert.match(html, />Grant</);
-    assert.doesNotMatch(html, /Approve|Needs you/);
+    assert.doesNotMatch(html, /Approve/);
+    assert.match(html, />Needs you</, "the warning Badge above the title");
+    assert.match(html, /<dt[^>]*>Changes<\/dt><dd[^>]*>Refund limit goes from \$250 to \$500<\/dd>/);
+    assert.match(html, /<dt[^>]*>Still asks<\/dt>/);
+    assert.match(html, /Change it any time in the table\./, "the write-access warning stays");
     assert.equal(solidPrimary(html), 1);
   });
 
@@ -280,6 +284,9 @@ describe("agent-permissions below 640", { skip }, () => {
       assert.doesNotMatch(container.textContent, /Today 08:05/, "Last used drops");
       assert.doesNotMatch(container.textContent, /Default for new actions/, "no dial below 640");
       assert.match(container.textContent, /Collections · \$500 asked/);
+      assert.match(container.textContent, /Refund limit\$250 to \$500/, "the short summary rows");
+      const footer = container.querySelector("section footer");
+      assert.deepEqual([...footer.querySelectorAll("button")].map((b) => b.textContent.trim()), ["Grant", "Deny"], "Grant first");
       const rows = [...container.querySelectorAll('[role="listitem"]')];
       const locked = rows.find((li) => li.textContent.includes("Change prices"));
       assert.equal(locked.querySelector("button"), null, "locked row can't be opened");
