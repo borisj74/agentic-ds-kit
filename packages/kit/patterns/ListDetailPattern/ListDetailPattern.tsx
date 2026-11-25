@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeft } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
@@ -7,6 +8,7 @@ import { Card } from "../../ui/Card";
 import { Empty } from "../../ui/Empty";
 import { IconButton } from "../../ui/IconButton";
 import { Input } from "../../ui/Input";
+import { Link } from "../../ui/Link";
 import { ListView } from "../../ui/ListView";
 import type { ListViewItem } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
@@ -37,9 +39,6 @@ const LINE_COLUMNS = [
   { key: "qty", header: "Qty", numeric: true },
   { key: "amount", header: "Amount", numeric: true },
 ];
-
-/* Below 640 the amount card above already says the total, so line items keep only item and amount. */
-const LINE_COLUMNS_NARROW = [LINE_COLUMNS[0], LINE_COLUMNS[2]];
 
 /*
  * Narrow = below --grid-breakpoint-sm (640), read at runtime. Below it the list fills the page and a
@@ -89,9 +88,15 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
   const history = narrow ? [...invoice.payments].reverse() : invoice.payments;
   const payments: ListViewItem[] = history.map((payment) => ({
     id: payment.id,
-    primary: payment.text,
+    primary: narrow ? payment.short : payment.text,
     icon: payment.icon,
-    meta: payment.at,
+    meta: narrow ? payment.day : payment.at,
+  }));
+  // On the phone line items are plain rows, item and amount, with no column header.
+  const lineItems: ListViewItem[] = invoice.lines.map((line) => ({
+    id: line.item,
+    primary: line.short ?? line.item,
+    value: line.amount,
   }));
   const summary = narrow
     ? [{ label: `Amount due · ${invoice.card}`, value: invoice.amount, lead: true }]
@@ -114,14 +119,16 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
         </dl>
       </Card>
       <Card title="Line items" headingLevel={3} size={narrow ? "sm" : "md"} flush>
-        <Table
-          columns={narrow ? LINE_COLUMNS_NARROW : LINE_COLUMNS}
-          rows={lineRows}
-          size="sm"
-          footer={
-            narrow ? undefined : { label: invoice.status === "paid" ? "Total paid" : "Total due", value: invoice.total }
-          }
-        />
+        {narrow ? (
+          <ListView label={`Line items on ${invoice.id}`} size="md" items={lineItems} />
+        ) : (
+          <Table
+            columns={LINE_COLUMNS}
+            rows={lineRows}
+            size="sm"
+            footer={{ label: invoice.status === "paid" ? "Total paid" : "Total due", value: invoice.total }}
+          />
+        )}
       </Card>
       <Card title="Payment history" headingLevel={3} size={narrow ? "sm" : "md"} flush>
         <ListView
@@ -257,23 +264,27 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
 
   // Below 640 with a record open: the record is the page, and the header's back step returns to the list.
   if (narrow && open) {
-    const trail = [...(breadcrumbs?.slice(0, -1) ?? []), { label: "Invoices", href: "#" }, { label: open.id }];
     return (
-      <div className="layout-canvas layout-canvas--sticky-header">
-        <div className="layout-header">
-          <PageHeader
-            title={open.id}
-            subtitle={`${open.customer} · ${dueLine(open)}`}
-            breadcrumbs={trail}
-          />
-        </div>
+      <div className="layout-canvas">
         <div className="layout-content">
-          <section className="list-detail-pattern__detail" aria-label={`Invoice ${open.id}`}>
-            <div className="list-detail-pattern__title-row">
-              <StatusBadge status={open.status} />
-            </div>
-            {detailActions(open)}
+          <section className="list-detail-pattern__detail" aria-labelledby={headingId}>
+            <header className="list-detail-pattern__head list-detail-pattern__head--page">
+              <Link href="#" variant="standalone">
+                <ChevronLeft size={20} strokeWidth={1.5} aria-hidden />
+                Invoices
+              </Link>
+              <div className="list-detail-pattern__title-row">
+                <h1 id={headingId} className="list-detail-pattern__title">
+                  {open.id}
+                </h1>
+                <StatusBadge status={open.status} />
+              </div>
+              <p className="list-detail-pattern__sub">
+                {open.customer} · {dueLine(open)}
+              </p>
+            </header>
             <InvoiceBody invoice={open} narrow />
+            {detailActions(open)}
           </section>
           {live}
         </div>
@@ -303,7 +314,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
           onChange={(value) => setFilter(value as Filter)}
         />
       </div>
-      {filter === "overdue" ? <p className="list-detail-pattern__note">Overdue · oldest first</p> : null}
+      {filter === "overdue" && !narrow ? <p className="list-detail-pattern__note">Overdue · oldest first</p> : null}
       <ListView
         label="Invoices"
         size={narrow ? "md" : "sm"}
@@ -316,7 +327,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
         truncate="secondary"
         empty={{ title: "No invoice matches this search.", description: "Try a customer name or an invoice number." }}
       />
-      <p className="list-detail-pattern__note">
+      <p className="list-detail-pattern__note" hidden={narrow}>
         Showing {shown.length} of {inFilter.length}
         {filter === "all" ? "" : ` ${FILTER_LABEL[filter].toLowerCase()}`}
       </p>

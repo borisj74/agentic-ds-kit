@@ -154,3 +154,8 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* The phone record page: the back link sits above the id with a step of space. */
+.list-detail-pattern__head--page .list-detail-pattern__title-row {
+  margin-block-start: var(--space-3);
+}

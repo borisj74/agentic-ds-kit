@@ -6,6 +6,8 @@ export interface InvoiceLine {
   item: string;
   qty: string;
   amount: string;
+  /** Shorter label for the phone, where there is no Qty column ("Scale plan, 24 seats"). */
+  short?: string;
 }
 
 export interface InvoicePayment {
@@ -13,6 +15,9 @@ export interface InvoicePayment {
   /** One line that says what happened, in words. */
   text: string;
   at: string;
+  /** Phone copy: a few words and the day only ("Retry declined", "Nov 7"). */
+  short: string;
+  day: string;
   icon: "CircleX" | "Mail" | "CircleCheck";
 }
 
@@ -35,15 +40,26 @@ export interface ListDetailItem {
 }
 
 function lines(seats: number, seatAmount: string, overage: string | null, tax: string): InvoiceLine[] {
-  const rows: InvoiceLine[] = [{ item: "Scale plan, annual seat", qty: String(seats), amount: seatAmount }];
+  const rows: InvoiceLine[] = [
+    { item: "Scale plan, annual seat", qty: String(seats), amount: seatAmount, short: `Scale plan, ${seats} seats` },
+  ];
   if (overage) rows.push({ item: "API calls over 2M", qty: "370K", amount: overage });
   rows.push({ item: "Sales tax 8%", qty: "", amount: tax });
   return rows;
 }
 
-const declined = (id: string, at: string, retry: string): InvoicePayment[] => [
-  { id: `${id}-declined`, text: "Visa ending 4242 declined · insufficient funds", at, icon: "CircleX" },
-  { id: `${id}-retry`, text: "Automatic retry declined", at: retry, icon: "CircleX" },
+const day = (at: string) => at.split(",")[0];
+
+const declined = (id: string, card: string, at: string, retry: string): InvoicePayment[] => [
+  {
+    id: `${id}-declined`,
+    text: `${card.replace(/ (\d+)$/, " ending $1")} declined · insufficient funds`,
+    short: `${card} declined`,
+    at,
+    day: day(at),
+    icon: "CircleX",
+  },
+  { id: `${id}-retry`, text: "Automatic retry declined", short: "Retry declined", at: retry, day: day(retry), icon: "CircleX" },
 ];
 
 /** Overdue invoices come first, oldest first; then open, then paid. */
@@ -60,7 +76,7 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Leah Park",
     lines: lines(140, "$13,611.11", null, "$1,088.89"),
     total: "$14,700.00",
-    payments: declined("INV-1821", "Nov 1, 09:04", "Nov 4, 09:00"),
+    payments: declined("INV-1821", "Mastercard 5100", "Nov 1, 09:04", "Nov 4, 09:00"),
   },
   {
     id: "INV-1842",
@@ -75,8 +91,15 @@ export const INVOICES: ListDetailItem[] = [
     lines: lines(24, "$2,016.00", "$222.00", "$180.00"),
     total: "$2,418.00",
     payments: [
-      ...declined("INV-1842", "Nov 4, 09:12", "Nov 7, 09:00"),
-      { id: "INV-1842-reminder", text: "Reminder 1 sent to ana.ruiz@northwind.example", at: "Nov 8, 10:30", icon: "Mail" },
+      ...declined("INV-1842", "Visa 4242", "Nov 4, 09:12", "Nov 7, 09:00"),
+      {
+        id: "INV-1842-reminder",
+        text: "Reminder 1 sent to ana.ruiz@northwind.example",
+        short: "Reminder 1 sent",
+        at: "Nov 8, 10:30",
+        day: "Nov 8",
+        icon: "Mail",
+      },
     ],
   },
   {
@@ -91,7 +114,7 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Sam Okafor",
     lines: lines(60, "$6,055.56", null, "$484.44"),
     total: "$6,540.00",
-    payments: declined("INV-1838", "Nov 8, 09:02", "Nov 11, 09:00"),
+    payments: declined("INV-1838", "Visa 1881", "Nov 8, 09:02", "Nov 11, 09:00"),
   },
   {
     id: "INV-1850",
@@ -105,7 +128,7 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Jo Brandt",
     lines: lines(18, "$1,777.78", null, "$142.22"),
     total: "$1,920.00",
-    payments: declined("INV-1850", "Nov 12, 09:10", "Nov 15, 09:00"),
+    payments: declined("INV-1850", "Amex 1005", "Nov 12, 09:10", "Nov 15, 09:00"),
   },
   {
     id: "INV-1853",
@@ -119,7 +142,7 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Priya Nair",
     lines: lines(20, "$2,000.00", null, "$160.00"),
     total: "$2,160.00",
-    payments: declined("INV-1853", "Nov 15, 09:01", "Nov 18, 09:00"),
+    payments: declined("INV-1853", "Visa 7310", "Nov 15, 09:01", "Nov 18, 09:00"),
   },
   {
     id: "INV-1854",
@@ -133,7 +156,7 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Tomas Novak",
     lines: lines(8, "$824.07", null, "$65.93"),
     total: "$890.00",
-    payments: declined("INV-1854", "Nov 17, 09:06", "Nov 20, 09:00"),
+    payments: declined("INV-1854", "Visa 0056", "Nov 17, 09:06", "Nov 20, 09:00"),
   },
   {
     id: "INV-1861",
@@ -189,7 +212,9 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Marco Russo",
     lines: lines(24, "$2,400.00", null, "$192.00"),
     total: "$2,592.00",
-    payments: [{ id: "INV-1830-paid", text: "Paid with Visa ending 6604", at: "Nov 6, 09:00", icon: "CircleCheck" }],
+    payments: [
+      { id: "INV-1830-paid", text: "Paid with Visa ending 6604", short: "Paid", at: "Nov 6, 09:00", day: "Nov 6", icon: "CircleCheck" },
+    ],
   },
   {
     id: "INV-1834",
@@ -203,6 +228,8 @@ export const INVOICES: ListDetailItem[] = [
     contact: "Ruth Alder",
     lines: lines(7, "$700.00", null, "$56.00"),
     total: "$756.00",
-    payments: [{ id: "INV-1834-paid", text: "Paid with Amex ending 2290", at: "Nov 9, 09:00", icon: "CircleCheck" }],
+    payments: [
+      { id: "INV-1834-paid", text: "Paid with Amex ending 2290", short: "Paid", at: "Nov 9, 09:00", day: "Nov 9", icon: "CircleCheck" },
+    ],
   },
 ];

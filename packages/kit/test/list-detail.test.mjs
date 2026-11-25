@@ -52,7 +52,7 @@ function transpile(file, target) {
     .replace(/^import "\.\/[\w-]+\.css";$/m, "")
     .replace(/from "\.\.\/\.\.\/ui\/(\w+)"/g, (_, name) => `from "${new URL(`${name}/${name}.js`, kitUi).href}"`)
     .replace(/from "\.\/list-detail-data"/g, 'from "./list-detail-data.mjs"')
-    .replace(/from "(react(?:\/jsx-runtime)?)"/g, (_, name) => `from "${import.meta.resolve(name)}"`);
+    .replace(/from "(react(?:\/jsx-runtime)?|lucide-react)"/g, (_, name) => `from "${import.meta.resolve(name)}"`);
   writeFileSync(join(out, target), code);
 }
 
