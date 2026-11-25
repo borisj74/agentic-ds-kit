@@ -2036,13 +2036,14 @@
         "Do not use raw hex or primitive --color-* ramps",
         "Do not use dot as the only sign of a status; say it in primary or secondary",
         "Do not write the priority word in secondary; the kit adds High, Medium or Low",
-        "Do not put an amount in meta or badge; use value"
+        "Do not put an amount in meta or badge; use value",
+        "Do not use metaTone or iconTone danger as the only sign of a problem; the words must say it"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units)."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. Both default to neutral, and the words must still say the problem."
         },
         "label": {
           "type": "string",
@@ -2122,6 +2123,11 @@
           ],
           "default": "none",
           "note": "Clip lines to one line with an ellipsis instead of wrapping (e.g. long emails in a narrow rail wrap mid-word otherwise). secondary clips the secondary line; both also the primary. The full text stays in the row's accessible name and the hover title."
+        },
+        "flush": {
+          "type": "boolean",
+          "default": false,
+          "note": "Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 at xs and sm and 24 at md, and a plain icon at its own size. A selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card; the Card head or your own rules close the ends."
         },
         "sort": {
           "type": "enum",
@@ -9066,6 +9072,11 @@
           ],
           "default": "md"
         },
+        "fullWidth": {
+          "type": "boolean",
+          "default": false,
+          "note": "Stretches the track to its container and splits it into equal segments, e.g. a filter above a list pane."
+        },
         "disabled": {
           "type": "boolean",
           "default": false,
@@ -14420,7 +14431,7 @@
         "One URL per record (here #INV-1842; /invoices/:id in an app). The list with nothing open is its own URL",
         "At 640 and up the detail sits beside the list (layout-split); with nothing open it is kit Empty that says so and offers one neutral Button",
         "Below 640 the list fills the page and rows drill (interaction=\"drill\"); the record opens full page under a bar with a ghost Invoices back button to the list, and Back returns focus to that row",
-        "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\"), never colour alone"
+        "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\", in metaTone danger), never colour alone"
       ]
     },
     {

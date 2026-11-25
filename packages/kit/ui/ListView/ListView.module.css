@@ -408,3 +408,55 @@ button.body:focus {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* metaTone / iconTone danger: the words already say the problem ("17 days late"); the tone adds weight, never meaning. */
+.meta.danger,
+.leading.danger {
+  color: var(--status-danger-text);
+}
+
+/* flush: rows meet the list's edges, square, with a 1px rule between rows. The text keeps its inset
+   (16 at xs and sm, 24 at md). A selected row fills edge to edge and gets a 2px brand edge on its start side,
+   so the state shows as fill, edge and a heavier name. */
+.root.flush {
+  padding: 0;
+}
+
+.flush .row {
+  border-radius: 0;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+/* Rules sit between rows only, so a flush Card's head rule or the parent's own rule closes the ends. */
+.flush .item + .item > .row,
+.flush .group + .group {
+  border-block-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* A plain icon in a flush row sits at its own size, so a one-line row stays 44 high. */
+.flush .leading:has(> svg) {
+  width: auto;
+  height: auto;
+}
+
+.flush.md .row {
+  padding-inline: var(--space-6);
+}
+
+.flush .row[data-selected] {
+  box-shadow: inset var(--border-width-medium) 0 0 0 var(--border-brand);
+}
+
+.flush .groupHeader {
+  border-radius: 0;
+  padding-inline: var(--space-4);
+}
+
+.flush.md .groupHeader {
+  padding-inline: var(--space-6);
+}
+
+.flush .row[data-selected]:dir(rtl) {
+  box-shadow: inset calc(-1 * var(--border-width-medium)) 0 0 0 var(--border-brand);
+}

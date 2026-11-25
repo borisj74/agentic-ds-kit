@@ -54,6 +54,11 @@
       "values": ["sm", "md"],
       "default": "md"
     },
+    "fullWidth": {
+      "type": "boolean",
+      "default": false,
+      "note": "Stretches the track to its container and splits it into equal segments, e.g. a filter above a list pane."
+    },
     "disabled": {
       "type": "boolean",
       "default": false,

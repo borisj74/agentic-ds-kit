@@ -12,4 +12,5 @@ export type {
   ListViewDotTone,
   ListViewPriority,
   ListViewSort,
+  ListViewTone,
 } from "./ListView.types";

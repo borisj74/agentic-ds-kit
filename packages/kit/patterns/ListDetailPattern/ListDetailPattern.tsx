@@ -138,6 +138,8 @@ function InvoiceBody({
     id: payment.id,
     primary: narrow ? payment.short : payment.text,
     icon: payment.icon,
+    // A declined attempt says so in its text; the red icon only adds weight.
+    iconTone: payment.icon === "CircleX" ? "danger" : "neutral",
     meta: narrow ? payment.day : payment.at,
   }));
   // On the phone line items are plain rows, item and amount, with no column header.
@@ -188,6 +190,7 @@ function InvoiceBody({
           <ListView
             label={`Line items on ${invoice.id}`}
             size="xs"
+            flush
             items={lineItems}
           />
         ) : (
@@ -210,6 +213,7 @@ function InvoiceBody({
         <ListView
           label={`Payment history for ${invoice.id}`}
           size={narrow ? "xs" : "md"}
+          flush
           items={payments}
           empty={{ title: "No payment attempts yet." }}
         />
@@ -301,6 +305,8 @@ export function ListDetailPattern({
     secondary: narrow ? item.id : `${item.id} · due ${item.due}`,
     value: item.amount,
     meta: rowMeta(item),
+    // "N days late" says it in words; danger tone only adds weight.
+    metaTone: item.status === "overdue" ? "danger" : "neutral",
   }));
 
   const filterItems = (Object.keys(FILTER_LABEL) as Filter[]).map((key) => ({
@@ -446,6 +452,7 @@ export function ListDetailPattern({
         <SegmentedControl
           ariaLabel="Show invoices"
           size={narrow ? "md" : "sm"}
+          fullWidth
           items={filterItems}
           value={filter}
           onChange={(value) => setFilter(value as Filter)}
@@ -456,10 +463,13 @@ export function ListDetailPattern({
           Overdue · oldest first
         </p>
       ) : null}
-      <div className="list-detail-pattern__rows">
+      <div
+        className={`list-detail-pattern__rows${narrow ? " list-detail-pattern__rows--phone" : ""}`}
+      >
         <ListView
           label="Invoices"
           size="md"
+          flush
           items={items}
           selection={narrow ? "none" : "single"}
           selected={!narrow && openId ? [openId] : []}

@@ -31,10 +31,11 @@
     "One URL per record (here #INV-1842; /invoices/:id in an app). The list with nothing open is its own URL",
     "At 640 and up the detail sits beside the list (layout-split); with nothing open it is kit Empty that says so and offers one neutral Button",
     "Below 640 the list fills the page and rows drill (interaction=\"drill\"); the record opens full page under a bar with a ghost Invoices back button to the list, and Back returns focus to that row",
-    "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\"), never colour alone"
+    "Status is a Badge with an icon and a word, and lateness is text (\"17 days late\", in metaTone danger), never colour alone"
   ],
   "defaults": [
     "Demo is Northwind's invoices: Overdue filter, oldest first, with search by customer or invoice",
+    "Invoice rows and both record lists are flush ListViews (edge-to-edge rules; the selected row fills with a 2px brand edge), and the filter is a fullWidth SegmentedControl",
     "At 640 and up the list column carries the Invoices PageHeader and New invoice; the record pane has the id, a status Badge, the customer line, and Ask on the left with Download PDF and Retry payment (the one primary) on the right",
     "Record body: an amount strip, Line items (Table with a total) and Payment history (ListView, oldest first)",
     "Below 640 rows show the invoice number only; the record keeps item and amount in Line items and lists the latest payment first. Actions sit in the body; there is no sticky bottom bar"
