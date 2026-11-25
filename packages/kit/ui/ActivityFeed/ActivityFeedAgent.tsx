@@ -8,7 +8,7 @@ import { Button } from "../Button";
 import { Empty } from "../Empty";
 import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
-import { agentSteps, groupByDay, plural, timeLabel, undoLeft } from "./activityFeed.logic";
+import { agentSteps, groupByDay, plural, timeLabel, timeOf, undoLeft } from "./activityFeed.logic";
 import type { ActivityAgentEvent, ActivityFeedAgentProps } from "./ActivityFeed.types";
 import styles from "./ActivityFeed.module.css";
 import { nisthaAttr } from "../shared/inspect";
@@ -55,14 +55,30 @@ export function ActivityFeedAgent(props: ActivityFeedAgentProps) {
   const uid = useId();
   const titleId = `${uid}-title`;
   const leadId = `${uid}-lead`;
-  const [renderedAt] = useState(() => Date.now());
-  const now = nowProp ?? renderedAt;
+  const [tick, setTick] = useState(() => Date.now());
+  const now = nowProp ?? tick;
   const [announcement, setAnnouncement] = useState("");
   const pending = useRef<Set<string> | null>(null);
   const undoing = useRef<string | null>(null);
   const eventRefs = useRef(new Map<string, HTMLLIElement>());
 
   const shown = useMemo(() => agentSteps(events), [events]);
+
+  // Undo countdown: with no now prop, the time ticks once a minute (or at the nearest deadline, if
+  // sooner) while any Undo is showing, so "8 min left" counts down and Undo goes at its deadline.
+  // The timer stops once no Undo is left.
+  const nextDeadline = useMemo(() => {
+    const ends = events
+      .filter((event) => event.undo && !event.state)
+      .map((event) => timeOf({ at: event.undo!.until }))
+      .filter((end) => end > now);
+    return ends.length ? Math.min(...ends) : null;
+  }, [events, now]);
+  useEffect(() => {
+    if (nowProp !== undefined || nextDeadline === null) return;
+    const timer = setTimeout(() => setTick(Date.now()), Math.max(0, Math.min(60_000, nextDeadline - Date.now())));
+    return () => clearTimeout(timer);
+  }, [nowProp, nextDeadline, tick]);
   const days = useMemo(() => groupByDay(shown, now, locale, timeZone), [shown, now, locale, timeZone]);
   const showMore = Boolean(onLoadMore && hasMore);
 

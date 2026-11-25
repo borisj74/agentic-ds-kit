@@ -469,8 +469,8 @@
   gap: 0 var(--space-3);
 }
 
-/* Focus lands on a step only from code (after Undo or Load earlier days), so show it on :focus. */
-.agentEvent:focus {
+/* Focus lands on a step only from code (after Undo or Load earlier days); a pointer click shows no ring. */
+.agentEvent:focus-visible {
   outline: var(--border-focus-width) solid var(--focus-ring);
   outline-offset: var(--space-px);
 }

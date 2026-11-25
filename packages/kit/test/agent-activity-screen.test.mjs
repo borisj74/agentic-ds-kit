@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { register } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { after, before, describe, test } from "node:test";
+import { after, before, describe, mock, test } from "node:test";
 
 register(
   "data:text/javascript," +
@@ -208,6 +208,26 @@ describe("ActivityFeed variant=\"agent\"", () => {
     assert.match(row.textContent, /Undone/);
     assert.match(row.textContent, /Undone by you at 14:15\./);
     assert.equal(document.activeElement, row);
+  });
+
+  test("with no now prop, the deadline counts down each minute and Undo goes at its deadline", { skip }, async () => {
+    mock.timers.enable({ apis: ["setTimeout", "Date"], now: NOW });
+    try {
+      const root = await mount(h(ActivityFeed, { variant: "agent", events: steps(), timeZone: "UTC" }));
+      const undoButtons = () => [...root.querySelectorAll("button")].filter((b) => b.textContent.trim() === "Undo");
+      assert.match(root.textContent, /14:22 · 8 min left/);
+      await act(async () => mock.timers.tick(60_000));
+      assert.match(root.textContent, /14:22 · 7 min left/);
+      assert.equal(undoButtons().length, 1);
+      await act(async () => mock.timers.tick(7 * 60_000));
+      assert.equal(undoButtons().length, 0, "Undo is gone at its deadline");
+      assert.doesNotMatch(root.textContent, /min left/);
+      // No Undo left, so no timer is pending: another tick changes nothing.
+      await act(async () => mock.timers.tick(10 * 60_000));
+      assert.equal(undoButtons().length, 0);
+    } finally {
+      mock.timers.reset();
+    }
   });
 });
 

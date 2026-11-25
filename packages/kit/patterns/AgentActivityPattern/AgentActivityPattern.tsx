@@ -204,7 +204,7 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
     );
   } else {
     content = (
-      <Card className="agent-activity-pattern__card">
+      <Card className="agent-activity-pattern__card" size={narrow ? "sm" : "md"}>
         <ActivityFeed
           variant="agent"
           title={PAGE.title}
@@ -249,6 +249,7 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
         <PageHeader title={PAGE.title} subtitle={narrow ? subtitle : `Newest first. ${subtitle}.`} actions={ask} />
         <div className="agent-activity-pattern__filters">
           <FilterBar
+            size="sm"
             ariaLabel="Filter steps"
             filters={chips}
             maxVisible={narrow ? 2 : undefined}
