@@ -412,7 +412,9 @@ function NextChargeCard({ next, onChangeCard }: { next: NextCharge; onChangeCard
         </div>
         {next.lines.length > 0 ? (
           <>
-            <Divider orientation="vertical" />
+            <span className="billing-schedule-pattern__next-rule">
+              <Divider orientation="vertical" />
+            </span>
             <div className="billing-schedule-pattern__lines">
               {next.lines.map((line) => (
                 <div key={line.label} className="billing-schedule-pattern__line-item">
@@ -478,6 +480,7 @@ function ScheduleTable({
           }))}
           rowActions={(_row, index) => actions(charges[index])}
           rowActionsAs="icons"
+          stack
           footer={footer}
           emptyLabel={emptyLabel}
         />
