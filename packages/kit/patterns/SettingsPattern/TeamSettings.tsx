@@ -202,7 +202,7 @@ export function TeamSettings({
               columns={COLUMNS}
               emptyLabel="No members match your search or role."
               rows={members.map((member) => ({
-                member: <MemberCell member={member} />,
+                member: <MemberCell name={member.name} member={member} />,
                 role:
                   member.role === "owner" ? (
                     "Owner"
@@ -275,12 +275,13 @@ export function TeamSettings({
   );
 }
 
-function MemberCell({ member }: { member: Member }) {
+/** `name` names the row, so the Table's row menu reads "Actions for Marco Li". */
+function MemberCell({ name, member }: { name: string; member: Member }) {
   return (
     <span className="settings-pattern__member">
-      <Avatar name={member.name} size="sm" />
+      <Avatar name={name} size="sm" />
       <span className="settings-pattern__two-line">
-        <span className="settings-pattern__strong">{member.you ? `${member.name} (you)` : member.name}</span>
+        <span className="settings-pattern__strong">{member.you ? `${name} (you)` : name}</span>
         <span className="settings-pattern__caption">{member.detail}</span>
       </span>
     </span>

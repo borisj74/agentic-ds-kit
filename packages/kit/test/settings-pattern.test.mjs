@@ -285,4 +285,15 @@ describe("SettingsPattern", { skip }, () => {
     await team.unmount();
     narrow = false;
   });
+  test("wide Team: seats, role filter, and row menus named per member", async () => {
+    narrow = false;
+    const view = await render({ section: "team" });
+    const main = view.container.querySelector("main");
+    assert.match(main.textContent, /12 of 15 seats[\s\S]*3 free · 1 held by a pending invite/);
+    assert.match(main.textContent, /11 members · 1 invite/);
+    assert.ok(main.querySelector('[aria-label="Actions for Marco Li"]'), "row menu named for the member");
+    assert.ok(main.querySelector('[aria-label="Role for Marco Li"]'), "role Select named for the member");
+    assert.match(main.textContent, /Showing 5 of 12/);
+    await view.unmount();
+  });
 });

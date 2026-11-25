@@ -34,8 +34,8 @@ const YOU_SCOPE = "Personal setting · only changes it for you";
 /** Settings sections in nav order: the workspace group, then the you group. API waits for its own board. */
 export const SECTIONS: SettingsSectionMeta[] = [
   { id: "general", group: "workspace", label: "General", icon: Building2, scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "Northwind Studio Ltd · USD" },
-  { id: "billing", group: "workspace", label: "Billing", icon: "CreditCard", scope: WORKSPACE_SCOPE, editors: "owners and billing can edit", description: "Next charge $348.00 on 1 Dec" },
-  { id: "team", group: "workspace", label: "Team", icon: "Users", scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "11 members · 1 invite" },
+  { id: "billing", group: "workspace", label: "Billing", icon: "CreditCard", scope: WORKSPACE_SCOPE, editors: "owners and billing admins can change it", description: "Next charge $348.00 on 1 Dec" },
+  { id: "team", group: "workspace", label: "Team", icon: "Users", scope: WORKSPACE_SCOPE, editors: "owners and admins can invite and change roles", description: "11 members · 1 invite" },
   { id: "integrations", group: "workspace", label: "Integrations", icon: "Plug", scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "3 connected" },
   { id: "security", group: "workspace", label: "Security", icon: ShieldCheck, scope: WORKSPACE_SCOPE, editors: "owners can change it", description: "Okta SSO · two-step required" },
   { id: "profile", group: "you", label: "Profile", icon: "User", scope: YOU_SCOPE, description: "Priya Shah · Owner" },
