@@ -82,7 +82,7 @@ export function AppNavDoc() {
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Grouped catalog</h2>
-              <div className={demo.exampleCanvas}>
+              <div className={`${styles.exampleCanvas} ${demo.exampleCanvas}`}>
                 <div className={demo.nav}>
                   <AppNav title="Nistha" groups={PLAYGROUND_APPNAV_DEMO_GROUPS} />
                 </div>
@@ -96,7 +96,7 @@ export function AppNavDoc() {
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Flat list</h2>
-              <div className={demo.exampleCanvas}>
+              <div className={`${styles.exampleCanvas} ${demo.exampleCanvas}`}>
                 <div className={demo.nav}>
                   <AppNav title="Sprint 24" items={FLAT_ITEMS} />
                 </div>
@@ -119,7 +119,7 @@ export function AppNavDoc() {
             </section>
             <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Variables</h2>
-              <div className={demo.exampleCanvas}>
+              <div className={`${styles.exampleCanvas} ${demo.exampleCanvas}`}>
                 <div className={demo.nav}>
                   <AppNav title="Sprint 24" items={FLAT_ITEMS} style={THEMED_STYLE} />
                 </div>
