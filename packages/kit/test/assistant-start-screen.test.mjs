@@ -34,6 +34,7 @@ const out = mkdtempSync(join(kitDir, ".assistant-start-test-"));
 
 let h;
 let act;
+let useState;
 let render;
 let createRoot;
 let dom;
@@ -78,6 +79,7 @@ function transpile(folder, file) {
 before(async () => {
   const React = await import("react");
   h = React.createElement;
+  useState = React.useState;
   act = React.act;
   ({ renderToStaticMarkup: render } = await import("react-dom/server"));
   if (!skip) {
@@ -222,6 +224,46 @@ describe("Chat suggestionLayout, summary and composerLabel", () => {
     const button = [...container.querySelectorAll("button")].find((b) => b.textContent.includes("Why did MRR drop"));
     await click(button);
     assert.deepEqual(sent, ["Why did MRR drop 3.1% in October?"]);
+  });
+});
+
+describe("Chat focus after a send from the top composer", () => {
+  function Thread(props) {
+    const [messages, setMessages] = useState([]);
+    return h(Chat, {
+      greeting: "Hi",
+      composerLabel: "Ask the billing assistant",
+      suggestions,
+      suggestionLayout: "grid",
+      ...props,
+      messages,
+      onSend: (m) => setMessages((list) => [...list, { role: "user", content: m }]),
+    });
+  }
+
+  test("typing in the top composer and pressing Enter leaves focus on the foot input", { skip }, async () => {
+    const container = await mount(h(Thread));
+    const input = container.querySelector("input");
+    input.focus();
+    await type(input, "Which invoices are late?");
+    await act(async () => {
+      const enter = new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
+      if (input.dispatchEvent(enter)) input.form.requestSubmit();
+    });
+    assert.match(container.textContent, /Which invoices are late\?/);
+    const foot = container.querySelector("form input");
+    assert.ok(container.innerHTML.indexOf("Which invoices") < container.innerHTML.indexOf("<form"), "composer moved to the foot");
+    assert.equal(document.activeElement, foot);
+  });
+
+  test("clicking a grid suggestion leaves focus on the foot input", { skip }, async () => {
+    const container = await mount(h(Thread));
+    const button = [...container.querySelectorAll("button")].find((b) => b.textContent.includes("Why did MRR drop"));
+    button.focus();
+    await click(button);
+    assert.match(container.textContent, /Why did MRR drop/);
+    assert.equal(container.querySelector('[role="group"][aria-label="Suggested prompts"]'), null);
+    assert.equal(document.activeElement, container.querySelector("form input"));
   });
 });
 

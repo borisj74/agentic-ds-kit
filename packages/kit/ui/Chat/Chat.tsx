@@ -259,6 +259,9 @@ export function Chat({
   const labels = useKitLabels();
   const [internalValue, setInternalValue] = useState(defaultValue);
   const threadRef = useRef<HTMLDivElement>(null);
+  const composerRef = useRef<HTMLFormElement>(null);
+  // A send from the top composer moves the composer to the foot; focus follows it.
+  const refocusAtFoot = useRef(false);
   const inputId = useId();
   const contextId = useId();
   const draft = value ?? internalValue;
@@ -283,6 +286,15 @@ export function Chat({
     thread.scrollTop = thread.scrollHeight;
   }, [isThinking, messages.length, thinkingSteps?.length]);
 
+  useEffect(() => {
+    if (composerTop || !refocusAtFoot.current) return;
+    refocusAtFoot.current = false;
+    const form = composerRef.current;
+    const target =
+      form?.querySelector<HTMLElement>("input:not(:disabled)") ?? form?.querySelector<HTMLElement>("button:not(:disabled)");
+    target?.focus();
+  }, [composerTop]);
+
   function updateDraft(nextValue: string) {
     if (value === undefined) setInternalValue(nextValue);
     onValueChange?.(nextValue);
@@ -291,6 +303,7 @@ export function Chat({
   function sendMessage(message = draft) {
     const nextMessage = message.trim();
     if (!nextMessage || locked) return;
+    if (composerTop) refocusAtFoot.current = true;
     onSend?.(nextMessage);
     updateDraft("");
   }
@@ -360,6 +373,7 @@ export function Chat({
 
   const composer = (
     <form
+      ref={composerRef}
       className={cx(styles.composer, composerTop && styles.composerTop)}
       onSubmit={(event) => {
         event.preventDefault();

@@ -13,7 +13,9 @@
     "Asking about one part of a screen, like a chart card, with context naming it",
     "A tab of a work panel or Drawer that already has its own title and edge — embedded",
     "An assistant start page whose data is still loading — loading",
-    "An assistant start page with a few short prompts as buttons — suggestionLayout grid"
+    "An assistant start page with a few short prompts as buttons — suggestionLayout grid",
+    "A start page that shows the key figures the assistant reads, in one mono line under the intro — summary",
+    "A start page whose composer is the main action, with a visible label above the suggestions — composerLabel"
   ],
   "doNotUseWhen": [
     "A blocking overlay — use Modal",
@@ -265,7 +267,11 @@
     "Do not use raw hex",
     "Do not use product-specific, billing-platform, or copilot wording in copy",
     "Do not hide or restyle the Chat header from the host — use embedded",
-    "Do not use embedded for a standalone chat card; it has no title on screen"
+    "Do not use embedded for a standalone chat card; it has no title on screen",
+    "Do not use loading for a thinking answer — use isThinking; loading is for the data the assistant reads, before anything can be asked",
+    "Do not use suggestionLayout grid for long or many prompts, or when the hint matters — keep list (LinkList rows with hints)",
+    "Do not put status, sentences or a second intro in summary — it is one line of figures; status still needs words",
+    "Do not add a separate Field or label beside Chat for the composer — pass composerLabel"
   ],
   "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />\n\n<Chat title=\"Billing assistant\" embedded loading greeting=\"Good morning, Maya\" intro=\"Reading Stripe and QuickBooks\" onSend={handleSend} />"
 }

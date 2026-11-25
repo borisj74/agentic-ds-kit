@@ -2043,7 +2043,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed 96 lane at the row end; once any row has one, rows without one keep the empty lane, so badges, values and verbs line up across rows. At size lg below --grid-breakpoint-sm the primaryAction drops to a full-width line under its row; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. Both default to neutral, and the words must still say the problem."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed 96 lane at the row end; once any row has one, rows without one keep the empty lane, so badges, values and verbs line up across rows. When primaryAction is set, every entry in actions goes in the kit DropdownMenu. At size lg below --grid-breakpoint-sm the primaryAction drops to a full-width line under its row, and below --grid-breakpoint-sm the empty lane on rows without one is hidden at every size. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. Both default to neutral, and the words must still say the problem."
         },
         "label": {
           "type": "string",
@@ -4884,7 +4884,9 @@
         "Asking about one part of a screen, like a chart card, with context naming it",
         "A tab of a work panel or Drawer that already has its own title and edge — embedded",
         "An assistant start page whose data is still loading — loading",
-        "An assistant start page with a few short prompts as buttons — suggestionLayout grid"
+        "An assistant start page with a few short prompts as buttons — suggestionLayout grid",
+        "A start page that shows the key figures the assistant reads, in one mono line under the intro — summary",
+        "A start page whose composer is the main action, with a visible label above the suggestions — composerLabel"
       ],
       "doNotUseWhen": [
         "A blocking overlay — use Modal",
@@ -4899,7 +4901,11 @@
         "Do not use raw hex",
         "Do not use product-specific, billing-platform, or copilot wording in copy",
         "Do not hide or restyle the Chat header from the host — use embedded",
-        "Do not use embedded for a standalone chat card; it has no title on screen"
+        "Do not use embedded for a standalone chat card; it has no title on screen",
+        "Do not use loading for a thinking answer — use isThinking; loading is for the data the assistant reads, before anything can be asked",
+        "Do not use suggestionLayout grid for long or many prompts, or when the hint matters — keep list (LinkList rows with hints)",
+        "Do not put status, sentences or a second intro in summary — it is one line of figures; status still needs words",
+        "Do not add a separate Field or label beside Chat for the composer — pass composerLabel"
       ],
       "props": {
         "title": {

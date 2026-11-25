@@ -516,11 +516,12 @@ button.body:focus {
     flex: 1 0 100%;
   }
 
-  .lg .primaryActionSlot:empty {
+  /* Narrow screens drop the empty lane at every size so rows keep their width. */
+  .primaryActionSlot:empty {
     display: none;
   }
 
-  .lg .actions:has(> .primaryActionSlot:empty:only-child) {
+  .actions:has(> .primaryActionSlot:empty:only-child) {
     display: none;
   }
 
