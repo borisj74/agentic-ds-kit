@@ -14266,10 +14266,10 @@
     {
       "id": "dashboard",
       "group": "pattern",
-      "intent": "Revenue overview for a subscription business inside the app-shell example (inset): a title with Tabs and Export, period / granularity / compare controls, a dismissible one-sentence summary, a selectable metric strip that picks the main chart's metric, a main LineChart with a labelled reference line (and the previous period dashed when compare is on), MRR movements, revenue by plan, retention by signup month, top plans, accounts that might churn, and a Needs attention rail. Every card has an Ask button that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
+      "intent": "A billing home for a subscription business inside the app-shell example (inset): a title with Export and one solid New invoice, and two Tabs. Overview: four selectable KPIs (MRR, Collected, Overdue, Failed payments) that pick the revenue chart's metric, the revenue LineChart with a labelled reference line and a title that states the finding, a Needs attention rail, and the oldest overdue invoices. Revenue: the period / granularity / compare controls, a dismissible one-sentence summary, MRR movements, revenue by plan, retention by signup month and top plans. Every Overview card has a labelled Ask in its footer that opens the work panel's Ask tab (kit Chat with a context chip); the panel's other tab is What changed.",
       "useWhen": [
-        "An overview page where a few headline numbers each open a closer look in one main chart",
-        "Recurring revenue, subscriptions or any metric set with this period against the last",
+        "A home page where a few headline numbers each open a closer look in one main chart, next to the work that needs a person today",
+        "Billing, recurring revenue or any metric set with this period against the last",
         "A dashboard where people should be able to ask about one card without leaving the page"
       ],
       "doNotUseWhen": [
@@ -14278,18 +14278,19 @@
         "Live operations status that changes by the second — use the agent blocks (RunningNow, AgentMonitor)"
       ],
       "doNot": [
-        "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard sparkline, sparklineVariant and meter, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
+        "Do not build a sparkline, metric tile, reference line or context chip locally; Scorecard, Scoreboard selectable, LineChart referenceLine and Chat context cover them",
         "Do not colour chart series by status; losses in MRR movements are negative values, not red bars",
-        "Do not put more than five tiles in the metric strip",
-        "Do not add a second solid primary Button",
+        "Do not put more than five tiles in the KPI strip",
+        "Do not add a second solid primary Button; card actions are outline",
+        "Do not reorder the rail with CSS order or a second copy; it leads the source and the grid places it",
         "Do not open a Modal for Ask; use the work panel (a right Drawer when narrow)"
       ],
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts, sparklines, metric tiles)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "Chart series take the chart palette (--chart-1 to --chart-6, set by the charts); status colours only where they mean something (past due, churn, a bad delta)",
+        "Chart series take the chart palette (--chart-1 to --chart-6, set by the charts); status colours only where they mean something (overdue, a failed payment, a bad delta)",
         "Every number uses tabular figures (the page root sets font-variant-numeric: tabular-nums)",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view; this page has none (Export is outline), so Chat's send stays solid",
+        "Exactly one appearance=\"solid\" mode=\"primary\" Button per view: New invoice in the header. Export and every card action are outline",
         "Do not restyle kit components; change them through their props, slots, and tokens",
         "Render inside a main landmark; nav stays reachable on small screens (the app shell's Drawer) and the work panel opens as its right Drawer when narrow"
       ],
@@ -14297,7 +14298,7 @@
         "metrics": {
           "type": "array",
           "required": false,
-          "note": "DashboardMetric[]: { id, label, value, delta, deltaTone, sparkline, series: { current, previous }, reference: { value, label, highlight }, format, question }. Default: the demo data for period and granularity. An empty array is the no-data state: every card shows kit Empty."
+          "note": "DashboardMetric[]: { id, label, value, delta, deltaTone, sparkline, series: { current, previous }, reference: { value, label, highlight }, format, question }. Default: the demo KPIs for period and granularity (MRR, Collected in November, Overdue · 14 invoices, Failed payments · 3). The tiles show label, value and delta (the arrow follows the delta's sign) with what it compares to; sparkline is not drawn here. The chart card's title is built from the last point and reference (e.g. MRR is $7.4k below the $420k target), so name the reference with one word first: Target, Goal or Limit. An empty array is the no-data state: every card shows kit Empty."
         },
         "selectedMetric": {
           "type": "string",
@@ -14307,7 +14308,7 @@
         "compare": {
           "type": "boolean",
           "required": false,
-          "note": "Controlled: the previous period as a dashed series in the main chart. Uncontrolled with defaultCompare (default false); onCompareChange(compare) fires from the Switch."
+          "note": "Controlled: the previous period as a dashed series in the Overview chart. The Switch sits with the period and granularity controls on the Revenue tab. Uncontrolled with defaultCompare (default false); onCompareChange(compare) fires from the Switch."
         },
         "period": {
           "type": "enum",
@@ -14317,7 +14318,7 @@
             "12m"
           ],
           "required": false,
-          "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
+          "note": "Controlled period (Last 30 days, 3 months, 12 months), the presets of the period DateRangePicker on the Revenue tab. It sets how far back the Overview chart and the Revenue charts reach. Uncontrolled with defaultPeriod (default 3m); onPeriodChange(period). A custom range shows its dates in the picker and the demo data of the nearest period."
         },
         "granularity": {
           "type": "enum",
@@ -14332,17 +14333,17 @@
         "insight": {
           "type": "node | null",
           "required": false,
-          "note": "The one-sentence summary in a kit InsightCard (tone info) with Dismiss. Default: built from the data, key numbers in <strong>. null hides it; onInsightDismiss fires on Dismiss."
+          "note": "The one-sentence summary at the top of the Revenue tab, in a kit InsightCard (tone info) with Dismiss. Default: built from the data, key numbers in <strong>. null hides it; onInsightDismiss fires on Dismiss."
         },
         "rail": {
           "type": "boolean",
           "default": true,
-          "note": "Needs attention (failed payments, expiring cards) as a kit ListView in a Card. Wide: beside the charts in layout-split--primary, with the accounts table full width below. Narrow (the shell's --grid-breakpoint-md): under the table."
+          "note": "Needs attention (failed payments, expiring cards) as a kit ListView in a Card. It leads the source order: the first card on a phone, and from the shell's --grid-breakpoint-md the grid places it beside the chart, under the KPIs, with the overdue invoices full width below. false: the chart runs full width."
         },
         "loading": {
           "type": "boolean",
           "default": false,
-          "note": "Every card shows kit Skeleton in its place; the summary hides."
+          "note": "Every card shows kit Skeleton in its place (the invoices Table its loading rows); the summary hides."
         },
         "panel": {
           "type": "object",

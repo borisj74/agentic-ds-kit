@@ -6,7 +6,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The Overview tab: controls, summary, metric strip, then the cards. */
+/* Each tab's column of cards. */
 .dashboard-pattern__body {
   display: grid;
   gap: var(--space-gap-lg);
@@ -14,14 +14,47 @@
   min-width: 0;
 }
 
-.dashboard-pattern__stack {
-  display: grid;
-  gap: var(--space-gap-lg);
+/* Overview, narrow: one column in source order (Needs attention, KPIs, overdue invoices, chart). */
+.dashboard-pattern__home > * {
   min-width: 0;
 }
 
-.dashboard-pattern__split > * {
-  min-width: 0;
+/* Overview, wide: the grid places the rail beside the chart, under the KPIs, so the source order
+   (rail first) never has to change. */
+.dashboard-pattern__home--rail {
+  grid-template-columns: minmax(0, 1fr) var(--layout-rail);
+  grid-template-areas:
+    "kpis kpis"
+    "chart rail"
+    "table table";
+  align-items: start;
+}
+
+/* Overview, wide without the rail: the chart follows the KPIs, and the invoices close the page. */
+.dashboard-pattern__home--wide {
+  grid-template-areas:
+    "kpis"
+    "chart"
+    "table";
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-rail {
+  grid-area: rail;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-kpis,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-kpis {
+  grid-area: kpis;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-chart,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-chart {
+  grid-area: chart;
+}
+
+.dashboard-pattern__home--rail > .dashboard-pattern__area-table,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-table {
+  grid-area: table;
 }
 
 .dashboard-pattern__controls {
@@ -40,11 +73,6 @@
 .dashboard-pattern__period {
   inline-size: var(--layout-metrics-min);
   max-inline-size: 100%;
-}
-
-/* Card bodies with no padding of their own (flush cards) get the card inset back for a skeleton or Empty. */
-.dashboard-pattern__pad {
-  padding: var(--space-inset-md);
 }
 
 /* Holds the main chart and its summary, so the visually hidden summary stays inside the scroll area. */

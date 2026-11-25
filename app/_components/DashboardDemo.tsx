@@ -142,7 +142,7 @@ function dashboardViewProps(view?: string): DashboardPatternProps {
     case "compare":
       return { defaultCompare: true };
     case "metric":
-      return { defaultSelectedMetric: "churn", defaultCompare: true };
+      return { defaultSelectedMetric: "overdue", defaultCompare: true };
     case "empty":
       return { metrics: [] };
     case "loading":

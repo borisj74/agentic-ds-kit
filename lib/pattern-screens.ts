@@ -110,7 +110,7 @@ export function isScreenSlug(slug: string): slug is ScreenSlug {
 
 /** One line per pattern page: the index card description and the page lead. */
 export const PATTERN_BLURBS: Record<PatternSlug, string> = {
-  dashboard: "Revenue overview: metric strip that drives the main chart, movements, plans, retention, accounts that might churn, and an Ask panel.",
+  dashboard: "Billing home: four KPIs that drive the revenue chart, Needs attention, overdue invoices, a Revenue tab of analysis charts, and an Ask panel.",
   "settings-form": "Grouped settings fields with save and cancel.",
   "list-detail": "A list of records beside the one you selected.",
   "empty-first-run": "First-run empty state with one primary action.",
