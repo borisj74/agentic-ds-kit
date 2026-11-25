@@ -30,15 +30,19 @@ import {
   typeCounts,
   visibleEvents,
 } from "./activityFeed.logic";
-import type { ActivityEvent, ActivityFeedFilters, ActivityFeedProps } from "./ActivityFeed.types";
+import type { ActivityEvent, ActivityFeedEventProps, ActivityFeedFilters, ActivityFeedProps } from "./ActivityFeed.types";
 import styles from "./ActivityFeed.module.css";
 import { nisthaAttr } from "../shared/inspect";
+import { ActivityFeedAgent } from "./ActivityFeedAgent";
 
 export type {
   ActivityActor,
+  ActivityAgentEvent,
   ActivityEvent,
   ActivityEventType,
   ActivityFeedFilters,
+  ActivityFeedAgentProps,
+  ActivityFeedEventProps,
   ActivityFeedProps,
   ActivityFeedVariant,
 } from "./ActivityFeed.types";
@@ -64,8 +68,14 @@ function SkeletonRows({ count, label }: { count: number; label: string }) {
  * Block: what happened across a workspace. Events from people and agents, newest first and grouped
  * by day, filtered by type and by person, with Open and Reply on each event and Load more at the
  * end. Each event reads as one sentence; events that Load more brings in are announced politely.
+ * variant="agent" shows an agent's steps with Undo, Undone and Final instead.
  */
 export function ActivityFeed(props: ActivityFeedProps) {
+  if (props.variant === "agent") return <ActivityFeedAgent {...props} />;
+  return <EventFeed {...props} />;
+}
+
+function EventFeed(props: ActivityFeedEventProps) {
   const {
     events,
     filters: filtersProp,

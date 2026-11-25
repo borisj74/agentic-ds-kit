@@ -1,4 +1,4 @@
-import type { ActivityActor, ActivityEvent, ActivityEventType, ActivityFeedFilters } from "./ActivityFeed.types";
+import type { ActivityActor, ActivityAgentEvent, ActivityEvent, ActivityEventType, ActivityFeedFilters } from "./ActivityFeed.types";
 
 export const ACTIVITY_TYPES: ActivityEventType[] = ["comment", "change", "run", "member", "billing"];
 
@@ -24,7 +24,7 @@ export const NO_FILTERS: ActivityFeedFilters = { types: [], people: [] };
 
 const DAY = 86_400_000;
 
-export function timeOf(event: ActivityEvent): number {
+export function timeOf(event: { at: number | string }): number {
   return typeof event.at === "number" ? event.at : Date.parse(event.at);
 }
 
@@ -83,15 +83,20 @@ export function timeLabel(time: number, locale = "en-GB", timeZone?: string): st
   return new Intl.DateTimeFormat(locale, { timeZone, hour: "2-digit", minute: "2-digit" }).format(time);
 }
 
-export interface ActivityDay {
+export interface ActivityDay<T extends { at: number | string } = ActivityEvent> {
   key: string;
   label: string;
-  events: ActivityEvent[];
+  events: T[];
 }
 
 /** Sorted events in day groups, newest day first. */
-export function groupByDay(events: ActivityEvent[], now: number, locale?: string, timeZone?: string): ActivityDay[] {
-  const days: ActivityDay[] = [];
+export function groupByDay<T extends { at: number | string }>(
+  events: T[],
+  now: number,
+  locale?: string,
+  timeZone?: string,
+): ActivityDay<T>[] {
+  const days: ActivityDay<T>[] = [];
   for (const event of events) {
     const time = timeOf(event);
     const key = dayKey(time, timeZone);
@@ -155,4 +160,20 @@ export function loadedMessage(added: number, addedShown: number, filtered: boole
   const head = `${plural(added, "more event")} loaded`;
   if (!filtered || addedShown === added) return `${head}.${end}`;
   return `${head}, ${addedShown} ${addedShown === 1 ? "matches" : "match"} the filters.${end}`;
+}
+
+/** variant="agent": steps newest first. Ties keep their given order. */
+export function agentSteps(events: ActivityAgentEvent[]): ActivityAgentEvent[] {
+  return events
+    .map((event, index) => ({ event, index }))
+    .sort((a, b) => timeOf(b.event) - timeOf(a.event) || a.index - b.index)
+    .map(({ event }) => event);
+}
+
+/** The Undo deadline: "14:22 · 8 min left", rounded up to the minute. Null once it has passed. */
+export function undoLeft(until: number | string, now: number, locale = "en-GB", timeZone?: string): string | null {
+  const end = typeof until === "number" ? until : Date.parse(until);
+  if (!(end > now)) return null;
+  const minutes = Math.ceil((end - now) / 60_000);
+  return `${timeLabel(end, locale, timeZone)} · ${minutes} min left`;
 }

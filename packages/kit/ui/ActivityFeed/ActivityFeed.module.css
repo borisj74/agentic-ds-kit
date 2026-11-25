@@ -422,3 +422,199 @@
     padding: var(--space-4);
   }
 }
+
+/* agent: an agent's steps on the shared rail (as history), with an Avatar marker in place of the dot.
+   No frame of its own: it sits in the page's Card. Days are split by a divider. */
+.agent {
+  gap: var(--space-4);
+}
+
+.agentDays {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.agentDay {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.agentDay + .agentDay {
+  padding-block-start: var(--space-4);
+  border-block-start: var(--border-width-thin) solid var(--line-default);
+}
+
+.agentDayTitle {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-secondary);
+}
+
+.agentList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Time column, rail, copy, end column. */
+.agentEvent {
+  display: grid;
+  align-items: start;
+  grid-template-columns: var(--space-10) var(--space-6) minmax(0, 1fr) auto;
+  grid-template-areas: "time rail body end";
+  gap: 0 var(--space-3);
+}
+
+/* Focus lands on a step only from code (after Undo or Load earlier days), so show it on :focus. */
+.agentEvent:focus {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-px);
+}
+
+.agentTime {
+  grid-area: time;
+  /* The 20px lines sit centred on the 24px Avatar. */
+  padding-block-start: var(--space-px);
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.agentRail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--space-1);
+}
+
+.agentBody {
+  grid-area: body;
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  min-width: 0;
+  padding-block: var(--space-px) var(--space-5);
+}
+
+.agentEvent:last-child .agentBody {
+  padding-block-end: 0;
+}
+
+.agentSentence {
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-fg);
+  overflow-wrap: anywhere;
+}
+
+/* The Undone Badge says it in words; the strike and the muted ink only back it up. */
+.agentStruck {
+  text-decoration: line-through;
+  color: var(--text-fg-muted);
+}
+
+.agentMeta,
+.agentReason {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.agentReason {
+  color: var(--text-secondary);
+}
+
+/* The time has its own column when wide; it joins the meta line when narrow. */
+.agentMetaTime {
+  display: none;
+}
+
+.agentMetaTime time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.agentEnd {
+  grid-area: end;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: var(--space-2);
+}
+
+.agentDeadline {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The note sits beside the Badge only when narrow; wide, it is the copy's last line. */
+.agentNote {
+  display: none;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-fg-muted);
+}
+
+/* Narrow: no time column; time leads the meta line; Undo with its deadline, or the Badge with its
+   note, moves under the copy. 40rem is --grid-breakpoint-sm. */
+@container activityfeed (max-width: 40rem) {
+  .agentEvent {
+    grid-template-columns: var(--space-6) minmax(0, 1fr);
+    grid-template-areas:
+      "rail body"
+      "rail end";
+  }
+
+  .agentTime {
+    display: none;
+  }
+
+  .agentMetaTime {
+    display: inline;
+  }
+
+  .agentEvent:has(.agentEnd) .agentBody {
+    padding-block-end: 0;
+  }
+
+  .agentEnd {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block: var(--space-2) var(--space-5);
+  }
+
+  .agentEvent:last-child .agentEnd {
+    padding-block-end: 0;
+  }
+
+  /* An undone or final step with a note folds it into the Badge line. */
+  .agentFolds .agentReason {
+    display: none;
+  }
+
+  .agentFolds .agentNote {
+    display: inline;
+  }
+
+  .agent .more > * {
+    flex: 1;
+  }
+}

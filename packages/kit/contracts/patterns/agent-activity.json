@@ -1,0 +1,45 @@
+{
+  "id": "agent-activity",
+  "status": "stable",
+  "level": "template",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add agent-activity",
+  "import": "import { AgentActivityPattern } from \"@/components/patterns/agent-activity\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/agent-activity/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
+  "intent": "What your agents did, as a page: AppHeader, a PageHeader with an undo count and Ask, a FilterBar (Agent, Allowed by, App, Clear all) with the step count at the row end, then one Card holding the kit ActivityFeed with variant=\"agent\": day groups on the rail with Avatar markers, a sentence, meta and reason per step, Undo with its deadline, Undone and Final steps, and Load earlier days. Undo strikes the step and a kit Toast confirms it. Empty (filtered) and load-error states. Below 640 a Menu IconButton in AppHeader opens the app's nav in a Drawer, the FilterBar shows two chips and +1, and the feed folds its time and end columns into the copy.",
+  "contains": [
+    "activityfeed",
+    "alert",
+    "appheader",
+    "avatar",
+    "button",
+    "card",
+    "checkbox",
+    "drawer",
+    "empty",
+    "filterbar",
+    "iconbutton",
+    "pageheader",
+    "sidenav",
+    "toast"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (step rows, rails, undo buttons, badges, filter chips, toasts)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "No appearance=\"solid\" mode=\"primary\" Button on this page; Ask, Undo and Load earlier days are outline neutral",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 its Menu IconButton (Open navigation) opens the nav in a kit Drawer",
+    "The steps are one kit ActivityFeed with variant=\"agent\"; filter them in the page with a kit FilterBar and pass the filtered steps in",
+    "Undo is offered only until its deadline, which shows beside it; after Undo the step shows Undone and a Toast says what stopped",
+    "A step that can't be undone says Final and what to do instead; status is always a word (Undone, Final, On its own, Approved by), never colour alone"
+  ],
+  "defaults": [
+    "Demo is Northwind's Collections and Invoicing agents over one week: 9 of 12 steps match, one can still be undone, one was undone, the rest are final",
+    "The first page is the two newest days with a matching step; Load earlier days brings the rest",
+    "The load error is a kit Alert (danger) with an outline Retry in place of the Card; the filtered empty state is a kit Empty with Clear filters",
+    "Below 640 the subtitle drops \"Newest first.\", the count and Clear all hide, more than one picked value shows as a count, and the note on undone and final steps shortens to sit beside its Badge"
+  ],
+  "snippet": "<AgentActivityPattern view=\"default\" />"
+}
