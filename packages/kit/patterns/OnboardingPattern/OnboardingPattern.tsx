@@ -2,39 +2,39 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { AppHeader } from "../../ui/AppHeader";
-import { Badge } from "../../ui/Badge";
 import { BlurCrossfade } from "../../ui/BlurCrossfade";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
-import { Empty } from "../../ui/Empty";
 import { Field } from "../../ui/Field";
 import { Input } from "../../ui/Input";
 import { ListView } from "../../ui/ListView";
+import type { ListViewItem } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
 import { ProgressSteps } from "../../ui/ProgressSteps";
+import type { ProgressStepsItem } from "../../ui/ProgressSteps";
 import { Select } from "../../ui/Select";
-import { SetupGuide } from "../../ui/SetupGuide";
-import { SideNavBrand, SideNavFooter, SideNavHeader, SideNavRoot, SideNavSlot } from "../../ui/SideNav";
-import type { SetupTask } from "../../ui/SetupGuide";
-import { Spinner } from "../../ui/Spinner";
+import { SideNavBrand, SideNavHeader, SideNavRoot, SideNavSlot } from "../../ui/SideNav";
+import { TileGroup } from "../../ui/TileGroup";
 import {
   COUNTRY_OPTIONS,
   CURRENCY_OPTIONS,
+  DEFAULT_VALUES,
+  FIRST_INVOICE,
+  PLANS,
   PRODUCT,
-  SETUP_TASKS,
   STEPS,
-  TEAM_SIZE_OPTIONS,
-  WELCOME_ITEMS,
-  WORKSPACE_DEFAULTS,
+  TERMS_OPTIONS,
+  type BillingValues,
+  type BusinessValues,
   type OnboardingStep,
-  type WorkspaceValues,
+  type OnboardingValues,
 } from "./onboarding-data";
 import "./OnboardingPattern.css";
 
-export type { OnboardingStep, WorkspaceValues };
+export type { BillingValues, BusinessValues, OnboardingStep, OnboardingValues };
 
-/** Workspace step: ready to fill, showing the validation error, or creating the workspace. */
-export type WorkspaceState = "idle" | "error" | "submitting";
+/** Review step: ready to confirm, showing a validation error, or creating the account. */
+export type ConfirmState = "idle" | "error" | "submitting";
 
 /*
  * Narrow = below --grid-breakpoint-md, read at runtime like the app-shell example. The Stage
@@ -61,36 +61,62 @@ export interface OnboardingPatternProps {
   defaultStep?: OnboardingStep;
   onStepChange?: (step: OnboardingStep) => void;
   /**
-   * Force the workspace step's state (docs, tests). Left out, the pattern validates the name
-   * itself and shows "submitting" while onCreateWorkspace's promise is pending.
+   * Force the Review step's state (docs, tests). "error" clears the business name so Review has a step to fix. Left out,
+   * the pattern validates each step itself and shows "submitting" while onConfirm's promise is pending.
    */
-  workspaceState?: WorkspaceState;
-  /** Create the workspace. Return a promise to keep the submitting state until it settles. */
-  onCreateWorkspace?: (values: WorkspaceValues) => void | Promise<void>;
-  /** Setup Guide task action (Connect, Import…) on the Connect step. */
-  onTaskAction?: (taskId: string) => void;
+  confirmState?: ConfirmState;
+  /** Create the account from every step's values. Return a promise to keep the submitting state until it settles. */
+  onConfirm?: (values: OnboardingValues) => void | Promise<void>;
   onSaveAndExit?: () => void;
-  /** Go to dashboard, on the Done step. */
+  /** Called after onConfirm succeeds, e.g. to go to the dashboard. */
   onFinish?: () => void;
   /** Fill the viewport height (layout-shell--viewport). Default true; turn it off inside a framed preview. */
   viewport?: boolean;
 }
 
 const ORDER: OnboardingStep[] = STEPS.map((step) => step.id);
+const FORM_STEPS: Exclude<OnboardingStep, "review">[] = ["business", "plan", "billing"];
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type Errors = Partial<Record<string, string>>;
+
+function businessErrors(business: BusinessValues): Errors {
+  return business.name.trim() ? {} : { name: "Enter a business name." };
+}
+
+function planErrors(plan: string): Errors {
+  return PLANS.some((item) => item.value === plan) ? {} : { plan: "Choose a plan." };
+}
+
+function billingErrors(billing: BillingValues): Errors {
+  const errors: Errors = {};
+  if (!EMAIL.test(billing.email.trim())) errors.email = "Enter a billing email, like finance@company.com.";
+  if (!billing.prefix.trim()) errors.prefix = "Enter an invoice number prefix.";
+  return errors;
+}
+
+function errorsFor(step: OnboardingStep, values: OnboardingValues): Errors {
+  if (step === "business") return businessErrors(values.business);
+  if (step === "plan") return planErrors(values.plan);
+  if (step === "billing") return billingErrors(values.billing);
+  return {};
+}
+
+const labelOf = (options: { value: string; label: string }[], value: string) =>
+  options.find((option) => option.value === value)?.label ?? value;
 
 /**
- * Guided setup after sign-in: Welcome, Workspace, Connect or choose (with the kit SetupGuide),
- * Done, in the Stage look: a steps column on the canvas (vertical ProgressSteps, Save and exit) and
- * the step on a layout-shell--inset panel; below md a reduced AppHeader carries the steps. Back
- * (ghost) and the one solid primary sit in a footer bar. Not sign-in and not empty-first-run.
+ * Guided account setup after sign-in: Business, Plan (kit TileGroup), Billing, then Review and
+ * Confirm, in the Stage look: vertical ProgressSteps in a column on the canvas and the step on a
+ * layout-shell--inset panel; below md a reduced AppHeader carries the steps, which compact on their
+ * own. The footer holds Save and exit (desktop), Back (ghost) and the one solid primary.
  */
 export function OnboardingPattern({
   step: stepProp,
-  defaultStep = "welcome",
+  defaultStep = "business",
   onStepChange,
-  workspaceState,
-  onCreateWorkspace,
-  onTaskAction,
+  confirmState,
+  onConfirm,
   onSaveAndExit,
   onFinish,
   viewport = true,
@@ -104,15 +130,25 @@ export function OnboardingPattern({
   const index = ORDER.indexOf(step);
   const meta = STEPS[index];
 
-  const [values, setValues] = useState<WorkspaceValues>(WORKSPACE_DEFAULTS);
-  const [nameError, setNameError] = useState(false);
+  const [own, setValues] = useState<OnboardingValues>(DEFAULT_VALUES);
+  // Steps whose errors show: tried to continue on them.
+  const [checked, setChecked] = useState<Set<OnboardingStep>>(() => new Set());
   const [pending, setPending] = useState(false);
-  const [tasks, setTasks] = useState<SetupTask[]>(SETUP_TASKS);
+  // Once Review has been shown, every invalid step keeps showing its errors (after Edit too).
+  const [reviewed, setReviewed] = useState(step === "review" || confirmState === "error");
+  if ((step === "review" || confirmState === "error") && !reviewed) setReviewed(true);
 
-  const showError = workspaceState === "error" || (workspaceState === undefined && nameError);
-  const submitting = workspaceState === "submitting" || (workspaceState === undefined && pending);
-  const name = workspaceState === "error" ? "" : values.name;
-  const tasksLeft = tasks.filter((task) => task.status !== "done").length;
+  // confirmState="error" (docs, tests) clears the business name once, so Review shows a step to fix.
+  const [forced, setForced] = useState<ConfirmState | undefined>(undefined);
+  if (confirmState !== forced) {
+    setForced(confirmState);
+    if (confirmState === "error") setValues((current) => ({ ...current, business: { ...current.business, name: "" } }));
+  }
+  const values = own;
+  const submitting = confirmState === "submitting" || (confirmState === undefined && pending);
+  const invalid: OnboardingStep[] = FORM_STEPS.filter((id) => Object.keys(errorsFor(id, values)).length > 0);
+  const shown = (id: OnboardingStep) => checked.has(id) || reviewed;
+  const errors = shown(step) ? errorsFor(step, values) : {};
 
   // A new step replaces the content under focus: move focus to the step (not on first render).
   const mainRef = useRef<HTMLElement>(null);
@@ -128,33 +164,109 @@ export function OnboardingPattern({
     onStepChange?.(next);
   }
 
+  function setBusiness(patch: Partial<BusinessValues>) {
+    setValues((current) => ({ ...current, business: { ...current.business, ...patch } }));
+  }
+
+  function setBilling(patch: Partial<BillingValues>) {
+    setValues((current) => ({ ...current, billing: { ...current.billing, ...patch } }));
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (step === "welcome") return go("workspace");
-    if (step === "connect") return go("done");
-    if (step === "done") return onFinish?.();
     if (submitting) return;
-    if (!values.name.trim()) {
-      setNameError(true);
-      document.getElementById(`${uid}-name`)?.focus();
-      return;
+    if (step !== "review") {
+      const stepErrors = errorsFor(step, values);
+      const first = Object.keys(stepErrors)[0];
+      if (first) {
+        setChecked((current) => new Set([...current, step]));
+        document.getElementById(`${uid}-${first}`)?.focus();
+        return;
+      }
+      return go(ORDER[index + 1]);
     }
+    if (invalid.length > 0) return;
     setPending(true);
     try {
-      await onCreateWorkspace?.(values);
-      go("connect");
+      await onConfirm?.(values);
+      onFinish?.();
     } finally {
       setPending(false);
     }
   }
 
-  function taskAction(id: string) {
-    setTasks((rows) => rows.map((task) => (task.id === id ? { ...task, status: "done" } : task)));
-    onTaskAction?.(id);
-  }
+  const plan = PLANS.find((item) => item.value === values.plan);
+  const country = COUNTRY_OPTIONS.find((option) => option.value === values.business.country);
+  const currency = CURRENCY_OPTIONS.find((option) => option.value === values.business.currency);
+  const terms = labelOf(TERMS_OPTIONS, values.billing.terms);
 
-  const primaryLabel =
-    step === "welcome" ? "Get started" : step === "done" ? "Go to dashboard" : "Continue";
+  const done: Record<OnboardingStep, string | undefined> = {
+    business: [country?.short, currency?.code].filter(Boolean).join(", "),
+    plan: plan?.title,
+    billing: terms,
+    review: undefined,
+  };
+  const progressSteps: ProgressStepsItem[] = STEPS.map(({ id, label }, at) => ({
+    id,
+    label,
+    description: at < index && !invalid.includes(id) ? done[id] : undefined,
+    status: invalid.includes(id) && shown(id) && id !== step ? "error" : undefined,
+  }));
+  const stepClick = (at: number) => {
+    if (!submitting) go(ORDER[at]);
+  };
+
+  const fix = (id: OnboardingStep) => (invalid.includes(id) ? { badge: "Fix", badgeTone: "danger" as const } : {});
+  const edit = (name: string) => [{ id: "edit", label: "Edit", actionLabel: `Edit ${name}`, disabled: submitting }];
+  const reviewItems: ListViewItem[] = [
+    {
+      id: "business",
+      group: "business",
+      primary: values.business.name.trim() || "No business name",
+      secondary: [country?.label, currency?.code, values.business.vat?.trim() && `VAT ${values.business.vat.trim()}`]
+        .filter(Boolean)
+        .join(" · "),
+      actions: edit("business"),
+      ...fix("business"),
+    },
+    {
+      id: "plan",
+      group: "plan",
+      primary: plan?.title ?? "No plan chosen",
+      secondary: plan ? `${plan.price} a month · ${plan.seats}` : undefined,
+      actions: edit("plan"),
+      ...fix("plan"),
+    },
+    {
+      id: "billing",
+      group: "billing",
+      primary: values.billing.email.trim() || "No billing email",
+      secondary: `${terms} · prefix ${values.billing.prefix.trim() || "not set"}`,
+      actions: edit("billing"),
+      ...fix("billing"),
+    },
+    {
+      id: "invoice",
+      group: "invoice",
+      primary: `${values.billing.prefix.trim()}${FIRST_INVOICE.number}`,
+      secondary: `${FIRST_INVOICE.date}, then monthly`,
+      value: plan?.price,
+    },
+  ];
+
+  const saveAndExit = (
+    <Button appearance="ghost" mode="neutral" size={stage ? "md" : "sm"} disabled={submitting} onClick={onSaveAndExit}>
+      Save and exit
+    </Button>
+  );
+
+  // Desktop: Save and exit at the start, Back beside the primary. Narrow: Back at the start.
+  const back =
+    index > 0 ? (
+      <Button appearance="ghost" mode="neutral" disabled={submitting} onClick={() => go(ORDER[index - 1])}>
+        Back
+      </Button>
+    ) : null;
 
   return (
     <div
@@ -168,48 +280,30 @@ export function OnboardingPattern({
           mark={PRODUCT.mark}
           radius="none"
           search={false}
-          center={
-            <ProgressSteps
-              size="sm"
-              ariaLabel="Setup steps"
-              current={index}
-              steps={STEPS.map(({ id, label }) => ({ id, label }))}
-            />
-          }
-          actions={
-            step === "done" ? undefined : (
-              <Button appearance="ghost" mode="neutral" size="sm" onClick={onSaveAndExit}>
-                Save and exit
-              </Button>
-            )
-          }
+          center={<ProgressSteps size="sm" ariaLabel="Setup steps" current={index} steps={progressSteps} />}
+          actions={saveAndExit}
         />
       )}
 
       <div className={stage ? "layout-app" : "onboarding-pattern__single"}>
         {stage ? (
-          <SideNavRoot aria-label={`${PRODUCT.name} setup`} radius="none" open>
-            <SideNavHeader>
-              <SideNavBrand title={PRODUCT.name.toLowerCase()} mark={PRODUCT.mark.toLowerCase()} />
-            </SideNavHeader>
-            <SideNavSlot>
-              <p className="onboarding-pattern__overline">{`Set up · ${STEPS.length} steps`}</p>
-              <ProgressSteps
-                size="sm"
-                orientation="vertical"
-                ariaLabel="Setup steps"
-                current={index}
-                steps={STEPS.map(({ id, label }) => ({ id, label }))}
-              />
-            </SideNavSlot>
-            {step === "done" ? null : (
-              <SideNavFooter className="onboarding-pattern__exit">
-                <Button appearance="ghost" mode="neutral" size="sm" onClick={onSaveAndExit}>
-                  Save and exit
-                </Button>
-              </SideNavFooter>
-            )}
-          </SideNavRoot>
+          <div className="onboarding-pattern__rail">
+            <SideNavRoot aria-label={`${PRODUCT.name} setup`} radius="none" open>
+              <SideNavHeader>
+                <SideNavBrand title={PRODUCT.name} mark={PRODUCT.mark} />
+              </SideNavHeader>
+              <SideNavSlot>
+                <ProgressSteps
+                  size="sm"
+                  orientation="vertical"
+                  ariaLabel="Setup steps"
+                  current={index}
+                  steps={progressSteps}
+                  onStepClick={stepClick}
+                />
+              </SideNavSlot>
+            </SideNavRoot>
+          </div>
         ) : null}
 
         <main
@@ -218,123 +312,130 @@ export function OnboardingPattern({
           className={stage ? "onboarding-pattern__main onboarding-pattern__main--stage" : "onboarding-pattern__main"}
           aria-label={`Setup, step ${index + 1} of ${STEPS.length}: ${meta.label}`}
         >
-          {stage ? <p className="onboarding-pattern__count">{`Step ${index + 1} of ${STEPS.length}`}</p> : null}
           <form id={formId} className="layout-content onboarding-pattern__content" onSubmit={submit} noValidate>
             <div className="layout-container-sm onboarding-pattern__column">
-              {step === "done" ? (
-                <Empty
-                  icon="Check"
-                  title={`${values.name || WORKSPACE_DEFAULTS.name} ${meta.title}`}
-                  description={`${tasksLeft === 1 ? "One setup task is" : `${tasksLeft} setup tasks are`} left in your Setup Guide. ${meta.subtitle}`}
-                  actions={
-                    <span className="onboarding-pattern__badges">
-                      <Badge tone="success" size="sm">
-                        Workspace created
-                      </Badge>
-                      <Badge tone="neutral" appearance="outline" size="sm">
-                        {`${tasksLeft} tasks left`}
-                      </Badge>
-                    </span>
-                  }
+              <BlurCrossfade contentKey={step} label={`Step ${index + 1} of ${STEPS.length}: ${meta.label}`}>
+                <PageHeader
+                  eyebrow={stage ? `Step ${index + 1} of ${STEPS.length}` : undefined}
+                  title={meta.title}
+                  subtitle={meta.subtitle}
                 />
-              ) : (
-                <BlurCrossfade contentKey={step} label={`Step ${index + 1} of ${STEPS.length}: ${meta.label}`}>
-                  <PageHeader title={meta.title} subtitle={meta.subtitle} />
-                </BlurCrossfade>
-              )}
+              </BlurCrossfade>
 
-              {step === "welcome" ? (
-                <ListView label="What you'll set up" items={WELCOME_ITEMS} />
-              ) : step === "workspace" ? (
-                <Card>
-                  <div className="onboarding-pattern__fields" aria-busy={submitting || undefined}>
-                    <Field
-                      label="Workspace name"
-                      htmlFor={`${uid}-name`}
-                      hint={showError ? undefined : "Shown on invoices and in emails"}
-                      error={showError ? "Enter a workspace name." : undefined}
-                    >
-                      <Input
-                        id={`${uid}-name`}
-                        name="workspaceName"
-                        placeholder="Workspace name"
-                        value={name}
-                        error={showError}
-                        disabled={submitting}
-                        onChange={(next) => {
-                          setValues((current) => ({ ...current, name: next }));
-                          if (next.trim()) setNameError(false);
-                        }}
+              {step === "business" ? (
+                <div className="onboarding-pattern__fields">
+                  <Field label="Business name" htmlFor={`${uid}-name`} error={errors.name} hint="Your registered or trading name" required>
+                    <Input
+                      id={`${uid}-name`}
+                      name="businessName"
+                      value={values.business.name}
+                      error={Boolean(errors.name)}
+                      onChange={(name) => setBusiness({ name })}
+                    />
+                  </Field>
+                  <div className="layout-split">
+                    <Field label="Country" htmlFor={`${uid}-country`}>
+                      <Select
+                        id={`${uid}-country`}
+                        name="country"
+                        options={COUNTRY_OPTIONS}
+                        value={values.business.country}
+                        onChange={(next) => setBusiness({ country: String(next) })}
                       />
                     </Field>
-                    <div className="layout-split">
-                      <Field label="Country" htmlFor={`${uid}-country`}>
-                        <Select
-                          id={`${uid}-country`}
-                          name="country"
-                          options={COUNTRY_OPTIONS}
-                          value={values.country}
-                          disabled={submitting}
-                          onChange={(country) => setValues((current) => ({ ...current, country: String(country) }))}
-                        />
-                      </Field>
-                      <Field label="Currency" htmlFor={`${uid}-currency`}>
-                        <Select
-                          id={`${uid}-currency`}
-                          name="currency"
-                          options={CURRENCY_OPTIONS}
-                          value={values.currency}
-                          disabled={submitting}
-                          onChange={(currency) => setValues((current) => ({ ...current, currency: String(currency) }))}
-                        />
-                      </Field>
-                    </div>
-                    <Field label="Team size" htmlFor={`${uid}-team`}>
+                    <Field label="Currency" htmlFor={`${uid}-currency`}>
                       <Select
-                        id={`${uid}-team`}
-                        name="teamSize"
-                        options={TEAM_SIZE_OPTIONS}
-                        value={values.teamSize}
-                        disabled={submitting}
-                        onChange={(teamSize) => setValues((current) => ({ ...current, teamSize: String(teamSize) }))}
+                        id={`${uid}-currency`}
+                        name="currency"
+                        options={CURRENCY_OPTIONS}
+                        value={values.business.currency}
+                        onChange={(next) => setBusiness({ currency: String(next) })}
                       />
                     </Field>
                   </div>
-                </Card>
-              ) : step === "connect" ? (
-                <SetupGuide
-                  title="Setup guide"
-                  tasks={tasks}
-                  onTaskAction={taskAction}
-                  onUndoSkip={(id) => setTasks((rows) => rows.map((task) => (task.id === id ? { ...task, status: "todo" } : task)))}
+                  <Field label="VAT number" htmlFor={`${uid}-vat`} hint="Printed on invoices when set" optional>
+                    <Input
+                      id={`${uid}-vat`}
+                      name="vat"
+                      value={values.business.vat ?? ""}
+                      onChange={(vat) => setBusiness({ vat })}
+                    />
+                  </Field>
+                </div>
+              ) : step === "plan" ? (
+                <TileGroup
+                  id={`${uid}-plan`}
+                  ariaLabel="Plan"
+                  items={PLANS.map(({ value, title, description, meta: price }) => ({ value, title, description, meta: price }))}
+                  value={values.plan}
+                  onChange={(next) => setValues((current) => ({ ...current, plan: next }))}
                 />
-              ) : null}
+              ) : step === "billing" ? (
+                <div className="onboarding-pattern__fields">
+                  <Field label="Billing email" htmlFor={`${uid}-email`} error={errors.email} hint="Replies to invoices go here" required>
+                    <Input
+                      id={`${uid}-email`}
+                      type="email"
+                      name="billingEmail"
+                      value={values.billing.email}
+                      error={Boolean(errors.email)}
+                      onChange={(email) => setBilling({ email })}
+                    />
+                  </Field>
+                  <div className="layout-split">
+                    <Field label="Payment terms" htmlFor={`${uid}-terms`}>
+                      <Select
+                        id={`${uid}-terms`}
+                        name="terms"
+                        options={TERMS_OPTIONS}
+                        value={values.billing.terms}
+                        onChange={(next) => setBilling({ terms: String(next) })}
+                      />
+                    </Field>
+                    <Field label="Invoice prefix" htmlFor={`${uid}-prefix`} error={errors.prefix} hint={`First invoice ${values.billing.prefix.trim() || "…"}${FIRST_INVOICE.number}`} required>
+                      <Input
+                        id={`${uid}-prefix`}
+                        name="prefix"
+                        value={values.billing.prefix}
+                        error={Boolean(errors.prefix)}
+                        onChange={(prefix) => setBilling({ prefix })}
+                      />
+                    </Field>
+                  </div>
+                </div>
+              ) : (
+                <Card flush aria-busy={submitting || undefined}>
+                  <ListView
+                    label="Summary"
+                    size="sm"
+                    items={reviewItems}
+                    groups={[
+                      { id: "business", label: "Business" },
+                      { id: "plan", label: "Plan" },
+                      { id: "billing", label: "Billing" },
+                      { id: "invoice", label: "First invoice" },
+                    ]}
+                    onAction={(id) => go(id as OnboardingStep)}
+                  />
+                </Card>
+              )}
             </div>
           </form>
 
-          <div className={step === "done" ? "onboarding-pattern__footer onboarding-pattern__footer--center" : "onboarding-pattern__footer"}>
-            {step === "welcome" || step === "done" ? null : (
-              <Button appearance="ghost" mode="neutral" disabled={submitting} onClick={() => go(ORDER[index - 1])}>
-                Back
-              </Button>
-            )}
+          <div className="onboarding-pattern__footer">
+            {stage ? saveAndExit : back}
             <div className="onboarding-pattern__footer-end">
-              {/* Busy state: a kit Spinner with a visible label beside the disabled primary (no Button loading prop). */}
-              {submitting ? <Spinner size="sm" label="Creating workspace…" /> : null}
-              {step === "connect" ? (
-                <Button appearance="ghost" mode="neutral" onClick={() => go("done")}>
-                  Skip for now
-                </Button>
-              ) : null}
+              {stage ? back : null}
               <Button
                 type="submit"
                 form={formId}
-                disabled={submitting}
-                iconStart={step === "welcome" || step === "done" ? "ArrowRight" : undefined}
-                shortcut={step === "workspace" || step === "connect" ? (submitting ? undefined : "⏎") : undefined}
-                aria-keyshortcuts={step === "workspace" || step === "connect" ? "Enter" : undefined}
+                loading={submitting}
+                disabled={step === "review" && invalid.length > 0}
+                iconStart={step === "review" && !submitting ? "Check" : undefined}
+                shortcut={step === "review" || submitting ? undefined : "⏎"}
+                aria-keyshortcuts={step === "review" ? undefined : "Enter"}
               >
-                {primaryLabel}
+                {submitting ? "Creating account…" : step === "review" ? "Confirm" : "Continue"}
               </Button>
             </div>
           </div>

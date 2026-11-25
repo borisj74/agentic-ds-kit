@@ -79,6 +79,22 @@ describe("Table markup", () => {
     assert.match(html, /<th scope="col"[^>]*><span[^>]*>Actions<\/span><\/th>/);
   });
 
+  test("rowActionsAs=icons renders each action as an icon Button, not a menu, and the footer value stays under its column", () => {
+    const html = render(
+      h(kit.Table, {
+        columns: COLUMNS,
+        rows: ROWS,
+        rowActions: (row) => [{ icon: "Pencil", ariaLabel: `Edit ${row.customer}` }],
+        rowActionsAs: "icons",
+        footer: { label: "Total", value: "$9" },
+      }),
+    );
+    assert.match(html, /role="group" aria-label="Actions for Northwind Traders"/);
+    assert.match(html, /<button[^>]*aria-label="Edit Northwind Traders"/);
+    assert.doesNotMatch(html, /aria-haspopup="menu"/);
+    assert.match(html, /<tfoot[\s\S]*>\$9<\/td><td[^>]*><\/td><\/tr><\/tfoot>/);
+  });
+
   test("state=loading keeps the header and marks the region busy", () => {
     const html = render(h(kit.Table, { columns: COLUMNS, rows: ROWS, state: "loading" }));
     assert.match(html, /aria-busy="true"/);

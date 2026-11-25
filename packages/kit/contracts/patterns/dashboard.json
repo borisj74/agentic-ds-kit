@@ -135,7 +135,7 @@
     "requirements": [
       "Reading order matches the phone layout: header, Needs attention, KPIs, overdue invoices, chart. The rail is placed by grid when wide, not moved in the source",
       "KPIs: Scoreboard selectable is a radiogroup named Metric shown in the chart; one tab stop, arrow keys move and pick, Home and End jump; the chart card's title follows the pick",
-      "The chart card's title states the finding, the reference line has a text label, and a visually hidden sentence reads the start, the end and the distance to the reference",
+      "The chart card's title states the finding, the reference line has a text label, and a visually hidden sentence reads the start, the end and the distance to the reference; the chart sits directly in the Card body, so it keeps its Table view without a second frame",
       "Ask is a labelled sm Button in each Overview card's footer (Card askLabel); the Revenue tab's charts keep an icon-only Ask named Ask about <card>. The Chat composer is described by the context chip (Asking about <card> · <period>)",
       "Status reads in words: Needs attention rows say the reason, invoices carry an Overdue Badge and days late, deltas an arrow and what they compare to. Icons are aria-hidden; colour is never the only signal",
       "The Compare Switch and the period DateRangePicker have visible names; disabled granularity options stay in the group"

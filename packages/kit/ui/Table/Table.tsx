@@ -74,6 +74,7 @@ export function Table({
   footer,
   stickyHeader = false,
   rowActions,
+  rowActionsAs = "menu",
   state,
   errorMessage = DEFAULT_ERROR,
   onRetry,
@@ -204,7 +205,12 @@ export function Table({
           {hasActions ? (
             <td className={classNames(styles.td, styles.actions)}>
               {actions.length > 0 ? (
-                <Cell type="actionMenu" size="sm" label={`Actions for ${rowName(row, index)}`} actions={actions} />
+                <Cell
+                  type={rowActionsAs === "icons" ? "actionIcons" : "actionMenu"}
+                  size="sm"
+                  label={`Actions for ${rowName(row, index)}`}
+                  actions={actions}
+                />
               ) : null}
             </td>
           ) : null}

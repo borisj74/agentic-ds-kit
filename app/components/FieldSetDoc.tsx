@@ -69,6 +69,33 @@ export function FieldSetDoc() {
         ) : (
           <div className={styles.variants} role="tabpanel" aria-label="Variants">
             <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Side legend</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <FieldSet
+                    legend="Billing address"
+                    description="Shown under the company name on invoices and receipts"
+                    layout="side"
+                  >
+                    <Field label="Street address" htmlFor="fieldset-side-street">
+                      <Input id="fieldset-side-street" defaultValue="18 Hatton Garden" />
+                    </Field>
+                    <Field label="City" htmlFor="fieldset-side-city">
+                      <Input id="fieldset-side-city" defaultValue="London" />
+                    </Field>
+                  </FieldSet>
+                </div>
+              </div>
+              <CodeBlock
+                code={`<FieldSet legend="Billing address" description="Shown under the company name on invoices and receipts" layout="side">
+  <Field label="Street address" htmlFor="street">
+    <Input id="street" />
+  </Field>
+</FieldSet>`}
+              />
+            </section>
+
+            <section className={styles.example}>
               <h2 className={styles.exampleTitle}>Checkbox under a legend</h2>
               <div className={styles.exampleCanvas}>
                 <div className={styles.previewFill}>

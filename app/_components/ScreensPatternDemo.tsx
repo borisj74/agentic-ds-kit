@@ -9,6 +9,7 @@ import {
   NotificationStack,
   SideNavAccount,
   SideNavBrand,
+  SideNavFooter,
   SideNavHeader,
   SideNavItem,
   SideNavNav,
@@ -68,7 +69,9 @@ function StageNav({ section, onPick }: { section: SettingsSection; onPick: (sect
           ))}
         </SideNavSection>
       </SideNavNav>
-      <SideNavAccount name="Priya Shah" secondary="Pro plan · 12 seats" initials="PS" />
+      <SideNavFooter>
+        <SideNavAccount name="Priya Shah" secondary="Pro plan · 12 seats" initials="PS" />
+      </SideNavFooter>
     </SideNavRoot>
   );
 }
@@ -125,18 +128,18 @@ export function SettingsScreen({ view }: { view?: string }) {
 
 /**
  * The onboarding pattern as a full screen. `view` is one of Paper's screens; the pattern's own
- * buttons also move between steps (creating the workspace waits a moment).
+ * buttons also move between steps (creating the account waits a moment).
  */
 export function OnboardingScreen({ view }: { view?: string }) {
-  const [screenId, setScreenId] = useState(ONBOARDING_SCREENS.some((item) => item.id === view) ? view! : "welcome");
+  const [screenId, setScreenId] = useState(ONBOARDING_SCREENS.some((item) => item.id === view) ? view! : "business");
   const screen = ONBOARDING_SCREENS.find((item) => item.id === screenId) ?? ONBOARDING_SCREENS[0];
 
   return (
     <OnboardingPattern
       step={screen.step}
       onStepChange={(step) => setScreenId(step)}
-      workspaceState={screen.workspace}
-      onCreateWorkspace={() => new Promise((resolve) => setTimeout(resolve, 1200))}
+      confirmState={screen.confirm}
+      onConfirm={() => new Promise((resolve) => setTimeout(resolve, 1200))}
     />
   );
 }

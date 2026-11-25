@@ -34,8 +34,15 @@
   width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
 }
 
+/* Closed: the panel is clipped, so the shell carries the whole frame (border and
+   radius on all four sides) and the panel drops its own border. */
 .rootClosed:not(.radiusNone) {
-  border-inline-end: var(--border-surface) solid var(--border-faint);
+  border: var(--border-surface) solid var(--border-faint);
+  border-radius: var(--radius-surface-md);
+}
+
+.rootClosed:not(.radiusNone) .panel {
+  border: 0;
 }
 
 .panel {
@@ -501,6 +508,9 @@
   align-items: center;
   gap: var(--space-inline-md);
   min-width: 0;
+  /* The sm avatar (24px) sits on the same center line as the 16px item icons, open or
+     closed: the footer insets like the nav, and 4px (half the size difference) does the rest. */
+  padding-inline: var(--space-1);
 }
 
 * + .account {

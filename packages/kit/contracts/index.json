@@ -1316,7 +1316,7 @@
   },
   {
     "id": "settings-form",
-    "intent": "Settings page example: header, grouped fields, and save/cancel actions.",
+    "intent": "Settings form example: a PageHeader over grouped fields (FieldSets in one Card, legend left when wide), a sticky SaveBar that names unsaved changes, an error summary Alert, and an AlertDialog before changes are lost. The demo is company billing details.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
@@ -1336,7 +1336,7 @@
   },
   {
     "id": "empty-first-run",
-    "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
+    "intent": "First run of a billing workspace inside the app-shell example (inset): PageHeader Invoices with no action, and one Card at layout-container-sm holding Empty (first-use, lg) with Create invoice (the one solid primary) and Try sample data (outline), then one setup line under a Divider: a count, what's left and Open setup (ghost) to the page with SetupGuide. Create invoice opens a Modal (md) that adds a new customer inline (Combobox allowCustomValue), with Plan (Select) and Due date (DatePicker); Create draft hands the draft to onCreate and shows a Toast. Try sample data swaps Empty for an info Alert (Sample data, Clear sample data) over the invoices Table, and Create invoice moves to PageHeader.",
     "group": "pattern",
     "path": "contracts/patterns/empty-first-run.json",
     "status": "stable",
@@ -1366,7 +1366,7 @@
   },
   {
     "id": "billing-schedule",
-    "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+    "intent": "Billing schedule for one customer: the next charge as one figure with its lines, a failure Alert that says what happens next, and Upcoming and Billed as two kit Tables with status as icon and word. Scheduled charges open a kit Drawer to move the date, change the amount or skip the month.",
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",
@@ -1396,7 +1396,7 @@
   },
   {
     "id": "onboarding",
-    "intent": "Guided setup after sign-in: Welcome, Workspace (validation error, submitting), Connect or choose with the SetupGuide, Done. Not sign-in and not empty-first-run.",
+    "intent": "Guided account setup after sign-in: Business, Plan (TileGroup), Billing, then Review and Confirm. Not sign-in and not empty-first-run.",
     "group": "pattern",
     "path": "contracts/patterns/onboarding.json",
     "status": "stable",

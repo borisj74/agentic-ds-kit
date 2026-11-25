@@ -28,3 +28,50 @@
   gap: var(--space-4);
   min-width: 0;
 }
+
+/* Side: the legend and description sit in a fixed column (sidebar width plus 24, 248px) with the
+   fields 48 to their right. The legend floats, so it leaves the fieldset border slot and lays out like
+   any block; it stays the group's accessible name. The fieldset is its own container, so the column
+   stacks when the FieldSet itself is narrow (under 40rem, the --grid-breakpoint-sm value), not the viewport. */
+.side {
+  --fieldset-side-column: calc(var(--layout-sidebar) + var(--space-6));
+  display: flow-root;
+  container-type: inline-size;
+}
+
+.side .legend {
+  float: inline-start;
+  clear: inline-start;
+  width: var(--fieldset-side-column);
+  font-size: var(--type-size-ui-md);
+  line-height: var(--type-line-ui-md);
+  font-weight: var(--type-weight-heading);
+}
+
+.side .description {
+  float: inline-start;
+  clear: inline-start;
+  width: var(--fieldset-side-column);
+  margin-block-start: var(--space-1);
+}
+
+.side .body {
+  margin-inline-start: calc(var(--fieldset-side-column) + var(--space-12));
+}
+
+@container (max-width: 40rem) {
+  .side .legend,
+  .side .description {
+    float: none;
+    width: auto;
+  }
+
+  .side .description {
+    margin-block-start: var(--space-1);
+  }
+
+  .side .body {
+    margin-inline-start: 0;
+    margin-block-start: var(--space-4);
+  }
+}

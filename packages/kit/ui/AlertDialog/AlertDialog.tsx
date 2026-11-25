@@ -12,12 +12,16 @@ import { mergeRefs } from "../shared/mergeRefs";
 import type { AlertDialogProps } from "./AlertDialog.types";
 import styles from "./AlertDialog.module.css";
 import { useIsClient } from "../shared/useIsClient";
+import { useMediaQuery } from "../shared/useMediaQuery";
 import { useThemeScopeMarker } from "../shared/themeScope";
 import { useKitLabels } from "../shared/labels";
 import { nisthaAttr } from "../shared/inspect";
 import { FOCUSABLE, lockPage, restoreFocus } from "../shared/overlayLock";
 
 export type { AlertDialogProps, AlertDialogActionVariant, AlertDialogSize } from "./AlertDialog.types";
+
+/** Media queries cannot read var(): 30rem (480px) is where Modal goes full screen and SaveBar stacks. */
+const SHEET_QUERY = "(max-width: 30rem)";
 
 export function AlertDialog({
   open,
@@ -48,6 +52,8 @@ export function AlertDialog({
   const mounted = useIsClient();
   const scope = useThemeScopeMarker();
   const [typed, setTyped] = useState("");
+  // Below 480px the dialog docks to the bottom as a sheet with full-width lg Buttons, Cancel on top.
+  const sheet = useMediaQuery(SHEET_QUERY);
   const needsTyping = Boolean(confirmText);
   const matches = !needsTyping || typed === confirmText;
   // A typo shows an error; a correct start (or nothing yet) only shows the hint.
@@ -125,7 +131,7 @@ export function AlertDialog({
   return createPortal(
     <div
       ref={overlayRef}
-      className={[styles.overlay, scope.fontClassName].filter(Boolean).join(" ")}
+      className={[styles.overlay, sheet && styles.sheet, scope.fontClassName].filter(Boolean).join(" ")}
       data-theme-scope={scope.id}
       data-theme={scope.mode === "dark" ? "dark" : undefined}
       role="presentation"
@@ -149,14 +155,26 @@ export function AlertDialog({
         className={cx(styles.dialog, className)}
         footerStart={footerStart}
         footer={
-          <ButtonGroup ariaLabel={labels.dialogActions}>
-            <Button appearance="outline" mode="neutral" size="sm" onClick={onCancel} data-alert-cancel="">
-              {cancelLabel}
-            </Button>
-            <Button appearance="solid" mode={actionVariant} size="sm" onClick={onAction} disabled={!matches}>
-              {actionLabel}
-            </Button>
-          </ButtonGroup>
+          sheet ? (
+            // Stacked, not joined: ButtonGroup fuses its Buttons into one segmented row.
+            <div role="group" aria-label={labels.dialogActions} className={styles.sheetActions}>
+              <Button appearance="outline" mode="neutral" size="lg" onClick={onCancel} data-alert-cancel="">
+                {cancelLabel}
+              </Button>
+              <Button appearance="solid" mode={actionVariant} size="lg" onClick={onAction} disabled={!matches}>
+                {actionLabel}
+              </Button>
+            </div>
+          ) : (
+            <ButtonGroup ariaLabel={labels.dialogActions}>
+              <Button appearance="outline" mode="neutral" size="sm" onClick={onCancel} data-alert-cancel="">
+                {cancelLabel}
+              </Button>
+              <Button appearance="solid" mode={actionVariant} size="sm" onClick={onAction} disabled={!matches}>
+                {actionLabel}
+              </Button>
+            </ButtonGroup>
+          )
         }
       >
         {hasBody ? (

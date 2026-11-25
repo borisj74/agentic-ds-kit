@@ -21,7 +21,9 @@ export function BillingScheduleScreen({ view = "history" }: { view?: string }) {
         summary={billing === "summary"}
         onViewAll={billing === "summary" ? noop : undefined}
         loading={billing === "loading"}
+        onAsk={billing === "summary" ? undefined : noop}
         onDownloadAll={noop}
+        onDownloadInvoice={noop}
         onChangeCard={noop}
         onUpdateCard={noop}
       />
