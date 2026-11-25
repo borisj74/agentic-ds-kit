@@ -109,7 +109,7 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
   return (
     <div className="list-detail-pattern__body">
       <Card size="sm" flush>
-        <dl className="list-detail-pattern__summary">
+        <dl className={`list-detail-pattern__summary${narrow ? " list-detail-pattern__summary--single" : ""}`}>
           {summary.map((cell) => (
             <div key={cell.label} className="list-detail-pattern__summary-cell">
               <dt>{cell.label}</dt>
@@ -120,7 +120,7 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
       </Card>
       <Card title="Line items" headingLevel={3} size={narrow ? "sm" : "md"} flush>
         {narrow ? (
-          <ListView label={`Line items on ${invoice.id}`} size="md" items={lineItems} />
+          <ListView label={`Line items on ${invoice.id}`} size="xs" items={lineItems} />
         ) : (
           <Table
             columns={LINE_COLUMNS}
@@ -133,7 +133,7 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
       <Card title="Payment history" headingLevel={3} size={narrow ? "sm" : "md"} flush>
         <ListView
           label={`Payment history for ${invoice.id}`}
-          size="sm"
+          size={narrow ? "xs" : "sm"}
           items={payments}
           empty={{ title: "No payment attempts yet." }}
         />
@@ -233,25 +233,27 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
   const oldestOverdue = INVOICES.find((item) => item.status === "overdue");
 
   // Ask sits on its own at the start; Download PDF and the one primary sit together at the end.
-  // Below 640 they stay md (36) in one row, with Download PDF as an IconButton so the row fits 390.
+  // Below 640 the row is lg (40): Ask, Download PDF as an IconButton, and Retry payment filling the rest.
   const detailActions = (invoice: ListDetailItem) => (
     <div className="list-detail-pattern__actions">
       <span className="list-detail-pattern__ask">
-        <Button size={narrow ? "md" : "sm"} appearance="outline" mode="neutral" iconStart="MessageCircle">
+        <Button size={narrow ? "lg" : "sm"} appearance="outline" mode="neutral" iconStart="MessageCircle">
           Ask
         </Button>
       </span>
       {narrow ? (
-        <IconButton icon="Download" ariaLabel="Download PDF" size="md" appearance="outline" mode="neutral" />
+        <IconButton icon="Download" ariaLabel="Download PDF" size="lg" appearance="outline" mode="neutral" />
       ) : (
         <Button size="md" appearance="outline" mode="neutral" iconStart="Download">
           Download PDF
         </Button>
       )}
       {invoice.status === "overdue" ? (
-        <Button size="md" iconStart="RefreshCw">
-          Retry payment
-        </Button>
+        <span className={narrow ? "list-detail-pattern__grow" : undefined}>
+          <Button size={narrow ? "lg" : "md"} iconStart="RefreshCw" block={narrow}>
+            Retry payment
+          </Button>
+        </span>
       ) : null}
     </div>
   );
@@ -266,13 +268,15 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
   if (narrow && open) {
     return (
       <div className="layout-canvas">
-        <div className="layout-content">
+        <nav className="layout-header list-detail-pattern__topbar" aria-label="Back">
+          <Link href="#" variant="standalone">
+            <ChevronLeft size={20} strokeWidth={1.5} aria-hidden />
+            Invoices
+          </Link>
+        </nav>
+        <div className="layout-content list-detail-pattern__page">
           <section className="list-detail-pattern__detail" aria-labelledby={headingId}>
             <header className="list-detail-pattern__head list-detail-pattern__head--page">
-              <Link href="#" variant="standalone">
-                <ChevronLeft size={20} strokeWidth={1.5} aria-hidden />
-                Invoices
-              </Link>
               <div className="list-detail-pattern__title-row">
                 <h1 id={headingId} className="list-detail-pattern__title">
                   {open.id}

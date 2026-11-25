@@ -123,6 +123,11 @@
   border-inline-start: var(--border-width-thin) solid var(--border-faint);
 }
 
+/* The phone shows one cell, amount due, inset 16 like the cards below it. */
+.list-detail-pattern__summary--single .list-detail-pattern__summary-cell {
+  padding-inline: var(--space-4);
+}
+
 .list-detail-pattern__summary dt {
   font-family: var(--font-sans);
   font-size: var(--type-size-body-xs);
@@ -155,7 +160,36 @@
   white-space: nowrap;
 }
 
-/* The phone record page: the back link sits above the id with a step of space. */
-.list-detail-pattern__head--page .list-detail-pattern__title-row {
-  margin-block-start: var(--space-3);
+/* The phone record page: a bar with the back link, then the id and customer line with no rule under them. */
+.list-detail-pattern__topbar {
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  background: var(--surface-card);
+  border-block-end: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__topbar a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-block-size: var(--control-height-lg);
+  padding-inline: var(--space-2) var(--space-3);
+}
+
+/* The record page uses the narrow page margin (16), so Ask, Download and Retry payment fit one row at 390. */
+.list-detail-pattern__page {
+  padding: var(--layout-margin-sm);
+  gap: var(--space-4);
+}
+
+.list-detail-pattern__head--page {
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+/* Retry payment fills what Ask and Download leave. */
+.list-detail-pattern__grow {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
 }
