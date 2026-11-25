@@ -11,7 +11,7 @@ export interface DeleteWorkspaceProps {
   onDeleteWorkspace?: () => void;
 }
 
-/** Delete workspace: a danger action in its own Card, confirmed in a kit AlertDialog. Cancel returns focus to it. */
+/** Delete workspace: a danger action in its own Card, confirmed in a kit AlertDialog where you type the name. Cancel returns focus to it. */
 export function DeleteWorkspace({ onDeleteWorkspace }: DeleteWorkspaceProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const deleteRef = useRef<HTMLDivElement>(null);
@@ -38,6 +38,7 @@ export function DeleteWorkspace({ onDeleteWorkspace }: DeleteWorkspaceProps) {
         open={confirmOpen}
         title={`Delete ${WORKSPACE_NAME}?`}
         description="This removes every invoice, customer and agent in the workspace. It can’t be undone."
+        confirmText={WORKSPACE_NAME}
         cancelLabel="Cancel"
         actionLabel="Delete workspace"
         actionVariant="danger"

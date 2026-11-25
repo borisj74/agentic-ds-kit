@@ -14764,7 +14764,7 @@
     {
       "id": "settings",
       "group": "pattern",
-      "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations; You: Profile, Notifications, Security) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Billing, Team, Integrations and Security act per card. Billing overdue / loading / error, Team empty and invite Drawer, Security 2FA off.",
+      "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations, Security; You: Profile, Notifications, Sign-in) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Security's sign-in rules (SSO, Require SSO, two-step for members) end in their own save row, then your sessions and a Danger zone with Delete workspace; Billing (plan, payment method, AI credits UsageMeter, invoices Table, billing schedule), Team (seats Meter, role filter, members Table) and Integrations act per card; Sign-in holds your password and two-factor. Billing overdue / loading / error, Team empty and invite Drawer, Sign-in 2FA off.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
@@ -14779,8 +14779,9 @@
         "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
         "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
         "An overdue invoice is a kit Alert (danger) that says the invoice, the amount and what happens next; Pay now is then the one solid primary and Upgrade steps away",
-        "Delete workspace sits on General, in its own Card below the form, as a danger action behind a kit AlertDialog; Cancel returns focus to it",
-        "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); the other sections have no save bar and act per card",
+        "Danger actions sit in their own group after every card that saves",
+        "Delete workspace sits on Security, in a Danger zone (a kit Section heading) after every card that saves, in its own Card, as a danger action behind a kit AlertDialog where you type the name; Cancel returns focus to it",
+        "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); Security's sign-in rules end in their own save row in the card (Cancel and Save sign-in rules); the other sections have no save bar and act per card",
         "Integrations renders the integration-settings example; do not build a second integration form",
         "Money arrives pre-formatted from your app; label example data as example"
       ]

@@ -1386,7 +1386,7 @@
   },
   {
     "id": "settings",
-    "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations; You: Profile, Notifications, Security) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Billing, Team, Integrations and Security act per card. Billing overdue / loading / error, Team empty and invite Drawer, Security 2FA off.",
+    "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations, Security; You: Profile, Notifications, Sign-in) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Security's sign-in rules (SSO, Require SSO, two-step for members) end in their own save row, then your sessions and a Danger zone with Delete workspace; Billing (plan, payment method, AI credits UsageMeter, invoices Table, billing schedule), Team (seats Meter, role filter, members Table) and Integrations act per card; Sign-in holds your password and two-factor. Billing overdue / loading / error, Team empty and invite Drawer, Sign-in 2FA off.",
     "group": "pattern",
     "path": "contracts/patterns/settings.json",
     "status": "stable",

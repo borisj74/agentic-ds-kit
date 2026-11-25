@@ -35,12 +35,17 @@ export const SETTINGS_SCREENS: {
   { id: "team-invite", label: "Team · invite drawer", section: "team", invite: true },
   { id: "team-empty", label: "Team · empty", section: "team", team: "empty" },
   { id: "integrations", label: "Integrations", section: "integrations" },
+  { id: "security", label: "Security", section: "security" },
   { id: "profile", label: "Profile", section: "profile" },
   { id: "notifications", label: "Notifications", section: "notifications" },
-  { id: "security", label: "Security", section: "security" },
-  { id: "security-2fa-off", label: "Security · 2FA off", section: "security", twoFactor: false },
+  { id: "sign-in", label: "Sign-in", section: "sign-in" },
+  { id: "sign-in-2fa-off", label: "Sign-in · 2FA off", section: "sign-in", twoFactor: false },
   { id: "index", label: "390 · Settings index", section: null, twoFactor: false, device: "mobile" },
   { id: "general-390", label: "390 · General", section: "general", device: "mobile" },
+  { id: "billing-390", label: "390 · Billing", section: "billing", device: "mobile" },
+  { id: "team-390", label: "390 · Team", section: "team", device: "mobile" },
+  { id: "security-390", label: "390 · Security", section: "security", device: "mobile" },
+  { id: "sign-in-390", label: "390 · Sign-in", section: "sign-in", device: "mobile" },
 ];
 
 /** The Onboarding screens (Paper p-9-1, 4H05-0): each step, plus Review's error and submitting states. */

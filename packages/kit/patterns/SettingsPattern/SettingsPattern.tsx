@@ -21,6 +21,7 @@ import { GeneralSettings } from "./GeneralSettings";
 import { NotificationSettings } from "./NotificationSettings";
 import { ProfileSettings } from "./ProfileSettings";
 import { SecuritySettings } from "./SecuritySettings";
+import { SignInSettings } from "./SignInSettings";
 import { TeamSettings, type TeamState } from "./TeamSettings";
 import { PROFILE, SECTIONS, SETTINGS_GROUPS, WORKSPACE, type SettingsSection, type SettingsSectionMeta } from "./settings-data";
 import "./SettingsPattern.css";
@@ -48,13 +49,13 @@ export interface SettingsPatternProps {
   /** Invite Drawer open on the Team page (controlled). */
   inviteOpen?: boolean;
   onInviteOpenChange?: (open: boolean) => void;
-  /** Two-factor authentication on (default) or off with the policy notice. */
+  /** Your two-factor authentication on Sign-in: on (default) or off with the policy notice. */
   twoFactor?: boolean;
-  /** Save on General, Profile and Notifications (the SaveBar, or ⌘/Ctrl+S). */
+  /** Save on General, Profile, Notifications (the SaveBar, or ⌘/Ctrl+S) and Security (Save sign-in rules). */
   onSave?: (section: SettingsSection) => void;
   onCancel?: (section: SettingsSection) => void;
   onRetryBilling?: () => void;
-  /** Delete workspace (on General), after the AlertDialog confirm. */
+  /** Delete workspace (Security's Danger zone), after the AlertDialog confirm. */
   onDeleteWorkspace?: () => void;
 }
 
@@ -91,7 +92,8 @@ function scopeLine(meta: SettingsSectionMeta, wide: boolean): ReactNode {
  * then Workspace and You groups) and the section on the inset panel, titled by PageHeader alone
  * with a scope line under it. Below --grid-breakpoint-md: Settings is an index page of two kit
  * LinkLists, and each section has Back to Settings. General, Profile and Notifications end in
- * one SaveBar; the other sections act per card. Renders its own `<main>`.
+ * one SaveBar; Security's sign-in rules end in their own; the other sections act per card.
+ * Renders its own `<main>`.
  */
 export function SettingsPattern({
   section,
@@ -121,7 +123,7 @@ export function SettingsPattern({
   const current: SettingsSection | null = picked === null && !narrow ? "general" : picked;
 
   const sections = SECTIONS.map((item) =>
-    item.id === "security" ? { ...item, description: twoFactor ? "Two-factor on" : "Two-factor off" } : item,
+    item.id === "sign-in" ? { ...item, description: twoFactor ? "Password · two-factor on" : "Password · two-factor off" } : item,
   );
 
   function go(next: SettingsSection | null) {
@@ -189,7 +191,7 @@ export function SettingsPattern({
   const sectionAction: ReactNode =
     current === "team" && team === "ready" ? (
       <Button iconStart="Plus" onClick={() => setInvite(true)}>
-        Invite people
+        {narrow ? "Invite" : "Invite people"}
       </Button>
     ) : null;
 
@@ -220,26 +222,28 @@ export function SettingsPattern({
         />
       </div>
       {current === "general" ? (
-        <GeneralSettings
-          narrow={narrow}
-          onSave={() => onSave?.("general")}
-          onCancel={() => onCancel?.("general")}
-          onDeleteWorkspace={onDeleteWorkspace}
-        />
+        <GeneralSettings narrow={narrow} onSave={() => onSave?.("general")} onCancel={() => onCancel?.("general")} />
       ) : current === "billing" ? (
-        <BillingSettings state={billing} onRetry={onRetryBilling} />
+        <BillingSettings state={billing} narrow={narrow} onRetry={onRetryBilling} />
       ) : current === "team" ? (
-        <TeamSettings state={team} inviteOpen={invite} onInviteOpenChange={setInvite} />
+        <TeamSettings state={team} narrow={narrow} inviteOpen={invite} onInviteOpenChange={setInvite} />
       ) : current === "integrations" ? (
         <div className="layout-content">
           <IntegrationSettingsPattern />
         </div>
+      ) : current === "security" ? (
+        <SecuritySettings
+          narrow={narrow}
+          onSave={() => onSave?.("security")}
+          onCancel={() => onCancel?.("security")}
+          onDeleteWorkspace={onDeleteWorkspace}
+        />
       ) : current === "profile" ? (
         <ProfileSettings narrow={narrow} onSave={() => onSave?.("profile")} onCancel={() => onCancel?.("profile")} />
       ) : current === "notifications" ? (
         <NotificationSettings narrow={narrow} onSave={() => onSave?.("notifications")} onCancel={() => onCancel?.("notifications")} />
       ) : (
-        <SecuritySettings twoFactor={twoFactor} />
+        <SignInSettings twoFactor={twoFactor} />
       )}
     </main>
   );
