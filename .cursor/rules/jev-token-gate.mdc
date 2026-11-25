@@ -22,7 +22,7 @@ Use when reviewing or writing kit UI for **color, type, spacing, or grid tokens*
 - One-off spacing that should be `var(--space-*)`
 - Raw `px`/`rem` or a hard-coded column count in `grid-template-columns`, `gap`, or `max-width` when a `--grid-*` token exists
 - Raw `px`/`rem` widths in `@media` queries (`min-width`, `max-width`, `width <`) instead of a `--grid-breakpoint-*` token
-- Lucide `strokeWidth` other than `ICON_STROKE` (1.5, `--icon-stroke`) or `ICON_STROKE_STRONG` (2, `--icon-stroke-strong`) on tiny marks such as the Checkbox check. Do not flag chart, Progress, Meter, or PieChart strokes; those are data lines
+- Lucide `strokeWidth` other than `ICON_STROKE` (2, `--icon-stroke`) or `ICON_STROKE_STRONG` (also 2, `--icon-stroke-strong`). Do not flag chart, Progress, Meter, or PieChart strokes; those are data lines
 
 Source of truth: `packages/kit/tokens/tokens.json` → emitted as `packages/kit/lib/tokens.css`. Contracts list expected tokens per component under `packages/kit/contracts/`.
 

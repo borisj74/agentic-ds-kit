@@ -226,7 +226,7 @@ export function PageHeaderDoc() {
                     title="General"
                     subtitle={
                       <>
-                        <Users aria-hidden strokeWidth={1.5} />
+                        <Users aria-hidden />
                         Applies to everyone in Northwind
                       </>
                     }
@@ -245,7 +245,7 @@ export function PageHeaderDoc() {
   title="General"
   subtitle={
     <>
-      <Users aria-hidden strokeWidth={1.5} />
+      <Users aria-hidden />
       Applies to everyone in Northwind
     </>
   }

@@ -88,7 +88,7 @@ function LevelCell({ action, requested }: { action: AgentAction; requested?: str
   const Icon = LEVEL_ICON[action.level];
   return (
     <span className="agent-permissions-pattern__level">
-      <Icon className="agent-permissions-pattern__level-icon" size={16} strokeWidth={1.5} aria-hidden="true" />
+      <Icon className="agent-permissions-pattern__level-icon" size={16} aria-hidden="true" />
       <span className="agent-permissions-pattern__two-line">
         <span>{levelWord(action)}</span>
         {requested ? <span className="agent-permissions-pattern__requested">{requested}</span> : null}

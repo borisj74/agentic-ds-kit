@@ -32,7 +32,7 @@ Lint must finish with 0 warnings.
 - **Contracts are the source of truth.** A component's contract lives in `packages/kit/contracts/`. If behaviour changes, update the contract, the component in `packages/kit/ui/` and its docs page in the same pull request.
 - **Use the existing kit.** Read `packages/kit/contracts/index.json` first. If a component exists, use it. If one is missing, open an issue before adding it.
 - **Tokens only.** No hex, `rgb()` or primitive `--color-*` ramps in components. Use the semantic tokens in `packages/kit/lib/tokens.css`, and the `--grid-*` tokens and layout classes for layout. New tokens need a discussion first.
-- **Icons** are Lucide at `strokeWidth` 1.5 (`ICON_STROKE`).
+- **Icons** are Lucide at `strokeWidth` 2, Lucide's default (`ICON_STROKE`).
 - **Accessibility** is part of the contract: keep the `a11y` requirements true, and run axe on the pages you change.
 - **Changelog.** Don't edit `CHANGELOG.md`. For anything a kit user would notice, add `changes/<branch-name>.md` (with `/` turned into `-`) holding the entry under a `### Added` / `### Changed` / `### Fixed` heading. [changes/README.md](changes/README.md) has the format; maintainers fold the files into `CHANGELOG.md` with `npm run changelog` when releasing.
 

@@ -18,7 +18,7 @@ type PageHeaderOwnedKeys = "children" | "title";
 export interface PageHeaderProps extends Omit<ComponentPropsWithoutRef<"header">, PageHeaderOwnedKeys> {
   title: string;
   /**
-   * One line under the title. A string, or inline nodes such as a lucide icon (strokeWidth 1.5)
+   * One line under the title. A string, or inline nodes such as a lucide icon (default strokeWidth 2)
    * before a short scope line. It renders inside a `<p>`, so no blocks, lists or buttons.
    */
   subtitle?: ReactNode;

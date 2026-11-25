@@ -290,7 +290,7 @@ export function IconsFoundations() {
             <code className={colorStyles.huePattern}>--icon-stroke</code>
           </div>
           <p className={styles.note}>
-            Lucide icons use stroke width 1.5. Don&apos;t set another stroke width. The kit sets{" "}
+            Lucide icons use stroke width 2, Lucide&apos;s default. Don&apos;t set another stroke width. The kit sets{" "}
             <code>strokeWidth</code> from <code>ICON_STROKE</code>, and <code>svg.lucide</code> uses the
             same token so icons you pass in match.
           </p>
@@ -298,12 +298,12 @@ export function IconsFoundations() {
             <div className={styles.demo}>
               <Search aria-hidden="true" strokeWidth={ICON_STROKE} />
               <CopyToken value="--icon-stroke" />
-              <span className={styles.demoNote}>1.5. Every interface icon.</span>
+              <span className={styles.demoNote}>2. Every interface icon.</span>
             </div>
             <div className={styles.demo}>
               <Check aria-hidden="true" className="kit-icon-strong" size={24} strokeWidth={ICON_STROKE_STRONG} />
               <CopyToken value="--icon-stroke-strong" />
-              <span className={styles.demoNote}>2. Tiny marks, such as the Checkbox check at 12px.</span>
+              <span className={styles.demoNote}>2, the same as <code>--icon-stroke</code>. Kept for tiny marks such as the Checkbox check.</span>
             </div>
           </div>
         </section>
@@ -332,8 +332,8 @@ export function IconsFoundations() {
           </div>
           <ul className={styles.rules}>
             <li>
-              Lucide icons use stroke width 1.5 (<code>--icon-stroke</code>). Don&apos;t set other stroke
-              widths on icons. Tiny marks such as the Checkbox check use <code>--icon-stroke-strong</code> (2).
+              Lucide icons use stroke width 2 (<code>--icon-stroke</code>), Lucide&apos;s default. Don&apos;t set other stroke
+              widths on icons. <code>--icon-stroke-strong</code> is also 2 now and stays for existing code.
             </li>
             <li>
               Use semantic colors such as <code>--icon-default</code> and <code>--icon-muted</code>.

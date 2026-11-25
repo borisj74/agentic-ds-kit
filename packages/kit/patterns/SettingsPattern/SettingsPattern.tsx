@@ -82,7 +82,7 @@ function scopeLine(meta: SettingsSectionMeta, wide: boolean): ReactNode {
   const text = wide && meta.editors ? `${meta.scope} · ${meta.editors}` : meta.scope;
   return (
     <>
-      <Icon aria-hidden="true" strokeWidth={1.5} />
+      <Icon aria-hidden="true" />
       {text}
     </>
   );
