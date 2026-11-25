@@ -1,18 +1,16 @@
 "use client";
 
-import { useId, useRef, useState, type FormEvent } from "react";
-import { AlertDialog } from "../../ui/AlertDialog";
-import { Button } from "../../ui/Button";
+import { useId, useState, type FormEvent } from "react";
 import { Card } from "../../ui/Card";
 import { Field } from "../../ui/Field";
 import { FieldSet } from "../../ui/FieldSet";
 import { Input } from "../../ui/Input";
 import { SaveBar } from "../../ui/SaveBar";
 import { Select } from "../../ui/Select";
+import { DeleteWorkspace } from "./DeleteWorkspace";
 import { saveShortcut } from "./ProfileSettings";
 import {
   CURRENCY_OPTIONS,
-  DELETE_COPY,
   GENERAL_DRAFT,
   GENERAL_LABELS,
   GENERAL_SAVED,
@@ -35,15 +33,13 @@ export interface GeneralSettingsProps {
 
 /**
  * General: the workspace's name, URL, currency, invoice prefix and time zone in one FieldSet (legend
- * left when wide) in a Card, the settings-form composition; Delete workspace in its own Card below, and the one SaveBar. Copy it in and replace the
- * fields and the save call.
+ * left when wide) in a Card, then Delete workspace in its own Card outside the form, and the one
+ * SaveBar. Copy it in and replace the fields and the save call.
  */
 export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWorkspace }: GeneralSettingsProps) {
   const uid = useId();
   const [saved, setSaved] = useState(GENERAL_SAVED);
   const [values, setValues] = useState(GENERAL_DRAFT);
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const deleteRef = useRef<HTMLDivElement>(null);
 
   const changes = FIELD_ORDER.filter((field) => values[field] !== saved[field]).map((field) => GENERAL_LABELS[field]);
   const size = narrow ? "lg" : "md";
@@ -64,12 +60,6 @@ export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWork
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     save();
-  }
-
-  function closeConfirm() {
-    setConfirmOpen(false);
-    // Cancel returns focus to Delete workspace.
-    requestAnimationFrame(() => deleteRef.current?.querySelector("button")?.focus());
   }
 
   const prefix = values.prefix.trim() || GENERAL_SAVED.prefix;
@@ -116,24 +106,14 @@ export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWork
 
   return (
     <>
-      <form className="layout-content settings-pattern__body" onSubmit={submit} onKeyDown={saveShortcut} noValidate>
-        {/* Narrow: the group loses its Card frame, as in settings-form. */}
-        {narrow ? fields : <Card size="md">{fields}</Card>}
-
-        <div ref={deleteRef}>
-          <Card>
-            <div className="settings-pattern__row settings-pattern__row--center">
-              <span className="settings-pattern__two-line">
-                <span className="settings-pattern__title">{DELETE_COPY.title}</span>
-                <span className="settings-pattern__muted">{DELETE_COPY.description}</span>
-              </span>
-              <Button appearance="outline" mode="danger" iconStart="Trash2" onClick={() => setConfirmOpen(true)}>
-                Delete workspace
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </form>
+      <div className="layout-content settings-pattern__body">
+        <form onSubmit={submit} onKeyDown={saveShortcut} noValidate>
+          {/* Narrow: the group loses its Card frame, as in settings-form. */}
+          {narrow ? fields : <Card size="md">{fields}</Card>}
+        </form>
+        {/* Outside the form: deleting is not part of Save. */}
+        <DeleteWorkspace onDeleteWorkspace={onDeleteWorkspace} />
+      </div>
 
       <SaveBar
         state={changes.length > 0 ? "dirty" : "saved"}
@@ -144,20 +124,6 @@ export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWork
           onCancel?.();
         }}
         onSave={save}
-      />
-
-      <AlertDialog
-        open={confirmOpen}
-        title={`Delete ${WORKSPACE_NAME}?`}
-        description="This removes every invoice, customer and agent in the workspace. It can’t be undone."
-        cancelLabel="Cancel"
-        actionLabel="Delete workspace"
-        actionVariant="danger"
-        onCancel={closeConfirm}
-        onAction={() => {
-          setConfirmOpen(false);
-          onDeleteWorkspace?.();
-        }}
       />
     </>
   );
