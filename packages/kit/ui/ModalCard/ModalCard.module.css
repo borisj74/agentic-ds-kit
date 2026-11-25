@@ -135,6 +135,10 @@
 .card[aria-modal="true"] .body {
   min-height: 0;
   overflow: auto;
+  /* The scroll box clips at its edge: 4px of room on every side, given back by the margin,
+     keeps a focused field's 3px focus ring whole without moving the content. */
+  padding: var(--space-1);
+  margin: calc(var(--space-1) * -1);
 }
 
 /* ---- Shared footer: footerStart (Ask or a count) left, actions right ---- */
