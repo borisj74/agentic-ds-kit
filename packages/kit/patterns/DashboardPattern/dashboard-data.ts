@@ -367,9 +367,6 @@ export const NEEDS_ATTENTION_FOLDED: ListViewItem[] = [
   { id: "expiring", primary: "2 cards expiring", secondary: "Marlow Dental, Quarry Coffee", icon: "Clock", value: cents(1450 + 260) },
 ];
 
-/** How many people Needs attention asks for today, for its title. */
-export const NEEDS_ATTENTION_COUNT = NEEDS_ATTENTION.length;
-
 /** Work panel: what changed since Monday, newest first. */
 export const CHANGES: ListViewItem[] = [
   { id: "c1", primary: "Growth added 18 subscribers", secondary: "Most came from the annual offer", dot: "success", meta: "2h ago" },

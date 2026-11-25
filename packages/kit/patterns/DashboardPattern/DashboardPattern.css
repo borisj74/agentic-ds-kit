@@ -30,19 +30,30 @@
   align-items: start;
 }
 
+/* Overview, wide without the rail: the chart follows the KPIs, and the invoices close the page. */
+.dashboard-pattern__home--wide {
+  grid-template-areas:
+    "kpis"
+    "chart"
+    "table";
+}
+
 .dashboard-pattern__home--rail > .dashboard-pattern__area-rail {
   grid-area: rail;
 }
 
-.dashboard-pattern__home--rail > .dashboard-pattern__area-kpis {
+.dashboard-pattern__home--rail > .dashboard-pattern__area-kpis,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-kpis {
   grid-area: kpis;
 }
 
-.dashboard-pattern__home--rail > .dashboard-pattern__area-chart {
+.dashboard-pattern__home--rail > .dashboard-pattern__area-chart,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-chart {
   grid-area: chart;
 }
 
-.dashboard-pattern__home--rail > .dashboard-pattern__area-table {
+.dashboard-pattern__home--rail > .dashboard-pattern__area-table,
+.dashboard-pattern__home--wide > .dashboard-pattern__area-table {
   grid-area: table;
 }
 
@@ -62,11 +73,6 @@
 .dashboard-pattern__period {
   inline-size: var(--layout-metrics-min);
   max-inline-size: 100%;
-}
-
-/* Card bodies with no padding of their own (flush cards) get the card inset back for a skeleton or Empty. */
-.dashboard-pattern__pad {
-  padding: var(--space-inset-md);
 }
 
 /* Holds the main chart and its summary, so the visually hidden summary stays inside the scroll area. */

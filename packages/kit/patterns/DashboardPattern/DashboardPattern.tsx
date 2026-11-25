@@ -15,7 +15,6 @@ import { LineChart } from "../../ui/LineChart";
 import { ListView } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
 import { Scoreboard } from "../../ui/Scoreboard";
-import type { ScorecardProps } from "../../ui/Scorecard";
 import { SegmentedControl } from "../../ui/SegmentedControl";
 import { DateRangePicker } from "../../ui/DateRangePicker";
 import type { DateRange } from "../../ui/DateRangePicker";
@@ -55,7 +54,10 @@ import {
   type DashboardMetric,
   type DashboardPeriod,
 } from "./dashboard-data";
+import { findingFor, shortName, trendFor } from "./metricText";
 import "./DashboardPattern.css";
+
+export { findingFor, trendFor } from "./metricText";
 
 /** The demo's last day (dashboard-data END) and the three periods as DateRangePicker presets. */
 const PERIOD_END = "2026-11-20";
@@ -279,39 +281,6 @@ function AtWidth({ children }: { children: (narrow: boolean) => ReactNode }) {
   return <>{children(narrow)}</>;
 }
 
-/** "Overdue · 14 invoices" → "Overdue": the tile label without its count. */
-function shortName(label: string): string {
-  return label.split(" · ")[0];
-}
-
-/**
- * The chart card's title states the finding: how far the latest point sits from the reference,
- * e.g. "MRR is $7.4k below the $420k target". The reference label's first word names it (Target,
- * Goal, Limit).
- */
-export function findingFor(m: DashboardMetric): string {
-  const latest = m.series.current[m.series.current.length - 1];
-  const name = shortName(m.label);
-  if (latest === undefined || !Number.isFinite(latest)) return name;
-  const [kind, ...rest] = m.reference.label.split(" ");
-  const what = rest.length ? `the ${m.format(m.reference.value)} ${kind.toLowerCase()}` : m.reference.label;
-  const gap = latest - m.reference.value;
-  const verb = /s$/.test(name) ? "are" : "is";
-  if (gap === 0) return `${name} ${verb} at ${what}`;
-  return `${name} ${verb} ${m.format(Math.abs(gap))} ${gap < 0 ? "below" : "above"} ${what}`;
-}
-
-/** Scorecard arrow from the delta text's sign, else from where the period's line went. */
-export function trendFor(m: DashboardMetric): NonNullable<ScorecardProps["trend"]> {
-  const sign = m.delta.trim()[0];
-  if (sign === "+") return "up";
-  if (sign === "-" || sign === "−") return "down";
-  const first = m.series.current[0];
-  const latest = m.series.current[m.series.current.length - 1];
-  if (first === undefined || latest === undefined || first === latest) return "flat";
-  return latest > first ? "up" : "down";
-}
-
 /**
  * Northwind's billing home inside AppShellPattern (inset). Overview: four KPIs that pick the
  * revenue chart's metric, the chart, Needs attention and the oldest overdue invoices. Revenue:
@@ -347,6 +316,18 @@ export function DashboardPattern({
   const [compare, setCompare] = useControllable(compareProp, defaultCompare, onCompareChange);
   const [insightOpen, setInsightOpen] = useState(true);
   const [tab, setTab] = useState("overview");
+  // "Open revenue report" unmounts with the Overview panel, so focus moves to the Revenue panel.
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const focusPanel = useRef(false);
+  useEffect(() => {
+    if (!focusPanel.current) return;
+    focusPanel.current = false;
+    tabsRef.current?.querySelector<HTMLElement>(':scope > [role="tabpanel"]')?.focus();
+  }, [tab]);
+  function openRevenue() {
+    focusPanel.current = true;
+    setTab("revenue");
+  }
 
   // A granularity the period does not offer falls back to the period's first one.
   const allowed = granularitiesFor(period);
@@ -482,7 +463,7 @@ export function DashboardPattern({
         source={`Stripe · ${periodShort}`}
         askLabel="Ask"
         onAsk={() => ask(name)}
-        actions={narrow ? undefined : [{ label: "Open revenue report", appearance: "outline", mode: "neutral", onClick: () => setTab("revenue") }]}
+        actions={narrow ? undefined : [{ label: "Open revenue report", appearance: "outline", mode: "neutral", onClick: openRevenue }]}
       >
         <div className="dashboard-pattern__chart">
           <LineChart
@@ -507,10 +488,10 @@ export function DashboardPattern({
       size={narrow ? "sm" : "md"}
       icon="TriangleAlert"
       eyebrow="Needs attention · today"
-      title={empty ? "Needs attention" : `${NEEDS_ATTENTION.length} accounts need a person`}
-      askLabel="Ask"
-      onAsk={() => ask("Needs attention")}
-      actions={empty ? undefined : [{ label: "Retry 3 payments", appearance: "outline", mode: "neutral" }]}
+      title={empty || loading ? "Needs attention" : `${NEEDS_ATTENTION.length} accounts need a person`}
+      askLabel={loading ? undefined : "Ask"}
+      onAsk={loading ? undefined : () => ask("Needs attention")}
+      actions={empty || loading ? undefined : [{ label: "Retry 3 payments", appearance: "outline", mode: "neutral" }]}
     >
       {loading ? (
         <Skeleton lines={4} label="Loading Needs attention" />
@@ -546,12 +527,12 @@ export function DashboardPattern({
       flush
       icon="FileText"
       eyebrow="Billing · Invoices"
-      meta={SYNCED_AT}
-      title={empty ? "Overdue invoices" : `${OVERDUE.count} invoices overdue, ${cents(OVERDUE.total)}`}
-      source={empty ? undefined : `Oldest first · ${OVERDUE_INVOICES.length} of ${OVERDUE.count} · Stripe, synced ${SYNCED_AT}`}
-      askLabel="Ask"
-      onAsk={() => ask("Overdue invoices")}
-      actions={empty ? undefined : [{ label: narrow ? `View all ${OVERDUE.count}` : `View all ${OVERDUE.count} invoices`, appearance: "outline", mode: "neutral" }]}
+      meta={loading ? undefined : SYNCED_AT}
+      title={empty || loading ? "Overdue invoices" : `${OVERDUE.count} invoices overdue, ${cents(OVERDUE.total)}`}
+      source={empty || loading ? undefined : `Oldest first · ${OVERDUE_INVOICES.length} of ${OVERDUE.count} · Stripe, synced ${SYNCED_AT}`}
+      askLabel={loading ? undefined : "Ask"}
+      onAsk={loading ? undefined : () => ask("Overdue invoices")}
+      actions={empty || loading ? undefined : [{ label: narrow ? `View all ${OVERDUE.count}` : `View all ${OVERDUE.count} invoices`, appearance: "outline", mode: "neutral" }]}
     >
       <Table
         aria-label="Overdue invoices, oldest first"
@@ -582,7 +563,7 @@ export function DashboardPattern({
           className={[
             "dashboard-pattern__body",
             "dashboard-pattern__home",
-            !narrow && rail ? "dashboard-pattern__home--rail" : "",
+            narrow ? "" : rail ? "dashboard-pattern__home--rail" : "dashboard-pattern__home--wide",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -773,6 +754,7 @@ export function DashboardPattern({
         </div>
         <div className="layout-content">
           <Tabs
+            ref={tabsRef}
             ariaLabel="Billing views"
             value={tab}
             onChange={setTab}
