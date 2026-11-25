@@ -1,8 +1,6 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Avatar } from "../../ui/Avatar";
-import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import { Drawer } from "../../ui/Drawer";
@@ -12,7 +10,7 @@ import { Input } from "../../ui/Input";
 import { ListView } from "../../ui/ListView";
 import { Meter } from "../../ui/Meter";
 import { Select } from "../../ui/Select";
-import { Table } from "../../ui/Table";
+import { DataTable } from "../../ui/DataTable";
 import { Textarea } from "../../ui/Textarea";
 import { MEMBERS, ROLE_FILTER_OPTIONS, ROLE_LABELS, ROLE_OPTIONS, SEATS, type Member } from "./settings-data";
 
@@ -36,7 +34,18 @@ const COLUMNS = [
   { key: "role", header: "Role" },
   { key: "status", header: "Status" },
   { key: "lastActive", header: "Last active" },
+  { key: "actions", header: "", width: "3.5rem" },
 ];
+
+/** Avatar initials from the person's name, without "(you)". */
+function initials(name: string): string {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
 
 /** Row menu: invites can be resent or revoked; members can have their email copied or be removed. */
 function memberActions(member: Member) {
@@ -58,7 +67,7 @@ const seatsFree = SEATS.limit - SEATS.used;
 
 /**
  * Team page: seats (a kit Meter; seats count pending invites, Add seats), search and a role filter,
- * members in a kit Table (role Select, status Badge, last active, row menu), and Invite people in a
+ * members in a kit DataTable (role Select, status Badge, last active, row menu), and Invite people in a
  * kit Drawer. Narrow lists members in a ListView with a row menu. Empty shows a kit Empty whose
  * Invite people is the primary.
  */
@@ -197,41 +206,41 @@ export function TeamSettings({
               <div className="settings-pattern__filter">{roleFilter}</div>
               <span className="settings-pattern__caption settings-pattern__count">{count}</span>
             </div>
-            <Table
-              aria-label="Members"
+            <DataTable
+              ariaLabel="Members"
               columns={COLUMNS}
-              emptyLabel="No members match your search or role."
+              emptyMessage="No members match your search or role."
               rows={members.map((member) => ({
-                member: <MemberCell name={member.name} member={member} />,
+                id: member.id,
+                member: {
+                  type: "avatar",
+                  name: member.you ? `${member.name} (you)` : member.name,
+                  initials: initials(member.name),
+                  label: member.detail,
+                },
                 role:
-                  member.role === "owner" ? (
-                    "Owner"
-                  ) : (
-                    <Select
-                      id={`${uid}-${member.id}-role`}
-                      size="sm"
-                      ariaLabel={`Role for ${member.name}`}
-                      options={ROLE_OPTIONS}
-                      defaultValue={member.role}
-                      onChange={(next) => onRoleChange?.(member.id, String(next))}
-                    />
-                  ),
-                status: (
-                  <Badge tone={member.status === "active" ? "success" : "warning"} size="sm">
-                    {member.status === "active" ? "Active" : "Invited"}
-                  </Badge>
-                ),
+                  member.role === "owner"
+                    ? ROLE_LABELS.owner
+                    : { type: "select", label: `Role for ${member.name}`, options: ROLE_OPTIONS, value: member.role },
+                status: {
+                  type: "badge",
+                  label: member.status === "active" ? "Active" : "Invited",
+                  tone: member.status === "active" ? "success" : "warning",
+                },
                 lastActive: member.lastActive,
+                actions: {
+                  type: "actionMenu",
+                  label: `Actions for ${member.name}`,
+                  actions: memberActions(member)
+                    .filter((action) => action.id !== "role" && !("disabled" in action && action.disabled))
+                    .map((action) => ({
+                      label: action.label,
+                      icon: action.icon,
+                      mode: "danger" in action && action.danger ? ("danger" as const) : undefined,
+                      onClick: () => onMemberAction?.(member.id, action.id),
+                    })),
+                },
               }))}
-              rowActions={(_, index) =>
-                memberActions(members[index])
-                  .filter((action) => action.id !== "role" && !("disabled" in action && action.disabled))
-                  .map((action) => ({
-                    label: action.label,
-                    icon: action.icon,
-                    onClick: () => onMemberAction?.(members[index].id, action.id),
-                  }))
-              }
             />
             <div className="settings-pattern__row settings-pattern__row--center settings-pattern__inset">
               <span className="settings-pattern__caption" role="status">{`Showing ${members.length} of ${SEATS.total}`}</span>
@@ -272,18 +281,5 @@ export function TeamSettings({
         </form>
       </Drawer>
     </div>
-  );
-}
-
-/** `name` names the row, so the Table's row menu reads "Actions for Marco Li". */
-function MemberCell({ name, member }: { name: string; member: Member }) {
-  return (
-    <span className="settings-pattern__member">
-      <Avatar name={name} size="sm" />
-      <span className="settings-pattern__two-line">
-        <span className="settings-pattern__strong">{member.you ? `${name} (you)` : name}</span>
-        <span className="settings-pattern__caption">{member.detail}</span>
-      </span>
-    </span>
   );
 }

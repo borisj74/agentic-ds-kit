@@ -3,13 +3,8 @@
 import { useState } from "react";
 import { ONBOARDING_SCREENS, SETTINGS_SCREENS } from "@/lib/pattern-screens";
 import { OnboardingPattern } from "../../packages/kit/patterns/OnboardingPattern";
-import { Button, NotificationStack } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { SettingsPattern, type SettingsSection } from "../../packages/kit/patterns/SettingsPattern";
-
-const INBOX = [
-  { id: "n1", title: "Payment received", body: "INV-2026-0121 · $1,240.00", createdAt: "2 h ago", read: false, tone: "success" as const },
-  { id: "n2", title: "Approval needed", body: "Agent wants to send 4 reminders", createdAt: "5 h ago", read: false, tone: "info" as const },
-];
 
 /**
  * The settings pattern as a full screen: it renders its own settings SideNav and inset panel when
@@ -27,12 +22,9 @@ export function SettingsScreen({ view }: { view?: string }) {
   return (
     <SettingsPattern
       headerActions={
-        <>
-          <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
-            Ask
-          </Button>
-          <NotificationStack items={INBOX} label="Notifications" />
-        </>
+        <Button appearance="outline" mode="neutral" size="sm" iconStart="MessageCircle">
+          Ask
+        </Button>
       }
       appHref="#"
       section={screen.section}

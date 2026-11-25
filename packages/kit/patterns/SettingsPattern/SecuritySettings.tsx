@@ -134,7 +134,7 @@ export function SecuritySettings({
           </FieldSet>
         </div>
         {/* The card's own save row: the page's one solid primary. */}
-        <div className="settings-pattern__row settings-pattern__row--center settings-pattern__inset settings-pattern__ruled">
+        <div className="settings-pattern__row settings-pattern__row--center settings-pattern__inset settings-pattern__ruled settings-pattern__save-row">
           {narrow ? null : (
             <span className="settings-pattern__muted" role="status">
               {changes.length === 0 ? "All changes saved" : `${changes.length} unsaved change${changes.length > 1 ? "s" : ""}`}

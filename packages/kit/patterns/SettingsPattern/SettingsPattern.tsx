@@ -40,7 +40,7 @@ export interface SettingsPatternProps {
   sectionHref?: (section: SettingsSection) => string;
   /** Where Back to app goes (the nav's first row, and the index page's back step). Default "/". */
   appHref?: string;
-  /** Page-level actions on the title row, e.g. Ask and the NotificationStack bell. */
+  /** Page-level actions on the title row, e.g. Ask. */
   headerActions?: ReactNode;
   /** Billing page state: ready, overdue (unpaid invoice), loading or error. */
   billing?: BillingState;

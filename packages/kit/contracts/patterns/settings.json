@@ -65,7 +65,7 @@
   "defaults": [
     "General is the default section when wide; the index page is the default when narrow. Route section from your URL (sectionHref gives each row a real link) or let the pattern keep it",
     "Scope lines: \"Workspace setting · applies to all 12 members\" (plus who can edit, when wide) and \"Personal setting · only changes it for you\"; the index rows say what's inside (next charge, Okta SSO, Password · two-factor off)",
-    "headerActions sit on the title row, e.g. Ask (neutral sm Button with MessageCircle) and the NotificationStack bell",
+    "headerActions sit on the title row, e.g. Ask (neutral sm Button with MessageCircle)",
     "Controls are md 36 wide and lg 40 below --grid-breakpoint-md; General's labels sit left of the controls when wide",
     "Team's Invite people is the PageHeader primary; the empty Team page moves it into the kit Empty",
     "Invite people opens a right kit Drawer with Email addresses, Role and Message; Send invites is the Drawer's primary",
@@ -107,5 +107,5 @@
       "delete confirm (type the name)"
     ]
   },
-  "snippet": "<SettingsPattern section={section} onSectionChange={setSection} appHref=\"/\" headerActions={<AskAndBell />} onSave={save} onDeleteWorkspace={deleteWorkspace} />"
+  "snippet": "<SettingsPattern section={section} onSectionChange={setSection} appHref=\"/\" headerActions={<Ask />} onSave={save} onDeleteWorkspace={deleteWorkspace} />"
 }

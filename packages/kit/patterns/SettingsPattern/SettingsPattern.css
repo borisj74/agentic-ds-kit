@@ -288,3 +288,10 @@
 .settings-pattern:not(.settings-pattern--narrow) > .layout-header {
   padding-block-start: var(--space-6);
 }
+
+/* Security's save row: a muted footer that fills the card's bottom, inside its rounded corners. */
+.settings-pattern__save-row {
+  background-color: var(--surface-muted);
+  border-end-start-radius: calc(var(--radius-surface-md) - var(--border-width-thin));
+  border-end-end-radius: calc(var(--radius-surface-md) - var(--border-width-thin));
+}

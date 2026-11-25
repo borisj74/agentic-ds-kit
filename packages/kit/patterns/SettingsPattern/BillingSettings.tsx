@@ -6,11 +6,11 @@ import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import { Drawer } from "../../ui/Drawer";
+import { DataTable } from "../../ui/DataTable";
 import { Empty } from "../../ui/Empty";
 import { ListView } from "../../ui/ListView";
 import { PricingPlans } from "../../ui/PricingPlans";
 import { Skeleton } from "../../ui/Skeleton";
-import { Table } from "../../ui/Table";
 import { UsageMeter } from "../../ui/UsageMeter";
 import { BillingSchedulePattern } from "../BillingSchedulePattern";
 import {
@@ -23,7 +23,6 @@ import {
   PLAN,
   PRICING_PLANS,
   RECENT_CHARGES,
-  type Invoice,
 } from "./settings-data";
 
 export type BillingState = "ready" | "overdue" | "loading" | "error";
@@ -43,24 +42,17 @@ export interface BillingSettingsProps {
 }
 
 const INVOICE_COLUMNS = [
-  { key: "invoice", header: "Invoice", emphasis: true },
+  { key: "invoice", header: "Invoice" },
   { key: "date", header: "Date" },
   { key: "item", header: "Item" },
   { key: "status", header: "Status" },
-  { key: "amount", header: "Amount", numeric: true },
+  { key: "amount", header: "Amount", type: "number" as const },
+  { key: "download", header: "", width: "3.5rem" },
 ];
-
-function statusBadge(invoice: Invoice) {
-  return (
-    <Badge tone={invoice.status === "paid" ? "success" : "danger"} size="sm">
-      {invoice.status === "paid" ? "Paid" : "Failed"}
-    </Badge>
-  );
-}
 
 /**
  * Billing page: the plan (Compare plans opens kit PricingPlans in a Drawer), the payment method,
- * AI credits in a kit UsageMeter (its Upgrade is the one solid primary), invoices in a kit Table,
+ * AI credits in a kit UsageMeter (its Upgrade is the one solid primary), invoices in a kit DataTable,
  * then the billing-schedule example in its summary mode. Narrow puts AI credits first and lists
  * invoices in a ListView. Overdue puts a danger Alert on top and makes Pay now the one solid
  * primary; Upgrade steps away.
@@ -203,25 +195,27 @@ export function BillingSettings({
       flush
       description={INVOICES_SUMMARY}
     >
-      <Table
-        aria-label="Invoices"
+      <DataTable
+        ariaLabel="Invoices"
         aria-describedby={noteId}
         columns={INVOICE_COLUMNS}
         rows={INVOICES.map((invoice) => ({
-          invoice: <span className="settings-pattern__mono">{invoice.number}</span>,
+          id: invoice.id,
+          invoice: invoice.number,
           date: invoice.date,
           item: invoice.item,
-          status: statusBadge(invoice),
-          amount: <span className="settings-pattern__mono">{invoice.amount}</span>,
-        }))}
-        rowActionsAs="icons"
-        rowActions={(_, index) => [
-          {
-            icon: "Download",
-            ariaLabel: `Download ${INVOICES[index].number}`,
-            onClick: () => onDownload?.(INVOICES[index].id),
+          status: {
+            type: "badge",
+            label: invoice.status === "paid" ? "Paid" : "Failed",
+            tone: invoice.status === "paid" ? "success" : "danger",
           },
-        ]}
+          amount: invoice.amount,
+          download: {
+            type: "actionIcons",
+            label: `Download ${invoice.number}`,
+            actions: [{ icon: "Download", ariaLabel: `Download ${invoice.number}`, onClick: () => onDownload?.(invoice.id) }],
+          },
+        }))}
       />
       <div className="settings-pattern__row settings-pattern__row--center settings-pattern__inset">
         <span className="settings-pattern__caption" id={noteId}>
