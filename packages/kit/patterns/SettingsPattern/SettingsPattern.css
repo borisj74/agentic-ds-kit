@@ -263,11 +263,6 @@
   min-width: 0;
 }
 
-/* AI credits spans the page like the cards around it; the UsageMeter's own width var, not its look. */
-.settings-pattern .settings-pattern__credits {
-  --usage-width: 100%;
-}
-
 /* Narrow sign-in rules: the name and hint on the left, the Switch at the end of the row. */
 .settings-pattern--narrow .settings-pattern__rule {
   grid-template-columns: minmax(0, 1fr) max-content;

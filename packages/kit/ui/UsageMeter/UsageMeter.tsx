@@ -40,7 +40,9 @@ export function UsageMeter({
   warnAt = USAGE_WARN_AT,
   paceNote,
   overage,
+  compact = false,
   onUpgrade,
+  upgradeLabel = "Upgrade plan",
   onViewUsage,
   loading = false,
   error,
@@ -61,18 +63,65 @@ export function UsageMeter({
     : `${title}: ${num(used)} of ${num(limit)} ${unit}, ${percent}% used`;
   const labels = dailyLabels ?? daily.map((_, index) => String(index + 1));
   const today = daily.length ? daily[daily.length - 1] : undefined;
+  const badge = (
+    <Badge
+      tone={state === "normal" ? "neutral" : state === "warning" ? "warning" : "danger"}
+      size="sm"
+      icon={compact && state !== "normal" ? (state === "warning" ? "TriangleAlert" : "CircleX") : undefined}
+    >
+      {state === "normal" ? `${percent}% used` : state === "warning" ? "Near limit" : over ? "Over limit" : "Limit reached"}
+    </Badge>
+  );
+  const upgrade =
+    onUpgrade && state !== "normal" ? (
+      <Button size="md" className={compact ? styles.compactUpgrade : undefined} onClick={onUpgrade}>
+        {upgradeLabel}
+      </Button>
+    ) : null;
+
+  if (compact && !loading && !error) {
+    const summary = [`${num(used)} of ${num(limit)} used`, resetLabel, paceNote].filter(Boolean).join(" · ");
+    return (
+      <section
+        {...rest} {...nisthaAttr("usagemeter", rest)}
+        ref={ref}
+        className={cx(styles.card, styles.compact, className)}
+        aria-labelledby={titleId}
+      >
+        <div className={styles.compactGrid}>
+          <header className={styles.compactHead}>
+            <h3 id={titleId} className={styles.title}>
+              {title}
+            </h3>
+            {badge}
+          </header>
+          {upgrade}
+          <p className={styles.summary}>{summary}</p>
+          <div className={styles.compactMeter}>
+            <Meter value={Math.min(100, percent)} intent={intent} size="md" label={meterLabel} />
+          </div>
+          {categories.length ? (
+            <dl className={styles.categories} aria-label={`${title} by category`}>
+              {categories.map((category) => (
+                <div key={category.id} className={styles.category}>
+                  <dt>{category.label}</dt>
+                  <dd>{num(category.value)}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section {...rest} {...nisthaAttr("usagemeter", rest)} ref={ref} className={cx(styles.card, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
+    <section {...rest} {...nisthaAttr("usagemeter", rest)} ref={ref} className={cx(styles.card, compact && styles.compact, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
-        {!loading && !error ? (
-          <Badge tone={state === "normal" ? "neutral" : state === "warning" ? "warning" : "danger"} size="sm">
-            {state === "normal" ? `${percent}% used` : state === "warning" ? "Near limit" : over ? "Over limit" : "Limit reached"}
-          </Badge>
-        ) : null}
+        {!loading && !error ? badge : null}
       </header>
 
       {loading ? (
@@ -160,11 +209,7 @@ export function UsageMeter({
                   View usage
                 </Button>
               ) : null}
-              {onUpgrade && state !== "normal" ? (
-                <Button size="md" onClick={onUpgrade}>
-                  Upgrade plan
-                </Button>
-              ) : null}
+              {upgrade}
             </footer>
           ) : null}
         </>

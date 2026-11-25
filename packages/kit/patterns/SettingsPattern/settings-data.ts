@@ -124,7 +124,9 @@ export const CREDITS = {
   used: 9300,
   limit: 10000,
   resetLabel: "resets 01 Dec",
-  paceNote: "At this pace you run out on 28 Nov.",
+  paceNote: "at this pace you run out on 28 Nov",
+  paceShort: "runs out about 28 Nov",
+  upgradeLabel: "Upgrade to Business",
   categories: [
     { id: "drafting", label: "Invoice drafting", value: 5100 },
     { id: "reminders", label: "Payment reminders", value: 2700 },

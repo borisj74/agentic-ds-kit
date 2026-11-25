@@ -52,7 +52,7 @@ const INVOICE_COLUMNS = [
 
 /**
  * Billing page: the plan (Compare plans opens kit PricingPlans in a Drawer), the payment method,
- * AI credits in a kit UsageMeter (its Upgrade is the one solid primary), invoices in a kit DataTable,
+ * AI credits in a compact kit UsageMeter (its Upgrade is the one solid primary), invoices in a kit DataTable,
  * then the billing-schedule example in its summary mode. Narrow puts AI credits first and lists
  * invoices in a ListView. Overdue puts a danger Alert on top and makes Pay now the one solid
  * primary; Upgrade steps away.
@@ -102,7 +102,7 @@ export function BillingSettings({
             <Skeleton lines={3} label="Loading payment method" />
           </Card>
         </div>
-        <UsageMeter title="AI credits" used={0} limit={CREDITS.limit} loading />
+        <UsageMeter compact title="AI credits" used={0} limit={CREDITS.limit} loading />
         <Card title="Invoices">
           <Skeleton lines={4} label="Loading invoices" />
         </Card>
@@ -115,14 +115,16 @@ export function BillingSettings({
 
   const credits = (
     <UsageMeter
-      className="settings-pattern__credits"
+      compact
       title="AI credits"
       used={CREDITS.used}
       limit={CREDITS.limit}
-      resetLabel={CREDITS.resetLabel}
+      // Narrow: the short pace line only, as on the 390 board.
+      resetLabel={narrow ? undefined : CREDITS.resetLabel}
       categories={CREDITS.categories}
       warnAt={0.8}
-      paceNote={CREDITS.paceNote}
+      paceNote={narrow ? CREDITS.paceShort : CREDITS.paceNote}
+      upgradeLabel={CREDITS.upgradeLabel}
       // Overdue: Pay now is the one solid primary, so Upgrade steps away.
       onUpgrade={overdue ? undefined : onUpgrade ?? comparePlans}
     />

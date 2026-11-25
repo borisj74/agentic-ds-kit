@@ -114,3 +114,98 @@
   flex-direction: column;
   gap: var(--space-3);
 }
+
+/* Compact: one block for a settings page. Spans its container; the grid moves Upgrade below the meter when narrow. */
+.compact {
+  --usage-width: 100%;
+  container: usagemeter / inline-size;
+}
+
+.compactGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "head action"
+    "summary summary"
+    "meter meter"
+    "categories categories";
+  align-items: center;
+  column-gap: var(--space-4);
+  row-gap: var(--space-3);
+}
+
+.compactHead {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.compactUpgrade {
+  grid-area: action;
+}
+
+.summary {
+  grid-area: summary;
+  margin: 0;
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.compactMeter {
+  grid-area: meter;
+}
+
+.categories {
+  grid-area: categories;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.category {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-inline: var(--space-4);
+  border-inline-start: var(--border-width-thin) solid var(--line-default);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+}
+
+.category:first-child {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+
+.category dt {
+  color: var(--text-fg-muted);
+}
+
+.category dd {
+  margin: 0;
+  color: var(--text-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+@container usagemeter (max-width: 40rem) {
+  .compactGrid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "head"
+      "summary"
+      "meter"
+      "action";
+  }
+
+  .compactUpgrade {
+    width: 100%;
+  }
+
+  .categories {
+    display: none;
+  }
+}
