@@ -44,9 +44,13 @@
   box-shadow: var(--shadow-xs);
 }
 
+/* Segments sit 2px apart inside the track, so the focus ring stays inside the focused segment instead of
+   bleeding over its neighbours and the track edge. */
 .item:focus-visible {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-inset-2xs);
+  position: relative;
+  z-index: 1;
+  outline: var(--border-focus-width) solid var(--border-focus);
+  outline-offset: calc(var(--border-focus-width) * -1);
 }
 
 .item:disabled {
