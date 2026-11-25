@@ -30,8 +30,53 @@
   margin-bottom: 0;
 }
 
-.list-detail-pattern__status {
+/* At 640 and up the open record (or Empty) is a pane beside the list, split from it by a faint rule. */
+.list-detail-pattern__pane {
+  align-self: stretch;
+  padding-inline-start: var(--layout-gutter-md);
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__empty {
+  display: grid;
+  align-content: center;
+}
+
+/* Record head: id and status on one line, the customer line, then the actions; a rule closes it. */
+.list-detail-pattern__head {
+  display: grid;
+  gap: var(--space-1);
+  padding-block-end: var(--space-6);
+  border-block-end: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__title-row {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-size-ui-lg);
+  line-height: var(--type-line-ui-lg);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-primary);
+}
+
+.list-detail-pattern__sub {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body);
+  line-height: var(--type-line-body);
+  color: var(--text-secondary);
+}
+
+.list-detail-pattern__head .list-detail-pattern__actions {
+  margin-block-start: var(--space-3);
 }
 
 .list-detail-pattern__actions {
@@ -39,6 +84,14 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+}
+
+.list-detail-pattern__ask {
+  display: flex;
+}
+
+.list-detail-pattern__head .list-detail-pattern__ask {
+  margin-inline-end: auto;
 }
 
 .list-detail-pattern__note {

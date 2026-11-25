@@ -5,12 +5,12 @@ import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import { Empty } from "../../ui/Empty";
+import { IconButton } from "../../ui/IconButton";
 import { Input } from "../../ui/Input";
 import { ListView } from "../../ui/ListView";
 import type { ListViewItem } from "../../ui/ListView";
 import { PageHeader } from "../../ui/PageHeader";
 import type { PageHeaderProps } from "../../ui/PageHeader";
-import { Section } from "../../ui/Section";
 import { SegmentedControl } from "../../ui/SegmentedControl";
 import { Table } from "../../ui/Table";
 import { INVOICES, type InvoiceStatus, type ListDetailItem } from "./list-detail-data";
@@ -37,6 +37,9 @@ const LINE_COLUMNS = [
   { key: "qty", header: "Qty", numeric: true },
   { key: "amount", header: "Amount", numeric: true },
 ];
+
+/* Below 640 the amount card above already says the total, so line items keep only item and amount. */
+const LINE_COLUMNS_NARROW = [LINE_COLUMNS[0], LINE_COLUMNS[2]];
 
 /*
  * Narrow = below --grid-breakpoint-sm (640), read at runtime. Below it the list fills the page and a
@@ -82,9 +85,14 @@ function StatusBadge({ status }: { status: InvoiceStatus }) {
 /** The record's body: amount strip, line items and payment history. Shared by the side pane and the full page. */
 function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boolean }) {
   const lineRows = invoice.lines.map((line) => ({ item: line.item, qty: line.qty, amount: line.amount }));
-  const payments: ListViewItem[] = [...invoice.payments]
-    .reverse()
-    .map((payment) => ({ id: payment.id, primary: payment.text, icon: payment.icon, meta: payment.at }));
+  // Wide reads as a log, oldest first; the phone shows the latest attempt first.
+  const history = narrow ? [...invoice.payments].reverse() : invoice.payments;
+  const payments: ListViewItem[] = history.map((payment) => ({
+    id: payment.id,
+    primary: payment.text,
+    icon: payment.icon,
+    meta: payment.at,
+  }));
   const summary = narrow
     ? [{ label: `Amount due · ${invoice.card}`, value: invoice.amount, lead: true }]
     : [
@@ -107,10 +115,12 @@ function InvoiceBody({ invoice, narrow }: { invoice: ListDetailItem; narrow: boo
       </Card>
       <Card title="Line items" headingLevel={3} size={narrow ? "sm" : "md"} flush>
         <Table
-          columns={LINE_COLUMNS}
+          columns={narrow ? LINE_COLUMNS_NARROW : LINE_COLUMNS}
           rows={lineRows}
           size="sm"
-          footer={{ label: invoice.status === "paid" ? "Total paid" : "Total due", value: invoice.total }}
+          footer={
+            narrow ? undefined : { label: invoice.status === "paid" ? "Total paid" : "Total due", value: invoice.total }
+          }
         />
       </Card>
       <Card title="Payment history" headingLevel={3} size={narrow ? "sm" : "md"} flush>
@@ -133,6 +143,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
   const [announce, setAnnounce] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
   const searchId = useId();
+  const headingId = useId();
   const returnTo = useRef<string | null>(null);
 
   // Follow a changed `selectedId` prop by adjusting state during render
@@ -193,7 +204,8 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
   const items: ListViewItem[] = shown.map((item) => ({
     id: item.id,
     primary: item.customer,
-    secondary: `${item.id} · due ${item.due}`,
+    // The phone row keeps the invoice number only; the due date is in the record.
+    secondary: narrow ? item.id : `${item.id} · due ${item.due}`,
     value: item.amount,
     meta: rowMeta(item),
   }));
@@ -203,7 +215,9 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
     label: `${FILTER_LABEL[key]} ${counts[key]}`,
   }));
 
-  const newInvoice = (
+  const newInvoice = narrow ? (
+    <IconButton icon="Plus" ariaLabel="New invoice" size="lg" appearance="outline" mode="neutral" />
+  ) : (
     <Button size="sm" appearance="outline" mode="neutral" iconStart="Plus">
       New invoice
     </Button>
@@ -211,20 +225,28 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
 
   const oldestOverdue = INVOICES.find((item) => item.status === "overdue");
 
+  // Ask sits on its own at the start; Download PDF and the one primary sit together at the end.
+  // Below 640 they stay md (36) in one row, with Download PDF as an IconButton so the row fits 390.
   const detailActions = (invoice: ListDetailItem) => (
-    <>
-      <Button size="sm" appearance="outline" mode="neutral" iconStart="MessageCircle">
-        Ask
-      </Button>
-      <Button size="md" appearance="outline" mode="neutral" iconStart="Download">
-        Download PDF
-      </Button>
+    <div className="list-detail-pattern__actions">
+      <span className="list-detail-pattern__ask">
+        <Button size={narrow ? "md" : "sm"} appearance="outline" mode="neutral" iconStart="MessageCircle">
+          Ask
+        </Button>
+      </span>
+      {narrow ? (
+        <IconButton icon="Download" ariaLabel="Download PDF" size="md" appearance="outline" mode="neutral" />
+      ) : (
+        <Button size="md" appearance="outline" mode="neutral" iconStart="Download">
+          Download PDF
+        </Button>
+      )}
       {invoice.status === "overdue" ? (
         <Button size="md" iconStart="RefreshCw">
           Retry payment
         </Button>
       ) : null}
-    </>
+    </div>
   );
 
   const live = (
@@ -239,14 +261,18 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
     return (
       <div className="layout-canvas layout-canvas--sticky-header">
         <div className="layout-header">
-          <PageHeader title={open.id} subtitle={`${open.customer} · ${dueLine(open)}`} breadcrumbs={trail} />
+          <PageHeader
+            title={open.id}
+            subtitle={`${open.customer} · ${dueLine(open)}`}
+            breadcrumbs={trail}
+          />
         </div>
         <div className="layout-content">
           <section className="list-detail-pattern__detail" aria-label={`Invoice ${open.id}`}>
-            <div className="list-detail-pattern__status">
+            <div className="list-detail-pattern__title-row">
               <StatusBadge status={open.status} />
             </div>
-            <div className="list-detail-pattern__actions">{detailActions(open)}</div>
+            {detailActions(open)}
             <InvoiceBody invoice={open} narrow />
           </section>
           {live}
@@ -257,6 +283,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
 
   const list = (
     <div className="list-detail-pattern__list" ref={listRef}>
+      {narrow ? null : <PageHeader title="Invoices" breadcrumbs={breadcrumbs} actions={newInvoice} />}
       <div className="list-detail-pattern__controls">
         <Input
           id={searchId}
@@ -276,7 +303,7 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
           onChange={(value) => setFilter(value as Filter)}
         />
       </div>
-      {filter === "overdue" ? <p className="list-detail-pattern__note">Oldest first</p> : null}
+      {filter === "overdue" ? <p className="list-detail-pattern__note">Overdue · oldest first</p> : null}
       <ListView
         label="Invoices"
         size={narrow ? "md" : "sm"}
@@ -298,14 +325,11 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
 
   return (
     <div className="layout-canvas layout-canvas--sticky-header">
-      <div className="layout-header">
-        <PageHeader
-          title="Invoices"
-          subtitle={`${counts.overdue} of ${counts.all} are overdue.`}
-          breadcrumbs={breadcrumbs}
-          actions={newInvoice}
-        />
-      </div>
+      {narrow ? (
+        <div className="layout-header">
+          <PageHeader title="Invoices" actions={newInvoice} />
+        </div>
+      ) : null}
       <div className="layout-content">
         {narrow ? (
           list
@@ -313,32 +337,36 @@ export function ListDetailPattern({ breadcrumbs, selectedId }: ListDetailPattern
           <div className="layout-split--secondary list-detail-pattern__split">
             {list}
             {open ? (
-              <Section
-                title={open.id}
-                description={`${open.customer} · ${dueLine(open)}`}
-                actions={detailActions(open)}
-                size="sm"
-                className="list-detail-pattern__detail"
-              >
-                <div className="list-detail-pattern__status">
-                  <StatusBadge status={open.status} />
-                </div>
+              <section className="list-detail-pattern__detail list-detail-pattern__pane" aria-labelledby={headingId}>
+                <header className="list-detail-pattern__head">
+                  <div className="list-detail-pattern__title-row">
+                    <h2 id={headingId} className="list-detail-pattern__title">
+                      {open.id}
+                    </h2>
+                    <StatusBadge status={open.status} />
+                  </div>
+                  <p className="list-detail-pattern__sub">
+                    {open.customer} · {dueLine(open)}
+                  </p>
+                  {detailActions(open)}
+                </header>
                 <InvoiceBody invoice={open} narrow={false} />
-              </Section>
+              </section>
             ) : (
-              <Empty
-                title="No invoice open"
-                description={`Pick one from the list. ${counts.overdue} of ${counts.all} are overdue.`}
-                icon="FileText"
-                outlined
-                actions={
-                  oldestOverdue ? (
-                    <Button size="sm" appearance="outline" mode="neutral" onClick={() => openInvoice(oldestOverdue.id)}>
-                      Open oldest overdue
-                    </Button>
-                  ) : undefined
-                }
-              />
+              <div className="list-detail-pattern__pane list-detail-pattern__empty">
+                <Empty
+                  title="No invoice open"
+                  description={`Pick one from the list. ${counts.overdue} of ${counts.all} are overdue.`}
+                  icon="FileText"
+                  actions={
+                    oldestOverdue ? (
+                      <Button size="sm" appearance="outline" mode="neutral" onClick={() => openInvoice(oldestOverdue.id)}>
+                        Open oldest overdue
+                      </Button>
+                    ) : undefined
+                  }
+                />
+              </div>
             )}
           </div>
         )}

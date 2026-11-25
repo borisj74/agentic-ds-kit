@@ -16,7 +16,7 @@
     "card",
     "badge",
     "button",
-    "section",
+    "iconbutton",
     "table",
     "input",
     "segmentedcontrol"
@@ -35,9 +35,9 @@
   ],
   "defaults": [
     "Demo is Northwind's invoices: Overdue filter, oldest first, with search by customer or invoice",
-    "Rows: customer, invoice number and due date, amount as the ListView value, lateness as meta",
-    "Detail: status Badge, Ask, Download PDF and Retry payment (the one primary), an amount strip, Line items (Table) and Payment history (ListView)",
-    "Below 640 the actions sit under the status in the detail body; there is no sticky bottom bar"
+    "At 640 and up the list column carries the Invoices PageHeader and New invoice; the record pane has the id, a status Badge, the customer line, and Ask on the left with Download PDF and Retry payment (the one primary) on the right",
+    "Record body: an amount strip, Line items (Table with a total) and Payment history (ListView, oldest first)",
+    "Below 640 rows show the invoice number only; the record keeps item and amount in Line items and lists the latest payment first. Actions sit in the body; there is no sticky bottom bar"
   ],
   "snippet": "<ListDetailPattern />"
 }

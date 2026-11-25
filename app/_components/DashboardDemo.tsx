@@ -266,7 +266,7 @@ export function DashboardScreen({
         ) : page === "research" ? (
           <EmptyFirstRunPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (
-          <ListDetailPattern breadcrumbs={trail} selectedId={listDetailSelectedId(pattern === "list-detail" ? view : undefined)} />
+          <ListDetailPattern selectedId={listDetailSelectedId(pattern === "list-detail" ? view : undefined)} />
         ) : current ? (
           <PlaceholderPage item={current} breadcrumbs={trail} />
         ) : null}
