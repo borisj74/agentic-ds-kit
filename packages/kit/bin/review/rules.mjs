@@ -550,11 +550,16 @@ function patternFinding(kit, used, ctx) {
     const parts = distinctive(small);
     return small !== big && parts.length > 0 && parts.every((id) => big.contains.includes(id));
   };
-  // A file that already is (or uses) a pattern covers that pattern's parts, so a pattern inside it is no better fit.
+  // A file that already is (or uses) a pattern covers that pattern's parts: when every distinctive part
+  // that matched is one the file's own pattern brings (onboarding's PageHeader and ListView), it is no better fit.
   const own = kit.patterns.filter((pattern) => usesPattern(pattern, ctx));
+  const explained = (pattern) => {
+    const hits = distinctive(pattern).filter((id) => usedIds.has(id));
+    return own.some((mine) => hits.every((id) => mine.contains.includes(id)));
+  };
   const matches = [];
   for (const pattern of kit.patterns) {
-    if (own.includes(pattern) || own.some((mine) => inside(pattern, mine))) continue;
+    if (own.includes(pattern) || explained(pattern)) continue;
     const match = shareMatch(kit, pattern.contains, usedIds, { allowSmall: true });
     if (match) matches.push({ pattern, match, size: [match.share, match.usedAll.length, pattern.contains.length] });
   }

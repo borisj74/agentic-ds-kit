@@ -7,4 +7,4 @@
 
 ### Fixed
 
-- **`review` pattern-fits no longer names a smaller pattern inside a bigger one.** A file that is (or uses) the dashboard pattern isn't told it looks like list-detail, and when both fit, the bigger pattern wins.
+- **`review` pattern-fits no longer names a smaller pattern inside a bigger one.** When the parts that matched are ones the file's own pattern already brings (the dashboard or onboarding pattern and list-detail), it stays quiet, and when two patterns fit, the bigger one wins.
