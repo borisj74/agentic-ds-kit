@@ -84,6 +84,20 @@ describe("Alert", () => {
     assert.equal(buttons.length, 2);
     assert.ok(html.indexOf("Try again") < html.indexOf("View log"));
   });
+
+  test("page action with appearance outline matches the inline outline Button; no children renders no body", () => {
+    const button = (html) => (html.match(/<button[^>]*>/) ?? [""])[0];
+    const solid = renderToStaticMarkup(h(Alert, { variant: "danger", title: "Not saved", action: { label: "Go to VAT number", onClick: noop } }));
+    const outline = renderToStaticMarkup(
+      h(Alert, { variant: "danger", title: "Not saved", action: { label: "Go to VAT number", onClick: noop, appearance: "outline" } }),
+    );
+    const inline = renderToStaticMarkup(
+      h(Alert, { variant: "danger", placement: "inline", title: "Not saved", action: { label: "Go to VAT number", onClick: noop } }),
+    );
+    assert.notEqual(button(solid), button(outline), "outline changes the page action");
+    assert.equal(button(outline), button(inline), "same outline neutral Button as inline");
+    assert.equal((outline.match(/<p/g) ?? []).length, 1, "title only, no empty body paragraph");
+  });
 });
 
 describe("Alert labels", () => {

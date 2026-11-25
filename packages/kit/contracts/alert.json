@@ -31,7 +31,8 @@
     },
     "children": {
       "type": "string",
-      "required": true
+      "required": false,
+      "note": "Optional: leave it out when the title says it all, like an error summary."
     },
     "placement": {
       "type": "enum",
@@ -55,7 +56,7 @@
     "action": {
       "type": "object",
       "required": false,
-      "note": "One kit Button under the text. page: solid primary (counts as the view's one primary). inline: outline neutral.",
+      "note": "One kit Button under the text. page: solid primary (counts as the view's one primary), or outline neutral with appearance \"outline\" when the page already has its primary (an error summary above a form with Save). inline: outline neutral.",
       "label": {
         "type": "string",
         "required": true
@@ -63,6 +64,16 @@
       "onClick": {
         "type": "function",
         "required": true
+      },
+      "appearance": {
+        "type": "enum",
+        "values": [
+          "solid",
+          "outline"
+        ],
+        "default": "solid",
+        "required": false,
+        "note": "action only; page placement only. inline is always outline."
       }
     },
     "secondaryAction": {

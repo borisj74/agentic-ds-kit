@@ -29,7 +29,7 @@
     "Wrap every labeled input in Field (label, hint, and error wiring)",
     "Group related fields in a FieldSet with a legend; on a wide form use layout=\"side\" so the legend sits in its own column",
     "Save lives in a kit SaveBar after the form, sticky to the bottom of the scroller, with scroll-padding so a focused field is never under it",
-    "Save is the only solid primary on the page; the error summary Alert uses placement=\"inline\" so its Buttons are outline",
+    "Save is the only solid primary on the page; the error summary Alert gives its action appearance \"outline\"",
     "Mark each changed field with Field changed and put the old value in its hint (\"Was USD.\"); the SaveBar lists the same fields",
     "On Save with errors, show a danger Alert summary with one Button per field that moves focus to it, and focus the Alert; field errors keep their hint",
     "Discard, and leaving with unsaved changes, ask first in a kit AlertDialog that names the changes; Keep editing is the cancel. Closing the tab can only use the browser's own beforeunload prompt",

@@ -7,6 +7,8 @@
 .layout-canvas.settings-form-pattern {
   grid-template-rows: max-content minmax(max-content, 1fr) max-content;
   scroll-padding-block-end: calc(var(--space-16) + var(--space-4));
+  /* The page sits on the canvas; the Card (wide) and the controls are the surfaces on it. */
+  background: var(--bg-canvas);
 }
 
 /* Company, Billing address, Currency and invoices: 24 between each group and its Divider. */

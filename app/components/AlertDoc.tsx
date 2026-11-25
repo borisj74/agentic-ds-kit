@@ -220,6 +220,33 @@ export function AlertDoc() {
               </div>
               <CodeBlock code={PAGE_CODE} />
             </section>
+
+            <section className={styles.example}>
+              <h2 className={styles.exampleTitle}>Error summary</h2>
+              <div className={styles.exampleCanvas}>
+                <div className={styles.previewFill}>
+                  <Alert
+                    variant="danger"
+                    title="Not saved. Fix 1 field first"
+                    action={{ label: "Go to VAT number", onClick: noop, appearance: "outline" }}
+                  />
+                </div>
+              </div>
+              <div>
+                <h3 className={styles.usageTitle}>Usage</h3>
+                <p className={styles.usageBody}>
+                  Above a form whose Save is the page&apos;s primary. The title says it all, so there is no
+                  body, and the action is outline. One Button per field moves focus to it.
+                </p>
+              </div>
+              <CodeBlock
+                code={`<Alert
+  variant="danger"
+  title="Not saved. Fix 1 field first"
+  action={{ label: "Go to VAT number", onClick: focusVat, appearance: "outline" }}
+/>`}
+              />
+            </section>
           </div>
         )}
       </section>

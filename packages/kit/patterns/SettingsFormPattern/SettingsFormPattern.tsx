@@ -224,7 +224,9 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
         htmlFor={id(name)}
         optional={extra?.optional}
         changed={isChanged}
-        hint={hintFor(name, saved, isChanged)}
+        // On a phone a changed field drops "Was …" (Edited carries the change and the SaveBar lists it).
+        // With an error it keeps its plain hint, since the hint stays under an error.
+        hint={!narrow || !isChanged ? hintFor(name, saved, isChanged) : errors[name] ? hintFor(name, saved, false) : undefined}
         error={errors[name]}
       >
         {children}
@@ -239,11 +241,22 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
     <div className="settings-form-pattern__groups">
       <FieldSet legend="Company" description="The legal entity your customers pay" layout="side">
         {field("legalName", control("legalName", "text", "organization"))}
-        <div className="settings-form-pattern__pair">
-          {field("tradingName", control("tradingName"), { optional: true })}
-          {field("companyNumber", control("companyNumber"))}
-        </div>
-        <div className="settings-form-pattern__pair">{field("vatNumber", control("vatNumber"))}</div>
+        {narrow ? (
+          // One column on a phone: VAT number moves up under Legal name, the fields most likely to need a fix.
+          <>
+            {field("vatNumber", control("vatNumber"))}
+            {field("tradingName", control("tradingName"), { optional: true })}
+            {field("companyNumber", control("companyNumber"))}
+          </>
+        ) : (
+          <>
+            <div className="settings-form-pattern__pair">
+              {field("tradingName", control("tradingName"), { optional: true })}
+              {field("companyNumber", control("companyNumber"))}
+            </div>
+            <div className="settings-form-pattern__pair">{field("vatNumber", control("vatNumber"))}</div>
+          </>
+        )}
       </FieldSet>
       <Divider />
       <FieldSet legend="Billing address" description="Shown under the company name on invoices and receipts" layout="side">
@@ -270,35 +283,34 @@ export function SettingsFormPattern({ breadcrumbs, onCancel, onSave }: SettingsF
       <div className="layout-header" onClickCapture={guardLeave}>
         <PageHeader
           title="Billing details"
-          subtitle="Printed on every invoice Northwind sends. Changes apply from INV-1843, the next invoice."
+          // A phone keeps the title only, so the form starts higher.
+          subtitle={narrow ? undefined : "Printed on every invoice Northwind sends. Changes apply from INV-1843, the next invoice."}
           breadcrumbs={breadcrumbs}
           eyebrow={breadcrumbs ? undefined : "Settings"}
         />
       </div>
       <form className="layout-content" id={`${uid}-form`} onSubmit={handleSubmit} noValidate>
-        {/* inline: its Buttons are outline, so Save stays the page's only solid primary. */}
+        {/* The action is outline so Save stays the page's only solid primary. */}
         {firstError ? (
           <Alert
             ref={summaryRef}
             tabIndex={-1}
             variant="danger"
-            placement="inline"
             title={summaryTitle}
             className="settings-form-pattern__summary"
-            action={{ label: `Go to ${LABELS[firstError]}`, onClick: () => focusField(firstError) }}
+            action={{ label: `Go to ${LABELS[firstError]}`, onClick: () => focusField(firstError), appearance: "outline" }}
             secondaryAction={
               secondError ? { label: `Go to ${LABELS[secondError]}`, onClick: () => focusField(secondError) } : undefined
             }
-          >
-            Your changes are still here. Fix the marked fields, then save.
-          </Alert>
+          />
         ) : null}
         {narrow ? groups : <Card size="md">{groups}</Card>}
       </form>
       <SaveBar
         state={state}
-        changes={changeNames}
-        savedAt={justSaved || !dirty ? savedAt.split(" by ")[0] : savedAt}
+        // In the error state the bar says only what to fix; the summary Alert above the form names the field.
+        changes={state === "error" ? [] : changeNames}
+        savedAt={state === "error" ? undefined : justSaved || !dirty ? savedAt.split(" by ")[0] : savedAt}
         message={state === "error" ? `Not saved · ${plural(errorFields.length, "field", "fields")} to fix` : undefined}
         onDiscard={() => setConfirm("discard")}
         onSave={save}
