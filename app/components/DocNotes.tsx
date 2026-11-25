@@ -28,7 +28,7 @@ function GuideIcon({ kind }: { kind: "do" | "dont" }) {
           d="M3.5 8.5 6.5 11.5 12.5 4.5"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -37,7 +37,7 @@ function GuideIcon({ kind }: { kind: "do" | "dont" }) {
           d="M4.5 4.5 11.5 11.5 M11.5 4.5 4.5 11.5"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
         />
       )}

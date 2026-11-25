@@ -271,12 +271,12 @@
       },
       "tokens": {
         "--icon-stroke": {
-          "note": "Standard Lucide stroke width, 1.5.",
+          "note": "Standard Lucide stroke width, 2 (Lucide's default).",
           "useWhen": "Every interface icon",
           "doNot": "Do not set another stroke width on icons"
         },
         "--icon-stroke-strong": {
-          "note": "Heavier stroke, 2, where 1.5 looks too thin.",
+          "note": "Stroke 2 for tiny marks. Now the same as --icon-stroke; kept so existing code keeps working.",
           "useWhen": "Tiny marks such as the Checkbox check and minus at 12px or smaller",
           "doNot": "Do not use on regular icons, or on chart, Progress, Meter, or PieChart strokes"
         },

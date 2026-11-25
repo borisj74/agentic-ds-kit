@@ -67,7 +67,7 @@ describe("Table markup", () => {
     const html = render(h(kit.Table, { columns: COLUMNS, rows: ROWS }));
     assert.equal((html.match(/aria-sort="none"/g) ?? []).length, 2);
     assert.match(html, /<button type="button"[^>]*><span>Customer<\/span><svg/);
-    assert.match(html, /stroke-width="1.5"/);
+    assert.match(html, /stroke-width="2"/);
   });
 
   test("rowActions adds a last column named per row", () => {
