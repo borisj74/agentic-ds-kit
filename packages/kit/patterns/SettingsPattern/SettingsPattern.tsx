@@ -14,6 +14,7 @@ import {
   SideNavNav,
   SideNavRoot,
   SideNavSection,
+  SideNavSlot,
 } from "../../ui/SideNav";
 import { IntegrationSettingsPattern } from "../IntegrationSettingsPattern";
 import { BillingSettings, type BillingState } from "./BillingSettings";
@@ -254,6 +255,12 @@ export function SettingsPattern({
     <div className="layout-shell layout-shell--inset layout-shell--viewport settings-pattern__shell">
       <div className="layout-app">
         <SideNavRoot aria-label="Settings" radius="none" open>
+          {/* Back to app sits at the very top, above the workspace. */}
+          <SideNavSlot placement="before" className="settings-pattern__back">
+            <SideNavSection>
+              <SideNavItem label="Back to app" icon={ArrowLeft} href={appHref} />
+            </SideNavSection>
+          </SideNavSlot>
           <SideNavHeader>
             <SideNavBrand
               mark={WORKSPACE.mark}
@@ -266,9 +273,6 @@ export function SettingsPattern({
             />
           </SideNavHeader>
           <SideNavNav>
-            <SideNavSection>
-              <SideNavItem label="Back to app" icon={ArrowLeft} href={appHref} />
-            </SideNavSection>
             {SETTINGS_GROUPS.map((group) => (
               <SideNavSection key={group.id} label={group.label}>
                 {sections

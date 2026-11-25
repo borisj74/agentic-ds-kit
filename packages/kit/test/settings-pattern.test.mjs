@@ -166,12 +166,20 @@ async function click(el) {
 }
 
 describe("SettingsPattern", { skip }, () => {
-  test("wide: a settings nav with Back to app first, Workspace and You groups, General marked; no breadcrumb", async () => {
+  test("wide: Back to app at the very top, then the workspace, the Workspace and You groups (General marked), the user last; no breadcrumb", async () => {
     narrow = false;
     const view = await render();
     const nav = view.container.querySelector('nav[aria-label="Settings"]');
     assert.ok(nav, "the nav is named Settings");
-    const links = [...nav.querySelectorAll("a, button")].map((el) => el.textContent.trim());
+    const side = nav.parentElement;
+    const text = side.textContent;
+    assert.ok(
+      text.indexOf("Back to app") < text.indexOf("Northwind Studio") &&
+        text.indexOf("Northwind Studio") < text.indexOf("General") &&
+        text.indexOf("Sign-in") < text.indexOf("Priya Shah"),
+      "Back to app, workspace, groups, then the user",
+    );
+    const links = [...side.querySelectorAll("a"), ...nav.querySelectorAll("button")].map((el) => el.textContent.trim());
     assert.deepEqual(links, ["Back to app", "General", "Billing", "Team", "Integrations", "Security", "Profile", "Notifications", "Sign-in"]);
     assert.match(nav.textContent, /Workspace[\s\S]*You/);
     assert.equal(nav.querySelector('[aria-current="page"]').textContent.trim(), "General");
@@ -200,7 +208,7 @@ describe("SettingsPattern", { skip }, () => {
     const view = await render({ sectionHref: (section) => `/settings/${section}`, appHref: "/home" });
     const nav = view.container.querySelector('nav[aria-label="Settings"]');
     assert.equal(byText(nav, "a", "Billing").getAttribute("href"), "/settings/billing");
-    assert.equal(byText(nav, "a", "Back to app").getAttribute("href"), "/home");
+    assert.equal(byText(nav.parentElement, "a", "Back to app").getAttribute("href"), "/home");
     await view.unmount();
   });
 
