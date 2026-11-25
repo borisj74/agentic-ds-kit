@@ -8,16 +8,18 @@
   "add": "npx agentic-ds-kit add settings-form",
   "import": "import { SettingsFormPattern } from \"@/components/patterns/settings-form\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/settings-form/) with this contract beside it. You own the copy: replace the demo data, rearrange or drop sections, and keep the `must` lines.",
-  "intent": "Settings page example: header, grouped fields, and save/cancel actions.",
+  "intent": "Settings form example: a PageHeader over grouped fields (FieldSets in one Card, legend left when wide), a sticky SaveBar that names unsaved changes, an error summary Alert, and an AlertDialog before changes are lost. The demo is company billing details.",
   "contains": [
     "pageheader",
-    "section",
+    "card",
+    "fieldset",
     "field",
     "input",
     "select",
-    "checkbox",
-    "button",
-    "toast"
+    "divider",
+    "alert",
+    "savebar",
+    "alertdialog"
   ],
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
@@ -25,10 +27,18 @@
     "At most one appearance=\"solid\" mode=\"primary\" Button per view",
     "Do not restyle kit components; change them through their props, slots, and tokens",
     "Wrap every labeled input in Field (label, hint, and error wiring)",
+    "Group related fields in a FieldSet with a legend; on a wide form use layout=\"side\" so the legend sits in its own column",
+    "Save lives in a kit SaveBar after the form, sticky to the bottom of the scroller, with scroll-padding so a focused field is never under it",
+    "Save is the only solid primary on the page; the error summary Alert gives its action appearance \"outline\"",
+    "Mark each changed field with Field changed and put the old value in its hint (\"Was USD.\"); the SaveBar lists the same fields",
+    "On Save with errors, show a danger Alert summary with one Button per field that moves focus to it, and focus the Alert; field errors keep their hint",
+    "Discard, and leaving with unsaved changes, ask first in a kit AlertDialog that names the changes; Keep editing is the cancel. Closing the tab can only use the browser's own beforeunload prompt",
     "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
   ],
   "defaults": [
-    "Fields are grouped in Sections with save / cancel at the end; arrange them however suits your settings"
+    "Company, Billing address, and Currency and invoices groups in one Card md, split by Dividers; swap in your own groups",
+    "Controls are md 36 wide and lg 40 below --grid-breakpoint-sm, where the Card frame drops and paired fields stack",
+    "The demo opens with two unsaved edits so the SaveBar has something to say; open with the saved values in your app"
   ],
   "snippet": "<SettingsFormPattern />"
 }

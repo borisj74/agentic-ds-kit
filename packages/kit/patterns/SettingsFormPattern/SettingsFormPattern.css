@@ -1,15 +1,52 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The settings-form-pattern__ prefix keeps names unique. */
 
-.settings-form-pattern__form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  max-width: 28rem;
+/* The canvas is the scroller (sticky header on top, SaveBar sticky at the bottom), so it keeps a
+   focused field clear of the 64px bar plus a 16px breath. The form row grows to fill a tall
+   viewport, so the bar sits at the bottom even when the form is short. */
+.layout-canvas.settings-form-pattern {
+  grid-template-rows: max-content minmax(max-content, 1fr) max-content;
+  scroll-padding-block-end: calc(var(--space-16) + var(--space-4));
+  /* The page sits on the canvas; the Card (wide) and the controls are the surfaces on it. */
+  background: var(--bg-canvas);
 }
 
-.settings-form-pattern__actions {
+/* Company, Billing address, Currency and invoices: 24 between each group and its Divider. */
+.settings-form-pattern__groups {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+/* Two fields side by side (Trading name and Company number, City and Postcode). A lone field in a
+   pair (VAT number, Country, Invoice currency) takes the left half, so short values get short controls. */
+.settings-form-pattern__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* City gets two thirds, Postcode one. */
+.settings-form-pattern__pair--wide-first {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+/* The summary takes focus after a failed Save. It shows the kit's focus ring (as Button does) so the
+   move is visible; outline-offset keeps it clear of the Alert border. */
+.settings-form-pattern__summary:focus {
+  outline: none;
+}
+
+.settings-form-pattern__summary:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+/* Under --grid-breakpoint-sm (the pattern reads it at runtime and sets --narrow): pairs stack and lone
+   fields take the full width. */
+.settings-form-pattern--narrow .settings-form-pattern__pair,
+.settings-form-pattern--narrow .settings-form-pattern__pair--wide-first {
+  grid-template-columns: minmax(0, 1fr);
 }

@@ -35,6 +35,8 @@ export function Alert({
   const role = variant === "danger" ? "alert" : "status";
   const hasMeta = placement === "inline" || Boolean(eyebrow || timestamp || onDismiss);
   const hasActions = Boolean(action || secondaryAction);
+  // Page placement makes the action the view's solid primary unless it asks for outline.
+  const solidAction = placement === "page" && action?.appearance !== "outline";
 
   return (
     <div
@@ -64,13 +66,13 @@ export function Alert({
           </div>
         ) : null}
         {title ? <p className={styles.title}>{title}</p> : null}
-        <p className={styles.body}>{children}</p>
+        {children ? <p className={styles.body}>{children}</p> : null}
         {hasActions ? (
           <div className={styles.actions}>
             {action ? (
               <Button
-                appearance={placement === "page" ? "solid" : "outline"}
-                mode={placement === "page" ? "primary" : "neutral"}
+                appearance={solidAction ? "solid" : "outline"}
+                mode={solidAction ? "primary" : "neutral"}
                 size="sm"
                 onClick={action.onClick}
               >

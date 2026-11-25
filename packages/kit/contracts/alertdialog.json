@@ -130,7 +130,8 @@
       "Overlay click does not dismiss",
       "Scroll lock keeps the scrollbar gutter",
       "Focus returns to the opener on close; if the opener is gone, to the page heading (or main)",
-      "built-in labels (dialogActions, warning, danger, info, success) come from KitLabelsProvider; English by default"
+      "built-in labels (dialogActions, warning, danger, info, success) come from KitLabelsProvider; English by default",
+      "Below 30rem (480px) it docks to the bottom as a full-width sheet (24 from the sides, 40 from the bottom) with Cancel and the action stacked full width at lg 40, Cancel on top; focus still starts on Cancel"
     ]
   },
   "doNot": [
