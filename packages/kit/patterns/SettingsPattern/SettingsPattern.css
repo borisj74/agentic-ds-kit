@@ -225,6 +225,11 @@
   padding: var(--space-4) var(--space-6);
 }
 
+/* Team members: the DataTable sits inside the card with its own frame, lined up with the toolbar. */
+.settings-pattern__table {
+  padding-inline: var(--space-6);
+}
+
 /* Team seats: count, Meter, extra seat price and Add seats on one row. */
 .settings-pattern__seats {
   display: flex;

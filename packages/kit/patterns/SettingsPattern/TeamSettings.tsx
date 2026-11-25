@@ -206,42 +206,45 @@ export function TeamSettings({
               <div className="settings-pattern__filter">{roleFilter}</div>
               <span className="settings-pattern__caption settings-pattern__count">{count}</span>
             </div>
-            <DataTable
-              ariaLabel="Members"
-              columns={COLUMNS}
-              emptyMessage="No members match your search or role."
-              rows={members.map((member) => ({
-                id: member.id,
-                member: {
-                  type: "avatar",
-                  name: member.you ? `${member.name} (you)` : member.name,
-                  initials: initials(member.name),
-                  label: member.detail,
-                },
-                role:
-                  member.role === "owner"
-                    ? ROLE_LABELS.owner
-                    : { type: "select", label: `Role for ${member.name}`, options: ROLE_OPTIONS, value: member.role },
-                status: {
-                  type: "badge",
-                  label: member.status === "active" ? "Active" : "Invited",
-                  tone: member.status === "active" ? "success" : "warning",
-                },
-                lastActive: member.lastActive,
-                actions: {
-                  type: "actionMenu",
-                  label: `Actions for ${member.name}`,
-                  actions: memberActions(member)
-                    .filter((action) => action.id !== "role" && !("disabled" in action && action.disabled))
-                    .map((action) => ({
-                      label: action.label,
-                      icon: action.icon,
-                      mode: "danger" in action && action.danger ? ("danger" as const) : undefined,
-                      onClick: () => onMemberAction?.(member.id, action.id),
-                    })),
-                },
-              }))}
-            />
+            {/* The table keeps its own frame (rounded top, border all round) inside the card. */}
+            <div className="settings-pattern__table">
+              <DataTable
+                ariaLabel="Members"
+                columns={COLUMNS}
+                emptyMessage="No members match your search or role."
+                rows={members.map((member) => ({
+                  id: member.id,
+                  member: {
+                    type: "avatar",
+                    name: member.you ? `${member.name} (you)` : member.name,
+                    initials: initials(member.name),
+                    label: member.detail,
+                  },
+                  role:
+                    member.role === "owner"
+                      ? ROLE_LABELS.owner
+                      : { type: "select", label: `Role for ${member.name}`, options: ROLE_OPTIONS, value: member.role },
+                  status: {
+                    type: "badge",
+                    label: member.status === "active" ? "Active" : "Invited",
+                    tone: member.status === "active" ? "success" : "warning",
+                  },
+                  lastActive: member.lastActive,
+                  actions: {
+                    type: "actionMenu",
+                    label: `Actions for ${member.name}`,
+                    actions: memberActions(member)
+                      .filter((action) => action.id !== "role" && !("disabled" in action && action.disabled))
+                      .map((action) => ({
+                        label: action.label,
+                        icon: action.icon,
+                        mode: "danger" in action && action.danger ? ("danger" as const) : undefined,
+                        onClick: () => onMemberAction?.(member.id, action.id),
+                      })),
+                  },
+                }))}
+              />
+            </div>
             <div className="settings-pattern__row settings-pattern__row--center settings-pattern__inset">
               <span className="settings-pattern__caption" role="status">{`Showing ${members.length} of ${SEATS.total}`}</span>
               <Button appearance="ghost" mode="neutral" size="sm" onClick={onShowAll}>
