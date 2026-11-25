@@ -6,14 +6,13 @@
   min-width: 0;
   width: 100%;
   padding: var(--space-6);
-  background: transparent;
 }
 
 .nav {
   width: 15rem;
   flex: 0 0 auto;
   min-width: 0;
-  background: transparent;
+  background: none;
   border: 0;
   border-radius: 0;
 }
