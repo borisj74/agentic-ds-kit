@@ -13,9 +13,29 @@
     "Page title — use PageHeader or Card title"
   ],
   "props": {
-    "legend": { "type": "string", "required": true },
-    "description": { "type": "string", "required": false },
-    "children": { "type": "slot", "required": true, "note": "kit Field, Checkbox, Switch, or RadioGroup" }
+    "legend": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "Linked to the fieldset with aria-describedby, so it is read with the legend on first focus."
+    },
+    "layout": {
+      "type": "enum",
+      "values": [
+        "stack",
+        "side"
+      ],
+      "default": "stack",
+      "note": "stack: legend and description above the fields. side: legend (16/24, heading weight) and description in a fixed left column (--layout-sidebar plus 24) with the fields 48 to the right; stacks when the FieldSet is under 40rem wide. Use side for the groups of a wide settings form in one Card."
+    },
+    "children": {
+      "type": "slot",
+      "required": true,
+      "note": "kit Field, Checkbox, Switch, or RadioGroup"
+    }
   },
   "passthrough": {
     "root": "fieldset",
@@ -23,10 +43,24 @@
     "className": "root",
     "rest": "fieldset"
   },
-  "tokens": ["text.primary", "text.muted"],
+  "tokens": [
+    "layout.sidebar",
+    "space.1",
+    "space.12",
+    "space.4",
+    "space.6",
+    "text.muted",
+    "text.primary",
+    "type.size.uiMd",
+    "type.weight.heading"
+  ],
   "a11y": {
     "element": "fieldset",
-    "requirements": ["legend is the accessible name of the group"]
+    "requirements": [
+      "legend is the accessible name of the group",
+      "description is linked with aria-describedby",
+      "side keeps the legend as the group's name; reading order stays legend, description, fields"
+    ]
   },
   "doNot": [
     "Do not invent FieldLegend, FieldGroup, FieldSeparator, Form, or FormDisplay — FieldSet is the form group",

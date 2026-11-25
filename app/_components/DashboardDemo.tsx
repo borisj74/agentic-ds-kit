@@ -262,7 +262,7 @@ export function DashboardScreen({
         }
       >
         {page === "settings" ? (
-          <SettingsFormPattern breadcrumbs={trail} onCancel={() => go("overview")} />
+          <SettingsFormPattern breadcrumbs={trail} />
         ) : page === "research" ? (
           <EmptyFirstRunPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (

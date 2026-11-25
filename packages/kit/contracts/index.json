@@ -1316,7 +1316,7 @@
   },
   {
     "id": "settings-form",
-    "intent": "Settings page example: header, grouped fields, and save/cancel actions.",
+    "intent": "Settings form example: a PageHeader over grouped fields (FieldSets in one Card, legend left when wide), a sticky SaveBar that names unsaved changes, an error summary Alert, and an AlertDialog before changes are lost. The demo is company billing details.",
     "group": "pattern",
     "path": "contracts/patterns/settings-form.json",
     "status": "stable",
