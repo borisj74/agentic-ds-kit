@@ -1396,7 +1396,7 @@
   },
   {
     "id": "onboarding",
-    "intent": "Guided setup after sign-in: Welcome, Workspace (validation error, submitting), Connect or choose with the SetupGuide, Done. Not sign-in and not empty-first-run.",
+    "intent": "Guided account setup after sign-in: Business, Plan (TileGroup), Billing, then Review and Confirm. Not sign-in and not empty-first-run.",
     "group": "pattern",
     "path": "contracts/patterns/onboarding.json",
     "status": "stable",

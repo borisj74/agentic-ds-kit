@@ -8,55 +8,52 @@
   "add": "npx agentic-ds-kit add onboarding",
   "import": "import { OnboardingPattern } from \"@/components/patterns/onboarding\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/onboarding/) with this contract beside it. You own the copy: replace the demo steps and options, add or drop steps, and keep the `must` lines.",
-  "intent": "Guided setup after sign-in: Welcome, Workspace (validation error, submitting), Connect or choose with the SetupGuide, Done. Not sign-in and not empty-first-run.",
+  "intent": "Guided account setup after sign-in: Business, Plan (TileGroup), Billing, then Review and Confirm. Not sign-in and not empty-first-run.",
   "contains": [
     "appheader",
-    "badge",
     "blurcrossfade",
     "button",
-    "card",
-    "empty",
     "field",
     "input",
     "listview",
     "pageheader",
     "progresssteps",
     "select",
-    "setupguide",
     "sidenav",
-    "spinner"
+    "tilegroup"
   ],
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
     "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-    "At most one appearance=\"solid\" mode=\"primary\" Button per step: Get started, Continue, or Go to dashboard",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per step: Continue on Business, Plan and Billing, and Confirm on Review",
     "Do not restyle kit components; change them through their props, slots, and tokens",
-    "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav compose parts), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md; the step content is in <main>, labelled with the step number and name",
-    "Back is a ghost Button; Skip for now is ghost; Save and exit stays reachable on every step before Done",
-    "Wrap every labeled input in Field; a missing workspace name shows the Field error, sets the Input's error, and moves focus to it",
-    "While the workspace is being created the fields, Back and the primary are disabled and a kit Spinner with a visible label (\"Creating workspace…\") says what is happening",
-    "Motion only through kit components: BlurCrossfade on the step heading (it honours reduced motion); do not wrap the form or the SetupGuide in it",
+    "Progress is a kit ProgressSteps: vertical in the Stage steps column (SideNav compose parts), or horizontal in a header landmark (AppHeader) below --grid-breakpoint-md, where it compacts to Step n of m, a Progress bar and the next step; the step content is in <main>, labelled with the step number and name",
+    "Back is a ghost Button; Save and exit is ghost and reachable on every step: in the footer at the start when wide, in the AppHeader at sm below md. Every step is required, so there is no Skip",
+    "Wrap every labeled input in Field; a missing business name on Business shows the Field error, sets the Input's error, and moves focus to it",
+    "Confirm on Review is enabled only when Business, Plan and Billing are all valid; an invalid step is marked error in ProgressSteps and shows the Field error on the invalid field",
+    "While the account is being created, Confirm uses Button loading labelled \"Creating account…\", and Back and Save and exit are disabled",
+    "Motion only through kit components: BlurCrossfade on the step heading (it honours reduced motion); do not wrap the form or the TileGroup in it",
     "Page layout uses kit layout classes (layout-shell, layout-shell--inset, layout-app, layout-content, layout-container-sm, layout-split) and grid / layout tokens; no hard-coded columns, gutters, max-widths or breakpoints"
   ],
   "defaults": [
-    "Four steps: Welcome, Workspace, Connect, Done; the Connect step is the kit SetupGuide, so what's left there carries over to the dashboard",
-    "Stage look (Paper's second row, the Nistha site's look): a steps column on the canvas with the brand, SET UP · 4 STEPS and vertical ProgressSteps, Save and exit at its foot, and the step on an inset card panel (layout-shell--inset) with Step N of 4 at the top. Below --grid-breakpoint-md, where the column doesn't fit, a reduced AppHeader with horizontal ProgressSteps and Save and exit. No dense app nav",
-    "The step column is layout-container-sm, centred on the page; the footer bar holds Back (start) and the primary (end), centred on Done",
-    "Enter submits the step (⏎ on Continue); onCreateWorkspace may return a promise to hold the submitting state",
-    "Done is a kit Empty with a check, Workspace created and N tasks left Badges, and Go to dashboard"
+    "Four steps: Business (name, country, currency, optional VAT), Plan (a kit TileGroup with the price in meta), Billing (email, payment terms, invoice prefix), Review (a kit ListView, one group per step with an Edit action, and the first invoice with its amount as value)",
+    "Stage look: a steps column on the canvas with the brand and vertical ProgressSteps (Done steps show a short summary and go back on click), and the step on an inset card panel (layout-shell--inset) with Step N of 4 as the PageHeader eyebrow. Below --grid-breakpoint-md a reduced AppHeader with the brand, horizontal ProgressSteps and Save and exit. No dense app nav",
+    "The step column is layout-container-sm, centred on the page; the footer bar holds Save and exit (start, wide only), Back and the primary (end); below md Back sits at the start",
+    "Enter submits the step (⏎ on Continue); onConfirm may return a promise to hold the submitting state, and onFinish runs after it resolves",
+    "Confirm has a Check icon; Edit on a Review row goes back to that step"
   ],
   "states": {
     "steps": [
-      "welcome",
-      "workspace",
-      "connect",
-      "done"
+      "business",
+      "plan",
+      "billing",
+      "review"
     ],
-    "workspace": [
+    "confirm": [
       "idle",
-      "error (workspaceState=\"error\")",
-      "submitting (workspaceState=\"submitting\")"
+      "error (confirmState=\"error\")",
+      "submitting (confirmState=\"submitting\")"
     ]
   },
-  "snippet": "<OnboardingPattern step={step} onStepChange={setStep} onCreateWorkspace={createWorkspace} onSaveAndExit={saveAndExit} onFinish={goToDashboard} />"
+  "snippet": "<OnboardingPattern step={step} onStepChange={setStep} onConfirm={createAccount} onSaveAndExit={saveAndExit} onFinish={goToDashboard} />"
 }

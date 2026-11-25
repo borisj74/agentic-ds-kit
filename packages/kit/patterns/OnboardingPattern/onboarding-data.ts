@@ -1,70 +1,68 @@
 /** Demo data for OnboardingPattern. Every value is an example; replace it with your product's steps and options. */
-import type { SetupTask } from "../../ui/SetupGuide";
+import type { TileGroupItem } from "../../ui/TileGroup";
 
-export type OnboardingStep = "welcome" | "workspace" | "connect" | "done";
+export type OnboardingStep = "business" | "plan" | "billing" | "review";
 
 export const STEPS: { id: OnboardingStep; label: string; title: string; subtitle: string }[] = [
-  {
-    id: "welcome",
-    label: "Welcome",
-    title: "Welcome to Northwind, Priya",
-    subtitle: "Three short steps and your workspace is ready to send its first invoice. About 4 minutes.",
-  },
-  { id: "workspace", label: "Workspace", title: "Set up your workspace", subtitle: "You can change all of this later in Settings." },
-  {
-    id: "connect",
-    label: "Connect",
-    title: "Connect or choose",
-    subtitle: "Connect what you use now, or skip and do it from the Setup Guide later.",
-  },
-  { id: "done", label: "Done", title: "is ready", subtitle: "Pick them up any time from the dashboard." },
+  { id: "business", label: "Business", title: "Tell us about your business", subtitle: "Shown on every invoice you send" },
+  { id: "plan", label: "Plan", title: "Choose a plan", subtitle: "Billed monthly in GBP" },
+  { id: "billing", label: "Billing", title: "Set up billing", subtitle: "Where invoices come from and when they are due" },
+  { id: "review", label: "Review", title: "Review and confirm", subtitle: "Nothing is created until you confirm" },
 ];
 
 export const PRODUCT = { name: "Northwind", mark: "N" };
 
-export const WELCOME_ITEMS = [
-  { id: "workspace", primary: "Name your workspace", secondary: "So your team and customers recognise it", icon: "House" },
-  { id: "connect", primary: "Connect your tools", secondary: "Payments, accounting and email", icon: "Plug" },
-  { id: "invoice", primary: "Send a first invoice", secondary: "From a template, in under a minute", icon: "Rocket" },
-];
-
-export interface WorkspaceValues {
+export interface BusinessValues {
   name: string;
   country: string;
   currency: string;
-  teamSize: string;
+  vat?: string;
 }
 
-export const WORKSPACE_DEFAULTS: WorkspaceValues = {
-  name: "Northwind Studio",
-  country: "gb",
-  currency: "gbp",
-  teamSize: "2-10",
+export interface BillingValues {
+  email: string;
+  terms: string;
+  prefix: string;
+}
+
+/** What onConfirm receives. */
+export interface OnboardingValues {
+  business: BusinessValues;
+  plan: string;
+  billing: BillingValues;
+}
+
+export const DEFAULT_VALUES: OnboardingValues = {
+  business: { name: "Northwind Traders Ltd", country: "gb", currency: "gbp", vat: "GB 284 1937 62" },
+  plan: "growth",
+  billing: { email: "finance@northwind.co.uk", terms: "net30", prefix: "INV-" },
 };
 
 export const COUNTRY_OPTIONS = [
-  { value: "gb", label: "United Kingdom" },
-  { value: "ie", label: "Ireland" },
-  { value: "de", label: "Germany" },
-  { value: "us", label: "United States" },
+  { value: "gb", label: "United Kingdom", short: "UK" },
+  { value: "ie", label: "Ireland", short: "IE" },
+  { value: "de", label: "Germany", short: "DE" },
+  { value: "us", label: "United States", short: "US" },
 ];
 
 export const CURRENCY_OPTIONS = [
-  { value: "gbp", label: "GBP · £" },
-  { value: "eur", label: "EUR · €" },
-  { value: "usd", label: "USD · $" },
+  { value: "gbp", label: "GBP · £", code: "GBP" },
+  { value: "eur", label: "EUR · €", code: "EUR" },
+  { value: "usd", label: "USD · $", code: "USD" },
 ];
 
-export const TEAM_SIZE_OPTIONS = [
-  { value: "1", label: "Just me" },
-  { value: "2-10", label: "2–10 people" },
-  { value: "11-50", label: "11–50 people" },
-  { value: "51+", label: "51 or more" },
+export const TERMS_OPTIONS = [
+  { value: "receipt", label: "Due on receipt" },
+  { value: "net14", label: "Net 14" },
+  { value: "net30", label: "Net 30" },
+  { value: "net60", label: "Net 60" },
 ];
 
-export const SETUP_TASKS: SetupTask[] = [
-  { id: "company", label: "Add company details", description: "Name, address and tax ID", status: "done" },
-  // All To do here: the step footer holds this step's one solid primary (Continue), so no task is Current.
-  { id: "payments", label: "Connect a payment method", description: "So customers can pay online", status: "todo", actionLabel: "Connect" },
-  { id: "customers", label: "Import customers", description: "CSV or connect your CRM", status: "todo", actionLabel: "Import" },
+export const PLANS: (TileGroupItem & { price: string; seats: string })[] = [
+  { value: "starter", title: "Starter", description: "Up to 50 invoices a month, one user", meta: "£19.00 a month", price: "£19.00", seats: "1 user" },
+  { value: "growth", title: "Growth", description: "Unlimited invoices, 5 users, dunning", meta: "£48.00 a month", price: "£48.00", seats: "5 users" },
+  { value: "scale", title: "Scale", description: "Usage billing, 20 users, SSO", meta: "£120.00 a month", price: "£120.00", seats: "20 users" },
 ];
+
+/** The first invoice the account will send, shown on Review. */
+export const FIRST_INVOICE = { number: "1842", date: "21 Dec 2026" };
