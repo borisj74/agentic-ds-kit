@@ -26,8 +26,16 @@ function meta(step: AgentTrailStep): string | undefined {
   return step.duration ?? step.timer;
 }
 
+/** A failed step with a later done step (its retry passed) is closed: not open, not current. */
+function isOpen(steps: AgentTrailStep[], index: number) {
+  const step = steps[index];
+  if (step.status === "done") return false;
+  if (step.status === "failed") return !steps.slice(index + 1).some((later) => later.status === "done");
+  return true;
+}
+
 function defaultProgress(steps: AgentTrailStep[]) {
-  const open = steps.findIndex((step) => step.status !== "done");
+  const open = steps.findIndex((_, index) => isOpen(steps, index));
   return { current: open === -1 ? steps.length : open + 1, total: steps.length };
 }
 
@@ -47,10 +55,10 @@ export function AgentTrail({
 }: AgentTrailProps) {
   const titleId = useId();
   const counter = progress ?? defaultProgress(steps);
-  const firstOpen = steps.findIndex((step) => step.status !== "done");
-  // The current step is the live one (running or waiting on you), else the failed one.
+  const firstOpen = steps.findIndex((_, index) => isOpen(steps, index));
+  // The current step is the live one (running or waiting on you), else the failed one no retry has passed.
   const live = steps.find((step) => step.status === "running" || step.status === "approval");
-  const currentId = (live ?? steps.find((step) => step.status === "failed"))?.id;
+  const currentId = (live ?? steps.find((step, index) => step.status === "failed" && isOpen(steps, index)))?.id;
 
   return (
     <section {...rest} {...nisthaAttr("agenttrail", rest)} ref={ref} className={cx(styles.trail, variant === "list" && styles.listTrail, className)} aria-labelledby={titleId}>

@@ -37,7 +37,7 @@
     "progress": {
       "type": "object",
       "required": false,
-      "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count."
+      "note": "{ current, total } overrides the counter. Default: first unfinished step over the step count. A failed step with a later done step (its retry passed) counts as finished and is not the current step."
     },
     "selectedStepId": {
       "type": "string",

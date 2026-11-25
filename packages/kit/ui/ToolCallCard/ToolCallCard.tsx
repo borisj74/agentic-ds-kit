@@ -111,6 +111,8 @@ export function ToolCallCard({
 }: ToolCallCardProps) {
   const panel = variant === "panel" && !Array.isArray(calls);
   const panelId = useId();
+  const argsId = useId();
+  const [argsOpen, setArgsOpen] = useState(false);
   const group = Array.isArray(calls);
   const [innerOpen, setInnerOpen] = useState(defaultExpanded ?? (status === "error" && !group));
   const open = expanded ?? innerOpen;
@@ -216,7 +218,11 @@ export function ToolCallCard({
                 </div>
               ) : (
                 <>
-                  {argLines.length ? <PanelBox label="Arguments" body={argLines} /> : null}
+                  {argLines.length ? (
+                    <div className={cx(errorLines.length > 0 && styles.panelWide)}>
+                      <PanelBox label="Arguments" body={argLines} />
+                    </div>
+                  ) : null}
                   {resultLines.length ? <PanelBox label="Result" meta={resultMeta} body={resultLines} /> : null}
                 </>
               )}
@@ -229,12 +235,34 @@ export function ToolCallCard({
                   ))}
                 </div>
               ) : null}
+              {errorLines.length && argLines.length && !resultLines.length ? (
+                <div className={cx(styles.panelNarrow, styles.panelFold)}>
+                  <button type="button" className={styles.panelFoldHead} aria-expanded={argsOpen} aria-controls={argsId} onClick={() => setArgsOpen((value) => !value)}>
+                    <span>Arguments</span>
+                    {argsOpen ? (
+                      <ChevronUp size={16} strokeWidth={ICON_STROKE} className={styles.chevron} aria-hidden="true" />
+                    ) : (
+                      <ChevronDown size={16} strokeWidth={ICON_STROKE} className={styles.chevron} aria-hidden="true" />
+                    )}
+                  </button>
+                  <pre id={argsId} className={styles.panelFoldCode} aria-label="Arguments" hidden={!argsOpen}>
+                    {argLines.join("\n")}
+                  </pre>
+                </div>
+              ) : null}
               {onRetry ? (
                 <div className={styles.panelFooter}>
                   <span className={styles.attempt}>{attempt ? `Attempt ${attempt.n} of ${attempt.max}` : null}</span>
-                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={onRetry}>
-                    Retry
-                  </Button>
+                  <span className={styles.panelWide}>
+                    <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={onRetry}>
+                      Retry
+                    </Button>
+                  </span>
+                  <span className={styles.panelNarrow}>
+                    <Button size="lg" appearance="outline" mode="neutral" iconStart="RotateCcw" block onClick={onRetry}>
+                      Retry
+                    </Button>
+                  </span>
                 </div>
               ) : null}
             </>

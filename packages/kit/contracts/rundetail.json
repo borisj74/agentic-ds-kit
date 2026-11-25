@@ -50,7 +50,7 @@
         "all"
       ],
       "default": "selected",
-      "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call. The trail uses AgentTrail variant=\"list\" and the calls ToolCallCard variant=\"panel\"."
+      "note": "selected: the selected step's ToolCallCard (Empty when none). all: every started step's ToolCallCard in step order, the failed one open (all fold when the run is done); the monitor is the one-row bar, the trail and trace sit on the left, and Retry shows only on the ToolCallCard. Picking a trail step scrolls to its call. The trail uses AgentTrail variant=\"list\" and the calls ToolCallCard variant=\"panel\". calls=\"all\" doesn't render pendingAction, approve/deny (onApprove, onDeny) or the Ask panel (messages, onSend)."
     },
     "trace": {
       "type": "array",
@@ -171,6 +171,7 @@
     "Do not keep a second selection in one of the parts; the block's one selected step drives them all",
     "Do not add a LiveSession beside RunDetail; pass messages and onSend",
     "Do not use raw hex",
+    "a waiting run or Ask needs calls=\"selected\"",
     "Only one solid primary in the view: the ApprovalCard's approve while waiting, else Resume while paused, else the Ask send; a failed or running calls=\"all\" run has none"
   ],
   "snippet": "<RunDetail run={run} steps={steps} calls=\"all\" trace={spans} onRetry={retry} onPause={pause} onStop={stop} />"

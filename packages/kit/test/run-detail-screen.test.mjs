@@ -118,7 +118,8 @@ describe("RunDetail calls=\"all\"", () => {
 
   test("Retry shows once, on the failed ToolCallCard, not in the monitor", () => {
     const html = renderToStaticMarkup(h(RunDetail, { run: failedRun, steps, calls: "all", onRetry: () => {} }));
-    assert.equal((html.match(/>Retry</g) ?? []).length, 1);
+    // One Retry per width: sm beside the attempt, and lg across the card below 25rem (CSS shows one).
+    assert.equal((html.match(/>Retry</g) ?? []).length, 2);
     assert.doesNotMatch(html, /Retry step/);
     assert.doesNotMatch(html, /Open failed step/);
   });
@@ -191,6 +192,40 @@ describe("Run detail looks (approved variants)", () => {
   });
 });
 
+describe("Run detail fixes from check #326", () => {
+  const doneSteps = [
+    { ...steps[0] },
+    { ...steps[1] },
+    { id: "match-2", agentId: "a", tool: "ledger.match_payments", label: "Match payments", status: "done", duration: "0.5s" },
+    { ...steps[2], status: "done", duration: "0.4s" },
+    { id: "mark", agentId: "a", tool: "billing.invoices.update", label: "Mark INV-1842 paid", status: "done", duration: "0.3s" },
+  ];
+
+  test("done run with a retried step: the counter reads 5 of 5 and the old failed attempt is not current", () => {
+    const html = renderToStaticMarkup(h(RunDetail, { run: { ...failedRun, status: "done", headline: "INV-1842 marked paid" }, steps: doneSteps, calls: "all" }));
+    assert.match(html, />5 of 5</);
+    assert.doesNotMatch(html, /aria-current="step"/);
+  });
+
+  test("a failed step with no later done step is still open and current", () => {
+    const html = renderToStaticMarkup(h(RunDetail, { run: failedRun, steps, calls: "all" }));
+    assert.match(html, />2 of 3</);
+    assert.equal((html.match(/aria-current="step"/g) ?? []).length, 1);
+  });
+
+  test("panel at phone width: folded Arguments under the error and an lg full-width Retry", () => {
+    const html = renderToStaticMarkup(h(RunDetail, { run: failedRun, steps: [steps[0], { ...steps[1], args: { invoice: "INV-1842" } }], calls: "all", onRetry: () => {} }));
+    assert.match(html, /<button type="button" class="[^"]*panelFoldHead[^"]*" aria-expanded="false"[^>]*><span>Arguments<\/span>/);
+    assert.match(html, /<pre id="[^"]+" class="[^"]*panelFoldCode[^"]*" aria-label="Arguments" hidden="">/);
+    assert.match(html, /class="[^"]*lg[^"]*block[^"]*"[^>]*>(?:(?!<\/button>).)*Retry/s);
+  });
+
+  test("the running bar marks its actions so Stop run gets its own row below 40rem", () => {
+    const html = renderToStaticMarkup(h(AgentMonitor, { name: "x", status: "running", elapsed: "0:03", collapsed: true, onPause: () => {}, onStop: () => {} }));
+    assert.match(html, /barActionsRunning/);
+  });
+});
+
 describe("AgentMonitor Stop run", () => {
   test("running: Stop run (outline danger) beside Pause in the card and the bar", () => {
     for (const collapsed of [false, true]) {
@@ -216,6 +251,23 @@ describe("AgentMonitor Stop run", () => {
     dialog = document.querySelector('[role="alertdialog"]');
     await click(buttonNamed(dialog, "Stop run"));
     assert.equal(stopped, 1);
+  });
+
+  test("Escape closes the AlertDialog without stopping, and focus returns to Stop run", { skip }, async () => {
+    let stopped = 0;
+    const container = await mount(h(AgentMonitor, { name: "Invoice reconciler", status: "running", elapsed: "0:03", collapsed: true, onPause: () => {}, onStop: () => stopped++ }));
+    const stop = buttonNamed(container, "Stop run");
+    stop.focus();
+    await click(stop);
+    const dialog = document.querySelector('[role="alertdialog"]');
+    assert.ok(dialog, "dialog opens");
+    await act(async () => {
+      (document.activeElement ?? dialog).dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
+    });
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+    assert.equal(document.querySelector('[role="alertdialog"]'), null, "dialog closes");
+    assert.equal(stopped, 0);
+    assert.equal(document.activeElement, buttonNamed(container, "Stop run"), "focus is back on Stop run");
   });
 
   test("RunDetail passes onStop through to the bar", () => {

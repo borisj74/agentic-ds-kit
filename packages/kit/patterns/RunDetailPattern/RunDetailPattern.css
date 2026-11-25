@@ -14,3 +14,22 @@
   border-bottom: var(--border-width-thin) solid var(--line-default);
   background: var(--surface-card);
 }
+
+/* The note under the calls lines up with the calls column, 8 under the last card. It goes with the
+   split: once the trail and calls stack (38rem, as layout.css), it hides, as on the 390 board. */
+.run-detail-pattern__note-row {
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.run-detail-pattern__note {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+@container layout-content (max-width: 38rem) {
+  .run-detail-pattern__note-row {
+    display: none;
+  }
+}

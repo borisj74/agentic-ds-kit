@@ -61,10 +61,11 @@ const MARK: RunDetailStep = {
 
 const RUN_NAME = "Invoice reconciler";
 
-export const RUNS: Record<RunDetailState, { run: RunDetailRun; headlineShort: string; steps: RunDetailStep[]; selected: string | null; trace?: TraceSpan[] }> = {
+export const RUNS: Record<RunDetailState, { run: RunDetailRun; headlineShort: string; steps: RunDetailStep[]; selected: string | null; trace?: TraceSpan[]; callsNote?: string }> = {
   failed: {
     run: { name: RUN_NAME, status: "failed", headline: "Stopped at Match payments, step 2 of 4", elapsed: "0:04", cost: "$0.02" },
     headlineShort: "Step 2 of 4",
+    callsNote: "Update ledger and Mark INV-1842 paid run once this step passes.",
     steps: [FETCH, MATCH_FAILED, POST, MARK],
     selected: "match",
     trace: [

@@ -107,6 +107,12 @@ export function RunDetailPattern({
           onPause={onPause}
           onStop={onStop}
         />
+        {data.callsNote ? (
+          <div className="layout-split--secondary run-detail-pattern__note-row">
+            <span aria-hidden="true" />
+            <p className="run-detail-pattern__note">{data.callsNote}</p>
+          </div>
+        ) : null}
       </main>
     </div>
   );

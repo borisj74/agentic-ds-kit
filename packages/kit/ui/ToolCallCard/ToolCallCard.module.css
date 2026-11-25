@@ -329,6 +329,55 @@ button.head:focus-visible {
   flex: 1 1 auto;
 }
 
+/* The phone-width pieces of a failed panel: folded Arguments under the error, and an lg Retry. */
+.panelNarrow {
+  display: none;
+}
+
+.panelFold {
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+}
+
+.panelFoldHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--control-height-lg);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-control-md);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.panelFoldHead:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.panelFoldCode {
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* 40rem is --grid-breakpoint-sm (container queries cannot read var()). */
 @container toolcall (max-width: 40rem) {
   .panelPair {
@@ -351,5 +400,22 @@ button.head:focus-visible {
   .panelFooter {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  /* The error comes first, Arguments fold under it, and Retry is lg (40) across the card. */
+  .panelError {
+    order: -1;
+  }
+
+  .panelWide {
+    display: none;
+  }
+
+  .panelNarrow {
+    display: block;
+  }
+
+  .panelFold {
+    display: flex;
   }
 }

@@ -581,6 +581,15 @@ button.selected:hover {
     flex: 1 1 0;
   }
 
+  /* While running, Stop run is full width on its own row right under the clock, and Pause sits under it. */
+  .barActionsRunning {
+    flex-direction: column-reverse;
+  }
+
+  .barActionsRunning > * {
+    flex: 0 0 auto;
+  }
+
   .step {
     height: calc(var(--space-10) + var(--space-1));
   }

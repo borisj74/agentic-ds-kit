@@ -205,7 +205,7 @@ export function AgentMonitor({
           </dl>
         ) : null}
         {status === "running" && (onPause || onStop) ? (
-          <div className={styles.barActions}>
+          <div className={cx(styles.barActions, styles.barActionsRunning)}>
             {onPause ? (
               <Button size="sm" appearance="outline" mode="neutral" onClick={onPause}>
                 Pause
