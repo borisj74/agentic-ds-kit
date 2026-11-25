@@ -35,6 +35,7 @@ export function SegmentedControl({
   onChange,
   size = "md",
   disabled = false,
+  fullWidth = false,
   describedBy,
   className,
   ref,
@@ -85,7 +86,7 @@ export function SegmentedControl({
       aria-describedby={describedBy}
       aria-orientation="horizontal"
       aria-disabled={disabled || undefined}
-      className={cx(styles.root, styles[size], className)}
+      className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}
       onKeyDown={onKeyDown}
     >
       {items.map((item) => {

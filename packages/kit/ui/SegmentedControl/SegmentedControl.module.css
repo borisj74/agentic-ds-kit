@@ -72,3 +72,15 @@
     transition: none;
   }
 }
+
+/* fullWidth: the track fills its container and the segments share it equally. A segment never gets narrower
+   than its label; when they can't all fit, the track wraps like the default one. */
+.root.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+.fullWidth .item {
+  flex: 1 1 0;
+  min-width: max-content;
+}

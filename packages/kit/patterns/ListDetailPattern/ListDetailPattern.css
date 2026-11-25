@@ -28,10 +28,14 @@
   background: var(--surface-card);
 }
 
-/* Rows sit 16 in from both pane edges, so their text lines up with the chrome at 24 and the selected
-   fill never runs into the rule beside the detail. */
-.list-detail-pattern__split .list-detail-pattern__rows {
-  padding-inline: var(--space-4);
+/* Flush rows run edge to edge with their text at 24, in line with the chrome; rules close both ends. */
+.list-detail-pattern__rows:has([role="option"], [role="listitem"]) {
+  border-block: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* On the phone the rows and their rules run to the screen edges, past the page margin. */
+.list-detail-pattern__rows--phone {
+  margin-inline: calc(-1 * var(--layout-margin-md));
 }
 
 /* The list pane's chrome (PageHeader, search, segments, notes) is inset 24; the rows run to its edges. */

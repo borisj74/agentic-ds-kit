@@ -25,6 +25,7 @@ export type {
   ListViewSelection,
   ListViewSize,
   ListViewSort,
+  ListViewTone,
 } from "./ListView.types";
 
 const GROUP_PREFIX = "group:";
@@ -117,6 +118,7 @@ export function ListView({
   empty,
   truncate = "none",
   sort = "none",
+  flush = false,
   className,
   ref,
   ...rest
@@ -262,7 +264,7 @@ export function ListView({
     }
     if (item.icon) {
       return (
-        <span className={styles.leading} aria-hidden>
+        <span className={cx(styles.leading, item.iconTone === "danger" && styles.danger)} aria-hidden>
           <LucideByName name={item.icon} size={iconPx} />
         </span>
       );
@@ -463,7 +465,7 @@ export function ListView({
     );
   }
 
-  const rootClass = cx(styles.root, styles[size], className);
+  const rootClass = cx(styles.root, styles[size], flush && styles.flush, className);
 
   if (items.length === 0) {
     return (
@@ -581,12 +583,12 @@ export function ListView({
                           {item.value ? (
                             <span className={styles.valueStack}>
                               <span className={styles.value}>{item.value}</span>
-                              {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
+                              {item.meta ? <span className={cx(styles.meta, item.metaTone === "danger" && styles.danger)}>{item.meta}</span> : null}
                               {renderBadge(item)}
                             </span>
                           ) : (
                             <>
-                              {item.meta ? <span className={styles.meta}>{item.meta}</span> : null}
+                              {item.meta ? <span className={cx(styles.meta, item.metaTone === "danger" && styles.danger)}>{item.meta}</span> : null}
                               {renderBadge(item)}
                             </>
                           )}

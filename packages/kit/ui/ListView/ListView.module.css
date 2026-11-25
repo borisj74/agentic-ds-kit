@@ -140,6 +140,15 @@ button.groupHeader:focus-visible {
   padding: var(--space-2) var(--space-3);
 }
 
+/* lg: touch-size rows for a phone record list; the lines step up to 16/24 and 14/20 with 4 between them. */
+.lg .row {
+  padding: var(--space-3) var(--space-4);
+}
+
+.lg .copy {
+  gap: var(--space-1);
+}
+
 .check {
   display: inline-flex;
   flex-shrink: 0;
@@ -164,7 +173,8 @@ button.groupHeader:focus-visible {
   height: var(--space-8);
 }
 
-.md .leading {
+.md .leading,
+.lg .leading {
   width: var(--space-10);
   height: var(--space-10);
 }
@@ -407,4 +417,83 @@ button.body:focus {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* metaTone / iconTone danger: the words already say the problem ("17 days late"); the tone adds weight, never meaning. */
+.meta.danger,
+.leading.danger {
+  color: var(--status-danger-text);
+}
+
+/* flush: rows meet the list's edges, square, with a 1px rule between rows. The text keeps its inset
+   (16 at xs, sm and lg, 24 at md). A selected row fills edge to edge and gets a 2px brand edge on its start side,
+   so the state shows as fill, edge and a heavier name. */
+.root.flush {
+  padding: 0;
+}
+
+.flush .row {
+  border-radius: 0;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+/* Rules sit between rows only, so a flush Card's head rule or the parent's own rule closes the ends. */
+.flush .item + .item > .row,
+.flush .group + .group {
+  border-block-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* A plain icon in a flush row sits at its own size, so a one-line row stays 44 high. */
+.flush .leading:has(> svg) {
+  width: auto;
+  height: auto;
+}
+
+.flush.md .row {
+  padding-inline: var(--space-6);
+}
+
+.flush .row[data-selected] {
+  box-shadow: inset var(--border-width-medium) 0 0 0 var(--border-brand);
+}
+
+.flush .groupHeader {
+  border-radius: 0;
+  padding-inline: var(--space-4);
+}
+
+.flush.md .groupHeader {
+  padding-inline: var(--space-6);
+}
+
+.flush .row[data-selected]:dir(rtl) {
+  box-shadow: inset calc(-1 * var(--border-width-medium)) 0 0 0 var(--border-brand);
+}
+
+.lg .primary,
+.lg .value {
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+}
+
+.lg .secondary,
+.lg .meta {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+/* flush md: 14/20 first line, 12/16 second line with 2 above it, so a two-line row is 62 like the list pane on the board. */
+.flush.md .copy {
+  gap: var(--space-px);
+}
+
+.flush.md .primary,
+.flush.md .value {
+  line-height: var(--type-line-body-sm);
+}
+
+.flush.md .secondary,
+.flush.md .meta {
+  line-height: var(--type-line-body-xs);
 }

@@ -27,6 +27,8 @@ export interface SegmentedControlProps
   defaultValue?: string;
   onChange?: (value: string) => void;
   size?: SegmentedControlSize;
+  /** Stretch the track to its container and split it into equal segments, e.g. a filter above a list pane. Default false. */
+  fullWidth?: boolean;
   /** Locks every segment. */
   disabled?: boolean;
   /** Id(s) for aria-describedby on the radiogroup. Field passes its hint or error id. */
