@@ -421,8 +421,29 @@ button.body:focus {
 
 /* metaTone / iconTone danger: the words already say the problem ("17 days late"); the tone adds weight, never meaning. */
 .meta.danger,
+.note.danger,
 .leading.danger {
   color: var(--status-danger-text);
+}
+
+/* metaTone / noteTone / iconTone warning: something waits on someone ("$500 asked"); the words say it. */
+.meta.warning,
+.note.warning,
+.leading.warning {
+  color: var(--status-warning-text);
+}
+
+/* item.valueIcon: a quiet icon before the value, e.g. a level icon next to "Up to $250". */
+.valueWithIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.valueIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--text-muted);
 }
 
 /* flush: rows meet the list's edges, square, with a 1px rule between rows. The text keeps its inset

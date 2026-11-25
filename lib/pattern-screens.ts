@@ -135,6 +135,14 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "undone", label: "After Undo" },
     { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
+  "agent-permissions": [
+    { id: "default", label: "Request waiting" },
+    { id: "edit-drawer", label: "Edit level" },
+    { id: "granted", label: "Granted" },
+    { id: "denied", label: "Denied" },
+    { id: "error", label: "Not saved" },
+    { id: "390", label: "Mobile 390", device: "mobile" },
+  ],
 };
 
 export function isScreenSlug(slug: string): slug is ScreenSlug {
@@ -155,6 +163,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   settings: "A settings nav in two groups (Workspace, You) beside each section, with a scope line under the title; an index page of two lists at 390.",
   onboarding: "Four setup steps (business, plan, billing, review) with progress, a validation error and a creating state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
+  "agent-permissions": "What each agent may do on its own: a waiting request to Grant or Deny, a table of actions and levels with Edit, a switch to stop all agents, and the default for new actions.",
   "run-detail": "One agent run: a status bar with time and cost, the step trail and trace, and every tool call with Retry on the failed one.",
   "agent-activity": "What your agents did, by day: filters, Undo before its deadline, and Undone and Final steps.",
 };
@@ -174,4 +183,5 @@ export const PATTERN_ADD: Record<ScreenSlug, string> = {
   "insight-stack": "npx agentic-ds-kit add insight-stack",
   "run-detail": "npx agentic-ds-kit add run-detail",
   "agent-activity": "npx agentic-ds-kit add agent-activity",
+  "agent-permissions": "npx agentic-ds-kit add agent-permissions",
 };

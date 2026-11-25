@@ -2003,7 +2003,9 @@
       "useWhen": [
         "Which mark: the row dot is the leading 8px mark in a ListView row; the row text still says the status. Do not add a separate Dot.",
         "People, files, or other records shown one per row",
-        "Pick one, check several, or open a row without comparing columns"
+        "Pick one, check several, or open a row without comparing columns",
+        "valueIcon: a value column people scan by kind, like a level icon next to \"On its own\" or \"Up to $250\"",
+        "note with noteTone warning: one part of the secondary line waits on someone, like \"Collections · $500 asked\""
       ],
       "doNotUseWhen": [
         "Values compared across columns — use Table or DataTable",
@@ -2037,13 +2039,15 @@
         "Do not use dot as the only sign of a status; say it in primary or secondary",
         "Do not write the priority word in secondary; the kit adds High, Medium or Low",
         "Do not put an amount in meta or badge; use value",
-        "Do not use metaTone or iconTone danger as the only sign of a problem; the words must say it"
+        "Do not use metaTone or iconTone danger as the only sign of a problem; the words must say it",
+        "Do not use valueIcon without value, or as the only way to tell values apart; the value words must say it",
+        "Do not use note for a time or a count at the row end (that is meta), or noteTone as the only sign; the note words must say it"
       ],
       "props": {
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. Both default to neutral, and the words must still say the problem."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. warning is for something waiting on someone. valueIcon is a quiet aria-hidden Lucide icon before value, like a level icon next to \"Up to $250\". note ends the secondary line after \" · \", like \"$500 asked\", and noteTone colours only that part. Tones default to neutral, and the words must still say it."
         },
         "label": {
           "type": "string",
@@ -9725,7 +9729,9 @@
       "useWhen": [
         "an agent needs access that lasts beyond one action",
         "several scopes with read / write / admin levels",
-        "the grant can fail and needs Retry"
+        "the grant can fail and needs Retry",
+        "badge: the request waits on this person, like \"Needs you\" on a page that also lists what is already allowed",
+        "summary: the change fits in two to four short cells, like Changes, For, Still asks, so it reads before the scopes"
       ],
       "doNotUseWhen": [
         "one command or edit — ApprovalCard",
@@ -9736,6 +9742,8 @@
         "Do not invent a local PermissionCard, AccessRequest, or ScopePicker",
         "Do not hide expiry or the standing-access warning for write or admin",
         "Grant is the one solid primary; Deny is outline",
+        "Do not put the reason or the warning in badge; badge is one or two words on who it waits for",
+        "Do not repeat every scope in summary or drop the scopes for it; summary says the change, the scopes say the access",
         "Do not use raw hex"
       ],
       "props": {
@@ -9778,7 +9786,17 @@
         "requestedAt": {
           "type": "string",
           "required": false,
-          "note": "Footer note, e.g. \"requested 14:02\"."
+          "note": "Header note, e.g. \"requested 14:02\". With badge it sits beside the badge."
+        },
+        "badge": {
+          "type": "string",
+          "required": false,
+          "note": "A warning kit Badge with a Hand icon on a row above the title, e.g. \"Needs you\". requestedAt moves onto that row and the scope count is left out."
+        },
+        "summary": {
+          "type": "array",
+          "required": false,
+          "note": "{ label, value }[], two to four cells, e.g. [{ label: \"For\", value: \"30 days, until 22 Dec\" }]. A dl strip under the description: columns, or label and value rows when the card is under 40rem."
         },
         "resolvedNote": {
           "type": "string",
@@ -14849,6 +14867,21 @@
         "The steps are one kit ActivityFeed with variant=\"agent\"; filter them in the page with a kit FilterBar and pass the filtered steps in",
         "Undo is offered only until its deadline, which shows beside it; after Undo the step shows Undone and a Toast says what stopped",
         "A step that can't be undone says Final and what to do instead; status is always a word (Undone, Final, On its own, Approved by), never colour alone"
+      ]
+    },
+    {
+      "id": "agent-permissions",
+      "group": "pattern",
+      "intent": "What each agent may do on its own, as a page: AppHeader, a PageHeader with a count of waiting requests and Ask, the pending kit PermissionRequest first (Grant / Deny, then one line), a Table of actions with each level as an icon plus a word and a ghost Edit, a Card with a Switch that makes every action ask first, and an AutonomyDial for the default level of new actions. Edit opens a kit Drawer with a card RadioGroup and, for an amount, a CurrencyInput under the group. Below 640 the nav opens in a Drawer from a Menu button, the Table becomes a drill ListView, Edit opens from the bottom and the dial is left out.",
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (request cards, level pickers, autonomy sliders, edit panels)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view: Grant on the page, Save level in the Edit Drawer",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 the nav is reachable from a Menu button in a kit Drawer",
+        "A waiting request is the kit PermissionRequest, first on the page, with its own Grant / Deny wording and one-line result",
+        "A level is always an icon and a word, never the icon or colour alone; a level set by workspace policy has no Edit and no drill",
+        "The amount for \"Up to an amount\" is a kit CurrencyInput under the RadioGroup, not inside an option"
       ]
     },
     {

@@ -6,7 +6,9 @@
   "useWhen": [
     "an agent needs access that lasts beyond one action",
     "several scopes with read / write / admin levels",
-    "the grant can fail and needs Retry"
+    "the grant can fail and needs Retry",
+    "badge: the request waits on this person, like \"Needs you\" on a page that also lists what is already allowed",
+    "summary: the change fits in two to four short cells, like Changes, For, Still asks, so it reads before the scopes"
   ],
   "doNotUseWhen": [
     "one command or edit — ApprovalCard",
@@ -58,7 +60,17 @@
     "requestedAt": {
       "type": "string",
       "required": false,
-      "note": "Footer note, e.g. \"requested 14:02\"."
+      "note": "Header note, e.g. \"requested 14:02\". With badge it sits beside the badge."
+    },
+    "badge": {
+      "type": "string",
+      "required": false,
+      "note": "A warning kit Badge with a Hand icon on a row above the title, e.g. \"Needs you\". requestedAt moves onto that row and the scope count is left out."
+    },
+    "summary": {
+      "type": "array",
+      "required": false,
+      "note": "{ label, value }[], two to four cells, e.g. [{ label: \"For\", value: \"30 days, until 22 Dec\" }]. A dl strip under the description: columns, or label and value rows when the card is under 40rem."
     },
     "resolvedNote": {
       "type": "string",
@@ -118,6 +130,8 @@
       "Escape denies (not on another control) and ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts; the key hint line is aria-hidden and hidden on touch screens",
       "granting sets aria-busy and announces in a status region",
       "the error is role=alert with a kit Button Retry",
+      "summary is a dl: each label is a dt and its value a dd",
+      "under 40rem of card width Grant and Deny stack full width at size lg, Grant first, and the key hint is left out",
       "resolved row is named \"Granted: <title>\"",
       "motion is opacity and transform only, off under prefers-reduced-motion"
     ]
@@ -126,6 +140,8 @@
     "Do not invent a local PermissionCard, AccessRequest, or ScopePicker",
     "Do not hide expiry or the standing-access warning for write or admin",
     "Grant is the one solid primary; Deny is outline",
+    "Do not put the reason or the warning in badge; badge is one or two words on who it waits for",
+    "Do not repeat every scope in summary or drop the scopes for it; summary says the change, the scopes say the access",
     "Do not use raw hex"
   ],
   "snippet": "<PermissionRequest title=\"Let Billing agent issue refunds on its own?\" description=\"Why: it found 6 duplicate card charges this month.\" scopes={[{ id: \"refunds\", resource: \"Stripe refunds\", access: \"write\", limit: \"$500 per refund\", expiry: \"Ends 22 Dec\" }]} warning=\"It won't ask again until 22 Dec. You can revoke it in Agent settings.\" onGrant={grant} onDeny={deny} />"
