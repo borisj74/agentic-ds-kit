@@ -126,6 +126,12 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   recent?: ChatRecent[];
   /** Shown under the Recent heading when `recent` is an empty array. */
   recentEmptyLabel?: string;
+  /**
+   * Data the assistant reads is still loading. The guided empty state keeps the greeting and intro,
+   * shows Skeleton rows in place of the suggestions, and the composer is disabled. The section is
+   * aria-busy. With no placeholder set, the composer reads "Available when your data loads".
+   */
+  loading?: boolean;
   isThinking?: boolean;
   /** While thinking: a live step list in place of the thinking dots. */
   thinkingSteps?: ChatStep[];

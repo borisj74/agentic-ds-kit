@@ -213,6 +213,9 @@ function Part({ part, disabled, onFollowup }: { part: ChatPart; disabled: boolea
   }
 }
 
+const DEFAULT_PLACEHOLDER = "How can we help you?";
+const LOADING_PLACEHOLDER = "Available when your data loads";
+
 function isRich(suggestion: string | ChatSuggestion): suggestion is ChatSuggestion {
   return typeof suggestion !== "string";
 }
@@ -223,12 +226,13 @@ export function Chat({
   messages = [],
   suggestions = [],
   context,
-  placeholder = "How can we help you?",
+  placeholder,
   emptyState = "Start a conversation.",
   greeting,
   intro,
   recent,
   recentEmptyLabel,
+  loading = false,
   isThinking = false,
   thinkingSteps,
   onStop,
@@ -255,13 +259,16 @@ export function Chat({
   const contextId = useId();
   const draft = value ?? internalValue;
   const showStop = isThinking && Boolean(onStop);
+  // While data loads the composer is off; nothing can be asked yet.
+  const locked = disabled || loading;
+  const composerPlaceholder = placeholder ?? (loading ? LOADING_PLACEHOLDER : DEFAULT_PLACEHOLDER);
   // A streaming answer already shows the work; no second thinking row under it.
   const streamingLast = messages.length > 0 && messages[messages.length - 1].status === "streaming";
 
   const richSuggestions = suggestions.filter(isRich);
   const plainSuggestions = suggestions.filter((item): item is string => !isRich(item));
   const isEmpty = messages.length === 0 && !isThinking;
-  const guided = isEmpty && Boolean(greeting || intro || recent || richSuggestions.length > 0);
+  const guided = isEmpty && Boolean(greeting || intro || recent || richSuggestions.length > 0 || loading);
 
   useEffect(() => {
     const thread = threadRef.current;
@@ -276,7 +283,7 @@ export function Chat({
 
   function sendMessage(message = draft) {
     const nextMessage = message.trim();
-    if (!nextMessage || disabled) return;
+    if (!nextMessage || locked) return;
     onSend?.(nextMessage);
     updateDraft("");
   }
@@ -298,6 +305,7 @@ export function Chat({
       ref={ref}
       className={cx(styles.panel, radius === "none" && styles.radiusNone, embedded && styles.embedded, className)}
       aria-label={title}
+      aria-busy={loading || undefined}
     >
       {embedded ? null : (
         <header className={styles.header}>
@@ -358,7 +366,16 @@ export function Chat({
               </div>
             ) : null}
             {contextBlock}
-            {richSuggestions.length > 0 ? (
+            {loading ? (
+              <div className={styles.group}>
+                <p className={styles.groupLabel} aria-hidden="true">{labels.chatSuggested}</p>
+                <div className={styles.loadingRows}>
+                  {Array.from({ length: Math.max(richSuggestions.length, 3) }, (_, index) => (
+                    <Skeleton key={index} shape="rect" height="var(--space-12)" label={index === 0 ? undefined : ""} />
+                  ))}
+                </div>
+              </div>
+            ) : richSuggestions.length > 0 ? (
               <div className={styles.group}>
                 <p className={styles.groupLabel} aria-hidden="true">{labels.chatSuggested}</p>
                 <LinkList
@@ -457,7 +474,7 @@ export function Chat({
               type="button"
               appearance="ghost" mode="neutral"
               size="sm"
-              disabled={disabled}
+              disabled={locked}
               onClick={() => sendMessage(suggestion)}
             >
               {suggestion}
@@ -479,10 +496,10 @@ export function Chat({
         <Input
           id={inputId}
           value={draft}
-          placeholder={showStop ? labels.chatWorking : placeholder}
-          ariaLabel={placeholder}
+          placeholder={showStop ? labels.chatWorking : composerPlaceholder}
+          ariaLabel={composerPlaceholder}
           describedBy={context ? contextId : undefined}
-          disabled={disabled || showStop}
+          disabled={locked || showStop}
           onChange={updateDraft}
         />
         {showStop ? (
@@ -496,7 +513,7 @@ export function Chat({
             mode="primary"
             size="md"
             ariaLabel={labels.send}
-            disabled={disabled || !draft.trim()}
+            disabled={locked || !draft.trim()}
             iconStart="Send"
           />
         )}

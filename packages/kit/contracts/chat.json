@@ -11,7 +11,8 @@
     "A help thread with send and a thinking state",
     "Suggested prompts above a composer",
     "Asking about one part of a screen, like a chart card, with context naming it",
-    "A tab of a work panel or Drawer that already has its own title and edge — embedded"
+    "A tab of a work panel or Drawer that already has its own title and edge — embedded",
+    "An assistant start page whose data is still loading — loading"
   ],
   "doNotUseWhen": [
     "A blocking overlay — use Modal",
@@ -72,7 +73,8 @@
     },
     "placeholder": {
       "type": "string",
-      "default": "How can we help you?"
+      "default": "How can we help you?",
+      "note": "Default \"How can we help you?\", or \"Available when your data loads\" while loading."
     },
     "emptyState": {
       "type": "string",
@@ -104,6 +106,11 @@
       "type": "string",
       "required": false,
       "note": "Shown under the Recent heading when recent is an empty array."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Data the assistant reads is still loading. The guided empty state keeps greeting and intro, shows kit Skeleton rows in place of the suggestions, and disables the composer (Send stays disabled). The section has aria-busy=\"true\". With no placeholder set, the composer reads \"Available when your data loads\"."
     },
     "isThinking": {
       "type": "boolean",
@@ -225,7 +232,8 @@
       "an error part is role=alert and names the problem with an icon and a title, not colour alone",
       "the collapsed step row is a Button with aria-expanded that controls the step list",
       "built-in labels (conversation, suggestedPrompts, send, chatContext, chatSuggested, chatRecent, chatStop, chatWorking, chatSteps, chatCopyDetails, retry) come from KitLabelsProvider; English by default",
-      "embedded keeps the section named by title (aria-label) though the header is hidden"
+      "embedded keeps the section named by title (aria-label) though the header is hidden",
+      "loading sets aria-busy=\"true\" on the section and disables the composer"
     ]
   },
   "doNot": [
@@ -238,5 +246,5 @@
     "Do not hide or restyle the Chat header from the host — use embedded",
     "Do not use embedded for a standalone chat card; it has no title on screen"
   ],
-  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />"
+  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />\n\n<Chat title=\"Billing assistant\" embedded loading greeting=\"Good morning, Maya\" intro=\"Reading Stripe and QuickBooks\" onSend={handleSend} />"
 }

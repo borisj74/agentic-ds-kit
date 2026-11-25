@@ -2,6 +2,7 @@
 
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { AppShellScreen } from "./AppShellDemo";
+import { AssistantStartScreen } from "./AssistantStartScreen";
 import { DashboardScreen, ListDetailScreen } from "./DashboardDemo";
 import { InsightStackScreen } from "./InsightStackDemo";
 import { RunDetailScreen } from "./RunDetailScreen";
@@ -38,5 +39,7 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
       return <InsightStackScreen view={current} />;
     case "run-detail":
       return <RunDetailScreen view={current} />;
+    case "assistant-start":
+      return <AssistantStartScreen view={current} />;
   }
 }

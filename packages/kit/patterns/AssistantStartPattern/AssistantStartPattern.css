@@ -1,0 +1,33 @@
+/* Plain CSS, not a CSS Module (see AppShellPattern.css). The assistant-start-pattern__ prefix keeps names unique. */
+
+/* The page: one centred column at --grid-width-sm (640), on the flat shell's subtle background. */
+.assistant-start-pattern.layout-canvas {
+  padding-block-start: var(--space-12);
+}
+
+.assistant-start-pattern__column {
+  display: grid;
+  align-content: start;
+  gap: var(--space-8);
+  width: min(100%, var(--grid-width-sm));
+  min-width: 0;
+  margin-inline: auto;
+}
+
+/* Below --grid-breakpoint-md (media queries cannot read var()): the 24 page inset all round. */
+@media (width < 64rem) {
+  .assistant-start-pattern.layout-canvas {
+    padding-block-start: var(--layout-margin-md);
+  }
+}
+
+/* After the first send: the column fills the page height, Chat's thread scrolls and its composer
+   sits at the bottom. */
+.assistant-start-pattern--thread.layout-canvas {
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+.assistant-start-pattern--thread .assistant-start-pattern__column {
+  grid-template-rows: minmax(0, 1fr);
+  height: 100%;
+}

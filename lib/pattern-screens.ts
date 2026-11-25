@@ -128,6 +128,12 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "mobile", label: "Mobile 390 · failed", device: "mobile" },
     { id: "mobile-running", label: "Mobile 390 · running", device: "mobile" },
   ],
+  "assistant-start": [
+    { id: "default", label: "Ready" },
+    { id: "loading", label: "Loading" },
+    { id: "reconnect-error", label: "Reconnect failed" },
+    { id: "mobile", label: "Mobile 390", device: "mobile" },
+  ],
 };
 
 export function isScreenSlug(slug: string): slug is ScreenSlug {
@@ -148,6 +154,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   settings: "A settings nav in two groups (Workspace, You) beside each section, with a scope line under the title; an index page of two lists at 390.",
   onboarding: "Four setup steps (business, plan, billing, review) with progress, a validation error and a creating state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
+  "assistant-start": "An assistant's start page: a greeting with the key figures, prompts that send, and the connected apps answers come from.",
   "run-detail": "One agent run: a status bar with time and cost, the step trail and trace, and every tool call with Retry on the failed one.",
 };
 
@@ -165,4 +172,5 @@ export const PATTERN_ADD: Record<ScreenSlug, string> = {
   onboarding: "npx agentic-ds-kit add onboarding",
   "insight-stack": "npx agentic-ds-kit add insight-stack",
   "run-detail": "npx agentic-ds-kit add run-detail",
+  "assistant-start": "npx agentic-ds-kit add assistant-start",
 };
