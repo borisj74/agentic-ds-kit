@@ -1252,7 +1252,7 @@
   {
     "id": "activityfeed",
     "kind": "block",
-    "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word.",
+    "intent": "Block: what happened across a workspace. Events from people and agents, newest first and grouped by day (Today, Yesterday, then dates), each with an Avatar, a verb line, its object, a time and Badges; Type and Person filters; Open and Reply on each event; Load more at the end. A history variant shows one record's events (an invoice, say) on the shared rail with a time column and a status word. An agent variant shows an agent's steps on the same rail with Avatar markers: a sentence, a meta line and a reason per step, Undo with its deadline, Undone and Final steps, and no built-in filters (the page puts a FilterBar above it).",
     "group": "component",
     "path": "contracts/activityfeed.json",
     "status": "stable",
@@ -1393,6 +1393,16 @@
     "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add run-detail"
+  },
+  {
+    "id": "agent-activity",
+    "intent": "What your agents did, as a page: AppHeader, a PageHeader with an undo count and Ask, a FilterBar (Agent, Allowed by, App, Clear all) with the step count at the row end, then one Card holding the kit ActivityFeed with variant=\"agent\": day groups on the rail with Avatar markers, a sentence, meta and reason per step, Undo with its deadline, Undone and Final steps, and Load earlier days. Undo strikes the step and a kit Toast confirms it. Empty (filtered) and load-error states. Below 640 a Menu IconButton in AppHeader opens the app's nav in a Drawer, the FilterBar shows two chips and +1, and the feed folds its time and end columns into the copy.",
+    "group": "pattern",
+    "path": "contracts/patterns/agent-activity.json",
+    "status": "stable",
+    "level": "template",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add agent-activity"
   },
   {
     "id": "agent-permissions",
