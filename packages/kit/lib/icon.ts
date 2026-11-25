@@ -1,8 +1,9 @@
-/** Standard Lucide stroke. Matches `--icon-stroke`. */
-export const ICON_STROKE = 1.5;
+/** Standard Lucide stroke (Lucide's default, 2). Matches `--icon-stroke`. */
+export const ICON_STROKE = 2;
 
 /**
- * Heavier stroke for tiny marks (Checkbox check and minus at 12px and under).
+ * Stroke for tiny marks (Checkbox check and minus at 12px and under).
+ * Same as ICON_STROKE now; kept so existing imports keep working.
  * Matches `--icon-stroke-strong`.
  */
 export const ICON_STROKE_STRONG = 2;

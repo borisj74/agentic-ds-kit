@@ -21,7 +21,7 @@ From repo root, list changed or target files, then flag lines matching roughly:
 - raw spacing like `padding: 13px` when a `var(--space-*)` exists
 - raw values in `grid-template-columns`, `gap`, or `max-width`: a `px`/`rem` length, or a hard-coded column count such as `repeat(12,`, when a `var(--grid-*)` exists (`--grid-columns`, `--grid-gutter-*`, `--grid-margin-*`, `--grid-width-*`)
 - raw `px`/`rem` widths in `@media` queries (`min-width`, `max-width`, `width <`) instead of a `--grid-breakpoint-*` token
-- Lucide `strokeWidth` set to a number other than `ICON_STROKE` (1.5) or `ICON_STROKE_STRONG` (2). Do not flag chart, Progress, Meter, or PieChart strokes; those are data lines, not icons
+- Lucide `strokeWidth` set to a number other than `ICON_STROKE` or `ICON_STROKE_STRONG` (both 2). Do not flag chart, Progress, Meter, or PieChart strokes; those are data lines, not icons
 
 Do not flag `packages/kit/lib/layout.css` or `tokens.css`; those files define the classes and tokens. Media queries cannot read `var()`, so a raw width there is paired with a comment naming the token.
 

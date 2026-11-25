@@ -50,7 +50,7 @@ describe("Empty", () => {
       const html = render(h(kit.Empty, { kind, title: "x" }));
       assert.match(html, /role="status"/);
       assert.match(html, /aria-hidden="true"[^>]*><svg/);
-      assert.match(html, /stroke-width="1.5"/);
+      assert.match(html, /stroke-width="2"/);
     });
   }
 
