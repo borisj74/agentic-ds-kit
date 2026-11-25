@@ -90,7 +90,7 @@ Patterns are examples of what you can build from the components, not rules: star
 - `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons
 - `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
 - `billing-schedule` — Section + next charge + failed-payment Alert + Table with status Badges
-- `integration-settings` — Section + status Badge + FieldSet of Fields (Select, Switch) + scope Tags + Save + Disconnect with AlertDialog
+- `integration-settings` — Section head + Connection Card (status Badge, last sync, error Alert with Retry) + Sync settings Card (FieldSet of Selects and Checkboxes, Save) + Disconnect Section with AlertDialog
 - `settings` — Profile, Billing, Team, Notifications and Security pages in the Stage look (`layout-shell--inset`, sections in the app's SideNav); Billing uses `billing-schedule` (add copies it beside)
 - `onboarding` — Welcome / Workspace / Connect (SetupGuide) / Done in the Stage look: vertical ProgressSteps beside an inset panel (`layout-shell--inset`), Back and one primary in a footer bar
 

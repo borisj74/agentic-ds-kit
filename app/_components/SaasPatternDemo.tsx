@@ -39,7 +39,9 @@ export function IntegrationSettingsScreen({ view = "connected" }: { view?: strin
         onSave={noop}
         onCancel={noop}
         onSyncNow={noop}
+        onRetry={() => setSettings("connected")}
         onViewErrors={noop}
+        onAsk={noop}
         onReconnect={() => setSettings("connected")}
         onDisconnect={() => setSettings("disconnected")}
         onConnect={() => setSettings("connected")}

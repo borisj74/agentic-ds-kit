@@ -149,6 +149,11 @@
       "required": false,
       "note": "Header row: a small icon tile (surface.muted, icon.muted) before the eyebrow. aria-hidden."
     },
+    "badge": {
+      "type": "slot",
+      "required": false,
+      "note": "One kit Badge right under the title, 4 below it, such as a connection status (a word plus an icon). Not for actions or long text."
+    },
     "eyebrow": {
       "type": "string",
       "required": false,

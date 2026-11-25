@@ -14,6 +14,7 @@ export function Section({
   title,
   description,
   eyebrow,
+  icon,
   count,
   headingLevel = 2,
   divider = false,
@@ -42,7 +43,39 @@ export function Section({
     onOpenChange?.(next);
   }
 
-  const showHeader = Boolean(title || description || actions || eyebrow);
+  const showHeader = Boolean(title || description || actions || eyebrow || icon);
+
+  const heading = (
+    <div className={styles.heading}>
+      {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+      {title ? (
+        <div className={styles.titleRow}>
+          <Heading id={headingId} className={styles.title}>
+            {canCollapse ? (
+              <button
+                type="button"
+                className={styles.trigger}
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpen(!open)}
+              >
+                <LucideByName
+                  name={open ? "ChevronDown" : "ChevronRight"}
+                  size={16}
+                  className={styles.chevron}
+                />
+                {title}
+              </button>
+            ) : (
+              title
+            )}
+          </Heading>
+          {typeof count === "number" ? <Count count={count} intent="neutral" subtle /> : null}
+        </div>
+      ) : null}
+      {description ? <p className={styles.description}>{description}</p> : null}
+    </div>
+  );
 
   return (
     <section
@@ -60,35 +93,16 @@ export function Section({
     >
       {showHeader ? (
         <header className={styles.header}>
-          <div className={styles.heading}>
-            {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-            {title ? (
-              <div className={styles.titleRow}>
-                <Heading id={headingId} className={styles.title}>
-                  {canCollapse ? (
-                    <button
-                      type="button"
-                      className={styles.trigger}
-                      aria-expanded={open}
-                      aria-controls={panelId}
-                      onClick={() => setOpen(!open)}
-                    >
-                      <LucideByName
-                        name={open ? "ChevronDown" : "ChevronRight"}
-                        size={16}
-                        className={styles.chevron}
-                      />
-                      {title}
-                    </button>
-                  ) : (
-                    title
-                  )}
-                </Heading>
-                {typeof count === "number" ? <Count count={count} intent="neutral" subtle /> : null}
-              </div>
-            ) : null}
-            {description ? <p className={styles.description}>{description}</p> : null}
-          </div>
+          {icon ? (
+            <div className={styles.lead}>
+              <span className={styles.iconTile} aria-hidden="true">
+                <LucideByName name={icon} size={20} className={styles.glyph} />
+              </span>
+              {heading}
+            </div>
+          ) : (
+            heading
+          )}
           {actions ? <div className={styles.actions}>{actions}</div> : null}
         </header>
       ) : null}

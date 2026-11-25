@@ -36,6 +36,31 @@
   margin: 0;
 }
 
+.lead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1;
+}
+
+.iconTile {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height-lg);
+  height: var(--control-height-lg);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-tray);
+  color: var(--icon-muted);
+}
+
+.glyph {
+  display: block;
+  stroke-width: var(--icon-stroke);
+}
+
 .heading {
   display: grid;
   gap: var(--space-1);

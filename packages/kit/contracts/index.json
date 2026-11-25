@@ -1376,7 +1376,7 @@
   },
   {
     "id": "integration-settings",
-    "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+    "intent": "Settings for one connected integration: a Section head (provider, account, Ask) over a Connection Card (status Badge, last sync with numbers, the sync error with Retry inside it) and a Sync settings Card (the form, Save), in layout-container-sm. Disconnect sits in its own Section below, behind a danger AlertDialog.",
     "group": "pattern",
     "path": "contracts/patterns/integration-settings.json",
     "status": "stable",

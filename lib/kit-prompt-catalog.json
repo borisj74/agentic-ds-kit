@@ -4530,6 +4530,11 @@
           "required": false,
           "note": "Header row: a small icon tile (surface.muted, icon.muted) before the eyebrow. aria-hidden."
         },
+        "badge": {
+          "type": "slot",
+          "required": false,
+          "note": "One kit Badge right under the title, 4 below it, such as a connection status (a word plus an icon). Not for actions or long text."
+        },
         "eyebrow": {
           "type": "string",
           "required": false,
@@ -7689,6 +7694,11 @@
           "type": "string",
           "required": false,
           "note": "Short sentence-case line above the title, 12/16 at weight 500. Never uppercase."
+        },
+        "icon": {
+          "type": "KitIcon",
+          "required": false,
+          "note": "A 40px tile (control-height-lg, radius-lg, bg-tray) with a 20px Lucide icon left of the heading, such as a provider mark on a settings page. Decorative: aria-hidden, the title names the section."
         },
         "title": {
           "type": "string",
@@ -14648,14 +14658,16 @@
     {
       "id": "integration-settings",
       "group": "pattern",
-      "intent": "Settings block for one connected integration: status, sync settings in a FieldSet, granted scopes, Save, and Disconnect behind a danger AlertDialog.",
+      "intent": "Settings for one connected integration: a Section head (provider, account, Ask) over a Connection Card (status Badge, last sync with numbers, the sync error with Retry inside it) and a Sync settings Card (the form, Save), in layout-container-sm. Disconnect sits in its own Section below, behind a danger AlertDialog.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",
         "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Options that wait for Save are Checkboxes; use Switch only for settings that apply at once",
         "Wrap every setting in Field (label, hint and control wiring); group them in a FieldSet",
         "Disable the FieldSet while saving and while access needs reauth",
+        "Disconnect sits outside the settings form, in its own Section below it",
         "Disconnect is a danger action and confirms with a kit AlertDialog; Cancel returns focus to Disconnect",
         "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
         "When access expires, Reconnect is the solid primary and Save steps down to outline",
