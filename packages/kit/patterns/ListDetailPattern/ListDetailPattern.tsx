@@ -468,7 +468,7 @@ export function ListDetailPattern({
       >
         <ListView
           label="Invoices"
-          size="md"
+          size={narrow ? "lg" : "md"}
           flush
           items={items}
           selection={narrow ? "none" : "single"}

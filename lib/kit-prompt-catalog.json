@@ -2055,10 +2055,11 @@
           "values": [
             "xs",
             "sm",
-            "md"
+            "md",
+            "lg"
           ],
           "default": "md",
-          "note": "xs is a compact 40px row for dense cards, like a dashboard Needs attention list."
+          "note": "xs is a compact 40px row for dense cards, like a dashboard Needs attention list. lg is a touch-size row with 16/24 primary and value and 14/20 secondary and meta, like a phone record list."
         },
         "selection": {
           "type": "enum",
@@ -2127,7 +2128,7 @@
         "flush": {
           "type": "boolean",
           "default": false,
-          "note": "Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 at xs and sm and 24 at md, and a plain icon at its own size. A selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card; the Card head or your own rules close the ends."
+          "note": "Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 at xs, sm and lg and 24 at md, and a plain icon at its own size. A selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card; the Card head or your own rules close the ends."
         },
         "sort": {
           "type": "enum",

@@ -95,3 +95,12 @@ describe("SegmentedControl fullWidth", () => {
     assert.match(seg({ fullWidth: true }), /role="radiogroup"/);
   });
 });
+
+describe("ListView size lg", () => {
+  test("lg sets its own size class on the root", () => {
+    const md = rootClass(list()).split(" ");
+    const lg = rootClass(list({ size: "lg" })).split(" ");
+    assert.ok(lg.some((c) => /^_?lg/.test(c) || c.startsWith("lg")), lg.join(" "));
+    assert.ok(!md.some((c) => c.startsWith("lg")));
+  });
+});

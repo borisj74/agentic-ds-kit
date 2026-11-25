@@ -2,8 +2,11 @@ import type { KitIcon } from "../Button/lucideName";
 import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { BadgeTone } from "../Badge/Badge.types";
 
-/** xs: compact 40px rows for dense cards (e.g. a dashboard "Needs attention" list). */
-export type ListViewSize = "xs" | "sm" | "md";
+/**
+ * xs: compact 40px rows for dense cards (e.g. a dashboard "Needs attention" list).
+ * lg: touch-size rows with 16/24 primary and value and 14/20 secondary and meta, e.g. a phone record list.
+ */
+export type ListViewSize = "xs" | "sm" | "md" | "lg";
 /** Row priority. Drives the leading bar marker and starts the secondary line with its word. */
 export type ListViewPriority = "high" | "medium" | "low";
 /** Tone for item.meta and the leading icon. danger is for a problem the words already name ("17 days late", "declined"). */
@@ -112,7 +115,7 @@ export interface ListViewProps extends Omit<ComponentPropsWithoutRef<"div">, Lis
    */
   truncate?: ListViewTruncate;
   /**
-   * Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 (xs, sm) or 24 (md),
+   * Rows meet the list's edges: square rows with a 1px rule between rows, text inset 16 (xs, sm, lg) or 24 (md),
    * and a selected row fills edge to edge with a 2px brand edge on its start side. Use it in a list pane or a flush Card.
    * Default false.
    */

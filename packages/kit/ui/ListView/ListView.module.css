@@ -140,6 +140,15 @@ button.groupHeader:focus-visible {
   padding: var(--space-2) var(--space-3);
 }
 
+/* lg: touch-size rows for a phone record list; the lines step up to 16/24 and 14/20 with 4 between them. */
+.lg .row {
+  padding: var(--space-3) var(--space-4);
+}
+
+.lg .copy {
+  gap: var(--space-1);
+}
+
 .check {
   display: inline-flex;
   flex-shrink: 0;
@@ -164,7 +173,8 @@ button.groupHeader:focus-visible {
   height: var(--space-8);
 }
 
-.md .leading {
+.md .leading,
+.lg .leading {
   width: var(--space-10);
   height: var(--space-10);
 }
@@ -416,7 +426,7 @@ button.body:focus {
 }
 
 /* flush: rows meet the list's edges, square, with a 1px rule between rows. The text keeps its inset
-   (16 at xs and sm, 24 at md). A selected row fills edge to edge and gets a 2px brand edge on its start side,
+   (16 at xs, sm and lg, 24 at md). A selected row fills edge to edge and gets a 2px brand edge on its start side,
    so the state shows as fill, edge and a heavier name. */
 .root.flush {
   padding: 0;
@@ -459,4 +469,16 @@ button.body:focus {
 
 .flush .row[data-selected]:dir(rtl) {
   box-shadow: inset calc(-1 * var(--border-width-medium)) 0 0 0 var(--border-brand);
+}
+
+.lg .primary,
+.lg .value {
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+}
+
+.lg .secondary,
+.lg .meta {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
 }
