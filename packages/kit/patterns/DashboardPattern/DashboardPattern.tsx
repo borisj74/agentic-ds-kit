@@ -465,20 +465,17 @@ export function DashboardPattern({
         onAsk={() => ask(name)}
         actions={narrow ? undefined : [{ label: "Open revenue report", appearance: "outline", mode: "neutral", onClick: openRevenue }]}
       >
-        <div className="dashboard-pattern__chart">
-          <LineChart
-            key={`${metric.id}-${period}-${granularity}`}
-            variant="area"
-            labels={labels}
-            series={mainSeries}
-            referenceLine={metric.reference}
-            highlightLast={!narrow}
-            showTable={false}
-            showGrid={!narrow}
-            height={narrow ? 120 : 280}
-          />
-          <p className="dashboard-pattern__sr">{mainSummary}</p>
-        </div>
+        <LineChart
+          key={`${metric.id}-${period}-${granularity}`}
+          variant="area"
+          labels={labels}
+          series={mainSeries}
+          referenceLine={metric.reference}
+          highlightLast={!narrow}
+          showGrid={!narrow}
+          height={narrow ? 120 : 280}
+        />
+        <p className="dashboard-pattern__sr">{mainSummary}</p>
       </Card>
     );
   };
