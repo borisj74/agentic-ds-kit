@@ -99,7 +99,7 @@ Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started
 
 ### Playground routes
 - `/` — Redirects to `/patterns/dashboard`
-- `/installation` — Install the package
+- `/get-started` — Install the package, agent rules and MCP setup (`/installation` redirects to its install section)
 - `/mcp` — MCP server for agents
 - `/theming` — Semantic tokens, dark mode, brand color, fonts
 - `/theme` — Visual token playground: ramp, live preview, and token export
