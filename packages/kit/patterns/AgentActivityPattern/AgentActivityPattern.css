@@ -1,6 +1,11 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app) turns modules into
    global CSS with no class map. The agent-activity-pattern__ prefix keeps names unique. */
 
+/* The brand title at the board's small size, through AppHeader's own token. */
+.agent-activity-pattern__header {
+  --appheader-title-size: var(--type-size-body-sm);
+}
+
 /* One centred column, as wide as --grid-width-md. */
 .agent-activity-pattern__content {
   grid-template-columns: minmax(0, var(--grid-width-md));

@@ -222,6 +222,7 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
   return (
     <div className={["layout-shell agent-activity-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
       <AppHeader
+        className="agent-activity-pattern__header"
         title={PAGE.product}
         radius="none"
         search={false}
