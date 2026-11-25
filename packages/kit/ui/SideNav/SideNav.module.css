@@ -36,6 +36,8 @@
 
 .rootClosed:not(.radiusNone) {
   border-inline-end: var(--border-surface) solid var(--border-faint);
+  /* The clipped panel loses its trailing corners; round the shell so the closed rail keeps all four. */
+  border-radius: var(--radius-surface-md);
 }
 
 .panel {
