@@ -60,6 +60,7 @@ export function ChartFrame({
       {...rest}
       ref={ref}
       className={cx(hasChrome ? styles.frame : styles.flush, className)}
+      data-kit-frame={hasChrome ? "chart" : undefined}
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={description ? descriptionId : undefined}
     >
