@@ -1,0 +1,50 @@
+{
+  "id": "assistant-start",
+  "status": "stable",
+  "level": "template",
+  "role": "example",
+  "roleNote": "An example of what you can build from kit components. Start from it, change it, or ignore it; layout is your choice. Follow `must` (kit look and accessibility); `defaults` are this example's suggestions, change any of them.",
+  "delivery": "copy-in",
+  "add": "npx agentic-ds-kit add assistant-start",
+  "requires": [
+    "app-shell"
+  ],
+  "import": "import { AssistantStartPattern } from \"@/components/patterns/assistant-start\";",
+  "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/assistant-start/) with this contract beside it, and the app-shell example it renders into components/patterns/app-shell/ (kept if you already have it). You own the copies: pass your nav through shell, replace the greeting, figures, prompts and apps, wire onSend, onReconnect and onAsk, and keep the `must` lines.",
+  "intent": "An assistant's start page inside the app-shell example (flat): SideNav when wide, the nav in a kit Drawer from a top bar below --grid-breakpoint-md. In main, one centred column at --grid-width-sm: kit Chat embedded in its guided empty state with a greeting, an intro, a mono summary of the key figures, the labelled composer (composerLabel) with the one solid Send, and suggestions as a 2x2 grid of outline Buttons that send (suggestionLayout grid, stacked when narrow). Under it, 32 apart, a Connected apps Card (Ask in the header) with a ListView of the sources answers use, each status a Badge word in one lane and Reconnect as the row's action. Loading uses Chat loading and Skeleton rows; a failed reconnect says what answers skip. After the first send the thread fills the page.",
+  "useWhen": [
+    "The landing page of an in-app assistant that answers from the workspace's data",
+    "An assistant start page that should show which sources answers come from and which need attention"
+  ],
+  "doNotUseWhen": [
+    "An assistant beside a working page — use Chat in the app-shell work panel or a Drawer",
+    "Managing integrations in depth — start from integration-settings"
+  ],
+  "contains": [
+    "sidenav",
+    "drawer",
+    "chat",
+    "card",
+    "listview",
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "must": [
+    "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (composers, prompt chips, app rows, status pills)",
+    "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+    "At most one appearance=\"solid\" mode=\"primary\" Button per view: Chat's Send",
+    "Do not restyle kit components; change them through their props, slots, and tokens",
+    "Render the page content inside a main landmark; SideNav is the nav landmark when wide and sits in a kit Drawer, opened by a named Menu Button, when narrow",
+    "The assistant is one kit Chat with embedded, composerLabel and suggestionLayout grid; suggestions are ChatSuggestion objects, not a local grid of buttons, and the composer is Chat's, not a local input",
+    "Each app's status is a Badge word, never colour alone; a failed reconnect says in words what answers skip",
+    "While data loads, pass Chat loading and put aria-busy on the Card with Skeleton rows"
+  ],
+  "defaults": [
+    "Demo is Northwind's billing assistant for Maya Chen: October MRR, overdue invoices, next run, four prompts with icons",
+    "Connected apps: Stripe (Connected) and QuickBooks (Sign-in expired, Reconnect)",
+    "Card size sm, flush, with Ask (outline neutral, MessageCircle) as its header action and a flush ListView",
+    "Below --grid-breakpoint-md the column keeps the 24 inset, the intro and figures shorten, the Card drops its description, and the app rows are ListView size lg with Reconnect QuickBooks full width under its row"
+  ],
+  "snippet": "<AssistantStartPattern state=\"ready\" onSend={send} onReconnect={reconnect} />"
+}

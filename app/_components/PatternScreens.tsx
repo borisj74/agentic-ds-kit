@@ -4,6 +4,7 @@ import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { AgentActivityScreen } from "./AgentActivityScreen";
 import { AgentPermissionsScreen } from "./AgentPermissionsScreen";
 import { AppShellScreen } from "./AppShellDemo";
+import { AssistantStartScreen } from "./AssistantStartScreen";
 import { DashboardScreen, ListDetailScreen } from "./DashboardDemo";
 import { InsightStackScreen } from "./InsightStackDemo";
 import { RunDetailScreen } from "./RunDetailScreen";
@@ -40,6 +41,8 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
       return <InsightStackScreen view={current} />;
     case "run-detail":
       return <RunDetailScreen view={current} />;
+    case "assistant-start":
+      return <AssistantStartScreen view={current} />;
     case "agent-activity":
       return <AgentActivityScreen view={current} />;
     case "agent-permissions":

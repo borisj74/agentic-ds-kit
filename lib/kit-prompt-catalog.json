@@ -2047,7 +2047,7 @@
         "items": {
           "type": "array",
           "required": true,
-          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed-width slot so verbs line up across rows; when it is set, every entry in actions goes in the kit DropdownMenu. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. warning is for something waiting on someone. valueIcon is a quiet aria-hidden Lucide icon before value, like a level icon next to \"Up to $250\". note ends the secondary line after \" · \", like \"$500 asked\", and noteTone colours only that part. Tones default to neutral, and the words must still say it."
+          "note": "Leading media is Avatar when name, src, or initials is set; otherwise Lucide icon; otherwise none. One leading slot. item.group matches groups[].id. At most two trailing actions render as kit Buttons; more go in kit DropdownMenu. Icons: A curated Lucide name (PascalCase or kebab-case) renders instantly; any other Lucide name needs import \"agentic-ds-kit/icons-on-demand\" once (otherwise it is skipped with a dev warning). Or pass the Lucide component (Plus) or an element. dot is a small status dot as the leading mark when there is no avatar or icon; it is aria-hidden and its tone is added to the row name (Note, Good, Warning, Problem, Info). The primary or secondary text must still say the status. meta is short muted text at the row end, like a relative time, read after the secondary line. priority shows a three-bar marker in the leading slot when there is no avatar or icon (it wins over dot), is aria-hidden, and starts the secondary line with High, Medium or Low, so the word is always visible and in the row name. primaryAction is the row's one verb: an outline kit Button in a fixed 96 lane at the row end; once any row has one, rows without one keep the empty lane, so badges, values and verbs line up across rows. When primaryAction is set, every entry in actions goes in the kit DropdownMenu. At size lg below --grid-breakpoint-sm the primaryAction drops to a full-width line under its row, and below --grid-breakpoint-sm the empty lane on rows without one is hidden at every size. actionLabel on an action is the button's accessible name when the visible label is not enough on its own: visible \"Review\", accessible name \"Review Tax checker\". Start it with the visible label. Leave it out and the button keeps its visible text. value is the row's amount or figure, like \"$2,418.00\", on the right of the primary line in tabular figures; meta and badge stack under it, right-aligned. Format it yourself (currency, units). metaTone danger colours meta, like \"17 days late\"; iconTone danger colours the leading Lucide icon, like a declined payment. warning is for something waiting on someone. valueIcon is a quiet aria-hidden Lucide icon before value, like a level icon next to \"Up to $250\". note ends the secondary line after \" · \", like \"$500 asked\", and noteTone colours only that part. Tones default to neutral, and the words must still say it."
         },
         "label": {
           "type": "string",
@@ -4886,7 +4886,11 @@
         "A help thread with send and a thinking state",
         "Suggested prompts above a composer",
         "Asking about one part of a screen, like a chart card, with context naming it",
-        "A tab of a work panel or Drawer that already has its own title and edge — embedded"
+        "A tab of a work panel or Drawer that already has its own title and edge — embedded",
+        "An assistant start page whose data is still loading — loading",
+        "An assistant start page with a few short prompts as buttons — suggestionLayout grid",
+        "A start page that shows the key figures the assistant reads, in one mono line under the intro — summary",
+        "A start page whose composer is the main action, with a visible label above the suggestions — composerLabel"
       ],
       "doNotUseWhen": [
         "A blocking overlay — use Modal",
@@ -4901,7 +4905,11 @@
         "Do not use raw hex",
         "Do not use product-specific, billing-platform, or copilot wording in copy",
         "Do not hide or restyle the Chat header from the host — use embedded",
-        "Do not use embedded for a standalone chat card; it has no title on screen"
+        "Do not use embedded for a standalone chat card; it has no title on screen",
+        "Do not use loading for a thinking answer — use isThinking; loading is for the data the assistant reads, before anything can be asked",
+        "Do not use suggestionLayout grid for long or many prompts, or when the hint matters — keep list (LinkList rows with hints)",
+        "Do not put status, sentences or a second intro in summary — it is one line of figures; status still needs words",
+        "Do not add a separate Field or label beside Chat for the composer — pass composerLabel"
       ],
       "props": {
         "title": {
@@ -4922,6 +4930,15 @@
           "required": false,
           "note": "Prompts that send their text. Plain strings are kit Buttons sm above the composer. Objects { label, hint?, icon? } are rows (kit LinkList) in the empty state."
         },
+        "suggestionLayout": {
+          "type": "enum",
+          "values": [
+            "list",
+            "grid"
+          ],
+          "default": "list",
+          "note": "How object suggestions show in the guided empty state. list: kit LinkList rows with the hint. grid: kit Button md outline neutral with the suggestion icon, block width, two columns when each gets at least space-16 * 4 and stacked below that; labels wrap to a second line, the hint is not shown, and the Suggested label is a plain caption. Both send their label. While loading, grid shows four control-height Skeletons in the same grid."
+        },
         "context": {
           "type": "object",
           "required": false,
@@ -4929,7 +4946,8 @@
         },
         "placeholder": {
           "type": "string",
-          "default": "How can we help you?"
+          "default": "How can we help you?",
+          "note": "Default \"How can we help you?\", or \"Available when your data loads\" while loading."
         },
         "emptyState": {
           "type": "string",
@@ -4946,6 +4964,16 @@
           "required": false,
           "note": "Empty state line under the greeting: what the assistant can do here. With context, the context Tag moves under it."
         },
+        "summary": {
+          "type": "string",
+          "required": false,
+          "note": "Empty state line under the intro in Geist Mono (caption, tabular figures): the key figures the assistant reads, like \"October MRR $184,320  -3.1% vs September\". Plain text."
+        },
+        "composerLabel": {
+          "type": "string",
+          "required": false,
+          "note": "Visible label above the composer input (kit Field label look); it names the input instead of the placeholder. In the guided empty state the labelled composer sits under the greeting block, above the suggestions (label, input and suggestions 8 and 16 apart, 32 under the greeting). Once the thread has messages the composer is at the foot."
+        },
         "recent": {
           "type": "array",
           "required": false,
@@ -4955,6 +4983,11 @@
           "type": "string",
           "required": false,
           "note": "Shown under the Recent heading when recent is an empty array."
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "note": "Data the assistant reads is still loading. The guided empty state keeps greeting and intro, shows kit Skeleton rows in place of the suggestions, and disables the composer (Send stays disabled). The section has aria-busy=\"true\". With no placeholder set, the composer reads \"Available when your data loads\"."
         },
         "isThinking": {
           "type": "boolean",
@@ -14837,6 +14870,29 @@
         "Connection status is a word in a kit Badge; syncing, error and expired access are kit Alerts",
         "When access expires, Reconnect is the solid primary and Save steps down to outline",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
+      ]
+    },
+    {
+      "id": "assistant-start",
+      "group": "pattern",
+      "intent": "An assistant's start page inside the app-shell example (flat): SideNav when wide, the nav in a kit Drawer from a top bar below --grid-breakpoint-md. In main, one centred column at --grid-width-sm: kit Chat embedded in its guided empty state with a greeting, an intro, a mono summary of the key figures, the labelled composer (composerLabel) with the one solid Send, and suggestions as a 2x2 grid of outline Buttons that send (suggestionLayout grid, stacked when narrow). Under it, 32 apart, a Connected apps Card (Ask in the header) with a ListView of the sources answers use, each status a Badge word in one lane and Reconnect as the row's action. Loading uses Chat loading and Skeleton rows; a failed reconnect says what answers skip. After the first send the thread fills the page.",
+      "useWhen": [
+        "The landing page of an in-app assistant that answers from the workspace's data",
+        "An assistant start page that should show which sources answers come from and which need attention"
+      ],
+      "doNotUseWhen": [
+        "An assistant beside a working page — use Chat in the app-shell work panel or a Drawer",
+        "Managing integrations in depth — start from integration-settings"
+      ],
+      "must": [
+        "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (composers, prompt chips, app rows, status pills)",
+        "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
+        "At most one appearance=\"solid\" mode=\"primary\" Button per view: Chat's Send",
+        "Do not restyle kit components; change them through their props, slots, and tokens",
+        "Render the page content inside a main landmark; SideNav is the nav landmark when wide and sits in a kit Drawer, opened by a named Menu Button, when narrow",
+        "The assistant is one kit Chat with embedded, composerLabel and suggestionLayout grid; suggestions are ChatSuggestion objects, not a local grid of buttons, and the composer is Chat's, not a local input",
+        "Each app's status is a Badge word, never colour alone; a failed reconnect says in words what answers skip",
+        "While data loads, pass Chat loading and put aria-busy on the Card with Skeleton rows"
       ]
     },
     {

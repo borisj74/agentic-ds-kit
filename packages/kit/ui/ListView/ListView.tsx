@@ -356,6 +356,19 @@ export function ListView({
   }
 
   function renderActions(item: ListViewItem): ReactNode {
+    const node = renderRowActions(item);
+    // Once any row has a primaryAction, a row without one keeps the empty slot, so badges and
+    // values end in one lane down the list.
+    if (item.primaryAction || !hasPrimaryLane) return node;
+    return (
+      <span className={styles.actions}>
+        <span className={styles.primaryActionSlot} aria-hidden />
+        {node}
+      </span>
+    );
+  }
+
+  function renderRowActions(item: ListViewItem): ReactNode {
     const actions = item.actions ?? [];
     const stop = (event: MouseEvent) => event.stopPropagation();
     const primary = item.primaryAction;
@@ -473,6 +486,7 @@ export function ListView({
     );
   }
 
+  const hasPrimaryLane = items.some((item) => Boolean(item.primaryAction));
   const rootClass = cx(styles.root, styles[size], flush && styles.flush, className);
 
   if (items.length === 0) {

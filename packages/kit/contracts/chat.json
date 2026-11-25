@@ -11,7 +11,11 @@
     "A help thread with send and a thinking state",
     "Suggested prompts above a composer",
     "Asking about one part of a screen, like a chart card, with context naming it",
-    "A tab of a work panel or Drawer that already has its own title and edge — embedded"
+    "A tab of a work panel or Drawer that already has its own title and edge — embedded",
+    "An assistant start page whose data is still loading — loading",
+    "An assistant start page with a few short prompts as buttons — suggestionLayout grid",
+    "A start page that shows the key figures the assistant reads, in one mono line under the intro — summary",
+    "A start page whose composer is the main action, with a visible label above the suggestions — composerLabel"
   ],
   "doNotUseWhen": [
     "A blocking overlay — use Modal",
@@ -61,6 +65,15 @@
       "required": false,
       "note": "Prompts that send their text. Plain strings are kit Buttons sm above the composer. Objects { label, hint?, icon? } are rows (kit LinkList) in the empty state."
     },
+    "suggestionLayout": {
+      "type": "enum",
+      "values": [
+        "list",
+        "grid"
+      ],
+      "default": "list",
+      "note": "How object suggestions show in the guided empty state. list: kit LinkList rows with the hint. grid: kit Button md outline neutral with the suggestion icon, block width, two columns when each gets at least space-16 * 4 and stacked below that; labels wrap to a second line, the hint is not shown, and the Suggested label is a plain caption. Both send their label. While loading, grid shows four control-height Skeletons in the same grid."
+    },
     "context": {
       "type": "object",
       "required": false,
@@ -72,7 +85,8 @@
     },
     "placeholder": {
       "type": "string",
-      "default": "How can we help you?"
+      "default": "How can we help you?",
+      "note": "Default \"How can we help you?\", or \"Available when your data loads\" while loading."
     },
     "emptyState": {
       "type": "string",
@@ -89,6 +103,16 @@
       "required": false,
       "note": "Empty state line under the greeting: what the assistant can do here. With context, the context Tag moves under it."
     },
+    "summary": {
+      "type": "string",
+      "required": false,
+      "note": "Empty state line under the intro in Geist Mono (caption, tabular figures): the key figures the assistant reads, like \"October MRR $184,320  -3.1% vs September\". Plain text."
+    },
+    "composerLabel": {
+      "type": "string",
+      "required": false,
+      "note": "Visible label above the composer input (kit Field label look); it names the input instead of the placeholder. In the guided empty state the labelled composer sits under the greeting block, above the suggestions (label, input and suggestions 8 and 16 apart, 32 under the greeting). Once the thread has messages the composer is at the foot."
+    },
     "recent": {
       "type": "array",
       "required": false,
@@ -104,6 +128,11 @@
       "type": "string",
       "required": false,
       "note": "Shown under the Recent heading when recent is an empty array."
+    },
+    "loading": {
+      "type": "boolean",
+      "default": false,
+      "note": "Data the assistant reads is still loading. The guided empty state keeps greeting and intro, shows kit Skeleton rows in place of the suggestions, and disables the composer (Send stays disabled). The section has aria-busy=\"true\". With no placeholder set, the composer reads \"Available when your data loads\"."
     },
     "isThinking": {
       "type": "boolean",
@@ -225,7 +254,9 @@
       "an error part is role=alert and names the problem with an icon and a title, not colour alone",
       "the collapsed step row is a Button with aria-expanded that controls the step list",
       "built-in labels (conversation, suggestedPrompts, send, chatContext, chatSuggested, chatRecent, chatStop, chatWorking, chatSteps, chatCopyDetails, retry) come from KitLabelsProvider; English by default",
-      "embedded keeps the section named by title (aria-label) though the header is hidden"
+      "embedded keeps the section named by title (aria-label) though the header is hidden",
+      "loading sets aria-busy=\"true\" on the section and disables the composer",
+      "with composerLabel, the composer input is named by its visible label"
     ]
   },
   "doNot": [
@@ -236,7 +267,11 @@
     "Do not use raw hex",
     "Do not use product-specific, billing-platform, or copilot wording in copy",
     "Do not hide or restyle the Chat header from the host — use embedded",
-    "Do not use embedded for a standalone chat card; it has no title on screen"
+    "Do not use embedded for a standalone chat card; it has no title on screen",
+    "Do not use loading for a thinking answer — use isThinking; loading is for the data the assistant reads, before anything can be asked",
+    "Do not use suggestionLayout grid for long or many prompts, or when the hint matters — keep list (LinkList rows with hints)",
+    "Do not put status, sentences or a second intro in summary — it is one line of figures; status still needs words",
+    "Do not add a separate Field or label beside Chat for the composer — pass composerLabel"
   ],
-  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />"
+  "snippet": "<Chat title=\"Assistant\" messages={messages} onSend={handleSend} isThinking={busy} onClose={close} />\n\n<Chat\n  title=\"Ask\"\n  messages={[]}\n  context={{ label: \"Revenue · Last 30 days\", onRemove: clearContext }}\n  suggestions={[\"What drove the change?\"]}\n  onSend={handleSend}\n/>\n\n<Chat title=\"Ask about revenue\" embedded messages={messages} suggestions={suggestions} onSend={handleSend} />\n\n<Chat\n  greeting=\"Good morning, Ada\"\n  intro=\"Ask about this dashboard.\"\n  suggestions={[{ label: \"What drove MRR this period?\", hint: \"Looks at MRR movements\", icon: \"TrendingUp\" }]}\n  recent={recent}\n  onSend={handleSend}\n/>\n\n<Chat messages={messages} isThinking={busy} thinkingSteps={steps} onStop={stop} onSend={handleSend} />\n\n<Chat title=\"Billing assistant\" embedded loading greeting=\"Good morning, Maya\" intro=\"Reading Stripe and QuickBooks\" onSend={handleSend} />"
 }
