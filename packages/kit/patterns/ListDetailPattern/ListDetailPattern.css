@@ -21,8 +21,11 @@
   align-content: stretch;
 }
 
+/* The list pane is the card surface in any shell (a flat shell paints the canvas with the page grey). */
 .list-detail-pattern__split > .list-detail-pattern__list {
+  align-self: stretch;
   padding-block: var(--space-6);
+  background: var(--surface-card);
 }
 
 /* Rows sit 16 in from both pane edges, so their text lines up with the chrome at 24 and the selected
@@ -101,8 +104,8 @@
 .list-detail-pattern__sub {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
   color: var(--text-secondary);
 }
 

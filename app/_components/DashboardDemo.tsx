@@ -185,13 +185,21 @@ export function ListDetailScreen({ view }: { view?: string }) {
   return (
     <AppShellPattern
       className="layout-shell--viewport"
+      layout="flat"
       navLabel="Northwind"
       markIcon={Building2}
       nav={(placement) => (
         <SideNav
           title="Northwind"
-          markIcon={Building2}
-          showHeader={placement === "rail"}
+          showHeader={false}
+          // The board's rail has the brand and no Close toggle; the Drawer has its own title.
+          beforeGroups={
+            placement === "rail" ? (
+              <SideNav.Header>
+                <SideNav.Brand title="Northwind" markIcon={Building2} />
+              </SideNav.Header>
+            ) : undefined
+          }
           radius={placement === "rail" ? "none" : "md"}
           open
           groups={groups}

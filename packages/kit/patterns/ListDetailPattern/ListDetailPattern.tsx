@@ -1,5 +1,6 @@
 "use client";
 
+import { Receipt } from "lucide-react";
 import {
   useEffect,
   useId,
@@ -193,7 +194,6 @@ function InvoiceBody({
           <Table
             columns={LINE_COLUMNS}
             rows={lineRows}
-            size="sm"
             footer={{
               label: invoice.status === "paid" ? "Total paid" : "Total due",
               value: invoice.total,
@@ -209,7 +209,7 @@ function InvoiceBody({
       >
         <ListView
           label={`Payment history for ${invoice.id}`}
-          size={narrow ? "xs" : "sm"}
+          size={narrow ? "xs" : "md"}
           items={payments}
           empty={{ title: "No payment attempts yet." }}
         />
@@ -459,7 +459,7 @@ export function ListDetailPattern({
       <div className="list-detail-pattern__rows">
         <ListView
           label="Invoices"
-          size={narrow ? "md" : "sm"}
+          size="md"
           items={items}
           selection={narrow ? "none" : "single"}
           selected={!narrow && openId ? [openId] : []}
@@ -528,7 +528,7 @@ export function ListDetailPattern({
                 <Empty
                   title="No invoice open"
                   description={`Pick one from the list. ${counts.overdue} of ${counts.all} are overdue.`}
-                  icon="FileText"
+                  icon={Receipt}
                   actions={
                     oldestOverdue ? (
                       <Button

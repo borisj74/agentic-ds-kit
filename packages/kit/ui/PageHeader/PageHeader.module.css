@@ -126,8 +126,8 @@
   }
 
   /* A single button (New invoice, labelled or icon-only) stays beside the title, as in a list
-     column or a phone list header. Two or more, or a field, still move under it. */
-  .row:has(> .actions > :is(button, a):only-child) > .content {
+     column or a phone list header. Two or more, a link or a field, still move under it. */
+  .row:has(> .actions > button:only-child) > .content {
     flex: 1 1 0;
     min-width: 0;
   }
