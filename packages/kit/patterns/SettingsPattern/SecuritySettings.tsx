@@ -1,8 +1,7 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId } from "react";
 import { Alert } from "../../ui/Alert";
-import { AlertDialog } from "../../ui/AlertDialog";
 import { Badge } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
@@ -10,7 +9,7 @@ import { Field } from "../../ui/Field";
 import { Input } from "../../ui/Input";
 import { ListView } from "../../ui/ListView";
 import { Switch } from "../../ui/Switch";
-import { PASSWORD_CHANGED, SESSIONS, TWO_FACTOR_ADDED, TWO_FACTOR_POLICY, WORKSPACE_NAME } from "./settings-data";
+import { PASSWORD_CHANGED, SESSIONS, TWO_FACTOR_ADDED, TWO_FACTOR_POLICY } from "./settings-data";
 
 export interface SecuritySettingsProps {
   /** Two-factor on, or off with the workspace-policy notice and Set up. */
@@ -19,13 +18,11 @@ export interface SecuritySettingsProps {
   onSetUpTwoFactor?: () => void;
   onSignOut?: (sessionId: string) => void;
   onSignOutOthers?: () => void;
-  onDeleteWorkspace?: () => void;
 }
 
 /**
- * Security page: password, two-factor (Switch plus an On/Off Badge), sessions in a kit ListView,
- * and Delete workspace as a danger action behind a kit AlertDialog. No solid primary: every action
- * here is secondary or destructive.
+ * Security page: password, two-factor (Switch plus an On/Off Badge) and sessions in a kit ListView.
+ * No solid primary: every action here acts on its own card. Delete workspace lives on General.
  */
 export function SecuritySettings({
   twoFactor = true,
@@ -33,17 +30,8 @@ export function SecuritySettings({
   onSetUpTwoFactor,
   onSignOut,
   onSignOutOthers,
-  onDeleteWorkspace,
 }: SecuritySettingsProps) {
   const uid = useId();
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const deleteRef = useRef<HTMLDivElement>(null);
-
-  function closeConfirm() {
-    setConfirmOpen(false);
-    // Cancel returns focus to Delete workspace.
-    requestAnimationFrame(() => deleteRef.current?.querySelector("button")?.focus());
-  }
 
   return (
     <div className="layout-content">
@@ -116,30 +104,8 @@ export function SecuritySettings({
               onAction={(id) => onSignOut?.(id)}
             />
           </Card>
-
-          <Card title="Delete workspace" description="Removes all invoices, customers and agents. You confirm before anything is deleted.">
-            <div ref={deleteRef}>
-              <Button appearance="outline" mode="danger" iconStart="Trash2" onClick={() => setConfirmOpen(true)}>
-                Delete workspace
-              </Button>
-            </div>
-          </Card>
         </div>
       </div>
-
-      <AlertDialog
-        open={confirmOpen}
-        title={`Delete ${WORKSPACE_NAME}?`}
-        description="This removes every invoice, customer and agent in the workspace. It can’t be undone."
-        cancelLabel="Cancel"
-        actionLabel="Delete workspace"
-        actionVariant="danger"
-        onCancel={closeConfirm}
-        onAction={() => {
-          setConfirmOpen(false);
-          onDeleteWorkspace?.();
-        }}
-      />
     </div>
   );
 }

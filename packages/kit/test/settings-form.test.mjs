@@ -254,4 +254,13 @@ describe("SettingsFormPattern", { skip }, () => {
     assert.ok(left === 1, "the held click goes through");
     await view.unmount();
   });
+
+  test("header={false} drops the PageHeader and keeps the form and the SaveBar", async () => {
+    const view = await render({ header: false });
+    assert.ok(!view.container.querySelector("h1"), "no page title");
+    assert.ok(!view.container.querySelector(".layout-header"), "no header row");
+    assert.ok(view.container.querySelector("form fieldset"), "the form renders");
+    assert.match(status(view.container), /2 unsaved changes/);
+    await view.unmount();
+  });
 });

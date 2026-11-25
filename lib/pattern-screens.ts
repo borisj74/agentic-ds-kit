@@ -14,27 +14,33 @@ export interface ScreenView {
   device?: "mobile";
 }
 
-/** The screens on Paper p-6-0 (Settings set). Each one is a section plus that section's state. */
+/** The Settings screens (Paper p-9-1, 4GQH-0): each section plus its states, and the 390 index. */
 export const SETTINGS_SCREENS: {
   id: string;
   label: string;
-  section: SettingsSection;
+  /** null is the index page (390). */
+  section: SettingsSection | null;
   billing?: BillingState;
   team?: TeamState;
   invite?: boolean;
   twoFactor?: boolean;
+  device?: "mobile";
 }[] = [
+  { id: "general", label: "General", section: "general" },
   { id: "billing", label: "Billing", section: "billing" },
   { id: "billing-overdue", label: "Billing · overdue", section: "billing", billing: "overdue" },
   { id: "billing-loading", label: "Billing · loading", section: "billing", billing: "loading" },
   { id: "billing-error", label: "Billing · error", section: "billing", billing: "error" },
-  { id: "profile", label: "Profile", section: "profile" },
   { id: "team", label: "Team", section: "team" },
   { id: "team-invite", label: "Team · invite drawer", section: "team", invite: true },
   { id: "team-empty", label: "Team · empty", section: "team", team: "empty" },
+  { id: "integrations", label: "Integrations", section: "integrations" },
+  { id: "profile", label: "Profile", section: "profile" },
   { id: "notifications", label: "Notifications", section: "notifications" },
   { id: "security", label: "Security", section: "security" },
   { id: "security-2fa-off", label: "Security · 2FA off", section: "security", twoFactor: false },
+  { id: "index", label: "390 · Settings index", section: null, twoFactor: false, device: "mobile" },
+  { id: "general-390", label: "390 · General", section: "general", device: "mobile" },
 ];
 
 /** The Onboarding screens (Paper p-9-1, 4H05-0): each step, plus Review's error and submitting states. */
@@ -96,7 +102,7 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "needsReauth", label: "Needs reauth" },
     { id: "disconnected", label: "Not connected" },
   ],
-  settings: SETTINGS_SCREENS.map(({ id, label }) => ({ id, label })),
+  settings: SETTINGS_SCREENS.map(({ id, label, device }) => (device ? { id, label, device } : { id, label })),
   onboarding: ONBOARDING_SCREENS.map(({ id, label }) => ({ id, label })),
   "insight-stack": [
     { id: "specimens", label: "Ranked, loading, all clear" },
@@ -122,7 +128,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   layouts: "Top bar and side nav, composed from kit components.",
   "billing-schedule": "Next charge, a failed-payment notice, and every charge with its status.",
   "integration-settings": "One integration's status and last sync, the sync error with Retry, sync settings, and Disconnect kept away from Save.",
-  settings: "Settings nav beside Profile, Billing, Team, Notifications and Security pages, with their states.",
+  settings: "A settings nav in two groups (Workspace, You) beside each section, with a scope line under the title; an index page of two lists at 390.",
   onboarding: "Four setup steps (business, plan, billing, review) with progress, a validation error and a creating state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
 };

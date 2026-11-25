@@ -241,7 +241,7 @@ describe("mcp server", { timeout: 20_000 }, () => {
 
     // A pattern built on another lists it, so an agent knows add copies both.
     const settings = await call("get_pattern", { id: "settings" });
-    assert.deepEqual(settings.pattern.requires, ["billing-schedule"]);
+    assert.deepEqual(settings.pattern.requires, ["billing-schedule", "integration-settings"]);
 
     const missing = await callError("get_pattern", { id: "not-a-pattern" });
     assert.match(missing, /No pattern "not-a-pattern"/);

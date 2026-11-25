@@ -1,15 +1,86 @@
 /** Demo data for SettingsPattern. Every value is an example; replace it with your workspace's data. */
+import { Building2, ShieldCheck } from "lucide-react";
+import type { KitIcon } from "../../ui/Button";
 import type { Charge } from "../BillingSchedulePattern";
 
-export type SettingsSection = "profile" | "billing" | "team" | "notifications" | "security";
+export type SettingsSection = "general" | "billing" | "team" | "integrations" | "profile" | "notifications" | "security";
 
-export const SECTIONS: { id: SettingsSection; label: string; icon: string; subtitle: string }[] = [
-  { id: "profile", label: "Profile", icon: "User", subtitle: "How you appear to your team." },
-  { id: "billing", label: "Billing", icon: "CreditCard", subtitle: "Plan, usage, charges and documents. Example data." },
-  { id: "team", label: "Team", icon: "Users", subtitle: "People in this workspace and what they can do." },
-  { id: "notifications", label: "Notifications", icon: "Bell", subtitle: "What you hear about and where." },
-  { id: "security", label: "Security", icon: "ShieldCheck", subtitle: "Sign-in, sessions and the danger zone." },
+/** workspace: settings for everyone in the workspace. you: settings that only change it for the signed-in person. */
+export type SettingsGroupId = "workspace" | "you";
+
+export interface SettingsSectionMeta {
+  id: SettingsSection;
+  group: SettingsGroupId;
+  label: string;
+  icon: KitIcon;
+  /** The scope line under the page title: who a change reaches. */
+  scope: string;
+  /** Who can edit, added to the scope line when wide. */
+  editors?: string;
+  /** The row's second line on the narrow index page: what's inside. */
+  description: string;
+}
+
+export const WORKSPACE = {
+  name: "Northwind Studio",
+  mark: "N",
+  plan: "Pro · 12 of 15 seats",
+  members: 12,
+};
+
+const WORKSPACE_SCOPE = `Workspace setting · applies to all ${WORKSPACE.members} members`;
+const YOU_SCOPE = "Personal setting · only changes it for you";
+
+/** Settings sections in nav order: the workspace group, then the you group. API waits for its own board. */
+export const SECTIONS: SettingsSectionMeta[] = [
+  { id: "general", group: "workspace", label: "General", icon: Building2, scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "Northwind Studio Ltd · USD" },
+  { id: "billing", group: "workspace", label: "Billing", icon: "CreditCard", scope: WORKSPACE_SCOPE, editors: "owners and billing can edit", description: "Next charge $348.00 on 1 Dec" },
+  { id: "team", group: "workspace", label: "Team", icon: "Users", scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "12 members · 1 invited" },
+  { id: "integrations", group: "workspace", label: "Integrations", icon: "Plug", scope: WORKSPACE_SCOPE, editors: "owners and admins can edit", description: "3 connected" },
+  { id: "profile", group: "you", label: "Profile", icon: "User", scope: YOU_SCOPE, description: "Priya Shah · Owner" },
+  { id: "notifications", group: "you", label: "Notifications", icon: "Bell", scope: YOU_SCOPE, description: "Email and in-app" },
+  { id: "security", group: "you", label: "Security", icon: ShieldCheck, scope: YOU_SCOPE, description: "Two-factor on" },
 ];
+
+/** The two nav groups and the narrow index lists, with the heading shown above each list. */
+export const SETTINGS_GROUPS: { id: SettingsGroupId; label: string; heading: string }[] = [
+  { id: "workspace", label: "Workspace", heading: `Workspace · applies to all ${WORKSPACE.members} members` },
+  { id: "you", label: "You", heading: "You · only changes it for you" },
+];
+
+/** General: what Northwind Studio shows on invoices and links. SAVED is what the server has. */
+export const GENERAL_SAVED = {
+  name: "Northwind Studio",
+  slug: "northwind",
+  currency: "usd",
+  prefix: "INV-",
+  timezone: "europe-london",
+};
+
+/** The demo opens with one unsaved edit so the save bar has something to say. */
+export const GENERAL_DRAFT = { ...GENERAL_SAVED, name: "Northwind Studio Ltd" };
+
+export const GENERAL_LABELS: Record<keyof typeof GENERAL_SAVED, string> = {
+  name: "Workspace name",
+  slug: "Workspace URL",
+  currency: "Default currency",
+  prefix: "Invoice prefix",
+  timezone: "Time zone",
+};
+
+export const URL_BASE = "app.nistha.example/";
+export const NEXT_INVOICE_NUMBER = 1843;
+
+export const CURRENCY_OPTIONS = [
+  { value: "usd", label: "USD · US dollar" },
+  { value: "gbp", label: "GBP · Pound sterling" },
+  { value: "eur", label: "EUR · Euro" },
+];
+
+export const DELETE_COPY = {
+  title: "Delete Northwind Studio",
+  description: "Removes its 1,284 invoices and 12 members. A dialog asks you to confirm first.",
+};
 
 export const PROFILE = {
   fullName: "Priya Shah",
@@ -134,4 +205,4 @@ export const SESSIONS = [
   { id: "windows", primary: "Firefox on Windows", secondary: "Leeds · 6 d ago", icon: "Monitor" },
 ];
 
-export const WORKSPACE_NAME = "Northwind Studio";
+export const WORKSPACE_NAME = WORKSPACE.name;

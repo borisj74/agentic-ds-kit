@@ -233,7 +233,10 @@ describe("review of new apps from init --template", () => {
       const made = run(["init", `app-${template}`, "--template", template], tmp);
       assert.equal(made.status, 0, made.stderr);
       const result = reviewPath(join(tmp, `app-${template}`));
-      assert.deepEqual(result.findings, []);
+      // Settings' General page is the settings-form composition (FieldSet side in a Card, SaveBar) with
+      // workspace fields, copied in on purpose; that one pattern-fits hint is expected.
+      const expected = (f) => template === "settings" && f.rule === "pattern-fits" && f.contractId === "settings-form" && f.file.endsWith("/GeneralSettings.tsx");
+      assert.deepEqual(result.findings.filter((f) => !expected(f)), []);
       assert.ok(result.files > 3);
     });
   }
