@@ -177,6 +177,12 @@
   gap: var(--space-4);
 }
 
+/* The date trigger spans the Drawer like the Amount input under it (DatePicker caps itself at 20rem).
+   Doubled class: the kit stylesheet may load after this one. */
+.billing-schedule-pattern__picker.billing-schedule-pattern__picker {
+  max-width: none;
+}
+
 /* Tables at 40rem and up, the month-grouped ListView below (see the container query). */
 .billing-schedule-pattern__wide,
 .billing-schedule-pattern__narrow {

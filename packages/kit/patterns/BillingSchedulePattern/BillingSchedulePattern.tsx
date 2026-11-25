@@ -714,7 +714,7 @@ function EditChargeDrawer({
       {charge ? (
         <div className="billing-schedule-pattern__form">
           <Field label="Charge date" htmlFor={dateId}>
-            <DatePicker id={dateId} value={date} onValueChange={(value: string) => setDate(value)} />
+            <DatePicker id={dateId} className="billing-schedule-pattern__picker" value={date} onValueChange={(value: string) => setDate(value)} />
           </Field>
           <Field label="Amount" htmlFor={amountId} error={amountError || undefined}>
             <CurrencyInput
