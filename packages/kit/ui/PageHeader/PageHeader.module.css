@@ -125,6 +125,13 @@
     flex-basis: 100%;
   }
 
+  /* One icon-only button (an IconButton such as New invoice) is small enough to stay beside
+     the title, as on a phone list header. */
+  .row:has(> .actions > [aria-label]:only-child) > .content {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   .trail:has(> .trailBack) > .trailFull {
     display: none;
   }
