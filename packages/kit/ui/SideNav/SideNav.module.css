@@ -34,10 +34,15 @@
   width: var(--sidenav-width-collapsed, var(--layout-sidebar-compact));
 }
 
+/* Closed: the panel is clipped, so the shell carries the whole frame (border and
+   radius on all four sides) and the panel drops its own border. */
 .rootClosed:not(.radiusNone) {
-  border-inline-end: var(--border-surface) solid var(--border-faint);
-  /* The clipped panel loses its trailing corners; round the shell so the closed rail keeps all four. */
+  border: var(--border-surface) solid var(--border-faint);
   border-radius: var(--radius-surface-md);
+}
+
+.rootClosed:not(.radiusNone) .panel {
+  border: 0;
 }
 
 .panel {
