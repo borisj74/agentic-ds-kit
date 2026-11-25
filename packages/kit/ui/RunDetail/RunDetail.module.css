@@ -90,3 +90,21 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* calls="all" and the trace: one column below 40rem (--grid-breakpoint-sm) hides the trace; time and
+   cost stay in the monitor bar. */
+@container rundetail (max-width: 40rem) {
+  .root .trace {
+    display: none;
+  }
+}
+
+/* calls="all": the bar, then the split, 16 apart; the bar and every call fill their column. */
+.all {
+  gap: var(--space-4);
+}
+
+.all > .monitor,
+.calls > * {
+  width: 100%;
+}

@@ -68,6 +68,11 @@ export interface AgentMonitorProps extends Omit<ComponentPropsWithoutRef<"sectio
   onPause?: () => void;
   onResume?: () => void;
   onCancel?: () => void;
+  /**
+   * Running: Stop run (sm, outline, danger) beside Pause. A kit AlertDialog confirms it once;
+   * confirming calls onStop. A stopped run can't resume.
+   */
+  onStop?: () => void;
   onRetry?: () => void;
   onViewDiff?: () => void;
   onOpenTrail?: () => void;

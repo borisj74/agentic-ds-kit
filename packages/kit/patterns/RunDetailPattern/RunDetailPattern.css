@@ -1,0 +1,35 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app) turns modules into
+   global CSS with no class map. The run-detail-pattern__ prefix keeps names unique. */
+
+.run-detail-pattern__content {
+  gap: var(--space-4);
+  padding: var(--layout-margin-md);
+}
+
+/* Below 640: the back bar holds Runs and Ask on the card surface, over a rule. */
+.run-detail-pattern__topbar {
+  flex-wrap: nowrap;
+  padding-inline: var(--space-4);
+  padding-block: var(--space-2);
+  border-bottom: var(--border-width-thin) solid var(--line-default);
+  background: var(--surface-card);
+}
+
+/* The note under the calls lines up with the calls column, 8 under the last card. It goes with the
+   split: once the trail and calls stack (38rem, as layout.css), it hides, as on the 390 board. */
+.run-detail-pattern__note-row {
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.run-detail-pattern__note {
+  margin: 0;
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+@container layout-content (max-width: 38rem) {
+  .run-detail-pattern__note-row {
+    display: none;
+  }
+}

@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 import type { AgentMonitorPendingAction, AgentMonitorStatus, AgentMonitorStep } from "../AgentMonitor/AgentMonitor.types";
 import type { AgentTreeNode } from "../AgentTree/AgentTree.types";
 import type { ChatMessage } from "../Chat/Chat.types";
+import type { TraceSpan } from "../TraceWaterfall/TraceWaterfall.types";
 
 /** A step's status. "pending" steps are planned: they show in the trail, not in the time strip. */
 export type RunDetailStepStatus = "done" | "running" | "waiting" | "failed" | "pending";
@@ -26,7 +27,12 @@ export interface RunDetailStep extends Omit<AgentMonitorStep, "status"> {
   resultMeta?: string;
   /** Failed: error lines. */
   error?: string | string[];
+  /** Failed: "Attempt 1 of 3" beside Retry on its ToolCallCard. */
+  attempt?: { n: number; max: number };
 }
+
+/** Which tool calls show: the selected step's, or every started step's. */
+export type RunDetailCalls = "selected" | "all";
 
 /** The run as a whole: what AgentMonitor shows on top. */
 export interface RunDetailRun {
@@ -59,8 +65,16 @@ type RunDetailOwnedKeys = "children" | "title";
 export interface RunDetailProps extends Omit<ComponentPropsWithoutRef<"section">, RunDetailOwnedKeys> {
   run: RunDetailRun;
   steps: RunDetailStep[];
-  /** Who started whom: the orchestrator and its sub-agents (AgentTree root). */
-  agents: AgentTreeNode;
+  /** Who started whom: the orchestrator and its sub-agents (AgentTree root). Leave it out for one agent: no AgentTree. */
+  agents?: AgentTreeNode;
+  /**
+   * "selected" (default): one ToolCallCard, the selected step's. "all": every started step's
+   * ToolCallCard in step order, the failed one open; the monitor is the one-row bar, the trail
+   * and trace sit beside the calls, and Retry shows only on the ToolCallCard.
+   */
+  calls?: RunDetailCalls;
+  /** TraceWaterfall spans. Renders TraceWaterfall compact in place of the monitor's step strip; hidden on one column below 40rem. */
+  trace?: TraceSpan[];
   /** Controlled selected step. null = none. */
   selectedStepId?: string | null;
   /** Uncontrolled starting step. Default none. */
@@ -73,6 +87,8 @@ export interface RunDetailProps extends Omit<ComponentPropsWithoutRef<"section">
   onResume?: () => void;
   /** Paused runs: Cancel run. */
   onCancel?: () => void;
+  /** Running runs: Stop run in the monitor, confirmed once in a kit AlertDialog. */
+  onStop?: () => void;
   /** Retry a failed step (from the run, the tree or the tool call). */
   onRetry?: (stepId: string) => void;
   /** Ask panel: the conversation with the agent on this run (kit Chat). Shows with messages or onSend. */

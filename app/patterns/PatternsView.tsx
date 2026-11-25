@@ -16,6 +16,7 @@ import billingSchedule from "../../packages/kit/contracts/patterns/billing-sched
 import dashboard from "../../packages/kit/contracts/patterns/dashboard.json";
 import emptyFirstRun from "../../packages/kit/contracts/patterns/empty-first-run.json";
 import insightStack from "../../packages/kit/contracts/patterns/insight-stack.json";
+import runDetail from "../../packages/kit/contracts/patterns/run-detail.json";
 import integrationSettings from "../../packages/kit/contracts/patterns/integration-settings.json";
 import listDetail from "../../packages/kit/contracts/patterns/list-detail.json";
 import onboarding from "../../packages/kit/contracts/patterns/onboarding.json";
@@ -51,6 +52,7 @@ const CONTRACTS: Record<Exclude<PatternSlug, "layouts">, PatternContract> = {
   settings,
   onboarding,
   "insight-stack": insightStack,
+  "run-detail": runDetail,
 };
 
 function List({ items }: { items?: string[] }) {

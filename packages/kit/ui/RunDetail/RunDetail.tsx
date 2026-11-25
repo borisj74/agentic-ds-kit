@@ -7,13 +7,31 @@ import { AgentTree } from "../AgentTree";
 import { Chat } from "../Chat";
 import { Empty } from "../Empty";
 import { ToolCallCard } from "../ToolCallCard";
+import { TraceWaterfall } from "../TraceWaterfall";
+import type { TraceStatus } from "../TraceWaterfall/TraceWaterfall.types";
 import { cx } from "../shared/cx";
-import { agentForStep, failedStepForAgent, lastFailedStep, monitorSteps, runSummary, stepForAgent, toolCallFor, trailSteps } from "./runDetail.logic";
+import {
+  agentForStep,
+  failedStepForAgent,
+  lastFailedStep,
+  monitorSteps,
+  runSummary,
+  startedSteps,
+  stepForAgent,
+  toolCallFor,
+  trailSteps,
+} from "./runDetail.logic";
+import type { RunDetailRun } from "./RunDetail.types";
 import type { RunDetailProps } from "./RunDetail.types";
 import styles from "./RunDetail.module.css";
 import { nisthaAttr } from "../shared/inspect";
 
-export type { RunDetailProps, RunDetailRun, RunDetailStep, RunDetailStepStatus } from "./RunDetail.types";
+export type { RunDetailCalls, RunDetailProps, RunDetailRun, RunDetailStep, RunDetailStepStatus } from "./RunDetail.types";
+
+function traceStatus(status: RunDetailRun["status"]): TraceStatus {
+  if (status === "failed") return "failed";
+  return status === "done" || status === "idle" ? "complete" : "running";
+}
 
 /**
  * Block: one agent run on one screen. AgentMonitor (clock, cost, step strip, pending approval),
@@ -34,7 +52,10 @@ export function RunDetail(props: RunDetailProps) {
     onPause,
     onResume,
     onCancel,
+    onStop,
     onRetry,
+    calls = "selected",
+    trace,
     messages,
     onSend,
     thinking = false,
@@ -50,8 +71,9 @@ export function RunDetail(props: RunDetailProps) {
   const [innerSelected, setInnerSelected] = useState<string | null>(defaultSelectedStepId);
   const selectedId = selectedProp !== undefined ? selectedProp : innerSelected;
 
-  const strip = useMemo(() => monitorSteps(steps), [steps]);
-  const trail = useMemo(() => trailSteps(steps), [steps]);
+  const all = calls === "all";
+  const strip = useMemo(() => (trace ? [] : monitorSteps(steps)), [steps, trace]);
+  const trail = useMemo(() => trailSteps(steps, all), [steps, all]);
   const selected = selectedId ? steps.find((step) => step.id === selectedId) : undefined;
   const call = toolCallFor(selected);
   const selectedAgent = agentForStep(steps, selectedId, agents);
@@ -62,9 +84,81 @@ export function RunDetail(props: RunDetailProps) {
     onSelectStep?.(next);
   }
 
+  const retry = onRetry ? (id: string) => onRetry(id) : undefined;
+  const cardId = (stepId: string) => `${callId}-${stepId}`;
+  // calls="all": picking a step in the trail brings its call into view.
+  function selectAndShow(next: string | null) {
+    select(next);
+    if (next) document.getElementById(cardId(next))?.scrollIntoView({ block: "nearest" });
+  }
+
+  const traceNode = trace ? (
+    <TraceWaterfall className={styles.trace} title="Run trace" spans={trace} status={traceStatus(run.status)} compact />
+  ) : null;
+
+  if (all) {
+    const started = startedSteps(steps);
+    const done = run.status === "done";
+    return (
+      <section {...rest} {...nisthaAttr("rundetail", rest)} ref={ref} className={cx(styles.root, styles.all, className)} aria-labelledby={titleId}>
+        {/* The page's PageHeader names the run on screen; the block keeps its heading for screen readers. */}
+        <header className={styles.srOnly}>
+          <h2 id={titleId}>{title}</h2>
+          <p>{runSummary(steps)}</p>
+        </header>
+        <AgentMonitor
+          collapsed
+          className={styles.monitor}
+          name={run.name}
+          status={run.status}
+          headline={run.headline}
+          elapsed={run.elapsed}
+          cost={run.cost}
+          onPause={onPause}
+          onResume={onResume}
+          onCancel={onCancel}
+          onStop={onStop}
+        />
+        <div className={cx("layout-split--secondary", styles.split)}>
+          <div className={styles.column}>
+            {agents ? (
+              <AgentTree
+                root={agents}
+                label="Agents"
+                selectedId={selectedAgent}
+                onSelect={(agentId) => {
+                  const next = stepForAgent(steps, agentId);
+                  selectAndShow(next === selectedId ? null : next);
+                }}
+                onApprove={onApprove ? () => onApprove() : undefined}
+              />
+            ) : null}
+            <AgentTrail variant="list" title="Steps" tag={run.tag} steps={trail} selectedStepId={selectedId} onSelectStep={selectAndShow} />
+            {traceNode}
+          </div>
+          <section className={cx(styles.column, styles.calls)} aria-label="Tool calls">
+            {started.map((step) => {
+              const props = toolCallFor(step);
+              if (!props) return null;
+              return (
+                <ToolCallCard
+                  key={`${step.id}-${done ? "done" : "open"}`}
+                  id={cardId(step.id)}
+                  variant="panel"
+                  {...props}
+                  defaultExpanded={!done}
+                  onRetry={retry && step.status === "failed" ? () => retry(step.id) : undefined}
+                />
+              );
+            })}
+          </section>
+        </div>
+      </section>
+    );
+  }
+
   // The strip only holds started steps: a pending step selected in the trail leaves it unpressed.
   const stripSelected = selected && selected.status !== "pending" ? selected.id : null;
-  const retry = onRetry ? (id: string) => onRetry(id) : undefined;
 
   return (
     <section {...rest} {...nisthaAttr("rundetail", rest)} ref={ref} className={cx(styles.root, className)} aria-labelledby={titleId}>
@@ -97,9 +191,12 @@ export function RunDetail(props: RunDetailProps) {
             onPause={onPause}
             onResume={onResume}
             onCancel={onCancel}
+            onStop={onStop}
             onRetry={retry && failedId ? () => retry(failedId) : undefined}
             onOpenTrail={run.status === "failed" && failedId ? () => select(failedId) : undefined}
           />
+
+          {traceNode}
 
           <section className={styles.call} aria-labelledby={callId}>
             <h3 id={callId} className={styles.subtitle}>
@@ -128,24 +225,26 @@ export function RunDetail(props: RunDetailProps) {
         </div>
 
         <div className={styles.column}>
-          <AgentTree
-            root={agents}
-            label="Agents"
-            selectedId={selectedAgent}
-            onSelect={(agentId) => {
-              const next = stepForAgent(steps, agentId);
-              select(next === selectedId ? null : next);
-            }}
-            onApprove={onApprove ? () => onApprove() : undefined}
-            onRetry={
-              retry
-                ? (agentId) => {
-                    const failed = failedStepForAgent(steps, agentId);
-                    if (failed) retry(failed);
-                  }
-                : undefined
-            }
-          />
+          {agents ? (
+            <AgentTree
+              root={agents}
+              label="Agents"
+              selectedId={selectedAgent}
+              onSelect={(agentId) => {
+                const next = stepForAgent(steps, agentId);
+                select(next === selectedId ? null : next);
+              }}
+              onApprove={onApprove ? () => onApprove() : undefined}
+              onRetry={
+                retry
+                  ? (agentId) => {
+                      const failed = failedStepForAgent(steps, agentId);
+                      if (failed) retry(failed);
+                    }
+                  : undefined
+              }
+            />
+          ) : null}
           <AgentTrail
             title={run.name}
             tag={run.tag}

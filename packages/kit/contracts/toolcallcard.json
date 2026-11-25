@@ -101,6 +101,15 @@
       "type": "function",
       "required": false,
       "note": "(expanded) => void"
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "default",
+        "panel"
+      ],
+      "default": "default",
+      "note": "panel (RunDetail calls=\"all\"): a 44 head with no status Badge (running reads \"Running\"), a grey body with white code boxes, Arguments and Result side by side (stacked below 40rem of card width), arrays of plain values on one line, the error box under Arguments, and Attempt left with Retry right (full width below 25rem). Ignored with calls."
     }
   },
   "passthrough": {
