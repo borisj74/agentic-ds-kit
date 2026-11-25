@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
       { source: "/patterns/empty", destination: "/patterns/empty-first-run", permanent: true },
       { source: "/frame/patterns/settings-area", destination: "/frame/patterns/settings", permanent: true },
       { source: "/frame/patterns/empty", destination: "/frame/patterns/empty-first-run", permanent: true },
+      // Installation merged into Get started; old links land on its install section.
+      { source: "/installation", destination: "/get-started#installation", permanent: true },
     ];
   },
 };

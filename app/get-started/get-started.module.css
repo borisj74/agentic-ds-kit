@@ -167,6 +167,24 @@
   color: var(--primary-fg);
 }
 
+/* Installation details: lines up with the step bodies, below a divider. */
+.details {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-3);
+  padding: var(--space-8) 0 0 calc(var(--space-8) + var(--space-5));
+  border-top: var(--border-width-thin) solid var(--line-default);
+}
+
+.topicTitle {
+  margin: 0;
+  color: var(--text-fg);
+  font-family: var(--font-heading);
+  font-size: var(--type-size-ui-md);
+  font-weight: var(--type-weight-heading);
+  line-height: var(--type-line-ui-md);
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -189,5 +207,9 @@
 
   .step::before {
     display: none;
+  }
+
+  .details {
+    padding-left: 0;
   }
 }

@@ -349,7 +349,7 @@ npm run dev
 | --- | --- |
 | `/` | Redirects to Patterns |
 | `/patterns` | Live pattern screens (Dashboard, Activity, Inbox, …) |
-| `/installation` | Install the package |
+| `/get-started` | Install, agent rules, MCP setup and installation details |
 | `/mcp` | MCP setup and the tool list |
 | `/foundations` | Token scales |
 | `/components` | Gallery and per-component docs |

@@ -553,7 +553,6 @@ function patternLeaves(pathname: string): AppNavItem[] {
 const DOC_PAGES = [
   { href: "/start-here", label: "Start here" },
   { href: "/get-started", label: "Get started" },
-  { href: "/installation", label: "Installation" },
   { href: "/mcp", label: "MCP server" },
   { href: "/theming", label: "Theming" },
   { href: "/theme", label: "Theme builder" },
@@ -637,7 +636,7 @@ export const PLAYGROUND_APPNAV_DEMO_GROUPS: AppNavGroup[] = [
   {
     label: "Getting started",
     items: [
-      { href: "/installation", label: "Installation", active: false },
+      { href: "/get-started", label: "Get started", active: false },
       { href: "/theming", label: "Theming", active: false },
     ],
   },
