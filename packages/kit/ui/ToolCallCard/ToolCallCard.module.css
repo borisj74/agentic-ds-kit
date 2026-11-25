@@ -229,3 +229,193 @@ button.head:focus-visible {
     animation: none;
   }
 }
+
+/* variant="panel" (RunDetail calls="all"): a 44 head, then a grey body with white code boxes. Arguments
+   and Result sit side by side and stack in a narrow card; Attempt sits left and Retry right. */
+.panel {
+  container: toolcall / inline-size;
+}
+
+.panel .head {
+  gap: var(--space-2);
+  min-height: calc(var(--space-10) + var(--space-1));
+}
+
+.panel .name,
+.panel .summary {
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-ui-sm);
+}
+
+.panel .chevron {
+  color: var(--icon-secondary);
+}
+
+.panel .body {
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--bg-subtle);
+}
+
+.panel.error {
+  border-color: var(--status-danger-border);
+}
+
+.panelPair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.panelPane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.panelLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.panelCode {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: var(--space-3);
+  overflow-x: auto;
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg);
+  white-space: pre;
+}
+
+.panelError {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background-color: var(--status-danger-subtle);
+  border: var(--border-width-thin) solid var(--status-danger-border);
+  border-radius: var(--radius-control-md);
+}
+
+.panelErrorLine {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--status-danger-text);
+}
+
+.panelFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.panelFooter .attempt {
+  flex: 1 1 auto;
+}
+
+/* The phone-width pieces of a failed panel: folded Arguments under the error, and an lg Retry. */
+.panelNarrow {
+  display: none;
+}
+
+.panelFold {
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-control-md);
+}
+
+.panelFoldHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--control-height-lg);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-control-md);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.panelFoldHead:focus-visible {
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
+}
+
+.panelFoldCode {
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* 40rem is --grid-breakpoint-sm (container queries cannot read var()). */
+@container toolcall (max-width: 40rem) {
+  .panelPair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panelCode {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Phone width (25rem, the same narrow step layout.css uses): the head keeps icon, name, time and
+   chevron, and Retry takes the full width under the attempt line. */
+@container toolcall (max-width: 25rem) {
+  .head .summary {
+    clip-path: inset(50%);
+  }
+
+  .panelFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* The error comes first, Arguments fold under it, and Retry is lg (40) across the card. */
+  .panelError {
+    order: -1;
+  }
+
+  .panelWide {
+    display: none;
+  }
+
+  .panelNarrow {
+    display: block;
+  }
+
+  .panelFold {
+    display: flex;
+  }
+}

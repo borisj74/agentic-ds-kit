@@ -121,6 +121,13 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "all-clear", label: "All clear · sm, md, lg" },
     { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
+  "run-detail": [
+    { id: "failed", label: "Failed on step 2" },
+    { id: "running", label: "Running" },
+    { id: "done", label: "Done" },
+    { id: "mobile", label: "Mobile 390 · failed", device: "mobile" },
+    { id: "mobile-running", label: "Mobile 390 · running", device: "mobile" },
+  ],
 };
 
 export function isScreenSlug(slug: string): slug is ScreenSlug {
@@ -141,6 +148,7 @@ export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   settings: "A settings nav in two groups (Workspace, You) beside each section, with a scope line under the title; an index page of two lists at 390.",
   onboarding: "Four setup steps (business, plan, billing, review) with progress, a validation error and a creating state.",
   "insight-stack": "A ranked AI summary card: findings with a change and a Why? panel, a loading state and an all-clear state.",
+  "run-detail": "One agent run: a status bar with time and cost, the step trail and trace, and every tool call with Retry on the failed one.",
 };
 
 /** Each screen pattern's add command. Docs slugs are the pattern ids. */
@@ -156,4 +164,5 @@ export const PATTERN_ADD: Record<ScreenSlug, string> = {
   settings: "npx agentic-ds-kit add settings",
   onboarding: "npx agentic-ds-kit add onboarding",
   "insight-stack": "npx agentic-ds-kit add insight-stack",
+  "run-detail": "npx agentic-ds-kit add run-detail",
 };

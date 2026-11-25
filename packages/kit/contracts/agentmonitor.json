@@ -7,7 +7,7 @@
     "watch one agent run in detail",
     "inspect a step's duration, tokens and cost",
     "approve the agent's next action in place",
-    "pause, resume, cancel or retry a run"
+    "pause, resume, stop, cancel or retry a run"
   ],
   "doNotUseWhen": [
     "many agents at a glance — RunningNow",
@@ -15,7 +15,9 @@
     "a step-by-step log with labels — AgentTrail"
   ],
   "contains": [
+    "alertdialog",
     "approvalcard",
+    "badge",
     "button",
     "empty",
     "skeleton"
@@ -102,7 +104,7 @@
     "collapsed": {
       "type": "boolean",
       "default": false,
-      "note": "A compact card: name, clock, cost and status in one row, the same step strip below. Picking a step opens the card on that step."
+      "note": "The one-row bar: status Badge (icon and word), name, headline, elapsed and cost (value over label), and while running Pause and Stop run; paused shows Cancel run and Resume. The step strip, when steps are passed, takes its own row below; picking a step opens the card on it. Below 40rem the name and labels hide, time and cost read \"0:04 · $0.02\", and the actions take a full row."
     },
     "onCollapsedChange": {
       "type": "function",
@@ -116,7 +118,7 @@
     "onPause": {
       "type": "function",
       "required": false,
-      "note": "Running footer."
+      "note": "Running: Pause, beside Stop run when onStop is set."
     },
     "onResume": {
       "type": "function",
@@ -127,6 +129,11 @@
       "type": "function",
       "required": false,
       "note": "Paused: Cancel run (outline danger)."
+    },
+    "onStop": {
+      "type": "function",
+      "required": false,
+      "note": "Running: Stop run (sm, outline, danger) beside Pause. A kit AlertDialog confirms it once; confirming calls onStop."
     },
     "onRetry": {
       "type": "function",
@@ -194,12 +201,15 @@
       "the detail panel is a named region with a Close button",
       "pending action is a kit ApprovalCard (Enter / Escape)",
       "collapse is a button with aria-expanded",
-      "motion is transform and opacity only, off under prefers-reduced-motion"
+      "motion is transform and opacity only, off under prefers-reduced-motion",
+      "Stop run opens a kit AlertDialog (role alertdialog, focus trapped, Escape cancels) before onStop",
+      "collapsed: status is a Badge with an icon and the word; elapsed and cost are a dl, the clock role=timer"
     ]
   },
   "doNot": [
     "Do not invent a local AgentMonitor, RunCard, or AgentStatusCard",
     "Do not rebuild the approval UI; pass pendingAction",
+    "Do not end a run without the Stop run confirmation; pass onStop",
     "Only one solid primary: Approve, Resume or Start run, never two",
     "Do not use raw hex"
   ],

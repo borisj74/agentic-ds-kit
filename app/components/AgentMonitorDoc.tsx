@@ -72,13 +72,24 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     ),
   },
   {
-    title: "Collapsed",
-    about: "collapsed keeps the status and the step strip; picking a step opens the card on that step.",
+    title: "Collapsed — one-row bar",
+    about: "collapsed is one row: the status Badge, name and headline, then elapsed and cost. While running it shows Pause and Stop run; the step strip, when passed, sits below and picking a step opens the card on it.",
     code: `<AgentMonitor … collapsed onCollapsedChange={setCollapsed} />`,
     render: (
       <div className={agentDoc.stack}>
         <AgentMonitor {...BASE} elapsed="02:14" cost="$0.42" steps={STEPS} collapsed onCollapsedChange={noop} />
         <AgentMonitor name="Docs sweep" status="done" elapsed="4:02" cost="$0.18" steps={DONE_STEPS} collapsed onCollapsedChange={noop} />
+      </div>
+    ),
+  },
+  {
+    title: "Running — Stop run",
+    about: "onStop adds Stop run (outline danger) beside Pause. A kit AlertDialog asks once before the run ends; Pause keeps it resumable.",
+    code: `<AgentMonitor … status="running" onPause={pause} onStop={stop} />`,
+    render: (
+      <div className={agentDoc.stack}>
+        <AgentMonitor {...BASE} headline="Editing src/billing/invoice.ts" elapsed="02:14" cost="$0.42" steps={STEPS} onPause={noop} onStop={noop} />
+        <AgentMonitor name="Invoice reconciler" headline="Step 2 of 4" elapsed="0:03" collapsed onPause={noop} onStop={noop} />
       </div>
     ),
   },
@@ -195,6 +206,7 @@ export function AgentMonitorDoc() {
                   onPause={() => setStatus("paused")}
                   onResume={() => setStatus("running")}
                   onCancel={noop}
+                  onStop={() => setStatus("done")}
                   onViewDiff={noop}
                   onOpenTrail={noop}
                 />

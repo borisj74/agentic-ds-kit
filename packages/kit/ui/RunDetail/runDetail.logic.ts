@@ -39,15 +39,20 @@ export function monitorSteps(steps: RunDetailStep[]): AgentMonitorStep[] {
 }
 
 /** The trail: every step, planned ones included. The sublabel is the tool and its target. */
-export function trailSteps(steps: RunDetailStep[]): AgentTrailStep[] {
+export function trailSteps(steps: RunDetailStep[], toolOnly = false): AgentTrailStep[] {
   return steps.map((step) => ({
     id: step.id,
     label: step.label ?? step.tool,
     status: TRAIL_STATUS[step.status],
     duration: step.duration,
     timer: step.timer,
-    sublabel: [step.tool, step.target].filter(Boolean).join(" "),
+    sublabel: toolOnly ? step.tool : [step.tool, step.target].filter(Boolean).join(" "),
   }));
+}
+
+/** Every started step, in step order: the calls column of calls="all". */
+export function startedSteps(steps: RunDetailStep[]): RunDetailStep[] {
+  return steps.filter((step) => step.status !== "pending");
 }
 
 /** ToolCallCard props for a step, or null for a pending one (no call yet). */
@@ -62,6 +67,7 @@ export function toolCallFor(step: RunDetailStep | undefined) {
     result: step.result,
     resultMeta: step.resultMeta,
     error: step.status === "failed" ? step.error : undefined,
+    attempt: step.status === "failed" ? step.attempt : undefined,
   };
 }
 
@@ -71,7 +77,8 @@ function nodeIds(node: AgentTreeNode): string[] {
 }
 
 /** Tree node to select: the agent that ran the step (if it is in the tree). */
-export function agentForStep(steps: RunDetailStep[], stepId: string | null | undefined, root: AgentTreeNode): string | null {
+export function agentForStep(steps: RunDetailStep[], stepId: string | null | undefined, root: AgentTreeNode | undefined): string | null {
+  if (!root) return null;
   const step = stepId ? steps.find((item) => item.id === stepId) : undefined;
   if (!step) return null;
   return nodeIds(root).includes(step.agentId) ? step.agentId : null;

@@ -396,6 +396,7 @@ export const PATTERN_ITEMS = [
   { slug: "settings", label: "Settings" },
   { slug: "onboarding", label: "Onboarding" },
   { slug: "insight-stack", label: "Insight stack" },
+  { slug: "run-detail", label: "Run detail" },
   { slug: "layouts", label: "Layouts" },
 ] as const;
 

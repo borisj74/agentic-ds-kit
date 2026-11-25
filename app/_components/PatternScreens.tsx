@@ -4,6 +4,7 @@ import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { AppShellScreen } from "./AppShellDemo";
 import { DashboardScreen, ListDetailScreen } from "./DashboardDemo";
 import { InsightStackScreen } from "./InsightStackDemo";
+import { RunDetailScreen } from "./RunDetailScreen";
 import { BillingScheduleScreen, IntegrationSettingsScreen } from "./SaasPatternDemo";
 import { OnboardingScreen, SettingsScreen } from "./ScreensPatternDemo";
 import { SignInScreen } from "./SignInDemo";
@@ -35,5 +36,7 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
       return <OnboardingScreen view={current} />;
     case "insight-stack":
       return <InsightStackScreen view={current} />;
+    case "run-detail":
+      return <RunDetailScreen view={current} />;
   }
 }

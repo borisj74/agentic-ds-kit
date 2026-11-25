@@ -1197,7 +1197,7 @@
   {
     "id": "rundetail",
     "kind": "block",
-    "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession.",
+    "intent": "Block: one agent run in detail. AgentMonitor as the header (live clock, cost, step strip, pending approval) and the selected step's ToolCallCard, beside AgentTree (who started whom), AgentTrail (the step log on the shared rail, status icon plus word) and an Ask panel (kit Chat) to ask or steer the agent. One selected step drives the monitor, tree, trail and tool call. Replaces LiveSession. With calls=\"all\" the monitor is the one-row AgentMonitor bar (collapsed) and every started step's ToolCallCard stacks beside the trail, the failed one open. trace renders TraceWaterfall compact in place of the step strip.",
     "group": "component",
     "path": "contracts/rundetail.json",
     "status": "stable",
@@ -1383,6 +1383,16 @@
     "level": "template",
     "delivery": "copy-in",
     "add": "npx agentic-ds-kit add integration-settings"
+  },
+  {
+    "id": "run-detail",
+    "intent": "One agent run as a page: AppHeader, a PageHeader with a Runs breadcrumb, the run's meta line and Ask, then the kit RunDetail block with calls=\"all\" and the run trace. The monitor is a one-row bar (status, agent, headline, elapsed, cost; Pause and Stop run while running), the step trail and compact trace sit beside every started step's ToolCallCard, the failed one open with its error, attempt and Retry. Below 640 a back bar (Runs, Ask) replaces AppHeader and the page is one column.",
+    "group": "pattern",
+    "path": "contracts/patterns/run-detail.json",
+    "status": "stable",
+    "level": "template",
+    "delivery": "copy-in",
+    "add": "npx agentic-ds-kit add run-detail"
   },
   {
     "id": "settings",

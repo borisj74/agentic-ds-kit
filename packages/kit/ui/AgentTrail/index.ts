@@ -1,2 +1,2 @@
 export { AgentTrail } from "./AgentTrail";
-export type { AgentTrailProps, AgentTrailStep, AgentTrailStepStatus } from "./AgentTrail.types";
+export type { AgentTrailProps, AgentTrailStep, AgentTrailStepStatus, AgentTrailVariant } from "./AgentTrail.types";
