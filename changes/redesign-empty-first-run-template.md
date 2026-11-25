@@ -5,3 +5,4 @@
 ### Fixed
 
 - **Combobox no longer swallows Escape when its list is closed.** Escape in a closed Combobox inside a Modal or Drawer now closes the Modal or Drawer.
+- **Modal no longer clips a focused field's focus ring.** The scrolling body keeps 4px of room on every side, so the ring on a full-width Input, Select or Combobox shows whole.
