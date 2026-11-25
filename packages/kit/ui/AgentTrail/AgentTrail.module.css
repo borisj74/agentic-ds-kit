@@ -210,7 +210,7 @@
   padding: 0 var(--space-2);
   background: transparent;
   border: var(--border-width-thin) solid transparent;
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-control-md);
   font: inherit;
   text-align: start;
   color: inherit;
@@ -227,10 +227,11 @@
   box-shadow: var(--bg-canvas) 0 0 0 var(--border-width-thin), var(--focus-ring) 0 0 0 calc(var(--border-width-thin) * 3);
 }
 
+/* Selected: a soft brand fill with a light brand edge, not a heavy outline (it would read as focus). */
 .selected,
 .selected:hover {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 var(--border-width-thin) var(--primary);
+  background-color: var(--action-selected);
+  border-color: var(--primary-subtle-stronger);
 }
 
 .sublabelBlock {

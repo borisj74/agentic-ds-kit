@@ -10,3 +10,4 @@
 
 - **RunDetail `agents` is optional.** Leave it out for a single agent and no AgentTree renders.
 - **AgentMonitor `collapsed` is now a one-row bar.** It shows the status as a Badge (icon and word) first, then the name and headline, then elapsed and cost (each value over its label). It shows Pause and Stop run while running, and Cancel run and Resume while paused. Before, the collapsed row showed the name with "elapsed · cost" under it and a dot status chip, and it had no actions. The step strip and the expand toggle stay where they were. Below 40rem the name and labels hide, time and cost read "0:04 · $0.02", and the actions take a full row. If you use `collapsed`, it now looks different, but it keeps the same props and doesn't break.
+- **AgentTrail selected step** is a soft brand fill with a light brand edge (radius-control-md) instead of a heavy brand outline, so it no longer reads as a focus ring.
