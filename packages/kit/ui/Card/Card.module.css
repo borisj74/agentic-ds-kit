@@ -234,3 +234,22 @@
 .flush .body > [data-kit-frame] {
   --kit-frame-inset: var(--card-spacing);
 }
+
+/* A framed chart (title, legend, actions or the Table toggle) directly in the body
+   drops its own border, radius, fill and shadow in any Card; the Card is the frame. */
+.body > [data-kit-frame="chart"] {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* Padded Card: the card padding is the chart's inset. */
+.card:not(.flush) .body > [data-kit-frame="chart"] {
+  padding: 0;
+}
+
+/* Flush Card: the chart takes the card's inset so its title lines up with the card header. */
+.flush .body > [data-kit-frame="chart"] {
+  padding: var(--card-spacing);
+}

@@ -41,7 +41,7 @@
     "children": {
       "type": "slot",
       "required": true,
-      "note": "Body. Compose kit Field/Input/Button/Badge/etc, never a local cousin. The card does not clip content, so DatePicker, Select, and DropdownMenu overlays open past its edge."
+      "note": "Body. Compose kit Field/Input/Button/Badge/etc, never a local cousin. The card does not clip content, so DatePicker, Select, and DropdownMenu overlays open past its edge. A chart (LineChart, BarChart, ComboChart, PieChart, ScatterChart, Heatmap) directly in the body drops its own frame (border, radius, fill), padded or flush; in a flush Card it takes the card's inline padding so its title lines up with the card header."
     },
     "size": {
       "type": "enum",

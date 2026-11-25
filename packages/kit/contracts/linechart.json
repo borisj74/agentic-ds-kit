@@ -58,7 +58,8 @@
     },
     "title": {
       "type": "string",
-      "required": false
+      "required": false,
+      "note": "Chart heading. A title, legend, actions or the Table toggle draw the chart's own frame; directly in a Card body the frame is dropped and the Card is the frame."
     },
     "description": {
       "type": "string",
