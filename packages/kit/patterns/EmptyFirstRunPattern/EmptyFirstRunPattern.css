@@ -1,0 +1,70 @@
+/* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
+   turns modules into global CSS with no class map. The empty-first-run-pattern__ prefix keeps names unique. */
+
+/* Empty sits in one Card at layout-container-sm, centred under the header, not a page-filling box. */
+.empty-first-run-pattern__start {
+  width: min(100%, var(--layout-container-sm));
+  margin-inline: auto;
+  padding-block-start: var(--space-10);
+  container-type: inline-size;
+}
+
+/* The setup line: count and what's left on one row, Open setup on the right. */
+.empty-first-run-pattern__setup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-6) var(--space-4);
+}
+
+.empty-first-run-pattern__setup-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+}
+
+.empty-first-run-pattern__setup-count {
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}
+
+.empty-first-run-pattern__setup-left {
+  font-weight: var(--type-weight-body);
+  color: var(--text-secondary);
+}
+
+/* Inside the shell's narrow width the card sits close under the header. */
+.empty-first-run-pattern__start--narrow {
+  padding-block-start: var(--space-2);
+}
+
+/* Narrow card: what's left drops under the count, still one setup line. */
+@container (max-width: 30rem) {
+  .empty-first-run-pattern__setup {
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    padding-inline: var(--space-4) var(--space-2);
+  }
+
+  .empty-first-run-pattern__setup-count,
+  .empty-first-run-pattern__setup-left {
+    display: block;
+  }
+}
+
+/* Sample data: the Alert 16 above the Table. */
+.empty-first-run-pattern__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.empty-first-run-pattern__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}

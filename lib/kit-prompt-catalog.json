@@ -14396,16 +14396,60 @@
     {
       "id": "empty-first-run",
       "group": "pattern",
-      "intent": "First-run page: PageHeader, outlined Empty, and one primary that opens a create Modal.",
+      "intent": "First run of a billing workspace inside the app-shell example (inset): PageHeader Invoices with no action, and one Card at layout-container-sm holding Empty (first-use, lg) with Create invoice (the one solid primary) and Try sample data (outline), then one setup line under a Divider: a count, what's left and Open setup (ghost) to the page with SetupGuide. Create invoice opens a Modal (md) that adds a new customer inline (Combobox allowCustomValue), with Plan (Select) and Due date (DatePicker); Create draft hands the draft to onCreate and shows a Toast. Try sample data swaps Empty for an info Alert (Sample data, Clear sample data) over the invoices Table, and Create invoice moves to PageHeader.",
+      "useWhen": [
+        "The first visit to a list that has no records yet, where one create action gets someone started",
+        "A new workspace that should offer sample data without filling the real list",
+        "A page that should show setup progress in one line while the task list lives elsewhere"
+      ],
+      "doNotUseWhen": [
+        "Guided setup across several steps — start from onboarding",
+        "A list that is empty because of filters or search — use Empty kind no-results in the list itself",
+        "A failed load — use LoadError"
+      ],
+      "doNot": [
+        "Do not render SetupGuide or a setup checklist on this page; link to it",
+        "Do not add a second solid primary for sample data or setup",
+        "Do not mix sample rows into real counts or exports"
+      ],
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
-        "At most one appearance=\"solid\" mode=\"primary\" Button per view: while Empty has the primary, PageHeader has none",
+        "Exactly one appearance=\"solid\" mode=\"primary\" Button per view: Create invoice in Empty while the list is empty, in PageHeader once it has rows, and Create draft while the Modal is open (Create invoice turns outline)",
         "Do not restyle kit components; change them through their props, slots, and tokens",
         "Wrap every labeled input in Field (label, hint, and error wiring)",
-        "FieldSet groups two or more related fields (legend); a single Field stands alone",
+        "The setup line is a count, what's left and one ghost Button to the page that holds SetupGuide; never render SetupGuide or its task list here",
+        "After Create draft, open the new record (onCreate is where your app routes to it)",
+        "Sample data is app data, marked by an info Alert with Clear sample data; it never counts as real invoices",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
-      ]
+      ],
+      "props": {
+        "breadcrumbs": {
+          "type": "array",
+          "required": false,
+          "note": "PageHeader breadcrumbs. The demo has none: the shell's nav already shows Billing › Invoices."
+        },
+        "onCreate": {
+          "type": "function",
+          "required": false,
+          "note": "(invoice: { customer, newCustomer, plan, dueDate }) => void. Create draft in the Modal. Save the draft and open it from here; dueDate is YYYY-MM-DD. The demo lists the draft and shows a Toast."
+        },
+        "setup": {
+          "type": "object",
+          "required": false,
+          "note": "{ done, total, left }: the setup line under Empty, like Setup 3 of 5 · Tax rates and payments left. null hides it once setup is done. Default: the demo's 3 of 5."
+        },
+        "onOpenSetup": {
+          "type": "function",
+          "required": false,
+          "note": "() => void. Open setup: go to the page that holds SetupGuide (Home in the demo)."
+        },
+        "shell": {
+          "type": "object",
+          "required": false,
+          "note": "App shell props for your app (nav, workspace, account…), merged over EMPTY_FIRST_RUN_DEMO_SHELL."
+        }
+      }
     },
     {
       "id": "app-shell",

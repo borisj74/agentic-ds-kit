@@ -119,7 +119,8 @@ export function Combobox({
       else if (allowCustomValue && query.trim()) commit({ value: query.trim(), label: query.trim() });
       return;
     }
-    if (event.key === "Escape") {
+    // Closed, Escape is not this field's: let a parent Modal or Drawer close.
+    if (event.key === "Escape" && open) {
       event.preventDefault();
       close("escape");
       return;
