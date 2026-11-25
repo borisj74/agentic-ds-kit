@@ -225,15 +225,22 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
         title={PAGE.product}
         radius="none"
         search={false}
-        actions={narrow ? undefined : <Avatar name={PAGE.account.name} initials={PAGE.account.initials} size="sm" />}
+        actions={<Avatar name={PAGE.account.name} initials={PAGE.account.initials} size="sm" />}
         end={
           narrow ? (
-            <IconButton icon="Menu" ariaLabel="Open navigation" size="md" appearance="ghost" mode="neutral" onClick={() => setNavOpen(true)} />
+            <IconButton
+              icon="Menu"
+              ariaLabel="Open navigation"
+              size="md"
+              appearance="ghost"
+              mode="neutral"
+              onClick={() => setNavOpen(true)}
+            />
           ) : undefined
         }
       />
       {narrow ? (
-        <Drawer open={navOpen} side="left" title={PAGE.product} onClose={() => setNavOpen(false)}>
+        <Drawer open={navOpen} onClose={() => setNavOpen(false)} side="left" title={PAGE.product}>
           <SideNav title={PAGE.product} showHeader={false} radius="md" groups={NAV_GROUPS.map((group) => ({ ...group, items: [...group.items] }))} />
         </Drawer>
       ) : null}
