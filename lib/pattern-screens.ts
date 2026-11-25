@@ -89,7 +89,7 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "built-nav", label: "Built nav, no header" },
   ],
   "billing-schedule": [
-    { id: "history", label: "History" },
+    { id: "history", label: "Schedule" },
     { id: "next", label: "Next charge" },
     { id: "summary", label: "Summary" },
     { id: "empty", label: "Empty" },

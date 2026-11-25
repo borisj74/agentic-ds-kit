@@ -130,9 +130,9 @@ export const OVERDUE = {
 };
 
 export const RECENT_CHARGES: Charge[] = [
-  { id: "dec", date: "01 Dec 2026", label: "Pro plan", amount: "$348.00", status: "upcoming" },
-  { id: "nov", date: "01 Nov 2026", label: "Pro plan", amount: "$348.00", status: "paid" },
-  { id: "seat", date: "18 Oct 2026", label: "Seat added", amount: "$22.40", status: "invoiced" },
+  { id: "dec", date: "2026-12-01", label: "Pro plan", amount: "$348.00", status: "scheduled" },
+  { id: "nov", date: "2026-11-01", label: "Pro plan", amount: "$348.00", status: "paid" },
+  { id: "seat", date: "2026-10-18", label: "Seat added", amount: "$22.40", status: "invoiced" },
 ];
 
 export const DOCUMENTS = [

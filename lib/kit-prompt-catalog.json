@@ -8308,6 +8308,15 @@
           "required": false,
           "note": "(row, index) => CellAction[]. One row menu (Cell type actionMenu) in a last 56px column with no visible header text, named Actions for <first cell>. Return [] to leave a row without a menu."
         },
+        "rowActionsAs": {
+          "type": "enum",
+          "values": [
+            "menu",
+            "icons"
+          ],
+          "default": "menu",
+          "note": "menu: one row menu (Cell actionMenu). icons: each action as an icon-only ghost Button (Cell actionIcons, up to 3), named by its ariaLabel, like Edit Onboarding part 2 of 3, 15 Dec. Use icons for one or two row actions the person scans for; the column stays 56px with no visible header text, so footer totals stay under their column."
+        },
         "state": {
           "type": "enum",
           "values": [
@@ -14703,15 +14712,16 @@
     {
       "id": "billing-schedule",
       "group": "pattern",
-      "intent": "Billing schedule block for a Billing settings page: next charge, a failed-payment notice, and every charge in a kit Table with its status as a word.",
+      "intent": "Billing schedule for one customer: the next charge as one figure with its lines, a failure Alert that says what happens next, and Upcoming and Billed as two kit Tables with status as icon and word. Scheduled charges open a kit Drawer to move the date, change the amount or skip the month.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Status is a word in a kit Badge (Upcoming, Paid, Failed…), never colour alone",
-        "Charges are a kit Table; do not build a local charges list",
-        "A failed payment is a kit Alert (danger) that says the date, the amount and what happens next",
+        "Status is a word in a kit Badge with its icon (Scheduled, Retrying, Invoiced, Paid, Failed…), never colour alone",
+        "Upcoming and Billed are two kit Tables; do not build a local charges list",
+        "A failed payment is a kit Alert (danger) that names the invoice, the amount, the next and last retry, and what happens after",
+        "Edit is a kit Drawer on scheduled charges only (no pencil on retries or billed rows); Skip asks once in a kit AlertDialog",
         "Money arrives pre-formatted from your app; label example data as example",
         "Render inside a main landmark (wrap the pattern, or your page content, in <main>); header and nav chrome, if any, use AppHeader / SideNav (or other header / nav landmarks) and nav stays reachable on small screens"
       ]
