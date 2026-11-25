@@ -1326,7 +1326,7 @@
   },
   {
     "id": "list-detail",
-    "intent": "List-detail page: in-page AppNav, table list, and detail Section.",
+    "intent": "List-detail page: a ListView of records beside the open one, with Empty when none is open; below 640 the list drills to a full-page detail.",
     "group": "pattern",
     "path": "contracts/patterns/list-detail.json",
     "status": "stable",

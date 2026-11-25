@@ -62,7 +62,12 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "settings-form": [{ id: "default", label: "Settings form" }],
-  "list-detail": [{ id: "default", label: "List detail" }],
+  "list-detail": [
+    { id: "default", label: "INV-1842 open" },
+    { id: "none", label: "Nothing open" },
+    { id: "mobile", label: "Mobile 390 list", device: "mobile" },
+    { id: "mobile-detail", label: "Mobile 390 detail", device: "mobile" },
+  ],
   "empty-first-run": [
     { id: "default", label: "First run" },
     { id: "mobile", label: "Mobile 390", device: "mobile" },
@@ -115,7 +120,7 @@ export function isScreenSlug(slug: string): slug is ScreenSlug {
 export const PATTERN_BLURBS: Record<PatternSlug, string> = {
   dashboard: "Billing home: four KPIs that drive the revenue chart, Needs attention, overdue invoices, a Revenue tab of analysis charts, and an Ask panel.",
   "settings-form": "Company billing details in grouped fields, with a sticky save bar.",
-  "list-detail": "A list of records beside the one you selected.",
+  "list-detail": "A list of invoices beside the one you opened.",
   "empty-first-run": "A new billing workspace with no invoices: one Create invoice, opt-in sample data and a one-line setup status.",
   "sign-in": "Centered sign-in card: SSO, email and password, then a one-time code step.",
   "app-shell": "Side nav with a workspace switcher, quick actions and a Notifications panel around the page, inset or flat, with a narrow drawer.",

@@ -1,5 +1,6 @@
 "use client";
 
+import { Building2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Button } from "agentic-ds-kit";
 import { Empty } from "agentic-ds-kit";
@@ -21,7 +22,7 @@ import { SettingsFormPattern } from "../../packages/kit/patterns/SettingsFormPat
 
 const NAV_ITEMS: SideNavItemData[] = [
   { id: "overview", label: "Overview", icon: "House" },
-  { id: "projects", label: "Projects", icon: "Folder", badge: "4" },
+  { id: "projects", label: "Invoices", icon: "FileText", badge: "11" },
   { id: "tasks", label: "Open tasks", icon: "Check", badge: "18" },
   { id: "resources", label: "Resources", icon: "Layers" },
   { id: "tag-important", label: "Important", icon: "TriangleAlert", badge: "3" },
@@ -131,9 +132,9 @@ function isListDetailPage(id: string) {
   return LIST_DETAIL_PAGES.has(id);
 }
 
-function selectedProjectId(page: string) {
-  if (page === "projects" || page === "list-detail") return "launch-brief";
-  return page;
+/** The list-detail screens (lib/pattern-screens PATTERN_VIEWS["list-detail"]) as the open invoice. */
+function listDetailSelectedId(view?: string): string | undefined {
+  return view === "none" || view === "mobile" ? undefined : "INV-1842";
 }
 
 /** The dashboard's screens (lib/pattern-screens PATTERN_VIEWS.dashboard) as pattern props. */
@@ -159,6 +160,56 @@ function dashboardViewProps(view?: string): DashboardPatternProps {
     default:
       return {};
   }
+}
+
+/* The list-detail board's shell: no top bar when wide, a Northwind SideNav with Work > Home and
+   Billing (Invoices, Payments, Plans) and the signed-in account at the foot. Below the breakpoint the
+   nav moves into the Drawer behind the same Agentix-style top bar the other screens use. */
+const LIST_DETAIL_NAV: SideNavItemData[] = [
+  { id: "home", label: "Home", icon: "House" },
+  {
+    id: "billing",
+    label: "Billing",
+    icon: "CreditCard",
+    items: [
+      { id: "invoices", label: "Invoices", badge: "48", active: true },
+      { id: "payments", label: "Payments" },
+      { id: "plans", label: "Plans" },
+    ],
+  },
+];
+
+export function ListDetailScreen({ view }: { view?: string }) {
+  const groups = [{ label: "Work", items: LIST_DETAIL_NAV }];
+  const account = { name: "Maya Chen", initials: "MC" };
+  return (
+    <AppShellPattern
+      className="layout-shell--viewport"
+      layout="flat"
+      navLabel="Northwind"
+      markIcon={Building2}
+      nav={(placement) => (
+        <SideNav
+          title="Northwind"
+          showHeader={false}
+          // The board's rail has the brand and no Close toggle; the Drawer has its own title.
+          beforeGroups={
+            placement === "rail" ? (
+              <SideNav.Header>
+                <SideNav.Brand title="Northwind" markIcon={Building2} />
+              </SideNav.Header>
+            ) : undefined
+          }
+          radius={placement === "rail" ? "none" : "md"}
+          open
+          groups={groups}
+          account={account}
+        />
+      )}
+    >
+      <ListDetailPattern selectedId={listDetailSelectedId(view)} />
+    </AppShellPattern>
+  );
 }
 
 /** The four dashboard-family screens (its own variant names; the docs slugs are settings-form and empty-first-run). */
@@ -276,7 +327,7 @@ export function DashboardScreen({
         {page === "settings" ? (
           <SettingsFormPattern breadcrumbs={trail} />
         ) : isListDetailPage(page) ? (
-          <ListDetailPattern breadcrumbs={trail} selectedId={selectedProjectId(page)} />
+          <ListDetailPattern selectedId={listDetailSelectedId(pattern === "list-detail" ? view : undefined)} />
         ) : current ? (
           <PlaceholderPage item={current} breadcrumbs={trail} />
         ) : null}

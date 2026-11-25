@@ -1,37 +1,221 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The list-detail-pattern__ prefix keeps names unique. */
 
-.list-detail-pattern__shell {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: var(--layout-gutter-md);
-  align-items: start;
+/* layout-split--secondary gives the list one part and the detail two. Below 640 the pattern renders one
+   column itself (list, or the full-page detail), so the split never has to stack. The 24 between the
+   columns is padding inside each pane, not a gap, so the rule between them sits flush. */
+.list-detail-pattern__split {
   min-width: 0;
+  gap: 0;
 }
 
-.list-detail-pattern__main {
+/* At 640 and up the two panes meet the canvas edges: the list rows and the detail's grey run edge to edge,
+   and each pane brings its own 24 inset. */
+/* No header row at 640 and up: the content takes the whole canvas, so both panes run to the bottom. */
+.list-detail-pattern__canvas {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.list-detail-pattern__wide {
+  padding: 0;
+  align-content: stretch;
+}
+
+/* The list pane is the card surface in any shell (a flat shell paints the canvas with the page grey). */
+.list-detail-pattern__split > .list-detail-pattern__list {
+  align-self: stretch;
+  padding-block: var(--space-6);
+  background: var(--surface-card);
+}
+
+/* Rows sit 16 in from both pane edges, so their text lines up with the chrome at 24 and the selected
+   fill never runs into the rule beside the detail. */
+.list-detail-pattern__split .list-detail-pattern__rows {
+  padding-inline: var(--space-4);
+}
+
+/* The list pane's chrome (PageHeader, search, segments, notes) is inset 24; the rows run to its edges. */
+.list-detail-pattern__split .list-detail-pattern__chrome {
+  padding-inline: var(--space-6);
+}
+
+.list-detail-pattern__list,
+.list-detail-pattern__detail,
+.list-detail-pattern__body {
   display: grid;
   gap: var(--space-stack-md);
+  align-content: start;
   min-width: 0;
-  overflow-x: auto;
 }
 
-.list-detail-pattern__main section {
-  margin-bottom: 0;
+.list-detail-pattern__list {
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__controls {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-end: var(--space-2);
 }
 
 .list-detail-pattern__detail {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  max-width: 36rem;
+  margin-bottom: 0;
 }
 
-.list-detail-pattern__body {
+/* At 640 and up the open record (or Empty) is a pane beside the list, split from it by a faint rule. */
+/* The open record (or Empty) sits on the page surface so its white cards stand out, as on the board. */
+.list-detail-pattern__pane {
+  align-self: stretch;
+  padding: var(--space-6);
+  background: var(--surface-page);
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__empty {
+  display: grid;
+  align-content: center;
+}
+
+/* Record head: id and status on one line, the customer line, then the actions; a rule closes it. */
+.list-detail-pattern__head {
+  display: grid;
+  gap: var(--space-1);
+  padding-block-end: var(--space-6);
+  border-block-end: var(--border-width-thin) solid var(--border-faint);
+}
+
+.list-detail-pattern__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-size-ui-lg);
+  line-height: var(--type-line-ui-lg);
+  font-weight: var(--type-weight-heading);
+  letter-spacing: var(--type-tracking-heading);
+  color: var(--text-primary);
+}
+
+.list-detail-pattern__sub {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--type-size-body);
-  line-height: var(--type-line-body);
+  font-size: var(--type-size-body-sm);
+  line-height: var(--type-line-body-sm);
+  color: var(--text-secondary);
+}
+
+.list-detail-pattern__head .list-detail-pattern__actions {
+  margin-block-start: var(--space-3);
+}
+
+.list-detail-pattern__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.list-detail-pattern__ask {
+  display: flex;
+}
+
+.list-detail-pattern__head .list-detail-pattern__ask {
+  margin-inline-end: auto;
+}
+
+.list-detail-pattern__note {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-muted);
+}
+
+/* Amount due leads; the other cells are short facts, split by a faint rule. */
+.list-detail-pattern__summary {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  margin: 0;
+  padding-block: var(--space-4);
+}
+
+.list-detail-pattern__summary-cell {
+  display: grid;
+  gap: var(--space-1);
+  align-content: end;
+  min-width: 0;
+  padding-inline: var(--space-6);
+}
+
+.list-detail-pattern__summary-cell + .list-detail-pattern__summary-cell {
+  border-inline-start: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* The phone shows one cell, amount due, inset 16 like the cards below it. */
+.list-detail-pattern__summary--single .list-detail-pattern__summary-cell {
+  padding-inline: var(--space-4);
+}
+
+.list-detail-pattern__summary dt {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-xs);
+  line-height: var(--type-line-body-xs);
+  color: var(--text-secondary);
+}
+
+.list-detail-pattern__summary dd {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-body-md);
+  line-height: var(--type-line-body-md);
+  font-weight: var(--type-weight-heading);
+  font-variant-numeric: tabular-nums;
   color: var(--text-primary);
+}
+
+.list-detail-pattern__summary dd[data-lead] {
+  font-size: var(--type-size-heading-5);
+  line-height: var(--type-line-heading-5);
+}
+
+/* Read by screen readers when a row opens: "INV-1842 open". */
+.list-detail-pattern__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The phone record page: a bar with the back link, then the id and customer line with no rule under them. */
+.list-detail-pattern__topbar {
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  background: var(--surface-card);
+  border-block-end: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* The record page uses the narrow page margin (16), so Ask, Download and Retry payment fit one row at 390. */
+.list-detail-pattern__page {
+  padding: var(--layout-margin-sm);
+  gap: var(--space-4);
+}
+
+.list-detail-pattern__head--page {
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+/* Retry payment fills what Ask and Download leave. */
+.list-detail-pattern__grow {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
 }

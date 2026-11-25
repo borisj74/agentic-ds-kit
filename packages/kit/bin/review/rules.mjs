@@ -544,13 +544,30 @@ function usesPattern(pattern, { code, imports, posix }) {
 
 function patternFinding(kit, used, ctx) {
   const usedIds = new Set(used.keys());
-  let best = null;
+  const distinctive = (pattern) => pattern.contains.filter((id) => !kit.common.has(id));
+  // True when every distinctive part of `small` is also in `big`: list-detail sits inside dashboard.
+  const inside = (small, big) => {
+    const parts = distinctive(small);
+    return small !== big && parts.length > 0 && parts.every((id) => big.contains.includes(id));
+  };
+  // A file that already is (or uses) a pattern covers that pattern's parts: when every distinctive part
+  // that matched is one the file's own pattern brings (onboarding's PageHeader and ListView), it is no better fit.
+  const own = kit.patterns.filter((pattern) => usesPattern(pattern, ctx));
+  const explained = (pattern) => {
+    const hits = distinctive(pattern).filter((id) => usedIds.has(id));
+    return own.some((mine) => hits.every((id) => mine.contains.includes(id)));
+  };
+  const matches = [];
   for (const pattern of kit.patterns) {
-    if (usesPattern(pattern, ctx)) continue;
+    if (own.includes(pattern) || explained(pattern)) continue;
     const match = shareMatch(kit, pattern.contains, usedIds, { allowSmall: true });
-    if (!match) continue;
-    const size = [match.share, match.usedAll.length, pattern.contains.length];
-    if (!best || compareSize(size, best.size) > 0) best = { pattern, match, size };
+    if (match) matches.push({ pattern, match, size: [match.share, match.usedAll.length, pattern.contains.length] });
+  }
+  // When a bigger pattern also fits, it wins over a smaller one inside it.
+  let best = null;
+  for (const entry of matches) {
+    if (matches.some((other) => inside(entry.pattern, other.pattern))) continue;
+    if (!best || compareSize(entry.size, best.size) > 0) best = entry;
   }
   if (!best) return null;
   const { pattern, match } = best;
