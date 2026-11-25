@@ -78,6 +78,21 @@
   gap: var(--space-3);
 }
 
+/* Beside the title, the actions centre on the title line, not on the whole title block, so a
+   subtitle doesn't push them down. The box is one title line tall and taller controls overflow
+   it evenly. With an eyebrow, the title line starts one eyebrow line (plus the gap) lower. */
+.row:has(> .content > .subtitle) {
+  align-items: flex-start;
+}
+
+.row:has(> .content > .subtitle) > .actions {
+  height: var(--type-line-heading-5);
+}
+
+.row:has(> .content > .eyebrow + .title + .subtitle) > .actions {
+  margin-block-start: calc(var(--type-line-ui-xs) + var(--space-1));
+}
+
 /* A kit Input (e.g. search) in actions: its root is width 100%, which would push
    the Buttons onto their own line. Size it to the field instead. */
 .actions > :has(> input) {
@@ -123,6 +138,12 @@
   /* The header stacks: actions move under the title. */
   .content {
     flex-basis: 100%;
+  }
+
+  /* Stacked, the actions wrap freely again. */
+  .row:has(> .content > .subtitle) > .actions {
+    height: auto;
+    margin-block-start: 0;
   }
 
   /* A single button (New invoice, labelled or icon-only) stays beside the title, as in a list

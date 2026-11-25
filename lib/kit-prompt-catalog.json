@@ -7225,7 +7225,7 @@
         "actions": {
           "type": "slot",
           "required": false,
-          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one. Below 40rem the actions move under the title, except a single button (one Button or IconButton), which stays beside it."
+          "note": "Any node, laid out in a wrapping row, vertically centered on the title line (a subtitle doesn't push them down): kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one. Below 40rem the actions move under the title, except a single button (one Button or IconButton), which stays beside it."
         },
         "overflowActions": {
           "type": "array",

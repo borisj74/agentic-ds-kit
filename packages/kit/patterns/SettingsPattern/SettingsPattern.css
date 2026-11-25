@@ -283,3 +283,8 @@
 .settings-pattern__actions--fill > :last-child {
   flex: 1 1 auto;
 }
+
+/* Wide: the page title sits 24 below the panel's top edge, as on the board. */
+.settings-pattern:not(.settings-pattern--narrow) > .layout-header {
+  padding-block-start: var(--space-6);
+}
