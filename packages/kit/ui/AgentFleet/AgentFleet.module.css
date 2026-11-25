@@ -290,7 +290,7 @@
   flex: 1 1 0;
   height: var(--space-2);
   overflow: hidden;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control-sm);
   background-color: var(--bg-tray);
 }
 

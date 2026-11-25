@@ -40,8 +40,8 @@
 .track {
   width: 100%;
   overflow: hidden;
-  /* Square ends, like the butt caps on the rings. */
-  border-radius: var(--radius-0);
+  /* Subtle round corners, the same as every kit meter; the fill inherits them. */
+  border-radius: var(--radius-control-sm);
 }
 
 .brand .track {
