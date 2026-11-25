@@ -1386,7 +1386,7 @@
   },
   {
     "id": "assistant-start",
-    "intent": "An assistant's start page inside the app-shell example (flat): SideNav when wide, the nav in a kit Drawer from a top bar below --grid-breakpoint-md. In main, one centred column at --grid-width-sm: kit Chat embedded in its guided empty state (greeting, an intro that carries the key figures as text, suggested prompts as LinkList rows that send, the composer with the one solid Send), then a Connected apps Card (Ask in the header) with a ListView of the sources answers use, each status a Badge word and Reconnect as the row's action. Loading uses Chat loading and Skeleton rows; a failed reconnect says what answers skip. After the first send the thread fills the page.",
+    "intent": "An assistant's start page inside the app-shell example (flat): SideNav when wide, the nav in a kit Drawer from a top bar below --grid-breakpoint-md. In main, one centred column at --grid-width-sm: kit Chat embedded in its guided empty state with a greeting, an intro, a mono summary of the key figures, the labelled composer (composerLabel) with the one solid Send, and suggestions as a 2x2 grid of outline Buttons that send (suggestionLayout grid, stacked when narrow). Under it, 32 apart, a Connected apps Card (Ask in the header) with a ListView of the sources answers use, each status a Badge word in one lane and Reconnect as the row's action. Loading uses Chat loading and Skeleton rows; a failed reconnect says what answers skip. After the first send the thread fills the page.",
     "group": "pattern",
     "path": "contracts/patterns/assistant-start.json",
     "status": "stable",

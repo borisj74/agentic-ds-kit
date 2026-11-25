@@ -455,3 +455,77 @@
   display: grid;
   gap: var(--space-2);
 }
+
+/* suggestionLayout="grid": md outline Buttons, two columns when each gets at least space-16 * 4,
+   one column below that. max() keeps it at two columns however wide the panel is. Labels start at
+   the icon and wrap to a second line instead of truncating. */
+.suggestionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(calc(var(--space-16) * 4), calc((100% - var(--space-2)) / 2))), 1fr));
+  gap: var(--space-2);
+}
+
+.suggestionGrid > button {
+  justify-content: flex-start;
+  height: auto;
+  min-height: var(--control-height-md);
+  white-space: normal;
+  text-align: start;
+}
+
+/* Grid suggestions take a plain caption label, like a field label, not the overline. */
+.groupLabelGrid {
+  font-family: var(--font-sans);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-body);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+/* summary: the key figures under the intro, in mono. */
+.summary {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-body);
+  font-variant-numeric: tabular-nums;
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+}
+
+/* composerLabel: a visible label over the input, as kit Field draws one. */
+.composerLabel {
+  grid-column: 1 / -1;
+  font-family: var(--font-sans);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  color: var(--text-primary);
+}
+
+/* A labelled composer leads the guided empty state: label, input and suggestions are one group
+   (8 inside, 16 to the suggestions), 32 under the greeting block. */
+.guided:has(> .composerGroup) {
+  gap: var(--space-8);
+}
+
+.composerGroup {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Embedded with the composer on top: the host's own inset sets the edges, so the thread adds no
+   block padding above the greeting or under the suggestions. */
+.embedded .thread:has(.composerGroup) {
+  padding-block: 0;
+}
+
+/* …and it is as tall as its content, so a host can stack more under it. */
+.embedded:has(.composerGroup) {
+  min-block-size: 0;
+}
+
+.composer.composerTop {
+  padding: 0;
+  border-top: 0;
+}

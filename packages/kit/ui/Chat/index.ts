@@ -13,5 +13,6 @@ export type {
   ChatStepStatus,
   ChatError,
   ChatSuggestion,
+  ChatSuggestionLayout,
   ChatRecent,
 } from "./Chat.types";

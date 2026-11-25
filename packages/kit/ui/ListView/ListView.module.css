@@ -399,10 +399,12 @@ button.body:focus {
 }
 
 /* item.primaryAction: one fixed-width slot so the verbs line up as a column across rows. */
+/* primaryAction: one fixed lane (96) at the row end, kept empty on rows without one, so badges,
+   values and verbs line up down the list. */
 .primaryActionSlot {
   display: inline-flex;
   flex-shrink: 0;
-  min-width: calc(var(--space-16) + var(--space-4));
+  min-width: calc(var(--space-16) + var(--space-8));
 }
 
 .primaryActionSlot > * {
@@ -496,4 +498,33 @@ button.body:focus {
 .flush.md .secondary,
 .flush.md .meta {
   line-height: var(--type-line-body-xs);
+}
+
+/* lg below --grid-breakpoint-sm (media queries cannot read var()): a row's primaryAction drops to a
+   full-width line under the row, so the name, second line and badge keep their room. Rows without
+   one drop the empty lane. */
+@media (width < 40rem) {
+  .lg .row:has(.primaryActionSlot) {
+    flex-wrap: wrap;
+  }
+
+  .lg .row:has(.primaryActionSlot) > .trail {
+    display: contents;
+  }
+
+  .lg .row:has(.primaryActionSlot > button) > .trail > .actions {
+    flex: 1 0 100%;
+  }
+
+  .lg .primaryActionSlot:empty {
+    display: none;
+  }
+
+  .lg .actions:has(> .primaryActionSlot:empty:only-child) {
+    display: none;
+  }
+
+  .lg .row .actions > .primaryActionSlot:has(> button) {
+    flex: 1 1 auto;
+  }
 }

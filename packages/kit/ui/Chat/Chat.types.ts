@@ -93,6 +93,8 @@ export interface ChatMenuItem {
 
 export type ChatRadius = "lg" | "none";
 
+export type ChatSuggestionLayout = "list" | "grid";
+
 /** What the next message is about, shown as a kit Tag above the composer. */
 export interface ChatContext {
   /** Short text, like "MRR movements · Last 3 months". */
@@ -114,6 +116,12 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
    * hint are rows (kit LinkList) in the empty state.
    */
   suggestions?: (string | ChatSuggestion)[];
+  /**
+   * How object suggestions show in the guided empty state. `list` (default): kit LinkList rows with
+   * the hint. `grid`: md outline Buttons with their icon, two columns when there is room and stacked
+   * when narrow; the hint is not shown. Both send their label.
+   */
+  suggestionLayout?: ChatSuggestionLayout;
   /** Context chip above the composer; the composer's description reads it to screen readers. */
   context?: ChatContext;
   placeholder?: string;
@@ -122,6 +130,17 @@ export interface ChatProps extends Omit<ComponentPropsWithoutRef<"section">, Cha
   greeting?: string;
   /** Empty state line under the greeting: what the assistant can do here. */
   intro?: string;
+  /**
+   * Empty state line under the intro, in mono: the key figures the assistant reads, like
+   * "October MRR $184,320 · -3.1% vs September". Plain text; status still needs words.
+   */
+  summary?: string;
+  /**
+   * Visible label above the composer input, like "Ask the billing assistant". It names the input
+   * instead of the placeholder. In the guided empty state the labelled composer sits under the
+   * greeting block, above the suggestions; once the thread has messages it is at the foot.
+   */
+  composerLabel?: string;
   /** Recent questions in the empty state (kit ListView). */
   recent?: ChatRecent[];
   /** Shown under the Recent heading when `recent` is an empty array. */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, ReceiptText } from "lucide-react";
+import { Building2, Calendar, ReceiptText } from "lucide-react";
 import { AppHeader } from "../../ui/AppHeader";
 import { Card } from "../../ui/Card";
 import { Chat } from "../../ui/Chat";
@@ -79,13 +79,18 @@ export const ASSISTANT_START_DEMO_SHELL: Omit<AppShellPatternProps, "children"> 
   },
 };
 
-const INTRO =
-  "Ask about invoices, customers and revenue. Answers link the invoice or report they use. October MRR $184,320, down 3.1% vs September. 7 invoices overdue, $23,480.";
+const INTRO = "Ask about invoices, customers and revenue. Answers link the invoice or report they use.";
+const INTRO_NARROW = "Ask about Northwind invoices, customers and revenue.";
+/** The key figures, from your app's data. Mono, under the intro. */
+// Non-breaking spaces keep each figure with its label when the line wraps.
+const nb = (text: string) => text.replace(/ /g, "\u00a0");
+const SUMMARY = [nb("October MRR $184,320"), nb("-3.1% vs September"), nb("Overdue 7 · $23,480"), nb("Next run Dec 1")].join("  ");
+const SUMMARY_NARROW = [nb("October MRR $184,320"), nb("-3.1% vs September"), nb("Overdue 7 · $23,480")].join("  ");
 
 const SUGGESTIONS: ChatSuggestion[] = [
   { label: "Why did MRR drop 3.1% in October?", hint: "Looks at MRR movements · Sep and Oct", icon: "TrendingDown" },
   { label: "Draft dunning for 7 overdue invoices", hint: "One email per customer · $23,480 due", icon: "Mail" },
-  { label: "Growth renewals due in December", hint: "Looks at Growth plan subscriptions", icon: "CalendarDays" },
+  { label: "Growth renewals due in December", hint: "Looks at Growth plan subscriptions", icon: Calendar },
   { label: "Explain the $1,240 credit on INV-1842", hint: "Looks at the invoice and its credit notes", icon: "FileText" },
 ];
 
@@ -110,7 +115,9 @@ function appRows(state: AssistantStartState, narrow: boolean): ListViewItem[] {
       ...(failed ? { icon: "CircleX", iconTone: "danger" as const } : {}),
       badge: "Sign-in expired",
       badgeTone: "warning",
-      primaryAction: { id: "reconnect", label: "Reconnect", actionLabel: "Reconnect QuickBooks" },
+      primaryAction: narrow
+        ? { id: "reconnect", label: "Reconnect QuickBooks" }
+        : { id: "reconnect", label: "Reconnect", actionLabel: "Reconnect QuickBooks" },
     },
   ];
 }
@@ -150,9 +157,12 @@ function AssistantStartPage({ state = "ready", onSend, onReconnect, onAsk }: Omi
           embedded
           loading={loading}
           greeting="Good morning, Maya"
-          intro={loading ? "Reading Stripe and QuickBooks" : INTRO}
+          intro={loading ? "Reading Stripe and QuickBooks" : narrow ? INTRO_NARROW : INTRO}
+          summary={loading ? undefined : narrow ? SUMMARY_NARROW : SUMMARY}
+          composerLabel="Ask the billing assistant"
           suggestions={SUGGESTIONS}
-          placeholder={loading ? undefined : "e.g. Which invoices are over 30 days late?"}
+          suggestionLayout="grid"
+          placeholder={loading ? undefined : narrow ? "e.g. Which invoices are late?" : "e.g. Which invoices are over 30 days late?"}
           messages={messages}
           isThinking={thinking}
           onStop={() => setThinking(false)}
@@ -164,7 +174,7 @@ function AssistantStartPage({ state = "ready", onSend, onReconnect, onAsk }: Omi
             flush={!loading}
             title="Connected apps"
             headingLevel={2}
-            description="Sources for every answer"
+            description={narrow ? undefined : "Sources for every answer"}
             headerAction={loading ? undefined : { label: "Ask", iconStart: "MessageCircle", appearance: "outline", mode: "neutral", onClick: onAsk }}
             aria-busy={loading || undefined}
           >

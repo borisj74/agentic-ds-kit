@@ -185,13 +185,58 @@ describe("Chat loading", () => {
   });
 });
 
+describe("Chat suggestionLayout, summary and composerLabel", () => {
+  test("grid: md outline Buttons with icons in a group, no hint, plain caption label", () => {
+    const html = render(h(Chat, { greeting: "Hi", suggestions, suggestionLayout: "grid" }));
+    const group = html.match(/<div class="_suggestionGrid_\w+" role="group" aria-label="Suggested prompts">[\s\S]*?<\/div>/)[0];
+    assert.match(group, /<button type="button"[^>]*_outline_[^>]*_neutral_/);
+    assert.match(group, /lucide-trending-down/);
+    assert.doesNotMatch(html, /Looks at MRR movements/);
+    assert.match(html, /_groupLabelGrid_\w+" aria-hidden="true">Suggested</);
+  });
+
+  test("grid while loading: four Skeletons in the grid", () => {
+    const html = render(h(Chat, { greeting: "Hi", suggestions, suggestionLayout: "grid", loading: true }));
+    const grid = html.slice(html.indexOf("_suggestionGrid_"), html.indexOf("<form"));
+    assert.equal((grid.match(/_bone_/g) ?? []).length, 4);
+    assert.doesNotMatch(grid, /<button/);
+  });
+
+  test("composerLabel names the input and puts the composer above the suggestions; summary is mono under the intro", () => {
+    const html = render(h(Chat, { greeting: "Hi", intro: "Ask about revenue.", summary: "MRR $184,320", composerLabel: "Ask the billing assistant", suggestions, suggestionLayout: "grid" }));
+    const id = html.match(/<label for="([^"]+)"/)[1];
+    assert.match(html, new RegExp(`<input id="${id}"`));
+    assert.doesNotMatch(html.match(/<input[^>]*>/)[0], /aria-label=/);
+    assert.ok(html.indexOf("Ask about revenue.") < html.indexOf("MRR $184,320"));
+    assert.ok(html.indexOf("<form") < html.indexOf('aria-label="Suggested prompts"'));
+  });
+
+  test("once the thread has messages, the labelled composer is at the foot", () => {
+    const html = render(h(Chat, { composerLabel: "Ask", greeting: "Hi", messages: [{ role: "user", content: "Hello" }] }));
+    assert.ok(html.indexOf("Hello") < html.indexOf("<form"));
+  });
+
+  test("grid suggestion is a real click that sends", { skip }, async () => {
+    const sent = [];
+    const container = await mount(h(Chat, { greeting: "Hi", suggestions, suggestionLayout: "grid", onSend: (m) => sent.push(m) }));
+    const button = [...container.querySelectorAll("button")].find((b) => b.textContent.includes("Why did MRR drop"));
+    await click(button);
+    assert.deepEqual(sent, ["Why did MRR drop 3.1% in October?"]);
+  });
+});
+
 describe("AssistantStartPattern", () => {
   test("ready: main holds Chat (embedded, guided) and the Connected apps Card with status words", () => {
     const html = render(h(AssistantStartPattern));
     const main = html.slice(html.indexOf("<main"));
     assert.match(main, /aria-label="Billing assistant"/);
     assert.match(main, /Good morning, Maya/);
-    assert.match(main, /October MRR \$184,320, down 3\.1% vs September\. 7 invoices overdue, \$23,480\./);
+    assert.match(main, /Ask about invoices, customers and revenue\. Answers link the invoice or report they use\./);
+    assert.match(main, /class="_summary_\w+">October\u00a0MRR\u00a0\$184,320  -3\.1%\u00a0vs\u00a0September  Overdue\u00a07\u00a0·\u00a0\$23,480  Next\u00a0run\u00a0Dec\u00a01</);
+    assert.match(main, /<label for="([^"]+)"[^>]*>Ask the billing assistant<\/label>/);
+    // Composer before the suggestions, which are a 2x2 grid of Buttons.
+    assert.ok(main.indexOf("Ask the billing assistant") < main.indexOf("Why did MRR drop"));
+    assert.match(main, /role="group" aria-label="Suggested prompts"/);
     for (const label of ["Why did MRR drop 3.1% in October?", "Draft dunning for 7 overdue invoices", "Growth renewals due in December", "Explain the $1,240 credit on INV-1842"]) {
       assert.ok(main.includes(label), label);
     }
@@ -241,5 +286,31 @@ describe("AssistantStartPattern", () => {
     assert.deepEqual(sent, ["Why did MRR drop 3.1% in October?"]);
     assert.doesNotMatch(container.innerHTML, /Connected apps/);
     assert.match(container.querySelector("main").className, /assistant-start-pattern--thread/);
+  });
+});
+
+describe("ListView primaryAction lane", () => {
+  let ListView;
+  before(async () => {
+    ({ ListView } = await import(dist("ListView/ListView")));
+  });
+
+  test("once one row has a primaryAction, rows without one keep an empty lane", () => {
+    const html = render(
+      h(ListView, {
+        label: "Apps",
+        items: [
+          { id: "a", primary: "Stripe", badge: "Connected", badgeTone: "success" },
+          { id: "b", primary: "QuickBooks", badge: "Sign-in expired", badgeTone: "warning", primaryAction: { id: "r", label: "Reconnect" } },
+        ],
+      }),
+    );
+    const stripe = html.slice(html.indexOf("Stripe"), html.indexOf("QuickBooks"));
+    assert.match(stripe, /Connected<\/span><span class="_actions_\w+"><span class="_primaryActionSlot_\w+" aria-hidden="true"><\/span>/);
+  });
+
+  test("with no primaryAction in the list, no empty lane is added", () => {
+    const html = render(h(ListView, { label: "Apps", items: [{ id: "a", primary: "Stripe", badge: "Connected" }] }));
+    assert.doesNotMatch(html, /_primaryActionSlot_/);
   });
 });

@@ -36,6 +36,7 @@ export type {
   ChatStep,
   ChatStepStatus,
   ChatSuggestion,
+  ChatSuggestionLayout,
 } from "./Chat.types";
 
 /** "0.8s" from milliseconds; undefined when there is no time. */
@@ -225,11 +226,14 @@ export function Chat({
   status,
   messages = [],
   suggestions = [],
+  suggestionLayout = "list",
   context,
   placeholder,
   emptyState = "Start a conversation.",
   greeting,
   intro,
+  summary,
+  composerLabel,
   recent,
   recentEmptyLabel,
   loading = false,
@@ -268,7 +272,10 @@ export function Chat({
   const richSuggestions = suggestions.filter(isRich);
   const plainSuggestions = suggestions.filter((item): item is string => !isRich(item));
   const isEmpty = messages.length === 0 && !isThinking;
-  const guided = isEmpty && Boolean(greeting || intro || recent || richSuggestions.length > 0 || loading);
+  const grid = suggestionLayout === "grid";
+  const guided = isEmpty && Boolean(greeting || intro || summary || recent || richSuggestions.length > 0 || loading);
+  // A labelled composer leads the guided empty state, above the suggestions.
+  const composerTop = guided && Boolean(composerLabel);
 
   useEffect(() => {
     const thread = threadRef.current;
@@ -298,6 +305,99 @@ export function Chat({
       </Tag>
     </div>
   ) : null;
+
+
+  const suggestionBlock =
+    loading ? (
+      <div className={styles.group}>
+        <p className={cx(styles.groupLabel, grid && styles.groupLabelGrid)} aria-hidden="true">{labels.chatSuggested}</p>
+        <div className={grid ? styles.suggestionGrid : styles.loadingRows}>
+          {Array.from({ length: Math.max(richSuggestions.length, grid ? 4 : 3) }, (_, index) => (
+            <Skeleton
+              key={index}
+              shape="rect"
+              height={grid ? "var(--control-height-md)" : "var(--space-12)"}
+              label={index === 0 ? undefined : ""}
+            />
+          ))}
+        </div>
+      </div>
+    ) : richSuggestions.length > 0 ? (
+      <div className={styles.group}>
+        <p className={cx(styles.groupLabel, grid && styles.groupLabelGrid)} aria-hidden="true">{labels.chatSuggested}</p>
+        {grid ? (
+          <div className={styles.suggestionGrid} role="group" aria-label={labels.suggestedPrompts}>
+            {richSuggestions.map((suggestion, index) => (
+              <Button
+                key={`${suggestion.label}-${index}`}
+                type="button"
+                appearance="outline"
+                mode="neutral"
+                size="md"
+                block
+                iconStart={suggestion.icon}
+                disabled={locked}
+                onClick={() => sendMessage(suggestion.label)}
+              >
+                {suggestion.label}
+              </Button>
+            ))}
+          </div>
+        ) : (
+        <LinkList
+          label={labels.suggestedPrompts}
+          items={richSuggestions.map((suggestion, index) => ({
+            id: `${suggestion.label}-${index}`,
+            label: suggestion.label,
+            description: suggestion.hint,
+            icon: suggestion.icon,
+            onClick: () => sendMessage(suggestion.label),
+          }))}
+        />
+        )}
+      </div>
+    ) : null;
+
+  const composer = (
+    <form
+      className={cx(styles.composer, composerTop && styles.composerTop)}
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (showStop) return;
+        sendMessage();
+      }}
+    >
+      {composerLabel ? (
+        <label htmlFor={inputId} className={styles.composerLabel}>
+    {composerLabel}
+        </label>
+      ) : null}
+      <Input
+        id={inputId}
+        value={draft}
+        placeholder={showStop ? labels.chatWorking : composerPlaceholder}
+        ariaLabel={composerLabel ? undefined : composerPlaceholder}
+        describedBy={context ? contextId : undefined}
+        disabled={locked || showStop}
+        onChange={updateDraft}
+      />
+      {showStop ? (
+        <Button type="button" appearance="outline" mode="neutral" size="md" iconStart="Square" onClick={onStop}>
+    {labels.chatStop}
+        </Button>
+      ) : (
+        <Button
+    type="submit"
+    appearance={sendAppearance}
+    mode="primary"
+    size="md"
+    ariaLabel={labels.send}
+    disabled={locked || !draft.trim()}
+    iconStart="Send"
+        />
+      )}
+    </form>
+  );
 
   return (
     <section
@@ -359,37 +459,22 @@ export function Chat({
         {isEmpty && !guided ? <p className={styles.empty}>{emptyState}</p> : null}
         {guided ? (
           <div className={styles.guided}>
-            {greeting || intro ? (
+            {greeting || intro || summary ? (
               <div className={styles.greetingBlock}>
                 {greeting ? <p className={styles.greeting}>{greeting}</p> : null}
                 {intro ? <p className={styles.intro}>{intro}</p> : null}
+                {summary ? <p className={styles.summary}>{summary}</p> : null}
               </div>
             ) : null}
             {contextBlock}
-            {loading ? (
-              <div className={styles.group}>
-                <p className={styles.groupLabel} aria-hidden="true">{labels.chatSuggested}</p>
-                <div className={styles.loadingRows}>
-                  {Array.from({ length: Math.max(richSuggestions.length, 3) }, (_, index) => (
-                    <Skeleton key={index} shape="rect" height="var(--space-12)" label={index === 0 ? undefined : ""} />
-                  ))}
-                </div>
+            {composerTop ? (
+              <div className={styles.composerGroup}>
+                {composer}
+                {suggestionBlock}
               </div>
-            ) : richSuggestions.length > 0 ? (
-              <div className={styles.group}>
-                <p className={styles.groupLabel} aria-hidden="true">{labels.chatSuggested}</p>
-                <LinkList
-                  label={labels.suggestedPrompts}
-                  items={richSuggestions.map((suggestion, index) => ({
-                    id: `${suggestion.label}-${index}`,
-                    label: suggestion.label,
-                    description: suggestion.hint,
-                    icon: suggestion.icon,
-                    onClick: () => sendMessage(suggestion.label),
-                  }))}
-                />
-              </div>
-            ) : null}
+            ) : (
+              suggestionBlock
+            )}
             {recent ? (
               <div className={cx(styles.group, styles.recent)}>
                 <p className={styles.groupLabel} aria-hidden="true">{labels.chatRecent}</p>
@@ -485,39 +570,7 @@ export function Chat({
 
       {guided ? null : contextBlock}
 
-      <form
-        className={styles.composer}
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (showStop) return;
-          sendMessage();
-        }}
-      >
-        <Input
-          id={inputId}
-          value={draft}
-          placeholder={showStop ? labels.chatWorking : composerPlaceholder}
-          ariaLabel={composerPlaceholder}
-          describedBy={context ? contextId : undefined}
-          disabled={locked || showStop}
-          onChange={updateDraft}
-        />
-        {showStop ? (
-          <Button type="button" appearance="outline" mode="neutral" size="md" iconStart="Square" onClick={onStop}>
-            {labels.chatStop}
-          </Button>
-        ) : (
-          <Button
-            type="submit"
-            appearance={sendAppearance}
-            mode="primary"
-            size="md"
-            ariaLabel={labels.send}
-            disabled={locked || !draft.trim()}
-            iconStart="Send"
-          />
-        )}
-      </form>
+      {composerTop ? null : composer}
     </section>
   );
 }
