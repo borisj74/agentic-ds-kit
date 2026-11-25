@@ -166,13 +166,21 @@ async function click(el) {
 }
 
 describe("SettingsPattern", { skip }, () => {
-  test("wide: a settings nav with Back to app first, Workspace and You groups, General marked; no breadcrumb", async () => {
+  test("wide: Back to app at the very top, then the workspace, the Workspace and You groups (General marked), the user last; no breadcrumb", async () => {
     narrow = false;
     const view = await render();
     const nav = view.container.querySelector('nav[aria-label="Settings"]');
     assert.ok(nav, "the nav is named Settings");
-    const links = [...nav.querySelectorAll("a, button")].map((el) => el.textContent.trim());
-    assert.deepEqual(links, ["Back to app", "General", "Billing", "Team", "Integrations", "Profile", "Notifications", "Security"]);
+    const side = nav.parentElement;
+    const text = side.textContent;
+    assert.ok(
+      text.indexOf("Back to app") < text.indexOf("Northwind Studio") &&
+        text.indexOf("Northwind Studio") < text.indexOf("General") &&
+        text.indexOf("Sign-in") < text.indexOf("Priya Shah"),
+      "Back to app, workspace, groups, then the user",
+    );
+    const links = [...side.querySelectorAll("a"), ...nav.querySelectorAll("button")].map((el) => el.textContent.trim());
+    assert.deepEqual(links, ["Back to app", "General", "Billing", "Team", "Integrations", "Security", "Profile", "Notifications", "Sign-in"]);
     assert.match(nav.textContent, /Workspace[\s\S]*You/);
     assert.equal(nav.querySelector('[aria-current="page"]').textContent.trim(), "General");
     assert.equal(view.container.querySelector("main h1").textContent, "General");
@@ -186,11 +194,12 @@ describe("SettingsPattern", { skip }, () => {
     narrow = false;
     const picked = [];
     const view = await render({ onSectionChange: (section) => picked.push(section) });
-    await click(byText(view.container, 'nav[aria-label="Settings"] a, nav[aria-label="Settings"] button', "Security"));
-    assert.deepEqual(picked, ["security"]);
-    assert.equal(view.container.querySelector("main h1").textContent, "Security");
+    await click(byText(view.container, 'nav[aria-label="Settings"] a, nav[aria-label="Settings"] button', "Sign-in"));
+    assert.deepEqual(picked, ["sign-in"]);
+    assert.equal(view.container.querySelector("main h1").textContent, "Sign-in");
     assert.match(view.container.querySelector("main").textContent, /Personal setting · only changes it for you/);
-    assert.ok(!view.container.textContent.includes("Delete workspace"), "Delete workspace moved to General");
+    assert.match(view.container.querySelector("main").textContent, /Password[\s\S]*Two-factor authentication/);
+    assert.ok(!view.container.textContent.includes("Delete workspace"), "Delete workspace lives on Security");
     await view.unmount();
   });
 
@@ -199,18 +208,47 @@ describe("SettingsPattern", { skip }, () => {
     const view = await render({ sectionHref: (section) => `/settings/${section}`, appHref: "/home" });
     const nav = view.container.querySelector('nav[aria-label="Settings"]');
     assert.equal(byText(nav, "a", "Billing").getAttribute("href"), "/settings/billing");
-    assert.equal(byText(nav, "a", "Back to app").getAttribute("href"), "/home");
+    assert.equal(byText(nav.parentElement, "a", "Back to app").getAttribute("href"), "/home");
     await view.unmount();
   });
 
-  test("Delete workspace sits on General and Cancel returns focus to it", async () => {
+  test("General has no Delete workspace", async () => {
     narrow = false;
     const view = await render();
+    assert.ok(!byText(view.container, "button", "Delete workspace"), "Delete workspace moved to Security");
+    await view.unmount();
+  });
+
+  test("Security is a workspace setting: sign-in rules save with the one solid primary, then sessions and a Danger zone", async () => {
+    narrow = false;
+    const saved = [];
+    const view = await render({ section: "security", onSave: (section) => saved.push(section) });
+    const main = view.container.querySelector("main");
+    assert.match(main.textContent, /Workspace setting · applies to all 12 members · owners can change it/);
+    const legend = main.querySelector("legend");
+    assert.equal(legend.textContent, "Sign-in rules");
+    assert.match(main.textContent, /Okta · northwind\.okta\.example/);
+    assert.match(main.querySelector('[role="status"]').textContent, /1 unsaved change/);
+    const headings = [...main.querySelectorAll("h2, h3")].map((el) => el.textContent.trim());
+    assert.ok(headings.indexOf("Danger zone") > headings.indexOf("Your sessions"), "Danger zone comes after every card that saves");
+    const save = byText(main, "button", "Save sign-in rules");
+    await click(save);
+    assert.deepEqual(saved, ["security"]);
+    assert.match(main.querySelector('[role="status"]').textContent, /All changes saved/);
+    assert.ok(save.disabled, "Save turns off once saved");
+    await view.unmount();
+  });
+
+  test("Delete workspace sits in Security's Danger zone, asks for the name, and Cancel returns focus to it", async () => {
+    narrow = false;
+    const view = await render({ section: "security" });
     const trigger = byText(view.container, "button", "Delete workspace");
     await click(trigger);
     await settle();
     const dialog = document.querySelector('[role="alertdialog"]');
     assert.match(dialog.textContent, /Delete Northwind Studio\?/);
+    assert.match(dialog.textContent, /Type Northwind Studio to confirm/);
+    assert.ok(byText(dialog, "button", "Delete workspace").disabled, "the action waits for the name");
     await click(byText(dialog, "button", "Cancel"));
     await settle();
     assert.equal(document.activeElement, byText(view.container, "button", "Delete workspace"));
@@ -225,7 +263,8 @@ describe("SettingsPattern", { skip }, () => {
     const lists = [...view.container.querySelectorAll("main ul[aria-label]")].map((el) => el.getAttribute("aria-label"));
     assert.deepEqual(lists, ["Workspace", "You"]);
     assert.match(view.container.textContent, /Workspace · applies to all 12 members/);
-    assert.match(view.container.textContent, /Security\s*Two-factor off/);
+    assert.match(view.container.textContent, /Sign-in\s*Password · two-factor off/);
+    assert.match(view.container.textContent, /Workspace · applies[\s\S]*Security[\s\S]*You · only/);
 
     await click(byText(view.container, "main ul button", "Billing"));
     assert.equal(view.container.querySelector("main h1").textContent, "Billing");
@@ -237,5 +276,32 @@ describe("SettingsPattern", { skip }, () => {
     assert.equal(document.activeElement, byText(view.container, "main ul button", "Billing"), "focus lands on the row you came from");
     await view.unmount();
     narrow = false;
+  });
+  test("narrow Billing puts AI credits first; narrow Team has Invite in the header and Jon Dale in the member list", async () => {
+    narrow = true;
+    const billing = await render({ section: "billing" });
+    const headings = [...billing.container.querySelectorAll("main h2, main h3")].map((el) => el.textContent.trim());
+    assert.equal(headings[0], "AI credits");
+    assert.ok(headings.indexOf("Invoices") < headings.indexOf("Billing schedule"), "Billing schedule stays below Invoices");
+    await billing.unmount();
+
+    const team = await render({ section: "team" });
+    assert.ok(byText(team.container, "main header button, main .layout-header button", "Invite"), "Invite in the top bar");
+    const list = team.container.querySelector('[aria-label="Members"]');
+    assert.match(list.textContent, /Jon Dale[\s\S]*Invited/);
+    assert.match(team.container.textContent, /12 of 15 seats/);
+    await team.unmount();
+    narrow = false;
+  });
+  test("wide Team: seats, role filter, and row menus named per member", async () => {
+    narrow = false;
+    const view = await render({ section: "team" });
+    const main = view.container.querySelector("main");
+    assert.match(main.textContent, /12 of 15 seats[\s\S]*3 free · 1 held by a pending invite/);
+    assert.match(main.textContent, /11 members · 1 invite/);
+    assert.ok(main.querySelector('[aria-label="Actions for Marco Li"]'), "row menu named for the member");
+    assert.ok(main.querySelector('[aria-label="Role for Marco Li"]'), "role Select named for the member");
+    assert.match(main.textContent, /Showing 5 of 12/);
+    await view.unmount();
   });
 });

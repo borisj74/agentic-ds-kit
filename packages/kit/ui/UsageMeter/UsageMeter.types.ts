@@ -43,8 +43,16 @@ export interface UsageMeterProps extends Omit<ComponentPropsWithoutRef<"section"
   paceNote?: string;
   /** Usage past the limit keeps running and is billed: the rate and the amount so far, said in the warning and the meter's name. */
   overage?: UsageOverage;
+  /**
+   * One block for a settings page: title, badge and Upgrade on one line, then "used of limit · reset · pace",
+   * the meter and the categories in a row. No figure, axis, daily line or Alert. Spans its container; under
+   * 40rem the categories drop and Upgrade goes full width below the meter.
+   */
+  compact?: boolean;
   /** The one primary action. */
   onUpgrade?: () => void;
+  /** Upgrade button label. Default "Upgrade plan". */
+  upgradeLabel?: string;
   onViewUsage?: () => void;
   loading?: boolean;
   error?: string;

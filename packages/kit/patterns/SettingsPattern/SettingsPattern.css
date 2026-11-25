@@ -213,3 +213,85 @@
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg-muted);
 }
+
+/* A label/value row under a hairline, like Next charge or Receipts go to. */
+.settings-pattern__ruled {
+  padding-block-start: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--border-faint);
+}
+
+/* Padding for content in a flush Card body (the toolbar above a Table, the sign-in rules). */
+.settings-pattern__inset {
+  padding: var(--space-4) var(--space-6);
+}
+
+/* Team members: the DataTable sits inside the card with its own frame, lined up with the toolbar. */
+.settings-pattern__table {
+  padding-inline: var(--space-6);
+}
+
+/* Team seats: count, Meter, extra seat price and Add seats on one row. */
+.settings-pattern__seats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-gap-md) var(--space-gap-lg);
+}
+
+.settings-pattern__meter {
+  flex: 1 1 var(--layout-sidebar);
+  min-width: 0;
+}
+
+.settings-pattern__filter {
+  flex: 0 0 var(--layout-sidebar);
+  min-width: 0;
+}
+
+.settings-pattern__count {
+  margin-inline-start: auto;
+}
+
+.settings-pattern__toolbar {
+  justify-content: flex-start;
+}
+
+/* Security sign-in rules: the rule's name on the left, its control on the right; stacks when narrow. */
+.settings-pattern__rule {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+  gap: var(--space-gap-sm) var(--space-gap-lg);
+  align-items: start;
+}
+
+.settings-pattern__rule-control {
+  min-width: 0;
+}
+
+/* Narrow sign-in rules: the name and hint on the left, the Switch at the end of the row. */
+.settings-pattern--narrow .settings-pattern__rule {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+}
+
+/* Narrow save row: Cancel keeps its size and Save takes the rest of the width. */
+.settings-pattern__actions--fill {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+}
+
+.settings-pattern__actions--fill > :last-child {
+  flex: 1 1 auto;
+}
+
+/* Wide: the page title sits 24 below the panel's top edge, as on the board. */
+.settings-pattern:not(.settings-pattern--narrow) > .layout-header {
+  padding-block-start: var(--space-6);
+}
+
+/* Security's save row: a muted footer that fills the card's bottom, inside its rounded corners. */
+.settings-pattern__save-row {
+  background-color: var(--surface-muted);
+  border-end-start-radius: calc(var(--radius-surface-md) - var(--border-width-thin));
+  border-end-end-radius: calc(var(--radius-surface-md) - var(--border-width-thin));
+}

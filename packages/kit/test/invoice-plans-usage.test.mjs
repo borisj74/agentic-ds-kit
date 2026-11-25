@@ -32,6 +32,25 @@ before(async () => {
 const h = (type, props) => renderToStaticMarkup(React.createElement(type, props));
 
 describe("UsageMeter", () => {
+  test("compact: one summary line, categories in a row, custom upgrade label, no Alert or figure", () => {
+    const html = h(UsageMeter, {
+      compact: true,
+      title: "AI credits",
+      used: 9300,
+      limit: 10000,
+      resetLabel: "resets 01 Dec",
+      paceNote: "at this pace you run out on 28 Nov",
+      categories: [{ id: "a", label: "Invoice drafting", value: 5100 }],
+      upgradeLabel: "Upgrade to Business",
+      onUpgrade: () => {},
+    });
+    assert.ok(html.includes("9,300 of 10,000 used · resets 01 Dec · at this pace you run out on 28 Nov"));
+    assert.ok(html.includes("Upgrade to Business"));
+    assert.ok(html.includes("<dt>Invoice drafting</dt><dd>5,100</dd>"));
+    assert.ok(html.includes("Near limit"));
+    assert.ok(!html.includes('role="alert"') && !html.includes("credits left"));
+  });
+
   test("warns from 0.8 by default", () => {
     assert.ok(h(UsageMeter, { title: "AI credits", used: 8000, limit: 10000 }).includes("Near limit"));
     assert.ok(!h(UsageMeter, { title: "AI credits", used: 7900, limit: 10000 }).includes("Near limit"));

@@ -12,7 +12,7 @@
   ],
   "import": "import { SettingsPattern } from \"@/components/patterns/settings\";",
   "copyNote": "Not exported from agentic-ds-kit. add copies the source into your app (components/patterns/settings/) with this contract beside it, and the billing-schedule and integration-settings examples it uses into components/patterns/ (kept if you already have them). You own the copies: replace the demo data, drop the sections you don't need, and keep the `must` lines.",
-  "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations; You: Profile, Notifications, Security) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Billing, Team, Integrations and Security act per card. Billing overdue / loading / error, Team empty and invite Drawer, Security 2FA off.",
+  "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations, Security; You: Profile, Notifications, Sign-in) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Security's sign-in rules (SSO, Require SSO, two-step for members) end in their own save row, then your sessions and a Danger zone with Delete workspace; Billing (plan, payment method, AI credits UsageMeter, invoices Table, billing schedule), Team (seats Meter, role filter, members Table) and Integrations act per card; Sign-in holds your password and two-factor. Billing overdue / loading / error, Team empty and invite Drawer, Sign-in 2FA off.",
   "contains": [
     "sidenav",
     "drawer",
@@ -31,12 +31,16 @@
     "table",
     "dropdownmenu",
     "listview",
-    "usagelist",
     "notificationstack",
     "empty",
     "skeleton",
     "linklist",
-    "savebar"
+    "savebar",
+    "usagemeter",
+    "meter",
+    "pricingplans",
+    "fieldset",
+    "section"
   ],
   "must": [
     "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
@@ -52,20 +56,23 @@
     "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
     "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
     "An overdue invoice is a kit Alert (danger) that says the invoice, the amount and what happens next; Pay now is then the one solid primary and Upgrade steps away",
-    "Delete workspace sits on General, in its own Card below the form, as a danger action behind a kit AlertDialog; Cancel returns focus to it",
-    "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); the other sections have no save bar and act per card",
+    "Danger actions sit in their own group after every card that saves",
+    "Delete workspace sits on Security, in a Danger zone (a kit Section heading) after every card that saves, in its own Card, as a danger action behind a kit AlertDialog where you type the name; Cancel returns focus to it",
+    "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); Security's sign-in rules end in their own save row in the card (Cancel and Save sign-in rules); the other sections have no save bar and act per card",
     "Integrations renders the integration-settings example; do not build a second integration form",
     "Money arrives pre-formatted from your app; label example data as example"
   ],
   "defaults": [
     "General is the default section when wide; the index page is the default when narrow. Route section from your URL (sectionHref gives each row a real link) or let the pattern keep it",
-    "Scope lines: \"Workspace setting · applies to all 12 members\" (plus who can edit, when wide) and \"Personal setting · only changes it for you\"; the index rows say what's inside (next charge, Two-factor off)",
-    "headerActions sit on the title row, e.g. Ask (neutral sm Button with MessageCircle) and the NotificationStack bell",
+    "Scope lines: \"Workspace setting · applies to all 12 members\" (plus who can edit, when wide) and \"Personal setting · only changes it for you\"; the index rows say what's inside (next charge, Okta SSO, Password · two-factor off)",
+    "headerActions sit on the title row, e.g. Ask (neutral sm Button with MessageCircle)",
     "Controls are md 36 wide and lg 40 below --grid-breakpoint-md; General's labels sit left of the controls when wide",
     "Team's Invite people is the PageHeader primary; the empty Team page moves it into the kit Empty",
     "Invite people opens a right kit Drawer with Email addresses, Role and Message; Send invites is the Drawer's primary",
+    "Billing: Compare plans opens kit PricingPlans in a kit Drawer; AI credits is a kit UsageMeter whose Upgrade is the one solid primary; invoices are a kit Table (a ListView below --grid-breakpoint-md), then the billing schedule",
+    "Team: a seats Card with a kit Meter (seats count pending invites) and Add seats, search and a role Select filter, and members in a kit Table (a ListView with a row menu below --grid-breakpoint-md)",
     "Billing loading shows Skeletons in the same Cards; a load error is an outlined kit Empty with Retry",
-    "Security has no solid primary: Update password and Set up are outline",
+    "Security has one solid primary, Save sign-in rules; Sign-in has none: Update password and Set up are outline",
     "No motion beyond kit overlays (Drawer, AlertDialog, DropdownMenu), which honour reduced motion"
   ],
   "states": {
@@ -75,9 +82,10 @@
       "billing",
       "team",
       "integrations",
+      "security",
       "profile",
       "notifications",
-      "security"
+      "sign-in"
     ],
     "billing": [
       "ready",
@@ -90,10 +98,14 @@
       "empty",
       "invite drawer (inviteOpen)"
     ],
-    "security": [
+    "sign-in": [
       "2FA on",
       "2FA off (twoFactor={false})"
+    ],
+    "security": [
+      "1 unsaved change (Save sign-in rules)",
+      "delete confirm (type the name)"
     ]
   },
-  "snippet": "<SettingsPattern section={section} onSectionChange={setSection} appHref=\"/\" headerActions={<AskAndBell />} onSave={save} onDeleteWorkspace={deleteWorkspace} />"
+  "snippet": "<SettingsPattern section={section} onSectionChange={setSection} appHref=\"/\" headerActions={<Ask />} onSave={save} onDeleteWorkspace={deleteWorkspace} />"
 }

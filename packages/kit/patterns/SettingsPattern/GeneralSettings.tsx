@@ -7,7 +7,6 @@ import { FieldSet } from "../../ui/FieldSet";
 import { Input } from "../../ui/Input";
 import { SaveBar } from "../../ui/SaveBar";
 import { Select } from "../../ui/Select";
-import { DeleteWorkspace } from "./DeleteWorkspace";
 import { saveShortcut } from "./ProfileSettings";
 import {
   CURRENCY_OPTIONS,
@@ -28,15 +27,14 @@ export interface GeneralSettingsProps {
   narrow?: boolean;
   onSave?: () => void;
   onCancel?: () => void;
-  onDeleteWorkspace?: () => void;
 }
 
 /**
  * General: the workspace's name, URL, currency, invoice prefix and time zone in one FieldSet (legend
- * left when wide) in a Card, then Delete workspace in its own Card outside the form, and the one
- * SaveBar. Copy it in and replace the fields and the save call.
+ * left when wide) in a Card, and the one SaveBar. Delete workspace lives on Security. Copy it in
+ * and replace the fields and the save call.
  */
-export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWorkspace }: GeneralSettingsProps) {
+export function GeneralSettings({ narrow = false, onSave, onCancel }: GeneralSettingsProps) {
   const uid = useId();
   const [saved, setSaved] = useState(GENERAL_SAVED);
   const [values, setValues] = useState(GENERAL_DRAFT);
@@ -111,8 +109,6 @@ export function GeneralSettings({ narrow = false, onSave, onCancel, onDeleteWork
           {/* Narrow: the group loses its Card frame, as in settings-form. */}
           {narrow ? fields : <Card size="md">{fields}</Card>}
         </form>
-        {/* Outside the form: deleting is not part of Save. */}
-        <DeleteWorkspace onDeleteWorkspace={onDeleteWorkspace} />
       </div>
 
       <SaveBar

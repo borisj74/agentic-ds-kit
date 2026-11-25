@@ -7225,7 +7225,7 @@
         "actions": {
           "type": "slot",
           "required": false,
-          "note": "Any node, laid out in a wrapping row, vertically centered: kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one. Below 40rem the actions move under the title, except a single button (one Button or IconButton), which stays beside it."
+          "note": "Any node, laid out in a wrapping row, vertically centered on the title line (a subtitle doesn't push them down): kit Buttons, a ButtonGroup, a search Input, a Select. At most one primary Button; it stays in view on narrow screens. A kit Input here sizes to its field (not full width), so it sits beside the Buttons; set a width with its className if you want one. Below 40rem the actions move under the title, except a single button (one Button or IconButton), which stays beside it."
         },
         "overflowActions": {
           "type": "array",
@@ -11447,7 +11447,8 @@
       "useWhen": [
         "show credits or plan usage for the current period",
         "warn before a limit and offer the upgrade",
-        "break usage down by category and day"
+        "break usage down by category and day",
+        "a compact credits block on a settings or billing page (compact)"
       ],
       "doNotUseWhen": [
         "one value without breakdown — Meter",
@@ -11518,10 +11519,20 @@
           "required": false,
           "note": "{ rateLabel, amount }, pre-formatted. Usage past the limit keeps running and is billed: the warning and the meter's name say the rate and the amount so far."
         },
+        "compact": {
+          "type": "boolean",
+          "default": false,
+          "note": "One block for a settings page: title, badge and Upgrade on one line, then used of limit · reset · pace, the meter and categories in a row. No figure, axis, daily line or Alert. Spans its container; under 40rem categories drop and Upgrade goes full width below the meter."
+        },
         "onUpgrade": {
           "type": "function",
           "required": false,
           "note": "Upgrade plan, the one solid primary; shown near or over the limit."
+        },
+        "upgradeLabel": {
+          "type": "string",
+          "default": "Upgrade plan",
+          "note": "e.g. \"Upgrade to Business\"."
         },
         "onViewUsage": {
           "type": "function",
@@ -14824,7 +14835,7 @@
     {
       "id": "settings",
       "group": "pattern",
-      "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations; You: Profile, Notifications, Security) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Billing, Team, Integrations and Security act per card. Billing overdue / loading / error, Team empty and invite Drawer, Security 2FA off.",
+      "intent": "Settings shell example for one workspace (Northwind Studio). Wide: a settings SideNav on the canvas (Back to app, then Workspace: General, Billing, Team, Integrations, Security; You: Profile, Notifications, Sign-in) and the section on the inset panel, named by its PageHeader with a scope line that says who a change reaches. Below --grid-breakpoint-md: an index page of two kit LinkLists with a description per row, and Back to Settings on each section. General, Profile and Notifications end in one SaveBar; Security's sign-in rules (SSO, Require SSO, two-step for members) end in their own save row, then your sessions and a Danger zone with Delete workspace; Billing (plan, payment method, AI credits UsageMeter, invoices Table, billing schedule), Team (seats Meter, role filter, members Table) and Integrations act per card; Sign-in holds your password and two-factor. Billing overdue / loading / error, Team empty and invite Drawer, Sign-in 2FA off.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
@@ -14839,8 +14850,9 @@
         "Status is a word in a kit Badge (Active, Invited, Paid, On, Off…), never colour alone",
         "Billing charges come from the billing-schedule example (summary mode); do not build a second charges list",
         "An overdue invoice is a kit Alert (danger) that says the invoice, the amount and what happens next; Pay now is then the one solid primary and Upgrade steps away",
-        "Delete workspace sits on General, in its own Card below the form, as a danger action behind a kit AlertDialog; Cancel returns focus to it",
-        "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); the other sections have no save bar and act per card",
+        "Danger actions sit in their own group after every card that saves",
+        "Delete workspace sits on Security, in a Danger zone (a kit Section heading) after every card that saves, in its own Card, as a danger action behind a kit AlertDialog where you type the name; Cancel returns focus to it",
+        "General, Profile and Notifications end in one kit SaveBar (Cancel and Save changes); Security's sign-in rules end in their own save row in the card (Cancel and Save sign-in rules); the other sections have no save bar and act per card",
         "Integrations renders the integration-settings example; do not build a second integration form",
         "Money arrives pre-formatted from your app; label example data as example"
       ]

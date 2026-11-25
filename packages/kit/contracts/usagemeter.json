@@ -6,7 +6,8 @@
   "useWhen": [
     "show credits or plan usage for the current period",
     "warn before a limit and offer the upgrade",
-    "break usage down by category and day"
+    "break usage down by category and day",
+    "a compact credits block on a settings or billing page (compact)"
   ],
   "doNotUseWhen": [
     "one value without breakdown — Meter",
@@ -80,10 +81,20 @@
       "required": false,
       "note": "{ rateLabel, amount }, pre-formatted. Usage past the limit keeps running and is billed: the warning and the meter's name say the rate and the amount so far."
     },
+    "compact": {
+      "type": "boolean",
+      "default": false,
+      "note": "One block for a settings page: title, badge and Upgrade on one line, then used of limit · reset · pace, the meter and categories in a row. No figure, axis, daily line or Alert. Spans its container; under 40rem categories drop and Upgrade goes full width below the meter."
+    },
     "onUpgrade": {
       "type": "function",
       "required": false,
       "note": "Upgrade plan, the one solid primary; shown near or over the limit."
+    },
+    "upgradeLabel": {
+      "type": "string",
+      "default": "Upgrade plan",
+      "note": "e.g. \"Upgrade to Business\"."
     },
     "onViewUsage": {
       "type": "function",
