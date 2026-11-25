@@ -7545,7 +7545,7 @@
     {
       "id": "progress",
       "group": "component",
-      "intent": "Task completion as a bar or circle from 0 to 100, or an indeterminate bar when the percent is not known. One piece. Optional name label. Percent overlay, end, or in the ring hole, in Geist Mono. Square bar ends. Tones brand, success, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
+      "intent": "Task completion as a bar or circle from 0 to 100, or an indeterminate bar when the percent is not known. One piece. Optional name label. Percent overlay, end, or in the ring hole, in Geist Mono. Bar track and fill share radius.controlSm, the same subtle corners as every kit meter. Tones brand, success, warning, danger, muted, neutral. Sizes sm, md, lg. Fill grows once on load.",
       "useWhen": [
         "Upload, import, or task completion",
         "A determinate percent in a form, card, or page",
@@ -7592,7 +7592,7 @@
             "lg"
           ],
           "default": "md",
-          "note": "Bar track height, square ends: sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
+          "note": "Bar track height (corners radius.controlSm, fill matches): sm is space-1, md is space-2, lg is space-3. Overlay uses space-5. Circle and semicircle: sm 56, md 96, lg 196."
         },
         "shape": {
           "type": "enum",
@@ -11426,7 +11426,7 @@
         "Do not use BarChart or Meter for a run trace",
         "Do not encode failed or running by colour alone",
         "Do not use raw hex",
-        "Do not round the bars; bars and legend marks are square"
+        "Do not make the bars square or pill; they use radius.controlSm like every kit meter. Legend marks stay square"
       ],
       "props": {
         "title": {

@@ -98,6 +98,7 @@
     "text.fgSubtle",
     "radius.surfaceLg",
     "radius.surfaceMd",
+    "radius.controlSm",
     "type.size.bodySm",
     "type.size.caption",
     "type.weight.label",
@@ -131,7 +132,7 @@
     "Do not use BarChart or Meter for a run trace",
     "Do not encode failed or running by colour alone",
     "Do not use raw hex",
-    "Do not round the bars; bars and legend marks are square"
+    "Do not make the bars square or pill; they use radius.controlSm like every kit meter. Legend marks stay square"
   ],
   "snippet": "<TraceWaterfall title=\"Run trace · Billing refactor\" spans={spans} selectedId={spanId} onSpanClick={setSpanId} />"
 }
