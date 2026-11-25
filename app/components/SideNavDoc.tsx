@@ -550,13 +550,6 @@ export function SideNavDoc() {
                   </Shell>
                 </div>
               </div>
-              <div className={demo.exampleCanvas}>
-                <div className={demo.fill}>
-                  <Shell side="left">
-                    <AccountBar defaultOpen={false} />
-                  </Shell>
-                </div>
-              </div>
               <div>
                 <h3 className={styles.usageTitle}>Usage</h3>
                 <p className={styles.usageBody}>
