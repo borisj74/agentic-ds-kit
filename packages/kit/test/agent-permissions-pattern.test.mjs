@@ -205,6 +205,7 @@ describe("agent-permissions request", { skip }, () => {
     await click(button(container, "Grant"));
     assert.ok(container.querySelector('[aria-label="Granted: Refund up to $500 without asking"]'));
     assert.match(row(container, "Issue refunds").textContent, /Up to \$500/);
+    assert.match(container.querySelector('[aria-label="Granted: Refund up to $500 without asking"]').textContent, /09:52/);
     assert.doesNotMatch(container.textContent, /\$500 requested/);
     assert.match(container.textContent, /No requests waiting/);
   });
@@ -277,6 +278,8 @@ describe("agent-permissions below 640", { skip }, () => {
       assert.equal(container.querySelector("table"), null, "no Table");
       assert.match(container.textContent, /\$500 asked/);
       assert.doesNotMatch(container.textContent, /Today 08:05/, "Last used drops");
+      assert.doesNotMatch(container.textContent, /Default for new actions/, "no dial below 640");
+      assert.match(container.textContent, /Collections · \$500 asked/);
       const rows = [...container.querySelectorAll('[role="listitem"]')];
       const locked = rows.find((li) => li.textContent.includes("Change prices"));
       assert.equal(locked.querySelector("button"), null, "locked row can't be opened");

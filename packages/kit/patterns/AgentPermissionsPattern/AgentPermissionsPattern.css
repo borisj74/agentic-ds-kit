@@ -23,6 +23,11 @@
   padding-block: var(--space-3);
 }
 
+/* The product name stays quiet, as in the app-shell example (AppHeader's own size token). */
+.agent-permissions-pattern__header {
+  --appheader-title-size: var(--type-size-body-sm);
+}
+
 .agent-permissions-pattern__two-line {
   display: flex;
   flex-direction: column;

@@ -81,12 +81,10 @@ export const REQUEST = {
   requestedAt: "Collections agent · requested 09:41",
   requestedAtShort: "Collections agent · 09:41",
   requested: "$500 requested",
-  requestedShort: "$500 asked",
-  grantedNote: "Up to $500 on its own, until 22 Dec",
-  deniedNote: "Limit stays at $250",
-  /** Below 640 the one-line result keeps its words; the note shortens. */
-  grantedNoteShort: "Until 22 Dec",
-  deniedNoteShort: "Stays $250",
+  /** The refunds row's second line below 640 while the request waits. */
+  requestedSecondary: "Collections · $500 asked",
+  /** When the request was granted or denied, on the right of the one-line result. */
+  resolvedAt: "09:52",
   errorMessage: "Stripe didn't answer. The limit is still $250.",
 };
 

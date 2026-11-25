@@ -14835,7 +14835,7 @@
     {
       "id": "agent-permissions",
       "group": "pattern",
-      "intent": "What each agent may do on its own, as a page: AppHeader, a PageHeader with a count of waiting requests and Ask, the pending kit PermissionRequest first (Grant / Deny, then one line), a Table of actions with each level as an icon plus a word and a ghost Edit, a Card with a Switch that makes every action ask first, and an AutonomyDial for the default level of new actions. Edit opens a kit Drawer with a card RadioGroup and, for an amount, a CurrencyInput under the group. Below 640 the nav opens in a Drawer from a Menu button, the Table becomes a drill ListView and Edit opens from the bottom.",
+      "intent": "What each agent may do on its own, as a page: AppHeader, a PageHeader with a count of waiting requests and Ask, the pending kit PermissionRequest first (Grant / Deny, then one line), a Table of actions with each level as an icon plus a word and a ghost Edit, a Card with a Switch that makes every action ask first, and an AutonomyDial for the default level of new actions. Edit opens a kit Drawer with a card RadioGroup and, for an amount, a CurrencyInput under the group. Below 640 the nav opens in a Drawer from a Menu button, the Table becomes a drill ListView, Edit opens from the bottom and the dial is left out.",
       "must": [
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (request cards, level pickers, autonomy sliders, edit panels)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",

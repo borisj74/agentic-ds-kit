@@ -180,9 +180,8 @@ export function AgentPermissionsPattern({
   const listItem = (action: AgentAction) => ({
     id: action.id,
     primary: action.name,
-    secondary: action.locked ? PERMISSIONS_PAGE.lockedShort : action.agent,
+    secondary: action.locked ? PERMISSIONS_PAGE.lockedShort : requestedFor(action) ? REQUEST.requestedSecondary : action.agent,
     value: levelWord(action),
-    meta: requestedFor(action) ? REQUEST.requestedShort : undefined,
   });
 
   const ask = (
@@ -205,6 +204,7 @@ export function AgentPermissionsPattern({
   return (
     <div className={["layout-shell agent-permissions-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
       <AppHeader
+        className="agent-permissions-pattern__header"
         title={PERMISSIONS_PAGE.product}
         radius="none"
         search={false}
@@ -238,17 +238,7 @@ export function AgentPermissionsPattern({
           requestedAt={narrow ? REQUEST.requestedAtShort : REQUEST.requestedAt}
           status={request}
           errorMessage={REQUEST.errorMessage}
-          resolvedNote={
-            request === "granted"
-              ? narrow
-                ? REQUEST.grantedNoteShort
-                : REQUEST.grantedNote
-              : request === "denied"
-                ? narrow
-                  ? REQUEST.deniedNoteShort
-                  : REQUEST.deniedNote
-                : undefined
-          }
+          resolvedNote={request === "granted" || request === "denied" ? REQUEST.resolvedAt : undefined}
           onGrant={grant}
           onDeny={deny}
           onRetry={grant}
@@ -318,7 +308,8 @@ export function AgentPermissionsPattern({
           </Card>
         )}
 
-        <div className="layout-split--secondary agent-permissions-pattern__controls">
+        {/* Below 640 the switch stands alone; the default for new actions is a wide-screen setting. */}
+        <div className={narrow ? "agent-permissions-pattern__controls" : "layout-split--secondary agent-permissions-pattern__controls"}>
           <Card size="sm">
             <div className="agent-permissions-pattern__switch-row">
               <h2 id={switchTitleId} className="agent-permissions-pattern__strong">
@@ -333,15 +324,16 @@ export function AgentPermissionsPattern({
             </div>
             <p className="agent-permissions-pattern__hint">{narrow ? SWITCH_COPY.hintShort : SWITCH_COPY.hint}</p>
           </Card>
-          <AutonomyDial
-            label={DEFAULT_COPY.label}
-            appliesTo={DEFAULT_COPY.appliesTo}
-            options={DEFAULT_LEVELS}
-            value={defaultLevel}
-            defaultValue="ask"
-            onValueChange={setDefaultLevel}
-            size={narrow ? "sm" : "md"}
-          />
+          {narrow ? null : (
+            <AutonomyDial
+              label={DEFAULT_COPY.label}
+              appliesTo={DEFAULT_COPY.appliesTo}
+              options={DEFAULT_LEVELS}
+              value={defaultLevel}
+              defaultValue="ask"
+              onValueChange={setDefaultLevel}
+            />
+          )}
         </div>
       </main>
 
