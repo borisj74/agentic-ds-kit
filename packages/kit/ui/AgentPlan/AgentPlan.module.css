@@ -112,7 +112,12 @@
 }
 
 .current {
-  background-color: var(--primary-subtle);
+  background-color: var(--status-info-subtle);
+}
+
+/* After a failed step, the rest will not run: muted. */
+.afterFailed .label {
+  color: var(--text-fg-muted);
 }
 
 .failed {
@@ -138,6 +143,8 @@
   justify-content: center;
   width: var(--space-5);
   height: var(--space-5);
+  border: var(--border-width-thin) solid var(--line-strong);
+  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
@@ -146,9 +153,11 @@
   color: var(--text-fg-muted);
 }
 
+/* The step that runs now: a filled info circle on the info tint. */
 .numberCurrent {
-  color: var(--primary-fg);
-  font-weight: var(--type-weight-label);
+  background-color: var(--status-info);
+  border-color: transparent;
+  color: var(--action-on-primary);
 }
 
 .markDone {
@@ -364,11 +373,44 @@
   margin-inline-start: auto;
 }
 
-/* Collapsed: one line */
-/* Collapsed: the header alone, with no rule under it. */
+/* Collapsed: one line — icon, title, "· summary", status, chevron — with no rule under it. */
+.collapsed {
+  padding: var(--space-3) var(--space-4);
+}
+
 .collapsed .header {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
   padding-bottom: 0;
   border-bottom: 0;
+}
+
+.collapsed .titleRow {
+  display: contents;
+}
+
+.collapsed .title {
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
+.collapsed .summary {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-fg-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collapsed .summary::before {
+  content: "· ";
+  color: var(--text-fg-subtle);
+}
+
+.collapsed .titleRow > :not(.titleIcon):not(.title) {
+  order: 1;
 }
 
 @keyframes plan-row-in {
