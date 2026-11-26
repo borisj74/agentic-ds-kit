@@ -20,6 +20,21 @@
   gap: var(--space-3);
 }
 
+/* Decorative agent mark, as in AgentMonitor and AgentLanes. */
+.agentIcon {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--space-6) + var(--space-1));
+  height: calc(var(--space-6) + var(--space-1));
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-pill);
+  color: var(--text-fg);
+}
+
 .heading {
   display: flex;
   flex: 1 1 0;
@@ -31,7 +46,7 @@
 .name {
   margin: 0;
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -47,16 +62,16 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg);
+  color: var(--text-fg-muted);
 }
 
 .dot {
-  width: var(--space-2);
-  height: var(--space-2);
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
   border-radius: var(--radius-pill);
   background-color: var(--line-strong);
 }
@@ -176,6 +191,10 @@
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-subtle);
+}
+
+.hintKey {
+  font-family: var(--font-mono);
 }
 
 .stopped {
