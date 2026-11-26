@@ -31,7 +31,7 @@ const STATUS_BADGE = {
 
 function seconds(ms: number) {
   const sec = ms / 1000;
-  if (sec < 60) return `${sec.toFixed(1)}s`;
+  if (sec < 60) return `${sec.toFixed(1).replace(/\.0$/, "")}s`;
   return `${Math.floor(sec / 60)}m ${String(Math.round(sec % 60)).padStart(2, "0")}s`;
 }
 
@@ -138,7 +138,11 @@ export function TraceWaterfall({
     const inner = (
       <>
         <span className={styles.label}>
-          {span.failed ? <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.failedIcon} aria-hidden="true" /> : null}
+          {span.failed ? (
+            <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.failedIcon} aria-hidden="true" />
+          ) : (
+            <span className={cx(styles.rowDot, kindClass(span))} aria-hidden="true" />
+          )}
           <span className={styles.labelText}>{span.label}</span>
           {span.failed ? (
             <span className={styles.failedWord} aria-hidden="true">
@@ -151,7 +155,7 @@ export function TraceWaterfall({
           {dashed ? <span className={styles.pending} style={{ insetInlineStart: `${left + width}%`, width: `${dashed}%` }} /> : null}
         </span>
         <span className={styles.num}>{duration}</span>
-        <span className={styles.num}>{span.cost !== undefined ? money(span.cost) : "–"}</span>
+        <span className={cx(styles.num, span.cost !== undefined ? styles.cost : styles.none)}>{span.cost !== undefined ? money(span.cost) : "—"}</span>
       </>
     );
     return (
@@ -259,7 +263,7 @@ export function TraceWaterfall({
 
         {status === "failed" && error ? (
           <p className={styles.failNote}>
-            <CircleX size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
             {error}
           </p>
         ) : null}
@@ -269,7 +273,7 @@ export function TraceWaterfall({
             <p className={styles.detailHead}>
               <span className={cx(styles.dot, kindClass(selected))} aria-hidden="true" />
               <span className={styles.detailTitle}>{selected.label}</span>
-              <Badge tone="neutral" size="sm">
+              <Badge tone="primary" size="sm">
                 {KIND_LABEL[selected.kind]}
               </Badge>
               {onSpanClick ? (
@@ -305,7 +309,7 @@ export function TraceWaterfall({
               </li>
             ))}
           </ul>
-          {running ? <span className={styles.legendNote}>dashed = still running</span> : null}
+          {status !== "failed" ? <span className={styles.legendNote}>dashed = still running</span> : null}
         </footer>
       </>
     );

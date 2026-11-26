@@ -1,10 +1,11 @@
 .card {
-  --trace-label: calc(var(--space-16) * 2);
-  --trace-num: var(--space-12);
+  /* Paper lanes: 150 label (room for the kind dot), 56 per number. */
+  --trace-label: calc(var(--space-16) * 2 + var(--space-5) + var(--space-px));
+  --trace-num: calc(var(--space-12) + var(--space-2));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   min-width: 0;
   padding: var(--space-4);
   background-color: var(--bg-surface);
@@ -102,7 +103,7 @@
 .rows {
   display: flex;
   flex-direction: column;
-  gap: var(--space-px);
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -174,8 +175,16 @@ button.rowButton:focus-visible,
 .label {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
   min-width: 0;
+}
+
+/* Row mark: the span's kind colour before its label. The legend keeps square marks. */
+.rowDot {
+  flex-shrink: 0;
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
+  border-radius: var(--radius-pill);
 }
 
 .failedIcon {
@@ -209,7 +218,7 @@ button.rowButton:focus-visible,
 
 .track {
   position: relative;
-  height: var(--space-3);
+  height: calc(var(--space-3) + var(--space-px));
 }
 
 .bar,
@@ -231,14 +240,14 @@ button.rowButton:focus-visible,
   animation: trace-grow var(--motion-duration-300) var(--motion-ease-out);
 }
 
-/* Span kinds on existing roles: model = primary, tool = neutral line, wait and approval = caution.
-   Success green is kept for status, so a tool bar never reads as "passed". */
+/* Span kinds on existing roles: model = primary, tool = teal (chart-2), wait and approval = caution.
+   Success green is kept for status, so a tool bar never reads as "passed"; no violet. */
 .kind-model {
   background-color: var(--primary);
 }
 
 .kind-tool {
-  background-color: var(--line-strong);
+  background-color: var(--chart-2);
 }
 
 .kind-wait,
@@ -263,15 +272,29 @@ button.rowButton:focus-visible,
   text-align: end;
 }
 
+.cost {
+  font-weight: var(--type-weight-label);
+  color: var(--text-fg);
+}
+
+.none {
+  color: var(--text-fg-subtle);
+}
+
 .failNote {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  font-family: var(--font-mono);
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
   color: var(--status-danger-text);
+}
+
+.failNote svg {
+  flex-shrink: 0;
+  color: var(--icon-danger);
 }
 
 /* Same grey surface as the stats above, no frame of its own. */
@@ -372,15 +395,21 @@ button.rowButton:focus-visible,
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  padding: calc(var(--space-2) + var(--space-px)) var(--space-3);
   background-color: var(--status-danger-subtle);
   border-radius: var(--radius-surface-md);
   color: var(--status-danger-text);
 }
 
+.error > svg {
+  flex-shrink: 0;
+  color: var(--icon-danger);
+}
+
 .errorText {
   flex: 1 1 0;
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
 }
 
