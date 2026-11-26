@@ -137,7 +137,15 @@ export function MemoryPanel({
             ) : null}
           </span>
         </div>
+        {/* Pin is last so it holds the right edge; Edit and Forget fade in to its left on hover or
+            focus. All three always take their space, so nothing moves. */}
         <span className={cx(styles.actions, item.pinned && styles.actionsPinned)}>
+          {onEdit ? (
+            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel={`Edit: ${item.content}`} onClick={() => setEditingId(item.id)} />
+          ) : null}
+          {onDelete ? (
+            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Trash2" ariaLabel={`Forget: ${item.content}`} onClick={() => setConfirmId(item.id)} />
+          ) : null}
           {onPin ? (
             <Button
               size="sm"
@@ -146,15 +154,9 @@ export function MemoryPanel({
               iconStart="Pin"
               ariaLabel={`${item.pinned ? "Unpin" : "Pin"}: ${item.content}`}
               aria-pressed={Boolean(item.pinned)}
-              className={item.pinned ? styles.pinOn : undefined}
+              className={cx(styles.pin, item.pinned && styles.pinOn)}
               onClick={() => onPin(item.id, !item.pinned)}
             />
-          ) : null}
-          {onEdit ? (
-            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel={`Edit: ${item.content}`} onClick={() => setEditingId(item.id)} />
-          ) : null}
-          {onDelete ? (
-            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Trash2" ariaLabel={`Forget: ${item.content}`} onClick={() => setConfirmId(item.id)} />
           ) : null}
         </span>
       </li>

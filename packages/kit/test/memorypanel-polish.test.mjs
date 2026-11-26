@@ -51,6 +51,17 @@ describe("MemoryPanel polish", () => {
     assert.doesNotMatch(forget, /_danger_/);
   });
 
+  test("pin is the last row action, so Edit and Forget appear to its left without moving it", () => {
+    const out = html({ items: ITEMS, onPin: noop, onEdit: noop, onDelete: noop });
+    for (const row of out.split("<li").slice(1)) {
+      const labels = [...row.matchAll(/aria-label="([A-Za-z]+):/g)].map((m) => m[1]);
+      assert.deepEqual(labels.slice(-3), ["Edit", "Forget", labels.at(-1)]);
+      assert.match(labels.at(-1), /^(Pin|Unpin)$/);
+      const pin = row.match(/<button[^>]*aria-pressed="[^"]*"[^>]*>/)[0];
+      assert.match(pin, /_pin_/, "pin carries the class that keeps it visible on pinned rows");
+    }
+  });
+
   test("loading rows start with a circle", () => {
     const out = html({ items: [], loading: true });
     assert.equal((out.match(/_circle_/g) ?? []).length, 3);

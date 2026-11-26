@@ -113,7 +113,8 @@
   color: var(--text-fg-subtle);
 }
 
-/* Row actions: pinned rows keep their pin; the rest show on hover or keyboard focus. */
+/* Row actions: Edit, Forget, then Pin at the right edge. Pinned rows keep their pin visible; the
+   rest show on hover or keyboard focus. Hidden ones keep their space (opacity, not display). */
 .actions {
   display: inline-flex;
   flex-shrink: 0;
@@ -127,7 +128,7 @@
 
 .item:hover .actions > *,
 .item:focus-within .actions > *,
-.actionsPinned > :first-child {
+.actionsPinned > .pin {
   opacity: 1;
 }
 
