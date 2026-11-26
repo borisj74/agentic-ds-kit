@@ -91,9 +91,10 @@ describe("PermissionRequest badge and summary", () => {
     assert.match(html, /Change it any time in the table\./, "the write warning stays");
   });
 
-  test("without badge the header keeps the scope count and requestedAt", () => {
+  test("without badge the header has the scope count Badge and the footer starts with requestedAt", () => {
     const html = renderToStaticMarkup(React.createElement(PermissionRequest, { ...props, badge: undefined }));
-    assert.match(html, /1 scope · Collections agent · requested 09:41/);
+    assert.match(html, /<header[\s\S]*_badge_[^>]*>1 scope<\/span><\/header>/);
+    assert.match(html, /<footer[\s\S]*>Collections agent · requested 09:41</);
     assert.doesNotMatch(html, /Needs you/);
   });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type KeyboardEvent } from "react";
-import { CircleX } from "lucide-react";
+import { CircleX, KeyRound } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Alert } from "../Alert";
 import { Badge } from "../Badge";
@@ -25,9 +25,9 @@ export type {
   PermissionAccess,
 } from "./PermissionRequest.types";
 
-// Colour only where access carries risk: write amber, admin red; read stays neutral.
-const ACCESS_TONE: Record<PermissionAccess, "neutral" | "warning" | "danger"> = {
-  read: "neutral",
+// Every level has a tone: read info, write amber, admin red.
+const ACCESS_TONE: Record<PermissionAccess, "info" | "warning" | "danger"> = {
+  read: "info",
   write: "warning",
   admin: "danger",
 };
@@ -37,7 +37,7 @@ const ACCESS_LABEL: Record<PermissionAccess, string> = { read: "Read", write: "W
 const ACCESS_ICON: Record<PermissionAccess, string> = { read: "Folder", write: "PenLine", admin: "ShieldAlert" };
 
 function summaryOf(scope: PermissionScope | undefined) {
-  return scope ? `${ACCESS_LABEL[scope.access]} ${scope.resource}` : "";
+  return scope ? `${scope.access} ${scope.resource}` : "";
 }
 
 /**
@@ -78,7 +78,7 @@ export function PermissionRequest({
         className={className}
         outcome={status === "granted" ? "yes" : status === "denied" ? "no" : "expired"}
         label={label}
-        text={text}
+        text={<span className={styles.resolvedText}>{text}</span>}
         meta={resolvedNote}
         aria-label={`${label}: ${title}`}
       />
@@ -106,9 +106,10 @@ export function PermissionRequest({
       Deny
     </Button>
   );
+  // Grant stays the one solid primary while it waits; in flight or after an error it steps back to outline.
   const grantButton = (
     <Button
-      appearance="solid"
+      appearance={busy || status === "error" ? "outline" : "solid"}
       mode="primary"
       size={buttonSize}
       block={narrow}
@@ -142,14 +143,14 @@ export function PermissionRequest({
         </div>
       ) : null}
       <header className={styles.header}>
+        <KeyRound size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {title}
         </h3>
         {badge ? null : (
-          <span className={styles.count}>
-            {scopes.length} {scopes.length === 1 ? "scope" : "scopes"}
-            {requestedAt ? ` · ${requestedAt}` : ""}
-          </span>
+          <Badge tone="neutral" size="sm" appearance="outline" className={styles.count}>
+            {`${scopes.length} ${scopes.length === 1 ? "scope" : "scopes"}`}
+          </Badge>
         )}
       </header>
       {description ? <p className={styles.description}>{description}</p> : null}
@@ -176,13 +177,13 @@ export function PermissionRequest({
                   {ACCESS_LABEL[scope.access]}
                 </Badge>
               </div>
-              {scope.reason ? <span className={styles.reason}>Why: {scope.reason}</span> : null}
-              {scope.limit || scope.expiry ? (
-                <div className={styles.scopeRow}>
-                  {scope.limit ? <span className={styles.limit}>Limit: {scope.limit}</span> : <span />}
+              {scope.reason || scope.expiry ? (
+                <div className={cx(styles.scopeRow, styles.detailRow)}>
+                  {scope.reason ? <span className={styles.reason}>Why: {scope.reason}</span> : <span className={styles.reason} />}
                   {scope.expiry ? <span className={styles.expiry}>{scope.expiry}</span> : null}
                 </div>
               ) : null}
+              {scope.limit ? <span className={styles.limit}>Limit: {scope.limit}</span> : null}
             </div>
           </li>
         ))}
@@ -193,7 +194,7 @@ export function PermissionRequest({
           <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.errorIcon} aria-hidden="true" />
           <span className={styles.errorText}>{errorMessage}</span>
           {onRetry ?? onGrant ? (
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={onRetry ?? onGrant}>
+            <Button size="sm" appearance="ghost" mode="danger" iconStart="RotateCcw" onClick={onRetry ?? onGrant}>
               Retry
             </Button>
           ) : null}
@@ -203,9 +204,15 @@ export function PermissionRequest({
       ) : null}
 
       <footer className={narrow ? styles.stack : reviewStyles.footer}>
-        {narrow ? null : <KeyHint>⌘⏎ grant · Esc deny</KeyHint>}
+        {narrow ? null : (
+          <span className={styles.footerStart}>
+            {requestedAt && !badge ? <span className={styles.requested}>{requestedAt}</span> : null}
+            <KeyHint>⌘⏎ grant · Esc deny</KeyHint>
+          </span>
+        )}
         {narrow ? (
           <>
+            {requestedAt && !badge ? <span className={styles.requested}>{requestedAt}</span> : null}
             {grantButton}
             {denyButton}
           </>

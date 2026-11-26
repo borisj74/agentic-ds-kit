@@ -60,7 +60,7 @@
     "requestedAt": {
       "type": "string",
       "required": false,
-      "note": "Header note, e.g. \"requested 14:02\". With badge it sits beside the badge."
+      "note": "e.g. \"requested 14:02\", in mono at the start of the footer. With badge it sits beside the badge instead."
     },
     "badge": {
       "type": "string",

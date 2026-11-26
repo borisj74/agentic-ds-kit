@@ -2,10 +2,10 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   width: 100%;
   min-width: 0;
-  padding: var(--space-5);
+  padding: var(--space-4);
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
@@ -16,7 +16,7 @@
 .header {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   column-gap: var(--space-2);
   row-gap: var(--space-1);
 }
@@ -27,20 +27,44 @@
   flex: 1 1 auto;
   margin: 0;
   min-width: 0;
-  font-size: var(--type-size-ui-lg);
-  font-weight: var(--type-weight-heading);
-  letter-spacing: var(--type-tracking-heading);
-  line-height: var(--type-line-ui-lg);
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
 
-/* Quiet meta, not a pill: "2 scopes". */
+.titleIcon {
+  flex-shrink: 0;
+  color: var(--text-fg);
+}
+
+/* The scope count: a kit Badge at the end of the header. */
 .count {
+  flex-shrink: 0;
+}
+
+/* Footer start: when it was asked, then the key hint. */
+.footerStart {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  min-width: 0;
+}
+
+.requested {
   flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+  color: var(--text-fg-subtle);
+}
+
+/* Resolved line: the access and resource in mono, as typed. */
+.resolvedText {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
 }
 
 /* badge: the "Needs you" Badge and requestedAt on one row above the title. */
@@ -100,6 +124,13 @@
   gap: var(--space-3);
 }
 
+/* Narrow: the expiry drops under the reason instead of squeezing it. */
+.narrow .detailRow {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
 .narrow .summaryValue {
   text-align: end;
 }
@@ -123,6 +154,7 @@
   padding: 0;
   list-style: none;
   background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
 }
 
@@ -184,7 +216,6 @@
 }
 
 .limit {
-  flex: 1 1 0;
   min-width: 0;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
