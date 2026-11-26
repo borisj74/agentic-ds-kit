@@ -41,7 +41,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: (
       <div className={agentDoc.row}>
         <RunningNow className={agentDoc.full} items={MIXED} onSelect={noop} onStop={noop} />
-        <RunningNow layout="stack" items={WAITING} onSelect={noop} onStop={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={WAITING} onSelect={noop} onStop={noop} />
       </div>
     ),
   },
@@ -51,20 +51,20 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     code: `<RunningNow layout="stack" items={items} onSelect={openAgent} onShowAll={openList} />`,
     render: (
       <div className={agentDoc.row}>
-        <RunningNow layout="stack" items={MIXED} onSelect={noop} />
-        <RunningNow layout="stack" items={ITEMS} onSelect={noop} onShowAll={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={MIXED} onSelect={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={ITEMS} onSelect={noop} onShowAll={noop} />
       </div>
     ),
   },
   {
     title: "Empty — quiet",
-    about: "No items: one quiet line. emptyText can say when the last run was.",
+    about: "No items: one quiet line with the count at 0. idleText says when the last run was, without the count or the icon.",
     code: `<RunningNow items={[]} />
-<RunningNow items={[]} emptyText="Idle · last run 2h ago" />`,
+<RunningNow items={[]} idleText="Idle · last run 2h ago" />`,
     render: (
       <div className={agentDoc.row}>
         <RunningNow items={[]} />
-        <RunningNow items={[]} emptyText="Idle · last run 2h ago" />
+        <RunningNow items={[]} idleText="Idle · last run 2h ago" />
       </div>
     ),
   },
@@ -76,7 +76,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: (
       <div className={agentDoc.row}>
         <RunningNow items={[]} loading />
-        <RunningNow layout="stack" items={[]} loading />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={[]} loading />
       </div>
     ),
   },

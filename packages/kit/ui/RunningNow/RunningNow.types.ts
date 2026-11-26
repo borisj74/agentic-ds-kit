@@ -34,5 +34,10 @@ export interface RunningNowProps extends Omit<ComponentPropsWithoutRef<"section"
   loading?: boolean;
   /** Empty text. Default "Nothing running right now". */
   emptyText?: string;
+  /**
+   * Idle state when items is empty, e.g. "Idle · last run 2h ago": the label drops its count and
+   * the line drops its icon. Takes the place of emptyText. Ignored while items run or load.
+   */
+  idleText?: string;
   ref?: Ref<HTMLElement>;
 }

@@ -9977,7 +9977,8 @@
       "useWhen": [
         "an at-a-glance list of running agents in app chrome",
         "show which agent waits for the person or failed",
-        "link from a compact strip to each agent"
+        "link from a compact strip to each agent",
+        "idleText: nothing runs now and you know when the last run was, e.g. \"Idle · last run 2h ago\""
       ],
       "doNotUseWhen": [
         "one agent in detail — AgentMonitor",
@@ -9987,7 +9988,9 @@
       "doNot": [
         "Do not invent a local RunningList, AgentStrip, or ActivityBar",
         "Do not nest an AgentMonitor in the strip",
-        "Do not use raw hex for status colors"
+        "Do not use raw hex for status colors",
+        "Do not pass idleText to say something is running or loading; it only shows when items is empty, and emptyText is the plain empty line",
+        "Do not swap idleText and emptyText: idleText is for an agent that has run before (\"Idle · last run 2h ago\"); emptyText is for one that has never run"
       ],
       "props": {
         "items": {
@@ -10034,6 +10037,11 @@
         "emptyText": {
           "type": "string",
           "default": "Nothing running right now"
+        },
+        "idleText": {
+          "type": "string",
+          "required": false,
+          "note": "Idle state when items is empty, e.g. \"Idle · last run 2h ago\": the label drops its count and the line drops its clock icon. Takes the place of emptyText; ignored while items run or load."
         }
       }
     },
