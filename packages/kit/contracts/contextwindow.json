@@ -33,7 +33,7 @@
     "segments": {
       "type": "array",
       "required": false,
-      "note": "{ id, label, tokens }[] in display order; the first is neutral, the rest use the chart ramp (--chart-1, --chart-2, --chart-4, --chart-5)."
+      "note": "{ id, label, tokens }[] in display order; colours in order: grey (--line-strong), teal (--chart-2), blue (--chart-1), primary (--primary), light grey (--line-default); a sixth starts again at grey. No violet."
     },
     "warningAt": {
       "type": "number",
@@ -88,15 +88,16 @@
     "type.weight.label",
     "type.family.mono",
     "motion.fast",
-    "bg.tray",
+    "radius.pill",
     "status.warningText",
     "status.dangerText",
     "status.dangerSubtle",
     "type.size.heading5",
     "chart.1",
     "chart.2",
-    "chart.4",
-    "chart.5"
+    "primary",
+    "icon.warning",
+    "icon.danger"
   ],
   "a11y": {
     "element": "section",

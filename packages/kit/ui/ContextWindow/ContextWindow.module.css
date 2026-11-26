@@ -91,25 +91,26 @@
   flex-basis: 0;
 }
 
-/* Categorical fills: a neutral first segment, then the chart ramp. No status roles, so a fill never reads as a state. */
+/* Categorical fills: grey, teal, blue, primary, light grey. No violet, and no status roles, so a fill
+   never reads as a state. */
 .seg0 {
   background-color: var(--line-strong);
 }
 
 .seg1 {
-  background-color: var(--chart-1);
-}
-
-.seg2 {
   background-color: var(--chart-2);
 }
 
+.seg2 {
+  background-color: var(--chart-1);
+}
+
 .seg3 {
-  background-color: var(--chart-4);
+  background-color: var(--primary);
 }
 
 .seg4 {
-  background-color: var(--chart-5);
+  background-color: var(--line-default);
 }
 
 .unknownBar {
