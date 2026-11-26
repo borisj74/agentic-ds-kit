@@ -12,7 +12,7 @@
 }
 
 .layout-stack {
-  padding: var(--space-3) var(--space-3) var(--space-4);
+  gap: calc(var(--space-1) + var(--space-px));
 }
 
 /* Row: as wide as its chips, not the whole container. */
@@ -59,17 +59,16 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+  color: var(--text-fg-subtle);
 }
 
 .count {
-  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  color: var(--text-fg-subtle);
+  color: var(--text-fg-muted);
 }
 
 .list {
@@ -128,7 +127,7 @@
   padding-inline: var(--space-3);
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-md);
+  border-radius: var(--radius-surface-sm);
 }
 
 .chip.withStop {
@@ -137,7 +136,7 @@
 
 .line {
   width: 100%;
-  padding: var(--space-2);
+  padding: var(--space-2) var(--space-2);
   border: 0;
   border-radius: var(--radius-surface-md);
   background: transparent;
@@ -167,7 +166,24 @@
 
 .icon {
   flex-shrink: 0;
-  color: var(--icon-brand);
+  color: var(--status-info);
+}
+
+/* Stack rows: icon, name over activity, clock — 12px apart. */
+.line .main {
+  gap: var(--space-3);
+}
+
+.line .activity {
+  color: var(--text-fg-muted);
+}
+
+.waiting .activity {
+  color: var(--status-warning-text);
+}
+
+.failed .activity {
+  color: var(--status-danger-text);
 }
 
 .running .icon {
@@ -189,14 +205,12 @@
   white-space: nowrap;
 }
 
-.waiting .icon,
-.waiting .status {
-  color: var(--status-warning-text);
+.waiting .icon {
+  color: var(--status-warning);
 }
 
-.failed .icon,
-.failed .status {
-  color: var(--status-danger-text);
+.failed .icon {
+  color: var(--status-danger);
 }
 
 .text {
@@ -283,9 +297,20 @@
   gap: var(--space-2);
 }
 
+/* Row skeleton chips keep their own widths instead of sharing the row. */
+.layout-row .loading > * {
+  flex: none;
+  width: auto;
+}
+
 .layout-stack .loading {
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 0;
+}
+
+.layout-stack .skeletonLine {
+  align-items: center;
+  padding: var(--space-2);
 }
 
 .skeletonLine {

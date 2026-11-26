@@ -27,11 +27,11 @@ function Item({
   onStop?: (id: string) => void;
 }) {
   const Icon = STATUS_ICON[item.status];
-  // Waiting and failed say so in words; a running item's activity already says what it does.
-  const word = item.status === "running" ? null : <span className={styles.status}>{STATUS_TEXT[item.status]}</span>;
+  // The icon and the activity's colour show the state; the word is read to screen readers.
+  const word = item.status === "running" ? null : <span className={styles.srOnly}>{STATUS_TEXT[item.status]}, </span>;
   const body = (
     <>
-      <Icon size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
+      <Icon size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
       <span className={styles.text}>
         <span className={styles.name}>{item.name}</span>
         {word || item.activity ? (
@@ -122,13 +122,18 @@ export function RunningNow({
         <div className={styles.loading}>
           {Array.from({ length: 3 }, (_, index) =>
             layout === "row" ? (
-              <Skeleton key={index} shape="rect" width="calc(var(--space-16) * 2)" height="var(--space-8)" />
+              <Skeleton
+                key={index}
+                shape="rect"
+                width={["calc(var(--space-16) + var(--space-12))", "calc(var(--space-16) + var(--space-8))", "calc(var(--space-16) + var(--space-12) + var(--space-2))"][index]}
+                height="var(--space-8)"
+              />
             ) : (
               <div key={index} className={styles.skeletonLine}>
-                <Skeleton shape="circle" size="sm" />
+                <Skeleton shape="circle" width="var(--space-4)" />
                 <div className={styles.skeletonText}>
-                  <Skeleton width="70%" />
-                  <Skeleton width="45%" size="sm" />
+                  <Skeleton width="60%" size="sm" />
+                  <Skeleton width="40%" size="sm" />
                 </div>
               </div>
             ),
