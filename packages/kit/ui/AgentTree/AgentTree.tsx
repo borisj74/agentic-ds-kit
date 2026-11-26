@@ -17,7 +17,7 @@ export type { AgentTreeProps, AgentTreeNode, AgentTreeStatus } from "./AgentTree
 const STATUS_TEXT: Record<AgentTreeStatus, string> = {
   queued: "Queued",
   running: "Running",
-  waiting: "Needs you",
+  waiting: "Waiting for you",
   done: "Done",
   failed: "Failed",
 };
@@ -57,7 +57,8 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
   const groupId = useId();
   const hasChildren = (node.children?.length ?? 0) > 0;
   const isFolded = ctx.folded.has(node.id);
-  const Icon = root ? Network : STATUS_ICON[node.status];
+  // The root shows the orchestrator mark until the whole tree is done, then the check.
+  const Icon = root && !allDone(node) ? Network : STATUS_ICON[node.status];
   const rolled = hasChildren && node.cost === undefined;
   const cost = costOf(node);
   const Chevron = isFolded ? ChevronRight : ChevronDown;
@@ -117,7 +118,7 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
           <div className={styles.noteRow}>
             <span className={styles.note}>{node.note}</span>
             {node.status === "waiting" && ctx.onApprove ? (
-              <Button size="sm" appearance="outline" mode="neutral" iconStart="Check" onClick={() => ctx.onApprove?.(node.id)} aria-label={`Approve ${node.name}`}>
+              <Button size="sm" appearance="ghost" mode="neutral" iconStart="Check" onClick={() => ctx.onApprove?.(node.id)} aria-label={`Approve ${node.name}`}>
                 Approve
               </Button>
             ) : null}
@@ -190,10 +191,10 @@ export function AgentTree({
       </header>
       {loading ? (
         <div className={styles.loading}>
-          {[0, 1, 2, 3, 4].map((row) => (
-            <div key={row} className={styles.skeletonRow} style={{ ["--tree-depth" as string]: row === 0 || row === 4 ? 0 : 1 }}>
-              <Skeleton shape="circle" size="sm" />
-              <Skeleton width={row % 2 ? "45%" : "35%"} />
+          {[0, 1, 2, 2, 1].map((depth, row) => (
+            <div key={row} className={styles.skeletonRow} style={{ ["--tree-depth" as string]: depth }}>
+              <Skeleton shape="circle" width="var(--space-4)" />
+              <Skeleton size="sm" width={["40%", "28%", "40%", "32%", "30%"][row]} />
             </div>
           ))}
         </div>

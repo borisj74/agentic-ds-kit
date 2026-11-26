@@ -76,19 +76,19 @@ export function AgentTreeDoc() {
           title: "Expanded — failed and waiting nodes",
           about: "A waiting leaf gets a dashed caution frame and Approve; a failed leaf a danger well and Retry. Branches without a cost sum their children.",
           code: `<AgentTree root={root} onFoldedChange={setFolded} onApprove={approve} onRetry={retry} />`,
-          render: <AgentTree className={agentDoc.trail} root={ROOT} onFoldedChange={noop} onApprove={noop} onRetry={noop} />,
+          render: <AgentTree className={agentDoc.trail} label="Orchestrator · example data" root={ROOT} onFoldedChange={noop} onApprove={noop} onRetry={noop} />,
         },
         {
           title: "Branch folded to one line",
           about: "folded lists branch ids; a folded branch shows how many agents it holds.",
           code: `<AgentTree root={root} folded={["research"]} onFoldedChange={setFolded} />`,
-          render: <AgentTree className={agentDoc.trail} root={ROOT} folded={["research"]} onFoldedChange={noop} onApprove={noop} onRetry={noop} />,
+          render: <AgentTree className={agentDoc.trail} label="Orchestrator · example data" root={ROOT} folded={["research"]} onFoldedChange={noop} onApprove={noop} onRetry={noop} />,
         },
         {
           title: "All complete",
           about: "When every node is done the header shows All complete.",
           code: `<AgentTree root={doneRoot} />`,
-          render: <AgentTree className={agentDoc.trail} root={DONE} />,
+          render: <AgentTree className={agentDoc.trail} label="Orchestrator · example data" root={DONE} />,
         },
         {
           title: "Loading and empty",
@@ -97,8 +97,8 @@ export function AgentTreeDoc() {
 <AgentTree root={null} />`,
           render: (
             <div className={agentDoc.row}>
-              <AgentTree className={agentDoc.trail} loading />
-              <AgentTree className={agentDoc.trail} root={null} />
+              <AgentTree className={agentDoc.trail} label="Orchestrator · example data" loading />
+              <AgentTree className={agentDoc.trail} label="Orchestrator · example data" root={null} />
             </div>
           ),
         },

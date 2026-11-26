@@ -3,7 +3,7 @@
   --tree-status: calc(var(--space-16) + var(--space-10));
   --tree-time: calc(var(--space-12) + var(--space-2));
   --tree-cost: calc(var(--space-12) + var(--space-3));
-  --tree-indent: var(--space-5);
+  --tree-indent: var(--space-6);
   --tree-gap: var(--space-4);
   container: agenttree / inline-size;
   box-sizing: border-box;
@@ -266,8 +266,10 @@
 }
 
 
+/* Waiting: a dashed caution outline on the surface, so the row reads as "your turn" without a fill. */
 .flagged.waiting {
-  background-color: var(--status-warning-subtle);
+  border-style: dashed;
+  border-color: var(--status-warning);
 }
 
 .flagged.failed {
@@ -302,7 +304,6 @@
 .loading {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   padding-top: var(--space-3);
 }
 
@@ -310,6 +311,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  min-height: var(--space-10);
   padding-inline-start: calc(var(--tree-depth, 0) * var(--tree-indent));
 }
 
@@ -317,7 +319,10 @@
    Container queries cannot read var(): 40rem is --grid-breakpoint-sm. */
 @container agenttree (max-width: 40rem) {
   .row,
-  .columns {
+  .columns,
+  .group,
+  .skeletonRow {
+    --tree-indent: var(--space-5);
     --tree-status: calc(var(--space-16) + var(--space-6));
     --tree-time: var(--space-12);
     --tree-cost: calc(var(--space-12) + var(--space-2));
