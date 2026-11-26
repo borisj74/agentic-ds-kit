@@ -71,6 +71,7 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
           hasChildren && styles.branch,
           root && styles.root,
           ctx.selectedId === node.id && styles.selected,
+          hasChildren && !root && isFolded && styles.folded,
           (node.status === "waiting" || node.status === "failed") && !hasChildren && styles.flagged,
         )}
       >
@@ -121,7 +122,7 @@ function Row({ node, depth, ctx, root }: { node: AgentTreeNode; depth: number; c
               </Button>
             ) : null}
             {node.status === "failed" && ctx.onRetry ? (
-              <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => ctx.onRetry?.(node.id)} aria-label={`Retry ${node.name}`}>
+              <Button size="sm" appearance="ghost" mode="danger" iconStart="RotateCcw" onClick={() => ctx.onRetry?.(node.id)} aria-label={`Retry ${node.name}`}>
                 Retry
               </Button>
             ) : null}
@@ -181,9 +182,9 @@ export function AgentTree({
           </Badge>
         ) : root ? (
           <span className={styles.columns} aria-hidden="true">
-            <span>Status</span>
-            <span className={styles.end}>Time</span>
-            <span className={styles.end}>Cost</span>
+            <span>status</span>
+            <span className={styles.end}>time</span>
+            <span className={styles.end}>cost</span>
           </span>
         ) : null}
       </header>
