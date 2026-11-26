@@ -1,8 +1,6 @@
 "use client";
 
 import { useId } from "react";
-import { Check } from "lucide-react";
-import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { DropdownMenu } from "../DropdownMenu";
 import { Tooltip } from "../Tooltip";
@@ -59,7 +57,7 @@ export function MessageActions({
           ) : null}
           {onRetry ? (
             retrying ? (
-              <Button size="sm" appearance="soft" mode="neutral" iconStart="LoaderCircle" className={styles.spin} disabled>
+              <Button size="sm" appearance="soft" mode="neutral" iconStart="RotateCcw" loading>
                 Retrying…
               </Button>
             ) : (
@@ -118,17 +116,12 @@ export function MessageActions({
           ) : null}
         </div>
         <span className={styles.thanks} role="status">
-          {thanks ? (
-            <>
-              <Check size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
-              {thanks}
-            </>
-          ) : null}
+          {thanks || null}
         </span>
       </div>
       {feedback === "down" && reasons.length ? (
         <div className={styles.reasons} role="group" aria-labelledby={`${reasonsId}-label`}>
-          <span id={`${reasonsId}-label`} className={styles.reasonsLabel}>
+          <span id={`${reasonsId}-label`} className={styles.srOnly}>
             {labels.whatWentWrong}
           </span>
           {reasons.map((reason) => {
