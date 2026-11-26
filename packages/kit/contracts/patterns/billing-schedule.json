@@ -40,13 +40,13 @@
   ],
   "defaults": [
     "Section title \"Billing schedule\" with Ask (outline, MessageCircle) and Download all (ghost) in its actions",
-    "Next-charge Card shows the figure, the date, the card and due line, then its lines and the draft invoice; no Next charge badge in the rows",
-    "With a failed payment the Card sits beside the failure Alert (layout-split--primary); Update card in the Alert is the one solid primary and Change card hides until it is fixed",
-    "Upcoming (next 60 days, oldest first) ends with a total row; Billed (last 60 days, newest first) has Download per invoice. Row actions are icon Buttons (Table rowActionsAs=\"icons\") named with the charge and date",
+    "The first scheduled row says Next charge after its description, as a word in info text (not a second Badge); the next-charge Card is not shown beside the tables",
+    "With a failed payment the failure Alert spans the width above the tables; Update card in the Alert is the one solid primary",
+    "Tables show Date (01 Dec 2026), Description, Status (Upcoming, Retrying, Invoiced, Paid, Failed, Waived) and Amount at md size. Upcoming (next 60 days, oldest first) ends with a total row; Billed (last 60 days, newest first) has Download per invoice. Row actions are icon Buttons (Table rowActionsAs=\"icons\") named with the charge and date",
     "The edit Drawer is md on the right: Charge date (DatePicker), Amount (CurrencyInput), Apply to (RadioGroup, only for a split fee), Skip this month in footerStart, then Cancel and Save changes. After Save the row moves, focus returns to its pencil and a polite status says where it moved",
-    "nextOnly shows just the next-charge Card",
+    "nextOnly shows just the next-charge Card: Next charge on the date, the figure, the card and due line, its lines and the draft invoice, then Change card at the end of the row",
     "summary is the overview card for a Billing page (the settings example uses it): no next-charge Card, the first `limit` charges (default 3) in two columns, charge with date and status, and amount, so it fits a half-width column, plus View all (ghost) via onViewAll",
-    "Loading uses Skeleton lines; empty uses a kit Empty; a load error uses a danger Alert with Retry"
+    "Loading is the Table loading state (header stays, Skeleton rows); empty uses a kit Empty (Calendar); a load error uses a danger Alert with Retry (outline)"
   ],
   "snippet": "<BillingSchedulePattern onAsk={ask} onDownloadAll={download} onDownloadInvoice={downloadInvoice} onUpdateCard={updateCard} onSaveCharge={saveCharge} onSkipCharge={skipCharge} />"
 }
