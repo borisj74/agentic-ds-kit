@@ -78,7 +78,7 @@ export function DecisionCardDoc() {
       variants={[
         {
           title: "Pending — multiple choice",
-          about: "Options are a kit RadioGroup in card layout. Confirm stays disabled until something is chosen. A disabled option stays in the list and says why (disabled, disabledReason). Skip is outline and takes Escape.",
+          about: "Options are a kit RadioGroup in card layout. Confirm stays disabled until something is chosen. A disabled option stays in the list and says why (disabled, disabledReason). Skip for now is a ghost button and takes Escape.",
           code: `<DecisionCard title="Billing refactor asks" meta="paused · 0:42" question="…" options={options} onConfirm={send} onSkip={skip} />`,
           render: <DecisionCard {...BASE} onConfirm={noop} onSkip={noop} />,
         },

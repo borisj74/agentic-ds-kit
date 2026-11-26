@@ -130,19 +130,20 @@ export function DecisionCard({
       ) : null}
 
       <footer className={reviewStyles.footer}>
+        {/* Skip sits at the start of the footer, Confirm at the end. */}
+        {onSkip ? (
+          <Button appearance="ghost" mode="neutral" aria-keyshortcuts="Escape" disabled={sending} onClick={onSkip}>
+            Skip for now
+          </Button>
+        ) : null}
         <span className={reviewStyles.actions}>
-          {onSkip ? (
-            <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={sending} onClick={onSkip}>
-              Skip for now
-            </Button>
-          ) : null}
           {/* Confirm is the one solid primary while it waits; sending or after an error it steps back to outline. */}
           <Button
             appearance={sending || status === "error" ? "outline" : "solid"}
             mode="primary"
             shortcut={sending ? undefined : "⌘⏎"}
             aria-keyshortcuts="Meta+Enter Control+Enter"
-            iconStart={sending ? "LoaderCircle" : "Check"}
+            iconStart={sending ? "LoaderCircle" : undefined}
             className={sending ? styles.spin : undefined}
             disabled={!canConfirm && !sending}
             onClick={sending ? undefined : onConfirm}
