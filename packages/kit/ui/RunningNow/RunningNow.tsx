@@ -34,12 +34,15 @@ function Item({
       <Icon size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
       <span className={styles.text}>
         <span className={styles.name}>{item.name}</span>
-        {word || item.activity ? (
+        {/* No activity: the word stays for screen readers, with no empty visible line under the name. */}
+        {item.activity ? (
           <span className={styles.sub}>
             {word}
-            {item.activity ? <span className={styles.activity}>{item.activity}</span> : null}
+            <span className={styles.activity}>{item.activity}</span>
           </span>
-        ) : null}
+        ) : (
+          word
+        )}
       </span>
       {item.elapsed ? <span className={styles.elapsed}>{item.elapsed}</span> : null}
       {item.status === "running" ? <span className={styles.srOnly}>, {STATUS_TEXT.running}</span> : null}

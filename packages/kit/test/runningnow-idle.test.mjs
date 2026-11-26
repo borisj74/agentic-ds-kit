@@ -51,3 +51,18 @@ describe("RunningNow idleText", () => {
     assert.doesNotMatch(loading, /Idle · last run/);
   });
 });
+
+describe("RunningNow item without activity", () => {
+  test("waiting or failed with no activity: no empty .sub line, the word stays for screen readers", () => {
+    for (const status of ["waiting", "failed"]) {
+      const out = html({ layout: "stack", items: [{ id: "m", name: "Migrate DB", status, elapsed: "00:31" }] });
+      assert.doesNotMatch(out, /class="_sub_/, `${status}: no sub line`);
+      assert.match(out, /_srOnly_[^>]*>(Needs you|Failed), </, `${status}: word kept for screen readers`);
+    }
+  });
+
+  test("with activity the word and the activity share the sub line", () => {
+    const out = html({ layout: "stack", items: [{ id: "m", name: "Migrate DB", status: "waiting", activity: "waiting for OK" }] });
+    assert.match(out, /class="_sub_[^"]*"><span class="_srOnly_[^"]*">Needs you, <\/span><span class="_activity_[^"]*">waiting for OK</);
+  });
+});

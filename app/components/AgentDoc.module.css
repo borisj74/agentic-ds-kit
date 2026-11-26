@@ -31,7 +31,7 @@
 }
 
 /* A sidebar-wide column (sidebar plus a step, about 18rem), for stacked strips like RunningNow layout="stack". */
-.rail {
+.docRail {
   width: min(100%, calc(var(--layout-sidebar) + var(--space-16)));
   min-width: 0;
 }

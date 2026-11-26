@@ -9989,7 +9989,8 @@
         "Do not invent a local RunningList, AgentStrip, or ActivityBar",
         "Do not nest an AgentMonitor in the strip",
         "Do not use raw hex for status colors",
-        "Do not pass idleText to say something is running or loading; it only shows when items is empty, and emptyText is the plain empty line"
+        "Do not pass idleText to say something is running or loading; it only shows when items is empty, and emptyText is the plain empty line",
+        "Do not swap idleText and emptyText: idleText is for an agent that has run before (\"Idle · last run 2h ago\"); emptyText is for one that has never run"
       ],
       "props": {
         "items": {

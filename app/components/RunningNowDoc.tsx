@@ -41,18 +41,18 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     render: (
       <div className={agentDoc.row}>
         <RunningNow className={agentDoc.full} items={MIXED} onSelect={noop} onStop={noop} />
-        <RunningNow className={agentDoc.rail} layout="stack" items={WAITING} onSelect={noop} onStop={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={WAITING} onSelect={noop} onStop={noop} />
       </div>
     ),
   },
   {
     title: "Mixed running and failed — stack",
     about: "stack lists one line each for a sidebar, up to 4, then \"+N more running · View all\".",
-    code: `<RunningNow className={agentDoc.rail} layout="stack" items={items} onSelect={openAgent} onShowAll={openList} />`,
+    code: `<RunningNow layout="stack" items={items} onSelect={openAgent} onShowAll={openList} />`,
     render: (
       <div className={agentDoc.row}>
-        <RunningNow className={agentDoc.rail} layout="stack" items={MIXED} onSelect={noop} />
-        <RunningNow className={agentDoc.rail} layout="stack" items={ITEMS} onSelect={noop} onShowAll={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={MIXED} onSelect={noop} />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={ITEMS} onSelect={noop} onShowAll={noop} />
       </div>
     ),
   },
@@ -72,11 +72,11 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     title: "Loading — row and stack",
     about: "loading shows skeleton chips or lines and marks the strip aria-busy.",
     code: `<RunningNow items={[]} loading />
-<RunningNow className={agentDoc.rail} layout="stack" items={[]} loading />`,
+<RunningNow layout="stack" items={[]} loading />`,
     render: (
       <div className={agentDoc.row}>
         <RunningNow items={[]} loading />
-        <RunningNow className={agentDoc.rail} layout="stack" items={[]} loading />
+        <RunningNow className={agentDoc.docRail} layout="stack" items={[]} loading />
       </div>
     ),
   },
