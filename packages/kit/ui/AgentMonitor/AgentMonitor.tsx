@@ -1,12 +1,10 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { Bot, ChevronDown, CircleCheck, CircleDashed, CirclePause, CircleX, Hand, LoaderCircle, X, type LucideIcon } from "lucide-react";
+import { Bot, Check, ChevronDown, ChevronUp, CircleCheck, CirclePause, CircleX, LoaderCircle, Pause, X } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { ApprovalCard } from "../ApprovalCard";
-import { Badge } from "../Badge";
-import type { BadgeTone } from "../Badge/Badge.types";
 import { Button } from "../Button";
 import { LucideByName, type KitIcon } from "../Button/lucideName";
 import { Empty } from "../Empty";
@@ -34,14 +32,12 @@ const STATUS_LABEL: Record<AgentMonitorStatus, string> = {
   failed: "Failed",
 };
 
-/** Collapsed bar: status as a Badge, icon plus word. */
-const STATUS_BADGE: Record<AgentMonitorStatus, { tone: BadgeTone; icon: LucideIcon }> = {
-  idle: { tone: "neutral", icon: CircleDashed },
-  running: { tone: "primary", icon: LoaderCircle },
-  waiting: { tone: "warning", icon: Hand },
-  paused: { tone: "warning", icon: CirclePause },
-  done: { tone: "success", icon: CircleCheck },
-  failed: { tone: "danger", icon: CircleX },
+/** Collapsed bar: a status mark at the end for runs that are not moving (the word is in the meta line). */
+const BAR_STATUS_ICON: Partial<Record<AgentMonitorStatus, typeof CircleCheck>> = {
+  waiting: CirclePause,
+  paused: CirclePause,
+  done: CircleCheck,
+  failed: CircleX,
 };
 
 /** A Lucide icon for common tool names. */
@@ -66,9 +62,22 @@ function stepsSummary(steps: AgentMonitorStep[], status: AgentMonitorStatus): st
   return [`${done} done`, tail].filter(Boolean).join(" · ");
 }
 
-function StepIcon({ step }: { step: AgentMonitorStep }) {
+/** The tools a run used, in first-use order: one entry per icon, pointing at its first step. */
+function toolsUsed(steps: AgentMonitorStep[]): { icon: KitIcon; step: AgentMonitorStep }[] {
+  const seen = new Map<KitIcon, AgentMonitorStep>();
+  for (const step of steps) {
+    const icon = iconFor(step);
+    if (!seen.has(icon)) seen.set(icon, step);
+  }
+  return [...seen].map(([icon, step]) => ({ icon, step }));
+}
+
+/** final: the last step of a finished run shows a check. */
+function StepIcon({ step, runStatus, final }: { step: AgentMonitorStep; runStatus: AgentMonitorStatus; final?: boolean }) {
   if (step.status === "running") return <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" />;
+  if (step.status === "waiting" && runStatus === "paused") return <Pause size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />;
   if (step.status === "waiting") return <CirclePause size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />;
+  if (final) return <Check size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />;
   return <LucideByName name={iconFor(step)} size={16} />;
 }
 
@@ -160,7 +169,7 @@ export function AgentMonitor({
             <Skeleton width="40%" size="sm" />
           </div>
         </div>
-        <Skeleton shape="rect" width="100%" height="calc(var(--space-16) + var(--space-8))" />
+        <Skeleton shape="rect" width="100%" height="calc(var(--space-16) + var(--space-12))" />
         <div className={styles.strip}>
           {[0, 1, 2, 3, 4].map((tile) => (
             <Skeleton key={tile} shape="rect" width="100%" height="var(--control-height-md)" />
@@ -171,67 +180,55 @@ export function AgentMonitor({
   }
 
   if (collapsed) {
-    // Collapsed keeps the status and the same step strip; picking a step opens the card on it.
+    // Collapsed is one row: agent mark, name over a mono "02:14 · $0.42" line, the tools the run used,
+    // then the chevron. Picking a tool opens the card on the first step that used it.
     const openOn = onCollapsedChange
       ? (stepId: string) => {
           onCollapsedChange(false);
           onSelectStep?.(stepId);
         }
       : undefined;
-    const badge = STATUS_BADGE[status];
+    const tools = status === "done" ? [] : toolsUsed(steps);
+    const EndIcon = BAR_STATUS_ICON[status];
+    const running = status === "running";
     return (
       <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={ref} className={cx(styles.collapsed, className)} aria-labelledby={nameId}>
-        <Badge tone={badge.tone} icon={badge.icon} className={styles.barStatus}>
-          {STATUS_LABEL[status]}
-        </Badge>
+        <span className={cx(styles.agentIcon, styles.agentIconBar)} aria-hidden="true">
+          <Bot size={16} strokeWidth={ICON_STROKE} />
+        </span>
         <div className={styles.barHeading}>
-          <h3 id={nameId} className={styles.barName}>
+          <h3 id={nameId} className={styles.barName} title={name}>
             {name}
           </h3>
           {headline ? <p className={styles.barHeadline}>{headline}</p> : null}
-        </div>
-        {elapsed || cost ? (
-          <dl className={styles.barClock}>
+          <p className={styles.barMeta}>
+            {running ? <span className={styles.srOnly}>{STATUS_LABEL.running}</span> : <span>{STATUS_LABEL[status].toLowerCase()}</span>}
             {elapsed ? (
-              <div className={styles.barFigure}>
-                <dt className={styles.barLabel}>elapsed</dt>
-                <dd className={styles.barValue} role="timer" aria-live="off">
-                  {elapsed}
-                </dd>
-              </div>
+              <span role="timer" aria-live="off">
+                {elapsed}
+              </span>
             ) : null}
-            {cost ? (
-              <div className={styles.barFigure}>
-                <dt className={styles.barLabel}>cost</dt>
-                <dd className={styles.barValue}>{cost}</dd>
-              </div>
-            ) : null}
-          </dl>
+            {cost ? <span>{cost}</span> : null}
+          </p>
+        </div>
+        {tools.length > 0 ? (
+          <ul className={styles.tools} aria-label="Tools used">
+            {tools.map(({ icon, step }) => (
+              <li key={step.id} className={styles.toolCell}>
+                {openOn ? (
+                  <button type="button" className={styles.tool} aria-label={`${step.tool}. Opens ${name}`} onClick={() => openOn(step.id)}>
+                    <LucideByName name={icon} size={14} />
+                  </button>
+                ) : (
+                  <span className={styles.tool} role="img" aria-label={step.tool}>
+                    <LucideByName name={icon} size={14} />
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
         ) : null}
-        {status === "running" && (onPause || onStop) ? (
-          <div className={cx(styles.barActions, styles.barActionsRunning)}>
-            {onPause ? (
-              <Button size="sm" appearance="outline" mode="neutral" onClick={onPause}>
-                Pause
-              </Button>
-            ) : null}
-            {stopButton}
-          </div>
-        ) : null}
-        {status === "paused" && (onCancel || onResume) ? (
-          <div className={styles.barActions}>
-            {onCancel ? (
-              <Button size="sm" appearance="outline" mode="danger" iconStart="CircleX" onClick={onCancel}>
-                Cancel run
-              </Button>
-            ) : null}
-            {onResume ? (
-              <Button size="sm" iconStart="Play" onClick={onResume}>
-                Resume
-              </Button>
-            ) : null}
-          </div>
-        ) : null}
+        {EndIcon ? <EndIcon size={16} strokeWidth={ICON_STROKE} className={cx(styles.barStatusIcon, styles[`barStatus-${status}`])} aria-hidden="true" /> : null}
         {onCollapsedChange ? (
           <button
             type="button"
@@ -240,33 +237,34 @@ export function AgentMonitor({
             aria-label={`Show ${name}`}
             onClick={() => onCollapsedChange(false)}
           >
-            <ChevronDown size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            <ChevronUp size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
           </button>
         ) : null}
-        {steps.length > 0 ? (
-          <ol className={cx(styles.strip, styles.collapsedStrip)} aria-label="Steps">
-            {steps.map((step, index) => {
-              const label = `Step ${index + 1}: ${step.tool}, ${step.status}${step.duration ? `, ${step.duration}` : ""}`;
-              return (
-                <li key={step.id} className={styles.cell}>
-                  {openOn ? (
-                    <button
-                      type="button"
-                      className={cx(styles.step, styles[`step-${step.status}`])}
-                      aria-label={`${label}. Opens ${name}`}
-                      onClick={() => openOn(step.id)}
-                    >
-                      <StepIcon step={step} />
-                    </button>
-                  ) : (
-                    <span className={cx(styles.step, styles[`step-${step.status}`])} role="img" aria-label={label}>
-                      <StepIcon step={step} />
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
+        {running && (onPause || onStop) ? (
+          <div className={styles.barActions}>
+            {stopButton ?? <span />}
+            {onPause ? (
+              <Button size="sm" appearance="outline" mode="neutral" iconStart="Pause" onClick={onPause}>
+                Pause
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+        {status === "paused" && (onCancel || onResume) ? (
+          <div className={styles.barActions}>
+            {onCancel ? (
+              <Button size="sm" appearance="outline" mode="danger" iconStart="Square" onClick={onCancel}>
+                Cancel run
+              </Button>
+            ) : (
+              <span />
+            )}
+            {onResume ? (
+              <Button size="sm" appearance="outline" mode="primary" iconStart="Play" onClick={onResume}>
+                Resume
+              </Button>
+            ) : null}
+          </div>
         ) : null}
         {stopDialog}
       </section>
@@ -282,7 +280,7 @@ export function AgentMonitor({
           <Bot size={16} strokeWidth={ICON_STROKE} />
         </span>
         <div className={styles.heading}>
-          <h3 id={nameId} className={styles.name}>
+          <h3 id={nameId} className={styles.name} title={name}>
             {name}
           </h3>
           {meta ? <p className={styles.meta}>{meta}</p> : null}
@@ -308,7 +306,7 @@ export function AgentMonitor({
           description="The clock, cost and steps appear here once the agent starts."
           actions={
             onStart ? (
-              <Button size="sm" iconStart="Play" onClick={onStart}>
+              <Button size="sm" appearance="outline" mode="primary" iconStart="Play" onClick={onStart}>
                 Start run
               </Button>
             ) : undefined
@@ -321,7 +319,7 @@ export function AgentMonitor({
           {headline ? (
             <p className={styles.headline}>
               {status === "running" ? <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={cx(styles.spin, styles.runningIcon)} aria-hidden="true" /> : null}
-              {status === "paused" ? <CirclePause size={16} strokeWidth={ICON_STROKE} className={styles.pausedIcon} aria-hidden="true" /> : null}
+              {status === "paused" ? <Pause size={16} strokeWidth={ICON_STROKE} className={styles.pausedIcon} aria-hidden="true" /> : null}
               {status === "done" ? <CircleCheck size={16} strokeWidth={ICON_STROKE} className={styles.doneIcon} aria-hidden="true" /> : null}
               {status === "failed" ? <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.failedIcon} aria-hidden="true" /> : null}
               <span className={styles.headlineText}>{headline}</span>
@@ -329,22 +327,29 @@ export function AgentMonitor({
             </p>
           ) : null}
           {status === "failed" && error ? <p className={styles.error}>{error}</p> : null}
-          <div className={styles.clockRow}>
-            <div>
-              <p className={cx(styles.clock, status === "failed" && styles.clockSmall)} role="timer" aria-live="off">
+          {status === "failed" ? (
+            <p className={styles.failedClock}>
+              <span className={cx(styles.clock, styles.clockSmall)} role="timer" aria-live="off">
                 {elapsed}
-              </p>
-              {status !== "failed" ? (
+              </span>
+              {cost ? <span className={styles.spent}>· {cost} spent</span> : null}
+            </p>
+          ) : (
+            <div className={styles.clockRow}>
+              <div>
+                <p className={cx(styles.clock, status === "paused" && styles.clockStopped)} role="timer" aria-live="off">
+                  {elapsed}
+                </p>
                 <p className={styles.clockLabel}>{status === "paused" ? "elapsed · clock stopped" : "elapsed"}</p>
+              </div>
+              {cost ? (
+                <div className={styles.costBlock}>
+                  <p className={styles.cost}>{cost}</p>
+                  <p className={styles.clockLabel}>cost so far</p>
+                </div>
               ) : null}
             </div>
-            {cost ? (
-              <div className={styles.costBlock}>
-                <p className={styles.cost}>{cost}</p>
-                <p className={styles.clockLabel}>{status === "failed" ? "spent" : "cost so far"}</p>
-              </div>
-            ) : null}
-          </div>
+          )}
         </div>
       ) : null}
 
@@ -369,24 +374,25 @@ export function AgentMonitor({
           <ol className={styles.strip}>
             {steps.map((step, index) => {
               const isSelected = step.id === selectedStepId;
+              const final = status === "done" && step.status === "done" && index === steps.length - 1;
               const label = `Step ${index + 1}: ${step.tool}, ${step.status}${step.duration ? `, ${step.duration}` : ""}`;
               return (
                 <li key={step.id} className={styles.cell}>
                   {onSelectStep ? (
                     <button
                       type="button"
-                      className={cx(styles.step, styles[`step-${step.status}`], isSelected && styles.selected)}
+                      className={cx(styles.step, styles[`step-${step.status}`], final && styles.stepFinal, isSelected && styles.selected)}
                       aria-pressed={isSelected}
                       data-step-id={step.id}
                       aria-controls={isSelected ? detailId : undefined}
                       aria-label={label}
                       onClick={() => onSelectStep(isSelected ? null : step.id)}
                     >
-                      <StepIcon step={step} />
+                      <StepIcon step={step} runStatus={status} final={final} />
                     </button>
                   ) : (
-                    <span className={cx(styles.step, styles[`step-${step.status}`])} role="img" aria-label={label}>
-                      <StepIcon step={step} />
+                    <span className={cx(styles.step, styles[`step-${step.status}`], final && styles.stepFinal)} role="img" aria-label={label}>
+                      <StepIcon step={step} runStatus={status} final={final} />
                     </span>
                   )}
                 </li>
@@ -436,14 +442,14 @@ export function AgentMonitor({
       {status === "paused" && (onCancel || onResume) ? (
         <footer className={styles.footer}>
           {onCancel ? (
-            <Button size="sm" appearance="outline" mode="danger" iconStart="CircleX" onClick={onCancel}>
+            <Button size="sm" appearance="outline" mode="danger" iconStart="Square" onClick={onCancel}>
               Cancel run
             </Button>
           ) : (
             <span />
           )}
           {onResume ? (
-            <Button size="sm" iconStart="Play" onClick={onResume}>
+            <Button size="sm" appearance="outline" mode="primary" iconStart="Play" onClick={onResume}>
               Resume
             </Button>
           ) : null}
@@ -462,7 +468,7 @@ export function AgentMonitor({
       {status === "done" && (onViewDiff || onOpenTrail) ? (
         <footer className={cx(styles.footer, styles.footerStart)}>
           {onViewDiff ? (
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="FileDiff" onClick={onViewDiff}>
+            <Button size="sm" appearance="outline" mode="neutral" iconStart="FileText" onClick={onViewDiff}>
               View diff
             </Button>
           ) : null}

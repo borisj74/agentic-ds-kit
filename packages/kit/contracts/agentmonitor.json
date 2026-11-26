@@ -104,7 +104,7 @@
     "collapsed": {
       "type": "boolean",
       "default": false,
-      "note": "The one-row bar: status Badge (icon and word), name, headline, elapsed and cost (value over label), and while running Pause and Stop run; paused shows Cancel run and Resume. The step strip, when steps are passed, takes its own row below; picking a step opens the card on it. Below 40rem the name and labels hide, time and cost read \"0:04 · $0.02\", and the actions take a full row."
+      "note": "The one-row bar: agent mark, name over a mono \"02:14 · $0.42\" line (other statuses lead with the word, e.g. \"done · 4:02 · $0.18\"), one tile per tool the run used, then the chevron. Done, failed, waiting and paused add a status icon; done drops the tools. Picking a tool opens the card on its first step. Running shows Pause and Stop run, paused shows Cancel run and Resume, on a row below."
     },
     "onCollapsedChange": {
       "type": "function",
@@ -113,7 +113,7 @@
     "onStart": {
       "type": "function",
       "required": false,
-      "note": "Idle: Start run (solid primary)."
+      "note": "Idle: Start run (outline primary)."
     },
     "onPause": {
       "type": "function",
@@ -123,7 +123,7 @@
     "onResume": {
       "type": "function",
       "required": false,
-      "note": "Paused: Resume (solid primary)."
+      "note": "Paused: Resume (outline primary)."
     },
     "onCancel": {
       "type": "function",

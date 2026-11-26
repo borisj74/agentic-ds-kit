@@ -12,7 +12,7 @@ import { AGENT_MONITOR_AXIS, AGENT_MONITOR_STEPS } from "@/lib/agent-demo.sample
 
 const STEPS = AGENT_MONITOR_STEPS;
 const AXIS = AGENT_MONITOR_AXIS;
-const BASE = { name: "Refactor billing service", meta: "claude-code · acme-demo", axis: AXIS };
+const BASE = { name: "Refactor billing service", meta: "claude-code · acme-demo · example data", axis: AXIS };
 
 const WAITING_STEPS: AgentMonitorStep[] = [...STEPS.slice(0, 5), { id: "s6", tool: "psql", status: "waiting" }];
 const PAUSED_STEPS: AgentMonitorStep[] = [...STEPS.slice(0, 5), { id: "s6", tool: "edit_file", status: "waiting" }];
@@ -73,7 +73,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Collapsed — one-row bar",
-    about: "collapsed is one row: the status Badge, name and headline, then elapsed and cost. While running it shows Pause and Stop run; the step strip, when passed, sits below and picking a step opens the card on it.",
+    about: "collapsed is one row: the agent mark, the name over a mono clock and cost line, one tile per tool the run used, then the chevron. Done shows a check in place of the tools. Picking a tool opens the card on its first step; run actions, when passed, sit on a row below.",
     code: `<AgentMonitor … collapsed onCollapsedChange={setCollapsed} />`,
     render: (
       <div className={agentDoc.stack}>
@@ -95,7 +95,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Paused",
-    about: "Paused stops the clock. Resume is the one solid primary; Cancel run is outline danger.",
+    about: "Paused stops the clock and mutes it. Resume is outline primary; Cancel run is outline danger.",
     code: `<AgentMonitor … status="paused" headline="Paused by you after step 5" onResume={resume} onCancel={cancel} />`,
     render: (
       <AgentMonitor {...BASE} status="paused" headline="Paused by you after step 5" elapsed="02:14" cost="$0.42" steps={PAUSED_STEPS} onResume={noop} onCancel={noop} />
@@ -103,7 +103,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Complete",
-    about: "Done: the headline says what finished. View diff and Open trail follow.",
+    about: "Done: the headline says what finished and the last step shows a check. View diff and Open trail follow.",
     code: `<AgentMonitor … status="done" headline="All 6 steps done · tests green" onViewDiff={viewDiff} onOpenTrail={openTrail} />`,
     render: (
       <AgentMonitor
@@ -121,7 +121,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Failed",
-    about: "Failed tints the panel with danger and names the error in mono. Retry step and Open failed step follow.",
+    about: "Failed tints the panel with danger, names the error in mono and puts the clock and what it spent on one line. Retry step and Open failed step follow.",
     code: `<AgentMonitor … status="failed" headline="run_tests failed at step 4" error="3 tests failed in invoice.test.ts · exit code 1" onRetry={retry} onOpenTrail={openStep} />`,
     render: (
       <AgentMonitor
@@ -140,7 +140,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Loading and not started",
-    about: "loading shows skeletons. status idle shows Empty with Start run.",
+    about: "loading shows skeletons. status idle shows Empty with an outline Start run.",
     code: `<AgentMonitor name="Refactor billing service" loading />
 <AgentMonitor name="Refactor billing service" status="idle" onStart={start} />`,
     render: (
