@@ -202,6 +202,7 @@ export function ApprovalCard({
       appearance="solid"
       mode="primary"
       iconStart={compact ? undefined : "Check"}
+      shortcut={compact ? "⌘⏎" : undefined}
       aria-keyshortcuts="Meta+Enter Control+Enter"
       onClick={onApprove}
     >
@@ -257,7 +258,7 @@ export function ApprovalCard({
           {lastSeconds ? "Denies in 10 seconds" : ""}
         </span>
         <footer className={styles.compactActions}>
-          <Button size="sm" appearance="outline" mode="neutral" aria-keyshortcuts="Escape" onClick={onDeny}>
+          <Button size="sm" appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" onClick={onDeny}>
             {denyLabel}
           </Button>
           {approveButton}

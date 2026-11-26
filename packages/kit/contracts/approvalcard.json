@@ -69,7 +69,7 @@
         "compact"
       ],
       "default": "default",
-      "note": "compact is for AgentMonitor's waiting state only: one row with the title (and the countdown when countdownSec is set), one line of description, the exact preview and small right-aligned Deny and Approve. No risk Badge, heading or facts; the risk is read to screen readers with the title."
+      "note": "compact is for AgentMonitor's waiting state only: one row with the title (and the countdown when countdownSec is set), one line of description, the exact preview and small right-aligned Deny and Approve with their key chips (Esc, ⌘⏎). No risk Badge, heading or facts; the risk is read to screen readers with the title."
     },
     "waitingSec": {
       "type": "number",

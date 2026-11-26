@@ -241,6 +241,8 @@ describe("ApprovalCard compact (AgentMonitor waiting)", () => {
     assert.match(out, /northwind \/ billing/);
     assert.match(out, /class="[^"]*_compactActions_[^"]*"[\s\S]*>Deny<[\s\S]*>Approve</);
     assert.equal((out.match(/_sm_/g) ?? []).length >= 2, true, "Deny and Approve are size sm");
+    assert.match(out, />Deny<\/span>[\s\S]*?>Esc</, "Deny shows its key chip");
+    assert.match(out, />Approve<\/span>[\s\S]*?>⌘⏎</, "Approve shows its key chip");
   });
 
   test("compact waitingSec shows \"waiting m:ss\" as a timer; hidden when left out and in the default variant", () => {
