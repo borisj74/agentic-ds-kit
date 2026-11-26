@@ -22,8 +22,23 @@
   line-height: var(--type-line-ui-xs);
 }
 
+/* Decorative assistant mark. */
+.authorIcon {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-pill);
+  color: var(--text-fg);
+}
+
 .author {
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   color: var(--text-fg);
 }
 
@@ -39,16 +54,14 @@
   color: var(--text-fg);
 }
 
-/* A raised, small mark that reads past the sentence instead of breaking it; still a real link. */
+/* An inline mono mark on the text's baseline, like the source list's numbers; still a real link. */
 .mark {
   position: relative;
-  margin-inline-start: var(--space-px);
   border-radius: var(--radius-control-sm);
+  font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-body);
-  line-height: 0;
-  vertical-align: super;
-  color: var(--link-default);
+  font-weight: var(--type-weight-heading);
+  color: var(--primary-fg);
   text-decoration: none;
 }
 
@@ -94,8 +107,8 @@
   padding: var(--space-1) var(--space-3);
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-control-md);
-  color: var(--text-fg);
+  border-radius: var(--radius-lg);
+  color: var(--text-fg-muted);
   font: inherit;
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
@@ -134,27 +147,18 @@
   border-radius: var(--radius-surface-md);
 }
 
-/* Highlight on a clicked mark: an overlay that fades on opacity only. */
-.source::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-color: var(--primary-subtle);
-  opacity: 0;
-  pointer-events: none;
+/* The clicked source keeps the strong primary tint until another mark is clicked; no motion. */
+.highlight {
+  background-color: var(--primary-subtle-strong);
 }
 
-.highlight::before {
-  animation: cited-highlight var(--motion-duration-600) var(--motion-ease-out);
-}
-
+/* A missing source keeps its danger tint even when its mark is clicked, on purpose: the warning
+   stays louder than the highlight. Listed after .highlight so it wins. */
 .missing {
   background-color: var(--status-danger-subtle);
 }
 
 .number {
-  position: relative;
   flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
@@ -170,7 +174,6 @@
 }
 
 .sourceBody {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-px);
@@ -230,6 +233,31 @@
   color: var(--text-fg-muted);
 }
 
+.loadingLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text-fg-subtle);
+}
+
+.spin {
+  flex-shrink: 0;
+  animation: cited-spin 1s linear infinite;
+}
+
+@keyframes cited-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}
+
 .loading {
   display: flex;
   flex-direction: column;
@@ -273,19 +301,8 @@
   }
 }
 
-@keyframes cited-highlight {
-  0%,
-  40% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .list,
-  .highlight::before {
+  .list {
     animation: none;
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { ChevronDown, CircleX, ExternalLink, Info, Layers } from "lucide-react";
+import { ChevronDown, CircleX, ExternalLink, Info, Layers, LoaderCircle, Sparkles } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { ShimmerText } from "../ShimmerText";
@@ -84,15 +84,21 @@ export function CitedAnswer({
   return (
     <article {...rest} {...nisthaAttr("citedanswer", rest)} ref={ref} className={cx(styles.answer, className)} aria-busy={loading || undefined}>
       <header className={styles.header}>
+        <span className={styles.authorIcon} aria-hidden="true">
+          <Sparkles size={14} strokeWidth={ICON_STROKE} />
+        </span>
         <span className={styles.author}>{author}</span>
         {time ? <span className={styles.time}>· {time}</span> : null}
       </header>
 
       {loading ? (
         <div className={styles.loading}>
-          <ShimmerText>{loadingText}</ShimmerText>
-          <Skeleton width="90%" size="sm" />
-          <Skeleton width="75%" size="sm" />
+          <p className={styles.loadingLine}>
+            <LoaderCircle size={14} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" />
+            <ShimmerText size="sm">{loadingText}</ShimmerText>
+          </p>
+          <Skeleton width="92%" size="sm" />
+          <Skeleton width="80%" size="sm" />
           <Skeleton width="55%" size="sm" />
         </div>
       ) : error ? (
@@ -112,7 +118,7 @@ export function CitedAnswer({
             <div className={styles.sources}>
               <button type="button" className={styles.toggle} aria-expanded={open} aria-controls={listId} onClick={() => setOpen(!open)}>
                 <Layers size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
-                {citations.length} {citations.length === 1 ? "source" : "sources"}
+                Used {citations.length} {citations.length === 1 ? "source" : "sources"}
                 {missingCount > 0 ? ` · ${missingCount} missing` : null}
                 <ChevronDown size={14} strokeWidth={ICON_STROKE} className={cx(styles.chevron, open && styles.chevronOpen)} aria-hidden="true" />
               </button>
