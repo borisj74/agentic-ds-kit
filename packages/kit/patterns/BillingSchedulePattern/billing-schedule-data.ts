@@ -8,7 +8,7 @@ export type ChargeStatus = "scheduled" | "retrying" | "invoiced" | "paid" | "fai
 
 export interface Charge {
   id: string;
-  /** Charge date as YYYY-MM-DD. The pattern shows it as 15 Dec with the weekday under it. */
+  /** Charge date as YYYY-MM-DD. The pattern shows it as 15 Dec 2026. */
   date: string;
   label: string;
   /** Pre-formatted amount; currency formatting stays with your app. */
@@ -22,7 +22,7 @@ export interface Charge {
   note?: string;
   /**
    * A split fee with later parts: the second Apply to option in the edit Drawer, e.g.
-   * "This and part 3 on 15 Jan". Without it the Drawer has no Apply to choice.
+   * "This and part 3 on 15 Jan 2027". Without it the Drawer has no Apply to choice.
    */
   splitLabel?: string;
 }
@@ -68,7 +68,7 @@ export const CHARGES: Charge[] = [
     value: 222,
     status: "scheduled",
     invoice: "INV-1871",
-    note: "Estimate · final on 30 Nov",
+    note: "Estimate · final on 30 Nov 2026",
   },
   {
     id: "onboarding-2",
@@ -79,7 +79,7 @@ export const CHARGES: Charge[] = [
     status: "scheduled",
     invoice: "INV-1879",
     note: "Fixed fee · Visa 4242",
-    splitLabel: "This and part 3 on 15 Jan",
+    splitLabel: "This and part 3 on 15 Jan 2027",
   },
   {
     id: "jan-plan",
@@ -99,7 +99,7 @@ export const CHARGES: Charge[] = [
     value: 72.8,
     status: "invoiced",
     invoice: "INV-1866",
-    note: "Due 18 Dec · sent to Ana Ruiz",
+    note: "Due 18 Dec 2026 · sent to Ana Ruiz",
   },
   {
     id: "nov",
@@ -119,7 +119,7 @@ export const CHARGES: Charge[] = [
     value: 1500,
     status: "paid",
     invoice: "INV-1830",
-    note: "Paid 15 Oct · Visa 4242",
+    note: "Paid 15 Oct 2026 · Visa 4242",
   },
 ];
 
@@ -136,6 +136,6 @@ export const NEXT_CHARGE: NextCharge = {
 
 export const PLAN_LABEL = "Northwind Traders · Scale plan, 24 seats · billed monthly · example data";
 /** What happens after the failure: next retry, last retry, then the pause. */
-export const FAILURE_DETAIL = "Visa 4242 was declined. Next retry is Tue 24 Nov, the last on 01 Dec. Then the plan pauses.";
+export const FAILURE_DETAIL = "Visa 4242 was declined. Next retry is 24 Nov 2026, the last on 01 Dec 2026. Then the plan pauses.";
 export const UPCOMING_WINDOW = "next 60 days";
 export const BILLED_WINDOW = "last 60 days";

@@ -106,8 +106,6 @@ export interface BillingSchedulePatternProps {
   onSkipCharge?: (id: string) => void;
 }
 
-const DAY = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" });
-const WEEKDAY = new Intl.DateTimeFormat("en-GB", { weekday: "short", timeZone: "UTC" });
 const LONG = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
 
 function parse(date: string): Date | null {
@@ -115,25 +113,14 @@ function parse(date: string): Date | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
-/** "15 Dec". Falls back to the raw string when it is not YYYY-MM-DD. */
-function day(date: string): string {
-  const parsed = parse(date);
-  return parsed ? DAY.format(parsed) : date;
-}
-
-function weekday(date: string): string {
-  const parsed = parse(date);
-  return parsed ? WEEKDAY.format(parsed) : "";
-}
-
 function longDate(date: string): string {
   const parsed = parse(date);
   return parsed ? LONG.format(parsed) : date;
 }
 
-/** The pencil's name: "Edit Onboarding part 2 of 3, 15 Dec". */
+/** The pencil's name: "Edit Onboarding part 2 of 3, 15 Dec 2026". */
 function editLabel(charge: Charge): string {
-  return `Edit ${charge.label.replaceAll(" · ", " ")}, ${day(charge.date)}`;
+  return `Edit ${charge.label.replaceAll(" · ", " ")}, ${longDate(charge.date)}`;
 }
 
 function money(value: number, currency: string): string {
@@ -228,7 +215,7 @@ export function BillingSchedulePattern({
       ),
     );
     onSaveCharge?.(id, edit);
-    setAnnounce(`Moved to ${weekday(edit.date)} ${day(edit.date)}`);
+    setAnnounce(`Moved to ${longDate(edit.date)}`);
     focusAfter.current = id;
     setEditId(null);
   }
@@ -237,7 +224,7 @@ export function BillingSchedulePattern({
     const charge = rows.find((item) => item.id === id);
     setRows((current) => current.filter((item) => item.id !== id));
     onSkipCharge?.(id);
-    if (charge) setAnnounce(`Skipped ${charge.label}, ${day(charge.date)}`);
+    if (charge) setAnnounce(`Skipped ${charge.label}, ${longDate(charge.date)}`);
     focusAfter.current = id;
     setSkipId(null);
   }
@@ -308,7 +295,7 @@ export function BillingSchedulePattern({
               <Alert
                 variant="danger"
                 placement="page"
-                title={`${failed.invoice ?? failed.label} failed on ${day(failed.date)} · ${failed.amount}`}
+                title={`${failed.invoice ?? failed.label} failed on ${longDate(failed.date)} · ${failed.amount}`}
                 action={onUpdateCard ? { label: "Update card", onClick: onUpdateCard } : undefined}
               >
                 {failureDetail}
@@ -393,7 +380,7 @@ export function BillingSchedulePattern({
       <AlertDialog
         open={skipping !== null}
         tone="warning"
-        title={skipping ? `Skip the ${day(skipping.date)} charge?` : "Skip this charge?"}
+        title={skipping ? `Skip the ${longDate(skipping.date)} charge?` : "Skip this charge?"}
         description={
           skipping
             ? `${skipping.label} (${skipping.amount}) won’t be charged this month. It doesn’t move to a later date.`
@@ -548,7 +535,7 @@ function ScheduleList({
     return {
       id: charge.id,
       primary: charge.label,
-      secondary: [`${weekday(charge.date)} ${day(charge.date)}`, charge.invoice].filter(Boolean).join(" · "),
+      secondary: [longDate(charge.date), charge.invoice].filter(Boolean).join(" · "),
       value: charge.amount,
       badge: STATUS[charge.status].label,
       badgeTone: STATUS[charge.status].tone as ListTone,
@@ -609,7 +596,12 @@ function ChargeText({ charge, next = false }: { charge: Charge; next?: boolean }
     <span className="billing-schedule-pattern__description">
       <span className="billing-schedule-pattern__line">
         {charge.label}
-        {next ? <span className="billing-schedule-pattern__next-marker">Next charge</span> : null}
+        {next ? (
+          <>
+            {" "}
+            <span className="billing-schedule-pattern__next-marker">Next charge</span>
+          </>
+        ) : null}
       </span>
       {charge.note ? (
         <span
@@ -690,7 +682,7 @@ function EditChargeDrawer({
       side="right"
       size="md"
       title={charge?.label ?? "Edit charge"}
-      description={charge ? `${charge.invoice ? `${charge.invoice} · ` : ""}was ${weekday(charge.date)} ${day(charge.date)}` : undefined}
+      description={charge ? `${charge.invoice ? `${charge.invoice} · ` : ""}was ${longDate(charge.date)}` : undefined}
       onClose={onClose}
       footerStart={
         charge ? (

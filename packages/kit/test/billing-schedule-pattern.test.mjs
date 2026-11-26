@@ -177,6 +177,7 @@ describe("BillingSchedulePattern desktop", () => {
     assert.ok(billed.indexOf(">18 Nov 2026<") < billed.indexOf(">15 Oct 2026<"), "Billed is newest first");
     assert.equal((html.match(/>Next charge</g) ?? []).length, 1, "one Next charge marker, on the first scheduled row");
     assert.ok(upcoming.indexOf(">Next charge<") < upcoming.indexOf("API calls over 2M"), "the marker sits on 01 Dec Scale plan");
+    assert.match(upcoming, /24 seats(?:<!-- -->)? <span[^>]*>Next charge</, "a space before the marker, so copied text reads \"24 seats Next charge\"");
     assert.ok(!html.includes('aria-label="Next charge"'), "no next-charge Card beside the tables");
     assert.ok(!html.includes(">Invoice<"), "four columns: Date, Description, Status, Amount");
   });
@@ -188,7 +189,7 @@ describe("BillingSchedulePattern desktop", () => {
     const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
     assert.equal((wide.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "four scheduled rows, no pencil on the retry");
     assert.equal((narrow.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "the phone list has the same four pencils");
-    assert.match(html, /aria-label="Edit Onboarding part 2 of 3, 15 Dec"/);
+    assert.match(html, /aria-label="Edit Onboarding part 2 of 3, 15 Dec 2026"/);
     assert.ok(!html.includes('aria-label="Edit Retry'));
     assert.match(html, /aria-label="Download INV-1866"/);
     assert.ok(!html.includes('aria-label="Actions for row'), "rows are named by their date");
@@ -197,8 +198,8 @@ describe("BillingSchedulePattern desktop", () => {
   test("failure Alert names invoice, amount and what happens next; Update card is the only solid primary, Change card hides", () => {
     const html = ssr({ onUpdateCard: () => {}, onChangeCard: () => {} });
     assert.match(html, /role="alert"/);
-    assert.match(html, /INV-1842 failed on 04 Nov · \$2,418\.00/);
-    assert.match(html, /Next retry is Tue 24 Nov, the last on 01 Dec\. Then the plan pauses\./);
+    assert.match(html, /INV-1842 failed on 04 Nov 2026 · \$2,418\.00/);
+    assert.match(html, /Next retry is 24 Nov 2026, the last on 01 Dec 2026\. Then the plan pauses\./);
     assert.match(html, />Update card</);
     assert.ok(!html.includes(">Change card<"), "Change card hides while Update card shows");
     const paid = ssr({ charges: [], onChangeCard: () => {} });
@@ -208,7 +209,7 @@ describe("BillingSchedulePattern desktop", () => {
   test("below 40rem the same charges are a ListView grouped by month with month totals, then Billed", () => {
     const html = ssr({ onDownloadInvoice: () => {} });
     const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
-    for (const text of ["November", "December", "January", "$2,418.00", "$3,738.00", "Tue 15 Dec · INV-1879", "Retrying"]) {
+    for (const text of ["November", "December", "January", "$2,418.00", "$3,738.00", "15 Dec 2026 · INV-1879", "Retrying"]) {
       assert.ok(narrow.includes(text), text);
     }
     assert.ok(narrow.indexOf(">November<") < narrow.indexOf(">December<"));
@@ -239,14 +240,14 @@ describe("BillingSchedulePattern edit", { skip }, () => {
   test("pencil opens the Drawer on Charge date; Save sends the edit, closes, says so and focuses the row's pencil", async () => {
     const saved = [];
     const container = await mount({ onSaveCharge: (id, edit) => saved.push({ id, edit }) });
-    const pencil = byLabel(container, "Edit Onboarding part 2 of 3, 15 Dec");
+    const pencil = byLabel(container, "Edit Onboarding part 2 of 3, 15 Dec 2026");
     pencil.focus();
     await click(pencil);
     const dialog = document.querySelector('[role="dialog"]');
     assert.ok(dialog, "Drawer opens");
     assert.match(dialog.textContent, /Onboarding · part 2 of 3/);
-    assert.match(dialog.textContent, /INV-1879 · was Tue 15 Dec/);
-    assert.match(dialog.textContent, /This and part 3 on 15 Jan/);
+    assert.match(dialog.textContent, /INV-1879 · was 15 Dec 2026/);
+    assert.match(dialog.textContent, /This and part 3 on 15 Jan 2027/);
     assert.ok(document.activeElement?.closest("[role=dialog]"), "focus is inside the Drawer");
 
     const amount = dialog.querySelector('input[role="spinbutton"]');
@@ -265,38 +266,38 @@ describe("BillingSchedulePattern edit", { skip }, () => {
     assert.deepEqual(saved[0].edit, { date: "2026-12-15", amount: 1250, scope: "this" });
     assert.ok(!document.querySelector('[role="dialog"]'), "Drawer closes");
     assert.match(container.innerHTML, /\$1,250\.00/);
-    assert.match(container.querySelector('[role="status"]').textContent, /Moved to Tue 15 Dec/);
-    assert.ok(document.activeElement === byLabel(container, "Edit Onboarding part 2 of 3, 15 Dec"), "focus: " + document.activeElement?.getAttribute("aria-label"));
+    assert.match(container.querySelector('[role="status"]').textContent, /Moved to 15 Dec 2026/);
+    assert.ok(document.activeElement === byLabel(container, "Edit Onboarding part 2 of 3, 15 Dec 2026"), "focus: " + document.activeElement?.getAttribute("aria-label"));
   });
 
   test("Escape closes the Drawer and returns focus to the pencil", async () => {
     const container = await mount();
-    const pencil = byLabel(container, "Edit API calls over 2M, 01 Dec");
+    const pencil = byLabel(container, "Edit API calls over 2M, 01 Dec 2026");
     pencil.focus();
     await click(pencil);
     const esc = new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true });
     await act(async () => document.activeElement.dispatchEvent(esc));
     assert.ok(!document.querySelector('[role="dialog"]'), "Drawer closes");
-    assert.ok(document.activeElement === byLabel(container, "Edit API calls over 2M, 01 Dec"), "focus: " + document.activeElement?.getAttribute("aria-label"));
+    assert.ok(document.activeElement === byLabel(container, "Edit API calls over 2M, 01 Dec 2026"), "focus: " + document.activeElement?.getAttribute("aria-label"));
   });
 
   test("Skip this month asks once in an AlertDialog, then drops the row and calls onSkipCharge", async () => {
     const skipped = [];
     const container = await mount({ onSkipCharge: (id) => skipped.push(id) });
-    const pencil = byLabel(container, "Edit Scale plan 24 seats, 01 Jan");
+    const pencil = byLabel(container, "Edit Scale plan 24 seats, 01 Jan 2027");
     pencil.focus();
     await click(pencil);
     await click(byText(document.body, "Skip this month"));
     const alert = document.querySelector('[role="alertdialog"]');
     assert.ok(alert, "AlertDialog opens");
-    assert.match(alert.textContent, /Skip the 01 Jan charge\?/);
+    assert.match(alert.textContent, /Skip the 01 Jan 2027 charge\?/);
     assert.equal(skipped.length, 0, "nothing skipped before the confirm");
     await click(byText(document.body, "Skip charge"));
     await frame();
     assert.deepEqual(skipped, ["jan-plan"]);
     assert.ok(!document.querySelector('[role="alertdialog"]'));
-    assert.ok(!byLabel(container, "Edit Scale plan 24 seats, 01 Jan"), "the row is gone");
-    assert.match(container.querySelector('[role="status"]').textContent, /Skipped Scale plan · 24 seats, 01 Jan/);
+    assert.ok(!byLabel(container, "Edit Scale plan 24 seats, 01 Jan 2027"), "the row is gone");
+    assert.match(container.querySelector('[role="status"]').textContent, /Skipped Scale plan · 24 seats, 01 Jan 2027/);
     assert.ok(document.activeElement === container.querySelector('[data-charge-table="upcoming"]'), "focus: " + document.activeElement?.getAttribute("aria-label"));
   });
 });
