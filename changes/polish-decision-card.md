@@ -1,0 +1,3 @@
+### Changed
+
+- **DecisionCard matches the polished Paper board.** The card is tighter (16px padding, 12px gaps) and the "who asks" title reads at 14/20. Skip reads "Skip for now". Confirm shows its ⌘⏎ key as a chip in place of the hint line, and steps back to outline while sending or after an error.

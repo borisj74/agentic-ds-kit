@@ -91,12 +91,12 @@
     "onConfirm": {
       "type": "function",
       "required": false,
-      "note": "Confirm (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
+      "note": "Confirm (Check icon, ⌘⏎ key chip), the one solid primary while it waits; outline while sending or after an error. ⌘/Ctrl+Enter inside the card."
     },
     "onSkip": {
       "type": "function",
       "required": false,
-      "note": "Skip (outline). Escape while focus is in the card but not on another control."
+      "note": "Skip for now (outline). Escape while focus is in the card but not on another control."
     }
   },
   "passthrough": {
@@ -135,7 +135,7 @@
       "options are a kit RadioGroup named by the question",
       "a disabled option stays in the RadioGroup, disabled, with its reason as the description, so it is announced, not skipped",
       "free text is a Field-wrapped Textarea with a hint",
-      "Confirm and Skip carry aria-keyshortcuts; ⌘/Ctrl+Enter confirms and Escape skips (not on another control) inside the card; the key hint line is aria-hidden and hidden on touch screens",
+      "Confirm and Skip carry aria-keyshortcuts; ⌘/Ctrl+Enter confirms and Escape skips (not on another control) inside the card; Confirm shows ⌘⏎ as an aria-hidden key chip",
       "sending sets aria-busy and announces in a status region",
       "the error is role=alert",
       "once resolved, focus moves to the one-line row",

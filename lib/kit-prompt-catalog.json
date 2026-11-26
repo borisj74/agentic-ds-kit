@@ -10634,12 +10634,12 @@
         "onConfirm": {
           "type": "function",
           "required": false,
-          "note": "Confirm (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
+          "note": "Confirm (Check icon, ⌘⏎ key chip), the one solid primary while it waits; outline while sending or after an error. ⌘/Ctrl+Enter inside the card."
         },
         "onSkip": {
           "type": "function",
           "required": false,
-          "note": "Skip (outline). Escape while focus is in the card but not on another control."
+          "note": "Skip for now (outline). Escape while focus is in the card but not on another control."
         }
       }
     },
