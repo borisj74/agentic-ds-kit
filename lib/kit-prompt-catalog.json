@@ -698,7 +698,7 @@
         "shortcut": {
           "type": "string",
           "required": false,
-          "note": "Visual key hint after the label, e.g. \"⏎\", \"Esc\", \"⌘⏎\". aria-hidden: wire the key yourself and set aria-keyshortcuts. Ignored when icon-only."
+          "note": "Visual key hint after the label, e.g. \"⏎\", \"Esc\", \"⌘⏎\". aria-hidden: wire the key yourself and set aria-keyshortcuts. Hidden on touch screens. Ignored when icon-only."
         },
         "ariaLabel": {
           "type": "string",
@@ -10560,7 +10560,7 @@
       "doNot": [
         "Do not invent a local DecisionCard, ChoiceCard, or AgentQuestion",
         "Do not start with nothing selected when an option is recommended; list it first and start value on it",
-        "Confirm is the one solid primary; Skip is outline neutral",
+        "Confirm is the one solid primary; Skip is ghost",
         "Do not use raw hex"
       ],
       "props": {
@@ -10634,12 +10634,12 @@
         "onConfirm": {
           "type": "function",
           "required": false,
-          "note": "Confirm (Check icon), the one solid primary. ⌘/Ctrl+Enter inside the card."
+          "note": "Confirm (⌘⏎ key chip, no icon), the one solid primary while it waits; outline while sending or after an error. ⌘/Ctrl+Enter inside the card."
         },
         "onSkip": {
           "type": "function",
           "required": false,
-          "note": "Skip (outline). Escape while focus is in the card but not on another control."
+          "note": "Skip for now (ghost). Escape while focus is in the card but not on another control."
         }
       }
     },

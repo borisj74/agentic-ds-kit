@@ -140,8 +140,11 @@ describe("DecisionCard", () => {
     assert.match(out, /Unavailable: in collections since 2 Nov/);
     assert.doesNotMatch(out, /Over 60 days late/);
     assert.match(out, /value="1799"[^>]*disabled|disabled[^>]*value="1799"/);
-    assert.match(out, /⌘⏎ confirm · Esc skip/);
-    assert.match(out, />Skip</);
+    assert.match(out, />Skip for now</);
+    assert.match(out, />Confirm<\/span>[\s\S]*?>⌘⏎</, "Confirm shows its key chip");
+    assert.doesNotMatch(out, /⌘⏎ confirm · Esc skip/, "no hint line");
+    assert.match(out, /<button[^>]*class="[^"]*_ghost_[^"]*"[^>]*><span>Skip for now<\/span>/, "Skip for now is ghost");
+    assert.doesNotMatch(out, /lucide-check[\s\S]*?>Confirm</, "Confirm has no Check icon");
   });
 
   test("Escape skips, ⌘/Ctrl+Enter confirms", () => {

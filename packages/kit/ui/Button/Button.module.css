@@ -233,6 +233,13 @@
   white-space: nowrap;
 }
 
+/* No keyboard on a touch screen, so no key chip (as the review cards' hint line). */
+@media (hover: none) and (pointer: coarse) {
+  .shortcut {
+    display: none;
+  }
+}
+
 /* Icon-only is a square of the control height. One class, so `block` below and a parent's width
    rule (Card footer) still win, as they did when the size came from padding. */
 .iconOnly {
