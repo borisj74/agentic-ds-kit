@@ -136,7 +136,7 @@ export function ContextWindow({
               {segments.map((segment, index) => (
                 <span
                   key={segment.id}
-                  className={cx(styles.segment, styles[`seg${index % 5}`])}
+                  className={cx(styles.segment, styles[`seg${index % 5}`], index === segments.length - 1 && styles.segmentEnd)}
                   style={{ flexGrow: segment.tokens / total }}
                 />
               ))}

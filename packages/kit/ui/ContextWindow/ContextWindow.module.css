@@ -83,7 +83,8 @@
   border-inline-end: var(--border-width-thin) solid var(--bg-surface);
 }
 
-.segment:last-of-type {
+/* The last segment has no split, so a full bar has no line at its end. */
+.segmentEnd {
   border-inline-end: 0;
 }
 

@@ -46,8 +46,32 @@ describe("ContextWindow polish", () => {
     assert.match(out, /Oldest messages will be trimmed soon\. Trim now to keep control\./);
   });
 
-  test("loading: two bars, then five lines", () => {
+  test("loading: five lines inside loadingLines", () => {
     const out = html({ used: 0, loading: true });
-    assert.equal((out.match(/aria-busy="true"/g) ?? []).length >= 7, true, "seven skeletons inside the busy card");
+    const start = out.search(/<div class="[^"]*_loadingLines_[^"]*">/);
+    assert.ok(start > -1, "loadingLines group is there");
+    const group = out.slice(start).match(/^<div class="[^"]*">((?:<span[^>]*>(?:<span[^>]*>[^<]*<\/span>|<span[^>]*><\/span>)*<\/span>)*)<\/div>/);
+    assert.ok(group, "loadingLines holds only skeletons");
+    const lines = group[1].match(/<span[^>]*aria-busy="true"/g) ?? [];
+    assert.equal(lines.length, 5);
+  });
+
+  test("bar: only the last segment drops its split line", () => {
+    const segments = [
+      { id: "s", label: "System", tokens: 10000 },
+      { id: "m", label: "Memory", tokens: 20000 },
+      { id: "t", label: "Tools", tokens: 30000 },
+    ];
+    for (const used of [60000, 200000]) {
+      const out = html({ used, limit: 200000, segments });
+      const bar = out.slice(out.indexOf('role="meter"'));
+      const classes = [...bar.matchAll(/<span class="([^"]*_segment_[^"]*)"/g)].map((m) => m[1]);
+      assert.equal(classes.length, 3, "one span per segment");
+      assert.deepEqual(
+        classes.map((c) => /_segmentEnd_/.test(c)),
+        [false, false, true],
+        `only the last segment ends the bar (used ${used})`,
+      );
+    }
   });
 });
