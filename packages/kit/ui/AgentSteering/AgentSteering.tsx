@@ -144,7 +144,7 @@ export function AgentSteering({
         </p>
       ) : null}
 
-      <form className={styles.composer} onSubmit={submit}>
+      <form className={styles.composer} onSubmit={submit} aria-busy={sending || undefined}>
         <Input
           id={inputId}
           className={styles.input}
@@ -152,7 +152,9 @@ export function AgentSteering({
           placeholder={placeholder}
           iconStart={Compass}
           value={value}
-          disabled={finished || sending}
+          // Sending locks the field but keeps its text readable (read-only, not disabled).
+          disabled={finished}
+          readOnly={sending}
           onChange={(next) => onValueChange?.(next)}
         />
         <Button
