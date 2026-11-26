@@ -4,10 +4,23 @@
  * version): initialize, ping, tools/list and tools/call. Notifications get no reply; unknown
  * methods get -32601. Tool arguments are checked against each tool's plain JSON Schema.
  * stdout carries only protocol messages.
+ *
+ * With `skills`, the server also publishes skills (extension io.modelcontextprotocol/skills,
+ * which clients use from revision 2026-07-28): server/discover advertises resources plus the
+ * extension, and skills/list, skills/get, resources/list and resources/read answer requests that
+ * carry that revision in `_meta`. `initialize` and requests without it are unchanged, so older
+ * clients see the same tools-only server as before.
  */
 
 export const PROTOCOL_VERSION = "2025-06-18";
 export const SUPPORTED_PROTOCOL_VERSIONS = [PROTOCOL_VERSION, "2025-03-26", "2024-11-05"];
+/** The revision that brings server/discover, per-request `_meta` and the skills extension. */
+export const MODERN_PROTOCOL_VERSION = "2026-07-28";
+const META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion";
+const META_SERVER_INFO = "io.modelcontextprotocol/serverInfo";
+const SKILLS_EXTENSION = "io.modelcontextprotocol/skills";
+/** Methods whose 2026-07-28 results carry cache hints. Content can change between installs only. */
+const CACHED_LISTS = new Set(["tools/list", "resources/list", "skills/list", "skills/get"]);
 
 const PARSE_ERROR = -32700;
 const INVALID_REQUEST = -32600;
@@ -64,14 +77,46 @@ export function validate(schema, value, path = "arguments") {
  * anything `isToolError` accepts) becomes an isError result; anything else is a JSON-RPC internal
  * error. A promise makes `handle` and `handleLine` return promises too.
  */
-export function createServer({ name, version, instructions, tools, isToolError = () => false }) {
+export function createServer({ name, version, instructions, tools, skills, isToolError = () => false }) {
   const byName = new Map(tools.map((tool) => [tool.name, tool]));
 
   function toolResult(text, isError = false) {
     return isError ? { content: [{ type: "text", text }], isError: true } : { content: [{ type: "text", text }] };
   }
 
+  const modernCapabilities = {
+    tools: { listChanged: false },
+    ...(skills ? { resources: { listChanged: false }, extensions: { [SKILLS_EXTENSION]: {} } } : {}),
+  };
+
+  const skillMethods = skills
+    ? {
+        "skills/list"() {
+          return { skills: skills.list() };
+        },
+        "skills/get"(params) {
+          if (typeof params?.uri !== "string") throw Object.assign(new Error("skills/get needs a uri"), { code: INVALID_PARAMS });
+          return { skill: skills.get(params.uri) };
+        },
+        "resources/list"() {
+          return { resources: skills.resources() };
+        },
+        "resources/read"(params) {
+          if (typeof params?.uri !== "string") throw Object.assign(new Error("resources/read needs a uri"), { code: INVALID_PARAMS });
+          return skills.read(params.uri);
+        },
+      }
+    : {};
+
   const methods = {
+    ...skillMethods,
+    "server/discover"() {
+      return {
+        supportedVersions: [MODERN_PROTOCOL_VERSION, ...SUPPORTED_PROTOCOL_VERSIONS],
+        capabilities: modernCapabilities,
+        ...(instructions ? { instructions } : {}),
+      };
+    },
     initialize(params) {
       const asked = params?.protocolVersion;
       return {
@@ -121,6 +166,15 @@ export function createServer({ name, version, instructions, tools, isToolError =
     },
   };
 
+  function modernResult(method, value) {
+    return {
+      ...value,
+      resultType: "complete",
+      ...(CACHED_LISTS.has(method) ? { ttlMs: 0, cacheScope: "public" } : {}),
+      _meta: { ...value._meta, [META_SERVER_INFO]: { name, version } },
+    };
+  }
+
   /** Handle one parsed message. Returns the response object, or null for notifications. */
   function handle(message) {
     if (message === null || typeof message !== "object" || Array.isArray(message) || message.jsonrpc !== "2.0") {
@@ -129,7 +183,13 @@ export function createServer({ name, version, instructions, tools, isToolError =
     const isNotification = !("id" in message);
     // Responses from the client (we never send requests) and notifications need no reply.
     if (isNotification || typeof message.method !== "string") return null;
-    const method = Object.hasOwn(methods, message.method) ? methods[message.method] : undefined;
+    // 2026-07-28 clients name their revision on every request; their results get the fields that
+    // revision requires, and only they reach the skill methods. Older clients get exactly the
+    // tools-only server they always got.
+    const modern =
+      message.method === "server/discover" || message.params?._meta?.[META_PROTOCOL_VERSION] === MODERN_PROTOCOL_VERSION;
+    const known = Object.hasOwn(methods, message.method) && (modern || !Object.hasOwn(skillMethods, message.method));
+    const method = known ? methods[message.method] : undefined;
     if (!method) {
       return { jsonrpc: "2.0", id: message.id, error: { code: METHOD_NOT_FOUND, message: `Method not found: ${message.method}` } };
     }
@@ -138,12 +198,13 @@ export function createServer({ name, version, instructions, tools, isToolError =
       id: message.id,
       error: { code: error.code ?? INTERNAL_ERROR, message: error.message || "Internal error" },
     });
+    const shape = (value) => (modern ? modernResult(message.method, value) : value);
     try {
       const result = method(message.params);
       if (result && typeof result.then === "function") {
-        return result.then((value) => ({ jsonrpc: "2.0", id: message.id, result: value }), failure);
+        return result.then((value) => ({ jsonrpc: "2.0", id: message.id, result: shape(value) }), failure);
       }
-      return { jsonrpc: "2.0", id: message.id, result };
+      return { jsonrpc: "2.0", id: message.id, result: shape(result) };
     } catch (error) {
       return failure(error);
     }
