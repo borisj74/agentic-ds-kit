@@ -44,7 +44,7 @@ export function AutonomyDialDoc() {
       summary="Pick a stop with the arrow keys or a click. It saves on change; the panel explains the stop."
       preview={
         <AutonomyDial
-          className={agentDoc.trail}
+          className={agentDoc.full}
           value={value}
           onValueChange={change}
           saving={saving}
@@ -73,37 +73,37 @@ export function AutonomyDialDoc() {
           title: "Stop 1 — Ask always",
           about: "The most oversight: every tool call waits for an OK.",
           code: `<AutonomyDial value="ask" appliesTo="…" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="ask" appliesTo={APPLIES} />,
+          render: <AutonomyDial className={agentDoc.full} value="ask" appliesTo={APPLIES} />,
         },
         {
           title: "Stop 2 — Ask on high risk (default)",
           about: "defaultValue marks the default stop with a badge.",
           code: `<AutonomyDial value="risk" appliesTo="…" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="risk" appliesTo={APPLIES} />,
+          render: <AutonomyDial className={agentDoc.full} value="risk" appliesTo={APPLIES} />,
         },
         {
           title: "Stop 3 — Act and tell me",
           about: "Acts, then reports what it did after each step.",
           code: `<AutonomyDial value="tell" appliesTo="…" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="tell" appliesTo={APPLIES} />,
+          render: <AutonomyDial className={agentDoc.full} value="tell" appliesTo={APPLIES} />,
         },
         {
           title: "Stop 4 — Act until I stop",
           about: "The most autonomy: the run goes to the end unless stopped.",
           code: `<AutonomyDial value="run" appliesTo="…" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="run" appliesTo={APPLIES} />,
+          render: <AutonomyDial className={agentDoc.full} value="run" appliesTo={APPLIES} />,
         },
         {
           title: "Disabled — locked by policy",
           about: "disabled with disabledReason shows a lock and why.",
           code: `<AutonomyDial value="risk" disabled disabledReason="Set by workspace policy" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="risk" appliesTo={APPLIES} disabled disabledReason="Set by workspace policy" />,
+          render: <AutonomyDial className={agentDoc.full} value="risk" appliesTo={APPLIES} disabled disabledReason="Set by workspace policy" />,
         },
         {
           title: "Saved — with the time",
           about: "savedAt shows when the stop was saved, as \"Saved 14:01\" in the panel.",
           code: `<AutonomyDial value="risk" savedAt="14:01" />`,
-          render: <AutonomyDial className={agentDoc.trail} value="risk" appliesTo={APPLIES} savedAt="14:01" />,
+          render: <AutonomyDial className={agentDoc.full} value="risk" appliesTo={APPLIES} savedAt="14:01" />,
         },
         {
           title: "Your own stops — billing words, narrow column",
@@ -120,7 +120,7 @@ export function AutonomyDialDoc() {
           title: "Loading — saving a new stop",
           about: "saving spins the stop's icon and shows Saving… in the panel.",
           code: `<AutonomyDial value="tell" saving />`,
-          render: <AutonomyDial className={agentDoc.trail} value="tell" appliesTo={APPLIES} saving />,
+          render: <AutonomyDial className={agentDoc.full} value="tell" appliesTo={APPLIES} saving />,
         },
       ]}
     />

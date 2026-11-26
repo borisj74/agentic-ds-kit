@@ -46,7 +46,35 @@
 /* The control is stretched to the dial's width; its stops grow into the extra space, so the
    track's inside padding is the same on both ends instead of leaving a gap after the last stop. */
 .control > * {
-  flex: 1 1 auto;
+  flex: 1 1 0;
+}
+
+/* Dots under the stops, one per stop on the same equal columns (the track's 2px inset kept). */
+.dots {
+  display: flex;
+  margin-bottom: calc(var(--space-1) * -1);
+  padding-inline: var(--space-px);
+}
+
+.dotCell {
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.dot {
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
+  border-radius: var(--radius-pill);
+  background-color: var(--line-strong);
+}
+
+.dotOn {
+  background-color: var(--primary);
+}
+
+.dotsDisabled {
+  opacity: var(--opacity-muted);
 }
 
 /* A narrow dial (under 40rem of its own width, --grid-breakpoint-sm; container queries cannot read
@@ -79,8 +107,9 @@
     transform: rotate(45deg);
   }
 
-  /* The rows already run top to bottom, so the end labels would only repeat the order. */
-  .dial > .ends {
+  /* The rows already run top to bottom, so the dots and end labels would only repeat the order. */
+  .dial > .ends,
+  .dial > .dots {
     display: none;
   }
 }
@@ -90,6 +119,7 @@
   display: flex;
   justify-content: space-between;
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-subtle);
 }
@@ -100,6 +130,7 @@
   gap: var(--space-1);
   padding: var(--space-3) var(--space-4);
   background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
   animation: dial-fade var(--motion-duration-200) var(--motion-ease-out);
 }

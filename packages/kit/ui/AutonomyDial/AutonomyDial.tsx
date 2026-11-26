@@ -72,6 +72,15 @@ export function AutonomyDial({
         }))}
       />
 
+      {/* One dot per stop, filled up to the current one: how far the agent may go. */}
+      <div className={cx(styles.dots, disabled && styles.dotsDisabled)} aria-hidden="true">
+        {options.map((option, at) => (
+          <span key={option.id} className={styles.dotCell}>
+            <span className={cx(styles.dot, at <= index && styles.dotOn)} />
+          </span>
+        ))}
+      </div>
+
       <div className={styles.ends} aria-hidden="true">
         <span>More oversight</span>
         <span>More autonomy</span>
@@ -83,7 +92,7 @@ export function AutonomyDial({
             <LucideByName name={current.icon} size={16} className={styles.panelIcon} />
             <span className={styles.panelTitle}>{current.label}</span>
             {current.id === defaultValue ? (
-              <Badge tone="neutral" size="sm">
+              <Badge tone="primary" size="sm">
                 default
               </Badge>
             ) : null}
