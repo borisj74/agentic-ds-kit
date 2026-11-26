@@ -64,6 +64,7 @@ import { CommentThreadDoc } from "./CommentThreadDoc";
 import { SetupGuideDoc } from "./SetupGuideDoc";
 import { NotificationStackDoc } from "./NotificationStackDoc";
 import { ExperimentCardDoc } from "./ExperimentCardDoc";
+import { BillingScheduleDoc } from "./BillingScheduleDoc";
 import { BlurCrossfadeDoc } from "./BlurCrossfadeDoc";
 import { TextRevealDoc } from "./TextRevealDoc";
 import { TiltCardDoc } from "./TiltCardDoc";
@@ -173,6 +174,7 @@ const TITLES: Record<string, string> = {
   guardraillog: "GuardrailLog",
   gradienttext: "GradientText",
   invoicedocument: "InvoiceDocument",
+  billingschedule: "BillingSchedule",
   pricingplans: "PricingPlans",
   integrationpicker: "IntegrationPicker",
   commentspanel: "CommentsPanel",
@@ -488,6 +490,7 @@ function ComponentView({ hash }: { hash: string }) {
   if (resolved === "setupguide") return <SetupGuideDoc />;
   if (resolved === "notificationstack") return <NotificationStackDoc />;
   if (resolved === "experimentcard") return <ExperimentCardDoc />;
+  if (resolved === "billingschedule") return <BillingScheduleDoc />;
   if (resolved === "blurcrossfade") return <BlurCrossfadeDoc />;
   if (resolved === "textreveal") return <TextRevealDoc />;
   if (resolved === "tiltcard") return <TiltCardDoc />;

@@ -155,6 +155,7 @@ export * from "../ui/CommentsPanel";
 export * from "../ui/IntegrationPicker";
 export * from "../ui/PricingPlans";
 export * from "../ui/InvoiceDocument";
+export * from "../ui/BillingSchedule";
 export * from "../ui/TaskBoard";
 export * from "../ui/TaskBrief";
 export * from "../ui/BlurCrossfade";

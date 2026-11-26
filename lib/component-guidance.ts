@@ -129,6 +129,7 @@ import contract_usagemeter from "../packages/kit/contracts/usagemeter.json";
 import contract_taskboard from "../packages/kit/contracts/taskboard.json";
 import contract_taskbrief from "../packages/kit/contracts/taskbrief.json";
 import contract_invoicedocument from "../packages/kit/contracts/invoicedocument.json";
+import contract_billingschedule from "../packages/kit/contracts/billingschedule.json";
 import contract_pricingplans from "../packages/kit/contracts/pricingplans.json";
 import contract_integrationpicker from "../packages/kit/contracts/integrationpicker.json";
 import contract_commentspanel from "../packages/kit/contracts/commentspanel.json";
@@ -280,6 +281,7 @@ const contracts: Record<string, ContractNotes> = {
   "taskboard": contract_taskboard,
   "taskbrief": contract_taskbrief,
   "invoicedocument": contract_invoicedocument,
+  "billingschedule": contract_billingschedule,
   "pricingplans": contract_pricingplans,
   "integrationpicker": contract_integrationpicker,
   "commentspanel": contract_commentspanel,

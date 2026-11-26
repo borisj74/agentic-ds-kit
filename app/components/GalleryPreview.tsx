@@ -10,6 +10,7 @@ import { CommentThread } from "agentic-ds-kit";
 import { SetupGuide } from "agentic-ds-kit";
 import { NotificationStack } from "agentic-ds-kit";
 import { ExperimentCard } from "agentic-ds-kit";
+import { BillingSchedule } from "agentic-ds-kit";
 import { BlurCrossfade, GradientText, GridBackground, TextReveal, TiltCard } from "agentic-ds-kit";
 import { ChangeSummary } from "agentic-ds-kit";
 import { TraceWaterfall } from "agentic-ds-kit";
@@ -383,6 +384,12 @@ export function GalleryPreview({ id }: { id: string }) {
       return (
         <Stage variant="wide">
           <ChangeSummary period="Oct → Nov" items={[{ id: "mrr", label: "MRR", before: "$48.2K", after: "$52.9K", delta: "+9.8%", direction: "up", sentiment: "good" }]} />
+        </Stage>
+      );
+    case "billingschedule":
+      return (
+        <Stage variant="wide">
+          <BillingSchedule view="nextOnly" description="Pro plan" next={{ date: "01 Dec 2026", amount: "$480.00", paysWith: "Visa ending 4242" }} />
         </Stage>
       );
     case "experimentcard":

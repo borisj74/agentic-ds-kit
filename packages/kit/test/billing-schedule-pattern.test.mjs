@@ -204,8 +204,8 @@ describe("BillingSchedulePattern", () => {
   test("the next charge says Next charge with a space before it; one marker only", () => {
     const html = ssr();
     assert.equal((html.match(/>Next charge</g) ?? []).length, 1);
-    assert.match(html, /Pro plan · monthly(?:<!-- -->)? <span[^>]*billing-schedule-pattern__next-marker[^>]*>Next charge</);
-    assert.match(html, /billing-schedule-pattern__date billing-schedule-pattern__date--next">01 Dec 2026</);
+    assert.match(html, /Pro plan · monthly(?:<!-- -->)? <span[^>]*nextMarker[^>]*>Next charge</);
+    assert.match(html, /_date_\w+ _dateNext_\w+">01 Dec 2026</);
   });
 
   test("status is a word in a Badge with no icon; notes are muted, Card declined is danger", () => {
@@ -216,9 +216,9 @@ describe("BillingSchedulePattern", () => {
       assert.ok(!html.slice(html.lastIndexOf("<td", at), at).includes("<svg"), `no icon in the ${word} Badge`);
     }
     assert.ok(!html.includes("billing-schedule-pattern__status"), "no local wrapper restyling the Badge");
-    assert.match(html, /billing-schedule-pattern__note">Prorated for 14 days</);
-    assert.match(html, /billing-schedule-pattern__note">Credit applied</);
-    assert.match(html, /billing-schedule-pattern__note billing-schedule-pattern__note--danger">Card declined</);
+    assert.match(html, /_note_\w+">Prorated for 14 days</);
+    assert.match(html, /_note_\w+">Credit applied</);
+    assert.match(html, /_note_\w+ _noteDanger_\w+">Card declined</);
   });
 
   test("no row actions without handlers; pencil on scheduled rows with onSaveCharge, Download on billed rows with onDownloadInvoice", () => {

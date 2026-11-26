@@ -12574,6 +12574,111 @@
       }
     },
     {
+      "id": "billingschedule",
+      "group": "component",
+      "intent": "A customer's billing schedule in a kit Card, one closed view: full (all charges in one Table), nextOnly (the next charge and its card) or failed (the open failed payment). Each view has its own empty, loading and error.",
+      "useWhen": [
+        "a dashboard card with the next charge — view=\"nextOnly\"",
+        "an account page that flags a failed payment — view=\"failed\"",
+        "billing settings with the full charge table — view=\"full\""
+      ],
+      "doNotUseWhen": [
+        "one invoice or credit note as a document — InvoiceDocument",
+        "choosing or changing a plan — PricingPlans",
+        "a generic list of rows with no billing meaning — Table"
+      ],
+      "doNot": [
+        "Do not rebuild a local billing schedule, charges table or next-charge card; use this component",
+        "Do not split upcoming and billed charges into two tables",
+        "Do not add a second solid primary; Update card in the failure Alert is the one",
+        "Do not reach into Card, Table, Badge or Alert markup to restyle them",
+        "Do not format money in the component; pass amounts pre-formatted"
+      ],
+      "props": {
+        "view": {
+          "type": "enum",
+          "values": [
+            "full",
+            "nextOnly",
+            "failed"
+          ],
+          "default": "full",
+          "required": false,
+          "note": "Closed. full: every charge, upcoming first (oldest first) then billed (newest first). nextOnly: the next-charge panel. failed: the open failed charge first, then invoiced or retrying charges."
+        },
+        "charges": {
+          "type": "array",
+          "required": false,
+          "note": "{ id, date (YYYY-MM-DD), label, amount (pre-formatted), value?, status, invoice?, note?, splitLabel? }[]. status: scheduled, retrying, invoiced, paid, failed or waived. full and failed read it."
+        },
+        "next": {
+          "type": "object",
+          "required": false,
+          "note": "{ date, amount, paysWith }, all pre-formatted. nextOnly reads it; without it nextOnly shows its empty state."
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "note": "The Card description beside the title, such as the plan name."
+        },
+        "failureDetail": {
+          "type": "string",
+          "required": false,
+          "note": "The failure Alert's body: what was declined, when the retry runs and what to do before then."
+        },
+        "emptyDescription": {
+          "type": "string",
+          "required": false,
+          "note": "The empty state's one line. Defaults per view."
+        },
+        "loading": {
+          "type": "boolean",
+          "required": false,
+          "note": "full and failed: the Table loading state (header plus Skeleton rows). nextOnly: the panel with Skeleton lines."
+        },
+        "error": {
+          "type": "string",
+          "required": false,
+          "note": "What failed to load. A danger Alert titled for the view."
+        },
+        "onRetry": {
+          "type": "function",
+          "required": false,
+          "note": "Retry (outline, RotateCcw) in the error Alert."
+        },
+        "onAsk": {
+          "type": "function",
+          "required": false,
+          "note": "Ask (outline, MessageCircle) in the Card header."
+        },
+        "onDownloadAll": {
+          "type": "function",
+          "required": false,
+          "note": "full only: Download all (ghost) in the Card header, hidden while the failure Alert shows."
+        },
+        "onEditCharge": {
+          "type": "function",
+          "required": false,
+          "note": "(charge) => void. full only: an edit pencil on scheduled rows, named \"Edit <label>, <date>\". Open your own edit form."
+        },
+        "onDownloadInvoice": {
+          "type": "function",
+          "required": false,
+          "note": "(charge) => void. A Download icon on billed rows, named by the invoice."
+        },
+        "onChangeCard": {
+          "type": "function",
+          "required": false,
+          "note": "nextOnly: Change card (outline) at the end of the panel."
+        },
+        "onUpdateCard": {
+          "type": "function",
+          "required": false,
+          "note": "full and failed: Update card in the failure Alert, the one solid primary."
+        }
+      }
+    },
+    {
       "id": "taskboard",
       "group": "component",
       "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
@@ -14865,7 +14970,7 @@
     {
       "id": "billing-schedule",
       "group": "pattern",
-      "intent": "Billing schedule for one customer in a kit Card: the Card's header with the plan, one kit Table of upcoming and billed charges with the next charge marked in words and status as a word in a kit Badge, a failure Alert while a payment is still open, and a next-charge panel. Scheduled charges can open a kit Drawer to move the date, change the amount or skip the month.",
+      "intent": "Billing schedule for one customer, built on the kit BillingSchedule component (view full, or nextOnly): the Card's header with the plan, one kit Table of upcoming and billed charges with the next charge marked in words and status as a word in a kit Badge, a failure Alert while a payment is still open, and a next-charge panel. Scheduled charges can open a kit Drawer to move the date, change the amount or skip the month.",
       "doNot": [
         "Do not split upcoming and billed charges into two tables",
         "Do not put an icon in the status Badges or mark status by colour alone",
@@ -14875,6 +14980,7 @@
         "Do not put a pencil on retries or billed rows"
       ],
       "must": [
+        "Render the schedule with the kit BillingSchedule (view=\"full\", or \"nextOnly\"); do not rebuild its table, failure Alert, next-charge panel or states locally",
         "Use kit components from agentic-ds-kit for anything the kit has; no local cousins (tables, dialogs, rows, rules, charts)",
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view",

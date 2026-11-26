@@ -1095,6 +1095,14 @@
     "level": "organism"
   },
   {
+    "id": "billingschedule",
+    "intent": "A customer's billing schedule in a kit Card, one closed view: full (all charges in one Table), nextOnly (the next charge and its card) or failed (the open failed payment). Each view has its own empty, loading and error.",
+    "group": "component",
+    "path": "contracts/billingschedule.json",
+    "status": "stable",
+    "level": "organism"
+  },
+  {
     "id": "taskboard",
     "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
     "group": "component",
@@ -1366,7 +1374,7 @@
   },
   {
     "id": "billing-schedule",
-    "intent": "Billing schedule for one customer in a kit Card: the Card's header with the plan, one kit Table of upcoming and billed charges with the next charge marked in words and status as a word in a kit Badge, a failure Alert while a payment is still open, and a next-charge panel. Scheduled charges can open a kit Drawer to move the date, change the amount or skip the month.",
+    "intent": "Billing schedule for one customer, built on the kit BillingSchedule component (view full, or nextOnly): the Card's header with the plan, one kit Table of upcoming and billed charges with the next charge marked in words and status as a word in a kit Badge, a failure Alert while a payment is still open, and a next-charge panel. Scheduled charges can open a kit Drawer to move the date, change the amount or skip the month.",
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",

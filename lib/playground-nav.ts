@@ -22,6 +22,7 @@ export const COMPONENT_ITEMS = [
   "avatar",
   "avatargroup",
   "badge",
+  "billingschedule",
   "blurcrossfade",
   "breadcrumb",
   "button",
@@ -175,6 +176,7 @@ export function componentLabel(id: string): string {
   if (id === "integrationpicker") return "IntegrationPicker";
   if (id === "pricingplans") return "PricingPlans";
   if (id === "invoicedocument") return "InvoiceDocument";
+  if (id === "billingschedule") return "BillingSchedule";
   if (id === "taskboard") return "TaskBoard";
   if (id === "taskbrief") return "TaskBrief";
   if (id === "blurcrossfade") return "BlurCrossfade";
@@ -256,7 +258,7 @@ export const COMPONENT_GROUPS = [
   },
   {
     label: "SaaS",
-    ids: ["changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
+    ids: ["billingschedule", "changesummary", "commentspanel", "commentthread", "experimentcard", "integrationpicker", "invoicedocument", "notificationstack", "pricingplans", "setupguide", "taskboard"],
   },
   {
     label: "Motion",
