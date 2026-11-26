@@ -241,7 +241,8 @@ export function ApprovalCard({
           ) : null}
           {counting && remaining !== undefined ? (
             <span className={styles.compactTimer}>
-              <span className={styles.srOnly}>Auto-deny in </span>
+              {/* With the waiting timer beside it, the words show so the two clocks read apart. */}
+              <span className={waiting && waited !== undefined ? undefined : styles.srOnly}>Auto-deny in </span>
               <span role="timer" aria-live="off">
                 {formatClock(remaining)}
               </span>

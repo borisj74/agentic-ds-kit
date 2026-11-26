@@ -267,9 +267,12 @@
   color: var(--text-fg-subtle);
 }
 
+/* One line with an ellipsis; the full text stays in the DOM, so screen readers read all of it. */
 .compactDescription {
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body-sm);
   color: var(--text-fg-muted);
