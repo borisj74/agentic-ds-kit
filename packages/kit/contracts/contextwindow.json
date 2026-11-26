@@ -103,7 +103,7 @@
     "requirements": [
       "section aria-labelledby the title (compact: aria-label)",
       "the stacked bar is role=meter with min, max, now and a text value",
-      "near limit and full are text and an icon, not colour alone",
+      "near limit and full are text and an icon, not colour alone; in compact the word is screen-reader text beside the icon",
       "the number uses kit NumberTransition",
       "aria-busy while loading; the error is role=alert"
     ]

@@ -17,7 +17,7 @@ export type { ContextWindowProps, ContextSegment } from "./ContextWindow.types";
 
 const full = (value: number) => value.toLocaleString("en-US");
 const short = (value: number) =>
-  value >= 1000 ? `${(value / 1000).toFixed(value >= 100_000 ? 0 : 1).replace(/\.0$/, "")}K` : String(value);
+  value >= 1000 ? `${(value / 1000).toFixed(value >= 100_000 ? 0 : 1)}K` : String(value);
 
 /** How full the prompt context is and what uses the space. Built on kit Meter (compact) and NumberTransition. */
 export function ContextWindow({
@@ -45,9 +45,9 @@ export function ContextWindow({
     return (
       <section {...rest} {...nisthaAttr("contextwindow", rest)} ref={ref} className={cx(styles.compact, styles[state], className)} aria-label={label} aria-busy={loading || undefined}>
         {loading ? (
-          <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" />
+          <LoaderCircle size={14} strokeWidth={ICON_STROKE} className={styles.spin} aria-hidden="true" />
         ) : (
-          <Layers size={16} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
+          <Layers size={14} strokeWidth={ICON_STROKE} className={styles.icon} aria-hidden="true" />
         )}
         <Meter
           className={styles.compactMeter}
@@ -59,14 +59,14 @@ export function ContextWindow({
         <span className={styles.compactValue}>{loading ? "– / –" : limit ? `${short(used)} / ${short(limit)}` : short(used)}</span>
         {state === "warn" && !loading ? (
           <span className={styles.compactState}>
-            <TriangleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-            Near limit
+            <TriangleAlert size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            <span className={styles.srOnly}>Near limit</span>
           </span>
         ) : null}
         {state === "full" && !loading ? (
           <span className={styles.compactState}>
-            <CircleX size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-            Full
+            <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+            <span className={styles.srOnly}>Full</span>
           </span>
         ) : null}
       </section>
@@ -98,9 +98,13 @@ export function ContextWindow({
         <div className={styles.loading}>
           <Skeleton width="40%" height="var(--space-6)" />
           <Skeleton width="100%" size="sm" />
-          <Skeleton width="70%" size="sm" />
-          <Skeleton width="60%" size="sm" />
-          <Skeleton width="80%" size="sm" />
+          <div className={styles.loadingLines}>
+            <Skeleton width="70%" size="sm" />
+            <Skeleton width="60%" size="sm" />
+            <Skeleton width="80%" size="sm" />
+            <Skeleton width="65%" size="sm" />
+            <Skeleton width="50%" size="sm" />
+          </div>
         </div>
       ) : error ? (
         <p className={styles.error} role="alert">
@@ -154,13 +158,13 @@ export function ContextWindow({
           ) : null}
           {state === "warn" ? (
             <p className={cx(styles.notice, styles.noticeWarn)}>
-              <TriangleAlert size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
-              Near the limit. The oldest messages drop first. Trim now to choose what goes.
+              <TriangleAlert size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+              Oldest messages will be trimmed soon. Trim now to keep control.
             </p>
           ) : null}
           {state === "full" ? (
             <p className={cx(styles.notice, styles.noticeFull)}>
-              <CircleX size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />
+              <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
               No room left. The next turn drops the oldest messages automatically.
             </p>
           ) : null}

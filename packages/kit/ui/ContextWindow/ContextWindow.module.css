@@ -29,7 +29,7 @@
   flex: 1 1 auto;
   margin: 0;
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -60,23 +60,31 @@
 .percent {
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-muted);
 }
 
-/* Stacked bar: one flex child per segment; grows on transform-free flex, values update instantly. */
+/* Stacked bar: one flex child per segment; grows on transform-free flex, values update instantly.
+   A pill track with a hairline edge; a surface-coloured hairline splits the segments. */
 .bar {
+  box-sizing: border-box;
   display: flex;
-  gap: var(--space-px);
   height: var(--space-2);
   overflow: hidden;
-  border-radius: var(--radius-control-sm);
-  background-color: var(--bg-tray);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-subtle);
 }
 
 .segment {
   flex-basis: 0;
   min-width: var(--space-1);
+  border-inline-end: var(--border-width-thin) solid var(--bg-surface);
+}
+
+.segment:last-of-type {
+  border-inline-end: 0;
 }
 
 .rest {
@@ -105,15 +113,16 @@
 }
 
 .unknownBar {
+  box-sizing: border-box;
   height: var(--space-2);
   border: var(--border-width-thin) dashed var(--line-strong);
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-pill);
 }
 
 .legend {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: calc(var(--space-1) + var(--space-px));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -124,7 +133,7 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-sm);
+  line-height: var(--type-line-ui-xs);
 }
 
 .dot {
@@ -141,6 +150,7 @@
 
 .legendValue {
   font-family: var(--font-mono);
+  font-weight: var(--type-weight-label);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);
 }
@@ -151,11 +161,20 @@
   gap: var(--space-2);
   margin: 0;
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
 }
 
 .notice svg {
   flex-shrink: 0;
+}
+
+.noticeWarn svg {
+  color: var(--icon-warning);
+}
+
+.noticeFull svg {
+  color: var(--icon-danger);
 }
 
 .noticeWarn {
@@ -170,7 +189,7 @@
   margin: 0;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+  color: var(--text-fg-subtle);
 }
 
 .actions {
@@ -183,15 +202,21 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: calc(var(--space-2) + var(--space-px)) var(--space-3);
   background-color: var(--status-danger-subtle);
   border-radius: var(--radius-surface-md);
   color: var(--status-danger-text);
 }
 
+.error > svg {
+  flex-shrink: 0;
+  color: var(--icon-danger);
+}
+
 .errorText {
   flex: 1 1 0;
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
 }
 
@@ -204,7 +229,7 @@
   color: inherit;
   font: inherit;
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-strong);
   cursor: pointer;
 }
 
@@ -223,13 +248,20 @@
   gap: var(--space-3);
 }
 
+.loadingLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 /* Compact: one line for a header bar. */
 .compact {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  height: var(--space-8);
+  padding: 0 var(--space-3);
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-md);
@@ -237,12 +269,17 @@
 }
 
 .compactMeter {
-  width: calc(var(--space-16) * 2);
+  width: calc(var(--space-6) * 5);
+}
+
+.compact .icon {
+  color: var(--text-fg-muted);
 }
 
 .compactValue {
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);
@@ -266,10 +303,32 @@
   color: var(--status-warning-text);
 }
 
+.compact.warn .compactState svg {
+  color: var(--icon-warning);
+}
+
 .compact.full .compactValue,
 .compact.full .compactState,
 .compact.full svg {
   color: var(--status-danger-text);
+}
+
+.compact.full .compactState svg {
+  color: var(--icon-danger);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Limit unknown: the words are prose, not figures. */
+.unknown .of {
+  font-family: var(--font-sans);
 }
 
 .spin {
