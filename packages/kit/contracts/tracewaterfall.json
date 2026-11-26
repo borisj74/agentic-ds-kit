@@ -28,7 +28,7 @@
     "spans": {
       "type": "array",
       "required": true,
-      "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, stepId?, detail? }[]; offsets from the run start; open spans draw dashed to now. stepId groups spans under a step heading, shown as written (e.g. \"1 · Fetch Stripe charges\")."
+      "note": "{ id, label, kind: \"model\" | \"tool\" | \"wait\" | \"approval\" | \"other\", startMs, endMs?, cost?, tokensIn?, tokensOut?, failed?, stepId?, detail? }[]; offsets from the run start; open spans draw dashed to now, and the legend adds \"dashed = still running\" only while at least one span has no endMs. stepId groups spans under a step heading, shown as written (e.g. \"1 · Fetch Stripe charges\")."
     },
     "status": {
       "type": "enum",
@@ -92,7 +92,8 @@
     "bg.surface",
     "bg.subtle",
     "line.default",
-    "line.strong",
+    "chart.2",
+    "radius.pill",
     "text.fg",
     "text.fgMuted",
     "text.fgSubtle",
