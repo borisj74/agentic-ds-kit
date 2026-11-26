@@ -53,7 +53,7 @@
 
 .split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: var(--grid-gutter-md);
 }
 
@@ -92,7 +92,7 @@
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-3);
   width: 100%;
   margin: 0;
   padding: var(--space-2) var(--space-3);
@@ -114,12 +114,23 @@
   outline-offset: calc(var(--border-focus-width) * -1);
 }
 
-/* A surface step plus a hairline: the hairline keeps selected apart from hover where the two tints
-   match (dark mode). */
+/* Selected: the strong primary tint, a step past hover's control tint, so the two stay apart. */
 .selected,
 .selected:hover {
-  background-color: var(--action-selected);
-  box-shadow: inset 0 0 0 var(--border-width-thin) var(--line-strong);
+  background-color: var(--primary-subtle-strong);
+}
+
+/* Unread: a 6px primary dot in a fixed slot before the icon. */
+.dot {
+  flex-shrink: 0;
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
+  margin-top: var(--space-1);
+  border-radius: var(--radius-pill);
+}
+
+.dotUnread {
+  background-color: var(--primary);
 }
 
 /* Subtle text drops below 4.5:1 on the selected tint; use the muted role there. */
@@ -128,17 +139,23 @@
   color: var(--text-fg-muted);
 }
 
-/* Amber for what waits on you, green for what is done; failures stay neutral, so the detail's risk
-   Badge is the one red. */
+/* Approval waits on you (caution), a question asks (info), a failure is red, a recap is done. */
 .typeIcon {
   flex-shrink: 0;
   margin-top: var(--space-px);
   color: var(--icon-muted);
 }
 
-.approval .typeIcon,
-.question .typeIcon {
+.approval .typeIcon {
   color: var(--icon-warning);
+}
+
+.question .typeIcon {
+  color: var(--icon-info);
+}
+
+.failure .typeIcon {
+  color: var(--icon-danger);
 }
 
 .recap .typeIcon {
@@ -161,11 +178,15 @@
   line-height: var(--type-line-ui-xs);
 }
 
+/* Unread names read heavier than read ones. */
 .agent {
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   color: var(--text-fg);
 }
 
+.read .agent {
+  font-weight: var(--type-weight-label);
+}
 
 .type {
   color: var(--text-fg-subtle);
@@ -181,6 +202,10 @@
   overflow-wrap: anywhere;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
+  color: var(--text-fg);
+}
+
+.read .rowPreview {
   color: var(--text-fg-muted);
 }
 

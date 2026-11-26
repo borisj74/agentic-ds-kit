@@ -170,10 +170,10 @@ export function AgentInbox(props: AgentInboxProps) {
       <div className={styles.loading} aria-busy="true">
         {[0, 1, 2, 3].map((row) => (
           <div key={row} className={styles.skeletonRow}>
-            <Skeleton shape="circle" size="sm" />
+            <Skeleton shape="circle" width="var(--space-4)" />
             <div className={styles.skeletonText}>
-              <Skeleton width="45%" />
-              <Skeleton width="85%" size="sm" />
+              <Skeleton width="40%" size="sm" />
+              <Skeleton width="75%" size="sm" />
             </div>
           </div>
         ))}
@@ -218,6 +218,8 @@ export function AgentInbox(props: AgentInboxProps) {
                   aria-controls={detailId}
                   onClick={() => select(item.id)}
                 >
+                  {/* Unread dot in a fixed slot, so read rows keep their icons in the same lane. */}
+                  <span className={cx(styles.dot, !item.read && styles.dotUnread)} aria-hidden="true" />
                   <Icon size={16} strokeWidth={ICON_STROKE} className={styles.typeIcon} aria-hidden="true" />
                   <span className={styles.rowText}>
                     <span className={styles.rowHead}>
