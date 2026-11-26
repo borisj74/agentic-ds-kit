@@ -1,0 +1,3 @@
+### Changed
+
+- **AgentMonitor matches the polished Paper board.** The header leads with an agent mark, the name uses the heading weight, the status dot is 6px, the clock panel opens up (16px between rows, 24px between clock and cost, snug clock tracking, regular-weight cost), the headline reads at 14/20 with a 16px status icon (spinning info loader while running), step tiles are 36px tall with the running tile in the info colours, the step detail uses the medium surface radius, the card has the extra-small shadow, and loading shows five 36px step tiles. A failed run's clock stays in the foreground colour.

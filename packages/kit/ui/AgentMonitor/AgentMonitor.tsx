@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { ChevronDown, CircleCheck, CircleDashed, CircleDot, CirclePause, CircleX, Hand, LoaderCircle, X, type LucideIcon } from "lucide-react";
+import { Bot, ChevronDown, CircleCheck, CircleDashed, CirclePause, CircleX, Hand, LoaderCircle, X, type LucideIcon } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { ApprovalCard } from "../ApprovalCard";
@@ -161,7 +161,11 @@ export function AgentMonitor({
           </div>
         </div>
         <Skeleton shape="rect" width="100%" height="calc(var(--space-16) + var(--space-8))" />
-        <Skeleton shape="rect" width="100%" height="var(--space-8)" />
+        <div className={styles.strip}>
+          {[0, 1, 2, 3, 4].map((tile) => (
+            <Skeleton key={tile} shape="rect" width="100%" height="var(--control-height-md)" />
+          ))}
+        </div>
       </section>
     );
   }
@@ -274,6 +278,9 @@ export function AgentMonitor({
   return (
     <section {...rest} {...nisthaAttr("agentmonitor", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.monitor, className)} aria-labelledby={nameId}>
       <header className={styles.header}>
+        <span className={styles.agentIcon} aria-hidden="true">
+          <Bot size={16} strokeWidth={ICON_STROKE} />
+        </span>
         <div className={styles.heading}>
           <h3 id={nameId} className={styles.name}>
             {name}
@@ -313,10 +320,10 @@ export function AgentMonitor({
         <div className={cx(styles.now, status === "failed" && styles.nowFailed)}>
           {headline ? (
             <p className={styles.headline}>
-              {status === "running" ? <CircleDot size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
-              {status === "paused" ? <CirclePause size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
-              {status === "done" ? <CircleCheck size={14} strokeWidth={ICON_STROKE} className={styles.doneIcon} aria-hidden="true" /> : null}
-              {status === "failed" ? <CircleX size={14} strokeWidth={ICON_STROKE} aria-hidden="true" /> : null}
+              {status === "running" ? <LoaderCircle size={16} strokeWidth={ICON_STROKE} className={cx(styles.spin, styles.runningIcon)} aria-hidden="true" /> : null}
+              {status === "paused" ? <CirclePause size={16} strokeWidth={ICON_STROKE} className={styles.pausedIcon} aria-hidden="true" /> : null}
+              {status === "done" ? <CircleCheck size={16} strokeWidth={ICON_STROKE} className={styles.doneIcon} aria-hidden="true" /> : null}
+              {status === "failed" ? <CircleX size={16} strokeWidth={ICON_STROKE} className={styles.failedIcon} aria-hidden="true" /> : null}
               <span className={styles.headlineText}>{headline}</span>
               {headlineNote ? <span className={styles.headlineNote}>{headlineNote}</span> : null}
             </p>
