@@ -1,6 +1,7 @@
 ### Added
 
 - **ApprovalCard `variant="compact"`.** For AgentMonitor's waiting state only: one row with the title (and the countdown when set), one line of description, the exact command or diff with its tag, and small right-aligned Deny and Approve. No risk Badge, heading or facts; the risk is read to screen readers with the title. The default card is unchanged.
+- **ApprovalCard `waitingSec` (compact only).** Seconds the agent has already waited, shown as "waiting m:ss" in the title row and counting up while pending; hidden when left out. AgentMonitor passes it from `pendingAction.waitingSec`.
 
 ### Changed
 

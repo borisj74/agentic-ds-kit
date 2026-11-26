@@ -28,6 +28,7 @@ const PENDING = {
   title: "Run a migration on staging?",
   description: "Drops column invoices.legacy_total on staging. Reversible from the 0041 snapshot.",
   risk: "high" as const,
+  waitingSec: 31,
   action: {
     kind: "command" as const,
     command: "psql $STAGING_URL -f migrations/0042_drop_legacy.sql",
@@ -65,8 +66,8 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Awaiting approval — exact command",
-    about: "status waiting with pendingAction renders a kit ApprovalCard in place: the exact command, Enter / Escape.",
-    code: `<AgentMonitor … status="waiting" pendingAction={{ title, description, risk: "high", action: { kind: "command", command, target } }} onApprove={approve} onDeny={deny} />`,
+    about: "status waiting with pendingAction renders the compact kit ApprovalCard in place: the title row with \"waiting m:ss\" when waitingSec is set, the exact command, small Deny and Approve (⌘/Ctrl+Enter, Escape).",
+    code: `<AgentMonitor … status="waiting" pendingAction={{ title, description, risk: "high", waitingSec: 31, action: { kind: "command", command, target } }} onApprove={approve} onDeny={deny} />`,
     render: (
       <AgentMonitor {...BASE} status="waiting" elapsed="02:14" cost="$0.42" steps={WAITING_STEPS} pendingAction={PENDING} onApprove={noop} onDeny={noop} />
     ),

@@ -361,6 +361,7 @@ export function AgentMonitor({
           description={pendingAction.description}
           risk={pendingAction.risk}
           action={pendingAction.action}
+          waitingSec={pendingAction.waitingSec}
           onApprove={onApprove}
           onDeny={onDeny}
         />

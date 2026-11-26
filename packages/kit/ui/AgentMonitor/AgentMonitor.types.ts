@@ -31,6 +31,8 @@ export interface AgentMonitorPendingAction {
   description?: string;
   risk?: ApprovalCardRisk;
   action: ApprovalCardAction;
+  /** Seconds the agent has waited so far; shown as "waiting m:ss" in the approval row. */
+  waitingSec?: number;
 }
 
 /** Native section attributes the kit sets itself (or replaces with its own prop). */

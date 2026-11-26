@@ -243,6 +243,14 @@ describe("ApprovalCard compact (AgentMonitor waiting)", () => {
     assert.equal((out.match(/_sm_/g) ?? []).length >= 2, true, "Deny and Approve are size sm");
   });
 
+  test("compact waitingSec shows \"waiting m:ss\" as a timer; hidden when left out and in the default variant", () => {
+    const shown = html("ApprovalCard", { ...props, variant: "compact", waitingSec: 31 });
+    assert.match(shown, /waiting <span role="timer" aria-live="off">0:31<\/span>/);
+    assert.match(html("ApprovalCard", { ...props, variant: "compact", waitingSec: 125.9 }), />2:05</, "whole seconds, rounded down");
+    assert.doesNotMatch(html("ApprovalCard", { ...props, variant: "compact" }), /waiting/);
+    assert.doesNotMatch(html("ApprovalCard", { ...props, waitingSec: 31 }), /waiting/, "default ignores it");
+  });
+
   test("compact keeps the keys: Escape denies, Meta+Enter approves", () => {
     let approved = 0;
     let denied = 0;

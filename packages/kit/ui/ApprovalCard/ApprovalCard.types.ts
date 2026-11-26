@@ -58,6 +58,11 @@ export interface ApprovalCardProps extends Omit<ComponentPropsWithoutRef<"articl
    * preview and small right-aligned Deny and Approve; the risk is read to screen readers, not shown.
    */
   variant?: ApprovalCardVariant;
+  /**
+   * Compact only: seconds the agent has already waited for this OK. Shown as "waiting m:ss" and
+   * counts up while pending. Leave it out to hide it. Not a deadline: that is countdownSec.
+   */
+  waitingSec?: number;
   /** Seconds until auto-deny. The card counts down and calls onExpire (or onDeny) at 0. */
   countdownSec?: number;
   onApprove?: () => void;

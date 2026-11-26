@@ -35,6 +35,12 @@ function formatClock(totalSec: number): string {
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
 }
 
+/** Elapsed time counts whole seconds up: 31.9 waited reads 0:31. */
+function formatElapsed(totalSec: number): string {
+  const sec = Math.max(0, Math.floor(totalSec));
+  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+}
+
 function summaryOf(action: ApprovalCardAction): string {
   return action.kind === "command" ? action.command : action.file;
 }
@@ -98,6 +104,7 @@ export function ApprovalCard({
   facts,
   status = "pending",
   variant = "default",
+  waitingSec,
   countdownSec,
   onApprove,
   onDeny,
@@ -118,6 +125,9 @@ export function ApprovalCard({
   const expireRef = useRef(onExpire ?? onDeny);
   const pending = status === "pending";
   const counting = pending && countdownSec !== undefined && countdownSec > 0;
+  const [waited, setWaited] = useState(waitingSec);
+  const [waitedFrom, setWaitedFrom] = useState(waitingSec);
+  const waiting = pending && variant === "compact" && waitingSec !== undefined;
 
   // A new countdownSec restarts the timer (state reset during render, not in an effect).
   if (countdownFrom !== countdownSec) {
@@ -125,9 +135,21 @@ export function ApprovalCard({
     setRemaining(countdownSec);
   }
 
+  // A new waitingSec restarts the count from that value (state reset during render, not in an effect).
+  if (waitedFrom !== waitingSec) {
+    setWaitedFrom(waitingSec);
+    setWaited(waitingSec);
+  }
+
   useEffect(() => {
     expireRef.current = onExpire ?? onDeny;
   });
+
+  useEffect(() => {
+    if (!waiting) return;
+    const id = window.setInterval(() => setWaited((value) => (value ?? 0) + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [waiting]);
 
   useEffect(() => {
     if (!counting) return;
@@ -208,6 +230,14 @@ export function ApprovalCard({
             {title}
             <span className={styles.srOnly}>, {RISK_LABEL[risk]}</span>
           </h3>
+          {waiting && waited !== undefined ? (
+            <span className={styles.compactTimer}>
+              waiting{" "}
+              <span role="timer" aria-live="off">
+                {formatElapsed(waited)}
+              </span>
+            </span>
+          ) : null}
           {counting && remaining !== undefined ? (
             <span className={styles.compactTimer}>
               <span className={styles.srOnly}>Auto-deny in </span>
