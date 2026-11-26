@@ -119,10 +119,10 @@ function Legend({ agent }: { agent: AgentFleetAgent }) {
   );
 }
 
-function Lead({ large }: { large?: boolean }) {
+function Lead({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
-    <span className={cx(styles.lead, large && styles.leadLarge)} aria-hidden="true">
-      <Network size={16} strokeWidth={ICON_STROKE} />
+    <span className={cx(styles.lead, size === "sm" && styles.leadSmall, size === "lg" && styles.leadLarge)} aria-hidden="true">
+      <Network size={size === "sm" ? 14 : 16} strokeWidth={ICON_STROKE} />
     </span>
   );
 }
@@ -141,6 +141,7 @@ function OverviewCard({
   return (
     <article className={cx(styles.card, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
+        <Lead />
         <h3 id={nameId} className={styles.name}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -195,6 +196,7 @@ function CompactCard({ agent, onOpen }: { agent: AgentFleetAgent; onOpen?: () =>
   return (
     <article className={cx(styles.compact, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
+        <Lead size="sm" />
         <h3 id={nameId} className={cx(styles.name, styles.nameSmall)}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -238,7 +240,7 @@ function ExpandedCard({
   return (
     <article className={styles.expanded} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
-        <Lead large />
+        <Lead size="lg" />
         <div className={styles.expandedHeading}>
           <h3 id={nameId} className={cx(styles.name, styles.nameLarge)}>
             {agent.name}
