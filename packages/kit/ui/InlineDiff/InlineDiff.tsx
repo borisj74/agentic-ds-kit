@@ -10,7 +10,7 @@ import { Skeleton } from "../Skeleton";
 import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
-import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
 import { handleReviewKeys } from "../shared/reviewKeys";
 import type { DiffLine, InlineDiffProps, InlineDiffStatus } from "./InlineDiff.types";
 import styles from "./InlineDiff.module.css";
@@ -18,12 +18,13 @@ import { nisthaAttr } from "../shared/inspect";
 
 export type { InlineDiffProps, InlineDiffStatus, InlineDiffMode, DiffLine, DiffSegment } from "./InlineDiff.types";
 
-const BADGE: Partial<Record<InlineDiffStatus, { label: string; tone: "neutral" | "warning" | "danger" }>> = {
-  pending: { label: "Pending", tone: "neutral" },
-  stale: { label: "Stale", tone: "warning" },
-  loading: { label: "Preparing", tone: "neutral" },
-  error: { label: "Error", tone: "danger" },
-  empty: { label: "No changes", tone: "neutral" },
+/** Neutral states get the hairline badge; stale and error keep the soft tint. */
+const BADGE: Partial<Record<InlineDiffStatus, { label: string; tone: "neutral" | "warning" | "danger"; appearance: "outline" | "soft" }>> = {
+  pending: { label: "Pending", tone: "neutral", appearance: "outline" },
+  stale: { label: "Stale", tone: "warning", appearance: "soft" },
+  loading: { label: "Preparing", tone: "neutral", appearance: "outline" },
+  error: { label: "Error", tone: "danger", appearance: "soft" },
+  empty: { label: "No changes", tone: "neutral", appearance: "outline" },
 };
 
 const MARK = { add: "+", remove: "−", context: "" } as const;
@@ -137,10 +138,13 @@ export function InlineDiff({
           segment.type === "same" ? (
             <span key={index}>{segment.text}</span>
           ) : segment.type === "remove" ? (
-            <del key={index} className={styles.del}>
-              <span aria-hidden="true">− </span>
-              {segment.text}
-            </del>
+            <span key={index}>
+              <del className={styles.del}>
+                <span aria-hidden="true">− </span>
+                {segment.text}
+              </del>
+              {segments[index + 1]?.type === "add" ? " " : null}
+            </span>
           ) : (
             <ins key={index} className={styles.ins}>
               <span aria-hidden="true">+ </span>
@@ -181,7 +185,12 @@ export function InlineDiff({
             <FileText size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
             {file ? <span className={styles.file}>{file}</span> : null}
             {hunkHeader ? <span className={styles.hunk}>{hunkHeader}</span> : null}
-            <span className={styles.counts}>{countsInWords(added, removed)}</span>
+            <span className={styles.counts}>
+              <span aria-hidden="true">
+                +{added} −{removed}
+              </span>
+              <span className={styles.srOnly}>{countsInWords(added, removed)}</span>
+            </span>
           </div>
         ) : null}
         <pre className={styles.pre}>
@@ -213,7 +222,7 @@ export function InlineDiff({
           {title}
         </h3>
         {badge ? (
-          <Badge tone={badge.tone} size="sm">
+          <Badge tone={badge.tone} appearance={badge.appearance} size="sm">
             {badge.label}
           </Badge>
         ) : null}
@@ -228,20 +237,26 @@ export function InlineDiff({
       {showActions && (onAccept || onReject || onAcceptAll) ? (
         <footer className={reviewStyles.footer}>
           {hunkLabel ? <span className={styles.note}>{hunkLabel}</span> : null}
-          <KeyHint>{[onAccept ? "⌘⏎ accept" : null, onReject ? "Esc reject" : null].filter(Boolean).join(" · ")}</KeyHint>
           <span className={reviewStyles.actions}>
+            {onReject ? (
+              <Button
+                appearance="outline"
+                mode="neutral"
+                shortcut="Esc"
+                aria-keyshortcuts="Escape"
+                disabled={stale}
+                onClick={onReject}
+              >
+                Reject
+              </Button>
+            ) : null}
             {onAcceptAll ? (
               <Button appearance="ghost" mode="neutral" disabled={stale} onClick={onAcceptAll}>
                 Accept all
               </Button>
             ) : null}
-            {onReject ? (
-              <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" disabled={stale} onClick={onReject}>
-                Reject
-              </Button>
-            ) : null}
             {onAccept ? (
-              <Button iconStart="Check" aria-keyshortcuts="Meta+Enter Control+Enter" disabled={stale} onClick={onAccept}>
+              <Button shortcut="⌘⏎" aria-keyshortcuts="Meta+Enter Control+Enter" disabled={stale} onClick={onAccept}>
                 Accept
               </Button>
             ) : null}

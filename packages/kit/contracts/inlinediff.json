@@ -2,7 +2,7 @@
   "id": "inlinediff",
   "status": "stable",
   "level": "organism",
-  "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and the counts in words (\"2 added, 2 removed\"), then one line.",
+  "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and counts (\"+2 −2\", read as \"2 added, 2 removed\"), then one line.",
   "useWhen": [
     "an agent proposes an edit to a file or a paragraph",
     "accept or reject hunks before they land",
@@ -85,17 +85,17 @@
     "onAccept": {
       "type": "function",
       "required": false,
-      "note": "Accept (Check icon), the one solid primary. ⌘/Ctrl+Enter in the card."
+      "note": "Accept, the one solid primary, with a ⌘⏎ key chip (hidden on touch screens). ⌘/Ctrl+Enter in the card."
     },
     "onReject": {
       "type": "function",
       "required": false,
-      "note": "Reject (outline). Escape in the card, not on another control."
+      "note": "Reject (outline), first in the footer, with an Esc key chip. Escape in the card, not on another control."
     },
     "onAcceptAll": {
       "type": "function",
       "required": false,
-      "note": "Accept all (ghost). Pass it only when the proposal has 2 or more hunks."
+      "note": "Accept all (ghost), between Reject and Accept. Pass it only when the proposal has 2 or more hunks."
     },
     "resolvedSummary": {
       "type": "string",
@@ -139,9 +139,9 @@
     "element": "section",
     "requirements": [
       "section aria-labelledby the h3 title",
-      "added and removed lines carry + / − marks and say Added / Removed to screen readers; the file header says the counts in words, e.g. \"2 added, 2 removed\"",
+      "added and removed lines carry + / − marks and say Added / Removed to screen readers; the file header shows \"+2 −2\" and says the counts in words to screen readers, e.g. \"2 added, 2 removed\"",
       "inline edits use del and ins",
-      "Escape rejects (not on another control) and ⌘/Ctrl+Enter accepts while focus is in the card; buttons carry aria-keyshortcuts; the key hint line is aria-hidden and hidden on touch screens",
+      "Escape rejects (not on another control) and ⌘/Ctrl+Enter accepts while focus is in the card; buttons carry aria-keyshortcuts; the Esc and ⌘⏎ key chips are aria-hidden and hidden on touch screens",
       "stale disables the actions and says why",
       "once resolved, focus moves to the one-line row"
     ]

@@ -992,7 +992,7 @@
   },
   {
     "id": "inlinediff",
-    "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and the counts in words (\"2 added, 2 removed\"), then one line.",
+    "intent": "Proposed text or code edits you accept or reject in place: unified, split or inline phrase diff, always with + / − marks and counts (\"+2 −2\", read as \"2 added, 2 removed\"), then one line.",
     "group": "component",
     "path": "contracts/inlinediff.json",
     "status": "stable",
