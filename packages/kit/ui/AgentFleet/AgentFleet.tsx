@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { Circle, CircleCheck, CirclePause, CircleX, LoaderCircle, Minimize2, Network } from "lucide-react";
+import { Circle, CircleCheck, CirclePause, CircleX, Layers, LoaderCircle, Minimize2, Network } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Button } from "../Button";
 import { Empty } from "../Empty";
@@ -119,10 +119,10 @@ function Legend({ agent }: { agent: AgentFleetAgent }) {
   );
 }
 
-function Lead({ large }: { large?: boolean }) {
+function Lead({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
-    <span className={cx(styles.lead, large && styles.leadLarge)} aria-hidden="true">
-      <Network size={16} strokeWidth={ICON_STROKE} />
+    <span className={cx(styles.lead, size === "sm" && styles.leadSmall, size === "lg" && styles.leadLarge)} aria-hidden="true">
+      <Network size={size === "sm" ? 14 : 16} strokeWidth={ICON_STROKE} />
     </span>
   );
 }
@@ -141,6 +141,7 @@ function OverviewCard({
   return (
     <article className={cx(styles.card, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
+        <Lead />
         <h3 id={nameId} className={styles.name}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -164,7 +165,7 @@ function OverviewCard({
       </div>
       {waitingSub ? (
         <div className={styles.attention}>
-          <CirclePause size={16} strokeWidth={ICON_STROKE} className={styles.attentionIcon} aria-hidden="true" />
+          <CirclePause size={14} strokeWidth={ICON_STROKE} className={styles.attentionIcon} aria-hidden="true" />
           <span className={styles.attentionText}>
             <span className={styles.attentionName}>{waitingSub.name}</span> waits for your OK
           </span>
@@ -195,6 +196,7 @@ function CompactCard({ agent, onOpen }: { agent: AgentFleetAgent; onOpen?: () =>
   return (
     <article className={cx(styles.compact, onOpen && styles.interactive)} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
+        <Lead size="sm" />
         <h3 id={nameId} className={cx(styles.name, styles.nameSmall)}>
           {onOpen ? (
             <button type="button" className={styles.open} aria-expanded="false" data-fleet-open={agent.id} onClick={onOpen}>
@@ -238,7 +240,7 @@ function ExpandedCard({
   return (
     <article className={styles.expanded} aria-labelledby={nameId}>
       <header className={styles.cardHeader}>
-        <Lead large />
+        <Lead size="lg" />
         <div className={styles.expandedHeading}>
           <h3 id={nameId} className={cx(styles.name, styles.nameLarge)}>
             {agent.name}
@@ -349,8 +351,9 @@ export function AgentFleet({
               <Skeleton shape="circle" size="md" />
               <Skeleton width="55%" />
             </div>
-            <Skeleton shape="rect" width="30%" height="var(--space-6)" />
-            <Skeleton width="100%" size="sm" />
+            <Skeleton shape="rect" width="30%" height="calc(var(--space-6) + var(--space-1))" />
+            <Skeleton shape="rect" width="100%" height="calc(var(--space-1) + var(--space-px))" />
+            <Skeleton width="70%" size="sm" />
           </div>
         ))}
         <span className={styles.srOnly} role="status">
@@ -415,7 +418,10 @@ export function AgentFleet({
     <section {...rest} {...nisthaAttr("agentfleet", rest)} ref={mergeRefs(rootRef, ref)} className={cx(styles.fleet, className)} aria-label={ariaLabel}>
       {body}
       {line && !loading && agents.length > 0 ? (
-        <p className={styles.totals}>{line}</p>
+        <p className={styles.totals}>
+          <Layers size={14} strokeWidth={ICON_STROKE} className={styles.totalsIcon} aria-hidden="true" />
+          {line}
+        </p>
       ) : null}
     </section>
   );
