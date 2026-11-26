@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { BookMarked, CircleX, Lock } from "lucide-react";
+import { Brain, CircleX, Lock } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Badge } from "../Badge";
@@ -123,18 +123,29 @@ export function MemoryPanel({
     }
     return (
       <li key={item.id} className={styles.item}>
+        <Brain size={16} strokeWidth={ICON_STROKE} className={styles.itemIcon} aria-hidden="true" />
         <div className={styles.itemBody}>
           <span className={styles.content}>{item.content}</span>
           <span className={styles.meta}>
-            {[item.source, item.age].filter(Boolean).join(" · ")}
+            {item.source ? <span>{item.source}</span> : null}
+            {item.source && item.age ? <span aria-hidden="true">·</span> : null}
+            {item.age ? <span className={styles.age}>{item.age}</span> : null}
             {item.usedHere ? (
-              <Badge tone="neutral" size="sm">
+              <Badge tone="primary" size="sm">
                 {usedLabel}
               </Badge>
             ) : null}
           </span>
         </div>
+        {/* Pin is last so it holds the right edge; Edit and Forget fade in to its left on hover or
+            focus. All three always take their space, so nothing moves. */}
         <span className={cx(styles.actions, item.pinned && styles.actionsPinned)}>
+          {onEdit ? (
+            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel={`Edit: ${item.content}`} onClick={() => setEditingId(item.id)} />
+          ) : null}
+          {onDelete ? (
+            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Trash2" ariaLabel={`Forget: ${item.content}`} onClick={() => setConfirmId(item.id)} />
+          ) : null}
           {onPin ? (
             <Button
               size="sm"
@@ -143,15 +154,9 @@ export function MemoryPanel({
               iconStart="Pin"
               ariaLabel={`${item.pinned ? "Unpin" : "Pin"}: ${item.content}`}
               aria-pressed={Boolean(item.pinned)}
-              className={item.pinned ? styles.pinOn : undefined}
+              className={cx(styles.pin, item.pinned && styles.pinOn)}
               onClick={() => onPin(item.id, !item.pinned)}
             />
-          ) : null}
-          {onEdit ? (
-            <Button size="sm" appearance="ghost" mode="neutral" iconStart="Pencil" ariaLabel={`Edit: ${item.content}`} onClick={() => setEditingId(item.id)} />
-          ) : null}
-          {onDelete ? (
-            <Button size="sm" appearance="ghost" mode="danger" iconStart="Trash2" ariaLabel={`Forget: ${item.content}`} onClick={() => setConfirmId(item.id)} />
           ) : null}
         </span>
       </li>
@@ -164,8 +169,9 @@ export function MemoryPanel({
       <div className={styles.loading}>
         {[0, 1, 2].map((key) => (
           <div key={key} className={styles.skeletonRow}>
+            <Skeleton shape="circle" width="var(--space-4)" />
             <div className={styles.skeletonText}>
-              <Skeleton width="80%" />
+              <Skeleton width="75%" size="sm" />
               <Skeleton width="40%" size="sm" />
             </div>
           </div>
@@ -187,7 +193,7 @@ export function MemoryPanel({
   } else if (items.length === 0 && !adding) {
     body = (
       <Empty
-        icon="BookMarked"
+        icon={Brain}
         title="Nothing remembered yet"
         description="Agents save useful facts here. You can add your own, pin what matters, or forget anything."
       />
@@ -229,7 +235,7 @@ export function MemoryPanel({
   return (
     <section {...rest} {...nisthaAttr("memorypanel", rest)} ref={ref} className={cx(styles.panel, className)} aria-labelledby={titleId} aria-busy={loading || undefined}>
       <header className={styles.header}>
-        <BookMarked size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
+        <Brain size={16} strokeWidth={ICON_STROKE} className={styles.titleIcon} aria-hidden="true" />
         <h3 id={titleId} className={styles.title}>
           {label}
         </h3>
@@ -245,7 +251,7 @@ export function MemoryPanel({
       ) : null}
       {body}
       <p className={styles.privacy}>
-        <Lock size={14} strokeWidth={ICON_STROKE} aria-hidden="true" />
+        <Lock size={12} strokeWidth={ICON_STROKE} aria-hidden="true" />
         {privacyNote}
       </p>
       <AlertDialog
@@ -255,6 +261,7 @@ export function MemoryPanel({
         cancelLabel="Keep"
         actionLabel="Forget"
         actionVariant="danger"
+        size="sm"
         onCancel={() => setConfirmId(null)}
         onAction={() => {
           if (confirmId) onDelete?.(confirmId);
