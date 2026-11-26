@@ -91,9 +91,10 @@ describe("PermissionRequest badge and summary", () => {
     assert.match(html, /Change it any time in the table\./, "the write warning stays");
   });
 
-  test("without badge the header keeps the scope count and requestedAt", () => {
+  test("without badge the header has the scope count Badge and the footer starts with requestedAt", () => {
     const html = renderToStaticMarkup(React.createElement(PermissionRequest, { ...props, badge: undefined }));
-    assert.match(html, /1 scope · Collections agent · requested 09:41/);
+    assert.match(html, /<header[\s\S]*_badge_[^>]*>1 scope<\/span><\/header>/);
+    assert.match(html, /<footer[\s\S]*>Collections agent · requested 09:41</);
     assert.doesNotMatch(html, /Needs you/);
   });
 
@@ -106,10 +107,11 @@ describe("PermissionRequest badge and summary", () => {
     assert.doesNotMatch(none, /<dl/);
   });
 
-  test("wide: Deny then Grant at md, with the key hint", () => {
+  test("wide: Deny then Grant at md, with their key chips", () => {
     const html = renderToStaticMarkup(React.createElement(PermissionRequest, props));
     assert.ok(html.indexOf(">Deny<") < html.indexOf(">Grant<"));
-    assert.match(html, /⌘⏎ grant · Esc deny/);
+    assert.match(html, />Deny<\/span>[\s\S]*?>Esc</);
+    assert.match(html, />Grant<\/span>[\s\S]*?>⌘⏎</);
   });
 });
 
@@ -122,7 +124,7 @@ describe("PermissionRequest under 40rem", { skip }, () => {
     return { container, root };
   }
 
-  test("Grant first and Deny under it, both full width at lg, no key hint", async () => {
+  test("Grant first and Deny under it, both full width at lg, no key chips", async () => {
     width = 320;
     const { container, root } = await mount();
     assert.deepEqual(names(container), ["Grant", "Deny"]);
@@ -130,14 +132,14 @@ describe("PermissionRequest under 40rem", { skip }, () => {
       assert.match(button.className, /_lg_/, "size lg");
       assert.match(button.className, /_block_/, "full width");
     }
-    assert.doesNotMatch(container.textContent, /⌘⏎ grant/);
+    assert.doesNotMatch(container.textContent, /⌘⏎|Esc/, "no key chips");
     await act(async () => root.unmount());
   });
 
   test("a wide card keeps Deny then Grant", async () => {
     width = 900;
     const { container, root } = await mount();
-    assert.deepEqual(names(container), ["Deny", "Grant"]);
+    assert.deepEqual(names(container), ["DenyEsc", "Grant⌘⏎"], "label then key chip");
     await act(async () => root.unmount());
   });
 });

@@ -60,7 +60,7 @@
     "requestedAt": {
       "type": "string",
       "required": false,
-      "note": "Header note, e.g. \"requested 14:02\". With badge it sits beside the badge."
+      "note": "e.g. \"requested 14:02\", in mono at the start of the footer. With badge it sits beside the badge instead."
     },
     "badge": {
       "type": "string",
@@ -127,11 +127,11 @@
     "requirements": [
       "section aria-labelledby the h3 title",
       "scopes are a list; access is text in a Badge",
-      "Escape denies (not on another control) and ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts; the key hint line is aria-hidden and hidden on touch screens",
+      "Escape denies (not on another control) and ⌘/Ctrl+Enter grants while focus is in the card; buttons carry aria-keyshortcuts and show their keys as aria-hidden chips (Esc on Deny, ⌘⏎ on Grant)",
       "granting sets aria-busy and announces in a status region",
       "the error is role=alert with a kit Button Retry",
       "summary is a dl: each label is a dt and its value a dd",
-      "under 40rem of card width Grant and Deny stack full width at size lg, Grant first, and the key hint is left out",
+      "under 40rem of card width Grant and Deny stack full width at size lg, Grant first, and the key chips are left out",
       "resolved row is named \"Granted: <title>\"",
       "motion is opacity and transform only, off under prefers-reduced-motion"
     ]
