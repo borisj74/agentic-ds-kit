@@ -135,7 +135,7 @@
       "options are a kit RadioGroup named by the question",
       "a disabled option stays in the RadioGroup, disabled, with its reason as the description, so it is announced, not skipped",
       "free text is a Field-wrapped Textarea with a hint",
-      "Confirm and Skip carry aria-keyshortcuts; ⌘/Ctrl+Enter confirms and Escape skips (not on another control) inside the card; Confirm shows ⌘⏎ as an aria-hidden key chip",
+      "Confirm and Skip carry aria-keyshortcuts; ⌘/Ctrl+Enter confirms and Escape skips (not on another control) inside the card; Confirm shows ⌘⏎ as an aria-hidden key chip, hidden on touch screens",
       "sending sets aria-busy and announces in a status region",
       "the error is role=alert",
       "once resolved, focus moves to the one-line row",

@@ -91,6 +91,13 @@ describe("Button styles", () => {
   });
 });
 
+describe("Button shortcut chip", () => {
+  test("the key chip is hidden on touch screens", () => {
+    const css = read("ui/Button/Button.module.css");
+    assert.match(css, /@media \(hover: none\) and \(pointer: coarse\) \{\s*\.shortcut \{\s*display: none;/);
+  });
+});
+
 describe("Button loading", () => {
   test("sets aria-busy, keeps the label and shows a spinner", () => {
     const html = render(h(Button, { loading: true }, "Save invoice"));
