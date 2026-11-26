@@ -8,6 +8,7 @@
   background-color: var(--bg-surface);
   border: var(--border-width-thin) solid var(--line-default);
   border-radius: var(--radius-surface-lg);
+  box-shadow: var(--shadow-xs);
   font-family: var(--font-sans);
 }
 
@@ -18,92 +19,157 @@
   padding: var(--space-6);
 }
 
-/* Collapsed is the one-row bar: status Badge, name and headline, then the clock, cost and the
-   running actions at the end. */
+/* Collapsed is one row: agent mark, name over a mono meta line, the tools used, the chevron.
+   Run actions, when passed, take a row of their own underneath. */
 .collapsed {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3) var(--space-4);
-  padding: var(--space-4);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
 }
 
-.barStatus {
-  flex-shrink: 0;
+.agentIconBar {
+  width: calc(var(--space-6) + var(--space-1));
+  height: calc(var(--space-6) + var(--space-1));
 }
 
 .barHeading {
   display: flex;
   flex: 1 1 0;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-1) var(--space-4);
+  flex-direction: column;
   min-width: 0;
 }
 
 .barName {
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
   font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Headline ("Step 2 of 4") and meta stay on one line; a long headline truncates (full text in title). */
 .barHeadline {
   margin: 0;
   min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg-muted);
-}
-
-.barClock {
-  display: flex;
-  flex-shrink: 0;
-  gap: var(--space-4);
-  margin: 0;
-}
-
-/* Value over its label; the label comes first in the DOM so it names the value. */
-.barFigure {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-end;
-}
-
-.barValue {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-fg);
-}
-
-.barLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-muted);
 }
 
-.barActions {
+.barMeta {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg-subtle);
+}
+
+.barMeta > span:not(.srOnly) ~ span::before {
+  content: " · ";
+}
+
+.tools {
   display: flex;
   flex-shrink: 0;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toolCell {
+  display: flex;
+}
+
+.tool {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--space-6) + var(--space-1));
+  height: calc(var(--space-6) + var(--space-1));
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-md);
+  color: var(--text-fg-muted);
+}
+
+button.tool {
+  cursor: pointer;
+}
+
+button.tool:hover {
+  border-color: var(--line-strong);
+  color: var(--text-fg);
+}
+
+.barStatusIcon {
+  flex-shrink: 0;
+}
+
+.barStatus-done {
+  color: var(--icon-success);
+}
+
+.barStatus-failed {
+  color: var(--status-danger);
+}
+
+.barStatus-waiting,
+.barStatus-paused {
+  color: var(--status-warning);
+}
+
+.barActions {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: var(--space-2);
 }
 
-/* Collapsed, the step strip takes its own row at the bottom, as it does when open. */
-.collapsedStrip {
-  flex-basis: 100%;
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+}
+
+/* Decorative agent mark, as in AgentLanes. */
+.agentIcon {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-pill);
+  color: var(--text-fg);
 }
 
 .heading {
@@ -116,11 +182,13 @@
 
 .name {
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nameSmall {
@@ -134,15 +202,11 @@
   color: var(--text-fg-subtle);
 }
 
-.collapsed .meta {
-  font-family: var(--font-mono);
-}
-
 .status {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
   font-size: var(--type-size-caption);
   font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
@@ -150,8 +214,8 @@
 }
 
 .dot {
-  width: var(--space-2);
-  height: var(--space-2);
+  width: calc(var(--space-1) + var(--space-px));
+  height: calc(var(--space-1) + var(--space-px));
   border-radius: var(--radius-pill);
   background-color: var(--line-strong);
 }
@@ -210,7 +274,7 @@
 .now {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
   padding: var(--space-4);
   background-color: var(--bg-subtle);
   border-radius: var(--radius-surface-md);
@@ -226,17 +290,30 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  font-size: var(--type-size-caption);
+  font-size: var(--type-size-body-sm);
   font-weight: var(--type-weight-label);
-  line-height: var(--type-line-ui-xs);
+  line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
 
 .nowFailed .headline,
-.nowFailed .clock,
 .nowFailed .clockLabel,
 .nowFailed .cost {
   color: var(--status-danger-text);
+}
+
+.runningIcon {
+  color: var(--status-info);
+}
+
+.pausedIcon {
+  flex-shrink: 0;
+  color: var(--status-warning);
+}
+
+.failedIcon {
+  flex-shrink: 0;
+  color: var(--status-danger);
 }
 
 .headlineText {
@@ -248,6 +325,8 @@
 .headlineNote {
   flex-shrink: 0;
   font-family: var(--font-mono);
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
   font-weight: var(--type-weight-body);
   color: var(--text-fg-subtle);
 }
@@ -263,7 +342,14 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-6);
+}
+
+/* Value over label, with the hairline gap from Paper. */
+.clockRow > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
 }
 
 .clock {
@@ -272,13 +358,33 @@
   font-size: var(--type-size-title);
   font-weight: var(--type-weight-body);
   line-height: var(--type-line-heading-4);
+  letter-spacing: var(--type-tracking-snug);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);
 }
 
+.clockStopped {
+  color: var(--text-fg-muted);
+}
+
+/* Failed: the clock and what it spent on one baseline. */
+.failedClock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.spent {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
 .clockSmall {
   font-size: var(--type-size-ui-lg);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-body);
   line-height: var(--type-line-ui-lg);
 }
 
@@ -290,6 +396,7 @@
 }
 
 .costBlock {
+  align-items: flex-end;
   text-align: end;
 }
 
@@ -297,7 +404,7 @@
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--type-size-ui-lg);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-body);
   line-height: var(--type-line-ui-lg);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);
@@ -359,7 +466,7 @@
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  height: var(--space-8);
+  height: var(--control-height-md);
   margin: 0;
   padding: 0;
   background-color: var(--bg-subtle);
@@ -386,14 +493,21 @@ button.selected:hover {
 
 .step-running {
   border-color: transparent;
-  background-color: var(--primary-subtle);
-  color: var(--icon-brand);
+  background-color: var(--status-info-subtle);
+  color: var(--status-info);
 }
 
 .step-waiting {
   border-style: dashed;
   border-color: var(--status-warning);
   color: var(--status-warning-text);
+}
+
+/* The last step of a finished run: a check on the success tint. */
+.stepFinal {
+  border-color: transparent;
+  background-color: var(--status-success-subtle);
+  color: var(--status-success);
 }
 
 .step-failed {
@@ -432,7 +546,7 @@ button.selected:hover {
   gap: var(--space-3);
   padding: var(--space-4);
   border: var(--border-width-thin) solid var(--line-default);
-  border-radius: var(--radius-surface-lg);
+  border-radius: var(--radius-surface-md);
   animation: monitor-lift var(--motion-duration-200) var(--motion-ease-out);
 }
 
@@ -545,53 +659,31 @@ button.selected:hover {
 /* Small screens: 44px touch targets (--space-10 + --space-1).
    Media queries cannot read var(): 40rem is --grid-breakpoint-sm. */
 @media (max-width: 40rem) {
-  /* The bar keeps status, headline and one mono "0:04 · $0.02"; Stop run takes a row of its own. */
-  .barName,
-  .barLabel {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .barClock {
-    gap: var(--space-1);
-  }
-
-  .barFigure + .barFigure::before {
-    content: "·";
-    font-family: var(--font-mono);
-    font-size: var(--type-size-body-sm);
-    line-height: var(--type-line-ui-sm);
-    color: var(--text-fg);
-  }
-
-  .barFigure {
-    flex-direction: row;
-    gap: var(--space-1);
-  }
-
-  .barActions {
-    flex-basis: 100%;
-  }
-
   .barActions > * {
     flex: 1 1 0;
   }
 
-  /* While running, Stop run is full width on its own row right under the clock, and Pause sits under it. */
-  .barActionsRunning {
-    flex-direction: column-reverse;
-  }
-
-  .barActionsRunning > * {
-    flex: 0 0 auto;
-  }
-
   .step {
     height: calc(var(--space-10) + var(--space-1));
+  }
+
+  /* The tools take a row of their own so the name keeps its room; 44px touch tiles share it evenly. */
+  .tools {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .toolCell {
+    flex: 1 1 0;
+  }
+
+  .tool {
+    width: 100%;
+    height: calc(var(--space-10) + var(--space-1));
+  }
+
+  .barActions {
+    order: 2;
   }
 
   .toggle,

@@ -124,10 +124,11 @@ describe("RunDetail calls=\"all\"", () => {
     assert.doesNotMatch(html, /Open failed step/);
   });
 
-  test("the monitor is the collapsed bar: Badge with the word, headline, elapsed and cost", () => {
+  test("the monitor is the collapsed bar: status word and icon, headline, elapsed and cost", () => {
     const html = renderToStaticMarkup(h(RunDetail, { run: failedRun, steps, calls: "all" }));
     const monitor = html.match(/<section class="_collapsed_[\s\S]*?<\/section>/)[0];
-    assert.match(monitor, /lucide-circle-x[\s\S]*Failed/);
+    assert.match(monitor, />failed</);
+    assert.match(monitor, /lucide-circle-x/);
     assert.match(monitor, /Stopped at Match payments, step 2 of 4/);
     assert.match(monitor, /0:04/);
     assert.match(monitor, /\$0\.02/);
@@ -220,9 +221,9 @@ describe("Run detail fixes from check #326", () => {
     assert.match(html, /class="[^"]*lg[^"]*block[^"]*"[^>]*>(?:(?!<\/button>).)*Retry/s);
   });
 
-  test("the running bar marks its actions so Stop run gets its own row below 40rem", () => {
+  test("the running bar puts Stop run and Pause on a row of their own", () => {
     const html = renderToStaticMarkup(h(AgentMonitor, { name: "x", status: "running", elapsed: "0:03", collapsed: true, onPause: () => {}, onStop: () => {} }));
-    assert.match(html, /barActionsRunning/);
+    assert.match(html, /class="_barActions_[^"]*"[\s\S]*Stop run[\s\S]*Pause/);
   });
 });
 

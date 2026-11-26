@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
-import { FilePen, SquareTerminal, Timer } from "lucide-react";
+import { CirclePause, FilePen, SquareTerminal, Timer } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -19,6 +19,7 @@ export type {
   ApprovalCardProps,
   ApprovalCardRisk,
   ApprovalCardStatus,
+  ApprovalCardVariant,
   ApprovalCardAction,
   ApprovalCardCommand,
   ApprovalCardDiff,
@@ -31,6 +32,12 @@ const RISK_TONE = { low: "success", medium: "warning", high: "danger" } as const
 
 function formatClock(totalSec: number): string {
   const sec = Math.max(0, Math.ceil(totalSec));
+  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+}
+
+/** Elapsed time counts whole seconds up: 31.9 waited reads 0:31. */
+function formatElapsed(totalSec: number): string {
+  const sec = Math.max(0, Math.floor(totalSec));
   return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
 }
 
@@ -96,6 +103,8 @@ export function ApprovalCard({
   action,
   facts,
   status = "pending",
+  variant = "default",
+  waitingSec,
   countdownSec,
   onApprove,
   onDeny,
@@ -116,6 +125,9 @@ export function ApprovalCard({
   const expireRef = useRef(onExpire ?? onDeny);
   const pending = status === "pending";
   const counting = pending && countdownSec !== undefined && countdownSec > 0;
+  const [waited, setWaited] = useState(waitingSec);
+  const [waitedFrom, setWaitedFrom] = useState(waitingSec);
+  const waiting = pending && variant === "compact" && waitingSec !== undefined;
 
   // A new countdownSec restarts the timer (state reset during render, not in an effect).
   if (countdownFrom !== countdownSec) {
@@ -123,9 +135,21 @@ export function ApprovalCard({
     setRemaining(countdownSec);
   }
 
+  // A new waitingSec restarts the count from that value (state reset during render, not in an effect).
+  if (waitedFrom !== waitingSec) {
+    setWaitedFrom(waitingSec);
+    setWaited(waitingSec);
+  }
+
   useEffect(() => {
     expireRef.current = onExpire ?? onDeny;
   });
+
+  useEffect(() => {
+    if (!waiting) return;
+    const id = window.setInterval(() => setWaited((value) => (value ?? 0) + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [waiting]);
 
   useEffect(() => {
     if (!counting) return;
@@ -169,6 +193,80 @@ export function ApprovalCard({
   const fraction = counting && remaining !== undefined ? (remaining / countdownSec) * 100 : 0;
 
   const lastSeconds = counting && remaining !== undefined && remaining <= 10;
+  const compact = variant === "compact";
+
+  // One Approve for both variants: the view's one solid primary. Compact uses sm and drops the icon.
+  const approveButton = (
+    <Button
+      size={compact ? "sm" : undefined}
+      appearance="solid"
+      mode="primary"
+      iconStart={compact ? undefined : "Check"}
+      shortcut={compact ? "⌘⏎" : undefined}
+      aria-keyshortcuts="Meta+Enter Control+Enter"
+      onClick={onApprove}
+    >
+      {approveLabel}
+    </Button>
+  );
+
+  if (compact) {
+    // Inside AgentMonitor: the run already says it is waiting, so the card is one row, one line of
+    // copy, the exact action and small buttons. The risk is read out with the title, not shown.
+    return (
+      <article
+        {...rest} {...nisthaAttr("approvalcard", rest)}
+        ref={ref}
+        tabIndex={-1}
+        className={cx(styles.card, styles.compact, reviewStyles.focusRing, className)}
+        onFocusCapture={focus.onFocusCapture}
+        onBlurCapture={focus.onBlurCapture}
+        aria-labelledby={titleId}
+        aria-describedby={description ? descriptionId : undefined}
+        onKeyDown={handleKeyDown}
+      >
+        <header className={styles.compactHead}>
+          <CirclePause size={16} strokeWidth={ICON_STROKE} className={styles.compactIcon} aria-hidden="true" />
+          <h3 id={titleId} className={styles.compactTitle}>
+            {title}
+            <span className={styles.srOnly}>, {RISK_LABEL[risk]}</span>
+          </h3>
+          {waiting && waited !== undefined ? (
+            <span className={styles.compactTimer}>
+              waiting{" "}
+              <span role="timer" aria-live="off">
+                {formatElapsed(waited)}
+              </span>
+            </span>
+          ) : null}
+          {counting && remaining !== undefined ? (
+            <span className={styles.compactTimer}>
+              {/* With the waiting timer beside it, the words show so the two clocks read apart. */}
+              <span className={waiting && waited !== undefined ? undefined : styles.srOnly}>Auto-deny in </span>
+              <span role="timer" aria-live="off">
+                {formatClock(remaining)}
+              </span>
+            </span>
+          ) : null}
+        </header>
+        {description ? (
+          <p id={descriptionId} className={styles.compactDescription}>
+            {description}
+          </p>
+        ) : null}
+        <Preview action={action} />
+        <span className={styles.srOnly} role="status">
+          {lastSeconds ? "Denies in 10 seconds" : ""}
+        </span>
+        <footer className={styles.compactActions}>
+          <Button size="sm" appearance="outline" mode="neutral" shortcut="Esc" aria-keyshortcuts="Escape" onClick={onDeny}>
+            {denyLabel}
+          </Button>
+          {approveButton}
+        </footer>
+      </article>
+    );
+  }
 
   return (
     <article
@@ -232,9 +330,7 @@ export function ApprovalCard({
           <Button appearance="outline" mode="neutral" aria-keyshortcuts="Escape" onClick={onDeny}>
             {denyLabel}
           </Button>
-          <Button appearance="solid" mode="primary" iconStart="Check" aria-keyshortcuts="Meta+Enter Control+Enter" onClick={onApprove}>
-            {approveLabel}
-          </Button>
+          {approveButton}
         </span>
       </footer>
     </article>

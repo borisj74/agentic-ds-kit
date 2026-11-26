@@ -9216,7 +9216,9 @@
       "useWhen": [
         "an agent needs a person's OK before a command, file edit, or other side effect",
         "human-in-the-loop gates in a chat, trail, or inbox",
-        "a resolved decision should stay in the log as one line"
+        "a resolved decision should stay in the log as one line",
+        "inside AgentMonitor, as variant=\"compact\" for the run's waiting state",
+        "compact inside AgentMonitor, with waitingSec, to say how long the agent has waited for the OK"
       ],
       "doNotUseWhen": [
         "a generic yes/no that interrupts the page — AlertDialog",
@@ -9229,7 +9231,9 @@
         "Do not paraphrase the action: show the exact command or diff",
         "Approve is the view's one solid primary; Deny stays outline neutral",
         "Do not use raw hex; risk colors come from status tokens",
-        "Do not hide the risk Badge for high-risk actions"
+        "Do not hide the risk Badge for high-risk actions in the default variant; only variant=\"compact\" inside AgentMonitor leaves it to screen readers",
+        "Do not use variant=\"compact\" for standalone approvals (chat, trail, inbox); it is only for AgentMonitor's waiting state",
+        "Do not pass waitingSec to the default variant or use it as a deadline; it only shows in compact, and auto-deny is countdownSec"
       ],
       "props": {
         "title": {
@@ -9271,6 +9275,20 @@
           ],
           "default": "pending",
           "note": "Anything but pending renders the one-line resolved row."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "default",
+            "compact"
+          ],
+          "default": "default",
+          "note": "compact is for AgentMonitor's waiting state only: one row with the title (and the countdown when countdownSec is set), one line of description, the exact preview and small right-aligned Deny and Approve with their key chips (Esc, ⌘⏎). No risk Badge, heading or facts; the risk is read to screen readers with the title."
+        },
+        "waitingSec": {
+          "type": "number",
+          "required": false,
+          "note": "Compact only: seconds the agent has already waited for this OK, shown as \"waiting m:ss\" in the title row and counting up while pending. Hidden when left out; ignored by the default variant. Not a deadline: use countdownSec for auto-deny."
         },
         "countdownSec": {
           "type": "number",
@@ -10131,7 +10149,7 @@
         "pendingAction": {
           "type": "object",
           "required": false,
-          "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard."
+          "note": "Waiting: { title, description?, risk?, action, waitingSec? } rendered as a kit ApprovalCard with variant=\"compact\": the title row (\"waiting m:ss\" when waitingSec is set), one line of description, the exact action and small Deny / Approve."
         },
         "onApprove": {
           "type": "function",
@@ -10149,7 +10167,7 @@
         "collapsed": {
           "type": "boolean",
           "default": false,
-          "note": "The one-row bar: status Badge (icon and word), name, headline, elapsed and cost (value over label), and while running Pause and Stop run; paused shows Cancel run and Resume. The step strip, when steps are passed, takes its own row below; picking a step opens the card on it. Below 40rem the name and labels hide, time and cost read \"0:04 · $0.02\", and the actions take a full row."
+          "note": "The one-row bar: agent mark, name over a mono \"02:14 · $0.42\" line (other statuses lead with the word, e.g. \"done · 4:02 · $0.18\"), one tile per tool the run used, then the chevron. Done, failed, waiting and paused add a status icon; done drops the tools. Picking a tool opens the card on its first step. Running shows Pause and Stop run, paused shows Cancel run and Resume, on a row below."
         },
         "onCollapsedChange": {
           "type": "function",
@@ -10158,7 +10176,7 @@
         "onStart": {
           "type": "function",
           "required": false,
-          "note": "Idle: Start run (solid primary)."
+          "note": "Idle: Start run (outline primary)."
         },
         "onPause": {
           "type": "function",
@@ -10168,7 +10186,7 @@
         "onResume": {
           "type": "function",
           "required": false,
-          "note": "Paused: Resume (solid primary)."
+          "note": "Paused: Resume (outline primary)."
         },
         "onCancel": {
           "type": "function",

@@ -6,7 +6,9 @@
   "useWhen": [
     "an agent needs a person's OK before a command, file edit, or other side effect",
     "human-in-the-loop gates in a chat, trail, or inbox",
-    "a resolved decision should stay in the log as one line"
+    "a resolved decision should stay in the log as one line",
+    "inside AgentMonitor, as variant=\"compact\" for the run's waiting state",
+    "compact inside AgentMonitor, with waitingSec, to say how long the agent has waited for the OK"
   ],
   "doNotUseWhen": [
     "a generic yes/no that interrupts the page — AlertDialog",
@@ -59,6 +61,20 @@
       ],
       "default": "pending",
       "note": "Anything but pending renders the one-line resolved row."
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "default",
+        "compact"
+      ],
+      "default": "default",
+      "note": "compact is for AgentMonitor's waiting state only: one row with the title (and the countdown when countdownSec is set), one line of description, the exact preview and small right-aligned Deny and Approve with their key chips (Esc, ⌘⏎). No risk Badge, heading or facts; the risk is read to screen readers with the title."
+    },
+    "waitingSec": {
+      "type": "number",
+      "required": false,
+      "note": "Compact only: seconds the agent has already waited for this OK, shown as \"waiting m:ss\" in the title row and counting up while pending. Hidden when left out; ignored by the default variant. Not a deadline: use countdownSec for auto-deny."
     },
     "countdownSec": {
       "type": "number",
@@ -144,7 +160,9 @@
       "countdown is role=timer with aria-live off; at 10 seconds left a polite status says \"Denies in 10 seconds\" once; the bar is a kit Progress with an accessible name",
       "resolved row is an article named \"Approved: <title>\" and takes focus if the card had it",
       "focus uses the shared ring (canvas 1px, focus-ring 3px)",
-      "entry motion is opacity and transform only, off under prefers-reduced-motion"
+      "entry motion is opacity and transform only, off under prefers-reduced-motion",
+      "compact: the title h3 also reads the risk (e.g. \", High risk\") to screen readers; the same keys and aria-keyshortcuts apply",
+      "compact waitingSec: the m:ss value is role=timer with aria-live off, after the visible word waiting"
     ]
   },
   "doNot": [
@@ -152,7 +170,9 @@
     "Do not paraphrase the action: show the exact command or diff",
     "Approve is the view's one solid primary; Deny stays outline neutral",
     "Do not use raw hex; risk colors come from status tokens",
-    "Do not hide the risk Badge for high-risk actions"
+    "Do not hide the risk Badge for high-risk actions in the default variant; only variant=\"compact\" inside AgentMonitor leaves it to screen readers",
+    "Do not use variant=\"compact\" for standalone approvals (chat, trail, inbox); it is only for AgentMonitor's waiting state",
+    "Do not pass waitingSec to the default variant or use it as a deadline; it only shows in compact, and auto-deny is countdownSec"
   ],
   "snippet": "<ApprovalCard title=\"Send a second reminder for INV-1842?\" description=\"Northwind owes $2,400.00, 18 days late.\" risk=\"medium\" facts={[{ label: \"Will do\", value: \"Email ap@northwind.com\" }, { label: \"Why medium\", value: \"Goes to the customer. Can't unsend.\" }]} action={{ kind: \"command\", command: \"dunning send --invoice INV-1842 --template overdue-2\", target: \"northwind / billing\" }} countdownSec={60} onApprove={approve} onDeny={deny} />"
 }

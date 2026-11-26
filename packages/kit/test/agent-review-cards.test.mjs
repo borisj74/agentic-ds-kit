@@ -235,3 +235,46 @@ describe("ChangeReview", () => {
     assert.match(out, /<footer[^>]*>.*⌘⏎ accept all.*Accept all 2 files.*<\/footer>/);
   });
 });
+
+describe("ApprovalCard compact (AgentMonitor waiting)", () => {
+  const props = { title: "Run a migration on staging?", description: "Drops column invoices.legacy_total on staging.", risk: "high", action: command, onApprove() {}, onDeny() {} };
+
+  test("default is unchanged: risk Badge, heading and full-size buttons", () => {
+    const out = html("ApprovalCard", props);
+    assert.match(out, />High risk</);
+    assert.match(out, /class="[^"]*_title_/);
+    assert.doesNotMatch(out, /_compact_/);
+  });
+
+  test("compact drops the Badge and heading, keeps the exact command and its tag, and uses small buttons", () => {
+    const out = html("ApprovalCard", { ...props, variant: "compact" });
+    assert.match(out, /class="[^"]*_compact_/);
+    assert.doesNotMatch(out, /_badge_/i, "no risk Badge");
+    assert.doesNotMatch(out, /class="[^"]*_title_/, "no big heading");
+    assert.match(out, /<h3[^>]*class="[^"]*_compactTitle_[^"]*"[^>]*>Run a migration on staging\?<span class="[^"]*_srOnly_[^"]*">, High risk<\/span><\/h3>/);
+    assert.match(out, /dunning send --invoice INV-1842 --template overdue-2/);
+    assert.match(out, /northwind \/ billing/);
+    assert.match(out, /class="[^"]*_compactActions_[^"]*"[\s\S]*>Deny<[\s\S]*>Approve</);
+    assert.equal((out.match(/_sm_/g) ?? []).length >= 2, true, "Deny and Approve are size sm");
+    assert.match(out, />Deny<\/span>[\s\S]*?>Esc</, "Deny shows its key chip");
+    assert.match(out, />Approve<\/span>[\s\S]*?>⌘⏎</, "Approve shows its key chip");
+  });
+
+  test("compact waitingSec shows \"waiting m:ss\" as a timer; hidden when left out and in the default variant", () => {
+    const shown = html("ApprovalCard", { ...props, variant: "compact", waitingSec: 31 });
+    assert.match(shown, /waiting <span role="timer" aria-live="off">0:31<\/span>/);
+    assert.match(html("ApprovalCard", { ...props, variant: "compact", waitingSec: 125.9 }), />2:05</, "whole seconds, rounded down");
+    assert.doesNotMatch(html("ApprovalCard", { ...props, variant: "compact" }), /waiting/);
+    assert.doesNotMatch(html("ApprovalCard", { ...props, waitingSec: 31 }), /waiting/, "default ignores it");
+  });
+
+  test("compact keeps the keys: Escape denies, Meta+Enter approves", () => {
+    let approved = 0;
+    let denied = 0;
+    const node = tree("ApprovalCard", { ...props, variant: "compact", onApprove: () => approved++, onDeny: () => denied++ });
+    key(node, { key: "Escape" });
+    key(node, { key: "Enter", metaKey: true });
+    assert.equal(denied, 1);
+    assert.equal(approved, 1);
+  });
+});

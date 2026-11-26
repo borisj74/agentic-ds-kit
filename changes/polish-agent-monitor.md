@@ -1,0 +1,9 @@
+### Added
+
+- **ApprovalCard `variant="compact"`.** For AgentMonitor's waiting state only: one row with the title (and the countdown when set), one line of description, the exact command or diff with its tag, and small right-aligned Deny and Approve with their key chips (Esc, ⌘⏎). No risk Badge, heading or facts; the risk is read to screen readers with the title. The default card is unchanged.
+- **ApprovalCard `waitingSec` (compact only).** Seconds the agent has already waited, shown as "waiting m:ss" in the title row and counting up while pending; hidden when left out. AgentMonitor passes it from `pendingAction.waitingSec`.
+
+### Changed
+
+- **AgentMonitor matches the polished Paper board.** The header leads with an agent mark and keeps the name on one line (truncated, full name on hover) with the status on the right. The clock panel opens up (16px between rows, 24px between clock and cost, snug clock tracking, regular-weight cost) and the headline reads at 14/20 with a 16px status icon. Step tiles are 36px; the running tile uses the info colours and the last step of a finished run shows a check on the success tint. Paused uses pause bars and mutes the stopped clock; failed puts the clock and what it spent on one line; loading shows five 36px step tiles. Start run and Resume are outline primary, Cancel run uses a stop icon and View diff a file icon. The card has the extra-small shadow.
+- **AgentMonitor collapsed is one compact row.** Agent mark, the name over a mono "02:14 · $0.42" line (other statuses lead with the word), one tile per tool the run used, then the chevron; done shows a check instead of the tools. Picking a tool opens the card on its first step. A passed headline still shows under the name, and run actions sit on a row below. RunDetail's header bar follows.
