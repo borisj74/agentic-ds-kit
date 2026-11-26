@@ -11,7 +11,7 @@ import { cx } from "../shared/cx";
 import { mergeRefs } from "../shared/mergeRefs";
 import { useNarrow } from "../shared/useNarrow";
 import { useResolvedFocus } from "../shared/useResolvedFocus";
-import { KeyHint, ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
+import { ResolvedRow, reviewStyles } from "../shared/ResolvedRow";
 import { handleReviewKeys } from "../shared/reviewKeys";
 import type { PermissionAccess, PermissionRequestProps, PermissionScope } from "./PermissionRequest.types";
 import styles from "./PermissionRequest.module.css";
@@ -99,6 +99,7 @@ export function PermissionRequest({
       mode="neutral"
       size={buttonSize}
       block={narrow}
+      shortcut={narrow ? undefined : "Esc"}
       aria-keyshortcuts="Escape"
       disabled={busy}
       onClick={onDeny}
@@ -114,6 +115,7 @@ export function PermissionRequest({
       size={buttonSize}
       block={narrow}
       iconStart={busy ? "LoaderCircle" : "Check"}
+      shortcut={narrow || busy ? undefined : "⌘⏎"}
       aria-keyshortcuts="Meta+Enter Control+Enter"
       className={busy ? styles.granting : undefined}
       onClick={busy ? undefined : onGrant}
@@ -207,7 +209,6 @@ export function PermissionRequest({
         {narrow ? null : (
           <span className={styles.footerStart}>
             {requestedAt && !badge ? <span className={styles.requested}>{requestedAt}</span> : null}
-            <KeyHint>⌘⏎ grant · Esc deny</KeyHint>
           </span>
         )}
         {narrow ? (

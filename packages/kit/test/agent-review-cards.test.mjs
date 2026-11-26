@@ -110,7 +110,8 @@ describe("PermissionRequest", () => {
     const out = html("PermissionRequest", { title: "Let Billing agent issue refunds on its own?", scopes: [scope], onGrant() {}, onDeny() {} });
     assert.match(out, /Limit: \$500 per refund/);
     assert.match(out, />Write</);
-    assert.match(out, /⌘⏎ grant · Esc deny/);
+    assert.match(out, />Deny<\/span>[\s\S]*?>Esc</, "Deny shows Esc");
+    assert.match(out, />Grant<\/span>[\s\S]*?>⌘⏎</, "Grant shows ⌘⏎");
   });
 
   test("error Retry is a kit Button", () => {
