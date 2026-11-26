@@ -147,26 +147,13 @@
   border-radius: var(--radius-surface-md);
 }
 
-/* Highlight on a clicked mark: an overlay that fades on opacity only. */
-.source::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-color: var(--primary-subtle);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.highlight::before {
-  animation: cited-highlight var(--motion-duration-600) var(--motion-ease-out);
-}
-
-/* The clicked source keeps the strong primary tint until another mark is clicked. */
+/* The clicked source keeps the strong primary tint until another mark is clicked; no motion. */
 .highlight {
   background-color: var(--primary-subtle-strong);
 }
 
+/* A missing source keeps its danger tint even when its mark is clicked, on purpose: the warning
+   stays louder than the highlight. Listed after .highlight so it wins. */
 .missing {
   background-color: var(--status-danger-subtle);
 }
@@ -316,19 +303,8 @@
   }
 }
 
-@keyframes cited-highlight {
-  0%,
-  40% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .list,
-  .highlight::before {
+  .list {
     animation: none;
   }
 
