@@ -12,13 +12,15 @@
   gap: var(--space-3);
 }
 
-/* Bare ghost icons under the message, no frame of their own. The row pulls back by a button's
-   inset so the first glyph lines up under the text. */
+/* Ghost icons in one hairline frame under the message. */
 .toolbar {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  margin-inline-start: calc(var(--space-2) * -1);
+  gap: var(--space-px);
+  padding: var(--space-px);
+  background-color: var(--bg-surface);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-lg);
 }
 
 .toolbar[aria-disabled="true"] {
@@ -28,20 +30,31 @@
 .divider {
   width: var(--border-width-thin);
   height: var(--space-4);
-  margin-inline: var(--space-1);
+  margin-inline: var(--space-px);
   background-color: var(--line-default);
 }
 
-.copied {
+/* Copied: the success tint, check in the success colour. Three classes deep so it outranks
+   Button's .soft.neutral; the hover and focus rule outranks .soft.neutral:hover, so the tint holds. */
+.wrap .toolbar .copied {
+  background-color: var(--status-success-subtle);
+  border-color: var(--status-success-subtle);
   color: var(--status-success-text);
 }
 
-.on {
-  color: var(--primary-fg);
+.wrap .toolbar .copied:hover:not(:disabled):not([aria-busy="true"]),
+.wrap .toolbar .copied:focus-visible {
+  background-color: var(--status-success-subtle);
+  border-color: var(--status-success-subtle);
 }
 
-.spin svg {
-  animation: actions-spin 1s linear infinite;
+.wrap .toolbar .copied svg {
+  color: var(--status-success);
+}
+
+/* A pressed thumbs up takes the primary colour on its soft fill. */
+.wrap .toolbar .on {
+  color: var(--primary);
 }
 
 .thanks {
@@ -50,7 +63,7 @@
   gap: var(--space-1);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
-  color: var(--status-success-text);
+  color: var(--text-fg-subtle);
   animation: actions-fade var(--motion-duration-150) var(--motion-ease-out);
 }
 
@@ -61,10 +74,14 @@
   gap: var(--space-2);
 }
 
-.reasonsLabel {
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+/* The reasons group keeps its name ("What went wrong?") for screen readers only. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* visible="hover": shown on hover or keyboard focus of the toolbar, or of a host marked data-message-actions-host. */
@@ -78,12 +95,6 @@
 :global([data-message-actions-host]:hover) .hover .toolbar,
 :global([data-message-actions-host]:focus-within) .hover .toolbar {
   opacity: 1;
-}
-
-@keyframes actions-spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes actions-fade {
@@ -101,7 +112,6 @@
     transition: none;
   }
 
-  .spin svg,
   .thanks {
     animation: none;
   }
