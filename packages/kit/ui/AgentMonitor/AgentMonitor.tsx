@@ -200,7 +200,11 @@ export function AgentMonitor({
           <h3 id={nameId} className={styles.barName} title={name}>
             {name}
           </h3>
-          {headline ? <p className={styles.barHeadline}>{headline}</p> : null}
+          {headline ? (
+            <p className={styles.barHeadline} title={headline}>
+              {headline}
+            </p>
+          ) : null}
           <p className={styles.barMeta}>
             {running ? <span className={styles.srOnly}>{STATUS_LABEL.running}</span> : <span>{STATUS_LABEL[status].toLowerCase()}</span>}
             {elapsed ? (

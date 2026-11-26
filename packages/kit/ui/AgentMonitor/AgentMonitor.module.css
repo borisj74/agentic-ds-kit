@@ -52,10 +52,13 @@
   white-space: nowrap;
 }
 
+/* Headline ("Step 2 of 4") and meta stay on one line; a long headline truncates (full text in title). */
 .barHeadline {
   margin: 0;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-muted);
@@ -63,6 +66,9 @@
 
 .barMeta {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
