@@ -114,8 +114,7 @@
   outline-offset: calc(var(--border-focus-width) * -1);
 }
 
-/* A surface step plus a hairline: the hairline keeps selected apart from hover where the two tints
-   match (dark mode). */
+/* Selected: the strong primary tint, a step past hover's control tint, so the two stay apart. */
 .selected,
 .selected:hover {
   background-color: var(--primary-subtle-strong);
@@ -152,11 +151,11 @@
 }
 
 .question .typeIcon {
-  color: var(--status-info);
+  color: var(--icon-info);
 }
 
 .failure .typeIcon {
-  color: var(--status-danger);
+  color: var(--icon-danger);
 }
 
 .recap .typeIcon {
@@ -188,7 +187,6 @@
 .read .agent {
   font-weight: var(--type-weight-label);
 }
-
 
 .type {
   color: var(--text-fg-subtle);
