@@ -101,9 +101,11 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
   "billing-schedule": [
     { id: "history", label: "Schedule" },
     { id: "next", label: "Next charge" },
+    { id: "failed", label: "Failed payment" },
     { id: "summary", label: "Summary" },
     { id: "empty", label: "Empty" },
     { id: "loading", label: "Loading" },
+    { id: "error", label: "Error" },
   ],
   "integration-settings": [
     { id: "connected", label: "Connected" },

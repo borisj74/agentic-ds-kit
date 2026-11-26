@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { BillingSchedulePattern } from "../../packages/kit/patterns/BillingSchedulePattern";
+import { FAILED_CHARGES } from "../../packages/kit/patterns/BillingSchedulePattern/billing-schedule-data";
 import { IntegrationSettingsPattern } from "../../packages/kit/patterns/IntegrationSettingsPattern";
 import styles from "../playground.module.css";
 
-type BillingView = "history" | "next" | "summary" | "empty" | "loading";
+type BillingView = "history" | "next" | "failed" | "summary" | "empty" | "loading" | "error";
 type SettingsView = "connected" | "syncing" | "error" | "needsReauth" | "disconnected";
 
 const noop = () => {};
@@ -16,14 +17,14 @@ export function BillingScheduleScreen({ view = "history" }: { view?: string }) {
   return (
     <div className={`${styles.screenPage} ${styles.screenPagePadded}`}>
       <BillingSchedulePattern
-        charges={billing === "empty" ? [] : undefined}
+        charges={billing === "empty" ? [] : billing === "failed" ? FAILED_CHARGES : undefined}
         nextOnly={billing === "next"}
         summary={billing === "summary"}
         onViewAll={billing === "summary" ? noop : undefined}
         loading={billing === "loading"}
-        onAsk={billing === "summary" ? undefined : noop}
+        error={billing === "error" ? "Check your connection, then try again" : undefined}
+        onRetry={noop}
         onDownloadAll={noop}
-        onDownloadInvoice={noop}
         onChangeCard={noop}
         onUpdateCard={noop}
       />

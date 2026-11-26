@@ -1,97 +1,62 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
-   turns modules into global CSS with no class map. The billing-schedule-pattern__ prefix keeps names unique. */
+   turns modules into global CSS with no class map. The billing-schedule-pattern__ prefix keeps names unique.
+   These rules style only the pattern's own markup; kit components keep their own look (props and variants). */
 
 .billing-schedule-pattern {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-3);
   min-width: 0;
   container-type: inline-size;
 }
 
-/* Next-charge Card beside the failure Alert (layout-split--primary, 2:1); both rows share one height. */
-.billing-schedule-pattern__summary {
-  display: grid;
-  min-width: 0;
+.billing-schedule-pattern__date {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-fg-muted);
 }
 
-.billing-schedule-pattern__summary.layout-split--primary {
-  align-items: stretch;
-  gap: var(--space-4);
+.billing-schedule-pattern__date--next {
+  color: var(--text-fg);
 }
 
-.billing-schedule-pattern__summary > * {
-  min-width: 0;
+.billing-schedule-pattern__amount {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-fg);
 }
 
-/* Layout inside the kit Card only: the Card owns the surface, border, radius and padding. */
-.billing-schedule-pattern__next {
+.billing-schedule-pattern__amount--waived {
+  color: var(--text-fg-subtle);
+}
+
+.billing-schedule-pattern__description {
   display: flex;
+  flex-direction: column;
+}
+
+.billing-schedule-pattern__line {
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-6);
-}
-
-.billing-schedule-pattern__next-rule {
-  display: flex;
-  align-self: stretch;
-}
-
-.billing-schedule-pattern__next-amount {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.billing-schedule-pattern__next-action {
-  display: flex;
-  padding-top: var(--space-2);
-}
-
-.billing-schedule-pattern__lines {
-  display: flex;
-  flex: 1 1 12rem;
-  flex-direction: column;
   gap: var(--space-2);
-  min-width: 0;
-}
-
-.billing-schedule-pattern__line-item {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
 
-.billing-schedule-pattern__line-item > :first-child {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.billing-schedule-pattern__line-item--foot {
-  padding-top: var(--space-2);
-  border-top: var(--border-divider) solid var(--border-faint);
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
-}
-
-.billing-schedule-pattern__figure {
-  font-family: var(--font-mono);
-  font-size: var(--type-size-heading-4);
+.billing-schedule-pattern__line--next {
   font-weight: var(--type-weight-label);
-  line-height: var(--type-line-heading-4);
-  letter-spacing: var(--type-tracking-heading);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-fg);
 }
 
-.billing-schedule-pattern__caption {
+/* "Next charge" after the next charge's description: a word, not a second Badge. */
+.billing-schedule-pattern__next-marker {
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+  color: var(--status-info-text);
 }
 
 .billing-schedule-pattern__note {
@@ -104,71 +69,60 @@
   color: var(--status-danger-text);
 }
 
-.billing-schedule-pattern__group {
+/* nextOnly panel: a subtle inset with the figure, a rule, the payment method and Change card. */
+.billing-schedule-pattern__panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-xl);
+}
+
+.billing-schedule-pattern__panel-figure,
+.billing-schedule-pattern__panel-method {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-1);
   min-width: 0;
 }
 
-.billing-schedule-pattern__group-heading {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: 0;
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
+.billing-schedule-pattern__panel-method {
+  flex: 1 1 auto;
 }
 
-.billing-schedule-pattern__group-window {
+.billing-schedule-pattern__panel-rule {
+  display: flex;
+  align-self: stretch;
+}
+
+.billing-schedule-pattern__panel-action {
+  display: flex;
+  margin-inline-start: auto;
+}
+
+.billing-schedule-pattern__caption {
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-body);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-}
-
-.billing-schedule-pattern__date {
-  display: flex;
-  flex-direction: column;
-}
-
-.billing-schedule-pattern__date-day {
-  font-family: var(--font-mono);
-  font-weight: var(--type-weight-label);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.billing-schedule-pattern__invoice {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
   color: var(--text-fg-muted);
 }
 
-.billing-schedule-pattern__mono {
+.billing-schedule-pattern__figure {
   font-family: var(--font-mono);
+  font-size: var(--type-size-heading-5);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-heading-5);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  color: var(--text-fg);
 }
 
-.billing-schedule-pattern__description {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-stack-2xs);
-}
-
-.billing-schedule-pattern__line {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.billing-schedule-pattern__loading {
-  padding-block: var(--space-2);
+.billing-schedule-pattern__method {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
 }
 
 .billing-schedule-pattern__form {
@@ -183,50 +137,21 @@
   max-width: none;
 }
 
-/* Tables at 40rem and up, the month-grouped ListView below (see the container query). */
-.billing-schedule-pattern__wide,
-.billing-schedule-pattern__narrow {
-  flex-direction: column;
-  gap: var(--space-6);
-  min-width: 0;
-}
-
-.billing-schedule-pattern__wide {
-  display: flex;
-}
-
-.billing-schedule-pattern__narrow {
-  display: none;
-}
-
-/* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the Card and the
-   failure Alert stack (layout-split does this itself only inside layout-content), and the
-   next-charge lines go under the figure without the vertical rule. Tables give way to ListViews. */
+/* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the panel stacks without
+   its rule. The Table stacks its rows itself (stack). */
 @container (max-width: 40rem) {
-  .billing-schedule-pattern__summary.layout-split--primary {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .billing-schedule-pattern__next {
+  .billing-schedule-pattern__panel {
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-4);
   }
 
-  .billing-schedule-pattern__next-rule {
+  .billing-schedule-pattern__panel-rule {
     display: none;
   }
 
-  .billing-schedule-pattern__lines {
-    flex-basis: auto;
-  }
-
-  .billing-schedule-pattern__wide {
-    display: none;
-  }
-
-  .billing-schedule-pattern__narrow {
-    display: flex;
+  .billing-schedule-pattern__panel-action {
+    margin-inline-start: 0;
   }
 }
 

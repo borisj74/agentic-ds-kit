@@ -74,6 +74,11 @@
         "default": "solid",
         "required": false,
         "note": "action only; page placement only. inline is always outline."
+      },
+      "icon": {
+        "type": "KitIcon",
+        "required": false,
+        "note": "Leading Lucide icon on the Button, aria-hidden, such as RotateCcw on Retry. The label still names the action."
       }
     },
     "secondaryAction": {
@@ -87,6 +92,11 @@
       "onClick": {
         "type": "function",
         "required": true
+      },
+      "icon": {
+        "type": "KitIcon",
+        "required": false,
+        "note": "Leading Lucide icon, aria-hidden."
       }
     },
     "onDismiss": {
@@ -126,7 +136,8 @@
       "The header starts with the tone word (Info, Success, Warning, Error from KitLabelsProvider keys info, success, warning, danger), then · eyebrow, so status is never colour alone",
       "Title uses the -fg tone and body uses text.primary (4.5:1 or more on the tinted fill); the icon keeps the status colour",
       "Dismiss is a kit Button named Dismiss (KitLabelsProvider); focus never jumps to the alert",
-      "Actions are kit Buttons, so they stay keyboard reachable in reading order after the text"
+      "Actions are kit Buttons, so they stay keyboard reachable in reading order after the text",
+      "An action icon (action.icon, secondaryAction.icon) is decorative and aria-hidden; the label still names the action, so never pass an icon without a label"
     ]
   },
   "doNot": [
