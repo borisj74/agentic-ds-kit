@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { CircleCheck, CircleX, Square } from "lucide-react";
+import { Bot, CircleCheck, CircleX, Compass, Square } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { AlertDialog } from "../AlertDialog";
 import { Button } from "../Button";
@@ -56,6 +56,9 @@ export function AgentSteering({
 
   const header = (
     <header className={styles.header}>
+      <span className={styles.agentIcon} aria-hidden="true">
+        <Bot size={14} strokeWidth={ICON_STROKE} />
+      </span>
       <div className={styles.heading}>
         <h3 id={nameId} className={styles.name}>
           {name}
@@ -78,8 +81,9 @@ export function AgentSteering({
     return (
       <section {...rest} {...nisthaAttr("agentsteering", rest)} ref={ref} className={cx(styles.card, className)} aria-busy="true" aria-label={`${name}, loading`}>
         <div className={styles.header}>
+          <Skeleton shape="circle" width="calc(var(--space-6) + var(--space-1))" />
           <div className={styles.heading}>
-            <Skeleton width="45%" />
+            <Skeleton width="50%" size="sm" />
             <Skeleton width="30%" size="sm" />
           </div>
         </div>
@@ -140,14 +144,17 @@ export function AgentSteering({
         </p>
       ) : null}
 
-      <form className={styles.composer} onSubmit={submit}>
+      <form className={styles.composer} onSubmit={submit} aria-busy={sending || undefined}>
         <Input
           id={inputId}
           className={styles.input}
           ariaLabel={`Steer ${name}`}
           placeholder={placeholder}
+          iconStart={Compass}
           value={value}
-          disabled={finished || sending}
+          // Sending locks the field but keeps its text readable (read-only, not disabled).
+          disabled={finished}
+          readOnly={sending}
           onChange={(next) => onValueChange?.(next)}
         />
         <Button
@@ -173,7 +180,8 @@ export function AgentSteering({
         </p>
       ) : null}
 
-      {suggestions.length && !finished ? (
+      {/* A finished run keeps its quick steers in view, disabled, like the rest of the controls. */}
+      {suggestions.length ? (
         <ul className={styles.suggestions} aria-label="Quick steers">
           {suggestions.map((suggestion) => (
             <li key={suggestion}>
@@ -181,7 +189,7 @@ export function AgentSteering({
                 size="sm"
                 appearance="outline"
                 mode="neutral"
-                disabled={status !== "running" || sending}
+                disabled={finished || status !== "running" || sending}
                 onClick={() => onValueChange?.(suggestion)}
               >
                 {suggestion}
@@ -216,9 +224,9 @@ export function AgentSteering({
           <span id={pauseNoteId} className={styles.hint}>
             {pauseNote}
           </span>
-        ) : (
-          <span className={styles.hint} aria-hidden="true">
-            Enter to steer
+        ) : finished ? null : (
+          <span className={cx(styles.hint, styles.hintKey)} aria-hidden="true">
+            steer with ⏎
           </span>
         )}
       </footer>
