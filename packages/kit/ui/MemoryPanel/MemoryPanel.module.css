@@ -28,7 +28,7 @@
 .title {
   margin: 0;
   font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-heading);
   line-height: var(--type-line-ui-sm);
   color: var(--text-fg);
 }
@@ -44,17 +44,18 @@
 .groups {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-px);
 }
 
-/* Same inline padding as the rows, so group labels and memory text share one left edge. */
+/* Group labels sit near the panel edge, left of the row icons. */
 .groupHead {
   margin: 0;
-  padding: var(--space-1) var(--space-2) 0;
+  padding: 0 var(--space-px);
+  font-family: var(--font-mono);
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-body);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-muted);
+  color: var(--text-fg-subtle);
 }
 
 .list {
@@ -70,7 +71,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-2);
+  padding: calc(var(--space-2) + var(--space-px)) var(--space-3);
   border-radius: var(--radius-surface-md);
   animation: memory-in var(--motion-duration-200) var(--motion-ease-out);
 }
@@ -78,6 +79,12 @@
 .item:hover,
 .item:focus-within {
   background-color: var(--bg-subtle);
+}
+
+.itemIcon {
+  flex-shrink: 0;
+  margin-top: var(--space-px);
+  color: var(--text-fg-muted);
 }
 
 .itemBody {
@@ -100,7 +107,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg-subtle);
@@ -124,8 +131,14 @@
   opacity: 1;
 }
 
-.pinOn {
-  color: var(--primary-fg);
+.age {
+  font-family: var(--font-mono);
+}
+
+/* Beats the ghost neutral Button colour (and its hover) so a pinned pin reads as on. */
+.actions .pinOn,
+.actions .pinOn:hover:not(:disabled) {
+  color: var(--primary);
 }
 
 .editing {
@@ -152,7 +165,7 @@
 .privacy {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
   margin: 0;
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
@@ -164,15 +177,21 @@
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: calc(var(--space-2) + var(--space-px)) var(--space-3);
   background-color: var(--status-danger-subtle);
   border-radius: var(--radius-surface-md);
   color: var(--status-danger-text);
 }
 
+.error > svg {
+  flex-shrink: 0;
+  color: var(--icon-danger);
+}
+
 .errorText {
   flex: 1 1 0;
   font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
   line-height: var(--type-line-ui-xs);
 }
 
@@ -185,7 +204,7 @@
   color: inherit;
   font: inherit;
   font-size: var(--type-size-caption);
-  font-weight: var(--type-weight-label);
+  font-weight: var(--type-weight-strong);
   cursor: pointer;
 }
 
@@ -201,21 +220,21 @@
 .loading {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-2);
+  gap: var(--space-px);
 }
 
 .skeletonRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
+  padding: calc(var(--space-2) + var(--space-px)) var(--space-3);
 }
 
 .skeletonText {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: calc(var(--space-1) + var(--space-px));
 }
 
 @keyframes memory-in {
