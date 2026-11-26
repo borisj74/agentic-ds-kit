@@ -98,6 +98,24 @@ describe("Alert", () => {
     assert.equal(button(outline), button(inline), "same outline neutral Button as inline");
     assert.equal((outline.match(/<p/g) ?? []).length, 1, "title only, no empty body paragraph");
   });
+
+  test("action and secondaryAction icons lead their Buttons, aria-hidden; no icon by default", () => {
+    const buttons = (html) => html.match(/<button[\s\S]*?<\/button>/g) ?? [];
+    const html = renderToStaticMarkup(
+      h(Alert, {
+        variant: "danger",
+        title: "Couldn’t load invoices",
+        action: { label: "Retry", onClick: noop, appearance: "outline", icon: "RotateCcw" },
+        secondaryAction: { label: "Open status page", onClick: noop, icon: "ExternalLink" },
+      }),
+    );
+    const [retry, status] = buttons(html);
+    assert.match(retry, /<svg[^>]*lucide-rotate-ccw[^>]*aria-hidden="true"[\s\S]*<span>Retry<\/span>/);
+    assert.ok(retry.indexOf("<svg") < retry.indexOf("Retry"), "the icon comes before the label");
+    assert.match(status, /<svg[^>]*aria-hidden="true"[\s\S]*Open status page/);
+    const plain = renderToStaticMarkup(h(Alert, { variant: "danger", title: "Not saved", action: { label: "Retry", onClick: noop } }));
+    assert.ok(!buttons(plain)[0].includes("<svg"), "no icon without action.icon");
+  });
 });
 
 describe("Alert labels", () => {

@@ -181,13 +181,13 @@ const EDIT_CHARGES = [
 ];
 
 describe("BillingSchedulePattern", () => {
-  test("a Card with the header: Calendar icon, Billing schedule, the plan and Download all", () => {
+  test("Card's own header: title Billing schedule, the plan as description and Download all; no hand-built header", () => {
     const html = ssr({ onDownloadAll: () => {} });
-    assert.match(html, /<article[^>]*billing-schedule-pattern__card/);
-    assert.match(html, /<svg[^>]*billing-schedule-pattern__head-icon[^>]*aria-hidden="true"/);
+    assert.match(html, /<article[^>]*aria-labelledby="[^"]+"/, "the Card is named by its title");
     assert.match(html, /<h2[^>]*>Billing schedule<\/h2>/);
-    assert.match(html, /billing-schedule-pattern__plan">Pro plan</);
+    assert.match(html, /<p[^>]*>Pro plan<\/p>/);
     assert.match(html, />Download all</);
+    assert.ok(!html.includes("billing-schedule-pattern__head"), "no local header markup");
   });
 
   test("one Table: Date, Description, Status, Amount; upcoming first, then billed newest first", () => {
@@ -201,19 +201,21 @@ describe("BillingSchedulePattern", () => {
     assert.ok(!html.includes("Total,"), "no total row");
   });
 
-  test("the next charge is highlighted by its marker; a space before it; one marker only", () => {
+  test("the next charge says Next charge with a space before it; one marker only", () => {
     const html = ssr();
     assert.equal((html.match(/>Next charge</g) ?? []).length, 1);
     assert.match(html, /Pro plan · monthly(?:<!-- -->)? <span[^>]*billing-schedule-pattern__next-marker[^>]*>Next charge</);
     assert.match(html, /billing-schedule-pattern__date billing-schedule-pattern__date--next">01 Dec 2026</);
   });
 
-  test("status is a word in a pill Badge with no icon; notes are muted, Card declined is danger", () => {
+  test("status is a word in a Badge with no icon; notes are muted, Card declined is danger", () => {
     const html = ssr();
-    for (const word of ["Upcoming", "Paid", "Invoiced", "Failed", "Waived"]) assert.match(html, new RegExp(`>${word}<`));
-    const statuses = [...html.matchAll(/billing-schedule-pattern__status">([\s\S]*?)<\/span><\/span>/g)].map((m) => m[1]);
-    assert.equal(statuses.length, 5);
-    assert.ok(statuses.every((badge) => !badge.includes("<svg")), "no icons in the Badges");
+    for (const word of ["Upcoming", "Paid", "Invoiced", "Failed", "Waived"]) {
+      const at = html.indexOf(`>${word}<`);
+      assert.ok(at > 0, word);
+      assert.ok(!html.slice(html.lastIndexOf("<td", at), at).includes("<svg"), `no icon in the ${word} Badge`);
+    }
+    assert.ok(!html.includes("billing-schedule-pattern__status"), "no local wrapper restyling the Badge");
     assert.match(html, /billing-schedule-pattern__note">Prorated for 14 days</);
     assert.match(html, /billing-schedule-pattern__note">Credit applied</);
     assert.match(html, /billing-schedule-pattern__note billing-schedule-pattern__note--danger">Card declined</);

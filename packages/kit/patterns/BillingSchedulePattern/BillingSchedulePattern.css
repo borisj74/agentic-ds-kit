@@ -1,12 +1,6 @@
 /* Plain CSS, not a CSS Module: a turbopack "*.css" rule (stock in create-next-app)
    turns modules into global CSS with no class map. The billing-schedule-pattern__ prefix keeps names unique.
-   The kit Card, Table, Badge and Alert are restyled here for this pattern only, through its own classes;
-   doubled classes win over the kit stylesheet whichever loads last. Nothing here changes them globally. */
-
-/* The Card: 16 corners (radius-surface-lg) like the board; size sm keeps the 16 padding. */
-.billing-schedule-pattern__card.billing-schedule-pattern__card {
-  border-radius: var(--radius-surface-lg);
-}
+   These rules style only the pattern's own markup; kit components keep their own look (props and variants). */
 
 .billing-schedule-pattern {
   display: flex;
@@ -14,120 +8,6 @@
   gap: var(--space-3);
   min-width: 0;
   container-type: inline-size;
-}
-
-/* Header: calendar icon, title, muted plan name, then the actions on the right. */
-.billing-schedule-pattern__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--control-height-sm);
-  min-width: 0;
-}
-
-.billing-schedule-pattern__head-icon {
-  flex-shrink: 0;
-  color: var(--icon-muted);
-}
-
-.billing-schedule-pattern__title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: var(--type-size-body-sm);
-  font-weight: var(--type-weight-heading);
-  line-height: var(--type-line-ui-sm);
-  color: var(--text-fg);
-}
-
-.billing-schedule-pattern__plan {
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--text-fg-subtle);
-}
-
-.billing-schedule-pattern__actions {
-  display: flex;
-  gap: var(--space-2);
-  margin-inline-start: auto;
-}
-
-/* Table look for this pattern: subtle sentence-case header with a rule under it, 52px rows
-   (space-12 + space-1) with no row rules, 12 cell padding. */
-.billing-schedule-pattern__table.billing-schedule-pattern__table {
-  --table-pad: var(--space-3);
-}
-
-.billing-schedule-pattern__table.billing-schedule-pattern__table th {
-  height: auto;
-  padding-block: 0 var(--space-2);
-  color: var(--text-fg-subtle);
-}
-
-.billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr {
-  border-bottom: none;
-}
-
-.billing-schedule-pattern__table.billing-schedule-pattern__table tbody td {
-  height: calc(var(--space-12) + var(--space-1));
-  color: var(--text-fg);
-}
-
-/* The next charge: primary-subtle row with an info rule round it and 8 corners. */
-.billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td {
-  background-color: var(--primary-subtle);
-  box-shadow:
-    inset 0 var(--border-width-thin) var(--info-line),
-    inset 0 calc(var(--border-width-thin) * -1) var(--info-line);
-}
-
-.billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td:first-child {
-  border-start-start-radius: var(--radius-lg);
-  border-end-start-radius: var(--radius-lg);
-  box-shadow:
-    inset 0 var(--border-width-thin) var(--info-line),
-    inset 0 calc(var(--border-width-thin) * -1) var(--info-line),
-    inset var(--border-width-thin) 0 var(--info-line);
-}
-
-.billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td:last-child {
-  border-start-end-radius: var(--radius-lg);
-  border-end-end-radius: var(--radius-lg);
-  box-shadow:
-    inset 0 var(--border-width-thin) var(--info-line),
-    inset 0 calc(var(--border-width-thin) * -1) var(--info-line),
-    inset calc(var(--border-width-thin) * -1) 0 var(--info-line);
-}
-
-/* Below 30rem the Table stacks each row into two lines (stack): the highlight moves to the whole row
-   and cells take their own height. 30rem is the Table's own stack width (container "table"). */
-@container table (max-width: 30rem) {
-  .billing-schedule-pattern__table.billing-schedule-pattern__table tbody td {
-    height: auto;
-  }
-
-  .billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) {
-    background-color: var(--primary-subtle);
-    border-radius: var(--radius-lg);
-    box-shadow: inset 0 0 0 var(--border-width-thin) var(--info-line);
-  }
-
-  .billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td,
-  .billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td:first-child,
-  .billing-schedule-pattern__table.billing-schedule-pattern__table tbody tr:has(.billing-schedule-pattern__next-marker) > td:last-child {
-    background-color: transparent;
-    border-radius: 0;
-    box-shadow: none;
-  }
-}
-
-/* Status: small pills with no icon. */
-.billing-schedule-pattern__status {
-  display: inline-flex;
-}
-
-.billing-schedule-pattern__status > * {
-  border-radius: var(--radius-full);
 }
 
 .billing-schedule-pattern__date {
@@ -187,32 +67,6 @@
 
 .billing-schedule-pattern__note--danger {
   color: var(--status-danger-text);
-}
-
-/* Alerts here put their one action on the right of the text, centred. The kit Alert's copy column
-   becomes a two-column grid; the action group is its last child. */
-.billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: var(--space-3);
-}
-
-.billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child > p {
-  grid-column: 1;
-}
-
-/* The board sets the sentence under the title in small danger text. */
-.billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child > p + p {
-  font-size: var(--type-size-caption);
-  line-height: var(--type-line-ui-xs);
-  color: var(--status-danger-text);
-}
-
-.billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child > div:last-child {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  margin: 0;
 }
 
 /* nextOnly panel: a subtle inset with the figure, a rule, the payment method and Change card. */
@@ -284,7 +138,7 @@
 }
 
 /* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the panel stacks without
-   its rule, and Alert actions go back under the text. The Table stacks its rows itself (stack). */
+   its rule. The Table stacks its rows itself (stack). */
 @container (max-width: 40rem) {
   .billing-schedule-pattern__panel {
     flex-direction: column;
@@ -298,14 +152,6 @@
 
   .billing-schedule-pattern__panel-action {
     margin-inline-start: 0;
-  }
-
-  .billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child {
-    display: block;
-  }
-
-  .billing-schedule-pattern__alert.billing-schedule-pattern__alert > div:last-child > div:last-child {
-    margin-top: var(--space-2);
   }
 }
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Calendar } from "lucide-react";
 import { Alert } from "../../ui/Alert";
 import { AlertDialog } from "../../ui/AlertDialog";
 import { Badge } from "../../ui/Badge";
 import type { BadgeTone } from "../../ui/Badge";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
+import type { CardAction } from "../../ui/Card";
 import { CurrencyInput } from "../../ui/CurrencyInput";
 import { DatePicker } from "../../ui/DatePicker";
 import { Divider } from "../../ui/Divider";
@@ -29,7 +29,7 @@ import {
 } from "./billing-schedule-data";
 import "./BillingSchedulePattern.css";
 
-/** Status is a word in a small pill Badge, never colour alone. Upcoming is the only primary one. */
+/** Status is a word in a small Badge, never colour alone. Upcoming is the only primary one. */
 const STATUS: Record<ChargeStatus, { tone: BadgeTone; label: string }> = {
   scheduled: { tone: "primary", label: "Upcoming" },
   retrying: { tone: "warning", label: "Retrying" },
@@ -76,20 +76,20 @@ export interface BillingSchedulePatternProps {
   summary?: boolean;
   /** Charges shown in summary mode. Default 3. */
   limit?: number;
-  /** Muted line beside the title, such as the plan name. Default: the demo plan. */
+  /** The Card description under the title, such as the plan name. Default: the demo plan. */
   description?: string;
   /** The failure Alert's body: what was declined, when the retry runs and what to do before then. */
   failureDetail?: string;
   /** ISO 4217 code for the edit Drawer's CurrencyInput. Default USD. */
   currency?: string;
-  /** "View all" (ghost) in the header, to the full schedule. Wins over Download all. */
+  /** "View all" (ghost) in the Card header, to the full schedule. Wins over Download all. */
   onViewAll?: () => void;
   loading?: boolean;
   error?: string;
   onRetry?: () => void;
-  /** Ask (outline, MessageCircle) in the header. */
+  /** Ask (outline, MessageCircle) in the Card header. */
   onAsk?: () => void;
-  /** Download all (ghost) in the header; hidden while the failure Alert shows. */
+  /** Download all (ghost) in the Card header; hidden while the failure Alert shows. */
   onDownloadAll?: () => void;
   /** Download icon on billed rows, named by the invoice. Without it billed rows have no action. */
   onDownloadInvoice?: (charge: Charge) => void;
@@ -137,8 +137,8 @@ function openFailure(billed: Charge[]): Charge | undefined {
 const cx = (...names: (string | false | undefined)[]) => names.filter(Boolean).join(" ");
 
 /**
- * Billing schedule for one customer in a kit Card: a header with the plan, one kit Table of upcoming
- * and billed charges with the next charge highlighted, a failure Alert when a payment is still open,
+ * Billing schedule for one customer in a kit Card: the Card's header with the plan, one kit Table of
+ * upcoming and billed charges with the next charge marked, a failure Alert when a payment is still open,
  * and a nextOnly panel. Scheduled rows can open a kit Drawer to move the date, change the amount or
  * skip the month. Copy it in and replace the demo data.
  */
@@ -171,7 +171,6 @@ export function BillingSchedulePattern({
     setRows(charges);
   }
 
-  const headingId = useId();
   const [editId, setEditId] = useState<string | null>(null);
   const [skipId, setSkipId] = useState<string | null>(null);
   const [announce, setAnnounce] = useState("");
@@ -191,7 +190,7 @@ export function BillingSchedulePattern({
     .filter((charge) => !UPCOMING.includes(charge.status))
     .sort((a, b) => b.date.localeCompare(a.date));
   const ordered = [...upcoming, ...billed];
-  /** The first scheduled charge is highlighted and says Next charge. */
+  /** The first scheduled charge says Next charge after its description. */
   const nextId = upcoming.find((charge) => charge.status === "scheduled")?.id;
   const failure = ready && !nextOnly && !summary ? openFailure(billed) : undefined;
   const hasRowActions = Boolean(onSaveCharge || onDownloadInvoice);
@@ -250,54 +249,31 @@ export function BillingSchedulePattern({
     return [];
   }
 
-  const askButton = onAsk ? (
-    <Button size="sm" appearance="outline" mode="neutral" iconStart="MessageCircle" onClick={onAsk}>
-      Ask
-    </Button>
-  ) : null;
-  const headerAction =
-    ready && !nextOnly && onViewAll ? (
-      <Button size="sm" appearance="ghost" mode="neutral" iconEnd="ArrowRight" onClick={onViewAll}>
-        View all
-      </Button>
-    ) : ready && !nextOnly && !failure && onDownloadAll ? (
-      <Button size="sm" appearance="ghost" mode="neutral" iconStart="Download" onClick={onDownloadAll}>
-        Download all
-      </Button>
-    ) : null;
+  // Card's own header holds the actions: Ask, then View all or Download all (at most two).
+  const headerActions: CardAction[] = [];
+  if (onAsk) headerActions.push({ label: "Ask", onClick: onAsk, iconStart: "MessageCircle", appearance: "outline" });
+  if (ready && !nextOnly && onViewAll) headerActions.push({ label: "View all", onClick: onViewAll, appearance: "ghost" });
+  else if (ready && !nextOnly && !failure && onDownloadAll)
+    headerActions.push({ label: "Download all", onClick: onDownloadAll, iconStart: "Download", appearance: "ghost" });
 
   return (
-    <Card size="sm" className="billing-schedule-pattern__card" aria-busy={loading || undefined}>
+    <Card
+      size="sm"
+      title="Billing schedule"
+      description={description || undefined}
+      headerAction={headerActions.length > 0 ? headerActions : undefined}
+      aria-busy={loading || undefined}
+    >
       <div className="billing-schedule-pattern" ref={rootRef}>
-        <div className="billing-schedule-pattern__head">
-          <Calendar className="billing-schedule-pattern__head-icon" size={16} aria-hidden="true" />
-          <h2 id={headingId} className="billing-schedule-pattern__title">
-            Billing schedule
-          </h2>
-          {description ? <span className="billing-schedule-pattern__plan">{description}</span> : null}
-          {askButton || headerAction ? (
-            <span className="billing-schedule-pattern__actions">
-              {askButton}
-              {headerAction}
-            </span>
-          ) : null}
-        </div>
         <span role="status" className="billing-schedule-pattern__sr">
           {announce}
         </span>
 
         {loading ? (
-          <Table
-            className="billing-schedule-pattern__table"
-            aria-label="Charges"
-            columns={COLUMNS}
-            rows={[]}
-            state="loading"
-          />
+          <Table aria-label="Charges" size="lg" columns={COLUMNS} rows={[]} state="loading" />
         ) : error ? (
           <Alert
             variant="danger"
-            className="billing-schedule-pattern__alert"
             title="Couldn’t load the billing schedule"
             action={onRetry ? { label: "Retry", onClick: onRetry, appearance: "outline", icon: "RotateCcw" } : undefined}
           >
@@ -323,7 +299,6 @@ export function BillingSchedulePattern({
               <Alert
                 variant="danger"
                 placement="page"
-                className="billing-schedule-pattern__alert"
                 title={`${failure.amount} failed on ${longDate(failure.date)}`}
                 action={onUpdateCard ? { label: "Update card", onClick: onUpdateCard } : undefined}
               >
@@ -331,9 +306,9 @@ export function BillingSchedulePattern({
               </Alert>
             ) : null}
             <Table
-              className="billing-schedule-pattern__table"
               aria-label="Charges"
               data-charge-table="schedule"
+              size="lg"
               stack
               columns={COLUMNS}
               rows={ordered.map((charge) => {
@@ -346,11 +321,9 @@ export function BillingSchedulePattern({
                   ),
                   charge: <ChargeText charge={charge} next={isNext} />,
                   status: (
-                    <span className="billing-schedule-pattern__status">
-                      <Badge tone={STATUS[charge.status].tone} size="sm">
-                        {STATUS[charge.status].label}
-                      </Badge>
-                    </span>
+                    <Badge tone={STATUS[charge.status].tone} size="sm">
+                      {STATUS[charge.status].label}
+                    </Badge>
                   ),
                   amount: (
                     <span
@@ -460,11 +433,9 @@ function SummaryCharge({ charge }: { charge: Charge }) {
     <span className="billing-schedule-pattern__description">
       <span className="billing-schedule-pattern__line">
         {charge.label}{" "}
-        <span className="billing-schedule-pattern__status">
-          <Badge tone={STATUS[charge.status].tone} size="sm">
-            {STATUS[charge.status].label}
-          </Badge>
-        </span>
+        <Badge tone={STATUS[charge.status].tone} size="sm">
+          {STATUS[charge.status].label}
+        </Badge>
       </span>
       <span className="billing-schedule-pattern__note billing-schedule-pattern__date">{longDate(charge.date)}</span>
     </span>
