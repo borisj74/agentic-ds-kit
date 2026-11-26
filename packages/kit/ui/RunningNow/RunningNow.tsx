@@ -83,6 +83,7 @@ export function RunningNow({
   onStop,
   loading = false,
   emptyText = "Nothing running right now",
+  idleText,
   className,
   ref,
   ...rest
@@ -91,6 +92,8 @@ export function RunningNow({
   const limit = maxVisible ?? (layout === "row" ? 3 : 4);
   const visible = items.slice(0, limit);
   const hidden = Math.max(0, items.length - visible.length);
+  // Idle: nothing runs and the person knows when it last did — no count, no icon, just the line.
+  const idle = Boolean(idleText) && !loading && items.length === 0;
 
   return (
     <section
@@ -103,9 +106,11 @@ export function RunningNow({
       <div className={styles.head}>
         <h3 id={labelId} className={styles.label}>
           {label}
-          <span className={styles.count} aria-hidden={loading || undefined}>
-            {loading ? "…" : items.length}
-          </span>
+          {idle ? null : (
+            <span className={styles.count} aria-hidden={loading || undefined}>
+              {loading ? "…" : items.length}
+            </span>
+          )}
         </h3>
         {/* Row layout: the overflow is said in words on the label line, not as a lone "+N" chip. */}
         {layout === "row" && !loading && hidden > 0 ? (
@@ -139,6 +144,8 @@ export function RunningNow({
             ),
           )}
         </div>
+      ) : idle ? (
+        <p className={styles.empty}>{idleText}</p>
       ) : items.length === 0 ? (
         <p className={styles.empty}>
           <Clock size={16} strokeWidth={ICON_STROKE} aria-hidden="true" />

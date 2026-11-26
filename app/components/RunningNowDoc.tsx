@@ -58,13 +58,13 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   },
   {
     title: "Empty — quiet",
-    about: "No items: one quiet line. emptyText can say when the last run was.",
+    about: "No items: one quiet line with the count at 0. idleText says when the last run was, without the count or the icon.",
     code: `<RunningNow items={[]} />
-<RunningNow items={[]} emptyText="Idle · last run 2h ago" />`,
+<RunningNow items={[]} idleText="Idle · last run 2h ago" />`,
     render: (
       <div className={agentDoc.row}>
         <RunningNow items={[]} />
-        <RunningNow items={[]} emptyText="Idle · last run 2h ago" />
+        <RunningNow items={[]} idleText="Idle · last run 2h ago" />
       </div>
     ),
   },
