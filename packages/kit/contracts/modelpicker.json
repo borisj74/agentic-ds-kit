@@ -96,6 +96,7 @@
       "a visible label (or hideLabel) names the field trigger",
       "the menu is the kit DropdownMenu: groups with headings, arrow keys, Escape",
       "disabled models stay in the list with their reason and a lock",
+      "context window and cost tier are plain text in the item description (e.g. \"Deepest reasoning · 200K · High\"), read with the item, not key chips or aria-keyshortcuts",
       "error is role=alert and described by the trigger",
       "the spinner stops under prefers-reduced-motion"
     ]

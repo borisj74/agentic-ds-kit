@@ -34,14 +34,20 @@ function groupsOf(models: PickerModel[], value: string | undefined): DropdownMen
   return order.map((vendor) => ({
     heading: vendor || undefined,
     items: (byVendor.get(vendor) ?? []).map((model) => {
-      const description = [model.recommended ? "Recommended" : "", model.disabled ? model.disabledReason : model.description]
+      // Context window and cost tier are plain text at the end of the description, not the
+      // shortcut slot: that slot draws key chips and announces them as aria-keyshortcuts.
+      const description = [
+        model.recommended ? "Recommended" : "",
+        model.disabled ? model.disabledReason : model.description,
+        model.contextWindow,
+        costWord(model.costTier),
+      ]
         .filter(Boolean)
         .join(" · ");
       return {
         id: model.id,
         label: model.name,
         description: description || undefined,
-        shortcut: [model.contextWindow, costWord(model.costTier)].filter(Boolean).join(" · ") || undefined,
         selected: model.id === value,
         disabled: model.disabled,
         icon: model.disabled ? "Lock" : undefined,
