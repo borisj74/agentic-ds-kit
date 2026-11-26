@@ -167,7 +167,19 @@ describe("InlineDiff", () => {
   test("counts read in words", () => {
     const out = html("InlineDiff", { title: "Change terms and amount on INV-1842?", file: "ledger/INV-1842.yaml", lines, onAccept() {}, onReject() {} });
     assert.match(out, /2 added, 2 removed/);
-    assert.match(out, /⌘⏎ accept · Esc reject/);
+    assert.match(out, /<span aria-hidden="true">\+2 −2<\/span>/, "+2 −2 shown, words for screen readers");
+  });
+
+  test("footer: Reject with Esc, Accept all, then Accept with ⌘⏎ and no Check icon", () => {
+    const out = html("InlineDiff", { title: "Edit", lines, onAccept() {}, onReject() {}, onAcceptAll() {} });
+    const reject = out.indexOf(">Reject<");
+    const all = out.indexOf(">Accept all<");
+    const accept = out.lastIndexOf(">Accept<");
+    assert.ok(reject > -1 && reject < all && all < accept, "Reject, Accept all, Accept");
+    assert.match(out, />Esc</);
+    assert.match(out, />⌘⏎</);
+    assert.doesNotMatch(out, /lucide-check\b/);
+    assert.doesNotMatch(out, /⌘⏎ accept · Esc reject/);
   });
 
   test("accepted row says the counts in words", () => {
