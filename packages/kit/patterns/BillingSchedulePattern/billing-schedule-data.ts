@@ -29,7 +29,7 @@ export interface Charge {
 
 /** The next charge, as one figure with its lines. Every string arrives pre-formatted. */
 export interface NextCharge {
-  /** e.g. "Tue 1 Dec". */
+  /** e.g. "01 Dec 2026"; the Card reads "Next charge on 01 Dec 2026". */
   date: string;
   amount: string;
   /** e.g. "Visa ending 4242 · 10 days from today". */
@@ -124,7 +124,7 @@ export const CHARGES: Charge[] = [
 ];
 
 export const NEXT_CHARGE: NextCharge = {
-  date: "Tue 1 Dec",
+  date: "01 Dec 2026",
   amount: "$2,238.00",
   detail: "Visa ending 4242 · 10 days from today",
   lines: [

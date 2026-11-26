@@ -9,21 +9,6 @@
   container-type: inline-size;
 }
 
-/* Next-charge Card beside the failure Alert (layout-split--primary, 2:1); both rows share one height. */
-.billing-schedule-pattern__summary {
-  display: grid;
-  min-width: 0;
-}
-
-.billing-schedule-pattern__summary.layout-split--primary {
-  align-items: stretch;
-  gap: var(--space-4);
-}
-
-.billing-schedule-pattern__summary > * {
-  min-width: 0;
-}
-
 /* Layout inside the kit Card only: the Card owns the surface, border, radius and padding. */
 .billing-schedule-pattern__next {
   display: flex;
@@ -43,9 +28,10 @@
   gap: var(--space-1);
 }
 
+/* Change card sits at the end of the row, after the lines. */
 .billing-schedule-pattern__next-action {
   display: flex;
-  padding-top: var(--space-2);
+  margin-inline-start: auto;
 }
 
 .billing-schedule-pattern__lines {
@@ -80,9 +66,9 @@
 
 .billing-schedule-pattern__figure {
   font-family: var(--font-mono);
-  font-size: var(--type-size-heading-4);
+  font-size: var(--type-size-heading-5);
   font-weight: var(--type-weight-label);
-  line-height: var(--type-line-heading-4);
+  line-height: var(--type-line-heading-5);
   letter-spacing: var(--type-tracking-heading);
   font-variant-numeric: tabular-nums;
   color: var(--text-fg);
@@ -129,23 +115,20 @@
   color: var(--text-fg-subtle);
 }
 
-.billing-schedule-pattern__date {
-  display: flex;
-  flex-direction: column;
-}
-
 .billing-schedule-pattern__date-day {
   font-family: var(--font-mono);
-  font-weight: var(--type-weight-label);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.billing-schedule-pattern__invoice {
-  font-family: var(--font-mono);
+  font-weight: var(--type-weight-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--text-fg-muted);
+}
+
+/* "Next charge" after the first scheduled charge's description: a word, not a second Badge. */
+.billing-schedule-pattern__next-marker {
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--status-info-text);
 }
 
 .billing-schedule-pattern__mono {
@@ -165,10 +148,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-}
-
-.billing-schedule-pattern__loading {
-  padding-block: var(--space-2);
 }
 
 .billing-schedule-pattern__form {
@@ -199,14 +178,9 @@
   display: none;
 }
 
-/* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the Card and the
-   failure Alert stack (layout-split does this itself only inside layout-content), and the
-   next-charge lines go under the figure without the vertical rule. Tables give way to ListViews. */
+/* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the next-charge
+   lines go under the figure without the vertical rule. Tables give way to ListViews. */
 @container (max-width: 40rem) {
-  .billing-schedule-pattern__summary.layout-split--primary {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .billing-schedule-pattern__next {
     flex-direction: column;
     align-items: stretch;
@@ -219,6 +193,10 @@
 
   .billing-schedule-pattern__lines {
     flex-basis: auto;
+  }
+
+  .billing-schedule-pattern__next-action {
+    margin-inline-start: 0;
   }
 
   .billing-schedule-pattern__wide {

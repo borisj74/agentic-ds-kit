@@ -172,15 +172,18 @@ describe("BillingSchedulePattern desktop", () => {
     assert.match(html, /Total, next 60 days, retry included/);
     assert.match(html, /\$8,172\.00/);
     const upcoming = html.slice(html.indexOf('aria-label="Upcoming"'), html.indexOf('aria-label="Billed"'));
-    assert.ok(upcoming.indexOf(">24 Nov<") < upcoming.indexOf(">01 Jan<"), "Upcoming is oldest first");
+    assert.ok(upcoming.indexOf(">24 Nov 2026<") < upcoming.indexOf(">01 Jan 2027<"), "Upcoming is oldest first");
     const billed = html.slice(html.indexOf('aria-label="Billed"'));
-    assert.ok(billed.indexOf(">18 Nov<") < billed.indexOf(">15 Oct<"), "Billed is newest first");
-    assert.ok(!html.includes("Next charge</span>"), "no Next charge badge in the rows");
+    assert.ok(billed.indexOf(">18 Nov 2026<") < billed.indexOf(">15 Oct 2026<"), "Billed is newest first");
+    assert.equal((html.match(/>Next charge</g) ?? []).length, 1, "one Next charge marker, on the first scheduled row");
+    assert.ok(upcoming.indexOf(">Next charge<") < upcoming.indexOf("API calls over 2M"), "the marker sits on 01 Dec Scale plan");
+    assert.ok(!html.includes('aria-label="Next charge"'), "no next-charge Card beside the tables");
+    assert.ok(!html.includes(">Invoice<"), "four columns: Date, Description, Status, Amount");
   });
 
   test("status is a word with an icon; pencil only on scheduled rows, Download names its invoice", () => {
     const html = ssr({ onDownloadInvoice: () => {} });
-    for (const word of ["Scheduled", "Retrying", "Invoiced", "Failed", "Paid"]) assert.match(html, new RegExp(`>${word}<`));
+    for (const word of ["Upcoming", "Retrying", "Invoiced", "Failed", "Paid"]) assert.match(html, new RegExp(`>${word}<`));
     const wide = html.slice(0, html.indexOf("billing-schedule-pattern__narrow"));
     const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
     assert.equal((wide.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "four scheduled rows, no pencil on the retry");
@@ -212,9 +215,11 @@ describe("BillingSchedulePattern desktop", () => {
     assert.match(narrow, /aria-label="Download INV-1830"/);
   });
 
-  test("next-charge Card shows the figure, its lines and the draft invoice", () => {
-    const html = ssr();
-    assert.match(html, /Next scheduled charge · Tue 1 Dec/);
+  test("nextOnly: the next-charge Card shows the figure, its lines, the draft invoice and Change card", () => {
+    const html = ssr({ nextOnly: true, onChangeCard: () => {} });
+    assert.match(html, /Next charge on 01 Dec 2026/);
+    assert.match(html, />Change card</);
+    assert.ok(!html.includes('aria-label="Upcoming"'), "no tables in nextOnly");
     assert.match(html, />\$2,238\.00</);
     assert.match(html, /API calls over 2M · estimate/);
     assert.match(html, /Goes on INV-1871 · draft/);
@@ -224,8 +229,8 @@ describe("BillingSchedulePattern desktop", () => {
   test("summary mode still renders two columns and View all for the Settings Billing page", () => {
     const html = ssr({ summary: true, onViewAll: () => {} });
     assert.match(html, />View all</);
-    assert.ok(!html.includes("Next scheduled charge"));
-    assert.ok(!html.includes(">Upcoming<"));
+    assert.ok(!html.includes("Next charge on"));
+    assert.ok(!/<h3[^>]*>Upcoming/.test(html), "no Upcoming table heading in summary");
     assert.match(html, />24 Nov 2026</);
   });
 });

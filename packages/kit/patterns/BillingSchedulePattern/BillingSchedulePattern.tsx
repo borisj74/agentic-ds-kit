@@ -16,7 +16,6 @@ import { Field } from "../../ui/Field";
 import { ListView } from "../../ui/ListView";
 import { RadioGroup } from "../../ui/RadioGroup";
 import { Section } from "../../ui/Section";
-import { Skeleton } from "../../ui/Skeleton";
 import { Table } from "../../ui/Table";
 import type { TableRowAction } from "../../ui/Table";
 import {
@@ -34,11 +33,11 @@ import "./BillingSchedulePattern.css";
 
 type KitIconName = "Clock" | "RotateCcw" | "File" | "CircleCheck" | "CircleX" | "Minus";
 
-/** Status is a word in a Badge with its own icon (aria-hidden), never colour alone. Scheduled stays neutral. */
+/** Status is a word in a Badge with its own icon (aria-hidden), never colour alone. Only Upcoming takes info. */
 const STATUS: Record<ChargeStatus, { tone: BadgeTone; label: string; icon: KitIconName }> = {
-  scheduled: { tone: "neutral", label: "Scheduled", icon: "Clock" },
+  scheduled: { tone: "info", label: "Upcoming", icon: "Clock" },
   retrying: { tone: "warning", label: "Retrying", icon: "RotateCcw" },
-  invoiced: { tone: "info", label: "Invoiced", icon: "File" },
+  invoiced: { tone: "neutral", label: "Invoiced", icon: "File" },
   paid: { tone: "success", label: "Paid", icon: "CircleCheck" },
   failed: { tone: "danger", label: "Failed", icon: "CircleX" },
   waived: { tone: "neutral", label: "Waived", icon: "Minus" },
@@ -54,8 +53,7 @@ const SUMMARY_COLUMNS = [
 
 const COLUMNS = [
   { key: "date", header: "Date" },
-  { key: "charge", header: "Charge" },
-  { key: "invoice", header: "Invoice" },
+  { key: "charge", header: "Description" },
   { key: "status", header: "Status" },
   { key: "amount", header: "Amount", align: "end" as const, numeric: true },
 ];
@@ -199,6 +197,8 @@ export function BillingSchedulePattern({
     ? money(upcoming.reduce((sum, charge) => sum + (charge.value ?? 0), 0), currency)
     : undefined;
   const retryIncluded = upcoming.some((charge) => charge.status === "retrying");
+  /** The first scheduled charge carries the Next charge marker in its row. */
+  const nextId = upcoming.find((charge) => charge.status === "scheduled")?.id;
 
   useEffect(() => {
     if (editId || skipId || !focusAfter.current) return;
@@ -278,19 +278,19 @@ export function BillingSchedulePattern({
           {announce}
         </span>
         {loading ? (
-          <div className="billing-schedule-pattern__loading">
-            <Skeleton lines={4} />
-          </div>
+          <Card size="sm" flush>
+            <Table aria-label="Charges" size="md" columns={COLUMNS} rows={[]} state="loading" />
+          </Card>
         ) : error ? (
           <Alert
             variant="danger"
             title="Couldn’t load the billing schedule"
-            action={onRetry ? { label: "Retry", onClick: onRetry } : undefined}
+            action={onRetry ? { label: "Retry", onClick: onRetry, appearance: "outline" } : undefined}
           >
             {error}
           </Alert>
         ) : rows.length === 0 ? (
-          <Empty title="No charges yet" description="Your first charge appears here after the trial ends." icon="CalendarDays" />
+          <Empty title="No charges yet" description="Your first charge shows here when the trial ends." icon="Calendar" />
         ) : summary ? (
           <Table
             aria-label="Charges"
@@ -303,19 +303,17 @@ export function BillingSchedulePattern({
           />
         ) : (
           <>
-            <div className={showsFailure ? "billing-schedule-pattern__summary layout-split--primary" : "billing-schedule-pattern__summary"}>
-              <NextChargeCard next={next} onChangeCard={showsFailure ? undefined : onChangeCard} />
-              {showsFailure && failed ? (
-                <Alert
-                  variant="danger"
-                  placement="page"
-                  title={`${failed.invoice ?? failed.label} failed on ${day(failed.date)} · ${failed.amount}`}
-                  action={onUpdateCard ? { label: "Update card", onClick: onUpdateCard } : undefined}
-                >
-                  {failureDetail}
-                </Alert>
-              ) : null}
-            </div>
+            {nextOnly ? <NextChargeCard next={next} onChangeCard={onChangeCard} /> : null}
+            {showsFailure && failed ? (
+              <Alert
+                variant="danger"
+                placement="page"
+                title={`${failed.invoice ?? failed.label} failed on ${day(failed.date)} · ${failed.amount}`}
+                action={onUpdateCard ? { label: "Update card", onClick: onUpdateCard } : undefined}
+              >
+                {failureDetail}
+              </Alert>
+            ) : null}
 
             {!nextOnly ? (
               <>
@@ -323,6 +321,7 @@ export function BillingSchedulePattern({
                   <ScheduleTable
                     kind="upcoming"
                     heading="Upcoming"
+                    nextId={nextId}
                     window={UPCOMING_WINDOW}
                     charges={upcoming}
                     footer={
@@ -417,16 +416,9 @@ function NextChargeCard({ next, onChangeCard }: { next: NextCharge; onChangeCard
     <Card aria-label="Next charge">
       <div className="billing-schedule-pattern__next">
         <div className="billing-schedule-pattern__next-amount">
-          <span className="billing-schedule-pattern__caption">Next scheduled charge · {next.date}</span>
+          <span className="billing-schedule-pattern__caption">Next charge on {next.date}</span>
           <span className="billing-schedule-pattern__figure">{next.amount}</span>
           <span className="billing-schedule-pattern__note">{next.detail}</span>
-          {onChangeCard ? (
-            <span className="billing-schedule-pattern__next-action">
-              <Button size="sm" appearance="outline" mode="neutral" onClick={onChangeCard}>
-                Change card
-              </Button>
-            </span>
-          ) : null}
         </div>
         {next.lines.length > 0 ? (
           <>
@@ -451,6 +443,13 @@ function NextChargeCard({ next, onChangeCard }: { next: NextCharge; onChangeCard
             </div>
           </>
         ) : null}
+        {onChangeCard ? (
+          <span className="billing-schedule-pattern__next-action">
+            <Button size="sm" appearance="outline" mode="neutral" onClick={onChangeCard}>
+              Change card
+            </Button>
+          </span>
+        ) : null}
       </div>
     </Card>
   );
@@ -464,6 +463,7 @@ function ScheduleTable({
   footer,
   emptyLabel,
   actions,
+  nextId,
 }: {
   kind: "upcoming" | "billed";
   heading: string;
@@ -472,6 +472,8 @@ function ScheduleTable({
   footer?: { label: string; value: string };
   emptyLabel: string;
   actions: (charge: Charge) => TableRowAction[];
+  /** Row that gets the Next charge marker after its description. */
+  nextId?: string;
 }) {
   return (
     <div className="billing-schedule-pattern__group">
@@ -483,12 +485,11 @@ function ScheduleTable({
         <Table
           aria-label={heading}
           data-charge-table={kind}
-          size="lg"
+          size="md"
           columns={COLUMNS}
           rows={charges.map((charge) => ({
-            date: <ChargeDate label={day(charge.date)} weekday={weekday(charge.date)} />,
-            charge: <ChargeText charge={charge} />,
-            invoice: <span className="billing-schedule-pattern__invoice">{charge.invoice ?? ""}</span>,
+            date: <ChargeDate label={longDate(charge.date)} />,
+            charge: <ChargeText charge={charge} next={charge.id === nextId} />,
             status: (
               <Badge tone={STATUS[charge.status].tone} size="sm" icon={STATUS[charge.status].icon}>
                 {STATUS[charge.status].label}
@@ -598,20 +599,18 @@ function ScheduleList({
   );
 }
 
-/** `label` doubles as the row name the Table reads for its Actions group. */
-function ChargeDate({ label, weekday: name }: { label: string; weekday: string }) {
-  return (
-    <span className="billing-schedule-pattern__date">
-      <span className="billing-schedule-pattern__date-day">{label}</span>
-      {name ? <span className="billing-schedule-pattern__note">{name}</span> : null}
-    </span>
-  );
+/** "01 Dec 2026". `label` doubles as the row name the Table reads for its Actions group. */
+function ChargeDate({ label }: { label: string }) {
+  return <span className="billing-schedule-pattern__date-day">{label}</span>;
 }
 
-function ChargeText({ charge }: { charge: Charge }) {
+function ChargeText({ charge, next = false }: { charge: Charge; next?: boolean }) {
   return (
     <span className="billing-schedule-pattern__description">
-      <span>{charge.label}</span>
+      <span className="billing-schedule-pattern__line">
+        {charge.label}
+        {next ? <span className="billing-schedule-pattern__next-marker">Next charge</span> : null}
+      </span>
       {charge.note ? (
         <span
           className={
