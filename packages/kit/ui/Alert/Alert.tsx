@@ -74,13 +74,14 @@ export function Alert({
                 appearance={solidAction ? "solid" : "outline"}
                 mode={solidAction ? "primary" : "neutral"}
                 size="sm"
+                iconStart={action.icon}
                 onClick={action.onClick}
               >
                 {action.label}
               </Button>
             ) : null}
             {secondaryAction ? (
-              <Button appearance="outline" mode="neutral" size="sm" onClick={secondaryAction.onClick}>
+              <Button appearance="outline" mode="neutral" size="sm" iconStart={secondaryAction.icon} onClick={secondaryAction.onClick}>
                 {secondaryAction.label}
               </Button>
             ) : null}

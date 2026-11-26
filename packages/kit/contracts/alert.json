@@ -74,6 +74,11 @@
         "default": "solid",
         "required": false,
         "note": "action only; page placement only. inline is always outline."
+      },
+      "icon": {
+        "type": "KitIcon",
+        "required": false,
+        "note": "Leading Lucide icon on the Button, aria-hidden, such as RotateCcw on Retry. The label still names the action."
       }
     },
     "secondaryAction": {
@@ -87,6 +92,11 @@
       "onClick": {
         "type": "function",
         "required": true
+      },
+      "icon": {
+        "type": "KitIcon",
+        "required": false,
+        "note": "Leading Lucide icon, aria-hidden."
       }
     },
     "onDismiss": {

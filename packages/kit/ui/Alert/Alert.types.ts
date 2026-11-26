@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, Ref } from "react";
+import type { KitIcon } from "../Button/lucideName";
 
 export type AlertVariant = "info" | "success" | "warning" | "danger";
 
@@ -13,6 +14,8 @@ export interface AlertAction {
    * "outline" when the page already has its primary, like an error summary above a form with Save.
    */
   appearance?: "solid" | "outline";
+  /** Leading Lucide icon on the Button, aria-hidden, such as RotateCcw on Retry. The label still names the action. */
+  icon?: KitIcon;
 }
 
 /** Native div attributes the kit sets itself (or replaces with its own prop). */

@@ -1,6 +1,6 @@
 /**
- * BillingSchedulePattern: next-charge Card, the failure Alert, Upcoming and Billed as two kit Tables
- * with icon row actions, the edit Drawer and the Skip AlertDialog, with focus moves. The pattern is
+ * BillingSchedulePattern: the Card header, one kit Table with the next charge highlighted, pill status
+ * Badges, the failure Alert, the nextOnly panel, the edit Drawer and the Skip AlertDialog, with focus moves. The pattern is
  * copy-in source (not in dist), so this transpiles it with TypeScript into a temp folder inside the
  * kit, points its ../../ui imports at the built kit (dist), and renders with SSR and jsdom.
  * `npm test` builds first.
@@ -162,91 +162,135 @@ async function frame() {
   await act(async () => new Promise((resolve) => setTimeout(resolve, 50)));
 }
 
-describe("BillingSchedulePattern desktop", () => {
-  test("two kit Tables, Upcoming oldest first with its total, Billed newest first", () => {
-    const html = ssr();
-    assert.match(html, /<h3[^>]*>Upcoming<span[^>]*>next 60 days<\/span><\/h3>/);
-    assert.match(html, /<h3[^>]*>Billed<span[^>]*>last 60 days<\/span><\/h3>/);
-    assert.match(html, /aria-label="Upcoming"/);
-    assert.match(html, /aria-label="Billed"/);
-    assert.match(html, /Total, next 60 days, retry included/);
-    assert.match(html, /\$8,172\.00/);
-    const upcoming = html.slice(html.indexOf('aria-label="Upcoming"'), html.indexOf('aria-label="Billed"'));
-    assert.ok(upcoming.indexOf(">24 Nov 2026<") < upcoming.indexOf(">01 Jan 2027<"), "Upcoming is oldest first");
-    const billed = html.slice(html.indexOf('aria-label="Billed"'));
-    assert.ok(billed.indexOf(">18 Nov 2026<") < billed.indexOf(">15 Oct 2026<"), "Billed is newest first");
-    assert.equal((html.match(/>Next charge</g) ?? []).length, 1, "one Next charge marker, on the first scheduled row");
-    assert.ok(upcoming.indexOf(">Next charge<") < upcoming.indexOf("API calls over 2M"), "the marker sits on 01 Dec Scale plan");
-    assert.match(upcoming, /24 seats(?:<!-- -->)? <span[^>]*>Next charge</, "a space before the marker, so copied text reads \"24 seats Next charge\"");
-    assert.ok(!html.includes('aria-label="Next charge"'), "no next-charge Card beside the tables");
-    assert.ok(!html.includes(">Invoice<"), "four columns: Date, Description, Status, Amount");
+/** Upcoming charges with a split fee, for the edit flow (the demo data has one scheduled charge). */
+const EDIT_CHARGES = [
+  { id: "dec", date: "2026-12-01", label: "Pro plan · monthly", amount: "$480.00", value: 480, status: "scheduled", invoice: "INV-0118" },
+  {
+    id: "onboarding-2",
+    date: "2026-12-15",
+    label: "Onboarding · part 2 of 3",
+    amount: "$1,500.00",
+    value: 1500,
+    status: "scheduled",
+    invoice: "INV-0120",
+    splitLabel: "This and part 3 on 15 Jan 2027",
+  },
+  { id: "jan", date: "2027-01-01", label: "Pro plan · monthly", amount: "$480.00", value: 480, status: "scheduled", invoice: "INV-0121" },
+  { id: "retry", date: "2026-11-24", label: "Retry of INV-0109", amount: "$480.00", value: 480, status: "retrying", invoice: "INV-0109" },
+  { id: "nov", date: "2026-11-01", label: "Pro plan · monthly", amount: "$480.00", value: 480, status: "paid", invoice: "INV-0117" },
+];
+
+describe("BillingSchedulePattern", () => {
+  test("a Card with the header: Calendar icon, Billing schedule, the plan and Download all", () => {
+    const html = ssr({ onDownloadAll: () => {} });
+    assert.match(html, /<article[^>]*billing-schedule-pattern__card/);
+    assert.match(html, /<svg[^>]*billing-schedule-pattern__head-icon[^>]*aria-hidden="true"/);
+    assert.match(html, /<h2[^>]*>Billing schedule<\/h2>/);
+    assert.match(html, /billing-schedule-pattern__plan">Pro plan</);
+    assert.match(html, />Download all</);
   });
 
-  test("status is a word with an icon; pencil only on scheduled rows, Download names its invoice", () => {
-    const html = ssr({ onDownloadInvoice: () => {} });
-    for (const word of ["Upcoming", "Retrying", "Invoiced", "Failed", "Paid"]) assert.match(html, new RegExp(`>${word}<`));
-    const wide = html.slice(0, html.indexOf("billing-schedule-pattern__narrow"));
-    const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
-    assert.equal((wide.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "four scheduled rows, no pencil on the retry");
-    assert.equal((narrow.match(/aria-label="Edit [^"]+"/g) ?? []).length, 4, "the phone list has the same four pencils");
+  test("one Table: Date, Description, Status, Amount; upcoming first, then billed newest first", () => {
+    const html = ssr();
+    assert.equal((html.match(/<table/g) ?? []).length, 1, "one table");
+    assert.match(html, /aria-label="Charges"/);
+    const headers = [...html.matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)].map((m) => m[1].replace(/<[^>]+>/g, ""));
+    assert.deepEqual(headers, ["Date", "Description", "Status", "Amount"]);
+    const order = ["01 Dec 2026", "01 Nov 2026", "18 Oct 2026", "01 Oct 2026", "01 Sep 2026"].map((d) => html.indexOf(`>${d}<`));
+    assert.deepEqual([...order].sort((a, b) => a - b), order, "01 Dec, then newest first");
+    assert.ok(!html.includes("Total,"), "no total row");
+  });
+
+  test("the next charge is highlighted by its marker; a space before it; one marker only", () => {
+    const html = ssr();
+    assert.equal((html.match(/>Next charge</g) ?? []).length, 1);
+    assert.match(html, /Pro plan · monthly(?:<!-- -->)? <span[^>]*billing-schedule-pattern__next-marker[^>]*>Next charge</);
+    assert.match(html, /billing-schedule-pattern__date billing-schedule-pattern__date--next">01 Dec 2026</);
+  });
+
+  test("status is a word in a pill Badge with no icon; notes are muted, Card declined is danger", () => {
+    const html = ssr();
+    for (const word of ["Upcoming", "Paid", "Invoiced", "Failed", "Waived"]) assert.match(html, new RegExp(`>${word}<`));
+    const statuses = [...html.matchAll(/billing-schedule-pattern__status">([\s\S]*?)<\/span><\/span>/g)].map((m) => m[1]);
+    assert.equal(statuses.length, 5);
+    assert.ok(statuses.every((badge) => !badge.includes("<svg")), "no icons in the Badges");
+    assert.match(html, /billing-schedule-pattern__note">Prorated for 14 days</);
+    assert.match(html, /billing-schedule-pattern__note">Credit applied</);
+    assert.match(html, /billing-schedule-pattern__note billing-schedule-pattern__note--danger">Card declined</);
+  });
+
+  test("no row actions without handlers; pencil on scheduled rows with onSaveCharge, Download on billed rows with onDownloadInvoice", () => {
+    assert.ok(!/aria-label="(Edit|Download) /.test(ssr()), "the board has no row actions");
+    const html = ssr({ charges: EDIT_CHARGES, onSaveCharge: () => {}, onDownloadInvoice: () => {} });
+    assert.equal((html.match(/aria-label="Edit [^"]+"/g) ?? []).length, 3, "three scheduled rows, no pencil on the retry");
     assert.match(html, /aria-label="Edit Onboarding part 2 of 3, 15 Dec 2026"/);
     assert.ok(!html.includes('aria-label="Edit Retry'));
-    assert.match(html, /aria-label="Download INV-1866"/);
-    assert.ok(!html.includes('aria-label="Actions for row'), "rows are named by their date");
+    assert.match(html, /aria-label="Download INV-0117"/);
   });
 
-  test("failure Alert names invoice, amount and what happens next; Update card is the only solid primary, Change card hides", () => {
-    const html = ssr({ onUpdateCard: () => {}, onChangeCard: () => {} });
-    assert.match(html, /role="alert"/);
-    assert.match(html, /INV-1842 failed on 04 Nov 2026 · \$2,418\.00/);
-    assert.match(html, /Next retry is 24 Nov 2026, the last on 01 Dec 2026\. Then the plan pauses\./);
-    assert.match(html, />Update card</);
-    assert.ok(!html.includes(">Change card<"), "Change card hides while Update card shows");
-    const paid = ssr({ charges: [], onChangeCard: () => {} });
-    assert.match(paid, /No charges yet/);
+  test("an open failed payment: Alert with amount and date, the retry sentence and Update card; Download all hides", () => {
+    const html = ssr({ charges: [EDIT_CHARGES[4], ...ssrFailed()], onUpdateCard: () => {}, onDownloadAll: () => {} });
+    assert.ok(!html.includes('role="alert"'), "a paid charge after the failure closes it");
+    const failed = ssr({ charges: ssrFailed(), onUpdateCard: () => {}, onDownloadAll: () => {} });
+    assert.match(failed, /role="alert"/);
+    assert.match(failed, /\$480\.00 failed on 01 Oct 2026/);
+    assert.match(failed, /We retry on 04 Oct 2026, so update it before then to keep the plan active\./);
+    assert.match(failed, />Update card</);
+    assert.ok(!failed.includes(">Download all<"), "Download all hides while the Alert shows");
+    assert.ok(failed.indexOf('role="alert"') < failed.indexOf("<table"), "the Alert sits above the table");
   });
 
-  test("below 40rem the same charges are a ListView grouped by month with month totals, then Billed", () => {
-    const html = ssr({ onDownloadInvoice: () => {} });
-    const narrow = html.slice(html.indexOf("billing-schedule-pattern__narrow"));
-    for (const text of ["November", "December", "January", "$2,418.00", "$3,738.00", "15 Dec 2026 · INV-1879", "Retrying"]) {
-      assert.ok(narrow.includes(text), text);
-    }
-    assert.ok(narrow.indexOf(">November<") < narrow.indexOf(">December<"));
-    assert.match(narrow, /aria-label="Download INV-1830"/);
-  });
-
-  test("nextOnly: the next-charge Card shows the figure, its lines, the draft invoice and Change card", () => {
-    const html = ssr({ nextOnly: true, onChangeCard: () => {} });
+  test("nextOnly: the panel with Next charge on the date, the figure, Pays with and Change card; no table", () => {
+    const html = ssr({ nextOnly: true, onChangeCard: () => {}, onDownloadAll: () => {} });
+    assert.match(html, /aria-label="Next charge"/);
     assert.match(html, /Next charge on 01 Dec 2026/);
+    assert.match(html, />\$480\.00</);
+    assert.match(html, />Pays with</);
+    assert.match(html, />Visa ending 4242</);
     assert.match(html, />Change card</);
-    assert.ok(!html.includes('aria-label="Upcoming"'), "no tables in nextOnly");
-    assert.match(html, />\$2,238\.00</);
-    assert.match(html, /API calls over 2M · estimate/);
-    assert.match(html, /Goes on INV-1871 · draft/);
-    assert.match(html, />2 lines</);
+    assert.ok(!html.includes("<table"), "no table in nextOnly");
+    assert.ok(!html.includes(">Download all<"));
+  });
+
+  test("empty, loading and error", () => {
+    const empty = ssr({ charges: [] });
+    assert.match(empty, /No charges yet/);
+    assert.match(empty, /Your first charge shows here when the trial ends on 14 Dec 2026/);
+    const loading = ssr({ loading: true });
+    assert.match(loading, /aria-busy="true"/);
+    assert.match(loading, /<th[^>]*>Date<\/th>/);
+    const error = ssr({ error: "Check your connection, then try again", onRetry: () => {} });
+    assert.match(error, /role="alert"/);
+    assert.match(error, /Couldn’t load the billing schedule/);
+    assert.match(error, /<button[^>]*>(?:(?!<\/button>)[\s\S])*lucide-rotate-ccw(?:(?!<\/button>)[\s\S])*Retry<\/span><\/button>/, "Retry has the RotateCcw icon");
   });
 
   test("summary mode still renders two columns and View all for the Settings Billing page", () => {
     const html = ssr({ summary: true, onViewAll: () => {} });
     assert.match(html, />View all</);
     assert.ok(!html.includes("Next charge on"));
-    assert.ok(!/<h3[^>]*>Upcoming/.test(html), "no Upcoming table heading in summary");
-    assert.match(html, />24 Nov 2026</);
+    assert.match(html, />01 Dec 2026</);
   });
 });
+
+function ssrFailed() {
+  return [
+    { id: "seat", date: "2026-10-18", label: "Seat added", amount: "$22.40", value: 22.4, status: "invoiced", note: "Prorated for 14 days" },
+    { id: "oct", date: "2026-10-01", label: "Pro plan · monthly", amount: "$480.00", value: 480, status: "failed", note: "Card declined" },
+  ];
+}
 
 describe("BillingSchedulePattern edit", { skip }, () => {
   test("pencil opens the Drawer on Charge date; Save sends the edit, closes, says so and focuses the row's pencil", async () => {
     const saved = [];
-    const container = await mount({ onSaveCharge: (id, edit) => saved.push({ id, edit }) });
+    const container = await mount({ charges: EDIT_CHARGES, onSaveCharge: (id, edit) => saved.push({ id, edit }) });
     const pencil = byLabel(container, "Edit Onboarding part 2 of 3, 15 Dec 2026");
     pencil.focus();
     await click(pencil);
     const dialog = document.querySelector('[role="dialog"]');
     assert.ok(dialog, "Drawer opens");
     assert.match(dialog.textContent, /Onboarding · part 2 of 3/);
-    assert.match(dialog.textContent, /INV-1879 · was 15 Dec 2026/);
+    assert.match(dialog.textContent, /INV-0120 · was 15 Dec 2026/);
     assert.match(dialog.textContent, /This and part 3 on 15 Jan 2027/);
     assert.ok(document.activeElement?.closest("[role=dialog]"), "focus is inside the Drawer");
 
@@ -271,20 +315,20 @@ describe("BillingSchedulePattern edit", { skip }, () => {
   });
 
   test("Escape closes the Drawer and returns focus to the pencil", async () => {
-    const container = await mount();
-    const pencil = byLabel(container, "Edit API calls over 2M, 01 Dec 2026");
+    const container = await mount({ charges: EDIT_CHARGES, onSaveCharge: () => {} });
+    const pencil = byLabel(container, "Edit Pro plan monthly, 01 Dec 2026");
     pencil.focus();
     await click(pencil);
     const esc = new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true });
     await act(async () => document.activeElement.dispatchEvent(esc));
     assert.ok(!document.querySelector('[role="dialog"]'), "Drawer closes");
-    assert.ok(document.activeElement === byLabel(container, "Edit API calls over 2M, 01 Dec 2026"), "focus: " + document.activeElement?.getAttribute("aria-label"));
+    assert.ok(document.activeElement === byLabel(container, "Edit Pro plan monthly, 01 Dec 2026"), "focus: " + document.activeElement?.getAttribute("aria-label"));
   });
 
   test("Skip this month asks once in an AlertDialog, then drops the row and calls onSkipCharge", async () => {
     const skipped = [];
-    const container = await mount({ onSkipCharge: (id) => skipped.push(id) });
-    const pencil = byLabel(container, "Edit Scale plan 24 seats, 01 Jan 2027");
+    const container = await mount({ charges: EDIT_CHARGES, onSaveCharge: () => {}, onSkipCharge: (id) => skipped.push(id) });
+    const pencil = byLabel(container, "Edit Pro plan monthly, 01 Jan 2027");
     pencil.focus();
     await click(pencil);
     await click(byText(document.body, "Skip this month"));
@@ -294,10 +338,10 @@ describe("BillingSchedulePattern edit", { skip }, () => {
     assert.equal(skipped.length, 0, "nothing skipped before the confirm");
     await click(byText(document.body, "Skip charge"));
     await frame();
-    assert.deepEqual(skipped, ["jan-plan"]);
+    assert.deepEqual(skipped, ["jan"]);
     assert.ok(!document.querySelector('[role="alertdialog"]'));
-    assert.ok(!byLabel(container, "Edit Scale plan 24 seats, 01 Jan 2027"), "the row is gone");
-    assert.match(container.querySelector('[role="status"]').textContent, /Skipped Scale plan · 24 seats, 01 Jan 2027/);
-    assert.ok(document.activeElement === container.querySelector('[data-charge-table="upcoming"]'), "focus: " + document.activeElement?.getAttribute("aria-label"));
+    assert.ok(!byLabel(container, "Edit Pro plan monthly, 01 Jan 2027"), "the row is gone");
+    assert.match(container.querySelector('[role="status"]').textContent, /Skipped Pro plan · monthly, 01 Jan 2027/);
+    assert.ok(document.activeElement === container.querySelector('[data-charge-table="schedule"]'), "focus: " + document.activeElement?.getAttribute("aria-label"));
   });
 });

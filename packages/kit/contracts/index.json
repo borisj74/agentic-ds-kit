@@ -1366,7 +1366,7 @@
   },
   {
     "id": "billing-schedule",
-    "intent": "Billing schedule for one customer: the next charge as one figure with its lines, a failure Alert that says what happens next, and Upcoming and Billed as two kit Tables with status as icon and word. Scheduled charges open a kit Drawer to move the date, change the amount or skip the month.",
+    "intent": "Billing schedule for one customer in a kit Card: a header with the plan, one kit Table of upcoming and billed charges with the next charge highlighted and status as a word in a pill Badge, a failure Alert while a payment is still open, and a next-charge panel. Scheduled charges can open a kit Drawer to move the date, change the amount or skip the month.",
     "group": "pattern",
     "path": "contracts/patterns/billing-schedule.json",
     "status": "stable",
