@@ -1,7 +1,8 @@
 /**
  * agentic-ds-kit mcp: stdio MCP server. Tools read this install only.
  * stdout is the protocol. Do not write logs there.
- * No runtime dependencies: the protocol layer is ./mcp-server.mjs (MCP 2025-06-18, tools only).
+ * No runtime dependencies: the protocol layer is ./mcp-server.mjs (MCP 2025-06-18 tools, plus the
+ * prototype-from-kit skill for 2026-07-28 clients, read from ./mcp-skills.mjs).
  */
 import { parseArgs } from "node:util";
 import {
@@ -18,6 +19,7 @@ import {
 } from "./catalog.mjs";
 import { COMPONENT_LEVELS } from "./levels.mjs";
 import { createServer as createRpcServer, serveStdio } from "./mcp-server.mjs";
+import { createSkills } from "./mcp-skills.mjs";
 import { MAX_LIMIT, shapeComponents, shapeQuestions, shapeTokens } from "./mcp-shape.mjs";
 import { QuestionsError, buildQuestions } from "./questions.mjs";
 import { InspectError, inspectHtml, inspectTarget } from "./inspect.mjs";
@@ -43,6 +45,10 @@ Tools:
                         plus filename for a draft that is not saved yet
   inspect_ui            Same result as npx agentic-ds-kit inspect: kit pieces on a rendered
                         page by level, and landmark problems; a url, or html plus name
+
+Skill (clients with Skills over MCP):
+  prototype-from-kit    skill://prototype-from-kit/SKILL.md, read from this install's
+                        skills/prototype-from-kit/SKILL.md
 
 Levels, smallest to biggest: ${COMPONENT_LEVELS.join(", ")}, template (patterns).
 Reuse the biggest piece that fits before building from smaller ones.
@@ -266,6 +272,7 @@ function createServer() {
       "Use these tools for components, tokens, patterns, kit rules, the questions option list, review_ui to check UI code, and inspect_ui to list the kit pieces on a rendered page. " +
       "Answers come from that install's files. Do not invent a component or token the tools do not return.",
     tools,
+    skills: createSkills(packageRoot),
     isToolError: (error) =>
       error instanceof CatalogError ||
       error instanceof QuestionsError ||

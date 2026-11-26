@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { after, before, describe, test } from "node:test";
@@ -367,5 +368,89 @@ describe("mcp command", () => {
     const bad = spawnSync(process.execPath, [bin, "mcp", "--nope"], { encoding: "utf8", timeout: 5000 });
     assert.equal(bad.status, 1);
     assert.match(bad.stderr, /agentic-ds-kit:/);
+  });
+});
+
+describe("mcp skills", () => {
+  const skillPath = join(kitRoot, "skills/prototype-from-kit/SKILL.md");
+  const skillText = readFileSync(skillPath, "utf8");
+  const uri = "skill://prototype-from-kit/SKILL.md";
+  const modern = { _meta: { "io.modelcontextprotocol/protocolVersion": "2026-07-28" } };
+
+  /** Send JSON-RPC requests over stdio, as a 2026-07-28 client does, and return replies by id. */
+  function rpc(requests) {
+    const input = requests.map((request, index) => JSON.stringify({ jsonrpc: "2.0", id: index + 1, ...request })).join("\n");
+    const run = spawnSync(process.execPath, [bin, "mcp"], { input: `${input}\n`, encoding: "utf8", timeout: 10_000 });
+    assert.equal(run.status, 0, run.stderr);
+    const replies = run.stdout.trim().split("\n").map((line) => JSON.parse(line));
+    return requests.map((_, index) => replies.find((reply) => reply.id === index + 1));
+  }
+
+  test("server/discover advertises resources and the skills extension", () => {
+    const [discover] = rpc([{ method: "server/discover", params: modern }]);
+    assert.ok(discover.result.supportedVersions.includes("2026-07-28"));
+    assert.deepEqual(discover.result.capabilities.extensions, { "io.modelcontextprotocol/skills": {} });
+    assert.ok(discover.result.capabilities.resources);
+    assert.ok(discover.result.capabilities.tools);
+    assert.equal(discover.result._meta["io.modelcontextprotocol/serverInfo"].name, "agentic-ds-kit");
+  });
+
+  test("skills/list lists prototype-from-kit, and its text matches the source file", () => {
+    const [list, get, read] = rpc([
+      { method: "skills/list", params: modern },
+      { method: "skills/get", params: { ...modern, uri } },
+      { method: "resources/read", params: { ...modern, uri } },
+    ]);
+    assert.equal(list.result.resultType, "complete");
+    assert.equal(typeof list.result.ttlMs, "number");
+    assert.deepEqual(
+      list.result.skills.map((skill) => skill.frontmatter.name),
+      ["prototype-from-kit"],
+    );
+    const [skill] = list.result.skills;
+    assert.equal(skill.uri, uri);
+    assert.match(skill.frontmatter.description, /product screen from Nistha \(agentic-ds-kit\)/);
+    assert.ok(skillText.startsWith(`---\nname: prototype-from-kit\ndescription: ${skill.frontmatter.description}\n---\n`));
+    const bytes = readFileSync(skillPath);
+    assert.deepEqual(skill.resources, [
+      { uri, digest: `sha256:${createHash("sha256").update(bytes).digest("hex")}`, size: bytes.length },
+    ]);
+    assert.deepEqual(get.result.skill, skill);
+    assert.equal(read.result.contents[0].uri, uri);
+    assert.equal(read.result.contents[0].mimeType, "text/markdown");
+    assert.equal(read.result.contents[0].text, skillText);
+  });
+
+  test("the skill keeps the kit rules", () => {
+    assert.match(skillText, /contracts\/index\.json/);
+    assert.match(skillText, /1–2 contract files/);
+    assert.match(skillText, /Never define local cousins/);
+    assert.match(skillText, /Never use raw hex[^\n]*semantic tokens only/);
+    assert.match(skillText, /blueprints that only compose kit pieces, never new primitives/);
+    assert.match(skillText, /stop and ask/);
+  });
+
+  test("an unknown skill is -32602", () => {
+    const [get, read] = rpc([
+      { method: "skills/get", params: { ...modern, uri: "skill://nope/SKILL.md" } },
+      { method: "resources/read", params: { ...modern, uri: "skill://nope/SKILL.md" } },
+    ]);
+    assert.equal(get.error.code, -32602);
+    assert.equal(read.error.code, -32602);
+  });
+
+  test("clients without skills see the same tools-only server", () => {
+    const [init, tools, skills, read] = rpc([
+      { method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "0" } } },
+      { method: "tools/list" },
+      { method: "skills/list" },
+      { method: "resources/read", params: { uri } },
+    ]);
+    assert.deepEqual(init.result.capabilities, { tools: { listChanged: false } });
+    assert.equal(init.result.protocolVersion, "2025-06-18");
+    assert.deepEqual(Object.keys(tools.result), ["tools"]);
+    assert.deepEqual(tools.result.tools.map((tool) => tool.name).sort(), TOOLS);
+    assert.equal(skills.error.code, -32601);
+    assert.equal(read.error.code, -32601);
   });
 });

@@ -539,6 +539,8 @@ From the app root:
 claude mcp add agentic-ds-kit -- npx -y agentic-ds-kit mcp
 ```
 
+Clients with Skills over MCP (MCP 2026-07-28, such as Claude Code) also get the `prototype-from-kit` skill from the server, read from the installed `skills/prototype-from-kit/SKILL.md`. Other clients see the same tools as before.
+
 ### Tools
 
 | Tool | Arguments | Returns |

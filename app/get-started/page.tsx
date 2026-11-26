@@ -128,6 +128,10 @@ export default function GetStartedPage() {
           <p className={styles.text}>
             A read-only server that answers from the version you installed: contracts, tokens and patterns.
           </p>
+          <p className={styles.text}>
+            Clients with Skills over MCP, such as Claude Code, also get the prototype-from-kit skill from the server, so
+            you don&apos;t need to copy it.
+          </p>
           <CodeSnippet
             title="MCP setup"
             tabs={[
