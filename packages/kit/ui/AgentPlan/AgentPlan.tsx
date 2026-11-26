@@ -341,12 +341,16 @@ export function AgentPlan({
                         Approval
                       </Badge>
                     ) : null}
-                    {/* The marker carries the state; the word stays for screen readers. Tool calls stay visible. */}
-                    {word ? (
+                    {/* The marker carries the state; the word stays for screen readers. Tool calls stay visible.
+                        With no calls, only the screen-reader word renders: it is absolutely positioned, so it
+                        takes no flex space or gap and the label keeps its room. */}
+                    {word && calls.length ? (
                       <span className={cx(styles.stepStatus, styles[`word-${state}`])}>
                         <span className={styles.srOnly}>{word}</span>
-                        {calls.length ? plural(calls.length, "call") : ""}
+                        {plural(calls.length, "call")}
                       </span>
+                    ) : word ? (
+                      <span className={styles.srOnly}>{word}</span>
                     ) : null}
                     {canEdit ? (
                       <span className={styles.rowActions}>
