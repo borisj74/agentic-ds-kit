@@ -2,6 +2,8 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 
 export type ApprovalCardRisk = "low" | "medium" | "high";
 export type ApprovalCardStatus = "pending" | "approved" | "denied" | "expired";
+/** default: the standalone card. compact: the waiting row inside AgentMonitor only. */
+export type ApprovalCardVariant = "default" | "compact";
 
 /** One line of a diff preview. */
 export interface ApprovalCardDiffLine {
@@ -50,6 +52,12 @@ export interface ApprovalCardProps extends Omit<ComponentPropsWithoutRef<"articl
   /** What will happen and why the risk is what it is, in words, e.g. Will do / Why medium. A dl above the preview. */
   facts?: ApprovalCardFact[];
   status?: ApprovalCardStatus;
+  /**
+   * default: risk Badge, heading, facts, preview and full-size buttons.
+   * compact: inside AgentMonitor only — one "waiting" row with the title, one line of copy, the
+   * preview and small right-aligned Deny and Approve; the risk is read to screen readers, not shown.
+   */
+  variant?: ApprovalCardVariant;
   /** Seconds until auto-deny. The card counts down and calls onExpire (or onDeny) at 0. */
   countdownSec?: number;
   onApprove?: () => void;

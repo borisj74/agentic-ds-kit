@@ -9216,7 +9216,8 @@
       "useWhen": [
         "an agent needs a person's OK before a command, file edit, or other side effect",
         "human-in-the-loop gates in a chat, trail, or inbox",
-        "a resolved decision should stay in the log as one line"
+        "a resolved decision should stay in the log as one line",
+        "inside AgentMonitor, as variant=\"compact\" for the run's waiting state"
       ],
       "doNotUseWhen": [
         "a generic yes/no that interrupts the page — AlertDialog",
@@ -9229,7 +9230,8 @@
         "Do not paraphrase the action: show the exact command or diff",
         "Approve is the view's one solid primary; Deny stays outline neutral",
         "Do not use raw hex; risk colors come from status tokens",
-        "Do not hide the risk Badge for high-risk actions"
+        "Do not hide the risk Badge for high-risk actions in the default variant; only variant=\"compact\" inside AgentMonitor leaves it to screen readers",
+        "Do not use variant=\"compact\" for standalone approvals (chat, trail, inbox); it is only for AgentMonitor's waiting state"
       ],
       "props": {
         "title": {
@@ -9271,6 +9273,15 @@
           ],
           "default": "pending",
           "note": "Anything but pending renders the one-line resolved row."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "default",
+            "compact"
+          ],
+          "default": "default",
+          "note": "compact is for AgentMonitor's waiting state only: one row with the title (and the countdown when countdownSec is set), one line of description, the exact preview and small right-aligned Deny and Approve. No risk Badge, heading or facts; the risk is read to screen readers with the title."
         },
         "countdownSec": {
           "type": "number",
@@ -10123,7 +10134,7 @@
         "pendingAction": {
           "type": "object",
           "required": false,
-          "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard."
+          "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard with variant=\"compact\": the title row, one line of description, the exact action and small Deny / Approve."
         },
         "onApprove": {
           "type": "function",

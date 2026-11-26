@@ -86,7 +86,7 @@
     "pendingAction": {
       "type": "object",
       "required": false,
-      "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard."
+      "note": "Waiting: { title, description?, risk?, action } rendered as a kit ApprovalCard with variant=\"compact\": the title row, one line of description, the exact action and small Deny / Approve."
     },
     "onApprove": {
       "type": "function",

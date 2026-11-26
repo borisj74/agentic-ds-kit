@@ -355,6 +355,7 @@ export function AgentMonitor({
 
       {status === "waiting" && pendingAction && !selected ? (
         <ApprovalCard
+          variant="compact"
           className={styles.approval}
           title={pendingAction.title}
           description={pendingAction.description}
