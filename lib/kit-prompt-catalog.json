@@ -11007,7 +11007,7 @@
         "segments": {
           "type": "array",
           "required": false,
-          "note": "{ id, label, tokens }[] in display order; the first is neutral, the rest use the chart ramp (--chart-1, --chart-2, --chart-4, --chart-5)."
+          "note": "{ id, label, tokens }[] in display order; colours in order: grey (--line-strong), teal (--chart-2), blue (--chart-1), primary (--primary), light grey (--line-default); a sixth starts again at grey. No violet."
         },
         "warningAt": {
           "type": "number",
