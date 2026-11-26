@@ -34,19 +34,26 @@
   background-color: var(--line-default);
 }
 
-/* Copied: the success tint, check in the success colour. Scoped to the toolbar's button so it
-   wins over Button's own soft neutral colours. */
-.toolbar button.copied {
+/* Copied: the success tint, check in the success colour. Three classes deep so it outranks
+   Button's .soft.neutral; the hover and focus rule outranks .soft.neutral:hover, so the tint holds. */
+.wrap .toolbar .copied {
   background-color: var(--status-success-subtle);
+  border-color: var(--status-success-subtle);
   color: var(--status-success-text);
 }
 
-.toolbar button.copied svg {
+.wrap .toolbar .copied:hover:not(:disabled):not([aria-busy="true"]),
+.wrap .toolbar .copied:focus-visible {
+  background-color: var(--status-success-subtle);
+  border-color: var(--status-success-subtle);
+}
+
+.wrap .toolbar .copied svg {
   color: var(--status-success);
 }
 
 /* A pressed thumbs up takes the primary colour on its soft fill. */
-.toolbar button.on {
+.wrap .toolbar .on {
   color: var(--primary);
 }
 
