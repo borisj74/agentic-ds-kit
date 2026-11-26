@@ -286,7 +286,7 @@ export function AgentPlan({
         <div className={styles.loading}>
           {[0, 1, 2, 3].map((row) => (
             <div key={row} className={styles.skeletonRow}>
-              <Skeleton shape="circle" size="sm" />
+              <Skeleton shape="circle" width="var(--space-5)" />
               <div className={styles.skeletonText}>
                 <Skeleton width={row % 2 ? "60%" : "85%"} />
                 <Skeleton width="45%" size="sm" />
@@ -327,7 +327,7 @@ export function AgentPlan({
             return (
               <li
                 key={step.id}
-                className={cx(styles.step, styles[state])}
+                className={cx(styles.step, styles[state], status === "failed" && state === "pending" && styles.afterFailed)}
                 aria-current={state === "current" || state === "failed" ? "step" : undefined}
               >
                 <span key={state} className={styles.marker}>
@@ -341,10 +341,11 @@ export function AgentPlan({
                         Approval
                       </Badge>
                     ) : null}
+                    {/* The marker carries the state; the word stays for screen readers. Tool calls stay visible. */}
                     {word ? (
                       <span className={cx(styles.stepStatus, styles[`word-${state}`])}>
-                        {word}
-                        {calls.length ? ` · ${plural(calls.length, "call")}` : ""}
+                        <span className={styles.srOnly}>{word}</span>
+                        {calls.length ? plural(calls.length, "call") : ""}
                       </span>
                     ) : null}
                     {canEdit ? (
@@ -438,7 +439,14 @@ export function AgentPlan({
                 <span />
               )}
               {onAccept ? (
-                <Button size="md" shortcut="⌘⏎" aria-keyshortcuts="Meta+Enter Control+Enter" onClick={onAccept}>
+                <Button
+                  size="md"
+                  appearance={editingId || adding ? "outline" : "solid"}
+                  mode="primary"
+                  shortcut="⌘⏎"
+                  aria-keyshortcuts="Meta+Enter Control+Enter"
+                  onClick={onAccept}
+                >
                   Accept plan
                 </Button>
               ) : null}
