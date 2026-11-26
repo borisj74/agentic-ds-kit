@@ -90,6 +90,8 @@ export function TraceWaterfall({
   const kinds = Array.from(new Set(spans.map((span) => span.kind)));
   const selected = spans.find((span) => span.id === selectedId);
   const running = status === "running";
+  // The legend explains the dashed tail only when some span is still open (no endMs).
+  const hasOpenSpan = spans.some((span) => span.endMs === undefined);
   const badge = STATUS_BADGE[status];
 
   if (compact) {
@@ -309,7 +311,7 @@ export function TraceWaterfall({
               </li>
             ))}
           </ul>
-          {status !== "failed" ? <span className={styles.legendNote}>dashed = still running</span> : null}
+          {hasOpenSpan ? <span className={styles.legendNote}>dashed = still running</span> : null}
         </footer>
       </>
     );

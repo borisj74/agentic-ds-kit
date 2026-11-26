@@ -59,10 +59,20 @@ describe("TraceWaterfall polish", () => {
     assert.match(out, />4\.2s</);
   });
 
-  test("detail badge is primary; dashed note shows unless the run failed", () => {
-    const complete = html({ selectedId: "plan", onSpanClick() {} });
-    assert.match(complete, /_primary_[^"]*"[^>]*>Model</);
-    assert.match(complete, /dashed = still running/);
-    assert.doesNotMatch(html({ status: "failed" }), /dashed = still running/);
+  test("detail badge is primary", () => {
+    const out = html({ selectedId: "plan", onSpanClick() {} });
+    assert.match(out, /_primary_[^"]*"[^>]*>Model</);
+  });
+
+  test("dashed note: hidden when every span has ended", () => {
+    assert.doesNotMatch(html({ status: "complete" }), /dashed = still running/);
+    assert.doesNotMatch(html({ status: "running" }), /dashed = still running/, "status alone does not show it");
+  });
+
+  test("dashed note: shown when a span has no endMs", () => {
+    const open = [...SPANS.slice(0, 2), { id: "fix", label: "Fix rounding", kind: "model", startMs: 6000 }];
+    const out = html({ status: "running", spans: open, totalMs: 20000 });
+    assert.match(out, /dashed = still running/);
+    assert.match(out, /_pending_/, "the open span draws its dashed tail");
   });
 });
