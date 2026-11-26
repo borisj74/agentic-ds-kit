@@ -16,7 +16,7 @@ const AGENTS: AgentFleetAgent[] = [
     status: "running",
     cost: "$1.28",
     elapsed: "6m 40s",
-    meta: "Orchestrator · Opus 5.5",
+    meta: "Orchestrator · Opus 5.5 · example data",
     subAgents: [
       { id: "scan", name: "scan-codebase", status: "done", elapsed: "58s", cost: "$0.14" },
       { id: "edit", name: "edit-invoice", status: "done", elapsed: "2m 02s", cost: "$0.61" },
@@ -67,9 +67,9 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
   {
     title: "Overview — three agents",
     about:
-      "Each card sums up its sub-agents: count, one bar segment per sub-agent, a text legend, cost and time. The fleet line totals them.",
-    code: `<AgentFleet agents={agents} onExpandedChange={setOpenId} />`,
-    render: <AgentFleet className={agentDoc.full} agents={AGENTS} onExpandedChange={noop} />,
+      "Each card sums up its sub-agents: count, one bar segment per sub-agent, a text legend, cost and time. The fleet chip totals them by default; totals=\"\" hides it, as here.",
+    code: `<AgentFleet agents={agents} totals="" onExpandedChange={setOpenId} />`,
+    render: <AgentFleet className={agentDoc.full} agents={AGENTS} totals="" onExpandedChange={noop} />,
   },
   {
     title: "Focused — one agent opens, others compact",
@@ -77,20 +77,28 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
       "expandedId opens one card into its sub-agent tree with cost, time, done and waiting. The others shrink to a compact column. Focus moves into the card and back on close.",
     code: `<AgentFleet agents={agents} expandedId="billing" onExpandedChange={setOpenId} onReview={review} />`,
     render: (
-      <AgentFleet className={agentDoc.full} agents={AGENTS} expandedId="billing" onExpandedChange={noop} onReview={noop} />
+      <AgentFleet className={agentDoc.full} agents={AGENTS} totals="" expandedId="billing" onExpandedChange={noop} onReview={noop} />
     ),
   },
   {
     title: "Waiting for you, one failed",
-    about: "A sub-agent that waits shows a Review callout on its card; the agent reads Needs you.",
-    code: `<AgentFleet agents={agents} onExpandedChange={setOpenId} onReview={review} />`,
-    render: <AgentFleet className={agentDoc.full} agents={WAITING} onExpandedChange={noop} onReview={noop} />,
+    about: "A sub-agent that waits shows a Review callout on its card; the agent reads Needs you. totals sets the fleet chip's line.",
+    code: `<AgentFleet agents={agents} totals="Fleet · 3 agents · 12 sub-agents · 1 needs you · 1 failed · $2.17 · 19m 57s" onExpandedChange={setOpenId} onReview={review} />`,
+    render: (
+      <AgentFleet
+        className={agentDoc.full}
+        agents={WAITING}
+        totals="Fleet · 3 agents · 12 sub-agents · 1 needs you · 1 failed · $2.17 · 19m 57s"
+        onExpandedChange={noop}
+        onReview={noop}
+      />
+    ),
   },
   {
     title: "All idle",
     about: "Idle agents keep empty bars and no time.",
     code: `<AgentFleet agents={idleAgents} />`,
-    render: <AgentFleet className={agentDoc.full} agents={IDLE} />,
+    render: <AgentFleet className={agentDoc.full} agents={IDLE} totals="Fleet · 3 agents · 12 sub-agents · all idle · $0.00 today" />,
   },
   {
     title: "Loading",
@@ -102,7 +110,7 @@ const VARIANT_DOCS: { title: string; about: string; code: string; render: ReactN
     title: "Empty",
     about: "No agents: the kit Empty with Start an agent.",
     code: `<AgentFleet agents={[]} onStart={start} />`,
-    render: <AgentFleet className={agentDoc.full} agents={[]} onStart={noop} />,
+    render: <AgentFleet className={agentDoc.narrow} agents={[]} onStart={noop} />,
   },
 ];
 
