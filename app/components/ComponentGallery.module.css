@@ -56,14 +56,6 @@
   max-width: var(--layout-drawer-md);
 }
 
-.resultCount {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--type-size-body-sm);
-  line-height: var(--type-line-body);
-  color: var(--text-secondary);
-}
-
 .grid {
   display: grid;
   grid-template-columns: 1fr;
