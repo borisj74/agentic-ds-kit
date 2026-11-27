@@ -4,6 +4,7 @@
  * SSR for markup, jsdom for interaction. Runs against the built kit (dist); `npm test` builds first.
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { register } from "node:module";
 import { before, describe, test } from "node:test";
 
@@ -213,5 +214,31 @@ describe("Table interaction", { skip: JSDOM ? false : "jsdom is not installed" }
     await React.act(async () => button.click());
     assert.equal(calls, 1);
     await React.act(async () => root.unmount());
+  });
+});
+
+describe("Table CSS: highlight edges and stacked corners", () => {
+  const css = readFileSync(new URL("../dist/ui/Table/Table.kit.css", import.meta.url), "utf8");
+  const rules = (text) => [...text.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+  const stackCss = css.slice(css.indexOf("@container"));
+
+  test("separate borders, so cell corners round in every browser", () => {
+    const table = rules(css).find((r) => /^\._table_\w+$/.test(r.selector));
+    assert.match(table.body, /border-collapse:\s*separate/);
+    assert.match(table.body, /border-spacing:\s*0/);
+  });
+
+  test("the row just before a highlighted row hides its line, so no doubled line sits above the highlight", () => {
+    const hit = rules(css).find((r) => /:has\(\+\s*\._tr_\w+\._highlight_\w+\)\s+\._td_\w+/.test(r.selector));
+    assert.ok(hit, "a :has(+ .highlight) rule on the previous row's cells");
+    assert.match(hit.body, /border-bottom-color:\s*transparent/);
+  });
+
+  test("stacked layout with rowDividers none: first and last cells drop their hover corners", () => {
+    const hit = rules(stackCss).find(
+      (r) => /\._stack_\w+\._noDividers_\w+ \._tbody_\w+ \._tr_\w+:hover \._td_\w+:first-child/.test(r.selector) && /:last-child/.test(r.selector),
+    );
+    assert.ok(hit, "a stacked hover rule for first and last cells");
+    assert.match(hit.body, /border-radius:\s*0/);
   });
 });
