@@ -15082,11 +15082,18 @@
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "No appearance=\"solid\" mode=\"primary\" Button on this page; Ask, Undo and Load earlier days are outline neutral",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 its Menu IconButton (Open navigation) opens the nav in a kit Drawer",
+        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 its Menu IconButton (Open navigation) opens the nav in a kit Drawer. With topBar={false} the surrounding app shell gives the header and nav",
         "The steps are one kit ActivityFeed with variant=\"agent\"; filter them in the page with a kit FilterBar and pass the filtered steps in",
         "Undo is offered only until its deadline, which shows beside it; after Undo the step shows Undone and a Toast says what stopped",
         "A step that can't be undone says Final and what to do instead; status is always a word (Undone, Final, On its own, Approved by), never colour alone"
-      ]
+      ],
+      "props": {
+        "topBar": {
+          "type": "boolean",
+          "required": false,
+          "note": "Default true: the page draws its own AppHeader, and below 640 a Menu IconButton opens the nav in a kit Drawer. Set false inside an app shell (e.g. AppShellPattern) that gives the header and nav; the page then renders only its main."
+        }
+      }
     },
     {
       "id": "agent-permissions",
@@ -15097,11 +15104,18 @@
         "Semantic tokens only (agentic-ds-kit/tokens.css); no raw hex, no primitive --color-* ramps",
         "At most one appearance=\"solid\" mode=\"primary\" Button per view: Grant on the page, Save level in the Edit Drawer",
         "Do not restyle kit components; change them through their props, slots, and tokens",
-        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 the nav is reachable from a Menu button in a kit Drawer",
+        "Render the page content inside a main landmark; the top bar is AppHeader (a header landmark), and below 640 the nav is reachable from a Menu button in a kit Drawer. With topBar={false} the surrounding app shell gives the header and nav",
         "A waiting request is the kit PermissionRequest, first on the page, with its own Grant / Deny wording and one-line result",
         "A level is always an icon and a word, never the icon or colour alone; a level set by workspace policy has no Edit and no drill",
         "The amount for \"Up to an amount\" is a kit CurrencyInput under the RadioGroup, not inside an option"
-      ]
+      ],
+      "props": {
+        "topBar": {
+          "type": "boolean",
+          "required": false,
+          "note": "Default true: the page draws its own AppHeader, and below 640 a Menu IconButton opens the nav in a kit Drawer. Set false inside an app shell (e.g. AppShellPattern) that gives the header and nav; the page then renders only its main."
+        }
+      }
     },
     {
       "id": "settings",
