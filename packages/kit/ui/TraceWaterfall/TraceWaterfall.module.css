@@ -2,6 +2,7 @@
   /* Paper lanes: 150 label (room for the kind dot), 56 per number. */
   --trace-label: calc(var(--space-16) * 2 + var(--space-5) + var(--space-px));
   --trace-num: calc(var(--space-12) + var(--space-2));
+  container: tracewaterfall / inline-size;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -459,6 +460,54 @@ button.rowButton:focus-visible,
   font-size: var(--type-size-caption);
   line-height: var(--type-line-ui-xs);
   color: var(--text-fg);
+}
+
+/* Narrow card (under --grid-breakpoint-sm, 40rem): the label and the two numbers share the first line and the
+   bar gets the full width below them, so bars stay readable and nothing scrolls sideways. */
+@container tracewaterfall (max-width: 40rem) {
+  .axisRow,
+  .rowButton {
+    grid-template-columns: minmax(0, 1fr) var(--trace-num) var(--trace-num);
+  }
+
+  .axisRow > :not(.axis) {
+    display: none;
+  }
+
+  .axis {
+    grid-column: 1 / -1;
+  }
+
+  /* Edge ticks hang inside the axis instead of half outside it. */
+  .tick:first-child {
+    transform: none;
+  }
+
+  .tick[data-edge="end"] {
+    transform: translateX(-100%);
+  }
+
+  .rowButton {
+    row-gap: var(--space-1);
+    padding-block: var(--space-2);
+  }
+
+  .track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  /* Loading rows stack the same way: label line, then the bar line. */
+  .skeletonRow {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-1);
+  }
+
+  /* A 96px label lane keeps detail values on one line and aligned across rows. */
+  .detailRow {
+    grid-template-columns: calc(var(--space-16) + var(--space-8)) minmax(0, 1fr);
+    column-gap: var(--space-2);
+  }
 }
 
 @keyframes trace-grow {
