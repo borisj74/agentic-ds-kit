@@ -242,3 +242,18 @@ describe("Table CSS: highlight edges and stacked corners", () => {
     assert.match(hit.body, /border-radius:\s*0/);
   });
 });
+
+describe("Table CSS: footer under a highlighted last row", () => {
+  const css = readFileSync(new URL("../dist/ui/Table/Table.kit.css", import.meta.url), "utf8");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+
+  test("the footer drops its top line when the last body row is highlighted, so no doubled line", () => {
+    const hit = rules.find((r) => /\._tbody_\w+:has\(>\s*\._tr_\w+\._highlight_\w+:last-child\)\s*\+\s*\._tfoot_\w+ \._td_\w+/.test(r.selector));
+    assert.ok(hit, "a tbody:has(highlighted last row) + tfoot rule");
+    assert.match(hit.body, /border-top-color:\s*transparent/);
+  });
+
+  test("no dead rules on footer rows", () => {
+    assert.ok(!rules.some((r) => /\._tfoot_\w+ \._tr_\w+/.test(r.selector)));
+  });
+});
