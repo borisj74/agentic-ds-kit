@@ -285,6 +285,12 @@
 
 /* Icon-only segments (Light / Dark, Desktop / Mobile): each label stays in the DOM as the
    segment's accessible name, visually hidden. */
+/* The state switch in the preview toolbar: as wide as its label, not the field-width default. */
+.previewTools .stateSelect {
+  inline-size: auto;
+  flex: none;
+}
+
 .iconSegments [role="radio"] {
   justify-content: center;
   min-inline-size: var(--space-8);

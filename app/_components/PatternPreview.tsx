@@ -186,20 +186,21 @@ export function PatternPreview({
               { value: "code", label: "Code", icon: "Code" },
             ]}
           />
-          {tab === "preview" && views.length > 1 ? (
-            <Select
-              id={`${slug}-state`}
-              size="sm"
-              ariaLabel="State"
-              value={view}
-              onChange={(value) => onViewChange(Array.isArray(value) ? value[0] : value)}
-              options={views.map((item) => ({ value: item.id, label: item.label }))}
-            />
-          ) : null}
         </div>
         <div className={styles.previewTools}>
           {tab === "preview" ? (
             <>
+              {views.length > 1 ? (
+                <Select
+                  className={styles.stateSelect}
+                  id={`${slug}-state`}
+                  size="sm"
+                  ariaLabel="State"
+                  value={view}
+                  onChange={(value) => onViewChange(Array.isArray(value) ? value[0] : value)}
+                  options={views.map((item) => ({ value: item.id, label: item.label }))}
+                />
+              ) : null}
               <SegmentedControl
                 className={styles.iconSegments}
                 size="sm"
