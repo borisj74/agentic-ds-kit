@@ -6,8 +6,6 @@ const STATE: Record<string, RunDetailState> = {
   failed: "failed",
   running: "running",
   done: "done",
-  mobile: "failed",
-  "mobile-running": "running",
 };
 
 /** run-detail as a full screen (Paper p-A-1, 4LD6-0). `view` picks the run's state. */

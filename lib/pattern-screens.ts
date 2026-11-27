@@ -10,21 +10,22 @@ import type { BillingState, SettingsSection, TeamState } from "../packages/kit/p
 export interface ScreenView {
   id: string;
   label: string;
-  /** Show this screen at phone width (390) in the preview and its thumbnail. */
-  device?: "mobile";
 }
 
-/** The Settings screens (Paper p-9-1, 4GQH-0): each section plus its states, and the 390 index. */
+/**
+ * The Settings screens (Paper p-9-1, 4GQH-0): each section plus its states. `index` is the page
+ * below --grid-breakpoint-md that Back to Settings opens; it is not in the state switch (the
+ * preview's Mobile width shows it).
+ */
 export const SETTINGS_SCREENS: {
   id: string;
   label: string;
-  /** null is the index page (390). */
+  /** null is the index page (narrow only). */
   section: SettingsSection | null;
   billing?: BillingState;
   team?: TeamState;
   invite?: boolean;
   twoFactor?: boolean;
-  device?: "mobile";
 }[] = [
   { id: "general", label: "General", section: "general" },
   { id: "billing", label: "Billing", section: "billing" },
@@ -40,12 +41,7 @@ export const SETTINGS_SCREENS: {
   { id: "notifications", label: "Notifications", section: "notifications" },
   { id: "sign-in", label: "Sign-in", section: "sign-in" },
   { id: "sign-in-2fa-off", label: "Sign-in · 2FA off", section: "sign-in", twoFactor: false },
-  { id: "index", label: "390 · Settings index", section: null, twoFactor: false, device: "mobile" },
-  { id: "general-390", label: "390 · General", section: "general", device: "mobile" },
-  { id: "billing-390", label: "390 · Billing", section: "billing", device: "mobile" },
-  { id: "team-390", label: "390 · Team", section: "team", device: "mobile" },
-  { id: "security-390", label: "390 · Security", section: "security", device: "mobile" },
-  { id: "sign-in-390", label: "390 · Sign-in", section: "sign-in", device: "mobile" },
+  { id: "index", label: "Settings index", section: null, twoFactor: false },
 ];
 
 /** The Onboarding screens (Paper p-9-1, 4H05-0): each step, plus Review's error and submitting states. */
@@ -61,7 +57,7 @@ export const ONBOARDING_SCREENS: { id: string; label: string; step: OnboardingSt
 /** Pattern pages shown as a full screen in a frame. Layouts is a page of its own. */
 export type ScreenSlug = Exclude<PatternSlug, "layouts">;
 
-/** Each screen's states; the first is the default. One entry: no state picker. */
+/** Each screen's states; the first is the default. One entry: no state switch. Width is the preview's Desktop / Mobile switch, not a state. */
 export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
   dashboard: [
     { id: "overview", label: "Overview" },
@@ -70,18 +66,14 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "chat", label: "Chat open" },
     { id: "empty", label: "No data yet" },
     { id: "loading", label: "Loading" },
-    { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "settings-form": [{ id: "default", label: "Settings form" }],
   "list-detail": [
     { id: "default", label: "INV-1842 open" },
     { id: "none", label: "Nothing open" },
-    { id: "mobile", label: "Mobile 390 list", device: "mobile" },
-    { id: "mobile-detail", label: "Mobile 390 detail", device: "mobile" },
   ],
   "empty-first-run": [
     { id: "default", label: "First run" },
-    { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "sign-in": [
     { id: "sign-in", label: "Sign in" },
@@ -114,34 +106,29 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "needsReauth", label: "Needs reauth" },
     { id: "disconnected", label: "Not connected" },
   ],
-  settings: SETTINGS_SCREENS.map(({ id, label, device }) => (device ? { id, label, device } : { id, label })),
+  settings: SETTINGS_SCREENS.filter(({ section }) => section !== null).map(({ id, label }) => ({ id, label })),
   onboarding: ONBOARDING_SCREENS.map(({ id, label }) => ({ id, label })),
   "insight-stack": [
     { id: "specimens", label: "Ranked, loading, all clear" },
     { id: "ranked", label: "Ranked · sm, md, lg" },
     { id: "loading", label: "Loading · sm, md, lg" },
     { id: "all-clear", label: "All clear · sm, md, lg" },
-    { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "run-detail": [
     { id: "failed", label: "Failed on step 2" },
     { id: "running", label: "Running" },
     { id: "done", label: "Done" },
-    { id: "mobile", label: "Mobile 390 · failed", device: "mobile" },
-    { id: "mobile-running", label: "Mobile 390 · running", device: "mobile" },
   ],
   "assistant-start": [
     { id: "default", label: "Ready" },
     { id: "loading", label: "Loading" },
     { id: "reconnect-error", label: "Reconnect failed" },
-    { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "agent-activity": [
     { id: "default", label: "Steps with Undo" },
     { id: "empty", label: "Empty · filtered" },
     { id: "error", label: "Couldn't load" },
     { id: "undone", label: "After Undo" },
-    { id: "mobile", label: "Mobile 390", device: "mobile" },
   ],
   "agent-permissions": [
     { id: "default", label: "Request waiting" },
@@ -149,7 +136,6 @@ export const PATTERN_VIEWS: Record<ScreenSlug, ScreenView[]> = {
     { id: "granted", label: "Granted" },
     { id: "denied", label: "Denied" },
     { id: "error", label: "Not saved" },
-    { id: "390", label: "Mobile 390", device: "mobile" },
   ],
 };
 

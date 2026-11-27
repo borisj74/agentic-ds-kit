@@ -53,8 +53,8 @@ function LayoutsThumb({ children }: { children: ReactNode }) {
 }
 
 /**
- * Every screen as its own card, like a screens catalogue: each pattern state ("Settings area /
- * Billing · overdue") with a live thumbnail, one line and Copy add. A card opens its pattern on that state.
+ * One card per pattern, like a screens catalogue: a live thumbnail of its first state, one line
+ * and Copy add. A card opens the pattern page, where the state switch shows the rest.
  */
 export function PatternsIndex() {
   const theme = usePatternTheme();
@@ -62,32 +62,31 @@ export function PatternsIndex() {
 
   // By name, like the nav: A–Z.
   const byName = [...PATTERN_ITEMS].sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }));
-  const screens = byName.flatMap((item): ScreenEntry[] => {
+  const screens = byName.map((item): ScreenEntry => {
     const slug = item.slug;
     if (!isScreenSlug(slug)) {
-      return [{ key: item.slug, title: item.label, description: PATTERN_BLURBS[item.slug], href: `/patterns/${item.slug}`, slug: null, view: null, copy: undefined }];
+      return { key: item.slug, title: item.label, description: PATTERN_BLURBS[item.slug], href: `/patterns/${item.slug}`, slug: null, view: null, copy: undefined };
     }
-    const views = PATTERN_VIEWS[slug];
-    return views.map((view, index) => ({
-      key: `${item.slug}:${view.id}`,
-      title: views.length > 1 && view.label !== item.label ? `${item.label} / ${view.label}` : item.label,
-      description: PATTERN_BLURBS[item.slug],
-      href: index === 0 ? `/patterns/${slug}` : `/patterns/${slug}?view=${encodeURIComponent(view.id)}`,
+    return {
+      key: slug,
+      title: item.label,
+      description: PATTERN_BLURBS[slug],
+      href: `/patterns/${slug}`,
       slug,
-      view: view.id,
+      view: PATTERN_VIEWS[slug][0].id,
       copy: PATTERN_ADD[slug],
-    }));
+    };
   });
 
   return (
     <div className={styles.index}>
       <h1 className={playground.pageTitle}>Patterns</h1>
       <p className={playground.pageLead}>
-        Screens built from kit components, every state on its own. Open one to see it full size, copy it in with its add
-        command, borrow from it, or ignore it.
+        Screens built from kit components, one page each with its states behind a switch. Open one to see it full size,
+        copy it in with its add command, borrow from it, or ignore it.
       </p>
       <p className={styles.count}>
-        Screens <span className={styles.countBadge}>{screens.length}</span>
+        Patterns <span className={styles.countBadge}>{screens.length}</span>
       </p>
       <div className={playground.screenList}>
         <div className={playground.screenGrid}>

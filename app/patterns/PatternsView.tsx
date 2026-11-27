@@ -1,12 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Breadcrumb } from "agentic-ds-kit";
 import { LayoutsDemo } from "../_components/LayoutsDemo";
-import { PatternPreview, ScaledFrame, frameUrl } from "../_components/PatternPreview";
-import { ScreenCard } from "../_components/ScreenCard";
-import { usePatternTheme } from "../_components/ThemeScope";
+import { PatternPreview } from "../_components/PatternPreview";
 import { CodeBlock } from "../components/CodeBlock";
 import { PATTERN_BLURBS, PATTERN_VIEWS, isScreenSlug, type ScreenSlug } from "@/lib/pattern-screens";
 import { patternPrompt } from "@/lib/pattern-prompt";
@@ -97,8 +95,8 @@ export function PatternsView({ slug, view }: { slug: PatternSlug; view?: string 
 }
 
 /**
- * A screen pattern's page: header, the preview of the chosen screen, its screens (each state as
- * a thumbnail you pick), then install, usage and the contract's lines.
+ * A screen pattern's page, one per pattern: header, the preview with its state switch, then
+ * install, usage and the contract's lines.
  */
 function ScreenPatternView({
   slug,
@@ -113,15 +111,11 @@ function ScreenPatternView({
 }) {
   const views = PATTERN_VIEWS[slug];
   const [view, setView] = useState(views.some((item) => item.id === initialView) ? initialView! : views[0].id);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const theme = usePatternTheme();
-
   function pick(id: string) {
     setView(id);
-    // Keep the link shareable (?view=) without a navigation, and bring the preview into view.
+    // Keep the link shareable (?view=) without a navigation.
     const url = id === views[0].id ? window.location.pathname : `${window.location.pathname}?view=${encodeURIComponent(id)}`;
     window.history.replaceState(null, "", url);
-    previewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   const contract = CONTRACTS[slug];
@@ -134,7 +128,7 @@ function ScreenPatternView({
         <h1 className={playground.pageTitle}>{title}</h1>
         <p className={playground.pageLead}>{PATTERN_BLURBS[slug]}</p>
 
-        <div ref={previewRef} className={styles.previewAnchor}>
+        <div className={styles.previewAnchor}>
           <PatternPreview
             slug={slug}
             title={title}
@@ -144,37 +138,9 @@ function ScreenPatternView({
             usage={usage}
             contract={JSON.stringify(contract, null, 2)}
             view={view}
+            onViewChange={pick}
           />
         </div>
-
-        {views.length > 1 ? (
-          <section className={styles.section} aria-labelledby={`${slug}-screens`}>
-            <h2 id={`${slug}-screens`} className={styles.sectionTitle}>
-              Screens <span className={styles.countBadge}>{views.length}</span>
-            </h2>
-            <div className={playground.screenList}>
-              <div className={`${playground.screenGrid} ${playground.screenGridSmall}`}>
-                {views.map((item) => (
-                  <ScreenCard
-                    key={item.id}
-                    headingLevel={3}
-                    title={item.label}
-                    selected={item.id === view}
-                    onSelect={() => pick(item.id)}
-                    thumb={
-                      <ScaledFrame
-                        src={frameUrl(slug, item.id, theme?.mode ?? "light")}
-                        title={`${title}: ${item.label}`}
-                        device={item.device}
-                        interactive={false}
-                      />
-                    }
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
 
         <section className={styles.section} aria-labelledby={`${slug}-install`}>
           <h2 id={`${slug}-install`} className={styles.sectionTitle}>

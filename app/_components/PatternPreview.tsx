@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Button, CodeSnippet, SegmentedControl } from "agentic-ds-kit";
+import { Button, CodeSnippet, SegmentedControl, Select } from "agentic-ds-kit";
 import { PATTERN_VIEWS, type ScreenSlug } from "@/lib/pattern-screens";
 import { CopyPromptBar } from "./CopyPromptBar";
 import { usePatternTheme } from "./ThemeScope";
@@ -133,9 +133,9 @@ export function ScaledFrame({
 }
 
 /**
- * Preview / Code for one pattern, like a screens catalogue: a toolbar (light or dark, desktop
- * or mobile, open full screen, copy the prompt or open it in an AI tool) over the screen in a scaled iframe, or
- * the install, usage and contract code. The page's screens list picks the screen shown.
+ * Preview / Code for one pattern, like a screens catalogue: a toolbar (the state switch, light or
+ * dark, desktop or mobile, open full screen, copy the prompt or open it in an AI tool) over the
+ * screen in a scaled iframe, or the install, usage and contract code.
  */
 export function PatternPreview({
   slug,
@@ -146,6 +146,7 @@ export function PatternPreview({
   usage,
   contract,
   view,
+  onViewChange,
 }: {
   slug: ScreenSlug;
   title: string;
@@ -156,19 +157,16 @@ export function PatternPreview({
   cursorPrompt: string;
   usage: string;
   contract: string;
-  /** The screen (state) shown; pick it from the screens list under the preview. */
+  /** The state shown; the toolbar's state switch picks it. */
   view: string;
+  onViewChange: (view: string) => void;
 }) {
   const views = PATTERN_VIEWS[slug];
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const theme = usePatternTheme();
   const [mode, setMode] = useState<Mode | null>(null);
-  const viewDevice: Device = views.find((item) => item.id === view)?.device ?? "desktop";
-  // A screen that is a phone view (e.g. Mobile 390) opens at that width; a pick on the Width control
-  // holds until another screen is chosen.
-  const [picked, setPicked] = useState<{ view: string; device: Device } | null>(null);
-  const device: Device = picked?.view === view ? picked.device : viewDevice;
-  const setDevice = (next: Device) => setPicked({ view, device: next });
+  // Width is its own switch and holds across states: any state can be seen at 390.
+  const [device, setDevice] = useState<Device>("desktop");
   const pathname = usePathname();
   const customize = useCustomizeOpen(pathname);
   const shownMode: Mode = mode ?? theme?.mode ?? "light";
@@ -188,13 +186,21 @@ export function PatternPreview({
               { value: "code", label: "Code", icon: "Code" },
             ]}
           />
-          {tab === "preview" && views.length > 1 ? (
-            <span className={styles.previewLabel}>{views.find((item) => item.id === view)?.label ?? view}</span>
-          ) : null}
         </div>
         <div className={styles.previewTools}>
           {tab === "preview" ? (
             <>
+              {views.length > 1 ? (
+                <Select
+                  className={styles.stateSelect}
+                  id={`${slug}-state`}
+                  size="sm"
+                  ariaLabel="State"
+                  value={view}
+                  onChange={(value) => onViewChange(Array.isArray(value) ? value[0] : value)}
+                  options={views.map((item) => ({ value: item.id, label: item.label }))}
+                />
+              ) : null}
               <SegmentedControl
                 className={styles.iconSegments}
                 size="sm"
