@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, useSyncExternalStore } from "react";
+import { useId, useState, useSyncExternalStore, type ReactNode } from "react";
 import { Hand, Lock, Play, type LucideIcon } from "lucide-react";
 import { AppHeader } from "../../ui/AppHeader";
 import { AutonomyDial } from "../../ui/AutonomyDial";
@@ -49,6 +49,11 @@ export interface AgentPermissionsPatternProps {
   onSaveLevel?: (actionId: string, level: AgentActionLevel, limit?: number) => void;
   /** Fill the viewport height (layout-shell--viewport). Default true; turn it off inside a framed preview. */
   viewport?: boolean;
+  /**
+   * Draw the page's own top bar (AppHeader, and below 640 the Menu button and nav Drawer). Default true.
+   * Set false inside an app shell that gives the header and nav; the page then renders only its main.
+   */
+  topBar?: boolean;
 }
 
 /*
@@ -104,6 +109,11 @@ const COLUMNS: TableColumn[] = [
   { key: "edit", header: "", align: "end" },
 ];
 
+/** The page's own layout-shell when it draws its top bar; nothing when an app shell wraps it. */
+function Frame({ topBar, className, children }: { topBar: boolean; className: string; children: ReactNode }) {
+  return topBar ? <div className={className}>{children}</div> : <>{children}</>;
+}
+
 /**
  * Agent permissions page: AppHeader, a PageHeader with Ask, the pending PermissionRequest first, then
  * "What agents may do" (a Table, a ListView below 640), a Switch that stops every agent acting on
@@ -118,6 +128,7 @@ export function AgentPermissionsPattern({
   onDeny = noop,
   onSaveLevel = noop,
   viewport = true,
+  topBar = true,
 }: AgentPermissionsPatternProps) {
   const narrow = useNarrow();
   const uid = useId();
@@ -205,30 +216,34 @@ export function AgentPermissionsPattern({
   const tableTitleId = `${uid}-table`;
 
   return (
-    <div className={["layout-shell agent-permissions-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
-      <AppHeader
-        className="agent-permissions-pattern__header"
-        title={PERMISSIONS_PAGE.product}
-        radius="none"
-        search={false}
-        actions={<Avatar name={PERMISSIONS_PAGE.account.name} initials={PERMISSIONS_PAGE.account.initials} size="sm" />}
-        end={
-          narrow ? (
-            <IconButton
-              icon="Menu"
-              ariaLabel="Open navigation"
-              size="md"
-              appearance="ghost"
-              mode="neutral"
-              onClick={() => setNavOpen(true)}
-            />
-          ) : undefined
-        }
-      />
-      {narrow ? (
-        <Drawer open={navOpen} onClose={() => setNavOpen(false)} side="left" title={PERMISSIONS_PAGE.product}>
-          <SideNav title={PERMISSIONS_PAGE.product} showHeader={false} radius="md" groups={PERMISSIONS_NAV} />
-        </Drawer>
+    <Frame topBar={topBar} className={["layout-shell agent-permissions-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
+      {topBar ? (
+        <>
+          <AppHeader
+            className="agent-permissions-pattern__header"
+            title={PERMISSIONS_PAGE.product}
+            radius="none"
+            search={false}
+            actions={<Avatar name={PERMISSIONS_PAGE.account.name} initials={PERMISSIONS_PAGE.account.initials} size="sm" />}
+            end={
+              narrow ? (
+                <IconButton
+                  icon="Menu"
+                  ariaLabel="Open navigation"
+                  size="md"
+                  appearance="ghost"
+                  mode="neutral"
+                  onClick={() => setNavOpen(true)}
+                />
+              ) : undefined
+            }
+          />
+          {narrow ? (
+            <Drawer open={navOpen} onClose={() => setNavOpen(false)} side="left" title={PERMISSIONS_PAGE.product}>
+              <SideNav title={PERMISSIONS_PAGE.product} showHeader={false} radius="md" groups={PERMISSIONS_NAV} />
+            </Drawer>
+          ) : null}
+        </>
       ) : null}
       <main className="layout-content agent-permissions-pattern__content">
         <PageHeader title={PERMISSIONS_PAGE.title} subtitle={subtitle} actions={ask} />
@@ -391,6 +406,6 @@ export function AgentPermissionsPattern({
           </div>
         ) : null}
       </Drawer>
-    </div>
+    </Frame>
   );
 }

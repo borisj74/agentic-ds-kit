@@ -26,6 +26,11 @@ export interface AgentActivityPatternProps {
   onAsk?: () => void;
   /** Fill the viewport height (layout-shell--viewport). Default true; turn it off inside a framed preview. */
   viewport?: boolean;
+  /**
+   * Draw the page's own top bar (AppHeader, and below 640 the Menu button and nav Drawer). Default true.
+   * Set false inside an app shell that gives the header and nav; the page then renders only its main.
+   */
+  topBar?: boolean;
 }
 
 /*
@@ -97,13 +102,18 @@ function withIds(text: string): ReactNode {
   );
 }
 
+/** The page's own layout-shell when it draws its top bar; nothing when an app shell wraps it. */
+function Frame({ topBar, className, children }: { topBar: boolean; className: string; children: ReactNode }) {
+  return topBar ? <div className={className}>{children}</div> : <>{children}</>;
+}
+
 /**
  * Agent activity page: AppHeader, a PageHeader with Ask, a FilterBar (Agent, Allowed by, App) with the
  * step count, then one Card holding the kit ActivityFeed (variant="agent"): day groups on the rail, Undo
  * with its deadline, Undone and Final steps, and Load earlier days. Undo strikes the step and a Toast
  * confirms it.
  */
-export function AgentActivityPattern({ view = "default", onAsk = noop, viewport = true }: AgentActivityPatternProps) {
+export function AgentActivityPattern({ view = "default", onAsk = noop, viewport = true, topBar = true }: AgentActivityPatternProps) {
   const narrow = useNarrow();
   const [filters, setFilters] = useState<Filters>(START[view]);
   const [openId, setOpenId] = useState<string | undefined>();
@@ -220,30 +230,34 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
   }
 
   return (
-    <div className={["layout-shell agent-activity-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
-      <AppHeader
-        className="agent-activity-pattern__header"
-        title={PAGE.product}
-        radius="none"
-        search={false}
-        actions={<Avatar name={PAGE.account.name} initials={PAGE.account.initials} size="sm" />}
-        end={
-          narrow ? (
-            <IconButton
-              icon="Menu"
-              ariaLabel="Open navigation"
-              size="md"
-              appearance="ghost"
-              mode="neutral"
-              onClick={() => setNavOpen(true)}
-            />
-          ) : undefined
-        }
-      />
-      {narrow ? (
-        <Drawer open={navOpen} onClose={() => setNavOpen(false)} side="left" title={PAGE.product}>
-          <SideNav title={PAGE.product} showHeader={false} radius="md" groups={NAV_GROUPS.map((group) => ({ ...group, items: [...group.items] }))} />
-        </Drawer>
+    <Frame topBar={topBar} className={["layout-shell agent-activity-pattern", viewport ? "layout-shell--viewport" : ""].filter(Boolean).join(" ")}>
+      {topBar ? (
+        <>
+          <AppHeader
+            className="agent-activity-pattern__header"
+            title={PAGE.product}
+            radius="none"
+            search={false}
+            actions={<Avatar name={PAGE.account.name} initials={PAGE.account.initials} size="sm" />}
+            end={
+              narrow ? (
+                <IconButton
+                  icon="Menu"
+                  ariaLabel="Open navigation"
+                  size="md"
+                  appearance="ghost"
+                  mode="neutral"
+                  onClick={() => setNavOpen(true)}
+                />
+              ) : undefined
+            }
+          />
+          {narrow ? (
+            <Drawer open={navOpen} onClose={() => setNavOpen(false)} side="left" title={PAGE.product}>
+              <SideNav title={PAGE.product} showHeader={false} radius="md" groups={NAV_GROUPS.map((group) => ({ ...group, items: [...group.items] }))} />
+            </Drawer>
+          ) : null}
+        </>
       ) : null}
       <main className="layout-content agent-activity-pattern__content">
         <PageHeader title={PAGE.title} subtitle={narrow ? subtitle : `Newest first. ${subtitle}.`} actions={ask} />
@@ -280,6 +294,6 @@ export function AgentActivityPattern({ view = "default", onAsk = noop, viewport 
         {content}
       </main>
       <Toast open={toast} onClose={() => setToast(false)} status="success" size="sm" title={UNDONE.toast} />
-    </div>
+    </Frame>
   );
 }

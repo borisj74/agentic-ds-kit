@@ -5,7 +5,7 @@ import { AgentActivityScreen } from "./AgentActivityScreen";
 import { AgentPermissionsScreen } from "./AgentPermissionsScreen";
 import { AppShellScreen } from "./AppShellDemo";
 import { AssistantStartScreen } from "./AssistantStartScreen";
-import { DashboardScreen, ListDetailScreen } from "./DashboardDemo";
+import { DashboardScreen, EmptyFirstRunScreen, ListDetailScreen, SettingsFormScreen } from "./DashboardDemo";
 import { InsightStackScreen } from "./InsightStackDemo";
 import { RunDetailScreen } from "./RunDetailScreen";
 import { BillingScheduleScreen, IntegrationSettingsScreen } from "./SaasPatternDemo";
@@ -18,13 +18,13 @@ export function PatternScreen({ slug, view }: { slug: ScreenSlug; view?: string 
   const current = views.some((item) => item.id === view) ? view : views[0].id;
   switch (slug) {
     case "dashboard":
-      return <DashboardScreen pattern={slug} view={current} />;
+      return <DashboardScreen view={current} />;
     case "list-detail":
       return <ListDetailScreen view={current} />;
     case "settings-form":
-      return <DashboardScreen pattern="settings" />;
+      return <SettingsFormScreen />;
     case "empty-first-run":
-      return <DashboardScreen pattern="empty" />;
+      return <EmptyFirstRunScreen />;
     case "sign-in":
       return <SignInScreen view={current} />;
     case "app-shell":
