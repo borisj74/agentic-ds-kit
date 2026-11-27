@@ -1,22 +1,19 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Alert } from "../../ui/Alert";
 import { AlertDialog } from "../../ui/AlertDialog";
 import { Badge } from "../../ui/Badge";
 import type { BadgeTone } from "../../ui/Badge";
+import { BillingSchedule } from "../../ui/BillingSchedule";
 import { Button } from "../../ui/Button";
 import { Card } from "../../ui/Card";
 import type { CardAction } from "../../ui/Card";
 import { CurrencyInput } from "../../ui/CurrencyInput";
 import { DatePicker } from "../../ui/DatePicker";
-import { Divider } from "../../ui/Divider";
 import { Drawer } from "../../ui/Drawer";
-import { Empty } from "../../ui/Empty";
 import { Field } from "../../ui/Field";
 import { RadioGroup } from "../../ui/RadioGroup";
 import { Table } from "../../ui/Table";
-import type { TableRowAction } from "../../ui/Table";
 import {
   CHARGES,
   EMPTY_NOTE,
@@ -29,7 +26,7 @@ import {
 } from "./billing-schedule-data";
 import "./BillingSchedulePattern.css";
 
-/** Status is a word in a small Badge, never colour alone. Upcoming is the only primary one. */
+/** Summary status words: the same Badge words and tones as the kit BillingSchedule. */
 const STATUS: Record<ChargeStatus, { tone: BadgeTone; label: string }> = {
   scheduled: { tone: "primary", label: "Upcoming" },
   retrying: { tone: "warning", label: "Retrying" },
@@ -39,18 +36,9 @@ const STATUS: Record<ChargeStatus, { tone: BadgeTone; label: string }> = {
   waived: { tone: "neutral", label: "Waived" },
 };
 
-const UPCOMING: ChargeStatus[] = ["scheduled", "retrying"];
-
 /** Summary mode: two columns, so the table fits a half-width card (text columns keep a min width). */
 const SUMMARY_COLUMNS = [
   { key: "charge", header: "Charge" },
-  { key: "amount", header: "Amount", align: "end" as const, numeric: true },
-];
-
-const COLUMNS = [
-  { key: "date", header: "Date" },
-  { key: "charge", header: "Description" },
-  { key: "status", header: "Status" },
   { key: "amount", header: "Amount", align: "end" as const, numeric: true },
 ];
 
@@ -82,7 +70,7 @@ export interface BillingSchedulePatternProps {
   failureDetail?: string;
   /** ISO 4217 code for the edit Drawer's CurrencyInput. Default USD. */
   currency?: string;
-  /** "View all" (ghost) in the Card header, to the full schedule. Wins over Download all. */
+  /** summary only: "View all" (ghost) in the Card header, to the full schedule. */
   onViewAll?: () => void;
   loading?: boolean;
   error?: string;
@@ -127,20 +115,11 @@ function money(value: number, currency: string): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(value);
 }
 
-/** The newest failed charge that no paid charge came after: the one the failure Alert is about. */
-function openFailure(billed: Charge[]): Charge | undefined {
-  const failed = billed.find((charge) => charge.status === "failed");
-  if (!failed) return undefined;
-  return billed.some((charge) => charge.status === "paid" && charge.date > failed.date) ? undefined : failed;
-}
-
-const cx = (...names: (string | false | undefined)[]) => names.filter(Boolean).join(" ");
-
 /**
- * Billing schedule for one customer in a kit Card: the Card's header with the plan, one kit Table of
- * upcoming and billed charges with the next charge marked, a failure Alert when a payment is still open,
- * and a nextOnly panel. Scheduled rows can open a kit Drawer to move the date, change the amount or
- * skip the month. Copy it in and replace the demo data.
+ * Billing schedule for one customer, built on the kit BillingSchedule (view "full", or "nextOnly"):
+ * the Card, the one Table of charges, the failure Alert and the states all come from it. The pattern adds
+ * the edit Drawer and Skip AlertDialog on scheduled rows, and a summary card for a Billing page.
+ * Copy it in and replace the demo data.
  */
 export function BillingSchedulePattern({
   charges = CHARGES,
@@ -182,19 +161,6 @@ export function BillingSchedulePattern({
   const skipping = rows.find((charge) => charge.id === skipId) ?? null;
   const ready = !loading && !error && rows.length > 0;
 
-  // One table: upcoming first (oldest first), then billed (newest first).
-  const upcoming = rows
-    .filter((charge) => UPCOMING.includes(charge.status))
-    .sort((a, b) => a.date.localeCompare(b.date));
-  const billed = rows
-    .filter((charge) => !UPCOMING.includes(charge.status))
-    .sort((a, b) => b.date.localeCompare(a.date));
-  const ordered = [...upcoming, ...billed];
-  /** The first scheduled charge says Next charge after its description. */
-  const nextId = upcoming.find((charge) => charge.status === "scheduled")?.id;
-  const failure = ready && !nextOnly && !summary ? openFailure(billed) : undefined;
-  const hasRowActions = Boolean(onSaveCharge || onDownloadInvoice);
-
   useEffect(() => {
     if (editId || skipId || !focusAfter.current) return;
     const target = focusAfter.current;
@@ -233,116 +199,39 @@ export function BillingSchedulePattern({
     setSkipId(null);
   }
 
-  function rowActions(charge: Charge): TableRowAction[] {
-    if (charge.status === "scheduled" && onSaveCharge) {
-      return [{ icon: "Pencil", ariaLabel: editLabel(charge), onClick: () => setEditId(charge.id) }];
-    }
-    if (!UPCOMING.includes(charge.status) && onDownloadInvoice) {
-      return [
-        {
-          icon: "Download",
-          ariaLabel: `Download ${charge.invoice ?? `${charge.label}, ${longDate(charge.date)}`}`,
-          onClick: () => onDownloadInvoice(charge),
-        },
-      ];
-    }
-    return [];
-  }
-
-  // Card's own header holds the actions: Ask, then View all or Download all (at most two).
-  const headerActions: CardAction[] = [];
-  if (onAsk) headerActions.push({ label: "Ask", onClick: onAsk, iconStart: "MessageCircle", appearance: "outline" });
-  if (ready && !nextOnly && onViewAll) headerActions.push({ label: "View all", onClick: onViewAll, appearance: "ghost" });
-  else if (ready && !nextOnly && !failure && onDownloadAll)
-    headerActions.push({ label: "Download all", onClick: onDownloadAll, iconStart: "Download", appearance: "ghost" });
-
   return (
-    <Card
-      size="sm"
-      title="Billing schedule"
-      description={description || undefined}
-      headerAction={headerActions.length > 0 ? headerActions : undefined}
-      aria-busy={loading || undefined}
-    >
-      <div className="billing-schedule-pattern" ref={rootRef}>
-        <span role="status" className="billing-schedule-pattern__sr">
-          {announce}
-        </span>
+    <div className="billing-schedule-pattern" ref={rootRef}>
+      <span role="status" className="billing-schedule-pattern__sr">
+        {announce}
+      </span>
 
-        {loading ? (
-          <Table aria-label="Charges" size="lg" columns={COLUMNS} rows={[]} state="loading" />
-        ) : error ? (
-          <Alert
-            variant="danger"
-            title="Couldn’t load the billing schedule"
-            action={onRetry ? { label: "Retry", onClick: onRetry, appearance: "outline", icon: "RotateCcw" } : undefined}
-          >
-            {error}
-          </Alert>
-        ) : rows.length === 0 ? (
-          <Empty title="No charges yet" description={EMPTY_NOTE} icon="CalendarDays" />
-        ) : summary ? (
-          <Table
-            aria-label="Charges"
-            size="sm"
-            columns={SUMMARY_COLUMNS}
-            rows={rows.slice(0, limit).map((charge) => ({
-              charge: <SummaryCharge charge={charge} />,
-              amount: <span className="billing-schedule-pattern__amount">{charge.amount}</span>,
-            }))}
-          />
-        ) : nextOnly ? (
-          <NextChargePanel next={next} onChangeCard={onChangeCard} />
-        ) : (
-          <>
-            {failure ? (
-              <Alert
-                variant="danger"
-                placement="page"
-                title={`${failure.amount} failed on ${longDate(failure.date)}`}
-                action={onUpdateCard ? { label: "Update card", onClick: onUpdateCard } : undefined}
-              >
-                {failureDetail}
-              </Alert>
-            ) : null}
-            <Table
-              aria-label="Charges"
-              data-charge-table="schedule"
-              size="lg"
-              stack
-              columns={COLUMNS}
-              rows={ordered.map((charge) => {
-                const isNext = charge.id === nextId;
-                return {
-                  date: (
-                    <span className={cx("billing-schedule-pattern__date", isNext && "billing-schedule-pattern__date--next")}>
-                      {longDate(charge.date)}
-                    </span>
-                  ),
-                  charge: <ChargeText charge={charge} next={isNext} />,
-                  status: (
-                    <Badge tone={STATUS[charge.status].tone} size="sm">
-                      {STATUS[charge.status].label}
-                    </Badge>
-                  ),
-                  amount: (
-                    <span
-                      className={cx(
-                        "billing-schedule-pattern__amount",
-                        charge.status === "waived" && "billing-schedule-pattern__amount--waived",
-                      )}
-                    >
-                      {charge.amount}
-                    </span>
-                  ),
-                };
-              })}
-              rowActions={hasRowActions ? (_row, index) => rowActions(ordered[index]) : undefined}
-              rowActionsAs="icons"
-            />
-          </>
-        )}
-      </div>
+      {summary && ready ? (
+        <SummaryCard
+          charges={rows.slice(0, limit)}
+          description={description}
+          onAsk={onAsk}
+          onViewAll={onViewAll}
+        />
+      ) : (
+        // One source: the schedule, its failure Alert, nextOnly panel and states come from the kit BillingSchedule.
+        <BillingSchedule
+          view={nextOnly ? "nextOnly" : "full"}
+          charges={rows}
+          next={next}
+          description={description || undefined}
+          failureDetail={failureDetail}
+          emptyDescription={EMPTY_NOTE}
+          loading={loading}
+          error={error}
+          onRetry={onRetry}
+          onAsk={onAsk}
+          onDownloadAll={onDownloadAll}
+          onEditCharge={onSaveCharge ? (charge) => setEditId(charge.id) : undefined}
+          onDownloadInvoice={onDownloadInvoice}
+          onChangeCard={onChangeCard}
+          onUpdateCard={onUpdateCard}
+        />
+      )}
 
       <EditChargeDrawer
         charge={editing}
@@ -372,59 +261,42 @@ export function BillingSchedulePattern({
         }}
         onAction={() => skipping && skip(skipping.id)}
       />
+    </div>
+  );
+}
+
+/** summary: the overview card for a Billing page, two columns so it fits a half-width column, and View all. */
+function SummaryCard({
+  charges,
+  description,
+  onAsk,
+  onViewAll,
+}: {
+  charges: Charge[];
+  description: string;
+  onAsk?: () => void;
+  onViewAll?: () => void;
+}) {
+  const headerActions: CardAction[] = [];
+  if (onAsk) headerActions.push({ label: "Ask", onClick: onAsk, iconStart: "MessageCircle", appearance: "outline" });
+  if (onViewAll) headerActions.push({ label: "View all", onClick: onViewAll, appearance: "ghost" });
+  return (
+    <Card
+      size="sm"
+      title="Billing schedule"
+      description={description || undefined}
+      headerAction={headerActions.length > 0 ? headerActions : undefined}
+    >
+      <Table
+        aria-label="Charges"
+        size="sm"
+        columns={SUMMARY_COLUMNS}
+        rows={charges.map((charge) => ({
+          charge: <SummaryCharge charge={charge} />,
+          amount: <span className="billing-schedule-pattern__amount">{charge.amount}</span>,
+        }))}
+      />
     </Card>
-  );
-}
-
-/** nextOnly: the date and figure, a rule, what it pays with, then Change card. */
-function NextChargePanel({ next, onChangeCard }: { next: NextCharge; onChangeCard?: () => void }) {
-  return (
-    <section className="billing-schedule-pattern__panel" aria-label="Next charge">
-      <div className="billing-schedule-pattern__panel-figure">
-        <span className="billing-schedule-pattern__caption">Next charge on {next.date}</span>
-        <span className="billing-schedule-pattern__figure">{next.amount}</span>
-      </div>
-      <span className="billing-schedule-pattern__panel-rule">
-        <Divider orientation="vertical" />
-      </span>
-      <div className="billing-schedule-pattern__panel-method">
-        <span className="billing-schedule-pattern__caption">Pays with</span>
-        <span className="billing-schedule-pattern__method">{next.paysWith}</span>
-      </div>
-      {onChangeCard ? (
-        <span className="billing-schedule-pattern__panel-action">
-          <Button size="sm" appearance="outline" mode="neutral" onClick={onChangeCard}>
-            Change card
-          </Button>
-        </span>
-      ) : null}
-    </section>
-  );
-}
-
-function ChargeText({ charge, next = false }: { charge: Charge; next?: boolean }) {
-  return (
-    <span className="billing-schedule-pattern__description">
-      <span className={cx("billing-schedule-pattern__line", next && "billing-schedule-pattern__line--next")}>
-        {charge.label}
-        {next ? (
-          <>
-            {" "}
-            <span className="billing-schedule-pattern__next-marker">Next charge</span>
-          </>
-        ) : null}
-      </span>
-      {charge.note ? (
-        <span
-          className={cx(
-            "billing-schedule-pattern__note",
-            charge.status === "failed" && "billing-schedule-pattern__note--danger",
-          )}
-        >
-          {charge.note}
-        </span>
-      ) : null}
-    </span>
   );
 }
 

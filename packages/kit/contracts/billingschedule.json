@@ -1,0 +1,150 @@
+{
+  "id": "billingschedule",
+  "status": "stable",
+  "level": "organism",
+  "intent": "A customer's billing schedule in a kit Card, one closed view: full (all charges in one Table), nextOnly (the next charge and its card) or failed (the open failed payment). Each view has its own empty, loading and error.",
+  "useWhen": [
+    "a dashboard card with the next charge — view=\"nextOnly\"",
+    "an account page that flags a failed payment — view=\"failed\"",
+    "billing settings with the full charge table — view=\"full\""
+  ],
+  "doNotUseWhen": [
+    "one invoice or credit note as a document — InvoiceDocument",
+    "choosing or changing a plan — PricingPlans",
+    "a generic list of rows with no billing meaning — Table"
+  ],
+  "contains": [
+    "card",
+    "table",
+    "badge",
+    "alert",
+    "button",
+    "divider",
+    "empty",
+    "skeleton"
+  ],
+  "props": {
+    "view": {
+      "type": "enum",
+      "values": [
+        "full",
+        "nextOnly",
+        "failed"
+      ],
+      "default": "full",
+      "required": false,
+      "note": "Closed. full: every charge, upcoming first (oldest first) then billed (newest first). nextOnly: the next-charge panel. failed: the open failed charge first, then invoiced or retrying charges."
+    },
+    "charges": {
+      "type": "array",
+      "required": false,
+      "note": "{ id, date (YYYY-MM-DD), label, amount (pre-formatted), value?, status, invoice?, note?, splitLabel? }[]. status: scheduled, retrying, invoiced, paid, failed or waived. full and failed read it."
+    },
+    "next": {
+      "type": "object",
+      "required": false,
+      "note": "{ date, amount, paysWith }, all pre-formatted. nextOnly reads it; without it nextOnly shows its empty state."
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "note": "The Card description beside the title, such as the plan name."
+    },
+    "failureDetail": {
+      "type": "string",
+      "required": false,
+      "note": "The failure Alert's body: what was declined, when the retry runs and what to do before then."
+    },
+    "emptyDescription": {
+      "type": "string",
+      "required": false,
+      "note": "The empty state's one line. Defaults per view."
+    },
+    "loading": {
+      "type": "boolean",
+      "required": false,
+      "note": "full and failed: the Table loading state (header plus Skeleton rows). nextOnly: the panel with Skeleton lines."
+    },
+    "error": {
+      "type": "string",
+      "required": false,
+      "note": "What failed to load. A danger Alert titled for the view."
+    },
+    "onRetry": {
+      "type": "function",
+      "required": false,
+      "note": "Retry (outline, RotateCcw) in the error Alert."
+    },
+    "onAsk": {
+      "type": "function",
+      "required": false,
+      "note": "Ask (outline, MessageCircle) in the Card header."
+    },
+    "onDownloadAll": {
+      "type": "function",
+      "required": false,
+      "note": "full only: Download all (ghost) in the Card header, hidden while the failure Alert shows."
+    },
+    "onEditCharge": {
+      "type": "function",
+      "required": false,
+      "note": "(charge) => void. full only: an edit pencil on scheduled rows, named \"Edit <label>, <date>\". Open your own edit form."
+    },
+    "onDownloadInvoice": {
+      "type": "function",
+      "required": false,
+      "note": "(charge) => void. A Download icon on billed rows, named by the invoice."
+    },
+    "onChangeCard": {
+      "type": "function",
+      "required": false,
+      "note": "nextOnly: Change card (outline) at the end of the panel."
+    },
+    "onUpdateCard": {
+      "type": "function",
+      "required": false,
+      "note": "full and failed: Update card in the failure Alert, the one solid primary."
+    }
+  },
+  "passthrough": {
+    "root": "article",
+    "ref": "article",
+    "className": "root",
+    "rest": "article"
+  },
+  "tokens": [
+    "bg.subtle",
+    "line.default",
+    "text.fg",
+    "text.fgMuted",
+    "text.fgSubtle",
+    "status.infoText",
+    "status.dangerText",
+    "radius.xl",
+    "type.family.mono",
+    "type.size.caption",
+    "type.size.bodySm",
+    "type.size.heading",
+    "type.weight.label"
+  ],
+  "a11y": {
+    "element": "article",
+    "requirements": [
+      "The Card is an article named by its Billing schedule heading",
+      "Status is a word in a kit Badge (Upcoming, Retrying, Invoiced, Paid, Failed, Waived), never colour alone",
+      "The next charge says Next charge in words after its description",
+      "Row actions are icon Buttons named with the charge and date, or the invoice",
+      "The nextOnly panel is a section named Next charge",
+      "aria-busy on the Card while loading; Skeletons announce Loading once",
+      "A load error and an open failed payment are kit Alerts (danger) with the amount and date in the failure title"
+    ]
+  },
+  "doNot": [
+    "Do not rebuild a local billing schedule, charges table or next-charge card; use this component",
+    "Do not split upcoming and billed charges into two tables",
+    "Do not add a second solid primary; Update card in the failure Alert is the one",
+    "Do not reach into Card, Table, Badge or Alert markup to restyle them",
+    "Do not format money in the component; pass amounts pre-formatted"
+  ],
+  "snippet": "<BillingSchedule view=\"full\" charges={charges} description=\"Pro plan\" onDownloadAll={downloadAll} onUpdateCard={updateCard} />\n<BillingSchedule view=\"nextOnly\" next={{ date: \"01 Dec 2026\", amount: \"$480.00\", paysWith: \"Visa ending 4242\" }} description=\"Pro plan\" onChangeCard={changeCard} />\n<BillingSchedule view=\"failed\" charges={charges} description=\"Pro plan\" failureDetail=\"The card was declined. We retry on 04 Oct 2026, so update it before then to keep the plan active.\" onUpdateCard={updateCard} />"
+}

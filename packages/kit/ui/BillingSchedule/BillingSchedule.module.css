@@ -1,0 +1,142 @@
+/* Styles only BillingSchedule's own markup. Card, Table, Badge, Alert, Empty and Skeleton keep their look (props only). */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.date {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-fg-muted);
+}
+
+.dateNext {
+  color: var(--text-fg);
+}
+
+.amount {
+  font-family: var(--font-mono);
+  font-weight: var(--type-weight-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-fg);
+}
+
+.amountWaived {
+  color: var(--text-fg-subtle);
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+}
+
+.line {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-fg);
+}
+
+.lineNext {
+  font-weight: var(--type-weight-label);
+}
+
+/* "Next charge" after the next charge's description: a word, not a second Badge. */
+.nextMarker {
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-xs);
+  color: var(--status-info-text);
+}
+
+.note {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-subtle);
+}
+
+.noteDanger {
+  color: var(--status-danger-text);
+}
+
+/* nextOnly panel: a subtle inset with the figure, a rule, the payment method and Change card. */
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--bg-subtle);
+  border: var(--border-width-thin) solid var(--line-default);
+  border-radius: var(--radius-xl);
+}
+
+.panelFigure,
+.panelMethod {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.panelMethod {
+  flex: 1 1 auto;
+}
+
+.panelRule {
+  display: flex;
+  align-self: stretch;
+}
+
+.panelAction {
+  display: flex;
+  margin-inline-start: auto;
+}
+
+.caption {
+  font-size: var(--type-size-caption);
+  line-height: var(--type-line-ui-xs);
+  color: var(--text-fg-muted);
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-size: var(--type-size-heading-5);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-heading-5);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-fg);
+}
+
+.method {
+  font-size: var(--type-size-body-sm);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-line-ui-sm);
+  color: var(--text-fg);
+}
+
+/* Below --grid-breakpoint-sm (40rem; container queries cannot read var()): the panel stacks without
+   its rule. The Table stacks its rows itself (stack). */
+@container (max-width: 40rem) {
+  .panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+
+  .panelRule {
+    display: none;
+  }
+
+  .panelAction {
+    margin-inline-start: 0;
+  }
+}
