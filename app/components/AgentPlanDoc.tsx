@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const STEPS: AgentPlanStep[] = [
   { id: "read", label: "Read invoice module", tool: "read_file", target: "src/billing/invoice.ts" },
@@ -225,24 +226,9 @@ export function AgentPlanDoc() {
                   onViewTrail={noop}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Status</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Status">
-                    {STATUSES.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${status === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={status === option}
-                        onClick={() => setStatus(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Status" options={STATUSES} value={status} onChange={setStatus} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { ApprovalCard, Button, Switch } from "agentic-ds-kit";
+import { ApprovalCard } from "agentic-ds-kit";
 import type { ApprovalCardAction, ApprovalCardRisk, ApprovalCardStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const RISKS: ApprovalCardRisk[] = ["low", "medium", "high"];
 
@@ -228,43 +229,21 @@ export function ApprovalCardDoc() {
                   resolvedAt="just now"
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Risk</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Risk">
-                    {RISKS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${risk === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={risk === option}
-                        onClick={() => setRisk(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Content</span>
-                  <Switch size="sm" label="Diff preview" checked={diff} onChange={setDiff} />
-                  <Switch size="sm" label="Countdown" checked={countdown} onChange={setCountdown} />
-                </div>
-                <div className={styles.panelGroup}>
-                  <Button
-                    size="sm"
-                    appearance="outline"
-                    mode="neutral"
-                    iconStart="RotateCcw"
-                    onClick={() => {
-                      setStatus("pending");
-                      setRun((value) => value + 1);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel
+                onReset={() => {
+                  setStatus("pending");
+                  setRun((value) => value + 1);
+                }}
+              >
+                <RadioControl label="Risk" options={RISKS} value={risk} onChange={setRisk} />
+                <SwitchControl
+                  label="Content"
+                  items={[
+                    { label: "Diff preview", checked: diff, onChange: setDiff },
+                    { label: "Countdown", checked: countdown, onChange: setCountdown },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

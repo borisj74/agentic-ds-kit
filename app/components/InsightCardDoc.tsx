@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { InsightCard } from "agentic-ds-kit";
 import type { InsightCardAction, InsightCardActionStyle, InsightCardSize, InsightCardTone } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: InsightCardSize[] = ["sm", "md", "lg"];
 const TONES: InsightCardTone[] = ["opportunity", "success", "warning", "danger", "info", "neutral"];
@@ -266,47 +266,19 @@ export function InsightCardDoc() {
                   onDismiss={showDismiss ? () => {} : undefined}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Tone</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Tone">
-                    {TONES.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${tone === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={tone === option}
-                        onClick={() => setTone(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Content</span>
-                  <Switch size="sm" label="Description" checked={showDescription} onChange={setShowDescription} />
-                  <Switch size="sm" label="Confidence" checked={showConfidence} onChange={setShowConfidence} />
-                  <Switch size="sm" label="Source" checked={showSource} onChange={setShowSource} />
-                  <Switch size="sm" label="Dismiss" checked={showDismiss} onChange={setShowDismiss} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Tone" options={TONES} value={tone} onChange={setTone} />
+                <SwitchControl
+                  label="Content"
+                  items={[
+                    { label: "Description", checked: showDescription, onChange: setShowDescription },
+                    { label: "Confidence", checked: showConfidence, onChange: setShowConfidence },
+                    { label: "Source", checked: showSource, onChange: setShowSource },
+                    { label: "Dismiss", checked: showDismiss, onChange: setShowDismiss },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

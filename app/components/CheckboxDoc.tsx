@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Checkbox } from "agentic-ds-kit";
 import type { CheckboxSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: CheckboxSize[] = ["sm", "md", "lg"];
 const LABEL_MODES = ["labeled", "unlabeled"] as const;
@@ -88,48 +88,19 @@ export function CheckboxDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Label</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Label">
-                    {LABEL_MODES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="checkbox-label"
-                          value={option}
-                          checked={labelMode === option}
-                          onChange={() => setLabelMode(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Checked" size="sm" checked={checked} onChange={setChecked} />
-                  <Switch label="Indeterminate" size="sm" checked={indeterminate} onChange={setIndeterminate} />
-                  <Switch label="Error" size="sm" checked={error} onChange={setError} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Label" options={LABEL_MODES} value={labelMode} onChange={setLabelMode} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Checked", checked: checked, onChange: setChecked },
+                    { label: "Indeterminate", checked: indeterminate, onChange: setIndeterminate },
+                    { label: "Error", checked: error, onChange: setError },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

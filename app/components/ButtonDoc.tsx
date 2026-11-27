@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Button } from "agentic-ds-kit";
 import type { ButtonAppearance, ButtonMode, ButtonSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: ButtonSize[] = ["sm", "md", "lg"];
 const APPEARANCES: ButtonAppearance[] = ["solid", "outline", "soft", "ghost"];
@@ -119,81 +119,20 @@ export function ButtonDoc() {
                   )}
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Appearance</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Appearance">
-                    {APPEARANCES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="button-appearance"
-                          value={option}
-                          checked={appearance === option}
-                          onChange={() => setAppearance(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Mode</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Mode">
-                    {MODES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="button-mode"
-                          value={option}
-                          checked={mode === option}
-                          onChange={() => setMode(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Icon</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Icon">
-                    {ICON_MODES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="button-icon"
-                          value={option}
-                          checked={icon === option}
-                          onChange={() => setIcon(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Flat" size="sm" checked={flat} onChange={setFlat} />
-                  <Switch label="Loading" size="sm" checked={loading} onChange={setLoading} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Appearance" options={APPEARANCES} value={appearance} onChange={setAppearance} />
+                <RadioControl label="Mode" options={MODES} value={mode} onChange={setMode} />
+                <RadioControl label="Icon" options={ICON_MODES} value={icon} onChange={setIcon} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Flat", checked: flat, onChange: setFlat },
+                    { label: "Loading", checked: loading, onChange: setLoading },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

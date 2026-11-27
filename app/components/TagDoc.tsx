@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Tag } from "agentic-ds-kit";
 import type { TagDotTone, TagSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: TagSize[] = ["sm", "md", "lg"];
 const DOTS: TagDotTone[] = ["neutral", "success", "warning", "danger", "info"];
@@ -98,56 +98,26 @@ export function TagDoc() {
                   )}
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Leading</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Leading">
-                    {LEADING.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="tag-leading"
-                          value={option}
-                          checked={leading === option}
-                          onChange={() => setLeading(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch
-                    label="Removable"
-                    size="sm"
-                    checked={removable}
-                    onChange={(next) => {
-                      setRemovable(next);
-                      setRemoved(false);
-                    }}
-                  />
-                  <Switch label="Selectable" size="sm" checked={selectable} onChange={setSelectable} />
-                  <Switch label="Count" size="sm" checked={withCount} onChange={setWithCount} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Leading" options={LEADING} value={leading} onChange={setLeading} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    {
+                      label: "Removable",
+                      checked: removable,
+                      onChange: (next) => {
+                        setRemovable(next);
+                        setRemoved(false);
+                      },
+                    },
+                    { label: "Selectable", checked: selectable, onChange: setSelectable },
+                    { label: "Count", checked: withCount, onChange: setWithCount },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

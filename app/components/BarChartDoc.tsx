@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { BarChart } from "agentic-ds-kit";
 import type { BarChartOrientation } from "agentic-ds-kit";
-import { Button, Switch } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const ORIENTATIONS: BarChartOrientation[] = ["vertical", "horizontal"];
 
@@ -106,28 +107,10 @@ export function BarChartDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${orientation === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={orientation === option}
-                        onClick={() => setOrientation(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Display</span>
-                  <Switch size="sm" label="Grid" checked={showGrid} onChange={setShowGrid} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+                <SwitchControl label="Display" items={[{ label: "Grid", checked: showGrid, onChange: setShowGrid }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

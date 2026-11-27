@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, DoneCheck } from "agentic-ds-kit";
+import { DoneCheck } from "agentic-ds-kit";
 import type { DoneCriterion } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel } from "./ControlsPanel";
 
 const TITLE = "Update the EU price list for spring";
 
@@ -131,22 +132,12 @@ export function DoneCheckDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Button
-                    size="sm"
-                    appearance="outline"
-                    mode="neutral"
-                    iconStart="RotateCcw"
-                    onClick={() => {
-                      setCriteria(MIXED);
-                      setOutcome(null);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel
+                onReset={() => {
+                  setCriteria(MIXED);
+                  setOutcome(null);
+                }}
+              />
             </div>
             <DocNotes>
               <div>

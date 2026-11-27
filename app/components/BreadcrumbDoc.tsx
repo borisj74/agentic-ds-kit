@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Breadcrumb } from "agentic-ds-kit";
 import type { BreadcrumbItem, BreadcrumbSeparator } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const SEPARATORS: BreadcrumbSeparator[] = ["chevron", "slash"];
 
@@ -97,28 +97,10 @@ export function BreadcrumbDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Separator</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Separator">
-                    {SEPARATORS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${separator === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={separator === option}
-                        onClick={() => setSeparator(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Trail</span>
-                  <Switch label="Collapsed" size="sm" checked={collapsed} onChange={setCollapsed} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Separator" options={SEPARATORS} value={separator} onChange={setSeparator} />
+                <SwitchControl label="Trail" items={[{ label: "Collapsed", checked: collapsed, onChange: setCollapsed }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

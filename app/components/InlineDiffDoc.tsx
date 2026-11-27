@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, InlineDiff } from "agentic-ds-kit";
+import { InlineDiff } from "agentic-ds-kit";
 import type { DiffLine, InlineDiffStatus } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
-import styles from "./ComponentDoc.module.css";
 
 const LINES: DiffLine[] = [
   { type: "context", text: "const subtotal = sumLines(lines);", oldNo: 41, newNo: 41 },
@@ -44,16 +44,8 @@ export function InlineDiffDoc() {
           resolvedAt="14:03"
         />
       }
-      controls={
-        <>
-          <DocOptions label="Mode" options={["unified", "split"] as const} value={mode} onChange={setMode} />
-          <div className={styles.panelGroup}>
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => setStatus("pending")}>
-              Reset
-            </Button>
-          </div>
-        </>
-      }
+      controls={<RadioControl label="Mode" options={["unified", "split"] as const} value={mode} onChange={setMode} />}
+      onReset={() => setStatus("pending")}
       usage="InlineDiff reviews one proposed edit. Changes always carry + / − marks and say Added / Removed to screen readers. Accept is the one solid primary."
       code={`<InlineDiff
   title="Proposed edit · calcTotal"

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, RedactionPreview } from "agentic-ds-kit";
+import { RedactionPreview } from "agentic-ds-kit";
 import type { RedactionRules, RedactionSpan, RedactionStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel } from "./ControlsPanel";
 
 /** Spans for each [value, type] pair, found in the text (first match from the last one on). */
 function find(text: string, pairs: [string, string][]): RedactionSpan[] {
@@ -172,23 +173,13 @@ export function RedactionPreviewDoc() {
                   </div>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Button
-                    size="sm"
-                    appearance="outline"
-                    mode="neutral"
-                    iconStart="RotateCcw"
-                    onClick={() => {
-                      setStatus("pending");
-                      setRules({});
-                      setSentText(null);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel
+                onReset={() => {
+                  setStatus("pending");
+                  setRules({});
+                  setSentText(null);
+                }}
+              />
             </div>
             <DocNotes>
               <div>

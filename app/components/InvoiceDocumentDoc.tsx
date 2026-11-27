@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { InvoiceDocument, type InvoiceLine, type InvoiceStatus } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const LINES: InvoiceLine[] = [
@@ -39,7 +40,7 @@ export function InvoiceDocumentDoc() {
       lede="A document view for an invoice or a credit note, not a PDF engine."
       summary="Switch the status: the badge, the solid primary and the footnote follow it."
       preview={<InvoiceDocument {...BASE} {...actions} status={status} footnote={FOOT[status]} />}
-      controls={<DocOptions label="Status" options={["draft", "issued", "paid", "overdue", "void"] as const} value={status} onChange={setStatus} />}
+      controls={<RadioControl label="Status" options={["draft", "issued", "paid", "overdue", "void"] as const} value={status} onChange={setStatus} />}
       usage="One solid primary at most: Issue invoice on a draft, Record payment when issued or overdue. A credit note names the invoice it reduces. Money arrives pre-formatted, so currency and locale stay with the app. All data here is an example."
       code={`<InvoiceDocument
   number="INV-2026-0117"

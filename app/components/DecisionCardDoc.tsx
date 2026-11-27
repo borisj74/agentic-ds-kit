@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, DecisionCard } from "agentic-ds-kit";
+import { DecisionCard } from "agentic-ds-kit";
 import type { DecisionCardStatus, DecisionOption } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
-import styles from "./ComponentDoc.module.css";
 
 const OPTIONS: DecisionOption[] = [
   { id: "keep", label: "Keep v1 endpoint for 30 days", description: "Safer; clients migrate on their own time.", recommended: true },
@@ -47,7 +47,7 @@ export function DecisionCardDoc() {
       }
       controls={
         <>
-          <DocOptions
+          <RadioControl
             label="Answer"
             options={["choices", "free text"] as const}
             value={mode}
@@ -57,13 +57,12 @@ export function DecisionCardDoc() {
               setStatus("pending");
             }}
           />
-          <div className={styles.panelGroup}>
-            <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => { setStatus("pending"); setValue(mode === "choices" ? DEFAULT_CHOICE : ""); }}>
-              Reset
-            </Button>
-          </div>
         </>
       }
+      onReset={() => {
+        setStatus("pending");
+        setValue(mode === "choices" ? DEFAULT_CHOICE : "");
+      }}
       usage="DecisionCard pauses the agent for a choice. The recommended option comes first, starts selected, and keeps its quiet badge. Confirm is the one solid primary; one action to approve is an ApprovalCard."
       code={`<DecisionCard
   title="Billing refactor asks"

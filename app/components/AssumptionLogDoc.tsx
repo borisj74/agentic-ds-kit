@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AssumptionLog, Button } from "agentic-ds-kit";
+import { AssumptionLog } from "agentic-ds-kit";
 import type { Assumption } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel } from "./ControlsPanel";
 
 /** A fake pricing-update run: what the agent decided without asking. */
 const OPEN: Assumption[] = [
@@ -129,13 +130,7 @@ export function AssumptionLogDoc() {
                   </div>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => setItems(OPEN)}>
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel onReset={() => setItems(OPEN)} />
             </div>
             <DocNotes>
               <div>

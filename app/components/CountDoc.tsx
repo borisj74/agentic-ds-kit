@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Count } from "agentic-ds-kit";
 import type { CountIntent, CountSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: CountSize[] = ["sm", "md", "lg"];
 const INTENTS: CountIntent[] = ["info", "danger", "neutral"];
@@ -54,46 +54,17 @@ export function CountDoc() {
               <div className={styles.canvas}>
                 <Count count={3} intent={intent} size={size} subtle={subtle} disabled={disabled} label="unread messages" />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Intent</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Intent">
-                    {INTENTS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="count-intent"
-                          value={option}
-                          checked={intent === option}
-                          onChange={() => setIntent(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Subtle" size="sm" checked={subtle} onChange={setSubtle} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Intent" options={INTENTS} value={intent} onChange={setIntent} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Subtle", checked: subtle, onChange: setSubtle },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

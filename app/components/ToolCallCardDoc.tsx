@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Switch, ToolCallCard } from "agentic-ds-kit";
+import { ToolCallCard } from "agentic-ds-kit";
 import type { ToolCall, ToolCallStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const STATUSES: ToolCallStatus[] = ["running", "done", "error"];
 
@@ -136,29 +137,16 @@ export function ToolCallCardDoc() {
                   />
                 )}
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Status</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Status">
-                    {STATUSES.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${status === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={status === option}
-                        onClick={() => setStatus(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Content</span>
-                  <Switch size="sm" label="Open" checked={open} onChange={setOpen} />
-                  <Switch size="sm" label="Group" checked={group} onChange={setGroup} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Status" options={STATUSES} value={status} onChange={setStatus} />
+                <SwitchControl
+                  label="Content"
+                  items={[
+                    { label: "Open", checked: open, onChange: setOpen },
+                    { label: "Group", checked: group, onChange: setGroup },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const SIZES: ProgressStepsSize[] = ["sm", "md"];
 const ORIENTATIONS: ProgressStepsOrientation[] = ["horizontal", "vertical"];
@@ -79,56 +80,17 @@ export function ProgressStepsDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${orientation === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={orientation === option}
-                        onClick={() => setOrientation(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Current</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Current step">
-                    {CURRENTS.map((index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        className={`${styles.sizeTab} ${current === index ? styles.sizeTabActive : ""}`}
-                        aria-pressed={current === index}
-                        onClick={() => setCurrent(index)}
-                      >
-                        {index === 4 ? "done" : String(index + 1)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+                <RadioControl
+                  label="Current"
+                  options={CURRENTS}
+                  value={current}
+                  onChange={setCurrent}
+                  optionLabel={(index) => (index === 4 ? "done" : String(index + 1))}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

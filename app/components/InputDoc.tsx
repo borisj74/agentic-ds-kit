@@ -5,13 +5,13 @@ import { Field } from "agentic-ds-kit";
 import type { FieldLabelPosition } from "agentic-ds-kit";
 import { Input } from "agentic-ds-kit";
 import type { InputSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { RealisticFields, realisticFieldsCode } from "./RealisticFields";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import shortcut from "./RealisticFields.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: InputSize[] = ["sm", "md", "lg"];
 const LABEL_POSITIONS: FieldLabelPosition[] = ["top", "start"];
@@ -63,64 +63,39 @@ export function InputDoc() {
                   emailError={fieldError}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Label</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Label position">
-                    {LABEL_POSITIONS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="input-label-position"
-                          value={option}
-                          checked={labelPosition === option}
-                          onChange={() => setLabelPosition(option)}
-                        />
-                        {option === "start" ? "start (left)" : option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>State</span>
-                  <Switch
-                    size="sm"
-                    label="Hover"
-                    checked={hover}
-                    onChange={(next) => {
-                      setHover(next);
-                      if (next) setFocus(false);
-                    }}
-                  />
-                  <Switch
-                    size="sm"
-                    label="Focus"
-                    checked={focus}
-                    onChange={(next) => {
-                      setFocus(next);
-                      if (next) setHover(false);
-                    }}
-                  />
-                  <Switch size="sm" label="Disabled" checked={disabled} onChange={setDisabled} />
-                  <Switch size="sm" label="Error" checked={error} onChange={setError} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl
+                  label="Label"
+                  options={LABEL_POSITIONS}
+                  value={labelPosition}
+                  onChange={setLabelPosition}
+                  optionLabel={(option) => (option === "start" ? "start (left)" : option)}
+                />
+                <SwitchControl
+                  label="State"
+                  items={[
+                    {
+                      label: "Hover",
+                      checked: hover,
+                      onChange: (next) => {
+                        setHover(next);
+                        if (next) setFocus(false);
+                      },
+                    },
+                    {
+                      label: "Focus",
+                      checked: focus,
+                      onChange: (next) => {
+                        setFocus(next);
+                        if (next) setHover(false);
+                      },
+                    },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                    { label: "Error", checked: error, onChange: setError },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

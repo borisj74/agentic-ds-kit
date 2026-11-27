@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Carousel } from "agentic-ds-kit";
 import type { CarouselOrientation } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import doc from "./CarouselDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const ORIENTATIONS: CarouselOrientation[] = ["horizontal", "vertical"];
 
@@ -74,29 +74,16 @@ export function CarouselDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${orientation === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={orientation === option}
-                        onClick={() => setOrientation(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Loop" size="sm" checked={loop} onChange={setLoop} />
-                  <Switch label="Show index" size="sm" checked={showIndex} onChange={setShowIndex} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Loop", checked: loop, onChange: setLoop },
+                    { label: "Show index", checked: showIndex, onChange: setShowIndex },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

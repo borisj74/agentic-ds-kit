@@ -8,6 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 import { RUNNING_NOW_ITEMS } from "@/lib/agent-demo.sample";
 
 const ITEMS = RUNNING_NOW_ITEMS;
@@ -108,24 +109,9 @@ export function RunningNowDoc() {
               <div className={styles.canvas}>
                 <RunningNow className={layout === "row" ? agentDoc.full : undefined} layout={layout} items={ITEMS} onSelect={noop} onShowAll={noop} />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Layout</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Layout">
-                    {(["row", "stack"] as const).map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${layout === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={layout === option}
-                        onClick={() => setLayout(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Layout" options={["row", "stack"] as const} value={layout} onChange={setLayout} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

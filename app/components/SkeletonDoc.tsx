@@ -5,11 +5,11 @@ import { Avatar } from "agentic-ds-kit";
 import { Card } from "agentic-ds-kit";
 import { Skeleton } from "agentic-ds-kit";
 import type { SkeletonAnimation, SkeletonShape, SkeletonSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: SkeletonSize[] = ["sm", "md", "lg"];
 const SHAPES: SkeletonShape[] = ["text", "circle", "rect"];
@@ -71,61 +71,12 @@ export function SkeletonDoc() {
                   </Skeleton>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Shape</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Shape">
-                    {SHAPES.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${shape === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={shape === option}
-                        onClick={() => setShape(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Animation</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Animation">
-                    {ANIMATIONS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="skeleton-animation"
-                          value={option}
-                          checked={animation === option}
-                          onChange={() => setAnimation(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Loading" size="sm" checked={loading} onChange={setLoading} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Shape" options={SHAPES} value={shape} onChange={setShape} />
+                <RadioControl label="Animation" options={ANIMATIONS} value={animation} onChange={setAnimation} />
+                <SwitchControl label="States" items={[{ label: "Loading", checked: loading, onChange: setLoading }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

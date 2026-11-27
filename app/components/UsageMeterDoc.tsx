@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { UsageMeter } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const NORMAL = {
@@ -48,7 +49,7 @@ export function UsageMeterDoc() {
           onViewUsage={noop}
         />
       }
-      controls={<DocOptions label="Usage" options={["normal", "warning"] as const} value={state} onChange={setState} />}
+      controls={<RadioControl label="Usage" options={["normal", "warning"] as const} value={state} onChange={setState} />}
       usage="UsageMeter composes kit Meter (total), UsageList (by category), LineChart (daily, with the cap) and Alert (near limit). Upgrade becomes the solid primary only near or over the limit."
       code={`<UsageMeter
   title="AI credits · Pro plan"

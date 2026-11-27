@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, GuardrailLog, Switch } from "agentic-ds-kit";
+import { Button, GuardrailLog } from "agentic-ds-kit";
 import type { GuardrailEvent, GuardrailFilters, GuardrailOverrideStatus } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const REFUNDS = { name: "No refunds over €500", text: "Refunds above €500 need a finance lead to approve them.", owner: "Finance ops" };
 const DISCOUNT = { name: "Discounts capped at 20%", text: "Agents may not offer more than 20% off any plan.", owner: "Revenue team" };
@@ -163,23 +164,17 @@ export function GuardrailLogDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Switch size="sm" label="Fail the next request" checked={failNext} onChange={setFailNext} />
-                  <Button
-                    size="sm"
-                    appearance="outline"
-                    mode="neutral"
-                    iconStart="RotateCcw"
-                    onClick={() => {
-                      setStatus("idle");
-                      setFilters({ time: "This week" });
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel
+                onReset={() => {
+                  setStatus("idle");
+                  setFilters({ time: "This week" });
+                }}
+              >
+                <SwitchControl
+                  label="States"
+                  items={[{ label: "Fail the next request", checked: failNext, onChange: setFailNext }]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

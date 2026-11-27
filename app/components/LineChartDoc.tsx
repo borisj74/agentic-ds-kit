@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { LineChart } from "agentic-ds-kit";
 import type { LineChartVariant } from "agentic-ds-kit";
-import { Button, Switch } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const VARIANTS: LineChartVariant[] = ["area", "line"];
 
@@ -117,28 +118,15 @@ export function LineChartDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Variant">
-                    {VARIANTS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${variant === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={variant === option}
-                        onClick={() => setVariant(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Display</span>
-                  <Switch size="sm" label="Grid" checked={showGrid} onChange={setShowGrid} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Variant" options={VARIANTS} value={variant} onChange={setVariant} />
+                <SwitchControl
+                  label="Display"
+                  items={[
+                    { label: "Grid", checked: showGrid, onChange: setShowGrid },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

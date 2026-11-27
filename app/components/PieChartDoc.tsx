@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { PieChart } from "agentic-ds-kit";
 import type { PieChartLayout, PieChartVariant } from "agentic-ds-kit";
-import { Button, Switch } from "agentic-ds-kit";
+import { Button } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const VARIANTS: PieChartVariant[] = ["donut", "pie"];
 const LAYOUTS: PieChartLayout[] = ["split", "stack"];
@@ -110,50 +111,17 @@ export function PieChartDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Variant">
-                    {VARIANTS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${variant === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={variant === option}
-                        onClick={() => setVariant(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Layout</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Layout">
-                    {LAYOUTS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${layout === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={layout === option}
-                        onClick={() => setLayout(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Display</span>
-                  <Switch
-                    size="sm"
-                    label="Centre total"
-                    checked={showCenterTotal}
-                    onChange={setShowCenterTotal}
-                  />
-                  <Switch size="sm" label="Sort by size" checked={sort} onChange={setSort} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Variant" options={VARIANTS} value={variant} onChange={setVariant} />
+                <RadioControl label="Layout" options={LAYOUTS} value={layout} onChange={setLayout} />
+                <SwitchControl
+                  label="Display"
+                  items={[
+                    { label: "Centre total", checked: showCenterTotal, onChange: setShowCenterTotal },
+                    { label: "Sort by size", checked: sort, onChange: setSort },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

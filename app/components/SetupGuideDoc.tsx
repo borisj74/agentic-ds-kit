@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { SetupGuide, type IntegrationItem, type SetupTask } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 
 // Example providers.
 const PROVIDERS: IntegrationItem[] = [
@@ -79,7 +80,7 @@ export function SetupGuideDoc() {
           onDismiss={noop}
         />
       }
-      controls={<DocOptions label="State" options={["first-run", "no-tiles", "complete"] as const} value={state} onChange={pick} />}
+      controls={<RadioControl label="State" options={["first-run", "no-tiles", "complete"] as const} value={state} onChange={pick} />}
       usage="Use SetupGuide for onboarding tasks people can do in any order. Every row has an icon and a word: Done, Current, To do, Blocked or Skipped. The current task's action is the one solid primary; give the task integrations and its suggested provider's Connect takes that role instead. A blocked task has no button and says what unlocks it. Use ProgressSteps for a linear wizard."
       code={`<SetupGuide
   title="Set up billing"

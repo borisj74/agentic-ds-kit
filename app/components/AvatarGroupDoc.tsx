@@ -8,6 +8,7 @@ import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SizeControl } from "./ControlsPanel";
 
 const SIZES: AvatarGroupSize[] = ["xs", "sm", "md", "lg", "xl"];
 
@@ -74,24 +75,9 @@ export function AvatarGroupDoc() {
                   <AvatarGroup size={size} max={3} ariaLabel="Assignees" items={[...MIXED]} />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

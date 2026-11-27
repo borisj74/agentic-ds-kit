@@ -8,6 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import demo from "./CollapsibleDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const MASTER_TRIGGER = "Order #4189";
 
@@ -87,29 +88,9 @@ export function CollapsibleDoc() {
                   </Collapsible>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Open</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Open">
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${open ? styles.sizeTabActive : ""}`}
-                      aria-pressed={open}
-                      onClick={() => setOpen(true)}
-                    >
-                      Open
-                    </button>
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${!open ? styles.sizeTabActive : ""}`}
-                      aria-pressed={!open}
-                      onClick={() => setOpen(false)}
-                    >
-                      Closed
-                    </button>
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl label="States" items={[{ label: "Open", checked: open, onChange: setOpen }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

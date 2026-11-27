@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const ORIENTATIONS: ResizableOrientation[] = ["horizontal", "vertical"];
 
@@ -44,16 +45,9 @@ export function ResizableDoc() {
                   end={<p>Detail</p>}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((step) => (
-                      <button key={step} type="button" className={`${styles.sizeTab} ${orientation === step ? styles.sizeTabActive : ""}`} aria-pressed={orientation === step} onClick={() => setOrientation(step)}>{step}</button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

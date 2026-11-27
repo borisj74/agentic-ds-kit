@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: DatePickerSize[] = ["sm", "md", "lg"];
 const MASTER_DEFAULT = "2026-08-29";
@@ -72,34 +73,10 @@ export function DatePickerDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <label className={styles.radio}>
-                    <input
-                      type="checkbox"
-                      checked={disabled}
-                      onChange={(event) => setDisabled(event.target.checked)}
-                    />
-                    Disabled
-                  </label>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <SwitchControl label="States" items={[{ label: "Disabled", checked: disabled, onChange: setDisabled }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

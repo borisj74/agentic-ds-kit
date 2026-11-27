@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AutonomyDial, Switch, type AutonomyStop } from "agentic-ds-kit";
+import { AutonomyDial, type AutonomyStop } from "agentic-ds-kit";
 import { AgentDocFrame } from "./AgentDocFrame";
+import { SwitchControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 import styles from "./ComponentDoc.module.css";
 
@@ -55,10 +56,10 @@ export function AutonomyDialDoc() {
         />
       }
       controls={
-        <div className={styles.panelGroup}>
-          <span className={styles.panelLabel}>State</span>
-          <Switch size="sm" label="Locked by policy" checked={locked} onChange={setLocked} />
-        </div>
+        <SwitchControl
+          label="State"
+          items={[{ label: "Locked by policy", checked: locked, onChange: setLocked }]}
+        />
       }
       usage="AutonomyDial sets how much an agent does before asking. It saves on change, so the view keeps its one primary Button for something else. Built on SegmentedControl."
       code={`<AutonomyDial

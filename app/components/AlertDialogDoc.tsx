@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const SIZES: AlertDialogSize[] = ["sm", "md"];
 const ACTION_VARIANTS: AlertDialogActionVariant[] = ["primary", "danger"];
@@ -120,41 +121,10 @@ export function AlertDialogDoc() {
                   </Button>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Action variant</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Action variant">
-                    {ACTION_VARIANTS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="alertdialog-action-variant"
-                          value={option}
-                          checked={actionVariant === option}
-                          onChange={() => setActionVariant(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Action variant" options={ACTION_VARIANTS} value={actionVariant} onChange={setActionVariant} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

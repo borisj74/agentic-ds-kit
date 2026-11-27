@@ -8,6 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import demo from "./AnchorNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const VARIANTS: AnchorNavVariant[] = ["rail", "menu"];
 
@@ -87,24 +88,9 @@ export function AnchorNavDoc() {
                   </div>
                 )}
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Variant">
-                    {VARIANTS.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${variant === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={variant === step}
-                        onClick={() => setVariant(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Variant" options={VARIANTS} value={variant} onChange={setVariant} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

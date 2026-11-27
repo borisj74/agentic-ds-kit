@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Switch } from "agentic-ds-kit";
 import { TreeView } from "agentic-ds-kit";
 import type { TreeViewItem, TreeViewSelection, TreeViewSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: TreeViewSize[] = ["sm", "md"];
 const SELECTIONS: TreeViewSelection[] = ["none", "single", "multiple"];
@@ -166,52 +166,18 @@ export function TreeViewDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Selection</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Selection">
-                    {SELECTIONS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="treeview-selection"
-                          value={option}
-                          checked={selection === option}
-                          onChange={() => changeSelection(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Show icons" size="sm" checked={showIcons} onChange={setShowIcons} />
-                  <Switch label="Show lines" size="sm" checked={showLines} onChange={setShowLines} />
-                  <Switch
-                    label="Reorderable"
-                    size="sm"
-                    checked={reorderable}
-                    onChange={setReorderable}
-                  />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Selection" options={SELECTIONS} value={selection} onChange={(option) => changeSelection(option)} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Show icons", checked: showIcons, onChange: setShowIcons },
+                    { label: "Show lines", checked: showLines, onChange: setShowLines },
+                    { label: "Reorderable", checked: reorderable, onChange: setReorderable },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

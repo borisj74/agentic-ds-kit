@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { ContextWindow } from "agentic-ds-kit";
 import { contextSegments as seg } from "@/lib/agent-demo.sample";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const STATES = {
@@ -29,7 +30,7 @@ export function ContextWindowDoc() {
           <ContextWindow used={data.used} limit={200_000} segments={data.segments} onTrim={noop} />
         </div>
       }
-      controls={<DocOptions label="Fill" options={["normal", "warning", "full"] as const} value={state} onChange={setState} />}
+      controls={<RadioControl label="Fill" options={["normal", "warning", "full"] as const} value={state} onChange={setState} />}
       usage="ContextWindow is about one thread's prompt context. Plan usage is a different meter. Near limit and full are said in text and an icon, never colour alone."
       code={`<ContextWindow
   used={104000}

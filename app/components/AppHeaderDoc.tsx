@@ -6,7 +6,6 @@ import { AppHeader } from "agentic-ds-kit";
 import { Badge } from "agentic-ds-kit";
 import { Button } from "agentic-ds-kit";
 import { ButtonGroup } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import contract from "agentic-ds-kit/contracts/appheader.json";
 import { CodeBlock } from "./CodeBlock";
 import { CssVarsTable } from "./CssVarsTable";
@@ -14,6 +13,7 @@ import styles from "./ComponentDoc.module.css";
 import demo from "./AppHeaderDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 function masterCode(showSearch: boolean, showActions: boolean, shortcut: boolean): string {
   const lines = ['<AppHeader', '  title="Acme"', '  mark="A"'];
@@ -120,14 +120,16 @@ export function AppHeaderDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Structure</span>
-                  <Switch size="sm" label="Search" checked={showSearch} onChange={setShowSearch} />
-                  <Switch size="sm" label="Shortcut" checked={shortcut} onChange={setShortcut} />
-                  <Switch size="sm" label="Actions" checked={showActions} onChange={setShowActions} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="Structure"
+                  items={[
+                    { label: "Search", checked: showSearch, onChange: setShowSearch },
+                    { label: "Shortcut", checked: shortcut, onChange: setShortcut },
+                    { label: "Actions", checked: showActions, onChange: setShowActions },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>
