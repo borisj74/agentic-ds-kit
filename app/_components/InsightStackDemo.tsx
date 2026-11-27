@@ -6,7 +6,7 @@ import {
   type InsightStackPatternProps,
   type InsightStackSize,
 } from "../../packages/kit/patterns/InsightStackPattern";
-import styles from "../playground.module.css";
+import { NorthwindPage } from "./northwindShell";
 import demo from "./InsightStackDemo.module.css";
 
 const noop = () => {};
@@ -50,7 +50,7 @@ const ALL_CLEAR: InsightStackPatternProps = {
 
 const STATES: Record<string, InsightStackPatternProps> = { ranked: RANKED, loading: LOADING, "all-clear": ALL_CLEAR };
 
-/** insight-stack as a screen: the board specimens, or one state in all three sizes. */
+/** insight-stack as a screen on a Northwind page (Reports current): the board specimens, or one state in all three sizes. */
 export function InsightStackScreen({ view = "specimens" }: { view?: string }) {
   let cards;
   if (STATES[view]) {
@@ -65,8 +65,8 @@ export function InsightStackScreen({ view = "specimens" }: { view?: string }) {
     );
   }
   return (
-    <main className={`${styles.screenPage} ${styles.screenPagePadded}`}>
+    <NorthwindPage active="reports" title="Insights" subtitle="Billing, product and CRM · last 30 days">
       <div className={demo.row}>{cards}</div>
-    </main>
+    </NorthwindPage>
   );
 }

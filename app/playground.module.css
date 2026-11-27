@@ -226,6 +226,11 @@
   flex: 1 1 auto;
 }
 
+/* A page landmark around a pattern that is its own layout-canvas: adds <main>, no box. */
+.landmark {
+  display: contents;
+}
+
 /* A pattern block (no shell of its own) on a page. */
 .screenPage {
   flex: 1 1 auto;
@@ -233,10 +238,6 @@
   min-height: 100dvh;
   overflow: auto;
   background: var(--bg-canvas);
-}
-
-.screenPagePadded {
-  padding: var(--layout-margin-lg);
 }
 
 /* Preview block on a pattern page: toolbar over a scaled iframe of the screen. */
