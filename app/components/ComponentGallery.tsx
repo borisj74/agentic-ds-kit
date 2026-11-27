@@ -159,9 +159,6 @@ export function ComponentGallery() {
           value={query}
           onChange={setQuery}
         />
-        <p className={styles.resultCount} aria-live="polite">
-          {items.length === 1 ? "1 component" : `${items.length} components`}
-        </p>
       </div>
       <Tabs
         variant="segmented"

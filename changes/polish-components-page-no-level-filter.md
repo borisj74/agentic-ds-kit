@@ -1,3 +1,3 @@
 ### Removed
 
-- **The Components gallery no longer has a level dropdown.** Search and the group tabs stay. The line under the search now always shows how many components are listed: the total, or the number that match your search. Old links with `?level=` open the full list.
+- **The Components gallery no longer has a level dropdown or a count line under the search.** Search and the group tabs stay, and each tab still shows how many components it holds, following the search. Old links with `?level=` open the full list.
