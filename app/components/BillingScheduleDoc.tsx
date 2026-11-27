@@ -48,7 +48,7 @@ const CODE: Record<BillingScheduleView, string> = {
 
 const ABOUT: Record<BillingScheduleView, Record<State, string>> = {
   full: {
-    ready: "Upcoming first, then billed newest first. The first scheduled charge says Next charge. Download all in the header.",
+    ready: "Upcoming first, then billed newest first. The earliest charge still due (scheduled or retrying) says Next charge. Download all in the header.",
     empty: "No charges: a kit Empty with one line (emptyDescription).",
     loading: "The Table loading state: the header stays, Skeleton rows below.",
     error: "A danger Alert with Retry (outline, RotateCcw).",
@@ -61,7 +61,7 @@ const ABOUT: Record<BillingScheduleView, Record<State, string>> = {
   },
   failed: {
     ready: "The open failed payment as a danger Alert with Update card (the one solid primary), then the failed charge and what is still owed.",
-    empty: "No open failure (a later charge was paid): No failed payments.",
+    empty: "No open failure (a later charge was paid or waived): No failed payments.",
     loading: "The Table loading state in the same four columns.",
     error: "A danger Alert titled for failed payments, with Retry.",
   },

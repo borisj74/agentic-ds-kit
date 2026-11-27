@@ -41,7 +41,7 @@
     "Each state sits in a kit Card (size sm) and uses the Card's own header: title Billing schedule, the plan name as its description, and Ask (outline, MessageCircle) and Download all (ghost) as headerAction. Download all hides while the failure Alert shows",
     "One Table (size lg) with Date (mono, first), Description, Status and Amount (end-aligned, mono, 500). Upcoming charges come first, oldest first, then billed charges, newest first. Below 480px the rows stack (Table stack)",
     "Description has a muted second line (Prorated for 14 days, Credit applied); a failed charge's line is danger text (Card declined). A waived amount is subtle",
-    "The first scheduled row says Next charge after its description in info text, and its date and description read in the strong text colour",
+    "The earliest row still due (scheduled or retrying) says Next charge after its description in info text, and its date and description read in the strong text colour",
     "Status Badges are size sm with no icon: Upcoming primary, Retrying warning, Invoiced neutral, Paid success, Failed danger, Waived neutral",
     "With an open failed payment, the failure Alert sits above the table with Update card, the one solid primary",
     "Row actions show only when you pass their handler: the edit pencil with onSaveCharge, Download on billed rows with onDownloadInvoice. Both are icon Buttons (Table rowActionsAs=\"icons\") named with the charge and date or the invoice",

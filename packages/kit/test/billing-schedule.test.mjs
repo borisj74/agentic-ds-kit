@@ -77,6 +77,14 @@ describe("BillingSchedule view=full", () => {
     assert.match(text(html), /Pro plan · monthly Next charge/);
   });
 
+  test("Next charge sits on the earliest row still due, a retrying charge included", () => {
+    const retry = { id: "retry", date: "2026-11-20", label: "Seat added", amount: "$22.40", status: "retrying", invoice: "INV-0119" };
+    const html = h({ view: "full", charges: [...CHARGES, retry] });
+    assert.equal((html.match(/>Next charge</g) ?? []).length, 1);
+    assert.match(text(html), /Seat added Next charge/);
+    assert.doesNotMatch(text(html), /Pro plan · monthly Next charge/);
+  });
+
   test("no failure Alert when a later charge was paid; Download all shows", () => {
     const html = h({ view: "full", charges: CHARGES, onDownloadAll: noop, onUpdateCard: noop });
     assert.ok(!text(html).includes("failed on"));
@@ -166,6 +174,15 @@ describe("BillingSchedule view=failed", () => {
     const t = text(h({ view: "failed", charges: CHARGES }));
     assert.ok(t.includes("No failed payments"));
     assert.ok(!t.includes("failed on"));
+  });
+
+  test("a failure that a later waived charge settled is not open either", () => {
+    const waived = { id: "nov-waived", date: "2026-11-01", label: "Pro plan · monthly", amount: "$0.00", status: "waived", invoice: "INV-0117", note: "Credit applied" };
+    const charges = [...OPEN_FAILURE, waived];
+    assert.ok(text(h({ view: "failed", charges })).includes("No failed payments"));
+    const full = text(h({ view: "full", charges, onUpdateCard: noop }));
+    assert.ok(!full.includes("failed on"));
+    assert.ok(!full.includes("Update card"));
   });
 
   test("loading and error of its own", () => {

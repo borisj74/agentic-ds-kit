@@ -77,11 +77,14 @@ function billingEditLabel(charge: Charge): string {
   return `Edit ${charge.label.replaceAll(" · ", " ")}, ${longDate(charge.date)}`;
 }
 
-/** The newest failed charge that no paid charge came after: the one the failure Alert is about. */
+/** A later charge with one of these statuses settles an earlier failure. */
+const SETTLED: ChargeStatus[] = ["paid", "waived"];
+
+/** The newest failed charge that no paid or waived charge came after: the one the failure Alert is about. */
 function openFailure(billed: Charge[]): Charge | undefined {
   const failed = billed.find((charge) => charge.status === "failed");
   if (!failed) return undefined;
-  return billed.some((charge) => charge.status === "paid" && charge.date > failed.date) ? undefined : failed;
+  return billed.some((charge) => SETTLED.includes(charge.status) && charge.date > failed.date) ? undefined : failed;
 }
 
 /**
@@ -120,7 +123,8 @@ export function BillingSchedule({
     .filter((charge) => !UPCOMING.includes(charge.status))
     .sort((a, b) => b.date.localeCompare(a.date));
   const failure = openFailure(billed);
-  const nextId = upcoming.find((charge) => charge.status === "scheduled")?.id;
+  // The earliest charge still due (scheduled or retrying) carries the Next charge marker.
+  const nextId = upcoming[0]?.id;
 
   const rows: Charge[] =
     view === "failed"
