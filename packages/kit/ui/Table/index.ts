@@ -8,5 +8,7 @@ export type {
   TableState,
   TableRow,
   TableRowAction,
+  TableRowTone,
+  TableRowDividers,
   TableSortValue,
 } from "./Table.types";

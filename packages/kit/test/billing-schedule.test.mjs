@@ -77,6 +77,20 @@ describe("BillingSchedule view=full", () => {
     assert.match(text(html), /Pro plan · monthly Next charge/);
   });
 
+  test("the next-charge row is the one highlighted Table row (rowTone); other views highlight none", () => {
+    const html = h({ view: "full", charges: CHARGES });
+    const tinted = [...html.matchAll(/<tr[^>]*data-row-tone="highlight"[^>]*>([\s\S]*?)<\/tr>/g)];
+    assert.equal(tinted.length, 1);
+    assert.match(text(tinted[0][1]), /01 Dec 2026 Pro plan · monthly Next charge/);
+    assert.ok(!h({ view: "failed", charges: OPEN_FAILURE }).includes("data-row-tone"));
+  });
+
+  test("the table drops row dividers through the public rowDividers prop", () => {
+    const table = (html) => html.match(/<div[^>]*data-charge-table="schedule"[^>]*>/)[0];
+    const html = h({ view: "full", charges: CHARGES });
+    assert.match(table(html), /class="[^"]*noDividers/);
+  });
+
   test("Next charge sits on the earliest row still due, a retrying charge included", () => {
     const retry = { id: "retry", date: "2026-11-20", label: "Seat added", amount: "$22.40", status: "retrying", invoice: "INV-0119" };
     const html = h({ view: "full", charges: [...CHARGES, retry] });

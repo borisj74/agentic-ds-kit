@@ -29,7 +29,10 @@
   width: max-content;
   min-width: 100%;
   caption-side: bottom;
-  border-collapse: collapse;
+  /* Separate borders (no spacing) so cell corners round the same in every browser; row lines live on
+     the cells. */
+  border-collapse: separate;
+  border-spacing: 0;
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
@@ -49,15 +52,16 @@
 }
 
 .tr {
-  border-bottom: var(--border-divider) solid var(--border-faint);
   transition: background-color var(--motion-interaction-duration) var(--motion-interaction-easing);
 }
 
-.thead .tr {
+/* Row lines sit on the cells, since separate borders ignore borders on rows. */
+.thead .th,
+.tbody .td {
   border-bottom: var(--border-divider) solid var(--border-faint);
 }
 
-.tbody .tr:last-child {
+.tbody .tr:last-child .td {
   border-bottom: none;
 }
 
@@ -65,24 +69,85 @@
   background-color: color-mix(in srgb, var(--surface-muted) 50%, var(--surface-card));
 }
 
+/* rowDividers none: no lines between body rows; rows read by spacing. Header and footer lines stay. */
+.noDividers .tbody .td {
+  border-bottom: none;
+}
+
+/* Without dividers the header is compact: its labels sit 8px over the header line, and 12px of space
+   separates that line from the first row, so a highlighted first row never touches it. */
+.noDividers .thead .th {
+  height: auto;
+  padding-block: 0 var(--space-2);
+}
+
+.noDividers .tbody::before {
+  content: "";
+  display: table-row;
+  height: var(--space-3);
+}
+
+.noDividers .tbody .tr:hover .td:first-child {
+  border-start-start-radius: var(--radius-surface-sm);
+  border-end-start-radius: var(--radius-surface-sm);
+}
+
+.noDividers .tbody .tr:hover .td:last-child {
+  border-start-end-radius: var(--radius-surface-sm);
+  border-end-end-radius: var(--radius-surface-sm);
+}
+
+/* rowTone highlight: the one row to look at first, as a rounded tinted shape with its own edge, so it
+   reads with or without row dividers. The row's own text says why. */
+.tbody .tr.highlight .td,
+.tbody .tr.highlight:hover .td {
+  --table-row-edge: var(--status-info-border);
+  background-color: var(--status-info-subtle);
+  box-shadow:
+    inset 0 var(--border-divider) 0 var(--table-row-edge),
+    inset 0 calc(-1 * var(--border-divider)) 0 var(--table-row-edge);
+}
+
+.tbody .tr.highlight .td:first-child {
+  border-start-start-radius: var(--radius-surface-sm);
+  border-end-start-radius: var(--radius-surface-sm);
+  box-shadow:
+    inset 0 var(--border-divider) 0 var(--table-row-edge),
+    inset 0 calc(-1 * var(--border-divider)) 0 var(--table-row-edge),
+    inset var(--border-divider) 0 0 var(--table-row-edge);
+}
+
+.tbody .tr.highlight .td:last-child {
+  border-start-end-radius: var(--radius-surface-sm);
+  border-end-end-radius: var(--radius-surface-sm);
+  box-shadow:
+    inset 0 var(--border-divider) 0 var(--table-row-edge),
+    inset 0 calc(-1 * var(--border-divider)) 0 var(--table-row-edge),
+    inset calc(-1 * var(--border-divider)) 0 0 var(--table-row-edge);
+}
+
+/* The highlighted row draws its own edge, so it drops the line below it and the line of the row just
+   before it: one edge, never a doubled line. */
+.tbody .tr.highlight .td,
+.tbody .tr:has(+ .tr.highlight) .td {
+  border-bottom-color: transparent;
+}
+
 .tfoot {
-  border-top: var(--border-divider) solid var(--border-faint);
   background-color: color-mix(in srgb, var(--surface-muted) 50%, transparent);
   font-weight: var(--type-weight-label);
 }
 
 .tfoot .td {
+  border-top: var(--border-divider) solid var(--border-faint);
   color: var(--text-primary);
   font-weight: var(--type-weight-label);
   background-color: color-mix(in srgb, var(--surface-muted) 50%, var(--surface-card));
 }
 
-.tfoot .tr {
-  border-bottom: none;
-}
-
-.tfoot .tr:last-child {
-  border-bottom: none;
+/* A highlighted last row already draws its bottom edge, so the footer drops its top line. */
+.tbody:has(> .tr.highlight:last-child) + .tfoot .td {
+  border-top-color: transparent;
 }
 
 .th,
@@ -201,7 +266,6 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  box-shadow: inset 0 calc(-1 * var(--border-divider)) 0 var(--border-faint);
 }
 
 /* Row menu column: 56px, no visible header text. */
@@ -269,6 +333,14 @@
     row-gap: var(--space-1);
     padding-block: var(--space-3);
     padding-inline: var(--table-inset);
+    border-bottom: var(--border-divider) solid var(--border-faint);
+  }
+
+  .stack .tbody .tr:last-child,
+  .stack.noDividers .tbody .tr,
+  .stack .tbody .tr.highlight,
+  .stack .tbody .tr:has(+ .tr.highlight) {
+    border-bottom-color: transparent;
   }
 
   /* Breaks the flex row after the title, value and menu. */
@@ -278,12 +350,41 @@
     flex-basis: 100%;
   }
 
-  .stack .tbody .tr .td {
+  /* A stacked row is one shape: its cells carry no line and no corners of their own, on hover too. */
+  .stack .tbody .tr .td,
+  .stack .tbody .tr:hover .td {
     width: auto;
     height: auto;
     min-width: 0;
     padding: 0;
     background: none;
+    border-bottom: none;
+    border-radius: 0;
+  }
+
+  .stack .tbody .tr.highlight {
+    border-radius: var(--radius-surface-sm);
+    background-color: var(--status-info-subtle);
+    box-shadow: inset 0 0 0 var(--border-divider) var(--status-info-border);
+  }
+
+  .stack .tbody .tr.highlight .td {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .stack.noDividers .tbody::before {
+    display: none;
+  }
+
+  .stack.noDividers .tbody .tr:hover {
+    border-radius: var(--radius-surface-sm);
+  }
+
+  /* The row is already rounded: its first and last cells drop the hover corners. */
+  .stack.noDividers .tbody .tr:hover .td:first-child,
+  .stack.noDividers .tbody .tr:hover .td:last-child {
+    border-radius: 0;
   }
 
   .stack .stackTitle {

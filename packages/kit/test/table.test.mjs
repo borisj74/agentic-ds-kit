@@ -4,6 +4,7 @@
  * SSR for markup, jsdom for interaction. Runs against the built kit (dist); `npm test` builds first.
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { register } from "node:module";
 import { before, describe, test } from "node:test";
 
@@ -130,6 +131,25 @@ describe("Table markup", () => {
     assert.match(html, /<a href="\/invoices\/0"[^>]*>Northwind Traders<\/a>/);
   });
 
+  test("rowTone highlight marks only that row, with no ARIA state; default and no rowTone leave rows plain", () => {
+    const plain = render(h(kit.Table, { columns: COLUMNS, rows: ROWS }));
+    assert.ok(!plain.includes("data-row-tone"));
+    const html = render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowTone: (row) => (row.customer === "Hooli" ? "highlight" : "default") }));
+    const rows = [...html.matchAll(/<tr[^>]*>/g)].map((m) => m[0]).slice(1);
+    assert.equal(rows.filter((tr) => tr.includes('data-row-tone="highlight"')).length, 1);
+    assert.match(html, /<tr[^>]*data-row-tone="highlight"[^>]*><td[^>]*>Hooli/);
+    assert.ok(!/aria-(selected|current)/.test(html));
+  });
+
+  test("rowDividers none adds one class on the region and keeps the table markup the same", () => {
+    const base = render(h(kit.Table, { columns: COLUMNS, rows: ROWS }));
+    const none = render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowDividers: "none" }));
+    const cls = (html) => html.match(/^<div[^>]*class="([^"]*)"/)[1].split(" ");
+    assert.equal(cls(none).length, cls(base).length + 1, "one extra class");
+    assert.ok(!cls(render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowDividers: "default" }))).some((c) => !cls(base).includes(c)));
+    assert.equal(none.replace(/^<div[^>]*>/, ""), base.replace(/^<div[^>]*>/, ""), "rows, header and cells unchanged");
+  });
+
   test("Cell values render in rows and name the row menu", () => {
     const rows = [{ customer: h(kit.Cell, { type: "text", label: "Acme Logistics" }), status: "Open", amount: "$9,600.00" }];
     const html = render(h(kit.Table, { columns: COLUMNS, rows, rowActions: () => [{ label: "Open" }] }));
@@ -194,5 +214,46 @@ describe("Table interaction", { skip: JSDOM ? false : "jsdom is not installed" }
     await React.act(async () => button.click());
     assert.equal(calls, 1);
     await React.act(async () => root.unmount());
+  });
+});
+
+describe("Table CSS: highlight edges and stacked corners", () => {
+  const css = readFileSync(new URL("../dist/ui/Table/Table.kit.css", import.meta.url), "utf8");
+  const rules = (text) => [...text.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+  const stackCss = css.slice(css.indexOf("@container"));
+
+  test("separate borders, so cell corners round in every browser", () => {
+    const table = rules(css).find((r) => /^\._table_\w+$/.test(r.selector));
+    assert.match(table.body, /border-collapse:\s*separate/);
+    assert.match(table.body, /border-spacing:\s*0/);
+  });
+
+  test("the row just before a highlighted row hides its line, so no doubled line sits above the highlight", () => {
+    const hit = rules(css).find((r) => /:has\(\+\s*\._tr_\w+\._highlight_\w+\)\s+\._td_\w+/.test(r.selector));
+    assert.ok(hit, "a :has(+ .highlight) rule on the previous row's cells");
+    assert.match(hit.body, /border-bottom-color:\s*transparent/);
+  });
+
+  test("stacked layout with rowDividers none: first and last cells drop their hover corners", () => {
+    const hit = rules(stackCss).find(
+      (r) => /\._stack_\w+\._noDividers_\w+ \._tbody_\w+ \._tr_\w+:hover \._td_\w+:first-child/.test(r.selector) && /:last-child/.test(r.selector),
+    );
+    assert.ok(hit, "a stacked hover rule for first and last cells");
+    assert.match(hit.body, /border-radius:\s*0/);
+  });
+});
+
+describe("Table CSS: footer under a highlighted last row", () => {
+  const css = readFileSync(new URL("../dist/ui/Table/Table.kit.css", import.meta.url), "utf8");
+  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1].trim(), body: m[2] }));
+
+  test("the footer drops its top line when the last body row is highlighted, so no doubled line", () => {
+    const hit = rules.find((r) => /\._tbody_\w+:has\(>\s*\._tr_\w+\._highlight_\w+:last-child\)\s*\+\s*\._tfoot_\w+ \._td_\w+/.test(r.selector));
+    assert.ok(hit, "a tbody:has(highlighted last row) + tfoot rule");
+    assert.match(hit.body, /border-top-color:\s*transparent/);
+  });
+
+  test("no dead rules on footer rows", () => {
+    assert.ok(!rules.some((r) => /\._tfoot_\w+ \._tr_\w+/.test(r.selector)));
   });
 });

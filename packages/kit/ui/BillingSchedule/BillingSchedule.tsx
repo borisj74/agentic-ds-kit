@@ -224,6 +224,8 @@ export function BillingSchedule({
           })}
           rowActions={hasRowActions ? (_row, index) => rowActions(rows[index]) : undefined}
           rowActionsAs="icons"
+          rowDividers="none"
+          rowTone={(_row, index) => (view === "full" && rows[index].id === nextId ? "highlight" : "default")}
         />
       </>
     );
