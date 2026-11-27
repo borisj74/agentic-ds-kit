@@ -10,6 +10,8 @@ export type TableRow = Record<string, string | number | ReactNode>;
 export type TableRowAction = CellAction;
 /** highlight tints one row a person should look at first; default is every other row. */
 export type TableRowTone = "default" | "highlight";
+/** none: rows read by spacing, for short lists inside a Card. */
+export type TableRowDividers = "default" | "none";
 
 export interface TableColumn {
   key: string;
@@ -57,5 +59,7 @@ export interface TableProps extends Omit<ComponentPropsWithoutRef<"div">, TableO
   rowHref?: (row: TableRow, index: number) => string;
   /** highlight tints the row (status info subtle) and edges it (status info border). Say why in the row's own text. */
   rowTone?: (row: TableRow, index: number) => TableRowTone;
+  /** none drops the lines between body rows (header and footer lines stay) and rounds the hover tint. */
+  rowDividers?: TableRowDividers;
   ref?: Ref<HTMLDivElement>;
 }

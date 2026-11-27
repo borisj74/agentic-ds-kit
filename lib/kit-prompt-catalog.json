@@ -8281,11 +8281,12 @@
     {
       "id": "table",
       "group": "component",
-      "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header, loading, empty and error states, and one optional highlighted row. Search and filters belong on DataTable. One piece.",
+      "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header, loading, empty and error states, row dividers on or off, and one optional highlighted row. Search and filters belong on DataTable. One piece.",
       "useWhen": [
         "Listing invoices, products, or other short text rows",
         "Inside Section on dashboard or list-detail patterns",
-        "Marking the one row a person should look at first, like the next charge in a billing schedule (rowTone highlight)"
+        "Marking the one row a person should look at first, like the next charge in a billing schedule (rowTone highlight)",
+        "Short, airy lists inside a Card where rows read by spacing, like a billing schedule (rowDividers none)"
       ],
       "doNotUseWhen": [
         "Search, filters, selection, or column settings — use DataTable",
@@ -8308,7 +8309,9 @@
         "Do not sort currency or date strings lexically — give the column sortValue",
         "Do not highlight more than one row, or use highlight for selection — selection belongs on DataTable",
         "Do not make highlight the only sign — say why the row stands out in its own text, like Next charge",
-        "Do not restyle rows with className or tr overrides for emphasis — use rowTone"
+        "Do not restyle rows with className or tr overrides for emphasis — use rowTone",
+        "Do not drop dividers on dense or wide tables where the eye must follow a row across many columns — keep the default",
+        "Do not remove row lines with className or tr overrides — use rowDividers"
       ],
       "props": {
         "columns": {
@@ -8398,7 +8401,16 @@
         "rowTone": {
           "type": "function",
           "required": false,
-          "note": "(row, index) => \"default\" | \"highlight\". highlight tints the row with status.infoSubtle and edges it with status.infoBorder. Use it for the one row the person should look at first, like the next charge. Without it, every row is default."
+          "note": "(row, index) => \"default\" | \"highlight\". highlight draws the row as a rounded shape (radius.surfaceSm) tinted with status.infoSubtle and edged all round with status.infoBorder, so it reads with or without row dividers. Use it for the one row the person should look at first, like the next charge. Without it, every row is default."
+        },
+        "rowDividers": {
+          "type": "enum",
+          "values": [
+            "default",
+            "none"
+          ],
+          "default": "default",
+          "note": "none drops the lines between body rows (the header and footer lines stay) and rounds the hover tint. Rows read by spacing. Use it for short lists inside a Card."
         }
       }
     },

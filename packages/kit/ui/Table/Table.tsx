@@ -22,6 +22,7 @@ export type {
   TableRow,
   TableRowAction,
   TableRowTone,
+  TableRowDividers,
   TableSortValue,
 } from "./Table.types";
 
@@ -82,6 +83,7 @@ export function Table({
   stack = false,
   rowHref,
   rowTone,
+  rowDividers = "default",
   className,
   ref,
   "aria-label": ariaLabel,
@@ -236,6 +238,7 @@ export function Table({
         styles[size],
         stickyHeader && styles.sticky,
         stack && styles.stack,
+        rowDividers === "none" && styles.noDividers,
         className,
       )}
       tabIndex={0}

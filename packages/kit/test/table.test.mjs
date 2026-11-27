@@ -140,6 +140,15 @@ describe("Table markup", () => {
     assert.ok(!/aria-(selected|current)/.test(html));
   });
 
+  test("rowDividers none adds one class on the region and keeps the table markup the same", () => {
+    const base = render(h(kit.Table, { columns: COLUMNS, rows: ROWS }));
+    const none = render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowDividers: "none" }));
+    const cls = (html) => html.match(/^<div[^>]*class="([^"]*)"/)[1].split(" ");
+    assert.equal(cls(none).length, cls(base).length + 1, "one extra class");
+    assert.ok(!cls(render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowDividers: "default" }))).some((c) => !cls(base).includes(c)));
+    assert.equal(none.replace(/^<div[^>]*>/, ""), base.replace(/^<div[^>]*>/, ""), "rows, header and cells unchanged");
+  });
+
   test("Cell values render in rows and name the row menu", () => {
     const rows = [{ customer: h(kit.Cell, { type: "text", label: "Acme Logistics" }), status: "Open", amount: "$9,600.00" }];
     const html = render(h(kit.Table, { columns: COLUMNS, rows, rowActions: () => [{ label: "Open" }] }));

@@ -9,5 +9,6 @@ export type {
   TableRow,
   TableRowAction,
   TableRowTone,
+  TableRowDividers,
   TableSortValue,
 } from "./Table.types";

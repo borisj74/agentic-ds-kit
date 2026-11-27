@@ -85,6 +85,12 @@ describe("BillingSchedule view=full", () => {
     assert.ok(!h({ view: "failed", charges: OPEN_FAILURE }).includes("data-row-tone"));
   });
 
+  test("the table drops row dividers through the public rowDividers prop", () => {
+    const table = (html) => html.match(/<div[^>]*data-charge-table="schedule"[^>]*>/)[0];
+    const html = h({ view: "full", charges: CHARGES });
+    assert.match(table(html), /class="[^"]*noDividers/);
+  });
+
   test("Next charge sits on the earliest row still due, a retrying charge included", () => {
     const retry = { id: "retry", date: "2026-11-20", label: "Seat added", amount: "$22.40", status: "retrying", invoice: "INV-0119" };
     const html = h({ view: "full", charges: [...CHARGES, retry] });
