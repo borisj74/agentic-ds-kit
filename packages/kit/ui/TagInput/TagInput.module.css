@@ -26,6 +26,18 @@
   min-height: var(--space-10);
 }
 
+/* With tags in the field, the start padding matches the space above and below the tags so the
+   first tag sits evenly in the shell (lg tags are centred in a taller frame, so that space is a
+   step bigger). With no tags the control padding stays, so the placeholder lines up with Input,
+   Select and Combobox. */
+.root .shell:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-px);
+}
+
+.root .shell[data-size="lg"]:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-1);
+}
+
 /* First Backspace highlights the tag the second one removes. */
 .pendingTag {
   outline: var(--border-focus-width) solid var(--focus-ring);
