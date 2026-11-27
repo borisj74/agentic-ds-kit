@@ -8,6 +8,8 @@ export type TableState = "loading" | "empty" | "error";
 export type TableSortValue = SortValue;
 export type TableRow = Record<string, string | number | ReactNode>;
 export type TableRowAction = CellAction;
+/** highlight tints one row a person should look at first; default is every other row. */
+export type TableRowTone = "default" | "highlight";
 
 export interface TableColumn {
   key: string;
@@ -53,5 +55,7 @@ export interface TableProps extends Omit<ComponentPropsWithoutRef<"div">, TableO
   stack?: boolean;
   /** Each row links here from its first cell. With stack, the whole stacked row is the link target. */
   rowHref?: (row: TableRow, index: number) => string;
+  /** highlight tints the row (status info subtle) and edges it (status info border). Say why in the row's own text. */
+  rowTone?: (row: TableRow, index: number) => TableRowTone;
   ref?: Ref<HTMLDivElement>;
 }

@@ -8281,10 +8281,11 @@
     {
       "id": "table",
       "group": "component",
-      "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header and loading, empty and error states. Search and filters belong on DataTable. One piece.",
+      "intent": "Simple semantic table for invoices, lists, and text rows, with optional sort, row menu, sticky header, loading, empty and error states, and one optional highlighted row. Search and filters belong on DataTable. One piece.",
       "useWhen": [
         "Listing invoices, products, or other short text rows",
-        "Inside Section on dashboard or list-detail patterns"
+        "Inside Section on dashboard or list-detail patterns",
+        "Marking the one row a person should look at first, like the next charge in a billing schedule (rowTone highlight)"
       ],
       "doNotUseWhen": [
         "Search, filters, selection, or column settings — use DataTable",
@@ -8304,7 +8305,10 @@
         "Do not build usage rows from a Table with a Progress column — use UsageList",
         "Do not put a second menu or icon buttons in a row — one rowActions menu, last",
         "Do not make stack the default — it is opt-in",
-        "Do not sort currency or date strings lexically — give the column sortValue"
+        "Do not sort currency or date strings lexically — give the column sortValue",
+        "Do not highlight more than one row, or use highlight for selection — selection belongs on DataTable",
+        "Do not make highlight the only sign — say why the row stands out in its own text, like Next charge",
+        "Do not restyle rows with className or tr overrides for emphasis — use rowTone"
       ],
       "props": {
         "columns": {
@@ -8390,6 +8394,11 @@
           "type": "function",
           "required": false,
           "note": "(row, index) => string. The first cell becomes a link to the row. With stack, the whole stacked row is the link target; the row menu stays its own control."
+        },
+        "rowTone": {
+          "type": "function",
+          "required": false,
+          "note": "(row, index) => \"default\" | \"highlight\". highlight tints the row with status.infoSubtle and edges it with status.infoBorder. Use it for the one row the person should look at first, like the next charge. Without it, every row is default."
         }
       }
     },

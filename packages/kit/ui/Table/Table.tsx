@@ -21,6 +21,7 @@ export type {
   TableState,
   TableRow,
   TableRowAction,
+  TableRowTone,
   TableSortValue,
 } from "./Table.types";
 
@@ -80,6 +81,7 @@ export function Table({
   onRetry,
   stack = false,
   rowHref,
+  rowTone,
   className,
   ref,
   "aria-label": ariaLabel,
@@ -176,8 +178,13 @@ export function Table({
     return sortedRows.map(({ row, index }) => {
       const href = rowHref?.(row, index);
       const actions = hasActions ? rowActions(row, index) : [];
+      const highlight = rowTone?.(row, index) === "highlight";
       return (
-        <tr key={index} className={classNames(styles.tr, href !== undefined && styles.linked)}>
+        <tr
+          key={index}
+          className={classNames(styles.tr, href !== undefined && styles.linked, highlight && styles.highlight)}
+          data-row-tone={highlight ? "highlight" : undefined}
+        >
           {columns.map((column, columnIndex) => {
             const content = cellValue(row[column.key]);
             return (

@@ -130,6 +130,16 @@ describe("Table markup", () => {
     assert.match(html, /<a href="\/invoices\/0"[^>]*>Northwind Traders<\/a>/);
   });
 
+  test("rowTone highlight marks only that row, with no ARIA state; default and no rowTone leave rows plain", () => {
+    const plain = render(h(kit.Table, { columns: COLUMNS, rows: ROWS }));
+    assert.ok(!plain.includes("data-row-tone"));
+    const html = render(h(kit.Table, { columns: COLUMNS, rows: ROWS, rowTone: (row) => (row.customer === "Hooli" ? "highlight" : "default") }));
+    const rows = [...html.matchAll(/<tr[^>]*>/g)].map((m) => m[0]).slice(1);
+    assert.equal(rows.filter((tr) => tr.includes('data-row-tone="highlight"')).length, 1);
+    assert.match(html, /<tr[^>]*data-row-tone="highlight"[^>]*><td[^>]*>Hooli/);
+    assert.ok(!/aria-(selected|current)/.test(html));
+  });
+
   test("Cell values render in rows and name the row menu", () => {
     const rows = [{ customer: h(kit.Cell, { type: "text", label: "Acme Logistics" }), status: "Open", amount: "$9,600.00" }];
     const html = render(h(kit.Table, { columns: COLUMNS, rows, rowActions: () => [{ label: "Open" }] }));
