@@ -39,6 +39,18 @@
   line-height: var(--type-line-ui-md);
 }
 
+/* With tags in the field, the start padding matches the block padding so the first tag sits
+   evenly in the shell. With no tags the control padding stays, so the placeholder lines up
+   with Input, Select and Combobox. */
+.shellMd:has(> :first-child:not(.native)),
+.shellLg:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-1);
+}
+
+.shellSm:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-px);
+}
+
 .shell:hover:not([data-disabled]) {
   border-color: var(--border-strong);
 }
