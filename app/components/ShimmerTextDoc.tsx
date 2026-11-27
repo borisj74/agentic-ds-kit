@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const SIZES: ShimmerTextSize[] = ["sm", "md", "lg"];
 const SPEEDS = ["slow", "normal", "fast"] as const;
@@ -54,40 +55,10 @@ export function ShimmerTextDoc() {
                   Generating response…
                 </ShimmerText>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Speed</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Speed">
-                    {SPEEDS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${speed === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={speed === option}
-                        onClick={() => setSpeed(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Speed" options={SPEEDS} value={speed} onChange={setSpeed} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

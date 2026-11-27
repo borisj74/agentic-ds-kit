@@ -2,7 +2,8 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { Button, TextReveal, type TextRevealBy } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import motion from "./MotionDoc.module.css";
 
 const WORDS = "Agents that ask before they act";
@@ -41,7 +42,7 @@ export function TextRevealDoc() {
           </Button>
         </div>
       }
-      controls={<DocOptions label="By" options={["word", "line"] as const} value={by} onChange={setBy} />}
+      controls={<RadioControl label="By" options={["word", "line"] as const} value={by} onChange={setBy} />}
       usage="One per view, on a hero or empty-state heading. Each word or line fades up over motion.duration300 with ease-out, 40ms apart by word and 80ms by line. No bounce, no scale, no loop. Under reduced motion the final text is there at once. Change replayKey to play it again."
       code={`<TextReveal as="h1">Agents that ask before they act</TextReveal>
 

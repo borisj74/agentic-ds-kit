@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ColorPicker, Field, Switch } from "agentic-ds-kit";
+import { ColorPicker, Field } from "agentic-ds-kit";
 import type { ColorPickerSwatch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const PREVIEW_FILL = { maxWidth: "20rem" } as const;
 
@@ -76,13 +77,16 @@ export function ColorPickerDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Switch label="Swatches" size="sm" checked={swatches} onChange={setSwatches} />
-                  <Switch label="Opacity" size="sm" checked={alpha} onChange={setAlpha} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Swatches", checked: swatches, onChange: setSwatches },
+                    { label: "Opacity", checked: alpha, onChange: setAlpha },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Card, GridBackground, type GridBackgroundVariant } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import motion from "./MotionDoc.module.css";
 
 function Foreground() {
@@ -35,8 +36,8 @@ export function GridBackgroundDoc() {
       preview={<Demo variant={variant} inverse={surface === "inverse"} bare />}
       controls={
         <>
-          <DocOptions label="Variant" options={["lines", "dots", "none"] as const} value={variant} onChange={setVariant} />
-          <DocOptions label="Surface" options={["default", "inverse"] as const} value={surface} onChange={setSurface} />
+          <RadioControl label="Variant" options={["lines", "dots", "none"] as const} value={variant} onChange={setVariant} />
+          <RadioControl label="Surface" options={["default", "inverse"] as const} value={surface} onChange={setSurface} />
         </>
       }
       usage="Behind a demo, hero or empty state, never behind dense data or long text. Lines sit every space.6 (24px) in border.faint, dots every space.4 (16px) in border.strong, and a radial mask fades them out from the centre, so it works on any surface. It is static: Paper's optional slow drift is not built."

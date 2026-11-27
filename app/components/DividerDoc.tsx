@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Button } from "agentic-ds-kit";
 import { Divider } from "agentic-ds-kit";
 import type { DividerAlign, DividerOrientation, DividerTone } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const ORIENTATIONS: DividerOrientation[] = ["horizontal", "vertical"];
 const TONES: DividerTone[] = ["faint", "default"];
@@ -103,68 +103,28 @@ export function DividerDoc() {
                   </div>
                 )}
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${orientation === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={orientation === option}
-                        onClick={() => setOrientation(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Tone</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Tone">
-                    {TONES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="divider-tone"
-                          value={option}
-                          checked={tone === option}
-                          onChange={() => setTone(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
+              <ControlsPanel>
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+                <RadioControl label="Tone" options={TONES} value={tone} onChange={setTone} />
                 {horizontal ? (
                   <>
-                    <div className={styles.panelGroup}>
-                      <span className={styles.panelLabel}>Content</span>
-                      <Switch label="Label" size="sm" checked={withLabel} onChange={setWithLabel} />
-                      <Switch label="Action" size="sm" checked={withAction} onChange={setWithAction} />
-                    </div>
-                    <div className={styles.panelGroup}>
-                      <span className={styles.panelLabel}>Align</span>
-                      <div className={styles.radioList} role="radiogroup" aria-label="Align">
-                        {ALIGNS.map((option) => (
-                          <label key={option} className={styles.radio}>
-                            <input
-                              type="radio"
-                              name="divider-align"
-                              value={option}
-                              checked={align === option}
-                              disabled={!withLabel && !withAction}
-                              onChange={() => setAlign(option)}
-                            />
-                            {option}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                    <SwitchControl
+                      label="Content"
+                      items={[
+                        { label: "Label", checked: withLabel, onChange: setWithLabel },
+                        { label: "Action", checked: withAction, onChange: setWithAction },
+                      ]}
+                    />
+                    <RadioControl
+                      label="Align"
+                      options={ALIGNS}
+                      value={align}
+                      onChange={setAlign}
+                      disabled={!withLabel && !withAction}
+                    />
                   </>
                 ) : null}
-              </aside>
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

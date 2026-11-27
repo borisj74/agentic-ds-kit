@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { ExperimentCard, type ExperimentStatus, type ExperimentVariant } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const RUNNING: ExperimentVariant[] = [
@@ -57,7 +58,7 @@ export function ExperimentCardDoc() {
           onEdit={noop}
         />
       }
-      controls={<DocOptions label="Status" options={["draft", "running", "concluded", "stopped"] as const} value={status} onChange={setStatus} />}
+      controls={<RadioControl label="Status" options={["draft", "running", "concluded", "stopped"] as const} value={status} onChange={setStatus} />}
       usage="Status, Winner and Leading are words in a Badge. Ship winner is the one solid primary and only appears on a concluded experiment with a winner; a concluded experiment with no winner reads Inconclusive and offers Extend."
       code={`<ExperimentCard
   name="Checkout button copy"

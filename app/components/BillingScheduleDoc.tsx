@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { BillingSchedule, type BillingScheduleProps, type BillingScheduleView, type Charge } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 
 type State = "ready" | "empty" | "loading" | "error";
 
@@ -81,8 +82,8 @@ export function BillingScheduleDoc() {
       preview={<BillingSchedule {...propsFor(view, state)} />}
       controls={
         <>
-          <DocOptions label="View" options={VIEWS} value={view} onChange={setView} />
-          <DocOptions label="State" options={STATES} value={state} onChange={setState} />
+          <RadioControl label="View" options={VIEWS} value={view} onChange={setView} />
+          <RadioControl label="State" options={STATES} value={state} onChange={setState} />
         </>
       }
       usage="view is closed: full for billing settings, nextOnly for a dashboard card, failed for an account page that flags a failed payment. Status is a word in a Badge, money arrives pre-formatted and every date reads 01 Dec 2026. Update card in the failure Alert is the one solid primary."

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { ChangeSummary, type ChangeItem } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const MIXED: ChangeItem[] = [
@@ -52,7 +53,7 @@ export function ChangeSummaryDoc() {
           <ChangeSummary period="Oct → Nov 2026" items={SETS[set]} onViewAll={noop} />
         )
       }
-      controls={<DocOptions label="Data" options={["narrated", "mixed", "all up", "all down"] as const} value={set} onChange={setSet} />}
+      controls={<RadioControl label="Data" options={["narrated", "mixed", "all up", "all down"] as const} value={set} onChange={setSet} />}
       usage="Each metric sets its own sentiment: churn going down is good. The word good, bad or neutral is always visible, and each row reads as one sentence to screen readers. Lead with summary, group with groupBy sentiment and give each row a short why (no trailing period). onAsk adds an Ask in Chat Button. Use Scoreboard for a row of KPIs and LineChart for a series."
       code={`<ChangeSummary
   title="Revenue · What moved"

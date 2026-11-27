@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 /** Room under the field so the open panel shows in full. */
 const OVERLAY_CANVAS = { minHeight: "36rem", alignItems: "start", overflow: "visible" } as const;
@@ -44,24 +45,10 @@ export function DateTimePickerDoc() {
                   </Field>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button key={step} type="button" className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`} aria-pressed={size === step} onClick={() => setSize(step)}>{step}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Hour cycle</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Hour cycle">
-                    {(["12", "24"] as const).map((step) => (
-                      <button key={step} type="button" className={`${styles.sizeTab} ${cycle === step ? styles.sizeTabActive : ""}`} aria-pressed={cycle === step} onClick={() => setCycle(step)}>{step}</button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Hour cycle" options={["12", "24"] as const} value={cycle} onChange={setCycle} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

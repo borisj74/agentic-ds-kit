@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const PLACEMENTS: TooltipPlacement[] = ["top", "bottom", "left", "right"];
 
@@ -52,24 +53,9 @@ export function TooltipDoc() {
                   </Button>
                 </Tooltip>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Placement</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Placement">
-                    {PLACEMENTS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${placement === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={placement === option}
-                        onClick={() => setPlacement(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Placement" options={PLACEMENTS} value={placement} onChange={setPlacement} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

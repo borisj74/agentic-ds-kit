@@ -10,6 +10,7 @@ import styles from "./ComponentDoc.module.css";
 import demo from "./SideNavDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const H = "/components#sidenav";
 
@@ -102,6 +103,8 @@ const SLOTS_CODE = `<SideNav
     item.badge ? <Tooltip content={\`\${item.badge} new\`} placement="right">{node}</Tooltip> : node
   }
 />`;
+
+const SIDES: SideNavSide[] = ["left", "right"];
 
 const WORKSPACES = [
   { value: "agentix", label: "Agentix" },
@@ -389,50 +392,10 @@ export function SideNavDoc() {
                   </Shell>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Open</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Open">
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${open ? styles.sizeTabActive : ""}`}
-                      aria-pressed={open}
-                      onClick={() => setOpen(true)}
-                    >
-                      Open
-                    </button>
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${!open ? styles.sizeTabActive : ""}`}
-                      aria-pressed={!open}
-                      onClick={() => setOpen(false)}
-                    >
-                      Closed
-                    </button>
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Side</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Side">
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${side === "left" ? styles.sizeTabActive : ""}`}
-                      aria-pressed={side === "left"}
-                      onClick={() => setSide("left")}
-                    >
-                      left
-                    </button>
-                    <button
-                      type="button"
-                      className={`${styles.sizeTab} ${side === "right" ? styles.sizeTabActive : ""}`}
-                      aria-pressed={side === "right"}
-                      onClick={() => setSide("right")}
-                    >
-                      right
-                    </button>
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl label="States" items={[{ label: "Open", checked: open, onChange: setOpen }]} />
+                <RadioControl label="Side" options={SIDES} value={side} onChange={setSide} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

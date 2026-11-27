@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AgentFleet, Switch } from "agentic-ds-kit";
+import { AgentFleet } from "agentic-ds-kit";
 import type { AgentFleetAgent } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const AGENTS: AgentFleetAgent[] = [
   {
@@ -155,12 +156,12 @@ export function AgentFleetDoc() {
                   onReview={() => setWaiting(false)}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>State</span>
-                  <Switch size="sm" label="Waiting for you" checked={waiting} onChange={setWaiting} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="State"
+                  items={[{ label: "Waiting for you", checked: waiting, onChange: setWaiting }]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

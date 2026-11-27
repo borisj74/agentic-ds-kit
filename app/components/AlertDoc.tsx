@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const VARIANTS: AlertVariant[] = ["info", "success", "warning", "danger"];
 const PLACEMENTS: AlertPlacement[] = ["page", "inline"];
@@ -94,42 +95,10 @@ export function AlertDoc() {
                   </Alert>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Variant">
-                    {VARIANTS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="alert-variant"
-                          value={option}
-                          checked={variant === option}
-                          onChange={() => setVariant(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Placement</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Placement">
-                    {PLACEMENTS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="alert-placement"
-                          value={option}
-                          checked={placement === option}
-                          onChange={() => setPlacement(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Variant" options={VARIANTS} value={variant} onChange={setVariant} />
+                <RadioControl label="Placement" options={PLACEMENTS} value={placement} onChange={setPlacement} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

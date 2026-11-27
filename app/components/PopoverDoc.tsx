@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const PLACEMENTS: PopoverPlacement[] = ["bottom", "top", "left", "right"];
 
@@ -66,16 +67,9 @@ export function PopoverDoc() {
                   Anyone at Northwind with the link can view this invoice.
                 </Popover>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Placement</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Placement">
-                    {PLACEMENTS.map((step) => (
-                      <button key={step} type="button" className={`${styles.sizeTab} ${placement === step ? styles.sizeTabActive : ""}`} aria-pressed={placement === step} onClick={() => setPlacement(step)}>{step}</button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Placement" options={PLACEMENTS} value={placement} onChange={setPlacement} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

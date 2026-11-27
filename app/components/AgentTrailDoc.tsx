@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AgentTrail, Switch } from "agentic-ds-kit";
+import { AgentTrail } from "agentic-ds-kit";
 import type { AgentTrailStep } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const APPROVAL_STEPS: AgentTrailStep[] = [
   { id: "read", label: "Read auth module", status: "done", duration: "4.1s" },
@@ -152,13 +153,15 @@ export function AgentTrailDoc() {
                   steps={APPROVAL_STEPS}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Content</span>
-                  <Switch size="sm" label="Icon" checked={showIcon} onChange={setShowIcon} />
-                  <Switch size="sm" label="Tag" checked={showTag} onChange={setShowTag} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="Content"
+                  items={[
+                    { label: "Icon", checked: showIcon, onChange: setShowIcon },
+                    { label: "Tag", checked: showTag, onChange: setShowTag },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

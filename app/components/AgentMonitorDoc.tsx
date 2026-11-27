@@ -8,6 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 import { AGENT_MONITOR_AXIS, AGENT_MONITOR_STEPS } from "@/lib/agent-demo.sample";
 
 const STEPS = AGENT_MONITOR_STEPS;
@@ -212,27 +213,17 @@ export function AgentMonitorDoc() {
                   onOpenTrail={noop}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Status</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Status">
-                    {(["running", "waiting", "paused", "done"] as const).map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${status === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={status === option}
-                        onClick={() => {
-                          setStepId(null);
-                          setStatus(option);
-                        }}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl
+                  label="Status"
+                  options={["running", "waiting", "paused", "done"] as const}
+                  value={status}
+                  onChange={(option) => {
+                    setStepId(null);
+                    setStatus(option);
+                  }}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -2,7 +2,8 @@
 
 import { useState, type CSSProperties } from "react";
 import { Badge, Button, Card, TiltCard } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { SwitchControl } from "./ControlsPanel";
 import motion from "./MotionDoc.module.css";
 
 function Plan({ action = true }: { action?: boolean }) {
@@ -33,7 +34,7 @@ const TILTED = {
 } as CSSProperties;
 
 export function TiltCardDoc() {
-  const [tilt, setTilt] = useState<"on" | "off">("on");
+  const [tilt, setTilt] = useState(true);
   return (
     <AgentDocFrame
       id="tiltcard"
@@ -43,7 +44,7 @@ export function TiltCardDoc() {
       preview={
         <div className={motion.cards}>
           <div className={motion.plan}>
-            <TiltCard title="Pro plan" tilt={tilt === "on"}>
+            <TiltCard title="Pro plan" tilt={tilt}>
               <Plan />
             </TiltCard>
           </div>
@@ -54,7 +55,7 @@ export function TiltCardDoc() {
           </div>
         </div>
       }
-      controls={<DocOptions label="Tilt" options={["on", "off"] as const} value={tilt} onChange={setTilt} />}
+      controls={<SwitchControl label="States" items={[{ label: "Tilt", checked: tilt, onChange: setTilt }]} />}
       usage="One or two per view, never on tables, forms or agent monitors. Up to 6° toward the pointer with a highlight that follows it; it eases back over motion.duration400 when the pointer leaves. Hover fades in a shadow.md lift. Mouse and pen only. Under reduced motion there is no rotation and no highlight; hover lifts the shadow only."
       code={`<TiltCard title="Pro plan">
   <Badge tone="primary" appearance="soft" size="sm">Recommended</Badge>

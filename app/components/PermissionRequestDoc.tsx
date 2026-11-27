@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, PermissionRequest } from "agentic-ds-kit";
+import { PermissionRequest } from "agentic-ds-kit";
 import type { PermissionRequestStatus, PermissionScope } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel } from "./ControlsPanel";
 
 const SCOPES: PermissionScope[] = [
   {
@@ -131,13 +132,7 @@ export function PermissionRequestDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => setStatus("pending")}>
-                    Reset
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel onReset={() => setStatus("pending")} />
             </div>
             <DocNotes>
               <div>

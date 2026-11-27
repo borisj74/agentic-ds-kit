@@ -2,7 +2,8 @@
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { BlurCrossfade, Button, Tag } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import motion from "./MotionDoc.module.css";
 
 type Status = "running" | "done";
@@ -91,7 +92,7 @@ export function BlurCrossfadeDoc() {
           </div>
         </div>
       }
-      controls={<DocOptions label="Duration" options={["fast", "normal"] as const} value={duration} onChange={setDuration} />}
+      controls={<RadioControl label="Duration" options={["fast", "normal"] as const} value={duration} onChange={setDuration} />}
       usage="Wrap a small value and give it a contentKey; change the key to swap. fast is motion.duration200 (Paper's motion.fast), normal is motion.duration300. The outgoing value fades and blurs to 6px while the new one sharpens in; this blur is the kit's one approved exception to the transform/opacity rule. Under reduced motion there is no blur: the old value goes at once and the new one fades in over motion.duration100."
       code={`<BlurCrossfade contentKey={status} label={\`Status: \${status}\`}>
   <Tag dot={status === "done" ? "success" : "info"}>{label}</Tag>

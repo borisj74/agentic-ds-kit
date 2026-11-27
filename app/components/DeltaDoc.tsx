@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const SIZES: DeltaSize[] = ["sm", "md"];
 const DIRECTIONS: DeltaDirection[] = ["up", "down", "flat"];
@@ -61,58 +62,17 @@ export function DeltaDoc() {
                   size={size}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Direction</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Direction">
-                    {DIRECTIONS.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="delta-direction"
-                          value={option}
-                          checked={direction === option}
-                          onChange={() => setDirection(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Tone</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Tone">
-                    {TONES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="delta-tone"
-                          value={option}
-                          checked={tone === option}
-                          onChange={() => setTone(option)}
-                        />
-                        {option === "auto" ? "from direction" : option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Direction" options={DIRECTIONS} value={direction} onChange={setDirection} />
+                <RadioControl
+                  label="Tone"
+                  options={TONES}
+                  value={tone}
+                  onChange={setTone}
+                  optionLabel={(option) => (option === "auto" ? "from direction" : option)}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

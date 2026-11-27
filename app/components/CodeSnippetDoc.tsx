@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { CodeSnippet } from "agentic-ds-kit";
 import type { CodeSnippetTab } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const SAMPLE = `import { Button, Card } from "agentic-ds-kit";
 
@@ -99,15 +99,17 @@ export function CodeSnippetDoc() {
                   )}
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Options</span>
-                  <Switch label="Tabs" size="sm" checked={withTabs} onChange={setWithTabs} />
-                  <Switch label="Title" size="sm" checked={withTitle} onChange={setWithTitle} />
-                  <Switch label="Line numbers" size="sm" checked={lineNumbers} onChange={setLineNumbers} />
-                  <Switch label="Wrap" size="sm" checked={wrap} onChange={setWrap} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="Options"
+                  items={[
+                    { label: "Tabs", checked: withTabs, onChange: setWithTabs },
+                    { label: "Title", checked: withTitle, onChange: setWithTitle },
+                    { label: "Line numbers", checked: lineNumbers, onChange: setLineNumbers },
+                    { label: "Wrap", checked: wrap, onChange: setWrap },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

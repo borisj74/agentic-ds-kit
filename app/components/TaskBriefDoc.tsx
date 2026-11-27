@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Button, TaskBrief } from "agentic-ds-kit";
+import { TaskBrief } from "agentic-ds-kit";
 import type { MultiSelectOption, PickerModel, TaskBriefStatus, TaskBriefValue } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import agentDoc from "./AgentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel } from "./ControlsPanel";
 
 const TOOLS: MultiSelectOption[] = [
   { value: "read_sheet", label: "Read sheets" },
@@ -137,25 +138,19 @@ export function TaskBriefDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <Button size="sm" appearance="outline" mode="neutral" iconStart="RotateCcw" onClick={() => setStatus("draft")}>
-                    Reset
-                  </Button>
-                  <Button
-                    size="sm"
-                    appearance="outline"
-                    mode="neutral"
-                    iconStart="X"
-                    onClick={() => {
+              <ControlsPanel
+                onReset={() => setStatus("draft")}
+                actions={[
+                  {
+                    label: "Clear",
+                    icon: "X",
+                    onClick: () => {
                       setValue(EMPTY);
                       setStatus("draft");
-                    }}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              </aside>
+                    },
+                  },
+                ]}
+              />
             </div>
             <DocNotes>
               <div>

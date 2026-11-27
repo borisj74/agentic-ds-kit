@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { AgentSteering } from "agentic-ds-kit";
 import type { AgentSteeringStatus } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import agentDoc from "./AgentDoc.module.css";
 
 const BASE = { name: "Billing refactor", meta: "step 6 · editing invoice.ts", elapsed: "02:14" };
@@ -52,7 +53,7 @@ export function AgentSteeringDoc() {
         />
       }
       controls={
-        <DocOptions
+        <RadioControl
           label="Status"
           options={["running", "paused", "stopped", "done"] as const}
           value={status}

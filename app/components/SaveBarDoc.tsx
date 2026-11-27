@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Card, Field, Input, SaveBar, Select, type SaveBarState } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import local from "./SaveBarDoc.module.css";
 
 const SAVED = { legalName: "Northwind Traders Ltd", currency: "usd" };
@@ -90,7 +91,7 @@ export function SaveBarDoc() {
       lede="A save bar that sticks to the bottom of main: what is unsaved, when it was last saved, then Discard and Save changes."
       summary="Edit a field: it says Edited and the bar lists it. Clear the legal name and Save to see the error state."
       preview={<BillingDetailsDemo narrow={width === "390"} />}
-      controls={<DocOptions label="Width" options={["wide", "390"] as const} value={width} onChange={setWidth} />}
+      controls={<RadioControl label="Width" options={["wide", "390"] as const} value={width} onChange={setWidth} />}
       usage="Put SaveBar last inside main, after the form, and set scroll-padding-bottom on the scroller to the bar height. Pass the changed field labels in changes and mark the same Fields with changed, old value in hint. Save is the page's one solid primary. On Save with field errors, set state error, say what to fix in message and focus an Alert summary (see Field). Leaving with changes opens AlertDialog in the app; closing the tab can only use the browser's own prompt."
       code={`<main style={{ scrollPaddingBottom: "4rem" }}>
   <form>…</form>

@@ -8,12 +8,12 @@ import { Input } from "agentic-ds-kit";
 import { Scoreboard } from "agentic-ds-kit";
 import { Section } from "agentic-ds-kit";
 import type { SectionSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { Table } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: SectionSize[] = ["sm", "md", "lg"];
 const MASTER_TITLE = "Recent activity";
@@ -117,45 +117,17 @@ export function SectionDoc() {
                   <Table columns={COLUMNS} rows={ROWS} />
                 </Section>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Structure</span>
-                  <Switch
-                    size="sm"
-                    label="Collapsible"
-                    checked={collapsible}
-                    onChange={setCollapsible}
-                  />
-                  <Switch
-                    size="sm"
-                    label="Description"
-                    checked={showDescription}
-                    onChange={setShowDescription}
-                  />
-                  <Switch
-                    size="sm"
-                    label="Actions"
-                    checked={showActions}
-                    onChange={setShowActions}
-                  />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <SwitchControl
+                  label="Structure"
+                  items={[
+                    { label: "Collapsible", checked: collapsible, onChange: setCollapsible },
+                    { label: "Description", checked: showDescription, onChange: setShowDescription },
+                    { label: "Actions", checked: showActions, onChange: setShowActions },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

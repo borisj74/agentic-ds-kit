@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const SIZES: SelectSize[] = ["sm", "md", "lg"];
 const DISPLAYS: SelectValueDisplay[] = ["text", "tags"];
@@ -141,40 +142,10 @@ export function SelectDoc() {
                   )}
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Value display</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Value display">
-                    {DISPLAYS.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${display === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={display === step}
-                        onClick={() => setDisplay(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Value display" options={DISPLAYS} value={display} onChange={setDisplay} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

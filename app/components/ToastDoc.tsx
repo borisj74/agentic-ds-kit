@@ -8,6 +8,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl } from "./ControlsPanel";
 
 const STATUSES: ToastStatus[] = ["info", "success", "warning", "danger"];
 const SIZES: ToastSize[] = ["sm", "md", "lg"];
@@ -148,42 +149,10 @@ export function ToastDoc() {
                   </Button>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Status</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Status">
-                    {STATUSES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="toast-status"
-                          value={option}
-                          checked={status === option}
-                          onChange={() => setStatus(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Size">
-                    {SIZES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="toast-size"
-                          value={option}
-                          checked={size === option}
-                          onChange={() => setSize(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Status" options={STATUSES} value={status} onChange={setStatus} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

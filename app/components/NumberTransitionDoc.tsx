@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "agentic-ds-kit";
 import { NumberTransition } from "agentic-ds-kit";
 import type { NumberTransitionSize } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ActionControl, ControlsPanel, SizeControl } from "./ControlsPanel";
 
 const SIZES: NumberTransitionSize[] = ["sm", "md", "lg"];
 
@@ -50,33 +50,16 @@ export function NumberTransitionDoc() {
               <div className={styles.canvas}>
                 <NumberTransition value={value} size={size} format={(n) => Number(n).toLocaleString("en-US")} />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Value</span>
-                  <Button appearance="outline" mode="neutral" size="sm" onClick={() => setValue((v) => v + 137)}>
-                    Increase
-                  </Button>
-                  <Button appearance="ghost" mode="neutral" size="sm" onClick={() => setValue((v) => Math.max(0, v - 89))}>
-                    Decrease
-                  </Button>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <ActionControl
+                  label="Value"
+                  actions={[
+                    { label: "Increase", onClick: () => setValue((v) => v + 137) },
+                    { label: "Decrease", onClick: () => setValue((v) => Math.max(0, v - 89)) },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

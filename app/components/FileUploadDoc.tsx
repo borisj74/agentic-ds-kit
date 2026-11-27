@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Field, FileUpload, Switch } from "agentic-ds-kit";
+import { Field, FileUpload } from "agentic-ds-kit";
 import type { FileUploadItem, FileUploadVariant } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const PREVIEW_FILL = { maxWidth: "28rem" } as const;
 const TICK_MS = 400;
@@ -146,28 +147,16 @@ export function FileUploadDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Variant</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Variant">
-                    {VARIANTS.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${variant === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={variant === step}
-                        onClick={() => setVariant(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <Switch label="Multiple" size="sm" checked={multiple} onChange={setMultiple} />
-                  <Switch label="Disabled" size="sm" checked={disabled} onChange={setDisabled} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Variant" options={VARIANTS} value={variant} onChange={setVariant} />
+                <SwitchControl
+                  label="States"
+                  items={[
+                    { label: "Multiple", checked: multiple, onChange: setMultiple },
+                    { label: "Disabled", checked: disabled, onChange: setDisabled },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

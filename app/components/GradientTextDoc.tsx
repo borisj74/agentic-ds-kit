@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { GradientText, type GradientTextTone } from "agentic-ds-kit";
-import { AgentDocFrame, DocOptions } from "./AgentDocFrame";
+import { AgentDocFrame } from "./AgentDocFrame";
+import { RadioControl } from "./ControlsPanel";
 import motion from "./MotionDoc.module.css";
 
 const COPY = "Ship agents people trust";
@@ -20,7 +21,7 @@ export function GradientTextDoc() {
           <GradientText tone={tone}>{COPY}</GradientText>
         </div>
       }
-      controls={<DocOptions label="Tone" options={["ink", "brand"] as const} value={tone} onChange={setTone} />}
+      controls={<RadioControl label="Tone" options={["ink", "brand"] as const} value={tone} onChange={setTone} />}
       usage="One heading per view, on a hero or empty state. ink runs text.fg to the brand colour; brand runs the brand colour to primary.fg. Use inverse on surface.inverse. Under forced colours, or where background-clip: text is missing, it is solid text.fg. It does not animate."
       code={`<GradientText as="h1">Ship agents people trust</GradientText>`}
       variants={[

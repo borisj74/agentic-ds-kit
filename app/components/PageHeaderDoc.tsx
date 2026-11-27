@@ -7,11 +7,11 @@ import { Button } from "agentic-ds-kit";
 import { PageHeader } from "agentic-ds-kit";
 import type { PageHeaderProps } from "agentic-ds-kit";
 import { Tabs } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, SwitchControl } from "./ControlsPanel";
 
 const MASTER_TITLE = "Aurora";
 const MASTER_SUBTITLE = "Campaign settings and collaborators.";
@@ -128,23 +128,15 @@ export function PageHeaderDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Structure</span>
-                  <Switch
-                    size="sm"
-                    label="Breadcrumb"
-                    checked={showBreadcrumb}
-                    onChange={setShowBreadcrumb}
-                  />
-                  <Switch
-                    size="sm"
-                    label="Actions"
-                    checked={showActions}
-                    onChange={setShowActions}
-                  />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SwitchControl
+                  label="Structure"
+                  items={[
+                    { label: "Breadcrumb", checked: showBreadcrumb, onChange: setShowBreadcrumb },
+                    { label: "Actions", checked: showActions, onChange: setShowActions },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

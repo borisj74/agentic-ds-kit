@@ -10,11 +10,11 @@ import { Input } from "agentic-ds-kit";
 import { DatePicker } from "agentic-ds-kit";
 import { RadioGroup } from "agentic-ds-kit";
 import { Select } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIDES: DrawerSide[] = ["right", "left", "bottom", "top"];
 const SIZES: DrawerSize[] = ["sm", "md", "lg"];
@@ -191,45 +191,17 @@ export function DrawerDoc() {
                   </Button>
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Side</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Side">
-                    {SIDES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${side === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={side === step}
-                        onClick={() => setSide(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>State</span>
-                  <Switch size="sm" label="Description" checked={showDescription} onChange={setShowDescription} />
-                  <Switch size="sm" label="Close" checked={showClose} onChange={setShowClose} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Side" options={SIDES} value={side} onChange={setSide} />
+                <SwitchControl
+                  label="State"
+                  items={[
+                    { label: "Description", checked: showDescription, onChange: setShowDescription },
+                    { label: "Close", checked: showClose, onChange: setShowClose },
+                  ]}
+                />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -8,6 +8,7 @@ import styles from "./ComponentDoc.module.css";
 import doc from "./ConveyorDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl } from "./ControlsPanel";
 
 const ORIENTATIONS: ConveyorOrientation[] = ["horizontal", "vertical"];
 const CONTENTS = ["cards", "chips"] as const;
@@ -134,40 +135,10 @@ export function ConveyorDoc() {
                   )}
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Orientation</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Orientation">
-                    {ORIENTATIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${orientation === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={orientation === option}
-                        onClick={() => setOrientation(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Content</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Content">
-                    {CONTENTS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`${styles.sizeTab} ${content === option ? styles.sizeTabActive : ""}`}
-                        aria-pressed={content === option}
-                        onClick={() => setContent(option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl label="Orientation" options={ORIENTATIONS} value={orientation} onChange={setOrientation} />
+                <RadioControl label="Content" options={CONTENTS} value={content} onChange={setContent} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Avatar } from "agentic-ds-kit";
 import type { AvatarPresence, AvatarShape, AvatarSize } from "agentic-ds-kit";
-import { Switch } from "agentic-ds-kit";
 import { CodeBlock } from "./CodeBlock";
 import { FACES } from "./faces";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SizeControl, SwitchControl } from "./ControlsPanel";
 
 const SIZES: AvatarSize[] = ["xs", "sm", "md", "lg", "xl"];
 const SHAPES: AvatarShape[] = ["circle", "square"];
@@ -71,62 +71,12 @@ export function AvatarDoc() {
                   />
                 </div>
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button
-                        key={step}
-                        type="button"
-                        className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`}
-                        aria-pressed={size === step}
-                        onClick={() => setSize(step)}
-                      >
-                        {step}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Appearance</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Appearance">
-                    {APPEARANCES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="avatar-appearance"
-                          value={option}
-                          checked={appearance === option}
-                          onChange={() => setAppearance(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Shape</span>
-                  <div className={styles.radioList} role="radiogroup" aria-label="Shape">
-                    {SHAPES.map((option) => (
-                      <label key={option} className={styles.radio}>
-                        <input
-                          type="radio"
-                          name="avatar-shape"
-                          value={option}
-                          checked={shape === option}
-                          onChange={() => setShape(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>States</span>
-                  <Switch label="Presence" size="sm" checked={presence} onChange={setPresence} />
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+                <RadioControl label="Appearance" options={APPEARANCES} value={appearance} onChange={setAppearance} />
+                <RadioControl label="Shape" options={SHAPES} value={shape} onChange={setShape} />
+                <SwitchControl label="States" items={[{ label: "Presence", checked: presence, onChange: setPresence }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

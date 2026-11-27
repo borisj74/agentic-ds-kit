@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocTabList } from "./DocTabList";
 import { DocNotes } from "./DocNotes";
+import { ControlsPanel, RadioControl, SwitchControl } from "./ControlsPanel";
 
 const PLANS = [
   { value: "starter", title: "Starter", description: "For drafts and one seat.", meta: "$12" },
@@ -77,35 +78,15 @@ export function TileGroupDoc() {
                   />
                 )}
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Selection</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Selection">
-                    {(["single", "multiple"] as const).map((mode) => (
-                      <button
-                        key={mode}
-                        type="button"
-                        className={`${styles.sizeTab} ${selection === mode ? styles.sizeTabActive : ""}`}
-                        aria-pressed={selection === mode}
-                        onClick={() => setSelection(mode)}
-                      >
-                        {mode}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>State</span>
-                  <button
-                    type="button"
-                    className={`${styles.sizeTab} ${disabled ? styles.sizeTabActive : ""}`}
-                    aria-pressed={disabled}
-                    onClick={() => setDisabled((current) => !current)}
-                  >
-                    Disabled
-                  </button>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <RadioControl
+                  label="Selection"
+                  options={["single", "multiple"] as const}
+                  value={selection}
+                  onChange={setSelection}
+                />
+                <SwitchControl label="States" items={[{ label: "Disabled", checked: disabled, onChange: setDisabled }]} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>

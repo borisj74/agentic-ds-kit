@@ -7,6 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import styles from "./ComponentDoc.module.css";
 import { DocNotes } from "./DocNotes";
 import { DocTabList } from "./DocTabList";
+import { ControlsPanel, SizeControl } from "./ControlsPanel";
 
 const SIZES: FilterBarSize[] = ["sm", "md", "lg"];
 const NARROW = { maxWidth: "24rem" } as const;
@@ -63,16 +64,9 @@ export function FilterBarDoc() {
                   onClear={() => setFilters((current) => current.map((filter) => ({ id: filter.id, label: filter.label })))}
                 />
               </div>
-              <aside className={styles.panel} aria-label="Controls">
-                <div className={styles.panelGroup}>
-                  <span className={styles.panelLabel}>Size</span>
-                  <div className={styles.sizeGroup} role="group" aria-label="Size">
-                    {SIZES.map((step) => (
-                      <button key={step} type="button" className={`${styles.sizeTab} ${size === step ? styles.sizeTabActive : ""}`} aria-pressed={size === step} onClick={() => setSize(step)}>{step}</button>
-                    ))}
-                  </div>
-                </div>
-              </aside>
+              <ControlsPanel>
+                <SizeControl options={SIZES} value={size} onChange={setSize} />
+              </ControlsPanel>
             </div>
             <DocNotes>
               <div>
