@@ -127,7 +127,7 @@
         "none"
       ],
       "default": "default",
-      "note": "none drops the lines between body rows (the header and footer lines stay) and rounds the hover tint. Rows read by spacing. Use it for short lists inside a Card."
+      "note": "none drops the lines between body rows (the header and footer lines stay) and rounds the hover tint. The header turns compact: labels sit space.2 over the header line, and space.3 separates that line from the first row. Rows read by spacing. Use it for short lists inside a Card."
     }
   },
   "passthrough": {
@@ -156,7 +156,8 @@
     "radius.controlSm",
     "status.infoSubtle",
     "status.infoBorder",
-    "radius.surfaceSm"
+    "radius.surfaceSm",
+    "space.3"
   ],
   "a11y": {
     "element": "table",

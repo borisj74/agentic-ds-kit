@@ -70,6 +70,19 @@
   border-bottom: none;
 }
 
+/* Without dividers the header is compact: its labels sit 8px over the header line, and 12px of space
+   separates that line from the first row, so a highlighted first row never touches it. */
+.noDividers .thead .th {
+  height: auto;
+  padding-block: 0 var(--space-2);
+}
+
+.noDividers .tbody::before {
+  content: "";
+  display: table-row;
+  height: var(--space-3);
+}
+
 .noDividers .tbody .tr:hover .td:first-child {
   border-start-start-radius: var(--radius-surface-sm);
   border-end-start-radius: var(--radius-surface-sm);
@@ -344,6 +357,10 @@
   .stack .tbody .tr.highlight .td {
     border-radius: 0;
     box-shadow: none;
+  }
+
+  .stack.noDividers .tbody::before {
+    display: none;
   }
 
   .stack.noDividers .tbody .tr:hover {
