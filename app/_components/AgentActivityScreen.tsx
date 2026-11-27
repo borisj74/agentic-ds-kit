@@ -7,7 +7,6 @@ const VIEW: Record<string, AgentActivityView> = {
   empty: "empty",
   error: "error",
   undone: "undone",
-  mobile: "default",
 };
 
 /** agent-activity as a full screen (Paper p-A-1, 4JQS-0). `view` picks the demo state. */

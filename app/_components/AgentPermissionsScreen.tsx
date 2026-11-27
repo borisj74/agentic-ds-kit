@@ -8,7 +8,6 @@ const REQUEST: Record<string, AgentPermissionsRequestState> = {
   granted: "granted",
   denied: "denied",
   error: "error",
-  "390": "pending",
 };
 
 /** agent-permissions as a full screen (Paper p-A-1, 4KTJ-0). `view` picks the request state or opens Edit. */

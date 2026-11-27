@@ -53,9 +53,7 @@ const STATES: Record<string, InsightStackPatternProps> = { ranked: RANKED, loadi
 /** insight-stack as a screen: the board specimens, or one state in all three sizes. */
 export function InsightStackScreen({ view = "specimens" }: { view?: string }) {
   let cards;
-  if (view === "mobile") {
-    cards = <InsightStackPattern {...RANKED} size="md" />;
-  } else if (STATES[view]) {
+  if (STATES[view]) {
     cards = SIZES.map((size) => <InsightStackPattern key={size} {...STATES[view]} size={size} />);
   } else {
     cards = (

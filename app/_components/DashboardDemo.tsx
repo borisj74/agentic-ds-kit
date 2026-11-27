@@ -134,7 +134,7 @@ function isListDetailPage(id: string) {
 
 /** The list-detail screens (lib/pattern-screens PATTERN_VIEWS["list-detail"]) as the open invoice. */
 function listDetailSelectedId(view?: string): string | undefined {
-  return view === "none" || view === "mobile" ? undefined : "INV-1842";
+  return view === "none" ? undefined : "INV-1842";
 }
 
 /** The dashboard's screens (lib/pattern-screens PATTERN_VIEWS.dashboard) as pattern props. */
