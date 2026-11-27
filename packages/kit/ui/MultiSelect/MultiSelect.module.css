@@ -39,6 +39,18 @@
   line-height: var(--type-line-ui-md);
 }
 
+/* With tags in the field, the start padding matches the block padding so the first tag sits
+   evenly in the shell. With no tags the control padding stays, so the placeholder lines up
+   with Input, Select and Combobox. */
+.shellMd:has(> :first-child:not(.native)),
+.shellLg:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-1);
+}
+
+.shellSm:has(> :first-child:not(.native)) {
+  padding-inline-start: var(--space-px);
+}
+
 .shell:hover:not([data-disabled]) {
   border-color: var(--border-strong);
 }
@@ -137,18 +149,20 @@
 
 .status {
   margin: 0;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: var(--type-size-body-sm);
   line-height: var(--type-line-body);
 }
 
+/* Inline padding plus the popup's border and padding equals the md input's border and
+   padding, so option text starts where the typed text does. */
 .option {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2);
   border-radius: var(--radius-control-sm);
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -167,9 +181,12 @@
   background-color: var(--surface-muted);
 }
 
+/* End slot: the selected check, or an empty 16px slot, pushed to the row's end so
+   item text starts where the input text does. */
 .check {
   display: inline-flex;
   flex-shrink: 0;
   width: var(--space-4);
+  margin-inline-start: auto;
   color: var(--icon-primary);
 }

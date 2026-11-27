@@ -219,10 +219,10 @@ export function Combobox({
                     if (!option.disabled) commit(option);
                   }}
                 >
+                  {option.label}
                   <span className={styles.check} aria-hidden>
                     {isSelected ? <Check size={14} strokeWidth={ICON_STROKE} /> : null}
                   </span>
-                  {option.label}
                 </li>
               );
             })}
