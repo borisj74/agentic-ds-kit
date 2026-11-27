@@ -62,6 +62,24 @@ describe("TraceWaterfall narrow layout", () => {
     assert.match(rule(block, "axis"), /grid-column:\s*1 \/ -1;/, "the axis spans the same width as the bars");
   });
 
+  test("under 40rem: the end tick hangs inside the axis and loading rows stack", () => {
+    const block = narrowBlock();
+    assert.match(block, /\._tick_[a-z0-9]+_\d+\[data-edge="?end"?\]\s*\{[^}]*transform:\s*translateX\(-100%\);/);
+    assert.match(rule(block, "skeletonRow"), /grid-template-columns:\s*minmax\(0, 1fr\);/);
+  });
+
+  test("only a tick at 100% is marked as the end edge", () => {
+    const render = (endMs) =>
+      renderToStaticMarkup(
+        React.createElement(TraceWaterfall, {
+          title: "Run trace",
+          spans: [{ id: "plan", label: "Plan task", kind: "model", startMs: 0, endMs }],
+        }),
+      );
+    assert.equal(render(4000).match(/data-edge="end"/g)?.length, 1, "4s run ends on a tick");
+    assert.equal(render(4200).match(/data-edge="end"/g), null, "4.2s run has no tick at 100%");
+  });
+
   test("the wide lanes stay as they are outside the query", () => {
     const outside = css.replace(narrowBlock(), "");
     assert.match(outside, /grid-template-columns:\s*var\(--trace-label\) minmax\(0, 1fr\) var\(--trace-num\) var\(--trace-num\);/);

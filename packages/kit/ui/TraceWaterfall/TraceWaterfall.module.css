@@ -483,6 +483,10 @@ button.rowButton:focus-visible,
     transform: none;
   }
 
+  .tick[data-edge="end"] {
+    transform: translateX(-100%);
+  }
+
   .rowButton {
     row-gap: var(--space-1);
     padding-block: var(--space-2);
@@ -491,6 +495,12 @@ button.rowButton:focus-visible,
   .track {
     grid-column: 1 / -1;
     grid-row: 2;
+  }
+
+  /* Loading rows stack the same way: label line, then the bar line. */
+  .skeletonRow {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-1);
   }
 
   /* A 96px label lane keeps detail values on one line and aligned across rows. */

@@ -239,7 +239,12 @@ export function TraceWaterfall({
             <span />
             <span className={styles.axis}>
               {ticks.map((tick) => (
-                <span key={tick.at} className={styles.tick} style={{ insetInlineStart: `${tick.at}%` }}>
+                <span
+                  key={tick.at}
+                  className={styles.tick}
+                  data-edge={tick.at === 100 ? "end" : undefined}
+                  style={{ insetInlineStart: `${tick.at}%` }}
+                >
                   {tick.label}
                 </span>
               ))}
