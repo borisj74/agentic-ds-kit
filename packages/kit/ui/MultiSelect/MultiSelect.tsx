@@ -204,10 +204,10 @@ export function MultiSelect({
                     if (!option.disabled) toggle(option.value);
                   }}
                 >
+                  {option.label}
                   <span className={styles.check} aria-hidden>
                     {isSelected ? <Check size={14} strokeWidth={ICON_STROKE} /> : null}
                   </span>
-                  {option.label}
                 </li>
               );
             })}
