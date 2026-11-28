@@ -209,6 +209,7 @@
   --bg-canvas: #f8fafc;
   --bg-subtle: #f8fafc;
   --bg-tray: #f1f5f9;
+  --bg-tray-floating: #f1f5f9;
   --bg-surface: #ffffff;
   --bg-raised: #ffffff;
   --bg-floating: #ffffff;
@@ -692,6 +693,7 @@
   --bg-canvas: #020617;
   --bg-subtle: color-mix(in srgb, #1E293B 50%, #0F172A);
   --bg-tray: #1e293b;
+  --bg-tray-floating: #334155;
   --bg-surface: #0f172a;
   --bg-raised: #1e293b;
   --bg-floating: #1e293b;
@@ -748,6 +750,7 @@
   --bg-canvas: #F5F5F5;
   --bg-subtle: #FAFAFA;
   --bg-tray: #E5E5E5;
+  --bg-tray-floating: #E5E5E5;
   --bg-surface: #FFFFFF;
   --bg-raised: #FFFFFF;
   --bg-floating: #FFFFFF;
@@ -786,6 +789,7 @@
   --bg-canvas: #0A0A0A;
   --bg-subtle: #141414;
   --bg-tray: #1B1B1B;
+  --bg-tray-floating: #404040;
   --bg-surface: #171717;
   --bg-raised: #1B1B1B;
   --bg-floating: #1B1B1B;
