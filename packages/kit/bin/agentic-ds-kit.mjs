@@ -66,7 +66,19 @@ async function loadManifest() {
   }
 }
 
-function printList(manifest) {
+/** Ids whose contract is deprecated (contracts/index.json); `add --list` and `list` skip them. */
+async function deprecatedIds() {
+  try {
+    const index = JSON.parse(await readFile(join(pkgRoot, "contracts/index.json"), "utf8"));
+    return new Set(index.filter((entry) => entry.status === "deprecated").map((entry) => entry.id));
+  } catch {
+    return new Set();
+  }
+}
+
+async function printList(all) {
+  const hidden = await deprecatedIds();
+  const manifest = all.filter((p) => p.status !== "deprecated" && !hidden.has(p.id));
   const width = Math.max(...manifest.map((p) => p.id.length));
   const sections = [
     ["Patterns (examples to start from):", "pattern"],
@@ -135,14 +147,14 @@ if (opts.help || !command) {
   process.exit(opts.help ? 0 : 1);
 }
 if (command === "list") {
-  printList(await loadManifest());
+  await printList(await loadManifest());
   process.exit(0);
 }
 if (command !== "add") fail(`unknown command "${command}". Run: npx agentic-ds-kit --help`);
 
 const manifest = await loadManifest();
 if (opts.list) {
-  printList(manifest);
+  await printList(manifest);
   process.exit(0);
 }
 if (names.length !== 1) {

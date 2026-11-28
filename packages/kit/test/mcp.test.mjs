@@ -23,7 +23,8 @@ const resolvePrimitive = (ref) =>
     : ref;
 const agents = readFileSync(join(kitRoot, "AGENTS.md"), "utf8");
 const { version } = JSON.parse(readFileSync(join(kitRoot, "package.json"), "utf8"));
-const componentIds = index.filter((entry) => entry.group === "component").map((entry) => entry.id);
+// list_components skips deprecated components by default.
+const componentIds = index.filter((entry) => entry.group === "component" && entry.status !== "deprecated").map((entry) => entry.id);
 const patternIds = index.filter((entry) => entry.group === "pattern").map((entry) => entry.id);
 
 const TOOLS = [
@@ -290,7 +291,7 @@ describe("mcp server", { timeout: 20_000 }, () => {
   });
 
   test("list_components level filter returns only that level; an unknown level is a tool error", async () => {
-    const byLevel = Object.fromEntries(index.filter((row) => row.group === "component").map((row) => [row.id, row.level]));
+    const byLevel = Object.fromEntries(index.filter((row) => row.group === "component" && row.status !== "deprecated").map((row) => [row.id, row.level]));
     for (const level of COMPONENT_LEVELS) {
       const listed = await call("list_components", { level });
       const expected = Object.keys(byLevel).filter((id) => byLevel[id] === level);

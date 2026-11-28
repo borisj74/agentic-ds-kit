@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BLOCK_ITEMS, isBlockSlug } from "@/lib/playground-nav";
+import { isBlockSlug } from "@/lib/playground-nav";
+import { ALL_BLOCK_DOCS, blockDoc } from "@/lib/blocks";
 import { BlockView } from "../BlockView";
 import { canonical } from "@/lib/site";
 
 export function generateStaticParams() {
-  return BLOCK_ITEMS.map((item) => ({ slug: item.slug }));
+  return ALL_BLOCK_DOCS.map((doc) => ({ slug: doc.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  return { title: BLOCK_ITEMS.find((item) => item.slug === slug)?.label ?? "Block", ...canonical(`/blocks/${slug}`) };
+  return { title: blockDoc(slug)?.label ?? "Block", ...canonical(`/blocks/${slug}`) };
 }
 
 export default async function BlockPage({ params }: { params: Promise<{ slug: string }> }) {

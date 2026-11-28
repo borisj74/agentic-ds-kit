@@ -6,7 +6,7 @@ import { BlockPreview } from "../_components/BlockPreview";
 import { CodeBlock } from "../components/CodeBlock";
 import { DocPageExtras } from "../components/DocPageExtras";
 import { blockPrompt } from "@/lib/pattern-prompt";
-import { blockDoc } from "@/lib/blocks";
+import { blockDoc, isDeprecatedBlock } from "@/lib/blocks";
 import { levelLabel } from "@/lib/component-gallery";
 import { componentLabel } from "@/lib/playground-nav";
 import styles from "../patterns/patterns.module.css";
@@ -41,6 +41,11 @@ export function BlockView({ slug }: { slug: string }) {
           <Badge size="sm" tone="neutral" appearance="soft">
             {levelLabel(contract.level)}
           </Badge>
+          {isDeprecatedBlock(doc) ? (
+            <Badge size="sm" tone="warning" appearance="soft">
+              deprecated
+            </Badge>
+          ) : null}
         </div>
         <h1 className={playground.pageTitle}>{title}</h1>
         <p className={playground.pageLead}>{lead}</p>

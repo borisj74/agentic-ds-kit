@@ -105,9 +105,12 @@ describe("LiveSession render", () => {
 });
 
 describe("LiveSession in the catalog (MCP)", () => {
-  test("list_components returns it as an Agents block", async () => {
-    const { listComponents } = await import("../bin/catalog.mjs");
-    const row = listComponents().components.find((item) => item.id === "livesession");
+  test("list_components skips it (deprecated); includeDeprecated and get_component still return it", async () => {
+    const { getComponent, listComponents, searchComponents } = await import("../bin/catalog.mjs");
+    assert.equal(listComponents().components.find((item) => item.id === "livesession"), undefined);
+    assert.equal(searchComponents("LiveSession").components.find((item) => item.id === "livesession"), undefined);
+    assert.equal(getComponent("LiveSession").component.status, "deprecated");
+    const row = listComponents({ includeDeprecated: true }).components.find((item) => item.id === "livesession");
     assert.equal(row?.name, "LiveSession");
     assert.equal(row.kind, "block");
     assert.equal(row.block.category, "Agents");

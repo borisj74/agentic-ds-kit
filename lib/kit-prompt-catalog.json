@@ -9426,7 +9426,7 @@
     {
       "id": "agenttrail",
       "group": "component",
-      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps. Becomes an internal part of RunDetail after the next release; prefer RunDetail.",
+      "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
       "useWhen": [
         "show what an agent already did and is doing now",
         "a run log next to a chat or an ApprovalCard",
@@ -10092,7 +10092,7 @@
     {
       "id": "agentmonitor",
       "group": "component",
-      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard. Becomes an internal part of RunDetail (its header) after the next release; prefer RunDetail.",
+      "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
       "useWhen": [
         "watch one agent run in detail",
         "inspect a step's duration, tokens and cost",
@@ -10401,7 +10401,7 @@
     {
       "id": "agentinbox",
       "group": "component",
-      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail. Becomes an internal part of AgentOverview (Needs you) after the next release; prefer AgentOverview.",
+      "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
       "useWhen": [
         "collect every agent request in one place",
         "act on approvals and questions without leaving the list",
@@ -12707,7 +12707,7 @@
     {
       "id": "taskboard",
       "group": "component",
-      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
+      "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
       "useWhen": [
         "a small board of tasks by status inside a product",
         "let people move cards between columns with mouse or keyboard",

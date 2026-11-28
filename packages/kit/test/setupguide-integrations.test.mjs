@@ -164,12 +164,14 @@ describe("AppDirectory (deprecated)", () => {
     assert.ok(text.includes("Ledger (example)") && !text.includes("Chat (example)"));
   });
 
-  test("the catalog still lists it as a block", async () => {
+  test("the catalog hides it by default (deprecated) but still returns it on request", async () => {
     const { getComponent, listComponents } = await import("../bin/catalog.mjs");
-    const row = listComponents().components.find((item) => item.id === "appdirectory");
+    assert.equal(listComponents().components.find((item) => item.id === "appdirectory"), undefined);
+    const row = listComponents({ includeDeprecated: true }).components.find((item) => item.id === "appdirectory");
     assert.equal(row?.name, "AppDirectory");
     assert.equal(row.kind, "block");
     const { component } = getComponent("AppDirectory");
+    assert.equal(component.status, "deprecated");
     assert.equal(component.import, 'import { AppDirectory } from "agentic-ds-kit";');
   });
 });

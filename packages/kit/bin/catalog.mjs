@@ -235,6 +235,7 @@ function load(root = packageRoot) {
         category: entry.group,
         kind: contract.kind === "block" || entry.kind === "block" ? "block" : "component",
         level: contract.level ?? entry.level ?? null,
+        status: contract.status ?? entry.status ?? "stable",
         block:
           contract.kind === "block" || entry.kind === "block"
             ? { category: contract.category ?? entry.category ?? "", summary: oneLine(contract.summary ?? entry.summary) }
@@ -333,9 +334,16 @@ export function kitData(root = packageRoot) {
   return load(root);
 }
 
-export function listComponents() {
+const isDeprecated = (component) => component.status === "deprecated";
+
+/**
+ * Every component, blocks included. Deprecated ones are left out unless includeDeprecated is true
+ * (inspect passes it, so a page that still renders one is named). get_component still returns them.
+ */
+export function listComponents({ includeDeprecated = false } = {}) {
   const data = load();
-  return { kit: data.version, components: data.components.map(summary) };
+  const components = includeDeprecated ? data.components : data.components.filter((component) => !isDeprecated(component));
+  return { kit: data.version, components: components.map(summary) };
 }
 
 export function getComponent(name) {
@@ -358,6 +366,7 @@ export function getComponent(name) {
       category: component.category,
       kind: component.kind,
       level: component.level,
+      status: component.status,
       ...(component.block ? { block: component.block } : {}),
       purpose: component.purpose,
       props: component.props,
@@ -371,11 +380,13 @@ export function getComponent(name) {
   };
 }
 
-export function searchComponents(query) {
+/** Like listComponents, deprecated components are skipped unless includeDeprecated is true. */
+export function searchComponents(query, { includeDeprecated = false } = {}) {
   const data = load();
   const text = requireText(query, "query", 'Pass a name, purpose, or keyword, such as "date" or "kpi".');
   const words = text.toLowerCase().split(/\s+/).filter(Boolean);
   const components = data.components.filter((component) => {
+    if (!includeDeprecated && isDeprecated(component)) return false;
     const haystack = [component.id, component.name, component.purpose, component.keywords].join(" ").toLowerCase();
     return words.every((word) => haystack.includes(word));
   });

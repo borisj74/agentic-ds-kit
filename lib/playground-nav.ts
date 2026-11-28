@@ -1,11 +1,9 @@
 import type { AppNavGroup, AppNavItem } from "agentic-ds-kit";
-import { BLOCK_DOCS } from "./blocks";
+import { BLOCK_DOCS, blockDoc } from "./blocks";
 
 export const COMPONENT_ITEMS = [
   "accordion",
-  "agentfleet",
   "agentinbox",
-  "agentlanes",
   "agentmonitor",
   "agentplan",
   "agentsteering",
@@ -141,6 +139,13 @@ export const COMPONENT_ITEMS = [
   "usagemeter",
 ] as const;
 
+/**
+ * Deprecated components (status "deprecated" in contracts/index.json). They are left out of
+ * COMPONENT_ITEMS and COMPONENT_GROUPS, so the nav, gallery, command palette and sitemap skip them;
+ * their doc pages stay reachable for old links.
+ */
+export const DEPRECATED_COMPONENT_ITEMS = ["agentfleet", "agentlanes"] as const;
+
 export function componentLabel(id: string): string {
   if (id === "agentfleet") return "AgentFleet";
   if (id === "agentplan") return "AgentPlan";
@@ -254,7 +259,7 @@ export function componentLabel(id: string): string {
 export const COMPONENT_GROUPS = [
   {
     label: "AI",
-    ids: ["agentfleet", "agentinbox", "agentlanes", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "guardraillog", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "redactionpreview", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
+    ids: ["agentinbox", "agentmonitor", "agentplan", "agentsteering", "agenttrail", "agenttree", "approvalcard", "assumptionlog", "autonomydial", "chat", "citedanswer", "contextwindow", "decisioncard", "donecheck", "guardraillog", "inlinediff", "insightcard", "loadinganimation", "memorypanel", "messageactions", "modelpicker", "numbertransition", "permissionrequest", "redactionpreview", "runningnow", "shimmertext", "taskbrief", "thinkinganimation", "toolcallcard", "tracewaterfall", "usagemeter"],
   },
   {
     label: "SaaS",
@@ -413,7 +418,7 @@ export const BLOCK_ITEMS = BLOCK_DOCS.map(({ slug, label, contract }) => ({ slug
 export type BlockSlug = string;
 
 export function isBlockSlug(value: string): value is BlockSlug {
-  return BLOCK_ITEMS.some((item) => item.slug === value);
+  return blockDoc(value) !== undefined;
 }
 
 const PATTERN_HASH_ALIASES: Record<string, PatternSlug> = {
