@@ -312,7 +312,16 @@
   /* Centred on the sentence's first line. */
   margin-block-start: calc((var(--type-line-body-sm) - var(--space-3)) / 2);
   border-radius: var(--radius-full);
-  background: var(--text-fg);
+  background: var(--fill-brand);
+}
+
+/* Brand by default, as on Timeline; a failed or waiting event takes its status tone. */
+.dotDanger {
+  background: var(--fill-danger);
+}
+
+.dotWarning {
+  background: var(--fill-warning);
 }
 
 .railLine {

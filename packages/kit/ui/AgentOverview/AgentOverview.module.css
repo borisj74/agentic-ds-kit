@@ -47,6 +47,13 @@
   gap: var(--space-3);
 }
 
+/* The Needs you line and the two columns: the line stays close to the request card below it. */
+.body {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
 .columns {
   min-width: 0;
   align-items: start;
