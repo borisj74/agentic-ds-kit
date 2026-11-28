@@ -38,7 +38,7 @@ export function UsageMeterDoc() {
     <AgentDocFrame
       id="usagemeter"
       name="UsageMeter"
-      lede="Plan usage and AI credits. Built from Meter, UsageList and LineChart."
+      lede="Plan usage and AI credits. Built from Meter, UsageList and BarChart."
       summary="Switch between normal and near limit: the Meter, warning and Upgrade change with it."
       preview={
         <UsageMeter
@@ -50,7 +50,7 @@ export function UsageMeterDoc() {
         />
       }
       controls={<RadioControl label="Usage" options={["normal", "warning"] as const} value={state} onChange={setState} />}
-      usage="UsageMeter composes kit Meter (total), UsageList (by category), LineChart (daily, with the cap) and Alert (near limit). Upgrade becomes the solid primary only near or over the limit."
+      usage="UsageMeter composes kit Meter (total), UsageList (by category), BarChart (daily, toned near and over the cap) and Alert (near limit). Upgrade becomes the solid primary only near or over the limit."
       code={`<UsageMeter
   title="AI credits · Pro plan"
   used={9240}
@@ -91,6 +91,7 @@ export function UsageMeterDoc() {
               {...BASE}
               {...WARNING}
               used={11240}
+              daily={[420, 480, 510, 560, 600, 620, 680, 700, 740, 780, 820, 860, 1080, 1240]}
               overage={{ rateLabel: "$4.00 per 100 credits", amount: "$49.60" }}
               onUpgrade={noop}
               onViewUsage={noop}
