@@ -9,11 +9,13 @@
  * Each generated region sits between `<!-- catalog:<name> -->` and `<!-- /catalog:<name> -->`.
  * Text outside the markers is left alone.
  *
- * Counts include deprecated rows, because they are still exported. The name lists leave them out.
+ * Components (blocks not included), blocks and patterns are counted separately, and each count
+ * leaves out `status: "deprecated"` rows. Deprecated rows are still exported, so they get their own
+ * line with a count and their names. The name lists leave them out too.
  * The index has no display names or README groups, so CATEGORIES below holds both: each entry is
  * a PascalCase name whose lowercase form is the index id. Every non-deprecated component and block
- * in the index must appear in CATEGORIES (or BLOCK_CATEGORIES), and every name there must be in
- * the index, or the script fails.
+ * in the index must appear in CATEGORIES (or BLOCK_CATEGORIES), every deprecated one in
+ * DEPRECATED_NAMES, and every name in these maps must be in the index, or the script fails.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
@@ -72,6 +74,9 @@ export const BLOCK_CATEGORIES = {
   "Social proof": ["LogoStrip"],
 };
 
+/** Display names for deprecated rows, which are not in a README group. Lowercase form is the id. */
+export const DEPRECATED_NAMES = ["AgentFleet", "AgentLanes", "LiveSession", "AppDirectory"];
+
 /** Reads the index and checks it against the category maps. Returns { catalog, errors }. */
 export function loadCatalog(index = JSON.parse(readFileSync(indexPath, "utf8"))) {
   const errors = [];
@@ -104,6 +109,24 @@ export function loadCatalog(index = JSON.parse(readFileSync(indexPath, "utf8")))
   const componentGroups = resolve(CATEGORIES, false);
   const blockGroups = resolve(BLOCK_CATEGORIES, true);
 
+  const deprecatedNames = [];
+  const deprecatedIds = new Set();
+  for (const name of DEPRECATED_NAMES) {
+    const id = name.toLowerCase();
+    const row = index.find((item) => item.id === id);
+    if (deprecatedIds.has(id)) errors.push(`${name} is listed twice in DEPRECATED_NAMES.`);
+    deprecatedIds.add(id);
+    if (!row) errors.push(`${name} (DEPRECATED_NAMES) is not in contracts/index.json.`);
+    else if (live(row)) errors.push(`${name} is not deprecated in contracts/index.json; move it out of DEPRECATED_NAMES.`);
+  }
+  // Deprecated rows in index order, so the line follows the index rather than the map.
+  for (const row of index) {
+    if (row.group === "foundation" || live(row)) continue;
+    const name = DEPRECATED_NAMES.find((item) => item.toLowerCase() === row.id);
+    if (name) deprecatedNames.push(name);
+    else errors.push(`${row.id} is deprecated in contracts/index.json but not in DEPRECATED_NAMES in scripts/sync-readme-catalog.mjs.`);
+  }
+
   for (const row of components) {
     if (live(row) && !seen.has(row.id)) {
       const map = row.kind === "block" ? "BLOCK_CATEGORIES" : "CATEGORIES";
@@ -114,9 +137,11 @@ export function loadCatalog(index = JSON.parse(readFileSync(indexPath, "utf8")))
   return {
     errors,
     catalog: {
-      componentCount: components.length,
-      blockCount: blocks.length,
-      patternCount: patterns.length,
+      componentCount: components.filter((row) => row.kind !== "block" && live(row)).length,
+      blockCount: blocks.filter(live).length,
+      patternCount: patterns.filter(live).length,
+      deprecatedCount: index.filter((row) => row.group !== "foundation" && !live(row)).length,
+      deprecatedNames,
       componentGroups,
       blockGroups,
       patternIds: patterns.filter(live).map((row) => row.id),
@@ -124,21 +149,28 @@ export function loadCatalog(index = JSON.parse(readFileSync(indexPath, "utf8")))
   };
 }
 
+const deprecatedLine = (c) =>
+  c.deprecatedCount === 0
+    ? "Deprecated (still exported): 0"
+    : `Deprecated (still exported): ${c.deprecatedCount} — ${c.deprecatedNames.join(", ")}`;
+
 const bullets = (groups) =>
   groups.filter((group) => group.names.length > 0).map((group) => `- **${group.label}** — ${group.names.join(", ")}`).join("\n");
 
 /** Region renderers per README. Block regions get a newline on each side; inline ones do not. */
 export const RENDERERS = {
   "README.md": {
-    counts: (c) => `${c.componentCount} components, including ${c.blockCount} blocks; ${c.patternCount} patterns`,
+    counts: (c) =>
+      `\n- ${c.componentCount} components\n- ${c.blockCount} blocks\n- ${c.patternCount} patterns\n\n${deprecatedLine(c)}\n`,
     components: (c) => `\n${bullets(c.componentGroups)}\n`,
     blocks: (c) => `\n${bullets(c.blockGroups)}\n`,
     patterns: (c) => `\n${c.patternIds.map((id) => `\`${id}\``).join(", ")}\n`,
   },
   "packages/kit/README.md": {
-    counts: (c) => `${c.componentCount} components, including ${c.blockCount} **blocks**`,
+    counts: (c) => `${c.componentCount} components and ${c.blockCount} **blocks**`,
     blocks: (c) => c.blockGroups.flatMap((group) => group.names).join(", "),
-    patterns: (c) => c.patternIds.join(", "),
+    deprecated: (c) => deprecatedLine(c),
+    patterns: (c) => `${c.patternCount}: ${c.patternIds.join(", ")}`,
   },
 };
 

@@ -48,7 +48,15 @@ Check the running page: start the app with `NEXT_PUBLIC_NISTHA_INSPECT=1` and `n
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (<!-- catalog:counts -->158 components, including 14 blocks; 15 patterns<!-- /catalog:counts -->). Browse blocks on the docs site at `/blocks`.
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json). Browse blocks on the docs site at `/blocks`.
+
+<!-- catalog:counts -->
+- 142 components
+- 12 blocks
+- 15 patterns
+
+Deprecated (still exported): 4 — AgentFleet, AgentLanes, LiveSession, AppDirectory
+<!-- /catalog:counts -->
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -82,7 +90,7 @@ Blocks are larger kit components for a whole area of a screen (`"kind": "block"`
 - **Social proof** — LogoStrip
 <!-- /catalog:blocks -->
 
-Deprecated blocks are still exported and counted above, but not listed here.
+Deprecated blocks are still exported but not listed here; the deprecated line above names them.
 
 ### Patterns
 
