@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BLOCK_ITEMS, isBlockSlug } from "@/lib/playground-nav";
+import { isBlockSlug } from "@/lib/playground-nav";
+import { blockDoc } from "@/lib/blocks";
 import { BlockFrame } from "../../../_components/BlockFrame";
 
 /** A block on its own (no docs chrome): the block page's iframe preview and "Open full screen". */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const label = BLOCK_ITEMS.find((item) => item.slug === slug)?.label;
+  const label = blockDoc(slug)?.label;
   return { title: label ? `${label} preview` : "Preview", robots: { index: false } };
 }
 
@@ -21,6 +22,6 @@ export default async function BlockFramePage({
   if (!isBlockSlug(slug)) notFound();
   const query = await searchParams;
   const mode = Array.isArray(query.mode) ? query.mode[0] : query.mode;
-  const label = BLOCK_ITEMS.find((item) => item.slug === slug)?.label ?? slug;
+  const label = blockDoc(slug)?.label ?? slug;
   return <BlockFrame slug={slug} label={label} mode={mode} />;
 }

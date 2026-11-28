@@ -102,7 +102,8 @@ function openingTags(html) {
 }
 
 function kitIndex() {
-  const { kit, components } = listComponents();
+  // Deprecated pieces included: a page that still renders one should have it named.
+  const { kit, components } = listComponents({ includeDeprecated: true });
   return { kit, byId: new Map(components.map((component) => [component.id, component])) };
 }
 

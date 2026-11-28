@@ -108,7 +108,7 @@ function createServer() {
     {
       title: "List components",
       description:
-        "List every UI component in this install, blocks included. Default summary rows: id, code name, kind (component, or block for a larger composition such as AgentOverview), level (atom, molecule, organism or block) and the first sentence of its purpose. detail full adds the category and the whole purpose line. Filter with kind and/or level; page with limit and offset (page.next). Reuse the biggest level that fits before building from smaller ones. Use get_component for props and rules.",
+        "List every UI component in this install, blocks included. Deprecated components are left out (get_component still returns them, with status). Default summary rows: id, code name, kind (component, or block for a larger composition such as AgentOverview), level (atom, molecule, organism or block) and the first sentence of its purpose. detail full adds the category and the whole purpose line. Filter with kind and/or level; page with limit and offset (page.next). Reuse the biggest level that fits before building from smaller ones. Use get_component for props and rules.",
       inputSchema: objectSchema({
         detail: detail("summary"),
         kind: { type: "string", enum: ["component", "block"], description: "Only components or only blocks." },
@@ -129,7 +129,7 @@ function createServer() {
     {
       title: "Get component",
       description:
-        "Get one component by code name or contract id (Button or button). Returns its kind and level, props, enum variants, must and doNot rules, the tokens the contract lists, an import line, and a usage example from the contract snippet.",
+        "Get one component by code name or contract id (Button or button). Returns its kind and level, props, enum variants, must and doNot rules, the tokens the contract lists, an import line, and a usage example from the contract snippet. status is stable or deprecated; a deprecated one's doNot names its replacement.",
       inputSchema: objectSchema(
         { name: { type: "string", description: "Component code name or contract id, such as Button or button." } },
         ["name"],
@@ -143,7 +143,7 @@ function createServer() {
     {
       title: "Search components",
       description:
-        "Find components whose name, purpose, or contract keywords match. Keywords are the contract useWhen, doNotUseWhen, and doNot lines. Every word must match. Case-insensitive. Rows include kind and level.",
+        "Find components whose name, purpose, or contract keywords match. Keywords are the contract useWhen, doNotUseWhen, and doNot lines. Every word must match. Case-insensitive. Rows include kind and level. Deprecated components are skipped.",
       inputSchema: objectSchema({ query: { type: "string", description: 'Words to match, such as "date" or "kpi".' } }, ["query"]),
     },
     ({ query }) => searchComponents(query),

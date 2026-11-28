@@ -832,7 +832,7 @@
   },
   {
     "id": "agenttrail",
-    "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps. Becomes an internal part of RunDetail after the next release; prefer RunDetail.",
+    "intent": "A vertical step list for a running agent task: done steps with durations, the current step with a live timer, then pending steps.",
     "group": "component",
     "path": "contracts/agenttrail.json",
     "status": "stable",
@@ -888,7 +888,7 @@
   },
   {
     "id": "agentmonitor",
-    "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard. Becomes an internal part of RunDetail (its header) after the next release; prefer RunDetail.",
+    "intent": "One agent at work: a live clock and running cost lead; finished steps sit in a time strip you can open. Waiting shows the exact action as an ApprovalCard.",
     "group": "component",
     "path": "contracts/agentmonitor.json",
     "status": "stable",
@@ -912,7 +912,7 @@
   },
   {
     "id": "agentinbox",
-    "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail. Becomes an internal part of AgentOverview (Needs you) after the next release; prefer AgentOverview.",
+    "intent": "A queue of what agents need from you: approvals, questions, failed runs and finished recaps. Filter, mark read, and select a row to open its detail.",
     "group": "component",
     "path": "contracts/agentinbox.json",
     "status": "stable",
@@ -1104,7 +1104,7 @@
   },
   {
     "id": "taskboard",
-    "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty. Becomes an internal part of WorkBoard after the next release; prefer WorkBoard.",
+    "intent": "A Kanban board of columns and task cards, not a full project product. Counts are text. Cards move by drag or by keyboard: Space picks a card up, arrows move it, Space drops and Escape cancels. Built on kit Badge, Avatar, Button and Empty.",
     "group": "component",
     "path": "contracts/taskboard.json",
     "status": "stable",
