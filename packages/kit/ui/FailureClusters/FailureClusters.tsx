@@ -250,6 +250,7 @@ function ClusterDetail({
       <div className={styles.block}>
         <h4 className={styles.sectionTitle}>Sample failing call</h4>
         <ToolCallCard
+          className={styles.sample}
           name={cluster.sample.name}
           status="error"
           duration={cluster.sample.duration}
@@ -262,7 +263,6 @@ function ClusterDetail({
       <div className={styles.block}>
         <h4 className={styles.sectionTitle}>Recent runs</h4>
         <Table
-          size="sm"
           caption={`Recent failed runs for ${cluster.title}`}
           columns={[
             { key: "run", header: "Run" },

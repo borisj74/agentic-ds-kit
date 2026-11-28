@@ -38,6 +38,12 @@ button.head:hover {
   background-color: var(--bg-control-hover);
 }
 
+/* Open, the head rounds only its top corners, so its hover fill joins the body square. */
+button.head[aria-expanded="true"] {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
 /* The card clips its corners, so the shared ring is drawn inset here. */
 button.head:focus-visible {
   outline: none;
