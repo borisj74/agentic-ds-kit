@@ -141,8 +141,8 @@
   line-height: var(--type-line-body);
 }
 
-/* Inline padding plus the popup's border and padding equals the md input's border and
-   padding, so option text starts where the typed text does. */
+/* Inline padding plus the popup's border and padding equals the input's border and padding,
+   so option text starts where the typed text does. md here; sm and lg follow the field below. */
 .option {
   display: flex;
   align-items: center;
@@ -174,4 +174,16 @@
   width: var(--space-4);
   margin-inline-start: auto;
   color: var(--icon-primary);
+}
+
+/* Popup rows follow the field's size: popup border + --space-1 + this padding = the control's
+   border + inline padding (sm --space-2, md --space-3, lg --space-4). */
+.root:has(> .shellSm) .option,
+.root:has(> .shellSm) .status {
+  padding-inline: var(--space-1);
+}
+
+.root:has(> .shellLg) .option,
+.root:has(> .shellLg) .status {
+  padding-inline: var(--space-3);
 }

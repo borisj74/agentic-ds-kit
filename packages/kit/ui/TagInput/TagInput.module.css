@@ -148,8 +148,10 @@
   box-shadow: var(--shadow-md);
 }
 
+/* Same as Combobox and MultiSelect options: list border + --space-1 + this padding = the
+   control's border + inline padding, so suggestion text starts where the typed text does. */
 .option {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2);
   border-radius: var(--radius-control-sm);
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -161,4 +163,27 @@
 .option[data-active],
 .option:hover {
   background-color: var(--surface-muted);
+}
+
+.root:has(> .shell[data-size="sm"]) .option {
+  padding-inline: var(--space-1);
+}
+
+.root:has(> .shell[data-size="lg"]) .option {
+  padding-inline: var(--space-3);
+}
+
+/* With tags, the shell's start padding is the tag inset. The input adds the rest back, so when it
+   wraps alone onto a new row its text starts at the control padding (sm --space-2, md --space-3,
+   lg --space-4), like an empty field. */
+.root .shell:has(> :first-child:not(.native)) > .native {
+  padding-inline-start: calc(var(--space-3) - var(--space-px));
+}
+
+.root .shell[data-size="sm"]:has(> :first-child:not(.native)) > .native {
+  padding-inline-start: calc(var(--space-2) - var(--space-px));
+}
+
+.root .shell[data-size="lg"]:has(> :first-child:not(.native)) > .native {
+  padding-inline-start: var(--space-3);
 }
