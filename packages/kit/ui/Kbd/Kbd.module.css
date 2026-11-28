@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0 var(--space-inset-xs);
   border: var(--border-width-thin) solid var(--border-strong);
-  border-radius: var(--radius-control-sm);
+  border-radius: var(--radius-sm);
   background: var(--surface-muted);
   color: var(--text-primary);
   font-family: var(--font-mono);
