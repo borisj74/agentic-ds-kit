@@ -25,10 +25,32 @@
 
 .panelColumns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Two equal, fixed columns: the panel is --grid-width-sm wide (less a 16px screen margin when
+     the screen is narrower), so long descriptions wrap instead of widening a column. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-1);
-  min-width: 28rem;
+  width: min(var(--grid-width-sm), calc(100vw - var(--space-4)));
   padding: var(--space-2);
+}
+
+/* Title on top, description under it, clamped to two lines. */
+.panelColumns .item {
+  align-items: flex-start;
+  padding-block: var(--space-2);
+}
+
+.panelColumns .itemText {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-inset-2xs);
+}
+
+.panelColumns .itemDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  white-space: normal;
 }
 
 .panelColumns .group {

@@ -162,12 +162,9 @@ export function DropdownMenu({
     const next: CSSProperties = {
       top: rect.bottom + 4,
     };
-    if (columns === 2) {
-      next.minWidth = "28rem";
-    } else if (triggerStyle === "field") {
-      next.minWidth = rect.width;
-    } else {
-      next.minWidth = Math.max(216, rect.width);
+    // A two-column panel takes its width from .panelColumns; the effect below keeps it on screen.
+    if (columns !== 2) {
+      next.minWidth = triggerStyle === "field" ? rect.width : Math.max(216, rect.width);
     }
     if (align === "end") {
       next.right = window.innerWidth - rect.right;
@@ -245,6 +242,20 @@ export function DropdownMenu({
       setCoords({ ...coords, top: "auto", bottom: window.innerHeight - rect.top + 4 });
     }
   }, [open, coords]);
+
+  // A two-column panel is wide: if it would run past the right edge, shift it left so it stays
+  // on screen with the same 8px margin as the height cap (and never past the left edge).
+  useLayoutEffect(() => {
+    if (!open || columns !== 2 || !coords || typeof coords.left !== "number") return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const margin = 8;
+    const width = panel.getBoundingClientRect().width;
+    const maxLeft = Math.max(margin, window.innerWidth - margin - width);
+    if (coords.left > maxLeft) {
+      setCoords({ ...coords, left: maxLeft });
+    }
+  }, [open, columns, coords]);
 
   // Same for a submenu that would run past the viewport bottom: align its bottom to the item's.
   useLayoutEffect(() => {
