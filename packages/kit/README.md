@@ -34,9 +34,11 @@ Importing from the package loads semantic tokens. If your own CSS uses those var
 import "agentic-ds-kit/tokens.css";
 ```
 
-The package exports 141 components, including 12 **blocks**: larger compositions for a whole area of a screen (AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, KpiBoard, UsageBilling, AppDirectory, WorkBoard, ActivityFeed, Plans, LogoStrip). Import a block like any component and put it inside your page's `<main>`. Browse them on the docs site at `/blocks`.
+The package exports <!-- catalog:counts -->142 components and 12 **blocks**<!-- /catalog:counts -->: larger compositions for a whole area of a screen (<!-- catalog:blocks -->AgentOverview, RunDetail, PlanReview, ChangeReview, EvalSuite, FailureClusters, WorkBoard, ActivityFeed, KpiBoard, UsageBilling, Plans, LogoStrip<!-- /catalog:blocks -->). Import a block like any component and put it inside your page's `<main>`. Browse them on the docs site at `/blocks`.
 
-The package exports components only. Patterns (app-shell, sign-in, dashboard, empty-first-run, list-detail, settings-form, billing-schedule, integration-settings, settings, onboarding) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
+<!-- catalog:deprecated -->Deprecated (still exported): 4 — AgentFleet, AgentLanes, LiveSession, AppDirectory<!-- /catalog:deprecated -->. Deprecated components and blocks are not counted or listed above.
+
+The package exports components only. Patterns (<!-- catalog:patterns -->15: dashboard, settings-form, list-detail, empty-first-run, app-shell, sign-in, billing-schedule, integration-settings, assistant-start, run-detail, agent-activity, agent-permissions, settings, onboarding, insight-stack<!-- /catalog:patterns -->) are examples of what you can build: start from one, borrow from it, or ignore it. Layout is your choice. Copy one into your app and own it:
 
 ```bash
 npx agentic-ds-kit add --list

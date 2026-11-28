@@ -48,7 +48,15 @@ Check the running page: start the app with `NEXT_PUBLIC_NISTHA_INSPECT=1` and `n
 
 ## What's here
 
-Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json) (141 components, including 12 blocks; 10 patterns). Browse blocks on the docs site at `/blocks`.
+Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/contracts/index.json). Browse blocks on the docs site at `/blocks`.
+
+<!-- catalog:counts -->
+- 142 components
+- 12 blocks
+- 15 patterns
+
+Deprecated (still exported): 4 — AgentFleet, AgentLanes, LiveSession, AppDirectory
+<!-- /catalog:counts -->
 
 ### Foundations
 - `packages/kit/tokens/tokens.json` — color, space, radius, border width, type, shadow, motion
@@ -56,43 +64,41 @@ Catalog source of truth: [`packages/kit/contracts/index.json`](packages/kit/cont
 
 ### Components
 
-- **Actions** — Button, ButtonGroup, DropdownMenu, FilterButton, FilterBar
+<!-- catalog:components -->
+- **Actions** — Button, IconButton, ButtonGroup, SplitButton, DropdownMenu, FilterButton, FilterBar
 - **Forms** — Input, Textarea, Select, SegmentedControl, TileGroup, InputOTP, Checkbox, RadioGroup, Switch, Slider, Field, FieldSet, SaveBar, DatePicker, DateRangePicker, DateTimePicker, TimePicker, NumberInput, CurrencyInput, Combobox, MultiSelect, TagInput, ColorPicker, FileUpload
 - **Data & charts** — Table, DataTable, DataGrid, Cell, HeaderCell, ListView, LinkList, TreeView, UsageList, Scorecard, Scoreboard, LineChart, BarChart, BarList, ComboChart, Heatmap, PieChart, ScatterChart, NumberTransition, InsightCard, Calendar, Meter
 - **Feedback** — Alert, Badge, Tag, Count, Delta, Kbd, Tooltip, Toast, Empty, LoadError, Progress, ProgressSteps, Spinner, LoadingAnimation, ThinkingAnimation, ShimmerText, Skeleton
 - **Overlays** — Modal, ModalCard, Drawer, AlertDialog, Command, HelpPopover, Popover, ContextMenu
 - **Navigation & chrome** — AppHeader, AppNav, SideNav, AnchorNav, Link, NavigationMenu, Breadcrumb, Tabs, Pagination, PageHeader, Section
-- **Structure** — Card, Accordion, Collapsible, Resizable, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline, CodeSnippet
-- **Agent** — ApprovalCard, AgentTrail, AgentPlan, AgentFleet, ToolCallCard, PermissionRequest, RunningNow, AgentMonitor, AgentTree, AgentLanes, AgentInbox, DecisionCard, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall, UsageMeter
-- **SaaS** — SetupGuide, NotificationStack, ChangeSummary, ExperimentCard, CommentThread, CommentsPanel, IntegrationPicker, PricingPlans, InvoiceDocument, TaskBoard
+- **Structure** — Card, Divider, Accordion, Collapsible, Resizable, Carousel, Conveyor, Avatar, AvatarGroup, Chat, Timeline, CodeSnippet
+- **Agent** — ApprovalCard, AssumptionLog, AgentTrail, AgentPlan, ToolCallCard, PermissionRequest, RedactionPreview, RunningNow, AgentMonitor, AgentTree, AgentInbox, GuardrailLog, DecisionCard, DoneCheck, AutonomyDial, AgentSteering, ModelPicker, ContextWindow, CitedAnswer, MessageActions, InlineDiff, MemoryPanel, TraceWaterfall, UsageMeter, TaskBrief
+- **SaaS** — SetupGuide, NotificationStack, ChangeSummary, ExperimentCard, CommentThread, CommentsPanel, IntegrationPicker, PricingPlans, InvoiceDocument, BillingSchedule, TaskBoard
 - **Motion** — BlurCrossfade, TextReveal, TiltCard, GridBackground, GradientText
+<!-- /catalog:components -->
 
-### Blocks (12)
+### Blocks
 
 Blocks are larger kit components for a whole area of a screen (`"kind": "block"` in the contract). Import them from `agentic-ds-kit` like any component and put them inside the page's `<main>`; they bring no app chrome. See them on the docs site at `/blocks`.
 
-- **Agents** — AgentOverview, RunDetail, LiveSession, PlanReview, ChangeReview, EvalSuite, FailureClusters
+<!-- catalog:blocks -->
+- **Agents** — AgentOverview, RunDetail, PlanReview, ChangeReview, EvalSuite, FailureClusters
 - **Productivity** — WorkBoard, ActivityFeed
 - **Analytics** — KpiBoard
 - **Billing** — UsageBilling
-- **Integrations** — AppDirectory (deprecated: use IntegrationPicker `connectFlow="detail"`)
 - **Pricing** — Plans
 - **Social proof** — LogoStrip
+<!-- /catalog:blocks -->
 
-### Patterns (10)
+Deprecated blocks are still exported but not listed here; the deprecated line above names them.
+
+### Patterns
 
 Patterns are examples of what you can build from the components, not rules: start from one, borrow from it, or ignore it. Layout (top bar, side nav, both, neither) is your choice. None are exported from the package; `npx agentic-ds-kit add <id>` copies one's source into your app. Each contract lists `must` (kit look and accessibility) and `defaults` (suggestions you can change).
 
-- `dashboard` — PageHeader + Scoreboard + LineChart + Section + DataTable
-- `settings-form` — PageHeader + Section + Fields + save/cancel Buttons
-- `list-detail` — AppNav + Table + detail Section
-- `empty-first-run` — PageHeader + Empty + one primary that opens a create Modal
-- `sign-in` — centred Card + Field-wrapped email/password + one primary + `or` Divider + SSO buttons
-- `app-shell` — one layout option: AppHeader over SideNav when wide; below 64rem a Menu Button in AppHeader opens the same nav in a left Drawer
-- `billing-schedule` — Section + next charge + failed-payment Alert + Table with status Badges
-- `integration-settings` — Section head + Connection Card (status Badge, last sync, error Alert with Retry) + Sync settings Card (FieldSet of Selects and Checkboxes, Save) + Disconnect Section with AlertDialog
-- `settings` — Profile, Billing, Team, Notifications and Security pages in the Stage look (`layout-shell--inset`, sections in the app's SideNav); Billing uses `billing-schedule` (add copies it beside)
-- `onboarding` — Business / Plan (TileGroup) / Billing / Review and Confirm in the Stage look: vertical ProgressSteps beside an inset panel (`layout-shell--inset`), Save and exit, Back and one primary in a footer bar
+<!-- catalog:patterns -->
+`dashboard`, `settings-form`, `list-detail`, `empty-first-run`, `app-shell`, `sign-in`, `billing-schedule`, `integration-settings`, `assistant-start`, `run-detail`, `agent-activity`, `agent-permissions`, `settings`, `onboarding`, `insight-stack`
+<!-- /catalog:patterns -->
 
 ### Playground
 Persistent left sidebar via kit **AppNav**. Top-level groups are Getting started, Foundations, Components, and Patterns. Components holds Overview, then collapsible Forms, Data, Overlays, Navigation, Feedback, Charts, and Agent. Pattern pages are routes under `/patterns/[slug]`. Foundation sections still use hash links.
