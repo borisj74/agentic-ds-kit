@@ -33,14 +33,28 @@
   background-color: transparent;
 }
 
+/* With no frame to ring, the search row becomes a field like kit Input: its border, fill,
+   corners and height, and Input's focus ring. */
 :global([aria-modal="true"]) .search {
-  border-radius: 0;
+  box-sizing: border-box;
+  min-height: var(--control-height-md);
+  margin: var(--space-1) var(--space-1) var(--space-2);
+  padding: 0 var(--space-3);
+  background-color: var(--bg-field);
+  border: var(--border-width-thin) solid var(--line);
+  border-radius: var(--radius-control-md);
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--motion-fast) ease, outline-color var(--motion-fast) ease;
 }
 
-/* With no frame to ring, focus shows as the input row's rule in the focus colour, at the focus width. */
+:global([aria-modal="true"]) .search:hover {
+  border-color: var(--border-strong);
+}
+
 :global([aria-modal="true"]) .search:focus-within {
-  outline: none;
-  border-bottom: var(--border-focus-width) solid var(--border-focus);
+  border-color: var(--border-focus);
+  outline: var(--border-focus-width) solid var(--focus-ring);
+  outline-offset: var(--space-inset-2xs);
 }
 
 .searchIcon {
