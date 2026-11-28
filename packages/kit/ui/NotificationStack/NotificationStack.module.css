@@ -10,9 +10,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* One digit: a --space-4 circle, number centred. Two or more grow into a pill of the same height. */
   min-width: var(--space-4);
   height: var(--space-4);
-  padding-inline: var(--space-1);
+  padding-inline: 0;
   box-sizing: border-box;
   font-family: var(--font-sans);
   font-size: var(--type-size-overline-xs);
@@ -25,6 +26,10 @@
   border-radius: var(--radius-full);
   pointer-events: none;
   animation: countIn var(--motion-duration-200) var(--motion-ease-spring-soft);
+}
+
+.countWide {
+  padding-inline: var(--space-1);
 }
 
 /* Beats the Popover's own padding and max-width (same element, higher specificity). */
