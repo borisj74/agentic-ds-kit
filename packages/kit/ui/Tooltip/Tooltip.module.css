@@ -4,7 +4,9 @@
 
 /* Portaled to document.body; top and left come from the shared placement helper. */
 .bubble {
-  --tooltip-arrow-size: 0.5rem;
+  /* Arrow depth, including the --space-px it tucks under the bubble; the base is twice that. */
+  --tooltip-arrow-size: var(--space-2);
+  --tooltip-arrow-base: var(--space-4);
   position: fixed;
   z-index: var(--z-tooltip);
   box-sizing: border-box;
@@ -33,36 +35,51 @@
     transform var(--motion-overlay-duration) var(--motion-overlay-easing);
 }
 
+/*
+ * One triangle, no transform: a clip-path shape on whole CSS pixels, so it snaps to the device
+ * grid like the bubble at any zoom. Its base sits --space-px inside the bubble, so the two shapes
+ * never meet on an anti-aliased edge and no seam shows. It shows --space-1 + --space-px past
+ * the bubble, which leaves room before the trigger's focus ring.
+ */
 .arrow {
   position: absolute;
-  width: var(--tooltip-arrow-size);
-  height: var(--tooltip-arrow-size);
   background: var(--surface-inverse);
-  transform: rotate(45deg);
+}
+
+[data-placement="top"] > .arrow,
+[data-placement="bottom"] > .arrow {
+  left: var(--floating-arrow);
+  width: var(--tooltip-arrow-base);
+  height: var(--tooltip-arrow-size);
+  margin-left: calc(var(--tooltip-arrow-size) * -1);
+}
+
+[data-placement="left"] > .arrow,
+[data-placement="right"] > .arrow {
+  top: var(--floating-arrow);
+  width: var(--tooltip-arrow-size);
+  height: var(--tooltip-arrow-base);
+  margin-top: calc(var(--tooltip-arrow-size) * -1);
 }
 
 [data-placement="top"] > .arrow {
-  bottom: -0.28rem;
-  left: var(--floating-arrow);
-  margin-left: calc(var(--tooltip-arrow-size) / -2);
+  top: calc(100% - var(--space-px));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 
 [data-placement="bottom"] > .arrow {
-  top: -0.28rem;
-  left: var(--floating-arrow);
-  margin-left: calc(var(--tooltip-arrow-size) / -2);
+  bottom: calc(100% - var(--space-px));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
 [data-placement="left"] > .arrow {
-  right: -0.28rem;
-  top: var(--floating-arrow);
-  margin-top: calc(var(--tooltip-arrow-size) / -2);
+  left: calc(100% - var(--space-px));
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 [data-placement="right"] > .arrow {
-  left: -0.28rem;
-  top: var(--floating-arrow);
-  margin-top: calc(var(--tooltip-arrow-size) / -2);
+  right: calc(100% - var(--space-px));
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
 }
 
 @media (prefers-reduced-motion: reduce) {
