@@ -1016,7 +1016,7 @@
   },
   {
     "id": "usagemeter",
-    "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
+    "intent": "Plan usage or AI credits against a limit: total, usage by category, daily bars toned against the cap, and a warning near the limit. Composes kit Meter, UsageList, BarChart and Alert.",
     "group": "component",
     "path": "contracts/usagemeter.json",
     "status": "stable",

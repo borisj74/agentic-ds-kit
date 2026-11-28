@@ -31,11 +31,11 @@ export interface UsageMeterProps extends Omit<ComponentPropsWithoutRef<"section"
   periodStart?: string;
   /** Right of the axis, e.g. "resets Dec 1". */
   resetLabel?: string;
-  /** Daily usage, oldest first; drawn with a kit LineChart (area). */
+  /** Daily usage, oldest first; drawn as kit BarChart bars. */
   daily?: number[];
   /** Labels for the daily points; default "1"… */
   dailyLabels?: string[];
-  /** Daily cap; drawn as a second series. */
+  /** Daily cap: days from warnAt of it take the soft warning tone, days over it the soft danger tone. */
   dailyCap?: number;
   /** Warning from this share of the limit. Default 0.8, the same as UsageList. */
   warnAt?: number;
@@ -45,7 +45,7 @@ export interface UsageMeterProps extends Omit<ComponentPropsWithoutRef<"section"
   overage?: UsageOverage;
   /**
    * One block for a settings page: title, badge and Upgrade on one line, then "used of limit · reset · pace",
-   * the meter and the categories in a row. No figure, axis, daily line or Alert. Spans its container; under
+   * the meter and the categories in a row. No figure, axis, daily bars or Alert. Spans its container; under
    * 40rem the categories drop and Upgrade goes full width below the meter.
    */
   compact?: boolean;

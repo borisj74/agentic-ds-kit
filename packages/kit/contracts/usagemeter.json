@@ -2,7 +2,7 @@
   "id": "usagemeter",
   "status": "stable",
   "level": "organism",
-  "intent": "Plan usage or AI credits against a limit: total, usage by category, a daily line with the cap, and a warning near the limit. Composes kit Meter, UsageList, LineChart and Alert.",
+  "intent": "Plan usage or AI credits against a limit: total, usage by category, daily bars toned against the cap, and a warning near the limit. Composes kit Meter, UsageList, BarChart and Alert.",
   "useWhen": [
     "show credits or plan usage for the current period",
     "warn before a limit and offer the upgrade",
@@ -18,7 +18,7 @@
     "alert",
     "badge",
     "button",
-    "linechart",
+    "barchart",
     "meter",
     "skeleton",
     "usagelist"
@@ -56,7 +56,7 @@
     "daily": {
       "type": "number[]",
       "required": false,
-      "note": "Kit LineChart (line), with the daily cap as a second line."
+      "note": "Kit BarChart, one bar a day."
     },
     "dailyLabels": {
       "type": "string[]",
@@ -65,7 +65,7 @@
     "dailyCap": {
       "type": "number",
       "required": false,
-      "note": "Second LineChart series."
+      "note": "Days from warnAt of the cap take status.warningBorder, days over it status.dangerBorder; the chart note says the cap and counts them."
     },
     "warnAt": {
       "type": "number",
@@ -84,7 +84,7 @@
     "compact": {
       "type": "boolean",
       "default": false,
-      "note": "One block for a settings page: title, badge and Upgrade on one line, then used of limit · reset · pace, the meter and categories in a row. No figure, axis, daily line or Alert. Spans its container; under 40rem categories drop and Upgrade goes full width below the meter."
+      "note": "One block for a settings page: title, badge and Upgrade on one line, then used of limit · reset · pace, the meter and categories in a row. No figure, axis, daily bars or Alert. Spans its container; under 40rem categories drop and Upgrade goes full width below the meter."
     },
     "onUpgrade": {
       "type": "function",
@@ -138,7 +138,8 @@
     "status.dangerSubtle",
     "status.dangerText",
     "fill.brand",
-    "fill.warning",
+    "status.warningBorder",
+    "status.dangerBorder",
     "type.size.heading5"
   ],
   "a11y": {
@@ -148,7 +149,7 @@
       "the total is a kit Meter with a full text label",
       "past the limit the badge reads Over limit and the meter's name says how far over and, with overage, the amount so far",
       "categories are a kit UsageList",
-      "the daily line is a kit LineChart with its data table",
+      "the daily bars are a kit BarChart with its data table; the chart note counts days near and over the cap, so tone is not colour alone",
       "near limit and limit reached are said in a Badge and a kit Alert, not colour alone",
       "aria-busy while loading; the error is role=alert"
     ]

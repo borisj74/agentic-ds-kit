@@ -5,8 +5,8 @@ import { CircleX } from "lucide-react";
 import { ICON_STROKE } from "../../lib/icon";
 import { Alert } from "../Alert";
 import { Badge } from "../Badge";
+import { BarChart } from "../BarChart";
 import { Button } from "../Button";
-import { LineChart } from "../LineChart";
 import { Meter } from "../Meter";
 import { Skeleton } from "../Skeleton";
 import { UsageList } from "../UsageList";
@@ -23,8 +23,8 @@ const num = (value: number) => value.toLocaleString("en-US");
 export const USAGE_WARN_AT = 0.8;
 
 /**
- * Plan usage and AI credits: total against the limit, usage by category, a daily line, and a warning
- * near the limit. Composes kit Meter, UsageList, LineChart and Alert.
+ * Plan usage and AI credits: total against the limit, usage by category, daily bars against the cap, and a
+ * warning near the limit. Composes kit Meter, UsageList, BarChart and Alert.
  */
 export function UsageMeter({
   title,
@@ -63,6 +63,22 @@ export function UsageMeter({
     : `${title}: ${num(used)} of ${num(limit)} ${unit}, ${percent}% used`;
   const labels = dailyLabels ?? daily.map((_, index) => String(index + 1));
   const today = daily.length ? daily[daily.length - 1] : undefined;
+  // Days near the cap (from warnAt of it) and over it take the soft status tones; the note says how many.
+  const dayTone = (value: number) =>
+    !dailyCap ? "normal" : value > dailyCap ? "over" : value >= dailyCap * warnAt ? "near" : "normal";
+  const dayColor = (value: number) => {
+    const tone = dayTone(value);
+    return tone === "over" ? "var(--status-danger-border)" : tone === "near" ? "var(--status-warning-border)" : "var(--fill-brand)";
+  };
+  const nearDays = daily.filter((value) => dayTone(value) === "near").length;
+  const overDays = daily.filter((value) => dayTone(value) === "over").length;
+  const dayCount = (count: number) => `${count} ${count === 1 ? "day" : "days"}`;
+  const dailyNote = [
+    today !== undefined ? `today ${num(today)}` : "",
+    dailyCap ? `cap ${num(dailyCap)} a day` : "",
+    nearDays ? `${dayCount(nearDays)} near the cap` : "",
+    overDays ? `${dayCount(overDays)} over` : "",
+  ].filter(Boolean).join(" · ") || undefined;
   const badge = (
     <Badge
       tone={state === "normal" ? "neutral" : state === "warning" ? "warning" : "danger"}
@@ -173,20 +189,14 @@ export function UsageMeter({
 
           {daily.length ? (
             <div className={styles.daily}>
-              <LineChart
+              <BarChart
                 className={styles.chart}
-                variant="line"
                 height={128}
                 showGrid={false}
-                includeZero
-                labels={labels}
                 tickInterval={Math.max(1, labels.length - 1)}
-                series={[
-                  { label: "Daily usage", data: daily, color: state === "normal" ? "var(--fill-brand)" : "var(--fill-warning)" },
-                  ...(dailyCap ? [{ label: `Daily cap ${num(dailyCap)}`, data: daily.map(() => dailyCap), color: "var(--line-default)" }] : []),
-                ]}
+                data={daily.map((value, index) => ({ label: labels[index], value, color: dayColor(value) }))}
                 title="Daily usage"
-                description={today !== undefined ? `today ${num(today)}` : undefined}
+                description={dailyNote}
               />
             </div>
           ) : null}
