@@ -1,3 +1,0 @@
-### Fixed
-
-- **Focus ring on joined controls stays inside the focused piece.** ButtonGroup buttons, both SplitButton halves, SegmentedControl segments and both halves of a split FilterButton chip now draw a 2px `--border-focus` ring inside the focused piece (outline offset -2px), lifted above its neighbours so both shared edges show the focus colour and nothing bleeds over the next piece. Corners follow the piece: square where it joins, the group's radius at the ends. ButtonGroup and SplitButton also turn the focused button's border to `--border-focus` and add a thin `--focus-ring-offset` line inside the ring so it stays visible on a solid primary fill. Separate (gapped) controls such as InputOTP slots keep the outside ring on the active slot only.
