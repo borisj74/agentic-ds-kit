@@ -197,6 +197,11 @@
       "useWhen": "Tabs segmented, grouped controls",
       "doNot": "Do not use tray as a card face"
     },
+    "--bg-tray-floating": {
+      "note": "Highlighted row on a floating surface (Modal card). Tray in light; one step above --bg-floating in dark.",
+      "useWhen": "Active list row inside a Modal, where --bg-tray matches the card in dark",
+      "doNot": "Do not use on --surface-card; use --bg-tray there"
+    },
     "--bg-surface": {
       "note": "Raised white surface.",
       "useWhen": "Cards, tables, header bars",

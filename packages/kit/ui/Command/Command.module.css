@@ -136,11 +136,12 @@
   background-color: var(--bg-tray);
 }
 
-/* Keyboard focus stays in the input (aria-activedescendant), so the highlighted row draws the
-   2px focus ring while Command has focus, matching DropdownMenu's focused item. */
-.root:focus-within .itemHighlighted {
-  outline: var(--border-focus-width) solid var(--focus-ring);
-  outline-offset: calc(-1 * var(--border-focus-width));
+/* Keyboard focus stays in the input (aria-activedescendant): the search row shows the focus
+   state, and the active row is marked by the tray fill alone, like DropdownMenu's highlighted item.
+   On the Modal card (--bg-floating) tray matches the card in dark, so use the floating tray there. */
+:global([aria-modal="true"]) .item:hover:not([aria-disabled="true"]),
+:global([aria-modal="true"]) .itemHighlighted {
+  background-color: var(--bg-tray-floating);
 }
 
 .itemDisabled {

@@ -72,6 +72,7 @@
   "tokens": [
     "surface.card",
     "bg.tray",
+    "bg.trayFloating",
     "border.faint",
     "border.focus",
     "radius.surfaceMd",
@@ -103,7 +104,7 @@
       "Shortcut chips are Geist Mono, one chip per key, and aria-hidden",
       "A polite live region reads the result count (resultCount label) after each search",
       "The key footer (↑↓ navigate, ↵ open, Esc close) is aria-hidden; Esc hints show only inside a kit Modal",
-      "Rows are lg (40px) with a bg tray highlight and 4px radius, the same item anatomy as DropdownMenu",
+      "Rows are lg (40px) with a bg tray highlight and 4px radius, the same item anatomy as DropdownMenu; inside a kit Modal the highlight is bg.trayFloating. The active row has no outline: focus stays on the search input",
       "Placement: Command stays put. It always opens in a kit Modal, so it never flips or floats",
       "built-in labels (navigate, openItem, close, resultCount) come from KitLabelsProvider; English by default",
       "loading sets aria-busy on the listbox and shows kit Spinner (role=status)",
