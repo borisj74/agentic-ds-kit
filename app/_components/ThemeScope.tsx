@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useId, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { ThemeScopeProvider } from "agentic-ds-kit";
 // Pattern demos render kit source (packages/kit/patterns → ../../ui), a second module instance with
 // its own scope context. Provide both, so their portals (Drawer, AlertDialog, menus) match the preview.
@@ -20,13 +20,18 @@ function subscribeSiteMode(onChange: () => void) {
   return () => observer.disconnect();
 }
 
+/** The docs site's own light / dark (html[data-theme]). The server (and hydration) render light. */
+export function useSiteMode(): "light" | "dark" {
+  return useSyncExternalStore(subscribeSiteMode, readPlaygroundTheme, () => "light" as const);
+}
+
 /**
  * Light or dark for preview thumbnails: the saved preview theme's mode when there is one, else
  * the docs site's own light / dark. The server (and hydration) render light.
  */
 export function usePreviewMode(): "light" | "dark" {
   const theme = usePatternTheme();
-  const site = useSyncExternalStore(subscribeSiteMode, readPlaygroundTheme, () => "light" as const);
+  const site = useSiteMode();
   return theme?.mode ?? site;
 }
 
@@ -73,8 +78,21 @@ export function ThemeScope({
   );
 }
 
+/**
+ * The theme a PreviewScope falls back to when no preview theme is saved. Unset, previews inherit
+ * the page. A page that runs in its own colour set (the home page, in Ink) sets it, so the
+ * product previews keep the kit's own look.
+ */
+const PreviewFallback = createContext<ThemeState | null>(null);
+
+export function PreviewFallbackProvider({ value, children }: { value: ThemeState; children: ReactNode }) {
+  return <PreviewFallback.Provider value={value}>{children}</PreviewFallback.Provider>;
+}
+
 export function PreviewScope({ className, children }: { className?: string; children: ReactNode }) {
-  const theme = usePatternTheme();
+  const saved = usePatternTheme();
+  const fallback = useContext(PreviewFallback);
+  const theme = saved ?? fallback;
   return (
     <ThemeScope theme={theme} className={className}>
       {children}

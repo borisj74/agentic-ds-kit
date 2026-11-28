@@ -1,102 +1,86 @@
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Card, Link, Section } from "agentic-ds-kit";
-import index from "agentic-ds-kit/contracts/index.json";
+import { Accordion } from "agentic-ds-kit";
 import kitPackage from "agentic-ds-kit/package.json";
 import { canonical } from "@/lib/site";
-import { CodeBlock } from "./components/CodeBlock";
-import { HomePatterns } from "./_components/HomePatterns";
-import { HomeScene } from "./_components/HomeScene";
-import playground from "./playground.module.css";
+import { HOME_FAQ } from "@/lib/home.sample";
+import { HomeAgents } from "./_components/home/HomeAgents";
+import { HomeFooter } from "./_components/home/HomeFooter";
+import { HomeHero } from "./_components/home/HomeHero";
+import { HomeLoop } from "./_components/home/HomeLoop";
+import { HomeMotion } from "./_components/home/HomeMotion";
+import { HomeNav } from "./_components/home/HomeNav";
+import { HomeTheme } from "./_components/home/HomeTheme";
+import styles from "./_components/home/Home.module.css";
 
 export const metadata: Metadata = {
   title: { absolute: "Nistha — a code-only design system for coding agents and product UI." },
   ...canonical("/"),
 };
 
-type Entry = { group: string; kind?: string };
-const entries = index as Entry[];
-const components = entries.filter((entry) => entry.group === "component");
-const blocks = components.filter((entry) => entry.kind === "block").length;
-const patterns = entries.filter((entry) => entry.group === "pattern").length;
+/**
+ * Runs before first paint on a full load, so CSS can hide the motion targets until GSAP takes
+ * them over. Without JS it never runs and everything stays visible (see HomeMotion).
+ */
+const MOTION_SCRIPT = 'document.documentElement.setAttribute("data-home-motion","pending")';
 
-const AREAS = [
-  {
-    title: "Components",
-    description: `${components.length} React components, ${blocks} of them blocks, each with a JSON contract agents read before they write UI.`,
-    href: "/components",
-  },
-  {
-    title: "Patterns",
-    description: `${patterns} example screens to copy into your app with npx agentic-ds-kit add, then make your own.`,
-    href: "/patterns",
-  },
-  {
-    title: "Blocks",
-    description: "Whole areas of a screen, such as an agent overview or a billing summary, imported like any component.",
-    href: "/blocks",
-  },
-];
-
-/** The docs home: what Nistha is, the kit at work, patterns to start from, then install and where to go next. */
+/**
+ * The docs home: a quiet landing page with its own top nav (no docs sidebar), in Ink greys with the
+ * Nistha brand colour on the logo and calls to action. The hero tells the whole story on one pinned
+ * product screen (built from the kit, repainted by a brand, switched light or dark, checked by
+ * review). How it works puts a contract beside its component; questions and how an agent uses the
+ * kit end the page. Every preview is a real kit component with example data.
+ */
 export default function Home() {
   return (
-    <div className={playground.page}>
-      <div className={playground.wideShell}>
-        <h1 className={playground.pageTitle}>Nistha</h1>
-        <p className={playground.homeLead}>
-          A code-only design system for coding agents and product UI: JSON contracts, tokens and React components,
-          published as agentic-ds-kit {kitPackage.version}.{" "}
-          <Link href="/start-here" linkAs={NextLink} variant="standalone">
-            New to Nistha? Start here
-          </Link>
-        </p>
+    <HomeTheme className={styles.landing}>
+      <script dangerouslySetInnerHTML={{ __html: MOTION_SCRIPT }} />
+      <HomeMotion />
+      <NextLink className={styles.skip} href="#main">
+        Skip to content
+      </NextLink>
+      <HomeNav version={kitPackage.version} />
+      <main id="main" className={`layout-content ${styles.home}`} tabIndex={-1}>
+        <HomeHero />
 
-        <div className={playground.homeScene}>
-          <HomeScene />
-        </div>
-
-        <Section
-          title="Start from a pattern"
-          description="Whole screens built from kit components. Open one, copy it in with npx agentic-ds-kit add, then make it yours."
-        >
-          <HomePatterns />
-        </Section>
-
-        <Section title="Install" description="In a React 19 app (Next.js 15 or later, Vite, …). Tokens load with the first import.">
-          <div className={playground.stack}>
-            <CodeBlock code={'npm install agentic-ds-kit\n\nimport { Button } from "agentic-ds-kit";'} />
-            <Link href="/get-started" linkAs={NextLink} variant="standalone">
-              Read the getting started guide
-            </Link>
+        {/* How it works: one line, then the contract beside the component it describes. */}
+        <section className={styles.section} data-section="how" aria-labelledby="home-how">
+          <header className={styles.headStack}>
+            <p className={styles.label}>How it works</p>
+            <h2 id="home-how" className={styles.sectionTitle}>
+              Your agent reads the contract, then renders the real component
+            </h2>
+          </header>
+          <div>
+            <HomeLoop />
           </div>
-        </Section>
+        </section>
 
-        <Section title="Explore">
-          {/* layout-metrics: as many columns as fit (12rem minimum), one column on a phone. */}
-          <div className="layout-metrics">
-            {AREAS.map((area) => (
-              <Card key={area.href} size="sm" title={area.title} description={area.description}>
-                <Link href={area.href} linkAs={NextLink} variant="standalone">
-                  {`Browse ${area.title.toLowerCase()}`}
-                </Link>
-              </Card>
-            ))}
+        <section className={styles.section} data-section="faq" aria-labelledby="home-faq">
+          <div className={`layout-split--secondary ${styles.faqSplit}`}>
+            <h2 id="home-faq" className={styles.sectionTitle}>
+              Questions
+            </h2>
+            <div className={styles.faq}>
+              <Accordion items={HOME_FAQ} defaultOpen="agent" />
+            </div>
           </div>
-        </Section>
+        </section>
 
-        <Section title="For coding agents" description="Cursor and Claude Code read the same rules and contracts from the installed package.">
-          <div className={playground.stack}>
-            <p className={playground.body}>
-              Copy AGENTS.md and CLAUDE.md from the package into your app, and connect the local MCP server so agents can
-              look up components, tokens and patterns from the version you installed.
-            </p>
-            <Link href="/mcp" linkAs={NextLink} variant="standalone">
-              Set up the MCP server
-            </Link>
+        <section className={styles.section} data-section="agents" aria-labelledby="home-agents">
+          <header className={styles.agentsHead}>
+            <h2 id="home-agents" className={styles.sectionTitle}>
+              Your agent builds with the kit, not around it
+            </h2>
+            <p className={styles.sectionLead}>Connect once. It looks up the right part, adds it, then checks its own work.</p>
+          </header>
+          <div>
+            <HomeAgents />
           </div>
-        </Section>
-      </div>
-    </div>
+        </section>
+
+        <HomeFooter version={kitPackage.version} />
+      </main>
+    </HomeTheme>
   );
 }
