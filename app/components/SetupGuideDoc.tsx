@@ -116,7 +116,9 @@ export function SetupGuideDoc() {
           about: "Rows with a button put the status word under the task name; provider tiles stack one per row.",
           code: `<SetupGuide title="Set up billing" tasks={tasks} … />`,
           render: (
-            <div style={{ maxWidth: "calc(var(--space-16) * 5.5)" }}>
+            // The card is an inline-size container, so it has no width of its own: give the wrapper one,
+            // or the centered example canvas shrinks it to its padding.
+            <div style={{ width: "100%", maxWidth: "calc(var(--space-16) * 5.5)" }}>
               <SetupGuide title={TITLE} tasks={FIRST_RUN} onTaskAction={noop} onIntegrationConnect={noop} onUndoSkip={noop} onDismiss={noop} />
             </div>
           ),
