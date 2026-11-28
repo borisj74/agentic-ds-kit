@@ -1,4 +1,5 @@
-/* Shared by DropdownMenu and Command: one chip per key, Geist Mono 12/16, 20px high. */
+/* Shared by DropdownMenu and Command: one chip per key, Geist Mono 12/16, 20px high.
+   Same flat look and corner as kit Kbd (thin border, --radius-sm); smaller and quieter so it fits a 20px menu row. */
 .keys {
   display: inline-flex;
   flex-shrink: 0;
@@ -21,7 +22,7 @@
   padding: 0 var(--space-1);
   margin: 0;
   border: var(--border-width-thin) solid var(--border-faint);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-sm);
   background-color: var(--surface-card);
   font-family: var(--font-mono);
   font-size: var(--type-size-caption);
