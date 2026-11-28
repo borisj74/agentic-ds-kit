@@ -216,7 +216,7 @@ function EventFeed(props: ActivityFeedEventProps) {
             {clock}
           </time>
           <span className={styles.rail}>
-            <span className={styles.dot} />
+            <span className={cx(styles.dot, tone === "danger" && styles.dotDanger, tone === "warning" && styles.dotWarning)} />
             {last ? null : <span className={styles.railLine} />}
           </span>
           <div className={cx(styles.historyBody, last && styles.historyBodyLast)}>

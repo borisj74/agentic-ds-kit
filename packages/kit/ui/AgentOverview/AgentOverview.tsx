@@ -178,98 +178,104 @@ export function AgentOverview(props: AgentOverviewProps) {
         {requests.length ? `${requests.length} ${requests.length === 1 ? "request needs" : "requests need"} you` : ""}
       </p>
 
-      <div className={cx("layout-split--primary", styles.columns)}>
-        <div className={styles.column}>
-          {request ? (
-            <section className={styles.needs} aria-labelledby={needsId}>
-              <h3 id={needsId} className={styles.srOnly}>
-                {`${requestAgent} asks`}
-              </h3>
-              <p className={styles.needsMeta}>
-                <AgentStatusMark status="needs-you" />
-                <span>{`${requestAgent} · ${formatClock(request.start)}`}</span>
-              </p>
-              {request.action ? (
-                <ApprovalCard
-                  key={request.id}
-                  title={request.ask ?? request.title}
-                  description={request.ask && request.ask !== request.title ? request.title : undefined}
-                  risk={request.risk}
-                  action={request.action}
-                  onApprove={() => onApprove?.(request.id)}
-                  onDeny={() => onReject?.(request.id)}
-                />
-              ) : (
-                <DecisionCard
-                  key={request.id}
-                  title={`${requestAgent} asks`}
-                  question={request.ask ?? request.title}
-                  meta={request.ask && request.ask !== request.title ? request.title : undefined}
-                  options={[
-                    { id: DECISION_APPROVE, label: "Approve" },
-                    { id: DECISION_REJECT, label: "Deny" },
-                  ]}
-                  value={decision}
-                  onValueChange={setDecision}
-                  onConfirm={() => {
-                    if (decision === DECISION_APPROVE) onApprove?.(request.id);
-                    else if (decision === DECISION_REJECT) onReject?.(request.id);
-                    setDecision(undefined);
-                  }}
-                />
-              )}
-              {more > 0 ? <p className={styles.more}>{`${more} more ${more === 1 ? "request" : "requests"} waiting`}</p> : null}
-            </section>
-          ) : null}
+      {/* The Needs you line sits above both columns, so the request card and the Since rail start level. */}
+      <div className={styles.body}>
+        {request ? (
+          <p className={styles.needsMeta}>
+            <AgentStatusMark status="needs-you" />
+            <span>{`${requestAgent} · ${formatClock(request.start)}`}</span>
+          </p>
+        ) : null}
 
-          <section className={styles.agents} aria-labelledby={listId}>
-            <header className={styles.agentsHead}>
-              <h3 id={listId} className={styles.agentsTitle}>
-                All agents
-              </h3>
-              <SegmentedControl
-                size="sm"
-                ariaLabel="Show agents"
-                value={filter}
-                onChange={(value) => changeFilter(value as AgentOverviewFilter)}
-                items={AGENT_OVERVIEW_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
-              />
-            </header>
-            {/* Timeline needs width: below the small breakpoint the list shows instead. */}
-            <div className={cx(styles.list, timeline && styles.listUnderTimeline)}>{list}</div>
-            {timeline ? (
-              <div className={styles.lanes}>
-                <AgentLanes
-                  agents={lanes.agents}
-                  tasks={lanes.tasks}
-                  now={now}
-                  span={span}
-                  spans={LANE_SPANS}
-                  onSpanChange={setPickedSpan}
-                  openTaskId={openTaskId}
-                  onOpenTaskChange={setOpenTaskId}
-                  onApprove={(id) => {
-                    setOpenTaskId(null);
-                    onApprove?.(id);
-                  }}
-                  onReject={(id) => {
-                    setOpenTaskId(null);
-                    onReject?.(id);
-                  }}
-                />
-              </div>
+        <div className={cx("layout-split--primary", styles.columns)}>
+          <div className={styles.column}>
+            {request ? (
+              <section className={styles.needs} aria-labelledby={needsId}>
+                <h3 id={needsId} className={styles.srOnly}>
+                  {`${requestAgent} asks`}
+                </h3>
+                {request.action ? (
+                  <ApprovalCard
+                    key={request.id}
+                    title={request.ask ?? request.title}
+                    description={request.ask && request.ask !== request.title ? request.title : undefined}
+                    risk={request.risk}
+                    action={request.action}
+                    onApprove={() => onApprove?.(request.id)}
+                    onDeny={() => onReject?.(request.id)}
+                  />
+                ) : (
+                  <DecisionCard
+                    key={request.id}
+                    title={`${requestAgent} asks`}
+                    question={request.ask ?? request.title}
+                    meta={request.ask && request.ask !== request.title ? request.title : undefined}
+                    options={[
+                      { id: DECISION_APPROVE, label: "Approve" },
+                      { id: DECISION_REJECT, label: "Deny" },
+                    ]}
+                    value={decision}
+                    onValueChange={setDecision}
+                    onConfirm={() => {
+                      if (decision === DECISION_APPROVE) onApprove?.(request.id);
+                      else if (decision === DECISION_REJECT) onReject?.(request.id);
+                      setDecision(undefined);
+                    }}
+                  />
+                )}
+                {more > 0 ? <p className={styles.more}>{`${more} more ${more === 1 ? "request" : "requests"} waiting`}</p> : null}
+              </section>
             ) : null}
-          </section>
-        </div>
 
-        <div className={styles.column}>
-          <ActivityFeed
-            variant="history"
-            title={`Since ${formatClock(since)}`}
-            description={`${doneCount} done`}
-            events={rail}
-            now={now}
-          />
+            <section className={styles.agents} aria-labelledby={listId}>
+              <header className={styles.agentsHead}>
+                <h3 id={listId} className={styles.agentsTitle}>
+                  All agents
+                </h3>
+                <SegmentedControl
+                  size="sm"
+                  ariaLabel="Show agents"
+                  value={filter}
+                  onChange={(value) => changeFilter(value as AgentOverviewFilter)}
+                  items={AGENT_OVERVIEW_FILTERS.map((key) => ({ value: key, label: `${FILTER_LABEL[key]} ${counts[key]}` }))}
+                />
+              </header>
+              {/* Timeline needs width: below the small breakpoint the list shows instead. */}
+              <div className={cx(styles.list, timeline && styles.listUnderTimeline)}>{list}</div>
+              {timeline ? (
+                <div className={styles.lanes}>
+                  <AgentLanes
+                    agents={lanes.agents}
+                    tasks={lanes.tasks}
+                    now={now}
+                    span={span}
+                    spans={LANE_SPANS}
+                    onSpanChange={setPickedSpan}
+                    openTaskId={openTaskId}
+                    onOpenTaskChange={setOpenTaskId}
+                    onApprove={(id) => {
+                      setOpenTaskId(null);
+                      onApprove?.(id);
+                    }}
+                    onReject={(id) => {
+                      setOpenTaskId(null);
+                      onReject?.(id);
+                    }}
+                  />
+                </div>
+              ) : null}
+            </section>
+          </div>
+
+          <div className={styles.column}>
+            <ActivityFeed
+              variant="history"
+              title={`Since ${formatClock(since)}`}
+              description={`${doneCount} done`}
+              events={rail}
+              now={now}
+            />
+          </div>
         </div>
       </div>
     </section>
