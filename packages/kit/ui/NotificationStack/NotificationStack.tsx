@@ -122,7 +122,7 @@ export function NotificationStack({
         </Popover>
       )}
       {unread > 0 ? (
-        <span key={unread} className={styles.count} aria-hidden="true">
+        <span key={unread} className={cx(styles.count, unread > 9 && styles.countWide)} aria-hidden="true">
           {unread > 99 ? "99+" : unread}
         </span>
       ) : null}
