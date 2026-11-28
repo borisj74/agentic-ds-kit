@@ -45,3 +45,6 @@ next-env.d.ts
 # local preview config
 .claude/launch.json
 .cursor/mcp.json
+
+# generated at build time (scripts/build-llms-txt.mjs)
+/public/llms.txt
